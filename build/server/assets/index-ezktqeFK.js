@@ -860,7 +860,8 @@ app.use("/api/auth/*", async (c, next) => {
 app.route(API_BASENAME, api);
 const index = createHonoServer({
   app,
-  defaultLogger: false
+  defaultLogger: false,
+  port: process.env.PORT ? parseInt(process.env.PORT) : 3e3
 });
 
 export { fetchWithHeaders as f, index as i };

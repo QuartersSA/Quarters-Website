@@ -7,7 +7,7 @@ import { renderToPipeableStream } from 'react-dom/server';
 import * as React from 'react';
 import React__default, { forwardRef, useEffect, createElement, useRef, useState, Component, useCallback, useMemo } from 'react';
 import { useButton } from '@react-aria/button';
-import { f as fetchWithHeaders } from './index-BtJd8Pt1.js';
+import { f as fetchWithHeaders } from './index-ezktqeFK.js';
 import { SessionProvider } from '@hono/auth-js/react';
 import { toPng } from 'html-to-image';
 import { serializeError } from 'serialize-error';
