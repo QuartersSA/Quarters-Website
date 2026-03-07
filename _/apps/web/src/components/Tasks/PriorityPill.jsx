@@ -1,0 +1,26 @@
+import { ws } from "@/components/Workspace/ui";
+
+const PRIORITY_LABELS_AR = {
+  Low: "منخفضة",
+  Normal: "عادية",
+  High: "عالية",
+  Urgent: "عاجلة",
+};
+
+export function PriorityPill({ priority }) {
+  const raw = priority || "Normal";
+  const label = PRIORITY_LABELS_AR[raw] || raw;
+
+  let className = "bg-white/[0.04] text-white/70 border-white/10";
+
+  if (raw === "Low")
+    className = "bg-slate-500/15 text-slate-200 border-slate-500/25";
+  if (raw === "Normal")
+    className = "bg-indigo-500/15 text-indigo-200 border-indigo-500/25";
+  if (raw === "High")
+    className = "bg-amber-500/15 text-amber-200 border-amber-500/25";
+  if (raw === "Urgent")
+    className = "bg-red-500/15 text-red-200 border-red-500/25";
+
+  return <span className={`${ws.pill} ${className}`}>{label}</span>;
+}

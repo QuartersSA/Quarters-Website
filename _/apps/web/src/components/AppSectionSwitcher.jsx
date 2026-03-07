@@ -1,0 +1,165 @@
+"use client";
+
+import React from "react";
+import { LayoutGrid, ClipboardList, Calculator, Users } from "lucide-react";
+import { ws } from "@/components/Workspace/ui";
+
+function readAdminPermissions() {
+  try {
+    const auth = localStorage.getItem("adminAuth");
+    const raw = localStorage.getItem("adminUser");
+    if (!auth || !raw) {
+      return null;
+    }
+
+    const adminUser = JSON.parse(raw);
+
+    // Backward compat: if flags are missing (older stored sessions), default to true.
+    const wsFlag = adminUser?.can_access_workspace;
+    const invFlag = adminUser?.can_manage_inventory;
+    const accFlag = adminUser?.can_manage_accounting;
+
+    const hrRaw =
+      adminUser?.can_access_hr === undefined ||
+      adminUser?.can_access_hr === null
+        ? adminUser?.can_manage_employees
+        : adminUser?.can_access_hr;
+
+    const deductionsFlag = adminUser?.can_manage_deductions;
+
+    return {
+      can_access_workspace:
+        wsFlag === undefined || wsFlag === null ? true : !!wsFlag,
+      can_manage_inventory:
+        invFlag === undefined || invFlag === null ? true : !!invFlag,
+      can_manage_accounting:
+        accFlag === undefined || accFlag === null ? true : !!accFlag,
+      can_access_hr: hrRaw === undefined || hrRaw === null ? true : !!hrRaw,
+      can_manage_deductions: !!deductionsFlag,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export default function AppSectionSwitcher({
+  active = "workspace",
+  className = "",
+}) {
+  const [perms, setPerms] = React.useState(null);
+
+  React.useEffect(() => {
+    setPerms(readAdminPermissions());
+  }, []);
+
+  const hrHref = perms?.can_access_hr ? "/hr" : "/hr/deductions";
+
+  const items = [
+    {
+      key: "workspace",
+      href: "/workspace/inbox",
+      label: "مساحة العمل",
+      Icon: LayoutGrid,
+      gate: (p) => (p ? p.can_access_workspace : true),
+      onClick: () => {
+        try {
+          localStorage.setItem("adminMode", "workspace");
+          const adminUser = localStorage.getItem("adminUser");
+          if (adminUser) {
+            localStorage.setItem("workspaceUser", adminUser);
+          }
+        } catch {
+          // ignore
+        }
+      },
+    },
+    {
+      key: "inventory",
+      href: "/admin",
+      label: "إدارة الجرد",
+      Icon: ClipboardList,
+      gate: (p) => (p ? p.can_manage_inventory : true),
+      onClick: () => {
+        try {
+          localStorage.setItem("adminMode", "inventory");
+          localStorage.removeItem("workspaceUser");
+        } catch {
+          // ignore
+        }
+      },
+    },
+    {
+      key: "accounting",
+      href: "/accounting",
+      label: "Accounting",
+      Icon: Calculator,
+      gate: (p) => (p ? p.can_manage_accounting : true),
+      onClick: () => {
+        try {
+          localStorage.setItem("adminMode", "accounting");
+          const adminUser = localStorage.getItem("adminUser");
+          if (adminUser) {
+            localStorage.setItem("workspaceUser", adminUser);
+          }
+        } catch {
+          // ignore
+        }
+      },
+    },
+    {
+      key: "hr",
+      href: hrHref,
+      label: "HR",
+      Icon: Users,
+      gate: (p) => (p ? p.can_access_hr || p.can_manage_deductions : true),
+      onClick: () => {
+        try {
+          localStorage.setItem("adminMode", "hr");
+          localStorage.removeItem("workspaceUser");
+        } catch {
+          // ignore
+        }
+      },
+    },
+  ];
+
+  const visibleItems = items.filter((it) => it.gate(perms));
+
+  const shellClass = `${ws.glassSoft} ${ws.card}`;
+
+  // If only one section is allowed, don't show the switcher.
+  if (visibleItems.length <= 1) {
+    return null;
+  }
+
+  return (
+    <div
+      className={`w-full max-w-full flex flex-wrap items-center justify-center gap-1 p-1 rounded-2xl border border-white/10 bg-white/[0.03] ${shellClass} ${className}`}
+      dir="rtl"
+    >
+      {visibleItems.map(({ key, href, label, Icon, onClick }) => {
+        const isActive = active === key;
+
+        const btnClass = isActive
+          ? "bg-white/10 text-white border-white/20"
+          : "bg-transparent text-white/60 border-transparent hover:bg-white/[0.06] hover:text-white/80";
+
+        return (
+          <a
+            key={key}
+            href={href}
+            onClick={onClick}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-colors ${btnClass}`}
+            title={label}
+          >
+            <Icon
+              className={`w-4 h-4 ${isActive ? "text-emerald-200" : "text-white/50"}`}
+            />
+            {/* Using 2xl here prevents the switcher from overflowing on common laptop widths */}
+            <span className="hidden 2xl:inline whitespace-nowrap">{label}</span>
+          </a>
+        );
+      })}
+    </div>
+  );
+}

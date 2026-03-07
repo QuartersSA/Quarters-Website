@@ -1,0 +1,142 @@
+export function calculatePayrollTotals(entries) {
+  let totalSalary = 0;
+  let totalBonuses = 0;
+  let totalDeductions = 0;
+  let net = 0;
+
+  for (const e of entries) {
+    totalSalary += Number(e.total_salary || 0);
+    totalBonuses += Number(e.total_bonuses || 0);
+    totalDeductions += Number(e.total_deductions || 0);
+    net += Number(e.net_salary || 0);
+  }
+
+  return {
+    totalSalary,
+    totalBonuses,
+    totalDeductions,
+    net,
+  };
+}
+
+export function formatRunCreatedAt(createdAt) {
+  if (!createdAt) return "—";
+  const s = String(createdAt);
+  const cleaned = s.replace("T", " ");
+  return cleaned.slice(0, 16);
+}
+
+export function getPayrollExportColumns() {
+  return [
+    {
+      header: "الموظف",
+      accessor: (item) => item.employee_name || "—",
+    },
+    {
+      header: "الفرع",
+      accessor: (item) => item.branch_name || "—",
+    },
+    {
+      header: "الراتب الأساسي",
+      accessor: (item) => item.base_salary,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "البدلات",
+      accessor: (item) => item.other_allowances,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "إجمالي الراتب",
+      accessor: (item) => item.total_salary,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "مجموع البونص",
+      accessor: (item) => item.total_bonuses,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "مجموع الخصميات",
+      accessor: (item) => item.total_deductions,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "الصافي",
+      accessor: (item) => item.net_salary,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "تم الدفع",
+      accessor: (item) => (item.is_paid ? "نعم" : "لا"),
+    },
+    {
+      header: "طريقة الدفع",
+      accessor: (item) => {
+        if (!item.payment_method) return "—";
+        if (item.payment_method === "cash") return "كاش";
+        if (item.payment_method === "transfer") return "تحويل";
+        return item.payment_method;
+      },
+    },
+    {
+      header: "المبلغ المدفوع",
+      accessor: (item) => item.paid_amount,
+      format: (value) => {
+        if (value === null || value === undefined) return "—";
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "ملاحظة الدفع",
+      accessor: (item) => item.payment_note || "—",
+    },
+  ];
+}

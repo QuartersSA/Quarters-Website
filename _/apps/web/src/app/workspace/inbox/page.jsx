@@ -1,0 +1,584 @@
+"use client";
+
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  useRef,
+  useEffect,
+} from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import WorkspaceSidebar from "@/components/Workspace/Sidebar";
+import useWorkspaceUser from "@/hooks/useWorkspaceUser";
+import { Plus, Send, ChevronLeft, MessageSquare, Search } from "lucide-react";
+import { ws } from "@/components/Workspace/ui";
+import GlassSelect from "@/components/Workspace/GlassSelect";
+
+function formatTime(ts) {
+  if (!ts) return "";
+  try {
+    return new Date(ts).toLocaleTimeString("ar-SA-u-nu-latn", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
+}
+
+function initials(name) {
+  const cleaned = (name || "").trim();
+  if (!cleaned) return "";
+  const parts = cleaned.split(" ").filter(Boolean);
+  const first = parts[0]?.[0] || "";
+  const second = parts[1]?.[0] || "";
+  const raw = `${first}${second}`.trim();
+  return raw ? raw.toUpperCase() : "";
+}
+
+export default function WorkspaceInboxPage() {
+  const { employeeId, user } = useWorkspaceUser();
+  const queryClient = useQueryClient();
+
+  const [selectedThreadId, setSelectedThreadId] = useState(null);
+  const [compose, setCompose] = useState("");
+  const [search, setSearch] = useState("");
+
+  const [showNewModal, setShowNewModal] = useState(false);
+  const [newToUserId, setNewToUserId] = useState("");
+
+  const myId = employeeId;
+
+  const messagesEndRef = useRef(null);
+
+  const threadsQuery = useQuery({
+    queryKey: ["workspaceThreads", myId],
+    enabled: !!myId,
+    refetchInterval: 15000,
+    queryFn: async () => {
+      const res = await fetch(`/api/workspace/threads?employeeId=${myId}`);
+      if (!res.ok) {
+        throw new Error(
+          `When fetching /api/workspace/threads, the response was [${res.status}] ${res.statusText}`,
+        );
+      }
+      return res.json();
+    },
+  });
+
+  const threads = threadsQuery.data?.threads || [];
+
+  React.useEffect(() => {
+    // UX: على الجوال ابدأ بقائمة المحادثات، وعلى الشاشات الكبيرة افتح أول محادثة تلقائياً.
+    if (selectedThreadId || threads.length === 0) {
+      return;
+    }
+
+    try {
+      const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+      if (isDesktop) {
+        setSelectedThreadId(threads[0].id);
+      }
+    } catch {
+      // ignore
+    }
+  }, [selectedThreadId, threads]);
+
+  const filteredThreads = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return threads;
+
+    const result = threads.filter((t) => {
+      const members = Array.isArray(t.members) ? t.members : [];
+      const names = members.map((m) => (m?.name || "").toLowerCase()).join(" ");
+      const lastBody = (t.last_message_body || "").toLowerCase();
+      return names.includes(q) || lastBody.includes(q);
+    });
+
+    return result;
+  }, [threads, search]);
+
+  const selectedThread = useMemo(() => {
+    const found = threads.find((t) => t.id === selectedThreadId);
+    return found || null;
+  }, [threads, selectedThreadId]);
+
+  const otherMemberName = useMemo(() => {
+    if (!selectedThread) return "";
+    const members = Array.isArray(selectedThread.members)
+      ? selectedThread.members
+      : [];
+
+    const other = members.find((m) => Number(m.id) !== Number(myId));
+    return other?.name || selectedThread.title || "محادثة";
+  }, [selectedThread, myId]);
+
+  const otherMemberInitials = useMemo(() => {
+    return initials(otherMemberName);
+  }, [otherMemberName]);
+
+  const messagesQuery = useQuery({
+    queryKey: ["workspaceMessages", selectedThreadId, myId],
+    enabled: !!myId && !!selectedThreadId,
+    refetchInterval: 5000,
+    queryFn: async () => {
+      const res = await fetch(
+        `/api/workspace/threads/${selectedThreadId}/messages?employeeId=${myId}`,
+      );
+      if (!res.ok) {
+        throw new Error(
+          `When fetching messages, the response was [${res.status}] ${res.statusText}`,
+        );
+      }
+      return res.json();
+    },
+  });
+
+  const messages = messagesQuery.data?.messages || [];
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages.length]);
+
+  const usersQuery = useQuery({
+    queryKey: ["workspaceUsers", myId],
+    enabled: !!myId,
+    queryFn: async () => {
+      const res = await fetch(`/api/workspace/users?employeeId=${myId}`);
+      if (!res.ok) {
+        throw new Error(
+          `When fetching /api/workspace/users, the response was [${res.status}] ${res.statusText}`,
+        );
+      }
+      return res.json();
+    },
+  });
+
+  const users = usersQuery.data?.users || [];
+
+  const createThreadMutation = useMutation({
+    mutationFn: async (toEmployeeId) => {
+      const res = await fetch("/api/workspace/threads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          employeeId: myId,
+          otherEmployeeId: toEmployeeId,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "فشل إنشاء محادثة");
+      }
+      return data;
+    },
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["workspaceThreads", myId],
+      });
+      setShowNewModal(false);
+      setNewToUserId("");
+      setSelectedThreadId(data.threadId);
+    },
+  });
+
+  const sendMutation = useMutation({
+    mutationFn: async (text) => {
+      const res = await fetch(
+        `/api/workspace/threads/${selectedThreadId}/messages`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ employeeId: myId, body: text }),
+        },
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "فشل إرسال الرسالة");
+      }
+      return data;
+    },
+    onMutate: async (text) => {
+      await queryClient.cancelQueries({
+        queryKey: ["workspaceMessages", selectedThreadId, myId],
+      });
+
+      const prev = queryClient.getQueryData([
+        "workspaceMessages",
+        selectedThreadId,
+        myId,
+      ]);
+
+      const optimistic = {
+        id: `optimistic-${Date.now()}`,
+        thread_id: selectedThreadId,
+        sender_employee_id: myId,
+        sender_name: user?.name || "أنا",
+        body: text,
+        created_at: new Date().toISOString(),
+      };
+
+      queryClient.setQueryData(
+        ["workspaceMessages", selectedThreadId, myId],
+        (old) => {
+          const oldMessages = old?.messages || [];
+          return { ...old, messages: [...oldMessages, optimistic] };
+        },
+      );
+
+      return { prev };
+    },
+    onError: (err, _text, ctx) => {
+      console.error(err);
+      if (ctx?.prev) {
+        queryClient.setQueryData(
+          ["workspaceMessages", selectedThreadId, myId],
+          ctx.prev,
+        );
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["workspaceMessages", selectedThreadId, myId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["workspaceThreads", myId] });
+    },
+  });
+
+  const onSend = useCallback(async () => {
+    const text = compose.trim();
+    if (!text || !selectedThreadId) return;
+    setCompose("");
+    sendMutation.mutate(text);
+  }, [compose, selectedThreadId, sendMutation]);
+
+  const openNewMessage = () => {
+    setShowNewModal(true);
+  };
+
+  const startNewConversation = () => {
+    const idNum = Number(newToUserId);
+    if (!Number.isFinite(idNum) || idNum <= 0) {
+      return;
+    }
+    createThreadMutation.mutate(idNum);
+  };
+
+  const isMobileThreadView = !!selectedThreadId;
+
+  const leftPanelClasses =
+    "w-full lg:w-[360px] border-b lg:border-b-0 lg:border-l border-white/10 bg-white/[0.035] backdrop-blur-xl";
+
+  const rightPanelClasses = "flex-1 bg-transparent flex flex-col min-h-[70vh]";
+
+  const mobileListHidden = isMobileThreadView ? "hidden lg:block" : "block";
+  const mobileChatHidden = !isMobileThreadView ? "hidden lg:flex" : "flex";
+
+  const topBarClass = ws.topBar;
+
+  const inputClass = `${ws.input} pr-10 pl-4 py-2.5`;
+
+  const softCardClass = `${ws.glass} ${ws.card}`;
+
+  const primaryBtnClass = `${ws.btnPrimary} px-3 py-2`;
+
+  const newMessageOptions = useMemo(() => {
+    const opts = users
+      .filter((u) => Number(u.id) !== Number(myId))
+      .map((u) => ({
+        value: String(u.id),
+        label: `${u.name} ${u.role === "Admin" ? "(مدير)" : ""}`.trim(),
+      }));
+
+    return [{ value: "", label: "—" }, ...opts];
+  }, [users, myId]);
+
+  return (
+    <div className="min-h-[100svh] pb-24 lg:pb-0" dir="rtl">
+      <WorkspaceSidebar active="inbox" />
+
+      {/* Mobile top bar */}
+      <div className={`lg:hidden sticky top-0 z-20 ${topBarClass}`}>
+        <div className="px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className={`${ws.iconBox} w-10 h-10`}>
+              <MessageSquare className="w-5 h-5 text-emerald-200" />
+            </div>
+            <div className="min-w-0">
+              <div className="font-bold text-white tracking-tight truncate">
+                الوارد
+              </div>
+              <div className="text-xs text-white/50 truncate">رسائل الفريق</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={openNewMessage}
+            className={primaryBtnClass}
+          >
+            <Plus className="w-4 h-4" />
+            جديد
+          </button>
+        </div>
+      </div>
+
+      <main className="mr-0 lg:mr-72 min-h-[100svh] flex">
+        {/* Left: threads */}
+        <div className={`${leftPanelClasses} ${mobileListHidden}`}>
+          <div className="p-4 border-b border-white/10 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <div className={`${ws.iconBox} w-9 h-9`}>
+                <MessageSquare className="w-4 h-4 text-white/70" />
+              </div>
+              <div className="font-bold text-white tracking-tight">الوارد</div>
+            </div>
+            <button
+              type="button"
+              onClick={openNewMessage}
+              className={`hidden lg:inline-flex ${primaryBtnClass}`}
+            >
+              <Plus className="w-4 h-4" />
+              جديد
+            </button>
+          </div>
+
+          <div className="p-4 border-b border-white/10">
+            <div className="relative">
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className={inputClass}
+                placeholder="ابحث…"
+              />
+            </div>
+          </div>
+
+          <div className="p-3">
+            {threadsQuery.isLoading ? (
+              <div className="p-4 text-white/60">جاري التحميل…</div>
+            ) : threadsQuery.error ? (
+              <div className="p-4 text-red-300">فشل تحميل المحادثات</div>
+            ) : filteredThreads.length === 0 ? (
+              <div className="p-4 text-white/60">
+                لا توجد محادثات. اضغط "جديد" لبدء محادثة.
+              </div>
+            ) : (
+              filteredThreads.map((t) => {
+                const isActive = t.id === selectedThreadId;
+                const members = Array.isArray(t.members) ? t.members : [];
+                const other = members.find(
+                  (m) => Number(m.id) !== Number(myId),
+                );
+                const title = other?.name || t.title || "محادثة";
+                const lastText = t.last_message_body || "";
+                const time = formatTime(t.last_message_at);
+                const unread = t.unread_count || 0;
+
+                const avatar = initials(title) || "";
+
+                const itemClass = isActive
+                  ? "bg-white/10 text-white border-white/20"
+                  : "bg-white/[0.03] hover:bg-white/[0.06] text-white border-white/10";
+
+                const subtitleClass = "text-white/55";
+
+                const avatarClass = isActive
+                  ? "bg-emerald-400/15 text-emerald-200 border-emerald-400/25"
+                  : "bg-white/[0.05] text-white/90 border-white/10";
+
+                const badge =
+                  unread > 0 ? (
+                    <div className="min-w-[26px] h-[26px] px-2 rounded-full bg-emerald-400/20 text-emerald-200 text-xs font-bold flex items-center justify-center border border-emerald-400/25">
+                      {unread}
+                    </div>
+                  ) : null;
+
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => setSelectedThreadId(t.id)}
+                    className={`w-full text-right rounded-3xl p-4 mb-2 transition-colors border ${itemClass}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold border shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] ${avatarClass}`}
+                        >
+                          {avatar}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-bold truncate tracking-tight">
+                            {title}
+                          </div>
+                          <div
+                            className={`text-sm mt-1 truncate ${subtitleClass}`}
+                          >
+                            {lastText || "—"}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        <div className={`text-xs ${subtitleClass}`}>{time}</div>
+                        {badge}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {/* Right: messages */}
+        <div className={`${rightPanelClasses} ${mobileChatHidden}`}>
+          <div className={`p-4 ${topBarClass} flex items-center gap-3`}>
+            <button
+              type="button"
+              onClick={() => setSelectedThreadId(null)}
+              className="lg:hidden p-2 rounded-2xl hover:bg-white/[0.06]"
+              aria-label="رجوع"
+            >
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </button>
+
+            <div className="w-10 h-10 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center font-bold text-white shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
+              {otherMemberInitials || ""}
+            </div>
+
+            <div className="min-w-0">
+              <div className="font-bold text-white truncate tracking-tight">
+                {otherMemberName || "محادثة"}
+              </div>
+              <div className="text-xs text-white/55">الرسائل</div>
+            </div>
+          </div>
+
+          <div className="flex-1 p-4 overflow-y-auto">
+            {messagesQuery.isLoading ? (
+              <div className="text-white/60">جاري تحميل الرسائل…</div>
+            ) : messagesQuery.error ? (
+              <div className="text-red-300">فشل تحميل الرسائل</div>
+            ) : messages.length === 0 ? (
+              <div className="text-white/60">ابدأ أول رسالة…</div>
+            ) : (
+              <div className="space-y-3">
+                {messages.map((m) => {
+                  // في RTL عادةً رسائلي تكون على اليمين
+                  const mine = Number(m.sender_employee_id) === Number(myId);
+                  const rowClass = mine ? "justify-end" : "justify-start";
+                  const bubbleClass = mine
+                    ? "bg-emerald-400 text-[#071018]"
+                    : "bg-white/[0.04] text-white border border-white/10";
+
+                  const time = formatTime(m.created_at);
+
+                  return (
+                    <div key={m.id} className={`flex ${rowClass}`}>
+                      <div className="max-w-[85%]">
+                        <div
+                          className={`rounded-3xl px-4 py-3 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] ${bubbleClass}`}
+                        >
+                          <div className="text-[15px] leading-6 whitespace-pre-wrap">
+                            {m.body}
+                          </div>
+                        </div>
+                        <div className="mt-1 text-xs text-white/45">{time}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div ref={messagesEndRef} />
+              </div>
+            )}
+          </div>
+
+          <div className={`p-4 border-t border-white/10 ${topBarClass}`}>
+            <div className="flex items-center gap-3">
+              <input
+                value={compose}
+                onChange={(e) => setCompose(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    onSend();
+                  }
+                }}
+                className="flex-1 px-4 py-3 rounded-3xl bg-white/[0.04] border border-white/10 text-white placeholder:text-white/35 focus:outline-none focus:border-white/20"
+                placeholder={
+                  selectedThreadId ? "اكتب رسالة…" : "اختر محادثة أولاً"
+                }
+                disabled={!selectedThreadId}
+              />
+              <button
+                type="button"
+                onClick={onSend}
+                disabled={
+                  !compose.trim() || sendMutation.isPending || !selectedThreadId
+                }
+                className="inline-flex items-center justify-center w-12 h-12 rounded-3xl bg-emerald-400/15 text-emerald-200 border border-emerald-400/25 disabled:opacity-50 hover:bg-emerald-400/20"
+                aria-label="إرسال"
+              >
+                <Send className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {showNewModal ? (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div
+            className={`w-full max-w-md ${softCardClass} overflow-hidden`}
+            dir="rtl"
+          >
+            <div className="p-5 border-b border-white/10 flex items-center justify-between">
+              <div className="font-bold text-white tracking-tight">
+                رسالة جديدة
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowNewModal(false)}
+                className={`${ws.btnNeutral} px-3 py-1`}
+              >
+                إغلاق
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <label className="block text-sm font-semibold text-white/70">
+                اختر المستخدم
+              </label>
+
+              <GlassSelect
+                value={newToUserId}
+                onChange={setNewToUserId}
+                options={newMessageOptions}
+                buttonClassName="px-4 py-3"
+              />
+
+              <button
+                type="button"
+                onClick={startNewConversation}
+                disabled={!newToUserId || createThreadMutation.isPending}
+                className={`${ws.btnPrimary} w-full justify-center py-3 disabled:opacity-50`}
+              >
+                بدء المحادثة
+              </button>
+
+              {createThreadMutation.error ? (
+                <div className="text-sm text-red-300">
+                  {createThreadMutation.error.message}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
