@@ -1,0 +1,802 @@
+{
+  "__notify-BBjbGjdY.js": {
+    "file": "assets/_notify-BBjbGjdY.js",
+    "name": "_notify",
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "__utils-AGOnKbxp.js": {
+    "file": "assets/_utils-AGOnKbxp.js",
+    "name": "_utils",
+    "imports": [
+      "_sql-BfhTxwII.js"
+    ]
+  },
+  "__utils-CZ4YmXjD.js": {
+    "file": "assets/_utils-CZ4YmXjD.js",
+    "name": "_utils",
+    "imports": [
+      "_sql-BfhTxwII.js"
+    ]
+  },
+  "_index-h1F8Nbzc.js": {
+    "file": "assets/index-h1F8Nbzc.js",
+    "name": "index",
+    "dynamicImports": [
+      "virtual:react-router/server-build",
+      "src/app/api/__create/ssr-test/route.js",
+      "src/app/api/accounting/cash-counts/route.js",
+      "src/app/api/accounting/expense-types/route.js",
+      "src/app/api/accounting/expenses/[id]/route.js",
+      "src/app/api/accounting/expenses/route.js",
+      "src/app/api/accounting/green-bean-order-items/[id]/route.js",
+      "src/app/api/accounting/green-bean-orders/[id]/deposit/route.js",
+      "src/app/api/accounting/green-bean-orders/[id]/route.js",
+      "src/app/api/accounting/green-bean-orders/route.js",
+      "src/app/api/accounting/green-beans/[id]/route.js",
+      "src/app/api/accounting/green-beans/route.js",
+      "src/app/api/accounting/payroll/close/route.js",
+      "src/app/api/accounting/payroll/payment/route.js",
+      "src/app/api/accounting/payroll/route.js",
+      "src/app/api/accounting/shift-closings/route.js",
+      "src/app/api/auth/expo-web-success/route.js",
+      "src/app/api/auth/token/route.js",
+      "src/app/api/branches/route.js",
+      "src/app/api/dashboard/analytics/route.js",
+      "src/app/api/employees/[id]/route.js",
+      "src/app/api/employees/login/route.js",
+      "src/app/api/employees/route.js",
+      "src/app/api/hr/bonuses/[id]/route.js",
+      "src/app/api/hr/bonuses/employees/route.js",
+      "src/app/api/hr/bonuses/route.js",
+      "src/app/api/hr/deductions/[id]/route.js",
+      "src/app/api/hr/deductions/employees/route.js",
+      "src/app/api/hr/deductions/route.js",
+      "src/app/api/hr/employees/[id]/logs/route.js",
+      "src/app/api/hr/employees/[id]/route.js",
+      "src/app/api/hr/employees/route.js",
+      "src/app/api/inventory-operations/route.js",
+      "src/app/api/inventory-transfers/route.js",
+      "src/app/api/item-categories/route.js",
+      "src/app/api/items/[id]/analysis/route.js",
+      "src/app/api/items/[id]/history/route.js",
+      "src/app/api/items/batch-inventory/route.js",
+      "src/app/api/items/low-stock/route.js",
+      "src/app/api/items/route.js",
+      "src/app/api/items/summary/route.js",
+      "src/app/api/opening-sessions/route.js",
+      "src/app/api/purchase-receipts/route.js",
+      "src/app/api/setup/route.js",
+      "src/app/api/uploadcare/config/route.js",
+      "src/app/api/uploads/[sessionId]/chunk/route.js",
+      "src/app/api/uploads/[sessionId]/complete/route.js",
+      "src/app/api/uploads/[sessionId]/file/route.js",
+      "src/app/api/uploads/[sessionId]/route.js",
+      "src/app/api/uploads/init/route.js",
+      "src/app/api/variance/route.js",
+      "src/app/api/wasender/test/route.js",
+      "src/app/api/workspace/cron/route.js",
+      "src/app/api/workspace/overdue/route.js",
+      "src/app/api/workspace/reminders/route.js",
+      "src/app/api/workspace/spaces/route.js",
+      "src/app/api/workspace/summary/route.js",
+      "src/app/api/workspace/tasks/[id]/attachments/route.js",
+      "src/app/api/workspace/tasks/[id]/checklist/route.js",
+      "src/app/api/workspace/tasks/[id]/history/route.js",
+      "src/app/api/workspace/tasks/[id]/route.js",
+      "src/app/api/workspace/tasks/[id]/subtasks/route.js",
+      "src/app/api/workspace/tasks/[id]/updates/route.js",
+      "src/app/api/workspace/tasks/quick-status/route.js",
+      "src/app/api/workspace/tasks/route.js",
+      "src/app/api/workspace/templates/route.js",
+      "src/app/api/workspace/threads/[threadId]/messages/route.js",
+      "src/app/api/workspace/threads/route.js",
+      "src/app/api/workspace/users/route.js"
+    ]
+  },
+  "_sessionToken-Bl92ibIS.js": {
+    "file": "assets/sessionToken-Bl92ibIS.js",
+    "name": "sessionToken"
+  },
+  "_sql-BfhTxwII.js": {
+    "file": "assets/sql-BfhTxwII.js",
+    "name": "sql"
+  },
+  "_wasender-Cn2_RTrC.js": {
+    "file": "assets/wasender-Cn2_RTrC.js",
+    "name": "wasender"
+  },
+  "src/app/api/__create/ssr-test/route.js": {
+    "file": "assets/route-CkSr1pmn.js",
+    "name": "route",
+    "src": "src/app/api/__create/ssr-test/route.js",
+    "isDynamicEntry": true
+  },
+  "src/app/api/accounting/cash-counts/route.js": {
+    "file": "assets/route-DKXW1K1D.js",
+    "name": "route",
+    "src": "src/app/api/accounting/cash-counts/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js"
+    ]
+  },
+  "src/app/api/accounting/expense-types/route.js": {
+    "file": "assets/route-EmTaLe9v.js",
+    "name": "route",
+    "src": "src/app/api/accounting/expense-types/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/expenses/[id]/route.js": {
+    "file": "assets/route-BmdIV1J1.js",
+    "name": "route",
+    "src": "src/app/api/accounting/expenses/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/expenses/route.js": {
+    "file": "assets/route-BDIM-HFP.js",
+    "name": "route",
+    "src": "src/app/api/accounting/expenses/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/green-bean-order-items/[id]/route.js": {
+    "file": "assets/route-BApGpVbp.js",
+    "name": "route",
+    "src": "src/app/api/accounting/green-bean-order-items/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/green-bean-orders/[id]/deposit/route.js": {
+    "file": "assets/route-DfGotNTG.js",
+    "name": "route",
+    "src": "src/app/api/accounting/green-bean-orders/[id]/deposit/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/green-bean-orders/[id]/route.js": {
+    "file": "assets/route-Xig-Xx4f.js",
+    "name": "route",
+    "src": "src/app/api/accounting/green-bean-orders/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/green-bean-orders/route.js": {
+    "file": "assets/route-kDQqy6wN.js",
+    "name": "route",
+    "src": "src/app/api/accounting/green-bean-orders/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/green-beans/[id]/route.js": {
+    "file": "assets/route-Dacjj1Ot.js",
+    "name": "route",
+    "src": "src/app/api/accounting/green-beans/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/green-beans/route.js": {
+    "file": "assets/route-CHhKI2aZ.js",
+    "name": "route",
+    "src": "src/app/api/accounting/green-beans/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/payroll/close/route.js": {
+    "file": "assets/route-Cl2W_W5H.js",
+    "name": "route",
+    "src": "src/app/api/accounting/payroll/close/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/payroll/payment/route.js": {
+    "file": "assets/route-BfnH8Lzk.js",
+    "name": "route",
+    "src": "src/app/api/accounting/payroll/payment/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/payroll/route.js": {
+    "file": "assets/route-D3dwyqmr.js",
+    "name": "route",
+    "src": "src/app/api/accounting/payroll/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/accounting/shift-closings/route.js": {
+    "file": "assets/route-C5zJ0mQ0.js",
+    "name": "route",
+    "src": "src/app/api/accounting/shift-closings/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js",
+      "_wasender-Cn2_RTrC.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/auth/expo-web-success/route.js": {
+    "file": "assets/route-Ds7wDXew.js",
+    "name": "route",
+    "src": "src/app/api/auth/expo-web-success/route.js",
+    "isDynamicEntry": true
+  },
+  "src/app/api/auth/token/route.js": {
+    "file": "assets/route-CnUs8NfG.js",
+    "name": "route",
+    "src": "src/app/api/auth/token/route.js",
+    "isDynamicEntry": true
+  },
+  "src/app/api/branches/route.js": {
+    "file": "assets/route-YkaCtO0t.js",
+    "name": "route",
+    "src": "src/app/api/branches/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/dashboard/analytics/route.js": {
+    "file": "assets/route-P_u4t8qD.js",
+    "name": "route",
+    "src": "src/app/api/dashboard/analytics/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/employees/[id]/route.js": {
+    "file": "assets/route-BOm7-r7l.js",
+    "name": "route",
+    "src": "src/app/api/employees/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/employees/login/route.js": {
+    "file": "assets/route-CIIyHlJX.js",
+    "name": "route",
+    "src": "src/app/api/employees/login/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/employees/route.js": {
+    "file": "assets/route-Bb-1uTUQ.js",
+    "name": "route",
+    "src": "src/app/api/employees/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/hr/bonuses/[id]/route.js": {
+    "file": "assets/route-BioBVz0M.js",
+    "name": "route",
+    "src": "src/app/api/hr/bonuses/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/hr/bonuses/employees/route.js": {
+    "file": "assets/route-BiFO682t.js",
+    "name": "route",
+    "src": "src/app/api/hr/bonuses/employees/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/hr/bonuses/route.js": {
+    "file": "assets/route-DBK9cJeb.js",
+    "name": "route",
+    "src": "src/app/api/hr/bonuses/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/hr/deductions/[id]/route.js": {
+    "file": "assets/route-_3m0qYN4.js",
+    "name": "route",
+    "src": "src/app/api/hr/deductions/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/hr/deductions/employees/route.js": {
+    "file": "assets/route-B5hP9cje.js",
+    "name": "route",
+    "src": "src/app/api/hr/deductions/employees/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/hr/deductions/route.js": {
+    "file": "assets/route-BzgnisGc.js",
+    "name": "route",
+    "src": "src/app/api/hr/deductions/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/hr/employees/[id]/logs/route.js": {
+    "file": "assets/route-l1G4CXhS.js",
+    "name": "route",
+    "src": "src/app/api/hr/employees/[id]/logs/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/hr/employees/[id]/route.js": {
+    "file": "assets/route-BMvbIkGh.js",
+    "name": "route",
+    "src": "src/app/api/hr/employees/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/hr/employees/route.js": {
+    "file": "assets/route-BKrzc2Cj.js",
+    "name": "route",
+    "src": "src/app/api/hr/employees/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/inventory-operations/route.js": {
+    "file": "assets/route-BzZKPyTS.js",
+    "name": "route",
+    "src": "src/app/api/inventory-operations/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/inventory-transfers/route.js": {
+    "file": "assets/route-BsSU428K.js",
+    "name": "route",
+    "src": "src/app/api/inventory-transfers/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/item-categories/route.js": {
+    "file": "assets/route-4YhAhnlo.js",
+    "name": "route",
+    "src": "src/app/api/item-categories/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/items/[id]/analysis/route.js": {
+    "file": "assets/route-vQiPgPpY.js",
+    "name": "route",
+    "src": "src/app/api/items/[id]/analysis/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/items/[id]/history/route.js": {
+    "file": "assets/route-CXN-eseB.js",
+    "name": "route",
+    "src": "src/app/api/items/[id]/history/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/items/batch-inventory/route.js": {
+    "file": "assets/route-DApGRSP3.js",
+    "name": "route",
+    "src": "src/app/api/items/batch-inventory/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/items/low-stock/route.js": {
+    "file": "assets/route-1r_NvEg1.js",
+    "name": "route",
+    "src": "src/app/api/items/low-stock/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/items/route.js": {
+    "file": "assets/route-DN68S3Ow.js",
+    "name": "route",
+    "src": "src/app/api/items/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/items/summary/route.js": {
+    "file": "assets/route-G-vEJVVB.js",
+    "name": "route",
+    "src": "src/app/api/items/summary/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/opening-sessions/route.js": {
+    "file": "assets/route-OuJKhJGB.js",
+    "name": "route",
+    "src": "src/app/api/opening-sessions/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/purchase-receipts/route.js": {
+    "file": "assets/route-DhMXqC2a.js",
+    "name": "route",
+    "src": "src/app/api/purchase-receipts/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/setup/route.js": {
+    "file": "assets/route-DHPlbnZq.js",
+    "name": "route",
+    "src": "src/app/api/setup/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js"
+    ]
+  },
+  "src/app/api/uploadcare/config/route.js": {
+    "file": "assets/route-CqirtLEk.js",
+    "name": "route",
+    "src": "src/app/api/uploadcare/config/route.js",
+    "isDynamicEntry": true
+  },
+  "src/app/api/uploads/[sessionId]/chunk/route.js": {
+    "file": "assets/route-BWW8YRGG.js",
+    "name": "route",
+    "src": "src/app/api/uploads/[sessionId]/chunk/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-AGOnKbxp.js"
+    ]
+  },
+  "src/app/api/uploads/[sessionId]/complete/route.js": {
+    "file": "assets/route-IADGGwF_.js",
+    "name": "route",
+    "src": "src/app/api/uploads/[sessionId]/complete/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-AGOnKbxp.js"
+    ]
+  },
+  "src/app/api/uploads/[sessionId]/file/route.js": {
+    "file": "assets/route-CoBWdfXw.js",
+    "name": "route",
+    "src": "src/app/api/uploads/[sessionId]/file/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-AGOnKbxp.js"
+    ]
+  },
+  "src/app/api/uploads/[sessionId]/route.js": {
+    "file": "assets/route-C-I7zprQ.js",
+    "name": "route",
+    "src": "src/app/api/uploads/[sessionId]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-AGOnKbxp.js"
+    ]
+  },
+  "src/app/api/uploads/init/route.js": {
+    "file": "assets/route-BBC1ATQs.js",
+    "name": "route",
+    "src": "src/app/api/uploads/init/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-AGOnKbxp.js"
+    ]
+  },
+  "src/app/api/variance/route.js": {
+    "file": "assets/route-DlTSoe0H.js",
+    "name": "route",
+    "src": "src/app/api/variance/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "_sessionToken-Bl92ibIS.js"
+    ]
+  },
+  "src/app/api/wasender/test/route.js": {
+    "file": "assets/route-DP-Gs_zT.js",
+    "name": "route",
+    "src": "src/app/api/wasender/test/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "__utils-CZ4YmXjD.js",
+      "_wasender-Cn2_RTrC.js",
+      "_sql-BfhTxwII.js"
+    ]
+  },
+  "src/app/api/workspace/cron/route.js": {
+    "file": "assets/route-FrvGeuIR.js",
+    "name": "route",
+    "src": "src/app/api/workspace/cron/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__notify-BBjbGjdY.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/workspace/overdue/route.js": {
+    "file": "assets/route-CQyewYzO.js",
+    "name": "route",
+    "src": "src/app/api/workspace/overdue/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/reminders/route.js": {
+    "file": "assets/route-_BaXYhQJ.js",
+    "name": "route",
+    "src": "src/app/api/workspace/reminders/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__notify-BBjbGjdY.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/workspace/spaces/route.js": {
+    "file": "assets/route-DIVVER4U.js",
+    "name": "route",
+    "src": "src/app/api/workspace/spaces/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/summary/route.js": {
+    "file": "assets/route-PIlTKF9x.js",
+    "name": "route",
+    "src": "src/app/api/workspace/summary/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/tasks/[id]/attachments/route.js": {
+    "file": "assets/route-lN9eR2U5.js",
+    "name": "route",
+    "src": "src/app/api/workspace/tasks/[id]/attachments/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/tasks/[id]/checklist/route.js": {
+    "file": "assets/route-KGnvYUcy.js",
+    "name": "route",
+    "src": "src/app/api/workspace/tasks/[id]/checklist/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/tasks/[id]/history/route.js": {
+    "file": "assets/route-B4TFUK2Y.js",
+    "name": "route",
+    "src": "src/app/api/workspace/tasks/[id]/history/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/tasks/[id]/route.js": {
+    "file": "assets/route-4_bu9lFq.js",
+    "name": "route",
+    "src": "src/app/api/workspace/tasks/[id]/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js",
+      "__notify-BBjbGjdY.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/workspace/tasks/[id]/subtasks/route.js": {
+    "file": "assets/route-D2uVrHln.js",
+    "name": "route",
+    "src": "src/app/api/workspace/tasks/[id]/subtasks/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js",
+      "__notify-BBjbGjdY.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/workspace/tasks/[id]/updates/route.js": {
+    "file": "assets/route-DPW0O6R2.js",
+    "name": "route",
+    "src": "src/app/api/workspace/tasks/[id]/updates/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js",
+      "__notify-BBjbGjdY.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/workspace/tasks/quick-status/route.js": {
+    "file": "assets/route-BcxH3Lg6.js",
+    "name": "route",
+    "src": "src/app/api/workspace/tasks/quick-status/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/tasks/route.js": {
+    "file": "assets/route-Ce7USjEb.js",
+    "name": "route",
+    "src": "src/app/api/workspace/tasks/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js",
+      "__notify-BBjbGjdY.js",
+      "_wasender-Cn2_RTrC.js"
+    ]
+  },
+  "src/app/api/workspace/templates/route.js": {
+    "file": "assets/route-DwoWpxuU.js",
+    "name": "route",
+    "src": "src/app/api/workspace/templates/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/threads/[threadId]/messages/route.js": {
+    "file": "assets/route-g-3ozY9o.js",
+    "name": "route",
+    "src": "src/app/api/workspace/threads/[threadId]/messages/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/threads/route.js": {
+    "file": "assets/route-DRXXJk-U.js",
+    "name": "route",
+    "src": "src/app/api/workspace/threads/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "src/app/api/workspace/users/route.js": {
+    "file": "assets/route-C-5ErZnJ.js",
+    "name": "route",
+    "src": "src/app/api/workspace/users/route.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_sql-BfhTxwII.js",
+      "__utils-CZ4YmXjD.js"
+    ]
+  },
+  "virtual:react-router/server-build": {
+    "file": "assets/server-build.js",
+    "name": "server-build",
+    "src": "virtual:react-router/server-build",
+    "isDynamicEntry": true,
+    "imports": [
+      "_index-h1F8Nbzc.js"
+    ],
+    "css": [
+      "assets/server-build-Cf9JKRxH.css"
+    ]
+  }
+}
