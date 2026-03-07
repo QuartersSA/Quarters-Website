@@ -684,7 +684,9 @@ if (process.env.CORS_ORIGINS) {
   app.use(
     "/*",
     cors({
-      origin: process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
+      origin: process.env.CORS_ORIGINS.split(",").map(
+        (origin) => origin.trim()
+      )
     })
   );
 }
@@ -856,7 +858,7 @@ app.use("/api/auth/*", async (c, next) => {
   return next();
 });
 app.route(API_BASENAME, api);
-const index = await createHonoServer({
+const index = createHonoServer({
   app,
   defaultLogger: false
 });

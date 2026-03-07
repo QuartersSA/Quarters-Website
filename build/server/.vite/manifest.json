@@ -21,8 +21,8 @@
       "_sql-BfhTxwII.js"
     ]
   },
-  "_index-h1F8Nbzc.js": {
-    "file": "assets/index-h1F8Nbzc.js",
+  "_index-BtJd8Pt1.js": {
+    "file": "assets/index-BtJd8Pt1.js",
     "name": "index",
     "dynamicImports": [
       "virtual:react-router/server-build",
@@ -793,7 +793,7 @@
     "src": "virtual:react-router/server-build",
     "isDynamicEntry": true,
     "imports": [
-      "_index-h1F8Nbzc.js"
+      "_index-BtJd8Pt1.js"
     ],
     "css": [
       "assets/server-build-Cf9JKRxH.css"
