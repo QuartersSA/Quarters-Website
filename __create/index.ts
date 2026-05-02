@@ -250,6 +250,29 @@ app.all("/integrations/:path{.+}", async (c, next) => {
   });
 });
 
+// Legacy upload endpoint guard: cached browsers may still POST here.
+// Return a clear JSON instead of letting React Router crash with a 405.
+app.all("/_create/api/upload", (c) =>
+  c.json(
+    {
+      error:
+        "هذا المسار قديم ولم يعد مدعوماً. حدّث المتصفح (Ctrl+Shift+R) لتحميل النسخة الجديدة.",
+      legacy: true,
+    },
+    410,
+  ),
+);
+app.all("/_create/api/upload/", (c) =>
+  c.json(
+    {
+      error:
+        "هذا المسار قديم ولم يعد مدعوماً. حدّث المتصفح (Ctrl+Shift+R) لتحميل النسخة الجديدة.",
+      legacy: true,
+    },
+    410,
+  ),
+);
+
 app.use("/api/auth/*", async (c, next) => {
   if (isAuthAction(c.req.path)) {
     return authHandler()(c, next);

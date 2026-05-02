@@ -8,7 +8,6 @@ function useUpload() {
   const upload = React.useCallback(async (input) => {
     try {
       setLoading(true);
-      let response;
 
       const readErrorMessage = async (res) => {
         // Prefer JSON { error } but fall back to plain text.
@@ -144,44 +143,46 @@ function useUpload() {
         const chunked = await uploadChunked(file);
         return { url: chunked.url, mimeType: chunked.mimeType || null };
       } else if ("url" in input) {
-        response = await fetch("/_create/api/upload/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ url: input.url }),
-        });
-      } else if ("base64" in input) {
-        response = await fetch("/_create/api/upload/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ base64: input.base64 }),
-        });
-      } else {
-        response = await fetch("/_create/api/upload/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/octet-stream",
-          },
-          body: input.buffer,
-        });
-      }
-
-      if (!response.ok) {
-        if (response.status === 413) {
-          throw new Error(
-            `حجم الملف كبير جدًا للرفع المباشر. جرّب مرة ثانية، وإذا استمرت المشكلة قلّي.`,
-          );
+        // Fetch the remote URL and convert to a File, then chunked upload.
+        const remoteRes = await fetch(input.url);
+        if (!remoteRes.ok) {
+          throw new Error(`تعذر تحميل الرابط (${remoteRes.status})`);
         }
-
-        const msg = await readErrorMessage(response);
-        throw new Error(msg || "Upload failed");
+        const blob = await remoteRes.blob();
+        const fileName =
+          (input.url.split("/").pop() || "file").split("?")[0] || "file";
+        const file = new File([blob], fileName, {
+          type: blob.type || "application/octet-stream",
+        });
+        const chunked = await uploadChunked(file);
+        return { url: chunked.url, mimeType: chunked.mimeType || null };
+      } else if ("base64" in input) {
+        // Decode base64 (with optional data: prefix) into a File, then upload.
+        const raw = String(input.base64 || "");
+        let mime = "application/octet-stream";
+        let b64Body = raw;
+        const m = raw.match(/^data:([^;]+);base64,(.*)$/);
+        if (m) {
+          mime = m[1];
+          b64Body = m[2];
+        }
+        const binary = atob(b64Body);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i += 1) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        const file = new File([bytes], "upload.bin", { type: mime });
+        const chunked = await uploadChunked(file);
+        return { url: chunked.url, mimeType: chunked.mimeType || null };
+      } else {
+        // Raw buffer
+        const buf = input.buffer;
+        const file = new File([buf], "upload.bin", {
+          type: "application/octet-stream",
+        });
+        const chunked = await uploadChunked(file);
+        return { url: chunked.url, mimeType: chunked.mimeType || null };
       }
-
-      const data = await response.json().catch(() => ({}));
-      return { url: data.url, mimeType: data.mimeType || null };
     } catch (uploadError) {
       const msg = uploadError instanceof Error ? uploadError.message : null;
       const msgLower = msg ? msg.toLowerCase() : "";
