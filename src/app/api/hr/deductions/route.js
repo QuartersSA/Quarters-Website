@@ -16,6 +16,99 @@ function safeInt(value) {
   return i;
 }
 
+let deductionImagesColumnEnsured = false;
+async function ensureDeductionImagesColumn() {
+  if (deductionImagesColumnEnsured) return;
+  try {
+    await sql`ALTER TABLE hr_employee_deductions ADD COLUMN IF NOT EXISTS images JSONB`;
+    deductionImagesColumnEnsured = true;
+  } catch (e) {
+    console.error("ensureDeductionImagesColumn failed", e);
+  }
+}
+
+function normalizeImagesInput(body) {
+  // Accept either an `images` array (new) or single `image_*` fields (legacy).
+  const raw = body?.images ?? body?.imageList ?? null;
+  let arr = [];
+  if (Array.isArray(raw)) {
+    arr = raw
+      .map((item) => {
+        if (!item || typeof item !== "object") return null;
+        const url = item.url ?? item.image_url ?? null;
+        if (!url) return null;
+        const mimeType = item.mimeType ?? item.image_mime_type ?? null;
+        const name = item.name ?? item.image_name ?? null;
+        const sizeBytes =
+          item.sizeBytes ??
+          item.size_bytes ??
+          item.image_size_bytes ??
+          null;
+        const sizeNum =
+          sizeBytes === null || sizeBytes === undefined || sizeBytes === ""
+            ? null
+            : safeNumber(sizeBytes);
+        return {
+          url: String(url),
+          mimeType: mimeType ? String(mimeType) : null,
+          name: name ? String(name) : null,
+          sizeBytes: sizeNum,
+        };
+      })
+      .filter(Boolean);
+  } else {
+    const url = body?.image_url ?? body?.imageUrl ?? null;
+    if (url) {
+      const mimeType = body?.image_mime_type ?? body?.imageMimeType ?? null;
+      const name = body?.image_name ?? body?.imageName ?? null;
+      const sizeRaw =
+        body?.image_size_bytes ?? body?.imageSizeBytes ?? body?.imageSize ?? null;
+      const sizeNum =
+        sizeRaw === null || sizeRaw === undefined || sizeRaw === ""
+          ? null
+          : safeNumber(sizeRaw);
+      arr = [
+        {
+          url: String(url),
+          mimeType: mimeType ? String(mimeType) : null,
+          name: name ? String(name) : null,
+          sizeBytes: sizeNum,
+        },
+      ];
+    }
+  }
+  return arr;
+}
+
+// For GET responses: ensure rows expose `images` array even for legacy rows
+// that only have the flat image_* fields populated.
+function decorateRowImages(row) {
+  if (!row) return row;
+  let images = Array.isArray(row.images) ? row.images : null;
+  if (!images && row.images && typeof row.images === "string") {
+    try {
+      const parsed = JSON.parse(row.images);
+      if (Array.isArray(parsed)) images = parsed;
+    } catch {
+      // ignore
+    }
+  }
+  if ((!images || images.length === 0) && row.image_url) {
+    images = [
+      {
+        url: row.image_url,
+        mimeType: row.image_mime_type || null,
+        name: row.image_name || null,
+        sizeBytes:
+          row.image_size_bytes === null || row.image_size_bytes === undefined
+            ? null
+            : Number(row.image_size_bytes),
+      },
+    ];
+  }
+  return { ...row, images: images || [] };
+}
+
 function normalizeIsoDate(value) {
   if (!value) return null;
   const s = String(value);
@@ -53,9 +146,10 @@ function normalizeEmployeeIds(body) {
   return single ? [single] : [];
 }
 
-function buildDeductionRowSelectSql(whereClause, params) {
+async function buildDeductionRowSelectSql(whereClause, params) {
+  await ensureDeductionImagesColumn();
   // Keep this in one place so GET/POST can stay in sync
-  return sql(
+  const rows = await sql(
     `
       SELECT
         d.id,
@@ -72,13 +166,15 @@ function buildDeductionRowSelectSql(whereClause, params) {
         d.image_url,
         d.image_mime_type,
         d.image_name,
-        d.image_size_bytes
+        d.image_size_bytes,
+        d.images
       FROM hr_employee_deductions d
       JOIN employees e ON e.id = d.employee_id
       ${whereClause}
     `,
     params,
   );
+  return rows.map(decorateRowImages);
 }
 
 async function notifyDeductionWhatsApp({ createdRows, actorUser }) {
@@ -293,11 +389,8 @@ export async function POST(request) {
     const reason = body.reason;
     const amount = safeNumber(body.amount);
 
-    const imageUrl = body.image_url ?? body.imageUrl;
-    const imageMimeType = body.image_mime_type ?? body.imageMimeType;
-    const imageName = body.image_name ?? body.imageName;
-    const imageSizeBytes =
-      body.image_size_bytes ?? body.imageSizeBytes ?? body.imageSize;
+    const images = normalizeImagesInput(body);
+    const firstImage = images[0] || null;
 
     // IMPORTANT: source is fixed automatically (ignore any client-provided value)
 
@@ -331,17 +424,18 @@ export async function POST(request) {
     const categoryValue = category ? String(category) : null;
     const reasonValue = reason ? String(reason) : null;
 
-    const imageUrlValue = imageUrl ? String(imageUrl) : null;
-    const imageMimeTypeValue = imageMimeType ? String(imageMimeType) : null;
-    const imageNameValue = imageName ? String(imageName) : null;
+    const imageUrlValue = firstImage?.url ?? null;
+    const imageMimeTypeValue = firstImage?.mimeType ?? null;
+    const imageNameValue = firstImage?.name ?? null;
     const imageSizeValue =
-      imageSizeBytes === null ||
-      imageSizeBytes === undefined ||
-      imageSizeBytes === ""
+      firstImage?.sizeBytes === null || firstImage?.sizeBytes === undefined
         ? null
-        : safeNumber(imageSizeBytes);
+        : Number(firstImage.sizeBytes);
+    const imagesJson = images.length > 0 ? JSON.stringify(images) : null;
 
     const uniqueEmployeeIds = Array.from(new Set(employeeIds));
+
+    await ensureDeductionImagesColumn();
 
     const insertResults = await sql.transaction((txn) =>
       uniqueEmployeeIds.map(
@@ -359,7 +453,8 @@ export async function POST(request) {
             image_url,
             image_mime_type,
             image_name,
-            image_size_bytes
+            image_size_bytes,
+            images
           )
           VALUES (
             ${empId},
@@ -373,7 +468,8 @@ export async function POST(request) {
             ${imageUrlValue},
             ${imageMimeTypeValue},
             ${imageNameValue},
-            ${imageSizeValue}
+            ${imageSizeValue},
+            ${imagesJson}::jsonb
           )
           RETURNING id
         `,

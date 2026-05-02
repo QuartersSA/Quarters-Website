@@ -14,6 +14,70 @@ function normalizeIsoDate(value) {
   return s;
 }
 
+let deductionImagesColumnEnsured = false;
+async function ensureDeductionImagesColumn() {
+  if (deductionImagesColumnEnsured) return;
+  try {
+    await sql`ALTER TABLE hr_employee_deductions ADD COLUMN IF NOT EXISTS images JSONB`;
+    deductionImagesColumnEnsured = true;
+  } catch (e) {
+    console.error("ensureDeductionImagesColumn failed", e);
+  }
+}
+
+function normalizeImagesArray(raw) {
+  if (!Array.isArray(raw)) return null;
+  const arr = raw
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const url = item.url ?? item.image_url ?? null;
+      if (!url) return null;
+      const mimeType = item.mimeType ?? item.image_mime_type ?? null;
+      const name = item.name ?? item.image_name ?? null;
+      const sizeBytes =
+        item.sizeBytes ?? item.size_bytes ?? item.image_size_bytes ?? null;
+      const sizeNum =
+        sizeBytes === null || sizeBytes === undefined || sizeBytes === ""
+          ? null
+          : safeNumber(sizeBytes);
+      return {
+        url: String(url),
+        mimeType: mimeType ? String(mimeType) : null,
+        name: name ? String(name) : null,
+        sizeBytes: sizeNum,
+      };
+    })
+    .filter(Boolean);
+  return arr;
+}
+
+function decorateRowImages(row) {
+  if (!row) return row;
+  let images = Array.isArray(row.images) ? row.images : null;
+  if (!images && row.images && typeof row.images === "string") {
+    try {
+      const parsed = JSON.parse(row.images);
+      if (Array.isArray(parsed)) images = parsed;
+    } catch {
+      // ignore
+    }
+  }
+  if ((!images || images.length === 0) && row.image_url) {
+    images = [
+      {
+        url: row.image_url,
+        mimeType: row.image_mime_type || null,
+        name: row.image_name || null,
+        sizeBytes:
+          row.image_size_bytes === null || row.image_size_bytes === undefined
+            ? null
+            : Number(row.image_size_bytes),
+      },
+    ];
+  }
+  return { ...row, images: images || [] };
+}
+
 export async function PUT(request, { params: { id } }) {
   const auth = requireAuth(request, {
     anyOf: [
@@ -39,6 +103,12 @@ export async function PUT(request, { params: { id } }) {
     const reason = body.reason;
     const amount = body.amount;
 
+    const imagesProvided =
+      body.images !== undefined || body.imageList !== undefined;
+    const imagesArray = imagesProvided
+      ? normalizeImagesArray(body.images ?? body.imageList) || []
+      : null;
+
     const imageUrl = body.image_url ?? body.imageUrl;
     const imageMimeType = body.image_mime_type ?? body.imageMimeType;
     const imageName = body.image_name ?? body.imageName;
@@ -46,6 +116,8 @@ export async function PUT(request, { params: { id } }) {
       body.image_size_bytes ?? body.imageSizeBytes ?? body.imageSize;
 
     // IMPORTANT: source is fixed, do not allow updates
+
+    await ensureDeductionImagesColumn();
 
     const sets = [];
     const values = [];
@@ -90,25 +162,45 @@ export async function PUT(request, { params: { id } }) {
       sets.push(`amount = $${values.length}`);
     }
 
-    if (imageUrl !== undefined) {
-      values.push(imageUrl ? String(imageUrl) : null);
+    // If `images` array provided, it's the source of truth. Sync the
+    // legacy single-image columns to the first entry for backward compat.
+    if (imagesProvided) {
+      const first = imagesArray[0] || null;
+      values.push(first?.url ?? null);
       sets.push(`image_url = $${values.length}`);
-    }
-
-    if (imageMimeType !== undefined) {
-      values.push(imageMimeType ? String(imageMimeType) : null);
+      values.push(first?.mimeType ?? null);
       sets.push(`image_mime_type = $${values.length}`);
-    }
-
-    if (imageName !== undefined) {
-      values.push(imageName ? String(imageName) : null);
+      values.push(first?.name ?? null);
       sets.push(`image_name = $${values.length}`);
-    }
-
-    if (imageSizeBytes !== undefined) {
-      const n = imageSizeBytes === "" ? null : safeNumber(imageSizeBytes);
-      values.push(n);
+      values.push(
+        first?.sizeBytes === null || first?.sizeBytes === undefined
+          ? null
+          : Number(first.sizeBytes),
+      );
       sets.push(`image_size_bytes = $${values.length}`);
+      values.push(imagesArray.length > 0 ? JSON.stringify(imagesArray) : null);
+      sets.push(`images = $${values.length}::jsonb`);
+    } else {
+      if (imageUrl !== undefined) {
+        values.push(imageUrl ? String(imageUrl) : null);
+        sets.push(`image_url = $${values.length}`);
+      }
+
+      if (imageMimeType !== undefined) {
+        values.push(imageMimeType ? String(imageMimeType) : null);
+        sets.push(`image_mime_type = $${values.length}`);
+      }
+
+      if (imageName !== undefined) {
+        values.push(imageName ? String(imageName) : null);
+        sets.push(`image_name = $${values.length}`);
+      }
+
+      if (imageSizeBytes !== undefined) {
+        const n = imageSizeBytes === "" ? null : safeNumber(imageSizeBytes);
+        values.push(n);
+        sets.push(`image_size_bytes = $${values.length}`);
+      }
     }
 
     if (sets.length === 0) {
@@ -146,13 +238,14 @@ export async function PUT(request, { params: { id } }) {
         d.image_url,
         d.image_mime_type,
         d.image_name,
-        d.image_size_bytes
+        d.image_size_bytes,
+        d.images
       FROM hr_employee_deductions d
       JOIN employees e ON e.id = d.employee_id
       WHERE d.id = ${deductionId}
     `;
 
-    return Response.json(row);
+    return Response.json(decorateRowImages(row));
   } catch (error) {
     console.error("HR: Error updating deduction:", error);
     return Response.json(

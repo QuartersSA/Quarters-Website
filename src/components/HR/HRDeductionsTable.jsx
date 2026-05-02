@@ -139,7 +139,10 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
               const amountValue = formatMoney(d.amount);
               // UPDATED: "مصدر المخالفة" = username of the user who entered it (fallbacks for old data)
               const sourceValue = d.source || d.created_by_employee_name || "-";
-              const hasImage = !!d.image_url;
+              const imagesArr = Array.isArray(d.images) ? d.images : [];
+              const firstImageUrl = imagesArr[0]?.url || d.image_url || null;
+              const imagesCount = imagesArr.length || (d.image_url ? 1 : 0);
+              const hasImage = !!firstImageUrl;
 
               return (
                 <tr
@@ -188,14 +191,23 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
                   <td className="px-5 py-4">
                     {hasImage ? (
                       <a
-                        href={d.image_url}
+                        href={firstImageUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className={`${ws.iconButton} text-emerald-200 inline-flex`}
+                        className={`${ws.iconButton} text-emerald-200 inline-flex items-center gap-1`}
                         aria-label="عرض المرفق"
-                        title="عرض المرفق"
+                        title={
+                          imagesCount > 1
+                            ? `عرض المرفقات (${imagesCount})`
+                            : "عرض المرفق"
+                        }
                       >
                         <ImageIcon className="w-4 h-4" />
+                        {imagesCount > 1 ? (
+                          <span className="text-xs font-semibold">
+                            {imagesCount}
+                          </span>
+                        ) : null}
                       </a>
                     ) : (
                       <span className="text-white/30">-</span>

@@ -1,2 +1,27 @@
 node_modules/
 .react-router/
+
+# Build output
+build/
+dist/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Project uses bun (bun.lock); ignore other lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+

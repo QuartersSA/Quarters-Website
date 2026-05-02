@@ -140,50 +140,9 @@ function useUpload() {
           );
         }
 
-        // For files bigger than ~4MB, we go straight to chunked upload.
-        // This avoids hitting Anything's various single-request limits.
-        const shouldChunk =
-          typeof file?.size === "number" && file.size > 4.5 * 1024 * 1024;
-        if (shouldChunk) {
-          const chunked = await uploadChunked(file);
-          return { url: chunked.url, mimeType: chunked.mimeType || null };
-        }
-
-        // Fast path for small files.
-        // IMPORTANT: /_create/api/upload expects multipart/form-data with a `file` field.
-        const form = new FormData();
-        form.append("file", file, file.name || "file");
-
-        try {
-          response = await fetch("/_create/api/upload/", {
-            method: "POST",
-            body: form,
-          });
-        } catch (e) {
-          // Some browsers (notably iOS/Safari) can throw "Load failed" for multipart uploads.
-          // In that case, fall back to chunked upload (our own /api/uploads/*).
-          if (isNetworkLikeError(e)) {
-            const chunked = await uploadChunked(file);
-            return { url: chunked.url, mimeType: chunked.mimeType || null };
-          }
-          throw e;
-        }
-
-        // If the platform rejects the body size, or returns the common "No image provided" error,
-        // fall back to chunked uploads.
-        if (!response.ok) {
-          if (response.status === 413) {
-            const chunked = await uploadChunked(file);
-            return { url: chunked.url, mimeType: chunked.mimeType || null };
-          }
-
-          const msg = await readErrorMessage(response);
-          const msgLower = String(msg || "").toLowerCase();
-          if (msgLower.includes("no image provided")) {
-            const chunked = await uploadChunked(file);
-            return { url: chunked.url, mimeType: chunked.mimeType || null };
-          }
-        }
+        // Always use chunked upload through our own /api/uploads/* endpoints.
+        const chunked = await uploadChunked(file);
+        return { url: chunked.url, mimeType: chunked.mimeType || null };
       } else if ("url" in input) {
         response = await fetch("/_create/api/upload/", {
           method: "POST",

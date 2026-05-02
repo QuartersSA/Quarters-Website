@@ -104,41 +104,67 @@ export function HRDeductionModal({
     return list;
   }, [currentCategory, showCustomCategoryOption]);
 
-  const onPickImage = useCallback(
-    async (file) => {
+  const currentImages = useMemo(() => {
+    return Array.isArray(formData.images) ? formData.images : [];
+  }, [formData.images]);
+
+  const onPickImages = useCallback(
+    async (files) => {
       setUploadError(null);
+      const list = Array.from(files || []).filter(Boolean);
+      if (list.length === 0) return;
 
-      if (!file) {
-        return;
+      const uploaded = [];
+      for (const file of list) {
+        const { url, mimeType, error } = await upload({ file });
+        if (error) {
+          setUploadError(error);
+          continue;
+        }
+        if (!url) continue;
+        uploaded.push({
+          url,
+          mimeType: mimeType || file.type || null,
+          name: file.name || null,
+          sizeBytes: typeof file.size === "number" ? file.size : null,
+        });
       }
 
-      const { url, mimeType, error } = await upload({ file });
-      if (error) {
-        setUploadError(error);
-        return;
-      }
+      if (uploaded.length === 0) return;
 
+      const next = [...currentImages, ...uploaded];
+      const first = next[0];
       setFormData({
         ...formData,
-        image_url: url || "",
-        image_mime_type: mimeType || file.type || "",
-        image_name: file.name || "",
-        image_size_bytes: typeof file.size === "number" ? file.size : null,
+        images: next,
+        // keep legacy fields synced to first image for backward compat
+        image_url: first?.url || "",
+        image_mime_type: first?.mimeType || "",
+        image_name: first?.name || "",
+        image_size_bytes:
+          typeof first?.sizeBytes === "number" ? first.sizeBytes : null,
       });
     },
-    [formData, setFormData, upload],
+    [currentImages, formData, setFormData, upload],
   );
 
-  const onClearImage = useCallback(() => {
-    setUploadError(null);
-    setFormData({
-      ...formData,
-      image_url: "",
-      image_mime_type: "",
-      image_name: "",
-      image_size_bytes: null,
-    });
-  }, [formData, setFormData]);
+  const onRemoveImage = useCallback(
+    (index) => {
+      setUploadError(null);
+      const next = currentImages.filter((_, i) => i !== index);
+      const first = next[0];
+      setFormData({
+        ...formData,
+        images: next,
+        image_url: first?.url || "",
+        image_mime_type: first?.mimeType || "",
+        image_name: first?.name || "",
+        image_size_bytes:
+          typeof first?.sizeBytes === "number" ? first.sizeBytes : null,
+      });
+    },
+    [currentImages, formData, setFormData],
+  );
 
   if (!isOpen) return null;
 
@@ -291,23 +317,22 @@ export function HRDeductionModal({
             />
           </div>
 
-          {/* Image */}
+          {/* Images */}
           <div>
             <label className="block text-sm font-semibold text-white/70 mb-2">
               <FileImage className="w-4 h-4 inline ml-2" />
-              صورة (اختياري)
+              صور (اختياري — يمكن إضافة أكثر من صورة)
             </label>
 
             <div className={`${ws.glassSoft} ${ws.card} p-4`}>
               <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                 <div className="text-white/70 text-sm">
-                  {formData.image_url ? (
-                    <div className="truncate" title={formData.image_name || ""}>
-                      تم رفع الصورة
-                      {formData.image_name ? `: ${formData.image_name}` : ""}
+                  {currentImages.length > 0 ? (
+                    <div>
+                      عدد الصور المرفوعة: {currentImages.length}
                     </div>
                   ) : (
-                    <div>ارفع صورة للمخالفة (اختياري)</div>
+                    <div>ارفع صور للمخالفة (يمكن اختيار أكثر من صورة)</div>
                   )}
                 </div>
 
@@ -318,16 +343,16 @@ export function HRDeductionModal({
                     <input
                       type="file"
                       accept="image/*"
+                      multiple
                       className="hidden"
                       onChange={(e) => {
-                        const file = e.target.files?.[0] || null;
-                        // reset input so picking same file again works
+                        const files = Array.from(e.target.files || []);
                         try {
                           e.target.value = "";
                         } catch {
                           // ignore
                         }
-                        onPickImage(file);
+                        onPickImages(files);
                       }}
                       disabled={uploading || isSubmitting}
                     />
@@ -336,23 +361,12 @@ export function HRDeductionModal({
                         <Loader2 className="w-4 h-4" />
                         جاري الرفع…
                       </span>
+                    ) : currentImages.length > 0 ? (
+                      "إضافة صور أخرى"
                     ) : (
-                      "اختيار صورة"
+                      "اختيار صور"
                     )}
                   </label>
-
-                  {formData.image_url ? (
-                    <button
-                      type="button"
-                      onClick={onClearImage}
-                      className={`${ws.iconButton} text-red-200`}
-                      aria-label="حذف الصورة"
-                      title="حذف الصورة"
-                      disabled={uploading || isSubmitting}
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  ) : null}
                 </div>
               </div>
 
@@ -360,19 +374,46 @@ export function HRDeductionModal({
                 <div className="mt-3 text-sm text-red-200">{uploadError}</div>
               ) : null}
 
-              {formData.image_url ? (
-                <a
-                  href={formData.image_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block mt-4"
-                >
-                  <img
-                    src={formData.image_url}
-                    alt="مرفق الخصمية"
-                    className="w-full max-h-[240px] object-contain rounded-xl bg-black/20"
-                  />
-                </a>
+              {currentImages.length > 0 ? (
+                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {currentImages.map((img, idx) => (
+                    <div
+                      key={`${img.url}-${idx}`}
+                      className="relative group rounded-xl overflow-hidden bg-black/20 border border-white/10"
+                    >
+                      <a
+                        href={img.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block"
+                      >
+                        <img
+                          src={img.url}
+                          alt={img.name || `صورة ${idx + 1}`}
+                          className="w-full h-[140px] object-cover"
+                        />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => onRemoveImage(idx)}
+                        className="absolute top-2 left-2 bg-black/60 hover:bg-red-500/80 text-white rounded-full p-1.5 transition-colors"
+                        aria-label="حذف الصورة"
+                        title="حذف الصورة"
+                        disabled={uploading || isSubmitting}
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                      {img.name ? (
+                        <div
+                          className="absolute bottom-0 inset-x-0 px-2 py-1 text-[11px] text-white/80 bg-black/60 truncate"
+                          title={img.name}
+                        >
+                          {img.name}
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
               ) : null}
             </div>
           </div>

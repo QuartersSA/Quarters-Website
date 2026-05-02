@@ -143,6 +143,7 @@ export default function HRDeductionsPage() {
       violation_category: "",
       reason: "",
       amount: "",
+      images: [],
       image_url: "",
       image_mime_type: "",
       image_name: "",
@@ -261,6 +262,44 @@ export default function HRDeductionsPage() {
   const handleOpenModal = (deduction = null) => {
     if (deduction) {
       setEditingDeduction(deduction);
+      const existingImages = Array.isArray(deduction.images)
+        ? deduction.images
+            .map((img) => {
+              if (!img || typeof img !== "object") return null;
+              const url = img.url || img.image_url;
+              if (!url) return null;
+              return {
+                url: String(url),
+                mimeType: img.mimeType || img.image_mime_type || null,
+                name: img.name || img.image_name || null,
+                sizeBytes:
+                  img.sizeBytes === null || img.sizeBytes === undefined
+                    ? img.image_size_bytes === null ||
+                      img.image_size_bytes === undefined
+                      ? null
+                      : Number(img.image_size_bytes)
+                    : Number(img.sizeBytes),
+              };
+            })
+            .filter(Boolean)
+        : [];
+
+      const fallbackImages =
+        existingImages.length === 0 && deduction.image_url
+          ? [
+              {
+                url: deduction.image_url,
+                mimeType: deduction.image_mime_type || null,
+                name: deduction.image_name || null,
+                sizeBytes:
+                  deduction.image_size_bytes === null ||
+                  deduction.image_size_bytes === undefined
+                    ? null
+                    : Number(deduction.image_size_bytes),
+              },
+            ]
+          : existingImages;
+
       setFormData({
         employeeIds: deduction.employee_id
           ? [String(deduction.employee_id)]
@@ -272,6 +311,7 @@ export default function HRDeductionsPage() {
           deduction.amount === null || deduction.amount === undefined
             ? ""
             : String(deduction.amount),
+        images: fallbackImages,
         image_url: deduction.image_url || "",
         image_mime_type: deduction.image_mime_type || "",
         image_name: deduction.image_name || "",
@@ -327,6 +367,22 @@ export default function HRDeductionsPage() {
       return;
     }
 
+    const imagesArray = Array.isArray(formData.images)
+      ? formData.images
+          .map((img) => {
+            if (!img || !img.url) return null;
+            return {
+              url: String(img.url),
+              mimeType: img.mimeType ? String(img.mimeType) : null,
+              name: img.name ? String(img.name) : null,
+              sizeBytes:
+                typeof img.sizeBytes === "number" ? img.sizeBytes : null,
+            };
+          })
+          .filter(Boolean)
+      : [];
+    const firstImage = imagesArray[0] || null;
+
     const payloadBase = {
       violation_date: dateValue,
       violation_category: formData.violation_category
@@ -334,15 +390,13 @@ export default function HRDeductionsPage() {
         : null,
       reason: formData.reason ? String(formData.reason) : null,
       amount: amountValue,
-      image_url: formData.image_url ? String(formData.image_url) : null,
-      image_mime_type: formData.image_mime_type
-        ? String(formData.image_mime_type)
-        : null,
-      image_name: formData.image_name ? String(formData.image_name) : null,
+      images: imagesArray,
+      // legacy fields kept in sync to first image (for older clients)
+      image_url: firstImage?.url || null,
+      image_mime_type: firstImage?.mimeType || null,
+      image_name: firstImage?.name || null,
       image_size_bytes:
-        formData.image_size_bytes === null || formData.image_size_bytes === ""
-          ? null
-          : Number(formData.image_size_bytes),
+        typeof firstImage?.sizeBytes === "number" ? firstImage.sizeBytes : null,
     };
 
     if (editingDeduction) {
