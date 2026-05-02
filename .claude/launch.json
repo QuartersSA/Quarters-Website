@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Dev Server (React Router + Vite)",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "dev"],
+      "port": 4000,
+      "autoPort": true
+    },
+    {
+      "name": "Production Server",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--env-file=.env", "./build/server/index.js"],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}
