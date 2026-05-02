@@ -87,7 +87,7 @@ export default defineConfig({
   server: {
     allowedHosts: true,
     host: "0.0.0.0",
-    port: 4000,
+    port: process.env.PORT ? parseInt(process.env.PORT) : 4000,
     hmr: {
       overlay: false,
     },
