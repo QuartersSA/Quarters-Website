@@ -48,9 +48,13 @@ export function HRDeductionModal({
     return new Set(HR_DEDUCTION_CATEGORIES);
   }, []);
 
+  const OTHER_VALUE = "__other__";
   const currentCategory = formData.violation_category || "";
+  const isOtherSelected = currentCategory === OTHER_VALUE;
   const showCustomCategoryOption =
-    !!currentCategory && !knownCategories.has(currentCategory);
+    !!currentCategory &&
+    currentCategory !== OTHER_VALUE &&
+    !knownCategories.has(currentCategory);
 
   const employeeSelectOptions = useMemo(() => {
     return employeeOptions.map((emp) => {
@@ -100,6 +104,8 @@ export function HRDeductionModal({
         list.push({ value: opt, label: opt });
       });
     });
+
+    list.push({ value: OTHER_VALUE, label: "أخرى" });
 
     return list;
   }, [currentCategory, showCustomCategoryOption]);
@@ -266,13 +272,33 @@ export function HRDeductionModal({
             </label>
 
             <GlassSelect
-              value={currentCategory}
-              onChange={(v) =>
-                setFormData({ ...formData, violation_category: v || "" })
-              }
+              value={isOtherSelected ? OTHER_VALUE : currentCategory}
+              onChange={(v) => {
+                if (v === OTHER_VALUE) {
+                  setFormData({ ...formData, violation_category: OTHER_VALUE });
+                } else {
+                  setFormData({ ...formData, violation_category: v || "" });
+                }
+              }}
               options={categorySelectOptions}
               placeholder="— اختر تصنيف المخالفة —"
             />
+
+            {isOtherSelected && (
+              <input
+                type="text"
+                autoFocus
+                className={`${ws.input} px-4 py-2 mt-2 w-full`}
+                placeholder="اكتب تصنيف المخالفة"
+                value={formData.violation_category_other || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    violation_category_other: e.target.value,
+                  })
+                }
+              />
+            )}
 
             <div className="mt-2 text-xs text-white/45">
               ملاحظة: تم اعتماد قائمة ثابتة لتصنيفات الخصميات.

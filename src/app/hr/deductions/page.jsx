@@ -383,11 +383,16 @@ export default function HRDeductionsPage() {
       : [];
     const firstImage = imagesArray[0] || null;
 
+    const resolvedCategory =
+      formData.violation_category === "__other__"
+        ? (formData.violation_category_other || "").trim() || null
+        : formData.violation_category
+        ? String(formData.violation_category)
+        : null;
+
     const payloadBase = {
       violation_date: dateValue,
-      violation_category: formData.violation_category
-        ? String(formData.violation_category)
-        : null,
+      violation_category: resolvedCategory,
       reason: formData.reason ? String(formData.reason) : null,
       amount: amountValue,
       images: imagesArray,
