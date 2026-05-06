@@ -47,7 +47,7 @@ export const ws = {
   iconBox:
     "w-11 h-11 rounded-2xl bg-white/[0.05] border border-white/10 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] flex items-center justify-center",
   iconButton:
-    "w-10 h-10 rounded-2xl bg-white/[0.03] border border-white/10 text-white hover:bg-white/[0.06]",
+    "inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-white/[0.03] border border-white/10 text-white hover:bg-white/[0.06]",
   chip: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-semibold text-white/70",
 
   // Segmented controls
