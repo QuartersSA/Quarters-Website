@@ -219,7 +219,7 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
                       <button
                         type="button"
                         onClick={() => onEdit?.(d)}
-                        className={`${ws.iconButton} text-sky-200`}
+                        className={`${ws.iconButton} inline-flex items-center justify-center text-sky-200`}
                         aria-label="تعديل"
                       >
                         <Pencil className="w-4 h-4" />
@@ -227,7 +227,7 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
                       <button
                         type="button"
                         onClick={() => onDelete?.(d.id)}
-                        className={`${ws.iconButton} text-red-200`}
+                        className={`${ws.iconButton} inline-flex items-center justify-center text-red-200`}
                         aria-label="حذف"
                       >
                         <Trash2 className="w-4 h-4" />
