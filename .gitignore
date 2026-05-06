@@ -2,6 +2,8 @@ node_modules/
 .react-router/
 
 # Build output
+# IMPORTANT: build/ MUST be committed — Railway serves these files directly.
+# Do not add build/ to .gitignore.
 dist/
 
 # Environment / secrets
