@@ -1,5 +1,8 @@
 # Quarters Website — Instructions for Claude
 
+> **Architecture reference:** Before non-trivial work, read [.claude/architecture.md](.claude/architecture.md)
+> for the full feature map, server/SSR architecture, auth flows, data layer, custom plugins, and project gotchas.
+
 ## Deployment context
 
 This project is deployed on **Railway** and serves traffic from `quarters.sa`. Railway does **not** rebuild the project on its own — it serves the pre-built files directly from the `build/` directory in the repository.
