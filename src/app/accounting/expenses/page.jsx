@@ -10,6 +10,7 @@ import {
   TrendingUp,
   Info,
   Banknote,
+  Anchor,
 } from "lucide-react";
 import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
@@ -22,6 +23,8 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { ExpenseForm } from "@/components/Accounting/ExpenseForm";
 import { ExpenseTable } from "@/components/Accounting/ExpenseTable";
+import { FixedExpenseForm } from "@/components/Accounting/FixedExpenseForm";
+import { FixedExpensesList } from "@/components/Accounting/FixedExpensesList";
 import {
   useExpensesData,
   useExpenseTypes,
@@ -31,6 +34,13 @@ import {
   useDeleteExpense,
   useCreateExpenseType,
 } from "@/hooks/useExpensesData";
+import {
+  useFixedExpenses,
+  useCreateFixedExpense,
+  useUpdateFixedExpense,
+  useDeleteFixedExpense,
+  useConfirmFixedExpense,
+} from "@/hooks/useFixedExpenses";
 
 /* ── Mobile Header ── */
 function ExpensesMobileHeader() {
@@ -79,7 +89,7 @@ function ExpensesInfoCard() {
         <div className="min-w-0">
           <div className="font-bold text-white tracking-tight">ملاحظة</div>
           <div className="text-sm text-white/60 mt-1 leading-6">
-            أضف المصروفات من قسم «تسجيل المصروفات» ثم راجعها وأكّدها من قسم «رفع
+            أضف المصروفات من قسم «مصروف متغيّر» ثم راجعها وأكّدها من قسم «رفع
             المصروفات» حسب الشهر.
           </div>
         </div>
@@ -247,19 +257,31 @@ export default function ExpensesPage() {
 
   const [activeTab, setActiveTab] = useState("register");
   const [editingExpense, setEditingExpense] = useState(null);
+  const [editingFixed, setEditingFixed] = useState(null);
 
   const expensesQuery = useExpensesData(month, employeeId, isAdmin);
   const typesQuery = useExpenseTypes(employeeId, isAdmin);
+  const fixedExpensesQuery = useFixedExpenses(employeeId, isAdmin);
   const createExpenseMutation = useCreateExpense(month);
   const updateExpenseMutation = useUpdateExpense(month);
   const confirmExpenseMutation = useConfirmExpense(month);
   const deleteExpenseMutation = useDeleteExpense(month);
   const createTypeMutation = useCreateExpenseType();
+  const createFixedMutation = useCreateFixedExpense();
+  const updateFixedMutation = useUpdateFixedExpense();
+  const deleteFixedMutation = useDeleteFixedExpense();
+  const confirmFixedMutation = useConfirmFixedExpense();
 
   const expenses = Array.isArray(expensesQuery.data?.expenses)
     ? expensesQuery.data.expenses
     : [];
+  const pendingFixed = Array.isArray(expensesQuery.data?.pending_fixed)
+    ? expensesQuery.data.pending_fixed
+    : [];
   const types = Array.isArray(typesQuery.data) ? typesQuery.data : [];
+  const fixedExpenses = Array.isArray(fixedExpensesQuery.data)
+    ? fixedExpensesQuery.data
+    : [];
 
   const handleCreateExpense = (data) => {
     createExpenseMutation.mutate(data);
@@ -294,6 +316,33 @@ export default function ExpensesPage() {
 
   const handleCancelEdit = () => {
     setEditingExpense(null);
+  };
+
+  const handleSubmitFixed = (data) => {
+    if (editingFixed) {
+      updateFixedMutation.mutate(data, {
+        onSuccess: () => setEditingFixed(null),
+      });
+    } else {
+      createFixedMutation.mutate(data);
+    }
+  };
+
+  const handleEditFixed = (fixed) => {
+    setEditingFixed(fixed);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleCancelEditFixed = () => {
+    setEditingFixed(null);
+  };
+
+  const handleDeleteFixed = (id) => {
+    deleteFixedMutation.mutate(id);
+  };
+
+  const handleConfirmFixedExpense = (data) => {
+    confirmFixedMutation.mutate(data);
   };
 
   // Loading / Auth states
@@ -346,6 +395,7 @@ export default function ExpensesPage() {
 
   const isRegisterTab = activeTab === "register";
   const isReviewTab = activeTab === "review";
+  const isFixedTab = activeTab === "fixed";
 
   return (
     <div className="min-h-[100svh] pb-24 lg:pb-0" dir="rtl">
@@ -367,7 +417,7 @@ export default function ExpensesPage() {
               className={`${ws.segBtn} ${isRegisterTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
             >
               <FileText className="w-4 h-4" />
-              تسجيل المصروفات
+              مصروف متغيّر
             </button>
             <button
               type="button"
@@ -379,6 +429,27 @@ export default function ExpensesPage() {
               {expenses.length > 0 && (
                 <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
                   {expenses.length}
+                </span>
+              )}
+              {pendingFixed.length > 0 && (
+                <span
+                  className="bg-emerald-400/20 text-emerald-200 text-[10px] px-1.5 py-0.5 rounded-full font-bold"
+                  title="مصروفات ثابتة بانتظار التأكيد"
+                >
+                  +{pendingFixed.length}
+                </span>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("fixed")}
+              className={`${ws.segBtn} ${isFixedTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
+            >
+              <Anchor className="w-4 h-4" />
+              مصروف ثابت
+              {fixedExpenses.length > 0 && (
+                <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                  {fixedExpenses.length}
                 </span>
               )}
             </button>
@@ -595,15 +666,47 @@ export default function ExpensesPage() {
                       <div className="overflow-x-auto">
                         <ExpenseTable
                           expenses={expenses}
+                          pendingFixed={pendingFixed}
+                          month={month}
                           onConfirm={handleConfirmExpense}
                           onDelete={handleDeleteExpense}
                           onEdit={handleEditExpense}
+                          onConfirmFixed={handleConfirmFixedExpense}
                         />
                       </div>
                     )}
                   </div>
                 </>
               )}
+            </>
+          )}
+
+          {/* ═══════ Fixed Expenses Tab ═══════ */}
+          {isFixedTab && (
+            <>
+              <FixedExpenseForm
+                types={types}
+                onSubmit={handleSubmitFixed}
+                isSubmitting={
+                  editingFixed
+                    ? updateFixedMutation.isPending
+                    : createFixedMutation.isPending
+                }
+                editingFixed={editingFixed}
+                onCancelEdit={handleCancelEditFixed}
+              />
+
+              <FixedExpensesList
+                items={fixedExpenses}
+                isLoading={fixedExpensesQuery.isLoading}
+                error={
+                  fixedExpensesQuery.error
+                    ? String(fixedExpensesQuery.error.message)
+                    : null
+                }
+                onEdit={handleEditFixed}
+                onDelete={handleDeleteFixed}
+              />
             </>
           )}
         </div>

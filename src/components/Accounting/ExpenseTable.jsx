@@ -1,7 +1,115 @@
 import { useState, useEffect } from "react";
-import { Check, X, MessageSquare, Pencil, Trash2 } from "lucide-react";
+import { Check, X, MessageSquare, Pencil, Trash2, Anchor } from "lucide-react";
 import { formatMoney } from "@/utils/payrollFormatters";
 import { ws } from "@/components/Workspace/ui";
+
+// Row for a fixed-expense template that has not been confirmed yet for the
+// current month. User can confirm payment (with optional override amount).
+function PendingFixedRow({ pending, month, onConfirmFixed }) {
+  const [amount, setAmount] = useState(String(pending.default_amount || ""));
+  const [note, setNote] = useState("");
+  const [showNote, setShowNote] = useState(false);
+
+  const handleConfirm = () => {
+    onConfirmFixed({
+      id: pending.id,
+      month,
+      confirmed_amount: amount !== "" ? Number(amount) : Number(pending.default_amount),
+      confirmed_note: note || null,
+    });
+  };
+
+  const typeName = pending.expense_type_name || "—";
+  const expenseName = pending.expense_name || "—";
+  const defaultFormatted = formatMoney(pending.default_amount);
+
+  return (
+    <>
+      <tr className="border-t border-white/10 hover:bg-white/[0.04] bg-emerald-400/[0.03]">
+        <td
+          className="py-2.5 px-2 text-white/70 whitespace-nowrap text-sm"
+          style={{ maxWidth: 120 }}
+        >
+          {typeName}
+        </td>
+        <td
+          className="py-2.5 px-2 font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm"
+          style={{ maxWidth: 200 }}
+        >
+          <span className="inline-flex items-center gap-1.5">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/15 border border-emerald-400/30 text-emerald-200 text-[10px] font-bold">
+              <Anchor className="w-2.5 h-2.5" />
+              ثابت
+            </span>
+            <span>{expenseName}</span>
+          </span>
+        </td>
+        <td
+          className="py-2.5 px-2 text-white/70 whitespace-nowrap text-right text-sm"
+          dir="ltr"
+        >
+          {defaultFormatted}
+        </td>
+        <td className="py-2.5 px-2">
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            className={`${ws.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right`}
+            dir="ltr"
+            placeholder={String(pending.default_amount || 0)}
+            step="0.01"
+          />
+        </td>
+        <td className="py-2.5 px-1 text-center">
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-white/[0.04] border border-white/10 text-white/30">
+            <X className="w-3.5 h-3.5" />
+          </span>
+        </td>
+        <td className="py-2.5 px-1">
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setShowNote(!showNote)}
+              className={`w-6 h-6 rounded-md inline-flex items-center justify-center transition-all ${
+                note
+                  ? "bg-amber-400/15 border border-amber-400/30 text-amber-300"
+                  : "bg-white/[0.04] border border-white/10 text-white/40 hover:bg-white/[0.08]"
+              }`}
+              title="ملاحظة"
+            >
+              <MessageSquare className="w-3 h-3" />
+            </button>
+            <button
+              type="button"
+              onClick={handleConfirm}
+              className={`${ws.btnPrimary} text-xs px-2 py-0.5 rounded-lg`}
+              title="تأكيد الدفع"
+            >
+              تأكيد الدفع
+            </button>
+          </div>
+        </td>
+      </tr>
+
+      {showNote && (
+        <tr className="border-t border-white/5">
+          <td colSpan={6} className="py-2 px-2">
+            <div className="flex items-start gap-2 mr-2">
+              <input
+                type="text"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="ملاحظة (اختياري)..."
+                className={`${ws.input} text-xs py-1.5 px-3 rounded-xl flex-1`}
+              />
+            </div>
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
 
 function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
   const savedConfirmed = !!expense.is_confirmed;
@@ -306,13 +414,25 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
   );
 }
 
-export function ExpenseTable({ expenses, onConfirm, onDelete, onEdit }) {
-  if (expenses.length === 0) {
+export function ExpenseTable({
+  expenses,
+  pendingFixed = [],
+  month,
+  onConfirm,
+  onDelete,
+  onEdit,
+  onConfirmFixed,
+}) {
+  const hasAny =
+    (Array.isArray(expenses) && expenses.length > 0) ||
+    (Array.isArray(pendingFixed) && pendingFixed.length > 0);
+
+  if (!hasAny) {
     return (
       <div className="text-center py-8">
         <div className="text-white/40 text-sm">لا يوجد مصروفات لهذا الشهر</div>
         <div className="text-white/25 text-xs mt-1">
-          أضف مصروفات من قسم تسجيل المصروفات
+          أضف مصروفات من قسم مصروف متغيّر أو سجّل مصاريف ثابتة
         </div>
       </div>
     );
@@ -323,6 +443,7 @@ export function ExpenseTable({ expenses, onConfirm, onDelete, onEdit }) {
   const totalConfirmed = expenses
     .filter((e) => e.is_confirmed)
     .reduce((s, e) => s + Number(e.confirmed_amount || e.amount || 0), 0);
+  const pendingCount = Array.isArray(pendingFixed) ? pendingFixed.length : 0;
 
   return (
     <>
@@ -330,6 +451,15 @@ export function ExpenseTable({ expenses, onConfirm, onDelete, onEdit }) {
         <span className="text-xs text-white/50">
           تم التأكيد: {confirmedCount} / {expenses.length}
         </span>
+        {pendingCount > 0 && (
+          <>
+            <span className="text-xs text-white/40">|</span>
+            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-200">
+              <Anchor className="w-3 h-3" />
+              مصروفات ثابتة بانتظار التأكيد: {pendingCount}
+            </span>
+          </>
+        )}
         <span className="text-xs text-white/40">|</span>
         <span className="text-xs text-white/50">
           إجمالي المصروفات:{" "}
@@ -372,6 +502,15 @@ export function ExpenseTable({ expenses, onConfirm, onDelete, onEdit }) {
           </tr>
         </thead>
         <tbody>
+          {Array.isArray(pendingFixed) &&
+            pendingFixed.map((p) => (
+              <PendingFixedRow
+                key={`fixed-${p.id}`}
+                pending={p}
+                month={month}
+                onConfirmFixed={onConfirmFixed}
+              />
+            ))}
           {expenses.map((e) => (
             <ExpenseRow
               key={e.id}

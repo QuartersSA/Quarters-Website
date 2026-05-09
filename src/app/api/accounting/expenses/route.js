@@ -37,7 +37,32 @@ export async function GET(request) {
       ORDER BY t.name ASC, e.expense_name ASC, e.id ASC
     `;
 
-    return Response.json({ types, expenses });
+    // Active fixed-expense templates that have NOT been instantiated yet for this month.
+    // Wrapped in a try so this never breaks the main expenses fetch if the table
+    // doesn't exist yet (first deploy).
+    let pendingFixed = [];
+    try {
+      pendingFixed = await sql`
+        SELECT f.id, f.expense_type_id, f.expense_name, f.default_amount,
+               f.start_month, t.name AS expense_type_name
+        FROM accounting_fixed_expenses f
+        JOIN accounting_expense_types t ON t.id = f.expense_type_id
+        WHERE f.is_active = TRUE
+          AND (f.start_month IS NULL OR f.start_month <= ${monthStart})
+          AND NOT EXISTS (
+            SELECT 1 FROM accounting_expenses e
+            WHERE e.fixed_expense_id = f.id
+              AND e.expense_month = ${monthStart}
+          )
+        ORDER BY t.name ASC, f.expense_name ASC
+      `;
+    } catch (e) {
+      // Table likely doesn't exist yet; that's fine — first request to fixed-expenses
+      // GET/POST will create it.
+      pendingFixed = [];
+    }
+
+    return Response.json({ types, expenses, pending_fixed: pendingFixed });
   } catch (error) {
     console.error("expenses GET error", error);
     return Response.json({ error: "فشل تحميل المصروفات" }, { status: 500 });
