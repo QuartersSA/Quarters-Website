@@ -316,7 +316,16 @@ export function OrdersList({
               return (
                 <tr
                   key={o.id}
-                  className={`${rowClass} border-t border-white/10`}
+                  className={`${rowClass} border-t border-white/10 cursor-pointer transition-colors`}
+                  onClick={() => onSelectOrder(String(o.id))}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      onSelectOrder(String(o.id));
+                    }
+                  }}
                 >
                   <td className="py-2 text-white/85 font-semibold truncate">
                     #{o.id}
