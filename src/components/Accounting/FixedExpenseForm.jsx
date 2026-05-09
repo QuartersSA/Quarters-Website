@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Banknote, Save, X } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import { buildRecentMonthOptions } from "@/utils/payrollFormatters";
 
 export function FixedExpenseForm({
   types,
@@ -16,6 +17,8 @@ export function FixedExpenseForm({
   const [startMonth, setStartMonth] = useState("");
 
   const isEditing = !!editingFixed;
+
+  const monthOptions = useMemo(() => buildRecentMonthOptions(30), []);
 
   useEffect(() => {
     if (editingFixed) {
@@ -129,11 +132,12 @@ export function FixedExpenseForm({
             شهر البداية{" "}
             <span className="text-white/35">(اختياري)</span>
           </div>
-          <input
-            type="month"
+          <GlassSelect
             value={startMonth}
-            onChange={(e) => setStartMonth(e.target.value)}
-            className={`${ws.input} px-3 py-2 w-full`}
+            onChange={setStartMonth}
+            options={monthOptions}
+            placeholder="بدون شهر بداية"
+            buttonClassName="text-sm py-2.5 px-3"
           />
           <div className="text-[11px] text-white/35 mt-1">
             إذا تُرك فارغاً يطبَّق على كل الأشهر السابقة واللاحقة.
