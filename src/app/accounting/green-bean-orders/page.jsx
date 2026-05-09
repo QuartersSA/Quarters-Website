@@ -34,12 +34,13 @@ export default function GreenBeanOrdersPage() {
 
   // archive state
   const [selectedOrderId, setSelectedOrderId] = useState("");
+  const [filterMonth, setFilterMonth] = useState(""); // "" = show all
 
   // edit state
   const [editingOrderId, setEditingOrderId] = useState(null);
 
   const beansQuery = useGreenBeans(ready, isAuthenticated, isAdmin);
-  const ordersQuery = useOrders(ready, isAuthenticated, isAdmin);
+  const ordersQuery = useOrders(ready, isAuthenticated, isAdmin, filterMonth);
   const orderDetailsQuery = useOrderDetails(
     ready,
     isAuthenticated,
@@ -315,6 +316,8 @@ export default function GreenBeanOrdersPage() {
         isLoading={ordersQuery.isLoading}
         error={ordersErrorText}
         deleteDisabled={deleteOrderMutation.isPending}
+        filterMonth={filterMonth}
+        onFilterMonthChange={setFilterMonth}
       />
 
       <OrderDetails

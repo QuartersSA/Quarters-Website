@@ -19,12 +19,36 @@ export function useGreenBeans(ready, isAuthenticated, isAdmin) {
   });
 }
 
-export function useOrders(ready, isAuthenticated, isAdmin) {
+function monthToRange(monthValue) {
+  const text = String(monthValue || "");
+  if (!/^\d{4}-\d{2}$/.test(text)) return { from: "", to: "" };
+
+  const yyyy = text.slice(0, 4);
+  const mm = text.slice(5, 7);
+  const monthNum = Number(mm);
+  const yearNum = Number(yyyy);
+  if (!Number.isFinite(monthNum) || !Number.isFinite(yearNum)) {
+    return { from: "", to: "" };
+  }
+
+  const lastDay = new Date(yearNum, monthNum, 0).getDate();
+  const dd = String(lastDay).padStart(2, "0");
+  return { from: `${yyyy}-${mm}-01`, to: `${yyyy}-${mm}-${dd}` };
+}
+
+export function useOrders(ready, isAuthenticated, isAdmin, month = "") {
   return useQuery({
-    queryKey: ["accounting", "greenBeanOrders"],
+    queryKey: ["accounting", "greenBeanOrders", month || "all"],
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
-      const res = await adminFetch("/api/accounting/green-bean-orders");
+      const params = new URLSearchParams();
+      params.set("limit", "2000");
+      const { from, to } = monthToRange(month);
+      if (from) params.set("from", from);
+      if (to) params.set("to", to);
+
+      const url = `/api/accounting/green-bean-orders?${params.toString()}`;
+      const res = await adminFetch(url);
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         throw new Error(
