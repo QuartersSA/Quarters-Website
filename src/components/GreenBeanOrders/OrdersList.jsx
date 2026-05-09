@@ -52,6 +52,8 @@ export function OrdersList({
   isLoading,
   error,
   deleteDisabled,
+  filterMonth = "",
+  onFilterMonthChange,
 }) {
   const cardShell = `${ws.glassSoft} ${ws.card} p-5`;
 
@@ -359,10 +361,31 @@ export function OrdersList({
     );
   }
 
+  const handleFilterMonthChange = (e) => {
+    if (typeof onFilterMonthChange === "function") {
+      onFilterMonthChange(e.target.value);
+    }
+  };
+
   return (
     <div className={cardShell}>
       <div className="text-white font-bold tracking-tight">الطلبات</div>
       <div className="text-xs text-white/50 mt-1">اختر طلب لفتح تفاصيله.</div>
+
+      <div className="mt-3">
+        <label className="block max-w-[220px]">
+          <div className="text-xs text-white/55 mb-1">فلترة حسب الشهر</div>
+          <input
+            type="month"
+            className={`${ws.input} px-3 py-2 w-full`}
+            value={filterMonth}
+            onChange={handleFilterMonthChange}
+          />
+          <div className="text-[11px] text-white/40 mt-1">
+            اترك الحقل فارغاً لعرض كل الطلبات.
+          </div>
+        </label>
+      </div>
 
       {content}
 
