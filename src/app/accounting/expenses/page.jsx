@@ -89,7 +89,7 @@ function ExpensesInfoCard() {
         <div className="min-w-0">
           <div className="font-bold text-white tracking-tight">ملاحظة</div>
           <div className="text-sm text-white/60 mt-1 leading-6">
-            أضف المصروفات من قسم «تسجيل المصروفات» ثم راجعها وأكّدها من قسم «رفع
+            أضف المصروفات من قسم «مصروف متغيّر» ثم راجعها وأكّدها من قسم «رفع
             المصروفات» حسب الشهر.
           </div>
         </div>
@@ -417,7 +417,7 @@ export default function ExpensesPage() {
               className={`${ws.segBtn} ${isRegisterTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
             >
               <FileText className="w-4 h-4" />
-              تسجيل المصروفات
+              مصروف متغيّر
             </button>
             <button
               type="button"

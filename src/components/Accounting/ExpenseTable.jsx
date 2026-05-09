@@ -432,7 +432,7 @@ export function ExpenseTable({
       <div className="text-center py-8">
         <div className="text-white/40 text-sm">لا يوجد مصروفات لهذا الشهر</div>
         <div className="text-white/25 text-xs mt-1">
-          أضف مصروفات من قسم تسجيل المصروفات أو سجّل مصاريف ثابتة
+          أضف مصروفات من قسم مصروف متغيّر أو سجّل مصاريف ثابتة
         </div>
       </div>
     );
