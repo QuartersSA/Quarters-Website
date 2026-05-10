@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Receipt,
   FileText,
@@ -408,6 +408,26 @@ export default function ExpensesPage() {
   const handleQuickAddSubmit = (data) => {
     createExpenseMutation.mutate(data);
   };
+
+  // ── Keyboard shortcuts ──
+  // Ctrl+N (or Cmd+N on Mac) opens the quick-add sheet from any tab.
+  // Enter inside the form submits — handled natively by <form onSubmit>.
+  useEffect(() => {
+    function onKey(e) {
+      const isCmdOrCtrl = e.ctrlKey || e.metaKey;
+      if (!isCmdOrCtrl) return;
+      const key = e.key?.toLowerCase();
+      if (key !== "n") return;
+      // Don't hijack a browser shortcut while the user is in another field
+      // that might conflict — e.g. they're typing in the existing form.
+      // Browser default for Ctrl+N is "new window"; we override it for the
+      // expenses page only.
+      e.preventDefault();
+      setQuickAddOpen(true);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   // Loading / Auth states
   if (!ready) {

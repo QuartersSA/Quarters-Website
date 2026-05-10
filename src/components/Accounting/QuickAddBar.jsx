@@ -31,10 +31,14 @@ export function QuickAddBar({
         <button
           type="button"
           onClick={onOpenAdd}
+          title="Ctrl+N"
           className={`${ws.btnPrimary} px-4 py-2.5 text-sm flex items-center gap-2`}
         >
           <Plus className="w-4 h-4" />
           <span>مصروف سريع</span>
+          <kbd className="hidden sm:inline-flex items-center text-[10px] font-mono bg-white/10 border border-white/15 rounded px-1.5 py-0.5">
+            Ctrl+N
+          </kbd>
         </button>
 
         <div className="w-32 sm:w-44">
