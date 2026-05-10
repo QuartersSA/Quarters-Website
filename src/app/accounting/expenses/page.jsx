@@ -25,6 +25,12 @@ import { ExpenseForm } from "@/components/Accounting/ExpenseForm";
 import { ExpenseTable } from "@/components/Accounting/ExpenseTable";
 import { FixedExpenseForm } from "@/components/Accounting/FixedExpenseForm";
 import { FixedExpensesList } from "@/components/Accounting/FixedExpensesList";
+import { QuickAddBar } from "@/components/Accounting/QuickAddBar";
+import { QuickAddSheet } from "@/components/Accounting/QuickAddSheet";
+import { getMissingPresetCategories } from "@/utils/cafeExpenseCategories";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { adminFetch } from "@/utils/apiAuth";
 import {
   useExpensesData,
   useExpenseTypes,
@@ -258,6 +264,8 @@ export default function ExpensesPage() {
   const [activeTab, setActiveTab] = useState("register");
   const [editingExpense, setEditingExpense] = useState(null);
   const [editingFixed, setEditingFixed] = useState(null);
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
+  const [isSeedingCategories, setIsSeedingCategories] = useState(false);
 
   const expensesQuery = useExpensesData(month, employeeId, isAdmin);
   const typesQuery = useExpenseTypes(employeeId, isAdmin);
@@ -345,6 +353,62 @@ export default function ExpensesPage() {
     confirmFixedMutation.mutate(data);
   };
 
+  const queryClient = useQueryClient();
+  const missingPresets = useMemo(
+    () => getMissingPresetCategories(types),
+    [types],
+  );
+
+  const handleSeedCafeCategories = async () => {
+    if (isSeedingCategories) return;
+    if (missingPresets.length === 0) {
+      toast.info("جميع تصنيفات الكوفي موجودة بالفعل");
+      return;
+    }
+    setIsSeedingCategories(true);
+    let added = 0;
+    let skipped = 0;
+    try {
+      for (const cat of missingPresets) {
+        try {
+          const res = await adminFetch("/api/accounting/expense-types", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: cat.name }),
+          });
+          if (res.ok) {
+            added += 1;
+          } else {
+            skipped += 1;
+          }
+        } catch {
+          skipped += 1;
+        }
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ["accounting_expense_types"],
+      });
+      if (added > 0) {
+        toast.success(
+          `تمت إضافة ${added} تصنيف${skipped > 0 ? ` (${skipped} تخطي)` : ""}`,
+        );
+      } else {
+        toast.error("تعذّر إضافة التصنيفات");
+      }
+    } finally {
+      setIsSeedingCategories(false);
+    }
+  };
+
+  const monthlyTotalAmount = useMemo(
+    () => expenses.reduce((s, e) => s + Number(e.amount || 0), 0),
+    [expenses],
+  );
+
+  const handleQuickAddSubmit = (data) => {
+    createExpenseMutation.mutate(data);
+  };
+
   // Loading / Auth states
   if (!ready) {
     return (
@@ -406,6 +470,18 @@ export default function ExpensesPage() {
       <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto w-full space-y-5">
           <ExpensesDesktopHeader />
+
+          <QuickAddBar
+            month={month}
+            onMonthChange={setMonth}
+            monthOptions={monthOptions}
+            totalAmount={monthlyTotalAmount}
+            totalCount={expenses.length}
+            onOpenAdd={() => setQuickAddOpen(true)}
+            onSeedCategories={handleSeedCafeCategories}
+            showSeedButton={missingPresets.length > 0}
+            isSeeding={isSeedingCategories}
+          />
 
           <ExpensesInfoCard />
 
@@ -711,6 +787,15 @@ export default function ExpensesPage() {
           )}
         </div>
       </main>
+
+      <QuickAddSheet
+        open={quickAddOpen}
+        onClose={() => setQuickAddOpen(false)}
+        types={types}
+        onSubmit={handleQuickAddSubmit}
+        isSubmitting={createExpenseMutation.isPending}
+        onCreateType={handleCreateType}
+      />
     </div>
   );
 }
