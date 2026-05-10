@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeftRight,
   Plus,
@@ -14,6 +14,7 @@ import { adminFetch } from "@/utils/apiAuth";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import { useCreateTransfer } from "@/hooks/useCreateTransfer";
 
 function toNumberOrNull(value) {
   const n = Number(value);
@@ -34,8 +35,6 @@ function nowLocalDatetime() {
 }
 
 export default function TransferModal({ branches, onClose }) {
-  const queryClient = useQueryClient();
-
   const [fromBranchId, setFromBranchId] = useState("");
   const [toBranchId, setToBranchId] = useState("");
   const [operationDate, setOperationDate] = useState(nowLocalDatetime());
@@ -200,48 +199,29 @@ export default function TransferModal({ branches, onClose }) {
     items.length === 0 ||
     items.length > 200;
 
-  const submitMutation = useMutation({
-    mutationFn: async () => {
-      const payload = {
-        fromBranchId: fromIdNum,
-        toBranchId: toIdNum,
-        items: items.map((x) => ({ itemId: x.itemId, quantity: x.quantity })),
-        note: note?.trim() ? note.trim() : null,
-        operationDate: operationDate || null,
-      };
-
-      const response = await adminFetch("/api/inventory-transfers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data?.error || "فشل في تنفيذ التحويل");
-      }
-
-      return data;
-    },
+  const submitMutation = useCreateTransfer({
     onSuccess: (data) => {
       setError(null);
       setSuccess(`تم التحويل بنجاح (${data?.transferNumber || ""})`);
-      queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      queryClient.invalidateQueries({ queryKey: ["items-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock"] });
-
       window.setTimeout(() => {
         onClose();
       }, 800);
     },
     onError: (e) => {
-      console.error(e);
       setSuccess(null);
       setError(e?.message || "حدث خطأ أثناء التحويل");
     },
   });
+
+  const handleSubmitTransfer = () => {
+    submitMutation.mutate({
+      fromBranchId: fromIdNum,
+      toBranchId: toIdNum,
+      items: items.map((x) => ({ itemId: x.itemId, quantity: x.quantity })),
+      note: note?.trim() ? note.trim() : null,
+      operationDate: operationDate || null,
+    });
+  };
 
   const modalRef = useRef(null);
 
@@ -528,7 +508,7 @@ export default function TransferModal({ branches, onClose }) {
                 setError("تأكد من اختيار الفروع وإضافة الأصناف");
                 return;
               }
-              submitMutation.mutate();
+              handleSubmitTransfer();
             }}
             className={`${ws.btnPrimary} flex-1 px-4 py-3 justify-center`}
             disabled={submitDisabled || submitMutation.isPending}
