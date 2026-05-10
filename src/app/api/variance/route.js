@@ -35,6 +35,11 @@ export async function GET(request) {
       );
     }
 
+    // Variance row computes two delta perspectives:
+    //   delta_quantity        = actual − (opening + receipts since opening)
+    //                           "loss/gain since the period opened"
+    //   delta_since_previous  = actual − (previous_inv + receipts between prev and this)
+    //                           "loss/gain since the last count" (incremental)
     const query = `
       SELECT
         io.id as operation_id,
@@ -95,7 +100,45 @@ export async function GET(request) {
             ),
             0
           )::numeric
-        )) as delta_quantity
+        )) as delta_quantity,
+        prev.prev_quantity,
+        prev.prev_op_date,
+        CASE
+          WHEN prev.prev_quantity IS NULL THEN NULL
+          ELSE (
+            prev.prev_quantity::numeric +
+            COALESCE(
+              (
+                SELECT SUM(pr.quantity)::numeric
+                FROM purchase_receipts pr
+                WHERE pr.branch_id = io.branch_id
+                  AND pr.item_id = ii.item_id
+                  AND pr.received_at > prev.prev_op_date
+                  AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
+              ),
+              0
+            )::numeric
+          )
+        END as expected_since_previous,
+        CASE
+          WHEN prev.prev_quantity IS NULL THEN NULL
+          ELSE (
+            ii.quantity::numeric - (
+              prev.prev_quantity::numeric +
+              COALESCE(
+                (
+                  SELECT SUM(pr.quantity)::numeric
+                  FROM purchase_receipts pr
+                  WHERE pr.branch_id = io.branch_id
+                    AND pr.item_id = ii.item_id
+                    AND pr.received_at > prev.prev_op_date
+                    AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
+                ),
+                0
+              )::numeric
+            )
+          )
+        END as delta_since_previous
       FROM inventory_operations io
       JOIN inventory_items ii ON ii.operation_id = io.id
       LEFT JOIN branches b ON b.id = io.branch_id
@@ -110,6 +153,28 @@ export async function GET(request) {
       ) os ON TRUE
       LEFT JOIN opening_session_items osi
         ON osi.session_id = os.id AND osi.item_id = ii.item_id
+      LEFT JOIN LATERAL (
+        SELECT
+          ii_p.quantity::numeric AS prev_quantity,
+          COALESCE(io_p.operation_date, io_p.created_at) AS prev_op_date
+        FROM inventory_items ii_p
+        JOIN inventory_operations io_p ON io_p.id = ii_p.operation_id
+        WHERE ii_p.item_id = ii.item_id
+          AND io_p.branch_id = io.branch_id
+          AND io_p.status = 'Completed'
+          AND io_p.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
+          AND (
+            COALESCE(io_p.operation_date, io_p.created_at)
+              < COALESCE(io.operation_date, io.created_at)
+            OR (
+              COALESCE(io_p.operation_date, io_p.created_at)
+                = COALESCE(io.operation_date, io.created_at)
+              AND io_p.id < io.id
+            )
+          )
+        ORDER BY COALESCE(io_p.operation_date, io_p.created_at) DESC, io_p.id DESC
+        LIMIT 1
+      ) prev ON TRUE
       WHERE io.status = 'Completed'
         AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
         AND io.branch_id = $1

@@ -118,7 +118,11 @@ export default function TransferModal({ branches, onClose }) {
     setSuccess(null);
 
     const itemIdNum = toNumberOrNull(selectedItemId);
-    const qtyNum = Math.floor(Number(quantity));
+    // Allow decimal quantities (e.g. 12.5 kg, 0.75 liters). Round to 3 decimals.
+    const rawQty = Number(quantity);
+    const qtyNum = Number.isFinite(rawQty)
+      ? Math.round(rawQty * 1000) / 1000
+      : NaN;
 
     if (!fromIdNum) {
       setError("اختر فرع المرسل");
@@ -350,8 +354,8 @@ export default function TransferModal({ branches, onClose }) {
                 </label>
                 <input
                   type="number"
-                  min={1}
-                  step={1}
+                  min={0}
+                  step="0.001"
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   className={`${ws.input} px-4 py-3`}

@@ -209,7 +209,11 @@ export async function POST(request) {
         continue;
       }
 
-      cleanedItems.push({ itemId, quantity: Math.floor(quantity) });
+      // Round to 3 decimal places (matches NUMERIC(12,3) precision)
+      cleanedItems.push({
+        itemId,
+        quantity: Math.round(quantity * 1000) / 1000,
+      });
     }
 
     if (cleanedItems.length === 0) {
@@ -270,7 +274,7 @@ export async function POST(request) {
 
     // Validate available qty in from-branch
     for (const it of cleanedItems) {
-      const current = Math.floor(Number(fromQtyMap.get(it.itemId) || 0));
+      const current = Number(fromQtyMap.get(it.itemId) || 0);
       if (current < it.quantity) {
         const name = itemNameById.get(it.itemId) || "الصنف";
         return Response.json(
@@ -326,14 +330,14 @@ export async function POST(request) {
       ],
     );
 
-    // Insert only the affected items with their NEW absolute quantities
-    // Use Math.round to ensure integer values for the integer column
+    // Insert only the affected items with their NEW absolute quantities.
+    // Quantity column is NUMERIC(12,3) — preserves up to 3 decimal places.
     for (const it of cleanedItems) {
-      const fromCurrent = Math.floor(Number(fromQtyMap.get(it.itemId) || 0));
-      const toCurrent = Math.floor(Number(toQtyMap.get(it.itemId) || 0));
+      const fromCurrent = Number(fromQtyMap.get(it.itemId) || 0);
+      const toCurrent = Number(toQtyMap.get(it.itemId) || 0);
 
-      const fromNew = fromCurrent - it.quantity;
-      const toNew = toCurrent + it.quantity;
+      const fromNew = Math.round((fromCurrent - it.quantity) * 1000) / 1000;
+      const toNew = Math.round((toCurrent + it.quantity) * 1000) / 1000;
 
       await sql`
         INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
