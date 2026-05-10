@@ -12,13 +12,17 @@ import {
   TrendingDown,
   Menu,
   X,
+  BarChart3,
+  Truck,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import AppSectionSwitcher from "@/components/AppSectionSwitcher";
 
 export function Sidebar({ onLogout, activePage = "dashboard" }) {
   const [isInventorySummaryOpen, setIsInventorySummaryOpen] = useState(
-    activePage === "low-stock" || activePage === "items-summary",
+    activePage === "low-stock" ||
+      activePage === "items-summary" ||
+      activePage === "variance",
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [canManageEmployees, setCanManageEmployees] = useState(true);
@@ -49,6 +53,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
       employees: "الموظفين",
       "low-stock": "منخفض الكمية",
       "items-summary": "ملخص الأصناف",
+      variance: "تقرير الانحراف",
+      receipts: "الواردات",
     };
 
     return titles[activePage] || "أنظمة Quarters";
@@ -198,6 +204,21 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             </span>
           </a>
 
+          <a
+            href="/admin/receipts"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
+              activePage === "receipts"
+                ? "bg-white/10 text-white border-white/20"
+                : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"
+            }`}
+          >
+            <Truck className="w-5 h-5" />
+            <span className={activePage === "receipts" ? "font-semibold" : ""}>
+              الواردات
+            </span>
+          </a>
+
           <div>
             <button
               onClick={() => setIsInventorySummaryOpen(!isInventorySummaryOpen)}
@@ -251,6 +272,25 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
                     }
                   >
                     ملخص الأصناف
+                  </span>
+                </a>
+
+                <a
+                  href="/admin/variance"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
+                    activePage === "variance"
+                      ? "bg-white/10 text-white border-white/20"
+                      : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"
+                  }`}
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  <span
+                    className={
+                      activePage === "variance" ? "font-semibold" : ""
+                    }
+                  >
+                    تقرير الانحراف
                   </span>
                 </a>
               </div>

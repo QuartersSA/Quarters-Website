@@ -358,6 +358,37 @@ export function ItemFormModal({
             </p>
           </div>
 
+          {/* Max Stock Threshold */}
+          <div>
+            <label className={labelClass}>
+              الحد الأقصى للتنبيه{" "}
+              <span className="text-white/40 text-xs">(اختياري)</span>
+            </label>
+            <input
+              type="number"
+              min="0"
+              value={
+                formData.max_stock_threshold === null ||
+                formData.max_stock_threshold === undefined
+                  ? ""
+                  : formData.max_stock_threshold
+              }
+              onChange={(e) => {
+                const val = e.target.value;
+                setFormData({
+                  ...formData,
+                  max_stock_threshold:
+                    val === "" ? null : parseInt(val) || null,
+                });
+              }}
+              className={`${ws.input} px-4 py-3`}
+              placeholder="بدون حد"
+            />
+            <p className={helpClass}>
+              سيتم التنبيه عند تجاوز الكمية هذا العدد (لكشف المخزون الفائض)
+            </p>
+          </div>
+
           {/* Show in Inventory Toggle */}
           <div
             className={`${ws.glassSoft} border border-white/10 rounded-2xl p-5`}
