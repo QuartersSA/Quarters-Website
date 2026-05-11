@@ -95,6 +95,76 @@ export default function OperationsPage() {
     });
   };
 
+  // ── Multi-select state for bulk operations ──
+  const [selectedIds, setSelectedIds] = useState(() => new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+
+  const toggleSelect = useCallback((id) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    const selectable = (filteredOperations || []).filter(
+      (op) =>
+        typeof op.id === "number" ||
+        (typeof op.id === "string" && /^\d+$/.test(op.id)),
+    );
+    setSelectedIds((prev) => {
+      const allOnPage = selectable.every((op) => prev.has(op.id));
+      if (allOnPage) {
+        const next = new Set(prev);
+        for (const op of selectable) next.delete(op.id);
+        return next;
+      }
+      const next = new Set(prev);
+      for (const op of selectable) next.add(op.id);
+      return next;
+    });
+  }, [filteredOperations]);
+
+  const clearSelection = useCallback(() => {
+    setSelectedIds(new Set());
+  }, []);
+
+  // Bulk delete: confirms once then calls deleteMutation.mutate per id.
+  // Receipt rows (string ids) are filtered out — they don't go through this path.
+  const handleBulkDelete = useCallback(async () => {
+    const ids = Array.from(selectedIds).filter(
+      (id) =>
+        typeof id === "number" ||
+        (typeof id === "string" && /^\d+$/.test(id)),
+    );
+    if (ids.length === 0) return;
+    if (typeof window === "undefined") return;
+    const ok = window.confirm(`حذف ${ids.length} عملية؟ لا يمكن التراجع.`);
+    if (!ok) return;
+
+    setBulkDeleting(true);
+    let succeeded = 0;
+    let failed = 0;
+    for (const id of ids) {
+      try {
+        await deleteMutation.mutateAsync(id);
+        succeeded += 1;
+      } catch (err) {
+        console.error("bulk delete failed for id", id, err);
+        failed += 1;
+      }
+    }
+    setBulkDeleting(false);
+    setSelectedIds(new Set());
+    if (failed > 0) {
+      window.alert(
+        `تم حذف ${succeeded} عملية، وفشل حذف ${failed} عملية. راجع الـ console.`,
+      );
+    }
+  }, [selectedIds, deleteMutation]);
+
   const handleEditOperation = useCallback(
     async (operation, existingDetails) => {
       const isReceipt = operation.inventory_type === "Receipt";
@@ -227,6 +297,12 @@ export default function OperationsPage() {
           onViewOperation={setSelectedOperation}
           onDeleteOperation={setDeleteTarget}
           onEditOperation={handleEditOperation}
+          selectedIds={selectedIds}
+          onToggleSelect={toggleSelect}
+          onToggleSelectAll={toggleSelectAll}
+          onClearSelection={clearSelection}
+          onBulkDelete={handleBulkDelete}
+          bulkDeleteDisabled={bulkDeleting || deleteMutation.isPending}
         />
       </main>
 
