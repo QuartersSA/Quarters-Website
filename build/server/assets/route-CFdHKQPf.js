@@ -163,12 +163,23 @@ async function GET(request) {
       });
     }
 
-    // Check total low stock
-    const totalLowStock = lowStockData.reduce((s, r) => s + Number(r.low_stock_count), 0);
-    if (totalLowStock > 0) {
+    // Aggregate lowStockData in one pass — previously this array was
+    // reduced three separate times (totalLowStock for alerts, then
+    // totalTrackedItems + totalLowStockItems + totalOutOfStock for the
+    // health score). Single loop avoids 3× iteration over the same
+    // array and removes the duplicate "sum of low_stock_count" pair.
+    let totalTrackedItems = 0;
+    let totalLowStockItems = 0;
+    let totalOutOfStock = 0;
+    for (const r of lowStockData) {
+      totalTrackedItems += Number(r.tracked_items || 0);
+      totalLowStockItems += Number(r.low_stock_count || 0);
+      totalOutOfStock += Number(r.out_of_stock_count || 0);
+    }
+    if (totalLowStockItems > 0) {
       alerts.push({
         type: "warning",
-        message: `${totalLowStock} صنف منخفض الكمية عبر جميع الفروع`
+        message: `${totalLowStockItems} صنف منخفض الكمية عبر جميع الفروع`
       });
     }
 
@@ -223,10 +234,8 @@ async function GET(request) {
     const totalInventoryCost = inventoryCost.reduce((s, r) => s + Number(r.total_cost || 0), 0);
 
     // 6. Health Score calculation
-    const totalTrackedItems = lowStockData.reduce((s, r) => s + Number(r.tracked_items || 0), 0);
-    const totalLowStockItems = lowStockData.reduce((s, r) => s + Number(r.low_stock_count || 0), 0);
-    const totalOutOfStock = lowStockData.reduce((s, r) => s + Number(r.out_of_stock_count || 0), 0);
-
+    // totalTrackedItems / totalLowStockItems / totalOutOfStock were
+    // already computed above in the single fused loop over lowStockData.
     // Health Score = 100 - (low stock penalty) - (out of stock penalty) - (no recent ops penalty)
     let healthScore = 100;
     if (totalTrackedItems > 0) {

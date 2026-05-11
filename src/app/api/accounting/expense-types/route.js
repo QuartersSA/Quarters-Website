@@ -12,8 +12,10 @@ export async function GET(request) {
   }
 
   try {
+    // Only `id` and `name` are consumed by the form selectors and the
+    // cafe-preset matcher.
     const types =
-      await sql`SELECT * FROM accounting_expense_types ORDER BY name ASC`;
+      await sql`SELECT id, name FROM accounting_expense_types ORDER BY name ASC`;
     return Response.json({ types });
   } catch (error) {
     console.error("expense-types GET error", error);
@@ -52,7 +54,9 @@ export async function POST(request) {
     }
 
     const [created] = await sql`
-      INSERT INTO accounting_expense_types (name) VALUES (${name}) RETURNING *
+      INSERT INTO accounting_expense_types (name)
+      VALUES (${name})
+      RETURNING id, name
     `;
 
     return Response.json({ ok: true, type: created });

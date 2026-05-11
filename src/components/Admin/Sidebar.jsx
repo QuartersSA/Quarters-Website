@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import {
   LayoutDashboard,
   Building2,
@@ -25,24 +25,25 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
       activePage === "variance",
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [canManageEmployees, setCanManageEmployees] = useState(true);
-
-  useEffect(() => {
+  // Sidebar mounts on every admin page navigation (it's rendered per-page,
+  // not in the layout). Previously this used useState(true) + useEffect to
+  // hydrate `canManageEmployees` from localStorage, which causes two
+  // renders per mount and runs localStorage.getItem + JSON.parse every
+  // time. Lazy `useState` initializer collapses it to a single render and
+  // a single read.
+  const [canManageEmployees] = useState(() => {
+    if (typeof window === "undefined") return true;
     try {
       const auth = localStorage.getItem("adminAuth");
       const raw = localStorage.getItem("adminUser");
-      if (!auth || !raw) {
-        return;
-      }
-
+      if (!auth || !raw) return true;
       const u = JSON.parse(raw);
       const flag = u?.can_manage_employees;
-      const allowed = flag === undefined || flag === null ? true : !!flag;
-      setCanManageEmployees(allowed);
+      return flag === undefined || flag === null ? true : !!flag;
     } catch {
-      // ignore
+      return true;
     }
-  }, []);
+  });
 
   const pageTitle = useMemo(() => {
     const titles = {

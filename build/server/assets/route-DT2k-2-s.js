@@ -20,8 +20,10 @@ async function GET(request) {
     const url = new URL(request.url);
     const monthRaw = url.searchParams.get("month");
 
-    // Always return expense types
-    const types = await sql`SELECT * FROM accounting_expense_types ORDER BY name ASC`;
+    // Always return expense types. Only `id` and `name` are consumed by
+    // the form selectors and the cafe-preset matcher — fetching the
+    // full row was wasted bytes over the wire.
+    const types = await sql`SELECT id, name FROM accounting_expense_types ORDER BY name ASC`;
     if (!monthRaw) {
       return Response.json({
         types,

@@ -25,7 +25,12 @@ export default defineConfig({
   optimizeDeps: {
     // Explicitly include fast-glob, since it gets dynamically imported and we
     // don't want that to cause a re-bundle.
-    include: ["fast-glob", "lucide-react"],
+    //
+    // `lucide-react` used to be in this list too, but it has ~1.5k icon
+    // entry points and force-prebundling all of them on cold dev start
+    // adds noticeable startup latency. Vite auto-discovers it from the
+    // static imports already, so the explicit `include` was unnecessary.
+    include: ["fast-glob"],
     exclude: [
       "@hono/auth-js/react",
       "@hono/auth-js",
