@@ -109,29 +109,19 @@ export function OperationsTable({
   onBulkDelete,
   bulkDeleteDisabled,
 }) {
-  // Operations table is multi-select aware. Receipt rows (id starts with "batch-"
-  // or "rcpt-") are virtual and don't support bulk delete via this path,
-  // so they're excluded from the master "select all".
+  // All operation types — including Receipts (id="batch-..." or "rcpt-...") —
+  // support delete via the inventory-operations DELETE endpoint, so every row
+  // is selectable.
   const selectionEnabled = selectedIds instanceof Set && onToggleSelect;
-  const selectableOps = selectionEnabled
-    ? (filteredOperations || []).filter(
-        (op) =>
-          typeof op.id === "number" ||
-          (typeof op.id === "string" && /^\d+$/.test(op.id)),
-      )
-    : [];
+  const selectableOps = selectionEnabled ? filteredOperations || [] : [];
   const allSelectedOnPage =
     selectionEnabled &&
     selectableOps.length > 0 &&
     selectableOps.every((op) => selectedIds.has(op.id));
   const selectedCount = selectionEnabled ? selectedIds.size : 0;
 
-  function isOperationSelectable(op) {
-    if (!selectionEnabled) return false;
-    return (
-      typeof op.id === "number" ||
-      (typeof op.id === "string" && /^\d+$/.test(op.id))
-    );
+  function isOperationSelectable() {
+    return selectionEnabled;
   }
   const [showExportMenu, setShowExportMenu] = useState(false);
   const exportBtnRef = useRef(null);
@@ -382,7 +372,7 @@ export function OperationsTable({
                 const operationDateValue =
                   operation.operation_date || operation.created_at;
 
-                const isSelectable = isOperationSelectable(operation);
+                const isSelectable = isOperationSelectable();
                 const isSelected =
                   selectionEnabled && selectedIds.has(operation.id);
 

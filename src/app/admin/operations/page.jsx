@@ -109,11 +109,7 @@ export default function OperationsPage() {
   }, []);
 
   const toggleSelectAll = useCallback(() => {
-    const selectable = (filteredOperations || []).filter(
-      (op) =>
-        typeof op.id === "number" ||
-        (typeof op.id === "string" && /^\d+$/.test(op.id)),
-    );
+    const selectable = filteredOperations || [];
     setSelectedIds((prev) => {
       const allOnPage = selectable.every((op) => prev.has(op.id));
       if (allOnPage) {
@@ -132,13 +128,10 @@ export default function OperationsPage() {
   }, []);
 
   // Bulk delete: confirms once then calls deleteMutation.mutate per id.
-  // Receipt rows (string ids) are filtered out — they don't go through this path.
+  // Accepts numeric ids (inventory_operations) AND string ids ("batch-*" /
+  // "rcpt-*") — backend handles all three via the same DELETE endpoint.
   const handleBulkDelete = useCallback(async () => {
-    const ids = Array.from(selectedIds).filter(
-      (id) =>
-        typeof id === "number" ||
-        (typeof id === "string" && /^\d+$/.test(id)),
-    );
+    const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
     if (typeof window === "undefined") return;
     const ok = window.confirm(`حذف ${ids.length} عملية؟ لا يمكن التراجع.`);
