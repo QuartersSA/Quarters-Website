@@ -23,12 +23,18 @@ function hmacSha256Base64Url(secret, message) {
 }
 
 function getSigningSecret() {
-  // In Anything, production + development environments sometimes differ.
-  // Prefer AUTH_SECRET, but fall back to DATABASE_URL so logins don't break
-  // if AUTH_SECRET isn't injected in a given environment.
-  const secret = process.env.AUTH_SECRET || process.env.DATABASE_URL;
+  // AUTH_SECRET only. The DB connection string was previously used as a
+  // fallback "so logins don't break in environments without AUTH_SECRET"
+  // — but DB connection strings are not cryptographic secrets: they leak
+  // through stack traces, error pages, ORM logs, infra dashboards, and
+  // backup files. An attacker with read access to any of those can mint
+  // valid session tokens. AUTH_SECRET must always be set explicitly.
+  const secret = process.env.AUTH_SECRET;
   if (!secret) {
-    throw new Error("Missing signing secret");
+    throw new Error(
+      "AUTH_SECRET is required. Set it in the environment (Railway / .env) " +
+        "before starting the server. Do not reuse DATABASE_URL.",
+    );
   }
   return secret;
 }
@@ -54,7 +60,7 @@ export function signSessionToken(
 
 export function verifySessionToken(token) {
   try {
-    const secret = process.env.AUTH_SECRET || process.env.DATABASE_URL;
+    const secret = process.env.AUTH_SECRET;
     if (!secret) {
       return { ok: false, error: "missing_secret", payload: null };
     }

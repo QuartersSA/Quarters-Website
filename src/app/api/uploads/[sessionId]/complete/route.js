@@ -1,7 +1,17 @@
 import sql from "@/app/api/utils/sql";
-import { ensureUploadTables } from "../../_utils";
+import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureUploadTables, getOwnedSession } from "../../_utils";
 
 export async function POST(request, { params: { sessionId } }) {
+  const auth = requireAuth(request);
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
+  const userId = Number(auth.user?.id) || null;
+  if (!userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     await ensureUploadTables();
 
@@ -13,10 +23,15 @@ export async function POST(request, { params: { sessionId } }) {
     const body = await request.json().catch(() => ({}));
     const totalChunksClient = Number(body?.totalChunks);
 
-    const [session] = await sql`SELECT * FROM upload_sessions WHERE id = ${id}`;
-    if (!session) {
-      return Response.json({ error: "جلسة الرفع غير موجودة" }, { status: 404 });
+    const owned = await getOwnedSession(id, userId);
+    if (owned.error) {
+      const msg =
+        owned.error === "forbidden"
+          ? "ليست لديك صلاحية إنهاء هذه الجلسة"
+          : "جلسة الرفع غير موجودة";
+      return Response.json({ error: msg }, { status: owned.status });
     }
+    const session = owned.session;
 
     if (session.status !== "in_progress") {
       return Response.json(
@@ -54,7 +69,12 @@ export async function POST(request, { params: { sessionId } }) {
     // from /api/uploads/:id/file. This avoids hitting Anything's upload payload limits.
     await sql`UPDATE upload_sessions SET status = 'completed', completed_at = CURRENT_TIMESTAMP WHERE id = ${id}`;
 
-    const fileUrl = `/api/uploads/${id}/file`;
+    // Embed the per-file access token so <img src=...> / <a href=...> work
+    // without a Bearer header. Legacy sessions without a token are still
+    // reachable by sending Authorization, but those URLs won't be re-emitted.
+    const fileUrl = session.access_token
+      ? `/api/uploads/${id}/file?t=${encodeURIComponent(session.access_token)}`
+      : `/api/uploads/${id}/file`;
 
     return Response.json(
       {

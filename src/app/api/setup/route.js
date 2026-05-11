@@ -1,24 +1,60 @@
 import sql from "@/app/api/utils/sql";
-import { hash } from "argon2";
+import { hashPassword } from "@/utils/passwordHash";
 
-// Setup endpoint - Creates initial admin account
-// WARNING: This should be disabled in production after first setup!
+/**
+ * One-shot bootstrap endpoint for the first Admin account.
+ *
+ * Security model:
+ *   - Caller must provide `secretKey` matching env `SETUP_SECRET_KEY`. No
+ *     fallback default — if the env var isn't set, /setup is closed.
+ *   - The endpoint refuses to run if any Admin already exists (prevents
+ *     a leaked secret from being used to create extra admins).
+ *   - GET returns only `{ hasAdmin: boolean }` — no count, no employee
+ *     metadata — to avoid letting unauthenticated callers enumerate the
+ *     account database.
+ */
 export async function POST(request) {
+  const SETUP_SECRET_KEY = process.env.SETUP_SECRET_KEY;
+  if (!SETUP_SECRET_KEY) {
+    return Response.json(
+      { error: "نقطة الإعداد معطّلة (SETUP_SECRET_KEY غير مضبوط)." },
+      { status: 503 },
+    );
+  }
+
   try {
     const body = await request.json();
-    const { username, password, name, secretKey } = body;
+    const { username, password, name, secretKey } = body || {};
 
-    // Security check - require secret key
-    // Change this to your own secret!
-    if (secretKey !== "SETUP_2024_INVENTORY") {
+    if (secretKey !== SETUP_SECRET_KEY) {
       return Response.json({ error: "رمز الإعداد غير صحيح" }, { status: 403 });
     }
 
-    // Check if username already exists
+    // Re-setup protection: once an Admin exists, /setup is sealed. Adding
+    // more admins must happen through /api/employees with proper auth.
+    const [{ count: adminCount }] = await sql`
+      SELECT COUNT(*)::int AS count FROM employees WHERE role = 'Admin'
+    `;
+    if (Number(adminCount) > 0) {
+      return Response.json(
+        {
+          error:
+            "تم إعداد النظام مسبقاً. أضف المدراء الجدد من شاشة الموظفين بحساب إداري.",
+        },
+        { status: 409 },
+      );
+    }
+
+    if (!username || !password || !name) {
+      return Response.json(
+        { error: "الاسم واسم المستخدم وكلمة المرور مطلوبة" },
+        { status: 400 },
+      );
+    }
+
     const existingUser = await sql`
       SELECT id FROM employees WHERE LOWER(username) = LOWER(${username})
     `;
-
     if (existingUser.length > 0) {
       return Response.json(
         { error: "اسم المستخدم موجود بالفعل" },
@@ -26,10 +62,8 @@ export async function POST(request) {
       );
     }
 
-    // Hash password
-    const hashedPassword = await hash(password);
+    const hashedPassword = await hashPassword(password);
 
-    // Create admin user
     const [newAdmin] = await sql`
       INSERT INTO employees (name, username, password, role)
       VALUES (${name}, ${username}, ${hashedPassword}, 'Admin')
@@ -52,19 +86,16 @@ export async function POST(request) {
   }
 }
 
-// GET endpoint to check if any admin exists
+// GET — returns the minimal signal the setup screen needs. No count,
+// no metadata. Anyone can call this; it only reveals one bit ("admin
+// exists yes/no") which is already inferable from whether /setup
+// returns 409.
 export async function GET() {
   try {
-    const admins = await sql`
-      SELECT COUNT(*) as count FROM employees WHERE role = 'Admin'
+    const [{ count: adminCount }] = await sql`
+      SELECT COUNT(*)::int AS count FROM employees WHERE role = 'Admin'
     `;
-
-    const hasAdmin = parseInt(admins[0].count) > 0;
-
-    return Response.json({
-      hasAdmin,
-      adminCount: parseInt(admins[0].count),
-    });
+    return Response.json({ hasAdmin: Number(adminCount) > 0 });
   } catch (error) {
     console.error("Check admin error:", error);
     return Response.json({ error: "حدث خطأ" }, { status: 500 });

@@ -1,7 +1,17 @@
 import sql from "@/app/api/utils/sql";
-import { ensureUploadTables } from "../../_utils";
+import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureUploadTables, getOwnedSession } from "../../_utils";
 
 export async function POST(request, { params: { sessionId } }) {
+  const auth = requireAuth(request);
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
+  const userId = Number(auth.user?.id) || null;
+  if (!userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     await ensureUploadTables();
 
@@ -17,14 +27,16 @@ export async function POST(request, { params: { sessionId } }) {
       return Response.json({ error: "chunk index غير صحيح" }, { status: 400 });
     }
 
-    // Ensure session exists
-    const existing =
-      await sql`SELECT id, status FROM upload_sessions WHERE id = ${id}`;
-    if (!existing?.length) {
-      return Response.json({ error: "جلسة الرفع غير موجودة" }, { status: 404 });
+    const owned = await getOwnedSession(id, userId);
+    if (owned.error) {
+      const msg =
+        owned.error === "forbidden"
+          ? "ليست لديك صلاحية الرفع لهذه الجلسة"
+          : "جلسة الرفع غير موجودة";
+      return Response.json({ error: msg }, { status: owned.status });
     }
 
-    if (existing[0].status !== "in_progress") {
+    if (owned.session.status !== "in_progress") {
       return Response.json(
         { error: "جلسة الرفع ليست قيد التنفيذ" },
         { status: 409 },

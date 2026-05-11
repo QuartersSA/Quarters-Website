@@ -3,6 +3,36 @@ import { getSearchParams } from "@/app/api/workspace/_utils";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+/**
+ * Idempotent guard: ensure the (branch_id, shift_date, shift_label) combo
+ * is unique, so two concurrent submissions for the same shift can't both
+ * land. Run before every POST — `IF NOT EXISTS` makes this cheap.
+ *
+ * Why partial: a unique row in the table represents "this shift was
+ * closed". `employee_id` deliberately NOT in the key — we don't want
+ * two cashiers both closing the same shift; only the first wins.
+ */
+let _ensureShiftIdxAttempted = false;
+async function ensureShiftClosingsUniqueIndex() {
+  if (_ensureShiftIdxAttempted) return;
+  _ensureShiftIdxAttempted = true;
+  try {
+    await sql`
+      CREATE UNIQUE INDEX IF NOT EXISTS
+        accounting_shift_closings_unique_shift_idx
+      ON accounting_shift_closings (branch_id, shift_date, shift_label)
+    `;
+  } catch (err) {
+    // If the table already has duplicate rows from before this guard, the
+    // CREATE UNIQUE INDEX will fail. Log and move on — better to ship the
+    // POST-side dup check than to block all writes.
+    console.error(
+      "ensureShiftClosingsUniqueIndex failed (probably existing duplicates):",
+      err?.message,
+    );
+  }
+}
+
 function toInt(value) {
   if (value === null || value === undefined || value === "") return null;
   const n = Number(value);
@@ -272,31 +302,48 @@ export async function POST(request) {
     const [branch] =
       await sql`SELECT id, name FROM branches WHERE id = ${branchId}`;
 
-    const [row] = await sql`
-      INSERT INTO accounting_shift_closings (
-        branch_id,
-        employee_id,
-        shift_date,
-        shift_label,
-        actual_cash,
-        actual_card,
-        foodics_cash,
-        foodics_card,
-        note
-      )
-      VALUES (
-        ${branchId},
-        ${employeeId},
-        ${shiftDate},
-        ${shiftLabel},
-        ${actualCash},
-        ${actualCard},
-        ${foodicsCash},
-        ${foodicsCard},
-        ${note}
-      )
-      RETURNING *
-    `;
+    await ensureShiftClosingsUniqueIndex();
+
+    let row;
+    try {
+      [row] = await sql`
+        INSERT INTO accounting_shift_closings (
+          branch_id,
+          employee_id,
+          shift_date,
+          shift_label,
+          actual_cash,
+          actual_card,
+          foodics_cash,
+          foodics_card,
+          note
+        )
+        VALUES (
+          ${branchId},
+          ${employeeId},
+          ${shiftDate},
+          ${shiftLabel},
+          ${actualCash},
+          ${actualCard},
+          ${foodicsCash},
+          ${foodicsCard},
+          ${note}
+        )
+        RETURNING *
+      `;
+    } catch (err) {
+      // Postgres unique_violation
+      if (String(err?.code) === "23505") {
+        return Response.json(
+          {
+            error:
+              "هذا الشفت تم إقفاله مسبقاً (نفس الفرع/التاريخ/الفترة). راجع الأرشيف.",
+          },
+          { status: 409 },
+        );
+      }
+      throw err;
+    }
 
     const cashDiff = Number(row.actual_cash) - Number(row.foodics_cash);
     const cardDiff = Number(row.actual_card) - Number(row.foodics_card);

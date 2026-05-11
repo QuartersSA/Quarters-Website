@@ -1,7 +1,18 @@
+import crypto from "node:crypto";
 import sql from "@/app/api/utils/sql";
+import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureUploadTables, MAX_UPLOAD_BYTES } from "../_utils";
 
 export async function POST(request) {
+  const auth = requireAuth(request);
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
+  const userId = Number(auth.user?.id) || null;
+  if (!userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     await ensureUploadTables();
 
@@ -38,9 +49,17 @@ export async function POST(request) {
       );
     }
 
+    const accessToken = crypto.randomUUID().replace(/-/g, "");
+
     const [row] = await sql`
-      INSERT INTO upload_sessions (file_name, mime_type, size_bytes, total_chunks)
-      VALUES (${fileName}, ${mimeType}, ${sizeBytes}, ${totalChunks})
+      INSERT INTO upload_sessions (
+        file_name, mime_type, size_bytes, total_chunks,
+        created_by_employee_id, access_token
+      )
+      VALUES (
+        ${fileName}, ${mimeType}, ${sizeBytes}, ${totalChunks},
+        ${userId}, ${accessToken}
+      )
       RETURNING id
     `;
 

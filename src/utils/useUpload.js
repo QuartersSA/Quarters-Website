@@ -1,4 +1,5 @@
 import * as React from "react";
+import { authedFetch } from "@/utils/apiAuth";
 
 function useUpload() {
   const [loading, setLoading] = React.useState(false);
@@ -52,7 +53,7 @@ function useUpload() {
         const CHUNK_SIZE = 128 * 1024; // 128KB (safer across environments)
         const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
 
-        const initRes = await fetch("/api/uploads/init", {
+        const initRes = await authedFetch("/api/uploads/init", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -82,7 +83,7 @@ function useUpload() {
             const slice = file.slice(start, end);
             const arrayBuffer = await slice.arrayBuffer();
 
-            const chunkRes = await fetch(
+            const chunkRes = await authedFetch(
               `/api/uploads/${uploadId}/chunk?index=${i}`,
               {
                 method: "POST",
@@ -102,7 +103,7 @@ function useUpload() {
             }
           }
 
-          const completeRes = await fetch(`/api/uploads/${uploadId}/complete`, {
+          const completeRes = await authedFetch(`/api/uploads/${uploadId}/complete`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ totalChunks }),
@@ -122,7 +123,7 @@ function useUpload() {
         } catch (e) {
           // best-effort cleanup
           try {
-            await fetch(`/api/uploads/${uploadId}`, { method: "DELETE" });
+            await authedFetch(`/api/uploads/${uploadId}`, { method: "DELETE" });
           } catch {
             // ignore
           }

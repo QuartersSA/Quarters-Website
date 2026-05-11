@@ -49,6 +49,24 @@ export function shiftCloseFetch(url, init = {}) {
   return fetch(url, withBearer(token, init));
 }
 
+/**
+ * `fetch` that attaches whichever session token the user currently has,
+ * preferring stronger sessions (admin) first. Used by features whose API
+ * accepts any authenticated employee — primarily `/api/uploads/*`, which
+ * is consumed by admin pages, workspace pages, and field-staff pages.
+ *
+ * Returns the response unmodified if no token is present so the server
+ * still has a chance to reject with 401.
+ */
+export function authedFetch(url, init = {}) {
+  const token =
+    getAdminToken() ||
+    getEmployeeInventoryToken() ||
+    getShiftCloseToken() ||
+    null;
+  return fetch(url, withBearer(token, init));
+}
+
 export function clearAdminSession() {
   if (typeof window === "undefined") return;
   try {
