@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 
+// 5 minutes — matches the admin analytics auto-refresh interval and
+// avoids a refetch storm when navigating between admin pages.
+const FIVE_MINUTES = 5 * 60 * 1000;
+
 export function useAdminDashboardData(isAuthenticated) {
   const { data: operations } = useQuery({
     queryKey: ["inventory-operations"],
@@ -14,6 +18,7 @@ export function useAdminDashboardData(isAuthenticated) {
       return response.json();
     },
     enabled: isAuthenticated,
+    staleTime: FIVE_MINUTES,
   });
 
   const { data: branches } = useQuery({
@@ -28,6 +33,8 @@ export function useAdminDashboardData(isAuthenticated) {
       return response.json();
     },
     enabled: isAuthenticated,
+    // Branches list changes rarely — cache aggressively.
+    staleTime: 30 * 60 * 1000,
   });
 
   const { data: items } = useQuery({
@@ -42,6 +49,8 @@ export function useAdminDashboardData(isAuthenticated) {
       return response.json();
     },
     enabled: isAuthenticated,
+    // Items endpoint is the most expensive (branch stock aggregation).
+    staleTime: FIVE_MINUTES,
   });
 
   const { data: employees } = useQuery({
@@ -56,6 +65,7 @@ export function useAdminDashboardData(isAuthenticated) {
       return response.json();
     },
     enabled: isAuthenticated,
+    staleTime: FIVE_MINUTES,
   });
 
   return { operations, branches, items, employees };

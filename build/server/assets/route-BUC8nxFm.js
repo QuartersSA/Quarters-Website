@@ -52,6 +52,12 @@ async function GET(request) {
     //                           "loss/gain since the period opened"
     //   delta_since_previous  = actual − (previous_inv + receipts between prev and this)
     //                           "loss/gain since the last count" (incremental)
+    // Two LATERAL subqueries compute receipts sums once each
+    // (since_opening, since_previous). The five derived columns
+    // (receipts_quantity, expected_quantity, delta_quantity,
+    //  expected_since_previous, delta_since_previous) now reuse them
+    // instead of repeating the same SELECT SUM(pr.quantity) subquery
+    // five times — saves PostgreSQL ~4 redundant index scans per row.
     const query = `
       SELECT
         io.id as operation_id,
@@ -65,90 +71,21 @@ async function GET(request) {
         os.id as opening_session_id,
         os.opened_at as opening_opened_at,
         COALESCE(osi.quantity, 0)::numeric as opening_quantity,
-        COALESCE(
-          (
-            SELECT SUM(pr.quantity)::numeric
-            FROM purchase_receipts pr
-            WHERE pr.branch_id = io.branch_id
-              AND pr.item_id = ii.item_id
-              AND (
-                os.opened_at IS NULL
-                OR pr.received_at >= os.opened_at::timestamp
-              )
-              AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
-          ),
-          0
-        )::numeric as receipts_quantity,
-        (
-          COALESCE(osi.quantity, 0)::numeric +
-          COALESCE(
-            (
-              SELECT SUM(pr.quantity)::numeric
-              FROM purchase_receipts pr
-              WHERE pr.branch_id = io.branch_id
-                AND pr.item_id = ii.item_id
-                AND (
-                  os.opened_at IS NULL
-                  OR pr.received_at >= os.opened_at::timestamp
-                )
-                AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
-            ),
-            0
-          )::numeric
-        ) as expected_quantity,
-        (ii.quantity::numeric - (
-          COALESCE(osi.quantity, 0)::numeric +
-          COALESCE(
-            (
-              SELECT SUM(pr.quantity)::numeric
-              FROM purchase_receipts pr
-              WHERE pr.branch_id = io.branch_id
-                AND pr.item_id = ii.item_id
-                AND (
-                  os.opened_at IS NULL
-                  OR pr.received_at >= os.opened_at::timestamp
-                )
-                AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
-            ),
-            0
-          )::numeric
-        )) as delta_quantity,
+        COALESCE(rso.sum_qty, 0)::numeric as receipts_quantity,
+        (COALESCE(osi.quantity, 0)::numeric + COALESCE(rso.sum_qty, 0)::numeric) as expected_quantity,
+        (ii.quantity::numeric -
+          (COALESCE(osi.quantity, 0)::numeric + COALESCE(rso.sum_qty, 0)::numeric)
+        ) as delta_quantity,
         prev.prev_quantity,
         prev.prev_op_date,
         CASE
           WHEN prev.prev_quantity IS NULL THEN NULL
-          ELSE (
-            prev.prev_quantity::numeric +
-            COALESCE(
-              (
-                SELECT SUM(pr.quantity)::numeric
-                FROM purchase_receipts pr
-                WHERE pr.branch_id = io.branch_id
-                  AND pr.item_id = ii.item_id
-                  AND pr.received_at > prev.prev_op_date
-                  AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
-              ),
-              0
-            )::numeric
-          )
+          ELSE (prev.prev_quantity::numeric + COALESCE(rsp.sum_qty, 0)::numeric)
         END as expected_since_previous,
         CASE
           WHEN prev.prev_quantity IS NULL THEN NULL
-          ELSE (
-            ii.quantity::numeric - (
-              prev.prev_quantity::numeric +
-              COALESCE(
-                (
-                  SELECT SUM(pr.quantity)::numeric
-                  FROM purchase_receipts pr
-                  WHERE pr.branch_id = io.branch_id
-                    AND pr.item_id = ii.item_id
-                    AND pr.received_at > prev.prev_op_date
-                    AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
-                ),
-                0
-              )::numeric
-            )
+          ELSE (ii.quantity::numeric -
+            (prev.prev_quantity::numeric + COALESCE(rsp.sum_qty, 0)::numeric)
           )
         END as delta_since_previous
       FROM inventory_operations io
@@ -187,6 +124,26 @@ async function GET(request) {
         ORDER BY COALESCE(io_p.operation_date, io_p.created_at) DESC, io_p.id DESC
         LIMIT 1
       ) prev ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT SUM(pr.quantity)::numeric AS sum_qty
+        FROM purchase_receipts pr
+        WHERE pr.branch_id = io.branch_id
+          AND pr.item_id = ii.item_id
+          AND (
+            os.opened_at IS NULL
+            OR pr.received_at >= os.opened_at::timestamp
+          )
+          AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
+      ) rso ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT SUM(pr.quantity)::numeric AS sum_qty
+        FROM purchase_receipts pr
+        WHERE prev.prev_op_date IS NOT NULL
+          AND pr.branch_id = io.branch_id
+          AND pr.item_id = ii.item_id
+          AND pr.received_at > prev.prev_op_date
+          AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
+      ) rsp ON TRUE
       WHERE io.status = 'Completed'
         AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
         AND io.branch_id = $1

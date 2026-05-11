@@ -181,9 +181,18 @@ export default function AdminLayout({ children }) {
     </div>
   );
 
-  const adminUserForUI = typeof window === "undefined" ? null : readAdminUser();
-  const can =
-    typeof window === "undefined" ? null : allowedModes(adminUserForUI);
+  // `readAdminUser()` parses localStorage on every call. Previously this
+  // ran on every render of AdminLayout (which mounts on every admin page).
+  // Memoize once per mount; the chooser UI is decided then, and changes
+  // to adminUser only happen on login/logout (full reload).
+  const adminUserForUI = React.useMemo(
+    () => (typeof window === "undefined" ? null : readAdminUser()),
+    [],
+  );
+  const can = React.useMemo(
+    () => (typeof window === "undefined" ? null : allowedModes(adminUserForUI)),
+    [adminUserForUI],
+  );
 
   const showInventoryBtn = can ? !!can.inventory : true;
   const showWorkspaceBtn = can ? !!can.workspace : true;

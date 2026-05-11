@@ -27,11 +27,21 @@ async function GET(request) {
     const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
 
-    // 1. Week-over-week comparison
-    const thisWeekOps = await sql(`SELECT COUNT(*) as cnt FROM inventory_operations WHERE COALESCE(operation_date, created_at) >= $1`, [startOfThisWeek.toISOString()]);
-    const lastWeekOps = await sql(`SELECT COUNT(*) as cnt FROM inventory_operations WHERE COALESCE(operation_date, created_at) >= $1 AND COALESCE(operation_date, created_at) < $2`, [startOfLastWeek.toISOString(), endOfLastWeek.toISOString()]);
-    const thisWeekCount = Number(thisWeekOps[0]?.cnt || 0);
-    const lastWeekCount = Number(lastWeekOps[0]?.cnt || 0);
+    // 1. Week-over-week comparison.
+    // Two separate COUNT(*) queries used to round-trip twice. Single query
+    // with FILTER clauses computes both windows in one scan.
+    const [weeklyCounts] = await sql(`
+        SELECT
+          COUNT(*) FILTER (WHERE COALESCE(operation_date, created_at) >= $1) AS this_cnt,
+          COUNT(*) FILTER (
+            WHERE COALESCE(operation_date, created_at) >= $2
+              AND COALESCE(operation_date, created_at) < $3
+          ) AS last_cnt
+        FROM inventory_operations
+        WHERE COALESCE(operation_date, created_at) >= $2
+      `, [startOfThisWeek.toISOString(), startOfLastWeek.toISOString(), endOfLastWeek.toISOString()]);
+    const thisWeekCount = Number(weeklyCounts?.this_cnt || 0);
+    const lastWeekCount = Number(weeklyCounts?.last_cnt || 0);
     const weekChangePercent = lastWeekCount > 0 ? Math.round((thisWeekCount - lastWeekCount) / lastWeekCount * 100) : thisWeekCount > 0 ? 100 : 0;
 
     // 2. Branch performance
@@ -127,31 +137,49 @@ async function GET(request) {
       });
     }
 
-    // Pending operations
-    const pendingOps = await sql`SELECT COUNT(*) as cnt FROM inventory_operations WHERE status = 'Pending'`;
-    const pendingCount = Number(pendingOps[0]?.cnt || 0);
+    // Three independent COUNT(*) queries used to round-trip three times
+    // (pending / today / total). Single query with FILTER clauses scans
+    // inventory_operations once and returns all three.
+    const [opCounts] = await sql(`SELECT
+         COUNT(*) FILTER (WHERE status = 'Pending') AS pending_cnt,
+         COUNT(*) FILTER (
+           WHERE COALESCE(operation_date, created_at) >= $1
+         ) AS today_cnt,
+         COUNT(*) AS total_cnt
+       FROM inventory_operations`, [startOfToday.toISOString()]);
+    const pendingCount = Number(opCounts?.pending_cnt || 0);
+    const todayOpsCount = Number(opCounts?.today_cnt || 0);
+    const totalAllOps = Number(opCounts?.total_cnt || 1);
     if (pendingCount > 0) {
       alerts.push({
         type: "warning",
         message: `${pendingCount} عمليات قيد الانتظار`
       });
     }
-
-    // No operations today
-    const todayOps = await sql(`SELECT COUNT(*) as cnt FROM inventory_operations WHERE COALESCE(operation_date, created_at) >= $1`, [startOfToday.toISOString()]);
-    if (Number(todayOps[0]?.cnt || 0) === 0) {
+    if (todayOpsCount === 0) {
       alerts.push({
         type: "info",
         message: "لا توجد عمليات جرد اليوم بعد"
       });
     }
 
-    // Check total low stock
-    const totalLowStock = lowStockData.reduce((s, r) => s + Number(r.low_stock_count), 0);
-    if (totalLowStock > 0) {
+    // Aggregate lowStockData in one pass — previously this array was
+    // reduced three separate times (totalLowStock for alerts, then
+    // totalTrackedItems + totalLowStockItems + totalOutOfStock for the
+    // health score). Single loop avoids 3× iteration over the same
+    // array and removes the duplicate "sum of low_stock_count" pair.
+    let totalTrackedItems = 0;
+    let totalLowStockItems = 0;
+    let totalOutOfStock = 0;
+    for (const r of lowStockData) {
+      totalTrackedItems += Number(r.tracked_items || 0);
+      totalLowStockItems += Number(r.low_stock_count || 0);
+      totalOutOfStock += Number(r.out_of_stock_count || 0);
+    }
+    if (totalLowStockItems > 0) {
       alerts.push({
         type: "warning",
-        message: `${totalLowStock} صنف منخفض الكمية عبر جميع الفروع`
+        message: `${totalLowStockItems} صنف منخفض الكمية عبر جميع الفروع`
       });
     }
 
@@ -206,10 +234,8 @@ async function GET(request) {
     const totalInventoryCost = inventoryCost.reduce((s, r) => s + Number(r.total_cost || 0), 0);
 
     // 6. Health Score calculation
-    const totalTrackedItems = lowStockData.reduce((s, r) => s + Number(r.tracked_items || 0), 0);
-    const totalLowStockItems = lowStockData.reduce((s, r) => s + Number(r.low_stock_count || 0), 0);
-    const totalOutOfStock = lowStockData.reduce((s, r) => s + Number(r.out_of_stock_count || 0), 0);
-
+    // totalTrackedItems / totalLowStockItems / totalOutOfStock were
+    // already computed above in the single fused loop over lowStockData.
     // Health Score = 100 - (low stock penalty) - (out of stock penalty) - (no recent ops penalty)
     let healthScore = 100;
     if (totalTrackedItems > 0) {
@@ -218,9 +244,9 @@ async function GET(request) {
       healthScore -= Math.round(lowStockRatio * 30); // up to -30 for low stock
       healthScore -= Math.round(outOfStockRatio * 40); // up to -40 for out of stock
     }
-    // Penalty for pending operations
-    const totalOpsAllTime = await sql`SELECT COUNT(*) as cnt FROM inventory_operations`;
-    const totalAllOps = Number(totalOpsAllTime[0]?.cnt || 1);
+    // Penalty for pending operations.
+    // `totalAllOps` was computed above in the combined opCounts query —
+    // reuse instead of issuing another COUNT(*) round-trip.
     const pendingRatio = pendingCount / Math.max(totalAllOps, 1);
     healthScore -= Math.round(pendingRatio * 20);
     healthScore = Math.max(0, Math.min(100, healthScore));
