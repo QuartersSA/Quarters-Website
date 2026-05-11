@@ -27,7 +27,7 @@ import { ws } from "@/components/Workspace/ui";
 function formatDateTime(dateString) {
   if (!dateString) return "—";
   try {
-    return new Date(dateString).toLocaleString("ar-SA-u-nu-latn", {
+    return new Date(dateString).toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -42,7 +42,7 @@ function formatDateTime(dateString) {
 function formatDateOnly(dateString) {
   if (!dateString) return "—";
   try {
-    return new Date(dateString).toLocaleDateString("ar-SA-u-nu-latn", {
+    return new Date(dateString).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
       month: "short",
       day: "numeric",

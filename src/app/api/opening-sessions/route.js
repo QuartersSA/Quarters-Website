@@ -1,6 +1,26 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+/**
+ * Validate a user-supplied openedAt value.
+ * Returns null if invalid / out of business range.
+ */
+function validateOpenedAt(value) {
+  if (!value) return null;
+  const str = String(value).trim();
+  if (!str) return null;
+  let d;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    d = new Date(`${str}T00:00:00`);
+  } else {
+    d = new Date(str);
+  }
+  if (isNaN(d.getTime())) return null;
+  if (d.getFullYear() < 2020) return null;
+  if (d > new Date(Date.now() + 24 * 60 * 60 * 1000)) return null;
+  return d;
+}
+
 export async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -86,6 +106,16 @@ export async function POST(request) {
     if (!openedAt) {
       return Response.json(
         { error: "تاريخ المخزون الافتتاحي مطلوب" },
+        { status: 400 },
+      );
+    }
+
+    if (!validateOpenedAt(openedAt)) {
+      return Response.json(
+        {
+          error:
+            "تاريخ المخزون الافتتاحي غير صالح (يجب أن يكون بين 2020 واليوم)",
+        },
         { status: 400 },
       );
     }

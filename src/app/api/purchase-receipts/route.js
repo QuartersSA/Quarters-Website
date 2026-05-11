@@ -1,6 +1,26 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+/**
+ * Validate a received_at value.
+ * Returns the parsed Date or null when out of business range.
+ */
+function validateReceivedAt(value) {
+  if (!value) return null;
+  const str = String(value).trim();
+  if (!str) return null;
+  let d;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    d = new Date(`${str}T00:00:00`);
+  } else {
+    d = new Date(str);
+  }
+  if (isNaN(d.getTime())) return null;
+  if (d.getFullYear() < 2020) return null;
+  if (d > new Date(Date.now() + 24 * 60 * 60 * 1000)) return null;
+  return d;
+}
+
 export async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -104,6 +124,12 @@ export async function POST(request) {
       if (!receivedAt) {
         return Response.json({ error: "تاريخ الوارد مطلوب" }, { status: 400 });
       }
+      if (!validateReceivedAt(receivedAt)) {
+        return Response.json(
+          { error: "تاريخ الوارد غير صالح (يجب أن يكون بين 2020 واليوم)" },
+          { status: 400 },
+        );
+      }
       if (items.length > 200) {
         return Response.json({ error: "الحد الأقصى 200 صنف" }, { status: 400 });
       }
@@ -177,6 +203,12 @@ export async function POST(request) {
 
     if (!receivedAt) {
       return Response.json({ error: "تاريخ الوارد مطلوب" }, { status: 400 });
+    }
+    if (!validateReceivedAt(receivedAt)) {
+      return Response.json(
+        { error: "تاريخ الوارد غير صالح (يجب أن يكون بين 2020 واليوم)" },
+        { status: 400 },
+      );
     }
 
     const actingEmployeeId = auth.user?.id || null;

@@ -11,7 +11,7 @@ function formatDateTime(value) {
   if (Number.isNaN(d.getTime())) return String(value);
 
   try {
-    return d.toLocaleString("ar-SA-u-nu-latn", {
+    return d.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -32,7 +32,7 @@ function formatDateOnly(value) {
     return s.length >= 10 ? s.slice(0, 10) : s;
   }
   try {
-    return d.toLocaleDateString("ar-SA-u-nu-latn", {
+    return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -94,7 +94,7 @@ function formatValueForField(key, value) {
     const n = Number(value);
     if (!Number.isFinite(n)) return safeText(value);
     try {
-      return n.toLocaleString("ar-SA-u-nu-latn", {
+      return n.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
       });

@@ -39,7 +39,7 @@ const DENOMINATIONS = [
 function formatMoney(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
-  return n.toLocaleString("ar-SA-u-nu-latn", {
+  return n.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
@@ -57,7 +57,7 @@ function monthLabel(m) {
   try {
     const [y, mo] = m.split("-");
     const d = new Date(Number(y), Number(mo) - 1, 1);
-    return d.toLocaleDateString("ar-SA-u-nu-latn", {
+    return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
       month: "long",
     });
@@ -82,7 +82,7 @@ function generateMonthOptions() {
 function formatDateTime(dt) {
   if (!dt) return "—";
   try {
-    return new Date(dt).toLocaleDateString("ar-SA-u-nu-latn", {
+    return new Date(dt).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
       month: "short",
       day: "numeric",

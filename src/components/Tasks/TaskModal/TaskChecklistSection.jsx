@@ -27,7 +27,7 @@ function formatShortDate(dateStr) {
   try {
     const d = new Date(`${dateStr}T00:00:00`);
     if (Number.isNaN(d.getTime())) return null;
-    return d.toLocaleDateString("ar-SA-u-nu-latn", {
+    return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       month: "short",
       day: "numeric",
     });

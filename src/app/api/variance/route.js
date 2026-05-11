@@ -179,8 +179,8 @@ export async function GET(request) {
         AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
         AND io.branch_id = $1
         AND ii.item_id = $2
-        AND COALESCE(io.operation_date, io.created_at) >= $3::date
-        AND COALESCE(io.operation_date, io.created_at) < ($4::date + INTERVAL '1 day')
+        AND COALESCE(io.operation_date, io.created_at)::date >= $3::date
+        AND COALESCE(io.operation_date, io.created_at)::date <= $4::date
       ORDER BY COALESCE(io.operation_date, io.created_at) ASC
     `;
 

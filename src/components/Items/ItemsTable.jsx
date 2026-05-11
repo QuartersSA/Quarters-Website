@@ -359,7 +359,7 @@ export function ItemsTable({
                                 (
                                 {new Date(
                                   item.last_order_date,
-                                ).toLocaleDateString("ar-SA")}
+                                ).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn")}
                                 )
                               </span>
                             ) : null}

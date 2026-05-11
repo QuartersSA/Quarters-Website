@@ -13,7 +13,7 @@ import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 function formatMoney(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
-  return n.toLocaleString("ar-SA-u-nu-latn", {
+  return n.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });

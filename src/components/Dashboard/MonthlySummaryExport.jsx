@@ -10,7 +10,7 @@ function getHealthLabel(score) {
 
 function formatCost(val) {
   if (!val) return "0";
-  return Number(val).toLocaleString("ar-SA-u-nu-latn", {
+  return Number(val).toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   });
@@ -19,7 +19,7 @@ function formatCost(val) {
 export function MonthlySummaryExport({ analytics, stats }) {
   if (!analytics || !stats) return null;
 
-  const currentMonth = new Date().toLocaleDateString("ar-SA-u-nu-latn", {
+  const currentMonth = new Date().toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
     month: "long",
     year: "numeric",
   });
@@ -74,7 +74,7 @@ export function MonthlySummaryExport({ analytics, stats }) {
       )
       .join("");
 
-    const now = new Date().toLocaleDateString("ar-SA-u-nu-latn", {
+    const now = new Date().toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
       month: "long",
       day: "numeric",

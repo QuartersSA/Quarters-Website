@@ -27,7 +27,7 @@ import { PriorityPill } from "@/components/Tasks/PriorityPill";
 function formatDateOnly(d) {
   if (!d) return "—";
   try {
-    return new Date(d).toLocaleDateString("ar-SA-u-nu-latn", {
+    return new Date(d).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       month: "short",
       day: "numeric",
     });

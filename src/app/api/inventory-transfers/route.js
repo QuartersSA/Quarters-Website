@@ -143,18 +143,41 @@ async function getCurrentQuantitiesForBranch({ txn, branchId, itemIds }) {
 
 /**
  * Safely parse and validate operationDate.
- * Returns a valid ISO timestamp string or null.
+ * Preserves the user's local wall-clock time (no UTC shift) so what they typed
+ * is what gets stored — matches the `TIMESTAMP without time zone` column.
+ * Returns `YYYY-MM-DD HH:mm:ss` string or null.
+ *
+ * Rejects:
+ *   - dates more than 1 day in the future
+ *   - dates before 2020 (sanity floor for this business)
  */
 function parseOperationDate(value) {
   if (!value) return null;
   const str = String(value).trim();
   if (!str) return null;
 
-  // Try parsing as Date
-  const d = new Date(str);
+  // Date-only input → append local midnight to avoid UTC interpretation
+  let d;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    d = new Date(`${str}T00:00:00`);
+  } else {
+    d = new Date(str);
+  }
   if (isNaN(d.getTime())) return null;
 
-  return d.toISOString();
+  // Sanity bounds — guard against bogus dates
+  if (d.getFullYear() < 2020) return null;
+  const maxFuture = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  if (d > maxFuture) return null;
+
+  // Format as local wall-clock, no timezone marker
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mn = String(d.getMinutes()).padStart(2, "0");
+  const ss = String(d.getSeconds()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd} ${hh}:${mn}:${ss}`;
 }
 
 export async function POST(request) {

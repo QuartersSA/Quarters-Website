@@ -34,7 +34,7 @@ function buildPrintHTML(selectedOperation, operationDetails, opStats) {
       ? "تقرير التحويل"
       : "تقرير الجرد";
 
-  const now = new Date().toLocaleString("ar-SA-u-nu-latn", {
+  const now = new Date().toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
     year: "numeric",
     month: "long",
     day: "numeric",

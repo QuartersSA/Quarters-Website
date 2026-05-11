@@ -34,7 +34,7 @@ function safeMoneyNumber(value) {
 function formatMoney(value, lang) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
-  const locale = lang === "en" ? "en-US" : "ar-SA-u-nu-latn";
+  const locale = lang === "en" ? "en-US" : "ar-SA-u-ca-gregory-nu-latn";
   return n.toLocaleString(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -587,7 +587,7 @@ export default function ShiftCloseLoginPage() {
     lang,
   ]);
 
-  const dateDisplayLocale = lang === "en" ? "en-US" : "ar-SA-u-nu-latn";
+  const dateDisplayLocale = lang === "en" ? "en-US" : "ar-SA-u-ca-gregory-nu-latn";
 
   if (stage === "checking") {
     return (

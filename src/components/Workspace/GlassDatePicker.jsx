@@ -44,7 +44,7 @@ export default function GlassDatePicker({
   buttonClassName = "",
   allowClear = true,
   dir = "rtl",
-  displayLocale = "ar-SA-u-nu-latn",
+  displayLocale = "ar-SA-u-ca-gregory-nu-latn",
   showTime = false,
 }) {
   const [open, setOpen] = useState(false);
@@ -54,7 +54,7 @@ export default function GlassDatePicker({
   const currentTime = useMemo(() => extractTime(value), [value]);
 
   const dayPickerLocale = dir === "ltr" ? enUS : arSA;
-  const latnLocale = dir === "ltr" ? "en-US" : "ar-SA-u-nu-latn";
+  const latnLocale = dir === "ltr" ? "en-US" : "ar-SA-u-ca-gregory-nu-latn";
 
   const displayLabel = useMemo(() => {
     if (!selected) return placeholder;

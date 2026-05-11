@@ -69,7 +69,7 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
 
   const displayData = isExpanded ? aggregated : aggregated.slice(0, 10);
 
-  const currentMonth = new Date().toLocaleDateString("ar-SA-u-nu-latn", {
+  const currentMonth = new Date().toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
     month: "long",
     year: "numeric",
   });
