@@ -302,6 +302,13 @@ async function PUT(request) {
         status: 400
       });
     }
+    if (!validateReceivedAt(receivedAt)) {
+      return Response.json({
+        error: "تاريخ الوارد غير صالح"
+      }, {
+        status: 400
+      });
+    }
     if (!Array.isArray(items) || items.length === 0) {
       return Response.json({
         error: "أضف صنف واحد على الأقل"

@@ -1,4 +1,4 @@
-if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},t,n),{get(o,e){return e in o?o[e]:void 0},has(){return!0}})}function f(t,n,o,e){const a=o.map(r=>r.header).join("</th><th>"),l=t.map(r=>`<tr>${o.map(i=>{const d=i.accessor(r);return`<td>${(i.format?i.format(d,r):d)??""}</td>`}).join("")}</tr>`).join(""),s=new Date().toLocaleDateString("ar-SA-u-ca-gregory-nu-latn"),c=`
+import{L as b}from"./dateUtils-CzgDxzYh.js";if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},t,n),{get(o,e){return e in o?o[e]:void 0},has(){return!0}})}function x(t,n,o,e){const a=o.map(r=>r.header).join("</th><th>"),s=t.map(r=>`<tr>${o.map(i=>{const d=i.accessor(r);return`<td>${(i.format?i.format(d,r):d)??""}</td>`}).join("")}</tr>`).join(""),l=new Date().toLocaleDateString(b),c=`
     <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
       <head>
         <meta charset="UTF-8">
@@ -42,19 +42,19 @@ if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.proc
       <body>
         <div class="header">
           <h1>${e}</h1>
-          <p>تاريخ الإنشاء: ${s}</p>
+          <p>تاريخ الإنشاء: ${l}</p>
         </div>
         <table>
           <thead>
             <tr><th>${a}</th></tr>
           </thead>
           <tbody>
-            ${l}
+            ${s}
           </tbody>
         </table>
       </body>
     </html>
-  `,p=new Blob([c],{type:"application/vnd.ms-excel;charset=utf-8;"});h(p,`${n}.xls`)}function u(t,n,o,e){const a=window.open("","_blank");if(!a){alert("الرجاء السماح بفتح النوافذ المنبثقة للتصدير");return}const l=o.map(r=>r.header).join("</th><th>"),s=t.map(r=>`<tr>${o.map(i=>{const d=i.accessor(r);return`<td>${(i.format?i.format(d,r):d)??""}</td>`}).join("")}</tr>`).join(""),c=new Date().toLocaleDateString("ar-SA-u-ca-gregory-nu-latn",{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"}),p=`
+  `,p=new Blob([c],{type:"application/vnd.ms-excel;charset=utf-8;"});f(p,`${n}.xls`)}function u(t,n,o,e){const a=window.open("","_blank");if(!a){alert("الرجاء السماح بفتح النوافذ المنبثقة للتصدير");return}const s=o.map(r=>r.header).join("</th><th>"),l=t.map(r=>`<tr>${o.map(i=>{const d=i.accessor(r);return`<td>${(i.format?i.format(d,r):d)??""}</td>`}).join("")}</tr>`).join(""),c=new Date().toLocaleDateString(b,{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"}),p=`
     <!DOCTYPE html>
     <html dir="rtl">
       <head>
@@ -230,10 +230,10 @@ if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.proc
         
         <table>
           <thead>
-            <tr><th>${l}</th></tr>
+            <tr><th>${s}</th></tr>
           </thead>
           <tbody>
-            ${s}
+            ${l}
           </tbody>
         </table>
         
@@ -243,4 +243,4 @@ if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.proc
         </div>
       </body>
     </html>
-  `;a.document.write(p),a.document.close(),a.onload=()=>{setTimeout(()=>{a.focus()},250)}}function h(t,n){const o=URL.createObjectURL(t),e=document.createElement("a");e.href=o,e.download=n,document.body.appendChild(e),e.click(),document.body.removeChild(e),URL.revokeObjectURL(o)}function m(t){return{Daily:"يومي",Weekly:"أسبوعي",Transfer:"تحويل",Receipt:"وارد",Opening:"مخزون افتتاحي"}[t]||t}function x(t){return{Admin:"مدير",Employee:"موظف"}[t]||t}function g(t){return t&&String(t).replace(/Z$/i,"")}function y(t){return t?new Date(g(t)).toLocaleString("ar-SA-u-ca-gregory-nu-latn",{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"-"}export{u as a,x as b,m as c,f as e,y as f};
+  `;a.document.write(p),a.document.close(),a.onload=()=>{setTimeout(()=>{a.focus()},250)}}function f(t,n){const o=URL.createObjectURL(t),e=document.createElement("a");e.href=o,e.download=n,document.body.appendChild(e),e.click(),document.body.removeChild(e),URL.revokeObjectURL(o)}function w(t){return{Daily:"يومي",Weekly:"أسبوعي",Transfer:"تحويل",Receipt:"وارد",Opening:"مخزون افتتاحي"}[t]||t}function y(t){return{Admin:"مدير",Employee:"موظف"}[t]||t}function g(t){return t&&String(t).replace(/Z$/i,"")}function v(t){return t?new Date(g(t)).toLocaleString(b,{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"-"}export{u as a,y as b,w as c,x as e,v as f};
