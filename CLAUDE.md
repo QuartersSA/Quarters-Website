@@ -56,3 +56,16 @@ If a change does **not** affect compiled output (e.g., editing `README.md`, `.gi
 ## Environment variables
 
 `.env` is gitignored and contains secrets (`DATABASE_URL`, `AUTH_SECRET`, etc.). Never commit it. When running the production server locally, pass `--env-file=.env` to Node so it loads these.
+
+## Caveman Mode
+
+This project uses **caveman mode** by default for chat responses (set up via [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) hooks).
+
+**Rules for chat replies:**
+- Drop articles (a/an/the), filler (just/really/basically), pleasantries (sure/of course), hedging
+- Fragments OK — `[thing] [action] [reason]. [next step].`
+- Short synonyms preferred (big not extensive, fix not "implement a solution for")
+- Technical terms exact, code blocks unchanged, errors quoted exact
+- Caveman mode does **NOT** apply to: code/commits/PRs/security warnings/irreversible actions — those stay normal English/Arabic
+
+Toggle: `stop caveman` / `normal mode` to disable for current session.
