@@ -21,31 +21,29 @@ function readAdminUser() {
 }
 
 function allowedModes(adminUser) {
+  // SECURITY: deny by default.
+  //
+  // Previously, missing/undefined permission flags were treated as "allow"
+  // for backward compatibility with old DB schemas that lacked the columns.
+  // That meant any schema-drift on the production DB silently granted full
+  // access to every admin section. The login API now returns false (not
+  // undefined) for every can_* column via COALESCE(..., false), so the
+  // "missing column" scenario is no longer a real concern, and the fail-
+  // open default is pure risk. Default is now `false`.
   if (!adminUser) {
-    return { inventory: true, workspace: true, accounting: true, hr: true };
+    return { inventory: false, workspace: false, accounting: false, hr: false };
   }
 
-  const wsFlag = adminUser?.can_access_workspace;
-  const invFlag = adminUser?.can_manage_inventory;
-  const accFlag = adminUser?.can_manage_accounting;
+  // HR has a legacy alias: older deployments gated HR via `can_manage_employees`.
+  // Either flag grants access.
+  const hrFlag = !!adminUser.can_access_hr || !!adminUser.can_manage_employees;
 
-  // New: dedicated HR permission (fallback to older can_manage_employees)
-  const hrRaw =
-    adminUser?.can_access_hr === undefined || adminUser?.can_access_hr === null
-      ? adminUser?.can_manage_employees
-      : adminUser?.can_access_hr;
-
-  const deductionsFlag = adminUser?.can_manage_deductions;
-
-  // Backward compat: missing flags => allow
+  // Deductions-only users get partial HR access (handled at HR page level).
   return {
-    workspace: wsFlag === undefined || wsFlag === null ? true : !!wsFlag,
-    inventory: invFlag === undefined || invFlag === null ? true : !!invFlag,
-    accounting: accFlag === undefined || accFlag === null ? true : !!accFlag,
-    hr:
-      hrRaw === undefined || hrRaw === null
-        ? true
-        : !!hrRaw || !!deductionsFlag,
+    workspace: !!adminUser.can_access_workspace,
+    inventory: !!adminUser.can_manage_inventory,
+    accounting: !!adminUser.can_manage_accounting,
+    hr: hrFlag || !!adminUser.can_manage_deductions,
   };
 }
 
