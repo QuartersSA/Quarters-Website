@@ -17,7 +17,7 @@ import GlassSelect from "@/components/Workspace/GlassSelect";
 function formatTime(ts) {
   if (!ts) return "";
   try {
-    return new Date(ts).toLocaleTimeString("ar-SA-u-nu-latn", {
+    return new Date(ts).toLocaleTimeString("ar-SA-u-ca-gregory-nu-latn", {
       hour: "2-digit",
       minute: "2-digit",
     });

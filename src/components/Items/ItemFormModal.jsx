@@ -117,7 +117,7 @@ export function ItemFormModal({
       ? {
           price: Number(editingItem.last_order_price_per_kg).toFixed(2),
           date: editingItem.last_order_date
-            ? new Date(editingItem.last_order_date).toLocaleDateString("ar-SA")
+            ? new Date(editingItem.last_order_date).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn")
             : null,
           beanName: editingItem.linked_green_bean_name || "",
         }

@@ -17,7 +17,7 @@ function formatMoney(value) {
   if (!Number.isFinite(n)) return "-";
 
   try {
-    return new Intl.NumberFormat("ar-SA-u-nu-latn", {
+    return new Intl.NumberFormat("ar-SA-u-ca-gregory-nu-latn", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(n);
@@ -32,7 +32,7 @@ function formatPercent(value) {
   if (!Number.isFinite(n)) return "-";
 
   try {
-    return new Intl.NumberFormat("ar-SA-u-nu-latn", {
+    return new Intl.NumberFormat("ar-SA-u-ca-gregory-nu-latn", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(n);

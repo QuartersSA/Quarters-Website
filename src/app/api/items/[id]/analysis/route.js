@@ -68,8 +68,8 @@ export async function GET(request, { params }) {
          AND io.branch_id IN (${branchPlaceholders})
          AND io.status = 'Completed'
          AND io.inventory_type IN ('Daily', 'Weekly')
-         AND COALESCE(io.operation_date, io.created_at) >= $2::date
-         AND COALESCE(io.operation_date, io.created_at) < ($3::date + INTERVAL '1 day')
+         AND COALESCE(io.operation_date, io.created_at)::date >= $2::date
+         AND COALESCE(io.operation_date, io.created_at)::date <= $3::date
        ORDER BY COALESCE(io.operation_date, io.created_at) ASC`,
       baseValues,
     );
@@ -86,8 +86,8 @@ export async function GET(request, { params }) {
        LEFT JOIN branches b ON b.id = pr.branch_id
        WHERE pr.item_id = $1
          AND pr.branch_id IN (${branchPlaceholders})
-         AND pr.received_at >= $2::date
-         AND pr.received_at < ($3::date + INTERVAL '1 day')
+         AND pr.received_at::date >= $2::date
+         AND pr.received_at::date <= $3::date
        ORDER BY pr.received_at ASC`,
       baseValues,
     );
@@ -105,8 +105,8 @@ export async function GET(request, { params }) {
        LEFT JOIN branches b ON b.id = os.branch_id
        WHERE osi.item_id = $1
          AND os.branch_id IN (${branchPlaceholders})
-         AND os.opened_at >= $2::date
-         AND os.opened_at < ($3::date + INTERVAL '1 day')
+         AND os.opened_at::date >= $2::date
+         AND os.opened_at::date <= $3::date
        ORDER BY os.opened_at ASC`,
       baseValues,
     );
@@ -127,8 +127,8 @@ export async function GET(request, { params }) {
          AND io.status = 'Completed'
          AND io.inventory_type = 'Transfer'
          AND io.transfer_direction = 'in'
-         AND COALESCE(io.operation_date, io.created_at) >= $2::date
-         AND COALESCE(io.operation_date, io.created_at) < ($3::date + INTERVAL '1 day')
+         AND COALESCE(io.operation_date, io.created_at)::date >= $2::date
+         AND COALESCE(io.operation_date, io.created_at)::date <= $3::date
        ORDER BY COALESCE(io.operation_date, io.created_at) ASC`,
       baseValues,
     );
@@ -149,8 +149,8 @@ export async function GET(request, { params }) {
          AND io.status = 'Completed'
          AND io.inventory_type = 'Transfer'
          AND io.transfer_direction = 'out'
-         AND COALESCE(io.operation_date, io.created_at) >= $2::date
-         AND COALESCE(io.operation_date, io.created_at) < ($3::date + INTERVAL '1 day')
+         AND COALESCE(io.operation_date, io.created_at)::date >= $2::date
+         AND COALESCE(io.operation_date, io.created_at)::date <= $3::date
        ORDER BY COALESCE(io.operation_date, io.created_at) ASC`,
       baseValues,
     );

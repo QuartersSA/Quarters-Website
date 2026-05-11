@@ -3,6 +3,39 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 
+/**
+ * Parse user-supplied operation_date.
+ * Preserves local wall-clock time so DB and UI agree on the calendar day.
+ * Returns `YYYY-MM-DD HH:mm:ss` or null when invalid / out of business range.
+ *
+ * Rejects:
+ *   - more than 1 day in the future (catches typos like 2050)
+ *   - before 2020 (catches typos like 1925)
+ */
+function parseOperationDate(value) {
+  if (!value) return null;
+  const str = String(value).trim();
+  if (!str) return null;
+
+  let d;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    d = new Date(`${str}T00:00:00`);
+  } else {
+    d = new Date(str);
+  }
+  if (isNaN(d.getTime())) return null;
+  if (d.getFullYear() < 2020) return null;
+  if (d > new Date(Date.now() + 24 * 60 * 60 * 1000)) return null;
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mn = String(d.getMinutes()).padStart(2, "0");
+  const ss = String(d.getSeconds()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd} ${hh}:${mn}:${ss}`;
+}
+
 // Idempotent schema migrations applied on every request.
 // Postgres ALTER COLUMN to widen INTEGER → NUMERIC is non-blocking and preserves
 // all existing data. Wrapped in try/catch so concurrent requests don't error.
@@ -527,7 +560,17 @@ export async function POST(request) {
 
     // Employees always use server time — only Admins may specify a custom date
     const isAdmin = auth.user?.role === "Admin";
-    const opDateValue = isAdmin && operationDate ? operationDate : null;
+    // Validate + normalize operation_date when admin supplies one
+    let opDateValue = null;
+    if (isAdmin && operationDate) {
+      opDateValue = parseOperationDate(operationDate);
+      if (!opDateValue) {
+        return Response.json(
+          { error: "تاريخ العملية غير صالح (يجب أن يكون بين 2020 واليوم)" },
+          { status: 400 },
+        );
+      }
+    }
 
     if (auth.user?.role === "Employee") {
       const allowed = Array.isArray(auth.user?.branchIds)
@@ -834,6 +877,18 @@ export async function PUT(request) {
       return Response.json({ error: "لا توجد أصناف صالحة" }, { status: 400 });
     }
 
+    // Validate operation_date in PUT before any DB writes
+    let validatedOpDate = null;
+    if (operationDate) {
+      validatedOpDate = parseOperationDate(operationDate);
+      if (!validatedOpDate) {
+        return Response.json(
+          { error: "تاريخ العملية غير صالح (يجب أن يكون بين 2020 واليوم)" },
+          { status: 400 },
+        );
+      }
+    }
+
     // Helper: update note + operation_date on a single inventory_operations row
     async function updateOperationRow(rowId, noteVal, dateVal) {
       const setClauses = [];
@@ -848,7 +903,7 @@ export async function PUT(request) {
 
       if (dateVal) {
         setClauses.push(`operation_date = $${idx}::timestamp`);
-        values.push(dateVal);
+        values.push(validatedOpDate || dateVal);
         idx++;
       }
 

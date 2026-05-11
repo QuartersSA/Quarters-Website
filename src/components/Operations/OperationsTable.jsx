@@ -371,7 +371,7 @@ export function OperationsTable({
                         <div className="text-white">
                           {new Date(
                             stripTZ(operationDateValue),
-                          ).toLocaleDateString("ar-SA-u-nu-latn", {
+                          ).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
                             year: "numeric",
                             month: "short",
                             day: "numeric",
@@ -380,7 +380,7 @@ export function OperationsTable({
                         <div className="text-white/45 text-xs">
                           {new Date(
                             stripTZ(operationDateValue),
-                          ).toLocaleTimeString("ar-SA-u-nu-latn", {
+                          ).toLocaleTimeString("ar-SA-u-ca-gregory-nu-latn", {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
@@ -393,7 +393,7 @@ export function OperationsTable({
                         <div className="text-white/60">
                           {new Date(
                             stripTZ(operation.created_at),
-                          ).toLocaleDateString("ar-SA-u-nu-latn", {
+                          ).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
                             year: "numeric",
                             month: "short",
                             day: "numeric",
@@ -402,7 +402,7 @@ export function OperationsTable({
                         <div className="text-white/35 text-xs">
                           {new Date(
                             stripTZ(operation.created_at),
-                          ).toLocaleTimeString("ar-SA-u-nu-latn", {
+                          ).toLocaleTimeString("ar-SA-u-ca-gregory-nu-latn", {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}

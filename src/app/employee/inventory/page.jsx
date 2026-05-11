@@ -22,6 +22,16 @@ import {
   EMPLOYEE_INVENTORY_TOKEN_KEY,
   employeeInventoryFetch,
 } from "@/utils/apiAuth";
+import { formatDateForInput } from "@/utils/dateUtils";
+
+// Build a deterministic localStorage key for the auto-saved draft.
+// MUST use ISO YYYY-MM-DD (not toLocaleDateString) — browser locale otherwise
+// produces Hijri strings on Arabic systems, which:
+//   - changes the key day-to-day inconsistently
+//   - collides with admin-side date handling (Gregorian-only policy)
+function inventoryDraftKey(employeeId) {
+  return `inventory_${employeeId}_${formatDateForInput(new Date())}`;
+}
 
 const EMPLOYEE_LOGIN_PATH = "/employee/login";
 
@@ -71,9 +81,7 @@ export default function EmployeeInventoryPage() {
     setEmployee(emp);
 
     // Load auto-saved data
-    const savedData = localStorage.getItem(
-      `inventory_${emp.id}_${new Date().toLocaleDateString()}`,
-    );
+    const savedData = localStorage.getItem(inventoryDraftKey(emp.id));
     if (savedData) {
       setAvailableItems(JSON.parse(savedData));
       setAutoSaved(true);
@@ -89,7 +97,7 @@ export default function EmployeeInventoryPage() {
   useEffect(() => {
     if (employee && Object.keys(availableItems).length > 0) {
       localStorage.setItem(
-        `inventory_${employee.id}_${new Date().toLocaleDateString()}`,
+        inventoryDraftKey(employee.id),
         JSON.stringify(availableItems),
       );
     }
@@ -166,9 +174,7 @@ export default function EmployeeInventoryPage() {
       setShowSuccess(true);
       // Clear auto-save
       if (employee) {
-        localStorage.removeItem(
-          `inventory_${employee.id}_${new Date().toLocaleDateString()}`,
-        );
+        localStorage.removeItem(inventoryDraftKey(employee.id));
       }
       setTimeout(() => {
         setAvailableItems({});

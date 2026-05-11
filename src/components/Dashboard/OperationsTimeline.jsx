@@ -62,7 +62,7 @@ function formatRelativeTime(dateStr) {
   if (minutes < 60) return `قبل ${minutes} دقيقة`;
   if (hours < 24) return `قبل ${hours} ساعة`;
   if (days < 7) return `قبل ${days} يوم`;
-  return d.toLocaleDateString("ar-SA-u-nu-latn", {
+  return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
     month: "short",
     day: "numeric",
   });
@@ -70,7 +70,7 @@ function formatRelativeTime(dateStr) {
 
 function formatTime(dateStr) {
   if (!dateStr) return "";
-  return new Date(dateStr).toLocaleTimeString("ar-SA-u-nu-latn", {
+  return new Date(dateStr).toLocaleTimeString("ar-SA-u-ca-gregory-nu-latn", {
     hour: "2-digit",
     minute: "2-digit",
   });
