@@ -83,41 +83,69 @@ async function GET(request) {
       }
     }
 
-    // For each item, compute stock per branch
-    const itemsWithStock = await Promise.all(items.map(async item => {
-      const branchStock = await sql`
-          SELECT
-            b.id as branch_id,
-            b.name as branch_name,
-            COALESCE(last_inv.inv_quantity, 0)
-              + COALESCE(receipts_after.total_received, 0) AS quantity
-          FROM branches b
-
-          LEFT JOIN LATERAL (
-            SELECT ii.quantity AS inv_quantity, COALESCE(io.operation_date, io.created_at) AS op_date
+    // Batch per-branch stock for ALL items in a single query.
+    // Previously this was Promise.all over items × one query per item
+    // (N+1) — at ~30 items × 5 branches that's 30 round-trips. Now: one.
+    const itemIds = items.map(it => it.id);
+    const stockRowsByItem = new Map();
+    if (itemIds.length > 0) {
+      const stockRows = await sql(`
+          WITH last_inv AS (
+            SELECT DISTINCT ON (ii.item_id, io.branch_id)
+              ii.item_id,
+              io.branch_id,
+              ii.quantity AS inv_quantity,
+              COALESCE(io.operation_date, io.created_at) AS op_date
             FROM inventory_items ii
             JOIN inventory_operations io ON io.id = ii.operation_id
-            WHERE ii.item_id  = ${item.id}
-              AND io.branch_id = b.id
-              AND io.status    = 'Completed'
-              AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
-            ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
-            LIMIT 1
-          ) last_inv ON true
-
-          LEFT JOIN LATERAL (
-            SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
+            WHERE ii.item_id = ANY($1::bigint[])
+              AND io.status = 'Completed'
+              AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
+            ORDER BY
+              ii.item_id,
+              io.branch_id,
+              COALESCE(io.operation_date, io.created_at) DESC,
+              io.id DESC
+          ),
+          receipts_after AS (
+            SELECT
+              pr.item_id,
+              pr.branch_id,
+              SUM(pr.quantity) AS total_received
             FROM purchase_receipts pr
-            WHERE pr.item_id   = ${item.id}
-              AND pr.branch_id = b.id
-              AND (
-                last_inv.op_date IS NULL
-                OR pr.received_at > last_inv.op_date
-              )
-          ) receipts_after ON true
-
-          ORDER BY b.name
-        `;
+            LEFT JOIN last_inv li
+              ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
+            WHERE pr.item_id = ANY($1::bigint[])
+              AND (li.op_date IS NULL OR pr.received_at > li.op_date)
+            GROUP BY pr.item_id, pr.branch_id
+          )
+          SELECT
+            ix.id          AS item_id,
+            b.id           AS branch_id,
+            b.name         AS branch_name,
+            COALESCE(li.inv_quantity, 0)
+              + COALESCE(ra.total_received, 0)
+            AS quantity
+          FROM (SELECT unnest($1::bigint[]) AS id) ix
+          CROSS JOIN branches b
+          LEFT JOIN last_inv li
+            ON li.item_id = ix.id AND li.branch_id = b.id
+          LEFT JOIN receipts_after ra
+            ON ra.item_id = ix.id AND ra.branch_id = b.id
+          ORDER BY ix.id, b.name
+        `, [itemIds]);
+      for (const row of stockRows) {
+        const arr = stockRowsByItem.get(row.item_id) || [];
+        arr.push({
+          branch_id: row.branch_id,
+          branch_name: row.branch_name,
+          quantity: row.quantity
+        });
+        stockRowsByItem.set(row.item_id, arr);
+      }
+    }
+    const itemsWithStock = items.map(item => {
+      const branchStock = stockRowsByItem.get(item.id) || [];
       const greenBeanInfo = item.linked_green_bean_id ? lastOrderPriceMap[item.linked_green_bean_id] || null : null;
       return {
         ...item,
@@ -125,7 +153,7 @@ async function GET(request) {
         last_order_price_per_kg: greenBeanInfo?.last_order_price_per_kg || null,
         last_order_date: greenBeanInfo?.last_order_date || null
       };
-    }));
+    });
     console.log("Returning items with stock:", itemsWithStock.length);
     return Response.json(itemsWithStock);
   } catch (error) {

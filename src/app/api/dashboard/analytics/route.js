@@ -29,18 +29,29 @@ export async function GET(request) {
     const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
 
-    // 1. Week-over-week comparison
-    const thisWeekOps = await sql(
-      `SELECT COUNT(*) as cnt FROM inventory_operations WHERE COALESCE(operation_date, created_at) >= $1`,
-      [startOfThisWeek.toISOString()],
-    );
-    const lastWeekOps = await sql(
-      `SELECT COUNT(*) as cnt FROM inventory_operations WHERE COALESCE(operation_date, created_at) >= $1 AND COALESCE(operation_date, created_at) < $2`,
-      [startOfLastWeek.toISOString(), endOfLastWeek.toISOString()],
+    // 1. Week-over-week comparison.
+    // Two separate COUNT(*) queries used to round-trip twice. Single query
+    // with FILTER clauses computes both windows in one scan.
+    const [weeklyCounts] = await sql(
+      `
+        SELECT
+          COUNT(*) FILTER (WHERE COALESCE(operation_date, created_at) >= $1) AS this_cnt,
+          COUNT(*) FILTER (
+            WHERE COALESCE(operation_date, created_at) >= $2
+              AND COALESCE(operation_date, created_at) < $3
+          ) AS last_cnt
+        FROM inventory_operations
+        WHERE COALESCE(operation_date, created_at) >= $2
+      `,
+      [
+        startOfThisWeek.toISOString(),
+        startOfLastWeek.toISOString(),
+        endOfLastWeek.toISOString(),
+      ],
     );
 
-    const thisWeekCount = Number(thisWeekOps[0]?.cnt || 0);
-    const lastWeekCount = Number(lastWeekOps[0]?.cnt || 0);
+    const thisWeekCount = Number(weeklyCounts?.this_cnt || 0);
+    const lastWeekCount = Number(weeklyCounts?.last_cnt || 0);
     const weekChangePercent =
       lastWeekCount > 0
         ? Math.round(((thisWeekCount - lastWeekCount) / lastWeekCount) * 100)
@@ -142,10 +153,23 @@ export async function GET(request) {
       });
     }
 
-    // Pending operations
-    const pendingOps =
-      await sql`SELECT COUNT(*) as cnt FROM inventory_operations WHERE status = 'Pending'`;
-    const pendingCount = Number(pendingOps[0]?.cnt || 0);
+    // Three independent COUNT(*) queries used to round-trip three times
+    // (pending / today / total). Single query with FILTER clauses scans
+    // inventory_operations once and returns all three.
+    const [opCounts] = await sql(
+      `SELECT
+         COUNT(*) FILTER (WHERE status = 'Pending') AS pending_cnt,
+         COUNT(*) FILTER (
+           WHERE COALESCE(operation_date, created_at) >= $1
+         ) AS today_cnt,
+         COUNT(*) AS total_cnt
+       FROM inventory_operations`,
+      [startOfToday.toISOString()],
+    );
+    const pendingCount = Number(opCounts?.pending_cnt || 0);
+    const todayOpsCount = Number(opCounts?.today_cnt || 0);
+    const totalAllOps = Number(opCounts?.total_cnt || 1);
+
     if (pendingCount > 0) {
       alerts.push({
         type: "warning",
@@ -153,12 +177,7 @@ export async function GET(request) {
       });
     }
 
-    // No operations today
-    const todayOps = await sql(
-      `SELECT COUNT(*) as cnt FROM inventory_operations WHERE COALESCE(operation_date, created_at) >= $1`,
-      [startOfToday.toISOString()],
-    );
-    if (Number(todayOps[0]?.cnt || 0) === 0) {
+    if (todayOpsCount === 0) {
       alerts.push({
         type: "info",
         message: "لا توجد عمليات جرد اليوم بعد",
@@ -253,10 +272,9 @@ export async function GET(request) {
       healthScore -= Math.round(lowStockRatio * 30); // up to -30 for low stock
       healthScore -= Math.round(outOfStockRatio * 40); // up to -40 for out of stock
     }
-    // Penalty for pending operations
-    const totalOpsAllTime =
-      await sql`SELECT COUNT(*) as cnt FROM inventory_operations`;
-    const totalAllOps = Number(totalOpsAllTime[0]?.cnt || 1);
+    // Penalty for pending operations.
+    // `totalAllOps` was computed above in the combined opCounts query —
+    // reuse instead of issuing another COUNT(*) round-trip.
     const pendingRatio = pendingCount / Math.max(totalAllOps, 1);
     healthScore -= Math.round(pendingRatio * 20);
     healthScore = Math.max(0, Math.min(100, healthScore));
