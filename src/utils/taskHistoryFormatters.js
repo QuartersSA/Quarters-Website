@@ -1,7 +1,9 @@
+import { LOCALE } from "./dateUtils";
+
 export const formatDateTime = (dateString) => {
   if (!dateString) return "—";
   try {
-    return new Date(dateString).toLocaleString("ar-SA-u-nu-latn", {
+    return new Date(dateString).toLocaleString(LOCALE, {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -16,7 +18,7 @@ export const formatDateTime = (dateString) => {
 export const formatDateOnly = (dateString) => {
   if (!dateString) return "—";
   try {
-    return new Date(dateString).toLocaleDateString("ar-SA-u-nu-latn", {
+    return new Date(dateString).toLocaleDateString(LOCALE, {
       year: "numeric",
       month: "short",
       day: "numeric",

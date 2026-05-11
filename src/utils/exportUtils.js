@@ -2,6 +2,7 @@
  * Export utilities for Excel and PDF generation
  * Supports Arabic RTL content
  */
+import { LOCALE } from "./dateUtils";
 
 /**
  * Convert data to Excel (XLSX) format and download
@@ -57,7 +58,7 @@ export function exportToExcelHTML(data, filename, columns, title) {
     )
     .join("");
 
-  const now = new Date().toLocaleDateString("ar-SA-u-nu-latn");
+  const now = new Date().toLocaleDateString(LOCALE);
 
   const htmlContent = `
     <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
@@ -151,7 +152,7 @@ export function exportToPDF(data, filename, columns, title) {
     )
     .join("");
 
-  const now = new Date().toLocaleDateString("ar-SA-u-nu-latn", {
+  const now = new Date().toLocaleDateString(LOCALE, {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -427,7 +428,7 @@ function stripTZ(v) {
  */
 export function formatDate(dateString) {
   if (!dateString) return "-";
-  return new Date(stripTZ(dateString)).toLocaleDateString("ar-SA-u-nu-latn", {
+  return new Date(stripTZ(dateString)).toLocaleDateString(LOCALE, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -441,7 +442,7 @@ export function formatDateTime(dateString) {
   if (!dateString) return "-";
   // IMPORTANT: use toLocaleString (not toLocaleDateString) so time is always rendered
   // across browsers (especially iOS/Safari) when hour/minute options are provided.
-  return new Date(stripTZ(dateString)).toLocaleString("ar-SA-u-nu-latn", {
+  return new Date(stripTZ(dateString)).toLocaleString(LOCALE, {
     year: "numeric",
     month: "short",
     day: "numeric",

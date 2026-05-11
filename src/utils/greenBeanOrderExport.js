@@ -1,4 +1,5 @@
 import { formatMoney, formatQty } from "@/utils/greenBeanOrderUtils";
+import { LOCALE } from "@/utils/dateUtils";
 
 const VAT_MULTIPLIER = 1.15;
 
@@ -90,7 +91,7 @@ export function exportGreenBeanOrderExcel(order, items, totals) {
     ? String(order.created_at).slice(0, 10)
     : "—";
 
-  const now = new Date().toLocaleDateString("ar-SA-u-nu-latn");
+  const now = new Date().toLocaleDateString(LOCALE);
 
   const summaryRows = totals
     ? `
@@ -190,7 +191,7 @@ export function exportGreenBeanOrderPDF(order, items, totals) {
   const note = order.note || "";
   const createdBy = order.created_by_employee_name || "—";
 
-  const now = new Date().toLocaleDateString("ar-SA-u-nu-latn", {
+  const now = new Date().toLocaleDateString(LOCALE, {
     year: "numeric",
     month: "long",
     day: "numeric",

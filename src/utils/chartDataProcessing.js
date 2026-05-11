@@ -1,3 +1,5 @@
+import { LOCALE } from "./dateUtils";
+
 export function processItemHistoryChartData(rows) {
   const branchKeyById = new Map();
   const branchLabelByKey = new Map();
@@ -16,19 +18,19 @@ export function processItemHistoryChartData(rows) {
   const byTs = new Map();
   for (const r of rows) {
     const dt = new Date(r.created_at);
-    const day = dt.toLocaleDateString("ar-SA-u-nu-latn", {
+    const day = dt.toLocaleDateString(LOCALE, {
       year: "2-digit",
       month: "short",
       day: "2-digit",
     });
-    const time = dt.toLocaleTimeString("ar-SA-u-nu-latn", {
+    const time = dt.toLocaleTimeString(LOCALE, {
       hour: "2-digit",
       minute: "2-digit",
     });
 
     const tsKey = dt.toISOString();
     const shortLabel = `${day} ${time}`;
-    const fullLabel = dt.toLocaleString("ar-SA-u-nu-latn");
+    const fullLabel = dt.toLocaleString(LOCALE);
 
     const existing = byTs.get(tsKey) || {
       ts: dt.getTime(),
@@ -76,12 +78,12 @@ export function processVarianceChartData(varianceRows) {
   const data = [];
   for (const r of varianceRows) {
     const dt = new Date(r.created_at);
-    const day = dt.toLocaleDateString("ar-SA-u-nu-latn", {
+    const day = dt.toLocaleDateString(LOCALE, {
       year: "2-digit",
       month: "short",
       day: "2-digit",
     });
-    const time = dt.toLocaleTimeString("ar-SA-u-nu-latn", {
+    const time = dt.toLocaleTimeString(LOCALE, {
       hour: "2-digit",
       minute: "2-digit",
     });
@@ -89,7 +91,7 @@ export function processVarianceChartData(varianceRows) {
     data.push({
       ts: dt.getTime(),
       label: `${day} ${time}`,
-      fullLabel: dt.toLocaleString("ar-SA-u-nu-latn"),
+      fullLabel: dt.toLocaleString(LOCALE),
       expected: Number(r.expected_quantity) || 0,
       actual: Number(r.actual_quantity) || 0,
       delta: Number(r.delta_quantity) || 0,
@@ -184,17 +186,17 @@ export function processItemAnalysisChartData(analysisData) {
     const tsKey = dt.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
 
     if (!byTimestamp.has(tsKey)) {
-      const day = dt.toLocaleDateString("ar-SA-u-nu-latn", {
+      const day = dt.toLocaleDateString(LOCALE, {
         year: "2-digit",
         month: "short",
         day: "2-digit",
       });
-      const time = dt.toLocaleTimeString("ar-SA-u-nu-latn", {
+      const time = dt.toLocaleTimeString(LOCALE, {
         hour: "2-digit",
         minute: "2-digit",
       });
       const label = `${day} ${time}`;
-      const fullLabel = dt.toLocaleString("ar-SA-u-nu-latn", {
+      const fullLabel = dt.toLocaleString(LOCALE, {
         year: "numeric",
         month: "long",
         day: "numeric",
