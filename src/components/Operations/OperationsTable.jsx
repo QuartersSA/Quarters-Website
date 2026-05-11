@@ -14,6 +14,9 @@ import {
   Trash2,
   FolderOpen,
   Pencil,
+  CheckSquare,
+  Square,
+  X,
 } from "lucide-react";
 import { useRef, useState } from "react";
 import {
@@ -98,7 +101,38 @@ export function OperationsTable({
   onViewOperation,
   onDeleteOperation,
   onEditOperation,
+  // Multi-select (optional). When `selectedIds` is provided, checkboxes appear.
+  selectedIds,
+  onToggleSelect,
+  onToggleSelectAll,
+  onClearSelection,
+  onBulkDelete,
+  bulkDeleteDisabled,
 }) {
+  // Operations table is multi-select aware. Receipt rows (id starts with "batch-"
+  // or "rcpt-") are virtual and don't support bulk delete via this path,
+  // so they're excluded from the master "select all".
+  const selectionEnabled = selectedIds instanceof Set && onToggleSelect;
+  const selectableOps = selectionEnabled
+    ? (filteredOperations || []).filter(
+        (op) =>
+          typeof op.id === "number" ||
+          (typeof op.id === "string" && /^\d+$/.test(op.id)),
+      )
+    : [];
+  const allSelectedOnPage =
+    selectionEnabled &&
+    selectableOps.length > 0 &&
+    selectableOps.every((op) => selectedIds.has(op.id));
+  const selectedCount = selectionEnabled ? selectedIds.size : 0;
+
+  function isOperationSelectable(op) {
+    if (!selectionEnabled) return false;
+    return (
+      typeof op.id === "number" ||
+      (typeof op.id === "string" && /^\d+$/.test(op.id))
+    );
+  }
   const [showExportMenu, setShowExportMenu] = useState(false);
   const exportBtnRef = useRef(null);
 
@@ -250,10 +284,57 @@ export function OperationsTable({
         </div>
       </div>
 
+      {selectionEnabled && selectedCount > 0 ? (
+        <div
+          className={`px-5 py-3 border-b ${ws.divider} bg-emerald-400/[0.06] flex items-center justify-between gap-3`}
+        >
+          <div className="flex items-center gap-3 text-sm text-white">
+            <CheckSquare className="w-4 h-4 text-emerald-300" />
+            <span>
+              تم تحديد <strong className="text-emerald-300">{selectedCount}</strong> عملية
+            </span>
+            <button
+              type="button"
+              onClick={onClearSelection}
+              className="text-white/55 hover:text-white text-xs underline-offset-2 hover:underline"
+            >
+              إلغاء التحديد
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={onBulkDelete}
+            disabled={bulkDeleteDisabled}
+            className={`${ws.btnDanger} px-4 py-2 text-sm justify-center disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>حذف المحدد ({selectedCount})</span>
+          </button>
+        </div>
+      ) : null}
+
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="bg-white/[0.04]">
+              {selectionEnabled ? (
+                <th className="px-4 py-4 text-center" style={{ width: 48 }}>
+                  <button
+                    type="button"
+                    onClick={onToggleSelectAll}
+                    className="inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-white/[0.06] transition-colors"
+                    aria-label={allSelectedOnPage ? "إلغاء تحديد الكل" : "تحديد الكل"}
+                    title={allSelectedOnPage ? "إلغاء تحديد الكل" : "تحديد الكل"}
+                    disabled={selectableOps.length === 0}
+                  >
+                    {allSelectedOnPage ? (
+                      <CheckSquare className="w-5 h-5 text-emerald-300" />
+                    ) : (
+                      <Square className="w-5 h-5 text-white/40" />
+                    )}
+                  </button>
+                </th>
+              ) : null}
               <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
                 رقم الجرد
               </th>
@@ -281,7 +362,7 @@ export function OperationsTable({
             {isLoading ? (
               <tr>
                 <td
-                  colSpan="7"
+                  colSpan={selectionEnabled ? "8" : "7"}
                   className="px-6 py-12 text-center text-white/55"
                 >
                   <div className="flex items-center justify-center gap-3">
@@ -301,11 +382,46 @@ export function OperationsTable({
                 const operationDateValue =
                   operation.operation_date || operation.created_at;
 
+                const isSelectable = isOperationSelectable(operation);
+                const isSelected =
+                  selectionEnabled && selectedIds.has(operation.id);
+
                 return (
                   <tr
                     key={operation.id}
-                    className="border-t border-white/5 hover:bg-white/[0.05] transition-colors"
+                    className={`border-t border-white/5 transition-colors ${
+                      isSelected
+                        ? "bg-emerald-400/[0.06] hover:bg-emerald-400/[0.10]"
+                        : "hover:bg-white/[0.05]"
+                    }`}
                   >
+                    {selectionEnabled ? (
+                      <td className="px-4 py-4 text-center" style={{ width: 48 }}>
+                        {isSelectable ? (
+                          <button
+                            type="button"
+                            onClick={() => onToggleSelect(operation.id)}
+                            className="inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-white/[0.06] transition-colors"
+                            aria-label={
+                              isSelected ? "إلغاء التحديد" : "تحديد"
+                            }
+                          >
+                            {isSelected ? (
+                              <CheckSquare className="w-5 h-5 text-emerald-300" />
+                            ) : (
+                              <Square className="w-5 h-5 text-white/40" />
+                            )}
+                          </button>
+                        ) : (
+                          <span
+                            className="text-white/20 text-xs"
+                            title="الواردات لا تُحذف من هنا"
+                          >
+                            —
+                          </span>
+                        )}
+                      </td>
+                    ) : null}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <FileText className="w-4 h-4 text-emerald-200" />
@@ -445,7 +561,7 @@ export function OperationsTable({
             ) : (
               <tr>
                 <td
-                  colSpan="7"
+                  colSpan={selectionEnabled ? "8" : "7"}
                   className="px-6 py-12 text-center text-white/45"
                 >
                   <ClipboardList className="w-12 h-12 mx-auto mb-3 opacity-40" />
