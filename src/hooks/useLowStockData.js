@@ -51,16 +51,26 @@ export function useLowStockData({ isAuthenticated, searchQuery, selectedBranch }
   }, [lowStockItems, searchQuery, selectedBranch]);
 
   const stats = useMemo(() => {
+    // Derive every counter from the same `getLowStockStatus` classifier
+    // the table renders. Previously the stat filters re-implemented the
+    // logic with strict `=== 0` / `> 0` comparisons, while the table
+    // label fell back to 0 on falsy values via `Number(x) || 0`. If a
+    // row's `current_quantity` ever became `undefined` / NaN, the table
+    // would label it "غير متوفر" but the stat counter would skip it
+    // (NaN === 0 is false), producing visible drift between the cards
+    // and the table on the same screen.
+    let outOfStock = 0;
+    let criticalItems = 0;
+    for (const item of filteredItems) {
+      const severity = getLowStockStatus(item).severity;
+      if (severity === "out") outOfStock += 1;
+      else if (severity === "critical") criticalItems += 1;
+    }
+
     return {
       totalLowStock: filteredItems.length,
-      outOfStock: filteredItems.filter(
-        (item) => Number(item.current_quantity) === 0,
-      ).length,
-      criticalItems: filteredItems.filter(
-        (item) =>
-          Number(item.current_quantity) > 0 &&
-          Number(item.current_quantity) < Number(item.min_stock_threshold) * 0.5,
-      ).length,
+      outOfStock,
+      criticalItems,
       branches: [...new Set(filteredItems.map((item) => item.branch_id))].length,
     };
   }, [filteredItems]);
