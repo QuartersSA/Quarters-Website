@@ -21,23 +21,28 @@ export function ExpenseForm({
 
   const monthOptions = useMemo(() => buildRecentMonthOptions(30), []);
 
-  // Set current month as default
+  // Default the month to "now" exactly once at mount when not editing.
+  // Previously this effect depended on `formMonth` too, which meant
+  // clearing the form (formMonth becoming "") after editing would re-fire
+  // it and overwrite a user-picked-then-cleared month. The mount-only
+  // effect avoids that loop.
   useEffect(() => {
-    if (!formMonth && !editingExpense) {
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth() + 1).padStart(2, "0");
-      setFormMonth(`${y}-${m}`);
-    }
-  }, [formMonth, editingExpense]);
+    if (editingExpense) return;
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    setFormMonth(`${y}-${m}`);
+    // We deliberately only run this once on mount; subsequent month
+    // changes are user-driven via the GlassSelect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Load editing expense into form
+  // Load editing expense into form whenever the editing target changes.
   useEffect(() => {
     if (editingExpense) {
       setTypeId(String(editingExpense.expense_type_id || ""));
       setExpenseName(editingExpense.expense_name || "");
       setAmount(String(editingExpense.amount || ""));
-      // Parse month from expense_month
       const em = editingExpense.expense_month
         ? String(editingExpense.expense_month).slice(0, 7)
         : "";

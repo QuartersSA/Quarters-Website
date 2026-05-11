@@ -11,15 +11,19 @@ import { VarianceFilters } from "@/components/Variance/VarianceFilters";
 import { VarianceStats } from "@/components/Variance/VarianceStats";
 import { VarianceTable } from "@/components/Variance/VarianceTable";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
+import { formatDateForInput } from "@/utils/dateUtils";
 
+// `toISOString()` treats the Date as UTC, which shifts the result back
+// one day at local times before the UTC offset wraps. `formatDateForInput`
+// reads local wall-clock fields and is TZ-stable.
 function defaultFromDate() {
   const d = new Date();
   d.setMonth(d.getMonth() - 1);
-  return d.toISOString().slice(0, 10);
+  return formatDateForInput(d);
 }
 
 function defaultToDate() {
-  return new Date().toISOString().slice(0, 10);
+  return formatDateForInput(new Date());
 }
 
 export default function VariancePage() {

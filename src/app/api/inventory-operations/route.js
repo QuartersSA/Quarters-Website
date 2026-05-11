@@ -159,7 +159,13 @@ function groupReceiptsIntoOperations(receipts) {
   // Batched receipts → one operation per batch
   for (const [batchId, rows] of batched.entries()) {
     const first = rows[0];
-    const totalQty = rows.reduce((s, r) => s + Number(r.quantity), 0);
+    // Guard each row's quantity: a NULL or non-numeric DB value would
+    // turn the sum into NaN and poison everything downstream (display,
+    // CSV export, totals).
+    const totalQty = rows.reduce((s, r) => {
+      const n = Number(r?.quantity);
+      return s + (Number.isFinite(n) ? n : 0);
+    }, 0);
     const itemNames = rows.map((r) => r.item_name).filter(Boolean);
     const itemCount = rows.length;
 

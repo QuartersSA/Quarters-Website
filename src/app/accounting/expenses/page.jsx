@@ -107,13 +107,29 @@ function ExpensesInfoCard() {
 /* ── Stats Cards ── */
 function ExpensesStatsCards({ expenses }) {
   const stats = useMemo(() => {
+    // `Number("foo") === NaN`, and `NaN + n === NaN`, so one malformed row
+    // poisons the entire total. Coerce per-row and drop non-finite values.
+    const safeNum = (v) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    };
+
     const totalCount = expenses.length;
     const confirmedCount = expenses.filter((e) => e.is_confirmed).length;
     const pendingCount = totalCount - confirmedCount;
-    const totalAmount = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+    const totalAmount = expenses.reduce((s, e) => s + safeNum(e.amount), 0);
     const confirmedAmount = expenses
       .filter((e) => e.is_confirmed)
-      .reduce((s, e) => s + Number(e.confirmed_amount || e.amount || 0), 0);
+      .reduce(
+        (s, e) =>
+          s +
+          safeNum(
+            e.confirmed_amount !== null && e.confirmed_amount !== undefined
+              ? e.confirmed_amount
+              : e.amount,
+          ),
+        0,
+      );
     const pendingAmount = totalAmount - confirmedAmount;
 
     // Group by type
@@ -401,7 +417,11 @@ export default function ExpensesPage() {
   };
 
   const monthlyTotalAmount = useMemo(
-    () => expenses.reduce((s, e) => s + Number(e.amount || 0), 0),
+    () =>
+      expenses.reduce((s, e) => {
+        const n = Number(e?.amount);
+        return s + (Number.isFinite(n) ? n : 0);
+      }, 0),
     [expenses],
   );
 
