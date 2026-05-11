@@ -3,6 +3,47 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 
+// Idempotent schema migrations applied on every request.
+// Postgres ALTER COLUMN to widen INTEGER → NUMERIC is non-blocking and preserves
+// all existing data. Wrapped in try/catch so concurrent requests don't error.
+async function ensureSchema() {
+  try {
+    await sql`
+      DO $$
+      BEGIN
+        IF EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'inventory_items'
+            AND column_name = 'quantity'
+            AND data_type = 'integer'
+        ) THEN
+          ALTER TABLE inventory_items ALTER COLUMN quantity TYPE NUMERIC(12, 3);
+        END IF;
+      END $$
+    `;
+  } catch (e) {
+    console.error("ensureSchema inventory_items.quantity:", e?.message);
+  }
+
+  try {
+    await sql`
+      DO $$
+      BEGIN
+        IF EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'opening_session_items'
+            AND column_name = 'quantity'
+            AND data_type = 'integer'
+        ) THEN
+          ALTER TABLE opening_session_items ALTER COLUMN quantity TYPE NUMERIC(12, 3);
+        END IF;
+      END $$
+    `;
+  } catch (e) {
+    console.error("ensureSchema opening_session_items.quantity:", e?.message);
+  }
+}
+
 // WhatsApp notify to opted-in admins (never blocks saving)
 async function notifyAdminsWhatsAppInventoryOperation({
   branchName,
@@ -152,6 +193,8 @@ export async function GET(request) {
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }
+
+  await ensureSchema();
 
   try {
     const { searchParams } = new URL(request.url);

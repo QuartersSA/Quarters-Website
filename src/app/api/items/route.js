@@ -1,6 +1,17 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+// Idempotent schema additions; runs cheaply on every request.
+async function ensureSchema() {
+  try {
+    await sql`ALTER TABLE items ADD COLUMN IF NOT EXISTS max_stock_threshold INTEGER`;
+  } catch (e) {
+    // Don't fail the request if the migration has already been applied
+    // by a concurrent request or if the user lacks ALTER permission.
+    console.error("ensureSchema items.max_stock_threshold:", e?.message);
+  }
+}
+
 export async function GET(request) {
   const auth = requireAuth(request, {
     anyOf: [
@@ -13,10 +24,11 @@ export async function GET(request) {
   }
 
   try {
+    await ensureSchema();
     console.log("Fetching items...");
 
     const items = await sql`
-      SELECT 
+      SELECT
         i.id,
         i.name,
         i.name_en,
@@ -24,6 +36,7 @@ export async function GET(request) {
         i.image_url,
         i.unit,
         i.min_stock_threshold,
+        i.max_stock_threshold,
         i.is_active,
         i.category_id,
         i.cost,
@@ -153,6 +166,7 @@ export async function POST(request) {
       image_url,
       unit,
       min_stock_threshold,
+      max_stock_threshold,
       is_active,
       category_id,
       categoryId,
@@ -166,6 +180,16 @@ export async function POST(request) {
     }
 
     const threshold = min_stock_threshold || 10;
+    const maxThreshold =
+      max_stock_threshold !== undefined &&
+      max_stock_threshold !== null &&
+      max_stock_threshold !== ""
+        ? parseInt(max_stock_threshold)
+        : null;
+    const safeMaxThreshold =
+      maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold > 0
+        ? maxThreshold
+        : null;
     const showInInventory =
       show_in_inventory !== undefined ? show_in_inventory : true;
     const active = showInInventory;
@@ -193,10 +217,11 @@ export async function POST(request) {
         ? parseInt(linked_green_bean_id)
         : null;
 
+    await ensureSchema();
     const result = await sql`
-      INSERT INTO items (name, name_en, description, image_url, unit, min_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id)
-      VALUES (${name.trim()}, ${name_en || null}, ${description || null}, ${image_url || null}, ${unit || null}, ${threshold}, ${active}, ${safeCategoryId}, ${parsedCost}, ${showInInventory}, ${safeLinkedBeanId})
-      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id, created_at
+      INSERT INTO items (name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id)
+      VALUES (${name.trim()}, ${name_en || null}, ${description || null}, ${image_url || null}, ${unit || null}, ${threshold}, ${safeMaxThreshold}, ${active}, ${safeCategoryId}, ${parsedCost}, ${showInInventory}, ${safeLinkedBeanId})
+      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id, created_at
     `;
 
     const withCategory = await sql`
@@ -239,6 +264,7 @@ export async function PUT(request) {
       image_url,
       unit,
       min_stock_threshold,
+      max_stock_threshold,
       is_active,
       category_id,
       categoryId,
@@ -282,22 +308,35 @@ export async function PUT(request) {
         ? parseInt(linked_green_bean_id)
         : null;
 
+    const maxThreshold =
+      max_stock_threshold !== undefined &&
+      max_stock_threshold !== null &&
+      max_stock_threshold !== ""
+        ? parseInt(max_stock_threshold)
+        : null;
+    const safeMaxThreshold =
+      maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold > 0
+        ? maxThreshold
+        : null;
+
+    await ensureSchema();
     const result = await sql`
       UPDATE items
-      SET 
+      SET
         name = ${name.trim()},
         name_en = ${name_en || null},
         description = ${description || null},
         image_url = ${image_url || null},
         unit = ${unit || null},
         min_stock_threshold = ${min_stock_threshold || 10},
+        max_stock_threshold = ${safeMaxThreshold},
         is_active = ${active},
         category_id = ${safeCategoryId},
         cost = ${parsedCost},
         show_in_inventory = ${showInInventory},
         linked_green_bean_id = ${safeLinkedBeanId}
       WHERE id = ${id}
-      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id, created_at
+      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id, created_at
     `;
 
     if (result.length === 0) {

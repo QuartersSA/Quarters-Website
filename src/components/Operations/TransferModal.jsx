@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeftRight,
   Plus,
@@ -14,6 +14,7 @@ import { adminFetch } from "@/utils/apiAuth";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import { useCreateTransfer } from "@/hooks/useCreateTransfer";
 
 function toNumberOrNull(value) {
   const n = Number(value);
@@ -34,8 +35,6 @@ function nowLocalDatetime() {
 }
 
 export default function TransferModal({ branches, onClose }) {
-  const queryClient = useQueryClient();
-
   const [fromBranchId, setFromBranchId] = useState("");
   const [toBranchId, setToBranchId] = useState("");
   const [operationDate, setOperationDate] = useState(nowLocalDatetime());
@@ -119,7 +118,11 @@ export default function TransferModal({ branches, onClose }) {
     setSuccess(null);
 
     const itemIdNum = toNumberOrNull(selectedItemId);
-    const qtyNum = Math.floor(Number(quantity));
+    // Allow decimal quantities (e.g. 12.5 kg, 0.75 liters). Round to 3 decimals.
+    const rawQty = Number(quantity);
+    const qtyNum = Number.isFinite(rawQty)
+      ? Math.round(rawQty * 1000) / 1000
+      : NaN;
 
     if (!fromIdNum) {
       setError("اختر فرع المرسل");
@@ -200,48 +203,29 @@ export default function TransferModal({ branches, onClose }) {
     items.length === 0 ||
     items.length > 200;
 
-  const submitMutation = useMutation({
-    mutationFn: async () => {
-      const payload = {
-        fromBranchId: fromIdNum,
-        toBranchId: toIdNum,
-        items: items.map((x) => ({ itemId: x.itemId, quantity: x.quantity })),
-        note: note?.trim() ? note.trim() : null,
-        operationDate: operationDate || null,
-      };
-
-      const response = await adminFetch("/api/inventory-transfers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data?.error || "فشل في تنفيذ التحويل");
-      }
-
-      return data;
-    },
+  const submitMutation = useCreateTransfer({
     onSuccess: (data) => {
       setError(null);
       setSuccess(`تم التحويل بنجاح (${data?.transferNumber || ""})`);
-      queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      queryClient.invalidateQueries({ queryKey: ["items-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock"] });
-
       window.setTimeout(() => {
         onClose();
       }, 800);
     },
     onError: (e) => {
-      console.error(e);
       setSuccess(null);
       setError(e?.message || "حدث خطأ أثناء التحويل");
     },
   });
+
+  const handleSubmitTransfer = () => {
+    submitMutation.mutate({
+      fromBranchId: fromIdNum,
+      toBranchId: toIdNum,
+      items: items.map((x) => ({ itemId: x.itemId, quantity: x.quantity })),
+      note: note?.trim() ? note.trim() : null,
+      operationDate: operationDate || null,
+    });
+  };
 
   const modalRef = useRef(null);
 
@@ -370,8 +354,8 @@ export default function TransferModal({ branches, onClose }) {
                 </label>
                 <input
                   type="number"
-                  min={1}
-                  step={1}
+                  min={0}
+                  step="0.001"
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   className={`${ws.input} px-4 py-3`}
@@ -528,7 +512,7 @@ export default function TransferModal({ branches, onClose }) {
                 setError("تأكد من اختيار الفروع وإضافة الأصناف");
                 return;
               }
-              submitMutation.mutate();
+              handleSubmitTransfer();
             }}
             className={`${ws.btnPrimary} flex-1 px-4 py-3 justify-center`}
             disabled={submitDisabled || submitMutation.isPending}

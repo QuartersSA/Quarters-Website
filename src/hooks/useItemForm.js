@@ -6,6 +6,7 @@ export function useItemForm() {
     name_en: "",
     description: "",
     min_stock_threshold: 10,
+    max_stock_threshold: null,
     is_active: true,
     unit: "حبة",
     category_id: null,
@@ -39,6 +40,11 @@ export function useItemForm() {
       name_en: item.name_en || "",
       description: item.description || "",
       min_stock_threshold: item.min_stock_threshold || 10,
+      max_stock_threshold:
+        item.max_stock_threshold !== undefined &&
+        item.max_stock_threshold !== null
+          ? item.max_stock_threshold
+          : null,
       is_active: showInInventory,
       unit: item.unit || "حبة",
       category_id: item.category_id || null,

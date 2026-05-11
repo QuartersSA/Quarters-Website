@@ -54,9 +54,11 @@ async function GET(request) {
         b.name as branch_name,
         pr.item_id,
         i.name as item_name,
+        i.unit as item_unit,
         pr.quantity,
         pr.received_at,
         pr.note,
+        pr.receipt_batch_id,
         pr.created_at,
         pr.created_by_employee_id,
         COALESCE(pr.created_by_employee_name, e.name) as created_by_employee_name
