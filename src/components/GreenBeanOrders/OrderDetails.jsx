@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { ws } from "@/components/Workspace/ui";
 import { computeOrderTotals } from "@/utils/greenBeanOrderCalculations";
+import { groupOrderItems } from "@/utils/greenBeanOrderUtils";
 import {
   exportGreenBeanOrderExcel,
   exportGreenBeanOrderPDF,
@@ -29,39 +30,11 @@ export function OrderDetails({
   const totals = useMemo(() => computeOrderTotals(orderItems), [orderItems]);
 
   // Group bags that share the same bean + identical pricing/waste/extra/size
-  // params into a single visual row labelled "× N خيشة". The DB still keeps
-  // one row per bag (so per-bag waste/price can diverge); grouping is purely
-  // a presentation concern. Bags with differing params for the same bean
-  // stay as separate rows so the user can edit them individually.
-  const groupedItems = useMemo(() => {
-    if (!Array.isArray(orderItems)) return [];
-    const groups = new Map();
-    for (const it of orderItems) {
-      const key = [
-        it.bean_id ?? "_",
-        it.price_kg_excl_tax ?? "_",
-        it.waste_percent ?? "_",
-        it.extra_cost_kg ?? "_",
-        it.bag_size_kg ?? "_",
-        it.roast_cost_incl_tax ?? "_",
-      ].join("|");
-      if (groups.has(key)) {
-        const g = groups.get(key);
-        g.itemIds.push(it.id);
-        g.totalReceived += Number(it.computed_received_after_waste_kg) || 0;
-        g.bagCount += 1;
-      } else {
-        groups.set(key, {
-          groupKey: key,
-          firstItem: it,
-          itemIds: [it.id],
-          totalReceived: Number(it.computed_received_after_waste_kg) || 0,
-          bagCount: 1,
-        });
-      }
-    }
-    return Array.from(groups.values());
-  }, [orderItems]);
+  // params into a single visual row labelled "× N خيشة". DB still stores
+  // one row per bag (so per-bag params can diverge); grouping is purely a
+  // presentation concern. Same util is used by the export so the printed
+  // file matches what's on screen.
+  const groupedItems = useMemo(() => groupOrderItems(orderItems), [orderItems]);
 
   const {
     showDepositModal,

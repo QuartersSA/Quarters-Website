@@ -37,6 +37,43 @@ export function withVat(excl) {
   return round2(n * (1 + VAT_RATE));
 }
 
+// Groups order items that share identical params (bean + price + waste +
+// extra + bag size + roast cost) into a single row labelled with the bag
+// count. Items with diverging params for the same bean stay separate so
+// we never hide real variations. Used by both the screen table and the
+// Excel/PDF exports so the two stay in sync.
+export function groupOrderItems(items) {
+  if (!Array.isArray(items)) return [];
+  const groups = new Map();
+  for (const it of items) {
+    const key = [
+      it.bean_id ?? "_",
+      it.price_kg_excl_tax ?? "_",
+      it.waste_percent ?? "_",
+      it.extra_cost_kg ?? "_",
+      it.bag_size_kg ?? "_",
+      it.roast_cost_incl_tax ?? "_",
+    ].join("|");
+    if (groups.has(key)) {
+      const g = groups.get(key);
+      g.itemIds.push(it.id);
+      g.totalReceived += Number(it.computed_received_after_waste_kg) || 0;
+      g.totalCostIncl += Number(it.computed_total_incl) || 0;
+      g.bagCount += 1;
+    } else {
+      groups.set(key, {
+        groupKey: key,
+        firstItem: it,
+        itemIds: [it.id],
+        totalReceived: Number(it.computed_received_after_waste_kg) || 0,
+        totalCostIncl: Number(it.computed_total_incl) || 0,
+        bagCount: 1,
+      });
+    }
+  }
+  return Array.from(groups.values());
+}
+
 export function todayISO() {
   try {
     const d = new Date();
