@@ -91,7 +91,7 @@ export default function AppSectionSwitcher({
     {
       key: "accounting",
       href: "/accounting",
-      label: "Accounting",
+      label: "المحاسبة",
       Icon: Calculator,
       gate: (p) => (p ? p.can_manage_accounting : true),
       onClick: () => {
@@ -109,7 +109,7 @@ export default function AppSectionSwitcher({
     {
       key: "hr",
       href: hrHref,
-      label: "HR",
+      label: "الموارد البشرية",
       Icon: Users,
       gate: (p) => (p ? p.can_access_hr || p.can_manage_deductions : true),
       onClick: () => {
@@ -152,14 +152,20 @@ export default function AppSectionSwitcher({
             key={key}
             href={href}
             onClick={onClick}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-colors ${btnClass}`}
+            className={`flex items-center justify-center px-2.5 py-1.5 rounded-xl border transition-colors ${btnClass}`}
             title={label}
+            aria-label={label}
           >
             <Icon
               className={`w-4 h-4 ${isActive ? "text-emerald-200" : "text-white/50"}`}
             />
-            {/* Using 2xl here prevents the switcher from overflowing on common laptop widths */}
-            <span className="hidden 2xl:inline whitespace-nowrap">{label}</span>
+            {/* Icon-only: every consumer renders inside a narrow container
+                (mobile top bar OR desktop w-72 sidebar = 288px). The old
+                `2xl:inline` rule showed labels at viewport ≥ 1536px even
+                when the container was narrow, causing overflow/truncation.
+                `title` + `aria-label` keep the text available via hover
+                and screen readers. */}
+            <span className="sr-only">{label}</span>
           </a>
         );
       })}
