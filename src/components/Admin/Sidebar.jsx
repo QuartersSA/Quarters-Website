@@ -81,13 +81,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             )}
           </button>
 
-          <div className="flex items-center gap-2 min-w-0">
-            <img
-              src="https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/"
-              alt="Quarters"
-              className="h-9 w-auto bg-white rounded-xl p-1"
-            />
-            <div className="min-w-0">
+          <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
+            <div className="min-w-0 text-right">
               <div className="text-white font-bold tracking-tight truncate">
                 {pageTitle}
               </div>
@@ -95,15 +90,22 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
                 أنظمة Quarters
               </div>
             </div>
-          </div>
-
-          {/* small section switcher (matches the style used in other areas) */}
-          <div className="hidden sm:flex">
-            <AppSectionSwitcher
-              active="inventory"
-              className="scale-90 origin-left"
+            <img
+              src="https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/"
+              alt="Quarters"
+              className="h-9 w-auto bg-white rounded-xl p-1"
             />
           </div>
+        </div>
+
+        {/* Section switcher — second row, always visible on mobile so user can
+            jump between Workspace / Inventory / Accounting / HR without
+            opening the side menu. */}
+        <div className="px-4 pb-2 -mt-1 flex justify-start">
+          <AppSectionSwitcher
+            active="inventory"
+            className="scale-95 origin-right"
+          />
         </div>
       </div>
 

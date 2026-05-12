@@ -79,6 +79,20 @@ export default function WorkspaceSidebar({ active = "inbox" }) {
 
   return (
     <>
+      {/* Mobile top bar — carries the cross-section switcher so users on
+          phones can jump between Workspace / Inventory / Accounting / HR. */}
+      <div
+        className={`lg:hidden fixed top-0 left-0 right-0 z-40 ${ws.glass} border-b border-white/10`}
+        dir="rtl"
+      >
+        <div className="px-3 py-2 flex justify-start">
+          <AppSectionSwitcher
+            active="workspace"
+            className="scale-95 origin-right"
+          />
+        </div>
+      </div>
+
       {/* Desktop sidebar */}
       <aside
         className={`hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-white/10`}

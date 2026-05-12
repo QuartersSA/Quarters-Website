@@ -103,6 +103,19 @@ export default function HRSidebar({ onLogout, active = "dashboard" }) {
 
   return (
     <>
+      {/* Mobile top bar — section switcher only so user can jump between
+          Workspace / Inventory / Accounting / HR without opening side menu.
+          HR uses a bottom nav for in-section nav, so this top bar only
+          carries the cross-section switcher. */}
+      <div
+        className={`lg:hidden fixed top-0 left-0 right-0 z-40 ${ws.glass} border-b border-white/10`}
+        dir="rtl"
+      >
+        <div className="px-3 py-2 flex justify-start">
+          <AppSectionSwitcher active="hr" className="scale-95 origin-right" />
+        </div>
+      </div>
+
       {/* Desktop sidebar */}
       <aside
         className={`hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-white/10`}
