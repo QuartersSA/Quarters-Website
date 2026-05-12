@@ -110,7 +110,6 @@ export default function ItemsPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting form with data:", formData);
 
     if (editingItem) {
       updateMutation.mutate(
@@ -290,7 +289,7 @@ export default function ItemsPage() {
           </p>
         </div>
 
-        <StatsCards items={items} />
+        <StatsCards items={filteredItems} totalCount={items.length} />
 
         <SearchBar
           searchTerm={searchTerm}

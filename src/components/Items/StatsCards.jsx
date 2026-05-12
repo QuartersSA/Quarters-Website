@@ -9,7 +9,13 @@ function getTotalStock(item) {
   }, 0);
 }
 
-export function StatsCards({ items }) {
+// `items` should be the *visible* list (filteredItems). When a filter
+// narrows the rows, totalCount keeps the system-wide count so we can
+// surface "ضمن الفلتر" alongside the raw number — otherwise the user
+// sees "منخفض: 12" while the table shows 3 rows and assumes drift.
+export function StatsCards({ items, totalCount }) {
+  const isFiltered =
+    typeof totalCount === "number" && totalCount !== items.length;
   const outOfStockItems = items.filter((item) => {
     if (!item.branch_stock || item.show_in_inventory === false) return false;
     const totalStock = getTotalStock(item);
@@ -39,9 +45,17 @@ export function StatsCards({ items }) {
             <Package className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">إجمالي الأصناف</p>
+        <p className="text-white/55 text-sm mb-1">
+          {isFiltered ? "ضمن الفلتر" : "إجمالي الأصناف"}
+        </p>
         <p className="text-3xl font-bold text-white tracking-tight">
           {items.length}
+          {isFiltered ? (
+            <span className="text-white/40 text-base font-normal">
+              {" "}
+              / {totalCount}
+            </span>
+          ) : null}
         </p>
       </div>
 

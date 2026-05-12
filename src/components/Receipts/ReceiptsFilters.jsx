@@ -14,7 +14,11 @@ export function ReceiptsFilters({
   dateTo,
   onDateToChange,
   onRefresh,
+  // Lit when from > to so user gets visual cue alongside the page-level
+  // banner. Keeps the filter row self-explanatory in isolation.
+  dateRangeInvalid,
 }) {
+  const dateRingClass = dateRangeInvalid ? "ring-1 ring-red-400/60" : "";
   return (
     <div className={`${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -44,7 +48,7 @@ export function ReceiptsFilters({
             type="date"
             value={dateFrom}
             onChange={(e) => onDateFromChange(e.target.value)}
-            className={`${ws.input} px-3 py-3 w-full`}
+            className={`${ws.input} px-3 py-3 w-full ${dateRingClass}`}
           />
         </div>
 
@@ -54,7 +58,7 @@ export function ReceiptsFilters({
             type="date"
             value={dateTo}
             onChange={(e) => onDateToChange(e.target.value)}
-            className={`${ws.input} px-3 py-3 w-full`}
+            className={`${ws.input} px-3 py-3 w-full ${dateRingClass}`}
           />
         </div>
 

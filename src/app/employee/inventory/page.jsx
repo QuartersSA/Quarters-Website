@@ -80,12 +80,35 @@ export default function EmployeeInventoryPage() {
     const emp = JSON.parse(employeeData);
     setEmployee(emp);
 
-    // Load auto-saved data
-    const savedData = localStorage.getItem(inventoryDraftKey(emp.id));
-    if (savedData) {
-      setAvailableItems(JSON.parse(savedData));
-      setAutoSaved(true);
-      setTimeout(() => setAutoSaved(false), 3000);
+    // Load auto-saved draft — but prompt first instead of silently
+    // hydrating. Two employees sharing the same device/account were
+    // getting each other's half-typed counts merged in with no signal.
+    // We parse first so we know if the saved blob actually has entries
+    // (an empty `{}` from a previous successful submit shouldn't ask).
+    const savedRaw = localStorage.getItem(inventoryDraftKey(emp.id));
+    if (savedRaw) {
+      try {
+        const parsed = JSON.parse(savedRaw);
+        const entryCount =
+          parsed && typeof parsed === "object" ? Object.keys(parsed).length : 0;
+        if (entryCount === 0) {
+          localStorage.removeItem(inventoryDraftKey(emp.id));
+        } else {
+          const ok = window.confirm(
+            `وجدنا مسودة جرد محفوظة (${entryCount} صنف). هل تريد استكمالها؟\nاضغط "إلغاء" لبدء جرد جديد فارغ.`,
+          );
+          if (ok) {
+            setAvailableItems(parsed);
+            setAutoSaved(true);
+            setTimeout(() => setAutoSaved(false), 3000);
+          } else {
+            localStorage.removeItem(inventoryDraftKey(emp.id));
+          }
+        }
+      } catch {
+        // Corrupt draft — drop it so we don't trip on it next time.
+        localStorage.removeItem(inventoryDraftKey(emp.id));
+      }
     }
 
     // Get language from localStorage

@@ -47,7 +47,14 @@ export default function PayrollPage() {
   const { ready, employeeId, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
 
-  const [month, setMonth] = useState("");
+  // Default to the current calendar month so first paint shows usable data
+  // instead of a "اختر الشهر" empty card — matches the expenses page.
+  const [month, setMonth] = useState(() => {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    return `${y}-${m}`;
+  });
   const monthOptions = useMemo(() => buildRecentMonthOptions(30), []);
   const monthHint = month ? monthLabel(month) : "";
 

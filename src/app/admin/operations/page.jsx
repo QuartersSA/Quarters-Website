@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowLeftRight, PlusCircle, Truck } from "lucide-react";
+import { ArrowLeftRight, PlusCircle, Truck } from "lucide-react";
 import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
@@ -77,7 +77,14 @@ export default function OperationsPage() {
   const [editOperation, setEditOperation] = useState(null);
   const [editOperationDetails, setEditOperationDetails] = useState(null);
 
-  /* ── opening session & purchase receipt ── */
+  /* ── opening session & purchase receipt ──
+   * Both hooks accept context-binding ids (preselected branch / item /
+   * variance source) so they can be reused from drill-in screens. The
+   * operations page is a generic "all ops" list with no preselection,
+   * so we pass empty strings here. Concretely:
+   *   useOpeningSession(activeItems, selectedBranchId, varianceBranchId)
+   *   usePurchaseReceipt(branchId, itemId, varianceBranchId, varianceItemId)
+   */
   const openingSession = useOpeningSession(activeItems, "", "");
   const purchaseReceipt = usePurchaseReceipt("", "", "", "");
 
@@ -98,6 +105,9 @@ export default function OperationsPage() {
   // ── Multi-select state for bulk operations ──
   const [selectedIds, setSelectedIds] = useState(() => new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
+  // Live counter for bulk delete so the user sees "12/50" instead of a
+  // single opaque "deleting…" spinner on long batches.
+  const [bulkProgress, setBulkProgress] = useState({ done: 0, total: 0 });
 
   const toggleSelect = useCallback((id) => {
     setSelectedIds((prev) => {
@@ -134,10 +144,23 @@ export default function OperationsPage() {
     const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
     if (typeof window === "undefined") return;
-    const ok = window.confirm(`حذف ${ids.length} عملية؟ لا يمكن التراجع.`);
+
+    // Warn if user selected items under one filter, then changed filter,
+    // since the off-screen ids will still be deleted.
+    const visibleIds = new Set((filteredOperations || []).map((op) => op.id));
+    const hiddenCount = ids.filter((id) => !visibleIds.has(id)).length;
+    const hiddenWarning =
+      hiddenCount > 0
+        ? `\n⚠️ تنبيه: ${hiddenCount} منها خارج الفلتر الحالي وغير ظاهرة.`
+        : "";
+
+    const ok = window.confirm(
+      `حذف ${ids.length} عملية؟ لا يمكن التراجع.${hiddenWarning}`,
+    );
     if (!ok) return;
 
     setBulkDeleting(true);
+    setBulkProgress({ done: 0, total: ids.length });
     let succeeded = 0;
     let failed = 0;
     for (const id of ids) {
@@ -148,15 +171,18 @@ export default function OperationsPage() {
         console.error("bulk delete failed for id", id, err);
         failed += 1;
       }
+      // Tick progress after each request so the chip updates live.
+      setBulkProgress({ done: succeeded + failed, total: ids.length });
     }
     setBulkDeleting(false);
+    setBulkProgress({ done: 0, total: 0 });
     setSelectedIds(new Set());
     if (failed > 0) {
       window.alert(
         `تم حذف ${succeeded} عملية، وفشل حذف ${failed} عملية. راجع الـ console.`,
       );
     }
-  }, [selectedIds, deleteMutation]);
+  }, [selectedIds, deleteMutation, filteredOperations]);
 
   const handleEditOperation = useCallback(
     async (operation, existingDetails) => {
@@ -217,12 +243,8 @@ export default function OperationsPage() {
         <div className="mb-8 mt-6 lg:mt-0">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div className="flex items-center gap-3">
-              <a
-                href="/admin"
-                className="text-white/55 hover:text-white transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </a>
+              {/* Back arrow removed: Breadcrumb above already links to
+                  the admin dashboard, so the icon was duplicate nav. */}
               <h1 className={`text-3xl sm:text-4xl ${ws.title}`}>
                 عمليات المخزون
               </h1>
@@ -296,6 +318,7 @@ export default function OperationsPage() {
           onClearSelection={clearSelection}
           onBulkDelete={handleBulkDelete}
           bulkDeleteDisabled={bulkDeleting || deleteMutation.isPending}
+          bulkProgress={bulkProgress}
         />
       </main>
 

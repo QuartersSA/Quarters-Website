@@ -26,7 +26,10 @@ function initials(name) {
   return raw ? raw.toUpperCase() : "Q";
 }
 
-export default function WorkspaceSidebar({ active = "inbox" }) {
+// Default to "home" (الرئيسية): consumers that forget the `active` prop
+// would otherwise mis-highlight inbox as the current page on every
+// workspace screen.
+export default function WorkspaceSidebar({ active = "home" }) {
   const { user } = useWorkspaceUser();
 
   const logout = () => {

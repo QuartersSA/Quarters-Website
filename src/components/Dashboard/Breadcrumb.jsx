@@ -8,6 +8,11 @@ const PAGE_LABELS = {
   employees: "الموظفين",
   "low-stock": "الأصناف المنخفضة",
   "items-summary": "ملخص الأصناف",
+  // Pages added later — without these the breadcrumb falls back to raw
+  // slug ("variance"/"receipts") which leaks English at the user.
+  variance: "تقرير الانحراف",
+  receipts: "الواردات",
+  "over-stock": "الأصناف الفائضة",
 };
 
 export function Breadcrumb({ activePage }) {

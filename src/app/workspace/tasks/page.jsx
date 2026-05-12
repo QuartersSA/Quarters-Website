@@ -98,23 +98,28 @@ export default function WorkspaceTasksPage() {
       return ids.includes(filterAssignee);
     });
 
-    // Apply sorting
+    // Apply sorting — secondary tiebreaker by id desc so unknown/null
+    // priority values (and same-day due dates) get a deterministic order
+    // (newest first) rather than insertion order.
     const sorted = [...filtered];
     if (sortBy === "priority") {
       const priorityOrder = { Urgent: 0, High: 1, Normal: 2, Low: 3 };
       sorted.sort((a, b) => {
         const pa = priorityOrder[a.priority] ?? 4;
         const pb = priorityOrder[b.priority] ?? 4;
-        return pa - pb;
+        if (pa !== pb) return pa - pb;
+        return (b.id || 0) - (a.id || 0);
       });
     } else if (sortBy === "dueDate") {
       sorted.sort((a, b) => {
         const da = a.due_date || "9999";
         const db = b.due_date || "9999";
-        return String(da).localeCompare(String(db));
+        const cmp = String(da).localeCompare(String(db));
+        if (cmp !== 0) return cmp;
+        return (b.id || 0) - (a.id || 0);
       });
     } else if (sortBy === "newest") {
-      sorted.sort((a, b) => b.id - a.id);
+      sorted.sort((a, b) => (b.id || 0) - (a.id || 0));
     }
 
     return sorted;
@@ -177,13 +182,24 @@ export default function WorkspaceTasksPage() {
     updateMutation.mutate({ id: editingTask.id, payload });
   };
 
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+
+  // Glass-styled confirm replaces window.confirm — the native dialog
+  // breaks the visual register on a dark RTL app and lacks Arabic by
+  // default in some browsers.
   const deleteCurrent = () => {
+    if (!editingTask?.id) return;
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDeleteTask = () => {
     const id = editingTask?.id;
     if (!id) return;
-    // simple confirm
-    const ok = window.confirm("هل أنت متأكد من حذف المهمة؟");
-    if (!ok) return;
-    deleteMutation.mutate(id);
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        setDeleteConfirmOpen(false);
+      },
+    });
   };
 
   // Quick status change
@@ -413,6 +429,50 @@ export default function WorkspaceTasksPage() {
           )}
         </div>
       </main>
+
+      {deleteConfirmOpen ? (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          dir="rtl"
+          onClick={() => !deleteMutation.isPending && setDeleteConfirmOpen(false)}
+        >
+          <div
+            className={`w-full max-w-md ${ws.glass} ${ws.card} p-6`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className={`${ws.iconBox} w-10 h-10 text-red-200`}>
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div className="font-bold text-white text-lg tracking-tight">
+                حذف المهمة؟
+              </div>
+            </div>
+            <div className="text-white/65 text-sm leading-relaxed mb-5">
+              سيتم حذف "{editingTask?.title || "المهمة"}" نهائياً ولا يمكن
+              التراجع.
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirmOpen(false)}
+                disabled={deleteMutation.isPending}
+                className={`${ws.btnNeutral} px-4 py-2 disabled:opacity-50`}
+              >
+                إلغاء
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteTask}
+                disabled={deleteMutation.isPending}
+                className={`${ws.btnDanger} px-4 py-2 disabled:opacity-50`}
+              >
+                {deleteMutation.isPending ? "جاري الحذف…" : "حذف"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {modalOpen ? (
         <TaskModal
