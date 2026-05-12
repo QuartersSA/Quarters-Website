@@ -1,4 +1,8 @@
-import { formatMoney, formatQty } from "@/utils/greenBeanOrderUtils";
+import {
+  formatMoney,
+  formatQty,
+  groupOrderItems,
+} from "@/utils/greenBeanOrderUtils";
 import { LOCALE } from "@/utils/dateUtils";
 
 const VAT_MULTIPLIER = 1.15;
@@ -7,6 +11,7 @@ function buildItemTableHeaders() {
   return [
     "#",
     "البن",
+    "عدد الخياش",
     "سعر الكيلو (بدون ضريبة)",
     "سعر الكيلو (شامل الضريبة)",
     "حجم الخيشة (كغ)",
@@ -23,7 +28,14 @@ function buildItemTableHeaders() {
   ];
 }
 
-function buildItemTableRow(it, idx) {
+// Build one export row per group (bean+identical params). Scalar params
+// (price/kg, waste%, size) come from any one bag in the group — they're
+// identical by construction. Quantity totals (bean cost, roast total,
+// extra total, item total, received kg) are scaled by `bagCount` so the
+// export numbers still reflect the *full* order across all bags.
+function buildItemTableRow(group, idx) {
+  const it = group.firstItem;
+  const bagCount = group.bagCount;
   const beanName = it.bean_name_snapshot || it.bean_name_current || "—";
   const price = Number(it.price_kg_excl_tax);
   const bag = Number(it.bag_size_kg);
@@ -34,25 +46,35 @@ function buildItemTableRow(it, idx) {
 
   const priceInclTax = Number.isFinite(price) ? price * VAT_MULTIPLIER : NaN;
 
-  const beanCostIncl =
+  const beanCostInclPerBag =
     Number.isFinite(price) && Number.isFinite(bag)
       ? price * VAT_MULTIPLIER * bag
       : NaN;
-  const roastTotal =
+  const beanCostIncl = Number.isFinite(beanCostInclPerBag)
+    ? beanCostInclPerBag * bagCount
+    : NaN;
+
+  const roastPerBag =
     Number.isFinite(roastIncl) && Number.isFinite(bag) ? roastIncl * bag : NaN;
+  const roastTotal = Number.isFinite(roastPerBag)
+    ? roastPerBag * bagCount
+    : NaN;
 
   const effectiveExtraKg =
     extraKg !== null && Number.isFinite(extraKg) ? extraKg : bag;
-  const extraTotal =
+  const extraPerBag =
     Number.isFinite(extraPerKg) && Number.isFinite(effectiveExtraKg)
       ? extraPerKg * effectiveExtraKg
       : 0;
+  const extraTotal = extraPerBag * bagCount;
 
   const extraCostKgText = extraKg !== null ? formatQty(extraKg) : "الكل";
+  const bagCountText = String(bagCount);
 
   return [
     String(idx + 1),
     beanName,
+    bagCountText,
     formatMoney(price),
     formatMoney(priceInclTax),
     formatQty(bag),
@@ -60,11 +82,11 @@ function buildItemTableRow(it, idx) {
     formatMoney(extraPerKg),
     extraCostKgText,
     formatMoney(waste),
-    formatQty(it.computed_received_after_waste_kg),
+    formatQty(group.totalReceived),
     formatMoney(beanCostIncl),
     formatMoney(roastTotal),
     formatMoney(extraTotal),
-    formatMoney(it.computed_total_incl),
+    formatMoney(group.totalCostIncl),
     formatMoney(it.computed_final_price_per_kg),
   ];
 }
@@ -74,9 +96,14 @@ export function exportGreenBeanOrderExcel(order, items, totals) {
   const thRow = headers.map((h) => `<th>${h}</th>`).join("");
   const colCount = headers.length;
 
-  const bodyRows = items
-    .map((it, idx) => {
-      const cells = buildItemTableRow(it, idx);
+  // Same grouping as the on-screen table — one export row per
+  // (bean + identical params), bag count in its own column. Totals still
+  // reflect the full order because per-bag scalars are multiplied by
+  // bagCount inside buildItemTableRow.
+  const groups = groupOrderItems(items);
+  const bodyRows = groups
+    .map((g, idx) => {
+      const cells = buildItemTableRow(g, idx);
       return `<tr>${cells.map((c) => `<td>${c}</td>`).join("")}</tr>`;
     })
     .join("");
@@ -171,9 +198,11 @@ export function exportGreenBeanOrderPDF(order, items, totals) {
   const headers = buildItemTableHeaders();
   const thRow = headers.map((h) => `<th>${h}</th>`).join("");
 
-  const bodyRows = items
-    .map((it, idx) => {
-      const cells = buildItemTableRow(it, idx);
+  // Same grouping logic as Excel + on-screen table.
+  const groups = groupOrderItems(items);
+  const bodyRows = groups
+    .map((g, idx) => {
+      const cells = buildItemTableRow(g, idx);
       const lastIdx = cells.length - 1;
       return `<tr>${cells
         .map((c, ci) => {

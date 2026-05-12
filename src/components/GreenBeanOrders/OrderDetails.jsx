@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { ws } from "@/components/Workspace/ui";
 import { computeOrderTotals } from "@/utils/greenBeanOrderCalculations";
+import { groupOrderItems } from "@/utils/greenBeanOrderUtils";
 import {
   exportGreenBeanOrderExcel,
   exportGreenBeanOrderPDF,
@@ -28,6 +29,13 @@ export function OrderDetails({
 
   const totals = useMemo(() => computeOrderTotals(orderItems), [orderItems]);
 
+  // Group bags that share the same bean + identical pricing/waste/extra/size
+  // params into a single visual row labelled "× N خيشة". DB still stores
+  // one row per bag (so per-bag params can diverge); grouping is purely a
+  // presentation concern. Same util is used by the export so the printed
+  // file matches what's on screen.
+  const groupedItems = useMemo(() => groupOrderItems(orderItems), [orderItems]);
+
   const {
     showDepositModal,
     depositBranchId,
@@ -49,7 +57,7 @@ export function OrderDetails({
     onChangeReceived,
     onSaveReceived,
     isRowSaving,
-  } = useReceivedQuantity(orderItems, selectedOrderId);
+  } = useReceivedQuantity(orderItems, selectedOrderId, groupedItems);
 
   const onExportOrderExcel = useCallback(() => {
     if (!selectedOrderId || !orderDetails?.id) {
@@ -122,7 +130,7 @@ export function OrderDetails({
       <>
         <OrderInfo orderDetails={orderDetails} />
         <OrderDetailsTable
-          orderItems={orderItems}
+          groupedItems={groupedItems}
           receivedById={receivedById}
           onChangeReceived={onChangeReceived}
           onSaveReceived={onSaveReceived}
