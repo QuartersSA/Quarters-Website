@@ -110,7 +110,6 @@ export default function ItemsPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting form with data:", formData);
 
     if (editingItem) {
       updateMutation.mutate(

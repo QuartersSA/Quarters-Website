@@ -43,6 +43,11 @@ export default function WorkspaceInboxPage() {
   const [selectedThreadId, setSelectedThreadId] = useState(null);
   const [compose, setCompose] = useState("");
   const [search, setSearch] = useState("");
+  // Tracks whether the auto-select-first-thread effect has already fired
+  // once for this mount. Without this, refetch (refetchInterval = 15s)
+  // would re-open the first thread every 15 seconds even after the user
+  // explicitly hit "back" to the thread list on desktop.
+  const [autoSelected, setAutoSelected] = useState(false);
 
   const [showNewModal, setShowNewModal] = useState(false);
   const [newToUserId, setNewToUserId] = useState("");
@@ -69,8 +74,10 @@ export default function WorkspaceInboxPage() {
   const threads = threadsQuery.data?.threads || [];
 
   React.useEffect(() => {
-    // UX: على الجوال ابدأ بقائمة المحادثات، وعلى الشاشات الكبيرة افتح أول محادثة تلقائياً.
-    if (selectedThreadId || threads.length === 0) {
+    // UX: على الجوال ابدأ بقائمة المحادثات، وعلى الشاشات الكبيرة افتح أول
+    // محادثة تلقائياً — مرة واحدة فقط في كل mount. autoSelected guard يمنع
+    // الـ refetch من إعادة اختيار threads[0] بعد ما المستخدم رجع للقائمة.
+    if (autoSelected || selectedThreadId || threads.length === 0) {
       return;
     }
 
@@ -78,11 +85,12 @@ export default function WorkspaceInboxPage() {
       const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
       if (isDesktop) {
         setSelectedThreadId(threads[0].id);
+        setAutoSelected(true);
       }
     } catch {
       // ignore
     }
-  }, [selectedThreadId, threads]);
+  }, [selectedThreadId, threads, autoSelected]);
 
   const filteredThreads = useMemo(() => {
     const q = search.trim().toLowerCase();

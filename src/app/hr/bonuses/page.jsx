@@ -81,6 +81,25 @@ export default function HRBonusesPage() {
     );
   }
 
-  // If authenticated, the useEffect will redirect.
-  return null;
+  // Authenticated user: useEffect fires `window.location.replace` to send
+  // them to /accounting/payroll. The redirect is async (next tick) so we
+  // render a loading card during that brief window instead of a blank page.
+  return (
+    <div
+      className="min-h-[100svh] flex items-center justify-center p-6"
+      dir="rtl"
+    >
+      <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full text-center`}>
+        <div className={`${ws.iconBox} w-12 h-12 mx-auto`}>
+          <Gift className="w-6 h-6 text-emerald-200" />
+        </div>
+        <div className="text-white font-bold text-lg mt-3">
+          جاري التحويل إلى مسير الرواتب…
+        </div>
+        <div className="text-white/60 text-sm mt-1">
+          إدارة البونص أصبحت داخل المحاسبة.
+        </div>
+      </div>
+    </div>
+  );
 }

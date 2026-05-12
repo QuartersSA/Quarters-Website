@@ -108,6 +108,9 @@ export function OperationsTable({
   onClearSelection,
   onBulkDelete,
   bulkDeleteDisabled,
+  // { done, total } — shows live counter inside the bulk-delete button
+  // so user sees "12/50 جاري" instead of an opaque spinner.
+  bulkProgress,
 }) {
   // All operation types — including Receipts (id="batch-..." or "rcpt-...") —
   // support delete via the inventory-operations DELETE endpoint, so every row
@@ -298,7 +301,11 @@ export function OperationsTable({
             className={`${ws.btnDanger} px-4 py-2 text-sm justify-center disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             <Trash2 className="w-4 h-4" />
-            <span>حذف المحدد ({selectedCount})</span>
+            <span>
+              {bulkProgress && bulkProgress.total > 0
+                ? `جاري الحذف… ${bulkProgress.done}/${bulkProgress.total}`
+                : `حذف المحدد (${selectedCount})`}
+            </span>
           </button>
         </div>
       ) : null}

@@ -438,8 +438,18 @@ export default function ExpensesPage() {
       if (!isCmdOrCtrl) return;
       const key = e.key?.toLowerCase();
       if (key !== "n") return;
-      // Don't hijack a browser shortcut while the user is in another field
-      // that might conflict — e.g. they're typing in the existing form.
+      // Skip when the user is typing in another field — opening the
+      // quick-add while focused inside the inline form steals focus mid-
+      // type and the keypress feels broken. tagName + contenteditable
+      // covers all common text-entry surfaces.
+      const tgt = e.target;
+      const tag = (tgt?.tagName || "").toUpperCase();
+      const isEditable =
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        tgt?.isContentEditable;
+      if (isEditable) return;
       // Browser default for Ctrl+N is "new window"; we override it for the
       // expenses page only.
       e.preventDefault();

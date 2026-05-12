@@ -179,9 +179,34 @@ export default function WorkspaceTemplatesPage() {
     Urgent: "عاجلة",
   };
 
+  // Reset every form field when modal closes — without this, reopening the
+  // modal shows whatever the user typed last time (or after a successful
+  // create the fields were cleared via onSuccess, but cancel-with-X kept
+  // them dirty). Single source so X-button + backdrop both call this.
+  const resetCreateForm = () => {
+    setShowCreate(false);
+    setFormName("");
+    setFormTitle("");
+    setFormDesc("");
+    setFormPriority("Normal");
+    setFormSpaceId("");
+    setFormChecklistText("");
+  };
+
+  // Wrap delete in a confirmation — destructive action with no undo and
+  // the trash icon button is small enough to mis-click on mobile.
+  const handleDeleteTemplate = (template) => {
+    if (deleteMutation.isPending) return;
+    const ok = window.confirm(
+      `حذف القالب "${template.name}"؟ لا يمكن التراجع.`,
+    );
+    if (!ok) return;
+    deleteMutation.mutate(template.id);
+  };
+
   return (
     <div className="min-h-[100svh] pb-24 lg:pb-0" dir="rtl">
-      <WorkspaceSidebar active="tasks" />
+      <WorkspaceSidebar active="templates" />
 
       <div className={`lg:hidden sticky top-0 z-20 ${topBarClass}`}>
         <div className="px-4 py-3 flex items-center justify-between">
@@ -293,8 +318,10 @@ export default function WorkspaceTemplatesPage() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => deleteMutation.mutate(t.id)}
-                        className="w-8 h-8 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-white/30 hover:text-red-300 hover:bg-red-400/10 flex-shrink-0"
+                        onClick={() => handleDeleteTemplate(t)}
+                        disabled={deleteMutation.isPending}
+                        title="حذف القالب"
+                        className="w-8 h-8 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center text-white/30 hover:text-red-300 hover:bg-red-400/10 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -349,10 +376,14 @@ export default function WorkspaceTemplatesPage() {
 
       {/* Create Template Modal */}
       {showCreate ? (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={resetCreateForm}
+        >
           <div
             className={`w-full max-w-lg ${ws.glass} ${ws.card} overflow-hidden max-h-[90vh] flex flex-col`}
             dir="rtl"
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="p-5 border-b border-white/10 flex items-center justify-between flex-shrink-0">
               <div className="font-bold text-white tracking-tight">
@@ -360,7 +391,7 @@ export default function WorkspaceTemplatesPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setShowCreate(false)}
+                onClick={resetCreateForm}
                 className={`${ws.btnNeutral} px-3 py-1`}
               >
                 إغلاق

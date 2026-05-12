@@ -98,6 +98,9 @@ export default function OperationsPage() {
   // ── Multi-select state for bulk operations ──
   const [selectedIds, setSelectedIds] = useState(() => new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
+  // Live counter for bulk delete so the user sees "12/50" instead of a
+  // single opaque "deleting…" spinner on long batches.
+  const [bulkProgress, setBulkProgress] = useState({ done: 0, total: 0 });
 
   const toggleSelect = useCallback((id) => {
     setSelectedIds((prev) => {
@@ -150,6 +153,7 @@ export default function OperationsPage() {
     if (!ok) return;
 
     setBulkDeleting(true);
+    setBulkProgress({ done: 0, total: ids.length });
     let succeeded = 0;
     let failed = 0;
     for (const id of ids) {
@@ -160,15 +164,18 @@ export default function OperationsPage() {
         console.error("bulk delete failed for id", id, err);
         failed += 1;
       }
+      // Tick progress after each request so the chip updates live.
+      setBulkProgress({ done: succeeded + failed, total: ids.length });
     }
     setBulkDeleting(false);
+    setBulkProgress({ done: 0, total: 0 });
     setSelectedIds(new Set());
     if (failed > 0) {
       window.alert(
         `تم حذف ${succeeded} عملية، وفشل حذف ${failed} عملية. راجع الـ console.`,
       );
     }
-  }, [selectedIds, deleteMutation]);
+  }, [selectedIds, deleteMutation, filteredOperations]);
 
   const handleEditOperation = useCallback(
     async (operation, existingDetails) => {
@@ -308,6 +315,7 @@ export default function OperationsPage() {
           onClearSelection={clearSelection}
           onBulkDelete={handleBulkDelete}
           bulkDeleteDisabled={bulkDeleting || deleteMutation.isPending}
+          bulkProgress={bulkProgress}
         />
       </main>
 

@@ -137,6 +137,9 @@ export default function BranchesPage() {
   };
 
   const handleDelete = (id) => {
+    // Extra guard alongside the button's `disabled` — keystroke + click
+    // can race the disabled flip between mutate-start and re-render.
+    if (deleteMutation.isPending) return;
     deleteMutation.mutate(id);
   };
 

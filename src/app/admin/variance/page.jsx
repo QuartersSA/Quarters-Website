@@ -83,7 +83,13 @@ export default function VariancePage() {
     ];
   }, [items, itemSearch]);
 
-  const hasFilters = !!(selectedBranch && selectedItem && dateFrom && dateTo);
+  // Inverted ranges (from > to) return an empty server result that looks
+  // identical to "no data" — surface it as a filter error instead so the
+  // query never even fires.
+  const dateRangeInvalid = !!(dateFrom && dateTo && dateFrom > dateTo);
+  const hasFilters =
+    !!(selectedBranch && selectedItem && dateFrom && dateTo) &&
+    !dateRangeInvalid;
 
   const varianceQuery = useQuery({
     queryKey: ["variance", selectedBranch, selectedItem, dateFrom, dateTo],

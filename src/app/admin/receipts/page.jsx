@@ -79,8 +79,12 @@ export default function ReceiptsPage() {
     [items],
   );
 
+  // Inverted ranges return empty results silently → looks like a broken
+  // filter. Detect here, skip the query, and surface the error inline.
+  const dateRangeInvalid = !!(dateFrom && dateTo && dateFrom > dateTo);
+
   const { groups, isLoading, error, refetch } = useReceiptsData({
-    isAuthenticated,
+    isAuthenticated: isAuthenticated && !dateRangeInvalid,
     branchId: selectedBranch,
     itemId: selectedItem,
     dateFrom,
@@ -126,9 +130,18 @@ export default function ReceiptsPage() {
           dateTo={dateTo}
           onDateToChange={setDateTo}
           onRefresh={refetch}
+          dateRangeInvalid={dateRangeInvalid}
         />
 
-        <ReceiptsList groups={groups} isLoading={isLoading} error={error} />
+        {dateRangeInvalid ? (
+          <div className={`${ws.glassSoft} ${ws.card} p-5 mb-6 text-center`}>
+            <p className="text-red-200 text-sm font-semibold">
+              ⚠ "من تاريخ" أحدث من "إلى تاريخ" — صحّح الفترة لعرض النتائج
+            </p>
+          </div>
+        ) : (
+          <ReceiptsList groups={groups} isLoading={isLoading} error={error} />
+        )}
       </main>
     </div>
   );
