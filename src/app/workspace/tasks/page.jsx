@@ -98,23 +98,28 @@ export default function WorkspaceTasksPage() {
       return ids.includes(filterAssignee);
     });
 
-    // Apply sorting
+    // Apply sorting — secondary tiebreaker by id desc so unknown/null
+    // priority values (and same-day due dates) get a deterministic order
+    // (newest first) rather than insertion order.
     const sorted = [...filtered];
     if (sortBy === "priority") {
       const priorityOrder = { Urgent: 0, High: 1, Normal: 2, Low: 3 };
       sorted.sort((a, b) => {
         const pa = priorityOrder[a.priority] ?? 4;
         const pb = priorityOrder[b.priority] ?? 4;
-        return pa - pb;
+        if (pa !== pb) return pa - pb;
+        return (b.id || 0) - (a.id || 0);
       });
     } else if (sortBy === "dueDate") {
       sorted.sort((a, b) => {
         const da = a.due_date || "9999";
         const db = b.due_date || "9999";
-        return String(da).localeCompare(String(db));
+        const cmp = String(da).localeCompare(String(db));
+        if (cmp !== 0) return cmp;
+        return (b.id || 0) - (a.id || 0);
       });
     } else if (sortBy === "newest") {
-      sorted.sort((a, b) => b.id - a.id);
+      sorted.sort((a, b) => (b.id || 0) - (a.id || 0));
     }
 
     return sorted;

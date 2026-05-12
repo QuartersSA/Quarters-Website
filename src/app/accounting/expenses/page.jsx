@@ -835,6 +835,7 @@ export default function ExpensesPage() {
         onSubmit={handleQuickAddSubmit}
         isSubmitting={createExpenseMutation.isPending}
         onCreateType={handleCreateType}
+        month={month}
       />
     </div>
   );

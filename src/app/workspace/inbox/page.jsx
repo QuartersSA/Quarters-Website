@@ -517,9 +517,13 @@ export default function WorkspaceInboxPage() {
               <button
                 type="button"
                 onClick={onSend}
-                disabled={
-                  !compose.trim() || sendMutation.isPending || !selectedThreadId
-                }
+                // Don't gate on sendMutation.isPending: compose clears
+                // optimistically and the optimistic update already shows the
+                // message — keeping it disabled until the network round-trip
+                // settles creates ~300-500ms input lag where a freshly-typed
+                // second message can't be sent. Multiple in-flight mutates
+                // is OK because each optimistic batch is appended to prev.
+                disabled={!compose.trim() || !selectedThreadId}
                 className="inline-flex items-center justify-center w-12 h-12 rounded-3xl bg-emerald-400/15 text-emerald-200 border border-emerald-400/25 disabled:opacity-50 hover:bg-emerald-400/20"
                 aria-label="إرسال"
               >

@@ -18,6 +18,9 @@ export function QuickAddSheet({
   onSubmit,
   isSubmitting,
   onCreateType,
+  // Page's currently-viewed month, so the quick-add form lands the new
+  // expense in the same month the user is on (not always wall-clock now).
+  month,
 }) {
   const submittingRef = useRef(false);
 
@@ -91,6 +94,7 @@ export function QuickAddSheet({
           onSubmit={onSubmit}
           isSubmitting={isSubmitting}
           onCreateType={onCreateType}
+          defaultMonth={month}
         />
       </div>
     </div>

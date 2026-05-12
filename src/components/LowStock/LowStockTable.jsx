@@ -78,7 +78,10 @@ export function LowStockTable({
                 const status = getLowStockStatus(item);
                 const qty = Number(item.current_quantity) || 0;
                 const threshold = Number(item.min_stock_threshold) || 0;
-                const shortage = threshold - qty;
+                // Clamp to 0: prevents "-(negative)" rendering when qty > threshold
+                // (theoretically shouldn't appear in the low-stock list, but a
+                // race between API + filter rerender can sneak a row through).
+                const shortage = Math.max(0, threshold - qty);
                 const qtyClass =
                   qty === 0
                     ? "text-red-200"

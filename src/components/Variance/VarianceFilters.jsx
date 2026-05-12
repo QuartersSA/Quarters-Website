@@ -17,6 +17,12 @@ export function VarianceFilters({
   itemSearch,
   onItemSearchChange,
 }) {
+  // itemOptions[0] is the "اختر الصنف" placeholder — actual matches = length-1.
+  // Surfaces "no matches" state so user doesn't think search broke.
+  const matchCount = Math.max(0, (itemOptions?.length || 0) - 1);
+  const hasSearch = !!(itemSearch && itemSearch.trim());
+  // Date range sanity: from > to is a typo, swap visually with red border.
+  const dateRangeInvalid = !!(dateFrom && dateTo && dateFrom > dateTo);
   return (
     <div className={`${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -42,6 +48,17 @@ export function VarianceFilters({
               className={`${ws.input} pr-10 pl-3 py-3`}
             />
           </div>
+          {hasSearch ? (
+            <p
+              className={`mt-1 text-xs ${
+                matchCount === 0 ? "text-red-200" : "text-white/45"
+              }`}
+            >
+              {matchCount === 0
+                ? "لا توجد نتائج"
+                : `${matchCount} نتيجة`}
+            </p>
+          ) : null}
         </div>
 
         <div>
@@ -62,7 +79,9 @@ export function VarianceFilters({
             type="date"
             value={dateFrom}
             onChange={(e) => onDateFromChange(e.target.value)}
-            className={`${ws.input} px-3 py-3 w-full`}
+            className={`${ws.input} px-3 py-3 w-full ${
+              dateRangeInvalid ? "ring-1 ring-red-400/60" : ""
+            }`}
           />
         </div>
 
@@ -73,7 +92,9 @@ export function VarianceFilters({
               type="date"
               value={dateTo}
               onChange={(e) => onDateToChange(e.target.value)}
-              className={`${ws.input} px-3 py-3 flex-1`}
+              className={`${ws.input} px-3 py-3 flex-1 ${
+                dateRangeInvalid ? "ring-1 ring-red-400/60" : ""
+              }`}
             />
             <button
               type="button"
@@ -84,6 +105,11 @@ export function VarianceFilters({
               <RefreshCw className="w-4 h-4" />
             </button>
           </div>
+          {dateRangeInvalid ? (
+            <p className="mt-1 text-xs text-red-200">
+              ⚠ "من" أحدث من "إلى"
+            </p>
+          ) : null}
         </div>
       </div>
     </div>

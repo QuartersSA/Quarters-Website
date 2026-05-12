@@ -11,6 +11,10 @@ export function ExpenseForm({
   onCreateType,
   editingExpense,
   onCancelEdit,
+  // Optional: prefill form's month (e.g. when opened from QuickAddSheet so
+  // the new expense lands in the same month the user is currently viewing).
+  // Falls back to current calendar month when omitted.
+  defaultMonth,
 }) {
   const [typeId, setTypeId] = useState("");
   const [expenseName, setExpenseName] = useState("");
@@ -21,13 +25,19 @@ export function ExpenseForm({
 
   const monthOptions = useMemo(() => buildRecentMonthOptions(30), []);
 
-  // Default the month to "now" exactly once at mount when not editing.
+  // Default the month at mount when not editing. Prefer caller-supplied
+  // `defaultMonth` (e.g. page's currently-viewed month) over wall-clock
+  // current month — keeps the new row in the same month the user is on.
   // Previously this effect depended on `formMonth` too, which meant
   // clearing the form (formMonth becoming "") after editing would re-fire
   // it and overwrite a user-picked-then-cleared month. The mount-only
   // effect avoids that loop.
   useEffect(() => {
     if (editingExpense) return;
+    if (defaultMonth) {
+      setFormMonth(defaultMonth);
+      return;
+    }
     const now = new Date();
     const y = now.getFullYear();
     const m = String(now.getMonth() + 1).padStart(2, "0");

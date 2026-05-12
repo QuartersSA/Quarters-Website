@@ -170,12 +170,21 @@ export default function VariancePage() {
           onRefresh={() => varianceQuery.refetch()}
         />
 
-        {hasFilters && rows.length > 0 ? <VarianceStats rows={rows} /> : null}
+        {/* Show stats whenever filters are complete (even with zero rows) so
+            user can tell the filter applied — previously hidden on empty rows
+            looked like the filter never ran. */}
+        {hasFilters ? <VarianceStats rows={rows} /> : null}
 
         <VarianceTable
           rows={rows}
           isLoading={varianceQuery.isLoading}
           hasFilters={hasFilters}
+          filterStatus={{
+            branch: !!selectedBranch,
+            item: !!selectedItem,
+            from: !!dateFrom,
+            to: !!dateTo,
+          }}
           onExportExcel={handleExportExcel}
           onExportPDF={handleExportPDF}
         />

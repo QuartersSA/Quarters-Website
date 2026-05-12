@@ -134,7 +134,19 @@ export default function OperationsPage() {
     const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
     if (typeof window === "undefined") return;
-    const ok = window.confirm(`حذف ${ids.length} عملية؟ لا يمكن التراجع.`);
+
+    // Warn if user selected items under one filter, then changed filter,
+    // since the off-screen ids will still be deleted.
+    const visibleIds = new Set((filteredOperations || []).map((op) => op.id));
+    const hiddenCount = ids.filter((id) => !visibleIds.has(id)).length;
+    const hiddenWarning =
+      hiddenCount > 0
+        ? `\n⚠️ تنبيه: ${hiddenCount} منها خارج الفلتر الحالي وغير ظاهرة.`
+        : "";
+
+    const ok = window.confirm(
+      `حذف ${ids.length} عملية؟ لا يمكن التراجع.${hiddenWarning}`,
+    );
     if (!ok) return;
 
     setBulkDeleting(true);

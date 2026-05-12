@@ -45,9 +45,14 @@ export function VarianceTable({
   rows,
   isLoading,
   hasFilters,
+  // When hasFilters is false, this tells the user which specific filter is
+  // still empty — previously the message said "حدد كل الفلاتر" without
+  // indicating which ones were already filled vs missing.
+  filterStatus,
   onExportExcel,
   onExportPDF,
 }) {
+  const f = filterStatus || {};
   return (
     <div className={sectionCard}>
       <div
@@ -70,7 +75,24 @@ export function VarianceTable({
         <div className="p-12 text-center text-white/50">
           <Calendar className="w-16 h-16 mx-auto mb-4 opacity-50" />
           <p className="text-lg mb-2">اختر الفرع والصنف والفترة لعرض الانحرافات</p>
-          <p className="text-sm">المعادلة: المتوقع = آخر افتتاحي + الواردات بعده</p>
+          {/* Per-filter status so user sees what's left */}
+          <div className="mt-4 inline-flex flex-col gap-1.5 items-start text-sm">
+            <span className={f.branch ? "text-emerald-300" : "text-white/55"}>
+              {f.branch ? "✓" : "○"} الفرع
+            </span>
+            <span className={f.item ? "text-emerald-300" : "text-white/55"}>
+              {f.item ? "✓" : "○"} الصنف
+            </span>
+            <span className={f.from ? "text-emerald-300" : "text-white/55"}>
+              {f.from ? "✓" : "○"} من تاريخ
+            </span>
+            <span className={f.to ? "text-emerald-300" : "text-white/55"}>
+              {f.to ? "✓" : "○"} إلى تاريخ
+            </span>
+          </div>
+          <p className="text-xs text-white/40 mt-4">
+            المعادلة: المتوقع = آخر افتتاحي + الواردات بعده
+          </p>
         </div>
       ) : isLoading ? (
         <div className="p-12 text-center text-white/55">

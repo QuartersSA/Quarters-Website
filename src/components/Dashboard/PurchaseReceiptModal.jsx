@@ -80,7 +80,16 @@ export function PurchaseReceiptModal({
     ? updateReceiptMutation
     : createReceiptMutation;
   const isPending = activeMutation?.isPending;
-  const canSubmit = itemsList.length > 0 && receiptBranchId && receiptDate;
+  // Future-date guard: receipt dates in future = wrong (typo or paste). Same
+  // pattern as OpeningSession/Inventory — keeps audit trail honest.
+  const isFutureDate = (() => {
+    if (!receiptDate) return false;
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    return new Date(receiptDate) > today;
+  })();
+  const canSubmit =
+    itemsList.length > 0 && receiptBranchId && receiptDate && !isFutureDate;
 
   const handleSubmit = isEditMode ? submitEditReceipt : submitReceipt;
 
@@ -176,6 +185,11 @@ export function PurchaseReceiptModal({
                 buttonClassName="px-4 py-3"
                 showTime
               />
+              {isFutureDate ? (
+                <p className="mt-1.5 text-xs text-red-200">
+                  ⚠ التاريخ في المستقبل — لا يمكن الحفظ
+                </p>
+              ) : null}
             </div>
           </div>
 
