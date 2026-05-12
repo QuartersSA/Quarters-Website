@@ -133,8 +133,11 @@ export default function AppSectionSwitcher({
   }
 
   return (
+    // inline-flex so the switcher only takes the space its icons need.
+    // Previously this was w-full which squeezed sibling content (page title)
+    // when used inline in a mobile top bar.
     <div
-      className={`w-full max-w-full flex flex-wrap items-center justify-center gap-1 p-1 rounded-2xl border border-white/10 bg-white/[0.03] ${shellClass} ${className}`}
+      className={`inline-flex items-center gap-1 p-1 rounded-2xl border border-white/10 bg-white/[0.03] shrink-0 ${shellClass} ${className}`}
       dir="rtl"
     >
       {visibleItems.map(({ key, href, label, Icon, onClick }) => {

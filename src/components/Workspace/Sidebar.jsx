@@ -79,6 +79,31 @@ export default function WorkspaceSidebar({ active = "inbox" }) {
 
   return (
     <>
+      {/* Mobile top bar — sticky (in flow) single-row matching other sections:
+          section switcher | logo + title */}
+      <div
+        className={`lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.glass} border-b border-white/10`}
+        dir="rtl"
+      >
+        <div className="px-4 py-3 flex items-center justify-between gap-3">
+          <AppSectionSwitcher
+            active="workspace"
+            className="scale-90 origin-left"
+          />
+
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="text-white text-sm font-bold tracking-tight whitespace-nowrap">
+              مساحة العمل
+            </div>
+            <img
+              src={BRAND_LOGO_URL}
+              alt="Quarters"
+              className="h-8 w-auto bg-white rounded-xl p-1 shrink-0"
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Desktop sidebar */}
       <aside
         className={`hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-white/10`}

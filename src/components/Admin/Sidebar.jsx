@@ -63,9 +63,11 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
 
   return (
     <>
-      {/* Mobile top bar (Apple-like) */}
+      {/* Mobile top bar — sticky (in flow) so page content naturally renders
+          below it instead of hiding under a fixed overlay. Layout matches
+          the design across all admin sections: hamburger | logo+title | switcher */}
       <div
-        className={`lg:hidden fixed top-0 left-0 right-0 z-50 ${ws.topBar}`}
+        className={`lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.topBar}`}
         dir="rtl"
       >
         <div className="px-4 py-3 flex items-center justify-between gap-3">
@@ -81,27 +83,19 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             )}
           </button>
 
+          <AppSectionSwitcher
+            active="inventory"
+            className="scale-90 origin-left"
+          />
+
           <div className="flex items-center gap-2 min-w-0">
+            <div className="text-white text-sm font-bold tracking-tight whitespace-nowrap">
+              {pageTitle}
+            </div>
             <img
               src="https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/"
               alt="Quarters"
-              className="h-9 w-auto bg-white rounded-xl p-1"
-            />
-            <div className="min-w-0">
-              <div className="text-white font-bold tracking-tight truncate">
-                {pageTitle}
-              </div>
-              <div className="text-xs text-white/55 truncate">
-                أنظمة Quarters
-              </div>
-            </div>
-          </div>
-
-          {/* small section switcher (matches the style used in other areas) */}
-          <div className="hidden sm:flex">
-            <AppSectionSwitcher
-              active="inventory"
-              className="scale-90 origin-left"
+              className="h-8 w-auto bg-white rounded-xl p-1 shrink-0"
             />
           </div>
         </div>
