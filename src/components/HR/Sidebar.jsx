@@ -103,16 +103,32 @@ export default function HRSidebar({ onLogout, active = "dashboard" }) {
 
   return (
     <>
-      {/* Mobile top bar — section switcher only so user can jump between
-          Workspace / Inventory / Accounting / HR without opening side menu.
-          HR uses a bottom nav for in-section nav, so this top bar only
-          carries the cross-section switcher. */}
+      {/* Mobile top bar — same single-row design used across all sections.
+          Sticky (not fixed) so page content renders below it without overlap.
+          HR uses a bottom nav for in-section nav, so this top bar carries:
+          section switcher | logo + title */}
       <div
-        className={`lg:hidden fixed top-0 left-0 right-0 z-40 ${ws.glass} border-b border-white/10`}
+        className={`lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.glass} border-b border-white/10`}
         dir="rtl"
       >
-        <div className="px-3 py-2 flex justify-start">
-          <AppSectionSwitcher active="hr" className="scale-95 origin-right" />
+        <div className="px-4 py-3 flex items-center justify-between gap-3">
+          <AppSectionSwitcher active="hr" className="scale-90 origin-left" />
+
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="min-w-0 text-right">
+              <div className="text-white font-bold tracking-tight truncate">
+                HR
+              </div>
+              <div className="text-xs text-white/55 truncate">
+                أنظمة Quarters
+              </div>
+            </div>
+            <img
+              src={BRAND_LOGO_URL}
+              alt="Quarters"
+              className="h-9 w-auto bg-white rounded-xl p-1"
+            />
+          </div>
         </div>
       </div>
 

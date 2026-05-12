@@ -63,9 +63,11 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
 
   return (
     <>
-      {/* Mobile top bar (Apple-like) */}
+      {/* Mobile top bar — sticky (in flow) so page content naturally renders
+          below it instead of hiding under a fixed overlay. Layout matches
+          the design across all admin sections: hamburger | logo+title | switcher */}
       <div
-        className={`lg:hidden fixed top-0 left-0 right-0 z-50 ${ws.topBar}`}
+        className={`lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.topBar}`}
         dir="rtl"
       >
         <div className="px-4 py-3 flex items-center justify-between gap-3">
@@ -81,7 +83,12 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             )}
           </button>
 
-          <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
+          <AppSectionSwitcher
+            active="inventory"
+            className="scale-90 origin-left"
+          />
+
+          <div className="flex items-center gap-2 min-w-0">
             <div className="min-w-0 text-right">
               <div className="text-white font-bold tracking-tight truncate">
                 {pageTitle}
@@ -96,16 +103,6 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
               className="h-9 w-auto bg-white rounded-xl p-1"
             />
           </div>
-        </div>
-
-        {/* Section switcher — second row, always visible on mobile so user can
-            jump between Workspace / Inventory / Accounting / HR without
-            opening the side menu. */}
-        <div className="px-4 pb-2 -mt-1 flex justify-start">
-          <AppSectionSwitcher
-            active="inventory"
-            className="scale-95 origin-right"
-          />
         </div>
       </div>
 
