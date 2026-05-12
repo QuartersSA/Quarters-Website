@@ -89,18 +89,13 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
           />
 
           <div className="flex items-center gap-2 min-w-0">
-            <div className="min-w-0 text-right">
-              <div className="text-white font-bold tracking-tight truncate">
-                {pageTitle}
-              </div>
-              <div className="text-xs text-white/55 truncate">
-                أنظمة Quarters
-              </div>
+            <div className="text-white text-sm font-bold tracking-tight whitespace-nowrap">
+              {pageTitle}
             </div>
             <img
               src="https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/"
               alt="Quarters"
-              className="h-9 w-auto bg-white rounded-xl p-1"
+              className="h-8 w-auto bg-white rounded-xl p-1 shrink-0"
             />
           </div>
         </div>

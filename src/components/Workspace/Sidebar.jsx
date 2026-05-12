@@ -92,18 +92,13 @@ export default function WorkspaceSidebar({ active = "inbox" }) {
           />
 
           <div className="flex items-center gap-2 min-w-0">
-            <div className="min-w-0 text-right">
-              <div className="text-white font-bold tracking-tight truncate">
-                مساحة العمل
-              </div>
-              <div className="text-xs text-white/55 truncate">
-                أنظمة Quarters
-              </div>
+            <div className="text-white text-sm font-bold tracking-tight whitespace-nowrap">
+              مساحة العمل
             </div>
             <img
               src={BRAND_LOGO_URL}
               alt="Quarters"
-              className="h-9 w-auto bg-white rounded-xl p-1"
+              className="h-8 w-auto bg-white rounded-xl p-1 shrink-0"
             />
           </div>
         </div>

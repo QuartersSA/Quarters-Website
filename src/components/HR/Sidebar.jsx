@@ -115,18 +115,13 @@ export default function HRSidebar({ onLogout, active = "dashboard" }) {
           <AppSectionSwitcher active="hr" className="scale-90 origin-left" />
 
           <div className="flex items-center gap-2 min-w-0">
-            <div className="min-w-0 text-right">
-              <div className="text-white font-bold tracking-tight truncate">
-                HR
-              </div>
-              <div className="text-xs text-white/55 truncate">
-                أنظمة Quarters
-              </div>
+            <div className="text-white text-sm font-bold tracking-tight whitespace-nowrap">
+              HR
             </div>
             <img
               src={BRAND_LOGO_URL}
               alt="Quarters"
-              className="h-9 w-auto bg-white rounded-xl p-1"
+              className="h-8 w-auto bg-white rounded-xl p-1 shrink-0"
             />
           </div>
         </div>
