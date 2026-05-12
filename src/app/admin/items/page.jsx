@@ -289,7 +289,7 @@ export default function ItemsPage() {
           </p>
         </div>
 
-        <StatsCards items={items} />
+        <StatsCards items={filteredItems} totalCount={items.length} />
 
         <SearchBar
           searchTerm={searchTerm}

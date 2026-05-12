@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowLeftRight, PlusCircle, Truck } from "lucide-react";
+import { ArrowLeftRight, PlusCircle, Truck } from "lucide-react";
 import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
@@ -77,7 +77,14 @@ export default function OperationsPage() {
   const [editOperation, setEditOperation] = useState(null);
   const [editOperationDetails, setEditOperationDetails] = useState(null);
 
-  /* ── opening session & purchase receipt ── */
+  /* ── opening session & purchase receipt ──
+   * Both hooks accept context-binding ids (preselected branch / item /
+   * variance source) so they can be reused from drill-in screens. The
+   * operations page is a generic "all ops" list with no preselection,
+   * so we pass empty strings here. Concretely:
+   *   useOpeningSession(activeItems, selectedBranchId, varianceBranchId)
+   *   usePurchaseReceipt(branchId, itemId, varianceBranchId, varianceItemId)
+   */
   const openingSession = useOpeningSession(activeItems, "", "");
   const purchaseReceipt = usePurchaseReceipt("", "", "", "");
 
@@ -236,12 +243,8 @@ export default function OperationsPage() {
         <div className="mb-8 mt-6 lg:mt-0">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div className="flex items-center gap-3">
-              <a
-                href="/admin"
-                className="text-white/55 hover:text-white transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </a>
+              {/* Back arrow removed: Breadcrumb above already links to
+                  the admin dashboard, so the icon was duplicate nav. */}
               <h1 className={`text-3xl sm:text-4xl ${ws.title}`}>
                 عمليات المخزون
               </h1>
