@@ -407,18 +407,24 @@ export async function POST(request) {
     // local-format `parsedDate` ("YYYY-MM-DD HH:MM:SS") and introduces
     // a TZ-offset bug that blocked even forward-dated transfers.
     if (parsedDate) {
-      // `nowLocalDatetime()` in the modal omits seconds (HH:mm), so
-      // `parsedDate` always ends in `:00`. The stored op `operation_date`
-      // however captures real seconds (e.g. 16:27:42). A naive
-      // `MAX(op) > parsed` then compares `16:27:42 > 16:27:00` = TRUE
-      // even when the user clicked transfer in the SAME minute as the
-      // last count — the guard wrongly fires. Truncating both sides to
-      // the minute makes same-minute submits pass; only strictly later
-      // minutes (a real backdate) still trigger the block.
+      // Compare DATES only (not full timestamps).
+      //
+      // Why date-level instead of minute-level:
+      //   - `io.created_at` defaults to `CURRENT_TIMESTAMP` which Neon
+      //     stores as UTC wall-clock in the timestamp-without-tz column.
+      //   - `io.operation_date` can be either: user-typed Riyadh
+      //     wall-clock (from a transfer/count modal) OR UTC wall-clock
+      //     (when defaulted to CURRENT_TIMESTAMP).
+      //   - `parsedDate` from the picker is always Riyadh wall-clock.
+      // Mixing these at minute precision causes a 3-hour false positive
+      // on every same-day Riyadh transfer. Casting both sides to ::date
+      // eliminates the TZ ambiguity — the guard still blocks genuine
+      // back-dated transfers (yesterday or earlier) while same-day
+      // submits always pass regardless of clock skew.
       const conflicts = await sql(
         `SELECT
            io.branch_id,
-           MAX(COALESCE(io.operation_date, io.created_at)) AS latest_date,
+           MAX(COALESCE(io.operation_date, io.created_at))::date AS latest_date,
            b.name AS branch_name
          FROM inventory_operations io
          JOIN branches b ON b.id = io.branch_id
@@ -427,8 +433,8 @@ export async function POST(request) {
            AND io.branch_id = ANY($1::int[])
          GROUP BY io.branch_id, b.name
          HAVING
-           date_trunc('minute', MAX(COALESCE(io.operation_date, io.created_at)))
-             > date_trunc('minute', $2::timestamp)`,
+           MAX(COALESCE(io.operation_date, io.created_at))::date
+             > $2::timestamp::date`,
         [[fromId, toId], parsedDate],
       );
       if (conflicts.length > 0) {
@@ -436,8 +442,8 @@ export async function POST(request) {
           .map((r) => {
             const dt =
               r.latest_date instanceof Date
-                ? r.latest_date.toISOString().slice(0, 16).replace("T", " ")
-                : String(r.latest_date).slice(0, 16).replace("T", " ");
+                ? r.latest_date.toISOString().slice(0, 10)
+                : String(r.latest_date).slice(0, 10);
             return `${r.branch_name} (${dt})`;
           })
           .join("، ");
