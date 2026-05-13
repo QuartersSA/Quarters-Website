@@ -395,27 +395,45 @@ export async function POST(request) {
     const parsedDate = parseOperationDate(operationDate);
 
     // Backdate guard: refuse to backdate behind the latest completed
-    // inventory baseline (Daily/Weekly/Transfer/Opening) at either
-    // branch. Storing a Transfer with an older operation_date silently
-    // turns it into a historical no-op — the newer inventory_items row
-    // remains `last_inv` and the transfer never affects current stock.
-    // Better to surface the conflict than silently break stock math.
+    // inventory baseline (Daily/Weekly/Transfer/Opening) — but only at
+    // branches that ACTUALLY have past activity. A branch with no
+    // inventory_operations yet has no `last_inv` to displace, so the
+    // transfer becomes its first row and current stock works
+    // correctly regardless of the requested date.
+    //
+    // The comparison happens entirely in Postgres so wall-clock dates
+    // stored as TIMESTAMP WITHOUT TIME ZONE stay consistent — pulling
+    // them into JS Date objects mixes UTC ISO output ("…Z") with the
+    // local-format `parsedDate` ("YYYY-MM-DD HH:MM:SS") and introduces
+    // a TZ-offset bug that blocked even forward-dated transfers.
     if (parsedDate) {
-      const [latest] = await sql(
-        `SELECT MAX(COALESCE(io.operation_date, io.created_at)) AS max_date
+      const conflicts = await sql(
+        `SELECT
+           io.branch_id,
+           MAX(COALESCE(io.operation_date, io.created_at)) AS latest_date,
+           b.name AS branch_name
          FROM inventory_operations io
+         JOIN branches b ON b.id = io.branch_id
          WHERE io.status = 'Completed'
            AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
-           AND io.branch_id = ANY($1::int[])`,
-        [[fromId, toId]],
+           AND io.branch_id = ANY($1::int[])
+         GROUP BY io.branch_id, b.name
+         HAVING MAX(COALESCE(io.operation_date, io.created_at)) > $2::timestamp`,
+        [[fromId, toId], parsedDate],
       );
-      const latestDate = latest?.max_date ? new Date(latest.max_date) : null;
-      const requestedDate = new Date(parsedDate);
-      if (latestDate && requestedDate < latestDate) {
-        const latestStr = latestDate.toISOString().slice(0, 16).replace("T", " ");
+      if (conflicts.length > 0) {
+        const detail = conflicts
+          .map((r) => {
+            const dt =
+              r.latest_date instanceof Date
+                ? r.latest_date.toISOString().slice(0, 16).replace("T", " ")
+                : String(r.latest_date).slice(0, 16).replace("T", " ");
+            return `${r.branch_name} (${dt})`;
+          })
+          .join("، ");
         return Response.json(
           {
-            error: `تاريخ التحويل أقدم من آخر جرد مكتمل في أحد الفرعَين (${latestStr}). التواريخ المسبقة تُفقد التأثير على المخزون.`,
+            error: `تاريخ التحويل أقدم من آخر جرد مكتمل في: ${detail}. التواريخ المسبقة تُفقد التأثير على المخزون. اختر تاريخاً أحدث أو ساوي.`,
           },
           { status: 400 },
         );
