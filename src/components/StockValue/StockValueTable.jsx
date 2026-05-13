@@ -105,9 +105,22 @@ export function StockValueTable({
             <tbody>
               {items.map((it, idx) => {
                 const qty = Number(it.total_quantity) || 0;
-                const cost = it.cost == null ? null : Number(it.cost);
-                const value = it.total_value == null ? null : Number(it.total_value);
-                const missingCost = cost == null || !Number.isFinite(cost);
+                // effective_cost = direct i.cost OR fallback to latest
+                // green-bean order price. matches the dashboard's logic
+                // so the totals agree across screens.
+                const effCost =
+                  it.effective_cost == null
+                    ? null
+                    : Number(it.effective_cost);
+                const directCost =
+                  it.cost == null ? null : Number(it.cost);
+                const usedFallback =
+                  directCost == null &&
+                  effCost != null &&
+                  Number.isFinite(effCost);
+                const value =
+                  it.total_value == null ? null : Number(it.total_value);
+                const missingCost = effCost == null || !Number.isFinite(effCost);
                 const pctText = fmtPct(value, totalValue);
 
                 return (
@@ -165,7 +178,21 @@ export function StockValueTable({
                           غير محدد
                         </span>
                       ) : (
-                        <span>{fmtMoney(cost)} ر.س</span>
+                        <span
+                          className="inline-flex items-center gap-1.5"
+                          title={
+                            usedFallback
+                              ? "السعر من آخر طلب بن أخضر (i.cost = NULL)"
+                              : "سعر تكلفة الصنف المسجّل"
+                          }
+                        >
+                          {fmtMoney(effCost)} ر.س
+                          {usedFallback ? (
+                            <span className="text-[10px] text-sky-200/80 bg-sky-400/10 border border-sky-400/20 rounded px-1 py-0.5">
+                              بن
+                            </span>
+                          ) : null}
+                        </span>
                       )}
                     </td>
                     <td
