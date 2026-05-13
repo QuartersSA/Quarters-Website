@@ -1,29 +1,22 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
-async function ensureSchema() {
-  try {
-    await sql`ALTER TABLE items ADD COLUMN IF NOT EXISTS max_stock_threshold INTEGER`;
-  } catch (e) {
-    console.error("ensureSchema items.max_stock_threshold:", e?.message);
-  }
-}
-
-// GET /api/items/over-stock
-// Returns items where current_quantity > max_stock_threshold (per branch).
-// Same shape as /api/items/low-stock for symmetry.
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
-    await ensureSchema();
-
+    // current stock = last Daily/Weekly/Transfer count + SUM(purchase_receipts after it)
     const rows = await sql`
       SELECT
         i.id,
@@ -31,7 +24,6 @@ export async function GET(request) {
         i.description,
         i.image_url,
         i.min_stock_threshold,
-        i.max_stock_threshold,
         i.unit,
         b.id as branch_id,
         b.name as branch_name,
@@ -49,7 +41,7 @@ export async function GET(request) {
           AND io.branch_id = b.id
           AND io.status    = 'Completed'
           AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
+        ORDER BY COALESCE(io.operation_date, io.created_at) DESC
         LIMIT 1
       ) last_inv ON true
 
@@ -70,24 +62,19 @@ export async function GET(request) {
 
       WHERE i.is_active = true
         AND i.show_in_inventory = true
-        AND i.max_stock_threshold IS NOT NULL
-        AND i.max_stock_threshold > 0
         AND (last_inv.op_date IS NOT NULL OR receipts_after.total_received > 0)
       ORDER BY i.name, b.name
     `;
-
-    const filteredItems = rows.filter(
-      (item) =>
-        Number(item.max_stock_threshold) > 0 &&
-        Number(item.current_quantity) > Number(item.max_stock_threshold),
-    );
-
+    const filteredItems = rows.filter(item => Number(item.current_quantity) < Number(item.min_stock_threshold));
     return Response.json(filteredItems);
   } catch (error) {
-    console.error("Error fetching over-stock items:", error);
-    return Response.json(
-      { error: "Failed to fetch over-stock items", details: error.message },
-      { status: 500 },
-    );
+    console.error("Error fetching low stock items:", error);
+    return Response.json({
+      error: "Failed to fetch low stock items"
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET };

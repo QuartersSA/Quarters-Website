@@ -1,38 +1,50 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
-    const { searchParams } = new URL(request.url);
+    const {
+      searchParams
+    } = new URL(request.url);
     const branchIdRaw = searchParams.get("branchId");
     const itemIdRaw = searchParams.get("itemId");
     const fromRaw = searchParams.get("from");
     const toRaw = searchParams.get("to");
-
     const branchId = branchIdRaw ? parseInt(branchIdRaw) : null;
     const itemId = itemIdRaw ? parseInt(itemIdRaw) : null;
-
     if (!branchId || Number.isNaN(branchId)) {
-      return Response.json({ error: "معرّف الفرع مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "معرّف الفرع مطلوب"
+      }, {
+        status: 400
+      });
     }
-
     if (!itemId || Number.isNaN(itemId)) {
-      return Response.json({ error: "معرّف الصنف مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "معرّف الصنف مطلوب"
+      }, {
+        status: 400
+      });
     }
-
     if (!fromRaw || !toRaw) {
-      return Response.json(
-        { error: "يجب تحديد فترة (من / إلى)" },
-        { status: 400 },
-      );
+      return Response.json({
+        error: "يجب تحديد فترة (من / إلى)"
+      }, {
+        status: 400
+      });
     }
 
     // Variance row computes two delta perspectives:
@@ -146,21 +158,22 @@ export async function GET(request) {
         AND COALESCE(io.operation_date, io.created_at)::date <= $4::date
       ORDER BY COALESCE(io.operation_date, io.created_at) ASC
     `;
-
     const rows = await sql(query, [branchId, itemId, fromRaw, toRaw]);
-
     return Response.json({
       branch_id: branchId,
       item_id: itemId,
       from: fromRaw,
       to: toRaw,
-      rows,
+      rows
     });
   } catch (error) {
     console.error("Error fetching variance:", error);
-    return Response.json(
-      { error: "Failed to fetch variance" },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch variance"
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET };

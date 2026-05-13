@@ -1,5 +1,7 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 async function ensureSchema() {
   try {
@@ -12,18 +14,20 @@ async function ensureSchema() {
 // GET /api/items/over-stock
 // Returns items where current_quantity > max_stock_threshold (per branch).
 // Same shape as /api/items/low-stock for symmetry.
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
-
     const rows = await sql`
       SELECT
         i.id,
@@ -75,19 +79,17 @@ export async function GET(request) {
         AND (last_inv.op_date IS NOT NULL OR receipts_after.total_received > 0)
       ORDER BY i.name, b.name
     `;
-
-    const filteredItems = rows.filter(
-      (item) =>
-        Number(item.max_stock_threshold) > 0 &&
-        Number(item.current_quantity) > Number(item.max_stock_threshold),
-    );
-
+    const filteredItems = rows.filter(item => Number(item.max_stock_threshold) > 0 && Number(item.current_quantity) > Number(item.max_stock_threshold));
     return Response.json(filteredItems);
   } catch (error) {
     console.error("Error fetching over-stock items:", error);
-    return Response.json(
-      { error: "Failed to fetch over-stock items", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch over-stock items",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET };
