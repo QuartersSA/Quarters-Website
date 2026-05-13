@@ -117,7 +117,10 @@ async function getCurrentQuantitiesForBranch({ txn, branchId, itemIds }) {
           AND pr.branch_id = $1
           AND (
             last_inv.op_date IS NULL
-            OR pr.received_at > last_inv.op_date
+            -- GREATEST(received_at, created_at): same backdated-row
+            -- protection used by /api/items so transfer validation
+            -- sees the same "available qty" as the items page.
+            OR GREATEST(pr.received_at, pr.created_at) > last_inv.op_date
           )
       ) receipts_after ON true
 

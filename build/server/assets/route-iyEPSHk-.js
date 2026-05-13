@@ -158,26 +158,33 @@ async function POST(request, {
     const actingEmployeeId = auth.user?.id || null;
     const actingEmployeeName = auth.user?.name || null;
 
-    // order_date may come as a Date object or ISO string from postgres
-    let dateStr = null;
+    // Receipt timestamp = NOW (when stock physically arrives at the
+    // branch via this deposit). Previously this used order.order_date,
+    // which silently broke current-stock math: if an older order was
+    // deposited after a Daily/Weekly/Opening count at the warehouse,
+    // SQL's `pr.received_at > last_inv.op_date` filter excluded the
+    // deposit entirely → warehouse stock disappeared from totals. The
+    // order date stays preserved in the note for audit trail.
+    const receivedAt = new Date().toISOString();
+
+    // Format order_date as YYYY-MM-DD for the audit note (best-effort).
+    let orderDateStr = null;
     if (order.order_date instanceof Date) {
-      dateStr = order.order_date.toISOString().slice(0, 10);
+      orderDateStr = order.order_date.toISOString().slice(0, 10);
     } else if (order.order_date) {
       const raw = String(order.order_date);
-      // Try ISO format first: "2026-02-16T00:00:00.000Z"
       const isoMatch = raw.match(/^(\d{4}-\d{2}-\d{2})/);
       if (isoMatch) {
-        dateStr = isoMatch[1];
+        orderDateStr = isoMatch[1];
       } else {
-        // Fallback: parse as Date
         const parsed = new Date(raw);
         if (!isNaN(parsed.getTime())) {
-          dateStr = parsed.toISOString().slice(0, 10);
+          orderDateStr = parsed.toISOString().slice(0, 10);
         }
       }
     }
-    const receivedAt = dateStr ? `${dateStr}T12:00:00` : new Date().toISOString();
-    const depositNote = note ? `إيداع من طلب بن أخضر #${orderId} — ${note}` : `إيداع من طلب بن أخضر #${orderId}`;
+    const orderRef = orderDateStr ? `#${orderId} (تاريخ الطلب ${orderDateStr})` : `#${orderId}`;
+    const depositNote = note ? `إيداع من طلب بن أخضر ${orderRef} — ${note}` : `إيداع من طلب بن أخضر ${orderRef}`;
     const batchId = `GB-${orderId}-${Date.now()}`;
     const receipts = [];
     for (const item of linked) {

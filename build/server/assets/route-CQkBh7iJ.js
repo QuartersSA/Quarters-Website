@@ -64,7 +64,11 @@ async function GET(request) {
           AND pr.branch_id = b.id
           AND (
             last_inv.op_date IS NULL
-            OR pr.received_at > last_inv.op_date
+            -- GREATEST(received_at, created_at): protects against
+            -- backdated rows (e.g. green-bean deposits stamped with an
+            -- older order_date) that would otherwise be silently
+            -- excluded from totals.
+            OR GREATEST(pr.received_at, pr.created_at) > last_inv.op_date
           )
       ) receipts_after ON true
 

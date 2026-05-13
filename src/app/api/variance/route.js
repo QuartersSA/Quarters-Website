@@ -113,15 +113,20 @@ export async function GET(request) {
         LIMIT 1
       ) prev ON TRUE
       LEFT JOIN LATERAL (
+        -- GREATEST(received_at, created_at) protects against legacy
+        -- green-bean deposits that stored order_date in received_at.
+        -- Without this, a deposit booked today against an old order
+        -- date would be excluded from "receipts since opening".
         SELECT SUM(pr.quantity)::numeric AS sum_qty
         FROM purchase_receipts pr
         WHERE pr.branch_id = io.branch_id
           AND pr.item_id = ii.item_id
           AND (
             os.opened_at IS NULL
-            OR pr.received_at >= os.opened_at::timestamp
+            OR GREATEST(pr.received_at, pr.created_at) >= os.opened_at::timestamp
           )
-          AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
+          AND GREATEST(pr.received_at, pr.created_at)
+            <= COALESCE(io.operation_date, io.created_at)
       ) rso ON TRUE
       LEFT JOIN LATERAL (
         SELECT SUM(pr.quantity)::numeric AS sum_qty
@@ -129,8 +134,9 @@ export async function GET(request) {
         WHERE prev.prev_op_date IS NOT NULL
           AND pr.branch_id = io.branch_id
           AND pr.item_id = ii.item_id
-          AND pr.received_at > prev.prev_op_date
-          AND pr.received_at <= COALESCE(io.operation_date, io.created_at)
+          AND GREATEST(pr.received_at, pr.created_at) > prev.prev_op_date
+          AND GREATEST(pr.received_at, pr.created_at)
+            <= COALESCE(io.operation_date, io.created_at)
       ) rsp ON TRUE
       WHERE io.status = 'Completed'
         AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')

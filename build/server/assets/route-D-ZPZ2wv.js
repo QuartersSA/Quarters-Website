@@ -75,6 +75,10 @@ async function GET(request) {
       ) last_inv ON true
 
       -- 2) Sum of purchase receipts for this item + branch AFTER the last inventory
+      --    GREATEST(received_at, created_at) protects against rows whose
+      --    received_at was backdated (legacy green-bean deposits used
+      --    order_date instead of NOW) — falling back to created_at keeps
+      --    them counted whenever they were actually entered into the system.
       LEFT JOIN LATERAL (
         SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
         FROM purchase_receipts pr
@@ -82,7 +86,7 @@ async function GET(request) {
           AND pr.branch_id = b.id
           AND (
             last_inv.operation_date IS NULL
-            OR pr.received_at > last_inv.operation_date
+            OR GREATEST(pr.received_at, pr.created_at) > last_inv.operation_date
           )
       ) receipts_after ON true
 

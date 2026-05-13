@@ -115,8 +115,16 @@ async function GET(request) {
             FROM purchase_receipts pr
             LEFT JOIN last_inv li
               ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
+            -- GREATEST(received_at, created_at): a backdated deposit
+            -- (green-bean order_date in the past) would otherwise get
+            -- excluded when a Daily/Opening count happened after the
+            -- deposit was actually recorded. Falling back to created_at
+            -- keeps the math right even for legacy rows.
             WHERE pr.item_id = ANY($1::bigint[])
-              AND (li.op_date IS NULL OR pr.received_at > li.op_date)
+              AND (
+                li.op_date IS NULL
+                OR GREATEST(pr.received_at, pr.created_at) > li.op_date
+              )
             GROUP BY pr.item_id, pr.branch_id
           )
           SELECT
