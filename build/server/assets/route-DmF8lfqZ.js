@@ -70,10 +70,27 @@ async function notifyAdminsWhatsAppInventoryTransfer({
     };
   }
 }
-async function getCurrentQuantitiesForBranch({
+
+/**
+ * Point-in-time stock for (branch, items) at an arbitrary moment.
+ *
+ * Formula: latest completed `Daily/Weekly/Transfer/Opening` snapshot at
+ * or before `atTime`, plus the sum of `purchase_receipts` strictly
+ * between that snapshot and `atTime`. When `atTime` is `null`, the
+ * formula collapses to "current stock" (no upper bound).
+ *
+ * Replaces the original `getCurrentQuantitiesForBranch` which only
+ * supported "now". Backdated transfers need to validate against the
+ * branch's stock AT the back-date, not against today's stock — if
+ * branch A had 10 kg yesterday and today has 0 (because of an
+ * unrelated count), a transfer dated yesterday should still be
+ * allowed.
+ */
+async function getQuantitiesAtTime({
   txn,
   branchId,
-  itemIds
+  itemIds,
+  atTime
 }) {
   if (!Array.isArray(itemIds) || itemIds.length === 0) {
     return new Map();
@@ -86,24 +103,26 @@ async function getCurrentQuantitiesForBranch({
   if (uniqueIds.length === 0) {
     return new Map();
   }
-
-  // current stock = last Daily/Weekly/Transfer/Opening inventory count + SUM(receipts after it)
-  // Fixed: added io.id DESC to break ties when operation_date is the same
   const rows = await txn(`
       SELECT
         i.id AS item_id,
         COALESCE(last_inv.inv_quantity, 0)
-          + COALESCE(receipts_after.total_received, 0) AS current_quantity
+          + COALESCE(receipts_after.total_received, 0) AS quantity_at_t
       FROM items i
 
       LEFT JOIN LATERAL (
-        SELECT ii.quantity AS inv_quantity, COALESCE(io.operation_date, io.created_at) AS op_date
+        SELECT ii.quantity AS inv_quantity,
+               COALESCE(io.operation_date, io.created_at) AS op_date
         FROM inventory_items ii
         JOIN inventory_operations io ON io.id = ii.operation_id
         WHERE ii.item_id = i.id
           AND io.branch_id = $1
           AND io.status = 'Completed'
-          AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
+          AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
+          AND (
+            $3::timestamp IS NULL
+            OR COALESCE(io.operation_date, io.created_at) <= $3::timestamp
+          )
         ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
         LIMIT 1
       ) last_inv ON true
@@ -113,23 +132,25 @@ async function getCurrentQuantitiesForBranch({
         FROM purchase_receipts pr
         WHERE pr.item_id = i.id
           AND pr.branch_id = $1
+          -- Only receipts AFTER the last snapshot (they're already baked
+          -- into the snapshot quantity otherwise).
           AND (
             last_inv.op_date IS NULL
-            -- GREATEST(received_at, created_at): same backdated-row
-            -- protection used by /api/items so transfer validation
-            -- sees the same "available qty" as the items page.
             OR GREATEST(pr.received_at, pr.created_at) > last_inv.op_date
+          )
+          -- And, if asking for a point-in-time, only receipts up to T.
+          AND (
+            $3::timestamp IS NULL
+            OR GREATEST(pr.received_at, pr.created_at) <= $3::timestamp
           )
       ) receipts_after ON true
 
       WHERE i.id = ANY($2::int[])
-    `, [safeBranchId, uniqueIds]);
+    `, [safeBranchId, uniqueIds, atTime]);
   const map = new Map();
   for (const r of rows) {
-    map.set(Number(r.item_id), Number(r.current_quantity) || 0);
+    map.set(Number(r.item_id), Number(r.quantity_at_t) || 0);
   }
-
-  // ensure any id that didn't exist comes back as 0
   for (const id of uniqueIds) {
     if (!map.has(id)) {
       map.set(id, 0);
@@ -356,109 +377,72 @@ async function POST(request) {
         });
       }
     }
-    const fromQtyMap = await getCurrentQuantitiesForBranch({
-      txn: sql,
-      branchId: fromId,
-      itemIds
-    });
-    const toQtyMap = await getCurrentQuantitiesForBranch({
-      txn: sql,
-      branchId: toId,
-      itemIds
-    });
 
-    // Validate available qty in from-branch
-    for (const it of cleanedItems) {
-      const current = Number(fromQtyMap.get(it.itemId) || 0);
-      if (current < it.quantity) {
-        const name = itemNameById.get(it.itemId) || "الصنف";
-        return Response.json({
-          error: `كمية غير كافية في فرع المرسل للصنف: ${name} (المتاح: ${current})`
-        }, {
-          status: 400
-        });
-      }
-    }
-
-    // Parse operation date safely — if invalid, use current timestamp
+    // Parse operation date safely. `null` means "no explicit date — use
+    // server NOW()". Anything else is a user-supplied Riyadh wall-clock.
     const parsedDate = parseOperationDate(operationDate);
 
-    // Backdate guard: refuse to backdate behind the latest completed
-    // inventory baseline (Daily/Weekly/Transfer/Opening) — but only at
-    // branches that ACTUALLY have past activity. A branch with no
-    // inventory_operations yet has no `last_inv` to displace, so the
-    // transfer becomes its first row and current stock works
-    // correctly regardless of the requested date.
+    // ─── Point-in-time stock validation ────────────────────────────────
     //
-    // The comparison happens entirely in Postgres so wall-clock dates
-    // stored as TIMESTAMP WITHOUT TIME ZONE stay consistent — pulling
-    // them into JS Date objects mixes UTC ISO output ("…Z") with the
-    // local-format `parsedDate` ("YYYY-MM-DD HH:MM:SS") and introduces
-    // a TZ-offset bug that blocked even forward-dated transfers.
-    if (parsedDate) {
-      // Backdate guard — date precision + 1-day slack vs Riyadh "today".
-      //
-      // Why date-level instead of minute-level:
-      //   - `io.created_at` defaults to `CURRENT_TIMESTAMP` which Neon
-      //     stores as UTC wall-clock in the timestamp-without-tz column.
-      //   - `io.operation_date` is a mix: user-typed Riyadh wall-clock
-      //     (from a modal) or UTC wall-clock (when defaulted to
-      //     CURRENT_TIMESTAMP via COALESCE in INSERT).
-      //   - `parsedDate` from the picker is Riyadh wall-clock.
-      // Mixing UTC- and Riyadh-stored wall-clocks at minute precision
-      // produced a 3-hour false positive on every same-day Riyadh
-      // transfer. Casting to ::date eliminates the intra-day TZ
-      // ambiguity.
-      //
-      // Why the extra `>= today - 1 day` clause:
-      // The picker's default ("now") can land on yesterday's Riyadh
-      // date when the browser / SSR runtime is in a different timezone
-      // and the user opens the modal close to local midnight. That
-      // off-by-one is harmless in intent (user means "now") but trips
-      // the date-only HAVING. Allowing parsedDate ≥ yesterday Riyadh
-      // makes the guard tolerant to any sub-24h drift, while still
-      // refusing clearly-back-dated transfers (≥ 2 days ago).
-      const conflicts = await sql(`SELECT
-           io.branch_id,
-           MAX(COALESCE(io.operation_date, io.created_at))::date AS latest_date,
-           b.name AS branch_name
-         FROM inventory_operations io
-         JOIN branches b ON b.id = io.branch_id
-         WHERE io.status = 'Completed'
-           AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
-           AND io.branch_id = ANY($1::int[])
-           AND $2::timestamp::date
-                 < ((NOW() AT TIME ZONE 'Asia/Riyadh')::date - 1)
-         GROUP BY io.branch_id, b.name
-         HAVING
-           MAX(COALESCE(io.operation_date, io.created_at))::date
-             > $2::timestamp::date`, [[fromId, toId], parsedDate]);
-      if (conflicts.length > 0) {
-        const detail = conflicts.map(r => {
-          const dt = r.latest_date instanceof Date ? r.latest_date.toISOString().slice(0, 10) : String(r.latest_date).slice(0, 10);
-          return `${r.branch_name} (${dt})`;
-        }).join("، ");
+    // The previous implementation pulled "current stock" (now) and
+    // refused the transfer if that current stock < requested quantity.
+    // For a back-dated transfer that's WRONG: the user is asserting
+    // "back at time T, branch A had Q kg — please record this past
+    // event". The right check is "did branch A have ≥ Q at time T",
+    // not "does branch A have ≥ Q right now".
+    //
+    // Example that the old logic broke:
+    //   - Branch A opening on May 10: 10 kg.
+    //   - User attempts on May 14 to record a May 11 transfer of 3 kg.
+    //   - But on May 13 a daily count recorded 2 kg (consumption).
+    //   - Old check: current = 2 < 3 → reject.
+    //   - Correct check: stock at May 11 = 10 ≥ 3 → allow.
+    //
+    // Caveat (Phase 2 work, not done here): inserting a back-dated leg
+    // does NOT recompute the `quantity` stored on later transfer rows
+    // in the same chain — they keep the absolute snapshot they had at
+    // their own insert time. For most flows that's harmless (counts
+    // after T act as absolute resets and dominate), but a back-date
+    // followed by other transfers (no count between) can leave the
+    // chain internally inconsistent. The follow-up will add a
+    // recompute pass; this commit unblocks the common case.
+    const fromQtyMap = await getQuantitiesAtTime({
+      txn: sql,
+      branchId: fromId,
+      itemIds,
+      atTime: parsedDate
+    });
+    const toQtyMap = await getQuantitiesAtTime({
+      txn: sql,
+      branchId: toId,
+      itemIds,
+      atTime: parsedDate
+    });
+    const whenLabel = parsedDate ? `بتاريخ ${parsedDate.slice(0, 16).replace(" ", " ")}` : "حالياً";
+    for (const it of cleanedItems) {
+      const stockAtT = Number(fromQtyMap.get(it.itemId) || 0);
+      if (stockAtT < it.quantity) {
+        const name = itemNameById.get(it.itemId) || "الصنف";
         return Response.json({
-          error: `تاريخ التحويل أقدم من آخر جرد مكتمل في: ${detail}. التواريخ المسبقة تُفقد التأثير على المخزون. اختر تاريخاً أحدث أو ساوي.`
+          error: `الكمية غير كافية في فرع المرسل للصنف "${name}" ${whenLabel} (المتاح: ${stockAtT}، المطلوب: ${it.quantity})`
         }, {
           status: 400
         });
       }
     }
 
-    // Pre-compute the new absolute quantities for both branches per item.
-    // The math is done in JS here (rather than in SQL) because the source
-    // qty depends on the current stock which we already fetched above.
-    // Quantity column is NUMERIC(12,3) — preserves up to 3 decimal places.
+    // Pre-compute the new absolute quantities for both branches per
+    // item, based on the point-in-time stock at parsedDate (or "now"
+    // when parsedDate is null). NUMERIC(12,3) precision preserved.
     const perItemIds = [];
     const fromNewArr = [];
     const toNewArr = [];
     for (const it of cleanedItems) {
-      const fromCurrent = Number(fromQtyMap.get(it.itemId) || 0);
-      const toCurrent = Number(toQtyMap.get(it.itemId) || 0);
+      const fromAtT = Number(fromQtyMap.get(it.itemId) || 0);
+      const toAtT = Number(toQtyMap.get(it.itemId) || 0);
       perItemIds.push(it.itemId);
-      fromNewArr.push(Math.round((fromCurrent - it.quantity) * 1000) / 1000);
-      toNewArr.push(Math.round((toCurrent + it.quantity) * 1000) / 1000);
+      fromNewArr.push(Math.round((fromAtT - it.quantity) * 1000) / 1000);
+      toNewArr.push(Math.round((toAtT + it.quantity) * 1000) / 1000);
     }
 
     // Atomic write: a single SQL statement with CTEs that inserts both

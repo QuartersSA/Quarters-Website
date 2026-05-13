@@ -145,23 +145,74 @@ export default function TransferModal({ branches, onClose }) {
     return activeItems.find((i) => Number(i.id) === idNum) || null;
   }, [activeItems, selectedItemId]);
 
-  // Get current stock for selected item in from-branch
-  const fromBranchStock = useMemo(() => {
-    if (!selectedItem || !fromIdNum) return null;
+  // ─── Point-in-time stock for the chosen operation date ─────────────
+  //
+  // Backend validation runs against the stock AT `operationDate`, not
+  // against today's stock. To stay in sync, the modal fetches the
+  // same point-in-time numbers via `/api/branch-stock-at` whenever
+  // the date or selected item changes. Falls back to the inline
+  // `selectedItem.branch_stock` (which is current/now) so the user
+  // still sees something while the fetch is in flight.
+  const fallbackStockAt = (branchIdNum) => {
+    if (!selectedItem || !branchIdNum) return null;
     const branchStock = selectedItem.branch_stock;
     if (!Array.isArray(branchStock)) return null;
-    const found = branchStock.find((bs) => Number(bs.branch_id) === fromIdNum);
+    const found = branchStock.find(
+      (bs) => Number(bs.branch_id) === branchIdNum,
+    );
     return found ? Number(found.quantity) || 0 : 0;
-  }, [selectedItem, fromIdNum]);
+  };
 
-  // Get current stock for selected item in to-branch
-  const toBranchStock = useMemo(() => {
-    if (!selectedItem || !toIdNum) return null;
-    const branchStock = selectedItem.branch_stock;
-    if (!Array.isArray(branchStock)) return null;
-    const found = branchStock.find((bs) => Number(bs.branch_id) === toIdNum);
-    return found ? Number(found.quantity) || 0 : 0;
-  }, [selectedItem, toIdNum]);
+  const stockAtQuery = useQuery({
+    queryKey: [
+      "branch-stock-at",
+      fromIdNum,
+      toIdNum,
+      selectedItem?.id,
+      operationDate,
+    ],
+    enabled: !!(selectedItem?.id && (fromIdNum || toIdNum)),
+    queryFn: async () => {
+      const ids = [fromIdNum, toIdNum].filter(Boolean);
+      const out = { from: null, to: null };
+      // Two parallel requests (one per branch). Cheaper than a single
+      // batched request because the result shapes diverge and the
+      // cache key is per-branch.
+      const fetchOne = async (branchId) => {
+        if (!branchId) return null;
+        const params = new URLSearchParams({
+          branchId: String(branchId),
+          itemIds: String(selectedItem.id),
+        });
+        if (operationDate) params.set("at", operationDate);
+        const res = await adminFetch(`/api/branch-stock-at?${params}`);
+        if (!res.ok) throw new Error("فشل في جلب الرصيد");
+        const data = await res.json();
+        const q = Number(data?.stock?.[String(selectedItem.id)]);
+        return Number.isFinite(q) ? q : 0;
+      };
+      const [fromQty, toQty] = await Promise.all([
+        fromIdNum ? fetchOne(fromIdNum) : Promise.resolve(null),
+        toIdNum ? fetchOne(toIdNum) : Promise.resolve(null),
+      ]);
+      out.from = fromQty;
+      out.to = toQty;
+      return out;
+    },
+    staleTime: 5 * 1000,
+  });
+
+  const fromBranchStock =
+    stockAtQuery.data?.from !== undefined && stockAtQuery.data?.from !== null
+      ? stockAtQuery.data.from
+      : fallbackStockAt(fromIdNum);
+
+  const toBranchStock =
+    stockAtQuery.data?.to !== undefined && stockAtQuery.data?.to !== null
+      ? stockAtQuery.data.to
+      : fallbackStockAt(toIdNum);
+
+  const stockIsPointInTime = !!operationDate && stockAtQuery.isSuccess;
 
   const addItem = () => {
     setError(null);
@@ -440,13 +491,19 @@ export default function TransferModal({ branches, onClose }) {
               </button>
             </div>
 
-            {/* Stock info for selected item */}
+            {/* Stock info for selected item. The label flips between
+                "الحالي" and "بتاريخ T" so the user knows the number
+                they're staring at matches what the backend will validate
+                against. */}
             {selectedItem && (fromIdNum || toIdNum) ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 items-center">
                 {fromIdNum && fromBranchStock !== null ? (
                   <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/[0.04] border border-white/10">
                     <Package className="w-4 h-4 text-white/40" />
-                    <span className="text-xs text-white/55">مخزون المرسل:</span>
+                    <span className="text-xs text-white/55">
+                      مخزون المرسل{" "}
+                      {stockIsPointInTime ? "بتاريخ التحويل" : "الحالي"}:
+                    </span>
                     <span
                       className={`text-sm font-bold ${fromBranchStock > 0 ? "text-emerald-300" : "text-red-300"}`}
                     >
@@ -458,7 +515,8 @@ export default function TransferModal({ branches, onClose }) {
                   <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/[0.04] border border-white/10">
                     <Package className="w-4 h-4 text-white/40" />
                     <span className="text-xs text-white/55">
-                      مخزون المستقبل:
+                      مخزون المستقبل{" "}
+                      {stockIsPointInTime ? "بتاريخ التحويل" : "الحالي"}:
                     </span>
                     <span
                       className={`text-sm font-bold ${toBranchStock > 0 ? "text-emerald-300" : "text-amber-300"}`}
@@ -466,6 +524,11 @@ export default function TransferModal({ branches, onClose }) {
                       {toBranchStock}
                     </span>
                   </div>
+                ) : null}
+                {stockAtQuery.isFetching ? (
+                  <span className="text-[11px] text-white/40">
+                    تحديث الرصيد…
+                  </span>
                 ) : null}
               </div>
             ) : null}
