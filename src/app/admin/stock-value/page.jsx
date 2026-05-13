@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useStockValueData } from "@/hooks/useStockValueData";
 import { Sidebar } from "@/components/Admin/Sidebar";
@@ -19,16 +19,40 @@ export default function StockValuePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("value_desc");
   const [hideMissingCost, setHideMissingCost] = useState(false);
+  // "" = جميع الفروع (default). Numeric string = single-branch slice.
+  const [selectedBranch, setSelectedBranch] = useState("");
 
-  const { filteredItems, stats, isLoading, refetch } = useStockValueData({
-    isAuthenticated,
-    searchQuery,
-    sortBy,
-    hideMissingCost,
-  });
+  const { filteredItems, stats, branches, isLoading, refetch } =
+    useStockValueData({
+      isAuthenticated,
+      searchQuery,
+      sortBy,
+      hideMissingCost,
+      selectedBranch,
+    });
+
+  const branchOptions = useMemo(
+    () => [
+      { value: "", label: "جميع الفروع" },
+      ...((Array.isArray(branches) ? branches : []).map((b) => ({
+        value: String(b.id),
+        label: b.name,
+      }))),
+    ],
+    [branches],
+  );
+
+  const branchLabel = useMemo(() => {
+    if (!selectedBranch) return "";
+    const b = (branches || []).find(
+      (br) => String(br.id) === String(selectedBranch),
+    );
+    return b?.name || "";
+  }, [branches, selectedBranch]);
 
   // Export columns mirror the on-screen table 1-to-1 so the file
-  // reflects exactly what the user saw, including the current sort.
+  // reflects exactly what the user saw, including the current sort
+  // and branch filter.
   const exportColumns = [
     { header: "#", accessor: (_r, idx) => idx + 1 },
     { header: "الصنف", accessor: (r) => r.name },
@@ -42,7 +66,7 @@ export default function StockValuePage() {
       header: "سعر التكلفة (ر.س)",
       // Export the effective cost (i.cost OR fallback to latest bean
       // order price). Matches the on-screen column + dashboard math so
-      // the exported total reconciles with what the user sees.
+      // the exported total reconciles with what the user saw.
       accessor: (r) =>
         r.effective_cost == null
           ? "غير محدد"
@@ -57,21 +81,29 @@ export default function StockValuePage() {
 
   const handleExportExcel = () => {
     const dateSlug = new Date().toISOString().split("T")[0];
+    const scope = branchLabel ? `_${branchLabel}` : "";
+    const titleSuffix = branchLabel
+      ? ` — فرع "${branchLabel}"`
+      : "";
     exportToExcelHTML(
       filteredItems,
-      `قيمة_المخزون_${dateSlug}`,
+      `قيمة_المخزون${scope}_${dateSlug}`,
       exportColumns,
-      `تقرير قيمة المخزون — إجمالي ${stats.totalValue.toFixed(2)} ر.س`,
+      `تقرير قيمة المخزون${titleSuffix} — إجمالي ${stats.totalValue.toFixed(2)} ر.س`,
     );
   };
 
   const handleExportPDF = () => {
     const dateSlug = new Date().toISOString().split("T")[0];
+    const scope = branchLabel ? `_${branchLabel}` : "";
+    const titleSuffix = branchLabel
+      ? ` — فرع "${branchLabel}"`
+      : "";
     exportToPDF(
       filteredItems,
-      `قيمة_المخزون_${dateSlug}`,
+      `قيمة_المخزون${scope}_${dateSlug}`,
       exportColumns,
-      `تقرير قيمة المخزون — إجمالي ${stats.totalValue.toFixed(2)} ر.س`,
+      `تقرير قيمة المخزون${titleSuffix} — إجمالي ${stats.totalValue.toFixed(2)} ر.س`,
     );
   };
 
@@ -84,7 +116,7 @@ export default function StockValuePage() {
       <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
         <Breadcrumb activePage="stock-value" />
 
-        <StockValueHeader />
+        <StockValueHeader branchLabel={branchLabel} />
 
         <StockValueStats stats={stats} />
 
@@ -96,6 +128,9 @@ export default function StockValuePage() {
           hideMissingCost={hideMissingCost}
           onHideMissingCostChange={setHideMissingCost}
           onRefresh={refetch}
+          branchOptions={branchOptions}
+          selectedBranch={selectedBranch}
+          onBranchChange={setSelectedBranch}
         />
 
         <StockValueTable

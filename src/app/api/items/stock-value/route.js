@@ -1,28 +1,23 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
-// GET /api/items/stock-value
+// GET /api/items/stock-value?branchId=<id>
 // One row per item with:
 //   - total_quantity   = sum across ALL branches of (last inventory + receipts after)
+//                        OR — if `branchId` is supplied — that branch's qty only
 //   - effective_cost   = COALESCE(i.cost, last green-bean order price)
 //   - total_value      = total_quantity * effective_cost
 //
-// Math mirrors `/api/items` byte-for-byte:
-//   - Same `last_inv` CTE with DISTINCT ON (item_id, branch_id) instead of
-//     a per-row LATERAL, so the same row is picked as the "current
-//     inventory baseline" — eliminates any subtle row-pick divergence.
-//   - Same `receipts_after` CTE with `GREATEST(received_at, created_at)`
-//     to keep backdated green-bean deposits in the count.
-// If you change one of `/api/items`, `/api/items/summary`, or this file,
-// change them all together to keep totals consistent across pages.
+// Math mirrors `/api/items` byte-for-byte (same last_inv + receipts_after
+// CTEs). When `branchId` is omitted (or 0 / "all"), the sum is across
+// every branch — same total as the dashboard "قيمة المخزون" stat.
+// When supplied, the API reports the value held at that single branch
+// — answering "how much SR is sitting in Branch X right now?".
 //
-// Cost source mirrors `/api/dashboard/analytics` for the same reason: a
-// bean-linked item with NULL `items.cost` falls back to the latest
-// green-bean order price so the dashboard "قيمة المخزون" stat agrees
-// with the grand total here.
-//
-// Inactive / hidden items are excluded — they're not part of operational
-// inventory and don't appear on the items page either.
+// Cost source mirrors `/api/dashboard/analytics` so a bean-linked item
+// with NULL `items.cost` falls back to the latest green-bean order
+// price. Inactive / hidden items are excluded — they're not part of
+// operational inventory.
 export async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -33,6 +28,14 @@ export async function GET(request) {
   }
 
   try {
+    const { searchParams } = new URL(request.url);
+    const branchIdRaw = searchParams.get("branchId");
+    const parsedBranchId = branchIdRaw ? Number(branchIdRaw) : null;
+    const branchFilter =
+      Number.isFinite(parsedBranchId) && parsedBranchId > 0
+        ? parsedBranchId
+        : null;
+
     const rows = await sql`
       WITH last_inv AS (
         SELECT DISTINCT ON (ii.item_id, io.branch_id)
@@ -76,6 +79,8 @@ export async function GET(request) {
           ON li.item_id = i.id AND li.branch_id = b.id
         LEFT JOIN receipts_after ra
           ON ra.item_id = i.id AND ra.branch_id = b.id
+        -- ${branchFilter ? "single-branch filter active" : "all branches"}
+        WHERE ${branchFilter}::int IS NULL OR b.id = ${branchFilter}::int
       ),
       item_totals AS (
         SELECT
