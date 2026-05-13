@@ -13,6 +13,7 @@ export function exportItemsSummaryToExcel(filteredItems) {
       const bQty = Number(branch.current_quantity) || 0;
       exportData.push({
         item_name: item.name,
+        item_name_en: item.name_en || "-",
         item_unit: item.unit || "حبة",
         item_description: item.description || "-",
         branch_name: branch.branch_name,
@@ -40,6 +41,7 @@ export function exportItemsSummaryToExcel(filteredItems) {
 
   const columns = [
     { header: "اسم الصنف", accessor: (item) => item.item_name },
+    { header: "Item Name (EN)", accessor: (item) => item.item_name_en },
     { header: "نوع المنتج", accessor: (item) => item.item_unit },
     { header: "الوصف", accessor: (item) => item.item_description },
     { header: "الفرع", accessor: (item) => item.branch_name },
@@ -73,6 +75,7 @@ export function exportItemsSummaryToPDF(filteredItems) {
       const bQty = Number(branch.current_quantity) || 0;
       exportData.push({
         item_name: item.name,
+        item_name_en: item.name_en || "-",
         item_unit: item.unit || "حبة",
         branch_name: branch.branch_name,
         current_quantity: bQty,
@@ -90,6 +93,7 @@ export function exportItemsSummaryToPDF(filteredItems) {
 
   const columns = [
     { header: "الصنف", accessor: (item) => item.item_name },
+    { header: "Item Name (EN)", accessor: (item) => item.item_name_en },
     { header: "النوع", accessor: (item) => item.item_unit },
     { header: "الفرع", accessor: (item) => item.branch_name },
     { header: "الكمية", accessor: (item) => item.current_quantity },
