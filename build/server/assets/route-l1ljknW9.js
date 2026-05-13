@@ -3,28 +3,21 @@ import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
-// GET /api/items/stock-value
+// GET /api/items/stock-value?branchId=<id>
 // One row per item with:
 //   - total_quantity   = sum across ALL branches of (last inventory + receipts after)
+//                        OR — if `branchId` is supplied — that branch's qty only
 //   - effective_cost   = COALESCE(i.cost, last green-bean order price)
 //   - total_value      = total_quantity * effective_cost
 //
-// Math mirrors `/api/items` byte-for-byte:
-//   - Same `last_inv` CTE with DISTINCT ON (item_id, branch_id) instead of
-//     a per-row LATERAL, so the same row is picked as the "current
-//     inventory baseline" — eliminates any subtle row-pick divergence.
-//   - Same `receipts_after` CTE with `GREATEST(received_at, created_at)`
-//     to keep backdated green-bean deposits in the count.
-// If you change one of `/api/items`, `/api/items/summary`, or this file,
-// change them all together to keep totals consistent across pages.
+// Math mirrors `/api/items` byte-for-byte (same last_inv + receipts_after
+// CTEs). When `branchId` is omitted (or 0), the sum is across every
+// branch — same total as the dashboard "قيمة المخزون" stat. When
+// supplied, the API reports the value held at that single branch.
 //
-// Cost source mirrors `/api/dashboard/analytics` for the same reason: a
-// bean-linked item with NULL `items.cost` falls back to the latest
-// green-bean order price so the dashboard "قيمة المخزون" stat agrees
-// with the grand total here.
-//
-// Inactive / hidden items are excluded — they're not part of operational
-// inventory and don't appear on the items page either.
+// Cost source mirrors `/api/dashboard/analytics` so a bean-linked item
+// with NULL `items.cost` falls back to the latest green-bean order
+// price. Inactive / hidden items are excluded.
 async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -38,7 +31,20 @@ async function GET(request) {
     });
   }
   try {
-    const rows = await sql`
+    const {
+      searchParams
+    } = new URL(request.url);
+    const branchIdRaw = searchParams.get("branchId");
+    const parsedBranchId = branchIdRaw ? Number(branchIdRaw) : null;
+    const branchFilter = Number.isFinite(parsedBranchId) && parsedBranchId > 0 ? parsedBranchId : null;
+
+    // Explicit-params form (`sql(query, params)`) rather than tagged
+    // template — tagged template with conditional interpolation inside
+    // a SQL comment was producing extra/unused parameters that the
+    // Neon HTTP driver couldn't validate, returning an empty array
+    // silently. A single parameter referenced twice in the WHERE is
+    // unambiguous.
+    const query = `
       WITH last_inv AS (
         SELECT DISTINCT ON (ii.item_id, io.branch_id)
           ii.item_id,
@@ -81,6 +87,8 @@ async function GET(request) {
           ON li.item_id = i.id AND li.branch_id = b.id
         LEFT JOIN receipts_after ra
           ON ra.item_id = i.id AND ra.branch_id = b.id
+        -- $1 IS NULL → all branches; otherwise restrict to branch $1.
+        WHERE $1::int IS NULL OR b.id = $1::int
       ),
       item_totals AS (
         SELECT
@@ -124,6 +132,7 @@ async function GET(request) {
         AND i.show_in_inventory = true
       ORDER BY i.name ASC
     `;
+    const rows = await sql(query, [branchFilter]);
     return Response.json(rows);
   } catch (error) {
     console.error("Error fetching stock value:", error);

@@ -2,25 +2,48 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 
-// Wraps the /api/items/stock-value query + applies client-side search,
-// sort, and the "hide rows without cost" toggle. Aggregates stats over
-// the *filtered* set so the cards match the visible table — same pattern
-// as the Items page after the StatsCards fix.
+// Wraps `/api/items/stock-value` + branches list + client-side search,
+// sort, hide-missing-cost. Aggregates stats over the *filtered* set so
+// the cards match the visible table.
+//
+// `selectedBranch` is the user's branch picker. Empty string / "all"
+// means "every branch" — same call as before. A numeric id triggers a
+// server-side per-branch slice via the `branchId` query string.
 export function useStockValueData({
   isAuthenticated,
   searchQuery,
   sortBy,
   hideMissingCost,
+  selectedBranch,
 }) {
+  const branchFilter =
+    selectedBranch && selectedBranch !== "all" ? selectedBranch : "";
+
   const {
     data: rows = [],
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["stock-value"],
+    // Include branch in the cache key so each branch slice is cached
+    // independently. Switching between branches feels instant once
+    // each has been viewed once.
+    queryKey: ["stock-value", branchFilter || "all"],
     queryFn: async () => {
-      const res = await adminFetch("/api/items/stock-value");
+      const qs = branchFilter
+        ? `?branchId=${encodeURIComponent(branchFilter)}`
+        : "";
+      const res = await adminFetch(`/api/items/stock-value${qs}`);
       if (!res.ok) throw new Error("Failed to fetch stock value");
+      return res.json();
+    },
+    enabled: isAuthenticated,
+  });
+
+  const { data: branches = [] } = useQuery({
+    queryKey: ["branches"],
+    queryFn: async () => {
+      const res = await adminFetch("/api/branches");
+      if (!res.ok) throw new Error("Failed to fetch branches");
       return res.json();
     },
     enabled: isAuthenticated,
@@ -117,6 +140,7 @@ export function useStockValueData({
   return {
     rows,
     filteredItems,
+    branches,
     stats,
     isLoading,
     refetch,
