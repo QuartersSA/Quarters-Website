@@ -1,6 +1,7 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { s as sendWhatsAppViaWasender } from './wasender-Cn2_RTrC.js';
+import { a as assertItemsEnabledAtBranch } from './branchVisibility-CXtulk0B.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -595,6 +596,19 @@ async function POST(request) {
         status: 400
       });
     }
+
+    // Branch-visibility guard: refuse counts for (item, branch) pairs the
+    // admin has marked as disabled. Without this the row gets written to
+    // inventory_items but the items API hides it via its disabled-pair
+    // filter, so the count "succeeds" yet the stock never appears on
+    // the items / stock-value pages — silent data loss.
+    const requestedItemIds = [...Object.keys(availableItems || {}).map(Number), ...(Array.isArray(unavailableItems) ? unavailableItems.map(Number) : [])].filter(x => Number.isFinite(x) && x > 0);
+    if (requestedItemIds.length > 0) {
+      const fail = await assertItemsEnabledAtBranch(branchId, requestedItemIds);
+      if (fail) return Response.json(fail.body, {
+        status: fail.status
+      });
+    }
     const inventoryNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     const [operation] = await sql(`INSERT INTO inventory_operations (inventory_number, branch_id, employee_id, inventory_type, status, operation_date)
        VALUES ($1, $2, $3, $4, 'Completed', COALESCE($5::timestamp, CURRENT_TIMESTAMP))
@@ -871,6 +885,18 @@ async function PUT(request) {
         error: "لا توجد أصناف صالحة"
       }, {
         status: 400
+      });
+    }
+
+    // Branch-visibility guard — same protection as POST.
+    // For Transfer rows we already rejected `items` edits earlier, but
+    // Daily/Weekly/Opening edits flow through here and would otherwise
+    // be able to add quantities for items disabled at the operation's
+    // branch, silently dropping them from current-stock math.
+    {
+      const fail = await assertItemsEnabledAtBranch(operation.branch_id, cleanedItems.map(c => c.itemId));
+      if (fail) return Response.json(fail.body, {
+        status: fail.status
       });
     }
 

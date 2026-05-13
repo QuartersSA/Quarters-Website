@@ -70,15 +70,25 @@ export function useOpeningSession(
 
   const filteredOpeningItems = useMemo(() => {
     const q = openingSearch.trim().toLowerCase();
-    if (!q) {
-      return activeItems;
-    }
-    return activeItems.filter((it) => {
+    // Drop items disabled at the chosen opening branch — the API
+    // rejects them now, so hiding the row keeps the form honest.
+    const branchIdNum = Number(openingBranchId);
+    const byBranch = (it) => {
+      if (!Number.isFinite(branchIdNum) || branchIdNum <= 0) return true;
+      const disabled = Array.isArray(it?.disabled_branches)
+        ? it.disabled_branches.map(Number)
+        : [];
+      return !disabled.includes(branchIdNum);
+    };
+
+    const base = activeItems.filter(byBranch);
+    if (!q) return base;
+    return base.filter((it) => {
       const name = (it.name || "").toLowerCase();
       const nameEn = (it.name_en || "").toLowerCase();
       return name.includes(q) || nameEn.includes(q);
     });
-  }, [activeItems, openingSearch]);
+  }, [activeItems, openingSearch, openingBranchId]);
 
   const openOpeningModal = useCallback(() => {
     setOpeningError(null);
@@ -112,12 +122,23 @@ export function useOpeningSession(
       return;
     }
 
-    const payloadItems = activeItems.map((it) => {
-      const raw = openingQtyByItem[it.id];
-      const qty = Number(raw);
-      const safeQty = Number.isFinite(qty) && qty >= 0 ? qty : 0;
-      return { itemId: it.id, quantity: safeQty };
-    });
+    // Skip items disabled at the chosen branch — server rejects them
+    // anyway, no point sending them. Mirrors the filter in
+    // `filteredOpeningItems` so payload and UI stay in sync.
+    const branchIdNum = Number(openingBranchId);
+    const payloadItems = activeItems
+      .filter((it) => {
+        const disabled = Array.isArray(it?.disabled_branches)
+          ? it.disabled_branches.map(Number)
+          : [];
+        return !disabled.includes(branchIdNum);
+      })
+      .map((it) => {
+        const raw = openingQtyByItem[it.id];
+        const qty = Number(raw);
+        const safeQty = Number.isFinite(qty) && qty >= 0 ? qty : 0;
+        return { itemId: it.id, quantity: safeQty };
+      });
 
     createOpeningMutation.mutate({
       branchId: openingBranchId,

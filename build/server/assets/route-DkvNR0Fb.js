@@ -55,6 +55,11 @@ async function GET(request) {
       FROM items i
       CROSS JOIN branches b
 
+      -- Hide (item, branch) pairs the admin has disabled per-branch.
+      -- item_branch_disabled is sparse: only stores disabled pairs.
+      LEFT JOIN item_branch_disabled ibd
+        ON ibd.item_id = i.id AND ibd.branch_id = b.id
+
       -- 1) Last Daily / Weekly / Transfer / Opening completed inventory for this item + branch
       LEFT JOIN LATERAL (
         SELECT
@@ -95,6 +100,7 @@ async function GET(request) {
       ) receipts_after ON true
 
       WHERE i.is_active = true
+        AND ibd.item_id IS NULL
       ORDER BY i.name, b.name
     `;
     return Response.json(itemsSummary);

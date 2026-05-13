@@ -14,6 +14,7 @@ import { ItemsTable } from "@/components/Items/ItemsTable";
 import { ItemFormModal } from "@/components/Items/ItemFormModal";
 import { DeleteConfirmModal } from "@/components/Items/DeleteConfirmModal";
 import { ViewStockModal } from "@/components/Items/ViewStockModal";
+import { ItemBranchVisibilityModal } from "@/components/Items/ItemBranchVisibilityModal";
 import {
   exportToExcelHTML,
   exportToPDF,
@@ -47,6 +48,7 @@ export default function ItemsPage() {
   });
   const {
     items,
+    branches,
     isLoading,
     createMutation,
     updateMutation,
@@ -81,6 +83,7 @@ export default function ItemsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [viewStockItem, setViewStockItem] = useState(null);
+  const [manageBranchesItem, setManageBranchesItem] = useState(null);
 
   // Filter state
   const [showFilters, setShowFilters] = useState(false);
@@ -317,6 +320,7 @@ export default function ItemsPage() {
           onEdit={handleOpenModal}
           onDelete={setDeleteConfirm}
           onViewStock={setViewStockItem}
+          onManageBranches={setManageBranchesItem}
           onBatchInventory={handleBatchInventory}
           isBatchPending={batchInventoryMutation.isPending}
         />
@@ -353,6 +357,20 @@ export default function ItemsPage() {
       <ViewStockModal
         item={viewStockItem}
         onClose={() => setViewStockItem(null)}
+      />
+
+      {/* Derive the modal item fresh from the items list each render so
+          invalidating ["items"] after each toggle re-seeds the modal
+          with the new disabled_branches without re-opening it. */}
+      <ItemBranchVisibilityModal
+        item={
+          manageBranchesItem
+            ? items.find((it) => it.id === manageBranchesItem.id) ||
+              manageBranchesItem
+            : null
+        }
+        branches={branches}
+        onClose={() => setManageBranchesItem(null)}
       />
     </div>
   );

@@ -1,5 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { a as assertItemsEnabledAtBranch } from './branchVisibility-CXtulk0B.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -171,6 +172,17 @@ async function POST(request) {
           status: 400
         });
       }
+
+      // Branch-visibility guard: reject receipts for items disabled at
+      // this branch. Otherwise the row writes successfully but the
+      // items API hides it via the disabled-pair filter — the stock
+      // simply vanishes from totals.
+      {
+        const fail = await assertItemsEnabledAtBranch(branchIdNum, cleanedItems.map(c => c.itemId));
+        if (fail) return Response.json(fail.body, {
+          status: fail.status
+        });
+      }
       const actingEmployeeId = auth.user?.id || null;
       const actingEmployeeName = auth.user?.name || null;
 
@@ -236,6 +248,14 @@ async function POST(request) {
         error: "تاريخ الوارد غير صالح (يجب أن يكون بين 2020 واليوم)"
       }, {
         status: 400
+      });
+    }
+
+    // Branch-visibility guard (single-item legacy path).
+    {
+      const fail = await assertItemsEnabledAtBranch(branchIdNum, [itemIdNum]);
+      if (fail) return Response.json(fail.body, {
+        status: fail.status
       });
     }
     const actingEmployeeId = auth.user?.id || null;
@@ -339,6 +359,16 @@ async function PUT(request) {
         error: "لا توجد أصناف صالحة"
       }, {
         status: 400
+      });
+    }
+
+    // Branch-visibility guard on edit too — admin can otherwise
+    // sidestep the rule by editing an existing receipt to add a
+    // disabled item.
+    {
+      const fail = await assertItemsEnabledAtBranch(branchIdNum, cleanedItems.map(c => c.itemId));
+      if (fail) return Response.json(fail.body, {
+        status: fail.status
       });
     }
     const actingEmployeeId = auth.user?.id || null;

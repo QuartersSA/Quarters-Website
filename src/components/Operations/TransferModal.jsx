@@ -84,11 +84,26 @@ export default function TransferModal({ branches, onClose }) {
   }, [branches]);
 
   const itemOptions = useMemo(() => {
+    // Hide items the admin has disabled at EITHER the source or the
+    // destination — the transfers API rejects such pairs anyway, so
+    // the dropdown should not even offer them. We only filter once
+    // both branches are picked so the list isn't empty before the
+    // user has chosen.
+    const isDisabledHere = (it) => {
+      const disabled = Array.isArray(it?.disabled_branches)
+        ? it.disabled_branches.map(Number)
+        : [];
+      if (fromIdNum && disabled.includes(fromIdNum)) return true;
+      if (toIdNum && disabled.includes(toIdNum)) return true;
+      return false;
+    };
+
     const base = [
       { value: "", label: itemsLoading ? "جاري التحميل…" : "اختر صنف" },
     ];
 
     const mapped = activeItems
+      .filter((it) => !isDisabledHere(it))
       .slice()
       .sort((a, b) =>
         String(a.name || "").localeCompare(String(b.name || ""), "ar"),
@@ -96,7 +111,7 @@ export default function TransferModal({ branches, onClose }) {
       .map((it) => ({ value: String(it.id), label: it.name }));
 
     return [...base, ...mapped];
-  }, [activeItems, itemsLoading]);
+  }, [activeItems, itemsLoading, fromIdNum, toIdNum]);
 
   const selectedItem = useMemo(() => {
     const idNum = toNumberOrNull(selectedItemId);

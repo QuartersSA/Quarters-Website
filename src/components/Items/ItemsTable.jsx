@@ -16,6 +16,7 @@ import {
   MinusSquare,
   XCircle,
   Link,
+  Building2,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -70,6 +71,7 @@ export function ItemsTable({
   onEdit,
   onDelete,
   onViewStock,
+  onManageBranches,
   onBatchInventory,
   isBatchPending,
 }) {
@@ -401,6 +403,25 @@ export function ItemsTable({
                         >
                           <Eye className="w-4 h-4" />
                         </button>
+                        {/* Per-branch enable/disable. Optional handler:
+                            page passes it in but the table degrades
+                            gracefully if a future caller omits it. */}
+                        {typeof onManageBranches === "function" ? (
+                          <button
+                            type="button"
+                            onClick={() => onManageBranches(item)}
+                            className={`${ws.iconButton} text-purple-200`}
+                            aria-label="إدارة الفروع"
+                            title={
+                              Array.isArray(item?.disabled_branches) &&
+                              item.disabled_branches.length > 0
+                                ? `معطّل في ${item.disabled_branches.length} فرع — اضغط للإدارة`
+                                : "إدارة الفروع (تفعيل/إلغاء حسب الفرع)"
+                            }
+                          >
+                            <Building2 className="w-4 h-4" />
+                          </button>
+                        ) : null}
                         <button
                           type="button"
                           onClick={() => onEdit(item)}
