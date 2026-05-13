@@ -151,7 +151,10 @@ export default function EditOperationModal({
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["items-summary"] });
       queryClient.invalidateQueries({ queryKey: ["variance"] });
+      // `useLowStockData` keys its query as ["low-stock-items"] — the
+      // bare ["low-stock"] invalidation was hitting nothing.
       queryClient.invalidateQueries({ queryKey: ["low-stock"] });
+      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
       queryClient.invalidateQueries({ queryKey: ["operation-details"] });
       queryClient.invalidateQueries({ queryKey: ["opening-sessions"] });
       onClose();

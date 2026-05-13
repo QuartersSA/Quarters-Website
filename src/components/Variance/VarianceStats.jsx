@@ -66,8 +66,34 @@ function computeStats(rows) {
   let bigDiffsCount = 0;
 
   for (const r of list) {
-    const delta = Number(r.delta_quantity) || 0;
-    const expected = Number(r.expected_quantity) || 0;
+    // Use the INCREMENTAL delta (since previous count) for summing.
+    //
+    // `delta_quantity` is cumulative (since opening) — summing it across
+    // N counts in a range multiplies the loss N times. For a range with
+    // 3 counts at -3 / -7 / -10 (all since opening), the cumulative
+    // sum is -20 instead of the true loss of -10.
+    //
+    // `delta_since_previous` is the per-count change. Summing those
+    // gives the correct total change across the range. When it's NULL
+    // (the row has no prior count — typically the very first count
+    // after opening, or the first count ever for that item/branch),
+    // we fall back to `delta_quantity` so the row still contributes
+    // its real change.
+    const incrementalRaw =
+      r.delta_since_previous !== null && r.delta_since_previous !== undefined
+        ? r.delta_since_previous
+        : r.delta_quantity;
+    const delta = Number(incrementalRaw) || 0;
+
+    // For the "big diff %" classification, base the ratio on the same
+    // incremental window so a single noisy entry doesn't get amplified
+    // by the cumulative `expected_quantity`.
+    const expectedRaw =
+      r.expected_since_previous !== null &&
+      r.expected_since_previous !== undefined
+        ? r.expected_since_previous
+        : r.expected_quantity;
+    const expected = Number(expectedRaw) || 0;
 
     if (delta < 0) totalLoss += Math.abs(delta);
     if (delta > 0) totalGain += delta;

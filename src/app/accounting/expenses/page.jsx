@@ -130,6 +130,14 @@ function ExpensesStatsCards({ expenses }) {
           ),
         0,
       );
+    // Original amount for the CONFIRMED rows only. The "الفرق
+    // (مؤكد - أصلي)" stat below compares each confirmed entry's final
+    // amount against its own original — comparing against the total
+    // (including unconfirmed entries) just measures how much hasn't
+    // been confirmed yet, which always drags the diff negative.
+    const confirmedOriginalAmount = expenses
+      .filter((e) => e.is_confirmed)
+      .reduce((s, e) => s + safeNum(e.amount), 0);
     const pendingAmount = totalAmount - confirmedAmount;
 
     // Group by type
@@ -156,6 +164,7 @@ function ExpensesStatsCards({ expenses }) {
       pendingCount,
       totalAmount,
       confirmedAmount,
+      confirmedOriginalAmount,
       pendingAmount,
       topTypeName,
       topTypeAmount,
@@ -240,7 +249,12 @@ function ExpensesStatsCards({ expenses }) {
         <div className={`${ws.glass} ${ws.card} p-3`}>
           <div className="text-xs text-white/55">الفرق (مؤكد - أصلي)</div>
           {(() => {
-            const diff = stats.confirmedAmount - stats.totalAmount;
+            // Compare ONLY the confirmed rows' final vs original amounts.
+            // Previously this subtracted the full month total (incl.
+            // pending), which made the diff always look negative no
+            // matter how the confirmed entries shifted.
+            const diff =
+              stats.confirmedAmount - stats.confirmedOriginalAmount;
             const isPositive = diff > 0;
             const isNeg = diff < 0;
             const color = isPositive

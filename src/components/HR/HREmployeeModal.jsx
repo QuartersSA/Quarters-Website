@@ -14,6 +14,7 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import HRModalHeader from "@/components/HR/HRModalHeader";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import GlassMultiSelect from "@/components/Workspace/GlassMultiSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 
 function YesNoSelect({ value, onChange }) {
@@ -48,18 +49,18 @@ export function HREmployeeModal({
     return list;
   }, [branches]);
 
+  // Multi-select feeds raw branch options (no "— بدون —" sentinel —
+  // an empty selection naturally means "no branch"). Each value is the
+  // branch id as a string so GlassMultiSelect's Set-based comparison
+  // works cleanly across re-renders.
   const branchSelectOptions = useMemo(() => {
-    const base = [{ value: "", label: "— بدون —" }];
-
-    const mapped = branchOptions.map((b) => {
+    return branchOptions.map((b) => {
       const label = b.location ? `${b.name} (${b.location})` : b.name;
       return {
         value: String(b.id),
         label,
       };
     });
-
-    return [...base, ...mapped];
   }, [branchOptions]);
 
   if (!isOpen) return null;
@@ -226,11 +227,18 @@ export function HREmployeeModal({
             <div>
               <label className="block text-sm font-semibold text-white/70 mb-2">
                 <Building2 className="w-4 h-4 inline ml-2" />
-                الفرع
+                الفروع
               </label>
-              <GlassSelect
-                value={formData.branchId}
-                onChange={(v) => setFormData({ ...formData, branchId: v })}
+              <GlassMultiSelect
+                values={
+                  Array.isArray(formData.branchIds) ? formData.branchIds : []
+                }
+                onChange={(vals) =>
+                  setFormData({
+                    ...formData,
+                    branchIds: Array.isArray(vals) ? vals : [],
+                  })
+                }
                 options={branchSelectOptions}
                 placeholder="— بدون —"
               />

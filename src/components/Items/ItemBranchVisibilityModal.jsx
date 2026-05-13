@@ -75,7 +75,10 @@ export function ItemBranchVisibilityModal({
       // immediately on items / summary / low-stock / dashboard.
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["items-summary"] });
+      // `useLowStockData` keys its query as ["low-stock-items"]; the
+      // bare ["low-stock"] key never matched its cache.
       queryClient.invalidateQueries({ queryKey: ["low-stock"] });
+      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
       queryClient.invalidateQueries({ queryKey: ["over-stock"] });
       queryClient.invalidateQueries({ queryKey: ["stock-value"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
