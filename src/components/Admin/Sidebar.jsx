@@ -14,6 +14,7 @@ import {
   X,
   BarChart3,
   Truck,
+  Banknote,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import AppSectionSwitcher from "@/components/AppSectionSwitcher";
@@ -22,7 +23,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
   const [isInventorySummaryOpen, setIsInventorySummaryOpen] = useState(
     activePage === "low-stock" ||
       activePage === "items-summary" ||
-      activePage === "variance",
+      activePage === "variance" ||
+      activePage === "stock-value",
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // Sidebar mounts on every admin page navigation (it's rendered per-page,
@@ -56,6 +58,7 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
       "items-summary": "ملخص الأصناف",
       variance: "تقرير الانحراف",
       receipts: "الواردات",
+      "stock-value": "قيمة المخزون",
     };
 
     return titles[activePage] || "أنظمة Quarters";
@@ -286,6 +289,25 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
                     }
                   >
                     تقرير الانحراف
+                  </span>
+                </a>
+
+                <a
+                  href="/admin/stock-value"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
+                    activePage === "stock-value"
+                      ? "bg-white/10 text-white border-white/20"
+                      : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"
+                  }`}
+                >
+                  <Banknote className="w-4 h-4" />
+                  <span
+                    className={
+                      activePage === "stock-value" ? "font-semibold" : ""
+                    }
+                  >
+                    قيمة المخزون
                   </span>
                 </a>
               </div>

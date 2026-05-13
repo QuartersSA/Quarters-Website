@@ -13,6 +13,7 @@ const PAGE_LABELS = {
   variance: "تقرير الانحراف",
   receipts: "الواردات",
   "over-stock": "الأصناف الفائضة",
+  "stock-value": "قيمة المخزون",
 };
 
 export function Breadcrumb({ activePage }) {
@@ -21,7 +22,11 @@ export function Breadcrumb({ activePage }) {
   const crumbs = [{ label: "لوحة التحكم", href: "/admin" }];
 
   // Add parent breadcrumbs based on page
-  if (activePage === "low-stock" || activePage === "items-summary") {
+  if (
+    activePage === "low-stock" ||
+    activePage === "items-summary" ||
+    activePage === "stock-value"
+  ) {
     crumbs.push({ label: "ملخص جرد الأصناف", href: null });
   }
 
