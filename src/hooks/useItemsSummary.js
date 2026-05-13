@@ -35,6 +35,10 @@ export function useItemsSummary(isAuthenticated) {
         grouped[record.id] = {
           id: record.id,
           name: record.name,
+          // English name + unit propagated so exports can include them
+          // without re-fetching from /api/items.
+          name_en: record.name_en,
+          unit: record.unit,
           description: record.description,
           min_stock_threshold: record.min_stock_threshold,
           is_active: record.is_active,

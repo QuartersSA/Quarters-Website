@@ -25,6 +25,8 @@ async function GET(request) {
       SELECT
         i.id,
         i.name,
+        i.name_en,
+        i.unit,
         i.description,
         i.image_url,
         i.min_stock_threshold,
