@@ -396,6 +396,14 @@ async function POST(request) {
     // local-format `parsedDate` ("YYYY-MM-DD HH:MM:SS") and introduces
     // a TZ-offset bug that blocked even forward-dated transfers.
     if (parsedDate) {
+      // `nowLocalDatetime()` in the modal omits seconds (HH:mm), so
+      // `parsedDate` always ends in `:00`. The stored op `operation_date`
+      // however captures real seconds (e.g. 16:27:42). A naive
+      // `MAX(op) > parsed` then compares `16:27:42 > 16:27:00` = TRUE
+      // even when the user clicked transfer in the SAME minute as the
+      // last count — the guard wrongly fires. Truncating both sides to
+      // the minute makes same-minute submits pass; only strictly later
+      // minutes (a real backdate) still trigger the block.
       const conflicts = await sql(`SELECT
            io.branch_id,
            MAX(COALESCE(io.operation_date, io.created_at)) AS latest_date,
@@ -406,7 +414,9 @@ async function POST(request) {
            AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
            AND io.branch_id = ANY($1::int[])
          GROUP BY io.branch_id, b.name
-         HAVING MAX(COALESCE(io.operation_date, io.created_at)) > $2::timestamp`, [[fromId, toId], parsedDate]);
+         HAVING
+           date_trunc('minute', MAX(COALESCE(io.operation_date, io.created_at)))
+             > date_trunc('minute', $2::timestamp)`, [[fromId, toId], parsedDate]);
       if (conflicts.length > 0) {
         const detail = conflicts.map(r => {
           const dt = r.latest_date instanceof Date ? r.latest_date.toISOString().slice(0, 16).replace("T", " ") : String(r.latest_date).slice(0, 16).replace("T", " ");
