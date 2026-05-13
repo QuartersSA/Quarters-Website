@@ -24,14 +24,38 @@ function toNumberOrNull(value) {
   return n;
 }
 
+// Always returns the current wall-clock in Riyadh, regardless of the
+// browser's or server's local timezone setting. Using `new Date()` with
+// `getFullYear/Date/Hours` returned whatever the runtime's TZ was —
+// which on SSR (Railway UTC) or a mis-configured client could be a
+// full day behind Riyadh at the midnight rollover, defaulting the
+// picker to "yesterday" and tripping the backdate guard.
 function nowLocalDatetime() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const min = String(d.getMinutes()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+  try {
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Riyadh",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    const parts = fmt.formatToParts(new Date());
+    const get = (t) => parts.find((p) => p.type === t)?.value || "00";
+    // Intl en-CA outputs "24" for midnight hour in some engines — normalize.
+    const hh = get("hour") === "24" ? "00" : get("hour");
+    return `${get("year")}-${get("month")}-${get("day")}T${hh}:${get("minute")}`;
+  } catch {
+    // Last-resort fallback if Intl is broken: local time.
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const hh = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+  }
 }
 
 export default function TransferModal({ branches, onClose }) {

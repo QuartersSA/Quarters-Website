@@ -1,4 +1,4 @@
-import{L as b}from"./dateUtils-CzgDxzYh.js";if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},t,n),{get(o,e){return e in o?o[e]:void 0},has(){return!0}})}function x(t,n,o,e){const a=o.map(r=>r.header).join("</th><th>"),s=t.map(r=>`<tr>${o.map(i=>{const d=i.accessor(r);return`<td>${(i.format?i.format(d,r):d)??""}</td>`}).join("")}</tr>`).join(""),l=new Date().toLocaleDateString(b),c=`
+import{L as b}from"./dateUtils-DKTrydAn.js";if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},t,n),{get(o,e){return e in o?o[e]:void 0},has(){return!0}})}function x(t,n,o,e){const a=o.map(r=>r.header).join("</th><th>"),s=t.map(r=>`<tr>${o.map(i=>{const d=i.accessor(r);return`<td>${(i.format?i.format(d,r):d)??""}</td>`}).join("")}</tr>`).join(""),l=new Date().toLocaleDateString(b),c=`
     <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
       <head>
         <meta charset="UTF-8">

@@ -10,7 +10,7 @@ import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import { arSA, enUS } from "date-fns/locale";
 import { ws } from "@/components/Workspace/ui";
 import GlassPopover from "@/components/Workspace/GlassPopover";
-import { formatDateForInput } from "@/utils/dateUtils";
+import { formatDateForInput, formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 function safeParseISODate(value) {
   if (!value) return null;
@@ -249,7 +249,26 @@ export default function GlassDatePicker({
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => handleSelect(new Date())}
+                onClick={() => {
+                  // Force Riyadh "today" — never trust the runtime's
+                  // local TZ. On a UTC server or mis-configured client
+                  // `formatDateForInput(new Date())` could return
+                  // yesterday's date and silently send the wrong value
+                  // to the API.
+                  const today = formatRiyadhDateForInput(new Date());
+                  if (showTime) {
+                    const h =
+                      currentTime.hour !== ""
+                        ? currentTime.hour
+                        : new Date().getHours();
+                    const m =
+                      currentTime.minute !== "" ? currentTime.minute : "0";
+                    setValue(buildDateTimeValue(today, h, m));
+                  } else {
+                    setValue(today);
+                    setOpen(false);
+                  }
+                }}
                 className={`${ws.btnNeutral} px-3 py-2 text-xs justify-center`}
               >
                 اليوم

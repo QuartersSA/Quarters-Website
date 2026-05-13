@@ -407,20 +407,28 @@ export async function POST(request) {
     // local-format `parsedDate` ("YYYY-MM-DD HH:MM:SS") and introduces
     // a TZ-offset bug that blocked even forward-dated transfers.
     if (parsedDate) {
-      // Compare DATES only (not full timestamps).
+      // Backdate guard — date precision + 1-day slack vs Riyadh "today".
       //
       // Why date-level instead of minute-level:
       //   - `io.created_at` defaults to `CURRENT_TIMESTAMP` which Neon
       //     stores as UTC wall-clock in the timestamp-without-tz column.
-      //   - `io.operation_date` can be either: user-typed Riyadh
-      //     wall-clock (from a transfer/count modal) OR UTC wall-clock
-      //     (when defaulted to CURRENT_TIMESTAMP).
-      //   - `parsedDate` from the picker is always Riyadh wall-clock.
-      // Mixing these at minute precision causes a 3-hour false positive
-      // on every same-day Riyadh transfer. Casting both sides to ::date
-      // eliminates the TZ ambiguity — the guard still blocks genuine
-      // back-dated transfers (yesterday or earlier) while same-day
-      // submits always pass regardless of clock skew.
+      //   - `io.operation_date` is a mix: user-typed Riyadh wall-clock
+      //     (from a modal) or UTC wall-clock (when defaulted to
+      //     CURRENT_TIMESTAMP via COALESCE in INSERT).
+      //   - `parsedDate` from the picker is Riyadh wall-clock.
+      // Mixing UTC- and Riyadh-stored wall-clocks at minute precision
+      // produced a 3-hour false positive on every same-day Riyadh
+      // transfer. Casting to ::date eliminates the intra-day TZ
+      // ambiguity.
+      //
+      // Why the extra `>= today - 1 day` clause:
+      // The picker's default ("now") can land on yesterday's Riyadh
+      // date when the browser / SSR runtime is in a different timezone
+      // and the user opens the modal close to local midnight. That
+      // off-by-one is harmless in intent (user means "now") but trips
+      // the date-only HAVING. Allowing parsedDate ≥ yesterday Riyadh
+      // makes the guard tolerant to any sub-24h drift, while still
+      // refusing clearly-back-dated transfers (≥ 2 days ago).
       const conflicts = await sql(
         `SELECT
            io.branch_id,
@@ -431,6 +439,8 @@ export async function POST(request) {
          WHERE io.status = 'Completed'
            AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
            AND io.branch_id = ANY($1::int[])
+           AND $2::timestamp::date
+                 < ((NOW() AT TIME ZONE 'Asia/Riyadh')::date - 1)
          GROUP BY io.branch_id, b.name
          HAVING
            MAX(COALESCE(io.operation_date, io.created_at))::date
