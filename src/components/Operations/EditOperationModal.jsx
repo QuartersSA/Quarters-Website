@@ -26,7 +26,7 @@ const TYPE_LABELS = {
 const TYPE_DESCRIPTIONS = {
   Daily: "عدّل كميات الأصناف المسجلة في هذا الجرد اليومي",
   Weekly: "عدّل كميات الأصناف المسجلة في هذا الجرد الأسبوعي",
-  Transfer: "عدّل كميات الأصناف المحولة",
+  Transfer: "يمكنك تعديل الملاحظة والتاريخ فقط — تعديل الكميات معطّل لحماية بيانات الجرد",
   Opening: "عدّل كميات المخزون الافتتاحي المسجلة",
 };
 
@@ -142,11 +142,29 @@ export default function EditOperationModal({
     },
   });
 
+  // Transfer rows store post-transfer absolutes (source-remainder vs
+  // destination-total). Editing item quantities here would corrupt
+  // stock math on one of the two paired legs — the backend rejects
+  // such PUTs, so the modal only allows note + date edits for Transfer.
+  const isTransfer = operation?.inventory_type === "Transfer";
+
   const handleSubmit = useCallback(() => {
     setError(null);
 
     if (!opDate) {
       setError("اختر تاريخ العملية");
+      return;
+    }
+
+    // For Transfer: send only note + date, server applies to both legs.
+    if (isTransfer) {
+      updateMutation.mutate({
+        operationId: operation.id,
+        note,
+        operationDate: opDate,
+        // Intentionally omit `items` — backend rejects item edits on
+        // Transfer with a 400.
+      });
       return;
     }
 
@@ -183,6 +201,7 @@ export default function EditOperationModal({
     initialQtyMap,
     activeItems,
     updateMutation,
+    isTransfer,
   ]);
 
   if (!operation || !operationDetails) return null;
@@ -289,19 +308,45 @@ export default function EditOperationModal({
             </span>
           </div>
 
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className={`${ws.input} pr-10 pl-3 py-2.5`}
-              placeholder="ابحث عن صنف..."
-            />
-          </div>
+          {/* Transfer: items are read-only — editing them would corrupt
+              the source-remainder / destination-total snapshots on the
+              paired legs. Hide the search + table entirely. */}
+          {isTransfer ? (
+            <div
+              className={`${ws.glassSoft} ${ws.card} p-4 border-amber-400/20`}
+            >
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-200 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-amber-100 font-semibold mb-1">
+                    تعديل كميات التحويل غير مدعوم
+                  </div>
+                  <div className="text-white/70 text-sm leading-relaxed">
+                    التحويل يحفظ صف لكل فرع بكميات مختلفة (المتبقي عند
+                    المرسل، الإجمالي الجديد عند المستقبل). للتعديل، احذف
+                    التحويل وأنشئه من جديد بالكميات الصحيحة. تعديل
+                    الملاحظة والتاريخ فقط مسموح هنا.
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : null}
 
-          {/* Items table */}
+          {!isTransfer ? (
+            <div className="relative">
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className={`${ws.input} pr-10 pl-3 py-2.5`}
+                placeholder="ابحث عن صنف..."
+              />
+            </div>
+          ) : null}
+
+          {/* Items table — hidden for Transfer (see banner above) */}
+          {!isTransfer ? (
           <div
             className={`max-h-[40vh] overflow-auto rounded-3xl border ${ws.divider} bg-white/[0.02]`}
           >
@@ -377,6 +422,7 @@ export default function EditOperationModal({
               </tbody>
             </table>
           </div>
+          ) : null}
         </div>
 
         {/* Footer */}

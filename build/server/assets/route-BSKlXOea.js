@@ -920,6 +920,20 @@ async function PUT(request) {
 
     // ── Handle Transfer operations ──
     if (invType === "Transfer") {
+      // Editing transfer *item quantities* is unsafe: the two legs store
+      // post-transfer absolutes (source-remainder vs. destination-total)
+      // and replacing both with the same list silently corrupts stock at
+      // one side. Until the schema carries the transfer amount as a
+      // single source of truth, allow only metadata edits (note +
+      // operation_date) — apply them to both paired rows.
+      const itemsProvided = Array.isArray(cleanedItems) && cleanedItems.length > 0;
+      if (itemsProvided) {
+        return Response.json({
+          error: "تعديل كميات أصناف التحويل غير مدعوم. للتغيير، احذف التحويل ثم أنشئه من جديد."
+        }, {
+          status: 400
+        });
+      }
       const paired = await sql`
         SELECT id, branch_id, transfer_direction
         FROM inventory_operations
@@ -928,7 +942,6 @@ async function PUT(request) {
       `;
       for (const p of paired) {
         await updateOperationRow(p.id, note, operationDate);
-        await replaceInventoryItems(p.id, p.branch_id, cleanedItems);
       }
       return Response.json({
         ok: true,

@@ -47,11 +47,22 @@ export function useCreateTransfer({ onSuccess, onError } = {}) {
       return data;
     },
     onSuccess: (data) => {
+      // Every downstream query that derives from inventory_items /
+      // inventory_operations must invalidate so the UI reflects the
+      // new stock distribution. Previously variance / stock-value /
+      // over-stock / dashboard-analytics were stale until manual
+      // refresh, which made the post-transfer numbers look wrong on
+      // those screens.
       queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["items-summary"] });
       queryClient.invalidateQueries({ queryKey: ["low-stock"] });
       queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
+      queryClient.invalidateQueries({ queryKey: ["over-stock"] });
+      queryClient.invalidateQueries({ queryKey: ["stock-value"] });
+      queryClient.invalidateQueries({ queryKey: ["variance"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["operation-details"] });
       onSuccess?.(data);
     },
     onError: (err) => {

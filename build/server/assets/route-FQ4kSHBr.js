@@ -31,7 +31,13 @@ async function notifyAdminsWhatsAppInventoryTransfer({
         reason: "no_admin_phones"
       };
     }
-    const itemsText = Array.isArray(items) ? items.slice(0, 15).map(it => `- ${it.itemName || "صنف"} (${it.quantity})`).join("\n") : "";
+
+    // Append unit (kg / لتر / حبة …) so the admin can tell "12.5" apart
+    // from "12.5 لتر" at a glance — bare numbers were ambiguous.
+    const itemsText = Array.isArray(items) ? items.slice(0, 15).map(it => {
+      const unit = it.unit ? ` ${it.unit}` : "";
+      return `- ${it.itemName || "صنف"} (${it.quantity}${unit})`;
+    }).join("\n") : "";
     const lines = ["تحويل بين الفروع", transferNumber ? `رقم التحويل: ${transferNumber}` : null, fromBranchName ? `من: ${fromBranchName}` : null, toBranchName ? `إلى: ${toBranchName}` : null, employeeName ? `بواسطة: ${employeeName}` : null, note ? `ملاحظة: ${note}` : null, itemsText ? `الأصناف:\n${itemsText}` : null, Array.isArray(items) && items.length > 15 ? `… والمزيد (${items.length - 15})` : null].filter(Boolean);
     const text = lines.join("\n").trim();
     const results = await Promise.all(admins.map(async a => {
@@ -225,21 +231,55 @@ async function POST(request) {
         status: 400
       });
     }
+
+    // Backend cap mirrors the UI cap in TransferModal (200 rows). A malicious
+    // or buggy client could otherwise submit thousands of rows and lock the
+    // DB on the batched INSERTs.
+    const MAX_ITEMS_PER_TRANSFER = 200;
+    if (items.length > MAX_ITEMS_PER_TRANSFER) {
+      return Response.json({
+        error: `لا يمكن تحويل أكثر من ${MAX_ITEMS_PER_TRANSFER} صنف في عملية واحدة`
+      }, {
+        status: 400
+      });
+    }
+
+    // Strict validation: reject the whole request if ANY row is malformed,
+    // and report the offending rows. The previous loop silently skipped
+    // bad rows (continue) which let buggy clients half-commit transfers.
     const cleanedItems = [];
-    for (const it of items) {
+    const invalidItems = [];
+    for (let i = 0; i < items.length; i += 1) {
+      const it = items[i];
       const itemId = Number(it?.itemId);
       const quantity = Number(it?.quantity);
       if (!Number.isFinite(itemId) || itemId <= 0) {
+        invalidItems.push({
+          index: i,
+          reason: "itemId غير صالح"
+        });
         continue;
       }
       if (!Number.isFinite(quantity) || quantity <= 0) {
+        invalidItems.push({
+          index: i,
+          itemId,
+          reason: "الكمية يجب أن تكون أكبر من صفر"
+        });
         continue;
       }
-
-      // Round to 3 decimal places (matches NUMERIC(12,3) precision)
       cleanedItems.push({
         itemId,
+        // Round to 3 decimal places (matches NUMERIC(12,3) precision).
         quantity: Math.round(quantity * 1000) / 1000
+      });
+    }
+    if (invalidItems.length > 0) {
+      return Response.json({
+        error: "بعض الأصناف غير صالحة — راجع الكميات والمعرّفات",
+        invalidItems
+      }, {
+        status: 400
       });
     }
     if (cleanedItems.length === 0) {
@@ -249,7 +289,12 @@ async function POST(request) {
         status: 400
       });
     }
-    const transferNumber = `TRF-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+    // crypto.randomUUID() avoids the 1-in-1000 collision risk of the old
+    // Date.now()+random(1000) scheme. The transferNumber pairs the two
+    // legs and is used as a delete-by-pair key.
+    const uuid = typeof crypto !== "undefined" && typeof crypto.randomUUID === "function" ? crypto.randomUUID().slice(0, 8) : Math.random().toString(36).slice(2, 10);
+    const transferNumber = `TRF-${Date.now()}-${uuid}`;
     const actingEmployeeId = auth.user?.id || null;
 
     // Validate branches exist
@@ -274,10 +319,11 @@ async function POST(request) {
       });
     }
 
-    // Validate items exist + get names for message
+    // Validate items exist + get names + units for the notification
     const itemIds = cleanedItems.map(x => x.itemId);
-    const itemRows = await sql(`SELECT id, name FROM items WHERE id = ANY($1::int[])`, [itemIds]);
+    const itemRows = await sql(`SELECT id, name, unit FROM items WHERE id = ANY($1::int[])`, [itemIds]);
     const itemNameById = new Map(itemRows.map(r => [Number(r.id), String(r.name)]));
+    const itemUnitById = new Map(itemRows.map(r => [Number(r.id), String(r.unit || "")]));
     for (const it of cleanedItems) {
       if (!itemNameById.has(it.itemId)) {
         return Response.json({
@@ -314,45 +360,133 @@ async function POST(request) {
     // Parse operation date safely — if invalid, use current timestamp
     const parsedDate = parseOperationDate(operationDate);
 
-    // Create two operations (out + in)
-    const [opOut] = await sql(`INSERT INTO inventory_operations (
-        inventory_number, branch_id, employee_id, inventory_type, status,
-        transfer_branch_id, transfer_direction, note, operation_date
-      )
-      VALUES (
-        $1, $2, $3, 'Transfer', 'Completed',
-        $4, 'out', $5, COALESCE($6::timestamp, CURRENT_TIMESTAMP)
-      )
-      RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, transfer_branch_id, transfer_direction, note, operation_date`, [transferNumber, fromId, actingEmployeeId, toId, note || null, parsedDate]);
-    const [opIn] = await sql(`INSERT INTO inventory_operations (
-        inventory_number, branch_id, employee_id, inventory_type, status,
-        transfer_branch_id, transfer_direction, note, operation_date
-      )
-      VALUES (
-        $1, $2, $3, 'Transfer', 'Completed',
-        $4, 'in', $5, COALESCE($6::timestamp, CURRENT_TIMESTAMP)
-      )
-      RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, transfer_branch_id, transfer_direction, note, operation_date`, [transferNumber, toId, actingEmployeeId, fromId, note || null, parsedDate]);
+    // Backdate guard: refuse to backdate behind the latest completed
+    // inventory baseline (Daily/Weekly/Transfer/Opening) at either
+    // branch. Storing a Transfer with an older operation_date silently
+    // turns it into a historical no-op — the newer inventory_items row
+    // remains `last_inv` and the transfer never affects current stock.
+    // Better to surface the conflict than silently break stock math.
+    if (parsedDate) {
+      const [latest] = await sql(`SELECT MAX(COALESCE(io.operation_date, io.created_at)) AS max_date
+         FROM inventory_operations io
+         WHERE io.status = 'Completed'
+           AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
+           AND io.branch_id = ANY($1::int[])`, [[fromId, toId]]);
+      const latestDate = latest?.max_date ? new Date(latest.max_date) : null;
+      const requestedDate = new Date(parsedDate);
+      if (latestDate && requestedDate < latestDate) {
+        const latestStr = latestDate.toISOString().slice(0, 16).replace("T", " ");
+        return Response.json({
+          error: `تاريخ التحويل أقدم من آخر جرد مكتمل في أحد الفرعَين (${latestStr}). التواريخ المسبقة تُفقد التأثير على المخزون.`
+        }, {
+          status: 400
+        });
+      }
+    }
 
-    // Insert only the affected items with their NEW absolute quantities.
+    // Pre-compute the new absolute quantities for both branches per item.
+    // The math is done in JS here (rather than in SQL) because the source
+    // qty depends on the current stock which we already fetched above.
     // Quantity column is NUMERIC(12,3) — preserves up to 3 decimal places.
+    const perItemIds = [];
+    const fromNewArr = [];
+    const toNewArr = [];
     for (const it of cleanedItems) {
       const fromCurrent = Number(fromQtyMap.get(it.itemId) || 0);
       const toCurrent = Number(toQtyMap.get(it.itemId) || 0);
-      const fromNew = Math.round((fromCurrent - it.quantity) * 1000) / 1000;
-      const toNew = Math.round((toCurrent + it.quantity) * 1000) / 1000;
-      await sql`
-        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
-        VALUES (${opOut.id}, ${it.itemId}, ${fromNew}, ${fromId})
-      `;
-      await sql`
-        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
-        VALUES (${opIn.id}, ${it.itemId}, ${toNew}, ${toId})
-      `;
+      perItemIds.push(it.itemId);
+      fromNewArr.push(Math.round((fromCurrent - it.quantity) * 1000) / 1000);
+      toNewArr.push(Math.round((toCurrent + it.quantity) * 1000) / 1000);
     }
+
+    // Atomic write: a single SQL statement with CTEs that inserts both
+    // operation rows and all inventory_items rows. Either everything
+    // commits or nothing — eliminates the partial-write state where
+    // opOut was inserted but opIn (or inventory_items) failed, leaving
+    // an orphan leg behind. Race against concurrent transfers is still
+    // possible (no FOR UPDATE on the read above) but the data this
+    // request *does* write is now consistent within itself.
+    const [opPair] = await sql(`
+      WITH op_out AS (
+        INSERT INTO inventory_operations (
+          inventory_number, branch_id, employee_id, inventory_type, status,
+          transfer_branch_id, transfer_direction, note, operation_date
+        )
+        VALUES (
+          $1, $2, $3, 'Transfer', 'Completed',
+          $4, 'out', $5, COALESCE($6::timestamp, CURRENT_TIMESTAMP)
+        )
+        RETURNING id, branch_id, created_at, operation_date
+      ),
+      op_in AS (
+        INSERT INTO inventory_operations (
+          inventory_number, branch_id, employee_id, inventory_type, status,
+          transfer_branch_id, transfer_direction, note, operation_date
+        )
+        VALUES (
+          $1, $4, $3, 'Transfer', 'Completed',
+          $2, 'in', $5, COALESCE($6::timestamp, CURRENT_TIMESTAMP)
+        )
+        RETURNING id, branch_id, created_at, operation_date
+      ),
+      items_data AS (
+        SELECT
+          unnest($7::int[])     AS item_id,
+          unnest($8::numeric[]) AS from_new,
+          unnest($9::numeric[]) AS to_new
+      ),
+      ins_out AS (
+        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
+        SELECT op_out.id, items_data.item_id, items_data.from_new, op_out.branch_id
+        FROM op_out, items_data
+        RETURNING 1
+      ),
+      ins_in AS (
+        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
+        SELECT op_in.id, items_data.item_id, items_data.to_new, op_in.branch_id
+        FROM op_in, items_data
+        RETURNING 1
+      )
+      SELECT
+        (SELECT id FROM op_out)             AS out_id,
+        (SELECT id FROM op_in)              AS in_id,
+        (SELECT created_at FROM op_out)     AS out_created_at,
+        (SELECT created_at FROM op_in)      AS in_created_at,
+        (SELECT operation_date FROM op_out) AS out_operation_date,
+        (SELECT operation_date FROM op_in)  AS in_operation_date,
+        (SELECT COUNT(*) FROM ins_out)      AS out_inserted_count,
+        (SELECT COUNT(*) FROM ins_in)       AS in_inserted_count
+      `, [transferNumber, fromId, actingEmployeeId, toId, note || null, parsedDate, perItemIds, fromNewArr, toNewArr]);
+    const opOut = {
+      id: opPair.out_id,
+      inventory_number: transferNumber,
+      branch_id: fromId,
+      employee_id: actingEmployeeId,
+      inventory_type: "Transfer",
+      status: "Completed",
+      created_at: opPair.out_created_at,
+      transfer_branch_id: toId,
+      transfer_direction: "out",
+      note: note || null,
+      operation_date: opPair.out_operation_date
+    };
+    const opIn = {
+      id: opPair.in_id,
+      inventory_number: transferNumber,
+      branch_id: toId,
+      employee_id: actingEmployeeId,
+      inventory_type: "Transfer",
+      status: "Completed",
+      created_at: opPair.in_created_at,
+      transfer_branch_id: fromId,
+      transfer_direction: "in",
+      note: note || null,
+      operation_date: opPair.in_operation_date
+    };
     const resultItems = cleanedItems.map(it => ({
       itemId: it.itemId,
       itemName: itemNameById.get(it.itemId) || "",
+      unit: itemUnitById.get(it.itemId) || "",
       quantity: it.quantity
     }));
     const result = {
