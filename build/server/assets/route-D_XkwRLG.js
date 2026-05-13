@@ -143,17 +143,24 @@ async function GET(request) {
           ORDER BY ix.id, b.name
         `, [itemIds]);
       for (const row of stockRows) {
-        const arr = stockRowsByItem.get(row.item_id) || [];
+        // Key as String so the lookup below tolerates the postgres
+        // driver returning the unnested bigint as a string while
+        // `items.id` (from a plain SELECT on a `serial` column) comes
+        // back as a JS number. Without normalisation `Map.get(5)` after
+        // `Map.set("5", …)` misses, branch_stock becomes null for every
+        // item, and the items page renders "-" instead of totals.
+        const key = String(row.item_id);
+        const arr = stockRowsByItem.get(key) || [];
         arr.push({
           branch_id: row.branch_id,
           branch_name: row.branch_name,
           quantity: row.quantity
         });
-        stockRowsByItem.set(row.item_id, arr);
+        stockRowsByItem.set(key, arr);
       }
     }
     const itemsWithStock = items.map(item => {
-      const branchStock = stockRowsByItem.get(item.id) || [];
+      const branchStock = stockRowsByItem.get(String(item.id)) || [];
       const greenBeanInfo = item.linked_green_bean_id ? lastOrderPriceMap[item.linked_green_bean_id] || null : null;
       return {
         ...item,
