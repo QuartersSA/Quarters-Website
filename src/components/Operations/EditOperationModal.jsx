@@ -95,10 +95,30 @@ export default function EditOperationModal({
   });
 
   const activeItems = useMemo(() => {
-    return (allItemsRaw || []).filter(
-      (it) => it.is_active !== false && it.show_in_inventory !== false,
-    );
-  }, [allItemsRaw]);
+    // Also drop items the admin has disabled at THIS operation's
+    // branch — letting the user add rows for disabled (item, branch)
+    // pairs lets them re-introduce the silent-loss path the server
+    // now blocks. Rows that were on the operation BEFORE the item was
+    // disabled are still loaded into initialQtyMap so the user can
+    // see / clear them; this filter only governs which items appear
+    // for fresh additions.
+    const opBranchId = Number(operation?.branch_id);
+    return (allItemsRaw || []).filter((it) => {
+      if (it.is_active === false) return false;
+      if (it.show_in_inventory === false) return false;
+      if (Number.isFinite(opBranchId) && opBranchId > 0) {
+        const disabled = Array.isArray(it.disabled_branches)
+          ? it.disabled_branches.map(Number)
+          : [];
+        // Keep the item if it was on the operation originally (so
+        // admin can zero it out) — checked via initialQtyMap below.
+        if (disabled.includes(opBranchId) && !(it.id in initialQtyMap)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [allItemsRaw, operation?.branch_id, initialQtyMap]);
 
   // Filter items by search
   const filteredItems = useMemo(() => {

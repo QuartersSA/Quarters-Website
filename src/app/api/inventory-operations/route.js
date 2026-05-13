@@ -2,6 +2,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
+import { assertItemsEnabledAtBranch } from "@/app/api/utils/branchVisibility";
 
 /**
  * Parse user-supplied operation_date.
@@ -605,6 +606,20 @@ export async function POST(request) {
       );
     }
 
+    // Branch-visibility guard: refuse counts for (item, branch) pairs the
+    // admin has marked as disabled. Without this the row gets written to
+    // inventory_items but the items API hides it via its disabled-pair
+    // filter, so the count "succeeds" yet the stock never appears on
+    // the items / stock-value pages — silent data loss.
+    const requestedItemIds = [
+      ...Object.keys(availableItems || {}).map(Number),
+      ...(Array.isArray(unavailableItems) ? unavailableItems.map(Number) : []),
+    ].filter((x) => Number.isFinite(x) && x > 0);
+    if (requestedItemIds.length > 0) {
+      const fail = await assertItemsEnabledAtBranch(branchId, requestedItemIds);
+      if (fail) return Response.json(fail.body, { status: fail.status });
+    }
+
     const inventoryNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     const [operation] = await sql(
@@ -881,6 +896,19 @@ export async function PUT(request) {
 
     if (cleanedItems.length === 0) {
       return Response.json({ error: "لا توجد أصناف صالحة" }, { status: 400 });
+    }
+
+    // Branch-visibility guard — same protection as POST.
+    // For Transfer rows we already rejected `items` edits earlier, but
+    // Daily/Weekly/Opening edits flow through here and would otherwise
+    // be able to add quantities for items disabled at the operation's
+    // branch, silently dropping them from current-stock math.
+    {
+      const fail = await assertItemsEnabledAtBranch(
+        operation.branch_id,
+        cleanedItems.map((c) => c.itemId),
+      );
+      if (fail) return Response.json(fail.body, { status: fail.status });
     }
 
     // Validate operation_date in PUT before any DB writes

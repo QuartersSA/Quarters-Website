@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
+import { findDisabledItemsAtBranch } from "@/app/api/utils/branchVisibility";
 
 async function notifyAdminsWhatsAppInventoryTransfer({
   fromBranchName,
@@ -331,6 +332,35 @@ export async function POST(request) {
       if (!itemNameById.has(it.itemId)) {
         return Response.json(
           { error: `الصنف غير موجود (id: ${it.itemId})` },
+          { status: 400 },
+        );
+      }
+    }
+
+    // Branch-visibility guard: refuse the transfer if any item is
+    // disabled at either the source OR the destination. Running the
+    // transfer anyway would write inventory_items rows that the items
+    // API hides — stock silently disappears from totals.
+    {
+      const [disabledAtFrom, disabledAtTo] = await Promise.all([
+        findDisabledItemsAtBranch(fromId, itemIds),
+        findDisabledItemsAtBranch(toId, itemIds),
+      ]);
+      const combined = new Set([...disabledAtFrom, ...disabledAtTo]);
+      if (combined.size > 0) {
+        const offendingIds = Array.from(combined);
+        const labels = offendingIds.map(
+          (id) => itemNameById.get(id) || `#${id}`,
+        );
+        return Response.json(
+          {
+            error:
+              "بعض الأصناف معطّلة في فرع المرسل أو المستقبل. أعد تفعيلها من إدارة الفروع قبل التحويل.",
+            disabled_items: offendingIds,
+            disabled_item_labels: labels,
+            disabled_at_from: disabledAtFrom,
+            disabled_at_to: disabledAtTo,
+          },
           { status: 400 },
         );
       }

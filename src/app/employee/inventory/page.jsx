@@ -293,8 +293,23 @@ export default function EmployeeInventoryPage() {
     return unit;
   };
 
+  // Drop items disabled at THIS employee's branch (per-branch visibility
+  // via item_branch_disabled). Otherwise the employee would see the row
+  // and could submit a count for it; the API now rejects such counts so
+  // the only friendly thing is to hide them up-front.
+  const employeeBranchId = Number(employee?.branchId);
   const activeItems =
-    items?.filter((item) => item.show_in_inventory !== false) || [];
+    items?.filter((item) => {
+      if (item.show_in_inventory === false) return false;
+      if (
+        Array.isArray(item.disabled_branches) &&
+        Number.isFinite(employeeBranchId) &&
+        item.disabled_branches.map(Number).includes(employeeBranchId)
+      ) {
+        return false;
+      }
+      return true;
+    }) || [];
 
   const categoryOptions = useMemo(() => {
     const base = [

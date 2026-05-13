@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { assertItemsEnabledAtBranch } from "@/app/api/utils/branchVisibility";
 
 /**
  * Validate a received_at value.
@@ -147,6 +148,18 @@ export async function POST(request) {
         return Response.json({ error: "لا توجد أصناف صالحة" }, { status: 400 });
       }
 
+      // Branch-visibility guard: reject receipts for items disabled at
+      // this branch. Otherwise the row writes successfully but the
+      // items API hides it via the disabled-pair filter — the stock
+      // simply vanishes from totals.
+      {
+        const fail = await assertItemsEnabledAtBranch(
+          branchIdNum,
+          cleanedItems.map((c) => c.itemId),
+        );
+        if (fail) return Response.json(fail.body, { status: fail.status });
+      }
+
       const actingEmployeeId = auth.user?.id || null;
       const actingEmployeeName = auth.user?.name || null;
 
@@ -209,6 +222,12 @@ export async function POST(request) {
         { error: "تاريخ الوارد غير صالح (يجب أن يكون بين 2020 واليوم)" },
         { status: 400 },
       );
+    }
+
+    // Branch-visibility guard (single-item legacy path).
+    {
+      const fail = await assertItemsEnabledAtBranch(branchIdNum, [itemIdNum]);
+      if (fail) return Response.json(fail.body, { status: fail.status });
     }
 
     const actingEmployeeId = auth.user?.id || null;
@@ -295,6 +314,17 @@ export async function PUT(request) {
 
     if (cleanedItems.length === 0) {
       return Response.json({ error: "لا توجد أصناف صالحة" }, { status: 400 });
+    }
+
+    // Branch-visibility guard on edit too — admin can otherwise
+    // sidestep the rule by editing an existing receipt to add a
+    // disabled item.
+    {
+      const fail = await assertItemsEnabledAtBranch(
+        branchIdNum,
+        cleanedItems.map((c) => c.itemId),
+      );
+      if (fail) return Response.json(fail.body, { status: fail.status });
     }
 
     const actingEmployeeId = auth.user?.id || null;

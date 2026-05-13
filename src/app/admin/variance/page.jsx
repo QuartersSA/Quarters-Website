@@ -67,11 +67,22 @@ export default function VariancePage() {
 
   const itemOptions = useMemo(() => {
     const q = (itemSearch || "").toLowerCase();
-    const filtered = items.filter(
-      (it) =>
-        it.show_in_inventory !== false &&
-        (!q || it.name.toLowerCase().includes(q)),
-    );
+    // After a branch is picked, hide items disabled at that branch —
+    // variance for a disabled (item, branch) pair is meaningless. The
+    // dropdown stays unfiltered until a branch is chosen so the user
+    // can pre-search.
+    const branchIdNum = Number(selectedBranch);
+    const filtered = items.filter((it) => {
+      if (it.show_in_inventory === false) return false;
+      if (q && !it.name.toLowerCase().includes(q)) return false;
+      if (Number.isFinite(branchIdNum) && branchIdNum > 0) {
+        const disabled = Array.isArray(it.disabled_branches)
+          ? it.disabled_branches.map(Number)
+          : [];
+        if (disabled.includes(branchIdNum)) return false;
+      }
+      return true;
+    });
     return [
       { value: "", label: "اختر الصنف" },
       ...filtered
@@ -81,7 +92,7 @@ export default function VariancePage() {
         )
         .map((it) => ({ value: String(it.id), label: it.name })),
     ];
-  }, [items, itemSearch]);
+  }, [items, itemSearch, selectedBranch]);
 
   // Inverted ranges (from > to) return an empty server result that looks
   // identical to "no data" — surface it as a filter error instead so the

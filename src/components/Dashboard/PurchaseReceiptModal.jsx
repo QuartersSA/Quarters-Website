@@ -55,8 +55,21 @@ export function PurchaseReceiptModal({
   );
 
   const itemOptions = useMemo(() => {
+    // Drop items the admin has disabled at the chosen receipt branch.
+    // Receipt API now rejects them server-side; hiding them in the
+    // dropdown keeps the form from offering invalid choices.
+    const branchIdNum = Number(receiptBranchId);
+    const byBranch = (it) => {
+      if (!Number.isFinite(branchIdNum) || branchIdNum <= 0) return true;
+      const disabled = Array.isArray(it?.disabled_branches)
+        ? it.disabled_branches.map(Number)
+        : [];
+      return !disabled.includes(branchIdNum);
+    };
+
     const base = [{ value: "", label: "اختر الصنف" }];
     const sorted = (activeItems || [])
+      .filter(byBranch)
       .slice()
       .sort((a, b) =>
         String(a.name || "").localeCompare(String(b.name || ""), "ar"),
@@ -66,7 +79,7 @@ export function PurchaseReceiptModal({
       label: it.name,
     }));
     return [...base, ...mapped];
-  }, [activeItems]);
+  }, [activeItems, receiptBranchId]);
 
   if (!receiptModalOpen) {
     return null;

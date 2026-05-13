@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { assertItemsEnabledAtBranch } from "@/app/api/utils/branchVisibility";
 
 /**
  * Validate a user-supplied openedAt value.
@@ -143,6 +144,19 @@ export async function POST(request) {
         { error: "لا توجد كميات صالحة لحفظها" },
         { status: 400 },
       );
+    }
+
+    // Branch-visibility guard: reject opening sessions that include
+    // items disabled at this branch. The writes would land in
+    // opening_session_items + inventory_items but the items API
+    // would hide them — the session would "succeed" while the
+    // opening qty disappeared from totals.
+    {
+      const fail = await assertItemsEnabledAtBranch(
+        branchIdNum,
+        cleaned.map((c) => c.itemId),
+      );
+      if (fail) return Response.json(fail.body, { status: fail.status });
     }
 
     const actingEmployeeId = auth.user?.id || null;

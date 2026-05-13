@@ -146,6 +146,38 @@ export async function POST(request, { params }) {
       );
     }
 
+    // Branch-visibility guard: refuse to deposit a linked item that
+    // the admin has disabled at the chosen branch. The deposit would
+    // otherwise write a `purchase_receipts` row that the items API
+    // hides via its disabled-pair filter — the warehouse stock would
+    // silently disappear from totals.
+    {
+      const linkedItemIds = linked.map((x) => Number(x.inventoryItemId));
+      const disabledRows = await sql(
+        `SELECT item_id FROM item_branch_disabled
+           WHERE branch_id = $1 AND item_id = ANY($2::int[])`,
+        [branchId, linkedItemIds],
+      );
+      if (disabledRows.length > 0) {
+        const disabledSet = new Set(disabledRows.map((r) => Number(r.item_id)));
+        const blocked = linked.filter((x) =>
+          disabledSet.has(Number(x.inventoryItemId)),
+        );
+        return Response.json(
+          {
+            error:
+              "بعض الأصناف معطّلة في هذا الفرع. أعد تفعيلها من إدارة الفروع قبل الإيداع.",
+            blocked: blocked.map((x) => ({
+              beanName: x.beanName,
+              inventoryItemName: x.inventoryItemName,
+              inventoryItemId: x.inventoryItemId,
+            })),
+          },
+          { status: 400 },
+        );
+      }
+    }
+
     // 5. Create one purchase receipt per bean type (aggregated)
     const actingEmployeeId = auth.user?.id || null;
     const actingEmployeeName = auth.user?.name || null;

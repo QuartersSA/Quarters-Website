@@ -84,8 +84,34 @@ export function ItemBranchVisibilityModal({
 
   if (!item) return null;
 
+  // Helper: stock currently held at a given branch for this item, used
+  // to warn the admin before disabling a branch that still has stock.
+  // (The stock isn't deleted — disabling just hides it — but the
+  // admin should consciously accept that the total goes down.)
+  const stockAtBranch = (branchId) => {
+    if (!Array.isArray(item?.branch_stock)) return 0;
+    const row = item.branch_stock.find(
+      (s) => Number(s.branch_id) === Number(branchId),
+    );
+    return Number(row?.quantity) || 0;
+  };
+
   const handleToggle = (branchId) => {
     const wasDisabled = disabled.has(branchId);
+    // About to DISABLE? Warn if branch has positive stock that would
+    // disappear from totals.
+    if (!wasDisabled) {
+      const qty = stockAtBranch(branchId);
+      if (qty > 0) {
+        const branchName =
+          branchList.find((b) => Number(b.id) === Number(branchId))?.name ||
+          "هذا الفرع";
+        const ok = window.confirm(
+          `الكمية الحالية في "${branchName}" = ${qty} ${item.unit || "وحدة"}.\nإلغاء التفعيل يخفي هذه الكمية من المخزون والتقارير (الحركة التاريخية تبقى محفوظة، وتظهر مجدداً عند إعادة التفعيل).\n\nمتابعة الإلغاء؟`,
+        );
+        if (!ok) return;
+      }
+    }
     toggleMutation.mutate({
       branchId,
       enabled: wasDisabled, // flip
