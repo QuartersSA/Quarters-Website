@@ -35,6 +35,39 @@ export function formatDateForInput(d) {
 }
 
 /**
+ * Like `formatDateForInput` but ALWAYS interprets the Date in Riyadh
+ * (Asia/Riyadh) wall-clock, regardless of the runtime's local TZ.
+ *
+ * Use this when capturing "today" for business records — `new Date()`
+ * + `getFullYear/Date` returned the runtime's TZ date, which on a UTC
+ * SSR server (Railway) or a mis-configured browser produced
+ * yesterday's date for users near midnight Riyadh time and tripped
+ * backdate guards.
+ */
+export function formatRiyadhDateForInput(d) {
+  if (!d) return "";
+  const date = d instanceof Date ? d : new Date(d);
+  if (Number.isNaN(date.getTime())) return "";
+  try {
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Riyadh",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const parts = fmt.formatToParts(date);
+    const get = (t) => parts.find((p) => p.type === t)?.value;
+    const y = get("year");
+    const m = get("month");
+    const dd = get("day");
+    if (!y || !m || !dd) return formatDateForInput(date);
+    return `${y}-${m}-${dd}`;
+  } catch {
+    return formatDateForInput(date);
+  }
+}
+
+/**
  * Format `YYYY-MM-DD` (date only, Gregorian, Arabic).
  * Example: "11 مايو 2026"
  */
