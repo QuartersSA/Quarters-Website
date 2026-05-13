@@ -101,7 +101,9 @@ export async function GET(request) {
           AND io.branch_id = b.id
           AND io.status    = 'Completed'
           AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC
+        -- io.id DESC tiebreaker: matches /api/items so two ops at the
+        -- same timestamp resolve to the same row across endpoints.
+        ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
         LIMIT 1
       ) last_inv ON true
 
@@ -112,7 +114,9 @@ export async function GET(request) {
           AND pr.branch_id = b.id
           AND (
             last_inv.op_date IS NULL
-            OR pr.received_at > last_inv.op_date
+            -- GREATEST(received_at, created_at) for consistency with the
+            -- other current-stock endpoints (items / stock-value).
+            OR GREATEST(pr.received_at, pr.created_at) > last_inv.op_date
           )
       ) receipts_after ON true
 
@@ -225,7 +229,9 @@ export async function GET(request) {
           AND io.branch_id = b.id
           AND io.status    = 'Completed'
           AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC
+        -- io.id DESC tiebreaker: matches /api/items so two ops at the
+        -- same timestamp resolve to the same row across endpoints.
+        ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
         LIMIT 1
       ) last_inv ON true
 

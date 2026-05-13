@@ -41,7 +41,9 @@ async function GET(request) {
           AND io.branch_id = b.id
           AND io.status    = 'Completed'
           AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC
+        -- io.id DESC tiebreaker: matches /api/items so two ops at the
+        -- same timestamp resolve to the same row across endpoints.
+        ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
         LIMIT 1
       ) last_inv ON true
 

@@ -141,12 +141,32 @@ export default function OperationsPage() {
   // Accepts numeric ids (inventory_operations) AND string ids ("batch-*" /
   // "rcpt-*") — backend handles all three via the same DELETE endpoint.
   const handleBulkDelete = useCallback(async () => {
-    const ids = Array.from(selectedIds);
-    if (ids.length === 0) return;
+    const rawIds = Array.from(selectedIds);
+    if (rawIds.length === 0) return;
     if (typeof window === "undefined") return;
 
-    // Warn if user selected items under one filter, then changed filter,
-    // since the off-screen ids will still be deleted.
+    // Transfer rows come in pairs (out + in) that share an
+    // inventory_number; deleting either id removes BOTH legs in the
+    // backend. Bulk-selecting both legs then issuing two DELETEs would
+    // misreport the second as "فشل" (404 — already gone). Dedupe by
+    // inventory_number for Transfer ops, keep the rest as-is.
+    const opById = new Map(
+      (filteredOperations || []).map((op) => [op.id, op]),
+    );
+    const ids = [];
+    const seenTransferKeys = new Set();
+    for (const id of rawIds) {
+      const op = opById.get(id);
+      if (op?.inventory_type === "Transfer" && op?.inventory_number) {
+        const key = `transfer:${op.inventory_number}`;
+        if (seenTransferKeys.has(key)) continue;
+        seenTransferKeys.add(key);
+      }
+      ids.push(id);
+    }
+
+    // Warn if items selected under one filter then filter changed; the
+    // off-screen ids will still be deleted.
     const visibleIds = new Set((filteredOperations || []).map((op) => op.id));
     const hiddenCount = ids.filter((id) => !visibleIds.has(id)).length;
     const hiddenWarning =

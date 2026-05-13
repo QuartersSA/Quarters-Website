@@ -139,7 +139,15 @@ export async function GET(request) {
             <= COALESCE(io.operation_date, io.created_at)
       ) rsp ON TRUE
       WHERE io.status = 'Completed'
-        AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
+        -- Transfer rows are intentionally excluded from variance: they
+        -- are movements between branches, not inventory counts. Keeping
+        -- them here caused every transfer to register as a phantom
+        -- "loss" at the source and "gain" at the destination because
+        -- expected_quantity = opening + receipts had no awareness of
+        -- outgoing/incoming transfers. The prev-row lookup (io_p above)
+        -- still includes Transfer so delta_since_previous correctly
+        -- uses the post-transfer snapshot as its baseline.
+        AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
         AND io.branch_id = $1
         AND ii.item_id = $2
         AND COALESCE(io.operation_date, io.created_at)::date >= $3::date

@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeftRight,
   Plus,
@@ -47,6 +47,17 @@ export default function TransferModal({ branches, onClose }) {
 
   const fromIdNum = toNumberOrNull(fromBranchId);
   const toIdNum = toNumberOrNull(toBranchId);
+
+  const queryClient = useQueryClient();
+
+  // Force a refetch of `items` whenever the modal opens so the
+  // available-qty numbers shown reflect the latest stock — without this,
+  // two admins opening the modal at the same time both saw stale
+  // branch_stock and could oversell. Empty dep array = runs once on mount.
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["items"] });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { data: allItems = [], isLoading: itemsLoading } = useQuery({
     queryKey: ["items"],
@@ -218,6 +229,21 @@ export default function TransferModal({ branches, onClose }) {
   });
 
   const handleSubmitTransfer = () => {
+    // Confirm large transfers so an accidental click can't move 50+ rows
+    // or a heavy total without a deliberate second action. Threshold
+    // chosen as "more than a handful of items" — adjust if it nags.
+    const CONFIRM_THRESHOLD_ITEMS = 5;
+    if (items.length > CONFIRM_THRESHOLD_ITEMS) {
+      const fromName =
+        (branches || []).find((b) => Number(b.id) === fromIdNum)?.name || "";
+      const toName =
+        (branches || []).find((b) => Number(b.id) === toIdNum)?.name || "";
+      const ok = window.confirm(
+        `تأكيد التحويل: ${items.length} صنف من "${fromName}" إلى "${toName}"؟`,
+      );
+      if (!ok) return;
+    }
+
     submitMutation.mutate({
       fromBranchId: fromIdNum,
       toBranchId: toIdNum,
