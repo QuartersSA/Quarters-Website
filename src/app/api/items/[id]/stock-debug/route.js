@@ -146,6 +146,58 @@ export async function GET(request, { params }) {
       0,
     );
 
+    // Run the EXACT same SQL the stock-value endpoint runs, scoped to
+    // this item, so we can confirm the number on /admin/stock-value
+    // matches the per-branch breakdown above.
+    const [stockValueRow] = await sql`
+      WITH last_inv AS (
+        SELECT DISTINCT ON (ii.item_id, io.branch_id)
+          ii.item_id,
+          io.branch_id,
+          ii.quantity AS inv_quantity,
+          COALESCE(io.operation_date, io.created_at) AS op_date
+        FROM inventory_items ii
+        JOIN inventory_operations io ON io.id = ii.operation_id
+        WHERE ii.item_id = ${itemId}
+          AND io.status = 'Completed'
+          AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
+        ORDER BY
+          ii.item_id,
+          io.branch_id,
+          COALESCE(io.operation_date, io.created_at) DESC,
+          io.id DESC
+      ),
+      receipts_after AS (
+        SELECT
+          pr.branch_id,
+          SUM(pr.quantity) AS total_received
+        FROM purchase_receipts pr
+        LEFT JOIN last_inv li
+          ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
+        WHERE pr.item_id = ${itemId}
+          AND (
+            li.op_date IS NULL
+            OR GREATEST(pr.received_at, pr.created_at) > li.op_date
+          )
+        GROUP BY pr.branch_id
+      ),
+      per_branch AS (
+        SELECT
+          b.id AS branch_id,
+          COALESCE(li.inv_quantity, 0)
+            + COALESCE(ra.total_received, 0) AS qty
+        FROM branches b
+        LEFT JOIN last_inv li
+          ON li.branch_id = b.id
+        LEFT JOIN receipts_after ra
+          ON ra.branch_id = b.id
+      )
+      SELECT
+        ${itemId}::int AS item_id,
+        COALESCE(SUM(pb.qty), 0)::numeric(12, 3) AS total_quantity
+      FROM per_branch pb
+    `;
+
     return Response.json({
       item,
       branches,
@@ -158,6 +210,15 @@ export async function GET(request, { params }) {
       purchase_receipts_rows: receiptRows,
       per_branch_summary: perBranch,
       grand_total: grandTotal,
+      stock_value_query: {
+        // What /api/items/stock-value would return for total_quantity.
+        // If `grand_total` above differs from this number for the same
+        // item, the divergence is between the two queries — share the
+        // full JSON so we can pin it down.
+        total_quantity: stockValueRow?.total_quantity ?? 0,
+        matches_grand_total:
+          Number(stockValueRow?.total_quantity ?? 0) === Number(grandTotal),
+      },
     });
   } catch (error) {
     console.error("stock-debug error:", error);

@@ -1,5 +1,7 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 // GET /api/items/stock-value
 // One row per item with:
@@ -23,15 +25,18 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 //
 // Inactive / hidden items are excluded — they're not part of operational
 // inventory and don't appear on the items page either.
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     const rows = await sql`
       WITH last_inv AS (
@@ -119,13 +124,16 @@ export async function GET(request) {
         AND i.show_in_inventory = true
       ORDER BY i.name ASC
     `;
-
     return Response.json(rows);
   } catch (error) {
     console.error("Error fetching stock value:", error);
-    return Response.json(
-      { error: "Failed to fetch stock value", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch stock value",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET };
