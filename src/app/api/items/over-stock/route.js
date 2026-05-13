@@ -40,6 +40,9 @@ export async function GET(request) {
           + COALESCE(receipts_after.total_received, 0) AS current_quantity
       FROM items i
       CROSS JOIN branches b
+      -- Hide (item, branch) pairs admin disabled per-branch (sparse table).
+      LEFT JOIN item_branch_disabled ibd
+        ON ibd.item_id = i.id AND ibd.branch_id = b.id
 
       LEFT JOIN LATERAL (
         SELECT ii.quantity AS inv_quantity, COALESCE(io.operation_date, io.created_at) AS op_date
@@ -70,6 +73,7 @@ export async function GET(request) {
 
       WHERE i.is_active = true
         AND i.show_in_inventory = true
+        AND ibd.item_id IS NULL
         AND i.max_stock_threshold IS NOT NULL
         AND i.max_stock_threshold > 0
         AND (last_inv.op_date IS NOT NULL OR receipts_after.total_received > 0)

@@ -78,6 +78,10 @@ async function GET(request) {
       FROM branches b
       CROSS JOIN items i
 
+      -- Hide (item, branch) pairs admin disabled per-branch (sparse table).
+      LEFT JOIN item_branch_disabled ibd
+        ON ibd.item_id = i.id AND ibd.branch_id = b.id
+
       LEFT JOIN LATERAL (
         SELECT ii.quantity AS inv_quantity, COALESCE(io.operation_date, io.created_at) AS op_date
         FROM inventory_items ii
@@ -106,6 +110,7 @@ async function GET(request) {
       ) receipts_after ON true
 
       WHERE i.is_active = true AND i.show_in_inventory = true
+        AND ibd.item_id IS NULL
       GROUP BY b.id, b.name
       ORDER BY b.name
     `;
@@ -119,7 +124,10 @@ async function GET(request) {
       FROM items i
       JOIN inventory_items ii ON ii.item_id = i.id
       JOIN inventory_operations io ON io.id = ii.operation_id
+      LEFT JOIN item_branch_disabled ibd
+        ON ibd.item_id = i.id AND ibd.branch_id = io.branch_id
       WHERE i.is_active = true AND i.show_in_inventory = true
+        AND ibd.item_id IS NULL
         AND io.status = 'Completed'
         AND ii.quantity = 0
         AND io.id = (
@@ -200,6 +208,10 @@ async function GET(request) {
       FROM branches b
       CROSS JOIN items i
 
+      -- Hide (item, branch) pairs admin disabled per-branch (sparse table).
+      LEFT JOIN item_branch_disabled ibd
+        ON ibd.item_id = i.id AND ibd.branch_id = b.id
+
       LEFT JOIN LATERAL (
         SELECT ii.quantity AS inv_quantity, COALESCE(io.operation_date, io.created_at) AS op_date
         FROM inventory_items ii
@@ -241,6 +253,7 @@ async function GET(request) {
       ) last_bean_price ON i.linked_green_bean_id IS NOT NULL
 
       WHERE i.is_active = true AND i.show_in_inventory = true
+        AND ibd.item_id IS NULL
         AND (last_inv.op_date IS NOT NULL OR receipts_after.total_received > 0)
       GROUP BY b.id, b.name
       ORDER BY b.name
@@ -280,6 +293,9 @@ async function GET(request) {
       FROM items i
       CROSS JOIN branches b
 
+      LEFT JOIN item_branch_disabled ibd
+        ON ibd.item_id = i.id AND ibd.branch_id = b.id
+
       LEFT JOIN LATERAL (
         SELECT ii.quantity as qty
         FROM inventory_items ii
@@ -312,6 +328,7 @@ async function GET(request) {
       ) closing ON true
 
       WHERE i.is_active = true AND i.show_in_inventory = true
+        AND ibd.item_id IS NULL
         AND (opening.qty IS NOT NULL OR received.qty > 0 OR closing.qty IS NOT NULL)
       ORDER BY i.name, b.name
     `;
@@ -332,6 +349,9 @@ async function GET(request) {
         prev.op_date as prev_date
       FROM items i
       CROSS JOIN branches b
+
+      LEFT JOIN item_branch_disabled ibd
+        ON ibd.item_id = i.id AND ibd.branch_id = b.id
 
       LEFT JOIN LATERAL (
         SELECT ii.quantity as qty, COALESCE(io.operation_date, io.created_at) as op_date
@@ -357,6 +377,7 @@ async function GET(request) {
       ) prev ON true
 
       WHERE i.is_active = true AND i.show_in_inventory = true
+        AND ibd.item_id IS NULL
         AND latest.qty IS NOT NULL
         AND prev.qty IS NOT NULL
         AND prev.qty > latest.qty

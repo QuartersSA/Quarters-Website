@@ -10,6 +10,25 @@ async function ensureSchema() {
     // by a concurrent request or if the user lacks ALTER permission.
     console.error("ensureSchema items.max_stock_threshold:", e?.message);
   }
+
+  // Sparse per-branch visibility table. Default = item visible at every
+  // branch (no row). INSERT a row only when an admin disables the item
+  // at a specific branch; DELETE the row to re-enable. Cascading
+  // deletes keep cleanup automatic when items or branches are removed.
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS item_branch_disabled (
+        item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+        branch_id INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+        disabled_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        disabled_by_employee_id INTEGER,
+        disabled_by_employee_name TEXT,
+        PRIMARY KEY (item_id, branch_id)
+      )
+    `;
+  } catch (e) {
+    console.error("ensureSchema item_branch_disabled:", e?.message);
+  }
 }
 
 export async function GET(request) {
@@ -143,6 +162,13 @@ export async function GET(request) {
             ON li.item_id = ix.id AND li.branch_id = b.id
           LEFT JOIN receipts_after ra
             ON ra.item_id = ix.id AND ra.branch_id = b.id
+          -- Hide (item, branch) pairs the admin has disabled. The
+          -- item_branch_disabled table is sparse: a row exists only for
+          -- pairs that have been explicitly turned off, so absence
+          -- means "enabled" and the default behaviour is preserved.
+          LEFT JOIN item_branch_disabled ibd
+            ON ibd.item_id = ix.id AND ibd.branch_id = b.id
+          WHERE ibd.item_id IS NULL
           ORDER BY ix.id, b.name
         `,
         [itemIds],
@@ -166,14 +192,35 @@ export async function GET(request) {
       }
     }
 
+    // Per-item list of branches where the admin has disabled this item.
+    // Used by the items page modal to seed the toggle UI without an
+    // extra round-trip per item.
+    const disabledByItem = new Map();
+    if (itemIds.length > 0) {
+      const disabledRows = await sql(
+        `SELECT item_id, branch_id FROM item_branch_disabled
+         WHERE item_id = ANY($1::bigint[])`,
+        [itemIds],
+      );
+      for (const row of disabledRows) {
+        const key = String(row.item_id);
+        const arr = disabledByItem.get(key) || [];
+        arr.push(Number(row.branch_id));
+        disabledByItem.set(key, arr);
+      }
+    }
+
     const itemsWithStock = items.map((item) => {
       const branchStock = stockRowsByItem.get(String(item.id)) || [];
       const greenBeanInfo = item.linked_green_bean_id
         ? lastOrderPriceMap[item.linked_green_bean_id] || null
         : null;
+      const disabledBranches =
+        disabledByItem.get(String(item.id)) || [];
       return {
         ...item,
         branch_stock: branchStock.length > 0 ? branchStock : null,
+        disabled_branches: disabledBranches,
         last_order_price_per_kg:
           greenBeanInfo?.last_order_price_per_kg || null,
         last_order_date: greenBeanInfo?.last_order_date || null,

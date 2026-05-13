@@ -87,8 +87,12 @@ async function GET(request) {
           ON li.item_id = i.id AND li.branch_id = b.id
         LEFT JOIN receipts_after ra
           ON ra.item_id = i.id AND ra.branch_id = b.id
+        -- Hide (item, branch) pairs admin disabled per-branch.
+        LEFT JOIN item_branch_disabled ibd
+          ON ibd.item_id = i.id AND ibd.branch_id = b.id
         -- $1 IS NULL → all branches; otherwise restrict to branch $1.
-        WHERE $1::int IS NULL OR b.id = $1::int
+        WHERE ($1::int IS NULL OR b.id = $1::int)
+          AND ibd.item_id IS NULL
       ),
       item_totals AS (
         SELECT

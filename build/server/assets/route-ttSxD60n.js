@@ -3,17 +3,6 @@ import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
-async function ensureSchema() {
-  try {
-    await sql`ALTER TABLE items ADD COLUMN IF NOT EXISTS max_stock_threshold INTEGER`;
-  } catch (e) {
-    console.error("ensureSchema items.max_stock_threshold:", e?.message);
-  }
-}
-
-// GET /api/items/over-stock
-// Returns items where current_quantity > max_stock_threshold (per branch).
-// Same shape as /api/items/low-stock for symmetry.
 async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -27,7 +16,7 @@ async function GET(request) {
     });
   }
   try {
-    await ensureSchema();
+    // current stock = last Daily/Weekly/Transfer count + SUM(purchase_receipts after it)
     const rows = await sql`
       SELECT
         i.id,
@@ -35,7 +24,6 @@ async function GET(request) {
         i.description,
         i.image_url,
         i.min_stock_threshold,
-        i.max_stock_threshold,
         i.unit,
         b.id as branch_id,
         b.name as branch_name,
@@ -44,6 +32,9 @@ async function GET(request) {
           + COALESCE(receipts_after.total_received, 0) AS current_quantity
       FROM items i
       CROSS JOIN branches b
+      -- Hide (item, branch) pairs admin disabled per-branch (sparse table).
+      LEFT JOIN item_branch_disabled ibd
+        ON ibd.item_id = i.id AND ibd.branch_id = b.id
 
       LEFT JOIN LATERAL (
         SELECT ii.quantity AS inv_quantity, COALESCE(io.operation_date, io.created_at) AS op_date
@@ -53,6 +44,8 @@ async function GET(request) {
           AND io.branch_id = b.id
           AND io.status    = 'Completed'
           AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
+        -- io.id DESC tiebreaker: matches /api/items so two ops at the
+        -- same timestamp resolve to the same row across endpoints.
         ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
         LIMIT 1
       ) last_inv ON true
@@ -74,18 +67,16 @@ async function GET(request) {
 
       WHERE i.is_active = true
         AND i.show_in_inventory = true
-        AND i.max_stock_threshold IS NOT NULL
-        AND i.max_stock_threshold > 0
+        AND ibd.item_id IS NULL
         AND (last_inv.op_date IS NOT NULL OR receipts_after.total_received > 0)
       ORDER BY i.name, b.name
     `;
-    const filteredItems = rows.filter(item => Number(item.max_stock_threshold) > 0 && Number(item.current_quantity) > Number(item.max_stock_threshold));
+    const filteredItems = rows.filter(item => Number(item.current_quantity) < Number(item.min_stock_threshold));
     return Response.json(filteredItems);
   } catch (error) {
-    console.error("Error fetching over-stock items:", error);
+    console.error("Error fetching low stock items:", error);
     return Response.json({
-      error: "Failed to fetch over-stock items",
-      details: error.message
+      error: "Failed to fetch low stock items"
     }, {
       status: 500
     });
