@@ -144,7 +144,10 @@ export function usePurchaseReceipt(
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
       queryClient.invalidateQueries({ queryKey: ["items-summary"] });
+      // `useLowStockData` keys its query as ["low-stock-items"]; the
+      // bare ["low-stock"] key invalidated nothing.
       queryClient.invalidateQueries({ queryKey: ["low-stock"] });
+      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
     },
     onError: (err) => {
       console.error(err);
@@ -184,7 +187,10 @@ export function usePurchaseReceipt(
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
       queryClient.invalidateQueries({ queryKey: ["items-summary"] });
+      // `useLowStockData` keys its query as ["low-stock-items"]; the
+      // bare ["low-stock"] key invalidated nothing.
       queryClient.invalidateQueries({ queryKey: ["low-stock"] });
+      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
       queryClient.invalidateQueries({ queryKey: ["operation-details"] });
     },
     onError: (err) => {

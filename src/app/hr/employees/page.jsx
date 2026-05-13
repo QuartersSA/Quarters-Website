@@ -51,7 +51,10 @@ export default function HREmployeesPage() {
       medical_check_issued: false,
       health_card_issued: false,
       position: "",
-      branchId: "",
+      // Array of branch ids (strings, to match GlassMultiSelect's
+      // value model). Multi-branch employees keep every assignment
+      // across saves instead of being silently reduced to one.
+      branchIds: [],
       base_salary: "",
       other_allowances: "",
     }),
@@ -68,10 +71,17 @@ export default function HREmployeesPage() {
 
   const handleOpenModal = (employee = null) => {
     if (employee) {
+      // Pre-load the FULL list of branch assignments. The previous
+      // `firstBranchId` shortcut silently dropped every additional
+      // branch on save (the form replaced all assignments with the
+      // single selected one). Multi-branch employees are explicit
+      // about this in HR, so the form has to round-trip them.
       const branchesList = Array.isArray(employee.branches)
         ? employee.branches
         : [];
-      const firstBranchId = branchesList?.[0]?.id;
+      const branchIds = branchesList
+        .map((b) => (b?.id == null ? "" : String(b.id)))
+        .filter(Boolean);
 
       setEditingEmployee(employee);
       setFormData({
@@ -84,7 +94,7 @@ export default function HREmployeesPage() {
         medical_check_issued: !!employee.medical_check_issued,
         health_card_issued: !!employee.health_card_issued,
         position: employee.position || "",
-        branchId: firstBranchId ? String(firstBranchId) : "",
+        branchIds,
         base_salary:
           employee.base_salary === null || employee.base_salary === undefined
             ? ""
@@ -129,7 +139,14 @@ export default function HREmployeesPage() {
       return;
     }
 
-    const branchIds = formData.branchId ? [Number(formData.branchId)] : [];
+    // Pull every selected branch id, not just the first. Without this,
+    // editing a multi-branch employee from the modal would silently
+    // delete every assignment except the one currently shown.
+    const branchIds = Array.isArray(formData.branchIds)
+      ? formData.branchIds
+          .map((v) => Number(v))
+          .filter((n) => Number.isFinite(n) && n > 0)
+      : [];
 
     const baseSalaryValue =
       formData.base_salary === "" ? null : Number(formData.base_salary);

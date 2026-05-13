@@ -108,6 +108,31 @@ export async function POST(request) {
     const createdById = auth.user?.id ? Number(auth.user.id) : null;
     const createdByName = auth.user?.name ? String(auth.user.name) : null;
 
+    // Refuse to rebuild a closed month. Once the accountant clicks
+    // "تقفيل الشهر" the entries become a financial record; silently
+    // wiping and re-inserting them (e.g. because someone added a
+    // late bonus) would erase the actual paid amounts and the
+    // closing audit trail. The UI shows a confirm dialog that says
+    // "لا يمكن تعديل بعد التقفيل" but never enforced it — only the
+    // per-entry payment endpoint did. Mirror that here.
+    const [existingRun] = await sql(
+      `SELECT id, is_closed
+       FROM accounting_payroll_runs
+       WHERE payroll_month = $1
+       LIMIT 1`,
+      [parsed.monthStart],
+    );
+    if (existingRun?.is_closed) {
+      return Response.json(
+        {
+          error:
+            "هذا الشهر مُقفّل ولا يمكن إعادة بناؤه. افتح التقفيل أولاً من زر «إلغاء التقفيل» إذا كان التعديل ضرورياً.",
+          run_id: existingRun.id,
+        },
+        { status: 409 },
+      );
+    }
+
     // 1) Aggregate deductions + bonuses per employee for this month
     //    ✅ include ALL employees, even if they have no deductions/bonuses
     const rows = await sql(
