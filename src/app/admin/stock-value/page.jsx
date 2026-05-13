@@ -40,7 +40,13 @@ export default function StockValuePage() {
     { header: "الوحدة", accessor: (r) => r.unit || "-" },
     {
       header: "سعر التكلفة (ر.س)",
-      accessor: (r) => (r.cost == null ? "غير محدد" : Number(r.cost) || 0),
+      // Export the effective cost (i.cost OR fallback to latest bean
+      // order price). Matches the on-screen column + dashboard math so
+      // the exported total reconciles with what the user sees.
+      accessor: (r) =>
+        r.effective_cost == null
+          ? "غير محدد"
+          : Number(r.effective_cost) || 0,
     },
     {
       header: "القيمة الإجمالية (ر.س)",

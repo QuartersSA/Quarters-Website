@@ -2,16 +2,20 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
 // GET /api/items/stock-value
-// Returns one row per item with:
+// One row per item with:
 //   - quantity = sum across ALL branches of (last inventory + receipts after)
-//   - cost     = unit cost from items.cost
-//   - value    = quantity * cost
-// Same per-branch stock formula as /api/items so the totals agree with
-// what the user sees in the items table / view-stock modal.
+//   - effective_cost = COALESCE(i.cost, last green-bean order price)
+//   - value = quantity * effective_cost
 //
-// Items with cost = NULL still appear (value = null) so the user can see
-// "needs a cost" rows and act on them. Inactive / hidden items are
-// excluded — they're not part of operational inventory.
+// Cost source matches /api/dashboard/analytics deliberately so the
+// "قيمة المخزون" stat on the admin dashboard equals the grand total on
+// this page. Without the bean-price fallback, items linked to a green
+// bean variety but missing i.cost would silently zero out here while
+// the dashboard counted them — causing drift between the two screens.
+//
+// Inactive / hidden items are excluded. Items still missing a price
+// after the fallback show up with value = null + an amber "غير محدد"
+// pill so the user can spot what needs a cost entered.
 export async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -68,18 +72,36 @@ export async function GET(request) {
         i.unit,
         i.image_url,
         i.cost,
+        -- effective_cost = direct cost, then fall back to the latest
+        -- green-bean order price for items linked to a bean. Mirrors
+        -- /api/dashboard/analytics so the two screens agree.
+        COALESCE(i.cost, last_bean_price.final_price) AS effective_cost,
+        last_bean_price.final_price AS fallback_cost,
         c.name AS category_name,
         COALESCE(SUM(pb.qty), 0)::numeric(12, 3) AS total_quantity,
         CASE
-          WHEN i.cost IS NULL THEN NULL
-          ELSE (COALESCE(SUM(pb.qty), 0) * i.cost)::numeric(14, 2)
+          WHEN COALESCE(i.cost, last_bean_price.final_price) IS NULL
+            THEN NULL
+          ELSE (
+            COALESCE(SUM(pb.qty), 0)
+            * COALESCE(i.cost, last_bean_price.final_price)
+          )::numeric(14, 2)
         END AS total_value
       FROM items i
       LEFT JOIN item_categories c ON c.id = i.category_id
       LEFT JOIN per_branch pb ON pb.item_id = i.id
+      LEFT JOIN LATERAL (
+        SELECT oi.computed_final_price_per_kg AS final_price
+        FROM accounting_green_bean_order_items oi
+        JOIN accounting_green_bean_orders o ON o.id = oi.order_id
+        WHERE oi.bean_id = i.linked_green_bean_id
+          AND oi.computed_final_price_per_kg IS NOT NULL
+        ORDER BY o.order_date DESC, oi.id DESC
+        LIMIT 1
+      ) last_bean_price ON i.linked_green_bean_id IS NOT NULL
       WHERE i.is_active = true
         AND i.show_in_inventory = true
-      GROUP BY i.id, c.name
+      GROUP BY i.id, c.name, last_bean_price.final_price
       ORDER BY i.name ASC
     `;
 

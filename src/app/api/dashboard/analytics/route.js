@@ -234,7 +234,15 @@ export async function GET(request) {
         FROM purchase_receipts pr
         WHERE pr.item_id   = i.id
           AND pr.branch_id = b.id
-          AND (last_inv.op_date IS NULL OR pr.received_at > last_inv.op_date)
+          -- GREATEST(received_at, created_at): keeps this dashboard
+          -- aggregate in sync with /api/items, /api/items/stock-value,
+          -- and the other current-stock queries. Without it, green-bean
+          -- deposits stamped with an older order_date were silently
+          -- excluded when the warehouse had a later Daily/Opening count.
+          AND (
+            last_inv.op_date IS NULL
+            OR GREATEST(pr.received_at, pr.created_at) > last_inv.op_date
+          )
       ) receipts_after ON true
 
       LEFT JOIN LATERAL (

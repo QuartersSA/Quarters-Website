@@ -40,7 +40,13 @@ export function useStockValueData({
     }
 
     if (hideMissingCost) {
-      out = out.filter((r) => r.cost != null && Number.isFinite(Number(r.cost)));
+      // "missing cost" = no effective price (direct i.cost AND green-bean
+      // fallback both null). Matches the stat card + table indicator.
+      out = out.filter(
+        (r) =>
+          r.effective_cost != null &&
+          Number.isFinite(Number(r.effective_cost)),
+      );
     }
 
     const num = (v) => {
@@ -85,7 +91,8 @@ export function useStockValueData({
 
     for (const r of filteredItems) {
       const v = Number(r.total_value);
-      if (r.cost == null || !Number.isFinite(Number(r.cost))) {
+      const eff = r.effective_cost;
+      if (eff == null || !Number.isFinite(Number(eff))) {
         missingCostCount += 1;
         continue;
       }
