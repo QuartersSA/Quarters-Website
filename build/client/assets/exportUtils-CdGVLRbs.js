@@ -1,4 +1,4 @@
-import{L as b}from"./dateUtils-DKTrydAn.js";if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},t,n),{get(o,e){return e in o?o[e]:void 0},has(){return!0}})}function x(t,n,o,e){const a=o.map(r=>r.header).join("</th><th>"),s=t.map(r=>`<tr>${o.map(i=>{const d=i.accessor(r);return`<td>${(i.format?i.format(d,r):d)??""}</td>`}).join("")}</tr>`).join(""),l=new Date().toLocaleDateString(b),c=`
+import{L as b}from"./dateUtils-DKTrydAn.js";if(typeof window<"u"){const t={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},t,n),{get(o,e){return e in o?o[e]:void 0},has(){return!0}})}function m(t,n,o,e){const r=o.map(a=>a.header).join("</th><th>"),s=t.map(a=>`<tr>${o.map(d=>{const i=d.accessor(a);return`<td>${(d.format?d.format(i,a):i)??""}</td>`}).join("")}</tr>`).join(""),l=new Date().toLocaleDateString(b),c=`
     <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
       <head>
         <meta charset="UTF-8">
@@ -46,7 +46,7 @@ import{L as b}from"./dateUtils-DKTrydAn.js";if(typeof window<"u"){const t={};glo
         </div>
         <table>
           <thead>
-            <tr><th>${a}</th></tr>
+            <tr><th>${r}</th></tr>
           </thead>
           <tbody>
             ${s}
@@ -54,7 +54,7 @@ import{L as b}from"./dateUtils-DKTrydAn.js";if(typeof window<"u"){const t={};glo
         </table>
       </body>
     </html>
-  `,p=new Blob([c],{type:"application/vnd.ms-excel;charset=utf-8;"});f(p,`${n}.xls`)}function u(t,n,o,e){const a=window.open("","_blank");if(!a){alert("الرجاء السماح بفتح النوافذ المنبثقة للتصدير");return}const s=o.map(r=>r.header).join("</th><th>"),l=t.map(r=>`<tr>${o.map(i=>{const d=i.accessor(r);return`<td>${(i.format?i.format(d,r):d)??""}</td>`}).join("")}</tr>`).join(""),c=new Date().toLocaleDateString(b,{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"}),p=`
+  `,p=new Blob([c],{type:"application/vnd.ms-excel;charset=utf-8;"});f(p,`${n}.xls`)}function x(t,n,o,e){const r=window.open("","_blank");if(!r){alert("الرجاء السماح بفتح النوافذ المنبثقة للتصدير");return}const s=o.map(a=>a.header).join("</th><th>"),l=t.map(a=>`<tr>${o.map(d=>{const i=d.accessor(a);return`<td>${(d.format?d.format(i,a):i)??""}</td>`}).join("")}</tr>`).join(""),c=new Date().toLocaleDateString(b,{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"}),p=`
     <!DOCTYPE html>
     <html dir="rtl">
       <head>
@@ -243,4 +243,4 @@ import{L as b}from"./dateUtils-DKTrydAn.js";if(typeof window<"u"){const t={};glo
         </div>
       </body>
     </html>
-  `;a.document.write(p),a.document.close(),a.onload=()=>{setTimeout(()=>{a.focus()},250)}}function f(t,n){const o=URL.createObjectURL(t),e=document.createElement("a");e.href=o,e.download=n,document.body.appendChild(e),e.click(),document.body.removeChild(e),URL.revokeObjectURL(o)}function w(t){return{Daily:"يومي",Weekly:"أسبوعي",Transfer:"تحويل",Receipt:"وارد",Opening:"مخزون افتتاحي"}[t]||t}function y(t){return{Admin:"مدير",Employee:"موظف"}[t]||t}function g(t){return t&&String(t).replace(/Z$/i,"")}function v(t){return t?new Date(g(t)).toLocaleString(b,{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"-"}export{u as a,y as b,w as c,x as e,v as f};
+  `;r.document.write(p),r.document.close(),r.onload=()=>{setTimeout(()=>{r.focus()},250)}}function f(t,n){const o=URL.createObjectURL(t),e=document.createElement("a");e.href=o,e.download=n,document.body.appendChild(e),e.click(),document.body.removeChild(e),URL.revokeObjectURL(o)}function u(t){return{Daily:"يومي",Weekly:"أسبوعي",Transfer:"تحويل",Receipt:"وارد",Opening:"مخزون افتتاحي"}[t]||t}function w(t){return{Admin:"مدير",Employee:"موظف"}[t]||t}function y(t){return t?new Date(t).toLocaleString(b,{year:"numeric",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"Asia/Riyadh"}):"-"}export{x as a,w as b,u as c,m as e,y as f};

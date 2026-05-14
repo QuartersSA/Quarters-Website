@@ -233,10 +233,17 @@ export async function POST(request) {
       ? openedAt
       : `${openedAt}T00:00:00`;
 
+    // Storage = real moment. $5 (operationTimestamp) is a Riyadh
+    // wall-clock string from the form; pin it to Asia/Riyadh on the
+    // cast so PG records the correct moment.
     const [operation] = await sql(
       `INSERT INTO inventory_operations
-         (inventory_number, branch_id, employee_id, inventory_type, status, note, operation_date)
-       VALUES ($1, $2, $3, 'Opening', 'Completed', $4, $5::timestamp)
+         (inventory_number, branch_id, employee_id, inventory_type, status, note, operation_date, created_at)
+       VALUES (
+         $1, $2, $3, 'Opening', 'Completed', $4,
+         $5::timestamp AT TIME ZONE 'Asia/Riyadh',
+         NOW()
+       )
        RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, operation_date`,
       [
         inventoryNumber,

@@ -466,25 +466,33 @@ export async function POST(request) {
     // request *does* write is now consistent within itself.
     const [opPair] = await sql(
       `
+      -- Storage = real moment. The user-supplied $6 is a Riyadh
+      -- wall-clock string from the picker, so we pin it to
+      -- Asia/Riyadh on the cast to record the correct moment. Display
+      -- reads the moment back in Asia/Riyadh in the frontend.
       WITH op_out AS (
         INSERT INTO inventory_operations (
           inventory_number, branch_id, employee_id, inventory_type, status,
-          transfer_branch_id, transfer_direction, note, operation_date
+          transfer_branch_id, transfer_direction, note, operation_date, created_at
         )
         VALUES (
           $1, $2, $3, 'Transfer', 'Completed',
-          $4, 'out', $5, COALESCE($6::timestamp, CURRENT_TIMESTAMP)
+          $4, 'out', $5,
+          COALESCE($6::timestamp AT TIME ZONE 'Asia/Riyadh', NOW()),
+          NOW()
         )
         RETURNING id, branch_id, created_at, operation_date
       ),
       op_in AS (
         INSERT INTO inventory_operations (
           inventory_number, branch_id, employee_id, inventory_type, status,
-          transfer_branch_id, transfer_direction, note, operation_date
+          transfer_branch_id, transfer_direction, note, operation_date, created_at
         )
         VALUES (
           $1, $4, $3, 'Transfer', 'Completed',
-          $2, 'in', $5, COALESCE($6::timestamp, CURRENT_TIMESTAMP)
+          $2, 'in', $5,
+          COALESCE($6::timestamp AT TIME ZONE 'Asia/Riyadh', NOW()),
+          NOW()
         )
         RETURNING id, branch_id, created_at, operation_date
       ),

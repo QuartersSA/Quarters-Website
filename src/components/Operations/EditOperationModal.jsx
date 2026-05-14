@@ -39,13 +39,31 @@ const TYPE_ICONS = {
 
 function formatDateForInput(dateStr) {
   if (!dateStr) return "";
-  // The DB stores "timestamp without time zone" but neon appends "Z".
-  // We must strip that Z so we don't get a UTC→local shift each time.
-  const cleaned = String(dateStr).replace(/Z$/i, "");
-  const match = cleaned.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
-  if (!match) return "";
-  const [, yyyy, mm, dd, hh = "00", min = "00"] = match;
-  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+  // Storage convention (post-fix): DB stores the real moment as UTC.
+  // The picker expects a Riyadh wall-clock string ("YYYY-MM-DDTHH:mm").
+  // Use Intl with `timeZone: "Asia/Riyadh"` to convert independent of
+  // the runtime TZ (SSR, mis-configured browser, etc.). The old
+  // `stripTZ`-based formatter silently returned the UTC wall-clock,
+  // 3 hours behind real Riyadh time.
+  try {
+    const d = new Date(dateStr);
+    if (Number.isNaN(d.getTime())) return "";
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Riyadh",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    const parts = fmt.formatToParts(d);
+    const get = (t) => parts.find((p) => p.type === t)?.value || "00";
+    const hh = get("hour") === "24" ? "00" : get("hour");
+    return `${get("year")}-${get("month")}-${get("day")}T${hh}:${get("minute")}`;
+  } catch {
+    return "";
+  }
 }
 
 export default function EditOperationModal({

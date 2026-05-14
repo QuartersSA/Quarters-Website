@@ -414,39 +414,33 @@ export function formatRole(role) {
 }
 
 /**
- * Strip trailing "Z" that neon adds to "timestamp without time zone" columns.
- * Without this fix, dates shift by the user's UTC offset every time they
- * are displayed or round-tripped through an edit form.
- */
-function stripTZ(v) {
-  if (!v) return v;
-  return String(v).replace(/Z$/i, "");
-}
-
-/**
- * Format date for export
+ * Format date for export — pinned to Asia/Riyadh so Excel / PDF rows
+ * read the same wall-clock the user sees in the UI. Storage convention
+ * is "real moment" (UTC); display must convert to Riyadh.
  */
 export function formatDate(dateString) {
   if (!dateString) return "-";
-  return new Date(stripTZ(dateString)).toLocaleDateString(LOCALE, {
+  return new Date(dateString).toLocaleDateString(LOCALE, {
     year: "numeric",
     month: "short",
     day: "numeric",
+    timeZone: "Asia/Riyadh",
   });
 }
 
 /**
- * Format date and time for export
+ * Format date and time for export.
  */
 export function formatDateTime(dateString) {
   if (!dateString) return "-";
   // IMPORTANT: use toLocaleString (not toLocaleDateString) so time is always rendered
   // across browsers (especially iOS/Safari) when hour/minute options are provided.
-  return new Date(stripTZ(dateString)).toLocaleString(LOCALE, {
+  return new Date(dateString).toLocaleString(LOCALE, {
     year: "numeric",
     month: "short",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Riyadh",
   });
 }

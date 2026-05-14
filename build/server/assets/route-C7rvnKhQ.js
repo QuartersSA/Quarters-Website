@@ -188,10 +188,16 @@ async function POST(request) {
 
       // Generate a single batch id for all items in this receipt
       const batchId = `RB-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+
+      // Storage = real moment. `receivedAt` is a Riyadh wall-clock
+      // string from the picker; pin the cast to Asia/Riyadh so the
+      // recorded moment matches the user's intent regardless of the
+      // PG session TZ. `created_at` records the actual insertion
+      // moment.
       const receipts = [];
       for (const it of cleanedItems) {
-        const [row] = await sql(`INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, receipt_batch_id)
-           VALUES ($1, $2, $3, $4::timestamp, $5, $6, $7, $8)
+        const [row] = await sql(`INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, receipt_batch_id, created_at)
+           VALUES ($1, $2, $3, $4::timestamp AT TIME ZONE 'Asia/Riyadh', $5, $6, $7, $8, NOW())
            RETURNING id, branch_id, item_id, quantity, received_at, note, created_at, created_by_employee_id, created_by_employee_name, receipt_batch_id`, [branchIdNum, it.itemId, it.quantity, receivedAt, note || null, actingEmployeeId, actingEmployeeName, batchId]);
         receipts.push(row);
       }
@@ -260,9 +266,14 @@ async function POST(request) {
     }
     const actingEmployeeId = auth.user?.id || null;
     const actingEmployeeName = auth.user?.name || null;
+
+    // Storage = real moment (single-item legacy path). `received_at`
+    // is a Riyadh wall-clock string from the picker, pinned to
+    // Asia/Riyadh on the cast so the moment is correct independent of
+    // the PG session TZ.
     const [row] = await sql(`
-        INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name)
-        VALUES ($1, $2, $3, $4::timestamp, $5, $6, $7)
+        INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, created_at)
+        VALUES ($1, $2, $3, $4::timestamp AT TIME ZONE 'Asia/Riyadh', $5, $6, $7, NOW())
         RETURNING id, branch_id, item_id, quantity, received_at, note, created_at, created_by_employee_id, created_by_employee_name
       `, [branchIdNum, itemIdNum, qtyNum, receivedAt, note || null, actingEmployeeId, actingEmployeeName]);
     return Response.json({
@@ -389,11 +400,12 @@ async function PUT(request) {
       // Delete old items
       await sql(`DELETE FROM purchase_receipts WHERE receipt_batch_id = $1`, [batchId]);
 
-      // Re-insert with updated data
+      // Re-insert with updated data — storage = real moment, pin the
+      // picker-supplied `received_at` to Asia/Riyadh on the cast.
       const receipts = [];
       for (const it of cleanedItems) {
-        const [row] = await sql(`INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, receipt_batch_id)
-           VALUES ($1, $2, $3, $4::timestamp, $5, $6, $7, $8)
+        const [row] = await sql(`INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, receipt_batch_id, created_at)
+           VALUES ($1, $2, $3, $4::timestamp AT TIME ZONE 'Asia/Riyadh', $5, $6, $7, $8, NOW())
            RETURNING id, branch_id, item_id, quantity, received_at, note, created_at, created_by_employee_id, created_by_employee_name, receipt_batch_id`, [branchIdNum, it.itemId, it.quantity, receivedAt, note || null, actingEmployeeId, actingEmployeeName, batchId]);
         receipts.push(row);
       }
@@ -428,7 +440,9 @@ async function PUT(request) {
       // For single receipt, just update the first item
       const firstItem = cleanedItems[0];
       const [row] = await sql(`UPDATE purchase_receipts
-         SET branch_id = $1, item_id = $2, quantity = $3, received_at = $4::timestamp, note = $5,
+         SET branch_id = $1, item_id = $2, quantity = $3,
+             received_at = $4::timestamp AT TIME ZONE 'Asia/Riyadh',
+             note = $5,
              created_by_employee_id = $6, created_by_employee_name = $7
          WHERE id = $8
          RETURNING *`, [branchIdNum, firstItem.itemId, firstItem.quantity, receivedAt, note || null, actingEmployeeId, actingEmployeeName, receiptId]);

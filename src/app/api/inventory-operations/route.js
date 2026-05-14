@@ -622,9 +622,20 @@ export async function POST(request) {
 
     const inventoryNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
+    // Storage = real moment (NOW()).
+    // For the user-supplied `opDateValue` we get a Riyadh wall-clock
+    // string ("YYYY-MM-DD HH:MM:SS") from the picker. Cast it to a
+    // timestamp and pin it to Asia/Riyadh so PG records the correct
+    // moment, not whatever the session TZ happens to be. Display
+    // (`formatDateTime`) reads the stored moment back in
+    // `Asia/Riyadh` so the cell shows the user's wall-clock.
     const [operation] = await sql(
-      `INSERT INTO inventory_operations (inventory_number, branch_id, employee_id, inventory_type, status, operation_date)
-       VALUES ($1, $2, $3, $4, 'Completed', COALESCE($5::timestamp, CURRENT_TIMESTAMP))
+      `INSERT INTO inventory_operations (inventory_number, branch_id, employee_id, inventory_type, status, operation_date, created_at)
+       VALUES (
+         $1, $2, $3, $4, 'Completed',
+         COALESCE($5::timestamp AT TIME ZONE 'Asia/Riyadh', NOW()),
+         NOW()
+       )
        RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, operation_date`,
       [
         inventoryNumber,
@@ -936,7 +947,13 @@ export async function PUT(request) {
       }
 
       if (dateVal) {
-        setClauses.push(`operation_date = $${idx}::timestamp`);
+        // Pin the cast to Asia/Riyadh — the value here is a Riyadh
+        // wall-clock string from the edit modal. Without the explicit
+        // TZ the cast falls back to the session TZ and the saved
+        // moment ends up offset by the difference.
+        setClauses.push(
+          `operation_date = $${idx}::timestamp AT TIME ZONE 'Asia/Riyadh'`,
+        );
         values.push(validatedOpDate || dateVal);
         idx++;
       }
