@@ -28,12 +28,34 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassPopover from "@/components/Workspace/GlassPopover";
 
-// The DB stores "timestamp without time zone" but neon appends "Z" on
-// serialisation.  Stripping Z prevents the browser from applying a
-// UTC→local shift that would show the wrong calendar day / time.
-function stripTZ(v) {
-  if (!v) return v;
-  return String(v).replace(/Z$/i, "");
+// Storage convention (post-fix): DB stores the real moment as UTC,
+// neon returns ISO with "Z". We want to render that moment in Riyadh
+// wall-clock regardless of runtime TZ — pin `timeZone: "Asia/Riyadh"`
+// on the Intl formatter instead of stripping the "Z" (which used to
+// produce the UTC literal and read 3h behind real Riyadh time).
+const LATIN_LOCALE = "ar-SA-u-ca-gregory-nu-latn";
+
+function renderDateRiyadh(value) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString(LATIN_LOCALE, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "Asia/Riyadh",
+  });
+}
+
+function renderTimeRiyadh(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleTimeString(LATIN_LOCALE, {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh",
+  });
 }
 
 function getTypePill(type) {
@@ -504,21 +526,10 @@ export function OperationsTable({
                     <td className="px-6 py-4">
                       <div className="text-sm">
                         <div className="text-white">
-                          {new Date(
-                            stripTZ(operationDateValue),
-                          ).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
+                          {renderDateRiyadh(operationDateValue)}
                         </div>
                         <div className="text-white/45 text-xs">
-                          {new Date(
-                            stripTZ(operationDateValue),
-                          ).toLocaleTimeString("ar-SA-u-ca-gregory-nu-latn", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {renderTimeRiyadh(operationDateValue)}
                         </div>
                       </div>
                     </td>
@@ -526,21 +537,10 @@ export function OperationsTable({
                     <td className="px-6 py-4">
                       <div className="text-sm">
                         <div className="text-white/60">
-                          {new Date(
-                            stripTZ(operation.created_at),
-                          ).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
+                          {renderDateRiyadh(operation.created_at)}
                         </div>
                         <div className="text-white/35 text-xs">
-                          {new Date(
-                            stripTZ(operation.created_at),
-                          ).toLocaleTimeString("ar-SA-u-ca-gregory-nu-latn", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                          {renderTimeRiyadh(operation.created_at)}
                         </div>
                       </div>
                     </td>

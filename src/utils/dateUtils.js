@@ -68,18 +68,30 @@ export function formatRiyadhDateForInput(d) {
 }
 
 /**
- * Format `YYYY-MM-DD` (date only, Gregorian, Arabic).
- * Example: "11 مايو 2026"
+ * Display format helpers (date / date-time / time only).
+ *
+ * Storage convention (post-fix): the DB stores the **real moment** in
+ * UTC. Neon serializes it with a trailing "Z" — that "Z" is correct
+ * here, not a quirk to be stripped. To render in Riyadh wall-clock we
+ * just parse the ISO normally and pin `timeZone: "Asia/Riyadh"` on the
+ * Intl formatter. This produces the local Riyadh time the user expects
+ * regardless of the runtime (SSR on Railway UTC, client in any browser
+ * TZ, etc.).
+ *
+ * The earlier `stripTZ` + LOCAL approach treated the stored moment as
+ * if it were already a wall-clock string, which silently showed the
+ * UTC wall-clock literal in the UI — 3 hours behind real Riyadh time.
  */
 export function formatDate(value, options = {}) {
   if (!value) return "—";
   try {
-    const d = new Date(stripTZ(value));
+    const d = new Date(value);
     if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
     return d.toLocaleDateString(LOCALE, {
       year: "numeric",
       month: "short",
       day: "numeric",
+      timeZone: "Asia/Riyadh",
       ...options,
     });
   } catch {
@@ -93,7 +105,7 @@ export function formatDate(value, options = {}) {
 export function formatDateTime(value) {
   if (!value) return "—";
   try {
-    const d = new Date(stripTZ(value));
+    const d = new Date(value);
     if (Number.isNaN(d.getTime())) return String(value);
     return d.toLocaleString(LOCALE, {
       year: "numeric",
@@ -101,6 +113,7 @@ export function formatDateTime(value) {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
     return String(value);
@@ -113,11 +126,12 @@ export function formatDateTime(value) {
 export function formatTime(value) {
   if (!value) return "—";
   try {
-    const d = new Date(stripTZ(value));
+    const d = new Date(value);
     if (Number.isNaN(d.getTime())) return "—";
     return d.toLocaleTimeString(LOCALE, {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
     return "—";
