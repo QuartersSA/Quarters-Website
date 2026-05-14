@@ -84,14 +84,25 @@ function getTypePill(type) {
   };
 }
 
+// Use explicit prepositions (إلى / من) so the row makes one reading.
+// The bare labels "إرسال: X" / "استلام: X" parsed naturally as either
+// "sending to X" or "X is the sender" depending on the reader, and the
+// admin reported the rows looked reversed for that reason.
+//
+// Layout convention in the cell:
+//   <branch_name>          ← the branch this row belongs to (own POV)
+//   <Icon> <label> <other> ← the action this branch performed vs the
+//                            other branch
+// So for the OUT leg the own branch sent stock → "أرسل إلى <other>".
+// For the IN leg the own branch received stock → "استلم من <other>".
 function getTransferDirectionMeta(direction) {
   if (direction === "out") {
-    return { label: "إرسال", Icon: ArrowUpRight };
+    return { label: "أرسل إلى", Icon: ArrowUpRight };
   }
   if (direction === "in") {
-    return { label: "استلام", Icon: ArrowDownLeft };
+    return { label: "استلم من", Icon: ArrowDownLeft };
   }
-  return { label: "تحويل", Icon: ArrowLeftRight };
+  return { label: "تحويل مع", Icon: ArrowLeftRight };
 }
 
 export function OperationsTable({
@@ -440,7 +451,7 @@ export function OperationsTable({
                             <div className="text-white/45 text-xs flex items-center gap-1 mt-1">
                               <transferMeta.Icon className="w-3 h-3" />
                               <span>
-                                {transferMeta.label}:{" "}
+                                {transferMeta.label}{" "}
                                 {operation.transfer_branch_name}
                               </span>
                             </div>

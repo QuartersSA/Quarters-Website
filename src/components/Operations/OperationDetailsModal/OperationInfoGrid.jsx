@@ -22,14 +22,18 @@ function getInventoryTypeLabel(type) {
   return type || "-";
 }
 
+// Same wording fix as OperationsTable: bare "إرسال: X" / "استلام: X"
+// reads ambiguously in Arabic — the admin saw it as the opposite of
+// the actual direction. Spell the preposition out so each row has one
+// unambiguous reading from the own-branch POV.
 function getTransferDirMeta(direction) {
   if (direction === "out") {
-    return { label: "إرسال", Icon: ArrowUpRight };
+    return { label: "أرسل إلى", Icon: ArrowUpRight };
   }
   if (direction === "in") {
-    return { label: "استلام", Icon: ArrowDownLeft };
+    return { label: "استلم من", Icon: ArrowDownLeft };
   }
-  return { label: "تحويل", Icon: ArrowLeftRight };
+  return { label: "تحويل مع", Icon: ArrowLeftRight };
 }
 
 export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
@@ -62,7 +66,7 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
           <p className="text-gray-400 text-sm mt-2 flex items-center gap-2">
             <transferMeta.Icon className="w-4 h-4" />
             <span>
-              {transferMeta.label}: {selectedOperation.transfer_branch_name}
+              {transferMeta.label} {selectedOperation.transfer_branch_name}
             </span>
           </p>
         ) : null}
