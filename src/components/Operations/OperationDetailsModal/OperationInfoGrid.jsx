@@ -22,26 +22,27 @@ function getInventoryTypeLabel(type) {
   return type || "-";
 }
 
-// Same wording fix as OperationsTable: bare "إرسال: X" / "استلام: X"
-// reads ambiguously in Arabic — the admin saw it as the opposite of
-// the actual direction. Spell the preposition out so each row has one
-// unambiguous reading from the own-branch POV.
-function getTransferDirMeta(direction) {
-  if (direction === "out") {
-    return { label: "أرسل إلى", Icon: ArrowUpRight };
+// Resolve sender + receiver names explicitly from a single leg so the
+// modal reads the same way regardless of whether the user opened the
+// "out" or the "in" half of the transfer.
+function getTransferParties(operation) {
+  const own = operation?.branch_name || "—";
+  const other = operation?.transfer_branch_name || "—";
+  if (operation?.transfer_direction === "out") {
+    return { receiver: other, sender: own, Icon: ArrowUpRight };
   }
-  if (direction === "in") {
-    return { label: "استلم من", Icon: ArrowDownLeft };
+  if (operation?.transfer_direction === "in") {
+    return { receiver: own, sender: other, Icon: ArrowDownLeft };
   }
-  return { label: "تحويل مع", Icon: ArrowLeftRight };
+  return { receiver: other, sender: own, Icon: ArrowLeftRight };
 }
 
 export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
   const isTransfer = selectedOperation?.inventory_type === "Transfer";
   const isReceipt = selectedOperation?.inventory_type === "Receipt";
-  const transferMeta = getTransferDirMeta(
-    selectedOperation?.transfer_direction,
-  );
+  const transferParties = isTransfer
+    ? getTransferParties(selectedOperation)
+    : null;
 
   const operationDateValue =
     selectedOperation?.operation_date || selectedOperation?.created_at;
@@ -51,25 +52,35 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
       <div className="bg-white/5 rounded-lg p-4">
         <div className="flex items-center gap-2 text-gray-400 mb-2">
           <Building2 className="w-4 h-4" />
-          <span className="text-sm">الفرع</span>
+          <span className="text-sm">
+            {isTransfer ? "أطراف التحويل" : "الفرع"}
+          </span>
         </div>
-        <p className="text-white font-semibold">
-          {selectedOperation.branch_name || "غير محدد"}
-        </p>
-        {selectedOperation.branch_location && !isTransfer ? (
-          <p className="text-gray-400 text-sm mt-2">
-            {selectedOperation.branch_location}
-          </p>
-        ) : null}
 
-        {isTransfer && selectedOperation.transfer_branch_name ? (
-          <p className="text-gray-400 text-sm mt-2 flex items-center gap-2">
-            <transferMeta.Icon className="w-4 h-4" />
-            <span>
-              {transferMeta.label} {selectedOperation.transfer_branch_name}
-            </span>
-          </p>
-        ) : null}
+        {isTransfer && transferParties ? (
+          // Show both parties so the modal makes sense regardless of
+          // whether the user clicked the OUT or the IN row.
+          <>
+            <p className="text-white font-semibold flex items-center gap-2">
+              <transferParties.Icon className="w-4 h-4 text-emerald-200" />
+              <span>المستلم: {transferParties.receiver}</span>
+            </p>
+            <p className="text-gray-300 text-sm mt-2">
+              المرسل: {transferParties.sender}
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-white font-semibold">
+              {selectedOperation.branch_name || "غير محدد"}
+            </p>
+            {selectedOperation.branch_location ? (
+              <p className="text-gray-400 text-sm mt-2">
+                {selectedOperation.branch_location}
+              </p>
+            ) : null}
+          </>
+        )}
       </div>
 
       <div className="bg-white/5 rounded-lg p-4">
