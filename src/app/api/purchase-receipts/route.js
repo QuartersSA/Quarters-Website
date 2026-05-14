@@ -233,10 +233,11 @@ export async function POST(request) {
     const actingEmployeeId = auth.user?.id || null;
     const actingEmployeeName = auth.user?.name || null;
 
+    // Force `created_at` Riyadh wall-clock (single-item legacy path).
     const [row] = await sql(
       `
-        INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name)
-        VALUES ($1, $2, $3, $4::timestamp, $5, $6, $7)
+        INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, created_at)
+        VALUES ($1, $2, $3, $4::timestamp, $5, $6, $7, (NOW() AT TIME ZONE 'Asia/Riyadh'))
         RETURNING id, branch_id, item_id, quantity, received_at, note, created_at, created_by_employee_id, created_by_employee_name
       `,
       [
@@ -351,12 +352,13 @@ export async function PUT(request) {
         batchId,
       ]);
 
-      // Re-insert with updated data
+      // Re-insert with updated data — pin `created_at` to Riyadh
+      // wall-clock to match the new convention.
       const receipts = [];
       for (const it of cleanedItems) {
         const [row] = await sql(
-          `INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, receipt_batch_id)
-           VALUES ($1, $2, $3, $4::timestamp, $5, $6, $7, $8)
+          `INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, receipt_batch_id, created_at)
+           VALUES ($1, $2, $3, $4::timestamp, $5, $6, $7, $8, (NOW() AT TIME ZONE 'Asia/Riyadh'))
            RETURNING id, branch_id, item_id, quantity, received_at, note, created_at, created_by_employee_id, created_by_employee_name, receipt_batch_id`,
           [
             branchIdNum,

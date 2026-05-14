@@ -622,9 +622,21 @@ export async function POST(request) {
 
     const inventoryNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
+    // Force Riyadh wall-clock for both `created_at` and the
+    // fallback `operation_date`. The previous default
+    // `CURRENT_TIMESTAMP` resolves against the Neon session TZ (UTC)
+    // and stored a wall-clock 3 hours behind real Riyadh time, which
+    // made every "تاريخ الإدخال" cell read +3h off (the user saw
+    // 09:51 ص when the real time was 12:51 م). User-supplied
+    // `operation_date` is already a Riyadh wall-clock string from
+    // the picker, so it's preserved verbatim.
     const [operation] = await sql(
-      `INSERT INTO inventory_operations (inventory_number, branch_id, employee_id, inventory_type, status, operation_date)
-       VALUES ($1, $2, $3, $4, 'Completed', COALESCE($5::timestamp, CURRENT_TIMESTAMP))
+      `INSERT INTO inventory_operations (inventory_number, branch_id, employee_id, inventory_type, status, operation_date, created_at)
+       VALUES (
+         $1, $2, $3, $4, 'Completed',
+         COALESCE($5::timestamp, (NOW() AT TIME ZONE 'Asia/Riyadh')),
+         (NOW() AT TIME ZONE 'Asia/Riyadh')
+       )
        RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, operation_date`,
       [
         inventoryNumber,

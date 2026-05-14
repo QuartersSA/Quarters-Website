@@ -233,10 +233,18 @@ export async function POST(request) {
       ? openedAt
       : `${openedAt}T00:00:00`;
 
+    // Force Riyadh wall-clock for `created_at` so the operations
+    // table shows the real local time of insertion. The DB default
+    // CURRENT_TIMESTAMP resolves against Neon's UTC session and was
+    // shifting "تاريخ الإدخال" back 3h.
     const [operation] = await sql(
       `INSERT INTO inventory_operations
-         (inventory_number, branch_id, employee_id, inventory_type, status, note, operation_date)
-       VALUES ($1, $2, $3, 'Opening', 'Completed', $4, $5::timestamp)
+         (inventory_number, branch_id, employee_id, inventory_type, status, note, operation_date, created_at)
+       VALUES (
+         $1, $2, $3, 'Opening', 'Completed', $4,
+         $5::timestamp,
+         (NOW() AT TIME ZONE 'Asia/Riyadh')
+       )
        RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, operation_date`,
       [
         inventoryNumber,

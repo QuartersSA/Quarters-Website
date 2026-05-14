@@ -453,25 +453,35 @@ async function POST(request) {
     // possible (no FOR UPDATE on the read above) but the data this
     // request *does* write is now consistent within itself.
     const [opPair] = await sql(`
+      -- Force Riyadh wall-clock for both created_at and the fallback
+      -- operation_date. The DB default CURRENT_TIMESTAMP resolves
+      -- against Neon's UTC session TZ and stores wall-clock 3h behind
+      -- real Riyadh time, which made every "تاريخ الإدخال" cell read
+      -- the wrong hour. User-supplied operation_date is preserved
+      -- as-is (the picker already sends Riyadh wall-clock).
       WITH op_out AS (
         INSERT INTO inventory_operations (
           inventory_number, branch_id, employee_id, inventory_type, status,
-          transfer_branch_id, transfer_direction, note, operation_date
+          transfer_branch_id, transfer_direction, note, operation_date, created_at
         )
         VALUES (
           $1, $2, $3, 'Transfer', 'Completed',
-          $4, 'out', $5, COALESCE($6::timestamp, CURRENT_TIMESTAMP)
+          $4, 'out', $5,
+          COALESCE($6::timestamp, (NOW() AT TIME ZONE 'Asia/Riyadh')),
+          (NOW() AT TIME ZONE 'Asia/Riyadh')
         )
         RETURNING id, branch_id, created_at, operation_date
       ),
       op_in AS (
         INSERT INTO inventory_operations (
           inventory_number, branch_id, employee_id, inventory_type, status,
-          transfer_branch_id, transfer_direction, note, operation_date
+          transfer_branch_id, transfer_direction, note, operation_date, created_at
         )
         VALUES (
           $1, $4, $3, 'Transfer', 'Completed',
-          $2, 'in', $5, COALESCE($6::timestamp, CURRENT_TIMESTAMP)
+          $2, 'in', $5,
+          COALESCE($6::timestamp, (NOW() AT TIME ZONE 'Asia/Riyadh')),
+          (NOW() AT TIME ZONE 'Asia/Riyadh')
         )
         RETURNING id, branch_id, created_at, operation_date
       ),
