@@ -84,14 +84,26 @@ function getTypePill(type) {
   };
 }
 
-function getTransferDirectionMeta(direction) {
-  if (direction === "out") {
-    return { label: "إرسال", Icon: ArrowUpRight };
+// Resolve the receiver / sender pair from a single leg.
+//
+// Each transfer is stored as two mirrored rows ("out" leg + "in" leg).
+// The previous label "أرسل إلى <X>" / "استلم من <X>" still required the
+// reader to mentally combine row + label to know who's the sender and
+// who's the receiver. The admin asked for both names called out
+// explicitly so the row reads the same way regardless of which leg it
+// is:
+//   المستلم: <receiver>
+//   المرسل: <sender>
+function getTransferParties(operation) {
+  const own = operation?.branch_name || "—";
+  const other = operation?.transfer_branch_name || "—";
+  if (operation?.transfer_direction === "out") {
+    return { receiver: other, sender: own, Icon: ArrowUpRight };
   }
-  if (direction === "in") {
-    return { label: "استلام", Icon: ArrowDownLeft };
+  if (operation?.transfer_direction === "in") {
+    return { receiver: own, sender: other, Icon: ArrowDownLeft };
   }
-  return { label: "تحويل", Icon: ArrowLeftRight };
+  return { receiver: other, sender: own, Icon: ArrowLeftRight };
 }
 
 export function OperationsTable({
@@ -372,9 +384,9 @@ export function OperationsTable({
               filteredOperations.map((operation) => {
                 const typeMeta = getTypePill(operation.inventory_type);
                 const isTransfer = operation.inventory_type === "Transfer";
-                const transferMeta = getTransferDirectionMeta(
-                  operation.transfer_direction,
-                );
+                const transferParties = isTransfer
+                  ? getTransferParties(operation)
+                  : null;
 
                 const operationDateValue =
                   operation.operation_date || operation.created_at;
@@ -432,23 +444,33 @@ export function OperationsTable({
                       <div className="flex items-center gap-2">
                         <Building2 className="w-4 h-4 text-white/35" />
                         <div className="min-w-0">
-                          <div className="text-white/80 font-medium truncate">
-                            {operation.branch_name || "غير محدد"}
-                          </div>
-
-                          {isTransfer && operation.transfer_branch_name ? (
-                            <div className="text-white/45 text-xs flex items-center gap-1 mt-1">
-                              <transferMeta.Icon className="w-3 h-3" />
-                              <span>
-                                {transferMeta.label}:{" "}
-                                {operation.transfer_branch_name}
-                              </span>
-                            </div>
-                          ) : operation.branch_location ? (
-                            <div className="text-white/40 text-xs">
-                              {operation.branch_location}
-                            </div>
-                          ) : null}
+                          {isTransfer && transferParties ? (
+                            // For transfer rows, name both parties
+                            // explicitly so the cell reads identically
+                            // for both the "out" and the "in" leg.
+                            <>
+                              <div className="text-white/80 font-medium truncate flex items-center gap-1">
+                                <transferParties.Icon className="w-3.5 h-3.5 text-emerald-200" />
+                                <span>
+                                  المستلم: {transferParties.receiver}
+                                </span>
+                              </div>
+                              <div className="text-white/55 text-xs mt-1 truncate">
+                                المرسل: {transferParties.sender}
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="text-white/80 font-medium truncate">
+                                {operation.branch_name || "غير محدد"}
+                              </div>
+                              {operation.branch_location ? (
+                                <div className="text-white/40 text-xs">
+                                  {operation.branch_location}
+                                </div>
+                              ) : null}
+                            </>
+                          )}
                         </div>
                       </div>
                     </td>
