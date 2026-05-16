@@ -1,0 +1,1 @@
+import{c as n}from"./createLucideIcon-CIIuNeoi.js";if(typeof window<"u"){const s={};globalThis.process??={};const r=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},s,r),{get(e,o){return o in e?e[o]:void 0},has(){return!0}})}const c=n("LoaderCircle",[["path",{d:"M21 12a9 9 0 1 1-6.219-8.56",key:"13zald"}]]);export{c as L};
