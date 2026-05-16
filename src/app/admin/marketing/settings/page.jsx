@@ -60,8 +60,11 @@ export default function MarketingSettingsPage() {
     if (!form) return;
     saveMut.mutate({
       cafe_name: form.cafe_name,
+      cafe_name_ar: form.cafe_name_ar,
+      cafe_tagline: form.cafe_tagline,
       logo_letter: form.logo_letter,
       accent_color: form.accent_color,
+      cream_color: form.cream_color,
       welcome_headline: form.welcome_headline,
       welcome_subtext: form.welcome_subtext,
     });
@@ -109,7 +112,7 @@ export default function MarketingSettingsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-white/55 mb-2">
-                  اسم الكوفي
+                  اسم الكوفي (إنجليزي)
                 </label>
                 <input
                   type="text"
@@ -123,7 +126,35 @@ export default function MarketingSettingsPage() {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/55 mb-2">
-                  حرف الشعار
+                  اسم الكوفي (عربي)
+                </label>
+                <input
+                  type="text"
+                  value={form.cafe_name_ar || ""}
+                  onChange={(e) =>
+                    setForm({ ...form, cafe_name_ar: e.target.value })
+                  }
+                  className={`${ws.input} px-4 py-3`}
+                  placeholder="كوارتـــرز"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-white/55 mb-2">
+                  الـ Tagline (مثل BAR)
+                </label>
+                <input
+                  type="text"
+                  value={form.cafe_tagline || ""}
+                  onChange={(e) =>
+                    setForm({ ...form, cafe_tagline: e.target.value })
+                  }
+                  className={`${ws.input} px-4 py-3`}
+                  placeholder="BAR"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-white/55 mb-2">
+                  حرف الشعار (للأماكن المختصرة)
                 </label>
                 <input
                   type="text"
@@ -136,17 +167,16 @@ export default function MarketingSettingsPage() {
                   }
                   className={`${ws.input} px-4 py-3 text-center text-2xl font-bold`}
                   maxLength={4}
-                  required
                 />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/55 mb-2 flex items-center gap-2">
-                  <Palette className="w-4 h-4" /> اللون الأساسي
+                  <Palette className="w-4 h-4" /> اللون الأساسي (Olive)
                 </label>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
-                    value={form.accent_color || "#10b981"}
+                    value={form.accent_color || "#7a8b5f"}
                     onChange={(e) =>
                       setForm({ ...form, accent_color: e.target.value })
                     }
@@ -159,22 +189,79 @@ export default function MarketingSettingsPage() {
                       setForm({ ...form, accent_color: e.target.value })
                     }
                     className={`${ws.input} px-4 py-3 flex-1`}
-                    placeholder="#10b981"
+                    placeholder="#7a8b5f"
                   />
                 </div>
               </div>
-              <div className="flex flex-col">
+              <div>
+                <label className="block text-xs font-semibold text-white/55 mb-2 flex items-center gap-2">
+                  <Palette className="w-4 h-4" /> لون النص (Cream)
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={form.cream_color || "#e8e9d6"}
+                    onChange={(e) =>
+                      setForm({ ...form, cream_color: e.target.value })
+                    }
+                    className="h-12 w-16 rounded-2xl border border-white/10 bg-transparent cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={form.cream_color || ""}
+                    onChange={(e) =>
+                      setForm({ ...form, cream_color: e.target.value })
+                    }
+                    className={`${ws.input} px-4 py-3 flex-1`}
+                    placeholder="#e8e9d6"
+                  />
+                </div>
+              </div>
+              <div className="sm:col-span-2">
                 <label className="block text-xs font-semibold text-white/55 mb-2">
-                  معاينة
+                  معاينة الـ Wordmark
                 </label>
                 <div
-                  className="flex-1 rounded-2xl border border-white/10 flex items-center justify-center text-white text-3xl font-extrabold"
+                  className="rounded-2xl flex items-center justify-center p-8"
                   style={{
-                    background: `linear-gradient(135deg, ${form.accent_color || "#10b981"}, #0b0b1a)`,
-                    minHeight: "60px",
+                    background: form.accent_color || "#7a8b5f",
+                    color: form.cream_color || "#e8e9d6",
+                    minHeight: "120px",
                   }}
                 >
-                  {form.logo_letter || "Q"}
+                  <div style={{ position: "relative", display: "inline-block", textAlign: "center" }}>
+                    <span style={{
+                      fontFamily: "'Cormorant Garamond', 'Playfair Display', serif",
+                      fontSize: 44,
+                      fontWeight: 700,
+                      letterSpacing: "0.02em",
+                    }}>
+                      {form.cafe_name || "QUARTERS"}
+                    </span>
+                    {form.cafe_tagline ? (
+                      <span style={{
+                        position: "absolute",
+                        top: -2,
+                        right: -24,
+                        fontFamily: "'Cormorant Garamond', serif",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        letterSpacing: "0.1em",
+                      }}>
+                        {form.cafe_tagline}
+                      </span>
+                    ) : null}
+                    {form.cafe_name_ar ? (
+                      <div style={{
+                        fontFamily: "'El Messiri', 'Cairo', sans-serif",
+                        fontSize: 22,
+                        fontWeight: 600,
+                        marginTop: 4,
+                      }}>
+                        {form.cafe_name_ar}
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
               <div className="sm:col-span-2">

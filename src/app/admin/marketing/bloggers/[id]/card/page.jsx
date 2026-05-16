@@ -51,13 +51,32 @@ export default function BloggerCardPage() {
 
   const b = bloggerQuery.data;
   const settings = settingsQuery.data?.settings;
-  const accent = settings?.accent_color || "#10b981";
-  const logoLetter = settings?.logo_letter || "Q";
-  const cafeName = settings?.cafe_name || "Quarters Coffee Bar";
+  const accent = settings?.accent_color || "#7a8b5f";
+  const cream = settings?.cream_color || "#e8e9d6";
+  const cafeName = settings?.cafe_name || "QUARTERS";
+  const cafeNameAr = settings?.cafe_name_ar || "كوارتـــرز";
+  const cafeTagline = settings?.cafe_tagline || "BAR";
 
   return (
     <div className="min-h-[100svh]" dir="rtl">
-      {/* Hide sidebar + UI chrome when printing. */}
+      {/* Brand fonts + print-only rules. Playfair Display = English
+          serif wordmark; El Messiri = refined Arabic naskh that pairs
+          with the brand's stretched lettering. Loaded once for the
+          whole card view. */}
+      <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+      />
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="anonymous"
+      />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=El+Messiri:wght@500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap"
+      />
+
       <style>{`
         @media print {
           .no-print { display: none !important; }
@@ -109,295 +128,262 @@ export default function BloggerCardPage() {
           </div>
         ) : (
           <div className="flex justify-center">
-            {/* Premium invitation card. Layered design — gradient base,
-                ornate frame, foiled accent band, branded crest, ribbon
-                tag. Prints cleanly on A6 / 5x7. */}
+            {/* Brand-led invitation card. Solid olive ground, cream
+                serif wordmark, minimal ornaments. Mirrors the official
+                Quarters Bar identity rather than competing with it.
+                Prints cleanly on A6 / 5x7. */}
             <div
               className="print-card"
               style={{
                 width: "100%",
                 maxWidth: 460,
                 position: "relative",
-                borderRadius: 28,
-                padding: 4,
-                background: `linear-gradient(135deg, ${accent} 0%, ${accent}66 35%, #d4af37 70%, ${accent}88 100%)`,
-                boxShadow: `0 30px 80px ${accent}55, 0 0 0 1px rgba(255,255,255,0.06)`,
-                fontFamily: '"Segoe UI", "Tahoma", "Arial", sans-serif',
+                borderRadius: 24,
+                background: accent,
+                color: cream,
+                padding: "52px 36px 40px",
+                textAlign: "center",
+                boxShadow: `0 30px 80px rgba(0,0,0,0.45), 0 0 0 1px ${cream}22`,
+                fontFamily:
+                  '"Cormorant Garamond", "Playfair Display", "Times New Roman", serif',
+                overflow: "hidden",
               }}
             >
-              {/* Inner cream card */}
+              {/* Soft inner border — barely visible cream hairline */}
               <div
                 style={{
-                  position: "relative",
-                  borderRadius: 24,
-                  background:
-                    "radial-gradient(ellipse at top, #fefcf7 0%, #f9f5ea 100%)",
-                  padding: "44px 32px 36px",
-                  textAlign: "center",
-                  overflow: "hidden",
-                  color: "#1c1917",
+                  position: "absolute",
+                  inset: 14,
+                  borderRadius: 18,
+                  border: `1px solid ${cream}1f`,
+                  pointerEvents: "none",
                 }}
-              >
-                {/* Decorative corner ornaments */}
-                <CornerOrnament position="top-left" color={accent} />
-                <CornerOrnament position="top-right" color={accent} />
-                <CornerOrnament position="bottom-left" color={accent} />
-                <CornerOrnament position="bottom-right" color={accent} />
+              />
 
-                {/* Top accent band — cafe name with hairline rules */}
+              {/* Subtle texture: top + bottom paper grain via radial */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: `radial-gradient(ellipse at top, ${cream}10 0%, transparent 55%), radial-gradient(ellipse at bottom, ${cream}08 0%, transparent 60%)`,
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* === Wordmark (English + Arabic) === */}
+              <div style={{ position: "relative", marginBottom: 28 }}>
                 <div
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 12,
-                    marginBottom: 26,
+                    position: "relative",
+                    display: "inline-block",
                   }}
                 >
-                  <HairLine color={accent} />
                   <div
                     style={{
-                      fontSize: 11,
+                      fontFamily:
+                        '"Cormorant Garamond", "Playfair Display", serif',
                       fontWeight: 700,
-                      letterSpacing: "0.32em",
-                      color: accent,
-                      textTransform: "uppercase",
-                      whiteSpace: "nowrap",
+                      fontSize: 56,
+                      letterSpacing: "0.02em",
+                      lineHeight: 1,
+                      color: cream,
                     }}
                   >
                     {cafeName}
                   </div>
-                  <HairLine color={accent} />
-                </div>
-
-                {/* Crest / logo monogram */}
-                <div
-                  style={{
-                    position: "relative",
-                    width: 96,
-                    height: 96,
-                    margin: "0 auto 24px",
-                  }}
-                >
-                  {/* Outer ring */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      borderRadius: "50%",
-                      background: `conic-gradient(from 0deg, ${accent}, #d4af37, ${accent})`,
-                      padding: 3,
-                    }}
-                  >
+                  {cafeTagline ? (
                     <div
                       style={{
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: "50%",
-                        background: "#fefcf7",
+                        position: "absolute",
+                        top: -2,
+                        right: -28,
+                        fontFamily:
+                          '"Cormorant Garamond", "Playfair Display", serif',
+                        fontSize: 13,
+                        fontWeight: 600,
+                        letterSpacing: "0.1em",
+                        color: cream,
                       }}
-                    />
-                  </div>
-                  {/* Letter */}
+                    >
+                      {cafeTagline}
+                    </div>
+                  ) : null}
+                </div>
+                {cafeNameAr ? (
                   <div
                     style={{
-                      position: "absolute",
-                      inset: 8,
-                      borderRadius: "50%",
-                      background: `linear-gradient(135deg, ${accent}, #1c1917)`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#fff",
-                      fontSize: 42,
-                      fontWeight: 900,
-                      letterSpacing: "-0.02em",
-                      boxShadow: `inset 0 -8px 16px ${accent}88`,
+                      fontFamily:
+                        '"El Messiri", "Cairo", "Tahoma", sans-serif',
+                      fontSize: 28,
+                      fontWeight: 600,
+                      color: cream,
+                      marginTop: 4,
+                      letterSpacing: "0.04em",
                     }}
                   >
-                    {logoLetter}
-                  </div>
-                </div>
-
-                {/* "INVITATION" label */}
-                <div
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    letterSpacing: "0.4em",
-                    color: "#92400e",
-                    marginBottom: 6,
-                    textTransform: "uppercase",
-                  }}
-                >
-                  دعوة خاصة · invitation
-                </div>
-
-                {/* Decorative diamond divider */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 8,
-                    margin: "8px 0 14px",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 28,
-                      height: 1,
-                      background: `linear-gradient(to right, transparent, ${accent})`,
-                    }}
-                  />
-                  <span
-                    style={{
-                      width: 6,
-                      height: 6,
-                      transform: "rotate(45deg)",
-                      background: accent,
-                    }}
-                  />
-                  <span
-                    style={{
-                      width: 28,
-                      height: 1,
-                      background: `linear-gradient(to left, transparent, ${accent})`,
-                    }}
-                  />
-                </div>
-
-                {/* Blogger name */}
-                <div
-                  style={{
-                    fontSize: 30,
-                    fontWeight: 900,
-                    color: "#1c1917",
-                    marginBottom: b.handle ? 4 : 22,
-                    lineHeight: 1.2,
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  {b.name}
-                </div>
-                {b.handle ? (
-                  <div
-                    style={{
-                      color: "#78716c",
-                      fontSize: 13,
-                      marginBottom: 22,
-                      direction: "ltr",
-                    }}
-                  >
-                    @{b.handle}
+                    {cafeNameAr}
                   </div>
                 ) : null}
+              </div>
 
-                {/* QR — wrapped in elegant double-border frame */}
+              {/* Hairline divider */}
+              <div
+                style={{
+                  width: 64,
+                  height: 1,
+                  background: `${cream}55`,
+                  margin: "0 auto 24px",
+                }}
+              />
+
+              {/* "INVITATION" label */}
+              <div
+                style={{
+                  fontFamily:
+                    '"Cormorant Garamond", "Playfair Display", serif',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.5em",
+                  color: cream,
+                  opacity: 0.8,
+                  textTransform: "uppercase",
+                  marginBottom: 4,
+                }}
+              >
+                Private Invitation
+              </div>
+              <div
+                style={{
+                  fontFamily:
+                    '"El Messiri", "Cairo", "Tahoma", sans-serif',
+                  fontSize: 13,
+                  color: cream,
+                  opacity: 0.7,
+                  marginBottom: 22,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                دعوة خاصة
+              </div>
+
+              {/* === Blogger name === */}
+              <div
+                style={{
+                  fontFamily:
+                    '"El Messiri", "Cairo", "Tahoma", sans-serif',
+                  fontSize: 30,
+                  fontWeight: 700,
+                  color: cream,
+                  marginBottom: b.handle ? 2 : 26,
+                  lineHeight: 1.3,
+                  letterSpacing: "0.01em",
+                }}
+              >
+                {b.name}
+              </div>
+              {b.handle ? (
                 <div
                   style={{
-                    display: "inline-block",
-                    position: "relative",
-                    padding: 4,
-                    background: `linear-gradient(135deg, ${accent}, #d4af37)`,
-                    borderRadius: 22,
-                    marginBottom: 18,
-                  }}
-                >
-                  <div
-                    style={{
-                      padding: 16,
-                      background: "#fff",
-                      borderRadius: 18,
-                      border: "1px solid rgba(0,0,0,0.04)",
-                    }}
-                  >
-                    <QRCodeSVG
-                      value={welcomeURL}
-                      size={210}
-                      level="M"
-                      bgColor="#ffffff"
-                      fgColor="#1c1917"
-                      includeMargin={false}
-                    />
-                  </div>
-                </div>
-
-                {/* Slug ribbon */}
-                <div
-                  style={{
-                    display: "inline-block",
-                    fontFamily: '"Courier New", monospace',
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: "#1c1917",
-                    letterSpacing: "0.16em",
-                    background: "#fff",
-                    padding: "8px 22px",
-                    borderRadius: 999,
-                    direction: "ltr",
-                    border: `1.5px solid ${accent}`,
-                    boxShadow: `0 4px 14px ${accent}33`,
-                    marginBottom: 22,
-                  }}
-                >
-                  {b.slug}
-                </div>
-
-                {/* Instructions */}
-                <div
-                  style={{
+                    color: cream,
+                    opacity: 0.65,
                     fontSize: 13,
-                    color: "#57534e",
-                    lineHeight: 1.8,
-                    marginBottom: 6,
+                    marginBottom: 24,
+                    direction: "ltr",
+                    letterSpacing: "0.04em",
                   }}
                 >
-                  امسح الكود وسلّمه للكاشير لتفعيل بطاقتك.
-                  <br />
-                  بعد التفعيل تظهر لك قائمة الضيافة.
+                  @{b.handle}
                 </div>
+              ) : null}
 
-                {/* Bottom flourish */}
-                <div
-                  style={{
-                    marginTop: 18,
-                    paddingTop: 16,
-                    borderTop: `1px solid ${accent}22`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 8,
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: "50%",
-                      background: accent,
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontSize: 10,
-                      color: "#a8a29e",
-                      letterSpacing: "0.2em",
-                      direction: "ltr",
-                      wordBreak: "break-all",
-                    }}
-                  >
-                    {welcomeURL.replace(/^https?:\/\//, "")}
-                  </span>
-                  <span
-                    style={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: "50%",
-                      background: accent,
-                    }}
-                  />
-                </div>
+              {/* === QR (cream backdrop, dark olive code) === */}
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: 14,
+                  background: cream,
+                  borderRadius: 14,
+                  marginBottom: 22,
+                  boxShadow: `0 8px 24px rgba(0,0,0,0.18)`,
+                }}
+              >
+                <QRCodeSVG
+                  value={welcomeURL}
+                  size={196}
+                  level="M"
+                  bgColor={cream}
+                  fgColor={darkenForQR(accent)}
+                  includeMargin={false}
+                />
+              </div>
+
+              {/* Slug — minimal serif label, no extra container */}
+              <div
+                style={{
+                  fontFamily:
+                    '"Cormorant Garamond", "Playfair Display", serif',
+                  fontSize: 17,
+                  fontWeight: 600,
+                  color: cream,
+                  letterSpacing: "0.32em",
+                  direction: "ltr",
+                  marginBottom: 24,
+                }}
+              >
+                {b.slug}
+              </div>
+
+              {/* Hairline */}
+              <div
+                style={{
+                  width: 48,
+                  height: 1,
+                  background: `${cream}33`,
+                  margin: "0 auto 16px",
+                }}
+              />
+
+              {/* Instructions */}
+              <div
+                style={{
+                  fontFamily:
+                    '"El Messiri", "Cairo", "Tahoma", sans-serif',
+                  fontSize: 13,
+                  color: cream,
+                  opacity: 0.78,
+                  lineHeight: 1.9,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                امسح الكود وسلّمه للكاشير لتفعيل بطاقتك
+              </div>
+              <div
+                style={{
+                  fontFamily:
+                    '"El Messiri", "Cairo", "Tahoma", sans-serif',
+                  fontSize: 13,
+                  color: cream,
+                  opacity: 0.6,
+                  lineHeight: 1.9,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                بعد التفعيل تظهر لك قائمة الضيافة
+              </div>
+
+              {/* Footer URL */}
+              <div
+                style={{
+                  marginTop: 22,
+                  fontSize: 10,
+                  color: cream,
+                  opacity: 0.4,
+                  letterSpacing: "0.18em",
+                  direction: "ltr",
+                  wordBreak: "break-all",
+                }}
+              >
+                {welcomeURL.replace(/^https?:\/\//, "")}
               </div>
             </div>
           </div>
@@ -407,70 +393,25 @@ export default function BloggerCardPage() {
   );
 }
 
-function HairLine({ color }) {
-  return (
-    <span
-      style={{
-        flex: 1,
-        height: 1,
-        maxWidth: 60,
-        background: `linear-gradient(to right, transparent, ${color}66, transparent)`,
-      }}
-    />
-  );
-}
-
-function CornerOrnament({ position, color }) {
-  // Tiny L-shaped corner brackets — engraved-card feel.
-  const styleByPos = {
-    "top-left": { top: 14, left: 14 },
-    "top-right": { top: 14, right: 14 },
-    "bottom-left": { bottom: 14, left: 14 },
-    "bottom-right": { bottom: 14, right: 14 },
-  };
-  // Rotate L based on corner so the open side faces inward.
-  const rotation = {
-    "top-left": 0,
-    "top-right": 90,
-    "bottom-right": 180,
-    "bottom-left": 270,
-  }[position];
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        ...styleByPos[position],
-        width: 24,
-        height: 24,
-        transform: `rotate(${rotation}deg)`,
-        pointerEvents: "none",
-        opacity: 0.85,
-      }}
-      aria-hidden="true"
-    >
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: 14,
-          height: 2,
-          background: color,
-          borderRadius: 2,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: 2,
-          height: 14,
-          background: color,
-          borderRadius: 2,
-        }}
-      />
-    </div>
-  );
+/**
+ * Drop the brand accent ~50% darker for QR foreground so it stays
+ * scannable on the cream backdrop without losing the brand feel.
+ * Cheap luminance shift via HSL conversion — no extra dependencies.
+ */
+function darkenForQR(hex) {
+  try {
+    const m = String(hex).replace("#", "");
+    const r = parseInt(m.length === 3 ? m[0] + m[0] : m.slice(0, 2), 16);
+    const g = parseInt(m.length === 3 ? m[1] + m[1] : m.slice(2, 4), 16);
+    const b = parseInt(m.length === 3 ? m[2] + m[2] : m.slice(4, 6), 16);
+    // 35% of original brightness keeps hue, boosts contrast.
+    const f = 0.35;
+    const toHex = (n) =>
+      Math.max(0, Math.min(255, Math.round(n * f)))
+        .toString(16)
+        .padStart(2, "0");
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  } catch {
+    return "#1c1917";
+  }
 }

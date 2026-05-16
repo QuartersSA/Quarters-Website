@@ -41,6 +41,12 @@ export async function PUT(request) {
     if (!v) return Response.json({ error: "الاسم لا يمكن أن يكون فارغاً" }, { status: 400 });
     push("cafe_name", v);
   }
+  if (b.cafe_name_ar !== undefined) {
+    push("cafe_name_ar", String(b.cafe_name_ar).trim());
+  }
+  if (b.cafe_tagline !== undefined) {
+    push("cafe_tagline", String(b.cafe_tagline).trim());
+  }
   if (b.logo_letter !== undefined) {
     const v = String(b.logo_letter).trim().slice(0, 4);
     if (!v) return Response.json({ error: "الحرف لا يمكن أن يكون فارغاً" }, { status: 400 });
@@ -48,11 +54,17 @@ export async function PUT(request) {
   }
   if (b.accent_color !== undefined) {
     const v = String(b.accent_color).trim();
-    // Loose hex check — allow short or long.
     if (!/^#[0-9A-Fa-f]{3,8}$/.test(v)) {
       return Response.json({ error: "اللون غير صحيح (#RRGGBB)" }, { status: 400 });
     }
     push("accent_color", v);
+  }
+  if (b.cream_color !== undefined) {
+    const v = String(b.cream_color).trim();
+    if (!/^#[0-9A-Fa-f]{3,8}$/.test(v)) {
+      return Response.json({ error: "لون الكريم غير صحيح" }, { status: 400 });
+    }
+    push("cream_color", v);
   }
   if (b.welcome_headline !== undefined) {
     push("welcome_headline", String(b.welcome_headline).trim());

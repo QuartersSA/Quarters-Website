@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { Coffee, Lock, ShieldCheck, Sparkles, AlertCircle } from "lucide-react";
+import { Coffee, Lock, Sparkles, AlertCircle } from "lucide-react";
 
 // Public page — no auth, no admin chrome. Single column, mobile-first.
 //
@@ -69,10 +69,12 @@ export default function PublicWelcomePage() {
   const settings = data?.settings || null;
   const items = data?.items || [];
 
-  const accent = settings?.accent_color || "#10b981";
-  const logoLetter = settings?.logo_letter || "Q";
-  const cafeName = settings?.cafe_name || "Quarters Coffee Bar";
-  const welcomeHeadline = settings?.welcome_headline || "مرحباً بك";
+  const accent = settings?.accent_color || "#7a8b5f";
+  const cream = settings?.cream_color || "#e8e9d6";
+  const cafeName = settings?.cafe_name || "QUARTERS";
+  const cafeNameAr = settings?.cafe_name_ar || "كوارتـــرز";
+  const cafeTagline = settings?.cafe_tagline || "BAR";
+  const welcomeHeadline = settings?.welcome_headline || "أهلاً بك في كوارترز";
   const welcomeSub = settings?.welcome_subtext || "";
 
   // Group menu items by category once.
@@ -109,10 +111,10 @@ export default function PublicWelcomePage() {
     onError: (e) => setActivateError(e.message || "خطأ"),
   });
 
-  // Lock body scroll for fullscreen feel.
+  // Solid brand olive — no gradients. Matches the printed card.
   useEffect(() => {
     const prev = document.body.style.background;
-    document.body.style.background = `linear-gradient(135deg, ${accent}11, #0b0b1a)`;
+    document.body.style.background = accent;
     return () => {
       document.body.style.background = prev;
     };
@@ -124,14 +126,18 @@ export default function PublicWelcomePage() {
     activateMut.mutate();
   };
 
+  const brandProps = { cafeName, cafeNameAr, cafeTagline, cream };
+
   // Loading
   if (
     (welcomeQuery.isLoading && !isPreview) ||
     (previewQuery.isLoading && isPreview)
   ) {
     return (
-      <FullscreenWrapper accent={accent}>
-        <div className="text-white/65">جاري التحميل…</div>
+      <FullscreenWrapper accent={accent} cream={cream}>
+        <div style={{ textAlign: "center", opacity: 0.6, fontFamily: '"El Messiri", sans-serif' }}>
+          جاري التحميل…
+        </div>
       </FullscreenWrapper>
     );
   }
@@ -143,14 +149,22 @@ export default function PublicWelcomePage() {
         ? "الكود غير موجود أو لم يعد صالحاً."
         : "تعذّر تحميل البيانات.";
     return (
-      <FullscreenWrapper accent={accent}>
-        <div className="text-center max-w-md w-full">
-          <Logo letter={logoLetter} accent={accent} />
-          <h1 className="text-2xl font-bold text-white mt-6">{cafeName}</h1>
-          <div className="mt-6 p-6 rounded-3xl bg-red-500/10 border border-red-500/25 text-red-100">
-            <AlertCircle className="w-10 h-10 mx-auto mb-3 opacity-70" />
-            <p className="text-lg font-semibold">{msg}</p>
-            <p className="text-sm text-red-200/70 mt-2">
+      <FullscreenWrapper accent={accent} cream={cream}>
+        <div className="max-w-md w-full mx-auto">
+          <BrandWordmark {...brandProps} size="md" />
+          <div
+            className="mt-10 p-8 rounded-2xl text-center"
+            style={{
+              background: `${cream}10`,
+              border: `1px solid ${cream}26`,
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <AlertCircle className="w-10 h-10 mx-auto mb-4 opacity-60" style={{ color: cream }} />
+            <p style={{ fontFamily: '"El Messiri", sans-serif', fontSize: 18, fontWeight: 700, color: cream }}>
+              {msg}
+            </p>
+            <p style={{ fontFamily: '"El Messiri", sans-serif', fontSize: 13, color: cream, opacity: 0.65, marginTop: 8 }}>
               تأكد من الرابط أو راجع الكاشير.
             </p>
           </div>
@@ -162,27 +176,80 @@ export default function PublicWelcomePage() {
   // Pending — show activation form
   if (blogger && blogger.state === "pending" && !isPreview) {
     return (
-      <FullscreenWrapper accent={accent}>
-        <div className="text-center max-w-md w-full">
-          <Logo letter={logoLetter} accent={accent} />
-          <h1 className="text-2xl font-bold text-white mt-6">{cafeName}</h1>
-          <p className="text-white/55 text-sm mt-1">دعوة خاصة لـ {blogger.name}</p>
+      <FullscreenWrapper accent={accent} cream={cream}>
+        <div className="max-w-md w-full mx-auto">
+          <BrandWordmark {...brandProps} size="md" />
+          <div
+            style={{
+              width: 48,
+              height: 1,
+              background: `${cream}55`,
+              margin: "20px auto 0",
+            }}
+          />
+          <p
+            style={{
+              fontFamily: '"El Messiri", sans-serif',
+              textAlign: "center",
+              color: cream,
+              opacity: 0.7,
+              fontSize: 14,
+              marginTop: 14,
+              letterSpacing: "0.06em",
+            }}
+          >
+            دعوة خاصة لـ {blogger.name}
+          </p>
 
-          <div className="mt-8 p-6 rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-xl">
-            <Lock
-              className="w-12 h-12 mx-auto mb-3"
-              style={{ color: accent }}
-            />
-            <h2 className="text-xl font-bold text-white">
-              يلزم تفعيل الكود من الكاشير
-            </h2>
-            <p className="text-white/55 text-sm mt-2 leading-relaxed">
-              سلّم الجهاز للكاشير وادخل رقم التفعيل الخاص بـ {cafeName}.
-            </p>
+          <div
+            className="mt-8 p-7 rounded-2xl"
+            style={{
+              background: `${cream}0d`,
+              border: `1px solid ${cream}2a`,
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <div style={{ textAlign: "center" }}>
+              <Lock className="w-10 h-10 mx-auto mb-3" style={{ color: cream, opacity: 0.85 }} />
+              <h2
+                style={{
+                  fontFamily: '"El Messiri", sans-serif',
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: cream,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                يلزم تفعيل الكود من الكاشير
+              </h2>
+              <p
+                style={{
+                  fontFamily: '"El Messiri", sans-serif',
+                  fontSize: 13,
+                  color: cream,
+                  opacity: 0.65,
+                  marginTop: 8,
+                  lineHeight: 1.8,
+                }}
+              >
+                سلّم الجهاز للكاشير لإدخال رقم التفعيل.
+              </p>
+            </div>
 
-            <form onSubmit={submitPin} className="mt-6 space-y-3 text-right">
+            <form onSubmit={submitPin} className="mt-6 space-y-3" style={{ textAlign: "right" }}>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label
+                  style={{
+                    display: "block",
+                    fontFamily: '"El Messiri", sans-serif',
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: cream,
+                    opacity: 0.75,
+                    marginBottom: 8,
+                    letterSpacing: "0.08em",
+                  }}
+                >
                   رقم التفعيل
                 </label>
                 <input
@@ -192,31 +259,87 @@ export default function PublicWelcomePage() {
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
                   autoFocus
-                  className="w-full px-4 py-4 rounded-2xl bg-black/40 border border-white/10 text-white text-center text-2xl tracking-widest focus:outline-none focus:border-white/30"
+                  style={{
+                    width: "100%",
+                    padding: "16px",
+                    borderRadius: 14,
+                    background: `${cream}10`,
+                    border: `1px solid ${cream}2a`,
+                    color: cream,
+                    textAlign: "center",
+                    fontSize: 24,
+                    letterSpacing: "0.4em",
+                    fontFamily: '"Cormorant Garamond", serif',
+                    outline: "none",
+                  }}
                   placeholder="••••••"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label
+                  style={{
+                    display: "block",
+                    fontFamily: '"El Messiri", sans-serif',
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: cream,
+                    opacity: 0.75,
+                    marginBottom: 8,
+                    letterSpacing: "0.08em",
+                  }}
+                >
                   اسم الكاشير (اختياري)
                 </label>
                 <input
                   type="text"
                   value={cashier}
                   onChange={(e) => setCashier(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-black/40 border border-white/10 text-white focus:outline-none focus:border-white/30"
+                  style={{
+                    width: "100%",
+                    padding: "12px 16px",
+                    borderRadius: 14,
+                    background: `${cream}10`,
+                    border: `1px solid ${cream}2a`,
+                    color: cream,
+                    fontFamily: '"El Messiri", sans-serif',
+                    outline: "none",
+                  }}
                 />
               </div>
               {activateError ? (
-                <div className="p-3 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-100 text-sm">
+                <div
+                  style={{
+                    padding: 12,
+                    borderRadius: 12,
+                    background: "rgba(220, 38, 38, 0.18)",
+                    border: "1px solid rgba(220, 38, 38, 0.4)",
+                    color: "#fecaca",
+                    fontFamily: '"El Messiri", sans-serif',
+                    fontSize: 13,
+                    textAlign: "center",
+                  }}
+                >
                   {activateError}
                 </div>
               ) : null}
               <button
                 type="submit"
                 disabled={activateMut.isPending}
-                className="w-full py-4 rounded-2xl font-bold text-white text-lg disabled:opacity-50 transition-opacity"
-                style={{ background: accent }}
+                style={{
+                  width: "100%",
+                  padding: "16px",
+                  borderRadius: 14,
+                  background: cream,
+                  color: accent,
+                  fontFamily: '"El Messiri", sans-serif',
+                  fontSize: 16,
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                  border: "none",
+                  cursor: "pointer",
+                  opacity: activateMut.isPending ? 0.6 : 1,
+                  transition: "opacity 0.2s",
+                }}
               >
                 {activateMut.isPending ? "جاري التفعيل…" : "تفعيل الكود"}
               </button>
@@ -229,50 +352,183 @@ export default function PublicWelcomePage() {
 
   // Active (or preview) — welcome + menu screen
   return (
-    <FullscreenWrapper accent={accent}>
-      <div className="w-full max-w-2xl">
-        <div className="text-center mb-8">
-          <Logo letter={logoLetter} accent={accent} />
-          <div className="mt-6 flex items-center justify-center gap-2 text-white/60 text-sm">
-            <ShieldCheck className="w-4 h-4" style={{ color: accent }} />
-            <span>{cafeName}</span>
+    <FullscreenWrapper accent={accent} cream={cream}>
+      <div className="w-full max-w-2xl mx-auto">
+        {/* Hero */}
+        <div style={{ textAlign: "center", marginBottom: 36 }}>
+          <BrandWordmark {...brandProps} size="lg" />
+
+          <div
+            style={{
+              width: 56,
+              height: 1,
+              background: `${cream}55`,
+              margin: "28px auto 0",
+            }}
+          />
+
+          <div
+            style={{
+              fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
+              fontSize: 12,
+              fontWeight: 600,
+              letterSpacing: "0.5em",
+              color: cream,
+              opacity: 0.8,
+              textTransform: "uppercase",
+              marginTop: 22,
+            }}
+          >
+            Welcome
           </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white mt-4 leading-tight">
+
+          <h1
+            style={{
+              fontFamily: '"El Messiri", "Cairo", sans-serif',
+              fontSize: "clamp(28px, 6vw, 42px)",
+              fontWeight: 700,
+              color: cream,
+              marginTop: 6,
+              lineHeight: 1.3,
+              letterSpacing: "0.01em",
+            }}
+          >
             {welcomeHeadline}
           </h1>
           {welcomeSub ? (
-            <p className="text-white/70 text-lg mt-2">{welcomeSub}</p>
-          ) : null}
-          {blogger?.name ? (
-            <div
-              className="mt-6 inline-flex items-center gap-2 px-5 py-2 rounded-full text-white font-semibold"
+            <p
               style={{
-                background: `linear-gradient(135deg, ${accent}, ${accent}aa)`,
+                fontFamily: '"El Messiri", "Cairo", sans-serif',
+                fontSize: 16,
+                color: cream,
+                opacity: 0.7,
+                marginTop: 8,
+                letterSpacing: "0.04em",
               }}
             >
-              <Sparkles className="w-4 h-4" />
-              <span>{blogger.name}</span>
+              {welcomeSub}
+            </p>
+          ) : null}
+
+          {blogger?.name ? (
+            <div style={{ marginTop: 24 }}>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "8px 22px",
+                  borderRadius: 999,
+                  background: `${cream}1a`,
+                  border: `1px solid ${cream}40`,
+                  fontFamily: '"El Messiri", "Cairo", sans-serif',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: cream,
+                  letterSpacing: "0.04em",
+                }}
+              >
+                <Sparkles className="w-4 h-4" style={{ opacity: 0.85 }} />
+                <span>{blogger.name}</span>
+              </div>
             </div>
           ) : null}
         </div>
 
-        <div className="rounded-3xl bg-white/[0.04] border border-white/10 backdrop-blur-xl p-5 sm:p-6">
-          <div className="flex items-center gap-2 mb-5">
-            <Coffee className="w-5 h-5" style={{ color: accent }} />
-            <h2 className="text-xl font-bold text-white">ضيافتك</h2>
+        {/* Menu card */}
+        <div
+          style={{
+            borderRadius: 24,
+            background: `${cream}0e`,
+            border: `1px solid ${cream}26`,
+            backdropFilter: "blur(8px)",
+            padding: "28px 22px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              marginBottom: 6,
+            }}
+          >
+            <span
+              style={{
+                flex: 1,
+                maxWidth: 60,
+                height: 1,
+                background: `${cream}40`,
+              }}
+            />
+            <Coffee className="w-4 h-4" style={{ color: cream, opacity: 0.8 }} />
+            <div
+              style={{
+                fontFamily: '"Cormorant Garamond", serif',
+                fontSize: 12,
+                fontWeight: 600,
+                letterSpacing: "0.4em",
+                color: cream,
+                opacity: 0.85,
+                textTransform: "uppercase",
+              }}
+            >
+              Menu
+            </div>
+            <Coffee className="w-4 h-4" style={{ color: cream, opacity: 0.8 }} />
+            <span
+              style={{
+                flex: 1,
+                maxWidth: 60,
+                height: 1,
+                background: `${cream}40`,
+              }}
+            />
+          </div>
+          <div
+            style={{
+              fontFamily: '"El Messiri", sans-serif',
+              fontSize: 14,
+              color: cream,
+              opacity: 0.65,
+              textAlign: "center",
+              marginBottom: 24,
+              letterSpacing: "0.04em",
+            }}
+          >
+            قائمة ضيافتك
           </div>
 
           {Object.keys(grouped).length === 0 ? (
-            <div className="text-white/55 text-sm text-center py-8">
+            <div
+              style={{
+                fontFamily: '"El Messiri", sans-serif',
+                fontSize: 14,
+                color: cream,
+                opacity: 0.55,
+                textAlign: "center",
+                padding: "28px 0",
+              }}
+            >
               المنيو غير متاح بعد. تواصل مع الكاشير.
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-7">
               {Object.entries(grouped).map(([category, list]) => (
                 <div key={category}>
                   <h3
-                    className="text-sm font-bold mb-3"
-                    style={{ color: accent }}
+                    style={{
+                      fontFamily: '"Cormorant Garamond", serif',
+                      fontSize: 13,
+                      fontWeight: 600,
+                      letterSpacing: "0.32em",
+                      color: cream,
+                      opacity: 0.85,
+                      marginBottom: 12,
+                      textAlign: "center",
+                      textTransform: "uppercase",
+                    }}
                   >
                     {category}
                   </h3>
@@ -280,25 +536,70 @@ export default function PublicWelcomePage() {
                     {list.map((it) => (
                       <div
                         key={it.id}
-                        className="flex items-start justify-between gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/5"
+                        style={{
+                          display: "flex",
+                          alignItems: "start",
+                          justifyContent: "space-between",
+                          gap: 12,
+                          padding: "14px 16px",
+                          borderRadius: 14,
+                          background: `${cream}08`,
+                          borderBottom: `1px solid ${cream}1a`,
+                        }}
                       >
-                        <div className="flex-1 min-w-0">
-                          <div className="text-white font-semibold">
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div
+                            style={{
+                              fontFamily: '"El Messiri", sans-serif',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              color: cream,
+                            }}
+                          >
                             {it.name_ar}
                           </div>
                           {it.name_en ? (
-                            <div className="text-white/40 text-xs">
+                            <div
+                              style={{
+                                fontFamily:
+                                  '"Cormorant Garamond", serif',
+                                fontSize: 12,
+                                color: cream,
+                                opacity: 0.55,
+                                letterSpacing: "0.06em",
+                                marginTop: 2,
+                              }}
+                            >
                               {it.name_en}
                             </div>
                           ) : null}
                           {it.description ? (
-                            <div className="text-white/55 text-xs mt-1 leading-relaxed">
+                            <div
+                              style={{
+                                fontFamily: '"El Messiri", sans-serif',
+                                fontSize: 12,
+                                color: cream,
+                                opacity: 0.6,
+                                marginTop: 6,
+                                lineHeight: 1.7,
+                              }}
+                            >
                               {it.description}
                             </div>
                           ) : null}
                         </div>
                         {it.price !== null && it.price !== undefined ? (
-                          <div className="text-white/80 text-sm font-bold whitespace-nowrap">
+                          <div
+                            style={{
+                              fontFamily:
+                                '"Cormorant Garamond", serif',
+                              fontSize: 16,
+                              fontWeight: 700,
+                              color: cream,
+                              whiteSpace: "nowrap",
+                              letterSpacing: "0.04em",
+                            }}
+                          >
                             {Number(it.price).toFixed(2)} ر.س
                           </div>
                         ) : null}
@@ -311,38 +612,119 @@ export default function PublicWelcomePage() {
           )}
         </div>
 
-        <div className="text-center text-white/40 text-xs mt-6">
-          {cafeName} · بطاقة دعوة شخصية
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: 24,
+            fontFamily: '"Cormorant Garamond", serif',
+            fontSize: 11,
+            letterSpacing: "0.32em",
+            color: cream,
+            opacity: 0.5,
+            textTransform: "uppercase",
+          }}
+        >
+          {cafeName} · Private Invitation
         </div>
       </div>
     </FullscreenWrapper>
   );
 }
 
-function FullscreenWrapper({ accent, children }) {
+function FullscreenWrapper({ accent, cream, children }) {
   return (
-    <div
-      dir="rtl"
-      className="min-h-[100svh] flex items-center justify-center p-4 sm:p-8"
-      style={{
-        background: `radial-gradient(circle at 30% 0%, ${accent}1a 0%, transparent 50%), radial-gradient(circle at 70% 100%, ${accent}14 0%, transparent 60%), #0b0b1a`,
-      }}
-    >
-      {children}
-    </div>
+    <>
+      {/* Brand fonts. Loaded once per render of the welcome page. */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="anonymous"
+      />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Playfair+Display:wght@600;700;900&family=El+Messiri:wght@500;600;700&display=swap"
+      />
+      <div
+        dir="rtl"
+        className="min-h-[100svh] flex items-center justify-center p-4 sm:p-8"
+        style={{
+          background: accent,
+          color: cream,
+        }}
+      >
+        {/* Soft paper grain via radial highlights — keeps the solid
+            olive from feeling flat, without competing with the brand. */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            inset: 0,
+            pointerEvents: "none",
+            background: `radial-gradient(ellipse at 30% 0%, ${cream}14 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, ${cream}0d 0%, transparent 60%)`,
+          }}
+        />
+        <div style={{ position: "relative", width: "100%" }}>{children}</div>
+      </div>
+    </>
   );
 }
 
-function Logo({ letter, accent }) {
+function BrandWordmark({ cream, cafeName, cafeNameAr, cafeTagline, size = "lg" }) {
+  const sizeMap = {
+    sm: { en: 32, ar: 18, tag: 9 },
+    md: { en: 44, ar: 22, tag: 11 },
+    lg: { en: 56, ar: 28, tag: 13 },
+  };
+  const s = sizeMap[size] || sizeMap.lg;
   return (
-    <div
-      className="w-24 h-24 mx-auto rounded-3xl flex items-center justify-center text-white text-5xl font-extrabold"
-      style={{
-        background: `linear-gradient(135deg, ${accent}, #0b0b1a)`,
-        boxShadow: `0 16px 48px ${accent}55`,
-      }}
-    >
-      {letter}
+    <div style={{ textAlign: "center" }}>
+      <div style={{ display: "inline-block", position: "relative" }}>
+        <div
+          style={{
+            fontFamily:
+              '"Cormorant Garamond", "Playfair Display", serif',
+            fontWeight: 700,
+            fontSize: s.en,
+            letterSpacing: "0.02em",
+            lineHeight: 1,
+            color: cream,
+          }}
+        >
+          {cafeName}
+        </div>
+        {cafeTagline ? (
+          <div
+            style={{
+              position: "absolute",
+              top: -2,
+              right: -Math.round(s.en * 0.5),
+              fontFamily:
+                '"Cormorant Garamond", "Playfair Display", serif',
+              fontSize: s.tag,
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              color: cream,
+            }}
+          >
+            {cafeTagline}
+          </div>
+        ) : null}
+      </div>
+      {cafeNameAr ? (
+        <div
+          style={{
+            fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
+            fontSize: s.ar,
+            fontWeight: 600,
+            color: cream,
+            marginTop: 4,
+            letterSpacing: "0.04em",
+          }}
+        >
+          {cafeNameAr}
+        </div>
+      ) : null}
     </div>
   );
 }

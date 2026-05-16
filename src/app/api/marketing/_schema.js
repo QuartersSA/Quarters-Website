@@ -43,19 +43,27 @@ export function ensureMarketingSchema() {
           )
         `;
 
-        // Single-row settings table — using a fixed id=1 record. Cleaner
-        // than a KV table for the small fixed set we need here.
+        // Single-row settings table — fixed id=1 record. Defaults match
+        // the official Quarters Bar brand (olive sage, serif wordmark).
         await sql`
           CREATE TABLE IF NOT EXISTS marketing_settings (
             id INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
-            cafe_name TEXT NOT NULL DEFAULT 'Quarters Coffee Bar',
+            cafe_name TEXT NOT NULL DEFAULT 'QUARTERS',
+            cafe_name_ar TEXT NOT NULL DEFAULT 'كوارتـــرز',
+            cafe_tagline TEXT NOT NULL DEFAULT 'BAR',
             logo_letter TEXT NOT NULL DEFAULT 'Q',
-            accent_color TEXT NOT NULL DEFAULT '#10b981',
-            welcome_headline TEXT NOT NULL DEFAULT 'مرحباً بك في Quarters',
-            welcome_subtext TEXT NOT NULL DEFAULT 'استمتع بتجربتك معنا',
+            accent_color TEXT NOT NULL DEFAULT '#7a8b5f',
+            cream_color TEXT NOT NULL DEFAULT '#e8e9d6',
+            welcome_headline TEXT NOT NULL DEFAULT 'أهلاً بك في كوارترز',
+            welcome_subtext TEXT NOT NULL DEFAULT 'ضيافة من القلب',
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
           )
         `;
+
+        // Idempotent column additions for older rows.
+        await sql`ALTER TABLE marketing_settings ADD COLUMN IF NOT EXISTS cafe_name_ar TEXT NOT NULL DEFAULT 'كوارتـــرز'`;
+        await sql`ALTER TABLE marketing_settings ADD COLUMN IF NOT EXISTS cafe_tagline TEXT NOT NULL DEFAULT 'BAR'`;
+        await sql`ALTER TABLE marketing_settings ADD COLUMN IF NOT EXISTS cream_color TEXT NOT NULL DEFAULT '#e8e9d6'`;
 
         // Seed the single settings row if missing.
         await sql`

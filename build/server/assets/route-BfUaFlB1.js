@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureMarketingSchema } from './_schema-Cz9AdGTf.js';
+import { e as ensureMarketingSchema } from './_schema-DJCyIsi1.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -53,6 +53,12 @@ async function PUT(request) {
     });
     push("cafe_name", v);
   }
+  if (b.cafe_name_ar !== undefined) {
+    push("cafe_name_ar", String(b.cafe_name_ar).trim());
+  }
+  if (b.cafe_tagline !== undefined) {
+    push("cafe_tagline", String(b.cafe_tagline).trim());
+  }
   if (b.logo_letter !== undefined) {
     const v = String(b.logo_letter).trim().slice(0, 4);
     if (!v) return Response.json({
@@ -64,7 +70,6 @@ async function PUT(request) {
   }
   if (b.accent_color !== undefined) {
     const v = String(b.accent_color).trim();
-    // Loose hex check — allow short or long.
     if (!/^#[0-9A-Fa-f]{3,8}$/.test(v)) {
       return Response.json({
         error: "اللون غير صحيح (#RRGGBB)"
@@ -73,6 +78,17 @@ async function PUT(request) {
       });
     }
     push("accent_color", v);
+  }
+  if (b.cream_color !== undefined) {
+    const v = String(b.cream_color).trim();
+    if (!/^#[0-9A-Fa-f]{3,8}$/.test(v)) {
+      return Response.json({
+        error: "لون الكريم غير صحيح"
+      }, {
+        status: 400
+      });
+    }
+    push("cream_color", v);
   }
   if (b.welcome_headline !== undefined) {
     push("welcome_headline", String(b.welcome_headline).trim());
