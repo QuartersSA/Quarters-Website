@@ -80,8 +80,8 @@ async function ensureSchema() {
   // Transfer ops were originally storing only the post-transfer absolute
   // (quantity = from_new on the OUT leg, to_new on the IN leg). The UI
   // needs the *moved* amount too — "how many units did this transfer
-  // shift". Add an explicit column; old rows stay NULL and the UI
-  // falls back to the existing display.
+  // shift". Add an explicit column; old rows stay NULL and get backfilled
+  // below.
   try {
     await sql`
       ALTER TABLE inventory_items
@@ -89,6 +89,82 @@ async function ensureSchema() {
     `;
   } catch (e) {
     console.error("ensureSchema inventory_items.transfer_quantity:", e?.message);
+  }
+
+  // One-shot backfill for legacy Transfer rows that predate the column.
+  // Computing on-the-fly per request would let downstream rows shift
+  // their "moved" value whenever an upstream Transfer was deleted —
+  // because their prev_balance lookup would jump further back.
+  // Backfilling once + reading the stored value gives a stable answer
+  // that doesn't depend on neighbors.
+  //
+  // The EXISTS guard makes this cheap after the first successful run:
+  // once every row is filled the UPDATE is skipped entirely.
+  try {
+    const [pending] = await sql`
+      SELECT 1
+        FROM inventory_items ii
+        JOIN inventory_operations io ON io.id = ii.operation_id
+       WHERE io.inventory_type = 'Transfer'
+         AND ii.transfer_quantity IS NULL
+       LIMIT 1
+    `;
+    if (pending) {
+      await sql`
+        WITH chain AS (
+          SELECT
+            ii.id AS row_id,
+            ABS(
+              COALESCE(
+                (
+                  SELECT COALESCE(prev_ii.quantity, 0)
+                       + COALESCE((
+                           SELECT SUM(pr.quantity)
+                             FROM purchase_receipts pr
+                            WHERE pr.item_id = ii.item_id
+                              AND pr.branch_id = ii.branch_id
+                              AND GREATEST(pr.received_at, pr.created_at)
+                                  > COALESCE(prev_io.operation_date, prev_io.created_at)
+                              AND GREATEST(pr.received_at, pr.created_at)
+                                  < COALESCE(io.operation_date, io.created_at)
+                         ), 0)
+                    FROM inventory_items prev_ii
+                    JOIN inventory_operations prev_io
+                      ON prev_io.id = prev_ii.operation_id
+                   WHERE prev_ii.item_id = ii.item_id
+                     AND prev_ii.branch_id = ii.branch_id
+                     AND prev_ii.id <> ii.id
+                     AND prev_io.status = 'Completed'
+                     AND prev_io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
+                     AND COALESCE(prev_io.operation_date, prev_io.created_at)
+                         < COALESCE(io.operation_date, io.created_at)
+                   ORDER BY COALESCE(prev_io.operation_date, prev_io.created_at) DESC,
+                            prev_io.id DESC
+                   LIMIT 1
+                ),
+                (
+                  SELECT COALESCE(SUM(pr.quantity), 0)
+                    FROM purchase_receipts pr
+                   WHERE pr.item_id = ii.item_id
+                     AND pr.branch_id = ii.branch_id
+                     AND GREATEST(pr.received_at, pr.created_at)
+                         < COALESCE(io.operation_date, io.created_at)
+                )
+              ) - ii.quantity
+            ) AS moved
+          FROM inventory_items ii
+          JOIN inventory_operations io ON io.id = ii.operation_id
+          WHERE io.inventory_type = 'Transfer'
+            AND ii.transfer_quantity IS NULL
+        )
+        UPDATE inventory_items target
+           SET transfer_quantity = chain.moved
+          FROM chain
+         WHERE target.id = chain.row_id
+      `;
+    }
+  } catch (e) {
+    console.error("ensureSchema backfill transfer_quantity:", e?.message);
   }
 }
 
@@ -416,69 +492,20 @@ async function GET(request) {
         });
       }
 
-      // For Transfer ops the UI wants the moved amount, not the
-      // post-transfer absolute. New rows populate transfer_quantity at
-      // creation time, but legacy rows are NULL — for those we compute
-      // the moved amount on the fly via chain lookup:
-      //   moved = |prev_balance_at(branch,item) - this_row.quantity|
-      // prev_balance = most recent inventory_items qty for the same
-      // (item, branch) strictly before this op's date, plus any
-      // purchase_receipts between that prior row and this op.
+      // Transfer ops: ii.transfer_quantity is set at creation time for
+      // new transfers and backfilled once by ensureSchema for legacy
+      // rows. Reading the stored column keeps the displayed value
+      // stable when neighboring transfers are added or deleted.
       const items = await sql`
         SELECT
           ii.id,
           ii.item_id,
           ii.quantity,
-          COALESCE(
-            ii.transfer_quantity,
-            CASE
-              WHEN op.inventory_type = 'Transfer' THEN
-                ABS(
-                  COALESCE(
-                    (
-                      SELECT COALESCE(prev_ii.quantity, 0)
-                           + COALESCE((
-                               SELECT SUM(pr.quantity)
-                                 FROM purchase_receipts pr
-                                WHERE pr.item_id = ii.item_id
-                                  AND pr.branch_id = ii.branch_id
-                                  AND GREATEST(pr.received_at, pr.created_at)
-                                      > COALESCE(prev_io.operation_date, prev_io.created_at)
-                                  AND GREATEST(pr.received_at, pr.created_at)
-                                      < COALESCE(op.operation_date, op.created_at)
-                             ), 0)
-                        FROM inventory_items prev_ii
-                        JOIN inventory_operations prev_io
-                          ON prev_io.id = prev_ii.operation_id
-                       WHERE prev_ii.item_id = ii.item_id
-                         AND prev_ii.branch_id = ii.branch_id
-                         AND prev_ii.id <> ii.id
-                         AND prev_io.status = 'Completed'
-                         AND prev_io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
-                         AND COALESCE(prev_io.operation_date, prev_io.created_at)
-                             < COALESCE(op.operation_date, op.created_at)
-                       ORDER BY COALESCE(prev_io.operation_date, prev_io.created_at) DESC,
-                                prev_io.id DESC
-                       LIMIT 1
-                    ),
-                    (
-                      SELECT COALESCE(SUM(pr.quantity), 0)
-                        FROM purchase_receipts pr
-                       WHERE pr.item_id = ii.item_id
-                         AND pr.branch_id = ii.branch_id
-                         AND GREATEST(pr.received_at, pr.created_at)
-                             < COALESCE(op.operation_date, op.created_at)
-                    )
-                  ) - ii.quantity
-                )
-              ELSE NULL
-            END
-          ) AS transfer_quantity,
+          ii.transfer_quantity,
           i.name as item_name,
           i.description as item_description
         FROM inventory_items ii
         LEFT JOIN items i ON ii.item_id = i.id
-        LEFT JOIN inventory_operations op ON op.id = ii.operation_id
         WHERE ii.operation_id = ${parseInt(operationId)}
         ORDER BY i.name
       `;
@@ -833,15 +860,88 @@ async function DELETE(request) {
       });
     }
 
-    // For Transfer operations, delete BOTH paired operations (out + in share same inventory_number)
+    // For Transfer operations: delete BOTH paired operations (out + in
+    // share same inventory_number) AND return the moved units to the
+    // chain so the source's current stock goes back up.
+    //
+    // The naive delete only removes the two legs. If a LATER transfer
+    // exists at the same (item, branch), its stored absolute was
+    // derived from the post-T1 balance (it baked T1 into its number),
+    // so simply removing T1 would leave that later row pretending T1
+    // still happened — the source's current stock would not reflect
+    // the returned units.
+    //
+    // Fix: before deleting, bump every subsequent inventory_items row
+    // at (item, source_branch) by +moved and at (item, dest_branch)
+    // by -moved, but only for rows tied to a TRANSFER op. Daily /
+    // Weekly / Opening rows are physical recounts the user explicitly
+    // measured, so they're preserved as-is.
     if (operation.inventory_type === "Transfer") {
       const paired = await sql`
-        SELECT id FROM inventory_operations
-        WHERE inventory_number = ${operation.inventory_number}
+        SELECT id, branch_id, transfer_branch_id, transfer_direction,
+               COALESCE(operation_date, created_at) AS op_date
+          FROM inventory_operations
+         WHERE inventory_number = ${operation.inventory_number}
       `;
       const pairedIds = paired.map(r => r.id);
 
-      // inventory_items rows are deleted automatically via ON DELETE CASCADE
+      // Source branch = OUT leg's own branch_id. Fall back to the IN
+      // leg's transfer_branch_id if the OUT leg is missing for some
+      // reason (legacy data).
+      const outLeg = paired.find(p => p.transfer_direction === "out") || paired[0];
+      const inLeg = paired.find(p => p.transfer_direction === "in") || paired[1] || null;
+      const sourceBranchId = outLeg?.branch_id;
+      const destBranchId = inLeg?.branch_id || outLeg?.transfer_branch_id || null;
+      const opDate = outLeg?.op_date || operation.op_date;
+
+      // Item-by-item moved amounts. Prefer the stored
+      // transfer_quantity. If still NULL (older row predating the
+      // backfill), reconstruct via chain compare to skip the row.
+      const movedRows = outLeg ? await sql`
+            SELECT
+              ii.item_id,
+              COALESCE(ii.transfer_quantity, 0) AS moved
+            FROM inventory_items ii
+            WHERE ii.operation_id = ${outLeg.id}
+          ` : [];
+
+      // Apply +moved to subsequent Transfer rows at the source branch,
+      // and -moved to subsequent Transfer rows at the destination
+      // branch. ANY( $pairedIds ) excludes the legs being deleted so
+      // we don't touch their own rows.
+      for (const row of movedRows) {
+        const moved = Number(row.moved) || 0;
+        if (!moved) continue;
+        if (sourceBranchId) {
+          await sql`
+            UPDATE inventory_items ii
+               SET quantity = quantity + ${moved}
+              FROM inventory_operations io
+             WHERE ii.operation_id = io.id
+               AND io.inventory_type = 'Transfer'
+               AND ii.item_id = ${row.item_id}
+               AND ii.branch_id = ${sourceBranchId}
+               AND io.id <> ALL(${pairedIds})
+               AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+          `;
+        }
+        if (destBranchId) {
+          await sql`
+            UPDATE inventory_items ii
+               SET quantity = GREATEST(quantity - ${moved}, 0)
+              FROM inventory_operations io
+             WHERE ii.operation_id = io.id
+               AND io.inventory_type = 'Transfer'
+               AND ii.item_id = ${row.item_id}
+               AND ii.branch_id = ${destBranchId}
+               AND io.id <> ALL(${pairedIds})
+               AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+          `;
+        }
+      }
+
+      // inventory_items rows for the paired ops are deleted via
+      // ON DELETE CASCADE when the operations row goes.
       for (const pid of pairedIds) {
         await sql`DELETE FROM inventory_operations WHERE id = ${pid}`;
       }
