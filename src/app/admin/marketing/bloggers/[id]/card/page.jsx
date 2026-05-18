@@ -338,54 +338,7 @@ export default function BloggerCardPage() {
                 />
               </div>
 
-              {/* Slug — bracketed serif treatment */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 14,
-                  marginBottom: 28,
-                  direction: "ltr",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily:
-                      '"Cormorant Garamond", "Playfair Display", serif',
-                    fontSize: 22,
-                    color: cream,
-                    opacity: 0.5,
-                    fontWeight: 400,
-                  }}
-                >
-                  ⟨
-                </span>
-                <span
-                  style={{
-                    fontFamily:
-                      '"Cormorant Garamond", "Playfair Display", serif',
-                    fontSize: 17,
-                    fontWeight: 600,
-                    color: cream,
-                    letterSpacing: "0.32em",
-                  }}
-                >
-                  {b.slug}
-                </span>
-                <span
-                  style={{
-                    fontFamily:
-                      '"Cormorant Garamond", "Playfair Display", serif',
-                    fontSize: 22,
-                    color: cream,
-                    opacity: 0.5,
-                    fontWeight: 400,
-                  }}
-                >
-                  ⟩
-                </span>
-              </div>
+              {/* Slug removed by request — kept inside DB + QR payload only. */}
 
               {/* Hairline */}
               <div
