@@ -44,6 +44,9 @@ export function useOperationsData(isAuthenticated) {
       queryClient.invalidateQueries({ queryKey: ["low-stock"] });
       queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
       queryClient.invalidateQueries({ queryKey: ["purchase-receipts"] });
+      // Timeline report walks the same chain; stale cache would show
+      // pre-delete events / balances after a transfer is removed.
+      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
     },
   });
 

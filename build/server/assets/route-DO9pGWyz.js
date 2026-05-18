@@ -864,18 +864,29 @@ async function DELETE(request) {
     // share same inventory_number) AND return the moved units to the
     // chain so the source's current stock goes back up.
     //
-    // The naive delete only removes the two legs. If a LATER transfer
-    // exists at the same (item, branch), its stored absolute was
-    // derived from the post-T1 balance (it baked T1 into its number),
-    // so simply removing T1 would leave that later row pretending T1
-    // still happened — the source's current stock would not reflect
-    // the returned units.
+    // Naive delete only removes the two legs. Any LATER transfer at
+    // the same (item, branch) stored an absolute that baked in this
+    // transfer's effect, so the deletion's credit never propagated
+    // without also bumping those later rows.
     //
-    // Fix: before deleting, bump every subsequent inventory_items row
-    // at (item, source_branch) by +moved and at (item, dest_branch)
-    // by -moved, but only for rows tied to a TRANSFER op. Daily /
-    // Weekly / Opening rows are physical recounts the user explicitly
-    // measured, so they're preserved as-is.
+    // We:
+    //  1) Compute moved amounts per item from the OUT leg's
+    //     transfer_quantity (set at creation, backfilled for legacy
+    //     rows by ensureSchema).
+    //  2) Guard rails:
+    //     - moved must be > 0; NULL/0 means we never knew the moved
+    //       amount, refuse rather than silently delete with no
+    //       adjustment.
+    //     - check that no subsequent Transfer at the destination
+    //       would go negative once we subtract `moved`. If so, the
+    //       chain has dependent transfers that need to be deleted
+    //       first; surface them in a 409 so the user can act.
+    //  3) Wrap the UPDATEs + DELETEs in a single sql.transaction so
+    //     a mid-operation failure can't leave a half-adjusted chain.
+    //  4) Apply +moved to every subsequent Transfer row at the source
+    //     branch and -moved at the destination branch (item-scoped).
+    //     Daily/Weekly/Opening rows are physical recounts the user
+    //     explicitly measured, so they're preserved as-is.
     if (operation.inventory_type === "Transfer") {
       const paired = await sql`
         SELECT id, branch_id, transfer_branch_id, transfer_direction,
@@ -884,36 +895,85 @@ async function DELETE(request) {
          WHERE inventory_number = ${operation.inventory_number}
       `;
       const pairedIds = paired.map(r => r.id);
-
-      // Source branch = OUT leg's own branch_id. Fall back to the IN
-      // leg's transfer_branch_id if the OUT leg is missing for some
-      // reason (legacy data).
       const outLeg = paired.find(p => p.transfer_direction === "out") || paired[0];
       const inLeg = paired.find(p => p.transfer_direction === "in") || paired[1] || null;
       const sourceBranchId = outLeg?.branch_id;
       const destBranchId = inLeg?.branch_id || outLeg?.transfer_branch_id || null;
       const opDate = outLeg?.op_date || operation.op_date;
 
-      // Item-by-item moved amounts. Prefer the stored
-      // transfer_quantity. If still NULL (older row predating the
-      // backfill), reconstruct via chain compare to skip the row.
+      // Per-item moved amounts. Joined with items so the conflict
+      // response can name the items if we have to refuse.
       const movedRows = outLeg ? await sql`
             SELECT
               ii.item_id,
-              COALESCE(ii.transfer_quantity, 0) AS moved
+              i.name AS item_name,
+              ii.transfer_quantity AS moved
             FROM inventory_items ii
+            LEFT JOIN items i ON i.id = ii.item_id
             WHERE ii.operation_id = ${outLeg.id}
           ` : [];
 
-      // Apply +moved to subsequent Transfer rows at the source branch,
-      // and -moved to subsequent Transfer rows at the destination
-      // branch. ANY( $pairedIds ) excludes the legs being deleted so
-      // we don't touch their own rows.
+      // (2a) NULL / zero guard. If any row's moved is null/0 we don't
+      // know how much to put back. Surface it instead of silently
+      // deleting the legs.
+      const missingMoved = movedRows.filter(r => {
+        const m = r.moved === null || r.moved === undefined ? null : Number(r.moved);
+        return m === null || !Number.isFinite(m) || m <= 0;
+      });
+      if (missingMoved.length > 0) {
+        return Response.json({
+          error: "تعذّر حذف التحويل: كمية النقل المسجلة غير معروفة لبعض الأصناف",
+          items: missingMoved.map(r => r.item_name || `#${r.item_id}`)
+        }, {
+          status: 409
+        });
+      }
+
+      // (2b) Cascade guard at destination. If a later transfer at the
+      // destination branch would go negative after subtracting moved,
+      // it depended on these units — refuse and tell the user which
+      // transfers to delete first.
+      if (destBranchId && movedRows.length > 0) {
+        const conflicts = [];
+        for (const row of movedRows) {
+          const moved = Number(row.moved);
+          const dependents = await sql`
+            SELECT io.inventory_number, io.id, ii.quantity
+              FROM inventory_items ii
+              JOIN inventory_operations io ON io.id = ii.operation_id
+             WHERE io.inventory_type = 'Transfer'
+               AND ii.item_id = ${row.item_id}
+               AND ii.branch_id = ${destBranchId}
+               AND io.id <> ALL(${pairedIds})
+               AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+               AND ii.quantity < ${moved}
+             ORDER BY COALESCE(io.operation_date, io.created_at) ASC
+          `;
+          for (const d of dependents) {
+            conflicts.push({
+              item_name: row.item_name,
+              inventory_number: d.inventory_number
+            });
+          }
+        }
+        if (conflicts.length > 0) {
+          const numbers = Array.from(new Set(conflicts.map(c => c.inventory_number)));
+          return Response.json({
+            error: "لا يمكن حذف هذا التحويل: توجد تحويلات لاحقة تعتمد على الكمية المنقولة. احذفها أولاً.",
+            dependent_transfers: numbers,
+            conflicts
+          }, {
+            status: 409
+          });
+        }
+      }
+
+      // (3) Atomic UPDATE + DELETE. Build the statement array first.
+      const txStatements = [];
       for (const row of movedRows) {
-        const moved = Number(row.moved) || 0;
-        if (!moved) continue;
+        const moved = Number(row.moved);
         if (sourceBranchId) {
-          await sql`
+          txStatements.push(sql`
             UPDATE inventory_items ii
                SET quantity = quantity + ${moved}
               FROM inventory_operations io
@@ -923,12 +983,12 @@ async function DELETE(request) {
                AND ii.branch_id = ${sourceBranchId}
                AND io.id <> ALL(${pairedIds})
                AND COALESCE(io.operation_date, io.created_at) > ${opDate}
-          `;
+          `);
         }
         if (destBranchId) {
-          await sql`
+          txStatements.push(sql`
             UPDATE inventory_items ii
-               SET quantity = GREATEST(quantity - ${moved}, 0)
+               SET quantity = quantity - ${moved}
               FROM inventory_operations io
              WHERE ii.operation_id = io.id
                AND io.inventory_type = 'Transfer'
@@ -936,14 +996,15 @@ async function DELETE(request) {
                AND ii.branch_id = ${destBranchId}
                AND io.id <> ALL(${pairedIds})
                AND COALESCE(io.operation_date, io.created_at) > ${opDate}
-          `;
+          `);
         }
       }
-
-      // inventory_items rows for the paired ops are deleted via
-      // ON DELETE CASCADE when the operations row goes.
       for (const pid of pairedIds) {
-        await sql`DELETE FROM inventory_operations WHERE id = ${pid}`;
+        // inventory_items for the paired ops cascade via FK on delete.
+        txStatements.push(sql`DELETE FROM inventory_operations WHERE id = ${pid}`);
+      }
+      if (txStatements.length > 0) {
+        await sql.transaction(txStatements);
       }
       return Response.json({
         ok: true,
@@ -1042,39 +1103,36 @@ async function PUT(request) {
     }
     const invType = operation.inventory_type;
 
-    // Validate items
-    if (!Array.isArray(items) || items.length === 0) {
+    // Items are required for Daily/Weekly/Opening edits. For
+    // Transfer, items are optional — sending only metadata (note +
+    // date) is valid (applies to both legs), and sending items
+    // triggers the delta-based chain adjustment in the Transfer
+    // branch below.
+    const cleanedItems = [];
+    if (Array.isArray(items)) {
+      for (const it of items) {
+        const itemId = parseInt(it?.itemId);
+        const qty = Number(it?.quantity);
+        if (!itemId || Number.isNaN(itemId)) continue;
+        if (!Number.isFinite(qty) || qty < 0) continue;
+        cleanedItems.push({
+          itemId,
+          quantity: qty
+        });
+      }
+    }
+    if (invType !== "Transfer" && cleanedItems.length === 0) {
       return Response.json({
         error: "أضف صنف واحد على الأقل"
       }, {
         status: 400
       });
     }
-    const cleanedItems = [];
-    for (const it of items) {
-      const itemId = parseInt(it?.itemId);
-      const qty = Number(it?.quantity);
-      if (!itemId || Number.isNaN(itemId)) continue;
-      if (!Number.isFinite(qty) || qty < 0) continue;
-      cleanedItems.push({
-        itemId,
-        quantity: qty
-      });
-    }
-    if (cleanedItems.length === 0) {
-      return Response.json({
-        error: "لا توجد أصناف صالحة"
-      }, {
-        status: 400
-      });
-    }
 
-    // Branch-visibility guard — same protection as POST.
-    // For Transfer rows we already rejected `items` edits earlier, but
-    // Daily/Weekly/Opening edits flow through here and would otherwise
-    // be able to add quantities for items disabled at the operation's
-    // branch, silently dropping them from current-stock math.
-    {
+    // Branch-visibility guard for non-Transfer edits. Transfer rows
+    // have their own validation downstream and the items live at
+    // either source or destination, not just operation.branch_id.
+    if (invType !== "Transfer" && cleanedItems.length > 0) {
       const fail = await assertItemsEnabledAtBranch(operation.branch_id, cleanedItems.map(c => c.itemId));
       if (fail) return Response.json(fail.body, {
         status: fail.status
@@ -1130,27 +1188,239 @@ async function PUT(request) {
     }
 
     // ── Handle Transfer operations ──
+    //
+    // Transfer edit is delta-based. Each (item) carries a `moved`
+    // amount stored on both legs as transfer_quantity. The legs'
+    // quantity fields hold post-transfer absolutes
+    // (source-remainder + destination-total), so a quantity change
+    // for one item must:
+    //
+    //   1. shift the OUT leg's stored absolute by -delta
+    //   2. shift the IN  leg's stored absolute by +delta
+    //   3. cascade the same shift through every later Transfer row
+    //      at the source / destination branches (their stored
+    //      absolutes baked in the old moved amount)
+    //   4. update both legs' transfer_quantity to newMoved
+    //
+    // Adding or removing items via edit is intentionally NOT
+    // supported — that path requires a delete + recreate so the
+    // initial branch-availability and routing checks run cleanly.
     if (invType === "Transfer") {
-      // Editing transfer *item quantities* is unsafe: the two legs store
-      // post-transfer absolutes (source-remainder vs. destination-total)
-      // and replacing both with the same list silently corrupts stock at
-      // one side. Until the schema carries the transfer amount as a
-      // single source of truth, allow only metadata edits (note +
-      // operation_date) — apply them to both paired rows.
-      const itemsProvided = Array.isArray(cleanedItems) && cleanedItems.length > 0;
-      if (itemsProvided) {
+      const paired = await sql`
+        SELECT id, branch_id, transfer_branch_id, transfer_direction,
+               COALESCE(operation_date, created_at) AS op_date
+          FROM inventory_operations
+         WHERE inventory_number = ${operation.inventory_number}
+         ORDER BY id ASC
+      `;
+      const outLeg = paired.find(p => p.transfer_direction === "out") || paired[0];
+      const inLeg = paired.find(p => p.transfer_direction === "in") || paired[1] || null;
+      if (!outLeg || !inLeg) {
         return Response.json({
-          error: "تعديل كميات أصناف التحويل غير مدعوم. للتغيير، احذف التحويل ثم أنشئه من جديد."
+          error: "بنية التحويل غير مكتملة (ساق مفقودة)"
         }, {
-          status: 400
+          status: 500
         });
       }
-      const paired = await sql`
-        SELECT id, branch_id, transfer_direction
-        FROM inventory_operations
-        WHERE inventory_number = ${operation.inventory_number}
-        ORDER BY id ASC
-      `;
+      const sourceBranchId = outLeg.branch_id;
+      const destBranchId = inLeg.branch_id;
+      const opDate = outLeg.op_date;
+      const pairedIds = [outLeg.id, inLeg.id];
+
+      // If no `items` payload, fall back to metadata-only update.
+      const itemsProvided = Array.isArray(cleanedItems) && cleanedItems.length > 0;
+      if (itemsProvided) {
+        const outItems = await sql`
+          SELECT item_id, quantity, transfer_quantity
+            FROM inventory_items
+           WHERE operation_id = ${outLeg.id}
+        `;
+        const inItems = await sql`
+          SELECT item_id, quantity
+            FROM inventory_items
+           WHERE operation_id = ${inLeg.id}
+        `;
+        const outMap = new Map(outItems.map(r => [Number(r.item_id), {
+          qty: Number(r.quantity) || 0,
+          moved: r.transfer_quantity === null || r.transfer_quantity === undefined ? null : Number(r.transfer_quantity)
+        }]));
+        const inMap = new Map(inItems.map(r => [Number(r.item_id), Number(r.quantity) || 0]));
+
+        // Build adjustments list and validate input shape.
+        const adjustments = [];
+        for (const it of cleanedItems) {
+          const out = outMap.get(it.itemId);
+          if (!out) {
+            return Response.json({
+              error: "إضافة أصناف جديدة عبر التعديل غير مدعومة — احذف التحويل وأنشئه من جديد",
+              item_id: it.itemId
+            }, {
+              status: 400
+            });
+          }
+          if (out.moved === null) {
+            return Response.json({
+              error: "كمية النقل الأصلية لأحد الأصناف غير معروفة — تعذّر التعديل",
+              item_id: it.itemId
+            }, {
+              status: 409
+            });
+          }
+          if (it.quantity <= 0) {
+            return Response.json({
+              error: "لإزالة صنف من التحويل احذف التحويل وأنشئه من جديد",
+              item_id: it.itemId
+            }, {
+              status: 400
+            });
+          }
+          const delta = it.quantity - out.moved;
+          if (delta !== 0) {
+            adjustments.push({
+              item_id: it.itemId,
+              newMoved: it.quantity,
+              delta,
+              outQty: out.qty,
+              inQty: inMap.get(it.itemId) || 0
+            });
+          }
+        }
+
+        // Pre-flight: don't let an edit push any chain value negative.
+        for (const adj of adjustments) {
+          const {
+            item_id,
+            delta,
+            outQty,
+            inQty
+          } = adj;
+
+          // OUT leg new qty = outQty - delta. If delta > outQty, source
+          // didn't have that many to transfer in the first place.
+          if (outQty - delta < 0) {
+            return Response.json({
+              error: "الكمية الجديدة تتجاوز ما كان متاحاً في فرع المرسل وقت التحويل",
+              item_id
+            }, {
+              status: 400
+            });
+          }
+
+          // IN leg new qty = inQty + delta. Floor at 0.
+          if (inQty + delta < 0) {
+            return Response.json({
+              error: "الكمية في فرع المستلم غير كافية للصنف",
+              item_id
+            }, {
+              status: 400
+            });
+          }
+
+          // Source cascade: when delta > 0 we subtract delta from
+          // every subsequent Transfer row at the source. Reject if
+          // any would go negative — user must shrink/delete those
+          // later transfers first.
+          if (delta > 0) {
+            const conflicts = await sql`
+              SELECT io.inventory_number
+                FROM inventory_items ii
+                JOIN inventory_operations io ON io.id = ii.operation_id
+               WHERE io.inventory_type = 'Transfer'
+                 AND ii.item_id = ${item_id}
+                 AND ii.branch_id = ${sourceBranchId}
+                 AND io.id <> ALL(${pairedIds})
+                 AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+                 AND ii.quantity < ${delta}
+            `;
+            if (conflicts.length > 0) {
+              return Response.json({
+                error: "لا يمكن التعديل: توجد تحويلات لاحقة في فرع المرسل ستصبح كميتها سالبة",
+                dependent_transfers: Array.from(new Set(conflicts.map(c => c.inventory_number)))
+              }, {
+                status: 409
+              });
+            }
+          }
+
+          // Destination cascade: when delta < 0 we subtract |delta|
+          // from every subsequent Transfer row at the destination.
+          if (delta < 0) {
+            const need = -delta;
+            const conflicts = await sql`
+              SELECT io.inventory_number
+                FROM inventory_items ii
+                JOIN inventory_operations io ON io.id = ii.operation_id
+               WHERE io.inventory_type = 'Transfer'
+                 AND ii.item_id = ${item_id}
+                 AND ii.branch_id = ${destBranchId}
+                 AND io.id <> ALL(${pairedIds})
+                 AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+                 AND ii.quantity < ${need}
+            `;
+            if (conflicts.length > 0) {
+              return Response.json({
+                error: "لا يمكن التعديل: توجد تحويلات لاحقة في فرع المستلم ستصبح كميتها سالبة",
+                dependent_transfers: Array.from(new Set(conflicts.map(c => c.inventory_number)))
+              }, {
+                status: 409
+              });
+            }
+          }
+        }
+
+        // Apply atomically: legs + cascade + transfer_quantity.
+        if (adjustments.length > 0) {
+          const stmts = [];
+          for (const adj of adjustments) {
+            const {
+              item_id,
+              newMoved,
+              delta
+            } = adj;
+            stmts.push(sql`
+              UPDATE inventory_items
+                 SET quantity = quantity - ${delta},
+                     transfer_quantity = ${newMoved}
+               WHERE operation_id = ${outLeg.id}
+                 AND item_id = ${item_id}
+            `);
+            stmts.push(sql`
+              UPDATE inventory_items
+                 SET quantity = quantity + ${delta},
+                     transfer_quantity = ${newMoved}
+               WHERE operation_id = ${inLeg.id}
+                 AND item_id = ${item_id}
+            `);
+            stmts.push(sql`
+              UPDATE inventory_items ii
+                 SET quantity = quantity - ${delta}
+                FROM inventory_operations io
+               WHERE ii.operation_id = io.id
+                 AND io.inventory_type = 'Transfer'
+                 AND ii.item_id = ${item_id}
+                 AND ii.branch_id = ${sourceBranchId}
+                 AND io.id <> ALL(${pairedIds})
+                 AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+            `);
+            stmts.push(sql`
+              UPDATE inventory_items ii
+                 SET quantity = quantity + ${delta}
+                FROM inventory_operations io
+               WHERE ii.operation_id = io.id
+                 AND io.inventory_type = 'Transfer'
+                 AND ii.item_id = ${item_id}
+                 AND ii.branch_id = ${destBranchId}
+                 AND io.id <> ALL(${pairedIds})
+                 AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+            `);
+          }
+          await sql.transaction(stmts);
+        }
+      }
+
+      // Note + date metadata always applied to both legs (outside
+      // the items transaction — these are idempotent and don't
+      // touch chain state).
       for (const p of paired) {
         await updateOperationRow(p.id, note, operationDate);
       }

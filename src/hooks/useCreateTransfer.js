@@ -63,6 +63,7 @@ export function useCreateTransfer({ onSuccess, onError } = {}) {
       queryClient.invalidateQueries({ queryKey: ["variance"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
       queryClient.invalidateQueries({ queryKey: ["operation-details"] });
+      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
       onSuccess?.(data);
     },
     onError: (err) => {

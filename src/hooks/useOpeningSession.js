@@ -55,6 +55,7 @@ export function useOpeningSession(
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["opening-sessions"] });
       queryClient.invalidateQueries({ queryKey: ["operations"] });
+      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
       // Close modal after a brief success message
       setTimeout(() => {
         setOpeningModalOpen(false);
