@@ -1,27 +1,26 @@
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureMarketingSchema, s as slugifyName, g as generateSlugSuffix } from './_schema-DJCyIsi1.js';
+import '@neondatabase/serverless';
+import 'crypto';
+
 // GET    /api/marketing/bloggers              — list all
 // POST   /api/marketing/bloggers              — create (auto-slug)
 // PUT    /api/marketing/bloggers (body.id)    — update
 // DELETE /api/marketing/bloggers?id=...       — delete
 
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
-import {
-  ensureMarketingSchema,
-  generateSlugSuffix,
-  slugifyName,
-} from "../_schema.js";
-
 const REQUIRE_MARKETING = {
   role: "Admin",
-  permission: "can_manage_marketing",
+  permission: "can_manage_marketing"
 };
-
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, REQUIRE_MARKETING);
-  if (!auth.ok) return Response.json({ error: auth.error }, { status: auth.status });
-
+  if (!auth.ok) return Response.json({
+    error: auth.error
+  }, {
+    status: auth.status
+  });
   await ensureMarketingSchema();
-
   const rows = await sql`
     SELECT id, name, handle, phone, note, slug, state,
            activated_at, activated_by_employee_id, activated_by_employee_name,
@@ -29,19 +28,25 @@ export async function GET(request) {
       FROM marketing_bloggers
      ORDER BY created_at DESC, id DESC
   `;
-  return Response.json({ bloggers: rows });
+  return Response.json({
+    bloggers: rows
+  });
 }
-
-export async function POST(request) {
+async function POST(request) {
   const auth = requireAuth(request, REQUIRE_MARKETING);
-  if (!auth.ok) return Response.json({ error: auth.error }, { status: auth.status });
-
+  if (!auth.ok) return Response.json({
+    error: auth.error
+  }, {
+    status: auth.status
+  });
   await ensureMarketingSchema();
-
   const body = await request.json().catch(() => ({}));
   const name = String(body.name || "").trim();
-  if (!name) return Response.json({ error: "الاسم مطلوب" }, { status: 400 });
-
+  if (!name) return Response.json({
+    error: "الاسم مطلوب"
+  }, {
+    status: 400
+  });
   const handle = body.handle ? String(body.handle).trim().replace(/^@/, "") : null;
   const phone = body.phone ? String(body.phone).trim() : null;
   const note = body.note ? String(body.note).trim() : null;
@@ -59,42 +64,51 @@ export async function POST(request) {
     }
   }
   if (!slug) {
-    return Response.json({ error: "تعذّر توليد كود فريد، حاول مجدداً" }, { status: 500 });
+    return Response.json({
+      error: "تعذّر توليد كود فريد، حاول مجدداً"
+    }, {
+      status: 500
+    });
   }
-
   const [row] = await sql`
     INSERT INTO marketing_bloggers (name, handle, phone, note, slug, state)
     VALUES (${name}, ${handle}, ${phone}, ${note}, ${slug}, 'pending')
     RETURNING id, name, handle, phone, note, slug, state, created_at, updated_at
   `;
-  return Response.json({ blogger: row }, { status: 201 });
+  return Response.json({
+    blogger: row
+  }, {
+    status: 201
+  });
 }
-
-export async function PUT(request) {
+async function PUT(request) {
   const auth = requireAuth(request, REQUIRE_MARKETING);
-  if (!auth.ok) return Response.json({ error: auth.error }, { status: auth.status });
-
+  if (!auth.ok) return Response.json({
+    error: auth.error
+  }, {
+    status: auth.status
+  });
   await ensureMarketingSchema();
-
   const body = await request.json().catch(() => ({}));
   const id = Number(body.id);
   if (!Number.isFinite(id) || id <= 0) {
-    return Response.json({ error: "id مطلوب" }, { status: 400 });
+    return Response.json({
+      error: "id مطلوب"
+    }, {
+      status: 400
+    });
   }
-
   const name = body.name !== undefined ? String(body.name).trim() : null;
   if (name !== null && !name) {
-    return Response.json({ error: "الاسم لا يمكن أن يكون فارغاً" }, { status: 400 });
+    return Response.json({
+      error: "الاسم لا يمكن أن يكون فارغاً"
+    }, {
+      status: 400
+    });
   }
-  const handle = body.handle !== undefined
-    ? (body.handle ? String(body.handle).trim().replace(/^@/, "") : null)
-    : undefined;
-  const phone = body.phone !== undefined
-    ? (body.phone ? String(body.phone).trim() : null)
-    : undefined;
-  const note = body.note !== undefined
-    ? (body.note ? String(body.note).trim() : null)
-    : undefined;
+  const handle = body.handle !== undefined ? body.handle ? String(body.handle).trim().replace(/^@/, "") : null : undefined;
+  const phone = body.phone !== undefined ? body.phone ? String(body.phone).trim() : null : undefined;
+  const note = body.note !== undefined ? body.note ? String(body.note).trim() : null : undefined;
 
   // Build dynamic UPDATE. Only touch fields that were sent.
   const sets = [];
@@ -121,11 +135,14 @@ export async function PUT(request) {
     idx += 1;
   }
   if (sets.length === 0) {
-    return Response.json({ error: "لا توجد حقول للتعديل" }, { status: 400 });
+    return Response.json({
+      error: "لا توجد حقول للتعديل"
+    }, {
+      status: 400
+    });
   }
   sets.push(`updated_at = NOW()`);
   vals.push(id);
-
   const query = `
     UPDATE marketing_bloggers
        SET ${sets.join(", ")}
@@ -135,25 +152,45 @@ export async function PUT(request) {
                created_at, updated_at
   `;
   const [row] = await sql(query, vals);
-  if (!row) return Response.json({ error: "غير موجود" }, { status: 404 });
-  return Response.json({ blogger: row });
+  if (!row) return Response.json({
+    error: "غير موجود"
+  }, {
+    status: 404
+  });
+  return Response.json({
+    blogger: row
+  });
 }
-
-export async function DELETE(request) {
+async function DELETE(request) {
   const auth = requireAuth(request, REQUIRE_MARKETING);
-  if (!auth.ok) return Response.json({ error: auth.error }, { status: auth.status });
-
+  if (!auth.ok) return Response.json({
+    error: auth.error
+  }, {
+    status: auth.status
+  });
   await ensureMarketingSchema();
-
   const url = new URL(request.url);
   const id = Number(url.searchParams.get("id"));
   if (!Number.isFinite(id) || id <= 0) {
-    return Response.json({ error: "id مطلوب" }, { status: 400 });
+    return Response.json({
+      error: "id مطلوب"
+    }, {
+      status: 400
+    });
   }
   const [row] = await sql`
     DELETE FROM marketing_bloggers WHERE id = ${id}
     RETURNING id
   `;
-  if (!row) return Response.json({ error: "غير موجود" }, { status: 404 });
-  return Response.json({ ok: true, id: row.id });
+  if (!row) return Response.json({
+    error: "غير موجود"
+  }, {
+    status: 404
+  });
+  return Response.json({
+    ok: true,
+    id: row.id
+  });
 }
+
+export { DELETE, GET, POST, PUT };

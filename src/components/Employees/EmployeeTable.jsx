@@ -37,6 +37,7 @@ export function EmployeeTable({
       if (employee.can_access_workspace) tasks.push("Workspace");
       if (employee.can_manage_deductions) tasks.push("الخصميات");
       if (employee.can_access_hr) tasks.push("HR");
+      if (employee.can_manage_marketing) tasks.push("التسويق");
       return tasks;
     }
 

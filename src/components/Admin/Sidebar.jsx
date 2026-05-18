@@ -15,10 +15,6 @@ import {
   BarChart3,
   Truck,
   Banknote,
-  Megaphone,
-  QrCode,
-  Coffee,
-  Settings,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import AppSectionSwitcher from "@/components/AppSectionSwitcher";
@@ -31,13 +27,6 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
       activePage === "stock-value",
   );
 
-  // Marketing subsection (bloggers / menu / settings). Auto-open when
-  // landing on any of them so the user sees their place in the tree.
-  const [isMarketingOpen, setIsMarketingOpen] = useState(
-    activePage === "marketing-bloggers" ||
-      activePage === "marketing-menu" ||
-      activePage === "marketing-settings",
-  );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // Sidebar mounts on every admin page navigation (it's rendered per-page,
   // not in the layout). Previously this used useState(true) + useEffect to
@@ -71,9 +60,6 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
       variance: "تقرير الانحراف",
       receipts: "الواردات",
       "stock-value": "قيمة المخزون",
-      "marketing-bloggers": "بطاقات البلوقرز",
-      "marketing-menu": "منيو الضيافة",
-      "marketing-settings": "إعدادات التسويق",
     };
 
     return titles[activePage] || "أنظمة Quarters";
@@ -348,84 +334,6 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             </a>
           ) : null}
 
-          {/* Marketing — separate section. Bloggers / menu / settings. */}
-          <div>
-            <button
-              onClick={() => setIsMarketingOpen(!isMarketingOpen)}
-              className="w-full flex items-center justify-between gap-3 px-4 py-3 text-white/70 hover:text-white hover:bg-white/[0.06] rounded-2xl transition-colors border border-transparent"
-            >
-              <div className="flex items-center gap-3">
-                <Megaphone className="w-5 h-5" />
-                <span>التسويق</span>
-              </div>
-              {isMarketingOpen ? (
-                <ChevronUp className="w-4 h-4" />
-              ) : (
-                <ChevronDown className="w-4 h-4" />
-              )}
-            </button>
-
-            {isMarketingOpen && (
-              <div className="mr-4 mt-2 space-y-1 border-r border-white/10 pr-3">
-                <a
-                  href="/admin/marketing/bloggers"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
-                    activePage === "marketing-bloggers"
-                      ? "bg-white/10 text-white border-white/20"
-                      : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"
-                  }`}
-                >
-                  <QrCode className="w-4 h-4" />
-                  <span
-                    className={
-                      activePage === "marketing-bloggers" ? "font-semibold" : ""
-                    }
-                  >
-                    بطاقات البلوقرز
-                  </span>
-                </a>
-
-                <a
-                  href="/admin/marketing/menu"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
-                    activePage === "marketing-menu"
-                      ? "bg-white/10 text-white border-white/20"
-                      : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"
-                  }`}
-                >
-                  <Coffee className="w-4 h-4" />
-                  <span
-                    className={
-                      activePage === "marketing-menu" ? "font-semibold" : ""
-                    }
-                  >
-                    منيو الضيافة
-                  </span>
-                </a>
-
-                <a
-                  href="/admin/marketing/settings"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
-                    activePage === "marketing-settings"
-                      ? "bg-white/10 text-white border-white/20"
-                      : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"
-                  }`}
-                >
-                  <Settings className="w-4 h-4" />
-                  <span
-                    className={
-                      activePage === "marketing-settings" ? "font-semibold" : ""
-                    }
-                  >
-                    إعدادات التسويق
-                  </span>
-                </a>
-              </div>
-            )}
-          </div>
         </nav>
 
         <button

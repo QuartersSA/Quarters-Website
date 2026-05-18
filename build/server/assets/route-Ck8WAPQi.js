@@ -1,20 +1,28 @@
-import sql from "@/app/api/utils/sql";
-import { hash } from "argon2";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { hash } from 'argon2';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 // GET single employee with branches
-export async function GET(request, { params }) {
+async function GET(request, {
+  params
+}) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_employees",
+    permission: "can_manage_employees"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
-    const { id } = params;
-
+    const {
+      id
+    } = params;
     const [employee] = await sql`
       SELECT
         e.id,
@@ -70,33 +78,43 @@ export async function GET(request, { params }) {
       WHERE e.id = ${id}
       GROUP BY e.id
     `;
-
     if (!employee) {
-      return Response.json({ error: "Employee not found" }, { status: 404 });
+      return Response.json({
+        error: "Employee not found"
+      }, {
+        status: 404
+      });
     }
-
     return Response.json(employee);
   } catch (error) {
     console.error("Error fetching employee:", error);
-    return Response.json(
-      { error: "Failed to fetch employee" },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch employee"
+    }, {
+      status: 500
+    });
   }
 }
 
 // UPDATE employee
-export async function PUT(request, { params }) {
+async function PUT(request, {
+  params
+}) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_employees",
+    permission: "can_manage_employees"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
-    const { id } = params;
+    const {
+      id
+    } = params;
     const body = await request.json();
     const {
       name,
@@ -132,11 +150,9 @@ export async function PUT(request, { params }) {
       notify_inventory_operation_push,
       // Admin notification preferences (WhatsApp)
       notify_shift_close_wa,
-      notify_inventory_operation_wa,
+      notify_inventory_operation_wa
     } = body;
-
     const employeeId = parseInt(id);
-
     const [existing] = await sql`
       SELECT
         id,
@@ -156,56 +172,32 @@ export async function PUT(request, { params }) {
       FROM employees
       WHERE id = ${employeeId}
     `;
-
     if (!existing) {
-      return Response.json({ error: "Employee not found" }, { status: 404 });
+      return Response.json({
+        error: "Employee not found"
+      }, {
+        status: 404
+      });
     }
-
     const effectiveRole = role !== undefined ? role : existing.role;
     const isAdmin = effectiveRole === "Admin";
-
-    const effectiveCanDoInventory =
-      can_do_inventory !== undefined
-        ? !!can_do_inventory
-        : !!existing.can_do_inventory;
-
-    const effectiveCanCloseShift =
-      can_close_shift !== undefined
-        ? !!can_close_shift
-        : !!existing.can_close_shift;
-
-    const effectiveNotifyShiftClosePush =
-      notify_shift_close_push !== undefined
-        ? !!notify_shift_close_push
-        : !!existing.notify_shift_close_push;
-
-    const effectiveNotifyInventoryOperationPush =
-      notify_inventory_operation_push !== undefined
-        ? !!notify_inventory_operation_push
-        : !!existing.notify_inventory_operation_push;
-
-    const effectiveNotifyShiftCloseWa =
-      notify_shift_close_wa !== undefined
-        ? !!notify_shift_close_wa
-        : !!existing.notify_shift_close_wa;
-
-    const effectiveNotifyInventoryOperationWa =
-      notify_inventory_operation_wa !== undefined
-        ? !!notify_inventory_operation_wa
-        : !!existing.notify_inventory_operation_wa;
-
-    const normalizedBranchIds = Array.isArray(branchIds)
-      ? branchIds.filter((v) => v !== null && v !== undefined)
-      : null;
+    const effectiveCanDoInventory = can_do_inventory !== undefined ? !!can_do_inventory : !!existing.can_do_inventory;
+    const effectiveCanCloseShift = can_close_shift !== undefined ? !!can_close_shift : !!existing.can_close_shift;
+    const effectiveNotifyShiftClosePush = notify_shift_close_push !== undefined ? !!notify_shift_close_push : !!existing.notify_shift_close_push;
+    const effectiveNotifyInventoryOperationPush = notify_inventory_operation_push !== undefined ? !!notify_inventory_operation_push : !!existing.notify_inventory_operation_push;
+    const effectiveNotifyShiftCloseWa = notify_shift_close_wa !== undefined ? !!notify_shift_close_wa : !!existing.notify_shift_close_wa;
+    const effectiveNotifyInventoryOperationWa = notify_inventory_operation_wa !== undefined ? !!notify_inventory_operation_wa : !!existing.notify_inventory_operation_wa;
+    const normalizedBranchIds = Array.isArray(branchIds) ? branchIds.filter(v => v !== null && v !== undefined) : null;
 
     // Enforce: employee-role permissions require >= 1 branch
     if (!isAdmin && (effectiveCanDoInventory || effectiveCanCloseShift)) {
       if (normalizedBranchIds) {
         if (normalizedBranchIds.length === 0) {
-          return Response.json(
-            { error: "لا يمكن تحديث الموظف بدون تحديد فرع واحد على الأقل" },
-            { status: 400 },
-          );
+          return Response.json({
+            error: "لا يمكن تحديث الموظف بدون تحديد فرع واحد على الأقل"
+          }, {
+            status: 400
+          });
         }
       } else {
         const [branchCountRow] = await sql`
@@ -217,13 +209,13 @@ export async function PUT(request, { params }) {
           FROM employees e
           WHERE e.id = ${employeeId}
         `;
-
         const branchCount = Number(branchCountRow?.branch_count || 0);
         if (branchCount < 1) {
-          return Response.json(
-            { error: "لا يمكن تحديث الموظف بدون تحديد فرع واحد على الأقل" },
-            { status: 400 },
-          );
+          return Response.json({
+            error: "لا يمكن تحديث الموظف بدون تحديد فرع واحد على الأقل"
+          }, {
+            status: 400
+          });
         }
       }
     }
@@ -232,7 +224,6 @@ export async function PUT(request, { params }) {
     const updates = [];
     const values = [];
     let paramCount = 1;
-
     if (name !== undefined) {
       updates.push(`name = $${paramCount}`);
       values.push(name);
@@ -300,7 +291,6 @@ export async function PUT(request, { params }) {
       values.push(other_allowances);
       paramCount++;
     }
-
     if (password !== undefined && password !== "") {
       const hashedPassword = await hash(password);
       updates.push(`password = $${paramCount}`);
@@ -312,31 +302,26 @@ export async function PUT(request, { params }) {
       values.push(role);
       paramCount++;
     }
-
     if (can_access_workspace !== undefined) {
       updates.push(`can_access_workspace = $${paramCount}`);
       values.push(!!can_access_workspace);
       paramCount++;
     }
-
     if (can_manage_inventory !== undefined) {
       updates.push(`can_manage_inventory = $${paramCount}`);
       values.push(!!can_manage_inventory);
       paramCount++;
     }
-
     if (can_manage_accounting !== undefined) {
       updates.push(`can_manage_accounting = $${paramCount}`);
       values.push(!!can_manage_accounting);
       paramCount++;
     }
-
     if (can_manage_marketing !== undefined) {
       updates.push(`can_manage_marketing = $${paramCount}`);
       values.push(!!can_manage_marketing);
       paramCount++;
     }
-
     if (can_manage_employees !== undefined) {
       updates.push(`can_manage_employees = $${paramCount}`);
       values.push(isAdmin ? !!can_manage_employees : false);
@@ -347,7 +332,6 @@ export async function PUT(request, { params }) {
     if (!isAdmin && role !== undefined && can_manage_employees === undefined) {
       updates.push("can_manage_employees = false");
     }
-
     if (can_access_hr !== undefined) {
       updates.push(`can_access_hr = $${paramCount}`);
       values.push(isAdmin ? !!can_access_hr : false);
@@ -358,7 +342,6 @@ export async function PUT(request, { params }) {
     if (!isAdmin && role !== undefined && can_access_hr === undefined) {
       updates.push("can_access_hr = false");
     }
-
     if (can_manage_deductions !== undefined) {
       updates.push(`can_manage_deductions = $${paramCount}`);
       values.push(isAdmin ? !!can_manage_deductions : false);
@@ -369,37 +352,31 @@ export async function PUT(request, { params }) {
     if (!isAdmin && role !== undefined && can_manage_deductions === undefined) {
       updates.push("can_manage_deductions = false");
     }
-
     if (can_do_inventory !== undefined) {
       updates.push(`can_do_inventory = $${paramCount}`);
       values.push(!!can_do_inventory);
       paramCount++;
     }
-
     if (can_close_shift !== undefined) {
       updates.push(`can_close_shift = $${paramCount}`);
       values.push(!!can_close_shift);
       paramCount++;
     }
-
     if (notify_shift_close_push !== undefined) {
       updates.push(`notify_shift_close_push = $${paramCount}`);
       values.push(isAdmin ? effectiveNotifyShiftClosePush : false);
       paramCount++;
     }
-
     if (notify_inventory_operation_push !== undefined) {
       updates.push(`notify_inventory_operation_push = $${paramCount}`);
       values.push(isAdmin ? effectiveNotifyInventoryOperationPush : false);
       paramCount++;
     }
-
     if (notify_shift_close_wa !== undefined) {
       updates.push(`notify_shift_close_wa = $${paramCount}`);
       values.push(isAdmin ? effectiveNotifyShiftCloseWa : false);
       paramCount++;
     }
-
     if (notify_inventory_operation_wa !== undefined) {
       updates.push(`notify_inventory_operation_wa = $${paramCount}`);
       values.push(isAdmin ? effectiveNotifyInventoryOperationWa : false);
@@ -498,38 +475,49 @@ export async function PUT(request, { params }) {
       WHERE e.id = ${employeeId}
       GROUP BY e.id
     `;
-
     return Response.json(updated);
   } catch (error) {
     console.error("Error updating employee:", error);
-    return Response.json(
-      { error: "Failed to update employee", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to update employee",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
 
 // DELETE employee
-export async function DELETE(request, { params }) {
+async function DELETE(request, {
+  params
+}) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_employees",
+    permission: "can_manage_employees"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
-    const { id } = params;
-
+    const {
+      id
+    } = params;
     await sql`DELETE FROM employees WHERE id = ${id}`;
-
-    return Response.json({ success: true });
+    return Response.json({
+      success: true
+    });
   } catch (error) {
     console.error("Error deleting employee:", error);
-    return Response.json(
-      { error: "Failed to delete employee" },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to delete employee"
+    }, {
+      status: 500
+    });
   }
 }
+
+export { DELETE, GET, PUT };

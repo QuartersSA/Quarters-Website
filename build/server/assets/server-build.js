@@ -7,14 +7,14 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { useButton } from '@react-aria/button';
 import * as React from 'react';
 import React__default, { useState, useEffect, Component, useRef, useCallback, useMemo } from 'react';
-import { f as fetchWithHeaders } from './index-CDRtx6_S.js';
+import { f as fetchWithHeaders } from './index-COmBxanf.js';
 import { SessionProvider } from '@hono/auth-js/react';
 import { toPng } from 'html-to-image';
 import { serializeError } from 'serialize-error';
 import { Toaster, toast } from 'sonner';
 import { useIdleTimer } from 'react-idle-timer';
 import { QueryClientProvider, QueryClient, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { Shield, ClipboardList, Calculator, Languages, ArrowLeft, LayoutGrid, Users, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, Receipt, LogOut, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, X, Tag, Anchor, MessageSquare, Pencil, Trash2, Sparkles, FileText, ClipboardCheck, Info, CheckCircle2, Clock, Copy, Download, Package, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, Minus, User, DollarSign, Percent, Lock, Send, Unlock, Gift, ChevronRight, ChevronLeft, Briefcase, Menu, Truck, ChevronUp, TrendingDown, BarChart3, Megaphone, QrCode, Coffee, Settings, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Search, Printer, Layers, MapPin, Edit, XCircle, UserCog, Phone, Mail, Bell, Ban, Filter, Link, ClipboardX, EyeOff, MinusSquare, Hash, ArrowRight, ExternalLink, Palette, CalendarCheck, FolderOpen, ArrowUpRight, ArrowDownLeft, CalendarPlus, StickyNote, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Globe, Image, FileImage, Loader2, ScrollText, BadgeCheck, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, Circle, HeartPulse, GitBranch, Users2, Flag, Tags, User2, Upload, Paperclip, Link2, Unlink, SlidersHorizontal, List, FolderKanban } from 'lucide-react';
+import { Shield, ClipboardList, Calculator, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, Receipt, LogOut, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, X, Tag, Anchor, MessageSquare, Pencil, Trash2, Sparkles, FileText, ClipboardCheck, Info, CheckCircle2, Clock, Copy, Download, Package, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, Minus, User, DollarSign, Percent, Lock, Send, Unlock, Gift, ChevronRight, ChevronLeft, Briefcase, Menu, Truck, ChevronUp, TrendingDown, BarChart3, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Search, Printer, Layers, MapPin, Edit, XCircle, UserCog, Phone, Mail, Bell, Ban, Filter, Link, ClipboardX, EyeOff, MinusSquare, Hash, CalendarCheck, FolderOpen, ArrowUpRight, ArrowDownLeft, CalendarPlus, StickyNote, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Globe, Image, FileImage, Loader2, ScrollText, BadgeCheck, Settings, QrCode, ArrowRight, ExternalLink, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, Circle, HeartPulse, GitBranch, Users2, Flag, Tags, User2, Upload, Paperclip, Link2, Unlink, SlidersHorizontal, List, FolderKanban } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import _JSXStyle from 'styled-jsx/style.js';
 import { getDefaultClassNames, DayPicker } from 'react-day-picker';
@@ -770,7 +770,7 @@ function useWorkspaceUser() {
   };
 }
 
-const BRAND_LOGO_URL$4 = "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/resize/96x96/-/format/png/";
+const BRAND_LOGO_URL$5 = "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/resize/96x96/-/format/png/";
 function AccountingLayout({
   children
 }) {
@@ -802,7 +802,7 @@ function AccountingLayout({
       Background,
       /* @__PURE__ */ jsx("div", { className: "relative w-full max-w-md", children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} rounded-3xl p-6`, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
-          /* @__PURE__ */ jsx("div", { className: "w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center overflow-hidden border border-white/10", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$4, alt: "Logo", className: "w-10 h-10 object-contain" }) }),
+          /* @__PURE__ */ jsx("div", { className: "w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center overflow-hidden border border-white/10", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$5, alt: "Logo", className: "w-10 h-10 object-contain" }) }),
           /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
             /* @__PURE__ */ jsx("div", { className: "text-white font-bold text-lg tracking-tight", children: "المحاسبة" }),
             /* @__PURE__ */ jsx("div", { className: "text-white/70 text-sm truncate", children: name ? `مرحباً ${name}` : "جاري التحميل…" })
@@ -834,12 +834,14 @@ function readAdminPermissions() {
     const accFlag = adminUser?.can_manage_accounting;
     const hrRaw = adminUser?.can_access_hr === void 0 || adminUser?.can_access_hr === null ? adminUser?.can_manage_employees : adminUser?.can_access_hr;
     const deductionsFlag = adminUser?.can_manage_deductions;
+    const marketingFlag = adminUser?.can_manage_marketing;
     return {
       can_access_workspace: wsFlag === void 0 || wsFlag === null ? true : !!wsFlag,
       can_manage_inventory: invFlag === void 0 || invFlag === null ? true : !!invFlag,
       can_manage_accounting: accFlag === void 0 || accFlag === null ? true : !!accFlag,
       can_access_hr: hrRaw === void 0 || hrRaw === null ? true : !!hrRaw,
-      can_manage_deductions: !!deductionsFlag
+      can_manage_deductions: !!deductionsFlag,
+      can_manage_marketing: !!marketingFlag
     };
   } catch {
     return null;
@@ -912,6 +914,22 @@ function AppSectionSwitcher({
       } catch {
       }
     }
+  }, {
+    key: "marketing",
+    href: "/marketing/bloggers",
+    label: "التسويق",
+    Icon: Megaphone,
+    gate: (p) => p ? p.can_manage_marketing : false,
+    onClick: () => {
+      try {
+        localStorage.setItem("adminMode", "marketing");
+        const adminUser = localStorage.getItem("adminUser");
+        if (adminUser) {
+          localStorage.setItem("workspaceUser", adminUser);
+        }
+      } catch {
+      }
+    }
   }];
   const visibleItems = items.filter((it) => it.gate(perms));
   const shellClass = `${ws.glassSoft} ${ws.card}`;
@@ -939,8 +957,8 @@ function AppSectionSwitcher({
   );
 }
 
-const BRAND_LOGO_URL$3 = "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/resize/80x80/-/format/png/";
-function initials$4(name) {
+const BRAND_LOGO_URL$4 = "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/resize/80x80/-/format/png/";
+function initials$5(name) {
   const cleaned = (name || "").trim();
   if (!cleaned) return "Q";
   const parts = cleaned.split(" ").filter(Boolean);
@@ -1010,7 +1028,7 @@ function AccountingSidebar({
   };
   const userName = user?.name || "";
   const userRole = user?.role || "";
-  const avatarText = initials$4(userName);
+  const avatarText = initials$5(userName);
   const shellClass = `${ws.glass}`;
   const pillBase = "rounded-2xl border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/25";
   return /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -1018,13 +1036,13 @@ function AccountingSidebar({
       /* @__PURE__ */ jsx(AppSectionSwitcher, { active: "accounting", className: "scale-90 origin-left" }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
         /* @__PURE__ */ jsx("div", { className: "text-white text-sm font-bold tracking-tight whitespace-nowrap", children: "المحاسبة" }),
-        /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$3, alt: "Quarters", className: "h-8 w-auto bg-white rounded-xl p-1 shrink-0" })
+        /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$4, alt: "Quarters", className: "h-8 w-auto bg-white rounded-xl p-1 shrink-0" })
       ] })
     ] }) }),
     /* @__PURE__ */ jsx("aside", { className: `hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-white/10`, dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col w-full", children: [
       /* @__PURE__ */ jsxs("div", { className: "p-6 border-b border-white/10", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: "w-11 h-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$3, alt: "Logo", className: "w-8 h-8 object-contain" }) }),
+          /* @__PURE__ */ jsx("div", { className: "w-11 h-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$4, alt: "Logo", className: "w-8 h-8 object-contain" }) }),
           /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
             /* @__PURE__ */ jsx("div", { className: "font-bold text-white truncate tracking-tight", children: "المحاسبة" }),
             /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 truncate", children: "أنظمة Quarters" })
@@ -9573,7 +9591,7 @@ const route8 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: page$w
 }, Symbol.toStringTag, { value: 'Module' }));
 
-function readAdminUser$2() {
+function readAdminUser$3() {
   try {
     const raw = localStorage.getItem("adminUser");
     if (!raw) return null;
@@ -9638,7 +9656,7 @@ function AdminLayout({
     try {
       localStorage.setItem("adminMode", "hr");
       localStorage.removeItem("workspaceUser");
-      const adminUser = readAdminUser$2();
+      const adminUser = readAdminUser$3();
       const hrRaw = adminUser?.can_access_hr === void 0 || adminUser?.can_access_hr === null ? adminUser?.can_manage_employees : adminUser?.can_access_hr;
       const target = hrRaw ? "/hr" : "/hr/deductions";
       window.location.href = target;
@@ -9653,7 +9671,7 @@ function AdminLayout({
       if (!auth) {
         return;
       }
-      const adminUser = readAdminUser$2();
+      const adminUser = readAdminUser$3();
       const can2 = allowedModes(adminUser);
       const allowedKeys = Object.entries(can2).filter(([, v]) => !!v).map(([k]) => k);
       if (allowedKeys.length === 0) {
@@ -9702,7 +9720,7 @@ function AdminLayout({
     /* @__PURE__ */ jsx("div", { className: "absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full bg-emerald-500/10 blur-[90px]" }),
     /* @__PURE__ */ jsx("div", { className: "absolute -bottom-56 -left-56 w-[620px] h-[620px] rounded-full bg-sky-500/10 blur-[110px]" })
   ] });
-  const adminUserForUI = React__default.useMemo(() => typeof window === "undefined" ? null : readAdminUser$2(), []);
+  const adminUserForUI = React__default.useMemo(() => typeof window === "undefined" ? null : readAdminUser$3(), []);
   const can = React__default.useMemo(() => typeof window === "undefined" ? null : allowedModes(adminUserForUI), [adminUserForUI]);
   const showInventoryBtn = can ? !!can.inventory : true;
   const showWorkspaceBtn = can ? !!can.workspace : true;
@@ -9756,7 +9774,6 @@ function Sidebar({
   activePage = "dashboard"
 }) {
   const [isInventorySummaryOpen, setIsInventorySummaryOpen] = useState(activePage === "low-stock" || activePage === "items-summary" || activePage === "variance" || activePage === "stock-value");
-  const [isMarketingOpen, setIsMarketingOpen] = useState(activePage === "marketing-bloggers" || activePage === "marketing-menu" || activePage === "marketing-settings");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [canManageEmployees] = useState(() => {
     if (typeof window === "undefined") return true;
@@ -9782,10 +9799,7 @@ function Sidebar({
       "items-summary": "ملخص الأصناف",
       variance: "تقرير الانحراف",
       receipts: "الواردات",
-      "stock-value": "قيمة المخزون",
-      "marketing-bloggers": "بطاقات البلوقرز",
-      "marketing-menu": "منيو الضيافة",
-      "marketing-settings": "إعدادات التسويق"
+      "stock-value": "قيمة المخزون"
     };
     return titles[activePage] || "أنظمة Quarters";
   }, [activePage]);
@@ -9857,30 +9871,7 @@ function Sidebar({
         canManageEmployees ? /* @__PURE__ */ jsxs("a", { href: "/admin/employees", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "employees" ? "bg-white/10 text-white border-white/20" : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"}`, children: [
           /* @__PURE__ */ jsx(Users, { className: "w-5 h-5" }),
           /* @__PURE__ */ jsx("span", { className: activePage === "employees" ? "font-semibold" : "", children: "الموظفين" })
-        ] }) : null,
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsxs("button", { onClick: () => setIsMarketingOpen(!isMarketingOpen), className: "w-full flex items-center justify-between gap-3 px-4 py-3 text-white/70 hover:text-white hover:bg-white/[0.06] rounded-2xl transition-colors border border-transparent", children: [
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx(Megaphone, { className: "w-5 h-5" }),
-              /* @__PURE__ */ jsx("span", { children: "التسويق" })
-            ] }),
-            isMarketingOpen ? /* @__PURE__ */ jsx(ChevronUp, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(ChevronDown, { className: "w-4 h-4" })
-          ] }),
-          isMarketingOpen && /* @__PURE__ */ jsxs("div", { className: "mr-4 mt-2 space-y-1 border-r border-white/10 pr-3", children: [
-            /* @__PURE__ */ jsxs("a", { href: "/admin/marketing/bloggers", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "marketing-bloggers" ? "bg-white/10 text-white border-white/20" : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"}`, children: [
-              /* @__PURE__ */ jsx(QrCode, { className: "w-4 h-4" }),
-              /* @__PURE__ */ jsx("span", { className: activePage === "marketing-bloggers" ? "font-semibold" : "", children: "بطاقات البلوقرز" })
-            ] }),
-            /* @__PURE__ */ jsxs("a", { href: "/admin/marketing/menu", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "marketing-menu" ? "bg-white/10 text-white border-white/20" : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"}`, children: [
-              /* @__PURE__ */ jsx(Coffee, { className: "w-4 h-4" }),
-              /* @__PURE__ */ jsx("span", { className: activePage === "marketing-menu" ? "font-semibold" : "", children: "منيو الضيافة" })
-            ] }),
-            /* @__PURE__ */ jsxs("a", { href: "/admin/marketing/settings", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "marketing-settings" ? "bg-white/10 text-white border-white/20" : "text-white/70 hover:text-white hover:bg-white/[0.06] border-transparent"}`, children: [
-              /* @__PURE__ */ jsx(Settings, { className: "w-4 h-4" }),
-              /* @__PURE__ */ jsx("span", { className: activePage === "marketing-settings" ? "font-semibold" : "", children: "إعدادات التسويق" })
-            ] })
-          ] })
-        ] })
+        ] }) : null
       ] }),
       /* @__PURE__ */ jsxs("button", { onClick: onLogout, className: `mt-8 w-full flex items-center justify-center gap-2 px-4 py-3 ${ws.btnDanger}`, children: [
         /* @__PURE__ */ jsx(LogOut, { className: "w-5 h-5" }),
@@ -12498,6 +12489,7 @@ const initialFormState = {
   can_manage_employees: false,
   can_access_hr: false,
   can_manage_deductions: false,
+  can_manage_marketing: false,
   // Admin notification preferences (WhatsApp)
   notify_shift_close_wa: false,
   notify_inventory_operation_wa: false,
@@ -12529,6 +12521,7 @@ function useEmployeeForm() {
       can_manage_employees: !!employee.can_manage_employees,
       can_access_hr: !!employee.can_access_hr,
       can_manage_deductions: !!employee.can_manage_deductions,
+      can_manage_marketing: !!employee.can_manage_marketing,
       // Admin notification preferences (WhatsApp)
       notify_shift_close_wa: !!employee.notify_shift_close_wa,
       notify_inventory_operation_wa: !!employee.notify_inventory_operation_wa,
@@ -12715,6 +12708,7 @@ function EmployeeTable({
       if (employee.can_access_workspace) tasks2.push("Workspace");
       if (employee.can_manage_deductions) tasks2.push("الخصميات");
       if (employee.can_access_hr) tasks2.push("HR");
+      if (employee.can_manage_marketing) tasks2.push("التسويق");
       return tasks2;
     }
     const tasks = [];
@@ -12839,6 +12833,7 @@ function EmployeeFormFields({
   const adminEmployeesBtnClass = formData.can_manage_employees ? `${ws.btnPrimary} px-4 py-2` : `${ws.btnNeutral} px-4 py-2`;
   const adminHrBtnClass = formData.can_access_hr ? `${ws.btnPrimary} px-4 py-2` : `${ws.btnNeutral} px-4 py-2`;
   const adminDeductionsBtnClass = formData.can_manage_deductions ? `${ws.btnPrimary} px-4 py-2` : `${ws.btnNeutral} px-4 py-2`;
+  const adminMarketingBtnClass = formData.can_manage_marketing ? `${ws.btnPrimary} px-4 py-2` : `${ws.btnNeutral} px-4 py-2`;
   const notifyShiftCloseWaBtnClass = formData.notify_shift_close_wa ? `${ws.btnPrimary} px-4 py-2` : `${ws.btnNeutral} px-4 py-2`;
   const notifyInventoryWaBtnClass = formData.notify_inventory_operation_wa ? `${ws.btnPrimary} px-4 py-2` : `${ws.btnNeutral} px-4 py-2`;
   return /* @__PURE__ */ jsxs("div", { className: "space-y-6", children: [
@@ -12916,6 +12911,8 @@ function EmployeeFormFields({
           can_access_hr: true,
           // NEW: deductions permission (off by default)
           can_manage_deductions: false,
+          // Marketing — separate section, off by default
+          can_manage_marketing: false,
           // إشعارات واتساب (افتراضيًا: غير مفعلة)
           notify_shift_close_wa: false,
           notify_inventory_operation_wa: false
@@ -12934,6 +12931,7 @@ function EmployeeFormFields({
           can_manage_employees: false,
           can_access_hr: false,
           can_manage_deductions: false,
+          can_manage_marketing: false,
           // إشعارات واتساب
           notify_shift_close_wa: false,
           notify_inventory_operation_wa: false
@@ -12997,6 +12995,14 @@ function EmployeeFormFields({
           formData.can_access_hr ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-5 h-5" }) : /* @__PURE__ */ jsx(XCircle, { className: "w-5 h-5" }),
           /* @__PURE__ */ jsx(Users, { className: "w-4 h-4" }),
           "HR"
+        ] }),
+        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setFormData((p) => ({
+          ...p,
+          can_manage_marketing: !p.can_manage_marketing
+        })), className: adminMarketingBtnClass, children: [
+          formData.can_manage_marketing ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-5 h-5" }) : /* @__PURE__ */ jsx(XCircle, { className: "w-5 h-5" }),
+          /* @__PURE__ */ jsx(Megaphone, { className: "w-4 h-4" }),
+          "التسويق"
         ] })
       ] })
     ] }) }) : null,
@@ -15975,1146 +15981,6 @@ const page$p = UNSAFE_withComponentProps(function WrappedPage(props) {
 const route15 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$p
-}, Symbol.toStringTag, { value: 'Module' }));
-
-function BloggersPage() {
-  const {
-    isAuthenticated,
-    logout
-  } = useAdminAuth({
-    requiredPermission: "can_manage_inventory"
-  });
-  const queryClient = useQueryClient();
-  const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({
-    name: "",
-    handle: "",
-    phone: "",
-    note: ""
-  });
-  const [error, setError] = useState(null);
-  const bloggersQuery = useQuery({
-    queryKey: ["marketing-bloggers"],
-    enabled: isAuthenticated,
-    queryFn: async () => {
-      const r = await adminFetch("/api/marketing/bloggers");
-      if (!r.ok) throw new Error("فشل تحميل البلوقرز");
-      return r.json();
-    }
-  });
-  const createMut = useMutation({
-    mutationFn: async (payload) => {
-      const r = await adminFetch("/api/marketing/bloggers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الإنشاء");
-      return d;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["marketing-bloggers"]
-      });
-      resetForm();
-    },
-    onError: (e) => setError(e.message || "خطأ")
-  });
-  const updateMut = useMutation({
-    mutationFn: async ({
-      id,
-      ...rest
-    }) => {
-      const r = await adminFetch("/api/marketing/bloggers", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          id,
-          ...rest
-        })
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
-      return d;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["marketing-bloggers"]
-      });
-      resetForm();
-    },
-    onError: (e) => setError(e.message || "خطأ")
-  });
-  const deleteMut = useMutation({
-    mutationFn: async (id) => {
-      const r = await adminFetch(`/api/marketing/bloggers?id=${encodeURIComponent(id)}`, {
-        method: "DELETE"
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
-      return d;
-    },
-    onSuccess: () => queryClient.invalidateQueries({
-      queryKey: ["marketing-bloggers"]
-    })
-  });
-  const resetForm = () => {
-    setShowForm(false);
-    setEditing(null);
-    setForm({
-      name: "",
-      handle: "",
-      phone: "",
-      note: ""
-    });
-    setError(null);
-  };
-  const openCreate = () => {
-    setEditing(null);
-    setForm({
-      name: "",
-      handle: "",
-      phone: "",
-      note: ""
-    });
-    setError(null);
-    setShowForm(true);
-  };
-  const openEdit = (b) => {
-    setEditing(b);
-    setForm({
-      name: b.name || "",
-      handle: b.handle || "",
-      phone: b.phone || "",
-      note: b.note || ""
-    });
-    setError(null);
-    setShowForm(true);
-  };
-  const submit = (e) => {
-    e.preventDefault();
-    if (!form.name.trim()) {
-      setError("الاسم مطلوب");
-      return;
-    }
-    if (editing) {
-      updateMut.mutate({
-        id: editing.id,
-        ...form
-      });
-    } else {
-      createMut.mutate(form);
-    }
-  };
-  const onDelete = (b) => {
-    if (!window.confirm(`حذف "${b.name}"؟ هذا الإجراء لا يمكن التراجع عنه.`)) return;
-    deleteMut.mutate(b.id);
-  };
-  if (!isAuthenticated) return null;
-  const bloggers = bloggersQuery.data?.bloggers || [];
-  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh]", dir: "rtl", children: [
-    /* @__PURE__ */ jsx(Sidebar, { activePage: "marketing-bloggers", onLogout: logout }),
-    /* @__PURE__ */ jsxs("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: [
-      /* @__PURE__ */ jsx(Breadcrumb, { activePage: "marketing-bloggers" }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 flex-wrap", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-pink-200`, children: /* @__PURE__ */ jsx(Megaphone, { className: "w-6 h-6" }) }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-white", children: "بطاقات البلوقرز" }),
-            /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mt-1", children: "أنشئ بطاقات دعوة لكل بلوقر مع كود QR للتفعيل عبر الكاشير." })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxs("button", { onClick: openCreate, className: `${ws.btnPrimary} px-5 py-3 justify-center`, children: [
-          /* @__PURE__ */ jsx(Plus, { className: "w-5 h-5" }),
-          /* @__PURE__ */ jsx("span", { children: "بلوقر جديد" })
-        ] })
-      ] }) }),
-      showForm ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-4", children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white", children: editing ? "تعديل بلوقر" : "بلوقر جديد" }),
-          /* @__PURE__ */ jsx("button", { onClick: resetForm, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
-        ] }),
-        error ? /* @__PURE__ */ jsx("div", { className: "mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm", children: error }) : null,
-        /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الاسم *" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.name, onChange: (e) => setForm({
-              ...form,
-              name: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "مثال: أحمد العتيبي", required: true })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "معرّف الحساب (اختياري)" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.handle, onChange: (e) => setForm({
-              ...form,
-              handle: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "@instagram" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الجوال (اختياري)" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.phone, onChange: (e) => setForm({
-              ...form,
-              phone: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "05xxxxxxxx" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "ملاحظة (اختياري)" }),
-            /* @__PURE__ */ jsx("textarea", { value: form.note, onChange: (e) => setForm({
-              ...form,
-              note: e.target.value
-            }), className: `${ws.input} px-4 py-3 resize-none`, rows: 2, placeholder: "ملاحظات داخلية" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2 flex gap-3", children: [
-            /* @__PURE__ */ jsx("button", { type: "submit", disabled: createMut.isPending || updateMut.isPending, className: `${ws.btnPrimary} flex-1 px-4 py-3 justify-center disabled:opacity-50`, children: editing ? "حفظ التعديلات" : "إنشاء" }),
-            /* @__PURE__ */ jsx("button", { type: "button", onClick: resetForm, className: `${ws.btnNeutral} px-4 py-3 justify-center`, children: "إلغاء" })
-          ] })
-        ] })
-      ] }) : null,
-      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: bloggersQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "p-8 text-center text-white/55", children: "جاري التحميل…" }) : bloggers.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-white/55", children: [
-        /* @__PURE__ */ jsx(Megaphone, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
-        /* @__PURE__ */ jsx("p", { children: "لا يوجد بلوقرز بعد. ابدأ بإضافة واحد." })
-      ] }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04]", children: [
-          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الاسم" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الكود" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الحالة" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "التفعيل" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "أُنشئ" }),
-          /* @__PURE__ */ jsx("th", { className: "text-center px-4 py-3 text-sm font-semibold text-white/55", children: "إجراءات" })
-        ] }) }),
-        /* @__PURE__ */ jsx("tbody", { children: bloggers.map((b) => {
-          const isActive = b.state === "active";
-          return /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/[0.04] hover:bg-white/[0.02]", children: [
-            /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
-              /* @__PURE__ */ jsx("div", { className: "text-white font-medium", children: b.name }),
-              b.handle ? /* @__PURE__ */ jsxs("div", { className: "text-white/45 text-xs mt-0.5", children: [
-                "@",
-                b.handle
-              ] }) : null,
-              b.phone ? /* @__PURE__ */ jsx("div", { className: "text-white/45 text-xs", children: b.phone }) : null
-            ] }),
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx("code", { className: "text-emerald-200 text-sm bg-white/[0.04] px-2 py-1 rounded", children: b.slug }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: isActive ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-500/25", children: [
-              /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3" }),
-              "مُفعَّل"
-            ] }) : /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-200 border border-amber-500/25", children: [
-              /* @__PURE__ */ jsx(Clock, { className: "w-3 h-3" }),
-              "بانتظار التفعيل"
-            ] }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/55 text-xs", children: b.activated_at ? /* @__PURE__ */ jsxs(Fragment, { children: [
-              /* @__PURE__ */ jsx("div", { children: formatDateTime$4(b.activated_at) }),
-              b.activated_by_employee_name ? /* @__PURE__ */ jsx("div", { className: "text-white/35 mt-0.5", children: b.activated_by_employee_name }) : null
-            ] }) : /* @__PURE__ */ jsx("span", { className: "text-white/35", children: "—" }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/55 text-xs", children: formatDateTime$4(b.created_at) }),
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
-              /* @__PURE__ */ jsx("a", { href: `/admin/marketing/bloggers/${b.id}/card`, className: `${ws.btnPrimary} px-3 py-1.5 text-sm justify-center`, title: "عرض بطاقة الدعوة", children: /* @__PURE__ */ jsx(QrCode, { className: "w-4 h-4" }) }),
-              /* @__PURE__ */ jsx("button", { onClick: () => openEdit(b), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
-              /* @__PURE__ */ jsx("button", { onClick: () => onDelete(b), className: `${ws.btnDanger} px-3 py-1.5 text-sm justify-center`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
-            ] }) })
-          ] }, b.id);
-        }) })
-      ] }) }) })
-    ] })
-  ] });
-}
-
-const page$o = UNSAFE_withComponentProps(function WrappedPage(props) {
-  return /* @__PURE__ */jsx(RootLayout, {
-    children: /* @__PURE__ */jsx(AdminLayout, {
-      children: /* @__PURE__ */jsx(BloggersPage, {
-        ...props
-      })
-    })
-  });
-});
-
-const route16 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: page$o
-}, Symbol.toStringTag, { value: 'Module' }));
-
-function BloggerCardPage() {
-  const {
-    isAuthenticated,
-    logout
-  } = useAdminAuth({
-    requiredPermission: "can_manage_inventory"
-  });
-  const params = useParams();
-  const bloggerId = Number(params?.id);
-  const bloggerQuery = useQuery({
-    queryKey: ["marketing-blogger", bloggerId],
-    enabled: isAuthenticated && Number.isFinite(bloggerId),
-    queryFn: async () => {
-      const r = await adminFetch("/api/marketing/bloggers");
-      if (!r.ok) throw new Error("فشل التحميل");
-      const data = await r.json();
-      const b2 = (data.bloggers || []).find((x) => Number(x.id) === bloggerId);
-      if (!b2) throw new Error("غير موجود");
-      return b2;
-    }
-  });
-  const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
-    enabled: isAuthenticated,
-    queryFn: async () => {
-      const r = await adminFetch("/api/marketing/settings");
-      if (!r.ok) throw new Error("فشل التحميل");
-      return r.json();
-    }
-  });
-  const welcomeURL = useMemo(() => {
-    const slug = bloggerQuery.data?.slug;
-    if (!slug) return "";
-    if (typeof window === "undefined") return `/welcome/${slug}`;
-    return `${window.location.origin}/welcome/${slug}`;
-  }, [bloggerQuery.data]);
-  if (!isAuthenticated) return null;
-  const b = bloggerQuery.data;
-  const settings = settingsQuery.data?.settings;
-  const accent = settings?.accent_color || "#7a8b5f";
-  const cream = settings?.cream_color || "#e8e9d6";
-  const cafeName = settings?.cafe_name || "QUARTERS";
-  const cafeNameAr = settings?.cafe_name_ar || "كوارتـــرز";
-  const cafeTagline = settings?.cafe_tagline || "BAR";
-  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh]", dir: "rtl", children: [
-    /* @__PURE__ */ jsx("link", { rel: "preconnect", href: "https://fonts.googleapis.com" }),
-    /* @__PURE__ */ jsx("link", { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" }),
-    /* @__PURE__ */ jsx("link", { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=El+Messiri:wght@500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" }),
-    /* @__PURE__ */ jsx("style", { children: `
-        @media print {
-          .no-print { display: none !important; }
-          .print-card { box-shadow: none !important; }
-          body { background: #fff !important; }
-        }
-      ` }),
-    /* @__PURE__ */ jsx("div", { className: "no-print", children: /* @__PURE__ */ jsx(Sidebar, { activePage: "marketing-bloggers", onLogout: logout }) }),
-    /* @__PURE__ */ jsxs("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: [
-      /* @__PURE__ */ jsxs("div", { className: "no-print mb-6 flex items-center justify-between gap-3 flex-wrap", children: [
-        /* @__PURE__ */ jsxs("a", { href: "/admin/marketing/bloggers", className: `${ws.btnNeutral} px-4 py-2 justify-center`, children: [
-          /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4" }),
-          /* @__PURE__ */ jsx("span", { children: "رجوع" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsxs("a", { href: welcomeURL, target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-4 py-2 justify-center`, children: [
-            /* @__PURE__ */ jsx(ExternalLink, { className: "w-4 h-4" }),
-            /* @__PURE__ */ jsx("span", { children: "فتح الرابط" })
-          ] }),
-          /* @__PURE__ */ jsxs("button", { onClick: () => window.print(), className: `${ws.btnPrimary} px-4 py-2 justify-center`, children: [
-            /* @__PURE__ */ jsx(Printer, { className: "w-4 h-4" }),
-            /* @__PURE__ */ jsx("span", { children: "طباعة" })
-          ] })
-        ] })
-      ] }),
-      bloggerQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-8 text-center text-white/55`, children: "جاري التحميل…" }) : !b ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-8 text-center text-red-200`, children: "لم يُعثر على البلوقر." }) : /* @__PURE__ */ jsx("div", { className: "flex justify-center", children: /* @__PURE__ */ jsxs("div", { className: "print-card", style: {
-        width: "100%",
-        maxWidth: 460,
-        position: "relative",
-        borderRadius: 26,
-        background: accent,
-        color: cream,
-        padding: "56px 38px 44px",
-        textAlign: "center",
-        boxShadow: `0 30px 80px rgba(0,0,0,0.45), 0 0 0 1px ${cream}22`,
-        fontFamily: '"Cormorant Garamond", "Playfair Display", "Times New Roman", serif',
-        overflow: "hidden"
-      }, children: [
-        /* @__PURE__ */ jsx("div", { style: {
-          position: "absolute",
-          inset: 12,
-          borderRadius: 20,
-          border: `1px solid ${cream}22`,
-          pointerEvents: "none"
-        } }),
-        /* @__PURE__ */ jsx("div", { style: {
-          position: "absolute",
-          inset: 18,
-          borderRadius: 16,
-          border: `1px solid ${cream}11`,
-          pointerEvents: "none"
-        } }),
-        /* @__PURE__ */ jsx("div", { style: {
-          position: "absolute",
-          inset: 0,
-          background: `radial-gradient(ellipse at top, ${cream}12 0%, transparent 55%), radial-gradient(ellipse at bottom, ${cream}08 0%, transparent 60%)`,
-          pointerEvents: "none"
-        } }),
-        /* @__PURE__ */ jsx(Leaf, { corner: "tl", cream }),
-        /* @__PURE__ */ jsx(Leaf, { corner: "tr", cream }),
-        /* @__PURE__ */ jsx(Leaf, { corner: "bl", cream }),
-        /* @__PURE__ */ jsx(Leaf, { corner: "br", cream }),
-        /* @__PURE__ */ jsxs("div", { style: {
-          position: "relative",
-          marginBottom: 30
-        }, children: [
-          /* @__PURE__ */ jsxs("div", { style: {
-            position: "relative",
-            display: "inline-block"
-          }, children: [
-            /* @__PURE__ */ jsx("div", { style: {
-              fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
-              fontWeight: 700,
-              fontSize: 58,
-              letterSpacing: "0.02em",
-              lineHeight: 1,
-              color: cream
-            }, children: cafeName }),
-            /* @__PURE__ */ jsx("div", { style: {
-              position: "absolute",
-              top: 0,
-              right: -22,
-              fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
-              fontSize: 12,
-              fontWeight: 600,
-              letterSpacing: "0.12em",
-              color: cream
-            }, children: cafeTagline }) 
-          ] }),
-          /* @__PURE__ */ jsx("div", { style: {
-            fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
-            fontSize: 30,
-            fontWeight: 600,
-            color: cream,
-            marginTop: 6,
-            letterSpacing: "0.05em"
-          }, children: cafeNameAr }) 
-        ] }),
-        /* @__PURE__ */ jsx(Flourish, { cream, marginBottom: 22 }),
-        /* @__PURE__ */ jsx("div", { style: {
-          fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
-          fontSize: 12,
-          fontWeight: 600,
-          letterSpacing: "0.55em",
-          color: cream,
-          opacity: 0.85,
-          textTransform: "uppercase",
-          marginBottom: 4
-        }, children: "Private Invitation" }),
-        /* @__PURE__ */ jsx("div", { style: {
-          fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
-          fontSize: 12,
-          color: cream,
-          opacity: 0.6,
-          marginBottom: 24,
-          letterSpacing: "0.1em"
-        }, children: "دعوة خاصة" }),
-        /* @__PURE__ */ jsxs("div", { style: {
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 14,
-          marginBottom: b.handle ? 2 : 26
-        }, children: [
-          /* @__PURE__ */ jsx(SideMark, { cream, side: "left" }),
-          /* @__PURE__ */ jsx("div", { style: {
-            fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
-            fontSize: 30,
-            fontWeight: 700,
-            color: cream,
-            lineHeight: 1.3,
-            letterSpacing: "0.01em"
-          }, children: b.name }),
-          /* @__PURE__ */ jsx(SideMark, { cream, side: "right" })
-        ] }),
-        b.handle ? /* @__PURE__ */ jsxs("div", { style: {
-          color: cream,
-          opacity: 0.6,
-          fontSize: 13,
-          marginBottom: 26,
-          direction: "ltr",
-          letterSpacing: "0.05em",
-          fontStyle: "italic"
-        }, children: [
-          "@",
-          b.handle
-        ] }) : null,
-        /* @__PURE__ */ jsx("div", { style: {
-          display: "inline-block",
-          position: "relative",
-          padding: 18,
-          background: cream,
-          borderRadius: 18,
-          marginBottom: 24,
-          boxShadow: `0 10px 28px rgba(0,0,0,0.22), inset 0 0 0 1px ${darkenForQR(accent)}1a`
-        }, children: /* @__PURE__ */ jsx(QRCodeSVG, { value: welcomeURL, size: 196, level: "M", bgColor: cream, fgColor: darkenForQR(accent), includeMargin: false }) }),
-        /* @__PURE__ */ jsx("div", { style: {
-          width: 56,
-          height: 1,
-          background: `${cream}40`,
-          margin: "0 auto 18px"
-        } }),
-        /* @__PURE__ */ jsx("div", { style: {
-          fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
-          fontSize: 13,
-          color: cream,
-          opacity: 0.82,
-          lineHeight: 1.9,
-          letterSpacing: "0.02em"
-        }, children: "امسح الكود وسلّمه للكاشير لتفعيل بطاقتك" }),
-        /* @__PURE__ */ jsx("div", { style: {
-          fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
-          fontSize: 12,
-          color: cream,
-          opacity: 0.55,
-          lineHeight: 1.9,
-          letterSpacing: "0.02em"
-        }, children: "بعد التفعيل تظهر لك قائمة الضيافة" })
-      ] }) })
-    ] })
-  ] });
-}
-function Leaf({
-  corner,
-  cream
-}) {
-  const positions = {
-    tl: {
-      top: 18,
-      left: 18,
-      rotate: 0
-    },
-    tr: {
-      top: 18,
-      right: 18,
-      rotate: 90
-    },
-    br: {
-      bottom: 18,
-      right: 18,
-      rotate: 180
-    },
-    bl: {
-      bottom: 18,
-      left: 18,
-      rotate: 270
-    }
-  };
-  const pos = positions[corner];
-  return /* @__PURE__ */ jsx("div", { "aria-hidden": "true", style: {
-    position: "absolute",
-    ...pos,
-    width: 26,
-    height: 26,
-    transform: `rotate(${pos.rotate}deg)`,
-    opacity: 0.55,
-    pointerEvents: "none"
-  }, children: /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", width: "100%", height: "100%", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M3 21 C 8 16, 12 12, 21 3 M21 3 C 14 4, 9 7, 6 11 M21 3 C 17 9, 14 13, 11 18", stroke: cream, strokeWidth: "1.2", strokeLinecap: "round" }) }) });
-}
-function Flourish({
-  cream,
-  marginBottom = 20
-}) {
-  return /* @__PURE__ */ jsxs("div", { style: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-    marginBottom
-  }, children: [
-    /* @__PURE__ */ jsx("span", { style: {
-      width: 56,
-      height: 1,
-      background: `linear-gradient(to right, transparent, ${cream}66)`
-    } }),
-    /* @__PURE__ */ jsx("span", { style: {
-      width: 5,
-      height: 5,
-      transform: "rotate(45deg)",
-      background: cream,
-      opacity: 0.7
-    } }),
-    /* @__PURE__ */ jsx("span", { style: {
-      width: 8,
-      height: 1,
-      background: `${cream}88`
-    } }),
-    /* @__PURE__ */ jsx("span", { style: {
-      width: 5,
-      height: 5,
-      transform: "rotate(45deg)",
-      background: cream,
-      opacity: 0.7
-    } }),
-    /* @__PURE__ */ jsx("span", { style: {
-      width: 56,
-      height: 1,
-      background: `linear-gradient(to left, transparent, ${cream}66)`
-    } })
-  ] });
-}
-function SideMark({
-  cream,
-  side
-}) {
-  return /* @__PURE__ */ jsxs("div", { "aria-hidden": "true", style: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 3,
-    opacity: 0.6
-  }, children: [
-    /* @__PURE__ */ jsx("span", { style: {
-      width: 4,
-      height: 4,
-      borderRadius: "50%",
-      background: cream
-    } }),
-    /* @__PURE__ */ jsx("span", { style: {
-      width: 1,
-      height: 14,
-      background: cream
-    } }),
-    /* @__PURE__ */ jsx("span", { style: {
-      width: 4,
-      height: 4,
-      borderRadius: "50%",
-      background: cream
-    } })
-  ] });
-}
-function darkenForQR(hex) {
-  try {
-    const m = String(hex).replace("#", "");
-    const r = parseInt(m.length === 3 ? m[0] + m[0] : m.slice(0, 2), 16);
-    const g = parseInt(m.length === 3 ? m[1] + m[1] : m.slice(2, 4), 16);
-    const b = parseInt(m.length === 3 ? m[2] + m[2] : m.slice(4, 6), 16);
-    const f = 0.35;
-    const toHex = (n) => Math.max(0, Math.min(255, Math.round(n * f))).toString(16).padStart(2, "0");
-    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-  } catch {
-    return "#1c1917";
-  }
-}
-
-const page$n = UNSAFE_withComponentProps(function WrappedPage(props) {
-  const params = useParams$1();
-  return /* @__PURE__ */jsx(RootLayout, {
-    children: /* @__PURE__ */jsx(AdminLayout, {
-      children: /* @__PURE__ */jsx(BloggerCardPage, {
-        ...props,
-        id: params.id
-      })
-    })
-  });
-});
-
-const route17 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: page$n
-}, Symbol.toStringTag, { value: 'Module' }));
-
-function MarketingMenuPage() {
-  const {
-    isAuthenticated,
-    logout
-  } = useAdminAuth({
-    requiredPermission: "can_manage_inventory"
-  });
-  const queryClient = useQueryClient();
-  const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(emptyForm());
-  const [error, setError] = useState(null);
-  function emptyForm() {
-    return {
-      category: "مشروبات",
-      name_ar: "",
-      name_en: "",
-      description: "",
-      price: "",
-      sort_order: 0,
-      is_active: true
-    };
-  }
-  const itemsQuery = useQuery({
-    queryKey: ["marketing-menu"],
-    enabled: isAuthenticated,
-    queryFn: async () => {
-      const r = await adminFetch("/api/marketing/menu");
-      if (!r.ok) throw new Error("فشل تحميل المنيو");
-      return r.json();
-    }
-  });
-  const items = itemsQuery.data?.items || [];
-  const grouped = useMemo(() => {
-    const g = {};
-    for (const it of items) {
-      if (!g[it.category]) g[it.category] = [];
-      g[it.category].push(it);
-    }
-    return g;
-  }, [items]);
-  const createMut = useMutation({
-    mutationFn: async (payload) => {
-      const r = await adminFetch("/api/marketing/menu", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
-      return d;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["marketing-menu"]
-      });
-      resetForm();
-    },
-    onError: (e) => setError(e.message || "خطأ")
-  });
-  const updateMut = useMutation({
-    mutationFn: async ({
-      id,
-      ...rest
-    }) => {
-      const r = await adminFetch("/api/marketing/menu", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          id,
-          ...rest
-        })
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
-      return d;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["marketing-menu"]
-      });
-      resetForm();
-    },
-    onError: (e) => setError(e.message || "خطأ")
-  });
-  const deleteMut = useMutation({
-    mutationFn: async (id) => {
-      const r = await adminFetch(`/api/marketing/menu?id=${encodeURIComponent(id)}`, {
-        method: "DELETE"
-      });
-      if (!r.ok) throw new Error("فشل الحذف");
-    },
-    onSuccess: () => queryClient.invalidateQueries({
-      queryKey: ["marketing-menu"]
-    })
-  });
-  const toggleMut = useMutation({
-    mutationFn: async (it) => {
-      const r = await adminFetch("/api/marketing/menu", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          id: it.id,
-          is_active: !it.is_active
-        })
-      });
-      if (!r.ok) throw new Error("فشل التحديث");
-    },
-    onSuccess: () => queryClient.invalidateQueries({
-      queryKey: ["marketing-menu"]
-    })
-  });
-  const resetForm = () => {
-    setShowForm(false);
-    setEditing(null);
-    setForm(emptyForm());
-    setError(null);
-  };
-  const openCreate = () => {
-    setEditing(null);
-    setForm(emptyForm());
-    setError(null);
-    setShowForm(true);
-  };
-  const openEdit = (it) => {
-    setEditing(it);
-    setForm({
-      category: it.category,
-      name_ar: it.name_ar,
-      name_en: it.name_en || "",
-      description: it.description || "",
-      price: it.price === null || it.price === void 0 ? "" : String(it.price),
-      sort_order: it.sort_order || 0,
-      is_active: !!it.is_active
-    });
-    setError(null);
-    setShowForm(true);
-  };
-  const submit = (e) => {
-    e.preventDefault();
-    if (!form.name_ar.trim() || !form.category.trim()) {
-      setError("الاسم والتصنيف مطلوبان");
-      return;
-    }
-    const payload = {
-      category: form.category.trim(),
-      name_ar: form.name_ar.trim(),
-      name_en: form.name_en.trim() || null,
-      description: form.description.trim() || null,
-      price: form.price === "" ? null : Number(form.price),
-      sort_order: Number(form.sort_order) || 0,
-      is_active: !!form.is_active
-    };
-    if (editing) updateMut.mutate({
-      id: editing.id,
-      ...payload
-    });
-    else createMut.mutate(payload);
-  };
-  const onDelete = (it) => {
-    if (!window.confirm(`حذف "${it.name_ar}"؟`)) return;
-    deleteMut.mutate(it.id);
-  };
-  if (!isAuthenticated) return null;
-  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh]", dir: "rtl", children: [
-    /* @__PURE__ */ jsx(Sidebar, { activePage: "marketing-menu", onLogout: logout }),
-    /* @__PURE__ */ jsxs("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: [
-      /* @__PURE__ */ jsx(Breadcrumb, { activePage: "marketing-menu" }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 flex-wrap", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-amber-200`, children: /* @__PURE__ */ jsx(Coffee, { className: "w-6 h-6" }) }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-white", children: "منيو الضيافة" }),
-            /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mt-1", children: "الأصناف التي ستعرض للبلوقر بعد تفعيل بطاقته." })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxs("button", { onClick: openCreate, className: `${ws.btnPrimary} px-5 py-3 justify-center`, children: [
-          /* @__PURE__ */ jsx(Plus, { className: "w-5 h-5" }),
-          /* @__PURE__ */ jsx("span", { children: "صنف جديد" })
-        ] })
-      ] }) }),
-      showForm ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-4", children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white", children: editing ? "تعديل صنف" : "صنف جديد" }),
-          /* @__PURE__ */ jsx("button", { onClick: resetForm, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
-        ] }),
-        error ? /* @__PURE__ */ jsx("div", { className: "mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm", children: error }) : null,
-        /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "التصنيف *" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.category, onChange: (e) => setForm({
-              ...form,
-              category: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "مشروبات / مخبوزات / حلويات…", list: "categories", required: true }),
-            /* @__PURE__ */ jsx("datalist", { id: "categories", children: Object.keys(grouped).map((c) => /* @__PURE__ */ jsx("option", { value: c }, c)) })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "ترتيب العرض" }),
-            /* @__PURE__ */ jsx("input", { type: "number", value: form.sort_order, onChange: (e) => setForm({
-              ...form,
-              sort_order: e.target.value
-            }), className: `${ws.input} px-4 py-3` })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الاسم (عربي) *" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.name_ar, onChange: (e) => setForm({
-              ...form,
-              name_ar: e.target.value
-            }), className: `${ws.input} px-4 py-3`, required: true })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الاسم (إنجليزي)" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.name_en, onChange: (e) => setForm({
-              ...form,
-              name_en: e.target.value
-            }), className: `${ws.input} px-4 py-3` })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "وصف (اختياري)" }),
-            /* @__PURE__ */ jsx("textarea", { value: form.description, onChange: (e) => setForm({
-              ...form,
-              description: e.target.value
-            }), className: `${ws.input} px-4 py-3 resize-none`, rows: 2 })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "السعر (ر.س — اختياري)" }),
-            /* @__PURE__ */ jsx("input", { type: "number", step: "0.01", value: form.price, onChange: (e) => setForm({
-              ...form,
-              price: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "0.00" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsx("input", { id: "active", type: "checkbox", checked: form.is_active, onChange: (e) => setForm({
-              ...form,
-              is_active: e.target.checked
-            }), className: "w-5 h-5" }),
-            /* @__PURE__ */ jsx("label", { htmlFor: "active", className: "text-white text-sm", children: "نشط (يظهر للبلوقر)" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2 flex gap-3", children: [
-            /* @__PURE__ */ jsx("button", { type: "submit", disabled: createMut.isPending || updateMut.isPending, className: `${ws.btnPrimary} flex-1 px-4 py-3 justify-center disabled:opacity-50`, children: editing ? "حفظ التعديلات" : "إنشاء" }),
-            /* @__PURE__ */ jsx("button", { type: "button", onClick: resetForm, className: `${ws.btnNeutral} px-4 py-3 justify-center`, children: "إلغاء" })
-          ] })
-        ] })
-      ] }) : null,
-      /* @__PURE__ */ jsx("div", { className: "space-y-6", children: itemsQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-8 text-center text-white/55`, children: "جاري التحميل…" }) : Object.keys(grouped).length === 0 ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-12 text-center text-white/55`, children: [
-        /* @__PURE__ */ jsx(Coffee, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
-        /* @__PURE__ */ jsx("p", { children: "لا توجد أصناف. ابدأ بإضافة منيو الضيافة." })
-      ] }) : Object.entries(grouped).map(([category, list]) => /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: [
-        /* @__PURE__ */ jsx("div", { className: "px-5 py-3 border-b border-white/[0.06] bg-white/[0.03]", children: /* @__PURE__ */ jsx("h3", { className: "text-white font-bold", children: category }) }),
-        /* @__PURE__ */ jsx("table", { className: "w-full", children: /* @__PURE__ */ jsx("tbody", { children: list.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/[0.04] hover:bg-white/[0.02]", children: [
-          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
-            /* @__PURE__ */ jsxs("div", { className: "text-white font-medium", children: [
-              it.name_ar,
-              !it.is_active ? /* @__PURE__ */ jsx("span", { className: "mr-2 text-xs px-2 py-0.5 rounded-full bg-white/[0.06] text-white/55", children: "مخفي" }) : null
-            ] }),
-            it.name_en ? /* @__PURE__ */ jsx("div", { className: "text-white/45 text-xs mt-0.5", children: it.name_en }) : null,
-            it.description ? /* @__PURE__ */ jsx("div", { className: "text-white/40 text-xs mt-1 leading-relaxed", children: it.description }) : null
-          ] }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/70 text-sm whitespace-nowrap", children: it.price !== null && it.price !== void 0 ? `${Number(it.price).toFixed(2)} ر.س` : "—" }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-center", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-end gap-2", children: [
-            /* @__PURE__ */ jsx("button", { onClick: () => toggleMut.mutate(it), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: it.is_active ? "إخفاء" : "إظهار", children: it.is_active ? /* @__PURE__ */ jsx(EyeOff, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Eye, { className: "w-4 h-4" }) }),
-            /* @__PURE__ */ jsx("button", { onClick: () => openEdit(it), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
-            /* @__PURE__ */ jsx("button", { onClick: () => onDelete(it), className: `${ws.btnDanger} px-3 py-1.5 text-sm justify-center`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
-          ] }) })
-        ] }, it.id)) }) })
-      ] }, category)) })
-    ] })
-  ] });
-}
-
-const page$m = UNSAFE_withComponentProps(function WrappedPage(props) {
-  return /* @__PURE__ */jsx(RootLayout, {
-    children: /* @__PURE__ */jsx(AdminLayout, {
-      children: /* @__PURE__ */jsx(MarketingMenuPage, {
-        ...props
-      })
-    })
-  });
-});
-
-const route18 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: page$m
-}, Symbol.toStringTag, { value: 'Module' }));
-
-function MarketingSettingsPage() {
-  const {
-    isAuthenticated,
-    logout
-  } = useAdminAuth({
-    requiredPermission: "can_manage_inventory"
-  });
-  const queryClient = useQueryClient();
-  const [form, setForm] = useState(null);
-  const [error, setError] = useState(null);
-  const [saved, setSaved] = useState(false);
-  const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
-    enabled: isAuthenticated,
-    queryFn: async () => {
-      const r = await adminFetch("/api/marketing/settings");
-      if (!r.ok) throw new Error("فشل تحميل الإعدادات");
-      return r.json();
-    }
-  });
-  useEffect(() => {
-    if (settingsQuery.data?.settings && !form) {
-      setForm(settingsQuery.data.settings);
-    }
-  }, [settingsQuery.data, form]);
-  const saveMut = useMutation({
-    mutationFn: async (payload) => {
-      const r = await adminFetch("/api/marketing/settings", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الحفظ");
-      return d;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["marketing-settings"]
-      });
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2500);
-    },
-    onError: (e) => setError(e.message || "خطأ")
-  });
-  const submit = (e) => {
-    e.preventDefault();
-    setError(null);
-    if (!form) return;
-    saveMut.mutate({
-      cafe_name: form.cafe_name,
-      cafe_name_ar: form.cafe_name_ar,
-      cafe_tagline: form.cafe_tagline,
-      logo_letter: form.logo_letter,
-      accent_color: form.accent_color,
-      cream_color: form.cream_color,
-      welcome_headline: form.welcome_headline,
-      welcome_subtext: form.welcome_subtext
-    });
-  };
-  if (!isAuthenticated) return null;
-  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh]", dir: "rtl", children: [
-    /* @__PURE__ */ jsx(Sidebar, { activePage: "marketing-settings", onLogout: logout }),
-    /* @__PURE__ */ jsxs("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: [
-      /* @__PURE__ */ jsx(Breadcrumb, { activePage: "marketing-settings" }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-sky-200`, children: /* @__PURE__ */ jsx(Settings, { className: "w-6 h-6" }) }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-white", children: "إعدادات التسويق" }),
-          /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mt-1", children: "الإعدادات تنطبق على بطاقات الدعوة + شاشة الترحيب." })
-        ] })
-      ] }) }),
-      settingsQuery.isLoading || !form ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-8 text-center text-white/55`, children: "جاري التحميل…" }) : /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: `${ws.glass} ${ws.card} p-5 sm:p-6 space-y-5`, children: [
-        error ? /* @__PURE__ */ jsx("div", { className: "p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm", children: error }) : null,
-        saved ? /* @__PURE__ */ jsx("div", { className: "p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 text-sm", children: "✓ تم الحفظ" }) : null,
-        /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "اسم الكوفي (إنجليزي)" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.cafe_name || "", onChange: (e) => setForm({
-              ...form,
-              cafe_name: e.target.value
-            }), className: `${ws.input} px-4 py-3`, required: true })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "اسم الكوفي (عربي)" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.cafe_name_ar || "", onChange: (e) => setForm({
-              ...form,
-              cafe_name_ar: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "كوارتـــرز" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الـ Tagline (مثل BAR)" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.cafe_tagline || "", onChange: (e) => setForm({
-              ...form,
-              cafe_tagline: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "BAR" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "حرف الشعار (للأماكن المختصرة)" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.logo_letter || "", onChange: (e) => setForm({
-              ...form,
-              logo_letter: e.target.value.slice(0, 4)
-            }), className: `${ws.input} px-4 py-3 text-center text-2xl font-bold`, maxLength: 4 })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsxs("label", { className: "block text-xs font-semibold text-white/55 mb-2 flex items-center gap-2", children: [
-              /* @__PURE__ */ jsx(Palette, { className: "w-4 h-4" }),
-              " اللون الأساسي (Olive)"
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx("input", { type: "color", value: form.accent_color || "#7a8b5f", onChange: (e) => setForm({
-                ...form,
-                accent_color: e.target.value
-              }), className: "h-12 w-16 rounded-2xl border border-white/10 bg-transparent cursor-pointer" }),
-              /* @__PURE__ */ jsx("input", { type: "text", value: form.accent_color || "", onChange: (e) => setForm({
-                ...form,
-                accent_color: e.target.value
-              }), className: `${ws.input} px-4 py-3 flex-1`, placeholder: "#7a8b5f" })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsxs("label", { className: "block text-xs font-semibold text-white/55 mb-2 flex items-center gap-2", children: [
-              /* @__PURE__ */ jsx(Palette, { className: "w-4 h-4" }),
-              " لون النص (Cream)"
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx("input", { type: "color", value: form.cream_color || "#e8e9d6", onChange: (e) => setForm({
-                ...form,
-                cream_color: e.target.value
-              }), className: "h-12 w-16 rounded-2xl border border-white/10 bg-transparent cursor-pointer" }),
-              /* @__PURE__ */ jsx("input", { type: "text", value: form.cream_color || "", onChange: (e) => setForm({
-                ...form,
-                cream_color: e.target.value
-              }), className: `${ws.input} px-4 py-3 flex-1`, placeholder: "#e8e9d6" })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "معاينة الـ Wordmark" }),
-            /* @__PURE__ */ jsx("div", { className: "rounded-2xl flex items-center justify-center p-8", style: {
-              background: form.accent_color || "#7a8b5f",
-              color: form.cream_color || "#e8e9d6",
-              minHeight: "120px"
-            }, children: /* @__PURE__ */ jsxs("div", { style: {
-              position: "relative",
-              display: "inline-block",
-              textAlign: "center"
-            }, children: [
-              /* @__PURE__ */ jsx("span", { style: {
-                fontFamily: "'Cormorant Garamond', 'Playfair Display', serif",
-                fontSize: 44,
-                fontWeight: 700,
-                letterSpacing: "0.02em"
-              }, children: form.cafe_name || "QUARTERS" }),
-              form.cafe_tagline ? /* @__PURE__ */ jsx("span", { style: {
-                position: "absolute",
-                top: -2,
-                right: -24,
-                fontFamily: "'Cormorant Garamond', serif",
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: "0.1em"
-              }, children: form.cafe_tagline }) : null,
-              form.cafe_name_ar ? /* @__PURE__ */ jsx("div", { style: {
-                fontFamily: "'El Messiri', 'Cairo', sans-serif",
-                fontSize: 22,
-                fontWeight: 600,
-                marginTop: 4
-              }, children: form.cafe_name_ar }) : null
-            ] }) })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "عنوان الترحيب" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.welcome_headline || "", onChange: (e) => setForm({
-              ...form,
-              welcome_headline: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "مرحباً بك في Quarters" })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "نص الترحيب الفرعي" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: form.welcome_subtext || "", onChange: (e) => setForm({
-              ...form,
-              welcome_subtext: e.target.value
-            }), className: `${ws.input} px-4 py-3`, placeholder: "استمتع بتجربتك معنا" })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 pt-2", children: [
-          /* @__PURE__ */ jsxs("button", { type: "submit", disabled: saveMut.isPending, className: `${ws.btnPrimary} px-6 py-3 justify-center disabled:opacity-50`, children: [
-            /* @__PURE__ */ jsx(Save, { className: "w-5 h-5" }),
-            /* @__PURE__ */ jsx("span", { children: saveMut.isPending ? "جاري الحفظ…" : "حفظ" })
-          ] }),
-          /* @__PURE__ */ jsxs("a", { href: "/welcome/preview", target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-4 py-3 justify-center`, children: [
-            /* @__PURE__ */ jsx(Coffee, { className: "w-5 h-5" }),
-            /* @__PURE__ */ jsx("span", { children: "معاينة شاشة البلوقر" })
-          ] })
-        ] })
-      ] })
-    ] })
-  ] });
-}
-
-const page$l = UNSAFE_withComponentProps(function WrappedPage(props) {
-  return /* @__PURE__ */jsx(RootLayout, {
-    children: /* @__PURE__ */jsx(AdminLayout, {
-      children: /* @__PURE__ */jsx(MarketingSettingsPage, {
-        ...props
-      })
-    })
-  });
-});
-
-const route19 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  default: page$l
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function useOperationsData(isAuthenticated) {
@@ -20317,7 +19183,7 @@ function OperationsPage() {
   ] });
 }
 
-const page$k = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$o = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(AdminLayout, {
       children: /* @__PURE__ */jsx(OperationsPage, {
@@ -20327,9 +19193,9 @@ const page$k = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route20 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route16 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$k
+  default: page$o
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function ReceiptsFilters({
@@ -20679,7 +19545,7 @@ function ReceiptsPage() {
   ] });
 }
 
-const page$j = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$n = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(AdminLayout, {
       children: /* @__PURE__ */jsx(ReceiptsPage, {
@@ -20689,9 +19555,9 @@ const page$j = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route21 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route17 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$j
+  default: page$n
 }, Symbol.toStringTag, { value: 'Module' }));
 
 // Wraps `/api/items/stock-value` + branches list + client-side search,
@@ -21177,7 +20043,7 @@ function StockValuePage() {
   ] });
 }
 
-const page$i = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$m = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(AdminLayout, {
       children: /* @__PURE__ */jsx(StockValuePage, {
@@ -21187,9 +20053,9 @@ const page$i = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route22 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route18 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$i
+  default: page$m
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function VarianceHeader() {
@@ -21610,7 +20476,7 @@ function VariancePage() {
   ] });
 }
 
-const page$h = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$l = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(AdminLayout, {
       children: /* @__PURE__ */jsx(VariancePage, {
@@ -21620,9 +20486,9 @@ const page$h = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route23 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route19 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$h
+  default: page$l
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function inventoryDraftKey(employeeId) {
@@ -22187,7 +21053,7 @@ function EmployeeInventoryPage() {
   ] });
 }
 
-const page$g = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$k = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(EmployeeInventoryPage, {
       ...props
@@ -22195,9 +21061,9 @@ const page$g = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route24 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route20 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$g
+  default: page$k
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function EmployeeLoginPage() {
@@ -22393,7 +21259,7 @@ function EmployeeLoginPage() {
   ] });
 }
 
-const page$f = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$j = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(EmployeeLoginPage, {
       ...props
@@ -22401,9 +21267,9 @@ const page$f = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route25 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route21 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$f
+  default: page$j
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function HRLayout({
@@ -22426,8 +21292,8 @@ function HRLayout({
   ] });
 }
 
-const BRAND_LOGO_URL$2 = "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/resize/80x80/-/format/png/";
-function initials$3(name) {
+const BRAND_LOGO_URL$3 = "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/resize/80x80/-/format/png/";
+function initials$4(name) {
   const cleaned = (name || "").trim();
   if (!cleaned) return "Q";
   const parts = cleaned.split(" ").filter(Boolean);
@@ -22436,7 +21302,7 @@ function initials$3(name) {
   const raw = `${first}${second}`.trim();
   return raw ? raw.toUpperCase() : "Q";
 }
-function readAdminUser$1() {
+function readAdminUser$2() {
   try {
     const raw = localStorage.getItem("adminUser");
     if (!raw) return null;
@@ -22452,11 +21318,11 @@ function HRSidebar({
   const [adminUser, setAdminUser] = useState(null);
   useEffect(() => {
     if (typeof window === "undefined") return;
-    setAdminUser(readAdminUser$1());
+    setAdminUser(readAdminUser$2());
   }, []);
   const userName = adminUser?.name || "";
   const userRole = adminUser?.role || "";
-  const avatarText = initials$3(userName);
+  const avatarText = initials$4(userName);
   const hasFullHr = useMemo(() => {
     const raw = adminUser?.can_access_hr;
     if (raw === void 0 || raw === null) {
@@ -22501,13 +21367,13 @@ function HRSidebar({
       /* @__PURE__ */ jsx(AppSectionSwitcher, { active: "hr", className: "scale-90 origin-left" }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
         /* @__PURE__ */ jsx("div", { className: "text-white text-sm font-bold tracking-tight whitespace-nowrap", children: "HR" }),
-        /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$2, alt: "Quarters", className: "h-8 w-auto bg-white rounded-xl p-1 shrink-0" })
+        /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$3, alt: "Quarters", className: "h-8 w-auto bg-white rounded-xl p-1 shrink-0" })
       ] })
     ] }) }),
     /* @__PURE__ */ jsx("aside", { className: `hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-white/10`, dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col w-full", children: [
       /* @__PURE__ */ jsxs("div", { className: "p-6 border-b border-white/10", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: "w-11 h-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$2, alt: "Logo", className: "w-8 h-8 object-contain" }) }),
+          /* @__PURE__ */ jsx("div", { className: "w-11 h-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$3, alt: "Logo", className: "w-8 h-8 object-contain" }) }),
           /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
             /* @__PURE__ */ jsx("div", { className: "font-bold text-white truncate tracking-tight", children: "HR" }),
             /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 truncate", children: "أنظمة Quarters" })
@@ -22558,7 +21424,7 @@ function HRSidebar({
   ] });
 }
 
-function readAdminUser() {
+function readAdminUser$1() {
   try {
     if (typeof window === "undefined") return null;
     const raw = localStorage.getItem("adminUser");
@@ -22581,7 +21447,7 @@ function HRHomePage() {
   const [adminUser, setAdminUser] = useState(null);
   useEffect(() => {
     if (typeof window === "undefined") return;
-    setAdminUser(readAdminUser());
+    setAdminUser(readAdminUser$1());
   }, []);
   const hasFullHr = useMemo(() => {
     const raw = adminUser?.can_access_hr;
@@ -22662,7 +21528,7 @@ function HRHomePage() {
   ] });
 }
 
-const page$e = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$i = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(HRLayout, {
       children: /* @__PURE__ */jsx(HRHomePage, {
@@ -22672,9 +21538,9 @@ const page$e = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route26 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route22 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$e
+  default: page$i
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function HRBonusesPage() {
@@ -22724,7 +21590,7 @@ function HRBonusesPage() {
   ] }) });
 }
 
-const page$d = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$h = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(HRLayout, {
       children: /* @__PURE__ */jsx(HRBonusesPage, {
@@ -22734,9 +21600,9 @@ const page$d = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route27 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route23 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$d
+  default: page$h
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function useHRDeductionsEmployeesData(isAuthenticated) {
@@ -23794,7 +22660,7 @@ function HRDeductionsPage() {
   ] });
 }
 
-const page$c = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$g = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(HRLayout, {
       children: /* @__PURE__ */jsx(HRDeductionsPage, {
@@ -23804,9 +22670,9 @@ const page$c = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route28 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route24 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$c
+  default: page$g
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function statusFromError(err) {
@@ -24716,7 +23582,7 @@ function HREmployeesPage() {
   ] });
 }
 
-const page$b = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$f = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(HRLayout, {
       children: /* @__PURE__ */jsx(HREmployeesPage, {
@@ -24726,9 +23592,9 @@ const page$b = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route29 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route25 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$b
+  default: page$f
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function InventoryAliasPage() {
@@ -24738,9 +23604,1059 @@ function InventoryAliasPage() {
   return null;
 }
 
-const page$a = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$e = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(InventoryAliasPage, {
+      ...props
+    })
+  });
+});
+
+const route26 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: page$e
+}, Symbol.toStringTag, { value: 'Module' }));
+
+function InventoryLoginAliasPage() {
+  React__default.useEffect(() => {
+    window.location.href = "/employee/login";
+  }, []);
+  return null;
+}
+
+const page$d = UNSAFE_withComponentProps(function WrappedPage(props) {
+  return /* @__PURE__ */jsx(RootLayout, {
+    children: /* @__PURE__ */jsx(InventoryLoginAliasPage, {
+      ...props
+    })
+  });
+});
+
+const route27 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: page$d
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const BRAND_LOGO_URL$2 = "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/resize/80x80/-/format/png/";
+function initials$3(name) {
+  const cleaned = (name || "").trim();
+  if (!cleaned) return "Q";
+  const parts = cleaned.split(" ").filter(Boolean);
+  const first = parts[0]?.[0] || "";
+  const second = parts[1]?.[0] || "";
+  const raw = `${first}${second}`.trim();
+  return raw ? raw.toUpperCase() : "Q";
+}
+function readAdminUser() {
+  try {
+    const raw = localStorage.getItem("adminUser");
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+function MarketingSidebar({
+  onLogout,
+  active = "bloggers"
+}) {
+  const [adminUser, setAdminUser] = useState(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setAdminUser(readAdminUser());
+  }, []);
+  const userName = adminUser?.name || "";
+  const userRole = adminUser?.role || "";
+  const avatarText = initials$3(userName);
+  const navItems = useMemo(() => [{
+    key: "bloggers",
+    href: "/marketing/bloggers",
+    label: "البلوقرز",
+    Icon: Users
+  }, {
+    key: "menu",
+    href: "/marketing/menu",
+    label: "منيو الضيافة",
+    Icon: Menu
+  }, {
+    key: "settings",
+    href: "/marketing/settings",
+    label: "إعدادات",
+    Icon: Settings
+  }], []);
+  const mobileGridClass = navItems.length === 1 ? "grid-cols-1" : navItems.length === 2 ? "grid-cols-2" : navItems.length === 3 ? "grid-cols-3" : "grid-cols-4";
+  const bottomSafeAreaStyle = {
+    paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 10px)"
+  };
+  const shellClass = `${ws.glass}`;
+  const pillBase = "rounded-2xl border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/25";
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("div", { className: `lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.glass} border-b border-white/10`, dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: "px-4 py-3 flex items-center justify-between gap-3", children: [
+      /* @__PURE__ */ jsx(AppSectionSwitcher, { active: "marketing", className: "scale-90 origin-left" }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-white text-sm font-bold tracking-tight whitespace-nowrap", children: "التسويق" }),
+        /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$2, alt: "Quarters", className: "h-8 w-auto bg-white rounded-xl p-1 shrink-0" })
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsx("aside", { className: `hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-white/10`, dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col w-full", children: [
+      /* @__PURE__ */ jsxs("div", { className: "p-6 border-b border-white/10", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("div", { className: "w-11 h-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL$2, alt: "Logo", className: "w-8 h-8 object-contain" }) }),
+          /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-white truncate tracking-tight", children: "التسويق" }),
+            /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 truncate", children: "أنظمة Quarters" })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "mt-4", children: /* @__PURE__ */ jsx(AppSectionSwitcher, { active: "marketing" }) }),
+        userName ? /* @__PURE__ */ jsx("div", { className: `mt-5 ${ws.glassSoft} ${ws.card} p-3`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("div", { className: "w-10 h-10 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center font-bold text-white shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: avatarText }),
+          /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+            /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-white truncate tracking-tight", children: userName }),
+            /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 truncate", children: userRole || "مدير" })
+          ] })
+        ] }) }) : null
+      ] }),
+      /* @__PURE__ */ jsx("nav", { className: "p-4 space-y-2 flex-1", children: navItems.map(({
+        key,
+        href,
+        label,
+        Icon
+      }) => {
+        const isActive = active === key;
+        const itemClass = isActive ? "bg-white/10 text-white border-white/20" : "bg-white/[0.02] text-white/75 border-white/10 hover:bg-white/[0.06]";
+        const iconClass = isActive ? "text-amber-200" : "text-white/70";
+        return /* @__PURE__ */ jsxs("a", { href, className: `flex items-center gap-3 px-4 py-3 ${pillBase} ${itemClass}`, children: [
+          /* @__PURE__ */ jsx("div", { className: "w-9 h-9 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx(Icon, { className: `w-5 h-5 ${iconClass}` }) }),
+          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: label })
+        ] }, key);
+      }) }),
+      /* @__PURE__ */ jsx("div", { className: "p-4 border-t border-white/10", children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: onLogout, className: `w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl ${ws.btnNeutral}`, children: [
+        /* @__PURE__ */ jsx(LogOut, { className: "w-5 h-5" }),
+        "خروج"
+      ] }) })
+    ] }) }),
+    /* @__PURE__ */ jsx("nav", { className: `lg:hidden fixed left-0 right-0 bottom-0 z-40 ${shellClass} border-t border-white/10`, dir: "rtl", style: bottomSafeAreaStyle, children: /* @__PURE__ */ jsx("div", { className: `px-3 pt-2 grid ${mobileGridClass} gap-2`, children: navItems.map(({
+      key,
+      href,
+      label,
+      Icon
+    }) => {
+      const isActive = active === key;
+      const itemClass = isActive ? "bg-white/10 text-white border-white/20" : "bg-white/[0.03] text-white/70 border-white/10";
+      const iconClass = isActive ? "text-amber-200" : "text-white/70";
+      return /* @__PURE__ */ jsxs("a", { href, className: `flex flex-col items-center justify-center gap-1 py-2 ${pillBase} ${itemClass}`, children: [
+        /* @__PURE__ */ jsx(Icon, { className: `w-5 h-5 ${iconClass}` }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold", children: label })
+      ] }, key);
+    }) }) })
+  ] });
+}
+
+function BloggersPage() {
+  const {
+    isAuthenticated,
+    logout
+  } = useAdminAuth({
+    requiredPermission: "can_manage_marketing"
+  });
+  const queryClient = useQueryClient();
+  const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState({
+    name: "",
+    handle: "",
+    phone: "",
+    note: ""
+  });
+  const [error, setError] = useState(null);
+  const bloggersQuery = useQuery({
+    queryKey: ["marketing-bloggers"],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const r = await adminFetch("/api/marketing/bloggers");
+      if (!r.ok) throw new Error("فشل تحميل البلوقرز");
+      return r.json();
+    }
+  });
+  const createMut = useMutation({
+    mutationFn: async (payload) => {
+      const r = await adminFetch("/api/marketing/bloggers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الإنشاء");
+      return d;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["marketing-bloggers"]
+      });
+      resetForm();
+    },
+    onError: (e) => setError(e.message || "خطأ")
+  });
+  const updateMut = useMutation({
+    mutationFn: async ({
+      id,
+      ...rest
+    }) => {
+      const r = await adminFetch("/api/marketing/bloggers", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id,
+          ...rest
+        })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
+      return d;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["marketing-bloggers"]
+      });
+      resetForm();
+    },
+    onError: (e) => setError(e.message || "خطأ")
+  });
+  const deleteMut = useMutation({
+    mutationFn: async (id) => {
+      const r = await adminFetch(`/api/marketing/bloggers?id=${encodeURIComponent(id)}`, {
+        method: "DELETE"
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
+      return d;
+    },
+    onSuccess: () => queryClient.invalidateQueries({
+      queryKey: ["marketing-bloggers"]
+    })
+  });
+  const resetForm = () => {
+    setShowForm(false);
+    setEditing(null);
+    setForm({
+      name: "",
+      handle: "",
+      phone: "",
+      note: ""
+    });
+    setError(null);
+  };
+  const openCreate = () => {
+    setEditing(null);
+    setForm({
+      name: "",
+      handle: "",
+      phone: "",
+      note: ""
+    });
+    setError(null);
+    setShowForm(true);
+  };
+  const openEdit = (b) => {
+    setEditing(b);
+    setForm({
+      name: b.name || "",
+      handle: b.handle || "",
+      phone: b.phone || "",
+      note: b.note || ""
+    });
+    setError(null);
+    setShowForm(true);
+  };
+  const submit = (e) => {
+    e.preventDefault();
+    if (!form.name.trim()) {
+      setError("الاسم مطلوب");
+      return;
+    }
+    if (editing) {
+      updateMut.mutate({
+        id: editing.id,
+        ...form
+      });
+    } else {
+      createMut.mutate(form);
+    }
+  };
+  const onDelete = (b) => {
+    if (!window.confirm(`حذف "${b.name}"؟ هذا الإجراء لا يمكن التراجع عنه.`)) return;
+    deleteMut.mutate(b.id);
+  };
+  if (!isAuthenticated) return null;
+  const bloggers = bloggersQuery.data?.bloggers || [];
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh]", dir: "rtl", children: [
+    /* @__PURE__ */ jsx(MarketingSidebar, { active: "bloggers", onLogout: logout }),
+    /* @__PURE__ */ jsxs("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8", children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-pink-200`, children: /* @__PURE__ */ jsx(Megaphone, { className: "w-6 h-6" }) }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-white", children: "بطاقات البلوقرز" }),
+            /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mt-1", children: "أنشئ بطاقات دعوة لكل بلوقر مع كود QR للتفعيل عبر الكاشير." })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("button", { onClick: openCreate, className: `${ws.btnPrimary} px-5 py-3 justify-center`, children: [
+          /* @__PURE__ */ jsx(Plus, { className: "w-5 h-5" }),
+          /* @__PURE__ */ jsx("span", { children: "بلوقر جديد" })
+        ] })
+      ] }) }),
+      showForm ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-4", children: [
+          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white", children: editing ? "تعديل بلوقر" : "بلوقر جديد" }),
+          /* @__PURE__ */ jsx("button", { onClick: resetForm, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+        ] }),
+        error ? /* @__PURE__ */ jsx("div", { className: "mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm", children: error }) : null,
+        /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الاسم *" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.name, onChange: (e) => setForm({
+              ...form,
+              name: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "مثال: أحمد العتيبي", required: true })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "معرّف الحساب (اختياري)" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.handle, onChange: (e) => setForm({
+              ...form,
+              handle: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "@instagram" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الجوال (اختياري)" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.phone, onChange: (e) => setForm({
+              ...form,
+              phone: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "05xxxxxxxx" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "ملاحظة (اختياري)" }),
+            /* @__PURE__ */ jsx("textarea", { value: form.note, onChange: (e) => setForm({
+              ...form,
+              note: e.target.value
+            }), className: `${ws.input} px-4 py-3 resize-none`, rows: 2, placeholder: "ملاحظات داخلية" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2 flex gap-3", children: [
+            /* @__PURE__ */ jsx("button", { type: "submit", disabled: createMut.isPending || updateMut.isPending, className: `${ws.btnPrimary} flex-1 px-4 py-3 justify-center disabled:opacity-50`, children: editing ? "حفظ التعديلات" : "إنشاء" }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: resetForm, className: `${ws.btnNeutral} px-4 py-3 justify-center`, children: "إلغاء" })
+          ] })
+        ] })
+      ] }) : null,
+      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: bloggersQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "p-8 text-center text-white/55", children: "جاري التحميل…" }) : bloggers.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-white/55", children: [
+        /* @__PURE__ */ jsx(Megaphone, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
+        /* @__PURE__ */ jsx("p", { children: "لا يوجد بلوقرز بعد. ابدأ بإضافة واحد." })
+      ] }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
+        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04]", children: [
+          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الاسم" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الكود" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الحالة" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "التفعيل" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "أُنشئ" }),
+          /* @__PURE__ */ jsx("th", { className: "text-center px-4 py-3 text-sm font-semibold text-white/55", children: "إجراءات" })
+        ] }) }),
+        /* @__PURE__ */ jsx("tbody", { children: bloggers.map((b) => {
+          const isActive = b.state === "active";
+          return /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/[0.04] hover:bg-white/[0.02]", children: [
+            /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+              /* @__PURE__ */ jsx("div", { className: "text-white font-medium", children: b.name }),
+              b.handle ? /* @__PURE__ */ jsxs("div", { className: "text-white/45 text-xs mt-0.5", children: [
+                "@",
+                b.handle
+              ] }) : null,
+              b.phone ? /* @__PURE__ */ jsx("div", { className: "text-white/45 text-xs", children: b.phone }) : null
+            ] }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx("code", { className: "text-emerald-200 text-sm bg-white/[0.04] px-2 py-1 rounded", children: b.slug }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: isActive ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-500/25", children: [
+              /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3" }),
+              "مُفعَّل"
+            ] }) : /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-200 border border-amber-500/25", children: [
+              /* @__PURE__ */ jsx(Clock, { className: "w-3 h-3" }),
+              "بانتظار التفعيل"
+            ] }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/55 text-xs", children: b.activated_at ? /* @__PURE__ */ jsxs(Fragment, { children: [
+              /* @__PURE__ */ jsx("div", { children: formatDateTime$4(b.activated_at) }),
+              b.activated_by_employee_name ? /* @__PURE__ */ jsx("div", { className: "text-white/35 mt-0.5", children: b.activated_by_employee_name }) : null
+            ] }) : /* @__PURE__ */ jsx("span", { className: "text-white/35", children: "—" }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/55 text-xs", children: formatDateTime$4(b.created_at) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
+              /* @__PURE__ */ jsx("a", { href: `/marketing/bloggers/${b.id}/card`, className: `${ws.btnPrimary} px-3 py-1.5 text-sm justify-center`, title: "عرض بطاقة الدعوة", children: /* @__PURE__ */ jsx(QrCode, { className: "w-4 h-4" }) }),
+              /* @__PURE__ */ jsx("button", { onClick: () => openEdit(b), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
+              /* @__PURE__ */ jsx("button", { onClick: () => onDelete(b), className: `${ws.btnDanger} px-3 py-1.5 text-sm justify-center`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
+            ] }) })
+          ] }, b.id);
+        }) })
+      ] }) }) })
+    ] })
+  ] });
+}
+
+const page$c = UNSAFE_withComponentProps(function WrappedPage(props) {
+  return /* @__PURE__ */jsx(RootLayout, {
+    children: /* @__PURE__ */jsx(BloggersPage, {
+      ...props
+    })
+  });
+});
+
+const route28 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: page$c
+}, Symbol.toStringTag, { value: 'Module' }));
+
+function BloggerCardPage() {
+  const {
+    isAuthenticated,
+    logout
+  } = useAdminAuth({
+    requiredPermission: "can_manage_marketing"
+  });
+  const params = useParams();
+  const bloggerId = Number(params?.id);
+  const bloggerQuery = useQuery({
+    queryKey: ["marketing-blogger", bloggerId],
+    enabled: isAuthenticated && Number.isFinite(bloggerId),
+    queryFn: async () => {
+      const r = await adminFetch("/api/marketing/bloggers");
+      if (!r.ok) throw new Error("فشل التحميل");
+      const data = await r.json();
+      const b2 = (data.bloggers || []).find((x) => Number(x.id) === bloggerId);
+      if (!b2) throw new Error("غير موجود");
+      return b2;
+    }
+  });
+  const settingsQuery = useQuery({
+    queryKey: ["marketing-settings"],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const r = await adminFetch("/api/marketing/settings");
+      if (!r.ok) throw new Error("فشل التحميل");
+      return r.json();
+    }
+  });
+  const welcomeURL = useMemo(() => {
+    const slug = bloggerQuery.data?.slug;
+    if (!slug) return "";
+    if (typeof window === "undefined") return `/welcome/${slug}`;
+    return `${window.location.origin}/welcome/${slug}`;
+  }, [bloggerQuery.data]);
+  if (!isAuthenticated) return null;
+  const b = bloggerQuery.data;
+  const settings = settingsQuery.data?.settings;
+  const accent = settings?.accent_color || "#7a8b5f";
+  const cream = settings?.cream_color || "#e8e9d6";
+  const cafeName = settings?.cafe_name || "QUARTERS";
+  const cafeNameAr = settings?.cafe_name_ar || "كوارتـــرز";
+  const cafeTagline = settings?.cafe_tagline || "BAR";
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh]", dir: "rtl", children: [
+    /* @__PURE__ */ jsx("link", { rel: "preconnect", href: "https://fonts.googleapis.com" }),
+    /* @__PURE__ */ jsx("link", { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" }),
+    /* @__PURE__ */ jsx("link", { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=El+Messiri:wght@500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" }),
+    /* @__PURE__ */ jsx("style", { children: `
+        @media print {
+          .no-print { display: none !important; }
+          .print-card { box-shadow: none !important; }
+          body { background: #fff !important; }
+        }
+      ` }),
+    /* @__PURE__ */ jsx("div", { className: "no-print", children: /* @__PURE__ */ jsx(MarketingSidebar, { active: "bloggers", onLogout: logout }) }),
+    /* @__PURE__ */ jsxs("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: [
+      /* @__PURE__ */ jsxs("div", { className: "no-print mb-6 flex items-center justify-between gap-3 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("a", { href: "/marketing/bloggers", className: `${ws.btnNeutral} px-4 py-2 justify-center`, children: [
+          /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4" }),
+          /* @__PURE__ */ jsx("span", { children: "رجوع" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxs("a", { href: welcomeURL, target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-4 py-2 justify-center`, children: [
+            /* @__PURE__ */ jsx(ExternalLink, { className: "w-4 h-4" }),
+            /* @__PURE__ */ jsx("span", { children: "فتح الرابط" })
+          ] }),
+          /* @__PURE__ */ jsxs("button", { onClick: () => window.print(), className: `${ws.btnPrimary} px-4 py-2 justify-center`, children: [
+            /* @__PURE__ */ jsx(Printer, { className: "w-4 h-4" }),
+            /* @__PURE__ */ jsx("span", { children: "طباعة" })
+          ] })
+        ] })
+      ] }),
+      bloggerQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-8 text-center text-white/55`, children: "جاري التحميل…" }) : !b ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-8 text-center text-red-200`, children: "لم يُعثر على البلوقر." }) : /* @__PURE__ */ jsx("div", { className: "flex justify-center", children: /* @__PURE__ */ jsxs("div", { className: "print-card", style: {
+        width: "100%",
+        maxWidth: 460,
+        position: "relative",
+        borderRadius: 26,
+        background: accent,
+        color: cream,
+        padding: "56px 38px 44px",
+        textAlign: "center",
+        boxShadow: `0 30px 80px rgba(0,0,0,0.45), 0 0 0 1px ${cream}22`,
+        fontFamily: '"Cormorant Garamond", "Playfair Display", "Times New Roman", serif',
+        overflow: "hidden"
+      }, children: [
+        /* @__PURE__ */ jsx("div", { style: {
+          position: "absolute",
+          inset: 12,
+          borderRadius: 20,
+          border: `1px solid ${cream}22`,
+          pointerEvents: "none"
+        } }),
+        /* @__PURE__ */ jsx("div", { style: {
+          position: "absolute",
+          inset: 18,
+          borderRadius: 16,
+          border: `1px solid ${cream}11`,
+          pointerEvents: "none"
+        } }),
+        /* @__PURE__ */ jsx("div", { style: {
+          position: "absolute",
+          inset: 0,
+          background: `radial-gradient(ellipse at top, ${cream}12 0%, transparent 55%), radial-gradient(ellipse at bottom, ${cream}08 0%, transparent 60%)`,
+          pointerEvents: "none"
+        } }),
+        /* @__PURE__ */ jsx(Leaf, { corner: "tl", cream }),
+        /* @__PURE__ */ jsx(Leaf, { corner: "tr", cream }),
+        /* @__PURE__ */ jsx(Leaf, { corner: "bl", cream }),
+        /* @__PURE__ */ jsx(Leaf, { corner: "br", cream }),
+        /* @__PURE__ */ jsxs("div", { style: {
+          position: "relative",
+          marginBottom: 30
+        }, children: [
+          /* @__PURE__ */ jsxs("div", { style: {
+            position: "relative",
+            display: "inline-block"
+          }, children: [
+            /* @__PURE__ */ jsx("div", { style: {
+              fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
+              fontWeight: 700,
+              fontSize: 58,
+              letterSpacing: "0.02em",
+              lineHeight: 1,
+              color: cream
+            }, children: cafeName }),
+            /* @__PURE__ */ jsx("div", { style: {
+              position: "absolute",
+              top: 0,
+              right: -22,
+              fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
+              fontSize: 12,
+              fontWeight: 600,
+              letterSpacing: "0.12em",
+              color: cream
+            }, children: cafeTagline }) 
+          ] }),
+          /* @__PURE__ */ jsx("div", { style: {
+            fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
+            fontSize: 30,
+            fontWeight: 600,
+            color: cream,
+            marginTop: 6,
+            letterSpacing: "0.05em"
+          }, children: cafeNameAr }) 
+        ] }),
+        /* @__PURE__ */ jsx(Flourish, { cream, marginBottom: 22 }),
+        /* @__PURE__ */ jsx("div", { style: {
+          fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
+          fontSize: 12,
+          fontWeight: 600,
+          letterSpacing: "0.55em",
+          color: cream,
+          opacity: 0.85,
+          textTransform: "uppercase",
+          marginBottom: 4
+        }, children: "Private Invitation" }),
+        /* @__PURE__ */ jsx("div", { style: {
+          fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
+          fontSize: 12,
+          color: cream,
+          opacity: 0.6,
+          marginBottom: 24,
+          letterSpacing: "0.1em"
+        }, children: "دعوة خاصة" }),
+        /* @__PURE__ */ jsxs("div", { style: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 14,
+          marginBottom: b.handle ? 2 : 26
+        }, children: [
+          /* @__PURE__ */ jsx(SideMark, { cream, side: "left" }),
+          /* @__PURE__ */ jsx("div", { style: {
+            fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
+            fontSize: 30,
+            fontWeight: 700,
+            color: cream,
+            lineHeight: 1.3,
+            letterSpacing: "0.01em"
+          }, children: b.name }),
+          /* @__PURE__ */ jsx(SideMark, { cream, side: "right" })
+        ] }),
+        b.handle ? /* @__PURE__ */ jsxs("div", { style: {
+          color: cream,
+          opacity: 0.6,
+          fontSize: 13,
+          marginBottom: 26,
+          direction: "ltr",
+          letterSpacing: "0.05em",
+          fontStyle: "italic"
+        }, children: [
+          "@",
+          b.handle
+        ] }) : null,
+        /* @__PURE__ */ jsx("div", { style: {
+          display: "inline-block",
+          position: "relative",
+          padding: 18,
+          background: cream,
+          borderRadius: 18,
+          marginBottom: 24,
+          boxShadow: `0 10px 28px rgba(0,0,0,0.22), inset 0 0 0 1px ${darkenForQR(accent)}1a`
+        }, children: /* @__PURE__ */ jsx(QRCodeSVG, { value: welcomeURL, size: 196, level: "M", bgColor: cream, fgColor: darkenForQR(accent), includeMargin: false }) }),
+        /* @__PURE__ */ jsx("div", { style: {
+          width: 56,
+          height: 1,
+          background: `${cream}40`,
+          margin: "0 auto 18px"
+        } }),
+        /* @__PURE__ */ jsx("div", { style: {
+          fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
+          fontSize: 13,
+          color: cream,
+          opacity: 0.82,
+          lineHeight: 1.9,
+          letterSpacing: "0.02em"
+        }, children: "امسح الكود وسلّمه للكاشير لتفعيل بطاقتك" }),
+        /* @__PURE__ */ jsx("div", { style: {
+          fontFamily: '"El Messiri", "Cairo", "Tahoma", sans-serif',
+          fontSize: 12,
+          color: cream,
+          opacity: 0.55,
+          lineHeight: 1.9,
+          letterSpacing: "0.02em"
+        }, children: "بعد التفعيل تظهر لك قائمة الضيافة" })
+      ] }) })
+    ] })
+  ] });
+}
+function Leaf({
+  corner,
+  cream
+}) {
+  const positions = {
+    tl: {
+      top: 18,
+      left: 18,
+      rotate: 0
+    },
+    tr: {
+      top: 18,
+      right: 18,
+      rotate: 90
+    },
+    br: {
+      bottom: 18,
+      right: 18,
+      rotate: 180
+    },
+    bl: {
+      bottom: 18,
+      left: 18,
+      rotate: 270
+    }
+  };
+  const pos = positions[corner];
+  return /* @__PURE__ */ jsx("div", { "aria-hidden": "true", style: {
+    position: "absolute",
+    ...pos,
+    width: 26,
+    height: 26,
+    transform: `rotate(${pos.rotate}deg)`,
+    opacity: 0.55,
+    pointerEvents: "none"
+  }, children: /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", width: "100%", height: "100%", fill: "none", children: /* @__PURE__ */ jsx("path", { d: "M3 21 C 8 16, 12 12, 21 3 M21 3 C 14 4, 9 7, 6 11 M21 3 C 17 9, 14 13, 11 18", stroke: cream, strokeWidth: "1.2", strokeLinecap: "round" }) }) });
+}
+function Flourish({
+  cream,
+  marginBottom = 20
+}) {
+  return /* @__PURE__ */ jsxs("div", { style: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    marginBottom
+  }, children: [
+    /* @__PURE__ */ jsx("span", { style: {
+      width: 56,
+      height: 1,
+      background: `linear-gradient(to right, transparent, ${cream}66)`
+    } }),
+    /* @__PURE__ */ jsx("span", { style: {
+      width: 5,
+      height: 5,
+      transform: "rotate(45deg)",
+      background: cream,
+      opacity: 0.7
+    } }),
+    /* @__PURE__ */ jsx("span", { style: {
+      width: 8,
+      height: 1,
+      background: `${cream}88`
+    } }),
+    /* @__PURE__ */ jsx("span", { style: {
+      width: 5,
+      height: 5,
+      transform: "rotate(45deg)",
+      background: cream,
+      opacity: 0.7
+    } }),
+    /* @__PURE__ */ jsx("span", { style: {
+      width: 56,
+      height: 1,
+      background: `linear-gradient(to left, transparent, ${cream}66)`
+    } })
+  ] });
+}
+function SideMark({
+  cream,
+  side
+}) {
+  return /* @__PURE__ */ jsxs("div", { "aria-hidden": "true", style: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 3,
+    opacity: 0.6
+  }, children: [
+    /* @__PURE__ */ jsx("span", { style: {
+      width: 4,
+      height: 4,
+      borderRadius: "50%",
+      background: cream
+    } }),
+    /* @__PURE__ */ jsx("span", { style: {
+      width: 1,
+      height: 14,
+      background: cream
+    } }),
+    /* @__PURE__ */ jsx("span", { style: {
+      width: 4,
+      height: 4,
+      borderRadius: "50%",
+      background: cream
+    } })
+  ] });
+}
+function darkenForQR(hex) {
+  try {
+    const m = String(hex).replace("#", "");
+    const r = parseInt(m.length === 3 ? m[0] + m[0] : m.slice(0, 2), 16);
+    const g = parseInt(m.length === 3 ? m[1] + m[1] : m.slice(2, 4), 16);
+    const b = parseInt(m.length === 3 ? m[2] + m[2] : m.slice(4, 6), 16);
+    const f = 0.35;
+    const toHex = (n) => Math.max(0, Math.min(255, Math.round(n * f))).toString(16).padStart(2, "0");
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  } catch {
+    return "#1c1917";
+  }
+}
+
+const page$b = UNSAFE_withComponentProps(function WrappedPage(props) {
+  const params = useParams$1();
+  return /* @__PURE__ */jsx(RootLayout, {
+    children: /* @__PURE__ */jsx(BloggerCardPage, {
+      ...props,
+      id: params.id
+    })
+  });
+});
+
+const route29 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: page$b
+}, Symbol.toStringTag, { value: 'Module' }));
+
+function MarketingMenuPage() {
+  const {
+    isAuthenticated,
+    logout
+  } = useAdminAuth({
+    requiredPermission: "can_manage_marketing"
+  });
+  const queryClient = useQueryClient();
+  const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyForm());
+  const [error, setError] = useState(null);
+  function emptyForm() {
+    return {
+      category: "مشروبات",
+      name_ar: "",
+      name_en: "",
+      description: "",
+      price: "",
+      sort_order: 0,
+      is_active: true
+    };
+  }
+  const itemsQuery = useQuery({
+    queryKey: ["marketing-menu"],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const r = await adminFetch("/api/marketing/menu");
+      if (!r.ok) throw new Error("فشل تحميل المنيو");
+      return r.json();
+    }
+  });
+  const items = itemsQuery.data?.items || [];
+  const grouped = useMemo(() => {
+    const g = {};
+    for (const it of items) {
+      if (!g[it.category]) g[it.category] = [];
+      g[it.category].push(it);
+    }
+    return g;
+  }, [items]);
+  const createMut = useMutation({
+    mutationFn: async (payload) => {
+      const r = await adminFetch("/api/marketing/menu", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
+      return d;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["marketing-menu"]
+      });
+      resetForm();
+    },
+    onError: (e) => setError(e.message || "خطأ")
+  });
+  const updateMut = useMutation({
+    mutationFn: async ({
+      id,
+      ...rest
+    }) => {
+      const r = await adminFetch("/api/marketing/menu", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id,
+          ...rest
+        })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
+      return d;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["marketing-menu"]
+      });
+      resetForm();
+    },
+    onError: (e) => setError(e.message || "خطأ")
+  });
+  const deleteMut = useMutation({
+    mutationFn: async (id) => {
+      const r = await adminFetch(`/api/marketing/menu?id=${encodeURIComponent(id)}`, {
+        method: "DELETE"
+      });
+      if (!r.ok) throw new Error("فشل الحذف");
+    },
+    onSuccess: () => queryClient.invalidateQueries({
+      queryKey: ["marketing-menu"]
+    })
+  });
+  const toggleMut = useMutation({
+    mutationFn: async (it) => {
+      const r = await adminFetch("/api/marketing/menu", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id: it.id,
+          is_active: !it.is_active
+        })
+      });
+      if (!r.ok) throw new Error("فشل التحديث");
+    },
+    onSuccess: () => queryClient.invalidateQueries({
+      queryKey: ["marketing-menu"]
+    })
+  });
+  const resetForm = () => {
+    setShowForm(false);
+    setEditing(null);
+    setForm(emptyForm());
+    setError(null);
+  };
+  const openCreate = () => {
+    setEditing(null);
+    setForm(emptyForm());
+    setError(null);
+    setShowForm(true);
+  };
+  const openEdit = (it) => {
+    setEditing(it);
+    setForm({
+      category: it.category,
+      name_ar: it.name_ar,
+      name_en: it.name_en || "",
+      description: it.description || "",
+      price: it.price === null || it.price === void 0 ? "" : String(it.price),
+      sort_order: it.sort_order || 0,
+      is_active: !!it.is_active
+    });
+    setError(null);
+    setShowForm(true);
+  };
+  const submit = (e) => {
+    e.preventDefault();
+    if (!form.name_ar.trim() || !form.category.trim()) {
+      setError("الاسم والتصنيف مطلوبان");
+      return;
+    }
+    const payload = {
+      category: form.category.trim(),
+      name_ar: form.name_ar.trim(),
+      name_en: form.name_en.trim() || null,
+      description: form.description.trim() || null,
+      price: form.price === "" ? null : Number(form.price),
+      sort_order: Number(form.sort_order) || 0,
+      is_active: !!form.is_active
+    };
+    if (editing) updateMut.mutate({
+      id: editing.id,
+      ...payload
+    });
+    else createMut.mutate(payload);
+  };
+  const onDelete = (it) => {
+    if (!window.confirm(`حذف "${it.name_ar}"؟`)) return;
+    deleteMut.mutate(it.id);
+  };
+  if (!isAuthenticated) return null;
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh]", dir: "rtl", children: [
+    /* @__PURE__ */ jsx(MarketingSidebar, { active: "menu", onLogout: logout }),
+    /* @__PURE__ */ jsxs("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8", children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-amber-200`, children: /* @__PURE__ */ jsx(Coffee, { className: "w-6 h-6" }) }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-white", children: "منيو الضيافة" }),
+            /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mt-1", children: "الأصناف التي ستعرض للبلوقر بعد تفعيل بطاقته." })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("button", { onClick: openCreate, className: `${ws.btnPrimary} px-5 py-3 justify-center`, children: [
+          /* @__PURE__ */ jsx(Plus, { className: "w-5 h-5" }),
+          /* @__PURE__ */ jsx("span", { children: "صنف جديد" })
+        ] })
+      ] }) }),
+      showForm ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-4", children: [
+          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white", children: editing ? "تعديل صنف" : "صنف جديد" }),
+          /* @__PURE__ */ jsx("button", { onClick: resetForm, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+        ] }),
+        error ? /* @__PURE__ */ jsx("div", { className: "mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm", children: error }) : null,
+        /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "التصنيف *" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.category, onChange: (e) => setForm({
+              ...form,
+              category: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "مشروبات / مخبوزات / حلويات…", list: "categories", required: true }),
+            /* @__PURE__ */ jsx("datalist", { id: "categories", children: Object.keys(grouped).map((c) => /* @__PURE__ */ jsx("option", { value: c }, c)) })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "ترتيب العرض" }),
+            /* @__PURE__ */ jsx("input", { type: "number", value: form.sort_order, onChange: (e) => setForm({
+              ...form,
+              sort_order: e.target.value
+            }), className: `${ws.input} px-4 py-3` })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الاسم (عربي) *" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.name_ar, onChange: (e) => setForm({
+              ...form,
+              name_ar: e.target.value
+            }), className: `${ws.input} px-4 py-3`, required: true })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الاسم (إنجليزي)" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.name_en, onChange: (e) => setForm({
+              ...form,
+              name_en: e.target.value
+            }), className: `${ws.input} px-4 py-3` })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "وصف (اختياري)" }),
+            /* @__PURE__ */ jsx("textarea", { value: form.description, onChange: (e) => setForm({
+              ...form,
+              description: e.target.value
+            }), className: `${ws.input} px-4 py-3 resize-none`, rows: 2 })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "السعر (ر.س — اختياري)" }),
+            /* @__PURE__ */ jsx("input", { type: "number", step: "0.01", value: form.price, onChange: (e) => setForm({
+              ...form,
+              price: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "0.00" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsx("input", { id: "active", type: "checkbox", checked: form.is_active, onChange: (e) => setForm({
+              ...form,
+              is_active: e.target.checked
+            }), className: "w-5 h-5" }),
+            /* @__PURE__ */ jsx("label", { htmlFor: "active", className: "text-white text-sm", children: "نشط (يظهر للبلوقر)" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2 flex gap-3", children: [
+            /* @__PURE__ */ jsx("button", { type: "submit", disabled: createMut.isPending || updateMut.isPending, className: `${ws.btnPrimary} flex-1 px-4 py-3 justify-center disabled:opacity-50`, children: editing ? "حفظ التعديلات" : "إنشاء" }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: resetForm, className: `${ws.btnNeutral} px-4 py-3 justify-center`, children: "إلغاء" })
+          ] })
+        ] })
+      ] }) : null,
+      /* @__PURE__ */ jsx("div", { className: "space-y-6", children: itemsQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-8 text-center text-white/55`, children: "جاري التحميل…" }) : Object.keys(grouped).length === 0 ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-12 text-center text-white/55`, children: [
+        /* @__PURE__ */ jsx(Coffee, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
+        /* @__PURE__ */ jsx("p", { children: "لا توجد أصناف. ابدأ بإضافة منيو الضيافة." })
+      ] }) : Object.entries(grouped).map(([category, list]) => /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: [
+        /* @__PURE__ */ jsx("div", { className: "px-5 py-3 border-b border-white/[0.06] bg-white/[0.03]", children: /* @__PURE__ */ jsx("h3", { className: "text-white font-bold", children: category }) }),
+        /* @__PURE__ */ jsx("table", { className: "w-full", children: /* @__PURE__ */ jsx("tbody", { children: list.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/[0.04] hover:bg-white/[0.02]", children: [
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+            /* @__PURE__ */ jsxs("div", { className: "text-white font-medium", children: [
+              it.name_ar,
+              !it.is_active ? /* @__PURE__ */ jsx("span", { className: "mr-2 text-xs px-2 py-0.5 rounded-full bg-white/[0.06] text-white/55", children: "مخفي" }) : null
+            ] }),
+            it.name_en ? /* @__PURE__ */ jsx("div", { className: "text-white/45 text-xs mt-0.5", children: it.name_en }) : null,
+            it.description ? /* @__PURE__ */ jsx("div", { className: "text-white/40 text-xs mt-1 leading-relaxed", children: it.description }) : null
+          ] }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/70 text-sm whitespace-nowrap", children: it.price !== null && it.price !== void 0 ? `${Number(it.price).toFixed(2)} ر.س` : "—" }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-center", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-end gap-2", children: [
+            /* @__PURE__ */ jsx("button", { onClick: () => toggleMut.mutate(it), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: it.is_active ? "إخفاء" : "إظهار", children: it.is_active ? /* @__PURE__ */ jsx(EyeOff, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Eye, { className: "w-4 h-4" }) }),
+            /* @__PURE__ */ jsx("button", { onClick: () => openEdit(it), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
+            /* @__PURE__ */ jsx("button", { onClick: () => onDelete(it), className: `${ws.btnDanger} px-3 py-1.5 text-sm justify-center`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
+          ] }) })
+        ] }, it.id)) }) })
+      ] }, category)) })
+    ] })
+  ] });
+}
+
+const page$a = UNSAFE_withComponentProps(function WrappedPage(props) {
+  return /* @__PURE__ */jsx(RootLayout, {
+    children: /* @__PURE__ */jsx(MarketingMenuPage, {
       ...props
     })
   });
@@ -24751,16 +24667,210 @@ const route30 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: page$a
 }, Symbol.toStringTag, { value: 'Module' }));
 
-function InventoryLoginAliasPage() {
-  React__default.useEffect(() => {
-    window.location.href = "/employee/login";
-  }, []);
-  return null;
+function MarketingSettingsPage() {
+  const {
+    isAuthenticated,
+    logout
+  } = useAdminAuth({
+    requiredPermission: "can_manage_marketing"
+  });
+  const queryClient = useQueryClient();
+  const [form, setForm] = useState(null);
+  const [error, setError] = useState(null);
+  const [saved, setSaved] = useState(false);
+  const settingsQuery = useQuery({
+    queryKey: ["marketing-settings"],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const r = await adminFetch("/api/marketing/settings");
+      if (!r.ok) throw new Error("فشل تحميل الإعدادات");
+      return r.json();
+    }
+  });
+  useEffect(() => {
+    if (settingsQuery.data?.settings && !form) {
+      setForm(settingsQuery.data.settings);
+    }
+  }, [settingsQuery.data, form]);
+  const saveMut = useMutation({
+    mutationFn: async (payload) => {
+      const r = await adminFetch("/api/marketing/settings", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الحفظ");
+      return d;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["marketing-settings"]
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    },
+    onError: (e) => setError(e.message || "خطأ")
+  });
+  const submit = (e) => {
+    e.preventDefault();
+    setError(null);
+    if (!form) return;
+    saveMut.mutate({
+      cafe_name: form.cafe_name,
+      cafe_name_ar: form.cafe_name_ar,
+      cafe_tagline: form.cafe_tagline,
+      logo_letter: form.logo_letter,
+      accent_color: form.accent_color,
+      cream_color: form.cream_color,
+      welcome_headline: form.welcome_headline,
+      welcome_subtext: form.welcome_subtext
+    });
+  };
+  if (!isAuthenticated) return null;
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh]", dir: "rtl", children: [
+    /* @__PURE__ */ jsx(MarketingSidebar, { active: "settings", onLogout: logout }),
+    /* @__PURE__ */ jsxs("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8", children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-sky-200`, children: /* @__PURE__ */ jsx(Settings, { className: "w-6 h-6" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("h1", { className: "text-2xl font-bold text-white", children: "إعدادات التسويق" }),
+          /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mt-1", children: "الإعدادات تنطبق على بطاقات الدعوة + شاشة الترحيب." })
+        ] })
+      ] }) }),
+      settingsQuery.isLoading || !form ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-8 text-center text-white/55`, children: "جاري التحميل…" }) : /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: `${ws.glass} ${ws.card} p-5 sm:p-6 space-y-5`, children: [
+        error ? /* @__PURE__ */ jsx("div", { className: "p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm", children: error }) : null,
+        saved ? /* @__PURE__ */ jsx("div", { className: "p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 text-sm", children: "✓ تم الحفظ" }) : null,
+        /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "اسم الكوفي (إنجليزي)" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.cafe_name || "", onChange: (e) => setForm({
+              ...form,
+              cafe_name: e.target.value
+            }), className: `${ws.input} px-4 py-3`, required: true })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "اسم الكوفي (عربي)" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.cafe_name_ar || "", onChange: (e) => setForm({
+              ...form,
+              cafe_name_ar: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "كوارتـــرز" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الـ Tagline (مثل BAR)" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.cafe_tagline || "", onChange: (e) => setForm({
+              ...form,
+              cafe_tagline: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "BAR" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "حرف الشعار (للأماكن المختصرة)" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.logo_letter || "", onChange: (e) => setForm({
+              ...form,
+              logo_letter: e.target.value.slice(0, 4)
+            }), className: `${ws.input} px-4 py-3 text-center text-2xl font-bold`, maxLength: 4 })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsxs("label", { className: "block text-xs font-semibold text-white/55 mb-2 flex items-center gap-2", children: [
+              /* @__PURE__ */ jsx(Palette, { className: "w-4 h-4" }),
+              " اللون الأساسي (Olive)"
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+              /* @__PURE__ */ jsx("input", { type: "color", value: form.accent_color || "#7a8b5f", onChange: (e) => setForm({
+                ...form,
+                accent_color: e.target.value
+              }), className: "h-12 w-16 rounded-2xl border border-white/10 bg-transparent cursor-pointer" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: form.accent_color || "", onChange: (e) => setForm({
+                ...form,
+                accent_color: e.target.value
+              }), className: `${ws.input} px-4 py-3 flex-1`, placeholder: "#7a8b5f" })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsxs("label", { className: "block text-xs font-semibold text-white/55 mb-2 flex items-center gap-2", children: [
+              /* @__PURE__ */ jsx(Palette, { className: "w-4 h-4" }),
+              " لون النص (Cream)"
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+              /* @__PURE__ */ jsx("input", { type: "color", value: form.cream_color || "#e8e9d6", onChange: (e) => setForm({
+                ...form,
+                cream_color: e.target.value
+              }), className: "h-12 w-16 rounded-2xl border border-white/10 bg-transparent cursor-pointer" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: form.cream_color || "", onChange: (e) => setForm({
+                ...form,
+                cream_color: e.target.value
+              }), className: `${ws.input} px-4 py-3 flex-1`, placeholder: "#e8e9d6" })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "معاينة الـ Wordmark" }),
+            /* @__PURE__ */ jsx("div", { className: "rounded-2xl flex items-center justify-center p-8", style: {
+              background: form.accent_color || "#7a8b5f",
+              color: form.cream_color || "#e8e9d6",
+              minHeight: "120px"
+            }, children: /* @__PURE__ */ jsxs("div", { style: {
+              position: "relative",
+              display: "inline-block",
+              textAlign: "center"
+            }, children: [
+              /* @__PURE__ */ jsx("span", { style: {
+                fontFamily: "'Cormorant Garamond', 'Playfair Display', serif",
+                fontSize: 44,
+                fontWeight: 700,
+                letterSpacing: "0.02em"
+              }, children: form.cafe_name || "QUARTERS" }),
+              form.cafe_tagline ? /* @__PURE__ */ jsx("span", { style: {
+                position: "absolute",
+                top: -2,
+                right: -24,
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: "0.1em"
+              }, children: form.cafe_tagline }) : null,
+              form.cafe_name_ar ? /* @__PURE__ */ jsx("div", { style: {
+                fontFamily: "'El Messiri', 'Cairo', sans-serif",
+                fontSize: 22,
+                fontWeight: 600,
+                marginTop: 4
+              }, children: form.cafe_name_ar }) : null
+            ] }) })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "عنوان الترحيب" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.welcome_headline || "", onChange: (e) => setForm({
+              ...form,
+              welcome_headline: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "مرحباً بك في Quarters" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "نص الترحيب الفرعي" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: form.welcome_subtext || "", onChange: (e) => setForm({
+              ...form,
+              welcome_subtext: e.target.value
+            }), className: `${ws.input} px-4 py-3`, placeholder: "استمتع بتجربتك معنا" })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 pt-2", children: [
+          /* @__PURE__ */ jsxs("button", { type: "submit", disabled: saveMut.isPending, className: `${ws.btnPrimary} px-6 py-3 justify-center disabled:opacity-50`, children: [
+            /* @__PURE__ */ jsx(Save, { className: "w-5 h-5" }),
+            /* @__PURE__ */ jsx("span", { children: saveMut.isPending ? "جاري الحفظ…" : "حفظ" })
+          ] }),
+          /* @__PURE__ */ jsxs("a", { href: "/welcome/preview", target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-4 py-3 justify-center`, children: [
+            /* @__PURE__ */ jsx(Coffee, { className: "w-5 h-5" }),
+            /* @__PURE__ */ jsx("span", { children: "معاينة شاشة البلوقر" })
+          ] })
+        ] })
+      ] })
+    ] })
+  ] });
 }
 
 const page$9 = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
-    children: /* @__PURE__ */jsx(InventoryLoginAliasPage, {
+    children: /* @__PURE__ */jsx(MarketingSettingsPage, {
       ...props
     })
   });
@@ -30182,7 +30292,7 @@ const route41 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   loader
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-ChnoaYKm.js','imports':['/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/index-CpuTRb_f.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-BFqr1x54.js','imports':['/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/index-CpuTRb_f.js','/assets/index-BBR7LY95.js','/assets/index-RzAbhzwT.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-CQGYHGqQ.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bg5GMaUs.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/shield-C5pcHydn.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/languages-CPElNbqN.js','/assets/arrow-left-CW124a3z.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CLYhawd1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-C4OMc5DJ.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/layout-dashboard-Da3J7I21.js','/assets/calculator-C0QlD7-v.js','/assets/banknote-DLLHtDFq.js','/assets/arrow-left-CW124a3z.js','/assets/trending-up-Bc6Ft-5J.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/users-C2p3447k.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BRvqEUi6.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-C4OMc5DJ.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-LVNAY-gV.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/banknote-DLLHtDFq.js','/assets/building-2-CDLOniT1.js','/assets/calendar-days-C02PkCCx.js','/assets/refresh-cw-y7gJHD-P.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/save-D1XVzy5X.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CRSyhvth.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-C4OMc5DJ.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-LVNAY-gV.js','/assets/save-D1XVzy5X.js','/assets/plus-CIktoki0.js','/assets/x-ZQ5dMI2W.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/style-CKxGNCTP.js','/assets/message-square-CPsboc2z.js','/assets/pencil-BX_oWWiy.js','/assets/trash-2-B7b6SXCh.js','/assets/banknote-DLLHtDFq.js','/assets/sparkles-DDkx9kY1.js','/assets/index-RzAbhzwT.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/file-text-DzqZs_V-.js','/assets/clipboard-check-B2Hh4TCw.js','/assets/info-k1Bw3zX2.js','/assets/circle-check-ZLW_x-jh.js','/assets/clock-B0amVQVI.js','/assets/trending-up-Bc6Ft-5J.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/index-CpuTRb_f.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-O3NZlper.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-C4OMc5DJ.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/arrow-left-CW124a3z.js','/assets/GlassSelect-LVNAY-gV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/plus-CIktoki0.js','/assets/save-D1XVzy5X.js','/assets/copy-CPMlRfz4.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D0tWnykq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-C4OMc5DJ.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/arrow-left-CW124a3z.js','/assets/refresh-cw-y7gJHD-P.js','/assets/index-RzAbhzwT.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/exportUtils-B7865RYi.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-CIJtpmk3.js','/assets/trash-2-B7b6SXCh.js','/assets/dateUtils-D9FnOxAe.js','/assets/package-Dy9XQSCd.js','/assets/pencil-BX_oWWiy.js','/assets/eye-Bmv-R64T.js','/assets/save-D1XVzy5X.js','/assets/circle-check-big-BhdGjCAh.js','/assets/triangle-alert-BQceZXIM.js','/assets/x-ZQ5dMI2W.js','/assets/useQuery-DoF-s0-_.js','/assets/square-check-big-YKuBvjpw.js','/assets/square-CcmcLF3p.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/plus-CIktoki0.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C4S162te.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-C4OMc5DJ.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassMultiSelect-Csg7Gpjq.js','/assets/x-ZQ5dMI2W.js','/assets/user-C2XU59vk.js','/assets/file-text-DzqZs_V-.js','/assets/dollar-sign-Dssx-zr6.js','/assets/percent-Ddy4Auwy.js','/assets/payrollFormatters-DGy10whX.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/useMutation-CIJtpmk3.js','/assets/info-k1Bw3zX2.js','/assets/lock-BSk8lcAC.js','/assets/circle-check-ZLW_x-jh.js','/assets/clock-B0amVQVI.js','/assets/style-CKxGNCTP.js','/assets/message-square-CPsboc2z.js','/assets/pencil-BX_oWWiy.js','/assets/GlassPopover-DQHHWwR-.js','/assets/exportUtils-B7865RYi.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/send-5WuU_ivn.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/gift-mN3W88SI.js','/assets/trash-2-B7b6SXCh.js','/assets/users-C2p3447k.js','/assets/plus-CIktoki0.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js','/assets/dateUtils-D9FnOxAe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-UsxGRDQ2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-C4OMc5DJ.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CXyp4_3l.js','/assets/useQuery-DoF-s0-_.js','/assets/calculator-C0QlD7-v.js','/assets/building-2-CDLOniT1.js','/assets/info-k1Bw3zX2.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/dateUtils-D9FnOxAe.js','/assets/clock-B0amVQVI.js','/assets/calendar-days-C02PkCCx.js','/assets/x-ZQ5dMI2W.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DYFxFc20.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-sEbfONA6.js','/assets/trending-up-Bc6Ft-5J.js','/assets/clipboard-list-CfZdVlXu.js','/assets/circle-check-big-BhdGjCAh.js','/assets/clock-B0amVQVI.js','/assets/building-2-CDLOniT1.js','/assets/calendar-days-C02PkCCx.js','/assets/sparkles-DDkx9kY1.js','/assets/chevron-down-CHWldOhk.js','/assets/x-ZQ5dMI2W.js','/assets/info-k1Bw3zX2.js','/assets/circle-alert-Kt4PfEMW.js','/assets/triangle-alert-BQceZXIM.js','/assets/package-plus-CTFpXdtR.js','/assets/calendar-Drj54W10.js','/assets/clsx-DPoTaEZk.js','/assets/activity-UcyPwpHL.js','/assets/dollar-sign-Dssx-zr6.js','/assets/package-Dy9XQSCd.js','/assets/exportUtils-B7865RYi.js','/assets/file-text-DzqZs_V-.js','/assets/search-D9cGQeLV.js','/assets/download-TOwF3vCj.js','/assets/printer-Cn5BGpcv.js','/assets/users-C2p3447k.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CXyp4_3l.js','/assets/GlassMultiSelect-Csg7Gpjq.js','/assets/layers-Dtawpc2Q.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/dateUtils-D9FnOxAe.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/briefcase-BT2UZY2_.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/calculator-C0QlD7-v.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CzBCTQwd.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-sEbfONA6.js','/assets/exportUtils-B7865RYi.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/building-2-CDLOniT1.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/search-D9cGQeLV.js','/assets/plus-CIktoki0.js','/assets/square-pen-CwZxAvZ-.js','/assets/trash-2-B7b6SXCh.js','/assets/x-ZQ5dMI2W.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/layout-dashboard-Da3J7I21.js','/assets/package-Dy9XQSCd.js','/assets/file-text-DzqZs_V-.js','/assets/chevron-down-CHWldOhk.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/dateUtils-D9FnOxAe.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ZImavNGR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-sEbfONA6.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/useMutation-CIJtpmk3.js','/assets/employeeUtils-BeP9BfEz.js','/assets/users-C2p3447k.js','/assets/shield-C5pcHydn.js','/assets/user-C2XU59vk.js','/assets/search-D9cGQeLV.js','/assets/GlassPopover-DQHHWwR-.js','/assets/exportUtils-B7865RYi.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/circle-check-ZLW_x-jh.js','/assets/circle-x-Dd_n687E.js','/assets/pencil-BX_oWWiy.js','/assets/trash-2-B7b6SXCh.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/briefcase-BT2UZY2_.js','/assets/dollar-sign-Dssx-zr6.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/x-ZQ5dMI2W.js','/assets/mail-CRjWmCH2.js','/assets/lock-BSk8lcAC.js','/assets/building-2-CDLOniT1.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/plus-CIktoki0.js','/assets/triangle-alert-BQceZXIM.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/layout-dashboard-Da3J7I21.js','/assets/package-Dy9XQSCd.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js','/assets/dateUtils-D9FnOxAe.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-hv9EneiM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/layers-Dtawpc2Q.js','/assets/x-ZQ5dMI2W.js','/assets/languages-CPElNbqN.js','/assets/plus-CIktoki0.js','/assets/pencil-BX_oWWiy.js','/assets/GlassSelect-LVNAY-gV.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/Sidebar-sEbfONA6.js','/assets/package-Dy9XQSCd.js','/assets/circle-check-big-BhdGjCAh.js','/assets/triangle-alert-BQceZXIM.js','/assets/circle-x-Dd_n687E.js','/assets/GlassPopover-DQHHWwR-.js','/assets/search-D9cGQeLV.js','/assets/filter-D0N8NsOk.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/eye-Bmv-R64T.js','/assets/building-2-CDLOniT1.js','/assets/trash-2-B7b6SXCh.js','/assets/square-check-big-YKuBvjpw.js','/assets/clipboard-check-B2Hh4TCw.js','/assets/square-CcmcLF3p.js','/assets/eye-off-Ct4Iogbq.js','/assets/dollar-sign-Dssx-zr6.js','/assets/clipboard-list-CfZdVlXu.js','/assets/circle-alert-Kt4PfEMW.js','/assets/exportUtils-B7865RYi.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/dateUtils-D9FnOxAe.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DCxoHtqs.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/Sidebar-sEbfONA6.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/exportUtils-B7865RYi.js','/assets/arrow-left-CW124a3z.js','/assets/package-Dy9XQSCd.js','/assets/building-2-CDLOniT1.js','/assets/circle-x-Dd_n687E.js','/assets/GlassSelect-LVNAY-gV.js','/assets/search-D9cGQeLV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/hash-Djhpd59e.js','/assets/calendar-Drj54W10.js','/assets/user-C2XU59vk.js','/assets/file-text-DzqZs_V-.js','/assets/triangle-alert-BQceZXIM.js','/assets/circle-check-big-BhdGjCAh.js','/assets/chevron-down-CHWldOhk.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/x-ZQ5dMI2W.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js','/assets/dateUtils-D9FnOxAe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CZDvufaq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/apiAuth-DIjdQgpG.js','/assets/shield-C5pcHydn.js','/assets/user-C2XU59vk.js','/assets/lock-BSk8lcAC.js','/assets/circle-alert-Kt4PfEMW.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DD0AVf5B.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/Sidebar-sEbfONA6.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/arrow-left-CW124a3z.js','/assets/circle-x-Dd_n687E.js','/assets/triangle-alert-BQceZXIM.js','/assets/building-2-CDLOniT1.js','/assets/GlassSelect-LVNAY-gV.js','/assets/search-D9cGQeLV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/package-Dy9XQSCd.js','/assets/circle-check-big-BhdGjCAh.js','/assets/exportUtils-B7865RYi.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/x-ZQ5dMI2W.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js','/assets/dateUtils-D9FnOxAe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/marketing/bloggers/page':{'id':'admin/marketing/bloggers/page','parentId':'root','path':'admin/marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BiWiWUHA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-sEbfONA6.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-D9FnOxAe.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/plus-CIktoki0.js','/assets/x-ZQ5dMI2W.js','/assets/circle-check-ZLW_x-jh.js','/assets/clock-B0amVQVI.js','/assets/square-pen-CwZxAvZ-.js','/assets/trash-2-B7b6SXCh.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/layout-dashboard-Da3J7I21.js','/assets/building-2-CDLOniT1.js','/assets/package-Dy9XQSCd.js','/assets/file-text-DzqZs_V-.js','/assets/chevron-down-CHWldOhk.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/marketing/bloggers/[id]/card/page':{'id':'admin/marketing/bloggers/[id]/card/page','parentId':'root','path':'admin/marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DK5KJSTl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-sEbfONA6.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/arrow-right-BD0nPUy5.js','/assets/external-link-fn2KPi3d.js','/assets/printer-Cn5BGpcv.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/x-ZQ5dMI2W.js','/assets/layout-dashboard-Da3J7I21.js','/assets/building-2-CDLOniT1.js','/assets/package-Dy9XQSCd.js','/assets/file-text-DzqZs_V-.js','/assets/chevron-down-CHWldOhk.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/marketing/menu/page':{'id':'admin/marketing/menu/page','parentId':'root','path':'admin/marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page--bommgrt.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-sEbfONA6.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/coffee-D7fvPaPE.js','/assets/plus-CIktoki0.js','/assets/x-ZQ5dMI2W.js','/assets/eye-off-Ct4Iogbq.js','/assets/eye-Bmv-R64T.js','/assets/square-pen-CwZxAvZ-.js','/assets/trash-2-B7b6SXCh.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/layout-dashboard-Da3J7I21.js','/assets/building-2-CDLOniT1.js','/assets/package-Dy9XQSCd.js','/assets/file-text-DzqZs_V-.js','/assets/chevron-down-CHWldOhk.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/marketing/settings/page':{'id':'admin/marketing/settings/page','parentId':'root','path':'admin/marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-klFLsdMt.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-sEbfONA6.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/save-D1XVzy5X.js','/assets/coffee-D7fvPaPE.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/clipboard-list-CfZdVlXu.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/x-ZQ5dMI2W.js','/assets/layout-dashboard-Da3J7I21.js','/assets/building-2-CDLOniT1.js','/assets/package-Dy9XQSCd.js','/assets/file-text-DzqZs_V-.js','/assets/chevron-down-CHWldOhk.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B_G1OOz-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/Sidebar-sEbfONA6.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/package-plus-CTFpXdtR.js','/assets/clock-B0amVQVI.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CXyp4_3l.js','/assets/filter-D0N8NsOk.js','/assets/x-ZQ5dMI2W.js','/assets/search-D9cGQeLV.js','/assets/exportUtils-B7865RYi.js','/assets/GlassPopover-DQHHWwR-.js','/assets/printer-Cn5BGpcv.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/square-check-big-YKuBvjpw.js','/assets/trash-2-B7b6SXCh.js','/assets/square-CcmcLF3p.js','/assets/building-2-CDLOniT1.js','/assets/eye-Bmv-R64T.js','/assets/pencil-BX_oWWiy.js','/assets/calendar-Drj54W10.js','/assets/user-C2XU59vk.js','/assets/hash-Djhpd59e.js','/assets/circle-check-big-BhdGjCAh.js','/assets/percent-Ddy4Auwy.js','/assets/package-Dy9XQSCd.js','/assets/circle-alert-Kt4PfEMW.js','/assets/circle-check-ZLW_x-jh.js','/assets/plus-CIktoki0.js','/assets/send-5WuU_ivn.js','/assets/triangle-alert-BQceZXIM.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/dateUtils-D9FnOxAe.js','/assets/calendar-days-C02PkCCx.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-pr3AB3Th.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-sEbfONA6.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/GlassSelect-LVNAY-gV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/calendar-Drj54W10.js','/assets/chevron-down-CHWldOhk.js','/assets/package-Dy9XQSCd.js','/assets/useQuery-DoF-s0-_.js','/assets/dateUtils-D9FnOxAe.js','/assets/arrow-left-CW124a3z.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/x-ZQ5dMI2W.js','/assets/layout-dashboard-Da3J7I21.js','/assets/building-2-CDLOniT1.js','/assets/file-text-DzqZs_V-.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js','/assets/GlassPopover-DQHHWwR-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DPVHGlr5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/Sidebar-sEbfONA6.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/banknote-DLLHtDFq.js','/assets/building-2-CDLOniT1.js','/assets/package-Dy9XQSCd.js','/assets/triangle-alert-BQceZXIM.js','/assets/trending-up-Bc6Ft-5J.js','/assets/GlassSelect-LVNAY-gV.js','/assets/search-D9cGQeLV.js','/assets/arrow-up-down-CJIVxoMf.js','/assets/refresh-cw-y7gJHD-P.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/layers-Dtawpc2Q.js','/assets/circle-alert-Kt4PfEMW.js','/assets/exportUtils-B7865RYi.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/x-ZQ5dMI2W.js','/assets/layout-dashboard-Da3J7I21.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js','/assets/dateUtils-D9FnOxAe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BIWYUheU.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-sEbfONA6.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/arrow-left-CW124a3z.js','/assets/GlassSelect-LVNAY-gV.js','/assets/search-D9cGQeLV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/trending-up-Bc6Ft-5J.js','/assets/triangle-alert-BQceZXIM.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/calendar-Drj54W10.js','/assets/exportUtils-B7865RYi.js','/assets/dateUtils-D9FnOxAe.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/x-ZQ5dMI2W.js','/assets/layout-dashboard-Da3J7I21.js','/assets/building-2-CDLOniT1.js','/assets/package-Dy9XQSCd.js','/assets/banknote-DLLHtDFq.js','/assets/coffee-D7fvPaPE.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-4rx7oPcy.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/GlassSelect-LVNAY-gV.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-D9FnOxAe.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/circle-check-big-BhdGjCAh.js','/assets/package-Dy9XQSCd.js','/assets/log-out-nZknGuHX.js','/assets/save-D1XVzy5X.js','/assets/trending-up-Bc6Ft-5J.js','/assets/search-D9cGQeLV.js','/assets/arrow-left-CW124a3z.js','/assets/layers-Dtawpc2Q.js','/assets/filter-D0N8NsOk.js','/assets/circle-alert-Kt4PfEMW.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CUvP0LqE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/apiAuth-DIjdQgpG.js','/assets/globe-Ca3x5RBc.js','/assets/user-C2XU59vk.js','/assets/lock-BSk8lcAC.js','/assets/building-2-CDLOniT1.js','/assets/circle-check-ZLW_x-jh.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DqrJ94El.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-DtOJ1PDh.js','/assets/useAdminAuth-DKivLyye.js','/assets/Sidebar-C9Z76EjQ.js','/assets/users-C2p3447k.js','/assets/arrow-left-CW124a3z.js','/assets/dollar-sign-Dssx-zr6.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/apiAuth-DIjdQgpG.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BHKavkK9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-DtOJ1PDh.js','/assets/useAdminAuth-DKivLyye.js','/assets/gift-mN3W88SI.js','/assets/arrow-left-CW124a3z.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-j2WGKB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-DtOJ1PDh.js','/assets/Sidebar-C9Z76EjQ.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/useMutation-CIJtpmk3.js','/assets/users-C2p3447k.js','/assets/dollar-sign-Dssx-zr6.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/pencil-BX_oWWiy.js','/assets/trash-2-B7b6SXCh.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassMultiSelect-Csg7Gpjq.js','/assets/GlassDatePicker-CXyp4_3l.js','/assets/useUpload-E3kaDHKn.js','/assets/x-ZQ5dMI2W.js','/assets/user-C2XU59vk.js','/assets/calendar-Drj54W10.js','/assets/file-text-DzqZs_V-.js','/assets/loader-circle-BahSWw3O.js','/assets/plus-CIktoki0.js','/assets/send-5WuU_ivn.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/dateUtils-D9FnOxAe.js','/assets/clock-B0amVQVI.js','/assets/calendar-days-C02PkCCx.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-zxvh3-pE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-DtOJ1PDh.js','/assets/Sidebar-C9Z76EjQ.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/useMutation-CIJtpmk3.js','/assets/employeeUtils-BeP9BfEz.js','/assets/search-D9cGQeLV.js','/assets/users-C2p3447k.js','/assets/user-C2XU59vk.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/pencil-BX_oWWiy.js','/assets/trash-2-B7b6SXCh.js','/assets/x-ZQ5dMI2W.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassMultiSelect-Csg7Gpjq.js','/assets/GlassDatePicker-CXyp4_3l.js','/assets/file-text-DzqZs_V-.js','/assets/calendar-Drj54W10.js','/assets/circle-check-ZLW_x-jh.js','/assets/briefcase-BT2UZY2_.js','/assets/building-2-CDLOniT1.js','/assets/dollar-sign-Dssx-zr6.js','/assets/refresh-cw-y7gJHD-P.js','/assets/plus-CIktoki0.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/dateUtils-D9FnOxAe.js','/assets/clock-B0amVQVI.js','/assets/calendar-days-C02PkCCx.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BrLtKKMf.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CsPu4Kx2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C3Drh6i3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/shield-C5pcHydn.js','/assets/globe-Ca3x5RBc.js','/assets/eye-Bmv-R64T.js','/assets/lock-BSk8lcAC.js','/assets/trash-2-B7b6SXCh.js','/assets/mail-CRjWmCH2.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BlTclHF0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CXyp4_3l.js','/assets/apiAuth-DIjdQgpG.js','/assets/languages-CPElNbqN.js','/assets/useMutation-CIJtpmk3.js','/assets/calculator-C0QlD7-v.js','/assets/building-2-CDLOniT1.js','/assets/user-C2XU59vk.js','/assets/lock-BSk8lcAC.js','/assets/info-k1Bw3zX2.js','/assets/log-out-nZknGuHX.js','/assets/send-5WuU_ivn.js','/assets/arrow-left-CW124a3z.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/dateUtils-D9FnOxAe.js','/assets/clock-B0amVQVI.js','/assets/calendar-days-C02PkCCx.js','/assets/x-ZQ5dMI2W.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BYeMKuZ0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/globe-Ca3x5RBc.js','/assets/mail-CRjWmCH2.js','/assets/external-link-fn2KPi3d.js','/assets/shield-C5pcHydn.js','/assets/file-text-DzqZs_V-.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bmf4LUzA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/circle-alert-Kt4PfEMW.js','/assets/lock-BSk8lcAC.js','/assets/sparkles-DDkx9kY1.js','/assets/coffee-D7fvPaPE.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cbgs3cy4.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-BkzV33ua.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/PriorityPill-C2JAbFLi.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/calendar-days-C02PkCCx.js','/assets/loader-circle-BahSWw3O.js','/assets/circle-check-ZLW_x-jh.js','/assets/message-square-CPsboc2z.js','/assets/triangle-alert-BQceZXIM.js','/assets/chevron-left-Be2Y_d7K.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/activity-UcyPwpHL.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/square-check-big-YKuBvjpw.js','/assets/file-text-DzqZs_V-.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CX7mXEto.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-BkzV33ua.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/GlassSelect-LVNAY-gV.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/message-square-CPsboc2z.js','/assets/plus-CIktoki0.js','/assets/search-D9cGQeLV.js','/assets/chevron-left-Be2Y_d7K.js','/assets/send-5WuU_ivn.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/square-check-big-YKuBvjpw.js','/assets/file-text-DzqZs_V-.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DPFdT1Ua.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-BkzV33ua.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/useUpload-E3kaDHKn.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/PriorityPill-C2JAbFLi.js','/assets/x-ZQ5dMI2W.js','/assets/arrow-right-BD0nPUy5.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CXyp4_3l.js','/assets/flag-BSXyrVUx.js','/assets/calendar-days-C02PkCCx.js','/assets/trash-2-B7b6SXCh.js','/assets/file-text-DzqZs_V-.js','/assets/dateUtils-D9FnOxAe.js','/assets/clock-B0amVQVI.js','/assets/loader-circle-BahSWw3O.js','/assets/plus-CIktoki0.js','/assets/circle-check-ZLW_x-jh.js','/assets/search-D9cGQeLV.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/triangle-alert-BQceZXIM.js','/assets/activity-UcyPwpHL.js','/assets/chevron-left-Be2Y_d7K.js','/assets/arrow-up-down-CJIVxoMf.js','/assets/square-check-big-YKuBvjpw.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/users-C2p3447k.js','/assets/log-out-nZknGuHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DQMDNOUC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-BkzV33ua.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/users-C2p3447k.js','/assets/plus-CIktoki0.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/square-check-big-YKuBvjpw.js','/assets/file-text-DzqZs_V-.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dd6yh51T.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-BkzV33ua.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/GlassSelect-LVNAY-gV.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/file-text-DzqZs_V-.js','/assets/plus-CIktoki0.js','/assets/trash-2-B7b6SXCh.js','/assets/flag-BSXyrVUx.js','/assets/square-check-big-YKuBvjpw.js','/assets/loader-circle-BahSWw3O.js','/assets/copy-CPMlRfz4.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-DUICySmC.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CTm4blAr.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-0605d4d6.js','version':'0605d4d6','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-ChnoaYKm.js','imports':['/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/index-CpuTRb_f.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-Cg5C3p6T.js','imports':['/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/index-CpuTRb_f.js','/assets/index-BBR7LY95.js','/assets/index-RzAbhzwT.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-D2nEj3H_.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bg5GMaUs.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/shield-C5pcHydn.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/languages-CPElNbqN.js','/assets/arrow-left-CW124a3z.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cq8cRkC6.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CtV9q26C.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/layout-dashboard-Da3J7I21.js','/assets/calculator-C0QlD7-v.js','/assets/banknote-DLLHtDFq.js','/assets/arrow-left-CW124a3z.js','/assets/trending-up-Bc6Ft-5J.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/users-C2p3447k.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B8livA_7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CtV9q26C.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-LVNAY-gV.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/banknote-DLLHtDFq.js','/assets/building-2-CDLOniT1.js','/assets/calendar-days-C02PkCCx.js','/assets/refresh-cw-y7gJHD-P.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/save-D1XVzy5X.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CkO5YHir.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CtV9q26C.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-LVNAY-gV.js','/assets/save-D1XVzy5X.js','/assets/plus-CIktoki0.js','/assets/x-ZQ5dMI2W.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/style-CKxGNCTP.js','/assets/message-square-CPsboc2z.js','/assets/pencil-BX_oWWiy.js','/assets/trash-2-B7b6SXCh.js','/assets/banknote-DLLHtDFq.js','/assets/sparkles-DDkx9kY1.js','/assets/index-RzAbhzwT.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/file-text-DzqZs_V-.js','/assets/clipboard-check-B2Hh4TCw.js','/assets/info-k1Bw3zX2.js','/assets/circle-check-ZLW_x-jh.js','/assets/clock-B0amVQVI.js','/assets/trending-up-Bc6Ft-5J.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/index-CpuTRb_f.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BJ9d69Y6.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CtV9q26C.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/arrow-left-CW124a3z.js','/assets/GlassSelect-LVNAY-gV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/plus-CIktoki0.js','/assets/save-D1XVzy5X.js','/assets/copy-CPMlRfz4.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CcoRo2I9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CtV9q26C.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/arrow-left-CW124a3z.js','/assets/refresh-cw-y7gJHD-P.js','/assets/index-RzAbhzwT.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/exportUtils-BkFuOHao.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-CIJtpmk3.js','/assets/trash-2-B7b6SXCh.js','/assets/dateUtils-PSFgQZQ-.js','/assets/package-Dy9XQSCd.js','/assets/pencil-BX_oWWiy.js','/assets/eye-Bmv-R64T.js','/assets/save-D1XVzy5X.js','/assets/circle-check-big-BhdGjCAh.js','/assets/triangle-alert-BQceZXIM.js','/assets/x-ZQ5dMI2W.js','/assets/useQuery-DoF-s0-_.js','/assets/square-check-big-YKuBvjpw.js','/assets/square-CcmcLF3p.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/plus-CIktoki0.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bmdiel_h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CtV9q26C.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassMultiSelect-Csg7Gpjq.js','/assets/x-ZQ5dMI2W.js','/assets/user-C2XU59vk.js','/assets/file-text-DzqZs_V-.js','/assets/dollar-sign-Dssx-zr6.js','/assets/percent-Ddy4Auwy.js','/assets/payrollFormatters-DGy10whX.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/useMutation-CIJtpmk3.js','/assets/info-k1Bw3zX2.js','/assets/lock-BSk8lcAC.js','/assets/circle-check-ZLW_x-jh.js','/assets/clock-B0amVQVI.js','/assets/style-CKxGNCTP.js','/assets/message-square-CPsboc2z.js','/assets/pencil-BX_oWWiy.js','/assets/GlassPopover-DQHHWwR-.js','/assets/exportUtils-BkFuOHao.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/send-5WuU_ivn.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/gift-mN3W88SI.js','/assets/trash-2-B7b6SXCh.js','/assets/users-C2p3447k.js','/assets/plus-CIktoki0.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js','/assets/dateUtils-PSFgQZQ-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BHdfdPTM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CtV9q26C.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CIvB5R2R.js','/assets/useQuery-DoF-s0-_.js','/assets/calculator-C0QlD7-v.js','/assets/building-2-CDLOniT1.js','/assets/info-k1Bw3zX2.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/users-C2p3447k.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/dateUtils-PSFgQZQ-.js','/assets/clock-B0amVQVI.js','/assets/calendar-days-C02PkCCx.js','/assets/x-ZQ5dMI2W.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ca-04ABq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-D1_Q62eT.js','/assets/trending-up-Bc6Ft-5J.js','/assets/clipboard-list-CfZdVlXu.js','/assets/circle-check-big-BhdGjCAh.js','/assets/clock-B0amVQVI.js','/assets/building-2-CDLOniT1.js','/assets/calendar-days-C02PkCCx.js','/assets/sparkles-DDkx9kY1.js','/assets/chevron-down-CHWldOhk.js','/assets/x-ZQ5dMI2W.js','/assets/info-k1Bw3zX2.js','/assets/circle-alert-Kt4PfEMW.js','/assets/triangle-alert-BQceZXIM.js','/assets/package-plus-CTFpXdtR.js','/assets/calendar-Drj54W10.js','/assets/clsx-DPoTaEZk.js','/assets/activity-UcyPwpHL.js','/assets/dollar-sign-Dssx-zr6.js','/assets/package-Dy9XQSCd.js','/assets/exportUtils-BkFuOHao.js','/assets/file-text-DzqZs_V-.js','/assets/search-D9cGQeLV.js','/assets/download-TOwF3vCj.js','/assets/printer-Cn5BGpcv.js','/assets/users-C2p3447k.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CIvB5R2R.js','/assets/GlassMultiSelect-Csg7Gpjq.js','/assets/layers-Dtawpc2Q.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/dateUtils-PSFgQZQ-.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/briefcase-BT2UZY2_.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/calculator-C0QlD7-v.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DQhk9UPJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-D1_Q62eT.js','/assets/exportUtils-BkFuOHao.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/building-2-CDLOniT1.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/search-D9cGQeLV.js','/assets/plus-CIktoki0.js','/assets/square-pen-CwZxAvZ-.js','/assets/trash-2-B7b6SXCh.js','/assets/x-ZQ5dMI2W.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/package-Dy9XQSCd.js','/assets/file-text-DzqZs_V-.js','/assets/chevron-down-CHWldOhk.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/dateUtils-PSFgQZQ-.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page--lRBFOaP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/Sidebar-D1_Q62eT.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/useMutation-CIJtpmk3.js','/assets/employeeUtils-BeP9BfEz.js','/assets/users-C2p3447k.js','/assets/shield-C5pcHydn.js','/assets/user-C2XU59vk.js','/assets/search-D9cGQeLV.js','/assets/GlassPopover-DQHHWwR-.js','/assets/exportUtils-BkFuOHao.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/circle-check-ZLW_x-jh.js','/assets/circle-x-Dd_n687E.js','/assets/pencil-BX_oWWiy.js','/assets/trash-2-B7b6SXCh.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/briefcase-BT2UZY2_.js','/assets/dollar-sign-Dssx-zr6.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/x-ZQ5dMI2W.js','/assets/mail-CRjWmCH2.js','/assets/lock-BSk8lcAC.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/building-2-CDLOniT1.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/plus-CIktoki0.js','/assets/triangle-alert-BQceZXIM.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/package-Dy9XQSCd.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js','/assets/dateUtils-PSFgQZQ-.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D8SqMy_Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/layers-Dtawpc2Q.js','/assets/x-ZQ5dMI2W.js','/assets/languages-CPElNbqN.js','/assets/plus-CIktoki0.js','/assets/pencil-BX_oWWiy.js','/assets/GlassSelect-LVNAY-gV.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/Sidebar-D1_Q62eT.js','/assets/package-Dy9XQSCd.js','/assets/circle-check-big-BhdGjCAh.js','/assets/triangle-alert-BQceZXIM.js','/assets/circle-x-Dd_n687E.js','/assets/GlassPopover-DQHHWwR-.js','/assets/search-D9cGQeLV.js','/assets/filter-D0N8NsOk.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/eye-Bmv-R64T.js','/assets/building-2-CDLOniT1.js','/assets/trash-2-B7b6SXCh.js','/assets/square-check-big-YKuBvjpw.js','/assets/clipboard-check-B2Hh4TCw.js','/assets/square-CcmcLF3p.js','/assets/eye-off-Ct4Iogbq.js','/assets/dollar-sign-Dssx-zr6.js','/assets/clipboard-list-CfZdVlXu.js','/assets/circle-alert-Kt4PfEMW.js','/assets/exportUtils-BkFuOHao.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/dateUtils-PSFgQZQ-.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D9uNhIMA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/Sidebar-D1_Q62eT.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/exportUtils-BkFuOHao.js','/assets/arrow-left-CW124a3z.js','/assets/package-Dy9XQSCd.js','/assets/building-2-CDLOniT1.js','/assets/circle-x-Dd_n687E.js','/assets/GlassSelect-LVNAY-gV.js','/assets/search-D9cGQeLV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/hash-Djhpd59e.js','/assets/calendar-Drj54W10.js','/assets/user-C2XU59vk.js','/assets/file-text-DzqZs_V-.js','/assets/triangle-alert-BQceZXIM.js','/assets/circle-check-big-BhdGjCAh.js','/assets/chevron-down-CHWldOhk.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/x-ZQ5dMI2W.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js','/assets/dateUtils-PSFgQZQ-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CZDvufaq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/apiAuth-DIjdQgpG.js','/assets/shield-C5pcHydn.js','/assets/user-C2XU59vk.js','/assets/lock-BSk8lcAC.js','/assets/circle-alert-Kt4PfEMW.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-A-daJjSx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/Sidebar-D1_Q62eT.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/arrow-left-CW124a3z.js','/assets/circle-x-Dd_n687E.js','/assets/triangle-alert-BQceZXIM.js','/assets/building-2-CDLOniT1.js','/assets/GlassSelect-LVNAY-gV.js','/assets/search-D9cGQeLV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/package-Dy9XQSCd.js','/assets/circle-check-big-BhdGjCAh.js','/assets/exportUtils-BkFuOHao.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/x-ZQ5dMI2W.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js','/assets/dateUtils-PSFgQZQ-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DCS0n1aB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/Sidebar-D1_Q62eT.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/package-plus-CTFpXdtR.js','/assets/clock-B0amVQVI.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CIvB5R2R.js','/assets/filter-D0N8NsOk.js','/assets/x-ZQ5dMI2W.js','/assets/search-D9cGQeLV.js','/assets/exportUtils-BkFuOHao.js','/assets/GlassPopover-DQHHWwR-.js','/assets/printer-Cn5BGpcv.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/square-check-big-YKuBvjpw.js','/assets/trash-2-B7b6SXCh.js','/assets/square-CcmcLF3p.js','/assets/building-2-CDLOniT1.js','/assets/eye-Bmv-R64T.js','/assets/pencil-BX_oWWiy.js','/assets/calendar-Drj54W10.js','/assets/user-C2XU59vk.js','/assets/hash-Djhpd59e.js','/assets/circle-check-big-BhdGjCAh.js','/assets/percent-Ddy4Auwy.js','/assets/package-Dy9XQSCd.js','/assets/circle-alert-Kt4PfEMW.js','/assets/circle-check-ZLW_x-jh.js','/assets/plus-CIktoki0.js','/assets/send-5WuU_ivn.js','/assets/triangle-alert-BQceZXIM.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/dateUtils-PSFgQZQ-.js','/assets/calendar-days-C02PkCCx.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CDv7ol-_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-D1_Q62eT.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/GlassSelect-LVNAY-gV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/calendar-Drj54W10.js','/assets/chevron-down-CHWldOhk.js','/assets/package-Dy9XQSCd.js','/assets/useQuery-DoF-s0-_.js','/assets/dateUtils-PSFgQZQ-.js','/assets/arrow-left-CW124a3z.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/triangle-alert-BQceZXIM.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/x-ZQ5dMI2W.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/building-2-CDLOniT1.js','/assets/file-text-DzqZs_V-.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js','/assets/GlassPopover-DQHHWwR-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C_bWBSgO.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/Sidebar-D1_Q62eT.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/banknote-DLLHtDFq.js','/assets/building-2-CDLOniT1.js','/assets/package-Dy9XQSCd.js','/assets/triangle-alert-BQceZXIM.js','/assets/trending-up-Bc6Ft-5J.js','/assets/GlassSelect-LVNAY-gV.js','/assets/search-D9cGQeLV.js','/assets/arrow-up-down-CJIVxoMf.js','/assets/refresh-cw-y7gJHD-P.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/layers-Dtawpc2Q.js','/assets/circle-alert-Kt4PfEMW.js','/assets/exportUtils-BkFuOHao.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/x-ZQ5dMI2W.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js','/assets/dateUtils-PSFgQZQ-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BI3sVdD-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-M5WRJ4aN.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-D1_Q62eT.js','/assets/Breadcrumb-CXSD-Klk.js','/assets/arrow-left-CW124a3z.js','/assets/GlassSelect-LVNAY-gV.js','/assets/search-D9cGQeLV.js','/assets/refresh-cw-y7gJHD-P.js','/assets/trending-up-Bc6Ft-5J.js','/assets/triangle-alert-BQceZXIM.js','/assets/GlassPopover-DQHHWwR-.js','/assets/download-TOwF3vCj.js','/assets/chevron-down-CHWldOhk.js','/assets/file-text-DzqZs_V-.js','/assets/calendar-Drj54W10.js','/assets/exportUtils-BkFuOHao.js','/assets/dateUtils-PSFgQZQ-.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/clipboard-list-CfZdVlXu.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/briefcase-BT2UZY2_.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/x-ZQ5dMI2W.js','/assets/menu-DEV918ie.js','/assets/layout-dashboard-Da3J7I21.js','/assets/building-2-CDLOniT1.js','/assets/package-Dy9XQSCd.js','/assets/banknote-DLLHtDFq.js','/assets/log-out-nZknGuHX.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C5vTudJv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/GlassSelect-LVNAY-gV.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-PSFgQZQ-.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/circle-check-big-BhdGjCAh.js','/assets/package-Dy9XQSCd.js','/assets/log-out-nZknGuHX.js','/assets/save-D1XVzy5X.js','/assets/trending-up-Bc6Ft-5J.js','/assets/search-D9cGQeLV.js','/assets/arrow-left-CW124a3z.js','/assets/layers-Dtawpc2Q.js','/assets/filter-D0N8NsOk.js','/assets/circle-alert-Kt4PfEMW.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CUvP0LqE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/apiAuth-DIjdQgpG.js','/assets/globe-Ca3x5RBc.js','/assets/user-C2XU59vk.js','/assets/lock-BSk8lcAC.js','/assets/building-2-CDLOniT1.js','/assets/circle-check-ZLW_x-jh.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMmrGXpa.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-DtOJ1PDh.js','/assets/useAdminAuth-DKivLyye.js','/assets/Sidebar-B-hPtw2U.js','/assets/users-C2p3447k.js','/assets/arrow-left-CW124a3z.js','/assets/dollar-sign-Dssx-zr6.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/apiAuth-DIjdQgpG.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BHKavkK9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-DtOJ1PDh.js','/assets/useAdminAuth-DKivLyye.js','/assets/gift-mN3W88SI.js','/assets/arrow-left-CW124a3z.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-VD70a1_J.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-DtOJ1PDh.js','/assets/Sidebar-B-hPtw2U.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/useMutation-CIJtpmk3.js','/assets/users-C2p3447k.js','/assets/dollar-sign-Dssx-zr6.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/pencil-BX_oWWiy.js','/assets/trash-2-B7b6SXCh.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassMultiSelect-Csg7Gpjq.js','/assets/GlassDatePicker-CIvB5R2R.js','/assets/useUpload-E3kaDHKn.js','/assets/x-ZQ5dMI2W.js','/assets/user-C2XU59vk.js','/assets/calendar-Drj54W10.js','/assets/file-text-DzqZs_V-.js','/assets/loader-circle-BahSWw3O.js','/assets/plus-CIktoki0.js','/assets/send-5WuU_ivn.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/dateUtils-PSFgQZQ-.js','/assets/clock-B0amVQVI.js','/assets/calendar-days-C02PkCCx.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-FiIu5Cf3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/layout-DtOJ1PDh.js','/assets/Sidebar-B-hPtw2U.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/index-RzAbhzwT.js','/assets/useMutation-CIJtpmk3.js','/assets/employeeUtils-BeP9BfEz.js','/assets/search-D9cGQeLV.js','/assets/users-C2p3447k.js','/assets/user-C2XU59vk.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/pencil-BX_oWWiy.js','/assets/trash-2-B7b6SXCh.js','/assets/x-ZQ5dMI2W.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassMultiSelect-Csg7Gpjq.js','/assets/GlassDatePicker-CIvB5R2R.js','/assets/file-text-DzqZs_V-.js','/assets/calendar-Drj54W10.js','/assets/circle-check-ZLW_x-jh.js','/assets/briefcase-BT2UZY2_.js','/assets/building-2-CDLOniT1.js','/assets/dollar-sign-Dssx-zr6.js','/assets/refresh-cw-y7gJHD-P.js','/assets/plus-CIktoki0.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/layout-dashboard-Da3J7I21.js','/assets/log-out-nZknGuHX.js','/assets/index-CpuTRb_f.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/dateUtils-PSFgQZQ-.js','/assets/clock-B0amVQVI.js','/assets/calendar-days-C02PkCCx.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BrLtKKMf.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CsPu4Kx2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D99xS_q9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CZ6miu1y.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-PSFgQZQ-.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/plus-CIktoki0.js','/assets/x-ZQ5dMI2W.js','/assets/circle-check-ZLW_x-jh.js','/assets/clock-B0amVQVI.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/square-pen-CwZxAvZ-.js','/assets/trash-2-B7b6SXCh.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/users-C2p3447k.js','/assets/menu-DEV918ie.js','/assets/log-out-nZknGuHX.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BC1VJAhP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CZ6miu1y.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/arrow-right-BD0nPUy5.js','/assets/external-link-fn2KPi3d.js','/assets/printer-Cn5BGpcv.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/menu-DEV918ie.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CjqD6DAe.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CZ6miu1y.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/coffee-D7fvPaPE.js','/assets/plus-CIktoki0.js','/assets/x-ZQ5dMI2W.js','/assets/eye-off-Ct4Iogbq.js','/assets/eye-Bmv-R64T.js','/assets/square-pen-CwZxAvZ-.js','/assets/trash-2-B7b6SXCh.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/menu-DEV918ie.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D9n2ncGJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CZ6miu1y.js','/assets/useAdminAuth-DKivLyye.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/save-D1XVzy5X.js','/assets/coffee-D7fvPaPE.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/menu-DEV918ie.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C3Drh6i3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/shield-C5pcHydn.js','/assets/globe-Ca3x5RBc.js','/assets/eye-Bmv-R64T.js','/assets/lock-BSk8lcAC.js','/assets/trash-2-B7b6SXCh.js','/assets/mail-CRjWmCH2.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-KULuUSj2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CIvB5R2R.js','/assets/apiAuth-DIjdQgpG.js','/assets/languages-CPElNbqN.js','/assets/useMutation-CIJtpmk3.js','/assets/calculator-C0QlD7-v.js','/assets/building-2-CDLOniT1.js','/assets/user-C2XU59vk.js','/assets/lock-BSk8lcAC.js','/assets/info-k1Bw3zX2.js','/assets/log-out-nZknGuHX.js','/assets/send-5WuU_ivn.js','/assets/arrow-left-CW124a3z.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/dateUtils-PSFgQZQ-.js','/assets/clock-B0amVQVI.js','/assets/calendar-days-C02PkCCx.js','/assets/x-ZQ5dMI2W.js','/assets/chevron-left-Be2Y_d7K.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BYeMKuZ0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/globe-Ca3x5RBc.js','/assets/mail-CRjWmCH2.js','/assets/external-link-fn2KPi3d.js','/assets/shield-C5pcHydn.js','/assets/file-text-DzqZs_V-.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bmf4LUzA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/circle-alert-Kt4PfEMW.js','/assets/lock-BSk8lcAC.js','/assets/sparkles-DDkx9kY1.js','/assets/coffee-D7fvPaPE.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/createLucideIcon-CIIuNeoi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-n_SCJTn6.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CyCEqMsz.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/PriorityPill-C2JAbFLi.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/calendar-days-C02PkCCx.js','/assets/loader-circle-BahSWw3O.js','/assets/circle-check-ZLW_x-jh.js','/assets/message-square-CPsboc2z.js','/assets/triangle-alert-BQceZXIM.js','/assets/chevron-left-Be2Y_d7K.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/activity-UcyPwpHL.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/square-check-big-YKuBvjpw.js','/assets/file-text-DzqZs_V-.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-6XmaONZz.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CyCEqMsz.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/GlassSelect-LVNAY-gV.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/message-square-CPsboc2z.js','/assets/plus-CIktoki0.js','/assets/search-D9cGQeLV.js','/assets/chevron-left-Be2Y_d7K.js','/assets/send-5WuU_ivn.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/square-check-big-YKuBvjpw.js','/assets/file-text-DzqZs_V-.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMkahWW2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CyCEqMsz.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/useUpload-E3kaDHKn.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/PriorityPill-C2JAbFLi.js','/assets/x-ZQ5dMI2W.js','/assets/arrow-right-BD0nPUy5.js','/assets/GlassSelect-LVNAY-gV.js','/assets/GlassDatePicker-CIvB5R2R.js','/assets/flag-BSXyrVUx.js','/assets/calendar-days-C02PkCCx.js','/assets/trash-2-B7b6SXCh.js','/assets/file-text-DzqZs_V-.js','/assets/dateUtils-PSFgQZQ-.js','/assets/clock-B0amVQVI.js','/assets/loader-circle-BahSWw3O.js','/assets/plus-CIktoki0.js','/assets/circle-check-ZLW_x-jh.js','/assets/search-D9cGQeLV.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/triangle-alert-BQceZXIM.js','/assets/activity-UcyPwpHL.js','/assets/chevron-left-Be2Y_d7K.js','/assets/arrow-up-down-CJIVxoMf.js','/assets/square-check-big-YKuBvjpw.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/users-C2p3447k.js','/assets/log-out-nZknGuHX.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-PjRSLcG5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CyCEqMsz.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/users-C2p3447k.js','/assets/plus-CIktoki0.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/square-check-big-YKuBvjpw.js','/assets/file-text-DzqZs_V-.js','/assets/log-out-nZknGuHX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-m2_GcjDT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js','/assets/layout-DHfyR2eI.js','/assets/Sidebar-CyCEqMsz.js','/assets/useWorkspaceUser-BQDluKHX.js','/assets/GlassSelect-LVNAY-gV.js','/assets/useQuery-DoF-s0-_.js','/assets/useMutation-CIJtpmk3.js','/assets/file-text-DzqZs_V-.js','/assets/plus-CIktoki0.js','/assets/trash-2-B7b6SXCh.js','/assets/flag-BSXyrVUx.js','/assets/square-check-big-YKuBvjpw.js','/assets/loader-circle-BahSWw3O.js','/assets/copy-CPMlRfz4.js','/assets/index-RzAbhzwT.js','/assets/index-CpuTRb_f.js','/assets/AppSectionSwitcher-edOC8bZO.js','/assets/createLucideIcon-CIIuNeoi.js','/assets/clipboard-list-CfZdVlXu.js','/assets/calculator-C0QlD7-v.js','/assets/users-C2p3447k.js','/assets/log-out-nZknGuHX.js','/assets/GlassPopover-DQHHWwR-.js','/assets/chevron-down-CHWldOhk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CTm4blAr.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-CrJJCYDh.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-e7fac608.js','version':'e7fac608','sri':undefined};
 
 const assetsBuildDirectory = "build\\client";
       const basename = "/";
@@ -30322,45 +30432,13 @@ const assetsBuildDirectory = "build\\client";
           caseSensitive: undefined,
           module: route15
         },
-  "admin/marketing/bloggers/page": {
-          id: "admin/marketing/bloggers/page",
-          parentId: "root",
-          path: "admin/marketing/bloggers",
-          index: undefined,
-          caseSensitive: undefined,
-          module: route16
-        },
-  "admin/marketing/bloggers/[id]/card/page": {
-          id: "admin/marketing/bloggers/[id]/card/page",
-          parentId: "root",
-          path: "admin/marketing/bloggers/:id/card",
-          index: undefined,
-          caseSensitive: undefined,
-          module: route17
-        },
-  "admin/marketing/menu/page": {
-          id: "admin/marketing/menu/page",
-          parentId: "root",
-          path: "admin/marketing/menu",
-          index: undefined,
-          caseSensitive: undefined,
-          module: route18
-        },
-  "admin/marketing/settings/page": {
-          id: "admin/marketing/settings/page",
-          parentId: "root",
-          path: "admin/marketing/settings",
-          index: undefined,
-          caseSensitive: undefined,
-          module: route19
-        },
   "admin/operations/page": {
           id: "admin/operations/page",
           parentId: "root",
           path: "admin/operations",
           index: undefined,
           caseSensitive: undefined,
-          module: route20
+          module: route16
         },
   "admin/receipts/page": {
           id: "admin/receipts/page",
@@ -30368,7 +30446,7 @@ const assetsBuildDirectory = "build\\client";
           path: "admin/receipts",
           index: undefined,
           caseSensitive: undefined,
-          module: route21
+          module: route17
         },
   "admin/stock-value/page": {
           id: "admin/stock-value/page",
@@ -30376,7 +30454,7 @@ const assetsBuildDirectory = "build\\client";
           path: "admin/stock-value",
           index: undefined,
           caseSensitive: undefined,
-          module: route22
+          module: route18
         },
   "admin/variance/page": {
           id: "admin/variance/page",
@@ -30384,7 +30462,7 @@ const assetsBuildDirectory = "build\\client";
           path: "admin/variance",
           index: undefined,
           caseSensitive: undefined,
-          module: route23
+          module: route19
         },
   "employee/inventory/page": {
           id: "employee/inventory/page",
@@ -30392,7 +30470,7 @@ const assetsBuildDirectory = "build\\client";
           path: "employee/inventory",
           index: undefined,
           caseSensitive: undefined,
-          module: route24
+          module: route20
         },
   "employee/login/page": {
           id: "employee/login/page",
@@ -30400,7 +30478,7 @@ const assetsBuildDirectory = "build\\client";
           path: "employee/login",
           index: undefined,
           caseSensitive: undefined,
-          module: route25
+          module: route21
         },
   "hr/page": {
           id: "hr/page",
@@ -30408,7 +30486,7 @@ const assetsBuildDirectory = "build\\client";
           path: "hr",
           index: undefined,
           caseSensitive: undefined,
-          module: route26
+          module: route22
         },
   "hr/bonuses/page": {
           id: "hr/bonuses/page",
@@ -30416,7 +30494,7 @@ const assetsBuildDirectory = "build\\client";
           path: "hr/bonuses",
           index: undefined,
           caseSensitive: undefined,
-          module: route27
+          module: route23
         },
   "hr/deductions/page": {
           id: "hr/deductions/page",
@@ -30424,7 +30502,7 @@ const assetsBuildDirectory = "build\\client";
           path: "hr/deductions",
           index: undefined,
           caseSensitive: undefined,
-          module: route28
+          module: route24
         },
   "hr/employees/page": {
           id: "hr/employees/page",
@@ -30432,7 +30510,7 @@ const assetsBuildDirectory = "build\\client";
           path: "hr/employees",
           index: undefined,
           caseSensitive: undefined,
-          module: route29
+          module: route25
         },
   "inventory/page": {
           id: "inventory/page",
@@ -30440,12 +30518,44 @@ const assetsBuildDirectory = "build\\client";
           path: "inventory",
           index: undefined,
           caseSensitive: undefined,
-          module: route30
+          module: route26
         },
   "inventory/login/page": {
           id: "inventory/login/page",
           parentId: "root",
           path: "inventory/login",
+          index: undefined,
+          caseSensitive: undefined,
+          module: route27
+        },
+  "marketing/bloggers/page": {
+          id: "marketing/bloggers/page",
+          parentId: "root",
+          path: "marketing/bloggers",
+          index: undefined,
+          caseSensitive: undefined,
+          module: route28
+        },
+  "marketing/bloggers/[id]/card/page": {
+          id: "marketing/bloggers/[id]/card/page",
+          parentId: "root",
+          path: "marketing/bloggers/:id/card",
+          index: undefined,
+          caseSensitive: undefined,
+          module: route29
+        },
+  "marketing/menu/page": {
+          id: "marketing/menu/page",
+          parentId: "root",
+          path: "marketing/menu",
+          index: undefined,
+          caseSensitive: undefined,
+          module: route30
+        },
+  "marketing/settings/page": {
+          id: "marketing/settings/page",
+          parentId: "root",
+          path: "marketing/settings",
           index: undefined,
           caseSensitive: undefined,
           module: route31
