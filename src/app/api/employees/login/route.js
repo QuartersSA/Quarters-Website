@@ -68,6 +68,7 @@ export async function POST(request) {
           COALESCE(e.can_access_workspace, false) as can_access_workspace,
           COALESCE(e.can_manage_inventory, false) as can_manage_inventory,
           COALESCE(e.can_manage_accounting, false) as can_manage_accounting,
+          COALESCE(e.can_manage_marketing, false) as can_manage_marketing,
           ${selectManageEmployees}
           ${selectAccessHr}
           ${selectManageDeductions}
@@ -188,6 +189,7 @@ export async function POST(request) {
         can_access_workspace: !!employeeData.can_access_workspace,
         can_manage_inventory: !!employeeData.can_manage_inventory,
         can_manage_accounting: !!employeeData.can_manage_accounting,
+        can_manage_marketing: !!employeeData.can_manage_marketing,
         can_manage_employees: !!employeeData.can_manage_employees,
         can_access_hr: !!employeeData.can_access_hr,
         can_manage_deductions: !!employeeData.can_manage_deductions,

@@ -26,6 +26,7 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
       activePage === "variance" ||
       activePage === "stock-value",
   );
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // Sidebar mounts on every admin page navigation (it's rendered per-page,
   // not in the layout). Previously this used useState(true) + useEffect to
@@ -332,6 +333,7 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
               </span>
             </a>
           ) : null}
+
         </nav>
 
         <button

@@ -65,6 +65,8 @@ export default function AdminLoginPage() {
               : !!data.employee.can_access_hr,
           // ✅ NEW: deductions-only permission
           can_manage_deductions: !!data.employee.can_manage_deductions,
+          // Marketing — separate section, gates /marketing/*
+          can_manage_marketing: !!data.employee.can_manage_marketing,
         }),
       );
 

@@ -14,6 +14,7 @@ import {
   Users,
   Bell,
   DollarSign,
+  Megaphone,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -62,6 +63,10 @@ export function EmployeeFormFields({
     : `${ws.btnNeutral} px-4 py-2`;
 
   const adminDeductionsBtnClass = formData.can_manage_deductions
+    ? `${ws.btnPrimary} px-4 py-2`
+    : `${ws.btnNeutral} px-4 py-2`;
+
+  const adminMarketingBtnClass = formData.can_manage_marketing
     ? `${ws.btnPrimary} px-4 py-2`
     : `${ws.btnNeutral} px-4 py-2`;
 
@@ -191,6 +196,8 @@ export function EmployeeFormFields({
                 can_access_hr: true,
                 // NEW: deductions permission (off by default)
                 can_manage_deductions: false,
+                // Marketing — separate section, off by default
+                can_manage_marketing: false,
                 // إشعارات واتساب (افتراضيًا: غير مفعلة)
                 notify_shift_close_wa: false,
                 notify_inventory_operation_wa: false,
@@ -220,6 +227,7 @@ export function EmployeeFormFields({
                 can_manage_employees: false,
                 can_access_hr: false,
                 can_manage_deductions: false,
+                can_manage_marketing: false,
                 // إشعارات واتساب
                 notify_shift_close_wa: false,
                 notify_inventory_operation_wa: false,
@@ -365,6 +373,25 @@ export function EmployeeFormFields({
                 )}
                 <Users className="w-4 h-4" />
                 HR
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    can_manage_marketing: !p.can_manage_marketing,
+                  }))
+                }
+                className={adminMarketingBtnClass}
+              >
+                {formData.can_manage_marketing ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                <Megaphone className="w-4 h-4" />
+                التسويق
               </button>
             </div>
           </div>

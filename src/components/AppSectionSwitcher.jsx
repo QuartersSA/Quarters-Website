@@ -1,7 +1,13 @@
 "use client";
 
 import React from "react";
-import { LayoutGrid, ClipboardList, Calculator, Users } from "lucide-react";
+import {
+  LayoutGrid,
+  ClipboardList,
+  Calculator,
+  Users,
+  Megaphone,
+} from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
 function readAdminPermissions() {
@@ -26,6 +32,7 @@ function readAdminPermissions() {
         : adminUser?.can_access_hr;
 
     const deductionsFlag = adminUser?.can_manage_deductions;
+    const marketingFlag = adminUser?.can_manage_marketing;
 
     return {
       can_access_workspace:
@@ -36,6 +43,7 @@ function readAdminPermissions() {
         accFlag === undefined || accFlag === null ? true : !!accFlag,
       can_access_hr: hrRaw === undefined || hrRaw === null ? true : !!hrRaw,
       can_manage_deductions: !!deductionsFlag,
+      can_manage_marketing: !!marketingFlag,
     };
   } catch {
     return null;
@@ -116,6 +124,24 @@ export default function AppSectionSwitcher({
         try {
           localStorage.setItem("adminMode", "hr");
           localStorage.removeItem("workspaceUser");
+        } catch {
+          // ignore
+        }
+      },
+    },
+    {
+      key: "marketing",
+      href: "/marketing/bloggers",
+      label: "التسويق",
+      Icon: Megaphone,
+      gate: (p) => (p ? p.can_manage_marketing : false),
+      onClick: () => {
+        try {
+          localStorage.setItem("adminMode", "marketing");
+          const adminUser = localStorage.getItem("adminUser");
+          if (adminUser) {
+            localStorage.setItem("workspaceUser", adminUser);
+          }
         } catch {
           // ignore
         }

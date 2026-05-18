@@ -36,6 +36,7 @@ export async function GET(request, { params }) {
         COALESCE(e.can_access_workspace, false) as can_access_workspace,
         COALESCE(e.can_manage_inventory, false) as can_manage_inventory,
         COALESCE(e.can_manage_accounting, false) as can_manage_accounting,
+        COALESCE(e.can_manage_marketing, false) as can_manage_marketing,
         COALESCE(e.can_manage_employees, false) as can_manage_employees,
         COALESCE(e.can_access_hr, false) as can_access_hr,
         COALESCE(e.can_manage_deductions, false) as can_manage_deductions,
@@ -119,6 +120,7 @@ export async function PUT(request, { params }) {
       can_access_workspace,
       can_manage_inventory,
       can_manage_accounting,
+      can_manage_marketing,
       can_manage_employees,
       can_access_hr,
       can_manage_deductions,
@@ -329,6 +331,12 @@ export async function PUT(request, { params }) {
       paramCount++;
     }
 
+    if (can_manage_marketing !== undefined) {
+      updates.push(`can_manage_marketing = $${paramCount}`);
+      values.push(!!can_manage_marketing);
+      paramCount++;
+    }
+
     if (can_manage_employees !== undefined) {
       updates.push(`can_manage_employees = $${paramCount}`);
       values.push(isAdmin ? !!can_manage_employees : false);
@@ -456,6 +464,7 @@ export async function PUT(request, { params }) {
         COALESCE(e.can_access_workspace, false) as can_access_workspace,
         COALESCE(e.can_manage_inventory, false) as can_manage_inventory,
         COALESCE(e.can_manage_accounting, false) as can_manage_accounting,
+        COALESCE(e.can_manage_marketing, false) as can_manage_marketing,
         COALESCE(e.can_manage_employees, false) as can_manage_employees,
         COALESCE(e.can_access_hr, false) as can_access_hr,
         COALESCE(e.can_manage_deductions, false) as can_manage_deductions,

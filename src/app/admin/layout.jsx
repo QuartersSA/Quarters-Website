@@ -7,6 +7,7 @@ import {
   Calculator,
   AlertTriangle,
   Users,
+  Megaphone,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -31,7 +32,13 @@ function allowedModes(adminUser) {
   // "missing column" scenario is no longer a real concern, and the fail-
   // open default is pure risk. Default is now `false`.
   if (!adminUser) {
-    return { inventory: false, workspace: false, accounting: false, hr: false };
+    return {
+      inventory: false,
+      workspace: false,
+      accounting: false,
+      hr: false,
+      marketing: false,
+    };
   }
 
   // HR has a legacy alias: older deployments gated HR via `can_manage_employees`.
@@ -44,6 +51,7 @@ function allowedModes(adminUser) {
     inventory: !!adminUser.can_manage_inventory,
     accounting: !!adminUser.can_manage_accounting,
     hr: hrFlag || !!adminUser.can_manage_deductions,
+    marketing: !!adminUser.can_manage_marketing,
   };
 }
 
@@ -85,6 +93,19 @@ export default function AdminLayout({ children }) {
       // ignore
     }
     window.location.href = "/accounting/shift-close";
+  }, []);
+
+  const goMarketing = React.useCallback(() => {
+    try {
+      localStorage.setItem("adminMode", "marketing");
+      const adminUser = localStorage.getItem("adminUser");
+      if (adminUser) {
+        localStorage.setItem("workspaceUser", adminUser);
+      }
+    } catch {
+      // ignore
+    }
+    window.location.href = "/marketing/bloggers";
   }, []);
 
   const goHR = React.useCallback(() => {
@@ -139,6 +160,8 @@ export default function AdminLayout({ children }) {
             goWorkspace();
           } else if (only === "accounting") {
             goAccounting();
+          } else if (only === "marketing") {
+            goMarketing();
           } else {
             goHR();
           }
@@ -166,10 +189,14 @@ export default function AdminLayout({ children }) {
         localStorage.removeItem("adminMode");
         setShowChooser(true);
       }
+      if (mode === "marketing" && !can.marketing) {
+        localStorage.removeItem("adminMode");
+        setShowChooser(true);
+      }
     } catch {
       // ignore
     }
-  }, [goInventory, goWorkspace, goAccounting, goHR]);
+  }, [goInventory, goWorkspace, goAccounting, goHR, goMarketing]);
 
   const Background = (
     <div
@@ -198,6 +225,7 @@ export default function AdminLayout({ children }) {
   const showWorkspaceBtn = can ? !!can.workspace : true;
   const showAccountingBtn = can ? !!can.accounting : true;
   const showHRBtn = can ? !!can.hr : true;
+  const showMarketingBtn = can ? !!can.marketing : false;
 
   return (
     <div className={`min-h-[100svh] ${ws.appBg}`} dir="rtl">
@@ -312,6 +340,24 @@ export default function AdminLayout({ children }) {
                   </div>
                   <div className="text-white/55 text-sm mt-1">
                     الموظفين + الصلاحيات
+                  </div>
+                </button>
+              ) : null}
+
+              {showMarketingBtn ? (
+                <button
+                  type="button"
+                  onClick={goMarketing}
+                  className="p-5 rounded-3xl text-right transition-colors border border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                >
+                  <div className={`${ws.iconBox} mb-4`}>
+                    <Megaphone className="w-6 h-6 text-pink-200" />
+                  </div>
+                  <div className="text-white font-bold text-lg tracking-tight">
+                    التسويق
+                  </div>
+                  <div className="text-white/55 text-sm mt-1">
+                    البلوقرز + منيو الضيافة
                   </div>
                 </button>
               ) : null}

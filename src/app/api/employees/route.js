@@ -34,6 +34,7 @@ export async function GET(request) {
         COALESCE(e.can_access_workspace, false) as can_access_workspace,
         COALESCE(e.can_manage_inventory, false) as can_manage_inventory,
         COALESCE(e.can_manage_accounting, false) as can_manage_accounting,
+        COALESCE(e.can_manage_marketing, false) as can_manage_marketing,
         COALESCE(e.can_manage_employees, false) as can_manage_employees,
         COALESCE(e.can_access_hr, false) as can_access_hr,
         COALESCE(e.can_manage_deductions, false) as can_manage_deductions,
@@ -112,6 +113,7 @@ export async function POST(request) {
       can_access_workspace,
       can_manage_inventory,
       can_manage_accounting,
+      can_manage_marketing,
       can_manage_employees,
       can_access_hr,
       can_manage_deductions,
@@ -156,6 +158,10 @@ export async function POST(request) {
 
     const canManageAccountingBool = isAdmin
       ? (can_manage_accounting ?? true)
+      : false;
+
+    const canManageMarketingBool = isAdmin
+      ? !!can_manage_marketing
       : false;
 
     const canManageEmployeesBool = isAdmin
@@ -218,6 +224,7 @@ export async function POST(request) {
           can_access_workspace,
           can_manage_inventory,
           can_manage_accounting,
+          can_manage_marketing,
           can_manage_employees,
           can_access_hr,
           can_manage_deductions,
@@ -247,6 +254,7 @@ export async function POST(request) {
           ${canAccessWorkspaceBool},
           ${canManageInventoryBool},
           ${canManageAccountingBool},
+          ${canManageMarketingBool},
           ${canManageEmployeesBool},
           ${canAccessHrBool},
           ${canManageDeductionsBool},
@@ -292,6 +300,7 @@ export async function POST(request) {
         COALESCE(e.can_access_workspace, false) as can_access_workspace,
         COALESCE(e.can_manage_inventory, false) as can_manage_inventory,
         COALESCE(e.can_manage_accounting, false) as can_manage_accounting,
+        COALESCE(e.can_manage_marketing, false) as can_manage_marketing,
         COALESCE(e.can_manage_employees, false) as can_manage_employees,
         COALESCE(e.can_access_hr, false) as can_access_hr,
         COALESCE(e.can_manage_deductions, false) as can_manage_deductions,
