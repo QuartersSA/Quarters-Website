@@ -138,10 +138,10 @@ export default function BloggerCardPage() {
                 width: "100%",
                 maxWidth: 460,
                 position: "relative",
-                borderRadius: 24,
+                borderRadius: 26,
                 background: accent,
                 color: cream,
-                padding: "52px 36px 40px",
+                padding: "56px 38px 44px",
                 textAlign: "center",
                 boxShadow: `0 30px 80px rgba(0,0,0,0.45), 0 0 0 1px ${cream}22`,
                 fontFamily:
@@ -149,29 +149,44 @@ export default function BloggerCardPage() {
                 overflow: "hidden",
               }}
             >
-              {/* Soft inner border — barely visible cream hairline */}
+              {/* Double inner border — outer hairline + inner ornamental */}
               <div
                 style={{
                   position: "absolute",
-                  inset: 14,
-                  borderRadius: 18,
-                  border: `1px solid ${cream}1f`,
+                  inset: 12,
+                  borderRadius: 20,
+                  border: `1px solid ${cream}22`,
+                  pointerEvents: "none",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 18,
+                  borderRadius: 16,
+                  border: `1px solid ${cream}11`,
                   pointerEvents: "none",
                 }}
               />
 
-              {/* Subtle texture: top + bottom paper grain via radial */}
+              {/* Paper texture wash */}
               <div
                 style={{
                   position: "absolute",
                   inset: 0,
-                  background: `radial-gradient(ellipse at top, ${cream}10 0%, transparent 55%), radial-gradient(ellipse at bottom, ${cream}08 0%, transparent 60%)`,
+                  background: `radial-gradient(ellipse at top, ${cream}12 0%, transparent 55%), radial-gradient(ellipse at bottom, ${cream}08 0%, transparent 60%)`,
                   pointerEvents: "none",
                 }}
               />
 
-              {/* === Wordmark (English + Arabic) === */}
-              <div style={{ position: "relative", marginBottom: 28 }}>
+              {/* Decorative corner ornaments — small leaf flourishes */}
+              <Leaf corner="tl" cream={cream} />
+              <Leaf corner="tr" cream={cream} />
+              <Leaf corner="bl" cream={cream} />
+              <Leaf corner="br" cream={cream} />
+
+              {/* === Wordmark === */}
+              <div style={{ position: "relative", marginBottom: 30 }}>
                 <div
                   style={{
                     position: "relative",
@@ -183,7 +198,7 @@ export default function BloggerCardPage() {
                       fontFamily:
                         '"Cormorant Garamond", "Playfair Display", serif',
                       fontWeight: 700,
-                      fontSize: 56,
+                      fontSize: 58,
                       letterSpacing: "0.02em",
                       lineHeight: 1,
                       color: cream,
@@ -195,13 +210,13 @@ export default function BloggerCardPage() {
                     <div
                       style={{
                         position: "absolute",
-                        top: -2,
-                        right: -28,
+                        top: 0,
+                        right: -22,
                         fontFamily:
                           '"Cormorant Garamond", "Playfair Display", serif',
-                        fontSize: 13,
+                        fontSize: 12,
                         fontWeight: 600,
-                        letterSpacing: "0.1em",
+                        letterSpacing: "0.12em",
                         color: cream,
                       }}
                     >
@@ -214,11 +229,11 @@ export default function BloggerCardPage() {
                     style={{
                       fontFamily:
                         '"El Messiri", "Cairo", "Tahoma", sans-serif',
-                      fontSize: 28,
+                      fontSize: 30,
                       fontWeight: 600,
                       color: cream,
-                      marginTop: 4,
-                      letterSpacing: "0.04em",
+                      marginTop: 6,
+                      letterSpacing: "0.05em",
                     }}
                   >
                     {cafeNameAr}
@@ -226,26 +241,19 @@ export default function BloggerCardPage() {
                 ) : null}
               </div>
 
-              {/* Hairline divider */}
-              <div
-                style={{
-                  width: 64,
-                  height: 1,
-                  background: `${cream}55`,
-                  margin: "0 auto 24px",
-                }}
-              />
+              {/* Ornamental divider — hairline + diamond + hairline */}
+              <Flourish cream={cream} marginBottom={22} />
 
-              {/* "INVITATION" label */}
+              {/* "INVITATION" label — bilingual */}
               <div
                 style={{
                   fontFamily:
                     '"Cormorant Garamond", "Playfair Display", serif',
                   fontSize: 12,
                   fontWeight: 600,
-                  letterSpacing: "0.5em",
+                  letterSpacing: "0.55em",
                   color: cream,
-                  opacity: 0.8,
+                  opacity: 0.85,
                   textTransform: "uppercase",
                   marginBottom: 4,
                 }}
@@ -256,55 +264,68 @@ export default function BloggerCardPage() {
                 style={{
                   fontFamily:
                     '"El Messiri", "Cairo", "Tahoma", sans-serif',
-                  fontSize: 13,
+                  fontSize: 12,
                   color: cream,
-                  opacity: 0.7,
-                  marginBottom: 22,
-                  letterSpacing: "0.08em",
+                  opacity: 0.6,
+                  marginBottom: 24,
+                  letterSpacing: "0.1em",
                 }}
               >
                 دعوة خاصة
               </div>
 
-              {/* === Blogger name === */}
+              {/* === Blogger name with ornamental side marks === */}
               <div
                 style={{
-                  fontFamily:
-                    '"El Messiri", "Cairo", "Tahoma", sans-serif',
-                  fontSize: 30,
-                  fontWeight: 700,
-                  color: cream,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 14,
                   marginBottom: b.handle ? 2 : 26,
-                  lineHeight: 1.3,
-                  letterSpacing: "0.01em",
                 }}
               >
-                {b.name}
+                <SideMark cream={cream} side="left" />
+                <div
+                  style={{
+                    fontFamily:
+                      '"El Messiri", "Cairo", "Tahoma", sans-serif',
+                    fontSize: 30,
+                    fontWeight: 700,
+                    color: cream,
+                    lineHeight: 1.3,
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  {b.name}
+                </div>
+                <SideMark cream={cream} side="right" />
               </div>
               {b.handle ? (
                 <div
                   style={{
                     color: cream,
-                    opacity: 0.65,
+                    opacity: 0.6,
                     fontSize: 13,
-                    marginBottom: 24,
+                    marginBottom: 26,
                     direction: "ltr",
-                    letterSpacing: "0.04em",
+                    letterSpacing: "0.05em",
+                    fontStyle: "italic",
                   }}
                 >
                   @{b.handle}
                 </div>
               ) : null}
 
-              {/* === QR (cream backdrop, dark olive code) === */}
+              {/* === QR — cream tile with embossed inner ring === */}
               <div
                 style={{
                   display: "inline-block",
-                  padding: 14,
+                  position: "relative",
+                  padding: 18,
                   background: cream,
-                  borderRadius: 14,
-                  marginBottom: 22,
-                  boxShadow: `0 8px 24px rgba(0,0,0,0.18)`,
+                  borderRadius: 18,
+                  marginBottom: 24,
+                  boxShadow: `0 10px 28px rgba(0,0,0,0.22), inset 0 0 0 1px ${darkenForQR(accent)}1a`,
                 }}
               >
                 <QRCodeSVG
@@ -317,29 +338,62 @@ export default function BloggerCardPage() {
                 />
               </div>
 
-              {/* Slug — minimal serif label, no extra container */}
+              {/* Slug — bracketed serif treatment */}
               <div
                 style={{
-                  fontFamily:
-                    '"Cormorant Garamond", "Playfair Display", serif',
-                  fontSize: 17,
-                  fontWeight: 600,
-                  color: cream,
-                  letterSpacing: "0.32em",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 14,
+                  marginBottom: 28,
                   direction: "ltr",
-                  marginBottom: 24,
                 }}
               >
-                {b.slug}
+                <span
+                  style={{
+                    fontFamily:
+                      '"Cormorant Garamond", "Playfair Display", serif',
+                    fontSize: 22,
+                    color: cream,
+                    opacity: 0.5,
+                    fontWeight: 400,
+                  }}
+                >
+                  ⟨
+                </span>
+                <span
+                  style={{
+                    fontFamily:
+                      '"Cormorant Garamond", "Playfair Display", serif',
+                    fontSize: 17,
+                    fontWeight: 600,
+                    color: cream,
+                    letterSpacing: "0.32em",
+                  }}
+                >
+                  {b.slug}
+                </span>
+                <span
+                  style={{
+                    fontFamily:
+                      '"Cormorant Garamond", "Playfair Display", serif',
+                    fontSize: 22,
+                    color: cream,
+                    opacity: 0.5,
+                    fontWeight: 400,
+                  }}
+                >
+                  ⟩
+                </span>
               </div>
 
               {/* Hairline */}
               <div
                 style={{
-                  width: 48,
+                  width: 56,
                   height: 1,
-                  background: `${cream}33`,
-                  margin: "0 auto 16px",
+                  background: `${cream}40`,
+                  margin: "0 auto 18px",
                 }}
               />
 
@@ -350,7 +404,7 @@ export default function BloggerCardPage() {
                     '"El Messiri", "Cairo", "Tahoma", sans-serif',
                   fontSize: 13,
                   color: cream,
-                  opacity: 0.78,
+                  opacity: 0.82,
                   lineHeight: 1.9,
                   letterSpacing: "0.02em",
                 }}
@@ -361,34 +415,157 @@ export default function BloggerCardPage() {
                 style={{
                   fontFamily:
                     '"El Messiri", "Cairo", "Tahoma", sans-serif',
-                  fontSize: 13,
+                  fontSize: 12,
                   color: cream,
-                  opacity: 0.6,
+                  opacity: 0.55,
                   lineHeight: 1.9,
                   letterSpacing: "0.02em",
                 }}
               >
                 بعد التفعيل تظهر لك قائمة الضيافة
               </div>
-
-              {/* Footer URL */}
-              <div
-                style={{
-                  marginTop: 22,
-                  fontSize: 10,
-                  color: cream,
-                  opacity: 0.4,
-                  letterSpacing: "0.18em",
-                  direction: "ltr",
-                  wordBreak: "break-all",
-                }}
-              >
-                {welcomeURL.replace(/^https?:\/\//, "")}
-              </div>
             </div>
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+/**
+ * Tiny leaf / coffee-bean ornament placed in each corner of the
+ * card. Pure inline SVG — no dependency, no asset.
+ */
+function Leaf({ corner, cream }) {
+  const positions = {
+    tl: { top: 18, left: 18, rotate: 0 },
+    tr: { top: 18, right: 18, rotate: 90 },
+    br: { bottom: 18, right: 18, rotate: 180 },
+    bl: { bottom: 18, left: 18, rotate: 270 },
+  };
+  const pos = positions[corner];
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        ...pos,
+        width: 26,
+        height: 26,
+        transform: `rotate(${pos.rotate}deg)`,
+        opacity: 0.55,
+        pointerEvents: "none",
+      }}
+    >
+      <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none">
+        <path
+          d="M3 21 C 8 16, 12 12, 21 3 M21 3 C 14 4, 9 7, 6 11 M21 3 C 17 9, 14 13, 11 18"
+          stroke={cream}
+          strokeWidth="1.2"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * Hairline → diamond → hairline ornament. Used as section divider
+ * after the wordmark.
+ */
+function Flourish({ cream, marginBottom = 20 }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+        marginBottom,
+      }}
+    >
+      <span
+        style={{
+          width: 56,
+          height: 1,
+          background: `linear-gradient(to right, transparent, ${cream}66)`,
+        }}
+      />
+      <span
+        style={{
+          width: 5,
+          height: 5,
+          transform: "rotate(45deg)",
+          background: cream,
+          opacity: 0.7,
+        }}
+      />
+      <span
+        style={{
+          width: 8,
+          height: 1,
+          background: `${cream}88`,
+        }}
+      />
+      <span
+        style={{
+          width: 5,
+          height: 5,
+          transform: "rotate(45deg)",
+          background: cream,
+          opacity: 0.7,
+        }}
+      />
+      <span
+        style={{
+          width: 56,
+          height: 1,
+          background: `linear-gradient(to left, transparent, ${cream}66)`,
+        }}
+      />
+    </div>
+  );
+}
+
+/**
+ * Small side mark — sits left/right of the blogger name. Two tiny
+ * dots stacked vertically + short line, all in cream.
+ */
+function SideMark({ cream, side }) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 3,
+        opacity: 0.6,
+      }}
+    >
+      <span
+        style={{
+          width: 4,
+          height: 4,
+          borderRadius: "50%",
+          background: cream,
+        }}
+      />
+      <span
+        style={{
+          width: 1,
+          height: 14,
+          background: cream,
+        }}
+      />
+      <span
+        style={{
+          width: 4,
+          height: 4,
+          borderRadius: "50%",
+          background: cream,
+        }}
+      />
     </div>
   );
 }
