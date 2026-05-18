@@ -76,6 +76,20 @@ async function ensureSchema() {
   } catch (e) {
     console.error("ensureSchema opening_session_items.quantity:", e?.message);
   }
+
+  // Transfer ops were originally storing only the post-transfer absolute
+  // (quantity = from_new on the OUT leg, to_new on the IN leg). The UI
+  // needs the *moved* amount too — "how many units did this transfer
+  // shift". Add an explicit column; old rows stay NULL and the UI
+  // falls back to the existing display.
+  try {
+    await sql`
+      ALTER TABLE inventory_items
+        ADD COLUMN IF NOT EXISTS transfer_quantity NUMERIC(12, 3)
+    `;
+  } catch (e) {
+    console.error("ensureSchema inventory_items.transfer_quantity:", e?.message);
+  }
 }
 
 // WhatsApp notify to opted-in admins (never blocks saving)
@@ -410,10 +424,11 @@ export async function GET(request) {
       }
 
       const items = await sql`
-        SELECT 
+        SELECT
           ii.id,
           ii.item_id,
           ii.quantity,
+          ii.transfer_quantity,
           i.name as item_name,
           i.description as item_description
         FROM inventory_items ii
