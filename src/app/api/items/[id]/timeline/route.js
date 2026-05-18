@@ -144,27 +144,50 @@ export async function GET(request, { params }) {
       return Number(a.operation_id) - Number(b.operation_id);
     });
 
-    // Running balance computation:
-    //   - "inv" rows: balance = new_quantity (absolute reset)
-    //   - "receipt" rows: balance = previous balance + delta
+    // Running balance + delta. Three families:
+    //
+    //   - Transfer rows: delta is derived from the operation's
+    //     intent (transfer_quantity + direction), not from the
+    //     stored absolutes. This keeps the displayed sign correct
+    //     regardless of any chain-adjustment artefacts and matches
+    //     what the user sees in /admin/operations.
+    //     balance = prev_balance ± transfer_quantity
+    //
+    //   - Other inv rows (Daily / Weekly / Opening): the stored
+    //     quantity IS the new absolute — it's a recount that resets
+    //     the chain. balance = new_quantity. delta vs previous.
+    //
+    //   - Receipt rows: explicit additive delta on top of the
+    //     running balance.
     let runningBalance = 0;
     const events = merged.map((m) => {
       let balance;
-      if (m.kind === "inv") {
-        balance = m.new_quantity;
+      let delta;
+
+      if (m.kind === "receipt") {
+        delta = m.delta;
+        balance = runningBalance + delta;
+      } else if (m.inventory_type === "Transfer") {
+        // Prefer transfer_quantity (the moved amount, populated by
+        // the transfer route and backfilled for legacy rows). Fall
+        // back to |stored - prev| if it's NULL for whatever reason.
+        const moved =
+          m.transfer_quantity !== null && m.transfer_quantity !== undefined
+            ? Number(m.transfer_quantity)
+            : Math.abs((Number(m.new_quantity) || 0) - runningBalance);
+        const sign = m.transfer_direction === "out" ? -1 : 1;
+        delta = sign * moved;
+        balance = runningBalance + delta;
       } else {
-        balance = runningBalance + m.delta;
+        balance = Number(m.new_quantity) || 0;
+        delta = balance - runningBalance;
       }
-      const prevBalance = runningBalance;
+
       runningBalance = balance;
       return {
         ...m,
         balance,
-        // Delta vs the previous event. For "inv" rows this is the
-        // net change (positive = received/transferred in, negative =
-        // sold/transferred out). For "receipt" rows it's the explicit
-        // delta. The first event's delta is the balance itself.
-        delta: m.kind === "receipt" ? m.delta : balance - prevBalance,
+        delta,
       };
     });
 
