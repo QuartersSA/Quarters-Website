@@ -882,16 +882,95 @@ export async function DELETE(request) {
       );
     }
 
-    // For Transfer operations, delete BOTH paired operations (out + in share same inventory_number)
+    // For Transfer operations: delete BOTH paired operations (out + in
+    // share same inventory_number) AND return the moved units to the
+    // chain so the source's current stock goes back up.
+    //
+    // The naive delete only removes the two legs. If a LATER transfer
+    // exists at the same (item, branch), its stored absolute was
+    // derived from the post-T1 balance (it baked T1 into its number),
+    // so simply removing T1 would leave that later row pretending T1
+    // still happened — the source's current stock would not reflect
+    // the returned units.
+    //
+    // Fix: before deleting, bump every subsequent inventory_items row
+    // at (item, source_branch) by +moved and at (item, dest_branch)
+    // by -moved, but only for rows tied to a TRANSFER op. Daily /
+    // Weekly / Opening rows are physical recounts the user explicitly
+    // measured, so they're preserved as-is.
     if (operation.inventory_type === "Transfer") {
       const paired = await sql`
-        SELECT id FROM inventory_operations
-        WHERE inventory_number = ${operation.inventory_number}
+        SELECT id, branch_id, transfer_branch_id, transfer_direction,
+               COALESCE(operation_date, created_at) AS op_date
+          FROM inventory_operations
+         WHERE inventory_number = ${operation.inventory_number}
       `;
-
       const pairedIds = paired.map((r) => r.id);
 
-      // inventory_items rows are deleted automatically via ON DELETE CASCADE
+      // Source branch = OUT leg's own branch_id. Fall back to the IN
+      // leg's transfer_branch_id if the OUT leg is missing for some
+      // reason (legacy data).
+      const outLeg =
+        paired.find((p) => p.transfer_direction === "out") || paired[0];
+      const inLeg =
+        paired.find((p) => p.transfer_direction === "in") || paired[1] || null;
+      const sourceBranchId = outLeg?.branch_id;
+      const destBranchId =
+        inLeg?.branch_id || outLeg?.transfer_branch_id || null;
+      const opDate = outLeg?.op_date || operation.op_date;
+
+      // Item-by-item moved amounts. Prefer the stored
+      // transfer_quantity. If still NULL (older row predating the
+      // backfill), reconstruct via chain compare to skip the row.
+      const movedRows = outLeg
+        ? await sql`
+            SELECT
+              ii.item_id,
+              COALESCE(ii.transfer_quantity, 0) AS moved
+            FROM inventory_items ii
+            WHERE ii.operation_id = ${outLeg.id}
+          `
+        : [];
+
+      // Apply +moved to subsequent Transfer rows at the source branch,
+      // and -moved to subsequent Transfer rows at the destination
+      // branch. ANY( $pairedIds ) excludes the legs being deleted so
+      // we don't touch their own rows.
+      for (const row of movedRows) {
+        const moved = Number(row.moved) || 0;
+        if (!moved) continue;
+
+        if (sourceBranchId) {
+          await sql`
+            UPDATE inventory_items ii
+               SET quantity = quantity + ${moved}
+              FROM inventory_operations io
+             WHERE ii.operation_id = io.id
+               AND io.inventory_type = 'Transfer'
+               AND ii.item_id = ${row.item_id}
+               AND ii.branch_id = ${sourceBranchId}
+               AND io.id <> ALL(${pairedIds})
+               AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+          `;
+        }
+
+        if (destBranchId) {
+          await sql`
+            UPDATE inventory_items ii
+               SET quantity = GREATEST(quantity - ${moved}, 0)
+              FROM inventory_operations io
+             WHERE ii.operation_id = io.id
+               AND io.inventory_type = 'Transfer'
+               AND ii.item_id = ${row.item_id}
+               AND ii.branch_id = ${destBranchId}
+               AND io.id <> ALL(${pairedIds})
+               AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+          `;
+        }
+      }
+
+      // inventory_items rows for the paired ops are deleted via
+      // ON DELETE CASCADE when the operations row goes.
       for (const pid of pairedIds) {
         await sql`DELETE FROM inventory_operations WHERE id = ${pid}`;
       }
