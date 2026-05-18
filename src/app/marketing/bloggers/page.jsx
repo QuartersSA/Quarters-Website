@@ -13,6 +13,7 @@ import {
   Clock,
 } from "lucide-react";
 import MarketingSidebar from "@/components/Marketing/Sidebar";
+import BloggersExportMenu from "@/components/Marketing/BloggersExportMenu";
 import { ws } from "@/components/Workspace/ui";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { adminFetch } from "@/utils/apiAuth";
@@ -154,13 +155,16 @@ export default function BloggersPage() {
                 </p>
               </div>
             </div>
-            <button
-              onClick={openCreate}
-              className={`${ws.btnPrimary} px-5 py-3 justify-center`}
-            >
-              <Plus className="w-5 h-5" />
-              <span>بلوقر جديد</span>
-            </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <BloggersExportMenu bloggers={bloggers} />
+              <button
+                onClick={openCreate}
+                className={`${ws.btnPrimary} px-5 py-3 justify-center`}
+              >
+                <Plus className="w-5 h-5" />
+                <span>بلوقر جديد</span>
+              </button>
+            </div>
           </div>
         </div>
 

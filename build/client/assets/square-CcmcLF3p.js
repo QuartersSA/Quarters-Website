@@ -1,1 +1,0 @@
-import{c as o}from"./createLucideIcon-CIIuNeoi.js";if(typeof window<"u"){const r={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},r,n),{get(e,s){return s in e?e[s]:void 0},has(){return!0}})}const t=o("Square",[["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}]]);export{t as S};

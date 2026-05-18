@@ -1,1 +1,0 @@
-import{c as i}from"./createLucideIcon-CIIuNeoi.js";if(typeof window<"u"){const s={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},s,n),{get(e,o){return o in e?e[o]:void 0},has(){return!0}})}const t=i("Filter",[["polygon",{points:"22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3",key:"1yg77f"}]]);export{t as F};
