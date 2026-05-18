@@ -126,7 +126,12 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
 
       {open ? (
         <div
-          className={`absolute top-full mt-2 left-0 z-30 w-72 ${ws.glass} ${ws.card} p-2 shadow-2xl`}
+          className={`absolute top-full mt-2 right-0 z-50 w-72 ${ws.card} p-2 shadow-2xl border border-white/15`}
+          style={{
+            background: "rgba(15, 23, 42, 0.98)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+          }}
         >
           {/* Bulk invitations */}
           <button
