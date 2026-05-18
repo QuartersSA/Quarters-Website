@@ -26,7 +26,8 @@ const TYPE_LABELS = {
 const TYPE_DESCRIPTIONS = {
   Daily: "عدّل كميات الأصناف المسجلة في هذا الجرد اليومي",
   Weekly: "عدّل كميات الأصناف المسجلة في هذا الجرد الأسبوعي",
-  Transfer: "يمكنك تعديل الملاحظة والتاريخ فقط — تعديل الكميات معطّل لحماية بيانات الجرد",
+  Transfer:
+    "عدّل كميات النقل لكل صنف. لا يمكن إضافة أو إزالة أصناف — للتغيير الكامل احذف التحويل وأعد إنشاءه.",
   Opening: "عدّل كميات المخزون الافتتاحي المسجلة",
 };
 
@@ -90,15 +91,28 @@ export default function EditOperationModal({
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
 
-  // Build initial qty map from operation details
+  // Build initial qty map from operation details. Transfer rows store
+  // the post-transfer absolute in `quantity`; the value the user
+  // actually thinks of as "the transfer's quantity for this item" is
+  // `transfer_quantity`. Daily/Weekly/Opening continue to use the
+  // absolute since that *is* the recorded count.
+  const isTransfer = operation?.inventory_type === "Transfer";
   const initialQtyMap = useMemo(() => {
     const map = {};
     const items = operationDetails?.items || [];
     for (const it of items) {
-      map[it.item_id] = Number(it.quantity) || 0;
+      if (isTransfer) {
+        const moved =
+          it.transfer_quantity === null || it.transfer_quantity === undefined
+            ? Number(it.quantity) || 0
+            : Number(it.transfer_quantity) || 0;
+        map[it.item_id] = moved;
+      } else {
+        map[it.item_id] = Number(it.quantity) || 0;
+      }
     }
     return map;
-  }, [operationDetails]);
+  }, [operationDetails, isTransfer]);
 
   const [qtyByItem, setQtyByItem] = useState(initialQtyMap);
 
@@ -183,12 +197,6 @@ export default function EditOperationModal({
     },
   });
 
-  // Transfer rows store post-transfer absolutes (source-remainder vs
-  // destination-total). Editing item quantities here would corrupt
-  // stock math on one of the two paired legs — the backend rejects
-  // such PUTs, so the modal only allows note + date edits for Transfer.
-  const isTransfer = operation?.inventory_type === "Transfer";
-
   const handleSubmit = useCallback(() => {
     setError(null);
 
@@ -197,14 +205,30 @@ export default function EditOperationModal({
       return;
     }
 
-    // For Transfer: send only note + date, server applies to both legs.
+    // Transfer: only items that were on the original transfer can be
+    // edited (no add / no remove). Build the items payload from the
+    // current qty map filtered to original item ids; backend treats
+    // each `quantity` here as the new "moved" amount and applies the
+    // delta-based chain adjustment.
     if (isTransfer) {
+      const itemsPayload = [];
+      for (const idStr of Object.keys(initialQtyMap)) {
+        const itemId = Number(idStr);
+        if (!Number.isFinite(itemId)) continue;
+        const raw = qtyByItem[itemId];
+        const qty = Number(raw);
+        if (!Number.isFinite(qty) || qty <= 0) {
+          setError("لا يمكن جعل كمية النقل صفر — احذف التحويل لإزالته");
+          return;
+        }
+        itemsPayload.push({ itemId, quantity: qty });
+      }
+
       updateMutation.mutate({
         operationId: operation.id,
         note,
         operationDate: opDate,
-        // Intentionally omit `items` — backend rejects item edits on
-        // Transfer with a 400.
+        items: itemsPayload,
       });
       return;
     }
@@ -349,26 +373,18 @@ export default function EditOperationModal({
             </span>
           </div>
 
-          {/* Transfer: items are read-only — editing them would corrupt
-              the source-remainder / destination-total snapshots on the
-              paired legs. Hide the search + table entirely. */}
+          {/* Transfer: editable items table restricted to the items
+              already on the transfer. Adding / removing items isn't
+              supported here — for that, delete + recreate. */}
           {isTransfer ? (
             <div
-              className={`${ws.glassSoft} ${ws.card} p-4 border-amber-400/20`}
+              className={`${ws.glassSoft} ${ws.card} p-3 border-amber-400/15 flex items-start gap-2`}
             >
-              <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-200 flex-shrink-0 mt-0.5" />
-                <div>
-                  <div className="text-amber-100 font-semibold mb-1">
-                    تعديل كميات التحويل غير مدعوم
-                  </div>
-                  <div className="text-white/70 text-sm leading-relaxed">
-                    التحويل يحفظ صف لكل فرع بكميات مختلفة (المتبقي عند
-                    المرسل، الإجمالي الجديد عند المستقبل). للتعديل، احذف
-                    التحويل وأنشئه من جديد بالكميات الصحيحة. تعديل
-                    الملاحظة والتاريخ فقط مسموح هنا.
-                  </div>
-                </div>
+              <AlertCircle className="w-4 h-4 text-amber-200 flex-shrink-0 mt-0.5" />
+              <div className="text-white/70 text-xs leading-relaxed">
+                عدّل كمية النقل لكل صنف. لا يمكن إضافة أصناف جديدة أو
+                إنزال الكمية إلى صفر — للتغيير الكامل احذف التحويل وأعد
+                إنشاءه.
               </div>
             </div>
           ) : null}
@@ -386,8 +402,8 @@ export default function EditOperationModal({
             </div>
           ) : null}
 
-          {/* Items table — hidden for Transfer (see banner above) */}
-          {!isTransfer ? (
+          {/* Items table — shown for all op types now. Transfer is
+              restricted to the original item set. */}
           <div
             className={`max-h-[40vh] overflow-auto rounded-3xl border ${ws.divider} bg-white/[0.02]`}
           >
@@ -401,12 +417,15 @@ export default function EditOperationModal({
                     الوحدة
                   </th>
                   <th className="text-right px-4 py-3 text-sm font-semibold text-white/70 w-40">
-                    الكمية
+                    {isTransfer ? "كمية النقل" : "الكمية"}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredItems.map((it) => {
+                {(isTransfer
+                  ? activeItems.filter((it) => it.id in initialQtyMap)
+                  : filteredItems
+                ).map((it) => {
                   const hasValue = it.id in qtyByItem;
                   const currentVal = qtyByItem[it.id] ?? "";
                   const wasInOriginal = it.id in initialQtyMap;
@@ -450,7 +469,10 @@ export default function EditOperationModal({
                   );
                 })}
 
-                {filteredItems.length === 0 ? (
+                {(isTransfer
+                  ? activeItems.filter((it) => it.id in initialQtyMap)
+                  : filteredItems
+                ).length === 0 ? (
                   <tr>
                     <td
                       colSpan={3}
@@ -463,7 +485,6 @@ export default function EditOperationModal({
               </tbody>
             </table>
           </div>
-          ) : null}
         </div>
 
         {/* Footer */}
