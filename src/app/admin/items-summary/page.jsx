@@ -15,6 +15,7 @@ import { ItemsSummaryHeader } from "@/components/ItemsSummary/ItemsSummaryHeader
 import { ItemsSummaryStats } from "@/components/ItemsSummary/ItemsSummaryStats";
 import { ItemsSummaryFilters } from "@/components/ItemsSummary/ItemsSummaryFilters";
 import { ItemsList } from "@/components/ItemsSummary/ItemsList";
+import TimelineReportLauncher from "@/components/ItemsSummary/TimelineReportLauncher";
 
 export default function ItemsSummaryPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -86,6 +87,11 @@ export default function ItemsSummaryPage() {
         <ItemsSummaryHeader />
 
         <ItemsSummaryStats stats={stats} />
+
+        <TimelineReportLauncher
+          groupedItems={groupedItems}
+          branches={branches}
+        />
 
         <ItemsSummaryFilters
           searchQuery={searchQuery}
