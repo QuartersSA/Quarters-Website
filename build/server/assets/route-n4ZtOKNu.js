@@ -864,18 +864,29 @@ async function DELETE(request) {
     // share same inventory_number) AND return the moved units to the
     // chain so the source's current stock goes back up.
     //
-    // The naive delete only removes the two legs. If a LATER transfer
-    // exists at the same (item, branch), its stored absolute was
-    // derived from the post-T1 balance (it baked T1 into its number),
-    // so simply removing T1 would leave that later row pretending T1
-    // still happened — the source's current stock would not reflect
-    // the returned units.
+    // Naive delete only removes the two legs. Any LATER transfer at
+    // the same (item, branch) stored an absolute that baked in this
+    // transfer's effect, so the deletion's credit never propagated
+    // without also bumping those later rows.
     //
-    // Fix: before deleting, bump every subsequent inventory_items row
-    // at (item, source_branch) by +moved and at (item, dest_branch)
-    // by -moved, but only for rows tied to a TRANSFER op. Daily /
-    // Weekly / Opening rows are physical recounts the user explicitly
-    // measured, so they're preserved as-is.
+    // We:
+    //  1) Compute moved amounts per item from the OUT leg's
+    //     transfer_quantity (set at creation, backfilled for legacy
+    //     rows by ensureSchema).
+    //  2) Guard rails:
+    //     - moved must be > 0; NULL/0 means we never knew the moved
+    //       amount, refuse rather than silently delete with no
+    //       adjustment.
+    //     - check that no subsequent Transfer at the destination
+    //       would go negative once we subtract `moved`. If so, the
+    //       chain has dependent transfers that need to be deleted
+    //       first; surface them in a 409 so the user can act.
+    //  3) Wrap the UPDATEs + DELETEs in a single sql.transaction so
+    //     a mid-operation failure can't leave a half-adjusted chain.
+    //  4) Apply +moved to every subsequent Transfer row at the source
+    //     branch and -moved at the destination branch (item-scoped).
+    //     Daily/Weekly/Opening rows are physical recounts the user
+    //     explicitly measured, so they're preserved as-is.
     if (operation.inventory_type === "Transfer") {
       const paired = await sql`
         SELECT id, branch_id, transfer_branch_id, transfer_direction,
@@ -884,36 +895,85 @@ async function DELETE(request) {
          WHERE inventory_number = ${operation.inventory_number}
       `;
       const pairedIds = paired.map(r => r.id);
-
-      // Source branch = OUT leg's own branch_id. Fall back to the IN
-      // leg's transfer_branch_id if the OUT leg is missing for some
-      // reason (legacy data).
       const outLeg = paired.find(p => p.transfer_direction === "out") || paired[0];
       const inLeg = paired.find(p => p.transfer_direction === "in") || paired[1] || null;
       const sourceBranchId = outLeg?.branch_id;
       const destBranchId = inLeg?.branch_id || outLeg?.transfer_branch_id || null;
       const opDate = outLeg?.op_date || operation.op_date;
 
-      // Item-by-item moved amounts. Prefer the stored
-      // transfer_quantity. If still NULL (older row predating the
-      // backfill), reconstruct via chain compare to skip the row.
+      // Per-item moved amounts. Joined with items so the conflict
+      // response can name the items if we have to refuse.
       const movedRows = outLeg ? await sql`
             SELECT
               ii.item_id,
-              COALESCE(ii.transfer_quantity, 0) AS moved
+              i.name AS item_name,
+              ii.transfer_quantity AS moved
             FROM inventory_items ii
+            LEFT JOIN items i ON i.id = ii.item_id
             WHERE ii.operation_id = ${outLeg.id}
           ` : [];
 
-      // Apply +moved to subsequent Transfer rows at the source branch,
-      // and -moved to subsequent Transfer rows at the destination
-      // branch. ANY( $pairedIds ) excludes the legs being deleted so
-      // we don't touch their own rows.
+      // (2a) NULL / zero guard. If any row's moved is null/0 we don't
+      // know how much to put back. Surface it instead of silently
+      // deleting the legs.
+      const missingMoved = movedRows.filter(r => {
+        const m = r.moved === null || r.moved === undefined ? null : Number(r.moved);
+        return m === null || !Number.isFinite(m) || m <= 0;
+      });
+      if (missingMoved.length > 0) {
+        return Response.json({
+          error: "تعذّر حذف التحويل: كمية النقل المسجلة غير معروفة لبعض الأصناف",
+          items: missingMoved.map(r => r.item_name || `#${r.item_id}`)
+        }, {
+          status: 409
+        });
+      }
+
+      // (2b) Cascade guard at destination. If a later transfer at the
+      // destination branch would go negative after subtracting moved,
+      // it depended on these units — refuse and tell the user which
+      // transfers to delete first.
+      if (destBranchId && movedRows.length > 0) {
+        const conflicts = [];
+        for (const row of movedRows) {
+          const moved = Number(row.moved);
+          const dependents = await sql`
+            SELECT io.inventory_number, io.id, ii.quantity
+              FROM inventory_items ii
+              JOIN inventory_operations io ON io.id = ii.operation_id
+             WHERE io.inventory_type = 'Transfer'
+               AND ii.item_id = ${row.item_id}
+               AND ii.branch_id = ${destBranchId}
+               AND io.id <> ALL(${pairedIds})
+               AND COALESCE(io.operation_date, io.created_at) > ${opDate}
+               AND ii.quantity < ${moved}
+             ORDER BY COALESCE(io.operation_date, io.created_at) ASC
+          `;
+          for (const d of dependents) {
+            conflicts.push({
+              item_name: row.item_name,
+              inventory_number: d.inventory_number
+            });
+          }
+        }
+        if (conflicts.length > 0) {
+          const numbers = Array.from(new Set(conflicts.map(c => c.inventory_number)));
+          return Response.json({
+            error: "لا يمكن حذف هذا التحويل: توجد تحويلات لاحقة تعتمد على الكمية المنقولة. احذفها أولاً.",
+            dependent_transfers: numbers,
+            conflicts
+          }, {
+            status: 409
+          });
+        }
+      }
+
+      // (3) Atomic UPDATE + DELETE. Build the statement array first.
+      const txStatements = [];
       for (const row of movedRows) {
-        const moved = Number(row.moved) || 0;
-        if (!moved) continue;
+        const moved = Number(row.moved);
         if (sourceBranchId) {
-          await sql`
+          txStatements.push(sql`
             UPDATE inventory_items ii
                SET quantity = quantity + ${moved}
               FROM inventory_operations io
@@ -923,12 +983,12 @@ async function DELETE(request) {
                AND ii.branch_id = ${sourceBranchId}
                AND io.id <> ALL(${pairedIds})
                AND COALESCE(io.operation_date, io.created_at) > ${opDate}
-          `;
+          `);
         }
         if (destBranchId) {
-          await sql`
+          txStatements.push(sql`
             UPDATE inventory_items ii
-               SET quantity = GREATEST(quantity - ${moved}, 0)
+               SET quantity = quantity - ${moved}
               FROM inventory_operations io
              WHERE ii.operation_id = io.id
                AND io.inventory_type = 'Transfer'
@@ -936,14 +996,15 @@ async function DELETE(request) {
                AND ii.branch_id = ${destBranchId}
                AND io.id <> ALL(${pairedIds})
                AND COALESCE(io.operation_date, io.created_at) > ${opDate}
-          `;
+          `);
         }
       }
-
-      // inventory_items rows for the paired ops are deleted via
-      // ON DELETE CASCADE when the operations row goes.
       for (const pid of pairedIds) {
-        await sql`DELETE FROM inventory_operations WHERE id = ${pid}`;
+        // inventory_items for the paired ops cascade via FK on delete.
+        txStatements.push(sql`DELETE FROM inventory_operations WHERE id = ${pid}`);
+      }
+      if (txStatements.length > 0) {
+        await sql.transaction(txStatements);
       }
       return Response.json({
         ok: true,
