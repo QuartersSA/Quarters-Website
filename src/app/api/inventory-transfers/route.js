@@ -219,6 +219,19 @@ export async function POST(request) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }
 
+  // Idempotent: ensures the transfer_quantity column exists before we
+  // try to INSERT it. The inventory-operations route applies the same
+  // migration on every request, but transfers can be the first call in
+  // a fresh tab so we cover ourselves here too.
+  try {
+    await sql`
+      ALTER TABLE inventory_items
+        ADD COLUMN IF NOT EXISTS transfer_quantity NUMERIC(12, 3)
+    `;
+  } catch (e) {
+    console.error("ensureSchema inventory_items.transfer_quantity:", e?.message);
+  }
+
   try {
     const body = await request.json();
     const { fromBranchId, toBranchId, items, note, operationDate } = body;
@@ -500,17 +513,18 @@ export async function POST(request) {
         SELECT
           unnest($7::int[])     AS item_id,
           unnest($8::numeric[]) AS from_new,
-          unnest($9::numeric[]) AS to_new
+          unnest($9::numeric[]) AS to_new,
+          unnest($10::numeric[]) AS moved
       ),
       ins_out AS (
-        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
-        SELECT op_out.id, items_data.item_id, items_data.from_new, op_out.branch_id
+        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id, transfer_quantity)
+        SELECT op_out.id, items_data.item_id, items_data.from_new, op_out.branch_id, items_data.moved
         FROM op_out, items_data
         RETURNING 1
       ),
       ins_in AS (
-        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
-        SELECT op_in.id, items_data.item_id, items_data.to_new, op_in.branch_id
+        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id, transfer_quantity)
+        SELECT op_in.id, items_data.item_id, items_data.to_new, op_in.branch_id, items_data.moved
         FROM op_in, items_data
         RETURNING 1
       )
@@ -534,6 +548,7 @@ export async function POST(request) {
         perItemIds,
         fromNewArr,
         toNewArr,
+        cleanedItems.map((it) => Number(it.quantity) || 0),
       ],
     );
 

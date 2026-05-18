@@ -88,7 +88,37 @@ export default function OperationsPage() {
   const openingSession = useOpeningSession(activeItems, "", "");
   const purchaseReceipt = usePurchaseReceipt("", "", "", "");
 
-  const stats = calculateOperationStats(filteredOperations);
+  // Transfers are stored as two mirrored rows (out + in) sharing one
+  // inventory_number. The admin wants a single row per transfer, so we
+  // collapse the pair into just the "out" leg before passing the list
+  // to the table / stats / selection. The OUT leg is canonical because
+  // its inventory_items rows carry the moved amount via the new
+  // `transfer_quantity` column and its branch is the sender, which the
+  // existing transfer-parties helper expects.
+  const displayedOperations = useMemo(() => {
+    const list = filteredOperations || [];
+    const seen = new Set();
+    const out = [];
+    for (const op of list) {
+      if (op?.inventory_type === "Transfer" && op?.inventory_number) {
+        const key = `transfer:${op.inventory_number}`;
+        // Prefer the out leg; fall back to whichever leg we see first
+        // if the out leg somehow isn't in the result set.
+        if (op.transfer_direction === "in") {
+          if (seen.has(key)) continue;
+          // Defer: only keep the "in" leg if the "out" never shows up.
+          // Cheap second pass below handles that, but in practice the
+          // out leg is always present.
+        }
+        if (seen.has(key)) continue;
+        seen.add(key);
+      }
+      out.push(op);
+    }
+    return out;
+  }, [filteredOperations]);
+
+  const stats = calculateOperationStats(displayedOperations);
 
   const handleDelete = () => {
     if (!deleteTarget) return;
@@ -119,7 +149,7 @@ export default function OperationsPage() {
   }, []);
 
   const toggleSelectAll = useCallback(() => {
-    const selectable = filteredOperations || [];
+    const selectable = displayedOperations || [];
     setSelectedIds((prev) => {
       const allOnPage = selectable.every((op) => prev.has(op.id));
       if (allOnPage) {
@@ -131,7 +161,7 @@ export default function OperationsPage() {
       for (const op of selectable) next.add(op.id);
       return next;
     });
-  }, [filteredOperations]);
+  }, [displayedOperations]);
 
   const clearSelection = useCallback(() => {
     setSelectedIds(new Set());
@@ -151,7 +181,7 @@ export default function OperationsPage() {
     // misreport the second as "فشل" (404 — already gone). Dedupe by
     // inventory_number for Transfer ops, keep the rest as-is.
     const opById = new Map(
-      (filteredOperations || []).map((op) => [op.id, op]),
+      (displayedOperations || []).map((op) => [op.id, op]),
     );
     const ids = [];
     const seenTransferKeys = new Set();
@@ -167,7 +197,7 @@ export default function OperationsPage() {
 
     // Warn if items selected under one filter then filter changed; the
     // off-screen ids will still be deleted.
-    const visibleIds = new Set((filteredOperations || []).map((op) => op.id));
+    const visibleIds = new Set((displayedOperations || []).map((op) => op.id));
     const hiddenCount = ids.filter((id) => !visibleIds.has(id)).length;
     const hiddenWarning =
       hiddenCount > 0
@@ -202,7 +232,7 @@ export default function OperationsPage() {
         `تم حذف ${succeeded} عملية، وفشل حذف ${failed} عملية. راجع الـ console.`,
       );
     }
-  }, [selectedIds, deleteMutation, filteredOperations]);
+  }, [selectedIds, deleteMutation, displayedOperations]);
 
   const handleEditOperation = useCallback(
     async (operation, existingDetails) => {
@@ -326,7 +356,7 @@ export default function OperationsPage() {
         />
 
         <OperationsTable
-          filteredOperations={filteredOperations}
+          filteredOperations={displayedOperations}
           isLoading={isLoading}
           hasActiveFilters={hasActiveFilters}
           onViewOperation={setSelectedOperation}

@@ -1,12 +1,11 @@
 import { Package } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
-// For Transfer ops, the stored qty is the post-transfer absolute at THIS
-// branch (not the transferred amount). A 0 here legitimately means
-// "branch fully drained that item via the transfer", not "the item is
-// unavailable". Suppress the متوفر/غير متوفر vocabulary entirely for
-// Transfer ops so the UI doesn't lie about availability — show the raw
-// post-transfer qty with a neutral label instead.
+// For Transfer ops we now display the moved amount (`transfer_quantity`)
+// rather than the post-transfer absolute. The admin wants to see "how
+// many units shipped in this transfer", not "what's left at the source".
+// Older transfers predating the `transfer_quantity` column fall back to
+// the absolute `quantity` value so historical rows still render.
 export function OperationItemsList({ operationDetails }) {
   const isTransfer = operationDetails?.inventory_type === "Transfer";
 
@@ -16,13 +15,23 @@ export function OperationItemsList({ operationDetails }) {
         <div className={`${ws.iconBox} w-10 h-10 text-white/80`}>
           <Package className="w-5 h-5" />
         </div>
-        {isTransfer ? "الكميات بعد التحويل" : "تفاصيل الأصناف"}
+        {isTransfer ? "كميات النقل" : "تفاصيل الأصناف"}
       </h4>
 
       {operationDetails?.items ? (
         <div className="space-y-3">
           {operationDetails.items.map((item, idx) => {
-            const qty = Number(item.quantity) || 0;
+            // Transfer rows: prefer the explicit moved amount; fall back
+            // to the absolute quantity for legacy rows where the new
+            // column is still NULL.
+            const movedRaw =
+              item.transfer_quantity !== null &&
+              item.transfer_quantity !== undefined
+                ? item.transfer_quantity
+                : item.quantity;
+            const qty = isTransfer
+              ? Number(movedRaw) || 0
+              : Number(item.quantity) || 0;
             const isZero = qty === 0;
 
             // For Transfer rows, drop the availability-flavoured styling
@@ -57,7 +66,7 @@ export function OperationItemsList({ operationDetails }) {
                   : "text-white/70";
 
             const badgeText = isTransfer
-              ? "كمية بعد التحويل"
+              ? "كمية النقل"
               : isZero
                 ? "غير متوفر"
                 : "وحدة متوفرة";
