@@ -189,6 +189,9 @@ export default function EditOperationModal({
       queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
       queryClient.invalidateQueries({ queryKey: ["operation-details"] });
       queryClient.invalidateQueries({ queryKey: ["opening-sessions"] });
+      // Timeline report reads the same chain, so its cached events
+      // need refreshing too after any quantity/date edit.
+      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
       onClose();
     },
     onError: (err) => {
