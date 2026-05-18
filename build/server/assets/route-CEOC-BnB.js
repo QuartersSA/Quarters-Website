@@ -415,16 +415,70 @@ async function GET(request) {
           status: 404
         });
       }
+
+      // For Transfer ops the UI wants the moved amount, not the
+      // post-transfer absolute. New rows populate transfer_quantity at
+      // creation time, but legacy rows are NULL — for those we compute
+      // the moved amount on the fly via chain lookup:
+      //   moved = |prev_balance_at(branch,item) - this_row.quantity|
+      // prev_balance = most recent inventory_items qty for the same
+      // (item, branch) strictly before this op's date, plus any
+      // purchase_receipts between that prior row and this op.
       const items = await sql`
         SELECT
           ii.id,
           ii.item_id,
           ii.quantity,
-          ii.transfer_quantity,
+          COALESCE(
+            ii.transfer_quantity,
+            CASE
+              WHEN op.inventory_type = 'Transfer' THEN
+                ABS(
+                  COALESCE(
+                    (
+                      SELECT COALESCE(prev_ii.quantity, 0)
+                           + COALESCE((
+                               SELECT SUM(pr.quantity)
+                                 FROM purchase_receipts pr
+                                WHERE pr.item_id = ii.item_id
+                                  AND pr.branch_id = ii.branch_id
+                                  AND GREATEST(pr.received_at, pr.created_at)
+                                      > COALESCE(prev_io.operation_date, prev_io.created_at)
+                                  AND GREATEST(pr.received_at, pr.created_at)
+                                      < COALESCE(op.operation_date, op.created_at)
+                             ), 0)
+                        FROM inventory_items prev_ii
+                        JOIN inventory_operations prev_io
+                          ON prev_io.id = prev_ii.operation_id
+                       WHERE prev_ii.item_id = ii.item_id
+                         AND prev_ii.branch_id = ii.branch_id
+                         AND prev_ii.id <> ii.id
+                         AND prev_io.status = 'Completed'
+                         AND prev_io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
+                         AND COALESCE(prev_io.operation_date, prev_io.created_at)
+                             < COALESCE(op.operation_date, op.created_at)
+                       ORDER BY COALESCE(prev_io.operation_date, prev_io.created_at) DESC,
+                                prev_io.id DESC
+                       LIMIT 1
+                    ),
+                    (
+                      SELECT COALESCE(SUM(pr.quantity), 0)
+                        FROM purchase_receipts pr
+                       WHERE pr.item_id = ii.item_id
+                         AND pr.branch_id = ii.branch_id
+                         AND GREATEST(pr.received_at, pr.created_at)
+                             < COALESCE(op.operation_date, op.created_at)
+                    )
+                  ) - ii.quantity
+                )
+              ELSE NULL
+            END
+          ) AS transfer_quantity,
           i.name as item_name,
           i.description as item_description
         FROM inventory_items ii
         LEFT JOIN items i ON ii.item_id = i.id
+        LEFT JOIN inventory_operations op ON op.id = ii.operation_id
         WHERE ii.operation_id = ${parseInt(operationId)}
         ORDER BY i.name
       `;
