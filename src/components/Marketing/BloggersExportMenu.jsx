@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Download, FileSpreadsheet, Image as ImageIcon, ChevronDown } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { useQuery } from "@tanstack/react-query";
@@ -17,8 +18,10 @@ import {
  *   - تصدير دعوة بلوقر واحد → single PNG
  *   - تصدير بيانات البلوقرز → Excel
  *
- * Single-blogger picker uses a nested submenu so we don't introduce a
- * separate modal. Disabled when there are no bloggers loaded.
+ * The dropdown panel is rendered via a portal into document.body so it
+ * escapes any parent stacking context (the toolbar card uses
+ * backdrop-filter, which would otherwise trap z-index and cause the
+ * panel to appear behind the table below).
  */
 export default function BloggersExportMenu({ bloggers, disabled = false }) {
   const [open, setOpen] = useState(false);
@@ -26,11 +29,11 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
   const [busy, setBusy] = useState(null); // "zip" | "single" | "data" | null
   const [progress, setProgress] = useState(null); // {done, total}
   const [error, setError] = useState(null);
-  const rootRef = useRef(null);
+  const [panelPos, setPanelPos] = useState(null);
+  const buttonRef = useRef(null);
+  const panelRef = useRef(null);
 
   // Settings are needed for image exports (accent / cream / wordmark).
-  // Fetched lazily — only when the user opens the menu — so the list
-  // page doesn't pay for it when no one exports.
   const settingsQuery = useQuery({
     queryKey: ["marketing-settings"],
     enabled: open,
@@ -42,10 +45,36 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
     staleTime: 60_000,
   });
 
+  // Position the floating panel under the button. Recompute on open,
+  // resize, and scroll so the menu tracks the button.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const recompute = () => {
+      const btn = buttonRef.current;
+      if (!btn) return;
+      const r = btn.getBoundingClientRect();
+      // 288px wide menu (w-72). Anchor right edge of menu to right edge
+      // of button (RTL: button is on the right side of toolbar).
+      setPanelPos({
+        top: r.bottom + 8,
+        right: Math.max(8, window.innerWidth - r.right),
+      });
+    };
+    recompute();
+    window.addEventListener("resize", recompute);
+    window.addEventListener("scroll", recompute, true);
+    return () => {
+      window.removeEventListener("resize", recompute);
+      window.removeEventListener("scroll", recompute, true);
+    };
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const onDocClick = (e) => {
-      if (rootRef.current && !rootRef.current.contains(e.target)) {
+      const insideButton = buttonRef.current?.contains(e.target);
+      const insidePanel = panelRef.current?.contains(e.target);
+      if (!insideButton && !insidePanel) {
         setOpen(false);
         setShowPicker(false);
       }
@@ -109,9 +138,130 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
 
   const isDisabled = disabled || list.length === 0;
 
+  const panel =
+    open && panelPos && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            ref={panelRef}
+            dir="rtl"
+            style={{
+              position: "fixed",
+              top: panelPos.top,
+              right: panelPos.right,
+              width: 288,
+              zIndex: 9999,
+              background: "rgba(15, 23, 42, 0.98)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              borderRadius: 20,
+              border: "1px solid rgba(255,255,255,0.15)",
+              boxShadow:
+                "0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04) inset",
+              padding: 8,
+            }}
+          >
+            <button
+              type="button"
+              onClick={handleZip}
+              disabled={!!busy}
+              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
+            >
+              <div className={`${ws.iconBox} w-9 h-9 text-pink-200 shrink-0`}>
+                <ImageIcon className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-white font-semibold text-sm">
+                  تصدير الدعوات (كل البلوقرز)
+                </div>
+                <div className="text-white/55 text-xs mt-0.5">
+                  ملف ZIP يحتوي صورة لكل بلوقر باسمه
+                </div>
+                {busy === "zip" && progress ? (
+                  <div className="text-amber-200 text-xs mt-1">
+                    جاري التصدير… {progress.done} / {progress.total}
+                  </div>
+                ) : null}
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowPicker((v) => !v)}
+              disabled={!!busy}
+              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
+            >
+              <div className={`${ws.iconBox} w-9 h-9 text-emerald-200 shrink-0`}>
+                <ImageIcon className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-white font-semibold text-sm flex items-center justify-between gap-2">
+                  <span>تصدير دعوة بلوقر واحد</span>
+                  <ChevronDown
+                    className={`w-4 h-4 opacity-60 transition-transform ${showPicker ? "rotate-180" : ""}`}
+                  />
+                </div>
+                <div className="text-white/55 text-xs mt-0.5">
+                  اختر البلوقر من القائمة
+                </div>
+              </div>
+            </button>
+
+            {showPicker ? (
+              <div className="mt-1 mb-1 max-h-64 overflow-y-auto border border-white/10 rounded-xl bg-black/30">
+                {list.map((b) => (
+                  <button
+                    key={b.id}
+                    type="button"
+                    onClick={() => handleSingle(b)}
+                    disabled={!!busy}
+                    className="w-full text-right px-3 py-2 hover:bg-white/[0.06] disabled:opacity-50 border-b border-white/5 last:border-b-0"
+                  >
+                    <div className="text-white text-sm font-medium truncate">
+                      {b.name}
+                    </div>
+                    {b.handle ? (
+                      <div className="text-white/45 text-xs" dir="ltr">
+                        @{b.handle}
+                      </div>
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+
+            <button
+              type="button"
+              onClick={handleData}
+              disabled={!!busy}
+              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
+            >
+              <div className={`${ws.iconBox} w-9 h-9 text-sky-200 shrink-0`}>
+                <FileSpreadsheet className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-white font-semibold text-sm">
+                  تصدير بيانات البلوقرز
+                </div>
+                <div className="text-white/55 text-xs mt-0.5">
+                  Excel: الاسم، الحساب، الحالة، وقت التفعيل
+                </div>
+              </div>
+            </button>
+
+            {error ? (
+              <div className="px-3 py-2 text-xs text-red-200 bg-red-500/10 border border-red-500/20 rounded-xl mt-1">
+                {error}
+              </div>
+            ) : null}
+          </div>,
+          document.body,
+        )
+      : null;
+
   return (
-    <div ref={rootRef} className="relative" dir="rtl">
+    <>
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         disabled={isDisabled}
@@ -123,114 +273,7 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
         <span>تصدير</span>
         <ChevronDown className="w-4 h-4 opacity-60" />
       </button>
-
-      {open ? (
-        <div
-          className={`absolute top-full mt-2 right-0 z-50 w-72 ${ws.card} p-2 shadow-2xl border border-white/15`}
-          style={{
-            background: "rgba(15, 23, 42, 0.98)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-          }}
-        >
-          {/* Bulk invitations */}
-          <button
-            type="button"
-            onClick={handleZip}
-            disabled={!!busy}
-            className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
-          >
-            <div className={`${ws.iconBox} w-9 h-9 text-pink-200 shrink-0`}>
-              <ImageIcon className="w-4 h-4" />
-            </div>
-            <div className="min-w-0">
-              <div className="text-white font-semibold text-sm">
-                تصدير الدعوات (كل البلوقرز)
-              </div>
-              <div className="text-white/55 text-xs mt-0.5">
-                ملف ZIP يحتوي صورة لكل بلوقر باسمه
-              </div>
-              {busy === "zip" && progress ? (
-                <div className="text-amber-200 text-xs mt-1">
-                  جاري التصدير… {progress.done} / {progress.total}
-                </div>
-              ) : null}
-            </div>
-          </button>
-
-          {/* Single blogger picker */}
-          <button
-            type="button"
-            onClick={() => setShowPicker((v) => !v)}
-            disabled={!!busy}
-            className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
-          >
-            <div className={`${ws.iconBox} w-9 h-9 text-emerald-200 shrink-0`}>
-              <ImageIcon className="w-4 h-4" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-white font-semibold text-sm flex items-center justify-between gap-2">
-                <span>تصدير دعوة بلوقر واحد</span>
-                <ChevronDown
-                  className={`w-4 h-4 opacity-60 transition-transform ${showPicker ? "rotate-180" : ""}`}
-                />
-              </div>
-              <div className="text-white/55 text-xs mt-0.5">
-                اختر البلوقر من القائمة
-              </div>
-            </div>
-          </button>
-
-          {showPicker ? (
-            <div className="mt-1 mb-1 max-h-64 overflow-y-auto border border-white/10 rounded-xl bg-black/20">
-              {list.map((b) => (
-                <button
-                  key={b.id}
-                  type="button"
-                  onClick={() => handleSingle(b)}
-                  disabled={!!busy}
-                  className="w-full text-right px-3 py-2 hover:bg-white/[0.06] disabled:opacity-50 border-b border-white/5 last:border-b-0"
-                >
-                  <div className="text-white text-sm font-medium truncate">
-                    {b.name}
-                  </div>
-                  {b.handle ? (
-                    <div className="text-white/45 text-xs" dir="ltr">
-                      @{b.handle}
-                    </div>
-                  ) : null}
-                </button>
-              ))}
-            </div>
-          ) : null}
-
-          {/* Bloggers data */}
-          <button
-            type="button"
-            onClick={handleData}
-            disabled={!!busy}
-            className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
-          >
-            <div className={`${ws.iconBox} w-9 h-9 text-sky-200 shrink-0`}>
-              <FileSpreadsheet className="w-4 h-4" />
-            </div>
-            <div className="min-w-0">
-              <div className="text-white font-semibold text-sm">
-                تصدير بيانات البلوقرز
-              </div>
-              <div className="text-white/55 text-xs mt-0.5">
-                Excel: الاسم، الحساب، الحالة، وقت التفعيل
-              </div>
-            </div>
-          </button>
-
-          {error ? (
-            <div className="px-3 py-2 text-xs text-red-200 bg-red-500/10 border border-red-500/20 rounded-xl mt-1">
-              {error}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-    </div>
+      {panel}
+    </>
   );
 }
