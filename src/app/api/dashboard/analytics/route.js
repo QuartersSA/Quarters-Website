@@ -364,7 +364,20 @@ export async function GET(request) {
     healthScore -= Math.round(pendingRatio * 20);
     healthScore = Math.max(0, Math.min(100, healthScore));
 
-    // 7. Monthly inventory movement
+    // 7. Monthly inventory movement.
+    //    opening_qty  = stock at start of month  (timeline-aligned)
+    //    received_qty = receipts inside the month
+    //    closing_qty  = current stock            (timeline-aligned)
+    //
+    // Each snapshot is computed the same way the reports compute
+    // current stock:
+    //   last RESET (Daily/Weekly/Opening, NOT Transfer)
+    //   + receipts since reset (and before the snapshot date)
+    //   + signed transfer deltas since reset (and before the snapshot date)
+    //
+    // Without this, transfers between the reset and the snapshot were
+    // either ignored (when a Transfer absolute drifted) or mis-counted
+    // (when the latest row picked was a Transfer post-state).
     const monthlyMovement = await sql`
       SELECT
         i.id as item_id,
@@ -382,18 +395,56 @@ export async function GET(request) {
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
 
+      -- opening: stock balance just before the month started
       LEFT JOIN LATERAL (
-        SELECT ii.quantity as qty
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id = i.id AND io.branch_id = b.id
-          AND io.status = 'Completed'
-          AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
-          AND COALESCE(io.operation_date, io.created_at) < ${startOfThisMonth.toISOString()}
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC
-        LIMIT 1
+        WITH last_reset AS (
+          SELECT ii.quantity AS inv_quantity,
+                 COALESCE(io.operation_date, io.created_at) AS op_date
+          FROM inventory_items ii
+          JOIN inventory_operations io ON io.id = ii.operation_id
+          WHERE ii.item_id = i.id AND io.branch_id = b.id
+            AND io.status = 'Completed'
+            AND io.inventory_type IN ('Daily','Weekly','Opening')
+            AND COALESCE(io.operation_date, io.created_at) < ${startOfThisMonth.toISOString()}
+          ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
+          LIMIT 1
+        )
+        SELECT
+          (
+            COALESCE((SELECT inv_quantity FROM last_reset), 0)
+            + COALESCE((
+                SELECT SUM(pr.quantity)
+                FROM purchase_receipts pr
+                WHERE pr.item_id = i.id AND pr.branch_id = b.id
+                  AND (
+                    (SELECT op_date FROM last_reset) IS NULL
+                    OR GREATEST(pr.received_at, pr.created_at) > (SELECT op_date FROM last_reset)
+                  )
+                  AND GREATEST(pr.received_at, pr.created_at) < ${startOfThisMonth.toISOString()}
+              ), 0)
+            + COALESCE((
+                SELECT SUM(
+                  CASE io2.transfer_direction
+                    WHEN 'in'  THEN  COALESCE(ii2.transfer_quantity, 0)
+                    WHEN 'out' THEN -COALESCE(ii2.transfer_quantity, 0)
+                    ELSE 0
+                  END
+                )
+                FROM inventory_items ii2
+                JOIN inventory_operations io2 ON io2.id = ii2.operation_id
+                WHERE ii2.item_id = i.id AND ii2.branch_id = b.id
+                  AND io2.status = 'Completed'
+                  AND io2.inventory_type = 'Transfer'
+                  AND (
+                    (SELECT op_date FROM last_reset) IS NULL
+                    OR COALESCE(io2.operation_date, io2.created_at) > (SELECT op_date FROM last_reset)
+                  )
+                  AND COALESCE(io2.operation_date, io2.created_at) < ${startOfThisMonth.toISOString()}
+              ), 0)
+          ) AS qty
       ) opening ON true
 
+      -- received: receipts inside the month (unchanged semantics)
       LEFT JOIN LATERAL (
         SELECT COALESCE(SUM(pr.quantity), 0) as qty
         FROM purchase_receipts pr
@@ -402,20 +453,55 @@ export async function GET(request) {
           AND pr.received_at < ${now.toISOString()}
       ) received ON true
 
+      -- closing: current stock balance, same formula as items-summary
       LEFT JOIN LATERAL (
-        SELECT ii.quantity as qty
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id = i.id AND io.branch_id = b.id
-          AND io.status = 'Completed'
-          AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC
-        LIMIT 1
+        WITH last_reset AS (
+          SELECT ii.quantity AS inv_quantity,
+                 COALESCE(io.operation_date, io.created_at) AS op_date
+          FROM inventory_items ii
+          JOIN inventory_operations io ON io.id = ii.operation_id
+          WHERE ii.item_id = i.id AND io.branch_id = b.id
+            AND io.status = 'Completed'
+            AND io.inventory_type IN ('Daily','Weekly','Opening')
+          ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
+          LIMIT 1
+        )
+        SELECT
+          (
+            COALESCE((SELECT inv_quantity FROM last_reset), 0)
+            + COALESCE((
+                SELECT SUM(pr.quantity)
+                FROM purchase_receipts pr
+                WHERE pr.item_id = i.id AND pr.branch_id = b.id
+                  AND (
+                    (SELECT op_date FROM last_reset) IS NULL
+                    OR GREATEST(pr.received_at, pr.created_at) > (SELECT op_date FROM last_reset)
+                  )
+              ), 0)
+            + COALESCE((
+                SELECT SUM(
+                  CASE io2.transfer_direction
+                    WHEN 'in'  THEN  COALESCE(ii2.transfer_quantity, 0)
+                    WHEN 'out' THEN -COALESCE(ii2.transfer_quantity, 0)
+                    ELSE 0
+                  END
+                )
+                FROM inventory_items ii2
+                JOIN inventory_operations io2 ON io2.id = ii2.operation_id
+                WHERE ii2.item_id = i.id AND ii2.branch_id = b.id
+                  AND io2.status = 'Completed'
+                  AND io2.inventory_type = 'Transfer'
+                  AND (
+                    (SELECT op_date FROM last_reset) IS NULL
+                    OR COALESCE(io2.operation_date, io2.created_at) > (SELECT op_date FROM last_reset)
+                  )
+              ), 0)
+          ) AS qty
       ) closing ON true
 
       WHERE i.is_active = true AND i.show_in_inventory = true
         AND ibd.item_id IS NULL
-        AND (opening.qty IS NOT NULL OR received.qty > 0 OR closing.qty IS NOT NULL)
+        AND (opening.qty <> 0 OR received.qty > 0 OR closing.qty <> 0)
       ORDER BY i.name, b.name
     `;
 
