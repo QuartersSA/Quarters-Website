@@ -24,7 +24,14 @@ import { BloggerInvitationCard } from "@/components/Marketing/BloggerInvitationC
 import { exportToExcelHTML } from "@/utils/exportUtils";
 import { formatDateTime } from "@/utils/dateUtils";
 
-// PNG capture options. 2x scale for printable resolution.
+// PNG capture options.
+//
+// pixelRatio was 2 (printable), but bulk exports of 50+ bloggers
+// would crash the tab with "Out of Memory" — each 2× capture is ~4MB
+// in canvas RAM + base64 string + zip entry, and JSZip holds all of
+// them in memory until generateAsync runs. 1.5× still prints
+// acceptably for an invitation card while cutting peak memory by
+// ~44%.
 //
 // IMPORTANT: do NOT pass `backgroundColor` here. html-to-image applies
 // that option as an inline style on the captured node itself, which
@@ -32,9 +39,23 @@ import { formatDateTime } from "@/utils/dateUtils";
 // fill. The white backdrop comes from a wrapping <div> we render in
 // React instead (see captureBloggerCard below).
 const PNG_OPTS = {
-  pixelRatio: 2,
+  pixelRatio: 1.5,
   cacheBust: true,
 };
+
+// dataURL "data:image/png;base64,XXX" → Uint8Array of the raw bytes.
+// JSZip accepts Uint8Array directly and stores it without holding the
+// long base64 string in memory, which matters for bulk exports.
+function dataUrlToBytes(dataUrl) {
+  const idx = String(dataUrl).indexOf(",");
+  const b64 = idx >= 0 ? dataUrl.slice(idx + 1) : "";
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
 
 function safeFileName(name) {
   return String(name || "blogger")
@@ -170,10 +191,13 @@ export async function exportInvitationsZip(
   let captured = 0;
 
   for (const b of bloggers) {
+    let dataUrl = null;
     try {
-      const dataUrl = await captureBloggerCard(b, settings, baseURL);
-      // Strip the `data:image/png;base64,` prefix.
-      const base64 = String(dataUrl).split(",")[1] || "";
+      dataUrl = await captureBloggerCard(b, settings, baseURL);
+      // Convert straight to bytes and drop the dataURL so the long
+      // base64 string isn't held alongside the binary copy in the zip.
+      const bytes = dataUrlToBytes(dataUrl);
+      dataUrl = null;
 
       // Disambiguate duplicate names (e.g. two بلوقرز with same display
       // name) by appending the slug suffix.
@@ -185,7 +209,7 @@ export async function exportInvitationsZip(
           ? `${baseName}.png`
           : `${baseName}-${b.slug || b.id}.png`;
 
-      zip.file(fileName, base64, { base64: true });
+      zip.file(fileName, bytes);
       captured += 1;
     } catch (err) {
       // Log but keep going so one bad row doesn't kill the whole batch.
@@ -194,9 +218,22 @@ export async function exportInvitationsZip(
     if (typeof onProgress === "function") {
       onProgress(captured, bloggers.length);
     }
+    // Yield to the browser between iterations. Without this the
+    // sync-heavy capture loop never lets the GC run, and large
+    // batches accumulate enough canvas / cloned-DOM garbage to OOM
+    // the tab. setTimeout(0) is the smallest yield that actually
+    // unblocks the event loop.
+    await new Promise((r) => setTimeout(r, 0));
   }
 
-  const blob = await zip.generateAsync({ type: "blob" });
+  // STORE (no DEFLATE) keeps generateAsync from re-reading every PNG
+  // into a working buffer to compress — PNGs are already compressed,
+  // so the deflate step buys ~0 bytes anyway. Big win on peak memory
+  // for bulk exports.
+  const blob = await zip.generateAsync({
+    type: "blob",
+    compression: "STORE",
+  });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
