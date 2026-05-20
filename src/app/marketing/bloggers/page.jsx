@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Clock,
   Upload,
+  Download,
 } from "lucide-react";
 import MarketingSidebar from "@/components/Marketing/Sidebar";
 import BloggersExportMenu from "@/components/Marketing/BloggersExportMenu";
@@ -20,6 +21,7 @@ import { ws } from "@/components/Workspace/ui";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatDateTime } from "@/utils/dateUtils";
+import { exportInvitationImage } from "@/utils/marketingExport";
 
 export default function BloggersPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -42,6 +44,38 @@ export default function BloggersPage() {
       return r.json();
     },
   });
+
+  // Marketing settings power the invitation card (accent, cream,
+  // wordmark, …). Fetched once for the page so the per-row "download"
+  // button doesn't have to wait on a separate request each time.
+  const settingsQuery = useQuery({
+    queryKey: ["marketing-settings"],
+    enabled: isAuthenticated,
+    queryFn: async () => {
+      const r = await adminFetch("/api/marketing/settings");
+      if (!r.ok) throw new Error("فشل تحميل الإعدادات");
+      return r.json();
+    },
+    staleTime: 60_000,
+  });
+
+  // Per-row download tracker: blogger.id currently being rendered to
+  // PNG. Keeps the button's spinner local to the active row instead of
+  // disabling every download button on the page.
+  const [downloadingId, setDownloadingId] = useState(null);
+
+  const handleDownloadCard = async (b) => {
+    if (downloadingId) return;
+    setDownloadingId(b.id);
+    try {
+      await exportInvitationImage(b, settingsQuery.data?.settings || null);
+    } catch (err) {
+      console.error("download card failed", err);
+      setError("تعذّر تحميل البطاقة");
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   const createMut = useMutation({
     mutationFn: async (payload) => {
@@ -309,7 +343,23 @@ export default function BloggersPage() {
                         className="border-t border-white/[0.04] hover:bg-white/[0.02]"
                       >
                         <td className="px-4 py-3">
-                          <div className="text-white font-medium">{b.name}</div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleDownloadCard(b)}
+                              disabled={downloadingId === b.id}
+                              title="تحميل بطاقة الدعوة"
+                              aria-label="تحميل بطاقة الدعوة"
+                              className={`${ws.btnNeutral} w-8 h-8 p-0 justify-center shrink-0 disabled:opacity-50`}
+                            >
+                              {downloadingId === b.id ? (
+                                <div className="w-3.5 h-3.5 border-2 border-white/40 border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <Download className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                            <div className="text-white font-medium">{b.name}</div>
+                          </div>
                           {b.handle ? (
                             <a
                               href={
