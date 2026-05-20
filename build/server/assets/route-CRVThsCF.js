@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureMarketingSchema, s as slugifyName, g as generateSlugSuffix } from './_schema-DJCyIsi1.js';
+import { e as ensureMarketingSchema, s as slugifyName, g as generateSlugSuffix } from './_schema-D3GCdwVm.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -24,6 +24,7 @@ async function GET(request) {
   const rows = await sql`
     SELECT id, name, handle, phone, note, slug, state,
            activated_at, activated_by_employee_id, activated_by_employee_name,
+           invited_at,
            created_at, updated_at
       FROM marketing_bloggers
      ORDER BY created_at DESC, id DESC

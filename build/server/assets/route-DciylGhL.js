@@ -1,5 +1,5 @@
 import { s as sql } from './sql-BfhTxwII.js';
-import { e as ensureMarketingSchema } from './_schema-DJCyIsi1.js';
+import { e as ensureMarketingSchema } from './_schema-D3GCdwVm.js';
 import '@neondatabase/serverless';
 
 // POST /api/marketing/activate
@@ -71,7 +71,7 @@ async function POST(request) {
            activated_by_employee_name = ${cashierName},
            updated_at = NOW()
      WHERE id = ${row.id}
-       AND state = 'pending'
+       AND state IN ('pending', 'invited')
      RETURNING id, name, slug, state, activated_at, activated_by_employee_name
   `;
   if (!updated) {

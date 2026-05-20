@@ -1,5 +1,5 @@
 import { s as sql } from './sql-BfhTxwII.js';
-import { e as ensureMarketingSchema } from './_schema-DJCyIsi1.js';
+import { e as ensureMarketingSchema } from './_schema-D3GCdwVm.js';
 import '@neondatabase/serverless';
 
 // GET /api/marketing/welcome/<slug>
