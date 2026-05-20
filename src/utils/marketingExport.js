@@ -56,20 +56,14 @@ async function captureBloggerCard(blogger, settings, baseURL) {
     throw new Error("Image export must run in the browser");
   }
 
-  // Off-screen host. Position absolute so layout never reflows the
+  // Off-screen host. Position fixed so layout never reflows the
   // visible page. We keep it in the document so getComputedStyle works
   // (important for html-to-image font/color resolution).
-  //
-  // Internal padding + solid white background give the captured PNG a
-  // clean margin around the rounded card + drop shadow, so it doesn't
-  // composite oddly against dark UIs / chat apps.
   const host = document.createElement("div");
   host.style.position = "fixed";
   host.style.left = "-10000px";
   host.style.top = "0";
-  host.style.width = "508px"; // 460 card + 24px padding each side
-  host.style.padding = "24px";
-  host.style.background = "#ffffff";
+  host.style.width = "460px";
   host.style.pointerEvents = "none";
   host.setAttribute("dir", "rtl");
   document.body.appendChild(host);
@@ -106,10 +100,12 @@ async function captureBloggerCard(blogger, settings, baseURL) {
       // computed styles as-is.
     }
 
-    // Capture the host (white padded frame) — not just the card — so
-    // the PNG includes the white margin around the rounded corners.
-    if (!host.firstElementChild) throw new Error("card did not mount");
-    return await toPng(host, PNG_OPTS);
+    // Capture the card itself. PNG_OPTS.backgroundColor (white) fills
+    // the canvas behind the rounded corners so the resulting PNG
+    // composites cleanly against any background.
+    const node = host.firstElementChild;
+    if (!node) throw new Error("card did not mount");
+    return await toPng(node, PNG_OPTS);
   } finally {
     root.unmount();
     host.remove();
