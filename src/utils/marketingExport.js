@@ -24,12 +24,16 @@ import { BloggerInvitationCard } from "@/components/Marketing/BloggerInvitationC
 import { exportToExcelHTML } from "@/utils/exportUtils";
 import { formatDateTime } from "@/utils/dateUtils";
 
-// PNG capture options. 2x scale for printable resolution. Skips the
-// no-print sidebar wrapper since each card renders standalone.
+// PNG capture options. 2x scale for printable resolution.
+//
+// IMPORTANT: do NOT pass `backgroundColor` here. html-to-image applies
+// that option as an inline style on the captured node itself, which
+// overrides the card's `background: <accent>` and wipes the olive
+// fill. The white backdrop comes from a wrapping <div> we render in
+// React instead (see captureBloggerCard below).
 const PNG_OPTS = {
   pixelRatio: 2,
   cacheBust: true,
-  backgroundColor: "transparent",
 };
 
 function safeFileName(name) {
@@ -54,14 +58,17 @@ async function captureBloggerCard(blogger, settings, baseURL) {
     throw new Error("Image export must run in the browser");
   }
 
-  // Off-screen host. Position absolute so layout never reflows the
+  // Off-screen host. Position fixed so layout never reflows the
   // visible page. We keep it in the document so getComputedStyle works
   // (important for html-to-image font/color resolution).
+  //
+  // 510px = 460 card + 24px padding each side + a couple of px slack
+  // so the inline-block wrapper inside doesn't wrap.
   const host = document.createElement("div");
   host.style.position = "fixed";
   host.style.left = "-10000px";
   host.style.top = "0";
-  host.style.width = "460px";
+  host.style.width = "510px";
   host.style.pointerEvents = "none";
   host.setAttribute("dir", "rtl");
   document.body.appendChild(host);
@@ -70,12 +77,29 @@ async function captureBloggerCard(blogger, settings, baseURL) {
 
   try {
     await new Promise((resolve) => {
+      // Render the card inside a white-padded wrapper. We capture the
+      // wrapper so the PNG has a clean white margin around the card's
+      // rounded corners + drop shadow. The wrapper's background lives
+      // on a normal React DOM node — NOT on the html-to-image
+      // `backgroundColor` option — so the card's own olive fill is
+      // preserved.
       root.render(
-        React.createElement(BloggerInvitationCard, {
-          blogger,
-          settings,
-          welcomeURL: welcomeURLFor(blogger, baseURL),
-        }),
+        React.createElement(
+          "div",
+          {
+            style: {
+              display: "inline-block",
+              background: "#ffffff",
+              padding: "24px",
+            },
+            dir: "rtl",
+          },
+          React.createElement(BloggerInvitationCard, {
+            blogger,
+            settings,
+            welcomeURL: welcomeURLFor(blogger, baseURL),
+          }),
+        ),
       );
       // Two RAFs: ensures React commit + browser paint before capture,
       // otherwise QR SVG can render blank in the first frame.
@@ -98,6 +122,10 @@ async function captureBloggerCard(blogger, settings, baseURL) {
       // computed styles as-is.
     }
 
+    // Capture the wrapper (white frame), which contains the card. The
+    // wrapper's own DOM background is what gives the PNG its white
+    // margin — much safer than the html-to-image backgroundColor
+    // option, which would replace the card's olive fill.
     const node = host.firstElementChild;
     if (!node) throw new Error("card did not mount");
     return await toPng(node, PNG_OPTS);
