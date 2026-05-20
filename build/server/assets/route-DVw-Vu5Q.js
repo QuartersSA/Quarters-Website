@@ -105,11 +105,12 @@ async function GET(request, {
       ORDER BY effective_at DESC, pr.id DESC
     `;
 
-    // Same SQL the items API uses, scoped to this single item, broken
-    // down per branch so we can see exactly what the production query
-    // would produce.
+    // Same formula the items API uses, scoped to this single item,
+    // broken down per branch. Mirrors the timeline-aligned formula:
+    //   last RESET (Daily/Weekly/Opening) + receipts since + signed
+    //   transfer deltas since.
     const perBranch = await sql`
-      WITH last_inv AS (
+      WITH last_reset AS (
         SELECT DISTINCT ON (io.branch_id)
           io.branch_id,
           ii.quantity AS inv_quantity,
@@ -120,7 +121,7 @@ async function GET(request, {
         JOIN inventory_operations io ON io.id = ii.operation_id
         WHERE ii.item_id = ${itemId}
           AND io.status = 'Completed'
-          AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
+          AND io.inventory_type IN ('Daily','Weekly','Opening')
         ORDER BY io.branch_id,
                  COALESCE(io.operation_date, io.created_at) DESC,
                  io.id DESC
@@ -131,13 +132,36 @@ async function GET(request, {
           SUM(pr.quantity) AS total_received,
           COUNT(*)         AS receipt_count
         FROM purchase_receipts pr
-        LEFT JOIN last_inv li ON li.branch_id = pr.branch_id
+        LEFT JOIN last_reset li ON li.branch_id = pr.branch_id
         WHERE pr.item_id = ${itemId}
           AND (
             li.op_date IS NULL
             OR GREATEST(pr.received_at, pr.created_at) > li.op_date
           )
         GROUP BY pr.branch_id
+      ),
+      transfers_after AS (
+        SELECT
+          ii.branch_id,
+          SUM(
+            CASE io.transfer_direction
+              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
+              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+              ELSE 0
+            END
+          ) AS net_transfer,
+          COUNT(*) AS transfer_count
+        FROM inventory_items ii
+        JOIN inventory_operations io ON io.id = ii.operation_id
+        LEFT JOIN last_reset li ON li.branch_id = ii.branch_id
+        WHERE ii.item_id = ${itemId}
+          AND io.status = 'Completed'
+          AND io.inventory_type = 'Transfer'
+          AND (
+            li.op_date IS NULL
+            OR COALESCE(io.operation_date, io.created_at) > li.op_date
+          )
+        GROUP BY ii.branch_id
       )
       SELECT
         b.id        AS branch_id,
@@ -148,11 +172,17 @@ async function GET(request, {
         li.inventory_number AS last_inv_number,
         ra.total_received AS receipts_after_total,
         ra.receipt_count  AS receipts_after_count,
-        (COALESCE(li.inv_quantity, 0) + COALESCE(ra.total_received, 0))
-          AS computed_stock
+        ta.net_transfer   AS transfers_after_net,
+        ta.transfer_count AS transfers_after_count,
+        (
+          COALESCE(li.inv_quantity, 0)
+          + COALESCE(ra.total_received, 0)
+          + COALESCE(ta.net_transfer, 0)
+        ) AS computed_stock
       FROM branches b
-      LEFT JOIN last_inv li ON li.branch_id = b.id
+      LEFT JOIN last_reset li ON li.branch_id = b.id
       LEFT JOIN receipts_after ra ON ra.branch_id = b.id
+      LEFT JOIN transfers_after ta ON ta.branch_id = b.id
       ORDER BY b.name ASC
     `;
     const grandTotal = perBranch.reduce((s, r) => s + Number(r.computed_stock || 0), 0);
@@ -161,7 +191,7 @@ async function GET(request, {
     // this item, so we can confirm the number on /admin/stock-value
     // matches the per-branch breakdown above.
     const [stockValueRow] = await sql`
-      WITH last_inv AS (
+      WITH last_reset AS (
         SELECT DISTINCT ON (ii.item_id, io.branch_id)
           ii.item_id,
           io.branch_id,
@@ -171,7 +201,7 @@ async function GET(request, {
         JOIN inventory_operations io ON io.id = ii.operation_id
         WHERE ii.item_id = ${itemId}
           AND io.status = 'Completed'
-          AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
+          AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
         ORDER BY
           ii.item_id,
           io.branch_id,
@@ -183,7 +213,7 @@ async function GET(request, {
           pr.branch_id,
           SUM(pr.quantity) AS total_received
         FROM purchase_receipts pr
-        LEFT JOIN last_inv li
+        LEFT JOIN last_reset li
           ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
         WHERE pr.item_id = ${itemId}
           AND (
@@ -192,16 +222,42 @@ async function GET(request, {
           )
         GROUP BY pr.branch_id
       ),
+      transfers_after AS (
+        SELECT
+          ii.branch_id,
+          SUM(
+            CASE io.transfer_direction
+              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
+              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+              ELSE 0
+            END
+          ) AS net_transfer
+        FROM inventory_items ii
+        JOIN inventory_operations io ON io.id = ii.operation_id
+        LEFT JOIN last_reset li
+          ON li.item_id = ii.item_id AND li.branch_id = ii.branch_id
+        WHERE ii.item_id = ${itemId}
+          AND io.status = 'Completed'
+          AND io.inventory_type = 'Transfer'
+          AND (
+            li.op_date IS NULL
+            OR COALESCE(io.operation_date, io.created_at) > li.op_date
+          )
+        GROUP BY ii.branch_id
+      ),
       per_branch AS (
         SELECT
           b.id AS branch_id,
           COALESCE(li.inv_quantity, 0)
-            + COALESCE(ra.total_received, 0) AS qty
+            + COALESCE(ra.total_received, 0)
+            + COALESCE(ta.net_transfer, 0) AS qty
         FROM branches b
-        LEFT JOIN last_inv li
+        LEFT JOIN last_reset li
           ON li.branch_id = b.id
         LEFT JOIN receipts_after ra
           ON ra.branch_id = b.id
+        LEFT JOIN transfers_after ta
+          ON ta.branch_id = b.id
       )
       SELECT
         ${itemId}::int AS item_id,

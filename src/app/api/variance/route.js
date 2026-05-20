@@ -60,20 +60,39 @@ export async function GET(request) {
         os.opened_at as opening_opened_at,
         COALESCE(osi.quantity, 0)::numeric as opening_quantity,
         COALESCE(rso.sum_qty, 0)::numeric as receipts_quantity,
-        (COALESCE(osi.quantity, 0)::numeric + COALESCE(rso.sum_qty, 0)::numeric) as expected_quantity,
-        (ii.quantity::numeric -
-          (COALESCE(osi.quantity, 0)::numeric + COALESCE(rso.sum_qty, 0)::numeric)
+        COALESCE(tso.net_transfer, 0)::numeric as net_transfer_quantity,
+        (
+          COALESCE(osi.quantity, 0)::numeric
+          + COALESCE(rso.sum_qty, 0)::numeric
+          + COALESCE(tso.net_transfer, 0)::numeric
+        ) as expected_quantity,
+        (
+          ii.quantity::numeric
+          - (
+              COALESCE(osi.quantity, 0)::numeric
+              + COALESCE(rso.sum_qty, 0)::numeric
+              + COALESCE(tso.net_transfer, 0)::numeric
+            )
         ) as delta_quantity,
         prev.prev_quantity,
         prev.prev_op_date,
         CASE
           WHEN prev.prev_quantity IS NULL THEN NULL
-          ELSE (prev.prev_quantity::numeric + COALESCE(rsp.sum_qty, 0)::numeric)
+          ELSE (
+            prev.prev_quantity::numeric
+            + COALESCE(rsp.sum_qty, 0)::numeric
+            + COALESCE(tsp.net_transfer, 0)::numeric
+          )
         END as expected_since_previous,
         CASE
           WHEN prev.prev_quantity IS NULL THEN NULL
-          ELSE (ii.quantity::numeric -
-            (prev.prev_quantity::numeric + COALESCE(rsp.sum_qty, 0)::numeric)
+          ELSE (
+            ii.quantity::numeric
+            - (
+                prev.prev_quantity::numeric
+                + COALESCE(rsp.sum_qty, 0)::numeric
+                + COALESCE(tsp.net_transfer, 0)::numeric
+              )
           )
         END as delta_since_previous
       FROM inventory_operations io
@@ -90,6 +109,14 @@ export async function GET(request) {
       ) os ON TRUE
       LEFT JOIN opening_session_items osi
         ON osi.session_id = os.id AND osi.item_id = ii.item_id
+      -- Previous physical count (NOT a transfer). Variance's
+      -- "expected_since_previous" baseline is the last human-observed
+      -- snapshot. Transfer rows store a post-transfer absolute that
+      -- can drift relative to chain intent, so basing prev on them
+      -- made delta_since_previous wrong whenever a cascade left the
+      -- stored value out of sync. Daily / Weekly / Opening are
+      -- physical recounts — they're the ground truth this metric
+      -- wants.
       LEFT JOIN LATERAL (
         SELECT
           ii_p.quantity::numeric AS prev_quantity,
@@ -99,7 +126,7 @@ export async function GET(request) {
         WHERE ii_p.item_id = ii.item_id
           AND io_p.branch_id = io.branch_id
           AND io_p.status = 'Completed'
-          AND io_p.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
+          AND io_p.inventory_type IN ('Daily', 'Weekly', 'Opening')
           AND (
             COALESCE(io_p.operation_date, io_p.created_at)
               < COALESCE(io.operation_date, io.created_at)
@@ -112,6 +139,31 @@ export async function GET(request) {
         ORDER BY COALESCE(io_p.operation_date, io_p.created_at) DESC, io_p.id DESC
         LIMIT 1
       ) prev ON TRUE
+
+      -- Signed transfer deltas between prev physical count and the
+      -- current count. expected_since_previous now accounts for
+      -- transfers in/out of the branch in the interval, mirroring the
+      -- formula used by /api/items/summary and the timeline report.
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(SUM(
+          CASE io_t.transfer_direction
+            WHEN 'in'  THEN  COALESCE(ii_t.transfer_quantity, 0)
+            WHEN 'out' THEN -COALESCE(ii_t.transfer_quantity, 0)
+            ELSE 0
+          END
+        ), 0)::numeric AS net_transfer
+        FROM inventory_items ii_t
+        JOIN inventory_operations io_t ON io_t.id = ii_t.operation_id
+        WHERE ii_t.item_id   = ii.item_id
+          AND ii_t.branch_id = io.branch_id
+          AND io_t.status    = 'Completed'
+          AND io_t.inventory_type = 'Transfer'
+          AND prev.prev_op_date IS NOT NULL
+          AND COALESCE(io_t.operation_date, io_t.created_at)
+              > prev.prev_op_date
+          AND COALESCE(io_t.operation_date, io_t.created_at)
+              <= COALESCE(io.operation_date, io.created_at)
+      ) tsp ON TRUE
       LEFT JOIN LATERAL (
         -- GREATEST(received_at, created_at) protects against legacy
         -- green-bean deposits that stored order_date in received_at.
@@ -128,6 +180,32 @@ export async function GET(request) {
           AND GREATEST(pr.received_at, pr.created_at)
             <= COALESCE(io.operation_date, io.created_at)
       ) rso ON TRUE
+      -- Signed transfer deltas since opening. expected_quantity now
+      -- accounts for movements in/out of the branch since the
+      -- opening session, so a Daily count following transfer activity
+      -- isn't misreported as a giant variance.
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(SUM(
+          CASE io_t.transfer_direction
+            WHEN 'in'  THEN  COALESCE(ii_t.transfer_quantity, 0)
+            WHEN 'out' THEN -COALESCE(ii_t.transfer_quantity, 0)
+            ELSE 0
+          END
+        ), 0)::numeric AS net_transfer
+        FROM inventory_items ii_t
+        JOIN inventory_operations io_t ON io_t.id = ii_t.operation_id
+        WHERE ii_t.item_id   = ii.item_id
+          AND ii_t.branch_id = io.branch_id
+          AND io_t.status    = 'Completed'
+          AND io_t.inventory_type = 'Transfer'
+          AND (
+            os.opened_at IS NULL
+            OR COALESCE(io_t.operation_date, io_t.created_at)
+                >= os.opened_at::timestamp
+          )
+          AND COALESCE(io_t.operation_date, io_t.created_at)
+              <= COALESCE(io.operation_date, io.created_at)
+      ) tso ON TRUE
       LEFT JOIN LATERAL (
         SELECT SUM(pr.quantity)::numeric AS sum_qty
         FROM purchase_receipts pr
