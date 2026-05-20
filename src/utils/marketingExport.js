@@ -302,8 +302,8 @@ export function exportBloggersData(bloggers) {
       accessor: (b) => b.name || "",
     },
     {
-      header: "الحساب",
-      accessor: (b) => (b.handle ? `@${b.handle}` : ""),
+      header: "رابط الحساب",
+      accessor: (b) => b.handle || "",
     },
     {
       header: "رقم الجوال",

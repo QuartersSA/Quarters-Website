@@ -64,9 +64,9 @@ export async function POST(request) {
       continue;
     }
 
-    const handle = r.handle
-      ? String(r.handle).trim().replace(/^@/, "")
-      : null;
+    // `handle` is treated as a free-form URL (رابط صفحة البلوقر) now.
+    // No leading "@" strip — admins paste full social links.
+    const handle = r.handle ? String(r.handle).trim() : null;
     const phone = r.phone ? String(r.phone).trim() : null;
     const note = r.note ? String(r.note).trim() : null;
 
