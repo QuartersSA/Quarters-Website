@@ -220,8 +220,12 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
                       {b.name}
                     </div>
                     {b.handle ? (
-                      <div className="text-white/45 text-xs" dir="ltr">
-                        @{b.handle}
+                      <div
+                        className="text-white/45 text-xs truncate max-w-[14rem]"
+                        dir="ltr"
+                        title={b.handle}
+                      >
+                        {b.handle}
                       </div>
                     ) : null}
                   </button>
@@ -243,7 +247,7 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
                   تصدير بيانات البلوقرز
                 </div>
                 <div className="text-white/55 text-xs mt-0.5">
-                  Excel: الاسم، الحساب، الحالة، وقت التفعيل
+                  Excel: الاسم، رابط الحساب، الحالة، وقت التفعيل
                 </div>
               </div>
             </button>

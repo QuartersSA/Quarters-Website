@@ -42,7 +42,11 @@ export async function POST(request) {
   const name = String(body.name || "").trim();
   if (!name) return Response.json({ error: "الاسم مطلوب" }, { status: 400 });
 
-  const handle = body.handle ? String(body.handle).trim().replace(/^@/, "") : null;
+  // `handle` is now a free-form URL ("رابط صفحة البلوقر") rather than
+  // a username. We keep the column name for backwards compatibility
+  // but no longer strip a leading "@" — admins paste full social
+  // links here.
+  const handle = body.handle ? String(body.handle).trim() : null;
   const phone = body.phone ? String(body.phone).trim() : null;
   const note = body.note ? String(body.note).trim() : null;
 
@@ -87,7 +91,7 @@ export async function PUT(request) {
     return Response.json({ error: "الاسم لا يمكن أن يكون فارغاً" }, { status: 400 });
   }
   const handle = body.handle !== undefined
-    ? (body.handle ? String(body.handle).trim().replace(/^@/, "") : null)
+    ? (body.handle ? String(body.handle).trim() : null)
     : undefined;
   const phone = body.phone !== undefined
     ? (body.phone ? String(body.phone).trim() : null)

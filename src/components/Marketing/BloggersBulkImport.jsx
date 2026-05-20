@@ -32,7 +32,11 @@ import { adminFetch } from "@/utils/apiAuth";
 // an Arabic guidance row so non-technical users know what to fill.
 const COLUMNS = [
   { key: "name", labelAr: "الاسم (مطلوب)", example: "أحمد الفلاني" },
-  { key: "handle", labelAr: "الحساب (بدون @)", example: "ahmed.travel" },
+  {
+    key: "handle",
+    labelAr: "رابط صفحة البلوقر",
+    example: "https://www.instagram.com/ahmed.travel",
+  },
   { key: "phone", labelAr: "الجوال", example: "0501234567" },
   { key: "note", labelAr: "ملاحظة", example: "بلوقر سفر" },
 ];
@@ -288,7 +292,7 @@ export default function BloggersBulkImport({ onClose }) {
                         الاسم
                       </th>
                       <th className="text-right px-3 py-2 text-white/65 font-semibold">
-                        الحساب
+                        الرابط
                       </th>
                       <th className="text-right px-3 py-2 text-white/65 font-semibold">
                         الجوال
@@ -302,8 +306,8 @@ export default function BloggersBulkImport({ onClose }) {
                     {parsedRows.slice(0, 10).map((row, idx) => (
                       <tr key={idx} className="border-t border-white/5">
                         <td className="px-3 py-2 text-white">{row.name}</td>
-                        <td className="px-3 py-2 text-white/70" dir="ltr">
-                          {row.handle ? `@${row.handle}` : ""}
+                        <td className="px-3 py-2 text-white/70 truncate max-w-[18rem]" dir="ltr">
+                          {row.handle || ""}
                         </td>
                         <td className="px-3 py-2 text-white/70" dir="ltr">
                           {row.phone}

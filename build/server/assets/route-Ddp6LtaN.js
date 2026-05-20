@@ -47,7 +47,12 @@ async function POST(request) {
   }, {
     status: 400
   });
-  const handle = body.handle ? String(body.handle).trim().replace(/^@/, "") : null;
+
+  // `handle` is now a free-form URL ("رابط صفحة البلوقر") rather than
+  // a username. We keep the column name for backwards compatibility
+  // but no longer strip a leading "@" — admins paste full social
+  // links here.
+  const handle = body.handle ? String(body.handle).trim() : null;
   const phone = body.phone ? String(body.phone).trim() : null;
   const note = body.note ? String(body.note).trim() : null;
 
@@ -106,7 +111,7 @@ async function PUT(request) {
       status: 400
     });
   }
-  const handle = body.handle !== undefined ? body.handle ? String(body.handle).trim().replace(/^@/, "") : null : undefined;
+  const handle = body.handle !== undefined ? body.handle ? String(body.handle).trim() : null : undefined;
   const phone = body.phone !== undefined ? body.phone ? String(body.phone).trim() : null : undefined;
   const note = body.note !== undefined ? body.note ? String(body.note).trim() : null : undefined;
 

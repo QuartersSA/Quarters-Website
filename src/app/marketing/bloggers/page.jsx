@@ -211,14 +211,16 @@ export default function BloggersPage() {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/55 mb-2">
-                  معرّف الحساب (اختياري)
+                  رابط صفحة البلوقر (اختياري)
                 </label>
                 <input
-                  type="text"
+                  type="url"
+                  inputMode="url"
+                  dir="ltr"
                   value={form.handle}
                   onChange={(e) => setForm({ ...form, handle: e.target.value })}
                   className={`${ws.input} px-4 py-3`}
-                  placeholder="@instagram"
+                  placeholder="https://www.instagram.com/username"
                 />
               </div>
               <div>
@@ -309,9 +311,20 @@ export default function BloggersPage() {
                         <td className="px-4 py-3">
                           <div className="text-white font-medium">{b.name}</div>
                           {b.handle ? (
-                            <div className="text-white/45 text-xs mt-0.5">
-                              @{b.handle}
-                            </div>
+                            <a
+                              href={
+                                /^https?:\/\//i.test(b.handle)
+                                  ? b.handle
+                                  : `https://${b.handle}`
+                              }
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              className="text-emerald-200/80 hover:text-emerald-200 text-xs mt-0.5 inline-block truncate max-w-[18rem]"
+                              dir="ltr"
+                              title={b.handle}
+                            >
+                              {b.handle}
+                            </a>
                           ) : null}
                           {b.phone ? (
                             <div className="text-white/45 text-xs">{b.phone}</div>
