@@ -168,14 +168,17 @@ export const BloggerInvitationCard = React.forwardRef(
           دعوة خاصة
         </div>
 
-        {/* Blogger name */}
+        {/* Blogger name. Handle was previously rendered on a second
+            line ("@…") but admins were filling it with full URLs and
+            the card came out cluttered, so the handle now lives in
+            the admin UI only — never on the printed/exported card. */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             gap: 14,
-            marginBottom: b.handle ? 2 : 26,
+            marginBottom: 26,
           }}
         >
           <SideMark cream={cream} />
@@ -194,21 +197,6 @@ export const BloggerInvitationCard = React.forwardRef(
           </div>
           <SideMark cream={cream} />
         </div>
-        {b.handle ? (
-          <div
-            style={{
-              color: cream,
-              opacity: 0.6,
-              fontSize: 13,
-              marginBottom: 26,
-              direction: "ltr",
-              letterSpacing: "0.05em",
-              fontStyle: "italic",
-            }}
-          >
-            @{b.handle}
-          </div>
-        ) : null}
 
         {/* QR */}
         <div
