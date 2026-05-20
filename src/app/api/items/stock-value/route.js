@@ -40,8 +40,12 @@ export async function GET(request) {
     // Neon HTTP driver couldn't validate, returning an empty array
     // silently. A single parameter referenced twice in the WHERE is
     // unambiguous.
+    // last_reset is the most recent Daily/Weekly/Opening per (item, branch).
+    // Transfers are NOT a reset — they're layered as signed deltas on top
+    // via transfers_after, mirroring /api/items/summary and the timeline
+    // report.
     const query = `
-      WITH last_inv AS (
+      WITH last_reset AS (
         SELECT DISTINCT ON (ii.item_id, io.branch_id)
           ii.item_id,
           io.branch_id,
@@ -50,7 +54,7 @@ export async function GET(request) {
         FROM inventory_items ii
         JOIN inventory_operations io ON io.id = ii.operation_id
         WHERE io.status = 'Completed'
-          AND io.inventory_type IN ('Daily', 'Weekly', 'Transfer', 'Opening')
+          AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
         ORDER BY
           ii.item_id,
           io.branch_id,
@@ -63,7 +67,7 @@ export async function GET(request) {
           pr.branch_id,
           SUM(pr.quantity) AS total_received
         FROM purchase_receipts pr
-        LEFT JOIN last_inv li
+        LEFT JOIN last_reset li
           ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
         WHERE (
           li.op_date IS NULL
@@ -71,22 +75,46 @@ export async function GET(request) {
         )
         GROUP BY pr.item_id, pr.branch_id
       ),
+      transfers_after AS (
+        SELECT
+          ii.item_id,
+          ii.branch_id,
+          SUM(
+            CASE io.transfer_direction
+              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
+              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+              ELSE 0
+            END
+          ) AS net_transfer
+        FROM inventory_items ii
+        JOIN inventory_operations io ON io.id = ii.operation_id
+        LEFT JOIN last_reset li
+          ON li.item_id = ii.item_id AND li.branch_id = ii.branch_id
+        WHERE io.status = 'Completed'
+          AND io.inventory_type = 'Transfer'
+          AND (
+            li.op_date IS NULL
+            OR COALESCE(io.operation_date, io.created_at) > li.op_date
+          )
+        GROUP BY ii.item_id, ii.branch_id
+      ),
       per_branch AS (
         SELECT
           i.id AS item_id,
           b.id AS branch_id,
           COALESCE(li.inv_quantity, 0)
-            + COALESCE(ra.total_received, 0) AS qty
+            + COALESCE(ra.total_received, 0)
+            + COALESCE(ta.net_transfer, 0) AS qty
         FROM items i
         CROSS JOIN branches b
-        LEFT JOIN last_inv li
+        LEFT JOIN last_reset li
           ON li.item_id = i.id AND li.branch_id = b.id
         LEFT JOIN receipts_after ra
           ON ra.item_id = i.id AND ra.branch_id = b.id
-        -- Hide (item, branch) pairs admin disabled per-branch.
+        LEFT JOIN transfers_after ta
+          ON ta.item_id = i.id AND ta.branch_id = b.id
         LEFT JOIN item_branch_disabled ibd
           ON ibd.item_id = i.id AND ibd.branch_id = b.id
-        -- $1 IS NULL → all branches; otherwise restrict to branch $1.
         WHERE ($1::int IS NULL OR b.id = $1::int)
           AND ibd.item_id IS NULL
       ),
