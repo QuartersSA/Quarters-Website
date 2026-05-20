@@ -36,6 +36,24 @@ import type { Route } from './+types/root';
 
 export const links = () => [];
 
+/**
+ * Catch-all action for the root route.
+ *
+ * Without this export, any POST/PUT/PATCH/DELETE to "/" (browsers occasionally
+ * issue stray POSTs — extensions, security scanners, mis-typed forms) trips
+ * React Router's "did not provide an 'action' for route 'root'" path. In the
+ * Node/Hono server build that error escapes the request handler instead of
+ * being caught by the route-level error boundary, so the response never
+ * flushes and Railway shows "Application failed to respond" for the affected
+ * request. Returning a 405 here keeps the handler well-formed.
+ */
+export async function action() {
+  return new Response("Method Not Allowed", {
+    status: 405,
+    headers: { Allow: "GET" },
+  });
+}
+
 if (globalThis.window && globalThis.window !== undefined) {
   globalThis.window.fetch = fetch;
 }
