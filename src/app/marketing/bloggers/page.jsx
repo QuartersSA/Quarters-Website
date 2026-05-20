@@ -11,9 +11,11 @@ import {
   QrCode,
   CheckCircle2,
   Clock,
+  Upload,
 } from "lucide-react";
 import MarketingSidebar from "@/components/Marketing/Sidebar";
 import BloggersExportMenu from "@/components/Marketing/BloggersExportMenu";
+import BloggersBulkImport from "@/components/Marketing/BloggersBulkImport";
 import { ws } from "@/components/Workspace/ui";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { adminFetch } from "@/utils/apiAuth";
@@ -26,6 +28,7 @@ export default function BloggersPage() {
   const queryClient = useQueryClient();
 
   const [showForm, setShowForm] = useState(false);
+  const [showBulkImport, setShowBulkImport] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: "", handle: "", phone: "", note: "" });
   const [error, setError] = useState(null);
@@ -157,6 +160,13 @@ export default function BloggersPage() {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <BloggersExportMenu bloggers={bloggers} />
+              <button
+                onClick={() => setShowBulkImport(true)}
+                className={`${ws.btnNeutral} px-4 py-3 justify-center`}
+              >
+                <Upload className="w-4 h-4" />
+                <span>رفع من ملف</span>
+              </button>
               <button
                 onClick={openCreate}
                 className={`${ws.btnPrimary} px-5 py-3 justify-center`}
@@ -376,6 +386,10 @@ export default function BloggersPage() {
           )}
         </div>
       </main>
+
+      {showBulkImport ? (
+        <BloggersBulkImport onClose={() => setShowBulkImport(false)} />
+      ) : null}
     </div>
   );
 }
