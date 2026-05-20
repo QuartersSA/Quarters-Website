@@ -108,8 +108,12 @@ async function GET(request) {
     const itemIds = items.map(it => it.id);
     const stockRowsByItem = new Map();
     if (itemIds.length > 0) {
+      // current quantity = last RESET (Daily/Weekly/Opening) +
+      // receipts after that reset + signed transfer deltas after that
+      // reset. Same formula as /api/items/summary and the timeline
+      // report so the numbers stay consistent across endpoints.
       const stockRows = await sql(`
-          WITH last_inv AS (
+          WITH last_reset AS (
             SELECT DISTINCT ON (ii.item_id, io.branch_id)
               ii.item_id,
               io.branch_id,
@@ -119,7 +123,7 @@ async function GET(request) {
             JOIN inventory_operations io ON io.id = ii.operation_id
             WHERE ii.item_id = ANY($1::bigint[])
               AND io.status = 'Completed'
-              AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
+              AND io.inventory_type IN ('Daily','Weekly','Opening')
             ORDER BY
               ii.item_id,
               io.branch_id,
@@ -132,19 +136,38 @@ async function GET(request) {
               pr.branch_id,
               SUM(pr.quantity) AS total_received
             FROM purchase_receipts pr
-            LEFT JOIN last_inv li
+            LEFT JOIN last_reset li
               ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
-            -- GREATEST(received_at, created_at): a backdated deposit
-            -- (green-bean order_date in the past) would otherwise get
-            -- excluded when a Daily/Opening count happened after the
-            -- deposit was actually recorded. Falling back to created_at
-            -- keeps the math right even for legacy rows.
             WHERE pr.item_id = ANY($1::bigint[])
               AND (
                 li.op_date IS NULL
                 OR GREATEST(pr.received_at, pr.created_at) > li.op_date
               )
             GROUP BY pr.item_id, pr.branch_id
+          ),
+          transfers_after AS (
+            SELECT
+              ii.item_id,
+              ii.branch_id,
+              SUM(
+                CASE io.transfer_direction
+                  WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
+                  WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+                  ELSE 0
+                END
+              ) AS net_transfer
+            FROM inventory_items ii
+            JOIN inventory_operations io ON io.id = ii.operation_id
+            LEFT JOIN last_reset li
+              ON li.item_id = ii.item_id AND li.branch_id = ii.branch_id
+            WHERE ii.item_id = ANY($1::bigint[])
+              AND io.status = 'Completed'
+              AND io.inventory_type = 'Transfer'
+              AND (
+                li.op_date IS NULL
+                OR COALESCE(io.operation_date, io.created_at) > li.op_date
+              )
+            GROUP BY ii.item_id, ii.branch_id
           )
           SELECT
             ix.id          AS item_id,
@@ -152,17 +175,16 @@ async function GET(request) {
             b.name         AS branch_name,
             COALESCE(li.inv_quantity, 0)
               + COALESCE(ra.total_received, 0)
+              + COALESCE(ta.net_transfer, 0)
             AS quantity
           FROM (SELECT unnest($1::bigint[]) AS id) ix
           CROSS JOIN branches b
-          LEFT JOIN last_inv li
+          LEFT JOIN last_reset li
             ON li.item_id = ix.id AND li.branch_id = b.id
           LEFT JOIN receipts_after ra
             ON ra.item_id = ix.id AND ra.branch_id = b.id
-          -- Hide (item, branch) pairs the admin has disabled. The
-          -- item_branch_disabled table is sparse: a row exists only for
-          -- pairs that have been explicitly turned off, so absence
-          -- means "enabled" and the default behaviour is preserved.
+          LEFT JOIN transfers_after ta
+            ON ta.item_id = ix.id AND ta.branch_id = b.id
           LEFT JOIN item_branch_disabled ibd
             ON ibd.item_id = ix.id AND ibd.branch_id = b.id
           WHERE ibd.item_id IS NULL

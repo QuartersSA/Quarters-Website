@@ -79,12 +79,20 @@ export async function GET(request) {
   const atTime = parseAtTime(atRaw);
 
   try {
+    // Point-in-time stock: last RESET (Daily/Weekly/Opening physical
+    // count) + receipts after that reset + signed transfer deltas
+    // after that reset, all bounded by $3 (atTime). Mirrors the
+    // formula used by /api/items/summary, /api/items, low-stock,
+    // over-stock, stock-value, and the timeline report so transfer
+    // creation validation, current-stock displays, and historical
+    // reports all agree.
     const rows = await sql(
       `
         SELECT
           i.id AS item_id,
-          COALESCE(last_inv.inv_quantity, 0)
-            + COALESCE(receipts_after.total_received, 0) AS quantity_at_t
+          COALESCE(last_reset.inv_quantity, 0)
+            + COALESCE(receipts_after.total_received, 0)
+            + COALESCE(transfers_after.net_transfer, 0) AS quantity_at_t
         FROM items i
 
         LEFT JOIN LATERAL (
@@ -95,14 +103,14 @@ export async function GET(request) {
           WHERE ii.item_id = i.id
             AND io.branch_id = $1
             AND io.status = 'Completed'
-            AND io.inventory_type IN ('Daily','Weekly','Transfer','Opening')
+            AND io.inventory_type IN ('Daily','Weekly','Opening')
             AND (
               $3::timestamp IS NULL
               OR COALESCE(io.operation_date, io.created_at) <= $3::timestamp
             )
           ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
           LIMIT 1
-        ) last_inv ON true
+        ) last_reset ON true
 
         LEFT JOIN LATERAL (
           SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
@@ -110,14 +118,38 @@ export async function GET(request) {
           WHERE pr.item_id = i.id
             AND pr.branch_id = $1
             AND (
-              last_inv.op_date IS NULL
-              OR GREATEST(pr.received_at, pr.created_at) > last_inv.op_date
+              last_reset.op_date IS NULL
+              OR GREATEST(pr.received_at, pr.created_at) > last_reset.op_date
             )
             AND (
               $3::timestamp IS NULL
               OR GREATEST(pr.received_at, pr.created_at) <= $3::timestamp
             )
         ) receipts_after ON true
+
+        LEFT JOIN LATERAL (
+          SELECT COALESCE(SUM(
+            CASE io.transfer_direction
+              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
+              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+              ELSE 0
+            END
+          ), 0) AS net_transfer
+          FROM inventory_items ii
+          JOIN inventory_operations io ON io.id = ii.operation_id
+          WHERE ii.item_id   = i.id
+            AND ii.branch_id = $1
+            AND io.status    = 'Completed'
+            AND io.inventory_type = 'Transfer'
+            AND (
+              last_reset.op_date IS NULL
+              OR COALESCE(io.operation_date, io.created_at) > last_reset.op_date
+            )
+            AND (
+              $3::timestamp IS NULL
+              OR COALESCE(io.operation_date, io.created_at) <= $3::timestamp
+            )
+        ) transfers_after ON true
 
         WHERE i.id = ANY($2::int[])
       `,
