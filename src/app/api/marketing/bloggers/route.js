@@ -25,6 +25,7 @@ export async function GET(request) {
   const rows = await sql`
     SELECT id, name, handle, phone, note, slug, state,
            activated_at, activated_by_employee_id, activated_by_employee_name,
+           invited_at,
            created_at, updated_at
       FROM marketing_bloggers
      ORDER BY created_at DESC, id DESC

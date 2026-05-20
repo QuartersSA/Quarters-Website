@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureMarketingSchema, s as slugifyName, g as generateSlugSuffix } from './_schema-DJCyIsi1.js';
+import { e as ensureMarketingSchema, s as slugifyName, g as generateSlugSuffix } from './_schema-D3GCdwVm.js';
 import '@neondatabase/serverless';
 import 'crypto';
 

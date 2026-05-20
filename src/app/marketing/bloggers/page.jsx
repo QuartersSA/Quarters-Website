@@ -13,6 +13,8 @@ import {
   Clock,
   Upload,
   Download,
+  Send,
+  MailCheck,
 } from "lucide-react";
 import MarketingSidebar from "@/components/Marketing/Sidebar";
 import BloggersExportMenu from "@/components/Marketing/BloggersExportMenu";
@@ -125,6 +127,24 @@ export default function BloggersPage() {
     },
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ["marketing-bloggers"] }),
+  });
+
+  // Single-shot "تمت الدعوة" toggle. Flips pending → invited and
+  // stamps invited_at. Refetches the list so the row's state badge +
+  // invitation timestamp pick up the new value.
+  const markInvitedMut = useMutation({
+    mutationFn: async (id) => {
+      const r = await adminFetch(
+        `/api/marketing/bloggers/${encodeURIComponent(id)}/mark-invited`,
+        { method: "POST" },
+      );
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "تعذّر تحديث الحالة");
+      return d;
+    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["marketing-bloggers"] }),
+    onError: (e) => setError(e.message || "تعذّر تحديث الحالة"),
   });
 
   const resetForm = () => {
@@ -324,6 +344,9 @@ export default function BloggersPage() {
                       الحالة
                     </th>
                     <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
+                      الدعوة
+                    </th>
+                    <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
                       التفعيل
                     </th>
                     <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
@@ -337,6 +360,7 @@ export default function BloggersPage() {
                 <tbody>
                   {bloggers.map((b) => {
                     const isActive = b.state === "active";
+                    const isInvited = b.state === "invited";
                     return (
                       <tr
                         key={b.id}
@@ -391,11 +415,54 @@ export default function BloggersPage() {
                               <CheckCircle2 className="w-3 h-3" />
                               مُفعَّل
                             </span>
+                          ) : isInvited ? (
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-sky-500/15 text-sky-200 border border-sky-500/25">
+                              <MailCheck className="w-3 h-3" />
+                              تمت الدعوة
+                            </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-200 border border-amber-500/25">
                               <Clock className="w-3 h-3" />
                               بانتظار التفعيل
                             </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-white/55 text-xs">
+                          {isActive ? (
+                            <span className="inline-flex items-center gap-1 text-xs text-emerald-200">
+                              <CheckCircle2 className="w-3 h-3" />
+                              تم
+                            </span>
+                          ) : isInvited ? (
+                            <div className="flex flex-col">
+                              <span className="inline-flex items-center gap-1 text-xs text-sky-200">
+                                <MailCheck className="w-3 h-3" />
+                                تمت
+                              </span>
+                              {b.invited_at ? (
+                                <span className="text-white/35 text-[10px] mt-0.5">
+                                  {formatDateTime(b.invited_at)}
+                                </span>
+                              ) : null}
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => markInvitedMut.mutate(b.id)}
+                              disabled={
+                                markInvitedMut.isPending &&
+                                markInvitedMut.variables === b.id
+                              }
+                              className={`${ws.btnNeutral} px-3 py-1.5 text-xs justify-center disabled:opacity-50`}
+                            >
+                              {markInvitedMut.isPending &&
+                              markInvitedMut.variables === b.id ? (
+                                <div className="w-3 h-3 border-2 border-white/40 border-t-transparent rounded-full animate-spin" />
+                              ) : (
+                                <Send className="w-3 h-3" />
+                              )}
+                              <span>تمت الدعوة</span>
+                            </button>
                           )}
                         </td>
                         <td className="px-4 py-3 text-white/55 text-xs">

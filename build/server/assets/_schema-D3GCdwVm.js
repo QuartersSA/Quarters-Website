@@ -22,9 +22,18 @@ function ensureMarketingSchema() {
             activated_at TIMESTAMPTZ,
             activated_by_employee_id INTEGER,
             activated_by_employee_name TEXT,
+            invited_at TIMESTAMPTZ,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
           )
+        `;
+
+        // Additive column for the "تمت الدعوة" tracking state on tables
+        // that predate this column. State values now include 'invited'
+        // between 'pending' and 'active'.
+        await sql`
+          ALTER TABLE marketing_bloggers
+            ADD COLUMN IF NOT EXISTS invited_at TIMESTAMPTZ
         `;
         await sql`
           CREATE TABLE IF NOT EXISTS marketing_menu_items (
