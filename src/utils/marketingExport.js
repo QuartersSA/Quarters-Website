@@ -19,7 +19,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import JSZip from "jszip";
-import { toPng } from "html-to-image";
+import { toPng, getFontEmbedCSS } from "html-to-image";
 import { BloggerInvitationCard } from "@/components/Marketing/BloggerInvitationCard";
 import { exportToExcelHTML } from "@/utils/exportUtils";
 import { formatDateTime } from "@/utils/dateUtils";
@@ -73,8 +73,15 @@ function welcomeURLFor(blogger, baseURL) {
  * Mounts the BloggerInvitationCard into a detached, off-screen DOM
  * node, captures it as PNG via html-to-image, then unmounts. Returns
  * the PNG data URL.
+ *
+ * If `extraOpts.fontEmbedCSS` is provided we pass it through so the
+ * heavy font-embedding work done by html-to-image (fetching Cormorant
+ * Garamond + El Messiri + Playfair Display, base64-encoding each
+ * font face, etc.) is performed once at the start of a batch instead
+ * of per blogger. This is the single biggest contributor to the OOM
+ * we hit on 50+ blogger batches.
  */
-async function captureBloggerCard(blogger, settings, baseURL) {
+async function captureBloggerCard(blogger, settings, baseURL, extraOpts = {}) {
   if (typeof window === "undefined") {
     throw new Error("Image export must run in the browser");
   }
@@ -149,7 +156,7 @@ async function captureBloggerCard(blogger, settings, baseURL) {
     // option, which would replace the card's olive fill.
     const node = host.firstElementChild;
     if (!node) throw new Error("card did not mount");
-    return await toPng(node, PNG_OPTS);
+    return await toPng(node, { ...PNG_OPTS, ...extraOpts });
   } finally {
     root.unmount();
     host.remove();
@@ -190,10 +197,40 @@ export async function exportInvitationsZip(
   const seenNames = new Map();
   let captured = 0;
 
+  // Precompute the embedded font CSS once. html-to-image normally
+  // does this inside every toPng call: walk all stylesheets, fetch
+  // every @font-face src, base64 each font binary, build a giant CSS
+  // blob. Doing that 50 times destroys memory (Cormorant Garamond
+  // alone ships several weights, plus El Messiri + Playfair Display).
+  // getFontEmbedCSS returns the CSS string we can reuse for every
+  // capture in the batch.
+  let fontEmbedCSS = "";
+  try {
+    const probe = document.createElement("div");
+    probe.style.position = "fixed";
+    probe.style.left = "-10000px";
+    probe.style.top = "0";
+    probe.style.width = "10px";
+    probe.style.height = "10px";
+    document.body.appendChild(probe);
+    try {
+      fontEmbedCSS = (await getFontEmbedCSS(probe)) || "";
+    } finally {
+      probe.remove();
+    }
+  } catch (err) {
+    console.warn("getFontEmbedCSS failed, falling back to per-capture", err);
+    fontEmbedCSS = "";
+  }
+
   for (const b of bloggers) {
     let dataUrl = null;
     try {
-      dataUrl = await captureBloggerCard(b, settings, baseURL);
+      dataUrl = await captureBloggerCard(b, settings, baseURL, {
+        // Reuse the precomputed font CSS so html-to-image skips its
+        // own per-call font-embedding work.
+        fontEmbedCSS,
+      });
       // Convert straight to bytes and drop the dataURL so the long
       // base64 string isn't held alongside the binary copy in the zip.
       const bytes = dataUrlToBytes(dataUrl);
@@ -221,9 +258,10 @@ export async function exportInvitationsZip(
     // Yield to the browser between iterations. Without this the
     // sync-heavy capture loop never lets the GC run, and large
     // batches accumulate enough canvas / cloned-DOM garbage to OOM
-    // the tab. setTimeout(0) is the smallest yield that actually
-    // unblocks the event loop.
-    await new Promise((r) => setTimeout(r, 0));
+    // the tab. Longer pause every 5 captures lets the GC catch up
+    // on the cumulative slack from the previous batch.
+    const longer = captured > 0 && captured % 5 === 0;
+    await new Promise((r) => setTimeout(r, longer ? 80 : 0));
   }
 
   // STORE (no DEFLATE) keeps generateAsync from re-reading every PNG
