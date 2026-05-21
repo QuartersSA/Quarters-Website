@@ -173,8 +173,15 @@ export default function PublicWelcomePage() {
     );
   }
 
-  // Pending — show activation form
-  if (blogger && blogger.state === "pending" && !isPreview) {
+  // Pre-activation — show activation form. Covers both 'pending'
+  // (not yet handed out) and 'invited' (admin marked as invited but
+  // cashier hasn't activated yet). Menu only opens when state is
+  // genuinely 'active'.
+  if (
+    blogger &&
+    blogger.state !== "active" &&
+    !isPreview
+  ) {
     return (
       <FullscreenWrapper accent={accent} cream={cream}>
         <div className="max-w-md w-full mx-auto">
