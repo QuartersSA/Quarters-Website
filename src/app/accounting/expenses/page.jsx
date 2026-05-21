@@ -11,6 +11,7 @@ import {
   Info,
   Banknote,
   Anchor,
+  ListChecks,
 } from "lucide-react";
 import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
@@ -23,6 +24,10 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { ExpenseForm } from "@/components/Accounting/ExpenseForm";
 import { ExpenseTable } from "@/components/Accounting/ExpenseTable";
+import ExpensesCharts from "@/components/Accounting/ExpensesCharts";
+import FixedPanel from "@/components/Accounting/FixedPanel";
+import VariableGrid from "@/components/Accounting/VariableGrid";
+import CategoriesManager from "@/components/Accounting/CategoriesManager";
 import { FixedExpenseForm } from "@/components/Accounting/FixedExpenseForm";
 import { FixedExpensesList } from "@/components/Accounting/FixedExpensesList";
 import { QuickAddBar } from "@/components/Accounting/QuickAddBar";
@@ -291,7 +296,7 @@ export default function ExpensesPage() {
   const monthOptions = useMemo(() => buildRecentMonthOptions(30), []);
   const monthHint = month ? monthLabel(month) : "";
 
-  const [activeTab, setActiveTab] = useState("register");
+  const [activeTab, setActiveTab] = useState("fixed");
   const [editingExpense, setEditingExpense] = useState(null);
   const [editingFixed, setEditingFixed] = useState(null);
   const [quickAddOpen, setQuickAddOpen] = useState(false);
@@ -524,6 +529,18 @@ export default function ExpensesPage() {
   const isRegisterTab = activeTab === "register";
   const isReviewTab = activeTab === "review";
   const isFixedTab = activeTab === "fixed";
+  const isCategoriesTab = activeTab === "categories";
+
+  // Types filtered by scope. Fixed tab uses 'fixed' OR 'both';
+  // variable tab uses 'variable' OR 'both'. Legacy rows without a scope
+  // (column was added later) are treated as 'both' via the COALESCE on
+  // the API side.
+  const fixedTypes = (types || []).filter((t) =>
+    ["fixed", "both"].includes(t.scope || "both"),
+  );
+  const variableTypes = (types || []).filter((t) =>
+    ["variable", "both"].includes(t.scope || "both"),
+  );
 
   return (
     <div className="min-h-[100svh] pb-24 lg:pb-0" dir="rtl">
@@ -553,35 +570,6 @@ export default function ExpensesPage() {
           <div className={`${ws.segWrap} relative z-10`}>
             <button
               type="button"
-              onClick={() => setActiveTab("register")}
-              className={`${ws.segBtn} ${isRegisterTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
-            >
-              <FileText className="w-4 h-4" />
-              مصروف متغيّر
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("review")}
-              className={`${ws.segBtn} ${isReviewTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
-            >
-              <ClipboardCheck className="w-4 h-4" />
-              رفع المصروفات
-              {expenses.length > 0 && (
-                <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
-                  {expenses.length}
-                </span>
-              )}
-              {pendingFixed.length > 0 && (
-                <span
-                  className="bg-emerald-400/20 text-emerald-200 text-[10px] px-1.5 py-0.5 rounded-full font-bold"
-                  title="مصروفات ثابتة بانتظار التأكيد"
-                >
-                  +{pendingFixed.length}
-                </span>
-              )}
-            </button>
-            <button
-              type="button"
               onClick={() => setActiveTab("fixed")}
               className={`${ws.segBtn} ${isFixedTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
             >
@@ -593,44 +581,75 @@ export default function ExpensesPage() {
                 </span>
               )}
             </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("register")}
+              className={`${ws.segBtn} ${isRegisterTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
+            >
+              <FileText className="w-4 h-4" />
+              مصروف متغيّر
+              {variableTypes.length > 0 && (
+                <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                  {variableTypes.length}
+                </span>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("review")}
+              className={`${ws.segBtn} ${isReviewTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
+            >
+              <ClipboardCheck className="w-4 h-4" />
+              تقارير ومراجعة
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("categories")}
+              className={`${ws.segBtn} ${isCategoriesTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
+            >
+              <ListChecks className="w-4 h-4" />
+              البنود
+              {types.length > 0 && (
+                <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                  {types.length}
+                </span>
+              )}
+            </button>
           </div>
 
-          {/* ═══════ Register Tab ═══════ */}
+          {/* ═══════ Variable Expenses Tab ═══════ */}
           {isRegisterTab && (
             <>
-              {/* Form Card — always visible, no month dependency */}
-              <div className={`${ws.glassSoft} ${ws.card} p-5`}>
-                <div className="flex items-center gap-3 mb-5">
-                  <div className={ws.iconBox}>
-                    <FileText className="w-5 h-5 text-emerald-200" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-white tracking-tight">
-                      {editingExpense ? "تعديل المصروف" : "تسجيل مصروف جديد"}
-                    </div>
-                    <div className="text-xs text-white/50 mt-0.5">
-                      {editingExpense
-                        ? "عدّل بيانات المصروف ثم اضغط حفظ"
-                        : "اختر الشهر والنوع ثم أضف المصروف"}
-                    </div>
-                  </div>
+              <VariableGrid
+                types={variableTypes}
+                monthExpenses={expenses}
+                month={month}
+                onMutate={() => expensesQuery.refetch()}
+              />
+              {/* Legacy register form kept hidden under details to
+                  preserve access to the older "add arbitrary expense"
+                  workflow (e.g. one-off items without a category). */}
+              <details className={`${ws.glassSoft} ${ws.card} p-4`}>
+                <summary className="text-white/55 text-xs cursor-pointer select-none">
+                  إضافة مصروف خارج البنود (متقدم)
+                </summary>
+                <div className="mt-4">
+                  <ExpenseForm
+                    types={types}
+                    onSubmit={
+                      editingExpense ? handleUpdateExpense : handleCreateExpense
+                    }
+                    isSubmitting={
+                      editingExpense
+                        ? updateExpenseMutation.isPending
+                        : createExpenseMutation.isPending
+                    }
+                    onCreateType={handleCreateType}
+                    editingExpense={editingExpense}
+                    onCancelEdit={handleCancelEdit}
+                  />
                 </div>
-
-                <ExpenseForm
-                  types={types}
-                  onSubmit={
-                    editingExpense ? handleUpdateExpense : handleCreateExpense
-                  }
-                  isSubmitting={
-                    editingExpense
-                      ? updateExpenseMutation.isPending
-                      : createExpenseMutation.isPending
-                  }
-                  onCreateType={handleCreateType}
-                  editingExpense={editingExpense}
-                  onCancelEdit={handleCancelEdit}
-                />
-              </div>
+              </details>
 
               {/* Quick expenses list for current month */}
               {month && expenses.length > 0 && (
@@ -770,6 +789,9 @@ export default function ExpensesPage() {
                     <ExpensesStatsCards expenses={expenses} />
                   )}
 
+                  {/* Charts: 12-month trend + by-type pie/bar */}
+                  <ExpensesCharts month={month} />
+
                   {/* Review Table */}
                   <div className={`${ws.glassSoft} ${ws.card} p-5`}>
                     <div className="flex items-center gap-3 mb-5">
@@ -823,32 +845,20 @@ export default function ExpensesPage() {
 
           {/* ═══════ Fixed Expenses Tab ═══════ */}
           {isFixedTab && (
-            <>
-              <FixedExpenseForm
-                types={types}
-                onSubmit={handleSubmitFixed}
-                isSubmitting={
-                  editingFixed
-                    ? updateFixedMutation.isPending
-                    : createFixedMutation.isPending
-                }
-                editingFixed={editingFixed}
-                onCancelEdit={handleCancelEditFixed}
-              />
-
-              <FixedExpensesList
-                items={fixedExpenses}
-                isLoading={fixedExpensesQuery.isLoading}
-                error={
-                  fixedExpensesQuery.error
-                    ? String(fixedExpensesQuery.error.message)
-                    : null
-                }
-                onEdit={handleEditFixed}
-                onDelete={handleDeleteFixed}
-              />
-            </>
+            <FixedPanel
+              templates={fixedExpenses}
+              monthExpenses={expenses}
+              types={fixedTypes}
+              month={month}
+              onMutate={() => {
+                fixedExpensesQuery.refetch();
+                expensesQuery.refetch();
+              }}
+            />
           )}
+
+          {/* ═══════ Categories Tab ═══════ */}
+          {isCategoriesTab && <CategoriesManager />}
         </div>
       </main>
 
