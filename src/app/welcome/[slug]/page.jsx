@@ -352,6 +352,23 @@ export default function PublicWelcomePage() {
               </button>
             </form>
           </div>
+
+          {/* Menu preview shown under the activation form so the
+              blogger can browse the hospitality menu while waiting on
+              the cashier. The wording flags it as a preview — items
+              don't get redeemed until the PIN flips state to active. */}
+          {Object.keys(grouped).length > 0 ? (
+            <div
+              className="mt-8 p-6 rounded-2xl"
+              style={{
+                background: `${cream}08`,
+                border: `1px solid ${cream}1f`,
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              <MenuList grouped={grouped} cream={cream} title="معاينة قائمة الضيافة" preview />
+            </div>
+          ) : null}
         </div>
       </FullscreenWrapper>
     );
@@ -635,6 +652,143 @@ export default function PublicWelcomePage() {
         </div>
       </div>
     </FullscreenWrapper>
+  );
+}
+
+/**
+ * Renders the grouped hospitality menu. Shared between the active
+ * welcome screen and the pre-activation preview (where `preview=true`
+ * adds a subtle "still pending" notice).
+ */
+function MenuList({ grouped, cream, title, preview = false }) {
+  return (
+    <>
+      <div
+        style={{
+          fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
+          fontSize: 12,
+          fontWeight: 600,
+          letterSpacing: "0.5em",
+          color: cream,
+          opacity: 0.85,
+          textAlign: "center",
+          textTransform: "uppercase",
+          marginBottom: 6,
+        }}
+      >
+        {title || "قائمة ضيافتك"}
+      </div>
+      {preview ? (
+        <div
+          style={{
+            fontFamily: '"El Messiri", sans-serif',
+            fontSize: 12,
+            color: cream,
+            opacity: 0.55,
+            textAlign: "center",
+            marginBottom: 18,
+          }}
+        >
+          ستتاح الضيافة بعد تفعيل الكود من الكاشير.
+        </div>
+      ) : (
+        <div style={{ marginBottom: 14 }} />
+      )}
+      <div className="space-y-7">
+        {Object.entries(grouped).map(([category, list]) => (
+          <div key={category}>
+            <h3
+              style={{
+                fontFamily: '"Cormorant Garamond", serif',
+                fontSize: 13,
+                fontWeight: 600,
+                letterSpacing: "0.32em",
+                color: cream,
+                opacity: 0.85,
+                marginBottom: 12,
+                textAlign: "center",
+                textTransform: "uppercase",
+              }}
+            >
+              {category}
+            </h3>
+            <div className="space-y-2">
+              {list.map((it) => (
+                <div
+                  key={it.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "start",
+                    justifyContent: "space-between",
+                    gap: 12,
+                    padding: "14px 16px",
+                    borderRadius: 14,
+                    background: `${cream}08`,
+                    borderBottom: `1px solid ${cream}1a`,
+                    opacity: preview ? 0.85 : 1,
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontFamily: '"El Messiri", sans-serif',
+                        fontSize: 16,
+                        fontWeight: 700,
+                        color: cream,
+                      }}
+                    >
+                      {it.name_ar}
+                    </div>
+                    {it.name_en ? (
+                      <div
+                        style={{
+                          fontFamily: '"Cormorant Garamond", serif',
+                          fontSize: 12,
+                          color: cream,
+                          opacity: 0.55,
+                          letterSpacing: "0.06em",
+                          marginTop: 2,
+                        }}
+                      >
+                        {it.name_en}
+                      </div>
+                    ) : null}
+                    {it.description ? (
+                      <div
+                        style={{
+                          fontFamily: '"El Messiri", sans-serif',
+                          fontSize: 12,
+                          color: cream,
+                          opacity: 0.6,
+                          marginTop: 6,
+                          lineHeight: 1.7,
+                        }}
+                      >
+                        {it.description}
+                      </div>
+                    ) : null}
+                  </div>
+                  {it.price !== null && it.price !== undefined ? (
+                    <div
+                      style={{
+                        fontFamily: '"Cormorant Garamond", serif',
+                        fontSize: 16,
+                        fontWeight: 700,
+                        color: cream,
+                        whiteSpace: "nowrap",
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      {Number(it.price).toFixed(2)} ر.س
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 
