@@ -538,101 +538,7 @@ export default function PublicWelcomePage() {
               المنيو غير متاح بعد. تواصل مع الكاشير.
             </div>
           ) : (
-            <div className="space-y-7">
-              {Object.entries(grouped).map(([category, list]) => (
-                <div key={category}>
-                  <h3
-                    style={{
-                      fontFamily: '"Cormorant Garamond", serif',
-                      fontSize: 13,
-                      fontWeight: 600,
-                      letterSpacing: "0.32em",
-                      color: cream,
-                      opacity: 0.85,
-                      marginBottom: 12,
-                      textAlign: "center",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {category}
-                  </h3>
-                  <div className="space-y-2">
-                    {list.map((it) => (
-                      <div
-                        key={it.id}
-                        style={{
-                          display: "flex",
-                          alignItems: "start",
-                          justifyContent: "space-between",
-                          gap: 12,
-                          padding: "14px 16px",
-                          borderRadius: 14,
-                          background: `${cream}08`,
-                          borderBottom: `1px solid ${cream}1a`,
-                        }}
-                      >
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div
-                            style={{
-                              fontFamily: '"El Messiri", sans-serif',
-                              fontSize: 16,
-                              fontWeight: 700,
-                              color: cream,
-                            }}
-                          >
-                            {it.name_ar}
-                          </div>
-                          {it.name_en ? (
-                            <div
-                              style={{
-                                fontFamily:
-                                  '"Cormorant Garamond", serif',
-                                fontSize: 12,
-                                color: cream,
-                                opacity: 0.55,
-                                letterSpacing: "0.06em",
-                                marginTop: 2,
-                              }}
-                            >
-                              {it.name_en}
-                            </div>
-                          ) : null}
-                          {it.description ? (
-                            <div
-                              style={{
-                                fontFamily: '"El Messiri", sans-serif',
-                                fontSize: 12,
-                                color: cream,
-                                opacity: 0.6,
-                                marginTop: 6,
-                                lineHeight: 1.7,
-                              }}
-                            >
-                              {it.description}
-                            </div>
-                          ) : null}
-                        </div>
-                        {it.price !== null && it.price !== undefined ? (
-                          <div
-                            style={{
-                              fontFamily:
-                                '"Cormorant Garamond", serif',
-                              fontSize: 16,
-                              fontWeight: 700,
-                              color: cream,
-                              whiteSpace: "nowrap",
-                              letterSpacing: "0.04em",
-                            }}
-                          >
-                            {Number(it.price).toFixed(2)} ر.س
-                          </div>
-                        ) : null}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <MenuList grouped={grouped} cream={cream} title="" />
           )}
         </div>
 
@@ -663,21 +569,23 @@ export default function PublicWelcomePage() {
 function MenuList({ grouped, cream, title, preview = false }) {
   return (
     <>
-      <div
-        style={{
-          fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
-          fontSize: 12,
-          fontWeight: 600,
-          letterSpacing: "0.5em",
-          color: cream,
-          opacity: 0.85,
-          textAlign: "center",
-          textTransform: "uppercase",
-          marginBottom: 6,
-        }}
-      >
-        {title || "قائمة ضيافتك"}
-      </div>
+      {title ? (
+        <div
+          style={{
+            fontFamily: '"Cormorant Garamond", "Playfair Display", serif',
+            fontSize: 12,
+            fontWeight: 600,
+            letterSpacing: "0.5em",
+            color: cream,
+            opacity: 0.85,
+            textAlign: "center",
+            textTransform: "uppercase",
+            marginBottom: 6,
+          }}
+        >
+          {title}
+        </div>
+      ) : null}
       {preview ? (
         <div
           style={{
