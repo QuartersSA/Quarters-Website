@@ -23,6 +23,7 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { ExpenseForm } from "@/components/Accounting/ExpenseForm";
 import { ExpenseTable } from "@/components/Accounting/ExpenseTable";
+import ExpensesCharts from "@/components/Accounting/ExpensesCharts";
 import { FixedExpenseForm } from "@/components/Accounting/FixedExpenseForm";
 import { FixedExpensesList } from "@/components/Accounting/FixedExpensesList";
 import { QuickAddBar } from "@/components/Accounting/QuickAddBar";
@@ -769,6 +770,9 @@ export default function ExpensesPage() {
                   {expenses.length > 0 && (
                     <ExpensesStatsCards expenses={expenses} />
                   )}
+
+                  {/* Charts: 12-month trend + by-type pie/bar */}
+                  <ExpensesCharts month={month} />
 
                   {/* Review Table */}
                   <div className={`${ws.glassSoft} ${ws.card} p-5`}>
