@@ -331,20 +331,27 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
               </button>
             )}
 
-            {!savedConfirmed && (
-              <button
-                type="button"
-                onClick={() => {
-                  if (window.confirm("هل تريد حذف هذا المصروف؟")) {
-                    onDelete(expense.id);
-                  }
-                }}
-                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-300 hover:bg-red-500/20"
-                title="حذف"
-              >
-                <Trash2 className="w-3 h-3" />
-              </button>
-            )}
+            {/* Delete is allowed even on confirmed rows — the backend
+                doesn't gate on confirmation, and hiding the button was
+                blocking legitimate corrections (e.g. an admin tagged
+                the wrong category and confirmed before noticing). The
+                prompt copy escalates when the row is already confirmed
+                so the user has to think twice. */}
+            <button
+              type="button"
+              onClick={() => {
+                const msg = savedConfirmed
+                  ? "هذا المصروف مؤكد — هل أنت متأكد من حذفه؟"
+                  : "هل تريد حذف هذا المصروف؟";
+                if (window.confirm(msg)) {
+                  onDelete(expense.id);
+                }
+              }}
+              className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-300 hover:bg-red-500/20"
+              title={savedConfirmed ? "حذف (مؤكد)" : "حذف"}
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
 
             {dirty && (
               <button

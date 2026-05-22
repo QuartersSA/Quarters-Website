@@ -30,7 +30,6 @@ import VariableGrid from "@/components/Accounting/VariableGrid";
 import CategoriesManager from "@/components/Accounting/CategoriesManager";
 import { FixedExpenseForm } from "@/components/Accounting/FixedExpenseForm";
 import { FixedExpensesList } from "@/components/Accounting/FixedExpensesList";
-import { QuickAddBar } from "@/components/Accounting/QuickAddBar";
 import { QuickAddSheet } from "@/components/Accounting/QuickAddSheet";
 import { getMissingPresetCategories } from "@/utils/cafeExpenseCategories";
 import { toast } from "sonner";
@@ -552,17 +551,23 @@ export default function ExpensesPage() {
         <div className="mx-auto w-full space-y-5">
           <ExpensesDesktopHeader />
 
-          <QuickAddBar
-            month={month}
-            onMonthChange={setMonth}
-            monthOptions={monthOptions}
-            totalAmount={monthlyTotalAmount}
-            totalCount={expenses.length}
-            onOpenAdd={() => setQuickAddOpen(true)}
-            onSeedCategories={handleSeedCafeCategories}
-            showSeedButton={missingPresets.length > 0}
-            isSeeding={isSeedingCategories}
-          />
+          {/* Month picker — minimal, replaces the old QuickAddBar
+              top strip (which mixed month picker + quick-add CTA +
+              monthly total and made the header feel noisy). */}
+          <div className={`${ws.glassSoft} ${ws.card} p-4`}>
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="text-white/55 text-xs">الشهر</div>
+              <div className="w-44">
+                <GlassSelect
+                  value={month}
+                  onChange={setMonth}
+                  options={monthOptions}
+                  placeholder="اختر الشهر"
+                  buttonClassName="text-sm py-2 px-3"
+                />
+              </div>
+            </div>
+          </div>
 
           <ExpensesInfoCard />
 
