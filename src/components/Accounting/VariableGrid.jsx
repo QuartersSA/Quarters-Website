@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Receipt, CheckCircle2, Trash2, Plus, X } from "lucide-react";
-import GlassSelect from "@/components/Workspace/GlassSelect";
+import { Receipt, CheckCircle2, Trash2 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
@@ -88,32 +87,6 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     onError: (e) => toast.error(e.message || "فشل الحفظ"),
   });
 
-  // Inline create modal state.
-  const [showAddCategory, setShowAddCategory] = useState(false);
-
-  const createCategoryMut = useMutation({
-    mutationFn: async (body) => {
-      const r = await adminFetch("/api/accounting/expense-types", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      queryClient.invalidateQueries({ queryKey: ["accounting_expense_types"] });
-      queryClient.invalidateQueries({
-        queryKey: ["accounting_expense_types_full"],
-      });
-      toast.success("تم إضافة البند");
-      setShowAddCategory(false);
-    },
-    onError: (e) => toast.error(e.message || "فشل الإضافة"),
-  });
-
   // Soft-deactivate the category. Hard DELETE refuses when any
   // accounting_expenses row references the type (preserves historical
   // data), so we instead flip is_active=false — the category vanishes
@@ -180,30 +153,12 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
 
   if (!types || types.length === 0) {
     return (
-      <>
-        <div className={`${ws.glass} ${ws.card} p-5`}>
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div className="text-white/55 text-sm">
-              لا توجد بنود متغيرة بعد. أضف بنداً للبدء.
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowAddCategory(true)}
-              className={`${ws.btnPrimary} px-3 py-2 text-xs`}
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>إضافة بند</span>
-            </button>
-          </div>
+      <div className={`${ws.glass} ${ws.card} p-5`}>
+        <div className="text-white/55 text-sm text-center py-6">
+          لا توجد بنود متغيرة بعد. أضف بنداً من تبويب «البنود» وحدد نطاقه
+          «متغيّر» أو «الاثنين».
         </div>
-        {showAddCategory && (
-          <CategoryQuickAdd
-            onClose={() => setShowAddCategory(false)}
-            onSubmit={(payload) => createCategoryMut.mutate(payload)}
-            isPending={createCategoryMut.isPending}
-          />
-        )}
-      </>
+      </div>
     );
   }
 
@@ -242,14 +197,6 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
               {formatMoney(totals.pending)}
             </span>
           </div>
-          <button
-            type="button"
-            onClick={() => setShowAddCategory(true)}
-            className={`${ws.btnPrimary} px-3 py-2 text-xs`}
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>إضافة بند</span>
-          </button>
         </div>
       </div>
 
@@ -363,109 +310,6 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
           </tbody>
         </table>
       </div>
-
-      {showAddCategory && (
-        <CategoryQuickAdd
-          onClose={() => setShowAddCategory(false)}
-          onSubmit={(payload) => createCategoryMut.mutate(payload)}
-          isPending={createCategoryMut.isPending}
-        />
-      )}
-    </div>
-  );
-}
-
-/* ──────────────────────────────────────────────────────────────── */
-
-const SCOPE_OPTIONS = [
-  { value: "variable", label: "متغيّر فقط" },
-  { value: "both", label: "الاثنين (ثابت + متغيّر)" },
-  { value: "fixed", label: "ثابت فقط" },
-];
-
-/**
- * Minimal in-place add-category modal scoped to the variable grid.
- * Defaults to scope='variable' since the admin is adding the row
- * from the variable surface.
- */
-function CategoryQuickAdd({ onClose, onSubmit, isPending }) {
-  const [name, setName] = useState("");
-  const [scope, setScope] = useState("variable");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    onSubmit({ name: trimmed, scope });
-  };
-
-  return (
-    <div
-      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-      dir="rtl"
-      onClick={onClose}
-    >
-      <form
-        onSubmit={handleSubmit}
-        onClick={(e) => e.stopPropagation()}
-        className={`w-full max-w-sm ${ws.glass} ${ws.card} p-5 space-y-4`}
-      >
-        <div className="flex items-center justify-between">
-          <h3 className="text-white font-bold tracking-tight">إضافة بند</h3>
-          <button
-            type="button"
-            onClick={onClose}
-            className={ws.iconButton}
-            aria-label="إغلاق"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
-            اسم البند *
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className={`${ws.input} px-3 py-2.5`}
-            required
-            autoFocus
-            placeholder="مثال: قهوة"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
-            النطاق
-          </label>
-          <GlassSelect
-            value={scope}
-            onChange={setScope}
-            options={SCOPE_OPTIONS}
-            buttonClassName="px-3 py-2.5"
-          />
-        </div>
-
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            disabled={isPending}
-            className={`${ws.btnPrimary} flex-1 px-4 py-2.5 justify-center disabled:opacity-50`}
-          >
-            {isPending ? "جاري الحفظ…" : "حفظ"}
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className={`${ws.btnNeutral} px-4 py-2.5`}
-          >
-            إلغاء
-          </button>
-        </div>
-      </form>
     </div>
   );
 }
