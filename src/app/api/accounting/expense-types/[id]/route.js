@@ -43,6 +43,11 @@ export async function PUT(request, { params }) {
       values.push(body.scope);
       idx += 1;
     }
+    if (body.is_active !== undefined) {
+      sets.push(`is_active = $${idx}`);
+      values.push(!!body.is_active);
+      idx += 1;
+    }
 
     if (sets.length === 0) {
       return Response.json({ error: "لا توجد حقول للتعديل" }, { status: 400 });
@@ -53,7 +58,7 @@ export async function PUT(request, { params }) {
       UPDATE accounting_expense_types
          SET ${sets.join(", ")}
        WHERE id = $${idx}
-       RETURNING id, name, scope
+       RETURNING id, name, scope, is_active
     `;
     const [updated] = await sql(query, values);
     if (!updated) {

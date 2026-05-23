@@ -204,6 +204,9 @@ export default function FixedPanel({
                     النوع
                   </th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                    التكرار
+                  </th>
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
                     المبلغ الافتراضي
                   </th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
@@ -231,6 +234,14 @@ export default function FixedPanel({
                       </td>
                       <td className="px-3 py-2 text-white/70 text-xs">
                         {t.expense_type_name}
+                      </td>
+                      <td className="px-3 py-2 text-xs">
+                        <FrequencyBadge frequency={t.frequency || "monthly"} />
+                        {t.start_month ? (
+                          <div className="text-white/40 text-[10px] mt-0.5" dir="ltr">
+                            من {String(t.start_month).slice(0, 7)}
+                          </div>
+                        ) : null}
                       </td>
                       <td className="px-3 py-2 text-white/70 text-sm" dir="ltr">
                         {formatMoney(t.default_amount)}
@@ -349,6 +360,36 @@ export default function FixedPanel({
 
 /* ──────────────────────────────────────────────────────────────── */
 
+const FREQUENCY_OPTIONS = [
+  { value: "monthly", label: "شهري" },
+  { value: "semi_annual", label: "نصف سنوي" },
+  { value: "annual", label: "سنوي" },
+];
+
+const FREQ_LABEL = {
+  monthly: "شهري",
+  semi_annual: "نصف سنوي",
+  annual: "سنوي",
+};
+
+const FREQ_BADGE = {
+  monthly: "bg-emerald-500/15 text-emerald-200 border-emerald-500/25",
+  semi_annual: "bg-amber-500/15 text-amber-200 border-amber-500/25",
+  annual: "bg-sky-500/15 text-sky-200 border-sky-500/25",
+};
+
+function FrequencyBadge({ frequency }) {
+  return (
+    <span
+      className={`inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full border ${
+        FREQ_BADGE[frequency] || FREQ_BADGE.monthly
+      }`}
+    >
+      {FREQ_LABEL[frequency] || "شهري"}
+    </span>
+  );
+}
+
 function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
   const [form, setForm] = useState(() => ({
     expense_name: target?.expense_name || "",
@@ -356,6 +397,10 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
       ? String(target.expense_type_id)
       : "",
     default_amount: target?.default_amount ?? "",
+    frequency: target?.frequency || "monthly",
+    start_month: target?.start_month
+      ? String(target.start_month).slice(0, 7) // 'YYYY-MM-01' → 'YYYY-MM'
+      : "",
   }));
 
   const typeOptions = useMemo(() => {
@@ -376,6 +421,8 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
       expense_name: form.expense_name.trim(),
       expense_type_id: Number(form.expense_type_id),
       default_amount: amt,
+      frequency: form.frequency,
+      start_month: form.start_month || null,
     });
   };
 
@@ -449,6 +496,39 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             dir="ltr"
           />
         </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-semibold text-white/55 mb-2">
+              التكرار *
+            </label>
+            <GlassSelect
+              value={form.frequency}
+              onChange={(v) => setForm((f) => ({ ...f, frequency: v }))}
+              options={FREQUENCY_OPTIONS}
+              buttonClassName="px-3 py-2.5"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-white/55 mb-2">
+              شهر البدء
+            </label>
+            <input
+              type="month"
+              value={form.start_month}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, start_month: e.target.value }))
+              }
+              className={`${ws.input} px-3 py-2.5`}
+              dir="ltr"
+              placeholder="YYYY-MM"
+            />
+          </div>
+        </div>
+        <p className="text-[10px] text-white/45 leading-relaxed">
+          «شهري» يظهر كل شهر بدءاً من «شهر البدء». «نصف سنوي» كل 6 أشهر،
+          «سنوي» كل 12 شهراً. اترك شهر البدء فارغاً لـ«من البداية دائماً».
+        </p>
 
         <div className="flex gap-2">
           <button
