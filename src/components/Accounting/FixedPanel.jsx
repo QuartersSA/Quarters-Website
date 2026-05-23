@@ -237,11 +237,14 @@ export default function FixedPanel({
                       </td>
                       <td className="px-3 py-2 text-xs">
                         <FrequencyBadge frequency={t.frequency || "monthly"} />
-                        {t.start_month ? (
-                          <div className="text-white/40 text-[10px] mt-0.5" dir="ltr">
-                            من {String(t.start_month).slice(0, 7)}
-                          </div>
-                        ) : null}
+                        {(() => {
+                          const m = toMonthString(t.start_month);
+                          return m ? (
+                            <div className="text-white/40 text-[10px] mt-0.5" dir="ltr">
+                              من {m}
+                            </div>
+                          ) : null;
+                        })()}
                       </td>
                       <td className="px-3 py-2 text-white/70 text-sm" dir="ltr">
                         {formatMoney(t.default_amount)}
@@ -378,6 +381,23 @@ const FREQ_BADGE = {
   annual: "bg-sky-500/15 text-sky-200 border-sky-500/25",
 };
 
+/**
+ * Normalize a DATE/TIMESTAMP value from the API into "YYYY-MM".
+ *   - already "YYYY-MM..."     → first 7 chars
+ *   - JS Date / ISO timestamp  → format from UTC components
+ *   - falsy / unparseable      → ""
+ */
+function toMonthString(value) {
+  if (!value) return "";
+  const s = String(value);
+  if (/^\d{4}-\d{2}/.test(s)) return s.slice(0, 7);
+  const d = new Date(s);
+  if (Number.isNaN(d.getTime())) return "";
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  return `${y}-${m}`;
+}
+
 function FrequencyBadge({ frequency }) {
   return (
     <span
@@ -398,9 +418,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
       : "",
     default_amount: target?.default_amount ?? "",
     frequency: target?.frequency || "monthly",
-    start_month: target?.start_month
-      ? String(target.start_month).slice(0, 7) // 'YYYY-MM-01' → 'YYYY-MM'
-      : "",
+    start_month: toMonthString(target?.start_month),
   }));
 
   const typeOptions = useMemo(() => {

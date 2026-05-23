@@ -87,16 +87,21 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     onError: (e) => toast.error(e.message || "فشل الحفظ"),
   });
 
-  // Delete the category itself (drops it from every month + both
-  // panels). Backend refuses if any accounting_expenses still
-  // reference the type, so the toast surfaces that case clearly.
-  const deleteCategoryMut = useMutation({
+  // Soft-deactivate the category. Hard DELETE refuses when any
+  // accounting_expenses row references the type (preserves historical
+  // data), so we instead flip is_active=false — the category vanishes
+  // from the fixed + variable panels but old expenses keep pointing
+  // at it. The admin can hard-delete from the البنود tab if there's
+  // no historical data left.
+  const deactivateCategoryMut = useMutation({
     mutationFn: async (id) => {
       const r = await adminFetch(`/api/accounting/expense-types/${id}`, {
-        method: "DELETE",
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_active: false }),
       });
       const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
+      if (!r.ok) throw new Error(d?.error || "تعذّر إيقاف البند");
       return d;
     },
     onSuccess: () => {
@@ -105,9 +110,9 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
       queryClient.invalidateQueries({
         queryKey: ["accounting_expense_types_full"],
       });
-      toast.success("تم حذف البند");
+      toast.success("تم إيقاف البند");
     },
-    onError: (e) => toast.error(e.message || "فشل الحذف"),
+    onError: (e) => toast.error(e.message || "تعذّر إيقاف البند"),
   });
 
   const handleBlur = (t) => {
@@ -285,15 +290,15 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
                         onClick={() => {
                           if (
                             window.confirm(
-                              `حذف البند «${t.name}»؟ سيتم إزالته من المصروفات الثابتة والمتغيرة معاً.`,
+                              `إيقاف البند «${t.name}»؟ سيختفي من المصروفات الثابتة والمتغيرة، والمصاريف السابقة المسجلة عليه تبقى كما هي.`,
                             )
                           ) {
-                            deleteCategoryMut.mutate(t.id);
+                            deactivateCategoryMut.mutate(t.id);
                           }
                         }}
-                        disabled={deleteCategoryMut.isPending}
+                        disabled={deactivateCategoryMut.isPending}
                         className={`${ws.btnDanger} px-2 py-1 text-xs disabled:opacity-50`}
-                        title="حذف البند"
+                        title="إيقاف البند"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
