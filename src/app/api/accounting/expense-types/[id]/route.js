@@ -80,9 +80,17 @@ export async function PUT(request, { params }) {
   }
 }
 
-// DELETE /api/accounting/expense-types/:id
-// Refuses delete if any accounting_expenses or accounting_fixed_expenses
-// still point at this type — admin must reassign / delete those first.
+// DELETE /api/accounting/expense-types/:id[?force=1]
+//
+// Default (no force): refuses with 409 if any accounting_expenses or
+// accounting_fixed_expenses row still points at this type — the
+// response includes the offending counts so the UI can ask the admin
+// to confirm a cascade delete.
+//
+// ?force=1: cascade. Drops every referencing accounting_expenses +
+// accounting_fixed_expenses row first, then the type itself. Wrapped
+// in sql.transaction so the partial state can't survive a mid-op
+// error.
 export async function DELETE(request, { params }) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -99,29 +107,41 @@ export async function DELETE(request, { params }) {
       return Response.json({ error: "Invalid ID" }, { status: 400 });
     }
 
-    const [usedInExpenses] = await sql`
-      SELECT 1 FROM accounting_expenses WHERE expense_type_id = ${id} LIMIT 1
-    `;
-    const [usedInFixed] = await sql`
-      SELECT 1 FROM accounting_fixed_expenses WHERE expense_type_id = ${id} LIMIT 1
-    `;
-    if (usedInExpenses || usedInFixed) {
-      return Response.json(
-        {
-          error:
-            "لا يمكن حذف هذا النوع لأنه مستخدم في مصروفات. احذف أو انقل المصروفات أولاً.",
-        },
-        { status: 409 },
-      );
+    const url = new URL(request.url);
+    const force = url.searchParams.get("force") === "1";
+
+    if (!force) {
+      const [{ expense_refs, fixed_refs }] = await sql`
+        SELECT
+          (SELECT COUNT(*)::int FROM accounting_expenses WHERE expense_type_id = ${id}) AS expense_refs,
+          (SELECT COUNT(*)::int FROM accounting_fixed_expenses WHERE expense_type_id = ${id}) AS fixed_refs
+      `;
+      if (expense_refs > 0 || fixed_refs > 0) {
+        return Response.json(
+          {
+            error:
+              "لا يمكن حذف هذا البند لأنه مستخدم في مصروفات. أعد المحاولة مع التأكيد للحذف النهائي مع جميع المصاريف المرتبطة.",
+            expense_refs,
+            fixed_refs,
+          },
+          { status: 409 },
+        );
+      }
     }
 
-    const [deleted] = await sql`
-      DELETE FROM accounting_expense_types WHERE id = ${id} RETURNING id
-    `;
-    if (!deleted) {
+    // sql.transaction so we never leave the type behind with its
+    // referencing rows already gone (or vice versa).
+    const stmts = [
+      sql`DELETE FROM accounting_expenses WHERE expense_type_id = ${id}`,
+      sql`DELETE FROM accounting_fixed_expenses WHERE expense_type_id = ${id}`,
+      sql`DELETE FROM accounting_expense_types WHERE id = ${id} RETURNING id`,
+    ];
+    const results = await sql.transaction(stmts);
+    const deletedRows = results[results.length - 1] || [];
+    if (deletedRows.length === 0) {
       return Response.json({ error: "النوع غير موجود" }, { status: 404 });
     }
-    return Response.json({ ok: true });
+    return Response.json({ ok: true, force });
   } catch (error) {
     console.error("expense-types DELETE error", error);
     return Response.json(

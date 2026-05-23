@@ -91,20 +91,53 @@ export default function CategoriesManager() {
     onError: (e) => toast.error(e.message || "فشل التعديل"),
   });
 
+  // Two-stage delete. The first call probes for references; if the
+  // API returns 409 with counts we surface a "نهائي مع المصاريف?"
+  // confirm and retry with ?force=1 to cascade-drop the linked
+  // accounting_expenses + accounting_fixed_expenses rows.
   const deleteMut = useMutation({
-    mutationFn: async (id) => {
-      const r = await adminFetch(`/api/accounting/expense-types/${id}`, {
-        method: "DELETE",
-      });
+    mutationFn: async ({ id, force = false }) => {
+      const url = force
+        ? `/api/accounting/expense-types/${id}?force=1`
+        : `/api/accounting/expense-types/${id}`;
+      const r = await adminFetch(url, { method: "DELETE" });
       const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
+      if (!r.ok) {
+        const err = new Error(d?.error || "فشل الحذف");
+        err.status = r.status;
+        err.expense_refs = d?.expense_refs;
+        err.fixed_refs = d?.fixed_refs;
+        err.id = id;
+        throw err;
+      }
       return d;
     },
     onSuccess: () => {
       invalidate();
+      // The mutation also invalidates expenses + fixed-expenses since
+      // a force delete drops rows there too.
+      queryClient.invalidateQueries({ queryKey: ["accounting_expenses"] });
+      queryClient.invalidateQueries({
+        queryKey: ["accounting_fixed_expenses"],
+      });
       toast.success("تم الحذف");
     },
-    onError: (e) => toast.error(e.message || "فشل الحذف"),
+    onError: (e) => {
+      if (
+        e?.status === 409 &&
+        ((e?.expense_refs ?? 0) > 0 || (e?.fixed_refs ?? 0) > 0)
+      ) {
+        const refs = [];
+        if (e.expense_refs > 0) refs.push(`${e.expense_refs} مصروف مسجّل`);
+        if (e.fixed_refs > 0) refs.push(`${e.fixed_refs} قالب ثابت`);
+        const msg = `هذا البند مستخدم في ${refs.join(" و ")}. هل تريد حذفه نهائياً مع جميع المصاريف المرتبطة به؟`;
+        if (window.confirm(msg)) {
+          deleteMut.mutate({ id: e.id, force: true });
+          return;
+        }
+      }
+      toast.error(e.message || "فشل الحذف");
+    },
   });
 
   const [showForm, setShowForm] = useState(false);
@@ -225,7 +258,7 @@ export default function CategoriesManager() {
                             type="button"
                             onClick={() => {
                               if (window.confirm(`حذف البند «${t.name}»؟`)) {
-                                deleteMut.mutate(t.id);
+                                deleteMut.mutate({ id: t.id, force: false });
                               }
                             }}
                             className={`${ws.btnDanger} px-2 py-1 text-xs`}
