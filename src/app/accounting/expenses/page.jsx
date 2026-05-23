@@ -11,6 +11,7 @@ import {
   Info,
   Banknote,
   Anchor,
+  ListChecks,
 } from "lucide-react";
 import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
@@ -26,6 +27,7 @@ import { ExpenseTable } from "@/components/Accounting/ExpenseTable";
 import ExpensesCharts from "@/components/Accounting/ExpensesCharts";
 import FixedPanel from "@/components/Accounting/FixedPanel";
 import VariableGrid from "@/components/Accounting/VariableGrid";
+import CategoriesManager from "@/components/Accounting/CategoriesManager";
 import { FixedExpenseForm } from "@/components/Accounting/FixedExpenseForm";
 import { FixedExpensesList } from "@/components/Accounting/FixedExpensesList";
 import { QuickAddSheet } from "@/components/Accounting/QuickAddSheet";
@@ -526,6 +528,7 @@ export default function ExpensesPage() {
   const isRegisterTab = activeTab === "register";
   const isReviewTab = activeTab === "review";
   const isFixedTab = activeTab === "fixed";
+  const isCategoriesTab = activeTab === "categories";
 
   // Types filtered by scope. Fixed tab uses 'fixed' OR 'both';
   // variable tab uses 'variable' OR 'both'. Legacy rows without a scope
@@ -603,6 +606,19 @@ export default function ExpensesPage() {
             >
               <ClipboardCheck className="w-4 h-4" />
               تقارير ومراجعة
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("categories")}
+              className={`${ws.segBtn} ${isCategoriesTab ? ws.segActive : ws.segInactive} flex items-center gap-2`}
+            >
+              <ListChecks className="w-4 h-4" />
+              البنود
+              {types.length > 0 && (
+                <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                  {types.length}
+                </span>
+              )}
             </button>
           </div>
 
@@ -845,6 +861,9 @@ export default function ExpensesPage() {
               }}
             />
           )}
+
+          {/* ═══════ Categories Tab ═══════ */}
+          {isCategoriesTab && <CategoriesManager />}
 
         </div>
       </main>
