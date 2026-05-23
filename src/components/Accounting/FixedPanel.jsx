@@ -14,7 +14,11 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
-import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
+import {
+  formatMoney,
+  monthLabel,
+  buildRecentMonthOptions,
+} from "@/utils/payrollFormatters";
 import { toast } from "sonner";
 
 /**
@@ -429,6 +433,14 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
     return opts;
   }, [types]);
 
+  // Same month dropdown shape used everywhere else on the accounting
+  // surface — 30 recent + upcoming months, formatted as "مايو 2026".
+  // Leading empty option = "من البداية دائماً" (NULL start_month).
+  const startMonthOptions = useMemo(() => {
+    const base = buildRecentMonthOptions(30);
+    return [{ value: "", label: "من البداية دائماً" }, ...base];
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.expense_name.trim()) return;
@@ -535,15 +547,12 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             <label className="block text-xs font-semibold text-white/55 mb-2">
               شهر البدء
             </label>
-            <input
-              type="month"
+            <GlassSelect
               value={form.start_month}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, start_month: e.target.value }))
-              }
-              className={`${ws.input} px-3 py-2.5`}
-              dir="ltr"
-              placeholder="YYYY-MM"
+              onChange={(v) => setForm((f) => ({ ...f, start_month: v }))}
+              options={startMonthOptions}
+              buttonClassName="px-3 py-2.5"
+              placeholder="من البداية دائماً"
             />
           </div>
         </div>
