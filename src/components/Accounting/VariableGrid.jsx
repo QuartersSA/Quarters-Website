@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Receipt, CheckCircle2 } from "lucide-react";
+import { Receipt, CheckCircle2, Trash2 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
@@ -85,6 +85,29 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
       queryClient.invalidateQueries({ queryKey: ["accounting_expenses"] });
     },
     onError: (e) => toast.error(e.message || "فشل الحفظ"),
+  });
+
+  // Delete the category itself (drops it from every month + both
+  // panels). Backend refuses if any accounting_expenses still
+  // reference the type, so the toast surfaces that case clearly.
+  const deleteCategoryMut = useMutation({
+    mutationFn: async (id) => {
+      const r = await adminFetch(`/api/accounting/expense-types/${id}`, {
+        method: "DELETE",
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      queryClient.invalidateQueries({ queryKey: ["accounting_expense_types"] });
+      queryClient.invalidateQueries({
+        queryKey: ["accounting_expense_types_full"],
+      });
+      toast.success("تم حذف البند");
+    },
+    onError: (e) => toast.error(e.message || "فشل الحذف"),
   });
 
   const handleBlur = (t) => {
@@ -245,19 +268,36 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
                     )}
                   </td>
                   <td className="px-3 py-2 text-center">
-                    {confirmed ? (
-                      <span className="text-white/35 text-xs">—</span>
-                    ) : (
+                    <div className="inline-flex items-center gap-1">
+                      {!confirmed && (
+                        <button
+                          type="button"
+                          onClick={() => handleMarkPaid(t)}
+                          disabled={saveMut.isPending || isLegacy}
+                          className={`${ws.btnPrimary} px-2 py-1 text-xs disabled:opacity-50`}
+                        >
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>تأكيد</span>
+                        </button>
+                      )}
                       <button
                         type="button"
-                        onClick={() => handleMarkPaid(t)}
-                        disabled={saveMut.isPending || isLegacy}
-                        className={`${ws.btnPrimary} px-2 py-1 text-xs disabled:opacity-50`}
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              `حذف البند «${t.name}»؟ سيتم إزالته من المصروفات الثابتة والمتغيرة معاً.`,
+                            )
+                          ) {
+                            deleteCategoryMut.mutate(t.id);
+                          }
+                        }}
+                        disabled={deleteCategoryMut.isPending}
+                        className={`${ws.btnDanger} px-2 py-1 text-xs disabled:opacity-50`}
+                        title="حذف البند"
                       >
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span>تأكيد</span>
+                        <Trash2 className="w-3 h-3" />
                       </button>
-                    )}
+                    </div>
                   </td>
                 </tr>
               );
