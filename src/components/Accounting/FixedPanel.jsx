@@ -201,7 +201,7 @@ export default function FixedPanel({
                     البند
                   </th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
-                    النوع
+                    التصنيف
                   </th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
                     التكرار
@@ -487,7 +487,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
 
         <div>
           <label className="block text-xs font-semibold text-white/55 mb-2">
-            النوع *
+            التصنيف *
           </label>
           <GlassSelect
             value={form.expense_type_id}
@@ -495,6 +495,10 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             options={typeOptions}
             buttonClassName="px-3 py-2.5"
           />
+          <p className="text-[10px] text-white/45 mt-1.5 leading-relaxed">
+            البند العام الذي ينتمي إليه هذا القالب — مثل «إيجار»،
+            «كهرباء»، «اشتراك». يستخدم في تجميع المصاريف للتقارير.
+          </p>
         </div>
 
         <div>
