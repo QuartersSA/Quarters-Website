@@ -20,11 +20,12 @@ const PAYROLL_TEMPLATE_NAME = "رواتب الموظفين";
  */
 async function syncPayrollToFixedExpense({
   monthStart,
-  totalNetPay,
+  totalAmount,
   userId,
   userName
 }) {
-  // 1) Category — find or create.
+  // 1) Category — find or create. Match by name; user may have added
+  //    the "رواتب" category manually before payroll close.
   let [category] = await sql`
     SELECT id FROM accounting_expense_types
     WHERE name = ${PAYROLL_CATEGORY_NAME}
@@ -38,8 +39,10 @@ async function syncPayrollToFixedExpense({
     `;
   }
 
-  // 2) Template — find or create. Re-activate if a previous run had
-  //    soft-deleted it.
+  // 2) Template — try the canonical name first, fall back to any
+  //    active template under the "رواتب" category. This handles the
+  //    case where the admin created the template manually with a
+  //    slightly different name; we still keep their template in sync.
   let [template] = await sql`
     SELECT id FROM accounting_fixed_expenses
     WHERE expense_name = ${PAYROLL_TEMPLATE_NAME}
@@ -48,13 +51,22 @@ async function syncPayrollToFixedExpense({
   `;
   if (!template) {
     [template] = await sql`
+      SELECT id FROM accounting_fixed_expenses
+      WHERE expense_type_id = ${category.id}
+        AND is_active = TRUE
+      ORDER BY id ASC
+      LIMIT 1
+    `;
+  }
+  if (!template) {
+    [template] = await sql`
       INSERT INTO accounting_fixed_expenses (
         expense_type_id, expense_name, default_amount,
         is_active, start_month, frequency,
         created_by_employee_id, created_by_employee_name
       )
       VALUES (
-        ${category.id}, ${PAYROLL_TEMPLATE_NAME}, ${totalNetPay},
+        ${category.id}, ${PAYROLL_TEMPLATE_NAME}, ${totalAmount},
         TRUE, ${monthStart}, 'monthly',
         ${userId}, ${userName}
       )
@@ -63,7 +75,7 @@ async function syncPayrollToFixedExpense({
   } else {
     await sql`
       UPDATE accounting_fixed_expenses
-         SET default_amount = ${totalNetPay},
+         SET default_amount = ${totalAmount},
              is_active = TRUE,
              updated_at = CURRENT_TIMESTAMP
        WHERE id = ${template.id}
@@ -84,8 +96,8 @@ async function syncPayrollToFixedExpense({
       confirmed_by_employee_id, confirmed_by_employee_name
     )
     VALUES (
-      ${category.id}, ${monthStart}, ${PAYROLL_TEMPLATE_NAME}, ${totalNetPay},
-      ${template.id}, TRUE, ${totalNetPay}, NOW(),
+      ${category.id}, ${monthStart}, ${PAYROLL_TEMPLATE_NAME}, ${totalAmount},
+      ${template.id}, TRUE, ${totalAmount}, NOW(),
       ${userId}, ${userName},
       ${userId}, ${userName}
     )
@@ -93,7 +105,7 @@ async function syncPayrollToFixedExpense({
   return {
     categoryId: category.id,
     templateId: template.id,
-    totalNetPay
+    totalAmount
   };
 }
 
@@ -172,16 +184,30 @@ async function POST(request) {
     // in try/catch so a sync failure never blocks the payroll-close
     // operation itself.
     let payrollSync = null;
+    let payrollSyncError = null;
     try {
       if (newIsClosed) {
+        // Prefer the actual paid total ("الإجمالي تم الدفع"). Fall
+        // back to net_salary for entries that weren't marked paid, so
+        // the template stays useful even before disbursement is
+        // recorded.
         const [{
-          total_net_pay
-        }] = await sql(`SELECT COALESCE(SUM(net_pay), 0)::numeric AS total_net_pay
+          total_paid,
+          total_net
+        }] = await sql(`SELECT
+             COALESCE(SUM(
+               CASE WHEN is_paid = TRUE
+                    THEN COALESCE(paid_amount, net_salary, 0)
+                    ELSE 0
+               END
+             ), 0)::numeric AS total_paid,
+             COALESCE(SUM(COALESCE(net_salary, 0)), 0)::numeric AS total_net
              FROM accounting_payroll_entries
             WHERE run_id = $1`, [run.id]);
+        const totalAmount = Number(total_paid) > 0 ? Number(total_paid) : Number(total_net) || 0;
         payrollSync = await syncPayrollToFixedExpense({
           monthStart,
-          totalNetPay: Number(total_net_pay) || 0,
+          totalAmount,
           userId: closedById,
           userName: closedByName
         });
@@ -192,11 +218,13 @@ async function POST(request) {
       }
     } catch (syncErr) {
       console.error("payroll close → fixed-expense sync failed", syncErr);
+      payrollSyncError = syncErr?.message || String(syncErr);
     }
     return Response.json({
       ok: true,
       run: updated,
-      payroll_sync: payrollSync
+      payroll_sync: payrollSync,
+      payroll_sync_error: payrollSyncError
     });
   } catch (error) {
     console.error("payroll close POST error", error);
