@@ -32,18 +32,30 @@ async function ensureSchema() {
     ALTER TABLE accounting_fixed_expenses
     ADD COLUMN IF NOT EXISTS frequency TEXT NOT NULL DEFAULT 'monthly'
   `;
+  // Drop and re-add the constraint so legacy versions (without
+  // 'quarterly') don't block writes after we widen the enum.
   try {
     await sql`
       ALTER TABLE accounting_fixed_expenses
+      DROP CONSTRAINT IF EXISTS accounting_fixed_expenses_freq_chk
+    `;
+    await sql`
+      ALTER TABLE accounting_fixed_expenses
       ADD CONSTRAINT accounting_fixed_expenses_freq_chk
-      CHECK (frequency IN ('monthly', 'semi_annual', 'annual'))
+      CHECK (frequency IN ('monthly', 'quarterly', 'semi_annual', 'annual'))
     `;
   } catch (e) {
-    // constraint already exists
+    // constraint juggling failed — most likely already in the target
+    // state; harmless on next request.
   }
 }
 
-const VALID_FREQ = new Set(["monthly", "semi_annual", "annual"]);
+const VALID_FREQ = new Set([
+  "monthly",
+  "quarterly",
+  "semi_annual",
+  "annual",
+]);
 
 // GET /api/accounting/fixed-expenses
 // Returns active fixed expense templates (joined with type name)

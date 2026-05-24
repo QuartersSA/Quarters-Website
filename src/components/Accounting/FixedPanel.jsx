@@ -211,7 +211,7 @@ export default function FixedPanel({
                     التكرار
                   </th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
-                    المبلغ الافتراضي
+                    الشهري (الإجمالي)
                   </th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
                     مبلغ الشهر
@@ -250,8 +250,17 @@ export default function FixedPanel({
                           ) : null;
                         })()}
                       </td>
-                      <td className="px-3 py-2 text-white/70 text-sm" dir="ltr">
-                        {formatMoney(t.default_amount)}
+                      <td className="px-3 py-2 text-sm" dir="ltr">
+                        <div className="text-white font-semibold">
+                          {formatMoney(
+                            perMonthAmount(t.default_amount, t.frequency),
+                          )}
+                        </div>
+                        {(FREQ_CYCLE_MONTHS[t.frequency] || 1) > 1 ? (
+                          <div className="text-white/40 text-[10px] mt-0.5">
+                            إجمالي: {formatMoney(t.default_amount)}
+                          </div>
+                        ) : null}
                       </td>
                       <td className="px-3 py-2">
                         {paid ? (
@@ -271,7 +280,9 @@ export default function FixedPanel({
                               }))
                             }
                             className={`${ws.input} px-2 py-1.5 text-sm w-28`}
-                            placeholder={String(t.default_amount)}
+                            placeholder={String(
+                              perMonthAmount(t.default_amount, t.frequency),
+                            )}
                             dir="ltr"
                           />
                         )}
@@ -369,21 +380,38 @@ export default function FixedPanel({
 
 const FREQUENCY_OPTIONS = [
   { value: "monthly", label: "شهري" },
+  { value: "quarterly", label: "ربع سنوي" },
   { value: "semi_annual", label: "نصف سنوي" },
   { value: "annual", label: "سنوي" },
 ];
 
 const FREQ_LABEL = {
   monthly: "شهري",
+  quarterly: "ربع سنوي",
   semi_annual: "نصف سنوي",
   annual: "سنوي",
 };
 
 const FREQ_BADGE = {
   monthly: "bg-emerald-500/15 text-emerald-200 border-emerald-500/25",
+  quarterly: "bg-pink-500/15 text-pink-200 border-pink-500/25",
   semi_annual: "bg-amber-500/15 text-amber-200 border-amber-500/25",
   annual: "bg-sky-500/15 text-sky-200 border-sky-500/25",
 };
+
+const FREQ_CYCLE_MONTHS = {
+  monthly: 1,
+  quarterly: 3,
+  semi_annual: 6,
+  annual: 12,
+};
+
+function perMonthAmount(totalAmount, frequency) {
+  const cycle = FREQ_CYCLE_MONTHS[frequency] || 1;
+  const total = Number(totalAmount);
+  if (!Number.isFinite(total) || total <= 0) return 0;
+  return Math.round((total / cycle) * 100) / 100;
+}
 
 /**
  * Normalize a DATE/TIMESTAMP value from the API into "YYYY-MM".
@@ -515,7 +543,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
 
         <div>
           <label className="block text-xs font-semibold text-white/55 mb-2">
-            المبلغ الافتراضي *
+            إجمالي المبلغ للدورة *
           </label>
           <input
             type="number"
@@ -529,6 +557,15 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             required
             dir="ltr"
           />
+          {form.default_amount && form.frequency !== "monthly" ? (
+            <p className="text-[10px] text-white/55 mt-1.5">
+              ينقسم إلى{" "}
+              <span className="text-emerald-200 font-bold" dir="ltr">
+                {perMonthAmount(form.default_amount, form.frequency)}
+              </span>{" "}
+              ر.س شهرياً (×{FREQ_CYCLE_MONTHS[form.frequency] || 1})
+            </p>
+          ) : null}
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -557,8 +594,9 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
           </div>
         </div>
         <p className="text-[10px] text-white/45 leading-relaxed">
-          «شهري» يظهر كل شهر بدءاً من «شهر البدء». «نصف سنوي» كل 6 أشهر،
-          «سنوي» كل 12 شهراً. اترك شهر البدء فارغاً لـ«من البداية دائماً».
+          المبلغ الإجمالي ينقسم على شهور الدورة ويظهر كل شهر بدءاً من «شهر
+          البدء». «شهري» × 1، «ربع سنوي» × 3، «نصف سنوي» × 6، «سنوي» × 12.
+          اترك شهر البدء فارغاً لـ«من البداية دائماً».
         </p>
 
         <div className="flex gap-2">

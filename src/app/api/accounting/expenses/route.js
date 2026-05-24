@@ -41,13 +41,14 @@ export async function GET(request) {
 
     // Active fixed-expense templates that have NOT been instantiated yet for this month.
     //
-    // Frequency gating: monthly → every month, semi_annual → every 6th
-    // month from start_month, annual → every 12th month from
-    // start_month. Templates without a start_month default to monthly
-    // applicability from the beginning of time.
-    //
-    // The (year*12 + month) trick converts a DATE into a monotonically
-    // increasing month index so modular arithmetic works across years.
+    // Semantics:
+    //   - default_amount is the TOTAL amount for one cycle of the
+    //     frequency (monthly = 1 month, quarterly = 3, semi_annual =
+    //     6, annual = 12).
+    //   - Every template applies EVERY month from start_month onward;
+    //     the per-month amount we use is default_amount / cycle.
+    //   - The cycle gating that previously hid quarterly/semi_annual/
+    //     annual templates between cycle starts is gone.
     let pendingFixed = [];
     try {
       pendingFixed = await sql`
@@ -57,30 +58,6 @@ export async function GET(request) {
         JOIN accounting_expense_types t ON t.id = f.expense_type_id
         WHERE f.is_active = TRUE
           AND (f.start_month IS NULL OR f.start_month <= ${monthStart})
-          AND (
-            f.start_month IS NULL
-            OR f.frequency = 'monthly'
-            OR (
-              f.frequency = 'semi_annual'
-              AND ((
-                EXTRACT(YEAR FROM ${monthStart}::date)::int * 12
-                + EXTRACT(MONTH FROM ${monthStart}::date)::int
-              ) - (
-                EXTRACT(YEAR FROM f.start_month)::int * 12
-                + EXTRACT(MONTH FROM f.start_month)::int
-              )) % 6 = 0
-            )
-            OR (
-              f.frequency = 'annual'
-              AND ((
-                EXTRACT(YEAR FROM ${monthStart}::date)::int * 12
-                + EXTRACT(MONTH FROM ${monthStart}::date)::int
-              ) - (
-                EXTRACT(YEAR FROM f.start_month)::int * 12
-                + EXTRACT(MONTH FROM f.start_month)::int
-              )) % 12 = 0
-            )
-          )
           AND NOT EXISTS (
             SELECT 1 FROM accounting_expenses e
             WHERE e.fixed_expense_id = f.id
