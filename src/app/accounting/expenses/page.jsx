@@ -28,6 +28,7 @@ import ExpensesCharts from "@/components/Accounting/ExpensesCharts";
 import FixedPanel from "@/components/Accounting/FixedPanel";
 import VariableGrid from "@/components/Accounting/VariableGrid";
 import CategoriesManager from "@/components/Accounting/CategoriesManager";
+import ReviewTabContent from "@/components/Accounting/ReviewTabContent";
 import { FixedExpenseForm } from "@/components/Accounting/FixedExpenseForm";
 import { FixedExpensesList } from "@/components/Accounting/FixedExpensesList";
 import { QuickAddSheet } from "@/components/Accounting/QuickAddSheet";
@@ -296,6 +297,8 @@ export default function ExpensesPage() {
   const monthHint = month ? monthLabel(month) : "";
 
   const [activeTab, setActiveTab] = useState("fixed");
+  // Review-tab filter chips: all | confirmed | pending.
+  const [reviewStatusFilter, setReviewStatusFilter] = useState("all");
   const [editingExpense, setEditingExpense] = useState(null);
   const [editingFixed, setEditingFixed] = useState(null);
   const [quickAddOpen, setQuickAddOpen] = useState(false);
@@ -755,97 +758,19 @@ export default function ExpensesPage() {
 
           {/* ═══════ Review Tab ═══════ */}
           {isReviewTab && (
-            <>
-              {/* Month Filter */}
-              <div className={`${ws.glassSoft} ${ws.card} p-5`}>
-                <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <div>
-                    <div className="font-bold text-white tracking-tight">
-                      فلترة المصروفات
-                    </div>
-                    <div className="text-xs text-white/50 mt-1">
-                      اختر الشهر لمراجعة وتأكيد المصروفات
-                    </div>
-                  </div>
-                  <div className="w-full sm:w-[280px]">
-                    <GlassSelect
-                      value={month}
-                      onChange={setMonth}
-                      options={monthOptions}
-                      placeholder="اختر الشهر"
-                      buttonClassName="text-sm py-2.5 px-3"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {!month && (
-                <div className={`${ws.glassSoft} ${ws.card} p-6 text-center`}>
-                  <div className="text-white/40 text-sm">
-                    اختر الشهر لعرض المصروفات
-                  </div>
-                </div>
-              )}
-
-              {month && (
-                <>
-                  {/* Stats Cards */}
-                  {expenses.length > 0 && (
-                    <ExpensesStatsCards expenses={expenses} />
-                  )}
-
-                  {/* Charts: 12-month trend + by-type pie/bar */}
-                  <ExpensesCharts month={month} />
-
-                  {/* Review Table */}
-                  <div className={`${ws.glassSoft} ${ws.card} p-5`}>
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className={ws.iconBox}>
-                        <ClipboardCheck className="w-5 h-5 text-emerald-200" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-white tracking-tight">
-                          رفع المصروفات
-                        </div>
-                        <div className="text-xs text-white/50 mt-0.5">
-                          مراجعة وتأكيد المصروفات لشهر {monthHint}
-                        </div>
-                      </div>
-                    </div>
-
-                    {expensesQuery.isLoading && (
-                      <div className="text-center py-8">
-                        <div className="text-white/60 text-sm">
-                          جاري التحميل…
-                        </div>
-                      </div>
-                    )}
-
-                    {expensesQuery.error && (
-                      <div className="text-center py-8">
-                        <div className="text-red-300 text-sm">
-                          {String(expensesQuery.error.message)}
-                        </div>
-                      </div>
-                    )}
-
-                    {!expensesQuery.isLoading && !expensesQuery.error && (
-                      <div className="overflow-x-auto">
-                        <ExpenseTable
-                          expenses={expenses}
-                          pendingFixed={pendingFixed}
-                          month={month}
-                          onConfirm={handleConfirmExpense}
-                          onDelete={handleDeleteExpense}
-                          onEdit={handleEditExpense}
-                          onConfirmFixed={handleConfirmFixedExpense}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-            </>
+            <ReviewTabContent
+              month={month}
+              monthHint={monthHint}
+              expenses={expenses}
+              pendingFixed={pendingFixed}
+              expensesQuery={expensesQuery}
+              statusFilter={reviewStatusFilter}
+              onStatusFilterChange={setReviewStatusFilter}
+              onConfirm={handleConfirmExpense}
+              onDelete={handleDeleteExpense}
+              onEdit={handleEditExpense}
+              onConfirmFixed={handleConfirmFixedExpense}
+            />
           )}
 
           {/* ═══════ Fixed Expenses Tab ═══════ */}
