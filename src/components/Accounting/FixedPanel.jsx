@@ -14,7 +14,11 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
-import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
+import {
+  formatMoney,
+  monthLabel,
+  buildRecentMonthOptions,
+} from "@/utils/payrollFormatters";
 import { toast } from "sonner";
 
 /**
@@ -201,7 +205,10 @@ export default function FixedPanel({
                     البند
                   </th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
-                    النوع
+                    التصنيف
+                  </th>
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                    التكرار
                   </th>
                   <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
                     المبلغ الافتراضي
@@ -231,6 +238,17 @@ export default function FixedPanel({
                       </td>
                       <td className="px-3 py-2 text-white/70 text-xs">
                         {t.expense_type_name}
+                      </td>
+                      <td className="px-3 py-2 text-xs">
+                        <FrequencyBadge frequency={t.frequency || "monthly"} />
+                        {(() => {
+                          const m = toMonthString(t.start_month);
+                          return m ? (
+                            <div className="text-white/40 text-[10px] mt-0.5" dir="ltr">
+                              من {m}
+                            </div>
+                          ) : null;
+                        })()}
                       </td>
                       <td className="px-3 py-2 text-white/70 text-sm" dir="ltr">
                         {formatMoney(t.default_amount)}
@@ -349,6 +367,53 @@ export default function FixedPanel({
 
 /* ──────────────────────────────────────────────────────────────── */
 
+const FREQUENCY_OPTIONS = [
+  { value: "monthly", label: "شهري" },
+  { value: "semi_annual", label: "نصف سنوي" },
+  { value: "annual", label: "سنوي" },
+];
+
+const FREQ_LABEL = {
+  monthly: "شهري",
+  semi_annual: "نصف سنوي",
+  annual: "سنوي",
+};
+
+const FREQ_BADGE = {
+  monthly: "bg-emerald-500/15 text-emerald-200 border-emerald-500/25",
+  semi_annual: "bg-amber-500/15 text-amber-200 border-amber-500/25",
+  annual: "bg-sky-500/15 text-sky-200 border-sky-500/25",
+};
+
+/**
+ * Normalize a DATE/TIMESTAMP value from the API into "YYYY-MM".
+ *   - already "YYYY-MM..."     → first 7 chars
+ *   - JS Date / ISO timestamp  → format from UTC components
+ *   - falsy / unparseable      → ""
+ */
+function toMonthString(value) {
+  if (!value) return "";
+  const s = String(value);
+  if (/^\d{4}-\d{2}/.test(s)) return s.slice(0, 7);
+  const d = new Date(s);
+  if (Number.isNaN(d.getTime())) return "";
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  return `${y}-${m}`;
+}
+
+function FrequencyBadge({ frequency }) {
+  return (
+    <span
+      className={`inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full border ${
+        FREQ_BADGE[frequency] || FREQ_BADGE.monthly
+      }`}
+    >
+      {FREQ_LABEL[frequency] || "شهري"}
+    </span>
+  );
+}
+
 function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
   const [form, setForm] = useState(() => ({
     expense_name: target?.expense_name || "",
@@ -356,6 +421,8 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
       ? String(target.expense_type_id)
       : "",
     default_amount: target?.default_amount ?? "",
+    frequency: target?.frequency || "monthly",
+    start_month: toMonthString(target?.start_month),
   }));
 
   const typeOptions = useMemo(() => {
@@ -365,6 +432,14 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
     }
     return opts;
   }, [types]);
+
+  // Same month dropdown shape used everywhere else on the accounting
+  // surface — 30 recent + upcoming months, formatted as "مايو 2026".
+  // Leading empty option = "من البداية دائماً" (NULL start_month).
+  const startMonthOptions = useMemo(() => {
+    const base = buildRecentMonthOptions(30);
+    return [{ value: "", label: "من البداية دائماً" }, ...base];
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -376,6 +451,8 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
       expense_name: form.expense_name.trim(),
       expense_type_id: Number(form.expense_type_id),
       default_amount: amt,
+      frequency: form.frequency,
+      start_month: form.start_month || null,
     });
   };
 
@@ -422,7 +499,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
 
         <div>
           <label className="block text-xs font-semibold text-white/55 mb-2">
-            النوع *
+            التصنيف *
           </label>
           <GlassSelect
             value={form.expense_type_id}
@@ -430,6 +507,10 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             options={typeOptions}
             buttonClassName="px-3 py-2.5"
           />
+          <p className="text-[10px] text-white/45 mt-1.5 leading-relaxed">
+            البند العام الذي ينتمي إليه هذا القالب — مثل «إيجار»،
+            «كهرباء»، «اشتراك». يستخدم في تجميع المصاريف للتقارير.
+          </p>
         </div>
 
         <div>
@@ -449,6 +530,36 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             dir="ltr"
           />
         </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-semibold text-white/55 mb-2">
+              التكرار *
+            </label>
+            <GlassSelect
+              value={form.frequency}
+              onChange={(v) => setForm((f) => ({ ...f, frequency: v }))}
+              options={FREQUENCY_OPTIONS}
+              buttonClassName="px-3 py-2.5"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-white/55 mb-2">
+              شهر البدء
+            </label>
+            <GlassSelect
+              value={form.start_month}
+              onChange={(v) => setForm((f) => ({ ...f, start_month: v }))}
+              options={startMonthOptions}
+              buttonClassName="px-3 py-2.5"
+              placeholder="من البداية دائماً"
+            />
+          </div>
+        </div>
+        <p className="text-[10px] text-white/45 leading-relaxed">
+          «شهري» يظهر كل شهر بدءاً من «شهر البدء». «نصف سنوي» كل 6 أشهر،
+          «سنوي» كل 12 شهراً. اترك شهر البدء فارغاً لـ«من البداية دائماً».
+        </p>
 
         <div className="flex gap-2">
           <button

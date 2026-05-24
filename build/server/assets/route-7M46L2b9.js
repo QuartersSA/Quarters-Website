@@ -13,6 +13,7 @@ async function ensureSchema() {
       default_amount NUMERIC(12, 2) NOT NULL DEFAULT 0,
       is_active BOOLEAN NOT NULL DEFAULT TRUE,
       start_month DATE,
+      frequency TEXT NOT NULL DEFAULT 'monthly',
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       created_by_employee_id INTEGER,
@@ -26,7 +27,24 @@ async function ensureSchema() {
     ADD COLUMN IF NOT EXISTS fixed_expense_id INTEGER
     REFERENCES accounting_fixed_expenses(id) ON DELETE SET NULL
   `;
+
+  // frequency column for legacy rows that predate it. Existing rows
+  // default to 'monthly' (the implicit behavior before this field).
+  await sql`
+    ALTER TABLE accounting_fixed_expenses
+    ADD COLUMN IF NOT EXISTS frequency TEXT NOT NULL DEFAULT 'monthly'
+  `;
+  try {
+    await sql`
+      ALTER TABLE accounting_fixed_expenses
+      ADD CONSTRAINT accounting_fixed_expenses_freq_chk
+      CHECK (frequency IN ('monthly', 'semi_annual', 'annual'))
+    `;
+  } catch (e) {
+    // constraint already exists
+  }
 }
+const VALID_FREQ = new Set(["monthly", "semi_annual", "annual"]);
 
 // GET /api/accounting/fixed-expenses
 // Returns active fixed expense templates (joined with type name)
@@ -93,6 +111,7 @@ async function POST(request) {
     const expenseName = body.expense_name ? String(body.expense_name).trim() : "";
     const defaultAmount = body.default_amount !== undefined && body.default_amount !== null ? Number(body.default_amount) : null;
     const startMonthRaw = body.start_month ? String(body.start_month).trim() : "";
+    const frequency = body.frequency && VALID_FREQ.has(body.frequency) ? body.frequency : "monthly";
     if (!typeId) {
       return Response.json({
         error: "نوع المصروف مطلوب"
@@ -129,11 +148,11 @@ async function POST(request) {
     const createdByName = auth.user?.name ? String(auth.user.name) : null;
     const [created] = await sql`
       INSERT INTO accounting_fixed_expenses (
-        expense_type_id, expense_name, default_amount, start_month,
+        expense_type_id, expense_name, default_amount, start_month, frequency,
         created_by_employee_id, created_by_employee_name
       )
       VALUES (
-        ${typeId}, ${expenseName}, ${defaultAmount}, ${startMonth},
+        ${typeId}, ${expenseName}, ${defaultAmount}, ${startMonth}, ${frequency},
         ${createdById}, ${createdByName}
       )
       RETURNING *

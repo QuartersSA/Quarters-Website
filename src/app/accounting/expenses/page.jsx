@@ -864,6 +864,7 @@ export default function ExpensesPage() {
 
           {/* ═══════ Categories Tab ═══════ */}
           {isCategoriesTab && <CategoriesManager />}
+
         </div>
       </main>
 

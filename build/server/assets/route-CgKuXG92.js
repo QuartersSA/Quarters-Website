@@ -3,8 +3,10 @@ import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
+const VALID_FREQ = new Set(["monthly", "semi_annual", "annual"]);
+
 // PATCH /api/accounting/fixed-expenses/:id
-// body: { expense_type_id?, expense_name?, default_amount?, is_active?, start_month? }
+// body: { expense_type_id?, expense_name?, default_amount?, is_active?, start_month?, frequency? }
 async function PATCH(request, {
   params
 }) {
@@ -80,6 +82,17 @@ async function PATCH(request, {
         values.push(`${raw}-01`);
       }
     }
+    if (body.frequency !== undefined) {
+      if (!VALID_FREQ.has(body.frequency)) {
+        return Response.json({
+          error: "تكرار غير صالح"
+        }, {
+          status: 400
+        });
+      }
+      setClauses.push(`frequency = $${paramIdx++}`);
+      values.push(body.frequency);
+    }
     if (setClauses.length === 0) {
       return Response.json({
         error: "لا يوجد بيانات للتحديث"
@@ -112,6 +125,9 @@ async function PATCH(request, {
     });
   }
 }
+
+// PUT alias — the FixedPanel update mutation uses PUT; mirror to PATCH.
+const PUT = PATCH;
 
 // DELETE /api/accounting/fixed-expenses/:id
 // Soft-delete via is_active=false to preserve historical links
@@ -201,4 +217,4 @@ async function DELETE(request, {
   }
 }
 
-export { DELETE, PATCH };
+export { DELETE, PATCH, PUT };

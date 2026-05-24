@@ -1,8 +1,10 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+const VALID_FREQ = new Set(["monthly", "semi_annual", "annual"]);
+
 // PATCH /api/accounting/fixed-expenses/:id
-// body: { expense_type_id?, expense_name?, default_amount?, is_active?, start_month? }
+// body: { expense_type_id?, expense_name?, default_amount?, is_active?, start_month?, frequency? }
 export async function PATCH(request, { params }) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -66,6 +68,16 @@ export async function PATCH(request, { params }) {
         values.push(`${raw}-01`);
       }
     }
+    if (body.frequency !== undefined) {
+      if (!VALID_FREQ.has(body.frequency)) {
+        return Response.json(
+          { error: "تكرار غير صالح" },
+          { status: 400 },
+        );
+      }
+      setClauses.push(`frequency = $${paramIdx++}`);
+      values.push(body.frequency);
+    }
 
     if (setClauses.length === 0) {
       return Response.json({ error: "لا يوجد بيانات للتحديث" }, { status: 400 });
@@ -95,6 +107,9 @@ export async function PATCH(request, { params }) {
     );
   }
 }
+
+// PUT alias — the FixedPanel update mutation uses PUT; mirror to PATCH.
+export const PUT = PATCH;
 
 // DELETE /api/accounting/fixed-expenses/:id
 // Soft-delete via is_active=false to preserve historical links

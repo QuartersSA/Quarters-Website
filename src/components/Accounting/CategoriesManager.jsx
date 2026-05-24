@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ListChecks, Pencil, Trash2, Plus, X } from "lucide-react";
+import { ListChecks, Pencil, Trash2, Plus, X, Power } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
@@ -33,10 +33,15 @@ const SCOPE_BADGE = {
  */
 export default function CategoriesManager() {
   const queryClient = useQueryClient();
+  // includeInactive=1 so the manager surface lists every category
+  // (active + inactive). Other endpoints continue to filter inactive
+  // ones out by default.
   const typesQuery = useQuery({
     queryKey: ["accounting_expense_types_full"],
     queryFn: async () => {
-      const r = await adminFetch("/api/accounting/expense-types");
+      const r = await adminFetch(
+        "/api/accounting/expense-types?includeInactive=1",
+      );
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d?.error || "فشل التحميل");
       return d.types || [];
@@ -86,20 +91,53 @@ export default function CategoriesManager() {
     onError: (e) => toast.error(e.message || "فشل التعديل"),
   });
 
+  // Two-stage delete. The first call probes for references; if the
+  // API returns 409 with counts we surface a "نهائي مع المصاريف?"
+  // confirm and retry with ?force=1 to cascade-drop the linked
+  // accounting_expenses + accounting_fixed_expenses rows.
   const deleteMut = useMutation({
-    mutationFn: async (id) => {
-      const r = await adminFetch(`/api/accounting/expense-types/${id}`, {
-        method: "DELETE",
-      });
+    mutationFn: async ({ id, force = false }) => {
+      const url = force
+        ? `/api/accounting/expense-types/${id}?force=1`
+        : `/api/accounting/expense-types/${id}`;
+      const r = await adminFetch(url, { method: "DELETE" });
       const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
+      if (!r.ok) {
+        const err = new Error(d?.error || "فشل الحذف");
+        err.status = r.status;
+        err.expense_refs = d?.expense_refs;
+        err.fixed_refs = d?.fixed_refs;
+        err.id = id;
+        throw err;
+      }
       return d;
     },
     onSuccess: () => {
       invalidate();
+      // The mutation also invalidates expenses + fixed-expenses since
+      // a force delete drops rows there too.
+      queryClient.invalidateQueries({ queryKey: ["accounting_expenses"] });
+      queryClient.invalidateQueries({
+        queryKey: ["accounting_fixed_expenses"],
+      });
       toast.success("تم الحذف");
     },
-    onError: (e) => toast.error(e.message || "فشل الحذف"),
+    onError: (e) => {
+      if (
+        e?.status === 409 &&
+        ((e?.expense_refs ?? 0) > 0 || (e?.fixed_refs ?? 0) > 0)
+      ) {
+        const refs = [];
+        if (e.expense_refs > 0) refs.push(`${e.expense_refs} مصروف مسجّل`);
+        if (e.fixed_refs > 0) refs.push(`${e.fixed_refs} قالب ثابت`);
+        const msg = `هذا البند مستخدم في ${refs.join(" و ")}. هل تريد حذفه نهائياً مع جميع المصاريف المرتبطة به؟`;
+        if (window.confirm(msg)) {
+          deleteMut.mutate({ id: e.id, force: true });
+          return;
+        }
+      }
+      toast.error(e.message || "فشل الحذف");
+    },
   });
 
   const [showForm, setShowForm] = useState(false);
@@ -159,49 +197,80 @@ export default function CategoriesManager() {
                 </tr>
               </thead>
               <tbody>
-                {types.map((t) => (
-                  <tr
-                    key={t.id}
-                    className="border-t border-white/5 hover:bg-white/[0.02]"
-                  >
-                    <td className="px-3 py-2 text-white text-sm font-medium">
-                      {t.name}
-                    </td>
-                    <td className="px-3 py-2">
-                      <span
-                        className={`inline-flex items-center text-xs px-2 py-1 rounded-full border ${
-                          SCOPE_BADGE[t.scope || "both"] || SCOPE_BADGE.both
-                        }`}
-                      >
-                        {SCOPE_LABEL[t.scope || "both"] || "—"}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2 text-center">
-                      <div className="flex items-center justify-center gap-1">
-                        <button
-                          type="button"
-                          onClick={() => setEditTarget(t)}
-                          className={`${ws.btnNeutral} px-2 py-1 text-xs`}
-                          title="تعديل"
+                {types.map((t) => {
+                  const isInactive = t.is_active === false;
+                  return (
+                    <tr
+                      key={t.id}
+                      className={`border-t border-white/5 hover:bg-white/[0.02] ${
+                        isInactive ? "opacity-50" : ""
+                      }`}
+                    >
+                      <td className="px-3 py-2 text-white text-sm font-medium">
+                        <div className="flex items-center gap-2">
+                          <span>{t.name}</span>
+                          {isInactive ? (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/10 text-white/60">
+                              غير مفعّل
+                            </span>
+                          ) : null}
+                        </div>
+                      </td>
+                      <td className="px-3 py-2">
+                        <span
+                          className={`inline-flex items-center text-xs px-2 py-1 rounded-full border ${
+                            SCOPE_BADGE[t.scope || "both"] || SCOPE_BADGE.both
+                          }`}
                         >
-                          <Pencil className="w-3 h-3" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (window.confirm(`حذف البند «${t.name}»؟`)) {
-                              deleteMut.mutate(t.id);
+                          {SCOPE_LABEL[t.scope || "both"] || "—"}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateMut.mutate({
+                                id: t.id,
+                                // legacy `undefined` treated as active,
+                                // so toggle resolves to false there too.
+                                is_active: isInactive ? true : false,
+                              })
                             }
-                          }}
-                          className={`${ws.btnDanger} px-2 py-1 text-xs`}
-                          title="حذف"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                            disabled={updateMut.isPending}
+                            className={`${
+                              isInactive ? ws.btnPrimary : ws.btnNeutral
+                            } px-2 py-1 text-xs disabled:opacity-50`}
+                            title={isInactive ? "تفعيل" : "إلغاء التفعيل"}
+                          >
+                            <Power className="w-3 h-3" />
+                            <span>{isInactive ? "تفعيل" : "إيقاف"}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditTarget(t)}
+                            className={`${ws.btnNeutral} px-2 py-1 text-xs`}
+                            title="تعديل"
+                          >
+                            <Pencil className="w-3 h-3" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm(`حذف البند «${t.name}»؟`)) {
+                                deleteMut.mutate({ id: t.id, force: false });
+                              }
+                            }}
+                            className={`${ws.btnDanger} px-2 py-1 text-xs`}
+                            title="حذف"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
