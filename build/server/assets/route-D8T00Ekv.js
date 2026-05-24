@@ -3,7 +3,7 @@ import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
-const VALID_FREQ = new Set(["monthly", "semi_annual", "annual"]);
+const VALID_FREQ = new Set(["monthly", "quarterly", "semi_annual", "annual"]);
 
 // PATCH /api/accounting/fixed-expenses/:id
 // body: { expense_type_id?, expense_name?, default_amount?, is_active?, start_month?, frequency? }

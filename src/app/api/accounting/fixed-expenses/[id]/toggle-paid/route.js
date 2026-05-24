@@ -39,7 +39,7 @@ export async function POST(request, { params }) {
     const monthStart = `${monthRaw}-01`;
 
     const [template] = await sql`
-      SELECT id, expense_type_id, expense_name, default_amount
+      SELECT id, expense_type_id, expense_name, default_amount, frequency
       FROM accounting_fixed_expenses
       WHERE id = ${id}
     `;
@@ -64,14 +64,34 @@ export async function POST(request, { params }) {
     }
 
     // Toggle on: create + mark paid.
+    //
+    // Per-month amount derives from the template's cycle:
+    //   monthly      → default_amount
+    //   quarterly    → default_amount / 3
+    //   semi_annual  → default_amount / 6
+    //   annual       → default_amount / 12
+    // The admin can still pass an explicit `amount` to override the
+    // derived value for a one-off month.
+    const cycleMonths =
+      template.frequency === "quarterly"
+        ? 3
+        : template.frequency === "semi_annual"
+          ? 6
+          : template.frequency === "annual"
+            ? 12
+            : 1;
     const overrideAmount =
       body.amount !== undefined && body.amount !== null && body.amount !== ""
         ? Number(body.amount)
         : null;
+    const derivedAmount =
+      ((Number(template.default_amount) || 0) / cycleMonths);
     const amount =
-      overrideAmount !== null && Number.isFinite(overrideAmount) && overrideAmount >= 0
+      overrideAmount !== null &&
+      Number.isFinite(overrideAmount) &&
+      overrideAmount >= 0
         ? overrideAmount
-        : Number(template.default_amount) || 0;
+        : Math.round(derivedAmount * 100) / 100;
 
     const createdById = auth.user?.id ? Number(auth.user.id) : null;
     const createdByName = auth.user?.name ? String(auth.user.name) : null;

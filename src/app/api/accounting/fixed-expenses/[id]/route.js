@@ -1,7 +1,12 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
-const VALID_FREQ = new Set(["monthly", "semi_annual", "annual"]);
+const VALID_FREQ = new Set([
+  "monthly",
+  "quarterly",
+  "semi_annual",
+  "annual",
+]);
 
 // PATCH /api/accounting/fixed-expenses/:id
 // body: { expense_type_id?, expense_name?, default_amount?, is_active?, start_month?, frequency? }
