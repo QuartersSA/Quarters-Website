@@ -185,7 +185,7 @@ export default function LoansList({
                         type="button"
                         onClick={() => onDelete(l)}
                         className={`${ws.iconButton} w-8 h-8 hover:bg-red-500/15 hover:border-red-500/30 hover:text-red-200`}
-                        title="حذف"
+                        title="حذف نهائي"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>

@@ -179,10 +179,10 @@ export default function LoansPage() {
   const handleDelete = (loan) => {
     const monthly = Number(loan.monthly_amount || 0);
     const confirmed = window.confirm(
-      `إيقاف تفعيل القرض لـ ${loan.employee_name || "هذا الموظف"}؟\nسيتم وقف الخصم الشهري (${formatMoney(monthly)}) من الأشهر القادمة. الأشهر المُقفلة لن تتأثر.`,
+      `حذف القرض نهائياً لـ ${loan.employee_name || "هذا الموظف"}؟\n\nسيُحذف من القائمة بالكامل، وتُمسح الاستقطاعات (${formatMoney(monthly)}/شهر) من مسير الرواتب لأي شهر لم يُقفل بعد.\nالأشهر المُقفلة تحتفظ بقيمها كما هي.`,
     );
     if (!confirmed) return;
-    deleteMutation.mutate({ id: loan.id, force: false });
+    deleteMutation.mutate({ id: loan.id, force: true });
   };
 
   let body = null;

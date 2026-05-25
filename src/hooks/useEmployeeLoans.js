@@ -2,18 +2,60 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
 
-// Helper: rebuild every unclosed payroll run whose payroll_month sits
-// inside the loan's installment window. Called silently after any
-// loan mutation so the deduction shows up on the payroll page right
-// away — without forcing the admin to click "إعادة بناء" manually.
+// Helper: make sure the loan's deduction is reflected in every open
+// payroll month in its installment window, including PAST months that
+// don't have a payroll run yet. Closed months are intentionally
+// skipped so the financial audit trail stays intact.
 //
-// `loan` should be the row returned from the API: it carries
-// start_month + installments_count + is_active (or we pass null/empty
-// when deleted in which case we just rebuild every unclosed run since
-// we can't be sure which one is affected).
+// Strategy:
+//   - When `loan` carries a start_month + installments_count, iterate
+//     every calendar month from start_month up to (but not past) the
+//     current calendar month, and POST /api/accounting/payroll for
+//     each. POST is idempotent and creates a fresh run if missing.
+//     Closed months reply 409 — we swallow that and move on.
+//   - When `loan` is null (edits / deletes where the old window is
+//     unknown or shifting) we instead refresh every existing unclosed
+//     run from the runs list. That covers months whose deduction
+//     needs to be cleared.
 async function rebuildAffectedPayrollRuns(loan) {
-  // Pull the recent runs list (last 24 months by default in the GET
-  // route). Closed months are kept as-is — silently skipped here.
+  const rebuilt = [];
+  const tryRebuild = async (monthStr) => {
+    try {
+      const res = await adminFetch("/api/accounting/payroll", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ month: monthStr }),
+      });
+      if (res.ok) rebuilt.push(monthStr);
+      // 409 = month is closed; silently ignore.
+    } catch {
+      // network blip — best effort
+    }
+  };
+
+  if (loan?.start_month && Number.isFinite(Number(loan?.installments_count))) {
+    // Walk the installment window month-by-month, stopping at the
+    // current calendar month. Future months stay un-built — we don't
+    // want to surprise the admin with empty runs for months they
+    // haven't reached yet.
+    const startStr = String(loan.start_month).slice(0, 7); // YYYY-MM
+    const [sy, sm] = startStr.split("-").map(Number);
+    if (Number.isFinite(sy) && Number.isFinite(sm)) {
+      const now = new Date();
+      const nowKey = now.getUTCFullYear() * 12 + now.getUTCMonth();
+      const startKey = sy * 12 + (sm - 1);
+      const installments = Number(loan.installments_count);
+      const endKey = Math.min(startKey + installments - 1, nowKey);
+      for (let k = startKey; k <= endKey; k += 1) {
+        const y = Math.floor(k / 12);
+        const m = String((k % 12) + 1).padStart(2, "0");
+        await tryRebuild(`${y}-${m}`);
+      }
+    }
+    return rebuilt;
+  }
+
+  // Loan window unknown — refresh every unclosed run we can see.
   let runs = [];
   try {
     const res = await adminFetch("/api/accounting/payroll");
@@ -22,41 +64,13 @@ async function rebuildAffectedPayrollRuns(loan) {
       runs = Array.isArray(data?.runs) ? data.runs : [];
     }
   } catch {
-    // Network blip — give up; user can rebuild manually.
-    return [];
+    return rebuilt;
   }
-
-  // Compute the [start, end) window in months.
-  const inWindow = (runDate) => {
-    if (!loan?.start_month || !loan?.installments_count) return true;
-    const sm = new Date(loan.start_month);
-    if (Number.isNaN(sm.getTime())) return true;
-    const end = new Date(sm);
-    end.setUTCMonth(end.getUTCMonth() + Number(loan.installments_count));
-    const d = new Date(runDate);
-    if (Number.isNaN(d.getTime())) return false;
-    return d >= sm && d < end;
-  };
-
-  const rebuilt = [];
   for (const r of runs) {
     if (r.is_closed) continue;
-    if (!inWindow(r.payroll_month)) continue;
-    const d = new Date(r.payroll_month);
-    if (Number.isNaN(d.getTime())) continue;
-    const y = d.getUTCFullYear();
-    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-    const monthStr = `${y}-${m}`;
-    try {
-      const res = await adminFetch("/api/accounting/payroll", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ month: monthStr }),
-      });
-      if (res.ok) rebuilt.push(monthStr);
-    } catch {
-      // ignore — best effort
-    }
+    const monthStr = String(r.payroll_month).slice(0, 7);
+    if (!/^\d{4}-\d{2}$/.test(monthStr)) continue;
+    await tryRebuild(monthStr);
   }
   return rebuilt;
 }
@@ -168,10 +182,15 @@ export function useUpdateLoan() {
     },
     onSuccess: async (data) => {
       // Edits can move start_month / change installments_count, so the
-      // OLD installment window can shrink or shift. Rebuilding only the
-      // new window would leave stale deductions in months that used to
-      // be in-window. Pass null → helper rebuilds every unclosed run.
-      const rebuilt = await rebuildAffectedPayrollRuns(null);
+      // OLD installment window can shrink or shift. We do two passes:
+      //   1. sweep every existing unclosed run — clears stale
+      //      deductions in months that are no longer in-window.
+      //   2. build the loan's NEW window — creates any past months
+      //      that don't have a run yet so the deduction shows up
+      //      retroactively.
+      const sweep = await rebuildAffectedPayrollRuns(null);
+      const window = await rebuildAffectedPayrollRuns(data?.loan);
+      const rebuilt = Array.from(new Set([...sweep, ...window]));
       await invalidateLoansAndPayroll(queryClient);
       if (rebuilt.length > 0) {
         toast.success(
