@@ -4,12 +4,13 @@ import '@neondatabase/serverless';
 import 'crypto';
 
 // PUT /api/accounting/expenses/variable
-// body: { month: "YYYY-MM", expense_type_id, amount, mark_paid? }
+// body: { month: "YYYY-MM", variable_template_id, amount, mark_paid? }
 //
-// Upsert one variable expense row per (type, month). The "bands"
-// (categories) are unified across months — only the amount changes.
-// Setting amount to 0/null deletes the row for that (type, month).
+// Upserts one accounting_expenses row per (variable_template_id,
+// month). Each row in the variable grid is a template, not a bare
+// category, so the uniqueness key is the template id.
 //
+// Setting amount to 0/null deletes the row for that (template, month).
 // Returns { ok: true, expense: row|null }.
 
 async function PUT(request) {
@@ -35,10 +36,10 @@ async function PUT(request) {
       });
     }
     const monthStart = `${monthRaw}-01`;
-    const typeId = body.expense_type_id ? Number(body.expense_type_id) : null;
-    if (!typeId) {
+    const templateId = body.variable_template_id ? Number(body.variable_template_id) : null;
+    if (!Number.isFinite(templateId) || templateId <= 0) {
       return Response.json({
-        error: "نوع المصروف مطلوب"
+        error: "القالب المتغيّر مطلوب"
       }, {
         status: 400
       });
@@ -52,26 +53,27 @@ async function PUT(request) {
         status: 400
       });
     }
-    const [type] = await sql`
-      SELECT id, name FROM accounting_expense_types WHERE id = ${typeId}
+
+    // Resolve template → category for the row's denormalized fields.
+    const [template] = await sql`
+      SELECT v.id, v.expense_type_id, v.name AS template_name,
+             t.name AS type_name
+      FROM accounting_variable_templates v
+      JOIN accounting_expense_types t ON t.id = v.expense_type_id
+      WHERE v.id = ${templateId}
+      LIMIT 1
     `;
-    if (!type) {
+    if (!template) {
       return Response.json({
-        error: "نوع المصروف غير موجود"
+        error: "القالب غير موجود"
       }, {
         status: 404
       });
     }
-
-    // We pick the canonical variable row for this (type, month) — the
-    // one with NO fixed_expense_id link, oldest first. Multiple rows
-    // are tolerated from legacy data but new writes always update the
-    // canonical row.
     const [existing] = await sql`
       SELECT id FROM accounting_expenses
-      WHERE expense_type_id = ${typeId}
+      WHERE variable_template_id = ${templateId}
         AND expense_month = ${monthStart}
-        AND fixed_expense_id IS NULL
       ORDER BY id ASC
       LIMIT 1
     `;
@@ -89,11 +91,14 @@ async function PUT(request) {
     const markPaid = !!body.mark_paid;
     const userId = auth.user?.id ? Number(auth.user.id) : null;
     const userName = auth.user?.name ? String(auth.user.name) : null;
+    const expenseName = template.template_name || template.type_name;
     if (existing) {
       const [updated] = await sql`
         UPDATE accounting_expenses
            SET amount = ${amount},
-               expense_name = ${type.name},
+               expense_type_id = ${template.expense_type_id},
+               expense_name = ${expenseName},
+               variable_template_id = ${templateId},
                is_confirmed = ${markPaid || false},
                confirmed_amount = ${markPaid ? amount : null},
                confirmed_at = ${markPaid ? new Date().toISOString() : null},
@@ -111,12 +116,14 @@ async function PUT(request) {
     const [created] = await sql`
       INSERT INTO accounting_expenses (
         expense_type_id, expense_month, expense_name, amount,
+        variable_template_id,
         is_confirmed, confirmed_amount, confirmed_at,
         created_by_employee_id, created_by_employee_name,
         confirmed_by_employee_id, confirmed_by_employee_name
       )
       VALUES (
-        ${typeId}, ${monthStart}, ${type.name}, ${amount},
+        ${template.expense_type_id}, ${monthStart}, ${expenseName}, ${amount},
+        ${templateId},
         ${markPaid || false},
         ${markPaid ? amount : null},
         ${markPaid ? new Date().toISOString() : null},

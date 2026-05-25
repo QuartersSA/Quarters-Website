@@ -66,6 +66,11 @@ export function usePayrollPayment(month) {
       await queryClient.invalidateQueries({
         queryKey: ["accounting_payroll", String(month)],
       });
+      // Marking an entry paid (or un-paid) inside a closed month
+      // changes the loans page's paid_months_to_date counter.
+      await queryClient.invalidateQueries({
+        queryKey: ["accounting_employee_loans"],
+      });
     },
     onError: (error) => {
       console.error(error);
@@ -93,6 +98,13 @@ export function usePayrollClose(month) {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
         queryKey: ["accounting_payroll", String(month)],
+      });
+      // Closing / reopening the month flips which entries the loans
+      // page counts as paid installments — refresh the loans cache so
+      // the "x / N شهر" column reflects reality without a manual
+      // page reload.
+      await queryClient.invalidateQueries({
+        queryKey: ["accounting_employee_loans"],
       });
       const msg = data?.run?.is_closed
         ? "تم تقفيل الشهر بنجاح"

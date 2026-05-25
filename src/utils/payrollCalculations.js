@@ -2,12 +2,14 @@ export function calculatePayrollTotals(entries) {
   let totalSalary = 0;
   let totalBonuses = 0;
   let totalDeductions = 0;
+  let totalLoanDeductions = 0;
   let net = 0;
 
   for (const e of entries) {
     totalSalary += Number(e.total_salary || 0);
     totalBonuses += Number(e.total_bonuses || 0);
     totalDeductions += Number(e.total_deductions || 0);
+    totalLoanDeductions += Number(e.loan_deduction || 0);
     net += Number(e.net_salary || 0);
   }
 
@@ -15,6 +17,7 @@ export function calculatePayrollTotals(entries) {
     totalSalary,
     totalBonuses,
     totalDeductions,
+    totalLoanDeductions,
     net,
   };
 }
@@ -87,6 +90,18 @@ export function getPayrollExportColumns() {
     {
       header: "مجموع الخصميات",
       accessor: (item) => item.total_deductions,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "قسط السلف",
+      accessor: (item) => item.loan_deduction,
       format: (value) => {
         const n = Number(value);
         if (!Number.isFinite(n)) return "—";

@@ -65,6 +65,28 @@ async function PUT(request, {
       values.push(!!body.is_active);
       idx += 1;
     }
+    if (body.is_template !== undefined) {
+      sets.push(`is_template = $${idx}`);
+      values.push(!!body.is_template);
+      idx += 1;
+    }
+    if (body.expected_amount !== undefined) {
+      if (body.expected_amount === null || body.expected_amount === "") {
+        sets.push(`expected_amount = NULL`);
+      } else {
+        const n = Number(body.expected_amount);
+        if (!Number.isFinite(n) || n < 0) {
+          return Response.json({
+            error: "المبلغ المتوقع غير صحيح"
+          }, {
+            status: 400
+          });
+        }
+        sets.push(`expected_amount = $${idx}`);
+        values.push(n);
+        idx += 1;
+      }
+    }
     if (sets.length === 0) {
       return Response.json({
         error: "لا توجد حقول للتعديل"
@@ -77,7 +99,7 @@ async function PUT(request, {
       UPDATE accounting_expense_types
          SET ${sets.join(", ")}
        WHERE id = $${idx}
-       RETURNING id, name, scope, is_active
+       RETURNING id, name, scope, is_active, expected_amount, is_template
     `;
     const [updated] = await sql(query, values);
     if (!updated) {

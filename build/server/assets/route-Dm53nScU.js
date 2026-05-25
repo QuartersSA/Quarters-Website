@@ -39,9 +39,11 @@ async function GET(request) {
     }
     const monthStart = `${monthRaw}-01`;
     const expenses = await sql`
-      SELECT e.*, t.name AS expense_type_name
+      SELECT e.*, t.name AS expense_type_name,
+             v.name AS variable_template_name
       FROM accounting_expenses e
       JOIN accounting_expense_types t ON t.id = e.expense_type_id
+      LEFT JOIN accounting_variable_templates v ON v.id = e.variable_template_id
       WHERE e.expense_month = ${monthStart}
       ORDER BY t.name ASC, e.expense_name ASC, e.id ASC
     `;
@@ -64,6 +66,7 @@ async function GET(request) {
         FROM accounting_fixed_expenses f
         JOIN accounting_expense_types t ON t.id = f.expense_type_id
         WHERE f.is_active = TRUE
+          AND t.is_active = TRUE
           AND (f.start_month IS NULL OR f.start_month <= ${monthStart})
           AND NOT EXISTS (
             SELECT 1 FROM accounting_expenses e

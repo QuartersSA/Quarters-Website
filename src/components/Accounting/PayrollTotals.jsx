@@ -59,7 +59,7 @@ export function PayrollTotals({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 w-full md:w-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 w-full md:w-auto">
           <div className={`${ws.glass} ${ws.card} p-3`}>
             <div className="text-xs text-white/55">إجمالي الرواتب</div>
             <div className="text-white font-extrabold" dir="ltr">
@@ -76,6 +76,12 @@ export function PayrollTotals({
             <div className="text-xs text-white/55">إجمالي الخصميات</div>
             <div className="text-white font-extrabold" dir="ltr">
               {formatMoney(totals.totalDeductions)}
+            </div>
+          </div>
+          <div className={`${ws.glass} ${ws.card} p-3`}>
+            <div className="text-xs text-white/55">قسط السلف</div>
+            <div className="text-amber-200 font-extrabold" dir="ltr">
+              {formatMoney(totals.totalLoanDeductions)}
             </div>
           </div>
           <div className={`${ws.glass} ${ws.card} p-3`}>
