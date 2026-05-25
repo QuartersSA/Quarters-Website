@@ -89,7 +89,15 @@ export async function GET(request) {
         e.name AS employee_name,
         l.total_amount,
         l.installments_count,
-        l.start_month,
+        -- IMPORTANT: cast to text so the DATE doesn't go through
+        -- JS Date object conversion in the postgres driver. node-pg
+        -- parses DATE values using the server's LOCAL timezone, then
+        -- JSON.stringify converts the Date to ISO UTC. On a server in
+        -- a positive timezone (e.g. Asia/Riyadh) the day shifts back
+        -- by one and the client renders the previous month for any
+        -- start_month picked from the loan modal. Casting to TEXT in
+        -- SQL skips the Date round-trip entirely.
+        TO_CHAR(l.start_month, 'YYYY-MM-DD') AS start_month,
         l.note,
         l.is_active,
         l.created_at,
@@ -171,16 +179,26 @@ export async function POST(request) {
     const createdById = auth.user?.id ? Number(auth.user.id) : null;
     const createdByName = auth.user?.name ? String(auth.user.name) : null;
 
+    // Returning columns explicitly with TO_CHAR on start_month so the
+    // DATE doesn't drift through the JS Date round-trip (see GET).
     const [created] = await sql`
-      INSERT INTO accounting_employee_loans (
-        employee_id, total_amount, installments_count, start_month, note,
+      WITH ins AS (
+        INSERT INTO accounting_employee_loans (
+          employee_id, total_amount, installments_count, start_month, note,
+          created_by_employee_id, created_by_employee_name
+        )
+        VALUES (
+          ${employeeId}, ${totalAmount}, ${installments}, ${startMonth}, ${note},
+          ${createdById}, ${createdByName}
+        )
+        RETURNING *
+      )
+      SELECT
+        id, employee_id, total_amount, installments_count,
+        TO_CHAR(start_month, 'YYYY-MM-DD') AS start_month,
+        note, is_active, created_at, updated_at,
         created_by_employee_id, created_by_employee_name
-      )
-      VALUES (
-        ${employeeId}, ${totalAmount}, ${installments}, ${startMonth}, ${note},
-        ${createdById}, ${createdByName}
-      )
-      RETURNING *
+      FROM ins
     `;
     return Response.json({ ok: true, loan: created });
   } catch (error) {

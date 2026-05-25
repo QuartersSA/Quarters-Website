@@ -85,11 +85,22 @@ export async function PUT(request, { params }) {
 
     sets.push(`updated_at = CURRENT_TIMESTAMP`);
     values.push(id);
+    // Same TO_CHAR trick as the GET / POST routes — keep start_month
+    // as a string so the JS Date / JSON round-trip doesn't drift the
+    // day when the server is in a positive timezone.
     const query = `
-      UPDATE accounting_employee_loans
-         SET ${sets.join(", ")}
-       WHERE id = $${idx}
-       RETURNING *
+      WITH upd AS (
+        UPDATE accounting_employee_loans
+           SET ${sets.join(", ")}
+         WHERE id = $${idx}
+         RETURNING *
+      )
+      SELECT
+        id, employee_id, total_amount, installments_count,
+        TO_CHAR(start_month, 'YYYY-MM-DD') AS start_month,
+        note, is_active, created_at, updated_at,
+        created_by_employee_id, created_by_employee_name
+      FROM upd
     `;
     const [updated] = await sql(query, values);
     if (!updated) {
@@ -131,10 +142,18 @@ export async function DELETE(request, { params }) {
     }
 
     const [updated] = await sql`
-      UPDATE accounting_employee_loans
-         SET is_active = FALSE, updated_at = CURRENT_TIMESTAMP
-       WHERE id = ${id}
-       RETURNING *
+      WITH upd AS (
+        UPDATE accounting_employee_loans
+           SET is_active = FALSE, updated_at = CURRENT_TIMESTAMP
+         WHERE id = ${id}
+         RETURNING *
+      )
+      SELECT
+        id, employee_id, total_amount, installments_count,
+        TO_CHAR(start_month, 'YYYY-MM-DD') AS start_month,
+        note, is_active, created_at, updated_at,
+        created_by_employee_id, created_by_employee_name
+      FROM upd
     `;
     if (!updated) {
       return Response.json({ error: "القرض غير موجود" }, { status: 404 });

@@ -24,8 +24,14 @@ function parsePayrollMonth(raw) {
   };
 }
 async function getPayrollRunAndEntriesByMonth(payrollMonthStart) {
+  // Cast payroll_month to text — see employee-loans/route.js for the
+  // full explanation of the timezone drift this avoids.
   const [run] = await sql`
-    SELECT *
+    SELECT
+      id,
+      TO_CHAR(payroll_month, 'YYYY-MM-DD') AS payroll_month,
+      created_by_employee_id, created_by_employee_name, created_at,
+      is_closed, closed_at, closed_by_employee_id, closed_by_employee_name
     FROM accounting_payroll_runs
     WHERE payroll_month = ${payrollMonthStart}
     LIMIT 1
@@ -84,7 +90,11 @@ async function GET(request) {
       });
     }
     const runs = await sql`
-      SELECT *
+      SELECT
+        id,
+        TO_CHAR(payroll_month, 'YYYY-MM-DD') AS payroll_month,
+        created_by_employee_id, created_by_employee_name, created_at,
+        is_closed, closed_at, closed_by_employee_id, closed_by_employee_name
       FROM accounting_payroll_runs
       ORDER BY payroll_month DESC
       LIMIT 24
