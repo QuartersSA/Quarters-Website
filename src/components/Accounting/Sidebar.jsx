@@ -10,6 +10,7 @@ import {
   ClipboardList,
   Banknote,
   Receipt,
+  HandCoins,
 } from "lucide-react";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
@@ -83,6 +84,12 @@ export default function AccountingSidebar({ active = "dashboard" }) {
       href: "/accounting/payroll",
       label: "مسير الرواتب",
       Icon: Wallet,
+    },
+    {
+      key: "loans",
+      href: "/accounting/loans",
+      label: "السلف والقروض",
+      Icon: HandCoins,
     },
     {
       key: "expenses",

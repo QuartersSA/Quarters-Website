@@ -126,6 +126,8 @@ function PaymentRow({ entry, onSave, isClosed }) {
   const totalSalary = formatMoney(entry.total_salary);
   const totalBonuses = formatMoney(entry.total_bonuses);
   const totalDeductions = formatMoney(entry.total_deductions);
+  const loanDeduction = formatMoney(entry.loan_deduction);
+  const hasLoan = Number(entry.loan_deduction || 0) > 0;
   const formattedNet = formatMoney(entry.net_salary);
 
   return (
@@ -172,6 +174,15 @@ function PaymentRow({ entry, onSave, isClosed }) {
           dir="ltr"
         >
           {totalDeductions}
+        </td>
+        <td
+          className={`py-2 px-1.5 whitespace-nowrap text-right ${
+            hasLoan ? "text-amber-300/90" : "text-white/30"
+          }`}
+          dir="ltr"
+          title={hasLoan ? "قسط شهري لقرض / سلفة نشطة" : ""}
+        >
+          {hasLoan ? loanDeduction : "—"}
         </td>
         <td
           className="py-2 px-1.5 text-emerald-200 font-bold whitespace-nowrap text-right"
@@ -311,7 +322,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
       {/* صف الملاحظة */}
       {showNote && isPaid && (
         <tr className="border-t border-white/5">
-          <td colSpan={12} className="py-2 px-2">
+          <td colSpan={13} className="py-2 px-2">
             <div className="flex items-start gap-2 mr-2">
               {amountDiffers && (
                 <div className="flex items-center gap-1.5 shrink-0 mt-1">
@@ -395,6 +406,9 @@ export function PayrollTable({ entries, onPaymentSave, isClosed }) {
             </th>
             <th className="text-right font-semibold py-2 px-1.5 whitespace-nowrap">
               الخصم
+            </th>
+            <th className="text-right font-semibold py-2 px-1.5 whitespace-nowrap">
+              السلف
             </th>
             <th className="text-right font-semibold py-2 px-1.5 whitespace-nowrap">
               الصافي

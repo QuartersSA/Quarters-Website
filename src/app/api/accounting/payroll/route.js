@@ -154,10 +154,13 @@ export async function POST(request) {
           COALESCE(b.bonuses_count, 0)::int AS bonuses_count,
           COALESCE(b.bonus_ids, '{}'::int[]) AS bonus_ids,
 
+          COALESCE(loan.monthly_total, 0)::numeric(14,2) AS loan_deduction,
+
           (
             (COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0))
             + COALESCE(b.total_bonuses, 0)
             - COALESCE(d.total_deductions, 0)
+            - COALESCE(loan.monthly_total, 0)
           )::numeric(14,2) AS net_salary
         FROM employees e
 
@@ -204,6 +207,24 @@ export async function POST(request) {
             AND x.bonus_date < $2
         ) b ON true
 
+        -- Active employee loans whose installment window covers
+        -- this month. monthly_total = SUM(total_amount / installments)
+        -- across every loan that's active and currently in its
+        -- installment period.
+        LEFT JOIN LATERAL (
+          SELECT COALESCE(
+            SUM(
+              ROUND(l.total_amount / NULLIF(l.installments_count, 0), 2)
+            ),
+            0
+          ) AS monthly_total
+          FROM accounting_employee_loans l
+          WHERE l.employee_id = e.id
+            AND l.is_active = TRUE
+            AND l.start_month <= $1::date
+            AND (l.start_month + (l.installments_count || ' months')::interval) > $1::date
+        ) loan ON true
+
         -- Branch resolution
         LEFT JOIN LATERAL (
           SELECT
@@ -227,6 +248,14 @@ export async function POST(request) {
       `,
       [parsed.monthStart, parsed.nextMonthStart],
     );
+
+    // Ensure accounting_payroll_entries carries the loan_deduction
+    // column. Idempotent — first POST after the migration adds it,
+    // subsequent calls are no-ops.
+    await sql`
+      ALTER TABLE accounting_payroll_entries
+      ADD COLUMN IF NOT EXISTS loan_deduction NUMERIC(14, 2) NOT NULL DEFAULT 0
+    `;
 
     // 2) Upsert run
     const [run] = await sql(
@@ -286,6 +315,7 @@ export async function POST(request) {
                 total_salary,
                 total_bonuses,
                 total_deductions,
+                loan_deduction,
                 net_salary,
                 deductions_count,
                 deduction_ids,
@@ -300,7 +330,7 @@ export async function POST(request) {
                 paid_by_employee_name
               )
               VALUES (
-                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22
+                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23
               )
             `,
             [
@@ -316,6 +346,7 @@ export async function POST(request) {
               Number(r.total_salary || 0),
               Number(r.total_bonuses || 0),
               Number(r.total_deductions || 0),
+              Number(r.loan_deduction || 0),
               Number(r.net_salary || 0),
               Number(r.deductions_count || 0),
               Array.isArray(r.deduction_ids) ? r.deduction_ids : [],
