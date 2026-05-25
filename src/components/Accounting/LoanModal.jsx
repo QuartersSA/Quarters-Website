@@ -5,7 +5,11 @@ import { createPortal } from "react-dom";
 import { Save, X, Wallet } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
-import { buildRecentMonthOptions, formatMoney } from "@/utils/payrollFormatters";
+import {
+  buildRecentMonthOptions,
+  formatMoney,
+  monthLabel,
+} from "@/utils/payrollFormatters";
 
 /**
  * Modal for creating / editing an employee loan.
@@ -35,6 +39,16 @@ export default function LoanModal({
   const [note, setNote] = useState("");
   const [isActive, setIsActive] = useState(true);
 
+  // Existing loan's start_month, normalized to YYYY-MM, so we can be
+  // sure it appears as a real option even if it's outside the default
+  // 36-month window (otherwise GlassSelect would render the placeholder
+  // and the admin would think the field is empty — and worse, lose the
+  // value if they click save without picking again).
+  const existingStartMonth = useMemo(() => {
+    if (!loan?.start_month) return "";
+    return String(loan.start_month).slice(0, 7);
+  }, [loan]);
+
   const monthOptions = useMemo(() => {
     // Drop the leading "اختر الشهر" placeholder — we want an explicit
     // selection on a loan because the installment math depends on it.
@@ -50,11 +64,22 @@ export default function LoanModal({
       const m = String(d.getUTCMonth() + 1).padStart(2, "0");
       const value = `${y}-${m}`;
       if (!opts.find((o) => o.value === value)) {
-        opts.unshift({ value, label: value });
+        opts.unshift({ value, label: monthLabel(value) });
       }
     }
+    // Make sure the loan's current start_month is selectable even if
+    // it's older than 36 months back.
+    if (
+      existingStartMonth &&
+      !opts.find((o) => o.value === existingStartMonth)
+    ) {
+      opts.push({
+        value: existingStartMonth,
+        label: monthLabel(existingStartMonth),
+      });
+    }
     return [{ value: "", label: "اختر الشهر" }, ...opts];
-  }, []);
+  }, [existingStartMonth]);
 
   useEffect(() => {
     if (!open) return;
@@ -208,7 +233,7 @@ export default function LoanModal({
           </div>
 
           <div>
-            <div className="text-xs text-white/55 mb-1">شهر بدء الاستقطاع</div>
+            <div className="text-xs text-white/55 mb-1">شهر البداية</div>
             <GlassSelect
               value={startMonth}
               onChange={setStartMonth}
@@ -216,6 +241,10 @@ export default function LoanModal({
               placeholder="اختر الشهر"
               buttonClassName="text-sm py-2.5 px-3"
             />
+            <div className="text-[11px] text-white/35 mt-1">
+              أول شهر يبدأ الاستقطاع منه — يُخصم القسط الشهري لمدة الأقساط
+              المُحددة ابتداءً من هذا الشهر.
+            </div>
           </div>
 
           <div>

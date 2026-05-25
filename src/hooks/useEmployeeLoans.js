@@ -167,7 +167,11 @@ export function useUpdateLoan() {
       return data;
     },
     onSuccess: async (data) => {
-      const rebuilt = await rebuildAffectedPayrollRuns(data?.loan);
+      // Edits can move start_month / change installments_count, so the
+      // OLD installment window can shrink or shift. Rebuilding only the
+      // new window would leave stale deductions in months that used to
+      // be in-window. Pass null → helper rebuilds every unclosed run.
+      const rebuilt = await rebuildAffectedPayrollRuns(null);
       await invalidateLoansAndPayroll(queryClient);
       if (rebuilt.length > 0) {
         toast.success(
@@ -199,10 +203,12 @@ export function useDeleteLoan() {
       return data;
     },
     onSuccess: async (data) => {
-      // Pass loan from the soft-delete response so window math still
-      // works. Hard delete returns just { hard: true } — fall back to
-      // rebuilding every unclosed run.
-      const rebuilt = await rebuildAffectedPayrollRuns(data?.loan || null);
+      // Deletion / deactivation drops the deduction from every month
+      // it used to apply to. Rebuilding only "the window from the
+      // returned row" misses cases where the loan was already shifted
+      // before deletion. Cheapest correct fix: rebuild every unclosed
+      // run.
+      const rebuilt = await rebuildAffectedPayrollRuns(null);
       await invalidateLoansAndPayroll(queryClient);
       const base = data?.hard ? "تم الحذف نهائياً" : "تم إلغاء تفعيل القرض";
       if (rebuilt.length > 0) {
