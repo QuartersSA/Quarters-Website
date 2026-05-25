@@ -100,21 +100,32 @@ async function GET(request) {
         l.created_at,
         l.created_by_employee_name,
         ROUND(l.total_amount / NULLIF(l.installments_count, 0), 2) AS monthly_amount,
-        -- Installments already covered by the current calendar month
-        GREATEST(
-          0,
-          LEAST(
-            l.installments_count,
-            (
-              (EXTRACT(YEAR FROM CURRENT_DATE)::int * 12
-               + EXTRACT(MONTH FROM CURRENT_DATE)::int)
-              -
-              (EXTRACT(YEAR FROM l.start_month)::int * 12
-               + EXTRACT(MONTH FROM l.start_month)::int)
-              + 1
-            )
-          )
-        )::int AS paid_months_to_date
+        -- Installments actually paid so far.
+        --
+        -- An installment counts as "paid" only when BOTH of these hold
+        -- for the payroll run that covers it:
+        --   1. The run is closed (run.is_closed = TRUE) — so the
+        --      accountant has signed off on the month.
+        --   2. The employee's entry is marked paid (entry.is_paid =
+        --      TRUE) — so the loan deduction was actually applied.
+        --
+        -- We also constrain to runs inside the loan's installment
+        -- window so a stale entry can't push the counter past
+        -- installments_count. Before this fix the value was derived
+        -- from elapsed calendar months, which falsely showed "2 / 8"
+        -- mid-month even though the current month hadn't been closed.
+        COALESCE((
+          SELECT COUNT(*)::int
+          FROM accounting_payroll_entries pe
+          JOIN accounting_payroll_runs pr ON pr.id = pe.run_id
+          WHERE pe.employee_id = l.employee_id
+            AND pr.is_closed = TRUE
+            AND pe.is_paid = TRUE
+            AND pr.payroll_month >= l.start_month
+            AND pr.payroll_month <
+                (l.start_month + (l.installments_count || ' months')::interval)
+            AND COALESCE(pe.loan_deduction, 0) > 0
+        ), 0) AS paid_months_to_date
       FROM accounting_employee_loans l
       JOIN employees e ON e.id = l.employee_id
       ${whereClause}
