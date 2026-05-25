@@ -57,6 +57,7 @@ export default function HREmployeesPage() {
       branchIds: [],
       base_salary: "",
       other_allowances: "",
+      start_date: "",
     }),
     [],
   );
@@ -104,6 +105,7 @@ export default function HREmployeesPage() {
           employee.other_allowances === undefined
             ? ""
             : String(employee.other_allowances),
+        start_date: toInputDate(employee.start_date),
       });
     } else {
       setEditingEmployee(null);
@@ -170,6 +172,7 @@ export default function HREmployeesPage() {
       position: formData.position ? String(formData.position) : null,
       base_salary: baseSalaryValue,
       other_allowances: otherAllowancesValue,
+      start_date: formData.start_date || null,
       branchIds,
     };
 

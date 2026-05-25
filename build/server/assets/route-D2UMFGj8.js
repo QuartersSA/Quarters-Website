@@ -57,6 +57,16 @@ function toSortedBranches(branches) {
   return normalized;
 }
 
+// Idempotent. Adds the start_date column when missing so older
+// schemas keep working without a manual migration. Cheap because of
+// IF NOT EXISTS.
+async function ensureHrSchema() {
+  await sql`
+    ALTER TABLE employees
+    ADD COLUMN IF NOT EXISTS start_date DATE
+  `;
+}
+
 // HR Employees API (separate from /api/employees)
 // GET: list employees (HR fields only)
 async function GET(request) {
@@ -72,6 +82,7 @@ async function GET(request) {
     });
   }
   try {
+    await ensureHrSchema();
     const employees = await sql`
       SELECT
         e.id,
@@ -87,6 +98,7 @@ async function GET(request) {
         e.position,
         e.base_salary,
         e.other_allowances,
+        TO_CHAR(e.start_date, 'YYYY-MM-DD') AS start_date,
         COALESCE(
           jsonb_agg(
             DISTINCT jsonb_build_object(
@@ -136,6 +148,7 @@ async function POST(request) {
     });
   }
   try {
+    await ensureHrSchema();
     const body = await request.json();
     const {
       name,
@@ -149,6 +162,7 @@ async function POST(request) {
       position,
       base_salary,
       other_allowances,
+      start_date,
       branchIds
     } = body;
     if (!name) {
@@ -171,7 +185,8 @@ async function POST(request) {
         health_card_issued,
         position,
         base_salary,
-        other_allowances
+        other_allowances,
+        start_date
       )
       VALUES (
         ${name},
@@ -184,7 +199,8 @@ async function POST(request) {
         ${!!health_card_issued},
         ${position || null},
         ${base_salary ?? null},
-        ${other_allowances ?? null}
+        ${other_allowances ?? null},
+        ${normalizeIsoDate(start_date) || null}
       )
       RETURNING id
     `;
@@ -220,6 +236,7 @@ async function POST(request) {
         e.position,
         e.base_salary,
         e.other_allowances,
+        TO_CHAR(e.start_date, 'YYYY-MM-DD') AS start_date,
         COALESCE(
           jsonb_agg(
             DISTINCT jsonb_build_object(
@@ -296,6 +313,10 @@ async function POST(request) {
           other_allowances: {
             from: null,
             to: other_allowances ?? null
+          },
+          start_date: {
+            from: null,
+            to: normalizeIsoDate(start_date || null)
           }
         },
         branches: {

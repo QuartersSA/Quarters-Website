@@ -7,9 +7,11 @@ import {
   FileText,
   Calendar,
   CheckCircle2,
+  XCircle,
   Briefcase,
   Building2,
   DollarSign,
+  CalendarCheck,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import HRModalHeader from "@/components/HR/HRModalHeader";
@@ -243,6 +245,80 @@ export function HREmployeeModal({
                 placeholder="— بدون —"
               />
             </div>
+          </div>
+
+          {/* Start date — toggle + date picker. When the toggle is on
+              the field expands; when off the form posts start_date as
+              null (employee paid full salary every month from creation
+              onwards, no proration). */}
+          <div
+            className={`${ws.glassSoft} border border-white/10 rounded-2xl p-4`}
+          >
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div className="min-w-0">
+                <p className="text-white font-semibold">
+                  <CalendarCheck className="w-4 h-4 inline ml-2" />
+                  تاريخ المباشرة
+                </p>
+                <p className="text-sm text-white/55 mt-1 leading-relaxed">
+                  فعّل وحدّد التاريخ ليبدأ مسير الرواتب من ذلك اليوم. مسير
+                  الشهر الذي يقع فيه التاريخ يُحسب على أساس{" "}
+                  <span className="text-white/80">
+                    (الراتب ÷ 30) × أيام العمل في الشهر
+                  </span>
+                  . الأشهر السابقة لا يُسجَّل لها راتب لهذا الموظف.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (formData.start_date) {
+                    setFormData({ ...formData, start_date: "" });
+                  } else {
+                    // Default to today when the admin first turns the
+                    // toggle on, so the date picker isn't stuck
+                    // showing the placeholder.
+                    const now = new Date();
+                    const y = now.getFullYear();
+                    const m = String(now.getMonth() + 1).padStart(2, "0");
+                    const d = String(now.getDate()).padStart(2, "0");
+                    setFormData({
+                      ...formData,
+                      start_date: `${y}-${m}-${d}`,
+                    });
+                  }
+                }}
+                className={
+                  formData.start_date
+                    ? `${ws.btnPrimary} px-4 py-2`
+                    : `${ws.btnNeutral} px-4 py-2`
+                }
+              >
+                {formData.start_date ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                {formData.start_date ? "مفعّل" : "غير مفعّل"}
+              </button>
+            </div>
+
+            {formData.start_date ? (
+              <div className="mt-3">
+                <GlassDatePicker
+                  value={formData.start_date}
+                  onChange={(v) =>
+                    setFormData({
+                      ...formData,
+                      start_date: v || "",
+                    })
+                  }
+                  placeholder="اختر تاريخ المباشرة"
+                  allowClear
+                />
+              </div>
+            ) : null}
           </div>
 
           {/* Salary */}

@@ -168,17 +168,72 @@ async function POST(request) {
       });
     }
 
+    // Make sure the start_date column exists. Idempotent — first POST
+    // after deploying this migration adds it; later calls no-op.
+    await sql`
+      ALTER TABLE employees
+      ADD COLUMN IF NOT EXISTS start_date DATE
+    `;
+
     // 1) Aggregate deductions + bonuses per employee for this month
     //    ✅ include ALL employees, even if they have no deductions/bonuses
+    //
+    // Salary proration:
+    //   - If start_date is NULL or on/before the first day of this
+    //     payroll month, the employee is paid the full base+allowances.
+    //   - If start_date sits on/after the next month, the employee
+    //     wasn't on board at all → both fields are zeroed.
+    //   - If start_date falls inside this month, base + allowances are
+    //     divided by 30 (Saudi convention regardless of calendar
+    //     length) and multiplied by the days actually worked
+    //     (start_date → end of month, inclusive). Days worked is
+    //     computed as (next_month_start - start_date) so a start on
+    //     the 1st gives "days_in_month" days; a start on the 15th of
+    //     a 30-day month gives 16 days.
     const rows = await sql(`
         SELECT
           e.id AS employee_id,
           e.name AS employee_name,
           br.branch_id AS branch_id,
           br.branch_name AS branch_name,
-          COALESCE(e.base_salary, 0)::numeric(14,2) AS base_salary,
-          COALESCE(e.other_allowances, 0)::numeric(14,2) AS other_allowances,
-          (COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0))::numeric(14,2) AS total_salary,
+          TO_CHAR(e.start_date, 'YYYY-MM-DD') AS start_date,
+          (CASE
+            WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
+              COALESCE(e.base_salary, 0)
+            WHEN e.start_date >= $2::date THEN
+              0
+            ELSE
+              ROUND(
+                COALESCE(e.base_salary, 0) / 30.0
+                * (($2::date - e.start_date)::int),
+                2
+              )
+          END)::numeric(14,2) AS base_salary,
+          (CASE
+            WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
+              COALESCE(e.other_allowances, 0)
+            WHEN e.start_date >= $2::date THEN
+              0
+            ELSE
+              ROUND(
+                COALESCE(e.other_allowances, 0) / 30.0
+                * (($2::date - e.start_date)::int),
+                2
+              )
+          END)::numeric(14,2) AS other_allowances,
+          (CASE
+            WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
+              COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0)
+            WHEN e.start_date >= $2::date THEN
+              0
+            ELSE
+              ROUND(
+                (COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0))
+                / 30.0
+                * (($2::date - e.start_date)::int),
+                2
+              )
+          END)::numeric(14,2) AS total_salary,
 
           COALESCE(d.total_deductions, 0)::numeric(14,2) AS total_deductions,
           COALESCE(d.deductions_count, 0)::int AS deductions_count,
@@ -191,7 +246,22 @@ async function POST(request) {
           COALESCE(loan.monthly_total, 0)::numeric(14,2) AS loan_deduction,
 
           (
-            (COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0))
+            -- Use the prorated total above, NOT the raw e.base_salary
+            -- column, so a mid-month hire's net reflects the partial
+            -- month they actually worked.
+            (CASE
+              WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
+                COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0)
+              WHEN e.start_date >= $2::date THEN
+                0
+              ELSE
+                ROUND(
+                  (COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0))
+                  / 30.0
+                  * (($2::date - e.start_date)::int),
+                  2
+                )
+            END)
             + COALESCE(b.total_bonuses, 0)
             - COALESCE(d.total_deductions, 0)
             - COALESCE(loan.monthly_total, 0)

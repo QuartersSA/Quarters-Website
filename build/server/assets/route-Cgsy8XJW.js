@@ -98,6 +98,7 @@ async function GET(request, {
         e.position,
         e.base_salary,
         e.other_allowances,
+        TO_CHAR(e.start_date, 'YYYY-MM-DD') AS start_date,
         COALESCE(
           jsonb_agg(
             DISTINCT jsonb_build_object(
@@ -179,6 +180,7 @@ async function PUT(request, {
         e.position,
         e.base_salary,
         e.other_allowances,
+        TO_CHAR(e.start_date, 'YYYY-MM-DD') AS start_date,
         COALESCE(
           jsonb_agg(
             DISTINCT jsonb_build_object(
@@ -223,6 +225,7 @@ async function PUT(request, {
       position,
       base_salary,
       other_allowances,
+      start_date,
       branchIds
     } = body;
     const updates = [];
@@ -283,6 +286,11 @@ async function PUT(request, {
       values.push(other_allowances);
       paramCount++;
     }
+    if (start_date !== undefined) {
+      updates.push(`start_date = $${paramCount}`);
+      values.push(normalizeIsoDate(start_date) || null);
+      paramCount++;
+    }
     if (updates.length > 0) {
       const query = `UPDATE employees SET ${updates.join(", ")} WHERE id = $${paramCount} RETURNING id`;
       values.push(employeeId);
@@ -332,6 +340,7 @@ async function PUT(request, {
         e.position,
         e.base_salary,
         e.other_allowances,
+        TO_CHAR(e.start_date, 'YYYY-MM-DD') AS start_date,
         COALESCE(
           jsonb_agg(
             DISTINCT jsonb_build_object(
@@ -357,12 +366,13 @@ async function PUT(request, {
       GROUP BY e.id
     `;
     const changedFields = {};
-    const keys = ["name", "phone", "iqama_number", "iqama_expiry_date", "sponsorship_transferred", "work_card_issued", "medical_check_issued", "health_card_issued", "position", "base_salary", "other_allowances"];
+    const keys = ["name", "phone", "iqama_number", "iqama_expiry_date", "sponsorship_transferred", "work_card_issued", "medical_check_issued", "health_card_issued", "position", "base_salary", "other_allowances", "start_date"];
+    const isDateField = key => key === "iqama_expiry_date" || key === "start_date";
     for (const key of keys) {
       const beforeValRaw = before?.[key];
       const afterValRaw = updated?.[key];
-      const beforeVal = key === "iqama_expiry_date" ? normalizeIsoDate(beforeValRaw) : beforeValRaw ?? null;
-      const afterVal = key === "iqama_expiry_date" ? normalizeIsoDate(afterValRaw) : afterValRaw ?? null;
+      const beforeVal = isDateField(key) ? normalizeIsoDate(beforeValRaw) : beforeValRaw ?? null;
+      const afterVal = isDateField(key) ? normalizeIsoDate(afterValRaw) : afterValRaw ?? null;
       const isDifferent = JSON.stringify(beforeVal) !== JSON.stringify(afterVal);
       if (isDifferent) {
         changedFields[key] = {
