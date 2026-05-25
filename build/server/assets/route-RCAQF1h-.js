@@ -65,6 +65,11 @@ async function PUT(request, {
       values.push(!!body.is_active);
       idx += 1;
     }
+    if (body.is_template !== undefined) {
+      sets.push(`is_template = $${idx}`);
+      values.push(!!body.is_template);
+      idx += 1;
+    }
     if (body.expected_amount !== undefined) {
       if (body.expected_amount === null || body.expected_amount === "") {
         sets.push(`expected_amount = NULL`);
@@ -94,7 +99,7 @@ async function PUT(request, {
       UPDATE accounting_expense_types
          SET ${sets.join(", ")}
        WHERE id = $${idx}
-       RETURNING id, name, scope, is_active, expected_amount
+       RETURNING id, name, scope, is_active, expected_amount, is_template
     `;
     const [updated] = await sql(query, values);
     if (!updated) {

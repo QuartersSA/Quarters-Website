@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Receipt, CheckCircle2, Trash2, Plus, X } from "lucide-react";
 import GlassSelect from "@/components/Workspace/GlassSelect";
@@ -27,6 +28,20 @@ import { toast } from "sonner";
  */
 export default function VariableGrid({ types, monthExpenses, month, onMutate }) {
   const queryClient = useQueryClient();
+
+  // The variable grid only shows categories the admin explicitly
+  // turned into templates via "إضافة قالب". Plain catalog categories
+  // from the البنود tab stay out of the grid even if their scope is
+  // 'variable' or 'both'. Legacy rows (created before is_template
+  // existed) come back as null/undefined → treat them as templates so
+  // nothing disappears after the migration.
+  const templateTypes = useMemo(
+    () =>
+      (types || []).filter(
+        (t) => t.is_template === true || t.is_template == null,
+      ),
+    [types],
+  );
 
   // Map of (type_id) → existing canonical row for this month.
   // "Canonical" = the variable row (no fixed_expense_id) for that type.
@@ -58,12 +73,12 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
   const [draft, setDraft] = useState({});
   useEffect(() => {
     const next = {};
-    for (const t of types || []) {
+    for (const t of templateTypes) {
       const row = existingByType.get(Number(t.id));
       next[t.id] = row ? String(row.amount) : "";
     }
     setDraft(next);
-  }, [types, existingByType, month]);
+  }, [templateTypes, existingByType, month]);
 
   const saveMut = useMutation({
     mutationFn: async ({ type_id, amount, mark_paid }) => {
@@ -167,7 +182,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
   const totals = useMemo(() => {
     let total = 0;
     let paid = 0;
-    for (const t of types || []) {
+    for (const t of templateTypes) {
       const row = existingByType.get(Number(t.id));
       if (!row) continue;
       total += Number(row.amount) || 0;
@@ -177,16 +192,36 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
       }
     }
     return { total, paid, pending: total - paid };
-  }, [types, existingByType]);
+  }, [templateTypes, existingByType]);
 
-  if (!types || types.length === 0) {
+  if (templateTypes.length === 0) {
     return (
-      <div className={`${ws.glass} ${ws.card} p-5`}>
-        <div className="text-white/55 text-sm text-center py-6">
-          لا توجد بنود متغيرة بعد. أضف بنداً من تبويب «البنود» وحدد نطاقه
-          «متغيّر» أو «الاثنين».
+      <>
+        <div className={`${ws.glass} ${ws.card} p-5`}>
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <div className="text-white/55 text-sm">
+              لا توجد قوالب متغيرة بعد. أضف أول قالب للبدء.
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowAddTemplate(true)}
+              className={`${ws.btnPrimary} px-3 py-2 text-xs`}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>إضافة قالب</span>
+            </button>
+          </div>
         </div>
-      </div>
+        {showAddTemplate && (
+          <VariableTemplateModal
+            types={types}
+            month={month}
+            onClose={() => setShowAddTemplate(false)}
+            onSubmit={(payload) => createTemplateMut.mutate(payload)}
+            isPending={createTemplateMut.isPending}
+          />
+        )}
+      </>
     );
   }
 
@@ -255,7 +290,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
             </tr>
           </thead>
           <tbody>
-            {types.map((t) => {
+            {templateTypes.map((t) => {
               const row = existingByType.get(Number(t.id));
               const confirmed = !!row?.is_confirmed;
               const isLegacy = !!row?.legacy;
@@ -462,12 +497,13 @@ function VariableTemplateModal({
       name: trimmed,
       scope,
       expected_amount: exp,
+      is_template: true,
     });
   };
 
-  return (
+  const node = (
     <div
-      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+      className="fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
       dir="rtl"
       onClick={onClose}
     >
@@ -568,4 +604,11 @@ function VariableTemplateModal({
       </form>
     </div>
   );
+
+  // Portal to body — the parent page has backdrop-filter / transform
+  // ancestors which trap the modal's z-index inside their stacking
+  // context and break the cover.
+  return typeof document !== "undefined"
+    ? createPortal(node, document.body)
+    : node;
 }
