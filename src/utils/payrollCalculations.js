@@ -25,8 +25,31 @@ export function calculatePayrollTotals(entries) {
 export function formatRunCreatedAt(createdAt) {
   if (!createdAt) return "—";
   const s = String(createdAt);
-  const cleaned = s.replace("T", " ");
-  return cleaned.slice(0, 16);
+
+  // Postgres stores TIMESTAMP without timezone; the neon/node-pg
+  // driver returns it as a JS Date and JSON.stringify hands the
+  // client an ISO UTC string ("...Z"). The old slice-and-replace
+  // shortcut printed those UTC numbers verbatim, so on a server in
+  // UTC the admin in Asia/Riyadh saw a value 3 hours behind the
+  // actual local clock.
+  //
+  // Now: append "Z" when the value has no timezone marker, parse
+  // it as a real Date, then format it in the user's LOCAL timezone
+  // (matches the wall clock the admin reads off their machine).
+  const hasTz = /Z$|[+-]\d\d:?\d\d$/.test(s);
+  let normalized = s;
+  if (!hasTz) {
+    normalized = (s.includes("T") ? s : s.replace(" ", "T")) + "Z";
+  }
+  const d = new Date(normalized);
+  if (Number.isNaN(d.getTime())) {
+    // Fall back to the raw string if it's something we can't parse —
+    // never throw inside a formatter that the table renders directly.
+    return s.replace("T", " ").slice(0, 16);
+  }
+
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 export function getPayrollExportColumns() {
