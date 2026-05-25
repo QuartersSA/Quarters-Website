@@ -71,16 +71,21 @@ async function GET(request) {
     await ensureSchema();
     const url = new URL(request.url);
     const includeInactive = url.searchParams.get("includeInactive") === "1";
+
+    // Templates whose parent category was deactivated are hidden
+    // from the active view. Historical accounting_expenses rows that
+    // link to the template stay intact (no cascade).
     const rows = includeInactive ? await sql`
-          SELECT f.*, t.name AS expense_type_name
+          SELECT f.*, t.name AS expense_type_name, t.is_active AS type_is_active
           FROM accounting_fixed_expenses f
           JOIN accounting_expense_types t ON t.id = f.expense_type_id
           ORDER BY f.is_active DESC, t.name ASC, f.expense_name ASC
         ` : await sql`
-          SELECT f.*, t.name AS expense_type_name
+          SELECT f.*, t.name AS expense_type_name, t.is_active AS type_is_active
           FROM accounting_fixed_expenses f
           JOIN accounting_expense_types t ON t.id = f.expense_type_id
           WHERE f.is_active = TRUE
+            AND t.is_active = TRUE
           ORDER BY t.name ASC, f.expense_name ASC
         `;
     return Response.json({

@@ -66,6 +66,7 @@ async function GET(request) {
         FROM accounting_fixed_expenses f
         JOIN accounting_expense_types t ON t.id = f.expense_type_id
         WHERE f.is_active = TRUE
+          AND t.is_active = TRUE
           AND (f.start_month IS NULL OR f.start_month <= ${monthStart})
           AND NOT EXISTS (
             SELECT 1 FROM accounting_expenses e
