@@ -2,92 +2,96 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Receipt, CheckCircle2, Trash2, Plus, X } from "lucide-react";
-import GlassSelect from "@/components/Workspace/GlassSelect";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  Receipt,
+  CheckCircle2,
+  Trash2,
+  Plus,
+  X,
+  Pencil,
+} from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
 import { toast } from "sonner";
 
 /**
- * One row per "variable" category (scope = 'variable' or 'both').
- * Amount is per (category, month). Saving an amount upserts the
- * canonical variable accounting_expenses row for that pair via
- * PUT /api/accounting/expenses/variable.
+ * Variable-expense grid.
  *
- * "بنود موحدة" — every month shows the SAME row list. Only amounts
- * differ. Setting amount to 0/empty deletes the row for that month.
+ * Each row is a "variable template" — a named line item linked to an
+ * existing expense_type (category). Templates live in
+ * accounting_variable_templates; per-month amounts live in
+ * accounting_expenses with a variable_template_id link back to the
+ * template.
  *
  * Props:
- *   types          — accounting_expense_types where scope IN ('variable','both')
- *   monthExpenses  — accounting_expenses rows for the month (used to
- *                    preload existing amounts)
- *   month          — "YYYY-MM"
- *   onMutate       — refetch hook
+ *   types         — full catalog (used to render the category
+ *                   dropdown in the add modal); only variable / both
+ *                   scopes get listed.
+ *   monthExpenses — accounting_expenses rows for the selected month.
+ *   month         — "YYYY-MM"
+ *   onMutate      — parent refetch hook.
  */
 export default function VariableGrid({ types, monthExpenses, month, onMutate }) {
   const queryClient = useQueryClient();
 
-  // The variable grid only shows categories the admin explicitly
-  // turned into templates via "إضافة قالب". Plain catalog categories
-  // from the البنود tab stay out of the grid even if their scope is
-  // 'variable' or 'both'. Legacy rows (created before is_template
-  // existed) come back as null/undefined → treat them as templates so
-  // nothing disappears after the migration.
-  const templateTypes = useMemo(
+  const templatesQuery = useQuery({
+    queryKey: ["accounting_variable_templates"],
+    queryFn: async () => {
+      const r = await adminFetch("/api/accounting/variable-templates");
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل تحميل القوالب");
+      return d.templates || [];
+    },
+  });
+  const templates = templatesQuery.data || [];
+
+  // Categories that the add-template modal lets the admin pick from.
+  // Restricted to variable / both — fixed-only categories don't make
+  // sense as a variable template parent.
+  const variableTypes = useMemo(
     () =>
       (types || []).filter(
-        (t) => t.is_template === true || t.is_template == null,
+        (t) =>
+          (t.scope === "variable" || t.scope === "both" || !t.scope) &&
+          (t.is_active === undefined || t.is_active === true),
       ),
     [types],
   );
 
-  // Map of (type_id) → existing canonical row for this month.
-  // "Canonical" = the variable row (no fixed_expense_id) for that type.
-  const existingByType = useMemo(() => {
+  // (template_id) → accounting_expenses row for the current month.
+  const existingByTemplate = useMemo(() => {
     const m = new Map();
     for (const e of monthExpenses || []) {
-      if (e.fixed_expense_id) continue; // skip fixed-linked rows
-      const tid = Number(e.expense_type_id);
-      if (!m.has(tid)) {
-        m.set(tid, e);
-      } else {
-        // Multiple rows for the same (type, month) — sum amounts so the
-        // UI still reflects the total. Mark as legacy (read-only) by
-        // setting a `legacy: true` flag downstream consumers can use.
-        const cur = m.get(tid);
-        m.set(tid, {
-          ...cur,
-          amount: Number(cur.amount || 0) + Number(e.amount || 0),
-          legacy: true,
-        });
-      }
+      const tid = Number(e.variable_template_id);
+      if (!Number.isFinite(tid) || tid <= 0) continue;
+      if (!m.has(tid)) m.set(tid, e);
     }
     return m;
   }, [monthExpenses]);
 
-  // Local "draft" state — what the user is currently typing. Re-seeds
-  // when the month or existing data changes so switching months doesn't
-  // strand stale input.
+  // Draft state per template. Seeded from existing rows; resets when
+  // the month or template set changes.
   const [draft, setDraft] = useState({});
   useEffect(() => {
     const next = {};
-    for (const t of templateTypes) {
-      const row = existingByType.get(Number(t.id));
+    for (const t of templates) {
+      const row = existingByTemplate.get(Number(t.id));
       next[t.id] = row ? String(row.amount) : "";
     }
     setDraft(next);
-  }, [templateTypes, existingByType, month]);
+  }, [templates, existingByTemplate, month]);
 
   const saveMut = useMutation({
-    mutationFn: async ({ type_id, amount, mark_paid }) => {
+    mutationFn: async ({ template_id, amount, mark_paid }) => {
       const r = await adminFetch("/api/accounting/expenses/variable", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           month,
-          expense_type_id: type_id,
+          variable_template_id: template_id,
           amount: amount === "" || amount === null ? null : Number(amount),
           mark_paid: !!mark_paid,
         }),
@@ -103,13 +107,13 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     onError: (e) => toast.error(e.message || "فشل الحفظ"),
   });
 
-  // Add-template modal state. The template is implemented as a
-  // variable-scoped expense_type row with an expected_amount.
-  const [showAddTemplate, setShowAddTemplate] = useState(false);
+  // Template CRUD.
+  const [showAdd, setShowAdd] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
 
   const createTemplateMut = useMutation({
     mutationFn: async (body) => {
-      const r = await adminFetch("/api/accounting/expense-types", {
+      const r = await adminFetch("/api/accounting/variable-templates", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -120,54 +124,64 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     },
     onSuccess: () => {
       onMutate?.();
-      queryClient.invalidateQueries({ queryKey: ["accounting_expense_types"] });
       queryClient.invalidateQueries({
-        queryKey: ["accounting_expense_types_full"],
+        queryKey: ["accounting_variable_templates"],
       });
       toast.success("تم إضافة القالب");
-      setShowAddTemplate(false);
+      setShowAdd(false);
     },
     onError: (e) => toast.error(e.message || "فشل الإضافة"),
   });
 
-  // Soft-deactivate the category. Hard DELETE refuses when any
-  // accounting_expenses row references the type (preserves historical
-  // data), so we instead flip is_active=false — the category vanishes
-  // from the fixed + variable panels but old expenses keep pointing
-  // at it. The admin can hard-delete elsewhere if there's no
-  // historical data left.
-  const deactivateCategoryMut = useMutation({
-    mutationFn: async (id) => {
-      const r = await adminFetch(`/api/accounting/expense-types/${id}`, {
+  const updateTemplateMut = useMutation({
+    mutationFn: async ({ id, ...body }) => {
+      const r = await adminFetch(`/api/accounting/variable-templates/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ is_active: false }),
+        body: JSON.stringify(body),
       });
       const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "تعذّر إيقاف البند");
+      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
       return d;
     },
     onSuccess: () => {
       onMutate?.();
-      queryClient.invalidateQueries({ queryKey: ["accounting_expense_types"] });
       queryClient.invalidateQueries({
-        queryKey: ["accounting_expense_types_full"],
+        queryKey: ["accounting_variable_templates"],
       });
-      toast.success("تم إيقاف البند");
+      toast.success("تم التعديل");
+      setEditTarget(null);
     },
-    onError: (e) => toast.error(e.message || "تعذّر إيقاف البند"),
+    onError: (e) => toast.error(e.message || "فشل التعديل"),
+  });
+
+  const deactivateTemplateMut = useMutation({
+    mutationFn: async (id) => {
+      const r = await adminFetch(`/api/accounting/variable-templates/${id}`, {
+        method: "DELETE",
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "تعذّر الإيقاف");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      queryClient.invalidateQueries({
+        queryKey: ["accounting_variable_templates"],
+      });
+      toast.success("تم إيقاف القالب");
+    },
+    onError: (e) => toast.error(e.message || "تعذّر الإيقاف"),
   });
 
   const handleBlur = (t) => {
-    const row = existingByType.get(Number(t.id));
+    const row = existingByTemplate.get(Number(t.id));
     const draftVal = draft[t.id] ?? "";
     const draftNum =
       draftVal === "" || draftVal === null ? null : Number(draftVal);
     const existingNum = row ? Number(row.amount) : null;
-
-    // No change → don't fire.
     if (draftNum === existingNum) return;
-    saveMut.mutate({ type_id: t.id, amount: draftVal });
+    saveMut.mutate({ template_id: t.id, amount: draftVal });
   };
 
   const handleMarkPaid = (t) => {
@@ -176,25 +190,79 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
       toast.error("أدخل المبلغ أولاً");
       return;
     }
-    saveMut.mutate({ type_id: t.id, amount: draftVal, mark_paid: true });
+    saveMut.mutate({ template_id: t.id, amount: draftVal, mark_paid: true });
   };
 
   const totals = useMemo(() => {
     let total = 0;
     let paid = 0;
-    for (const t of templateTypes) {
-      const row = existingByType.get(Number(t.id));
+    for (const t of templates) {
+      const row = existingByTemplate.get(Number(t.id));
       if (!row) continue;
       total += Number(row.amount) || 0;
       if (row.is_confirmed) {
-        paid +=
-          Number(row.confirmed_amount ?? row.amount) || 0;
+        paid += Number(row.confirmed_amount ?? row.amount) || 0;
       }
     }
     return { total, paid, pending: total - paid };
-  }, [templateTypes, existingByType]);
+  }, [templates, existingByTemplate]);
 
-  if (templateTypes.length === 0) {
+  const addCta = (
+    <button
+      type="button"
+      onClick={() => setShowAdd(true)}
+      className={`${ws.btnPrimary} px-3 py-2 text-xs`}
+    >
+      <Plus className="w-3.5 h-3.5" />
+      <span>إضافة قالب</span>
+    </button>
+  );
+
+  // Modal mounts in a portal so the page's backdrop-filter ancestors
+  // can't trap its z-index.
+  const modal = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    if (!showAdd && !editTarget) return null;
+    return createPortal(
+      <VariableTemplateModal
+        target={editTarget}
+        types={variableTypes}
+        month={month}
+        onClose={() => {
+          setShowAdd(false);
+          setEditTarget(null);
+        }}
+        onSubmit={(payload) => {
+          if (editTarget) {
+            updateTemplateMut.mutate({ id: editTarget.id, ...payload });
+          } else {
+            createTemplateMut.mutate(payload);
+          }
+        }}
+        isPending={
+          createTemplateMut.isPending || updateTemplateMut.isPending
+        }
+      />,
+      document.body,
+    );
+  }, [
+    showAdd,
+    editTarget,
+    variableTypes,
+    month,
+    createTemplateMut.isPending,
+    updateTemplateMut.isPending,
+  ]);
+
+  if (templatesQuery.isLoading) {
+    return (
+      <div className={`${ws.glass} ${ws.card} p-5 text-white/55 text-sm text-center py-6`}>
+        جاري التحميل…
+      </div>
+    );
+  }
+
+  if (templates.length === 0) {
     return (
       <>
         <div className={`${ws.glass} ${ws.card} p-5`}>
@@ -202,25 +270,10 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
             <div className="text-white/55 text-sm">
               لا توجد قوالب متغيرة بعد. أضف أول قالب للبدء.
             </div>
-            <button
-              type="button"
-              onClick={() => setShowAddTemplate(true)}
-              className={`${ws.btnPrimary} px-3 py-2 text-xs`}
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>إضافة قالب</span>
-            </button>
+            {addCta}
           </div>
         </div>
-        {showAddTemplate && (
-          <VariableTemplateModal
-            types={types}
-            month={month}
-            onClose={() => setShowAddTemplate(false)}
-            onSubmit={(payload) => createTemplateMut.mutate(payload)}
-            isPending={createTemplateMut.isPending}
-          />
-        )}
+        {modal}
       </>
     );
   }
@@ -237,7 +290,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
               المصروفات المتغيرة
             </div>
             <div className="text-xs text-white/55 mt-0.5">
-              {monthLabel(month)} — البنود موحّدة كل شهر، يتغيّر المبلغ فقط
+              {monthLabel(month)} — القوالب موحّدة كل شهر، يتغيّر المبلغ فقط
             </div>
           </div>
         </div>
@@ -260,14 +313,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
               {formatMoney(totals.pending)}
             </span>
           </div>
-          <button
-            type="button"
-            onClick={() => setShowAddTemplate(true)}
-            className={`${ws.btnPrimary} px-3 py-2 text-xs`}
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>إضافة قالب</span>
-          </button>
+          {addCta}
         </div>
       </div>
 
@@ -277,6 +323,9 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
             <tr className="bg-white/[0.04]">
               <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
                 البند
+              </th>
+              <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                التصنيف
               </th>
               <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
                 المبلغ
@@ -290,10 +339,9 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
             </tr>
           </thead>
           <tbody>
-            {templateTypes.map((t) => {
-              const row = existingByType.get(Number(t.id));
+            {templates.map((t) => {
+              const row = existingByTemplate.get(Number(t.id));
               const confirmed = !!row?.is_confirmed;
-              const isLegacy = !!row?.legacy;
               return (
                 <tr
                   key={t.id}
@@ -303,11 +351,9 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
                     <div className="text-white text-sm font-medium">
                       {t.name}
                     </div>
-                    {isLegacy ? (
-                      <div className="text-amber-300/70 text-[10px] mt-0.5">
-                        ملاحظة: عدة صفوف قديمة لنفس النوع — يُجمع تلقائياً
-                      </div>
-                    ) : null}
+                  </td>
+                  <td className="px-3 py-2 text-white/70 text-xs">
+                    {t.expense_type_name}
                   </td>
                   <td className="px-3 py-2">
                     <input
@@ -333,7 +379,6 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
                           : "0"
                       }
                       dir="ltr"
-                      disabled={isLegacy}
                     />
                   </td>
                   <td className="px-3 py-2 text-center">
@@ -354,7 +399,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
                         <button
                           type="button"
                           onClick={() => handleMarkPaid(t)}
-                          disabled={saveMut.isPending || isLegacy}
+                          disabled={saveMut.isPending}
                           className={`${ws.btnPrimary} px-2 py-1 text-xs disabled:opacity-50`}
                         >
                           <CheckCircle2 className="w-3 h-3" />
@@ -363,18 +408,26 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
                       )}
                       <button
                         type="button"
+                        onClick={() => setEditTarget(t)}
+                        className={`${ws.btnNeutral} px-2 py-1 text-xs`}
+                        title="تعديل القالب"
+                      >
+                        <Pencil className="w-3 h-3" />
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => {
                           if (
                             window.confirm(
-                              `إيقاف البند «${t.name}»؟ سيختفي من المصروفات الثابتة والمتغيرة، والمصاريف السابقة المسجلة عليه تبقى كما هي.`,
+                              `إيقاف القالب «${t.name}»؟ سيختفي من القائمة والمصاريف السابقة تبقى كما هي.`,
                             )
                           ) {
-                            deactivateCategoryMut.mutate(t.id);
+                            deactivateTemplateMut.mutate(t.id);
                           }
                         }}
-                        disabled={deactivateCategoryMut.isPending}
+                        disabled={deactivateTemplateMut.isPending}
                         className={`${ws.btnDanger} px-2 py-1 text-xs disabled:opacity-50`}
-                        title="إيقاف البند"
+                        title="إيقاف القالب"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
@@ -387,81 +440,61 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
         </table>
       </div>
 
-      {showAddTemplate && (
-        <VariableTemplateModal
-          types={types}
-          month={month}
-          onClose={() => setShowAddTemplate(false)}
-          onSubmit={(payload) => createTemplateMut.mutate(payload)}
-          isPending={createTemplateMut.isPending}
-        />
-      )}
+      {modal}
     </div>
   );
 }
 
 /* ──────────────────────────────────────────────────────────────── */
 
-const SCOPE_OPTIONS = [
-  { value: "variable", label: "متغيّر فقط" },
-  { value: "both", label: "الاثنين (ثابت + متغيّر)" },
-];
-
 /**
- * Add-template modal scoped to the variable grid.
+ * Add/edit modal for a variable template.
  *
  * Fields:
- *   - اسم البند     (free text → becomes accounting_expense_types.name)
- *   - التصنيف       (scope: 'variable' | 'both')
- *   - إجمالي المبلغ المتوقع
- *       Auto-prefills from /api/accounting/expenses/last-amount if a
- *       category with the same name already exists; otherwise the
- *       admin types in the expected amount manually.
+ *   - اسم البند (template name)
+ *   - التصنيف (existing expense_type from variableTypes)
+ *   - إجمالي المبلغ المتوقع (auto-prefilled from the most recent
+ *     amount logged against the chosen category)
  */
 function VariableTemplateModal({
+  target,
   types,
   month,
   onClose,
   onSubmit,
   isPending,
 }) {
-  const [name, setName] = useState("");
-  const [scope, setScope] = useState("variable");
-  const [expectedAmount, setExpectedAmount] = useState("");
+  const [name, setName] = useState(target?.name || "");
+  const [typeId, setTypeId] = useState(
+    target?.expense_type_id ? String(target.expense_type_id) : "",
+  );
+  const [expectedAmount, setExpectedAmount] = useState(
+    target?.expected_amount !== null && target?.expected_amount !== undefined
+      ? String(target.expected_amount)
+      : "",
+  );
   const [historyHint, setHistoryHint] = useState(null);
 
-  // History prefill: when the typed name matches an existing type
-  // (case-insensitive trim), look up its last accounting_expenses
-  // amount before the current month and seed the input.
-  React.useEffect(() => {
-    const trimmed = name.trim();
-    if (!trimmed) {
+  const typeOptions = useMemo(() => {
+    const opts = [{ value: "", label: "اختر التصنيف…" }];
+    for (const t of types || []) {
+      opts.push({ value: String(t.id), label: t.name });
+    }
+    return opts;
+  }, [types]);
+
+  // Auto-prefill expected_amount from the last logged amount for the
+  // chosen category (any month before current).
+  useEffect(() => {
+    if (!typeId || !month) {
       setHistoryHint(null);
       return;
     }
-    const match = (types || []).find(
-      (t) =>
-        String(t.name || "").trim().toLowerCase() ===
-        trimmed.toLowerCase(),
-    );
-    if (!match) {
-      setHistoryHint(null);
-      return;
-    }
-    // Seed expected_amount from the stored type-level expected first.
-    if (
-      match.expected_amount !== null &&
-      match.expected_amount !== undefined &&
-      !expectedAmount
-    ) {
-      setExpectedAmount(String(match.expected_amount));
-    }
-    if (!month) return;
     let cancelled = false;
     (async () => {
       try {
         const params = new URLSearchParams({
-          expense_type_id: String(match.id),
+          expense_type_id: String(typeId),
           beforeMonth: month,
         });
         const r = await adminFetch(
@@ -475,33 +508,38 @@ function VariableTemplateModal({
             amount: d.amount,
             month: String(d.expense_month || "").slice(0, 7),
           });
-          if (!expectedAmount) setExpectedAmount(String(d.amount));
+          if (!target && !expectedAmount) {
+            setExpectedAmount(String(d.amount));
+          }
+        } else {
+          setHistoryHint(null);
         }
       } catch {
-        // ignore — prefill is best-effort
+        // best-effort
       }
     })();
     return () => {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, month]);
+  }, [typeId, month]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) return;
+    const tid = Number(typeId);
+    if (!Number.isFinite(tid) || tid <= 0) return;
     const exp = expectedAmount === "" ? null : Number(expectedAmount);
     if (exp !== null && (!Number.isFinite(exp) || exp < 0)) return;
     onSubmit({
       name: trimmed,
-      scope,
+      expense_type_id: tid,
       expected_amount: exp,
-      is_template: true,
     });
   };
 
-  const node = (
+  return (
     <div
       className="fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
       dir="rtl"
@@ -514,7 +552,7 @@ function VariableTemplateModal({
       >
         <div className="flex items-center justify-between">
           <h3 className="text-white font-bold tracking-tight">
-            إضافة قالب متغيّر
+            {target ? "تعديل قالب متغيّر" : "إضافة قالب متغيّر"}
           </h3>
           <button
             type="button"
@@ -546,11 +584,14 @@ function VariableTemplateModal({
             التصنيف *
           </label>
           <GlassSelect
-            value={scope}
-            onChange={setScope}
-            options={SCOPE_OPTIONS}
+            value={typeId}
+            onChange={setTypeId}
+            options={typeOptions}
             buttonClassName="px-3 py-2.5"
           />
+          <p className="text-[10px] text-white/45 mt-1.5">
+            البنود المعروضة هنا فقط من التصنيفات المرتبطة بـ«مصروف متغيّر».
+          </p>
         </div>
 
         <div>
@@ -604,11 +645,4 @@ function VariableTemplateModal({
       </form>
     </div>
   );
-
-  // Portal to body — the parent page has backdrop-filter / transform
-  // ancestors which trap the modal's z-index inside their stacking
-  // context and break the cover.
-  return typeof document !== "undefined"
-    ? createPortal(node, document.body)
-    : node;
 }
