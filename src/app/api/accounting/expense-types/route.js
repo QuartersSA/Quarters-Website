@@ -16,6 +16,13 @@ async function ensureSchema() {
     ALTER TABLE accounting_expense_types
     ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE
   `;
+  // expected_amount = the default "إجمالي المبلغ المتوقع" the admin
+  // sets when adding a variable template. Used as the placeholder
+  // value when a month hasn't been filled in yet.
+  await sql`
+    ALTER TABLE accounting_expense_types
+    ADD COLUMN IF NOT EXISTS expected_amount NUMERIC(12, 2)
+  `;
   // Tighten with a check constraint via a guard so re-runs don't fail
   // on the duplicate-constraint error.
   try {
@@ -54,13 +61,13 @@ export async function GET(request) {
       // tagged as 'both' shows up under either panel.
       types = includeInactive
         ? await sql`
-            SELECT id, name, scope, is_active
+            SELECT id, name, scope, is_active, expected_amount
             FROM accounting_expense_types
             WHERE scope IN (${scope}, 'both')
             ORDER BY is_active DESC, name ASC
           `
         : await sql`
-            SELECT id, name, scope, is_active
+            SELECT id, name, scope, is_active, expected_amount
             FROM accounting_expense_types
             WHERE scope IN (${scope}, 'both')
               AND is_active = TRUE
@@ -69,12 +76,12 @@ export async function GET(request) {
     } else {
       types = includeInactive
         ? await sql`
-            SELECT id, name, scope, is_active
+            SELECT id, name, scope, is_active, expected_amount
             FROM accounting_expense_types
             ORDER BY is_active DESC, name ASC
           `
         : await sql`
-            SELECT id, name, scope, is_active
+            SELECT id, name, scope, is_active, expected_amount
             FROM accounting_expense_types
             WHERE is_active = TRUE
             ORDER BY name ASC
@@ -107,6 +114,16 @@ export async function POST(request) {
     const body = await request.json().catch(() => ({}));
     const name = body.name ? String(body.name).trim() : "";
     const scope = body.scope && VALID_SCOPES.has(body.scope) ? body.scope : "both";
+    const expectedRaw =
+      body.expected_amount === null ||
+      body.expected_amount === undefined ||
+      body.expected_amount === ""
+        ? null
+        : Number(body.expected_amount);
+    const expectedAmount =
+      expectedRaw !== null && Number.isFinite(expectedRaw) && expectedRaw >= 0
+        ? expectedRaw
+        : null;
 
     if (!name) {
       return Response.json({ error: "اسم النوع مطلوب" }, { status: 400 });
@@ -122,9 +139,9 @@ export async function POST(request) {
     }
 
     const [created] = await sql`
-      INSERT INTO accounting_expense_types (name, scope)
-      VALUES (${name}, ${scope})
-      RETURNING id, name, scope, is_active
+      INSERT INTO accounting_expense_types (name, scope, expected_amount)
+      VALUES (${name}, ${scope}, ${expectedAmount})
+      RETURNING id, name, scope, is_active, expected_amount
     `;
 
     return Response.json({ ok: true, type: created });

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Receipt, CheckCircle2, Trash2 } from "lucide-react";
+import { Receipt, CheckCircle2, Trash2, Plus, X } from "lucide-react";
+import GlassSelect from "@/components/Workspace/GlassSelect";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
@@ -85,6 +86,33 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
       queryClient.invalidateQueries({ queryKey: ["accounting_expenses"] });
     },
     onError: (e) => toast.error(e.message || "فشل الحفظ"),
+  });
+
+  // Add-template modal state. The template is implemented as a
+  // variable-scoped expense_type row with an expected_amount.
+  const [showAddTemplate, setShowAddTemplate] = useState(false);
+
+  const createTemplateMut = useMutation({
+    mutationFn: async (body) => {
+      const r = await adminFetch("/api/accounting/expense-types", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      queryClient.invalidateQueries({ queryKey: ["accounting_expense_types"] });
+      queryClient.invalidateQueries({
+        queryKey: ["accounting_expense_types_full"],
+      });
+      toast.success("تم إضافة القالب");
+      setShowAddTemplate(false);
+    },
+    onError: (e) => toast.error(e.message || "فشل الإضافة"),
   });
 
   // Soft-deactivate the category. Hard DELETE refuses when any
@@ -197,6 +225,14 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
               {formatMoney(totals.pending)}
             </span>
           </div>
+          <button
+            type="button"
+            onClick={() => setShowAddTemplate(true)}
+            className={`${ws.btnPrimary} px-3 py-2 text-xs`}
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>إضافة قالب</span>
+          </button>
         </div>
       </div>
 
@@ -255,7 +291,12 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
                         if (e.key === "Enter") e.currentTarget.blur();
                       }}
                       className={`${ws.input} px-2 py-1.5 text-sm w-32`}
-                      placeholder="0"
+                      placeholder={
+                        t.expected_amount !== null &&
+                        t.expected_amount !== undefined
+                          ? String(t.expected_amount)
+                          : "0"
+                      }
                       dir="ltr"
                       disabled={isLegacy}
                     />
@@ -310,6 +351,221 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
           </tbody>
         </table>
       </div>
+
+      {showAddTemplate && (
+        <VariableTemplateModal
+          types={types}
+          month={month}
+          onClose={() => setShowAddTemplate(false)}
+          onSubmit={(payload) => createTemplateMut.mutate(payload)}
+          isPending={createTemplateMut.isPending}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────── */
+
+const SCOPE_OPTIONS = [
+  { value: "variable", label: "متغيّر فقط" },
+  { value: "both", label: "الاثنين (ثابت + متغيّر)" },
+];
+
+/**
+ * Add-template modal scoped to the variable grid.
+ *
+ * Fields:
+ *   - اسم البند     (free text → becomes accounting_expense_types.name)
+ *   - التصنيف       (scope: 'variable' | 'both')
+ *   - إجمالي المبلغ المتوقع
+ *       Auto-prefills from /api/accounting/expenses/last-amount if a
+ *       category with the same name already exists; otherwise the
+ *       admin types in the expected amount manually.
+ */
+function VariableTemplateModal({
+  types,
+  month,
+  onClose,
+  onSubmit,
+  isPending,
+}) {
+  const [name, setName] = useState("");
+  const [scope, setScope] = useState("variable");
+  const [expectedAmount, setExpectedAmount] = useState("");
+  const [historyHint, setHistoryHint] = useState(null);
+
+  // History prefill: when the typed name matches an existing type
+  // (case-insensitive trim), look up its last accounting_expenses
+  // amount before the current month and seed the input.
+  React.useEffect(() => {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      setHistoryHint(null);
+      return;
+    }
+    const match = (types || []).find(
+      (t) =>
+        String(t.name || "").trim().toLowerCase() ===
+        trimmed.toLowerCase(),
+    );
+    if (!match) {
+      setHistoryHint(null);
+      return;
+    }
+    // Seed expected_amount from the stored type-level expected first.
+    if (
+      match.expected_amount !== null &&
+      match.expected_amount !== undefined &&
+      !expectedAmount
+    ) {
+      setExpectedAmount(String(match.expected_amount));
+    }
+    if (!month) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const params = new URLSearchParams({
+          expense_type_id: String(match.id),
+          beforeMonth: month,
+        });
+        const r = await adminFetch(
+          `/api/accounting/expenses/last-amount?${params}`,
+        );
+        if (!r.ok) return;
+        const d = await r.json();
+        if (cancelled) return;
+        if (d?.amount !== null && d?.amount !== undefined) {
+          setHistoryHint({
+            amount: d.amount,
+            month: String(d.expense_month || "").slice(0, 7),
+          });
+          if (!expectedAmount) setExpectedAmount(String(d.amount));
+        }
+      } catch {
+        // ignore — prefill is best-effort
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, month]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const exp = expectedAmount === "" ? null : Number(expectedAmount);
+    if (exp !== null && (!Number.isFinite(exp) || exp < 0)) return;
+    onSubmit({
+      name: trimmed,
+      scope,
+      expected_amount: exp,
+    });
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+      dir="rtl"
+      onClick={onClose}
+    >
+      <form
+        onSubmit={handleSubmit}
+        onClick={(e) => e.stopPropagation()}
+        className={`w-full max-w-md ${ws.glass} ${ws.card} p-5 space-y-4`}
+      >
+        <div className="flex items-center justify-between">
+          <h3 className="text-white font-bold tracking-tight">
+            إضافة قالب متغيّر
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className={ws.iconButton}
+            aria-label="إغلاق"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-white/55 mb-2">
+            اسم البند *
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={`${ws.input} px-3 py-2.5`}
+            required
+            autoFocus
+            placeholder="مثال: قهوة"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-white/55 mb-2">
+            التصنيف *
+          </label>
+          <GlassSelect
+            value={scope}
+            onChange={setScope}
+            options={SCOPE_OPTIONS}
+            buttonClassName="px-3 py-2.5"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-white/55 mb-2">
+            إجمالي المبلغ المتوقع
+          </label>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={expectedAmount}
+            onChange={(e) => setExpectedAmount(e.target.value)}
+            className={`${ws.input} px-3 py-2.5`}
+            dir="ltr"
+            placeholder="0"
+          />
+          {historyHint ? (
+            <p className="text-[10px] text-emerald-200/80 mt-1.5">
+              تمت تعبئته من شهر{" "}
+              <span dir="ltr">{historyHint.month}</span> (
+              <span dir="ltr">{formatMoney(historyHint.amount)}</span>)
+            </p>
+          ) : (
+            <p className="text-[10px] text-white/45 mt-1.5">
+              يستخدم كقيمة افتراضية كل شهر — يمكن تغييرها لاحقاً.
+            </p>
+          )}
+        </div>
+
+        <p className="text-[10px] text-white/45 leading-relaxed">
+          القالب يتكرر كل شهر في قائمة المصروفات المتغيرة. تعديل المبلغ
+          الشهري لا يؤثر على الأشهر الماضية.
+        </p>
+
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            disabled={isPending}
+            className={`${ws.btnPrimary} flex-1 px-4 py-2.5 justify-center disabled:opacity-50`}
+          >
+            {isPending ? "جاري الحفظ…" : "حفظ"}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className={`${ws.btnNeutral} px-4 py-2.5`}
+          >
+            إلغاء
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
