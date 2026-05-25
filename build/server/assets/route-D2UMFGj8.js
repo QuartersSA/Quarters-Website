@@ -1,5 +1,7 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 async function safeInsertHrEmployeeLog({
   employeeId,
@@ -7,7 +9,7 @@ async function safeInsertHrEmployeeLog({
   action,
   actor,
   summary,
-  changes,
+  changes
 }) {
   try {
     await sql`
@@ -34,24 +36,23 @@ async function safeInsertHrEmployeeLog({
     console.error("HR: failed to insert employee log", error);
   }
 }
-
 function normalizeIsoDate(value) {
   if (!value) return null;
   const s = String(value);
   if (s.length >= 10) return s.slice(0, 10);
   return s;
 }
-
 function toSortedBranches(branches) {
   const list = Array.isArray(branches) ? branches : [];
-  const normalized = list
-    .map((b) => {
-      const id = Number(b?.id);
-      const name = b?.name ? String(b.name) : null;
-      if (!Number.isFinite(id)) return null;
-      return { id, name };
-    })
-    .filter(Boolean);
+  const normalized = list.map(b => {
+    const id = Number(b?.id);
+    const name = b?.name ? String(b.name) : null;
+    if (!Number.isFinite(id)) return null;
+    return {
+      id,
+      name
+    };
+  }).filter(Boolean);
   normalized.sort((a, b) => a.id - b.id);
   return normalized;
 }
@@ -68,15 +69,18 @@ async function ensureHrSchema() {
 
 // HR Employees API (separate from /api/employees)
 // GET: list employees (HR fields only)
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_access_hr",
+    permission: "can_access_hr"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureHrSchema();
     const employees = await sql`
@@ -119,31 +123,33 @@ export async function GET(request) {
       GROUP BY e.id
       ORDER BY e.created_at DESC
     `;
-
     return Response.json(employees);
   } catch (error) {
     console.error("HR: Error fetching employees:", error);
-    return Response.json(
-      { error: "Failed to fetch employees" },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch employees"
+    }, {
+      status: 500
+    });
   }
 }
 
 // CREATE new employee (HR fields only)
-export async function POST(request) {
+async function POST(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_access_hr",
+    permission: "can_access_hr"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureHrSchema();
     const body = await request.json();
-
     const {
       name,
       phone,
@@ -157,17 +163,16 @@ export async function POST(request) {
       base_salary,
       other_allowances,
       start_date,
-      branchIds,
+      branchIds
     } = body;
-
     if (!name) {
-      return Response.json({ error: "Name is required" }, { status: 400 });
+      return Response.json({
+        error: "Name is required"
+      }, {
+        status: 400
+      });
     }
-
-    const normalizedBranchIds = Array.isArray(branchIds)
-      ? branchIds.filter((id) => id !== null && id !== undefined)
-      : [];
-
+    const normalizedBranchIds = Array.isArray(branchIds) ? branchIds.filter(id => id !== null && id !== undefined) : [];
     const [inserted] = await sql`
       INSERT INTO employees (
         name,
@@ -199,16 +204,14 @@ export async function POST(request) {
       )
       RETURNING id
     `;
-
     const employeeId = inserted?.id;
-
     if (!employeeId) {
-      return Response.json(
-        { error: "Failed to create employee" },
-        { status: 500 },
-      );
+      return Response.json({
+        error: "Failed to create employee"
+      }, {
+        status: 500
+      });
     }
-
     if (normalizedBranchIds.length > 0) {
       for (const branchId of normalizedBranchIds) {
         await sql`
@@ -218,7 +221,6 @@ export async function POST(request) {
         `;
       }
     }
-
     const [employeeWithBranches] = await sql`
       SELECT
         e.id,
@@ -259,9 +261,7 @@ export async function POST(request) {
       WHERE e.id = ${employeeId}
       GROUP BY e.id
     `;
-
     const branchesForLog = toSortedBranches(employeeWithBranches?.branches);
-
     await safeInsertHrEmployeeLog({
       employeeId,
       employeeName: employeeWithBranches?.name || name,
@@ -270,41 +270,71 @@ export async function POST(request) {
       summary: "تم إنشاء موظف (HR)",
       changes: {
         fields: {
-          name: { from: null, to: name },
-          phone: { from: null, to: phone || null },
-          iqama_number: { from: null, to: iqama_number || null },
+          name: {
+            from: null,
+            to: name
+          },
+          phone: {
+            from: null,
+            to: phone || null
+          },
+          iqama_number: {
+            from: null,
+            to: iqama_number || null
+          },
           iqama_expiry_date: {
             from: null,
-            to: normalizeIsoDate(iqama_expiry_date || null),
+            to: normalizeIsoDate(iqama_expiry_date || null)
           },
           sponsorship_transferred: {
             from: null,
-            to: !!sponsorship_transferred,
+            to: !!sponsorship_transferred
           },
-          work_card_issued: { from: null, to: !!work_card_issued },
-          medical_check_issued: { from: null, to: !!medical_check_issued },
-          health_card_issued: { from: null, to: !!health_card_issued },
-          position: { from: null, to: position || null },
-          base_salary: { from: null, to: base_salary ?? null },
-          other_allowances: { from: null, to: other_allowances ?? null },
+          work_card_issued: {
+            from: null,
+            to: !!work_card_issued
+          },
+          medical_check_issued: {
+            from: null,
+            to: !!medical_check_issued
+          },
+          health_card_issued: {
+            from: null,
+            to: !!health_card_issued
+          },
+          position: {
+            from: null,
+            to: position || null
+          },
+          base_salary: {
+            from: null,
+            to: base_salary ?? null
+          },
+          other_allowances: {
+            from: null,
+            to: other_allowances ?? null
+          },
           start_date: {
             from: null,
-            to: normalizeIsoDate(start_date || null),
-          },
+            to: normalizeIsoDate(start_date || null)
+          }
         },
         branches: {
           from: [],
-          to: branchesForLog,
-        },
-      },
+          to: branchesForLog
+        }
+      }
     });
-
     return Response.json(employeeWithBranches);
   } catch (error) {
     console.error("HR: Error creating employee:", error);
-    return Response.json(
-      { error: "Failed to create employee", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to create employee",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET, POST };

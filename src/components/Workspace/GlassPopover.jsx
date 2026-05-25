@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ws } from "@/components/Workspace/ui";
 
@@ -19,7 +19,13 @@ export default function GlassPopover({
   dir = "rtl",
 }) {
   const [mounted, setMounted] = useState(false);
-  const [pos, setPos] = useState({ top: 0, left: 0, width: 240 });
+  const [pos, setPos] = useState({
+    top: 0,
+    left: 0,
+    width: 240,
+    maxHeight: null,
+  });
+  const popoverRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
@@ -32,17 +38,15 @@ export default function GlassPopover({
     }
 
     const rect = el.getBoundingClientRect();
+    const viewportH = window.innerHeight;
+    const pad = 12;
 
     const preferredWidth =
       style && typeof style.width === "number" ? style.width : rect.width;
 
-    // Basic placement: below the anchor, aligned to its left edge.
+    // Horizontal: align to anchor left, then clamp into viewport.
     let left = rect.left;
     const width = preferredWidth;
-    const top = rect.bottom + 8; // mt-2
-
-    // Keep within viewport with a little padding.
-    const pad = 12;
     const maxLeft = window.innerWidth - width - pad;
     if (left > maxLeft) {
       left = Math.max(pad, maxLeft);
@@ -51,7 +55,34 @@ export default function GlassPopover({
       left = pad;
     }
 
-    setPos({ top, left, width });
+    // Vertical: prefer below the anchor; if the popover won't fit
+    // there, flip above. If neither side has room, pin to the side
+    // with more space and cap maxHeight so the popover scrolls
+    // instead of falling off-screen.
+    const popoverH = popoverRef.current?.offsetHeight || 0;
+    const spaceBelow = viewportH - rect.bottom - pad - 8;
+    const spaceAbove = rect.top - pad - 8;
+
+    let top;
+    let maxHeight = null;
+
+    if (popoverH === 0) {
+      // First render — we don't know the height yet. Place below and
+      // measure on the next tick.
+      top = rect.bottom + 8;
+    } else if (popoverH <= spaceBelow) {
+      top = rect.bottom + 8;
+    } else if (popoverH <= spaceAbove) {
+      top = rect.top - popoverH - 8;
+    } else if (spaceBelow >= spaceAbove) {
+      top = rect.bottom + 8;
+      maxHeight = Math.max(160, spaceBelow);
+    } else {
+      maxHeight = Math.max(160, spaceAbove);
+      top = rect.top - maxHeight - 8;
+    }
+
+    setPos({ top, left, width, maxHeight });
   }, [anchorRef, style]);
 
   useEffect(() => {
@@ -59,7 +90,11 @@ export default function GlassPopover({
       return;
     }
 
+    // First pass — popoverRef may not be attached yet, so we'll
+    // re-measure on the next animation frame after the children
+    // mount and the popover has a real height.
     updatePosition();
+    const raf = requestAnimationFrame(updatePosition);
 
     const onKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -76,6 +111,7 @@ export default function GlassPopover({
     window.addEventListener("resize", onResize);
 
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("scroll", onScroll, true);
       window.removeEventListener("resize", onResize);
@@ -90,12 +126,16 @@ export default function GlassPopover({
       width: pos.width,
       zIndex,
     };
+    if (pos.maxHeight) {
+      base.maxHeight = pos.maxHeight;
+      base.overflowY = "auto";
+    }
 
     if (style) {
       return { ...base, ...style };
     }
     return base;
-  }, [pos.left, pos.top, pos.width, style, zIndex]);
+  }, [pos.left, pos.maxHeight, pos.top, pos.width, style, zIndex]);
 
   if (!open || !mounted) {
     return null;
@@ -110,9 +150,10 @@ export default function GlassPopover({
         aria-hidden="true"
       />
       <div
+        ref={popoverRef}
         dir={dir}
         style={popoverStyle}
-        className={`${ws.popover} rounded-2xl overflow-hidden border border-white/15 shadow-2xl ${className}`}
+        className={`${ws.popover} rounded-2xl border border-white/15 shadow-2xl ${pos.maxHeight ? "" : "overflow-hidden"} ${className}`}
         onClick={(e) => {
           // prevent click-away closing when clicking inside
           e.stopPropagation();
