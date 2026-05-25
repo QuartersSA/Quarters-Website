@@ -65,6 +65,7 @@ function formatRelativeTime(dateStr) {
   return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
     month: "short",
     day: "numeric",
+    timeZone: "Asia/Riyadh",
   });
 }
 
@@ -73,6 +74,7 @@ function formatTime(dateStr) {
   return new Date(dateStr).toLocaleTimeString("ar-SA-u-ca-gregory-nu-latn", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Riyadh",
   });
 }
 

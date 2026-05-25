@@ -10,6 +10,7 @@ import {
   todayISO,
   computeGreenBeanMetrics,
 } from "@/utils/greenBeanCalculations";
+import { formatRunCreatedAt } from "@/utils/payrollCalculations";
 
 export function useGreenBeanCalculator({ ready, isAuthenticated, isAdmin }) {
   const queryClient = useQueryClient();
@@ -101,8 +102,10 @@ export function useGreenBeanCalculator({ ready, isAuthenticated, isAdmin }) {
   const selectedUpdatedAtText = useMemo(() => {
     const raw = selectedBean?.updated_at;
     if (!raw) return "—";
-    const text = String(raw).replace("T", " ").slice(0, 16);
-    return text || "—";
+    // PG TIMESTAMP comes through as ISO UTC. Reuse the payroll
+    // formatter so the displayed value is the actual Riyadh wall
+    // clock, not the raw UTC numbers.
+    return formatRunCreatedAt(raw);
   }, [selectedBean?.updated_at]);
 
   useEffect(() => {

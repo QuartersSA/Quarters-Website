@@ -13,17 +13,14 @@ import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { Plus, Send, ChevronLeft, MessageSquare, Search } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import { formatTime as formatTimeRiyadh } from "@/utils/dateUtils";
 
+// Wrapper: dateUtils.formatTime returns "—" for empty/invalid; the
+// inbox UI prefers an empty string in those slots.
 function formatTime(ts) {
   if (!ts) return "";
-  try {
-    return new Date(ts).toLocaleTimeString("ar-SA-u-ca-gregory-nu-latn", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return "";
-  }
+  const out = formatTimeRiyadh(ts);
+  return out === "—" ? "" : out;
 }
 
 function initials(name) {

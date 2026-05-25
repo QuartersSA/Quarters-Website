@@ -15,6 +15,7 @@ import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
+import { formatRunCreatedAt } from "@/utils/payrollCalculations";
 
 function formatMoney(value) {
   const n = Number(value);
@@ -140,7 +141,7 @@ export default function AccountingDashboardPage() {
   const latestRunMonthText = latestRunMonth || "—";
 
   const latestRunCreatedAtText = latestRun?.created_at
-    ? String(latestRun.created_at).replace("T", " ").slice(0, 16)
+    ? formatRunCreatedAt(latestRun.created_at)
     : "";
 
   const latestRunCreatedByName = latestRun?.created_by_employee_name

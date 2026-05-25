@@ -88,9 +88,18 @@ function formatDateTime(dt) {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
-    return String(dt).replace("T", " ").slice(0, 16);
+    // Last-resort fallback — convert through Date so the slice is at
+    // least in the user's local zone, not raw UTC.
+    try {
+      const d = new Date(dt);
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    } catch {
+      return String(dt).replace("T", " ").slice(0, 16);
+    }
   }
 }
 
