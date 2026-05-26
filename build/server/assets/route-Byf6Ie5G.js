@@ -1,5 +1,5 @@
 import { r as requireWorkspaceEmployee } from './_utils-CZ4YmXjD.js';
-import { s as sendWhatsAppViaWasender } from './wasender-Cn2_RTrC.js';
+import { s as sendWhatsAppViaWasender } from './wasender-D2lmIJ7B.js';
 import './sql-BfhTxwII.js';
 import '@neondatabase/serverless';
 

@@ -1,5 +1,5 @@
 import { s as sql } from './sql-BfhTxwII.js';
-import { s as sendWhatsAppViaWasender } from './wasender-Cn2_RTrC.js';
+import { s as sendWhatsAppViaWasender } from './wasender-D2lmIJ7B.js';
 
 function toInt(value) {
   if (value === null || value === undefined || value === "") return null;
