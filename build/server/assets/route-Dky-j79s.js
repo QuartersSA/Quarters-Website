@@ -175,6 +175,31 @@ async function POST(request) {
       ADD COLUMN IF NOT EXISTS start_date DATE
     `;
 
+    // Suspensions table — payroll skips suspended employees for the
+    // run month. Created here too so payroll keeps working on a
+    // server where the HR suspensions endpoint hasn't been hit yet.
+    await sql`
+      CREATE TABLE IF NOT EXISTS employee_suspensions (
+        id SERIAL PRIMARY KEY,
+        employee_id INTEGER NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+        kind TEXT NOT NULL,
+        month DATE,
+        effective_from DATE,
+        reason TEXT,
+        is_active BOOLEAN NOT NULL DEFAULT TRUE,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        created_by_employee_id INTEGER,
+        created_by_employee_name TEXT
+      )
+    `;
+
+    // Add the suspension flag column to entries — used by the UI to
+    // render a "موقوف" badge instead of zeroes silently disappearing.
+    await sql`
+      ALTER TABLE accounting_payroll_entries
+      ADD COLUMN IF NOT EXISTS is_suspended BOOLEAN NOT NULL DEFAULT FALSE
+    `;
+
     // 1) Aggregate deductions + bonuses per employee for this month
     //    ✅ include ALL employees, even if they have no deductions/bonuses
     //
@@ -197,7 +222,11 @@ async function POST(request) {
           br.branch_id AS branch_id,
           br.branch_name AS branch_name,
           TO_CHAR(e.start_date, 'YYYY-MM-DD') AS start_date,
+          COALESCE(susp.is_suspended, FALSE) AS is_suspended,
+          -- When the employee is suspended for this payroll month, every
+          -- salary field is zeroed regardless of start_date / proration.
           (CASE
+            WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
             WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
               COALESCE(e.base_salary, 0)
             WHEN e.start_date >= $2::date THEN
@@ -210,6 +239,7 @@ async function POST(request) {
               )
           END)::numeric(14,2) AS base_salary,
           (CASE
+            WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
             WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
               COALESCE(e.other_allowances, 0)
             WHEN e.start_date >= $2::date THEN
@@ -222,6 +252,7 @@ async function POST(request) {
               )
           END)::numeric(14,2) AS other_allowances,
           (CASE
+            WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
             WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
               COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0)
             WHEN e.start_date >= $2::date THEN
@@ -235,36 +266,53 @@ async function POST(request) {
               )
           END)::numeric(14,2) AS total_salary,
 
-          COALESCE(d.total_deductions, 0)::numeric(14,2) AS total_deductions,
+          -- Suspension zeroes deductions, bonuses, and loan installments
+          -- alongside the salary so the row totals stay internally
+          -- consistent (everything zero, net zero, "موقوف" badge).
+          (CASE
+            WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
+            ELSE COALESCE(d.total_deductions, 0)
+          END)::numeric(14,2) AS total_deductions,
           COALESCE(d.deductions_count, 0)::int AS deductions_count,
           COALESCE(d.deduction_ids, '{}'::int[]) AS deduction_ids,
 
-          COALESCE(b.total_bonuses, 0)::numeric(14,2) AS total_bonuses,
+          (CASE
+            WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
+            ELSE COALESCE(b.total_bonuses, 0)
+          END)::numeric(14,2) AS total_bonuses,
           COALESCE(b.bonuses_count, 0)::int AS bonuses_count,
           COALESCE(b.bonus_ids, '{}'::int[]) AS bonus_ids,
 
-          COALESCE(loan.monthly_total, 0)::numeric(14,2) AS loan_deduction,
+          (CASE
+            WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
+            ELSE COALESCE(loan.monthly_total, 0)
+          END)::numeric(14,2) AS loan_deduction,
 
           (
-            -- Use the prorated total above, NOT the raw e.base_salary
-            -- column, so a mid-month hire's net reflects the partial
-            -- month they actually worked.
-            (CASE
-              WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
-                COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0)
-              WHEN e.start_date >= $2::date THEN
-                0
+            -- Suspended employees zero out completely — no bonus, no
+            -- deductions, no loan installment. Skipping the whole row
+            -- would also lose audit context ("why didn't I pay X this
+            -- month?"), so we keep the row but make every number 0.
+            CASE
+              WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
               ELSE
-                ROUND(
-                  (COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0))
-                  / 30.0
-                  * (($2::date - e.start_date)::int),
-                  2
-                )
-            END)
-            + COALESCE(b.total_bonuses, 0)
-            - COALESCE(d.total_deductions, 0)
-            - COALESCE(loan.monthly_total, 0)
+                (CASE
+                  WHEN e.start_date IS NULL OR e.start_date <= $1::date THEN
+                    COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0)
+                  WHEN e.start_date >= $2::date THEN
+                    0
+                  ELSE
+                    ROUND(
+                      (COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0))
+                      / 30.0
+                      * (($2::date - e.start_date)::int),
+                      2
+                    )
+                END)
+                + COALESCE(b.total_bonuses, 0)
+                - COALESCE(d.total_deductions, 0)
+                - COALESCE(loan.monthly_total, 0)
+            END
           )::numeric(14,2) AS net_salary
         FROM employees e
 
@@ -328,6 +376,24 @@ async function POST(request) {
             AND l.start_month <= $1::date
             AND (l.start_month + (l.installments_count || ' months')::interval) > $1::date
         ) loan ON true
+
+        -- Suspension lookup. Matches if EITHER:
+        --   1) An active monthly suspension exists for this run month
+        --   2) An active indefinite suspension has effective_from on
+        --      or before the run month's first day.
+        -- A canceled suspension (is_active=false) is ignored — that's
+        -- how the HR page un-suspends an employee.
+        LEFT JOIN LATERAL (
+          SELECT TRUE AS is_suspended
+          FROM employee_suspensions s
+          WHERE s.employee_id = e.id
+            AND s.is_active = TRUE
+            AND (
+              (s.kind = 'monthly' AND s.month = $1::date)
+              OR (s.kind = 'indefinite' AND s.effective_from <= $1::date)
+            )
+          LIMIT 1
+        ) susp ON true
 
         -- Branch resolution
         LEFT JOIN LATERAL (
@@ -413,12 +479,13 @@ async function POST(request) {
                 payment_note,
                 paid_at,
                 paid_by_employee_id,
-                paid_by_employee_name
+                paid_by_employee_name,
+                is_suspended
               )
               VALUES (
-                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23
+                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24
               )
-            `, [run.id, empId, String(r.employee_name || ""), r.branch_id === null || r.branch_id === undefined ? null : Number(r.branch_id), r.branch_name ? String(r.branch_name) : null, Number(r.base_salary || 0), Number(r.other_allowances || 0), Number(r.total_salary || 0), Number(r.total_bonuses || 0), Number(r.total_deductions || 0), Number(r.loan_deduction || 0), Number(r.net_salary || 0), Number(r.deductions_count || 0), Array.isArray(r.deduction_ids) ? r.deduction_ids : [], Number(r.bonuses_count || 0), Array.isArray(r.bonus_ids) ? r.bonus_ids : [], prev ? true : false, prev ? prev.paid_amount : null, prev ? prev.payment_method : null, prev ? prev.payment_note : null, prev ? prev.paid_at : null, prev ? prev.paid_by_employee_id : null, prev ? prev.paid_by_employee_name : null]));
+            `, [run.id, empId, String(r.employee_name || ""), r.branch_id === null || r.branch_id === undefined ? null : Number(r.branch_id), r.branch_name ? String(r.branch_name) : null, Number(r.base_salary || 0), Number(r.other_allowances || 0), Number(r.total_salary || 0), Number(r.total_bonuses || 0), Number(r.total_deductions || 0), Number(r.loan_deduction || 0), Number(r.net_salary || 0), Number(r.deductions_count || 0), Array.isArray(r.deduction_ids) ? r.deduction_ids : [], Number(r.bonuses_count || 0), Array.isArray(r.bonus_ids) ? r.bonus_ids : [], prev ? true : false, prev ? prev.paid_amount : null, prev ? prev.payment_method : null, prev ? prev.payment_note : null, prev ? prev.paid_at : null, prev ? prev.paid_by_employee_id : null, prev ? prev.paid_by_employee_name : null, !!r.is_suspended]));
       }
       return queries;
     });
