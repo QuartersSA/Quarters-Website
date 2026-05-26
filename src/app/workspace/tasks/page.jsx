@@ -23,34 +23,10 @@ import { TaskViewControls } from "@/components/Tasks/TaskViewControls";
 import { TaskPageHeader } from "@/components/Tasks/TaskPageHeader";
 import { StatusPill } from "@/components/Tasks/StatusPill";
 import { ws } from "@/components/Workspace/ui";
-
-function formatDateTime(dateString) {
-  if (!dateString) return "—";
-  try {
-    return new Date(dateString).toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return String(dateString);
-  }
-}
-
-function formatDateOnly(dateString) {
-  if (!dateString) return "—";
-  try {
-    return new Date(dateString).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  } catch {
-    return String(dateString);
-  }
-}
+import {
+  formatDateTime,
+  formatDate as formatDateOnly,
+} from "@/utils/dateUtils";
 
 export default function WorkspaceTasksPage() {
   const { employeeId } = useWorkspaceUser();

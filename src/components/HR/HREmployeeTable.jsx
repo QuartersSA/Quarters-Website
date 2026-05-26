@@ -1,6 +1,6 @@
 "use client";
 
-import { Users, User, Pencil, Trash2, ScrollText } from "lucide-react";
+import { Users, User, Pencil, Trash2, ScrollText, Ban } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
 function formatIsoDate(value) {
@@ -41,6 +41,7 @@ export function HREmployeeTable({
   onEdit,
   onDelete,
   onViewLogs,
+  onSuspend,
 }) {
   const sectionCard = `${ws.glass} ${ws.card} overflow-hidden`;
 
@@ -254,6 +255,15 @@ export function HREmployeeTable({
                         title="السجل"
                       >
                         <ScrollText className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onSuspend?.(employee)}
+                        className={`${ws.iconButton} text-amber-200`}
+                        aria-label="إيقاف"
+                        title="إيقاف موظف"
+                      >
+                        <Ban className="w-4 h-4" />
                       </button>
                       <button
                         type="button"

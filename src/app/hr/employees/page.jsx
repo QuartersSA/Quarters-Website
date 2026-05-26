@@ -12,6 +12,7 @@ import HRSearchBar from "@/components/HR/HRSearchBar";
 import { HREmployeeTable } from "@/components/HR/HREmployeeTable";
 import { HREmployeeModal } from "@/components/HR/HREmployeeModal";
 import { HREmployeeLogsModal } from "@/components/HR/HREmployeeLogsModal";
+import SuspensionModal from "@/components/HR/SuspensionModal";
 import { toast } from "sonner";
 
 function toInputDate(value) {
@@ -70,6 +71,9 @@ export default function HREmployeesPage() {
   const [logsEmployee, setLogsEmployee] = useState(null);
   const [showLogsModal, setShowLogsModal] = useState(false);
 
+  const [suspensionEmployee, setSuspensionEmployee] = useState(null);
+  const [showSuspensionModal, setShowSuspensionModal] = useState(false);
+
   const handleOpenModal = (employee = null) => {
     if (employee) {
       // Pre-load the FULL list of branch assignments. The previous
@@ -124,6 +128,17 @@ export default function HREmployeesPage() {
   const handleCloseLogs = () => {
     setShowLogsModal(false);
     setLogsEmployee(null);
+  };
+
+  const handleOpenSuspension = (employee) => {
+    if (!employee) return;
+    setSuspensionEmployee(employee);
+    setShowSuspensionModal(true);
+  };
+
+  const handleCloseSuspension = () => {
+    setShowSuspensionModal(false);
+    setSuspensionEmployee(null);
   };
 
   const handleCloseModal = () => {
@@ -334,6 +349,7 @@ export default function HREmployeesPage() {
           onEdit={handleOpenModal}
           onDelete={handleDelete}
           onViewLogs={handleOpenLogs}
+          onSuspend={handleOpenSuspension}
         />
       </main>
 
@@ -352,6 +368,12 @@ export default function HREmployeesPage() {
         isOpen={showLogsModal}
         employee={logsEmployee}
         onClose={handleCloseLogs}
+      />
+
+      <SuspensionModal
+        open={showSuspensionModal}
+        employee={suspensionEmployee}
+        onClose={handleCloseSuspension}
       />
     </div>
   );

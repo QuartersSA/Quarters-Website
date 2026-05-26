@@ -659,8 +659,19 @@ export default function ExpensesPage() {
                 </div>
               </details>
 
-              {/* Quick expenses list for current month */}
-              {month && expenses.length > 0 && (
+              {/* Quick expenses list for current month — variable only.
+                  Fixed-template entries belong to the "مصروف ثابت"
+                  tab, so we filter them out here. Variable rows are
+                  those that DON'T carry a fixed_expense_id link. */}
+              {month &&
+                (() => {
+                  const variableExpenses = (expenses || []).filter(
+                    (e) =>
+                      e.fixed_expense_id === null ||
+                      e.fixed_expense_id === undefined,
+                  );
+                  if (variableExpenses.length === 0) return null;
+                  return (
                 <div className={`${ws.glassSoft} ${ws.card} p-5`}>
                   <div className="flex items-center justify-between gap-3 mb-4">
                     <div className="flex items-center gap-3">
@@ -672,7 +683,7 @@ export default function ExpensesPage() {
                           المصروفات المضافة
                         </div>
                         <div className="text-xs text-white/50 mt-0.5">
-                          {monthHint} — {expenses.length} مصروف
+                          {monthHint} — {variableExpenses.length} مصروف متغير
                         </div>
                       </div>
                     </div>
@@ -689,7 +700,7 @@ export default function ExpensesPage() {
                   </div>
 
                   <div className="space-y-2">
-                    {expenses.map((e) => {
+                    {variableExpenses.map((e) => {
                       const confirmedClass = e.is_confirmed
                         ? "border-emerald-400/20 bg-emerald-400/5"
                         : "border-white/10 bg-white/[0.02]";
@@ -733,7 +744,8 @@ export default function ExpensesPage() {
                     })}
                   </div>
                 </div>
-              )}
+                  );
+                })()}
 
               {/* If no month selected, prompt to select */}
               {!month && (

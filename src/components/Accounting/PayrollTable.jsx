@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, X, MessageSquare, Pencil } from "lucide-react";
+import { Check, X, MessageSquare, Pencil, Ban } from "lucide-react";
 import { formatMoney } from "@/utils/payrollFormatters";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
@@ -29,8 +29,10 @@ function PaymentRow({ entry, onSave, isClosed }) {
   const [dirty, setDirty] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // If already saved as paid, fields are locked unless editing
-  const isLocked = savedPaid && !isEditing && !dirty;
+  // If already saved as paid, fields are locked unless editing.
+  // Suspended employees also lock — there's no salary to pay.
+  const isLocked =
+    !!entry.is_suspended || (savedPaid && !isEditing && !dirty);
 
   const netSalary = Number(entry.net_salary || 0);
   const currentPaidAmount = paidAmount !== "" ? Number(paidAmount) : null;
@@ -121,6 +123,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
 
   const employeeName = entry.employee_name || "—";
   const branchName = entry.branch_name || "—";
+  const isSuspended = !!entry.is_suspended;
   const baseSalary = formatMoney(entry.base_salary);
   const otherAllowances = formatMoney(entry.other_allowances);
   const totalSalary = formatMoney(entry.total_salary);
@@ -132,12 +135,25 @@ function PaymentRow({ entry, onSave, isClosed }) {
 
   return (
     <>
-      <tr className="border-t border-white/10 hover:bg-white/[0.04]">
+      <tr
+        className={`border-t border-white/10 hover:bg-white/[0.04] ${isSuspended ? "opacity-70" : ""}`}
+      >
         <td
           className="py-2 px-1.5 font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis"
-          style={{ maxWidth: 130 }}
+          style={{ maxWidth: 160 }}
         >
-          {employeeName}
+          <div className="flex items-center gap-1.5">
+            <span className="truncate">{employeeName}</span>
+            {isSuspended ? (
+              <span
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-400/15 border border-amber-400/30 text-amber-200 shrink-0"
+                title="موظف موقوف هذا الشهر"
+              >
+                <Ban className="w-3 h-3" />
+                موقوف
+              </span>
+            ) : null}
+          </div>
         </td>
         <td
           className="py-2 px-1.5 text-white/70 whitespace-nowrap overflow-hidden text-ellipsis"

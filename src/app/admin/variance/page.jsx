@@ -134,7 +134,30 @@ export default function VariancePage() {
   }, [items, selectedItem]);
 
   const exportColumns = [
-    { header: "التاريخ", accessor: (r) => String(r.created_at).slice(0, 10) },
+    {
+      header: "التاريخ",
+      // Convert to Riyadh-local YYYY-MM-DD instead of slicing the
+      // raw ISO (which shows the UTC date and rolls past midnight
+      // backwards on the +03 server↔client boundary).
+      accessor: (r) => {
+        if (!r.created_at) return "—";
+        const d = new Date(r.created_at);
+        if (Number.isNaN(d.getTime())) return String(r.created_at).slice(0, 10);
+        try {
+          const fmt = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "Asia/Riyadh",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          });
+          const parts = fmt.formatToParts(d);
+          const get = (t) => parts.find((p) => p.type === t)?.value;
+          return `${get("year")}-${get("month")}-${get("day")}`;
+        } catch {
+          return String(r.created_at).slice(0, 10);
+        }
+      },
+    },
     { header: "رقم الجرد", accessor: (r) => r.inventory_number || "—" },
     { header: "المتوقع", accessor: (r) => Number(r.expected_quantity) || 0 },
     { header: "الفعلي", accessor: (r) => Number(r.actual_quantity) || 0 },

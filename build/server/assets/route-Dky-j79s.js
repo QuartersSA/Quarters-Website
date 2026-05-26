@@ -1,5 +1,7 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 function parsePayrollMonth(raw) {
   const value = raw ? String(raw).trim() : "";
@@ -10,17 +12,17 @@ function parsePayrollMonth(raw) {
   if (!Number.isFinite(year) || !Number.isFinite(month)) return null;
   if (year < 2000 || year > 2100) return null;
   if (month < 1 || month > 12) return null;
-
   const monthStart = `${y}-${m}-01`;
-
   const next = new Date(Date.UTC(year, month, 1)); // month is 1-based here, so Date month index = month
   const nextY = next.getUTCFullYear();
   const nextM = String(next.getUTCMonth() + 1).padStart(2, "0");
   const nextMonthStart = `${nextY}-${nextM}-01`;
-
-  return { month: value, monthStart, nextMonthStart };
+  return {
+    month: value,
+    monthStart,
+    nextMonthStart
+  };
 }
-
 async function getPayrollRunAndEntriesByMonth(payrollMonthStart) {
   // Cast payroll_month to text — see employee-loans/route.js for the
   // full explanation of the timezone drift this avoids.
@@ -34,47 +36,59 @@ async function getPayrollRunAndEntriesByMonth(payrollMonthStart) {
     WHERE payroll_month = ${payrollMonthStart}
     LIMIT 1
   `;
-
   if (!run?.id) {
-    return { run: null, entries: [] };
+    return {
+      run: null,
+      entries: []
+    };
   }
-
   const entries = await sql`
     SELECT *
     FROM accounting_payroll_entries
     WHERE run_id = ${run.id}
     ORDER BY branch_name ASC NULLS LAST, employee_name ASC, employee_id ASC
   `;
-
-  return { run, entries };
+  return {
+    run,
+    entries
+  };
 }
 
 // GET /api/accounting/payroll?month=YYYY-MM
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_accounting",
+    permission: "can_manage_accounting"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     const url = new URL(request.url);
     const monthRaw = url.searchParams.get("month");
-
     if (monthRaw) {
       const parsed = parsePayrollMonth(monthRaw);
       if (!parsed) {
-        return Response.json({ error: "Invalid month" }, { status: 400 });
+        return Response.json({
+          error: "Invalid month"
+        }, {
+          status: 400
+        });
       }
-
-      const { run, entries } = await getPayrollRunAndEntriesByMonth(
-        parsed.monthStart,
-      );
-      return Response.json({ month: parsed.month, run, entries });
+      const {
+        run,
+        entries
+      } = await getPayrollRunAndEntriesByMonth(parsed.monthStart);
+      return Response.json({
+        month: parsed.month,
+        run,
+        entries
+      });
     }
-
     const runs = await sql`
       SELECT
         id,
@@ -85,36 +99,52 @@ export async function GET(request) {
       ORDER BY payroll_month DESC
       LIMIT 24
     `;
-
-    return Response.json({ runs });
+    return Response.json({
+      runs
+    });
   } catch (error) {
     console.error("payroll GET error", error);
-    return Response.json({ error: "فشل تحميل مسير الرواتب" }, { status: 500 });
+    return Response.json({
+      error: "فشل تحميل مسير الرواتب"
+    }, {
+      status: 500
+    });
   }
 }
 
 // POST /api/accounting/payroll
 // body: { month: 'YYYY-MM' }
 // Creates or refreshes the payroll run for that month using HR deductions + bonuses.
-export async function POST(request) {
+async function POST(request) {
   const auth = requireAuth(request, {
-    anyOf: [
-      { role: "Admin", permission: "can_access_hr" },
-      { role: "Admin", permission: "can_manage_deductions" },
-      { role: "Admin", permission: "can_manage_accounting" },
-    ],
+    anyOf: [{
+      role: "Admin",
+      permission: "can_access_hr"
+    }, {
+      role: "Admin",
+      permission: "can_manage_deductions"
+    }, {
+      role: "Admin",
+      permission: "can_manage_accounting"
+    }]
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     const body = await request.json().catch(() => ({}));
     const parsed = parsePayrollMonth(body?.month);
     if (!parsed) {
-      return Response.json({ error: "month is required" }, { status: 400 });
+      return Response.json({
+        error: "month is required"
+      }, {
+        status: 400
+      });
     }
-
     const createdById = auth.user?.id ? Number(auth.user.id) : null;
     const createdByName = auth.user?.name ? String(auth.user.name) : null;
 
@@ -125,22 +155,17 @@ export async function POST(request) {
     // closing audit trail. The UI shows a confirm dialog that says
     // "لا يمكن تعديل بعد التقفيل" but never enforced it — only the
     // per-entry payment endpoint did. Mirror that here.
-    const [existingRun] = await sql(
-      `SELECT id, is_closed
+    const [existingRun] = await sql(`SELECT id, is_closed
        FROM accounting_payroll_runs
        WHERE payroll_month = $1
-       LIMIT 1`,
-      [parsed.monthStart],
-    );
+       LIMIT 1`, [parsed.monthStart]);
     if (existingRun?.is_closed) {
-      return Response.json(
-        {
-          error:
-            "هذا الشهر مُقفّل ولا يمكن إعادة بناؤه. افتح التقفيل أولاً من زر «إلغاء التقفيل» إذا كان التعديل ضرورياً.",
-          run_id: existingRun.id,
-        },
-        { status: 409 },
-      );
+      return Response.json({
+        error: "هذا الشهر مُقفّل ولا يمكن إعادة بناؤه. افتح التقفيل أولاً من زر «إلغاء التقفيل» إذا كان التعديل ضرورياً.",
+        run_id: existingRun.id
+      }, {
+        status: 409
+      });
     }
 
     // Make sure the start_date column exists. Idempotent — first POST
@@ -190,8 +215,7 @@ export async function POST(request) {
     //     computed as (next_month_start - start_date) so a start on
     //     the 1st gives "days_in_month" days; a start on the 15th of
     //     a 30-day month gives 16 days.
-    const rows = await sql(
-      `
+    const rows = await sql(`
         SELECT
           e.id AS employee_id,
           e.name AS employee_name,
@@ -391,9 +415,7 @@ export async function POST(request) {
         ) br ON true
 
         ORDER BY br.branch_name ASC NULLS LAST, e.name ASC, e.id ASC
-      `,
-      [parsed.monthStart, parsed.nextMonthStart],
-    );
+      `, [parsed.monthStart, parsed.nextMonthStart]);
 
     // Ensure accounting_payroll_entries carries the loan_deduction
     // column. Idempotent — first POST after the migration adds it,
@@ -404,8 +426,7 @@ export async function POST(request) {
     `;
 
     // 2) Upsert run
-    const [run] = await sql(
-      `
+    const [run] = await sql(`
         INSERT INTO accounting_payroll_runs (
           payroll_month,
           created_by_employee_id,
@@ -418,38 +439,23 @@ export async function POST(request) {
           created_by_employee_name = EXCLUDED.created_by_employee_name,
           created_at = CURRENT_TIMESTAMP
         RETURNING *
-      `,
-      [parsed.monthStart, createdById, createdByName],
-    );
+      `, [parsed.monthStart, createdById, createdByName]);
 
     // 3) Refresh entries in one transaction
     // First, read existing payment data so we can preserve it
-    const existingPayments = await sql(
-      `SELECT employee_id, is_paid, paid_amount, payment_method, payment_note, paid_at, paid_by_employee_id, paid_by_employee_name
+    const existingPayments = await sql(`SELECT employee_id, is_paid, paid_amount, payment_method, payment_note, paid_at, paid_by_employee_id, paid_by_employee_name
        FROM accounting_payroll_entries
-       WHERE run_id = $1 AND is_paid = true`,
-      [run.id],
-    );
-
+       WHERE run_id = $1 AND is_paid = true`, [run.id]);
     const paymentMap = {};
     for (const p of existingPayments) {
       paymentMap[Number(p.employee_id)] = p;
     }
-
-    await sql.transaction((txn) => {
-      const queries = [
-        txn("DELETE FROM accounting_payroll_entries WHERE run_id = $1", [
-          run.id,
-        ]),
-      ];
-
+    await sql.transaction(txn => {
+      const queries = [txn("DELETE FROM accounting_payroll_entries WHERE run_id = $1", [run.id])];
       for (const r of rows || []) {
         const empId = Number(r.employee_id);
         const prev = paymentMap[empId];
-
-        queries.push(
-          txn(
-            `
+        queries.push(txn(`
               INSERT INTO accounting_payroll_entries (
                 run_id,
                 employee_id,
@@ -479,50 +485,28 @@ export async function POST(request) {
               VALUES (
                 $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24
               )
-            `,
-            [
-              run.id,
-              empId,
-              String(r.employee_name || ""),
-              r.branch_id === null || r.branch_id === undefined
-                ? null
-                : Number(r.branch_id),
-              r.branch_name ? String(r.branch_name) : null,
-              Number(r.base_salary || 0),
-              Number(r.other_allowances || 0),
-              Number(r.total_salary || 0),
-              Number(r.total_bonuses || 0),
-              Number(r.total_deductions || 0),
-              Number(r.loan_deduction || 0),
-              Number(r.net_salary || 0),
-              Number(r.deductions_count || 0),
-              Array.isArray(r.deduction_ids) ? r.deduction_ids : [],
-              Number(r.bonuses_count || 0),
-              Array.isArray(r.bonus_ids) ? r.bonus_ids : [],
-              prev ? true : false,
-              prev ? prev.paid_amount : null,
-              prev ? prev.payment_method : null,
-              prev ? prev.payment_note : null,
-              prev ? prev.paid_at : null,
-              prev ? prev.paid_by_employee_id : null,
-              prev ? prev.paid_by_employee_name : null,
-              !!r.is_suspended,
-            ],
-          ),
-        );
+            `, [run.id, empId, String(r.employee_name || ""), r.branch_id === null || r.branch_id === undefined ? null : Number(r.branch_id), r.branch_name ? String(r.branch_name) : null, Number(r.base_salary || 0), Number(r.other_allowances || 0), Number(r.total_salary || 0), Number(r.total_bonuses || 0), Number(r.total_deductions || 0), Number(r.loan_deduction || 0), Number(r.net_salary || 0), Number(r.deductions_count || 0), Array.isArray(r.deduction_ids) ? r.deduction_ids : [], Number(r.bonuses_count || 0), Array.isArray(r.bonus_ids) ? r.bonus_ids : [], prev ? true : false, prev ? prev.paid_amount : null, prev ? prev.payment_method : null, prev ? prev.payment_note : null, prev ? prev.paid_at : null, prev ? prev.paid_by_employee_id : null, prev ? prev.paid_by_employee_name : null, !!r.is_suspended]));
       }
-
       return queries;
     });
-
-    const { entries } = await getPayrollRunAndEntriesByMonth(parsed.monthStart);
-
-    return Response.json({ ok: true, month: parsed.month, run, entries });
+    const {
+      entries
+    } = await getPayrollRunAndEntriesByMonth(parsed.monthStart);
+    return Response.json({
+      ok: true,
+      month: parsed.month,
+      run,
+      entries
+    });
   } catch (error) {
     console.error("payroll POST error", error);
-    return Response.json(
-      { error: "فشل إرسال المسير إلى المحاسبة", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل إرسال المسير إلى المحاسبة",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET, POST };

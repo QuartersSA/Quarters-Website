@@ -23,13 +23,15 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import { StatusPill } from "@/components/Tasks/StatusPill";
 import { PriorityPill } from "@/components/Tasks/PriorityPill";
+import { LOCALE } from "@/utils/dateUtils";
 
 function formatDateOnly(d) {
   if (!d) return "—";
   try {
-    return new Date(d).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
+    return new Date(d).toLocaleDateString(LOCALE, {
       month: "short",
       day: "numeric",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
     return String(d);
