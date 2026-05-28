@@ -547,27 +547,21 @@ export default function HRDeductionsPage() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <div className="text-white font-bold">
-                  إرسال إلى قسم المحاسبة
+                  إرسال مسير الرواتب
                 </div>
                 <div className="text-white/60 text-sm">
-                  سيتم إنشاء/تحديث مسير الرواتب للشهر: {monthHint} (يشمل
-                  الخصميات والبونص)
+                  تم نقل زر «إرسال إلى المحاسبة» إلى صفحة مسير الرواتب
+                  المستقلة. افتحها لمراجعة المسير ثم الإرسال.
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={handleSendPayroll}
-                disabled={payrollSendMutation.isPending}
+              <a
+                href="/hr/payroll"
                 className={`${ws.btnPrimary} px-5 py-2.5 justify-center w-full sm:w-auto`}
               >
                 <Send className="w-4 h-4" />
-                <span className="font-semibold">
-                  {payrollSendMutation.isPending
-                    ? "جاري الإرسال…"
-                    : "إرسال إلى مسير الرواتب"}
-                </span>
-              </button>
+                <span className="font-semibold">فتح صفحة مسير الرواتب</span>
+              </a>
             </div>
           </div>
         ) : null}

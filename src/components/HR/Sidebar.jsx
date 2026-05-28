@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { LayoutDashboard, Users, LogOut, DollarSign } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  LogOut,
+  DollarSign,
+  Wallet,
+} from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import AppSectionSwitcher from "@/components/AppSectionSwitcher";
 
@@ -68,6 +74,12 @@ export default function HRSidebar({ onLogout, active = "dashboard" }) {
           href: "/hr/deductions",
           label: "الخصميات",
           Icon: DollarSign,
+        },
+        {
+          key: "payroll",
+          href: "/hr/payroll",
+          label: "مسير الرواتب",
+          Icon: Wallet,
         },
       ];
     }
