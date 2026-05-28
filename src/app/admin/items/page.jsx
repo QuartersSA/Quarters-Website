@@ -236,6 +236,7 @@ export default function ItemsPage() {
   const handleExportPDF = () => {
     const columns = [
       { header: "اسم الصنف", accessor: (item) => item.name },
+      { header: "الوصف", accessor: (item) => item.description || "-" },
       { header: "الفئة", accessor: (item) => item.category_name || "-" },
       { header: "النوع", accessor: (item) => item.unit || "حبة" },
       {
