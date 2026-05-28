@@ -131,6 +131,9 @@ function PaymentRow({ entry, onSave, isClosed }) {
   const totalDeductions = formatMoney(entry.total_deductions);
   const loanDeduction = formatMoney(entry.loan_deduction);
   const hasLoan = Number(entry.loan_deduction || 0) > 0;
+  const totalOvertime = formatMoney(entry.total_overtime);
+  const hasOvertime = Number(entry.total_overtime || 0) > 0;
+  const overtimeDays = Number(entry.overtime_days || 0);
   const formattedNet = formatMoney(entry.net_salary);
 
   return (
@@ -184,6 +187,15 @@ function PaymentRow({ entry, onSave, isClosed }) {
           dir="ltr"
         >
           {totalBonuses}
+        </td>
+        <td
+          className={`py-2 px-1.5 whitespace-nowrap text-right ${
+            hasOvertime ? "text-sky-200" : "text-white/30"
+          }`}
+          dir="ltr"
+          title={hasOvertime ? `${overtimeDays} يوم` : ""}
+        >
+          {hasOvertime ? totalOvertime : "—"}
         </td>
         <td
           className="py-2 px-1.5 text-red-300/80 whitespace-nowrap text-right"
@@ -338,7 +350,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
       {/* صف الملاحظة */}
       {showNote && isPaid && (
         <tr className="border-t border-white/5">
-          <td colSpan={13} className="py-2 px-2">
+          <td colSpan={14} className="py-2 px-2">
             <div className="flex items-start gap-2 mr-2">
               {amountDiffers && (
                 <div className="flex items-center gap-1.5 shrink-0 mt-1">
@@ -419,6 +431,9 @@ export function PayrollTable({ entries, onPaymentSave, isClosed }) {
             </th>
             <th className="text-right font-semibold py-2 px-1.5 whitespace-nowrap">
               البونص
+            </th>
+            <th className="text-right font-semibold py-2 px-1.5 whitespace-nowrap">
+              أوفر تايم
             </th>
             <th className="text-right font-semibold py-2 px-1.5 whitespace-nowrap">
               الخصم

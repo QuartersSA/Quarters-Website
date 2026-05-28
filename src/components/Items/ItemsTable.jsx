@@ -117,7 +117,7 @@ export function ItemsTable({
   const sectionCard = `${ws.glass} ${ws.card} overflow-hidden`;
   const headerCell =
     "text-right px-6 py-4 text-sm font-semibold text-white/55 whitespace-nowrap";
-  const colCount = 9;
+  const colCount = 10;
 
   // checkbox styles
   const checkboxBase =
@@ -156,6 +156,7 @@ export function ItemsTable({
         </button>
       </th>
       <th className={headerCell}>الصنف</th>
+      <th className={headerCell}>الوصف</th>
       <th className={headerCell}>الفئة</th>
       <th className={headerCell}>الوحدة</th>
       <th className={headerCell}>التكلفة</th>
@@ -321,6 +322,17 @@ export function ItemsTable({
                             </div>
                           ) : null}
                         </div>
+                      </div>
+                    </td>
+
+                    {/* Description */}
+                    <td className="px-6 py-4 text-white/70 text-sm">
+                      <div
+                        className="line-clamp-2"
+                        style={{ maxWidth: 260 }}
+                        title={item?.description || ""}
+                      >
+                        {item?.description || "—"}
                       </div>
                     </td>
 

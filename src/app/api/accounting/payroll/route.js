@@ -175,6 +175,30 @@ export async function POST(request) {
       ADD COLUMN IF NOT EXISTS is_suspended BOOLEAN NOT NULL DEFAULT FALSE
     `;
 
+    // Overtime totals — stored at run time so the closed-month
+    // payroll keeps its overtime amount intact even if base_salary
+    // or the underlying overtime rows change later.
+    await sql`
+      CREATE TABLE IF NOT EXISTS hr_employee_overtime (
+        id SERIAL PRIMARY KEY,
+        employee_id INTEGER NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+        month DATE NOT NULL,
+        days NUMERIC(6, 2) NOT NULL,
+        reason TEXT,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        created_by_employee_id INTEGER,
+        created_by_employee_name TEXT
+      )
+    `;
+    await sql`
+      ALTER TABLE accounting_payroll_entries
+      ADD COLUMN IF NOT EXISTS total_overtime NUMERIC(14, 2) NOT NULL DEFAULT 0
+    `;
+    await sql`
+      ALTER TABLE accounting_payroll_entries
+      ADD COLUMN IF NOT EXISTS overtime_days NUMERIC(6, 2) NOT NULL DEFAULT 0
+    `;
+
     // 1) Aggregate deductions + bonuses per employee for this month
     //    ✅ include ALL employees, even if they have no deductions/bonuses
     //
@@ -259,6 +283,16 @@ export async function POST(request) {
           COALESCE(b.bonuses_count, 0)::int AS bonuses_count,
           COALESCE(b.bonus_ids, '{}'::int[]) AS bonus_ids,
 
+          -- Overtime (Saudi convention): per-day rate = base/30 * 2,
+          -- total = per_day * days. Computed live so it always
+          -- reflects the employee's current base_salary. Zero out
+          -- if suspended this month.
+          (CASE
+            WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
+            ELSE COALESCE(ot.total_overtime, 0)
+          END)::numeric(14,2) AS total_overtime,
+          COALESCE(ot.overtime_days, 0)::numeric(6,2) AS overtime_days,
+
           (CASE
             WHEN COALESCE(susp.is_suspended, FALSE) THEN 0
             ELSE COALESCE(loan.monthly_total, 0)
@@ -286,6 +320,7 @@ export async function POST(request) {
                     )
                 END)
                 + COALESCE(b.total_bonuses, 0)
+                + COALESCE(ot.total_overtime, 0)
                 - COALESCE(d.total_deductions, 0)
                 - COALESCE(loan.monthly_total, 0)
             END
@@ -352,6 +387,23 @@ export async function POST(request) {
             AND l.start_month <= $1::date
             AND (l.start_month + (l.installments_count || ' months')::interval) > $1::date
         ) loan ON true
+
+        -- Overtime totals for this employee + month. Sums every
+        -- overtime row that lands in the payroll month, with the
+        -- amount derived live: ROUND(base/30 * 2 * days, 2).
+        LEFT JOIN LATERAL (
+          SELECT
+            COALESCE(
+              SUM(
+                ROUND(COALESCE(e.base_salary, 0) / 30.0 * 2 * o.days, 2)
+              ),
+              0
+            ) AS total_overtime,
+            COALESCE(SUM(o.days), 0) AS overtime_days
+          FROM hr_employee_overtime o
+          WHERE o.employee_id = e.id
+            AND o.month = $1::date
+        ) ot ON true
 
         -- Suspension lookup. Matches if EITHER:
         --   1) An active monthly suspension exists for this run month
@@ -474,10 +526,12 @@ export async function POST(request) {
                 paid_at,
                 paid_by_employee_id,
                 paid_by_employee_name,
-                is_suspended
+                is_suspended,
+                total_overtime,
+                overtime_days
               )
               VALUES (
-                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24
+                $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26
               )
             `,
             [
@@ -507,6 +561,8 @@ export async function POST(request) {
               prev ? prev.paid_by_employee_id : null,
               prev ? prev.paid_by_employee_name : null,
               !!r.is_suspended,
+              Number(r.total_overtime || 0),
+              Number(r.overtime_days || 0),
             ],
           ),
         );

@@ -1,6 +1,7 @@
 export function calculatePayrollTotals(entries) {
   let totalSalary = 0;
   let totalBonuses = 0;
+  let totalOvertime = 0;
   let totalDeductions = 0;
   let totalLoanDeductions = 0;
   let net = 0;
@@ -8,6 +9,7 @@ export function calculatePayrollTotals(entries) {
   for (const e of entries) {
     totalSalary += Number(e.total_salary || 0);
     totalBonuses += Number(e.total_bonuses || 0);
+    totalOvertime += Number(e.total_overtime || 0);
     totalDeductions += Number(e.total_deductions || 0);
     totalLoanDeductions += Number(e.loan_deduction || 0);
     net += Number(e.net_salary || 0);
@@ -16,6 +18,7 @@ export function calculatePayrollTotals(entries) {
   return {
     totalSalary,
     totalBonuses,
+    totalOvertime,
     totalDeductions,
     totalLoanDeductions,
     net,
@@ -124,6 +127,27 @@ export function getPayrollExportColumns() {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         });
+      },
+    },
+    {
+      header: "أوفر تايم",
+      accessor: (item) => item.total_overtime,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toLocaleString("ar-SA-u-nu-latn", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      },
+    },
+    {
+      header: "أيام الأوفر تايم",
+      accessor: (item) => item.overtime_days,
+      format: (value) => {
+        const n = Number(value);
+        if (!Number.isFinite(n)) return "—";
+        return n.toString();
       },
     },
     {
