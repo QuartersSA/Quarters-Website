@@ -27,6 +27,7 @@ export function HRPayrollTable({ entries, isLoading }) {
     "البدلات",
     "الإجمالي",
     "البونص",
+    "أوفر تايم",
     "الخصم",
     "السلف",
     "الصافي",
@@ -132,6 +133,23 @@ export function HRPayrollTable({ entries, isLoading }) {
                     dir="ltr"
                   >
                     {formatMoney(e.total_bonuses)}
+                  </td>
+                  <td
+                    className={`py-2 px-2 whitespace-nowrap text-right ${
+                      Number(e.total_overtime || 0) > 0
+                        ? "text-sky-200"
+                        : "text-white/30"
+                    }`}
+                    dir="ltr"
+                    title={
+                      Number(e.overtime_days || 0) > 0
+                        ? `${Number(e.overtime_days)} يوم`
+                        : ""
+                    }
+                  >
+                    {Number(e.total_overtime || 0) > 0
+                      ? formatMoney(e.total_overtime)
+                      : "—"}
                   </td>
                   <td
                     className="py-2 px-2 text-red-300/80 whitespace-nowrap text-right"

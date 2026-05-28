@@ -7,6 +7,7 @@ import {
   LogOut,
   DollarSign,
   Wallet,
+  Clock,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import AppSectionSwitcher from "@/components/AppSectionSwitcher";
@@ -74,6 +75,12 @@ export default function HRSidebar({ onLogout, active = "dashboard" }) {
           href: "/hr/deductions",
           label: "الخصميات",
           Icon: DollarSign,
+        },
+        {
+          key: "overtime",
+          href: "/hr/overtime",
+          label: "الأوفر تايم",
+          Icon: Clock,
         },
         {
           key: "payroll",
