@@ -145,6 +145,25 @@ export default function FixedPanel({
     return sum;
   }, [paidMap]);
 
+  // Same shape as VariableGrid totals so the header reads identically
+  // across both tabs: { total, paid, pending }.
+  //   - total   = the sum of every active template's per-month amount
+  //               (default_amount split by its frequency cycle), i.e.
+  //               what's EXPECTED to land on the month.
+  //   - paid    = sum of accounting_expenses rows already confirmed
+  //               this month (paidMap).
+  //   - pending = expected − paid. Negative would mean an overrun;
+  //               clamped at 0 to keep the UI sane.
+  const totals = useMemo(() => {
+    let expected = 0;
+    for (const t of templates || []) {
+      expected += perMonthAmount(t.default_amount, t.frequency);
+    }
+    const paid = totalConfirmed;
+    const pending = Math.max(0, expected - paid);
+    return { total: expected, paid, pending };
+  }, [templates, totalConfirmed]);
+
   const handleToggle = (t) => {
     const paid = paidMap.has(Number(t.id));
     if (paid) {
@@ -176,10 +195,24 @@ export default function FixedPanel({
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="text-xs text-white/55">المجموع المُسدَّد</div>
-            <div className="text-emerald-200 font-bold" dir="ltr">
-              {formatMoney(totalConfirmed)}
+          <div className="flex items-center gap-4 text-xs flex-wrap">
+            <div>
+              <span className="text-white/55">الإجمالي: </span>
+              <span className="text-white font-bold" dir="ltr">
+                {formatMoney(totals.total)}
+              </span>
+            </div>
+            <div>
+              <span className="text-white/55">مؤكد: </span>
+              <span className="text-emerald-200 font-bold" dir="ltr">
+                {formatMoney(totals.paid)}
+              </span>
+            </div>
+            <div>
+              <span className="text-white/55">بانتظار: </span>
+              <span className="text-amber-200 font-bold" dir="ltr">
+                {formatMoney(totals.pending)}
+              </span>
             </div>
             <button
               type="button"
