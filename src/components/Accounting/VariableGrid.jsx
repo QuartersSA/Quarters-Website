@@ -193,18 +193,35 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     saveMut.mutate({ template_id: t.id, amount: draftVal, mark_paid: true });
   };
 
+  // Three figures shown in the header:
+  //
+  //   - paid    : sum of confirmed rows for this month
+  //               (confirmed_amount → amount fallback).
+  //   - pending : sum of every active template's expected_amount that
+  //               HASN'T been confirmed yet for the month. This is
+  //               the budget waiting to land.
+  //   - total   : paid + pending — what the month is shaping up to
+  //               cost in total once every template gets confirmed.
+  //
+  // The previous version read `total` from `row.amount` (the entered
+  // draft), so a row that was confirmed via a direct paid path with
+  // amount=0 but confirmed_amount=5160 would show total=0 and paid=
+  // 5160 — i.e. paid > total, which was confusing. The new shape
+  // makes the three figures internally consistent regardless of
+  // which path created the row.
   const totals = useMemo(() => {
-    let total = 0;
     let paid = 0;
+    let pending = 0;
     for (const t of templates) {
       const row = existingByTemplate.get(Number(t.id));
-      if (!row) continue;
-      total += Number(row.amount) || 0;
-      if (row.is_confirmed) {
+      const expected = Number(t.expected_amount) || 0;
+      if (row?.is_confirmed) {
         paid += Number(row.confirmed_amount ?? row.amount) || 0;
+      } else {
+        pending += expected;
       }
     }
-    return { total, paid, pending: total - paid };
+    return { total: paid + pending, paid, pending };
   }, [templates, existingByTemplate]);
 
   const addCta = (
