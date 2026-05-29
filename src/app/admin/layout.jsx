@@ -10,6 +10,8 @@ import {
   Megaphone,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import useAdminTheme from "@/hooks/useAdminTheme";
+import AdminThemeToggle from "@/components/Admin/AdminThemeToggle";
 
 function readAdminUser() {
   try {
@@ -58,6 +60,11 @@ function allowedModes(adminUser) {
 export default function AdminLayout({ children }) {
   const [showChooser, setShowChooser] = React.useState(false);
   const [noAccess, setNoAccess] = React.useState(false);
+  // Admin section owns the light-mode toggle. themeClass flips the
+  // outermost wrapper between dark and light so every ws.* token
+  // resolves against the chosen theme.
+  const { isDark } = useAdminTheme();
+  const themeClass = isDark ? "dark" : "";
 
   const goInventory = React.useCallback(() => {
     try {
@@ -228,8 +235,12 @@ export default function AdminLayout({ children }) {
   const showMarketingBtn = can ? !!can.marketing : false;
 
   return (
-    <div className={`min-h-[100svh] ${ws.appBg}`} dir="rtl">
+    <div
+      className={`${themeClass} min-h-[100svh] ${ws.appBg}`}
+      dir="rtl"
+    >
       {Background}
+      <AdminThemeToggle />
 
       <div className="relative">{children}</div>
 
