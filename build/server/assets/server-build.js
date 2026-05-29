@@ -1808,7 +1808,7 @@ function GlassPopover({
     /* @__PURE__ */ jsx("div", { className: "fixed inset-0", style: {
       zIndex: zIndex - 1
     }, onClick: () => onClose?.(), "aria-hidden": "true" }),
-    /* @__PURE__ */ jsx("div", { ref: popoverRef, dir, style: popoverStyle, className: `${ws.popover} rounded-2xl border border-white/15 shadow-2xl ${pos.maxHeight ? "" : "overflow-hidden"} ${className}`, onClick: (e) => {
+    /* @__PURE__ */ jsx("div", { ref: popoverRef, dir, style: popoverStyle, className: `${ws.popover} rounded-2xl border border-slate-200 dark:border-white/15 shadow-2xl ${pos.maxHeight ? "" : "overflow-hidden"} ${className}`, onClick: (e) => {
       e.stopPropagation();
     }, children })
   ] }), document.body);
@@ -1861,19 +1861,19 @@ function GlassSelect({
   const btnDisabled = disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer";
   return /* @__PURE__ */ jsxs("div", { className, dir, children: [
     /* @__PURE__ */ jsxs("button", { ref: btnRef, type: "button", disabled, onClick: () => setOpen((s) => !s), className: `${btnBase} ${btnDisabled} ${buttonClassName}`, "aria-expanded": open, children: [
-      /* @__PURE__ */ jsx("span", { className: `min-w-0 truncate ${selected ? "text-white" : "text-white/45"}`, children: label }),
-      /* @__PURE__ */ jsx(ChevronDown, { className: `w-4 h-4 flex-shrink-0 ${open ? "text-white" : "text-white/60"}` })
+      /* @__PURE__ */ jsx("span", { className: `min-w-0 truncate ${selected ? "text-slate-900 dark:text-white" : "text-slate-500 dark:text-white/45"}`, children: label }),
+      /* @__PURE__ */ jsx(ChevronDown, { className: `w-4 h-4 flex-shrink-0 ${open ? "text-slate-900 dark:text-white" : "text-slate-600 dark:text-white/60"}` })
     ] }),
-    /* @__PURE__ */ jsx(GlassPopover, { open, anchorRef: btnRef, onClose: () => setOpen(false), className: `border border-white/15 ${menuClassName}`, children: /* @__PURE__ */ jsx("div", { className: "max-h-[50vh] overflow-auto", children: normalizedOptions.map((o) => {
+    /* @__PURE__ */ jsx(GlassPopover, { open, anchorRef: btnRef, onClose: () => setOpen(false), className: `border border-slate-200 dark:border-white/15 ${menuClassName}`, children: /* @__PURE__ */ jsx("div", { className: "max-h-[50vh] overflow-auto", children: normalizedOptions.map((o) => {
       if (o.isGroupLabel) {
-        return /* @__PURE__ */ jsx("div", { className: "px-4 py-2 text-xs font-bold text-white/45 border-t border-white/10 first:border-t-0", role: "presentation", children: o.label }, `group-${o.value}-${o.label}`);
+        return /* @__PURE__ */ jsx("div", { className: "px-4 py-2 text-xs font-bold text-slate-500 dark:text-white/45 border-t border-slate-200 dark:border-white/10 first:border-t-0", role: "presentation", children: o.label }, `group-${o.value}-${o.label}`);
       }
       const active = selected?.value === o.value;
       const rowBase = `w-full flex items-center justify-between gap-3 px-4 py-3 ${textAlignClass} transition-colors`;
-      const rowClass = o.disabled ? "text-white/30 cursor-not-allowed" : active ? "bg-white/10 text-white" : "text-white/80 hover:bg-white/[0.06]";
+      const rowClass = o.disabled ? "text-slate-400 dark:text-white/30 cursor-not-allowed" : active ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white" : "text-white/80 hover:bg-slate-100 dark:hover:bg-white/[0.06]";
       return /* @__PURE__ */ jsxs("button", { type: "button", disabled: o.disabled, onClick: () => selectValue(o.value), className: `${rowBase} ${rowClass}`, role: "option", "aria-selected": active, children: [
         /* @__PURE__ */ jsx("span", { className: "min-w-0 truncate", children: o.label }),
-        active ? /* @__PURE__ */ jsx(Check, { className: "w-4 h-4 text-emerald-200 flex-shrink-0" }) : /* @__PURE__ */ jsx("span", { className: "w-4 h-4 flex-shrink-0" })
+        active ? /* @__PURE__ */ jsx(Check, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-200 flex-shrink-0" }) : /* @__PURE__ */ jsx("span", { className: "w-4 h-4 flex-shrink-0" })
       ] }, o.value);
     }) }) })
   ] });
@@ -9695,7 +9695,7 @@ function GlassMultiSelect({
   const showClear = selectedLabels.length > 0 && !disabled;
   return /* @__PURE__ */ jsxs("div", { className, dir, children: [
     /* @__PURE__ */ jsxs("button", { ref: btnRef, type: "button", disabled, onClick: () => setOpen((s) => !s), className: `${btnBase} ${btnDisabled} ${buttonClassName}`, "aria-expanded": open, children: [
-      /* @__PURE__ */ jsx("span", { className: `min-w-0 truncate ${selectedLabels.length ? "text-white" : "text-white/45"}`, children: label }),
+      /* @__PURE__ */ jsx("span", { className: `min-w-0 truncate ${selectedLabels.length ? "text-slate-900 dark:text-white" : "text-slate-500 dark:text-white/45"}`, children: label }),
       /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-2 flex-shrink-0", children: [
         showClear ? /* @__PURE__ */ jsx("span", { role: "button", tabIndex: 0, onClick: (e) => {
           e.preventDefault();
@@ -9707,25 +9707,25 @@ function GlassMultiSelect({
             e.stopPropagation();
             clearAll();
           }
-        }, className: "p-1 rounded-md hover:bg-white/10 text-white/60", "aria-label": "مسح", title: "مسح", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) }) : null,
-        /* @__PURE__ */ jsx(ChevronDown, { className: `w-4 h-4 ${open ? "text-white" : "text-white/60"}` })
+        }, className: "p-1 rounded-md hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-white/60", "aria-label": "مسح", title: "مسح", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) }) : null,
+        /* @__PURE__ */ jsx(ChevronDown, { className: `w-4 h-4 ${open ? "text-slate-900 dark:text-white" : "text-slate-600 dark:text-white/60"}` })
       ] })
     ] }),
-    /* @__PURE__ */ jsx(GlassPopover, { open, anchorRef: btnRef, onClose: () => setOpen(false), className: `border border-white/15 ${menuClassName}`, children: /* @__PURE__ */ jsxs("div", { className: "max-h-[50vh] overflow-auto", children: [
-      /* @__PURE__ */ jsxs("div", { className: "px-4 py-2 border-b border-white/10 flex items-center justify-between gap-3", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-xs font-semibold text-white/55", children: "اختيار متعدد" }),
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: clearAll, disabled: disabled || selectedLabels.length === 0, className: "text-xs text-white/70 hover:text-white disabled:opacity-40", children: "مسح الكل" })
+    /* @__PURE__ */ jsx(GlassPopover, { open, anchorRef: btnRef, onClose: () => setOpen(false), className: `border border-slate-200 dark:border-white/15 ${menuClassName}`, children: /* @__PURE__ */ jsxs("div", { className: "max-h-[50vh] overflow-auto", children: [
+      /* @__PURE__ */ jsxs("div", { className: "px-4 py-2 border-b border-slate-200 dark:border-white/10 flex items-center justify-between gap-3", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-xs font-semibold text-slate-600 dark:text-white/55", children: "اختيار متعدد" }),
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: clearAll, disabled: disabled || selectedLabels.length === 0, className: "text-xs text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white disabled:opacity-40", children: "مسح الكل" })
       ] }),
       normalizedOptions.map((o) => {
         if (o.isGroupLabel) {
-          return /* @__PURE__ */ jsx("div", { className: "px-4 py-2 text-xs font-bold text-white/45 border-t border-white/10 first:border-t-0", role: "presentation", children: o.label }, `group-${o.value}-${o.label}`);
+          return /* @__PURE__ */ jsx("div", { className: "px-4 py-2 text-xs font-bold text-slate-500 dark:text-white/45 border-t border-slate-200 dark:border-white/10 first:border-t-0", role: "presentation", children: o.label }, `group-${o.value}-${o.label}`);
         }
         const active = selectedValues.has(o.value);
         const rowBase = `w-full flex items-center justify-between gap-3 px-4 py-3 ${textAlignClass} transition-colors`;
-        const rowClass = o.disabled ? "text-white/30 cursor-not-allowed" : active ? "bg-white/10 text-white" : "text-white/80 hover:bg-white/[0.06]";
+        const rowClass = o.disabled ? "text-slate-400 dark:text-white/30 cursor-not-allowed" : active ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white" : "text-white/80 hover:bg-slate-100 dark:hover:bg-white/[0.06]";
         return /* @__PURE__ */ jsxs("button", { type: "button", disabled: o.disabled, onClick: () => toggle(o.value), className: `${rowBase} ${rowClass}`, role: "option", "aria-selected": active, children: [
           /* @__PURE__ */ jsx("span", { className: "min-w-0 truncate", children: o.label }),
-          active ? /* @__PURE__ */ jsx(Check, { className: "w-4 h-4 text-emerald-200 flex-shrink-0" }) : /* @__PURE__ */ jsx("span", { className: "w-4 h-4 flex-shrink-0" })
+          active ? /* @__PURE__ */ jsx(Check, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-200 flex-shrink-0" }) : /* @__PURE__ */ jsx("span", { className: "w-4 h-4 flex-shrink-0" })
         ] }, o.value);
       })
     ] }) })
@@ -11117,7 +11117,7 @@ function GlassDatePicker({
     setValue("");
     setOpen(false);
   }, [setValue]);
-  const buttonTextClass = value ? "text-white" : "text-white/35";
+  const buttonTextClass = value ? "text-slate-900 dark:text-white" : "text-slate-400 dark:text-white/35";
   const defaultClassNames = useMemo(() => getDefaultClassNames(), []);
   const dayPickerClassNames = useMemo(() => {
     const navBtn = `${ws.iconButton} w-8 h-8 rounded-xl flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed`;
@@ -11131,18 +11131,18 @@ function GlassDatePicker({
       nav: `${defaultClassNames.nav} flex items-center gap-1`,
       button_previous: `${defaultClassNames.button_previous} ${navBtn}`,
       button_next: `${defaultClassNames.button_next} ${navBtn}`,
-      chevron: `${defaultClassNames.chevron} text-white/70`,
+      chevron: `${defaultClassNames.chevron} text-slate-700 dark:text-white/70`,
       month_grid: `${defaultClassNames.month_grid} w-full border-collapse table-fixed`,
       weekdays: `${defaultClassNames.weekdays} `,
-      weekday: `${defaultClassNames.weekday} p-1 text-center text-[11px] text-white/45 font-semibold`,
+      weekday: `${defaultClassNames.weekday} p-1 text-center text-[11px] text-slate-500 dark:text-white/45 font-semibold`,
       weeks: `${defaultClassNames.weeks} `,
       week: `${defaultClassNames.week} `,
       // In v9: `day` is the cell, and `day_button` is the clickable button.
       day: `${defaultClassNames.day} p-1 text-center`,
-      day_button: `${defaultClassNames.day_button} h-8 w-8 rounded-xl mx-auto text-white/85 hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-emerald-400/20 flex items-center justify-center`,
-      today: `${defaultClassNames.today} text-sky-200`,
-      outside: `${defaultClassNames.outside} text-white/25`,
-      disabled: `${defaultClassNames.disabled} text-white/25 line-through`,
+      day_button: `${defaultClassNames.day_button} h-8 w-8 rounded-xl mx-auto text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-emerald-400/20 flex items-center justify-center`,
+      today: `${defaultClassNames.today} text-sky-700 dark:text-sky-200`,
+      outside: `${defaultClassNames.outside} text-slate-400 dark:text-white/25`,
+      disabled: `${defaultClassNames.disabled} text-slate-400 dark:text-white/25 line-through`,
       selected: `${defaultClassNames.selected} bg-emerald-400/20 text-emerald-100 border border-emerald-400/30`
     };
   }, [defaultClassNames]);
@@ -11164,9 +11164,9 @@ function GlassDatePicker({
     /* @__PURE__ */ jsxs("div", { className: "relative", children: [
       /* @__PURE__ */ jsxs("button", { ref: anchorRef, type: "button", onClick: () => setOpen((s) => !s), className: `${ws.select} flex items-center justify-between gap-3 ${buttonClassName}`, "aria-expanded": open, children: [
         /* @__PURE__ */ jsx("span", { className: `truncate ${buttonTextClass}`, children: displayLabel }),
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 rounded-xl bg-white/[0.03] flex-shrink-0`, "aria-hidden": "true", children: showTime ? /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4 text-white/65" }) : /* @__PURE__ */ jsx(CalendarDays, { className: "w-4 h-4 text-white/65" }) })
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 rounded-xl bg-slate-50 dark:bg-white/[0.03] flex-shrink-0`, "aria-hidden": "true", children: showTime ? /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4 text-slate-700 dark:text-white/65" }) : /* @__PURE__ */ jsx(CalendarDays, { className: "w-4 h-4 text-slate-700 dark:text-white/65" }) })
       ] }),
-      allowClear && value ? /* @__PURE__ */ jsx("button", { type: "button", onClick: clear, className: `absolute left-2 top-1/2 -translate-y-1/2 ${ws.iconButton} w-9 h-9 rounded-xl flex items-center justify-center`, "aria-label": "مسح التاريخ", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4 text-white/70" }) }) : null
+      allowClear && value ? /* @__PURE__ */ jsx("button", { type: "button", onClick: clear, className: `absolute left-2 top-1/2 -translate-y-1/2 ${ws.iconButton} w-9 h-9 rounded-xl flex items-center justify-center`, "aria-label": "مسح التاريخ", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4 text-slate-700 dark:text-white/70" }) }) : null
     ] }),
     /* @__PURE__ */ jsx(GlassPopover, { open, anchorRef, onClose: () => setOpen(false), style: {
       width: 320
@@ -11188,7 +11188,7 @@ function GlassDatePicker({
           allowClear ? /* @__PURE__ */ jsx("button", { type: "button", onClick: clear, className: `${ws.btnDanger} px-3 py-2 text-xs justify-center`, children: "مسح" }) : null
         ] })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-white/10 bg-white/[0.02] p-2 overflow-hidden", children: /* @__PURE__ */ jsx(
+      /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02] p-2 overflow-hidden", children: /* @__PURE__ */ jsx(
         DayPicker,
         {
           mode: "single",
@@ -11227,14 +11227,14 @@ function GlassDatePicker({
               const className2 = props?.className || "";
               if (dir === "rtl") {
                 if (props.orientation === "left") {
-                  return /* @__PURE__ */ jsx(ChevronRight, { className: `${className2} w-4 h-4 text-white/70` });
+                  return /* @__PURE__ */ jsx(ChevronRight, { className: `${className2} w-4 h-4 text-slate-700 dark:text-white/70` });
                 }
-                return /* @__PURE__ */ jsx(ChevronLeft, { className: `${className2} w-4 h-4 text-white/70` });
+                return /* @__PURE__ */ jsx(ChevronLeft, { className: `${className2} w-4 h-4 text-slate-700 dark:text-white/70` });
               }
               if (props.orientation === "left") {
-                return /* @__PURE__ */ jsx(ChevronLeft, { className: `${className2} w-4 h-4 text-white/70` });
+                return /* @__PURE__ */ jsx(ChevronLeft, { className: `${className2} w-4 h-4 text-slate-700 dark:text-white/70` });
               }
-              return /* @__PURE__ */ jsx(ChevronRight, { className: `${className2} w-4 h-4 text-white/70` });
+              return /* @__PURE__ */ jsx(ChevronRight, { className: `${className2} w-4 h-4 text-slate-700 dark:text-white/70` });
             }
           },
           styles: {
@@ -11244,14 +11244,14 @@ function GlassDatePicker({
           }
         }
       ) }),
-      showTime ? /* @__PURE__ */ jsxs("div", { className: "mt-3 pt-3 border-t border-white/10", children: [
+      showTime ? /* @__PURE__ */ jsxs("div", { className: "mt-3 pt-3 border-t border-slate-200 dark:border-white/10", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
-          /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4 text-white/50" }),
-          /* @__PURE__ */ jsx("span", { className: "text-sm font-semibold text-white/70", children: "الوقت" })
+          /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4 text-slate-500 dark:text-white/50" }),
+          /* @__PURE__ */ jsx("span", { className: "text-sm font-semibold text-slate-700 dark:text-white/70", children: "الوقت" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
           /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-[11px] text-white/45 mb-1", children: "الساعة" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-[11px] text-slate-500 dark:text-white/45 mb-1", children: "الساعة" }),
             /* @__PURE__ */ jsxs("select", { value: currentTime.hour !== "" ? Number(currentTime.hour) : "", onChange: (e) => handleTimeChange("hour", e.target.value), className: `${ws.input} px-3 py-2.5 text-center text-sm w-full`, style: {
               appearance: "none",
               WebkitAppearance: "none"
@@ -11260,9 +11260,9 @@ function GlassDatePicker({
               hourOptions.map((h) => /* @__PURE__ */ jsx("option", { value: h, children: String(h).padStart(2, "0") }, h))
             ] })
           ] }),
-          /* @__PURE__ */ jsx("span", { className: "text-white/50 text-lg font-bold mt-4", children: ":" }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50 text-lg font-bold mt-4", children: ":" }),
           /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-[11px] text-white/45 mb-1", children: "الدقيقة" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-[11px] text-slate-500 dark:text-white/45 mb-1", children: "الدقيقة" }),
             /* @__PURE__ */ jsxs("select", { value: currentTime.minute !== "" ? Number(currentTime.minute) : "", onChange: (e) => handleTimeChange("minute", e.target.value), className: `${ws.input} px-3 py-2.5 text-center text-sm w-full`, style: {
               appearance: "none",
               WebkitAppearance: "none"
@@ -11274,7 +11274,7 @@ function GlassDatePicker({
           /* @__PURE__ */ jsx("button", { type: "button", onClick: handleTimeDone, className: `${ws.btnPrimary} px-4 py-2.5 text-sm justify-center mt-4`, children: "تم" })
         ] })
       ] }) : null,
-      /* @__PURE__ */ jsx("div", { className: "pt-2 text-xs text-white/45", children: showTime ? "* اختر التاريخ والوقت" : "* اختيار تاريخ بنمط Workspace (بدون واجهة المتصفح البيضاء)" })
+      /* @__PURE__ */ jsx("div", { className: "pt-2 text-xs text-slate-500 dark:text-white/45", children: showTime ? "* اختر التاريخ والوقت" : "* اختيار تاريخ بنمط Workspace (بدون واجهة المتصفح البيضاء)" })
     ] }) })
   ] });
 }
@@ -11710,46 +11710,46 @@ function AdminLayout({
     Background,
     /* @__PURE__ */ jsx("div", { className: "relative", children }),
     noAccess ? /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4", children: /* @__PURE__ */ jsx("div", { className: `w-full max-w-xl ${ws.glass} ${ws.card} p-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3", children: [
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12`, children: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6 text-amber-200" }) }),
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12`, children: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6 text-amber-700 dark:text-amber-200" }) }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-xl font-bold tracking-tight", children: "لا توجد صلاحيات" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60 mt-1", children: "هذا الحساب الإداري لا يملك أي صلاحية لعرض الأقسام (Workspace / إدارة الجرد / Accounting / HR)." }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 text-sm mt-3", children: "حدّث الصلاحيات من شاشة الموظفين." })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white text-xl font-bold tracking-tight", children: "لا توجد صلاحيات" }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/60 mt-1", children: "هذا الحساب الإداري لا يملك أي صلاحية لعرض الأقسام (Workspace / إدارة الجرد / Accounting / HR)." }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm mt-3", children: "حدّث الصلاحيات من شاشة الموظفين." })
       ] })
     ] }) }) }) : null,
     showChooser ? /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4", children: /* @__PURE__ */ jsxs("div", { className: `w-full max-w-4xl ${ws.glass} ${ws.card} overflow-hidden`, children: [
       /* @__PURE__ */ jsxs("div", { className: `p-6 border-b ${ws.divider}`, children: [
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-2xl font-bold tracking-tight", children: "اختر القسم" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60 mt-2", children: "الأقسام الظاهرة هنا حسب صلاحيات الحساب." })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white text-2xl font-bold tracking-tight", children: "اختر القسم" }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/60 mt-2", children: "الأقسام الظاهرة هنا حسب صلاحيات الحساب." })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4", children: [
-        showInventoryBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goInventory, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-white/[0.06]", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6 text-emerald-200" }) }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-lg tracking-tight", children: "إدارة الجرد" }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm mt-1", children: "إدارة المخزون + عمليات الجرد" })
+        showInventoryBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goInventory, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6 text-emerald-700 dark:text-emerald-200" }) }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold text-lg tracking-tight", children: "إدارة الجرد" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mt-1", children: "إدارة المخزون + عمليات الجرد" })
         ] }) : null,
-        showWorkspaceBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goWorkspace, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-white/[0.06]", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(Briefcase, { className: "w-6 h-6 text-sky-200" }) }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-lg tracking-tight", children: "Workspace" }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm mt-1", children: "Inbox + My Tasks + Team Space" })
+        showWorkspaceBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goWorkspace, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(Briefcase, { className: "w-6 h-6 text-sky-700 dark:text-sky-200" }) }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold text-lg tracking-tight", children: "Workspace" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mt-1", children: "Inbox + My Tasks + Team Space" })
         ] }) : null,
-        showAccountingBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goAccounting, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-white/[0.06]", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(Calculator, { className: "w-6 h-6 text-fuchsia-200" }) }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-lg tracking-tight", children: "Accounting" }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm mt-1", children: "تقفيلة الشفت + تقارير المحاسبة" })
+        showAccountingBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goAccounting, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(Calculator, { className: "w-6 h-6 text-fuchsia-700 dark:text-fuchsia-200" }) }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold text-lg tracking-tight", children: "Accounting" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mt-1", children: "تقفيلة الشفت + تقارير المحاسبة" })
         ] }) : null,
-        showHRBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goHR, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-white/[0.06]", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(Users, { className: "w-6 h-6 text-amber-200" }) }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-lg tracking-tight", children: "HR" }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm mt-1", children: "الموظفين + الصلاحيات" })
+        showHRBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goHR, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(Users, { className: "w-6 h-6 text-amber-700 dark:text-amber-200" }) }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold text-lg tracking-tight", children: "HR" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mt-1", children: "الموظفين + الصلاحيات" })
         ] }) : null,
-        showMarketingBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goMarketing, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-white/[0.06]", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(Megaphone, { className: "w-6 h-6 text-pink-200" }) }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-lg tracking-tight", children: "التسويق" }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm mt-1", children: "البلوقرز + منيو الضيافة" })
+        showMarketingBtn ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: goMarketing, className: "p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mb-4`, children: /* @__PURE__ */ jsx(Megaphone, { className: "w-6 h-6 text-pink-700 dark:text-pink-200" }) }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold text-lg tracking-tight", children: "التسويق" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mt-1", children: "البلوقرز + منيو الضيافة" })
         ] }) : null
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "px-6 pb-6 text-xs text-slate-500 dark:text-white/45", children: "تقدر تبدّل بين الأقسام لاحقًا من نفس شاشة الإدارة." })
+      /* @__PURE__ */ jsx("div", { className: "px-6 pb-6 text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: "تقدر تبدّل بين الأقسام لاحقًا من نفس شاشة الإدارة." })
     ] }) }) : null
   ] });
 }
@@ -11793,67 +11793,67 @@ function Sidebar({
       /* @__PURE__ */ jsx("button", { onClick: () => setIsMobileMenuOpen(!isMobileMenuOpen), className: `${ws.iconButton}`, "aria-label": isMobileMenuOpen ? "إغلاق القائمة" : "فتح القائمة", children: isMobileMenuOpen ? /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) : /* @__PURE__ */ jsx(Menu, { className: "w-5 h-5" }) }),
       /* @__PURE__ */ jsx(AppSectionSwitcher, { active: "inventory", className: "scale-90 origin-left" }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-bold tracking-tight whitespace-nowrap", children: pageTitle }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white text-sm font-bold tracking-tight whitespace-nowrap", children: pageTitle }),
         /* @__PURE__ */ jsx("img", { src: "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/", alt: "Quarters", className: "h-8 w-auto bg-white rounded-xl p-1 shrink-0" })
       ] })
     ] }) }),
     isMobileMenuOpen && /* @__PURE__ */ jsx("div", { onClick: () => setIsMobileMenuOpen(false), className: "lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40" }),
-    /* @__PURE__ */ jsxs("aside", { className: `fixed right-0 top-0 h-[100svh] w-72 lg:w-72 p-6 overflow-y-auto z-50 transition-transform duration-300 ${ws.glass} ${ws.card} rounded-l-[28px] lg:rounded-none border-l border-slate-200 dark:border-white/10 ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"}`, dir: "rtl", children: [
+    /* @__PURE__ */ jsxs("aside", { className: `fixed right-0 top-0 h-[100svh] w-72 lg:w-72 p-6 overflow-y-auto z-50 transition-transform duration-300 ${ws.glass} ${ws.card} rounded-l-[28px] lg:rounded-none border-l border-slate-200 dark:border-slate-200 dark:dark:border-white/10 ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"}`, dir: "rtl", children: [
       /* @__PURE__ */ jsxs("div", { className: "mb-8 text-center", children: [
         /* @__PURE__ */ jsx("img", { src: "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/", alt: "Quarters Coffee Bar", className: "h-16 w-auto mx-auto bg-white rounded-2xl p-2 mb-3" }),
-        /* @__PURE__ */ jsx("h1", { className: "text-slate-900 dark:text-white font-bold text-lg tracking-tight", children: "لوحة الإدارة" }),
-        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-xs", children: "أنظمة Quarters" }),
+        /* @__PURE__ */ jsx("h1", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold text-lg tracking-tight", children: "لوحة الإدارة" }),
+        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-xs", children: "أنظمة Quarters" }),
         /* @__PURE__ */ jsx("div", { className: "mt-4 flex justify-center", children: /* @__PURE__ */ jsx(AppSectionSwitcher, { active: "inventory", className: "scale-95" }) })
       ] }),
       /* @__PURE__ */ jsxs("nav", { className: "space-y-2", children: [
-        /* @__PURE__ */ jsxs("a", { href: "/admin", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "dashboard" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+        /* @__PURE__ */ jsxs("a", { href: "/admin", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "dashboard" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
           /* @__PURE__ */ jsx(LayoutDashboard, { className: "w-5 h-5" }),
           /* @__PURE__ */ jsx("span", { className: activePage === "dashboard" ? "font-semibold" : "", children: "لوحة التحكم" })
         ] }),
-        /* @__PURE__ */ jsxs("a", { href: "/admin/branches", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "branches" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+        /* @__PURE__ */ jsxs("a", { href: "/admin/branches", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "branches" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
           /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }),
           /* @__PURE__ */ jsx("span", { className: activePage === "branches" ? "font-semibold" : "", children: "الفروع" })
         ] }),
-        /* @__PURE__ */ jsxs("a", { href: "/admin/items", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "items" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+        /* @__PURE__ */ jsxs("a", { href: "/admin/items", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "items" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
           /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }),
           /* @__PURE__ */ jsx("span", { className: activePage === "items" ? "font-semibold" : "", children: "إدارة الأصناف" })
         ] }),
-        /* @__PURE__ */ jsxs("a", { href: "/admin/operations", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "operations" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+        /* @__PURE__ */ jsxs("a", { href: "/admin/operations", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "operations" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
           /* @__PURE__ */ jsx(ClipboardList, { className: "w-5 h-5" }),
           /* @__PURE__ */ jsx("span", { className: activePage === "operations" ? "font-semibold" : "", children: "عمليات المخزون" })
         ] }),
-        /* @__PURE__ */ jsxs("a", { href: "/admin/receipts", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "receipts" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+        /* @__PURE__ */ jsxs("a", { href: "/admin/receipts", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "receipts" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
           /* @__PURE__ */ jsx(Truck, { className: "w-5 h-5" }),
           /* @__PURE__ */ jsx("span", { className: activePage === "receipts" ? "font-semibold" : "", children: "الواردات" })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsxs("button", { onClick: () => setIsInventorySummaryOpen(!isInventorySummaryOpen), className: "w-full flex items-center justify-between gap-3 px-4 py-3 text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] rounded-2xl transition-colors border border-transparent", children: [
+          /* @__PURE__ */ jsxs("button", { onClick: () => setIsInventorySummaryOpen(!isInventorySummaryOpen), className: "w-full flex items-center justify-between gap-3 px-4 py-3 text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] rounded-2xl transition-colors border border-transparent", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
               /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5" }),
               /* @__PURE__ */ jsx("span", { children: "ملخص جرد الأصناف" })
             ] }),
             isInventorySummaryOpen ? /* @__PURE__ */ jsx(ChevronUp, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(ChevronDown, { className: "w-4 h-4" })
           ] }),
-          isInventorySummaryOpen && /* @__PURE__ */ jsxs("div", { className: "mr-4 mt-2 space-y-1 border-r border-slate-200 dark:border-white/10 pr-3", children: [
-            /* @__PURE__ */ jsxs("a", { href: "/admin/low-stock", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "low-stock" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+          isInventorySummaryOpen && /* @__PURE__ */ jsxs("div", { className: "mr-4 mt-2 space-y-1 border-r border-slate-200 dark:border-slate-200 dark:dark:border-white/10 pr-3", children: [
+            /* @__PURE__ */ jsxs("a", { href: "/admin/low-stock", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "low-stock" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
               /* @__PURE__ */ jsx(TrendingDown, { className: "w-4 h-4" }),
               /* @__PURE__ */ jsx("span", { className: activePage === "low-stock" ? "font-semibold" : "", children: "الأصناف منخفضة الكمية" })
             ] }),
-            /* @__PURE__ */ jsxs("a", { href: "/admin/items-summary", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "items-summary" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+            /* @__PURE__ */ jsxs("a", { href: "/admin/items-summary", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "items-summary" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
               /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4" }),
               /* @__PURE__ */ jsx("span", { className: activePage === "items-summary" ? "font-semibold" : "", children: "ملخص الأصناف" })
             ] }),
-            /* @__PURE__ */ jsxs("a", { href: "/admin/variance", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "variance" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+            /* @__PURE__ */ jsxs("a", { href: "/admin/variance", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "variance" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
               /* @__PURE__ */ jsx(BarChart3, { className: "w-4 h-4" }),
               /* @__PURE__ */ jsx("span", { className: activePage === "variance" ? "font-semibold" : "", children: "تقرير الانحراف" })
             ] }),
-            /* @__PURE__ */ jsxs("a", { href: "/admin/stock-value", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "stock-value" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+            /* @__PURE__ */ jsxs("a", { href: "/admin/stock-value", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${activePage === "stock-value" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
               /* @__PURE__ */ jsx(Banknote, { className: "w-4 h-4" }),
               /* @__PURE__ */ jsx("span", { className: activePage === "stock-value" ? "font-semibold" : "", children: "قيمة المخزون" })
             ] })
           ] })
         ] }),
-        canManageEmployees ? /* @__PURE__ */ jsxs("a", { href: "/admin/employees", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "employees" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.06] border-transparent"}`, children: [
+        canManageEmployees ? /* @__PURE__ */ jsxs("a", { href: "/admin/employees", onClick: () => setIsMobileMenuOpen(false), className: `flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${activePage === "employees" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"}`, children: [
           /* @__PURE__ */ jsx(Users, { className: "w-5 h-5" }),
           /* @__PURE__ */ jsx("span", { className: activePage === "employees" ? "font-semibold" : "", children: "الموظفين" })
         ] }) : null
@@ -11875,19 +11875,19 @@ function StatCard$2({
   accent = "emerald"
 }) {
   const accentMap = {
-    emerald: "text-emerald-200",
-    sky: "text-sky-200",
-    amber: "text-amber-200",
-    purple: "text-purple-200"
+    emerald: "text-emerald-700 dark:text-emerald-200",
+    sky: "text-sky-700 dark:text-sky-200",
+    amber: "text-amber-700 dark:text-amber-200",
+    purple: "text-purple-700 dark:text-purple-200"
   };
-  const iconColor = accentMap[accent] || "text-emerald-200";
+  const iconColor = accentMap[accent] || "text-emerald-700 dark:text-emerald-200";
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-4", children: [
       /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} ${iconColor}`, children: icon }),
       trend ? /* @__PURE__ */ jsx("div", { className: iconColor, children: trend }) : null
     ] }),
-    /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: label }),
-    /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: value })
+    /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: label }),
+    /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: value })
   ] });
 }
 function StatisticsCards({
@@ -11903,27 +11903,27 @@ function StatisticsCards({
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8", children: [
       /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "عمليات اليوم" }),
-          /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-white tracking-tight", children: stats.operationsToday })
+          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "عمليات اليوم" }),
+          /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.operationsToday })
         ] }),
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-200`, children: /* @__PURE__ */ jsx(CalendarDays, { className: "w-6 h-6" }) })
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(CalendarDays, { className: "w-6 h-6" }) })
       ] }) }),
       /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "آخر 7 أيام" }),
-          /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-white tracking-tight", children: stats.operationsLast7 })
+          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "آخر 7 أيام" }),
+          /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.operationsLast7 })
         ] }),
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) })
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) })
       ] }) }),
       /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "نسبة اكتمال العمليات" }),
-          /* @__PURE__ */ jsxs("p", { className: "text-2xl font-bold text-white tracking-tight", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "نسبة اكتمال العمليات" }),
+          /* @__PURE__ */ jsxs("p", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: [
             stats.completionRate,
             "%"
           ] })
         ] }),
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(CheckCircle, { className: "w-6 h-6" }) })
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(CheckCircle, { className: "w-6 h-6" }) })
       ] }) })
     ] })
   ] });
@@ -11968,31 +11968,31 @@ function WelcomeBanner({
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6 mb-6 relative overflow-hidden`, children: [
     /* @__PURE__ */ jsx("div", { className: "absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-[60px] pointer-events-none" }),
     /* @__PURE__ */ jsxs("div", { className: "relative flex flex-col sm:flex-row sm:items-center gap-4", children: [
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-14 h-14 text-emerald-200 flex-shrink-0`, children: /* @__PURE__ */ jsx(Sparkles, { className: "w-7 h-7" }) }),
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-14 h-14 text-emerald-700 dark:text-emerald-200 flex-shrink-0`, children: /* @__PURE__ */ jsx(Sparkles, { className: "w-7 h-7" }) }),
       /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0", children: [
-        /* @__PURE__ */ jsxs("h2", { className: "text-2xl font-bold text-white tracking-tight", children: [
+        /* @__PURE__ */ jsxs("h2", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: [
           greeting,
           " ",
           adminName ? `يا ${adminName}` : "",
           " 👋"
         ] }),
         summaryParts.length > 0 ? /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-3 mt-3", children: [
-          pendingOps > 0 && /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-200 text-sm font-semibold", children: [
+          pendingOps > 0 && /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-200 text-sm font-semibold", children: [
             /* @__PURE__ */ jsx(Clock, { className: "w-3.5 h-3.5" }),
             pendingOps,
             " قيد الانتظار"
           ] }),
-          lowStockCount > 0 && /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-200 text-sm font-semibold", children: [
+          lowStockCount > 0 && /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm font-semibold", children: [
             /* @__PURE__ */ jsx(TrendingDown, { className: "w-3.5 h-3.5" }),
             lowStockCount,
             " منخفضة"
           ] }),
-          todayOps > 0 && /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 text-sm font-semibold", children: [
+          todayOps > 0 && /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-200 text-sm font-semibold", children: [
             /* @__PURE__ */ jsx(Sparkles, { className: "w-3.5 h-3.5" }),
             todayOps,
             " عمليات اليوم"
           ] })
-        ] }) : /* @__PURE__ */ jsx("p", { className: "text-white/50 mt-1", children: "كل شي تمام! لا توجد تنبيهات حالياً" })
+        ] }) : /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 mt-1", children: "كل شي تمام! لا توجد تنبيهات حالياً" })
       ] })
     ] })
   ] });
@@ -12001,17 +12001,17 @@ function WelcomeBanner({
 const ALERT_STYLES = {
   danger: {
     bg: "bg-red-500/10 border-red-500/20",
-    text: "text-red-200",
+    text: "text-red-700 dark:text-red-200",
     icon: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-5 h-5" })
   },
   warning: {
     bg: "bg-amber-500/10 border-amber-500/20",
-    text: "text-amber-200",
+    text: "text-amber-700 dark:text-amber-200",
     icon: /* @__PURE__ */ jsx(AlertCircle, { className: "w-5 h-5" })
   },
   info: {
     bg: "bg-sky-500/10 border-sky-500/20",
-    text: "text-sky-200",
+    text: "text-sky-700 dark:text-sky-200",
     icon: /* @__PURE__ */ jsx(Info, { className: "w-5 h-5" })
   }
 };
@@ -12050,31 +12050,31 @@ function SmartAlerts({
 const TYPE_META = {
   Daily: {
     label: "يومي",
-    color: "text-sky-200",
+    color: "text-sky-700 dark:text-sky-200",
     bgColor: "bg-sky-500/10 border-sky-500/20",
     icon: ClipboardList
   },
   Weekly: {
     label: "أسبوعي",
-    color: "text-purple-200",
+    color: "text-purple-700 dark:text-purple-200",
     bgColor: "bg-purple-500/10 border-purple-500/20",
     icon: Calendar
   },
   Transfer: {
     label: "تحويل",
-    color: "text-amber-200",
+    color: "text-amber-700 dark:text-amber-200",
     bgColor: "bg-amber-500/10 border-amber-500/20",
     icon: ArrowLeftRight
   },
   Receipt: {
     label: "وارد",
-    color: "text-emerald-200",
+    color: "text-emerald-700 dark:text-emerald-200",
     bgColor: "bg-emerald-500/10 border-emerald-500/20",
     icon: Truck
   },
   Opening: {
     label: "افتتاحي",
-    color: "text-teal-200",
+    color: "text-teal-700 dark:text-teal-200",
     bgColor: "bg-teal-500/10 border-teal-500/20",
     icon: PackagePlus
   }
@@ -12082,15 +12082,15 @@ const TYPE_META = {
 const STATUS_ICON = {
   Completed: {
     icon: CheckCircle,
-    color: "text-emerald-300"
+    color: "text-emerald-700 dark:text-emerald-300"
   },
   Pending: {
     icon: Clock,
-    color: "text-amber-300"
+    color: "text-amber-700 dark:text-amber-300"
   },
   "In Progress": {
     icon: AlertTriangle,
-    color: "text-sky-300"
+    color: "text-sky-700 dark:text-sky-300"
   }
 };
 function formatRelativeTime(dateStr) {
@@ -12125,17 +12125,17 @@ function OperationsTimeline({
   const items = timeline || [];
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden mb-8`, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-6 border-b ${ws.divider}`, children: [
-      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-white flex items-center gap-2 tracking-tight", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-emerald-200", children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 tracking-tight", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200", children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) }),
         "آخر العمليات"
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm mt-1", children: "الشريط الزمني لآخر العمليات" })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm mt-1", children: "الشريط الزمني لآخر العمليات" })
     ] }),
     /* @__PURE__ */ jsx("div", { className: "p-6", children: items.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "text-center py-8", children: [
-      /* @__PURE__ */ jsx(ClipboardList, { className: "w-12 h-12 mx-auto mb-3 text-white/20" }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/50", children: "لا توجد عمليات بعد" })
+      /* @__PURE__ */ jsx(ClipboardList, { className: "w-12 h-12 mx-auto mb-3 text-slate-300 dark:text-white/20" }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50", children: "لا توجد عمليات بعد" })
     ] }) : /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-      /* @__PURE__ */ jsx("div", { className: "absolute right-[23px] top-0 bottom-0 w-px bg-white/10" }),
+      /* @__PURE__ */ jsx("div", { className: "absolute right-[23px] top-0 bottom-0 w-px bg-slate-200 dark:bg-white/10" }),
       /* @__PURE__ */ jsx("div", { className: "space-y-1", children: items.map((item, i) => {
         const meta = TYPE_META[item.type] || TYPE_META.Daily;
         const statusMeta = STATUS_ICON[item.status] || STATUS_ICON.Completed;
@@ -12143,13 +12143,13 @@ function OperationsTimeline({
         const TypeIcon = meta.icon;
         return /* @__PURE__ */ jsxs("div", { className: "relative flex gap-4 py-3 group", children: [
           /* @__PURE__ */ jsx("div", { className: "relative z-10 flex-shrink-0", children: /* @__PURE__ */ jsx("div", { className: `w-[46px] h-[46px] rounded-2xl border flex items-center justify-center ${meta.bgColor}`, children: /* @__PURE__ */ jsx(TypeIcon, { className: `w-5 h-5 ${meta.color}` }) }) }),
-          /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0 pb-3 border-b border-white/5 group-last:border-0", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0 pb-3 border-b border-slate-100 dark:border-white/5 group-last:border-0", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1", children: [
               /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
                 /* @__PURE__ */ jsx("span", { className: `${ws.pill} ${meta.bgColor} ${meta.color}`, children: meta.label }),
                 /* @__PURE__ */ jsx(StatusIcon, { className: `w-4 h-4 ${statusMeta.color}` })
               ] }),
-              /* @__PURE__ */ jsxs("span", { className: "text-white/40 text-xs", children: [
+              /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/40 text-xs", children: [
                 formatRelativeTime(item.date),
                 " •",
                 " ",
@@ -12157,17 +12157,17 @@ function OperationsTimeline({
               ] })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm", children: [
-              item.branch && /* @__PURE__ */ jsxs("span", { className: "text-white/70", children: [
+              item.branch && /* @__PURE__ */ jsxs("span", { className: "text-slate-700 dark:text-white/70", children: [
                 "📍 ",
                 item.branch
               ] }),
-              item.employee && /* @__PURE__ */ jsxs("span", { className: "text-white/50", children: [
+              item.employee && /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/50", children: [
                 "👤 ",
                 item.employee
               ] }),
-              item.number && /* @__PURE__ */ jsx("span", { className: "text-white/35 font-mono text-xs", children: item.number })
+              item.number && /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35 font-mono text-xs", children: item.number })
             ] }),
-            item.type === "Receipt" && item.itemName && /* @__PURE__ */ jsxs("div", { className: "mt-1 text-xs text-emerald-200/70", children: [
+            item.type === "Receipt" && item.itemName && /* @__PURE__ */ jsxs("div", { className: "mt-1 text-xs text-emerald-700 dark:text-emerald-200/70", children: [
               item.itemName,
               " — الكمية: ",
               item.quantity
@@ -12183,28 +12183,28 @@ function getBranchHealthColor(lowStock, outOfStock, tracked) {
   if (tracked === 0) return {
     dot: "bg-gray-400",
     label: "لا بيانات",
-    color: "text-white/40"
+    color: "text-slate-500 dark:text-white/40"
   };
   const ratio = (lowStock + outOfStock * 2) / Math.max(tracked, 1);
   if (ratio === 0) return {
     dot: "bg-emerald-400",
     label: "ممتاز",
-    color: "text-emerald-200"
+    color: "text-emerald-700 dark:text-emerald-200"
   };
   if (ratio < 0.15) return {
     dot: "bg-emerald-400",
     label: "جيد",
-    color: "text-emerald-200"
+    color: "text-emerald-700 dark:text-emerald-200"
   };
   if (ratio < 0.3) return {
     dot: "bg-amber-400",
     label: "تحتاج متابعة",
-    color: "text-amber-200"
+    color: "text-amber-700 dark:text-amber-200"
   };
   return {
     dot: "bg-red-400",
     label: "حالة حرجة",
-    color: "text-red-200"
+    color: "text-red-700 dark:text-red-200"
   };
 }
 function BranchPerformanceCard({
@@ -12218,28 +12218,28 @@ function BranchPerformanceCard({
     منخفض: b.low_stock_count
   }));
   const COLORS = ["#34d399", "#38bdf8", "#a78bfa", "#fbbf24", "#f87171", "#2dd4bf"];
-  const changeIcon = weekComparison?.changePercent >= 0 ? /* @__PURE__ */ jsx(TrendingUp, { className: "w-4 h-4 text-emerald-300" }) : /* @__PURE__ */ jsx(TrendingDown, { className: "w-4 h-4 text-red-300" });
-  const changeColor = weekComparison?.changePercent >= 0 ? "text-emerald-200" : "text-red-200";
+  const changeIcon = weekComparison?.changePercent >= 0 ? /* @__PURE__ */ jsx(TrendingUp, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-300" }) : /* @__PURE__ */ jsx(TrendingDown, { className: "w-4 h-4 text-red-700 dark:text-red-300" });
+  const changeColor = weekComparison?.changePercent >= 0 ? "text-emerald-700 dark:text-emerald-200" : "text-red-700 dark:text-red-200";
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8", children: [
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-5", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-6 h-6" }) }),
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-6 h-6" }) }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white tracking-tight", children: "مقارنة أسبوعية" }),
-          /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm", children: "عدد العمليات هذا الأسبوع مقارنة بالأسبوع الماضي" })
+          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-slate-900 dark:text-white tracking-tight", children: "مقارنة أسبوعية" }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm", children: "عدد العمليات هذا الأسبوع مقارنة بالأسبوع الماضي" })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-3 gap-4 mb-4", children: [
         /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} rounded-2xl p-4 text-center`, children: [
-          /* @__PURE__ */ jsx("p", { className: "text-white/50 text-xs mb-1", children: "هذا الأسبوع" }),
-          /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-white", children: weekComparison?.thisWeek || 0 })
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-xs mb-1", children: "هذا الأسبوع" }),
+          /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-slate-900 dark:text-white", children: weekComparison?.thisWeek || 0 })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} rounded-2xl p-4 text-center`, children: [
-          /* @__PURE__ */ jsx("p", { className: "text-white/50 text-xs mb-1", children: "الأسبوع الماضي" }),
-          /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-white", children: weekComparison?.lastWeek || 0 })
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-xs mb-1", children: "الأسبوع الماضي" }),
+          /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-slate-900 dark:text-white", children: weekComparison?.lastWeek || 0 })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} rounded-2xl p-4 text-center`, children: [
-          /* @__PURE__ */ jsx("p", { className: "text-white/50 text-xs mb-1", children: "التغيير" }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-xs mb-1", children: "التغيير" }),
           /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-1.5", children: [
             changeIcon,
             /* @__PURE__ */ jsxs("p", { className: `text-2xl font-bold ${changeColor}`, children: [
@@ -12275,10 +12275,10 @@ function BranchPerformanceCard({
     ] }),
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-5", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6" }) }),
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6" }) }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white tracking-tight", children: "حالة الفروع" }),
-          /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm", children: "نظرة سريعة على حالة المخزون في كل فرع" })
+          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-slate-900 dark:text-white tracking-tight", children: "حالة الفروع" }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm", children: "نظرة سريعة على حالة المخزون في كل فرع" })
         ] })
       ] }),
       /* @__PURE__ */ jsx("div", { className: "space-y-3", children: branchPerformance.map((branch) => {
@@ -12289,15 +12289,15 @@ function BranchPerformanceCard({
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
               /* @__PURE__ */ jsx("div", { className: `w-3 h-3 rounded-full ${health.dot}` }),
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: branch.name }),
-                /* @__PURE__ */ jsx("p", { className: "text-white/40 text-xs", children: branch.location || "" })
+                /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: branch.name }),
+                /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/40 text-xs", children: branch.location || "" })
               ] })
             ] }),
             /* @__PURE__ */ jsx("span", { className: `text-xs font-bold ${health.color}`, children: health.label })
           ] }),
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs text-white/50 mt-2", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs text-slate-500 dark:text-white/50 mt-2", children: [
             /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1", children: [
-              /* @__PURE__ */ jsx(CheckCircle, { className: "w-3.5 h-3.5 text-emerald-300" }),
+              /* @__PURE__ */ jsx(CheckCircle, { className: "w-3.5 h-3.5 text-emerald-700 dark:text-emerald-300" }),
               "اكتمال ",
               completionRate,
               "%"
@@ -12306,13 +12306,13 @@ function BranchPerformanceCard({
               "عمليات الشهر: ",
               branch.ops_this_month
             ] }),
-            branch.low_stock_count > 0 && /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1 text-amber-200", children: [
+            branch.low_stock_count > 0 && /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1 text-amber-700 dark:text-amber-200", children: [
               /* @__PURE__ */ jsx(AlertCircle, { className: "w-3.5 h-3.5" }),
               branch.low_stock_count,
               " منخفض"
             ] })
           ] }),
-          /* @__PURE__ */ jsx("div", { className: "w-full h-1.5 bg-white/5 rounded-full mt-2 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "h-full rounded-full bg-emerald-400/60", style: {
+          /* @__PURE__ */ jsx("div", { className: "w-full h-1.5 bg-slate-100 dark:bg-white/5 rounded-full mt-2 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "h-full rounded-full bg-emerald-400/60", style: {
             width: `${completionRate}%`
           } }) })
         ] }, branch.id);
@@ -12323,22 +12323,22 @@ function BranchPerformanceCard({
 
 function getScoreColor(score) {
   if (score >= 80) return {
-    text: "text-emerald-200",
+    text: "text-emerald-700 dark:text-emerald-200",
     fill: "#34d399",
     label: "ممتاز 🟢"
   };
   if (score >= 60) return {
-    text: "text-amber-200",
+    text: "text-amber-700 dark:text-amber-200",
     fill: "#fbbf24",
     label: "جيد 🟡"
   };
   if (score >= 40) return {
-    text: "text-orange-200",
+    text: "text-orange-700 dark:text-orange-200",
     fill: "#fb923c",
     label: "يحتاج تحسين 🟠"
   };
   return {
-    text: "text-red-200",
+    text: "text-red-700 dark:text-red-200",
     fill: "#f87171",
     label: "حرج 🔴"
   };
@@ -12367,7 +12367,7 @@ function HealthScoreCard$1({
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6 flex flex-col items-center justify-center`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
         /* @__PURE__ */ jsx(Activity, { className: `w-5 h-5 ${scoreInfo.text}` }),
-        /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white tracking-tight", children: "صحة المخزون" })
+        /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-slate-900 dark:text-white tracking-tight", children: "صحة المخزون" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "relative w-[160px] h-[100px]", children: [
         /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: "100%", children: /* @__PURE__ */ jsx(PieChart$1, { children: /* @__PURE__ */ jsxs(Pie, { data: gaugeData, cx: "50%", cy: "100%", startAngle: 180, endAngle: 0, innerRadius: 55, outerRadius: 75, paddingAngle: 2, dataKey: "value", stroke: "none", children: [
@@ -12377,24 +12377,24 @@ function HealthScoreCard$1({
         /* @__PURE__ */ jsx("div", { className: "absolute bottom-0 left-1/2 -translate-x-1/2 text-center", children: /* @__PURE__ */ jsx("p", { className: `text-4xl font-bold ${scoreInfo.text}`, children: score }) })
       ] }),
       /* @__PURE__ */ jsx("p", { className: `text-sm font-semibold mt-2 ${scoreInfo.text}`, children: scoreInfo.label }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/40 text-xs mt-1 text-center", children: "يعتمد على نسبة الأصناف المتوفرة وانتظام الجرد" })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/40 text-xs mt-1 text-center", children: "يعتمد على نسبة الأصناف المتوفرة وانتظام الجرد" })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsx(DollarSign, { className: "w-5 h-5 text-emerald-200" }),
-        /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white tracking-tight", children: "قيمة المخزون" })
+        /* @__PURE__ */ jsx(DollarSign, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
+        /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-slate-900 dark:text-white tracking-tight", children: "قيمة المخزون" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "text-center mb-4", children: [
-        /* @__PURE__ */ jsxs("p", { className: "text-3xl font-bold text-white tracking-tight", children: [
+        /* @__PURE__ */ jsxs("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: [
           formatCost$2(totalCost),
           " ",
-          /* @__PURE__ */ jsx("span", { className: "text-base text-white/50 font-normal", children: "ر.س" })
+          /* @__PURE__ */ jsx("span", { className: "text-base text-slate-500 dark:text-white/50 font-normal", children: "ر.س" })
         ] }),
-        /* @__PURE__ */ jsx("p", { className: "text-white/40 text-xs mt-1", children: "إجمالي قيمة المخزون الحالي" })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/40 text-xs mt-1", children: "إجمالي قيمة المخزون الحالي" })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "space-y-2", children: costByBranch.map((bc) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between py-1.5 border-b border-white/5 last:border-0", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/70 text-sm", children: bc.branch_name }),
-        /* @__PURE__ */ jsxs("span", { className: "text-white font-semibold text-sm", children: [
+      /* @__PURE__ */ jsx("div", { className: "space-y-2", children: costByBranch.map((bc) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-white/5 last:border-0", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-sm", children: bc.branch_name }),
+        /* @__PURE__ */ jsxs("span", { className: "text-slate-900 dark:text-white font-semibold text-sm", children: [
           formatCost$2(bc.total_cost),
           " ر.س"
         ] })
@@ -12402,26 +12402,26 @@ function HealthScoreCard$1({
     ] }),
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsx(TrendingDown, { className: "w-5 h-5 text-amber-200" }),
-        /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white tracking-tight", children: "توقع النفاد" })
+        /* @__PURE__ */ jsx(TrendingDown, { className: "w-5 h-5 text-amber-700 dark:text-amber-200" }),
+        /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-slate-900 dark:text-white tracking-tight", children: "توقع النفاد" })
       ] }),
       urgentItems.length === 0 && (depletionPredictions || []).length === 0 ? /* @__PURE__ */ jsxs("div", { className: "text-center py-6", children: [
         /* @__PURE__ */ jsx(Package, { className: "w-10 h-10 mx-auto mb-2 text-white/15" }),
-        /* @__PURE__ */ jsx("p", { className: "text-white/40 text-sm", children: "لا توجد بيانات كافية للتوقع" })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/40 text-sm", children: "لا توجد بيانات كافية للتوقع" })
       ] }) : urgentItems.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "text-center py-4", children: [
-        /* @__PURE__ */ jsx("p", { className: "text-emerald-200 text-sm font-semibold", children: "✅ لا أصناف مهددة بالنفاد قريباً" }),
-        /* @__PURE__ */ jsxs("p", { className: "text-white/40 text-xs mt-1", children: [
+        /* @__PURE__ */ jsx("p", { className: "text-emerald-700 dark:text-emerald-200 text-sm font-semibold", children: "✅ لا أصناف مهددة بالنفاد قريباً" }),
+        /* @__PURE__ */ jsxs("p", { className: "text-slate-500 dark:text-white/40 text-xs mt-1", children: [
           "أقرب نفاد متوقع بعد",
           " ",
           depletionPredictions[0]?.days_to_depletion || "—",
           " يوم"
         ] })
       ] }) : /* @__PURE__ */ jsx("div", { className: "space-y-2 max-h-[200px] overflow-y-auto", children: urgentItems.slice(0, 6).map((item, i) => {
-        const daysColor = item.days_to_depletion <= 2 ? "text-red-200 bg-red-500/10 border-red-500/20" : item.days_to_depletion <= 5 ? "text-amber-200 bg-amber-500/10 border-amber-500/20" : "text-sky-200 bg-sky-500/10 border-sky-500/20";
+        const daysColor = item.days_to_depletion <= 2 ? "text-red-700 dark:text-red-200 bg-red-500/10 border-red-500/20" : item.days_to_depletion <= 5 ? "text-amber-700 dark:text-amber-200 bg-amber-500/10 border-amber-500/20" : "text-sky-700 dark:text-sky-200 bg-sky-500/10 border-sky-500/20";
         return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} rounded-xl p-3`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
           /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-            /* @__PURE__ */ jsx("p", { className: "text-white text-sm font-medium truncate", children: item.item_name }),
-            /* @__PURE__ */ jsxs("p", { className: "text-white/40 text-xs", children: [
+            /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white text-sm font-medium truncate", children: item.item_name }),
+            /* @__PURE__ */ jsxs("p", { className: "text-slate-500 dark:text-white/40 text-xs", children: [
               item.branch_name,
               " • متبقي: ",
               item.current_qty,
@@ -12435,7 +12435,7 @@ function HealthScoreCard$1({
           ] })
         ] }) }, i);
       }) }),
-      (depletionPredictions || []).length > 0 && urgentItems.length < (depletionPredictions || []).length && /* @__PURE__ */ jsxs("p", { className: "text-white/30 text-xs mt-3 text-center", children: [
+      (depletionPredictions || []).length > 0 && urgentItems.length < (depletionPredictions || []).length && /* @__PURE__ */ jsxs("p", { className: "text-slate-400 dark:text-white/30 text-xs mt-3 text-center", children: [
         "+ ",
         (depletionPredictions || []).length - urgentItems.length,
         " أصناف أخرى في فترة أطول"
@@ -12554,10 +12554,10 @@ function MonthlyMovementReport({
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden mb-8`, children: [
     /* @__PURE__ */ jsx("div", { className: `p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-purple-200`, children: /* @__PURE__ */ jsx(FileText, { className: "w-6 h-6" }) }),
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-purple-700 dark:text-purple-200`, children: /* @__PURE__ */ jsx(FileText, { className: "w-6 h-6" }) }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold text-white tracking-tight", children: "تقرير حركة المخزون" }),
-          /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm", children: currentMonth })
+          /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold text-slate-900 dark:text-white tracking-tight", children: "تقرير حركة المخزون" }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm", children: currentMonth })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
@@ -12566,7 +12566,7 @@ function MonthlyMovementReport({
           allBranches.map((b) => /* @__PURE__ */ jsx("option", { value: b.id, children: b.name }, b.id))
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-          /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" }),
+          /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/30" }),
           /* @__PURE__ */ jsx("input", { type: "text", placeholder: "بحث صنف...", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), className: `${ws.input} pr-9 px-3 py-2 text-sm w-[150px]` })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "relative", children: [
@@ -12574,35 +12574,35 @@ function MonthlyMovementReport({
             /* @__PURE__ */ jsx(Download, { className: "w-4 h-4" }),
             /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "تصدير" })
           ] }),
-          showExport && /* @__PURE__ */ jsxs("div", { className: `absolute left-0 top-full mt-1 z-20 ${ws.popover} rounded-xl border border-white/10 min-w-[140px]`, children: [
-            /* @__PURE__ */ jsx("button", { onClick: handleExportExcel, className: "w-full text-right px-4 py-2.5 text-sm text-white/80 hover:bg-white/[0.06]", children: "Excel" }),
-            /* @__PURE__ */ jsx("button", { onClick: handleExportPDF, className: "w-full text-right px-4 py-2.5 text-sm text-white/80 hover:bg-white/[0.06]", children: "PDF" })
+          showExport && /* @__PURE__ */ jsxs("div", { className: `absolute left-0 top-full mt-1 z-20 ${ws.popover} rounded-xl border border-slate-200 dark:border-white/10 min-w-[140px]`, children: [
+            /* @__PURE__ */ jsx("button", { onClick: handleExportExcel, className: "w-full text-right px-4 py-2.5 text-sm text-white/80 hover:bg-slate-100 dark:hover:bg-white/[0.06]", children: "Excel" }),
+            /* @__PURE__ */ jsx("button", { onClick: handleExportPDF, className: "w-full text-right px-4 py-2.5 text-sm text-white/80 hover:bg-slate-100 dark:hover:bg-white/[0.06]", children: "PDF" })
           ] })
         ] })
       ] })
     ] }) }),
     /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04]", children: [
-        /* @__PURE__ */ jsx("th", { className: "text-right px-5 py-3.5 text-sm font-semibold text-white/70", children: "الصنف" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-5 py-3.5 text-sm font-semibold text-white/70", children: "الوحدة" }),
-        /* @__PURE__ */ jsx("th", { className: "text-center px-5 py-3.5 text-sm font-semibold text-white/70", children: "أول الشهر" }),
-        /* @__PURE__ */ jsx("th", { className: "text-center px-5 py-3.5 text-sm font-semibold text-emerald-200/70", children: "+ الوارد" }),
-        /* @__PURE__ */ jsx("th", { className: "text-center px-5 py-3.5 text-sm font-semibold text-red-200/70", children: "- المستهلك" }),
-        /* @__PURE__ */ jsx("th", { className: "text-center px-5 py-3.5 text-sm font-semibold text-white/70", children: "نهاية الشهر" })
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+        /* @__PURE__ */ jsx("th", { className: "text-right px-5 py-3.5 text-sm font-semibold text-slate-700 dark:text-white/70", children: "الصنف" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-5 py-3.5 text-sm font-semibold text-slate-700 dark:text-white/70", children: "الوحدة" }),
+        /* @__PURE__ */ jsx("th", { className: "text-center px-5 py-3.5 text-sm font-semibold text-slate-700 dark:text-white/70", children: "أول الشهر" }),
+        /* @__PURE__ */ jsx("th", { className: "text-center px-5 py-3.5 text-sm font-semibold text-emerald-700 dark:text-emerald-200/70", children: "+ الوارد" }),
+        /* @__PURE__ */ jsx("th", { className: "text-center px-5 py-3.5 text-sm font-semibold text-red-700 dark:text-red-200/70", children: "- المستهلك" }),
+        /* @__PURE__ */ jsx("th", { className: "text-center px-5 py-3.5 text-sm font-semibold text-slate-700 dark:text-white/70", children: "نهاية الشهر" })
       ] }) }),
       /* @__PURE__ */ jsx("tbody", { children: displayData.length > 0 ? displayData.map((row, i) => {
         const consumed = row.opening_qty + row.received_qty - row.closing_qty;
-        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/5 hover:bg-white/[0.03]", children: [
-          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-white text-sm font-medium", children: row.item_name }),
-          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-white/50 text-sm", children: row.unit }),
-          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-center text-white/70 text-sm", children: row.opening_qty }),
-          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-center text-emerald-200 text-sm font-semibold", children: row.received_qty > 0 ? `+${row.received_qty}` : "0" }),
-          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-center text-red-200 text-sm font-semibold", children: consumed > 0 ? `-${consumed}` : "0" }),
-          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-center text-white font-bold text-sm", children: row.closing_qty })
+        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.03]", children: [
+          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-slate-900 dark:text-white text-sm font-medium", children: row.item_name }),
+          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-slate-500 dark:text-white/50 text-sm", children: row.unit }),
+          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-center text-slate-700 dark:text-white/70 text-sm", children: row.opening_qty }),
+          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-center text-emerald-700 dark:text-emerald-200 text-sm font-semibold", children: row.received_qty > 0 ? `+${row.received_qty}` : "0" }),
+          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-center text-red-700 dark:text-red-200 text-sm font-semibold", children: consumed > 0 ? `-${consumed}` : "0" }),
+          /* @__PURE__ */ jsx("td", { className: "px-5 py-3 text-center text-slate-900 dark:text-white font-bold text-sm", children: row.closing_qty })
         ] }, i);
-      }) : /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: "6", className: "px-5 py-8 text-center text-white/40", children: "لا توجد بيانات" }) }) })
+      }) : /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: "6", className: "px-5 py-8 text-center text-slate-500 dark:text-white/40", children: "لا توجد بيانات" }) }) })
     ] }) }),
-    aggregated.length > 10 && /* @__PURE__ */ jsx("div", { className: "p-4 text-center border-t border-white/5", children: /* @__PURE__ */ jsx("button", { onClick: () => setIsExpanded(!isExpanded), className: "text-white/50 hover:text-white text-sm flex items-center gap-1 mx-auto", children: isExpanded ? /* @__PURE__ */ jsxs(Fragment, { children: [
+    aggregated.length > 10 && /* @__PURE__ */ jsx("div", { className: "p-4 text-center border-t border-slate-100 dark:border-white/5", children: /* @__PURE__ */ jsx("button", { onClick: () => setIsExpanded(!isExpanded), className: "text-slate-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white text-sm flex items-center gap-1 mx-auto", children: isExpanded ? /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx(ChevronUp, { className: "w-4 h-4" }),
       "عرض أقل"
     ] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -12799,8 +12799,8 @@ function MonthlySummaryExport({
   };
   return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-5 mb-8`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3", children: [
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("h3", { className: "text-white font-bold tracking-tight", children: "📊 ملخص شهري قابل للتصدير" }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm mt-0.5", children: "تقرير شامل يشمل أداء الفروع + حالة المخزون + التكلفة + التوقعات" })
+      /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "📊 ملخص شهري قابل للتصدير" }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm mt-0.5", children: "تقرير شامل يشمل أداء الفروع + حالة المخزون + التكلفة + التوقعات" })
     ] }),
     /* @__PURE__ */ jsxs("button", { onClick: handleExport, className: `${ws.btnPrimary} px-5 py-2.5`, children: [
       /* @__PURE__ */ jsx(Printer, { className: "w-5 h-5" }),
@@ -12817,15 +12817,15 @@ function AdminInfoBanner({
     return null;
   }
   return /* @__PURE__ */ jsx("div", { className: `mb-6 ${ws.glassSoft} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-    /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-purple-200`, children: /* @__PURE__ */ jsx(Users, { className: "w-5 h-5" }) }),
+    /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-purple-700 dark:text-purple-200`, children: /* @__PURE__ */ jsx(Users, { className: "w-5 h-5" }) }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("p", { className: "text-white font-semibold tracking-tight", children: "حسابات المدراء المتوفرة" }),
-      /* @__PURE__ */ jsxs("p", { className: "text-white/60 text-sm", children: [
+      /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold tracking-tight", children: "حسابات المدراء المتوفرة" }),
+      /* @__PURE__ */ jsxs("p", { className: "text-slate-600 dark:text-white/60 text-sm", children: [
         "يوجد ",
-        /* @__PURE__ */ jsx("span", { className: "text-white font-bold", children: adminCount }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", children: adminCount }),
         " حساب admin في قاعدة البيانات • إجمالي الموظفين:",
         " ",
-        /* @__PURE__ */ jsx("span", { className: "text-white font-bold", children: totalEmployees })
+        /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", children: totalEmployees })
       ] })
     ] })
   ] }) });
@@ -12877,15 +12877,15 @@ function ItemHistoryChart({
   const needsDates = !!selectedItemId && (!dateFrom || !dateTo);
   let chartBody = null;
   if (!selectedItemId) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "اختر الصنف لعرض الرسم البياني" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "اختر الصنف لعرض الرسم البياني" });
   } else if (needsDates) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "اختر التاريخ (من / إلى) لعرض البيانات" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "اختر التاريخ (من / إلى) لعرض البيانات" });
   } else if (isHistoryLoading) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "جاري تحميل البيانات..." });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "جاري تحميل البيانات..." });
   } else if (historyError) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-red-200 py-10", children: "حدث خطأ أثناء تحميل بيانات الرسم البياني" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-red-700 dark:text-red-200 py-10", children: "حدث خطأ أثناء تحميل بيانات الرسم البياني" });
   } else if (!chartHasData) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "لا توجد بيانات لهذا الصنف خلال الفترة المحددة" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "لا توجد بيانات لهذا الصنف خلال الفترة المحددة" });
   } else {
     chartBody = /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("div", { className: "h-[360px]", children: /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: "100%", children: /* @__PURE__ */ jsxs(LineChart, { data: chartData, margin: {
@@ -12926,27 +12926,27 @@ function ItemHistoryChart({
         }, children: value }) }),
         branchSeries.map((s) => /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: s.dataKey, name: s.name, stroke: s.color, strokeWidth: 2, dot: false, connectNulls: true }, s.dataKey))
       ] }) }) }),
-      !selectedBranchId ? /* @__PURE__ */ jsx("p", { className: "text-xs text-white/40 mt-3", children: 'ملاحظة: عند اختيار "كل الفروع"، يتم عرض خط منفصل لكل فرع (ألوان مختلفة).' }) : null
+      !selectedBranchId ? /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/40 mt-3", children: 'ملاحظة: عند اختيار "كل الفروع"، يتم عرض خط منفصل لكل فرع (ألوان مختلفة).' }) : null
     ] });
   }
   return /* @__PURE__ */ jsxs("div", { className: wrapperClass, dir: "rtl", children: [
     /* @__PURE__ */ jsx("div", { className: `p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-white flex items-center gap-3 tracking-tight", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-5 h-5" }) }),
+        /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-5 h-5" }) }),
           historyTitle
         ] }),
-        historySubtitle ? /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm mt-1", children: historySubtitle }) : null
+        historySubtitle ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm mt-1", children: historySubtitle }) : null
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-auto", children: [
         /* @__PURE__ */ jsx(GlassSelect, { value: selectedItemId, onChange: setSelectedItemId, options: itemOptions, buttonClassName: "px-3 py-2" }),
         /* @__PURE__ */ jsx(GlassSelect, { value: selectedBranchId, onChange: setSelectedBranchId, options: branchOptions, buttonClassName: "px-3 py-2" }),
         /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/45 mb-1", children: "من" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-500 dark:text-white/45 mb-1", children: "من" }),
           /* @__PURE__ */ jsx(GlassDatePicker, { value: dateFrom, onChange: setDateFrom, placeholder: "اختر التاريخ", buttonClassName: "px-3 py-2" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/45 mb-1", children: "إلى" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-500 dark:text-white/45 mb-1", children: "إلى" }),
           /* @__PURE__ */ jsx(GlassDatePicker, { value: dateTo, onChange: setDateTo, placeholder: "اختر التاريخ", buttonClassName: "px-3 py-2" })
         ] })
       ] })
@@ -13028,17 +13028,17 @@ function ItemAnalysisChart({
   const needsDates = !!analysisItemId && analysisBranchIds && analysisBranchIds.length > 0 && (!analysisFrom || !analysisTo);
   let chartBody = null;
   if (!analysisItemId) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "اختر الصنف لعرض تحليل المخزون" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "اختر الصنف لعرض تحليل المخزون" });
   } else if (needsBranch) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "اختر الفرع لعرض البيانات" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "اختر الفرع لعرض البيانات" });
   } else if (needsDates) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "اختر التاريخ (من / إلى) لعرض البيانات" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "اختر التاريخ (من / إلى) لعرض البيانات" });
   } else if (isAnalysisLoading) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "جاري تحميل البيانات..." });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "جاري تحميل البيانات..." });
   } else if (analysisError) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-red-200 py-10", children: "حدث خطأ أثناء تحميل بيانات التحليل" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-red-700 dark:text-red-200 py-10", children: "حدث خطأ أثناء تحميل بيانات التحليل" });
   } else if (!analysisHasData) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "لا توجد بيانات لهذا الصنف خلال الفترة المحددة" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "لا توجد بيانات لهذا الصنف خلال الفترة المحددة" });
   } else {
     const activeSeries = SERIES.filter((s) => analysisChartData.some((d) => d[s.dataKey] != null));
     chartBody = /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -13087,30 +13087,30 @@ function ItemAnalysisChart({
         /* @__PURE__ */ jsx("span", { className: "inline-block w-3 h-3 rounded-full", style: {
           backgroundColor: s.color
         } }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white/50", children: s.name })
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-500 dark:text-white/50", children: s.name })
       ] }, s.dataKey)) }),
-      /* @__PURE__ */ jsx("p", { className: "text-xs text-white/40 mt-3", children: "الخطوط تمثل كميات الجرد والوارد والمخزون الافتتاحي والتحويلات عبر الفترة المحددة" })
+      /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/40 mt-3", children: "الخطوط تمثل كميات الجرد والوارد والمخزون الافتتاحي والتحويلات عبر الفترة المحددة" })
     ] });
   }
   return /* @__PURE__ */ jsxs("div", { className: wrapperClass, dir: "rtl", children: [
     /* @__PURE__ */ jsx("div", { className: `p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-white flex items-center gap-3 tracking-tight", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-violet-200`, children: /* @__PURE__ */ jsx(Layers, { className: "w-5 h-5" }) }),
+        /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-violet-700 dark:text-violet-200`, children: /* @__PURE__ */ jsx(Layers, { className: "w-5 h-5" }) }),
           title
         ] }),
-        subtitle ? /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm mt-1", children: subtitle }) : null,
-        /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm mt-0.5", children: "الجرد • الوارد • المخزون الافتتاحي • التحويلات" })
+        subtitle ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm mt-1", children: subtitle }) : null,
+        /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm mt-0.5", children: "الجرد • الوارد • المخزون الافتتاحي • التحويلات" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 w-full xl:w-auto", children: [
         /* @__PURE__ */ jsx(GlassSelect, { value: analysisItemId, onChange: setAnalysisItemId, options: itemOptions, buttonClassName: "px-3 py-2" }),
         /* @__PURE__ */ jsx(GlassMultiSelect, { values: analysisBranchIds, onChange: setAnalysisBranchIds, options: branchOptions, placeholder: "اختر الفروع", buttonClassName: "px-3 py-2" }),
         /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/45 mb-1", children: "من" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-500 dark:text-white/45 mb-1", children: "من" }),
           /* @__PURE__ */ jsx(GlassDatePicker, { value: analysisFrom, onChange: setAnalysisFrom, placeholder: "اختر التاريخ", buttonClassName: "px-3 py-2" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/45 mb-1", children: "إلى" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-500 dark:text-white/45 mb-1", children: "إلى" }),
           /* @__PURE__ */ jsx(GlassDatePicker, { value: analysisTo, onChange: setAnalysisTo, placeholder: "اختر التاريخ", buttonClassName: "px-3 py-2" })
         ] })
       ] })
@@ -13171,15 +13171,15 @@ function VarianceChart({
   const needsDates = !!varianceBranchId && !!varianceItemId && (!varianceFrom || !varianceTo);
   let chartBody = null;
   if (!varianceBranchId || !varianceItemId) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "اختر الفرع والصنف لعرض المفترض مقابل الفعلي" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "اختر الفرع والصنف لعرض المفترض مقابل الفعلي" });
   } else if (needsDates) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "اختر التاريخ (من / إلى) لعرض البيانات" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "اختر التاريخ (من / إلى) لعرض البيانات" });
   } else if (varianceLoading) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "جاري تحميل البيانات…" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "جاري تحميل البيانات…" });
   } else if (varianceError) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-red-200 py-10", children: "حدث خطأ أثناء تحميل بيانات المفترض مقابل الفعلي" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-red-700 dark:text-red-200 py-10", children: "حدث خطأ أثناء تحميل بيانات المفترض مقابل الفعلي" });
   } else if (!varianceHasData) {
-    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-white/55 py-10", children: "لا توجد بيانات جرد لهذا الصنف خلال الفترة المحددة" });
+    chartBody = /* @__PURE__ */ jsx("div", { className: "text-center text-slate-600 dark:text-white/55 py-10", children: "لا توجد بيانات جرد لهذا الصنف خلال الفترة المحددة" });
   } else {
     chartBody = /* @__PURE__ */ jsxs(Fragment, { children: [
       !varianceHasOpening ? /* @__PURE__ */ jsx("div", { className: "mb-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-3xl text-amber-100", children: 'لم يتم العثور على مخزون افتتاحي قبل تواريخ الجرد المعروضة. سجّل مخزون افتتاحي للفرع حتى تكون نتيجة "المفترض" دقيقة.' }) : null,
@@ -13223,27 +13223,27 @@ function VarianceChart({
         /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "actual", name: "الفعلي", stroke: "#38bdf8", strokeWidth: 2, dot: false, connectNulls: true }),
         /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "delta", name: "الفرق", stroke: "#fb7185", strokeWidth: 2, dot: false, connectNulls: true, strokeDasharray: "6 4" })
       ] }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-xs text-white/40 mt-3", children: "الفرق = الفعلي − المفترض (المخزون الافتتاحي + مجموع الوارد حتى تاريخ الجرد)" })
+      /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/40 mt-3", children: "الفرق = الفعلي − المفترض (المخزون الافتتاحي + مجموع الوارد حتى تاريخ الجرد)" })
     ] });
   }
   return /* @__PURE__ */ jsxs("div", { className: wrapperClass, dir: "rtl", children: [
     /* @__PURE__ */ jsx("div", { className: `p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-white flex items-center gap-3 tracking-tight", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-emerald-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-5 h-5" }) }),
         "المفترض مقابل الفعلي (افتتاحي + وارد + جرد)"
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm mt-1", children: "المفترض ≈ المخزون الافتتاحي + الوارد • الفرق = الفعلي − المفترض" })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm mt-1", children: "المفترض ≈ المخزون الافتتاحي + الوارد • الفرق = الفعلي − المفترض" })
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: "p-6", children: [
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-4", children: [
         /* @__PURE__ */ jsx(GlassSelect, { value: varianceBranchId, onChange: setVarianceBranchId, options: branchOptions, buttonClassName: "px-3 py-2" }),
         /* @__PURE__ */ jsx(GlassSelect, { value: varianceItemId, onChange: setVarianceItemId, options: itemOptions, buttonClassName: "px-3 py-2" }),
         /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/45 mb-1", children: "من" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-500 dark:text-white/45 mb-1", children: "من" }),
           /* @__PURE__ */ jsx(GlassDatePicker, { value: varianceFrom, onChange: setVarianceFrom, placeholder: "اختر التاريخ", buttonClassName: "px-3 py-2" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/45 mb-1", children: "إلى" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-500 dark:text-white/45 mb-1", children: "إلى" }),
           /* @__PURE__ */ jsx(GlassDatePicker, { value: varianceTo, onChange: setVarianceTo, placeholder: "اختر التاريخ", buttonClassName: "px-3 py-2" })
         ] })
       ] }),
@@ -13259,32 +13259,32 @@ function AdditionalInfoCards({
   const cardClass = `${ws.glass} ${ws.card} p-6`;
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8", dir: "rtl", children: [
     /* @__PURE__ */ jsxs("div", { className: cardClass, children: [
-      /* @__PURE__ */ jsxs("h3", { className: "text-lg font-bold text-white mb-4 flex items-center gap-3 tracking-tight", children: [
+      /* @__PURE__ */ jsxs("h3", { className: "text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-3 tracking-tight", children: [
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }) }),
         "إحصائيات الأصناف"
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-          /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "إجمالي الأصناف" }),
-          /* @__PURE__ */ jsx("span", { className: "text-2xl font-bold text-white", children: items?.length || 0 })
+          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "إجمالي الأصناف" }),
+          /* @__PURE__ */ jsx("span", { className: "text-2xl font-bold text-slate-900 dark:text-white", children: items?.length || 0 })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-          /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "الأصناف النشطة" }),
-          /* @__PURE__ */ jsx("span", { className: "text-2xl font-bold text-emerald-200", children: items?.filter((item) => item.show_in_inventory !== false).length || 0 })
+          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الأصناف النشطة" }),
+          /* @__PURE__ */ jsx("span", { className: "text-2xl font-bold text-emerald-700 dark:text-emerald-200", children: items?.filter((item) => item.show_in_inventory !== false).length || 0 })
         ] })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: cardClass, children: [
-      /* @__PURE__ */ jsxs("h3", { className: "text-lg font-bold text-white mb-4 flex items-center gap-3 tracking-tight", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsxs("h3", { className: "text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-3 tracking-tight", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
         "الفروع النشطة"
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "space-y-2", children: branches?.slice(0, 3).map((branch) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between py-2 border-b border-white/5 last:border-0", children: [
+      /* @__PURE__ */ jsx("div", { className: "space-y-2", children: branches?.slice(0, 3).map((branch) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between py-2 border-b border-slate-100 dark:border-white/5 last:border-0", children: [
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "text-white font-medium", children: branch.name }),
-          /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm", children: branch.location })
+          /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-medium", children: branch.name }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm", children: branch.location })
         ] }),
-        /* @__PURE__ */ jsx(CheckCircle, { className: "w-5 h-5 text-emerald-200" })
+        /* @__PURE__ */ jsx(CheckCircle, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" })
       ] }, branch.id)) })
     ] })
   ] });
@@ -14002,8 +14002,8 @@ function Breadcrumb({
   return /* @__PURE__ */ jsx("nav", { className: "flex items-center gap-1.5 text-sm mb-4 flex-wrap", "aria-label": "breadcrumb", children: crumbs.map((crumb, i) => {
     const isLast = i === crumbs.length - 1;
     return /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1.5", children: [
-      i > 0 && /* @__PURE__ */ jsx(ChevronLeft, { className: "w-3.5 h-3.5 text-white/30" }),
-      crumb.href && !isLast ? /* @__PURE__ */ jsx("a", { href: crumb.href, className: "text-white/50 hover:text-white/80 transition-colors", children: crumb.label }) : /* @__PURE__ */ jsx("span", { className: isLast ? "text-white/80 font-semibold" : "text-white/50", children: crumb.label })
+      i > 0 && /* @__PURE__ */ jsx(ChevronLeft, { className: "w-3.5 h-3.5 text-slate-400 dark:text-white/30" }),
+      crumb.href && !isLast ? /* @__PURE__ */ jsx("a", { href: crumb.href, className: "text-slate-500 dark:text-white/50 hover:text-white/80 transition-colors", children: crumb.label }) : /* @__PURE__ */ jsx("span", { className: isLast ? "text-white/80 font-semibold" : "text-slate-500 dark:text-white/50", children: crumb.label })
     ] }, i);
   }) });
 }
@@ -14160,23 +14160,23 @@ function BranchesPage() {
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8", children: [
         /* @__PURE__ */ jsxs("div", { className: statCard, children: [
           /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-white/80`, children: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6" }) }) }),
-          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "إجمالي الفروع" }),
-          /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: branches.length })
+          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "إجمالي الفروع" }),
+          /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight", children: branches.length })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: statCard, children: [
-          /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(MapPin, { className: "w-6 h-6" }) }) }),
-          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "فروع مع موقع" }),
-          /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: branches.filter((b) => b.location).length })
+          /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(MapPin, { className: "w-6 h-6" }) }) }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "فروع مع موقع" }),
+          /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight", children: branches.filter((b) => b.location).length })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: statCard, children: [
-          /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-200`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) }) }),
-          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "إجمالي السجلات" }),
-          /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: branches.length })
+          /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) }) }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "إجمالي السجلات" }),
+          /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight", children: branches.length })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex flex-col md:flex-row gap-4 mb-6", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex-1 relative", children: [
-          /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/35" }),
+          /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-400 dark:dark:text-white/35" }),
           /* @__PURE__ */ jsx("input", { type: "text", placeholder: "البحث عن فرع…", value: searchTerm, onChange: (e) => setSearchTerm(e.target.value), className: `${ws.input} pr-12 pl-4 py-3` })
         ] }),
         /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleOpenModal(), className: `${ws.btnPrimary} px-6 py-3 justify-center`, children: [
@@ -14185,37 +14185,37 @@ function BranchesPage() {
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: sectionCard, children: [
-        /* @__PURE__ */ jsx("div", { className: `p-5 sm:p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+        /* @__PURE__ */ jsx("div", { className: `p-5 sm:p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
           /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
           "قائمة الفروع"
         ] }) }),
         /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
-            /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "#" }),
-            /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "اسم الفرع" }),
-            /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الموقع" }),
-            /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "تاريخ الإضافة" }),
-            /* @__PURE__ */ jsx("th", { className: "text-center px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الإجراءات" })
+          /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]", children: [
+            /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "#" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "اسم الفرع" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الموقع" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "تاريخ الإضافة" }),
+            /* @__PURE__ */ jsx("th", { className: "text-center px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الإجراءات" })
           ] }) }),
-          /* @__PURE__ */ jsx("tbody", { children: isLoading ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: "5", className: "px-6 py-12 text-center text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
+          /* @__PURE__ */ jsx("tbody", { children: isLoading ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: "5", className: "px-6 py-12 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
             /* @__PURE__ */ jsx("div", { className: "w-5 h-5 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" }),
             /* @__PURE__ */ jsx("span", { children: "جاري التحميل…" })
-          ] }) }) }) : filteredBranches.length > 0 ? filteredBranches.map((branch, index) => /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors", children: [
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-500 dark:text-white/45", children: index + 1 }),
+          ] }) }) }) : filteredBranches.length > 0 ? filteredBranches.map((branch, index) => /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-slate-100 dark:dark:border-white/5 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.05] transition-colors", children: [
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: index + 1 }),
             /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-slate-700 dark:text-white/75`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
-              /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-medium", children: branch.name })
+              /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-slate-700 dark:text-slate-700 dark:dark:text-white/75`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
+              /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium", children: branch.name })
             ] }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: branch.location ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-slate-700 dark:text-white/75", children: [
-              /* @__PURE__ */ jsx(MapPin, { className: "w-4 h-4 text-emerald-200" }),
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: branch.location ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-slate-700 dark:text-slate-700 dark:dark:text-white/75", children: [
+              /* @__PURE__ */ jsx(MapPin, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-200" }),
               /* @__PURE__ */ jsx("span", { children: branch.location })
-            ] }) : /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45 text-sm", children: "غير محدد" }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-500 dark:text-white/45 text-sm whitespace-nowrap", children: formatDateTime$2(branch.created_at) }),
+            ] }) : /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm", children: "غير محدد" }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm whitespace-nowrap", children: formatDateTime$2(branch.created_at) }),
             /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleOpenModal(branch), className: `${ws.iconButton} text-sky-200`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setDeleteConfirm(branch), className: `${ws.iconButton} text-red-200`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleOpenModal(branch), className: `${ws.iconButton} text-sky-700 dark:text-sky-200`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setDeleteConfirm(branch), className: `${ws.iconButton} text-red-700 dark:text-red-200`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
             ] }) })
-          ] }, branch.id)) : /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: "5", className: "px-6 py-12 text-center text-slate-500 dark:text-white/45", children: [
+          ] }, branch.id)) : /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: "5", className: "px-6 py-12 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: [
             /* @__PURE__ */ jsx(Building2, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
             /* @__PURE__ */ jsx("p", { children: searchTerm ? "لا توجد نتائج للبحث" : "لا توجد فروع حتى الآن" })
           ] }) }) })
@@ -14224,20 +14224,20 @@ function BranchesPage() {
     ] }),
     isModalOpen ? /* @__PURE__ */ jsx("div", { className: "fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4", children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full max-w-md shadow-2xl`, children: [
       /* @__PURE__ */ jsxs("div", { className: `p-6 border-b ${ws.divider} flex items-center justify-between`, children: [
-        /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+        /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
           /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
           editingBranch ? "تعديل الفرع" : "إضافة فرع جديد"
         ] }),
         /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
           setIsModalOpen(false);
           resetForm();
-        }, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
+        }, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" }) })
       ] }),
       /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "p-6 space-y-4", children: [
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsxs("label", { className: "block text-slate-700 dark:text-white/70 text-sm font-semibold mb-2", children: [
+          /* @__PURE__ */ jsxs("label", { className: "block text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm font-semibold mb-2", children: [
             "اسم الفرع ",
-            /* @__PURE__ */ jsx("span", { className: "text-red-300", children: "*" })
+            /* @__PURE__ */ jsx("span", { className: "text-red-700 dark:text-red-300", children: "*" })
           ] }),
           /* @__PURE__ */ jsx("input", { type: "text", required: true, value: formData.name, onChange: (e) => setFormData({
             ...formData,
@@ -14245,13 +14245,13 @@ function BranchesPage() {
           }), className: `${ws.input} px-4 py-3`, placeholder: "مثال: الفرع الرئيسي" })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-slate-700 dark:text-white/70 text-sm font-semibold mb-2", children: "الموقع" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm font-semibold mb-2", children: "الموقع" }),
           /* @__PURE__ */ jsx("input", { type: "text", value: formData.location, onChange: (e) => setFormData({
             ...formData,
             location: e.target.value
           }), className: `${ws.input} px-4 py-3`, placeholder: "مثال: الرياض، شارع الملك فهد" })
         ] }),
-        createMutation.error || updateMutation.error ? /* @__PURE__ */ jsx("div", { className: "p-4 bg-red-500/10 border border-red-500/30 rounded-2xl", children: /* @__PURE__ */ jsx("p", { className: "text-red-200 text-sm", children: createMutation.error?.message || updateMutation.error?.message }) }) : null,
+        createMutation.error || updateMutation.error ? /* @__PURE__ */ jsx("div", { className: "p-4 bg-red-500/10 border border-red-500/30 rounded-2xl", children: /* @__PURE__ */ jsx("p", { className: "text-red-700 dark:text-red-200 text-sm", children: createMutation.error?.message || updateMutation.error?.message }) }) : null,
         /* @__PURE__ */ jsxs("div", { className: `flex gap-3 pt-4 border-t ${ws.divider}`, children: [
           /* @__PURE__ */ jsx("button", { type: "submit", disabled: createMutation.isPending || updateMutation.isPending, className: `${ws.btnPrimary} flex-1 px-6 py-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed`, children: createMutation.isPending || updateMutation.isPending ? "جاري الحفظ…" : editingBranch ? "حفظ التعديلات" : "إضافة الفرع" }),
           /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
@@ -14262,26 +14262,26 @@ function BranchesPage() {
       ] })
     ] }) }) : null,
     deleteConfirm ? /* @__PURE__ */ jsx("div", { className: "fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4", children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full max-w-md shadow-2xl border border-red-500/25`, children: [
-      /* @__PURE__ */ jsx("div", { className: `p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-red-200`, children: /* @__PURE__ */ jsx(Trash2, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsx("div", { className: `p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-red-700 dark:text-red-200`, children: /* @__PURE__ */ jsx(Trash2, { className: "w-5 h-5" }) }),
         "تأكيد الحذف"
       ] }) }),
       /* @__PURE__ */ jsxs("div", { className: "p-6", children: [
         /* @__PURE__ */ jsxs("p", { className: "text-white/80 mb-4", children: [
           "هل أنت متأكد من حذف الفرع",
           " ",
-          /* @__PURE__ */ jsxs("span", { className: "font-bold text-slate-900 dark:text-white", children: [
+          /* @__PURE__ */ jsxs("span", { className: "font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white", children: [
             '"',
             deleteConfirm.name,
             '"'
           ] }),
           "؟"
         ] }),
-        /* @__PURE__ */ jsxs("p", { className: "text-amber-200/90 text-sm flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3", children: [
+        /* @__PURE__ */ jsxs("p", { className: "text-amber-700 dark:text-amber-200/90 text-sm flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3", children: [
           /* @__PURE__ */ jsx("span", { className: "text-lg", children: "⚠️" }),
           /* @__PURE__ */ jsx("span", { children: "لا يمكن حذف الفرع إذا كان لديه موظفين أو عمليات جرد مرتبطة به" })
         ] }),
-        deleteMutation.error ? /* @__PURE__ */ jsx("div", { className: "mt-4 p-4 bg-red-500/10 border border-red-500/25 rounded-2xl", children: /* @__PURE__ */ jsx("p", { className: "text-red-200 text-sm", children: deleteMutation.error.message }) }) : null,
+        deleteMutation.error ? /* @__PURE__ */ jsx("div", { className: "mt-4 p-4 bg-red-500/10 border border-red-500/25 rounded-2xl", children: /* @__PURE__ */ jsx("p", { className: "text-red-700 dark:text-red-200 text-sm", children: deleteMutation.error.message }) }) : null,
         /* @__PURE__ */ jsxs("div", { className: "flex gap-3 mt-6", children: [
           /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleDelete(deleteConfirm.id), disabled: deleteMutation.isPending, className: `${ws.btnDanger} flex-1 px-6 py-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed`, children: deleteMutation.isPending ? "جاري الحذف…" : "نعم، احذف" }),
           /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setDeleteConfirm(null), className: `${ws.btnNeutral} px-6 py-3 justify-center`, children: "إلغاء" })
@@ -14563,18 +14563,18 @@ function EmployeeStatistics({
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8", children: [
     /* @__PURE__ */ jsxs("div", { className: statCard, children: [
       /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-white/80`, children: /* @__PURE__ */ jsx(Users, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "إجمالي الموظفين" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: totalEmployees })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "إجمالي الموظفين" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight", children: totalEmployees })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-fuchsia-200`, children: /* @__PURE__ */ jsx(Shield, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "المدراء" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: adminCount })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-fuchsia-700 dark:text-fuchsia-200`, children: /* @__PURE__ */ jsx(Shield, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "المدراء" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight", children: adminCount })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-200`, children: /* @__PURE__ */ jsx(User, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "موظفي الجرد" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: employeeCount })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(User, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "موظفي الجرد" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight", children: employeeCount })
     ] })
   ] });
 }
@@ -14584,7 +14584,7 @@ function EmployeeSearchBar({
   onSearchChange
 }) {
   return /* @__PURE__ */ jsxs("div", { className: "flex-1 relative", children: [
-    /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/35" }),
+    /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-400 dark:dark:text-white/35" }),
     /* @__PURE__ */ jsx("input", { type: "text", placeholder: "ابحث عن موظف (الاسم، اسم المستخدم، البريد)", value: searchTerm, onChange: (e) => onSearchChange(e.target.value), className: `${ws.input} pr-12 pl-4 py-3` })
   ] });
 }
@@ -14655,18 +14655,18 @@ function EmployeeExportMenu({
     /* @__PURE__ */ jsxs(GlassPopover, { open: showExportMenu, anchorRef: exportBtnRef, onClose: () => setShowExportMenu(false), style: {
       width: 224
     }, children: [
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-200" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-slate-800 dark:dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] transition-colors", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للتحليل والمعالجة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-slate-900 dark:dark:text-white", children: "Excel" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: "للتحليل والمعالجة" })
         ] })
       ] }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportPDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-200" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportPDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-slate-800 dark:dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-slate-200 dark:dark:border-white/10", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-700 dark:text-red-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-slate-900 dark:dark:text-white", children: "PDF" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: "للطباعة والأرشفة" })
         ] })
       ] })
     ] })
@@ -14705,82 +14705,82 @@ function EmployeeTable({
   };
   if (isLoading) {
     return /* @__PURE__ */ jsx("div", { className: sectionCard, children: /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الاسم" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "اسم المستخدم" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الجوال" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "البريد الإلكتروني" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الصلاحية" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "المهام" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفروع" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "Workspace" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الإجراءات" })
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]", children: [
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الاسم" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "اسم المستخدم" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الجوال" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "البريد الإلكتروني" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الصلاحية" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "المهام" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الفروع" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "Workspace" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الإجراءات" })
       ] }) }),
-      /* @__PURE__ */ jsx("tbody", { children: /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: "9", className: "px-6 py-12 text-center text-slate-600 dark:text-white/55", children: "جاري التحميل…" }) }) })
+      /* @__PURE__ */ jsx("tbody", { children: /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: "9", className: "px-6 py-12 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "جاري التحميل…" }) }) })
     ] }) }) });
   }
   if (!employees || employees.length === 0) {
     return /* @__PURE__ */ jsx("div", { className: sectionCard, children: /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الاسم" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "اسم المستخدم" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الجوال" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "البريد الإلكتروني" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الصلاحية" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "المهام" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفروع" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "Workspace" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الإجراءات" })
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]", children: [
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الاسم" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "اسم المستخدم" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الجوال" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "البريد الإلكتروني" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الصلاحية" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "المهام" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الفروع" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "Workspace" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الإجراءات" })
       ] }) }),
-      /* @__PURE__ */ jsx("tbody", { children: /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: "9", className: "px-6 py-12 text-center text-slate-500 dark:text-white/45", children: [
+      /* @__PURE__ */ jsx("tbody", { children: /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: "9", className: "px-6 py-12 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: [
         /* @__PURE__ */ jsx(Users, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
         /* @__PURE__ */ jsx("p", { children: "لا يوجد موظفين" })
       ] }) }) })
     ] }) }) });
   }
   return /* @__PURE__ */ jsx("div", { className: sectionCard, children: /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-    /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الاسم" }),
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "اسم المستخدم" }),
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الجوال" }),
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "البريد الإلكتروني" }),
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الصلاحية" }),
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "المهام" }),
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفروع" }),
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "Workspace" }),
-      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الإجراءات" })
+    /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]", children: [
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الاسم" }),
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "اسم المستخدم" }),
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الجوال" }),
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "البريد الإلكتروني" }),
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الصلاحية" }),
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "المهام" }),
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الفروع" }),
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "Workspace" }),
+      /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "الإجراءات" })
     ] }) }),
     /* @__PURE__ */ jsx("tbody", { children: employees.map((employee) => {
-      const rolePillClass = employee.role === "Admin" ? `${ws.pill} bg-fuchsia-500/10 text-fuchsia-200 border-fuchsia-500/20` : `${ws.pill} bg-sky-500/10 text-sky-200 border-sky-500/20`;
-      const workspaceBtnClass = employee.can_access_workspace ? "bg-emerald-500/15 text-emerald-200 border-emerald-500/25 hover:bg-emerald-500/20" : "bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.06]";
+      const rolePillClass = employee.role === "Admin" ? `${ws.pill} bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-200 border-fuchsia-500/20` : `${ws.pill} bg-sky-500/10 text-sky-700 dark:text-sky-200 border-sky-500/20`;
+      const workspaceBtnClass = employee.can_access_workspace ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25 hover:bg-emerald-500/20" : "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] text-slate-600 dark:text-slate-600 dark:dark:text-white/60 border-slate-200 dark:border-slate-200 dark:dark:border-white/10 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]";
       const tasks = renderTasks(employee);
-      return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors", children: [
+      return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-slate-100 dark:dark:border-white/5 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.05] transition-colors", children: [
         /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/85`, children: /* @__PURE__ */ jsx(User, { className: "w-5 h-5" }) }),
-          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-medium", children: employee.name })
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-slate-800 dark:text-slate-800 dark:dark:text-white/85`, children: /* @__PURE__ */ jsx(User, { className: "w-5 h-5" }) }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium", children: employee.name })
         ] }) }),
-        /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-white/75", children: employee.username || "-" }),
-        /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-white/75", dir: "ltr", children: employee.phone || "-" }),
-        /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-600 dark:text-white/55", children: employee.email || "-" }),
+        /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/75", children: employee.username || "-" }),
+        /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/75", dir: "ltr", children: employee.phone || "-" }),
+        /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: employee.email || "-" }),
         /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("span", { className: `${rolePillClass} inline-flex items-center gap-2`, children: [
           employee.role === "Admin" ? /* @__PURE__ */ jsx(Shield, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(User, { className: "w-4 h-4" }),
           renderRoleLabel(employee)
         ] }) }),
         /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: tasks.length > 0 ? /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-1", children: tasks.map((t) => {
           const icon = t === "تسجيل الجرد" || t === "إدارة الجرد" ? /* @__PURE__ */ jsx(ClipboardList, { className: "w-3.5 h-3.5" }) : t === "Accounting" || t === "تسجيل تقفيل الشفت" ? /* @__PURE__ */ jsx(Calculator, { className: "w-3.5 h-3.5" }) : t === "Workspace" ? /* @__PURE__ */ jsx(Briefcase, { className: "w-3.5 h-3.5" }) : t === "HR" ? /* @__PURE__ */ jsx(Users, { className: "w-3.5 h-3.5" }) : t === "الخصميات" ? /* @__PURE__ */ jsx(DollarSign, { className: "w-3.5 h-3.5" }) : null;
-          return /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10 inline-flex items-center gap-1`, children: [
+          return /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10 inline-flex items-center gap-1`, children: [
             icon,
             /* @__PURE__ */ jsx("span", { children: t })
           ] }, t);
-        }) }) : /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45 text-sm", children: "—" }) }),
-        /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: employee.branches && employee.branches.length > 0 ? /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-1", children: employee.branches.map((branch) => /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`, children: branch.name }, branch.id)) }) : /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45 text-sm", children: "لا يوجد فروع" }) }),
+        }) }) : /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm", children: "—" }) }),
+        /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: employee.branches && employee.branches.length > 0 ? /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-1", children: employee.branches.map((branch) => /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10`, children: branch.name }, branch.id)) }) : /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm", children: "لا يوجد فروع" }) }),
         /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onToggleWorkspace(employee), className: `inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold transition-colors border ${workspaceBtnClass}`, title: "تفعيل/إلغاء Workspace", children: [
           employee.can_access_workspace ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(XCircle, { className: "w-4 h-4" }),
           /* @__PURE__ */ jsx("span", { children: employee.can_access_workspace ? "مفعل" : "غير مفعل" })
         ] }) }),
         /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(employee), className: `${ws.iconButton} text-sky-200`, "aria-label": "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }) }),
-          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDelete(employee.id), className: `${ws.iconButton} text-red-200`, "aria-label": "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(employee), className: `${ws.iconButton} text-sky-700 dark:text-sky-200`, "aria-label": "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }) }),
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDelete(employee.id), className: `${ws.iconButton} text-red-700 dark:text-red-200`, "aria-label": "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
         ] }) })
       ] }, employee.id);
     }) })
@@ -14792,11 +14792,11 @@ function EmployeeModalHeader({
   onClose
 }) {
   return /* @__PURE__ */ jsxs("div", { className: `p-6 flex items-center justify-between sticky top-0 z-10 ${ws.topBar}`, children: [
-    /* @__PURE__ */ jsxs("h2", { className: "text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+    /* @__PURE__ */ jsxs("h2", { className: "text-2xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
       /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(UserCog, { className: "w-5 h-5" }) }),
       isEditing ? "تعديل موظف" : "إضافة موظف جديد"
     ] }),
-    /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
+    /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" }) })
   ] });
 }
 
@@ -14825,7 +14825,7 @@ function EmployeeFormFields({
   const notifyInventoryWaBtnClass = formData.notify_inventory_operation_wa ? `${ws.btnPrimary} px-4 py-2` : `${ws.btnNeutral} px-4 py-2`;
   return /* @__PURE__ */ jsxs("div", { className: "space-y-6", children: [
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: [
+      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: [
         /* @__PURE__ */ jsx(User, { className: "w-4 h-4 inline ml-2" }),
         "الاسم الكامل *"
       ] }),
@@ -14835,7 +14835,7 @@ function EmployeeFormFields({
       }), className: `${ws.input} px-4 py-3`, placeholder: "أدخل اسم الموظف" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: [
+      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: [
         /* @__PURE__ */ jsx(Phone, { className: "w-4 h-4 inline ml-2" }),
         "رقم الجوال"
       ] }),
@@ -14843,10 +14843,10 @@ function EmployeeFormFields({
         ...formData,
         phone: e.target.value
       }), className: `${ws.input} px-4 py-3`, placeholder: "+9665xxxxxxxx أو 05xxxxxxxx", dir: "ltr" }),
-      /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "يستخدم لإشعارات واتساب (مثلاً: تقفيلة الشفت / جرد جديد / تحديثات المهام)." })
+      /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mt-2", children: "يستخدم لإشعارات واتساب (مثلاً: تقفيلة الشفت / جرد جديد / تحديثات المهام)." })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: [
+      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: [
         /* @__PURE__ */ jsx(Mail, { className: "w-4 h-4 inline ml-2" }),
         "البريد الإلكتروني"
       ] }),
@@ -14856,7 +14856,7 @@ function EmployeeFormFields({
       }), className: `${ws.input} px-4 py-3`, placeholder: "example@company.com" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: [
+      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: [
         /* @__PURE__ */ jsx(UserCog, { className: "w-4 h-4 inline ml-2" }),
         "اسم المستخدم *"
       ] }),
@@ -14866,7 +14866,7 @@ function EmployeeFormFields({
       }), className: `${ws.input} px-4 py-3`, placeholder: "اسم المستخدم للدخول" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: [
+      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: [
         /* @__PURE__ */ jsx(Lock, { className: "w-4 h-4 inline ml-2" }),
         "كلمة المرور ",
         isEditing ? "" : "*"
@@ -14877,7 +14877,7 @@ function EmployeeFormFields({
       }), className: `${ws.input} px-4 py-3`, placeholder: isEditing ? "اتركه فارغاً لعدم التغيير" : "أدخل كلمة المرور" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: [
+      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: [
         /* @__PURE__ */ jsx(Shield, { className: "w-4 h-4 inline ml-2" }),
         "الصلاحية *"
       ] }),
@@ -14903,7 +14903,7 @@ function EmployeeFormFields({
           // إشعارات واتساب (افتراضيًا: غير مفعلة)
           notify_shift_close_wa: false,
           notify_inventory_operation_wa: false
-        }), className: `p-4 rounded-2xl border transition-colors ${formData.role === "Admin" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : `${ws.glassSoft} text-slate-600 dark:text-white/60 hover:bg-slate-100 dark:hover:bg-white/[0.06]`}`, children: [
+        }), className: `p-4 rounded-2xl border transition-colors ${formData.role === "Admin" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : `${ws.glassSoft} text-slate-600 dark:text-slate-600 dark:dark:text-white/60 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]`}`, children: [
           /* @__PURE__ */ jsx(Shield, { className: "w-6 h-6 mx-auto mb-2" }),
           /* @__PURE__ */ jsx("p", { className: "font-semibold", children: "مدير" }),
           /* @__PURE__ */ jsx("p", { className: "text-xs opacity-70", children: "حدد أقسام الإدارة" })
@@ -14922,17 +14922,17 @@ function EmployeeFormFields({
           // إشعارات واتساب
           notify_shift_close_wa: false,
           notify_inventory_operation_wa: false
-        }), className: `p-4 rounded-2xl border transition-colors ${formData.role === "Employee" ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : `${ws.glassSoft} text-slate-600 dark:text-white/60 hover:bg-slate-100 dark:hover:bg-white/[0.06]`}`, children: [
+        }), className: `p-4 rounded-2xl border transition-colors ${formData.role === "Employee" ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : `${ws.glassSoft} text-slate-600 dark:text-slate-600 dark:dark:text-white/60 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]`}`, children: [
           /* @__PURE__ */ jsx(User, { className: "w-6 h-6 mx-auto mb-2" }),
           /* @__PURE__ */ jsx("p", { className: "font-semibold", children: "موظف" }),
           /* @__PURE__ */ jsx("p", { className: "text-xs opacity-70", children: "حدد صلاحيات الموظف" })
         ] })
       ] })
     ] }),
-    showAdminOptions ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 flex-wrap", children: [
+    showAdminOptions ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 flex-wrap", children: [
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: "صلاحيات أقسام الإدارة" }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm text-slate-500 dark:text-white/50 mt-1", children: "هذه الصلاحيات تحدد أي الأقسام تظهر بعد تسجيل الدخول." })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold", children: "صلاحيات أقسام الإدارة" }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-slate-500 dark:text-slate-500 dark:dark:text-white/50 mt-1", children: "هذه الصلاحيات تحدد أي الأقسام تظهر بعد تسجيل الدخول." })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
         /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setFormData((p) => ({
@@ -14993,10 +14993,10 @@ function EmployeeFormFields({
         ] })
       ] })
     ] }) }) : null,
-    showAdminOptions ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 flex-wrap", children: [
+    showAdminOptions ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 flex-wrap", children: [
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: "إشعارات واتساب" }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm text-slate-500 dark:text-white/50 mt-1", children: "تصل على رقم الجوال المسجل أعلاه." })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold", children: "إشعارات واتساب" }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-slate-500 dark:text-slate-500 dark:dark:text-white/50 mt-1", children: "تصل على رقم الجوال المسجل أعلاه." })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
         /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setFormData((p) => ({
@@ -15017,11 +15017,11 @@ function EmployeeFormFields({
         ] })
       ] })
     ] }) }) : null,
-    showEmployeeOptions ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 flex-wrap", children: [
+    showEmployeeOptions ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 flex-wrap", children: [
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: "صلاحيات الموظف" }),
-        /* @__PURE__ */ jsx("p", { className: "text-sm text-slate-500 dark:text-white/50 mt-1", children: "تقدر تختار أكثر من صلاحية لنفس الموظف." }),
-        needsBranch ? /* @__PURE__ */ jsx("p", { className: "text-xs text-amber-200/90 mt-2", children: "تنبيه: لازم تختار فرع واحد على الأقل عند تفعيل (تسجيل الجرد) أو (تسجيل تقفيل الشفت)." }) : null
+        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold", children: "صلاحيات الموظف" }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm text-slate-500 dark:text-slate-500 dark:dark:text-white/50 mt-1", children: "تقدر تختار أكثر من صلاحية لنفس الموظف." }),
+        needsBranch ? /* @__PURE__ */ jsx("p", { className: "text-xs text-amber-700 dark:text-amber-200/90 mt-2", children: "تنبيه: لازم تختار فرع واحد على الأقل عند تفعيل (تسجيل الجرد) أو (تسجيل تقفيل الشفت)." }) : null
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
         /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setFormData((p) => ({
@@ -15043,22 +15043,22 @@ function EmployeeFormFields({
       ] })
     ] }) }) : null,
     showBranches ? /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: [
+      /* @__PURE__ */ jsxs("label", { className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: [
         /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4 inline ml-2" }),
         "الفروع"
       ] }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4 max-h-48 overflow-y-auto`, children: /* @__PURE__ */ jsx("div", { className: "grid grid-cols-2 gap-3", children: branches && branches.length > 0 ? branches.map((branch) => /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-3 p-3 bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-white/[0.06] rounded-2xl cursor-pointer transition-colors border border-slate-200 dark:border-white/10", children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl p-4 max-h-48 overflow-y-auto`, children: /* @__PURE__ */ jsx("div", { className: "grid grid-cols-2 gap-3", children: branches && branches.length > 0 ? branches.map((branch) => /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] rounded-2xl cursor-pointer transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-white/10", children: [
         /* @__PURE__ */ jsx("input", { type: "checkbox", checked: formData.branchIds.includes(branch.id), onChange: () => onToggleBranch(branch.id), className: "w-4 h-4" }),
         /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-          /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white text-sm font-medium", children: branch.name }),
-          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-xs", children: branch.location })
+          /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white text-sm font-medium", children: branch.name }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-xs", children: branch.location })
         ] })
-      ] }, branch.id)) : /* @__PURE__ */ jsx("p", { className: "col-span-2 text-center text-slate-500 dark:text-white/45 py-4", children: "لا توجد فروع متاحة" }) }) }),
-      /* @__PURE__ */ jsxs("p", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: [
+      ] }, branch.id)) : /* @__PURE__ */ jsx("p", { className: "col-span-2 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/45 py-4", children: "لا توجد فروع متاحة" }) }) }),
+      /* @__PURE__ */ jsxs("p", { className: "text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mt-2", children: [
         formData.branchIds.length,
         " فرع محدد"
       ] })
-    ] }) : /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4`, children: /* @__PURE__ */ jsx("p", { className: "text-slate-700 dark:text-white/70 text-sm", children: "المدير لا يحتاج تحديد فروع." }) })
+    ] }) : /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl p-4`, children: /* @__PURE__ */ jsx("p", { className: "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm", children: "المدير لا يحتاج تحديد فروع." }) })
   ] });
 }
 
@@ -15182,7 +15182,7 @@ function EmployeesPage() {
       /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 mt-6 lg:mt-0", children: [
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsxs("h1", { className: `text-3xl sm:text-4xl ${ws.title} mb-2 flex items-center gap-3`, children: [
-            /* @__PURE__ */ jsx(Users, { className: "w-8 h-8 sm:w-10 sm:h-10 text-emerald-200" }),
+            /* @__PURE__ */ jsx(Users, { className: "w-8 h-8 sm:w-10 sm:h-10 text-emerald-700 dark:text-emerald-200" }),
             "إدارة الموظفين"
           ] }),
           /* @__PURE__ */ jsx("p", { className: ws.muted, children: "إدارة حسابات الموظفين وصلاحياتهم" })
@@ -15194,7 +15194,7 @@ function EmployeesPage() {
       ] }),
       loadErrorMessage ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 mb-6 border border-red-500/20`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-red-100 font-semibold", children: loadErrorMessage }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60 text-sm mt-1", children: "إذا استمرت المشكلة، افتح صفحة /api/employees في تبويب جديد وشوف هل ترجع بيانات أو خطأ." })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/60 text-sm mt-1", children: "إذا استمرت المشكلة، افتح صفحة /api/employees في تبويب جديد وشوف هل ترجع بيانات أو خطأ." })
       ] }) : null,
       /* @__PURE__ */ jsx(EmployeeStatistics, { totalEmployees, adminCount, employeeCount }),
       /* @__PURE__ */ jsxs("div", { className: "flex flex-col md:flex-row gap-4 mb-6", children: [
@@ -15614,18 +15614,18 @@ function ItemCategoriesModal({
     maxHeight: "calc(100vh - 64px)"
   }, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-6 flex items-center justify-between shrink-0 ${ws.topBar}`, children: [
-      /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+      /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Layers, { className: "w-5 h-5" }) }),
         "إدارة فئات الأصناف"
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" }) })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "p-6 overflow-y-auto flex-1", children: [
       /* @__PURE__ */ jsxs("form", { onSubmit: onCreate, className: "space-y-3", children: [
         /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
           /* @__PURE__ */ jsx("input", { value: name, onChange: (e) => setName(e.target.value), className: `${ws.input} px-4 py-3`, placeholder: "اسم الفئة (عربي) — مثال: بن القهوة", disabled: saving, dir: "rtl" }),
           /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-            /* @__PURE__ */ jsx(Languages, { className: "absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35" }),
+            /* @__PURE__ */ jsx(Languages, { className: "absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-400 dark:dark:text-white/35" }),
             /* @__PURE__ */ jsx("input", { value: nameEn, onChange: (e) => setNameEn(e.target.value), className: `${ws.input} pl-11 pr-4 py-3`, placeholder: "Category name (English) — Example: Coffee beans", disabled: saving, dir: "ltr" })
           ] })
         ] }),
@@ -15634,21 +15634,21 @@ function ItemCategoriesModal({
           saving ? "جاري الإضافة…" : "إضافة"
         ] })
       ] }),
-      localError ? /* @__PURE__ */ jsx("div", { className: "mt-3 p-3 bg-red-500/10 border border-red-500/25 rounded-2xl text-red-200 text-sm", children: localError }) : null,
+      localError ? /* @__PURE__ */ jsx("div", { className: "mt-3 p-3 bg-red-500/10 border border-red-500/25 rounded-2xl text-red-700 dark:text-red-200 text-sm", children: localError }) : null,
       /* @__PURE__ */ jsxs("div", { className: "mt-6", children: [
-        /* @__PURE__ */ jsxs("div", { className: "text-sm text-slate-600 dark:text-white/55 mb-3", children: [
+        /* @__PURE__ */ jsxs("div", { className: "text-sm text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-3", children: [
           "الفئات (",
           sorted.length,
           ")"
         ] }),
-        sorted.length === 0 ? /* @__PURE__ */ jsx("div", { className: "p-6 text-center text-slate-500 dark:text-white/45 border border-slate-200 dark:border-white/10 rounded-3xl bg-slate-50 dark:bg-white/[0.03]", children: "ما فيه فئات حتى الآن. أضف أول فئة." }) : /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: sorted.map((c) => {
+        sorted.length === 0 ? /* @__PURE__ */ jsx("div", { className: "p-6 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/45 border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-3xl bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03]", children: "ما فيه فئات حتى الآن. أضف أول فئة." }) : /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: sorted.map((c) => {
           const isEditing = editingId === c.id;
-          return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3`, children: !isEditing ? /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3", children: [
+          return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl px-4 py-3`, children: !isEditing ? /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3", children: [
             /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
               /* @__PURE__ */ jsx("div", { className: "text-white/90 font-semibold truncate", children: c.name }),
-              /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm mt-1 truncate", dir: "ltr", children: c.name_en || "-" })
+              /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mt-1 truncate", dir: "ltr", children: c.name_en || "-" })
             ] }),
-            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => startEdit(c), className: `${ws.iconButton} text-sky-200`, "aria-label": "تعديل", title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }) })
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => startEdit(c), className: `${ws.iconButton} text-sky-700 dark:text-sky-200`, "aria-label": "تعديل", title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }) })
           ] }) : /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
             /* @__PURE__ */ jsx("input", { value: editName, onChange: (e) => setEditName(e.target.value), className: `${ws.input} px-4 py-2`, placeholder: "اسم الفئة (عربي)", disabled: updating, dir: "rtl" }),
             /* @__PURE__ */ jsx("input", { value: editNameEn, onChange: (e) => setEditNameEn(e.target.value), className: `${ws.input} px-4 py-2`, placeholder: "Category name (English)", disabled: updating, dir: "ltr" }),
@@ -15661,7 +15661,7 @@ function ItemCategoriesModal({
             ] })
           ] }) }, c.id);
         }) }),
-        /* @__PURE__ */ jsx("div", { className: "mt-5 text-xs text-slate-500 dark:text-white/40", children: "ملاحظة: حذف الفئات غير مفعّل حاليًا لتجنب مشاكل مع الأصناف المرتبطة." })
+        /* @__PURE__ */ jsx("div", { className: "mt-5 text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/40", children: "ملاحظة: حذف الفئات غير مفعّل حاليًا لتجنب مشاكل مع الأصناف المرتبطة." })
       ] }),
       /* @__PURE__ */ jsx("div", { className: `mt-6 pt-4 border-t ${ws.divider} flex gap-3`, children: /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-6 py-3 justify-center flex-1`, children: "إغلاق" }) })
     ] })
@@ -15700,11 +15700,11 @@ function StatsCards({
   }).length;
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8", children: [
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-purple-200`, children: /* @__PURE__ */ jsx(Package, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: isFiltered ? "ضمن الفلتر" : "إجمالي الأصناف" }),
-      /* @__PURE__ */ jsxs("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: [
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-purple-700 dark:text-purple-200`, children: /* @__PURE__ */ jsx(Package, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: isFiltered ? "ضمن الفلتر" : "إجمالي الأصناف" }),
+      /* @__PURE__ */ jsxs("p", { className: "text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight", children: [
         items.length,
-        isFiltered ? /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/40 text-base font-normal", children: [
+        isFiltered ? /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-base font-normal", children: [
           " ",
           "/ ",
           totalCount
@@ -15712,19 +15712,19 @@ function StatsCards({
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(CheckCircle, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "متوفر" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-emerald-200 tracking-tight", children: availableItems })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(CheckCircle, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "متوفر" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-emerald-700 dark:text-emerald-200 tracking-tight", children: availableItems })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-amber-200`, children: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "منخفض" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-amber-200 tracking-tight", children: lowStockItems })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "منخفض" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-amber-700 dark:text-amber-200 tracking-tight", children: lowStockItems })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-6`, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-red-200`, children: /* @__PURE__ */ jsx(XCircle, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "نفد" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-red-200 tracking-tight", children: outOfStockItems })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-red-700 dark:text-red-200`, children: /* @__PURE__ */ jsx(XCircle, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1", children: "نفد" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-red-700 dark:text-red-200 tracking-tight", children: outOfStockItems })
     ] })
   ] });
 }
@@ -15775,13 +15775,13 @@ function SearchBar({
   return /* @__PURE__ */ jsxs("div", { className: "mb-6 space-y-4", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex flex-col md:flex-row gap-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex-1 relative", children: [
-        /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 dark:text-white/40" }),
+        /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" }),
         /* @__PURE__ */ jsx("input", { type: "text", placeholder: "البحث عن صنف...", value: searchTerm, onChange: (e) => onSearchChange(e.target.value), className: `${ws.input} pr-12 pl-4 py-3` })
       ] }),
       onToggleFilters ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: onToggleFilters, className: `${hasActiveFilters ? ws.btnPrimary : ws.btnNeutral} px-5 py-3 justify-center relative`, children: [
         /* @__PURE__ */ jsx(Filter, { className: "w-5 h-5" }),
         /* @__PURE__ */ jsx("span", { children: "فلتر" }),
-        hasActiveFilters ? /* @__PURE__ */ jsx("span", { className: "absolute -top-1 -left-1 w-5 h-5 bg-red-500 text-slate-900 dark:text-white text-[10px] font-bold rounded-full flex items-center justify-center", children: "!" }) : null
+        hasActiveFilters ? /* @__PURE__ */ jsx("span", { className: "absolute -top-1 -left-1 w-5 h-5 bg-red-500 text-slate-900 dark:text-slate-900 dark:dark:text-white text-[10px] font-bold rounded-full flex items-center justify-center", children: "!" }) : null
       ] }) : null,
       onExportExcel && onExportPDF ? /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsxs("button", { ref: exportBtnRef, type: "button", onClick: () => setShowExportMenu((s) => !s), className: `${ws.btnNeutral} px-6 py-3 min-w-[140px] justify-center`, "aria-expanded": showExportMenu, children: [
@@ -15795,21 +15795,21 @@ function SearchBar({
           /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => {
             onExportExcel();
             setShowExportMenu(false);
-          }, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
-            /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-200" }),
+          }, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-slate-800 dark:dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] transition-colors", children: [
+            /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
-              /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للتحليل والمعالجة" })
+              /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-slate-900 dark:dark:text-white", children: "Excel" }),
+              /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: "للتحليل والمعالجة" })
             ] })
           ] }),
           /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => {
             onExportPDF();
             setShowExportMenu(false);
-          }, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
-            /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-200" }),
+          }, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-slate-800 dark:dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-slate-200 dark:dark:border-white/10", children: [
+            /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-700 dark:text-red-200" }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
-              /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
+              /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-slate-900 dark:dark:text-white", children: "PDF" }),
+              /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: "للطباعة والأرشفة" })
             ] })
           ] })
         ] })
@@ -15825,11 +15825,11 @@ function SearchBar({
     ] }),
     showFilters ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-4 sm:p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row gap-4 items-end", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-[180px]", children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-slate-600 dark:text-white/55 text-xs font-semibold mb-2", children: "الفئة" }),
+        /* @__PURE__ */ jsx("label", { className: "block text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-xs font-semibold mb-2", children: "الفئة" }),
         /* @__PURE__ */ jsx(GlassSelect, { value: selectedCategory, onChange: onCategoryChange, options: categoryOptions, buttonClassName: "px-4 py-2.5" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-[180px]", children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-slate-600 dark:text-white/55 text-xs font-semibold mb-2", children: "حالة المخزون" }),
+        /* @__PURE__ */ jsx("label", { className: "block text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-xs font-semibold mb-2", children: "حالة المخزون" }),
         /* @__PURE__ */ jsx(GlassSelect, { value: selectedStatus, onChange: onStatusChange, options: statusOptions, buttonClassName: "px-4 py-2.5" })
       ] }),
       hasActiveFilters ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: onClearFilters, className: `${ws.btnNeutral} px-4 py-2.5 text-sm justify-center`, children: [
@@ -15920,15 +15920,15 @@ function ItemsTable({
     onBatchInventory(Array.from(selectedIds), showInInventory, clearSelection);
   };
   const sectionCard = `${ws.glass} ${ws.card} overflow-hidden`;
-  const headerCell = "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55 whitespace-nowrap";
+  const headerCell = "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 whitespace-nowrap";
   const colCount = 10;
   const checkboxBase = "w-5 h-5 flex items-center justify-center cursor-pointer rounded-md transition-colors";
-  const checkboxActive = "bg-emerald-400/20 border border-emerald-400/40 text-emerald-300";
-  const checkboxInactive = "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/15 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.07]";
-  const checkboxPartial = "bg-emerald-400/10 border border-emerald-400/30 text-emerald-300";
+  const checkboxActive = "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300";
+  const checkboxInactive = "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border border-slate-200 dark:border-slate-200 dark:dark:border-white/15 text-slate-400 dark:text-slate-400 dark:dark:text-white/30 hover:bg-slate-200 dark:hover:bg-slate-200 dark:dark:hover:bg-white/[0.07]";
+  const checkboxPartial = "bg-emerald-400/10 border border-emerald-400/30 text-emerald-700 dark:text-emerald-300";
   const selectAllIcon = allSelected ? /* @__PURE__ */ jsx(CheckSquare, { className: "w-4 h-4" }) : someSelected ? /* @__PURE__ */ jsx(MinusSquare, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Square, { className: "w-4 h-4" });
   const selectAllClass = allSelected ? checkboxActive : someSelected ? checkboxPartial : checkboxInactive;
-  const headers = /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+  const headers = /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]", children: [
     /* @__PURE__ */ jsx("th", { className: "px-4 py-4 w-12", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: toggleSelectAll, className: `${checkboxBase} ${selectAllClass}`, title: "تحديد الكل", children: selectAllIcon }) }),
     /* @__PURE__ */ jsx("th", { className: headerCell, children: "الصنف" }),
     /* @__PURE__ */ jsx("th", { className: headerCell, children: "الوصف" }),
@@ -15942,7 +15942,7 @@ function ItemsTable({
   ] });
   const renderEmpty = (message) => /* @__PURE__ */ jsx("div", { className: sectionCard, children: /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
     /* @__PURE__ */ jsx("thead", { children: headers }),
-    /* @__PURE__ */ jsx("tbody", { children: /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: colCount, className: "px-6 py-12 text-center text-slate-500 dark:text-white/45", children: [
+    /* @__PURE__ */ jsx("tbody", { children: /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: colCount, className: "px-6 py-12 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/45", children: [
       /* @__PURE__ */ jsx(Package, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
       /* @__PURE__ */ jsx("p", { children: message })
     ] }) }) })
@@ -15950,7 +15950,7 @@ function ItemsTable({
   if (isLoading) {
     return /* @__PURE__ */ jsx("div", { className: sectionCard, children: /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
       /* @__PURE__ */ jsx("thead", { children: headers }),
-      /* @__PURE__ */ jsx("tbody", { children: /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: colCount, className: "px-6 py-12 text-center text-slate-600 dark:text-white/55", children: "جاري التحميل…" }) }) })
+      /* @__PURE__ */ jsx("tbody", { children: /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: colCount, className: "px-6 py-12 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: "جاري التحميل…" }) }) })
     ] }) }) });
   }
   if (!Array.isArray(items) || items.length === 0) {
@@ -15972,41 +15972,41 @@ function ItemsTable({
           const showInInventory = item?.show_in_inventory !== false;
           const minThresholdValue = Number(item?.min_stock_threshold || 0);
           const minThresholdText = `${minThresholdValue.toLocaleString()} ${unit}`;
-          const statusPillClass = !showInInventory ? `${ws.pill} bg-red-500/15 text-red-200 border-red-500/25` : stockStatus === "out_of_stock" ? `${ws.pill} bg-red-500/15 text-red-200 border-red-500/25` : stockStatus === "low_stock" ? `${ws.pill} bg-amber-500/15 text-amber-200 border-amber-500/25` : `${ws.pill} bg-emerald-500/15 text-emerald-200 border-emerald-500/25`;
+          const statusPillClass = !showInInventory ? `${ws.pill} bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25` : stockStatus === "out_of_stock" ? `${ws.pill} bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25` : stockStatus === "low_stock" ? `${ws.pill} bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25` : `${ws.pill} bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25`;
           const statusIcon = !showInInventory ? /* @__PURE__ */ jsx(EyeOff, { className: "w-4 h-4" }) : stockStatus === "out_of_stock" ? /* @__PURE__ */ jsx(XCircle, { className: "w-4 h-4" }) : stockStatus === "low_stock" ? /* @__PURE__ */ jsx(AlertTriangle, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(ClipboardCheck, { className: "w-4 h-4" });
           const statusText = !showInInventory ? "معطّل" : stockStatus === "out_of_stock" ? "نفد" : stockStatus === "low_stock" ? "منخفض" : "متوفر";
           const stockText = hasBranchStock ? `${totalStock.toLocaleString()} ${unit}` : "-";
           const viewStockTitle = hasBranchStock ? "عرض المخزون في الفروع" : "لا يوجد مخزون مسجل";
           const rowCheckClass = isChecked ? checkboxActive : checkboxInactive;
           const rowCheckIcon = isChecked ? /* @__PURE__ */ jsx(CheckSquare, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Square, { className: "w-4 h-4" });
-          const rowBg = isChecked ? "bg-emerald-400/[0.04]" : "hover:bg-slate-100 dark:hover:bg-white/[0.05]";
-          return /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-100 dark:border-white/5 transition-colors ${rowBg}`, children: [
+          const rowBg = isChecked ? "bg-emerald-400/[0.04]" : "hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.05]";
+          return /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-100 dark:border-slate-100 dark:dark:border-white/5 transition-colors ${rowBg}`, children: [
             /* @__PURE__ */ jsx("td", { className: "px-4 py-4", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: () => toggleOne(item.id), className: `${checkboxBase} ${rowCheckClass}`, children: rowCheckIcon }) }),
             /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 min-w-[240px]", children: [
               /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }) }),
               /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-                /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-medium truncate", children: item?.name || "-" }),
-                item?.name_en ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 text-xs truncate", dir: "ltr", children: item.name_en }) : null
+                /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium truncate", children: item?.name || "-" }),
+                item?.name_en ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-xs truncate", dir: "ltr", children: item.name_en }) : null
               ] })
             ] }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-white/70 text-sm", children: /* @__PURE__ */ jsx("div", { className: "line-clamp-2", style: {
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm", children: /* @__PURE__ */ jsx("div", { className: "line-clamp-2", style: {
               maxWidth: 260
             }, title: item?.description || "", children: item?.description || "—" }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10 inline-flex items-center gap-2`, children: [
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10 inline-flex items-center gap-2`, children: [
               /* @__PURE__ */ jsx(Layers, { className: "w-4 h-4" }),
               /* @__PURE__ */ jsx("span", { className: "truncate max-w-[180px]", children: categoryName })
             ] }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap", children: /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`, children: [
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/75 whitespace-nowrap", children: /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10`, children: [
               /* @__PURE__ */ jsx("span", { className: "text-base", children: getUnitIcon$1(unit) }),
               /* @__PURE__ */ jsx("span", { className: "mr-1", children: unit })
             ] }) }),
             /* @__PURE__ */ jsxs("td", { className: "px-6 py-4 whitespace-nowrap", children: [
-              /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/75 font-medium", children: formatCost(item?.cost) }),
+              /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-slate-700 dark:dark:text-white/75 font-medium", children: formatCost(item?.cost) }),
               item?.linked_green_bean_name ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 mt-1", children: [
-                /* @__PURE__ */ jsx(Link, { className: "w-3 h-3 text-amber-300/50" }),
-                /* @__PURE__ */ jsxs("span", { className: "text-amber-200/50 text-[10px]", children: [
+                /* @__PURE__ */ jsx(Link, { className: "w-3 h-3 text-amber-700 dark:text-amber-300/50" }),
+                /* @__PURE__ */ jsxs("span", { className: "text-amber-700 dark:text-amber-200/50 text-[10px]", children: [
                   item.linked_green_bean_name,
-                  item.last_order_date ? /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/30 mr-1", children: [
+                  item.last_order_date ? /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-slate-400 dark:dark:text-white/30 mr-1", children: [
                     "(",
                     new Date(item.last_order_date).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn"),
                     ")"
@@ -16014,42 +16014,42 @@ function ItemsTable({
                 ] })
               ] }) : null
             ] }),
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap", children: minThresholdText }),
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-800 dark:text-white/85 whitespace-nowrap", children: stockText }),
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/75 whitespace-nowrap", children: minThresholdText }),
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-800 dark:text-slate-800 dark:dark:text-white/85 whitespace-nowrap", children: stockText }),
             /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("span", { className: `${statusPillClass} inline-flex items-center gap-2`, children: [
               statusIcon,
               /* @__PURE__ */ jsx("span", { children: statusText })
             ] }) }),
             /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
               /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onViewStock(item), disabled: !hasBranchStock, className: `${ws.iconButton} text-white/80 disabled:opacity-40 disabled:cursor-not-allowed`, "aria-label": "عرض المخزون", title: viewStockTitle, children: /* @__PURE__ */ jsx(Eye, { className: "w-4 h-4" }) }),
-              typeof onManageBranches === "function" ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onManageBranches(item), className: `${ws.iconButton} text-purple-200`, "aria-label": "إدارة الفروع", title: Array.isArray(item?.disabled_branches) && item.disabled_branches.length > 0 ? `معطّل في ${item.disabled_branches.length} فرع — اضغط للإدارة` : "إدارة الفروع (تفعيل/إلغاء حسب الفرع)", children: /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4" }) }) : null,
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(item), className: `${ws.iconButton} text-sky-200`, "aria-label": "تعديل", title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }) }),
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDelete(item), className: `${ws.iconButton} text-red-200`, "aria-label": "حذف", title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
+              typeof onManageBranches === "function" ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onManageBranches(item), className: `${ws.iconButton} text-purple-700 dark:text-purple-200`, "aria-label": "إدارة الفروع", title: Array.isArray(item?.disabled_branches) && item.disabled_branches.length > 0 ? `معطّل في ${item.disabled_branches.length} فرع — اضغط للإدارة` : "إدارة الفروع (تفعيل/إلغاء حسب الفرع)", children: /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4" }) }) : null,
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(item), className: `${ws.iconButton} text-sky-700 dark:text-sky-200`, "aria-label": "تعديل", title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }) }),
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDelete(item), className: `${ws.iconButton} text-red-700 dark:text-red-200`, "aria-label": "حذف", title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
             ] }) })
           ] }, item.id);
         }) })
       ] }) }),
-      /* @__PURE__ */ jsx("div", { className: `px-6 py-3 border-t ${ws.divider} text-xs text-slate-500 dark:text-white/45`, children: "تلميح: على الجوال تقدر تسحب يمين/يسار لعرض كل الأعمدة." })
+      /* @__PURE__ */ jsx("div", { className: `px-6 py-3 border-t ${ws.divider} text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45`, children: "تلميح: على الجوال تقدر تسحب يمين/يسار لعرض كل الأعمدة." })
     ] }),
     selectedCount > 0 ? /* @__PURE__ */ jsx("div", { className: "fixed bottom-6 left-1/2 z-50", style: {
       transform: "translateX(-50%)"
-    }, children: /* @__PURE__ */ jsxs("div", { className: `${ws.popover} border border-slate-200 dark:border-white/15 rounded-2xl px-5 py-3.5 flex items-center gap-4 shadow-2xl`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-slate-900 dark:text-white font-semibold whitespace-nowrap", children: [
-        /* @__PURE__ */ jsx(CheckSquare, { className: "w-5 h-5 text-emerald-300" }),
+    }, children: /* @__PURE__ */ jsxs("div", { className: `${ws.popover} border border-slate-200 dark:border-slate-200 dark:dark:border-white/15 rounded-2xl px-5 py-3.5 flex items-center gap-4 shadow-2xl`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold whitespace-nowrap", children: [
+        /* @__PURE__ */ jsx(CheckSquare, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-300" }),
         /* @__PURE__ */ jsx("span", { children: selectedCount }),
-        /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50 text-sm font-normal", children: "محدد" })
+        /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/50 text-sm font-normal", children: "محدد" })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "w-px h-7 bg-slate-200 dark:bg-white/10" }),
-      /* @__PURE__ */ jsxs("button", { type: "button", disabled: isBatchPending, onClick: () => handleBatch(true), className: "flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-400/15 text-emerald-200 border border-emerald-400/25 font-semibold hover:bg-emerald-400/25 transition-colors disabled:opacity-50 whitespace-nowrap", children: [
+      /* @__PURE__ */ jsx("div", { className: "w-px h-7 bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", disabled: isBatchPending, onClick: () => handleBatch(true), className: "flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-400/15 text-emerald-700 dark:text-emerald-200 border border-emerald-400/25 font-semibold hover:bg-emerald-400/25 transition-colors disabled:opacity-50 whitespace-nowrap", children: [
         /* @__PURE__ */ jsx(ClipboardCheck, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { children: "فعّل في الجرد" })
       ] }),
-      /* @__PURE__ */ jsxs("button", { type: "button", disabled: isBatchPending, onClick: () => handleBatch(false), className: "flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/15 text-red-200 border border-red-500/25 font-semibold hover:bg-red-500/25 transition-colors disabled:opacity-50 whitespace-nowrap", children: [
+      /* @__PURE__ */ jsxs("button", { type: "button", disabled: isBatchPending, onClick: () => handleBatch(false), className: "flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/15 text-red-700 dark:text-red-200 border border-red-500/25 font-semibold hover:bg-red-500/25 transition-colors disabled:opacity-50 whitespace-nowrap", children: [
         /* @__PURE__ */ jsx(ClipboardX, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { children: "أخفِ من الجرد" })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "w-px h-7 bg-slate-200 dark:bg-white/10" }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: clearSelection, className: "flex items-center justify-center w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50 hover:bg-slate-200 dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-white/70 transition-colors", title: "إلغاء التحديد", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+      /* @__PURE__ */ jsx("div", { className: "w-px h-7 bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: clearSelection, className: "flex items-center justify-center w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.05] border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 text-slate-500 dark:text-slate-500 dark:dark:text-white/50 hover:bg-slate-200 dark:hover:bg-slate-200 dark:dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-slate-700 dark:dark:hover:text-white/70 transition-colors", title: "إلغاء التحديد", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
     ] }) }) : null
   ] });
 }
@@ -16109,8 +16109,8 @@ function ItemFormModal({
     value: "شدة",
     label: "شدة"
   }];
-  const labelClass = "block text-slate-700 dark:text-white/70 text-sm font-semibold mb-2";
-  const helpClass = "text-slate-500 dark:text-white/40 text-xs mt-1";
+  const labelClass = "block text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm font-semibold mb-2";
+  const helpClass = "text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs mt-1";
   const categoryOptions = [{
     value: "",
     label: "بدون فئة"
@@ -16139,11 +16139,11 @@ function ItemFormModal({
     maxHeight: "calc(100vh - 64px)"
   }, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-6 flex items-center justify-between shrink-0 ${ws.topBar}`, children: [
-      /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+      /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }) }),
         editingItem ? "تعديل الصنف" : "إضافة صنف جديد"
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" }) })
     ] }),
     /* @__PURE__ */ jsxs("form", { onSubmit, className: "p-6 space-y-4 overflow-y-auto flex-1", children: [
       /* @__PURE__ */ jsxs("div", { children: [
@@ -16155,7 +16155,7 @@ function ItemFormModal({
         /* @__PURE__ */ jsx("p", { className: helpClass, children: 'تقدر تضيف فئات من زر "الفئات" في صفحة الأصناف' })
       ] }),
       isRoastedCoffeeCategory ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-amber-500/20 rounded-2xl p-5`, children: [
-        /* @__PURE__ */ jsxs("label", { className: `${labelClass} flex items-center gap-2 text-amber-200/80`, children: [
+        /* @__PURE__ */ jsxs("label", { className: `${labelClass} flex items-center gap-2 text-amber-700 dark:text-amber-200/80`, children: [
           /* @__PURE__ */ jsx(Link, { className: "w-4 h-4" }),
           "ربط ببن أخضر"
         ] }),
@@ -16163,8 +16163,8 @@ function ItemFormModal({
           ...formData,
           linked_green_bean_id: v ? parseInt(v) : null
         }), options: greenBeanOptions, placeholder: "اختر البن الأخضر…" }),
-        /* @__PURE__ */ jsx("p", { className: "text-amber-200/40 text-xs mt-2", children: "عند ربط الصنف ببن أخضر، التكلفة تتحدث تلقائياً مع كل طلب توريد جديد" }),
-        lastOrderInfo ? /* @__PURE__ */ jsx("div", { className: "mt-3 p-3 bg-amber-500/10 border border-amber-500/15 rounded-xl", children: /* @__PURE__ */ jsxs("p", { className: "text-amber-200/80 text-xs", children: [
+        /* @__PURE__ */ jsx("p", { className: "text-amber-700 dark:text-amber-200/40 text-xs mt-2", children: "عند ربط الصنف ببن أخضر، التكلفة تتحدث تلقائياً مع كل طلب توريد جديد" }),
+        lastOrderInfo ? /* @__PURE__ */ jsx("div", { className: "mt-3 p-3 bg-amber-500/10 border border-amber-500/15 rounded-xl", children: /* @__PURE__ */ jsxs("p", { className: "text-amber-700 dark:text-amber-200/80 text-xs", children: [
           "آخر تكلفة توريد (",
           lastOrderInfo.beanName,
           "):",
@@ -16173,7 +16173,7 @@ function ItemFormModal({
             lastOrderInfo.price,
             " ر.س/كغ"
           ] }),
-          lastOrderInfo.date ? /* @__PURE__ */ jsxs("span", { className: "text-amber-200/50 mr-2", children: [
+          lastOrderInfo.date ? /* @__PURE__ */ jsxs("span", { className: "text-amber-700 dark:text-amber-200/50 mr-2", children: [
             "— ",
             lastOrderInfo.date
           ] }) : null
@@ -16182,7 +16182,7 @@ function ItemFormModal({
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsxs("label", { className: labelClass, children: [
           "اسم الصنف (عربي) ",
-          /* @__PURE__ */ jsx("span", { className: "text-red-300", children: "*" })
+          /* @__PURE__ */ jsx("span", { className: "text-red-700 dark:text-red-300", children: "*" })
         ] }),
         /* @__PURE__ */ jsx("input", { type: "text", required: true, value: formData.name, onChange: (e) => setFormData({
           ...formData,
@@ -16193,7 +16193,7 @@ function ItemFormModal({
         /* @__PURE__ */ jsxs("label", { className: `${labelClass} flex items-center gap-2`, children: [
           /* @__PURE__ */ jsx(Languages, { className: "w-4 h-4" }),
           "اسم الصنف (إنجليزي) ",
-          /* @__PURE__ */ jsx("span", { className: "text-red-300", children: "*" })
+          /* @__PURE__ */ jsx("span", { className: "text-red-700 dark:text-red-300", children: "*" })
         ] }),
         /* @__PURE__ */ jsx("input", { type: "text", required: true, value: formData.name_en, onChange: (e) => setFormData({
           ...formData,
@@ -16220,19 +16220,19 @@ function ItemFormModal({
         /* @__PURE__ */ jsx("p", { className: helpClass, children: "سعر التكلفة للوحدة الواحدة (اختياري)" })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsxs("label", { className: "block text-slate-700 dark:text-white/70 text-sm font-semibold mb-3", children: [
+        /* @__PURE__ */ jsxs("label", { className: "block text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm font-semibold mb-3", children: [
           "نوع المنتج (الوحدة) ",
-          /* @__PURE__ */ jsx("span", { className: "text-red-300", children: "*" })
+          /* @__PURE__ */ jsx("span", { className: "text-red-700 dark:text-red-300", children: "*" })
         ] }),
         /* @__PURE__ */ jsx("div", { className: "grid grid-cols-2 gap-3", children: unitOptions.map((option, index) => {
           const active = formData.unit === option.value;
-          const boxClass = active ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.06]";
+          const boxClass = active ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20" : "bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]";
           return /* @__PURE__ */ jsxs("label", { className: `relative flex items-center justify-center p-4 border rounded-2xl cursor-pointer transition-colors ${boxClass}`, children: [
             /* @__PURE__ */ jsx("input", { type: "radio", name: "unit", value: option.value, checked: formData.unit === option.value, onChange: (e) => setFormData({
               ...formData,
               unit: e.target.value
             }), required: index === 0, className: "sr-only" }),
-            /* @__PURE__ */ jsx("span", { className: `font-semibold ${active ? "text-slate-900 dark:text-white" : "text-slate-700 dark:text-white/70"}`, children: option.label })
+            /* @__PURE__ */ jsx("span", { className: `font-semibold ${active ? "text-slate-900 dark:text-slate-900 dark:dark:text-white" : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70"}`, children: option.label })
           ] }, option.value);
         }) }),
         /* @__PURE__ */ jsx("p", { className: helpClass, children: "اختر وحدة القياس المناسبة لهذا الصنف" })
@@ -16240,7 +16240,7 @@ function ItemFormModal({
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsxs("label", { className: labelClass, children: [
           "الحد الأدنى للتنبيه ",
-          /* @__PURE__ */ jsx("span", { className: "text-red-300", children: "*" })
+          /* @__PURE__ */ jsx("span", { className: "text-red-700 dark:text-red-300", children: "*" })
         ] }),
         /* @__PURE__ */ jsx("input", { type: "number", required: true, min: "0", value: formData.min_stock_threshold, onChange: (e) => setFormData({
           ...formData,
@@ -16252,7 +16252,7 @@ function ItemFormModal({
         /* @__PURE__ */ jsxs("label", { className: labelClass, children: [
           "الحد الأقصى للتنبيه",
           " ",
-          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40 text-xs", children: "(اختياري)" })
+          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs", children: "(اختياري)" })
         ] }),
         /* @__PURE__ */ jsx("input", { type: "number", min: "0", value: formData.max_stock_threshold === null || formData.max_stock_threshold === void 0 ? "" : formData.max_stock_threshold, onChange: (e) => {
           const val = e.target.value;
@@ -16263,12 +16263,12 @@ function ItemFormModal({
         }, className: `${ws.input} px-4 py-3`, placeholder: "بدون حد" }),
         /* @__PURE__ */ jsx("p", { className: helpClass, children: "سيتم التنبيه عند تجاوز الكمية هذا العدد (لكشف المخزون الفائض)" })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 text-blue-200`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-4 h-4" }) }),
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 text-blue-700 dark:text-blue-200`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-4 h-4" }) }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("p", { className: "text-white/90 text-sm font-semibold", children: "تفعيل الصنف في الجرد" }),
-            /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/40 text-xs mt-0.5", children: "الصنف يظهر للموظفين عند تسجيل الجرد ويُحسب في التقارير" })
+            /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs mt-0.5", children: "الصنف يظهر للموظفين عند تسجيل الجرد ويُحسب في التقارير" })
           ] })
         ] }),
         /* @__PURE__ */ jsx("button", { type: "button", role: "switch", "aria-checked": formData.show_in_inventory, onClick: () => setFormData({
@@ -16282,7 +16282,7 @@ function ItemFormModal({
           transform: formData.show_in_inventory ? "translateX(-6px) translateY(1px)" : "translateX(-30px) translateY(1px)"
         } }) })
       ] }) }),
-      errorMessage ? /* @__PURE__ */ jsx("div", { className: "p-4 bg-red-500/10 border border-red-500/25 rounded-2xl", children: /* @__PURE__ */ jsx("p", { className: "text-red-200 text-sm", children: errorMessage }) }) : null,
+      errorMessage ? /* @__PURE__ */ jsx("div", { className: "p-4 bg-red-500/10 border border-red-500/25 rounded-2xl", children: /* @__PURE__ */ jsx("p", { className: "text-red-700 dark:text-red-200 text-sm", children: errorMessage }) }) : null,
       /* @__PURE__ */ jsxs("div", { className: `flex gap-3 pt-4 border-t ${ws.divider}`, children: [
         /* @__PURE__ */ jsx("button", { type: "submit", disabled: saving, className: `${ws.btnPrimary} flex-1 px-6 py-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed`, children: submitLabel }),
         /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-6 py-3 justify-center`, children: "إلغاء" })
@@ -16299,26 +16299,26 @@ function DeleteConfirmModal({
 }) {
   if (!item) return null;
   return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4", dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full max-w-md shadow-2xl border border-red-500/25`, children: [
-    /* @__PURE__ */ jsx("div", { className: `p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-red-200`, children: /* @__PURE__ */ jsx(Trash2, { className: "w-5 h-5" }) }),
+    /* @__PURE__ */ jsx("div", { className: `p-6 border-b ${ws.divider}`, children: /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-red-700 dark:text-red-200`, children: /* @__PURE__ */ jsx(Trash2, { className: "w-5 h-5" }) }),
       "تأكيد الحذف"
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: "p-6", children: [
       /* @__PURE__ */ jsxs("p", { className: "text-white/80 mb-4", children: [
         "هل أنت متأكد من حذف الصنف",
         " ",
-        /* @__PURE__ */ jsxs("span", { className: "font-bold text-slate-900 dark:text-white", children: [
+        /* @__PURE__ */ jsxs("span", { className: "font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white", children: [
           '"',
           item.name,
           '"'
         ] }),
         "؟"
       ] }),
-      /* @__PURE__ */ jsxs("p", { className: "text-amber-200 text-sm flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3", children: [
+      /* @__PURE__ */ jsxs("p", { className: "text-amber-700 dark:text-amber-200 text-sm flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3", children: [
         /* @__PURE__ */ jsx("span", { className: "text-lg", children: "⚠️" }),
         /* @__PURE__ */ jsx("span", { children: "لا يمكن حذف الصنف إذا كان مرتبطاً بعمليات جرد" })
       ] }),
-      deleteMutation.error ? /* @__PURE__ */ jsx("div", { className: "mt-4 p-4 bg-red-500/10 border border-red-500/25 rounded-2xl", children: /* @__PURE__ */ jsx("p", { className: "text-red-200 text-sm", children: deleteMutation.error.message }) }) : null,
+      deleteMutation.error ? /* @__PURE__ */ jsx("div", { className: "mt-4 p-4 bg-red-500/10 border border-red-500/25 rounded-2xl", children: /* @__PURE__ */ jsx("p", { className: "text-red-700 dark:text-red-200 text-sm", children: deleteMutation.error.message }) }) : null,
       /* @__PURE__ */ jsxs("div", { className: "flex gap-3 mt-6", children: [
         /* @__PURE__ */ jsx("button", { type: "button", onClick: onConfirm, disabled: deleteMutation.isPending, className: `${ws.btnDanger} flex-1 px-6 py-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed`, children: deleteMutation.isPending ? "جاري الحذف…" : "نعم، احذف" }),
         /* @__PURE__ */ jsx("button", { type: "button", onClick: onCancel, className: `${ws.btnNeutral} px-6 py-3 justify-center`, children: "إلغاء" })
@@ -16346,15 +16346,15 @@ function ViewStockModal({
   }, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-6 flex items-center justify-between shrink-0 ${ws.topBar}`, children: [
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
+        /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
           /* @__PURE__ */ jsxs("span", { className: "truncate", children: [
             'مخزون "',
             item.name,
             '" في الفروع'
           ] })
         ] }),
-        item.unit ? /* @__PURE__ */ jsx("div", { className: "mt-2", children: /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`, children: [
+        item.unit ? /* @__PURE__ */ jsx("div", { className: "mt-2", children: /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10`, children: [
           /* @__PURE__ */ jsx("span", { className: "text-base", children: getUnitIcon(item.unit) }),
           /* @__PURE__ */ jsxs("span", { className: "mr-1", children: [
             "الوحدة: ",
@@ -16362,7 +16362,7 @@ function ViewStockModal({
           ] })
         ] }) }) : null
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" }) })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "p-6 overflow-y-auto flex-1", children: [
       /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
@@ -16371,16 +16371,16 @@ function ViewStockModal({
           const threshold = Number(item.min_stock_threshold || 0);
           const isOutOfStock = qty === 0;
           const isLow = !isOutOfStock && qty < threshold;
-          const rowClass = isOutOfStock ? "bg-red-500/10 border-red-500/20" : isLow ? "bg-amber-500/10 border-amber-500/20" : "bg-slate-100 dark:bg-white/[0.04] border-slate-200 dark:border-white/10";
-          const iconClass = isOutOfStock ? "text-red-200" : isLow ? "text-amber-200" : "text-sky-200";
-          const qtyClass = isOutOfStock ? "text-red-200" : isLow ? "text-amber-200" : "text-slate-900 dark:text-white";
-          const statusLabel = isOutOfStock ? /* @__PURE__ */ jsxs("p", { className: "text-red-200 text-xs flex items-center gap-1", children: [
+          const rowClass = isOutOfStock ? "bg-red-500/10 border-red-500/20" : isLow ? "bg-amber-500/10 border-amber-500/20" : "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border-slate-200 dark:border-slate-200 dark:dark:border-white/10";
+          const iconClass = isOutOfStock ? "text-red-700 dark:text-red-200" : isLow ? "text-amber-700 dark:text-amber-200" : "text-sky-700 dark:text-sky-200";
+          const qtyClass = isOutOfStock ? "text-red-700 dark:text-red-200" : isLow ? "text-amber-700 dark:text-amber-200" : "text-slate-900 dark:text-slate-900 dark:dark:text-white";
+          const statusLabel = isOutOfStock ? /* @__PURE__ */ jsxs("p", { className: "text-red-700 dark:text-red-200 text-xs flex items-center gap-1", children: [
             /* @__PURE__ */ jsx(XCircle, { className: "w-3 h-3" }),
             "نفد المخزون"
-          ] }) : isLow ? /* @__PURE__ */ jsxs("p", { className: "text-amber-200 text-xs flex items-center gap-1", children: [
+          ] }) : isLow ? /* @__PURE__ */ jsxs("p", { className: "text-amber-700 dark:text-amber-200 text-xs flex items-center gap-1", children: [
             /* @__PURE__ */ jsx(AlertTriangle, { className: "w-3 h-3" }),
             "أقل من الحد الأدنى"
-          ] }) : /* @__PURE__ */ jsxs("p", { className: "text-emerald-200 text-xs flex items-center gap-1", children: [
+          ] }) : /* @__PURE__ */ jsxs("p", { className: "text-emerald-700 dark:text-emerald-200 text-xs flex items-center gap-1", children: [
             /* @__PURE__ */ jsx(CheckCircle, { className: "w-3 h-3" }),
             "متوفر"
           ] });
@@ -16388,17 +16388,17 @@ function ViewStockModal({
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
               /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 ${iconClass}`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-medium", children: stock.branch_name }),
+                /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium", children: stock.branch_name }),
                 statusLabel
               ] })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "text-left", children: [
               /* @__PURE__ */ jsx("p", { className: `text-2xl font-bold ${qtyClass}`, children: qty }),
-              /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-xs", children: item.unit || "وحدة" })
+              /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-xs", children: item.unit || "وحدة" })
             ] })
           ] }, stock.branch_id);
         }),
-        !item.branch_stock || item.branch_stock.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "text-center py-8 text-slate-600 dark:text-white/55", children: [
+        !item.branch_stock || item.branch_stock.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "text-center py-8 text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: [
           /* @__PURE__ */ jsx(Package, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
           /* @__PURE__ */ jsx("p", { children: "لا توجد بيانات مخزون لهذا الصنف" })
         ] }) : null
@@ -16523,24 +16523,24 @@ function ItemBranchVisibilityModal({
   }, onClick: (e) => e.stopPropagation(), children: [
     /* @__PURE__ */ jsxs("div", { className: `p-5 sm:p-6 flex items-center justify-between shrink-0 ${ws.topBar}`, children: [
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
+        /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
           /* @__PURE__ */ jsxs("span", { className: "truncate", children: [
             'إدارة الفروع لـ "',
             item.name,
             '"'
           ] })
         ] }),
-        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mt-2 leading-relaxed", children: "فعّل/ألغِ تفعيل هذا الصنف لكل فرع. الفروع المعطّلة لن تظهر في صفحات الجرد، التقارير، أو لوحة التحكم." })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mt-2 leading-relaxed", children: "فعّل/ألغِ تفعيل هذا الصنف لكل فرع. الفروع المعطّلة لن تظهر في صفحات الجرد، التقارير، أو لوحة التحكم." })
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" }) })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "p-5 sm:p-6 overflow-y-auto flex-1", children: [
-      errorMsg ? /* @__PURE__ */ jsxs("div", { className: "mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-start gap-2", children: [
+      errorMsg ? /* @__PURE__ */ jsxs("div", { className: "mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm flex items-start gap-2", children: [
         /* @__PURE__ */ jsx(AlertCircle, { className: "w-4 h-4 mt-0.5 flex-shrink-0" }),
         errorMsg
       ] }) : null,
-      branchList.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "text-center py-8 text-slate-600 dark:text-white/55", children: [
+      branchList.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "text-center py-8 text-slate-600 dark:text-slate-600 dark:dark:text-white/55", children: [
         /* @__PURE__ */ jsx(Building2, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
         /* @__PURE__ */ jsx("p", { children: "لا توجد فروع" })
       ] }) : /* @__PURE__ */ jsx("div", { className: "space-y-2", children: branchList.map((branch) => {
@@ -16550,10 +16550,10 @@ function ItemBranchVisibilityModal({
         const cardClass = isDisabled ? "bg-red-500/[0.04] border-red-500/15" : "bg-emerald-500/[0.04] border-emerald-500/15";
         return /* @__PURE__ */ jsxs("div", { className: `flex items-center justify-between p-4 rounded-3xl border transition-colors ${cardClass}`, children: [
           /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 min-w-0", children: [
-            /* @__PURE__ */ jsx("div", { className: `w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 ${isDisabled ? "bg-red-500/10" : "bg-emerald-500/10"}`, children: isDisabled ? /* @__PURE__ */ jsx(EyeOff, { className: "w-5 h-5 text-red-200" }) : /* @__PURE__ */ jsx(Eye, { className: "w-5 h-5 text-emerald-200" }) }),
+            /* @__PURE__ */ jsx("div", { className: `w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 ${isDisabled ? "bg-red-500/10" : "bg-emerald-500/10"}`, children: isDisabled ? /* @__PURE__ */ jsx(EyeOff, { className: "w-5 h-5 text-red-700 dark:text-red-200" }) : /* @__PURE__ */ jsx(Eye, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
             /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-              /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-medium truncate", children: branch.name }),
-              /* @__PURE__ */ jsx("p", { className: `text-xs ${isDisabled ? "text-red-200" : "text-emerald-200"}`, children: isDisabled ? "معطّل في هذا الفرع" : "مفعّل" })
+              /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium truncate", children: branch.name }),
+              /* @__PURE__ */ jsx("p", { className: `text-xs ${isDisabled ? "text-red-700 dark:text-red-200" : "text-emerald-700 dark:text-emerald-200"}`, children: isDisabled ? "معطّل في هذا الفرع" : "مفعّل" })
             ] })
           ] }),
           /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleToggle(branchId), disabled: isPending, className: `${isDisabled ? ws.btnPrimary : ws.btnNeutral} px-4 py-2 text-sm justify-center disabled:opacity-50 disabled:cursor-not-allowed`, children: isPending ? "جاري…" : isDisabled ? "تفعيل" : "إلغاء التفعيل" })
@@ -17891,28 +17891,28 @@ function AdminLoginPage() {
       /* @__PURE__ */ jsx("div", { className: "text-center mb-6", children: /* @__PURE__ */ jsx("img", { src: "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/", alt: "Quarters Coffee Bar", className: "h-24 sm:h-28 w-auto mx-auto" }) }),
       /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-8`, children: [
         /* @__PURE__ */ jsxs("div", { className: "text-center mb-8", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-20 h-20 mx-auto mb-4 text-emerald-200`, children: /* @__PURE__ */ jsx(Shield, { className: "w-10 h-10" }) }),
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-20 h-20 mx-auto mb-4 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Shield, { className: "w-10 h-10" }) }),
           /* @__PURE__ */ jsx("h1", { className: `text-3xl font-bold ${ws.title} mb-2`, children: "لوحة التحكم الإدارية" }),
           /* @__PURE__ */ jsx("p", { className: ws.muted, children: "قم بتسجيل الدخول للوصول إلى النظام" })
         ] }),
         /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "space-y-6", children: [
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { htmlFor: "username", className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: "اسم المستخدم" }),
+            /* @__PURE__ */ jsx("label", { htmlFor: "username", className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: "اسم المستخدم" }),
             /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-              /* @__PURE__ */ jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2", children: /* @__PURE__ */ jsx(User, { className: "w-5 h-5 text-slate-500 dark:text-white/40" }) }),
+              /* @__PURE__ */ jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2", children: /* @__PURE__ */ jsx(User, { className: "w-5 h-5 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" }) }),
               /* @__PURE__ */ jsx("input", { id: "username", type: "text", value: username, onChange: (e) => setUsername(e.target.value), className: `${ws.input} px-4 py-3 pl-12`, placeholder: "أدخل اسم المستخدم", required: true, autoComplete: "username" })
             ] })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { htmlFor: "password", className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: "كلمة المرور" }),
+            /* @__PURE__ */ jsx("label", { htmlFor: "password", className: "block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 mb-2", children: "كلمة المرور" }),
             /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-              /* @__PURE__ */ jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2", children: /* @__PURE__ */ jsx(Lock, { className: "w-5 h-5 text-slate-500 dark:text-white/40" }) }),
+              /* @__PURE__ */ jsx("div", { className: "absolute left-3 top-1/2 -translate-y-1/2", children: /* @__PURE__ */ jsx(Lock, { className: "w-5 h-5 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" }) }),
               /* @__PURE__ */ jsx("input", { id: "password", type: "password", value: password, onChange: (e) => setPassword(e.target.value), className: `${ws.input} px-4 py-3 pl-12`, placeholder: "أدخل كلمة المرور", required: true, autoComplete: "current-password" })
             ] })
           ] }),
           error ? /* @__PURE__ */ jsxs("div", { className: "bg-red-500/10 border border-red-500/25 rounded-2xl p-3 backdrop-blur-sm flex items-start gap-2", children: [
-            /* @__PURE__ */ jsx(AlertCircle, { className: "w-5 h-5 text-red-200 flex-shrink-0 mt-0.5" }),
-            /* @__PURE__ */ jsx("p", { className: "text-red-200 text-sm", children: error })
+            /* @__PURE__ */ jsx(AlertCircle, { className: "w-5 h-5 text-red-700 dark:text-red-200 flex-shrink-0 mt-0.5" }),
+            /* @__PURE__ */ jsx("p", { className: "text-red-700 dark:text-red-200 text-sm", children: error })
           ] }) : null,
           /* @__PURE__ */ jsx("button", { type: "submit", disabled: loading, className: `${ws.btnPrimary} w-full justify-center py-3 disabled:opacity-50 disabled:cursor-not-allowed`, children: loading ? "جاري تسجيل الدخول..." : "دخول" })
         ] })
@@ -20805,8 +20805,8 @@ function OpeningSessionModal({
     /* @__PURE__ */ jsxs("div", { className: `relative w-full max-w-3xl ${ws.glass} ${ws.card} overflow-hidden`, children: [
       /* @__PURE__ */ jsxs("div", { className: `p-5 border-b ${ws.divider} flex items-center justify-between gap-4`, children: [
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-white font-bold text-lg tracking-tight truncate", children: "تسجيل مخزون افتتاحي" }),
-          /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm", children: 'هذه الخطوة تعيد "المفترض" كنقطة بداية للفترة' })
+          /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold text-lg tracking-tight truncate", children: "تسجيل مخزون افتتاحي" }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm", children: 'هذه الخطوة تعيد "المفترض" كنقطة بداية للفترة' })
         ] }),
         /* @__PURE__ */ jsx("button", { type: "button", className: ws.iconButton, onClick: close, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
       ] }),
@@ -20814,28 +20814,28 @@ function OpeningSessionModal({
         /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4", children: [
           /* @__PURE__ */ jsx(GlassSelect, { value: openingBranchId, onChange: setOpeningBranchId, options: branchOptions, buttonClassName: "px-3 py-2.5" }),
           /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "تاريخ الافتتاحي" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "تاريخ الافتتاحي" }),
             /* @__PURE__ */ jsx(GlassDatePicker, { value: openingOpenedAt, onChange: setOpeningOpenedAt, placeholder: "اختر التاريخ", buttonClassName: "px-3 py-2.5", showTime: true })
           ] }),
           /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "ملاحظة (اختياري)" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "ملاحظة (اختياري)" }),
             /* @__PURE__ */ jsx("input", { type: "text", value: openingNote, onChange: (e) => setOpeningNote(e.target.value), className: `${ws.input} px-3 py-2.5`, placeholder: "مثال: افتتاح فترة يناير" })
           ] })
         ] }),
         /* @__PURE__ */ jsx("div", { className: "mb-3", children: /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-          /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" }),
+          /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-white/40" }),
           /* @__PURE__ */ jsx("input", { type: "text", value: openingSearch, onChange: (e) => setOpeningSearch(e.target.value), className: `${ws.input} pr-10 pl-3 py-2.5`, placeholder: "ابحث عن صنف..." })
         ] }) }),
-        /* @__PURE__ */ jsx("div", { className: `max-h-[46vh] overflow-auto rounded-3xl border ${ws.divider} bg-white/[0.02]`, children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04]", children: [
-            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/70", children: "الصنف" }),
-            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/70", children: "الوحدة" }),
-            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/70", children: "الكمية الافتتاحية" })
+        /* @__PURE__ */ jsx("div", { className: `max-h-[46vh] overflow-auto rounded-3xl border ${ws.divider} bg-slate-50 dark:bg-white/[0.02]`, children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
+          /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70", children: "الصنف" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70", children: "الوحدة" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70", children: "الكمية الافتتاحية" })
           ] }) }),
           /* @__PURE__ */ jsxs("tbody", { children: [
-            filteredOpeningItems.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/5", children: [
-              /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white font-medium", children: it.name }),
-              /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/65 text-sm", children: it.unit || "-" }),
+            filteredOpeningItems.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5", children: [
+              /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-900 dark:text-white font-medium", children: it.name }),
+              /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65 text-sm", children: it.unit || "-" }),
               /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "any", value: openingQtyByItem[it.id] ?? 0, onChange: (e) => {
                 const v = e.target.value;
                 setOpeningQtyByItem((prev) => ({
@@ -20844,11 +20844,11 @@ function OpeningSessionModal({
                 }));
               }, className: `${ws.input} px-3 py-2.5` }) })
             ] }, it.id)),
-            filteredOpeningItems.length === 0 && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 3, className: "px-4 py-10 text-center text-white/55", children: "لا توجد نتائج" }) })
+            filteredOpeningItems.length === 0 && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 3, className: "px-4 py-10 text-center text-slate-600 dark:text-white/55", children: "لا توجد نتائج" }) })
           ] })
         ] }) }),
-        openingSuccess && /* @__PURE__ */ jsx("div", { className: "mt-4 p-3 bg-emerald-500/10 border border-emerald-400/30 rounded-2xl text-emerald-200 font-semibold", children: openingSuccess }),
-        openingError && /* @__PURE__ */ jsx("div", { className: "mt-4 p-3 bg-red-500/10 border border-red-400/30 rounded-2xl text-red-200", children: openingError }),
+        openingSuccess && /* @__PURE__ */ jsx("div", { className: "mt-4 p-3 bg-emerald-500/10 border border-emerald-400/30 rounded-2xl text-emerald-700 dark:text-emerald-200 font-semibold", children: openingSuccess }),
+        openingError && /* @__PURE__ */ jsx("div", { className: "mt-4 p-3 bg-red-500/10 border border-red-400/30 rounded-2xl text-red-700 dark:text-red-200", children: openingError }),
         /* @__PURE__ */ jsxs("div", { className: "mt-5 flex flex-col sm:flex-row gap-3 justify-end", children: [
           /* @__PURE__ */ jsx("button", { type: "button", onClick: close, className: `${ws.btnNeutral} px-4 py-3`, children: "إلغاء" }),
           /* @__PURE__ */ jsx("button", { type: "button", onClick: submitOpening, disabled: createOpeningMutation.isPending, className: `${ws.btnPrimary} px-6 py-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed`, children: createOpeningMutation.isPending ? "جاري الحفظ..." : "حفظ المخزون الافتتاحي" })
@@ -20940,13 +20940,13 @@ function PurchaseReceiptModal({
     /* @__PURE__ */ jsxs("div", { className: `relative w-full sm:max-w-2xl max-h-[95dvh] sm:max-h-[90dvh] flex flex-col rounded-t-3xl sm:rounded-3xl overflow-hidden ${ws.glass} ${ws.card}`, children: [
       /* @__PURE__ */ jsxs("div", { className: `p-4 sm:p-6 flex items-center justify-between flex-shrink-0 ${ws.topBar}`, children: [
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsxs("h3", { className: "text-lg sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxs("h3", { className: "text-lg sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2", children: [
             /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }) }),
             /* @__PURE__ */ jsx("span", { className: "truncate", children: isEditMode ? "تعديل الوارد" : "إضافة وارد مشتريات" })
           ] }),
-          /* @__PURE__ */ jsx("p", { className: "text-white/50 text-sm mt-1", children: isEditMode ? "عدّل بيانات الوارد والأصناف والكميات" : "سجّل كميات واردة لعدة أصناف في نفس الوقت" })
+          /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-sm mt-1", children: isEditMode ? "عدّل بيانات الوارد والأصناف والكميات" : "سجّل كميات واردة لعدة أصناف في نفس الوقت" })
         ] }),
-        /* @__PURE__ */ jsx("button", { type: "button", className: ws.iconButton, onClick: close, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-white/60" }) })
+        /* @__PURE__ */ jsx("button", { type: "button", className: ws.iconButton, onClick: close, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 min-h-0", children: [
         receiptError ? /* @__PURE__ */ jsxs("div", { className: "p-4 rounded-2xl border border-red-500/25 bg-red-500/10 text-red-100 flex items-start gap-2", children: [
@@ -20955,23 +20955,23 @@ function PurchaseReceiptModal({
         ] }) : null,
         /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الفرع" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "الفرع" }),
             /* @__PURE__ */ jsx(GlassSelect, { value: receiptBranchId, onChange: setReceiptBranchId, options: branchOptions, buttonClassName: "px-4 py-3" })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "تاريخ الوارد" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "تاريخ الوارد" }),
             /* @__PURE__ */ jsx(GlassDatePicker, { value: receiptDate, onChange: setReceiptDate, placeholder: "اختر التاريخ", buttonClassName: "px-4 py-3", showTime: true }),
-            isFutureDate ? /* @__PURE__ */ jsx("p", { className: "mt-1.5 text-xs text-red-200", children: "⚠ التاريخ في المستقبل — لا يمكن الحفظ" }) : null
+            isFutureDate ? /* @__PURE__ */ jsx("p", { className: "mt-1.5 text-xs text-red-700 dark:text-red-200", children: "⚠ التاريخ في المستقبل — لا يمكن الحفظ" }) : null
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
           /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-[1fr_140px_120px] gap-3 items-end", children: [
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الصنف" }),
+              /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "الصنف" }),
               /* @__PURE__ */ jsx(GlassSelect, { value: receiptItemId, onChange: setReceiptItemId, options: itemOptions, buttonClassName: "px-4 py-3" })
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الكمية" }),
+              /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "الكمية" }),
               /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "any", value: receiptQty, onChange: (e) => setReceiptQty(e.target.value), className: `${ws.input} px-4 py-3`, placeholder: "0" })
             ] }),
             /* @__PURE__ */ jsxs("button", { type: "button", onClick: addReceiptItem, className: `${ws.btnPrimary} px-4 py-3 justify-center`, children: [
@@ -20980,39 +20980,39 @@ function PurchaseReceiptModal({
             ] })
           ] }),
           showSelectedStock ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-1", children: [
-            /* @__PURE__ */ jsx(Warehouse, { className: "w-3.5 h-3.5 text-amber-300/70" }),
-            /* @__PURE__ */ jsxs("span", { className: "text-xs text-amber-200/80", children: [
+            /* @__PURE__ */ jsx(Warehouse, { className: "w-3.5 h-3.5 text-amber-700 dark:text-amber-300/70" }),
+            /* @__PURE__ */ jsxs("span", { className: "text-xs text-amber-700 dark:text-amber-200/80", children: [
               "الكمية الحالية في الفرع:",
               " ",
-              /* @__PURE__ */ jsx("span", { className: "font-bold text-amber-200", children: selectedStock })
+              /* @__PURE__ */ jsx("span", { className: "font-bold text-amber-700 dark:text-amber-200", children: selectedStock })
             ] })
           ] }) : null
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "ملاحظة (اختياري)" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "ملاحظة (اختياري)" }),
           /* @__PURE__ */ jsx("input", { type: "text", value: receiptNote, onChange: (e) => setReceiptNote(e.target.value), className: `${ws.input} px-4 py-3`, placeholder: "مثال: فاتورة رقم 123" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4`, children: [
           /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-3", children: [
-            /* @__PURE__ */ jsx("h4", { className: "text-white font-bold", children: "الأصناف المضافة" }),
+            /* @__PURE__ */ jsx("h4", { className: "text-slate-900 dark:text-white font-bold", children: "الأصناف المضافة" }),
             /* @__PURE__ */ jsxs("span", { className: `${ws.chip}`, children: [
               itemsList.length,
               " صنف"
             ] })
           ] }),
-          itemsList.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-white/50 text-sm", children: "ما تم اختيار أصناف بعد" }) : /* @__PURE__ */ jsx("div", { className: "space-y-2", children: itemsList.map((it) => {
+          itemsList.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/50 text-sm", children: "ما تم اختيار أصناف بعد" }) : /* @__PURE__ */ jsx("div", { className: "space-y-2", children: itemsList.map((it) => {
             const itemStock = getStock(stockByBranchItem, receiptBranchId, it.itemId);
-            return /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 p-3 rounded-2xl bg-white/[0.04] border border-white/10", children: [
+            return /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10", children: [
               /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-                /* @__PURE__ */ jsx("div", { className: "text-white font-semibold truncate", children: it.itemName }),
-                receiptBranchId && itemStock !== null ? /* @__PURE__ */ jsxs("div", { className: "text-white/40 text-xs mt-0.5 flex items-center gap-1", children: [
+                /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-semibold truncate", children: it.itemName }),
+                receiptBranchId && itemStock !== null ? /* @__PURE__ */ jsxs("div", { className: "text-slate-500 dark:text-white/40 text-xs mt-0.5 flex items-center gap-1", children: [
                   /* @__PURE__ */ jsx(Warehouse, { className: "w-3 h-3" }),
                   "المتوفر: ",
                   itemStock
                 ] }) : null
               ] }),
               /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-                /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-white/[0.06] text-white border-white/10`, children: it.quantity }),
+                /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-900 dark:text-white border-slate-200 dark:border-white/10`, children: it.quantity }),
                 /* @__PURE__ */ jsx("button", { type: "button", onClick: () => removeReceiptItem(it.itemId), className: `${ws.btnDanger} px-3 py-2 text-sm justify-center`, "aria-label": "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
               ] })
             ] }, it.itemId);
@@ -21563,11 +21563,11 @@ function OperationsPage() {
           /* @__PURE__ */ jsx("div", { className: "flex items-center gap-3", children: /* @__PURE__ */ jsx("h1", { className: `text-3xl sm:text-4xl ${ws.title}`, children: "عمليات المخزون" }) }),
           /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row gap-2", children: [
             /* @__PURE__ */ jsxs("button", { type: "button", onClick: openingSession.openOpeningModal, className: `${ws.btnNeutral} px-4 py-2 justify-center`, children: [
-              /* @__PURE__ */ jsx(PlusCircle, { className: "w-5 h-5 text-sky-200" }),
+              /* @__PURE__ */ jsx(PlusCircle, { className: "w-5 h-5 text-sky-700 dark:text-sky-200" }),
               /* @__PURE__ */ jsx("span", { children: "مخزون افتتاحي" })
             ] }),
             /* @__PURE__ */ jsxs("button", { type: "button", onClick: purchaseReceipt.openReceiptModal, className: `${ws.btnNeutral} px-4 py-2 justify-center`, children: [
-              /* @__PURE__ */ jsx(Truck, { className: "w-5 h-5 text-amber-200" }),
+              /* @__PURE__ */ jsx(Truck, { className: "w-5 h-5 text-amber-700 dark:text-amber-200" }),
               /* @__PURE__ */ jsx("span", { children: "إضافة وارد" })
             ] }),
             /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowTransferModal(true), className: `${ws.btnPrimary} px-4 py-2 justify-center`, children: [
@@ -21944,14 +21944,14 @@ function ReceiptsPage() {
       /* @__PURE__ */ jsx(Breadcrumb, { activePage: "receipts" }),
       /* @__PURE__ */ jsxs("div", { className: "mb-8 mt-6 lg:mt-0", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-4", children: [
-          /* @__PURE__ */ jsx("a", { href: "/admin", className: "text-slate-600 dark:text-white/55 hover:text-slate-900 dark:hover:text-white transition-colors", children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-5 h-5" }) }),
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(Truck, { className: "w-6 h-6" }) }),
+          /* @__PURE__ */ jsx("a", { href: "/admin", className: "text-slate-600 dark:text-slate-600 dark:dark:text-white/55 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white transition-colors", children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-5 h-5" }) }),
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Truck, { className: "w-6 h-6" }) }),
           /* @__PURE__ */ jsx("h1", { className: `text-3xl sm:text-4xl ${ws.title}`, children: "الواردات" })
         ] }),
         /* @__PURE__ */ jsx("p", { className: ws.muted, children: "سجل كامل للواردات من المورّدين، مجمّعة حسب الإيصال" })
       ] }),
       /* @__PURE__ */ jsx(ReceiptsFilters, { branchOptions, itemOptions, selectedBranch, onBranchChange: setSelectedBranch, selectedItem, onItemChange: setSelectedItem, dateFrom, onDateFromChange: setDateFrom, dateTo, onDateToChange: setDateTo, onRefresh: refetch, dateRangeInvalid }),
-      dateRangeInvalid ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-5 mb-6 text-center`, children: /* @__PURE__ */ jsx("p", { className: "text-red-200 text-sm font-semibold", children: '⚠ "من تاريخ" أحدث من "إلى تاريخ" — صحّح الفترة لعرض النتائج' }) }) : /* @__PURE__ */ jsx(ReceiptsList, { groups, isLoading, error })
+      dateRangeInvalid ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-5 mb-6 text-center`, children: /* @__PURE__ */ jsx("p", { className: "text-red-700 dark:text-red-200 text-sm font-semibold", children: '⚠ "من تاريخ" أحدث من "إلى تاريخ" — صحّح الفترة لعرض النتائج' }) }) : /* @__PURE__ */ jsx(ReceiptsList, { groups, isLoading, error })
     ] })
   ] });
 }
@@ -30562,28 +30562,28 @@ function WorkspaceSidebar({
   const shellClass = `${ws.glass}`;
   const pillBase = "rounded-2xl border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/25";
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx("div", { className: `lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.glass} border-b border-white/10`, dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: "px-4 py-3 flex items-center justify-between gap-3", children: [
+    /* @__PURE__ */ jsx("div", { className: `lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.glass} border-b border-slate-200 dark:border-white/10`, dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: "px-4 py-3 flex items-center justify-between gap-3", children: [
       /* @__PURE__ */ jsx(AppSectionSwitcher, { active: "workspace", className: "scale-90 origin-left" }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-white text-sm font-bold tracking-tight whitespace-nowrap", children: "مساحة العمل" }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-bold tracking-tight whitespace-nowrap", children: "مساحة العمل" }),
         /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL, alt: "Quarters", className: "h-8 w-auto bg-white rounded-xl p-1 shrink-0" })
       ] })
     ] }) }),
-    /* @__PURE__ */ jsx("aside", { className: `hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-white/10`, dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col w-full", children: [
-      /* @__PURE__ */ jsxs("div", { className: "p-6 border-b border-white/10", children: [
+    /* @__PURE__ */ jsx("aside", { className: `hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-slate-200 dark:border-white/10`, dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col w-full", children: [
+      /* @__PURE__ */ jsxs("div", { className: "p-6 border-b border-slate-200 dark:border-white/10", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: "w-11 h-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL, alt: "Logo", className: "w-8 h-8 object-contain" }) }),
+          /* @__PURE__ */ jsx("div", { className: "w-11 h-11 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx("img", { src: BRAND_LOGO_URL, alt: "Logo", className: "w-8 h-8 object-contain" }) }),
           /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-            /* @__PURE__ */ jsx("div", { className: "font-bold text-white truncate tracking-tight", children: "مساحة العمل" }),
-            /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 truncate", children: "أنظمة Quarters" })
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white truncate tracking-tight", children: "مساحة العمل" }),
+            /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 truncate", children: "أنظمة Quarters" })
           ] })
         ] }),
         /* @__PURE__ */ jsx("div", { className: "mt-4", children: /* @__PURE__ */ jsx(AppSectionSwitcher, { active: "workspace" }) }),
         userName ? /* @__PURE__ */ jsx("div", { className: `mt-5 ${ws.glassSoft} ${ws.card} p-3`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: "w-10 h-10 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center font-bold text-white shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: avatarText }),
+          /* @__PURE__ */ jsx("div", { className: "w-10 h-10 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center font-bold text-slate-900 dark:text-white shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: avatarText }),
           /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-            /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-white truncate tracking-tight", children: userName }),
-            /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 truncate", children: userRole || "موظف" })
+            /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white truncate tracking-tight", children: userName }),
+            /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 truncate", children: userRole || "موظف" })
           ] })
         ] }) }) : null
       ] }),
@@ -30594,27 +30594,27 @@ function WorkspaceSidebar({
         Icon
       }) => {
         const isActive = active === key;
-        const itemClass = isActive ? "bg-white/10 text-white border-white/20" : "bg-white/[0.02] text-white/75 border-white/10 hover:bg-white/[0.06]";
-        const iconClass = isActive ? "text-emerald-200" : "text-white/70";
+        const itemClass = isActive ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "bg-slate-50 dark:bg-white/[0.02] text-slate-700 dark:text-white/75 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.06]";
+        const iconClass = isActive ? "text-emerald-700 dark:text-emerald-200" : "text-slate-700 dark:text-white/70";
         return /* @__PURE__ */ jsxs("a", { href, className: `flex items-center gap-3 px-4 py-3 ${pillBase} ${itemClass}`, children: [
-          /* @__PURE__ */ jsx("div", { className: "w-9 h-9 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx(Icon, { className: `w-5 h-5 ${iconClass}` }) }),
+          /* @__PURE__ */ jsx("div", { className: "w-9 h-9 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]", children: /* @__PURE__ */ jsx(Icon, { className: `w-5 h-5 ${iconClass}` }) }),
           /* @__PURE__ */ jsx("span", { className: "font-semibold", children: label })
         ] }, key);
       }) }),
-      /* @__PURE__ */ jsx("div", { className: "p-4 border-t border-white/10", children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: logout, className: `w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl ${ws.btnNeutral}`, children: [
+      /* @__PURE__ */ jsx("div", { className: "p-4 border-t border-slate-200 dark:border-white/10", children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: logout, className: `w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl ${ws.btnNeutral}`, children: [
         /* @__PURE__ */ jsx(LogOut, { className: "w-5 h-5" }),
         "خروج"
       ] }) })
     ] }) }),
-    /* @__PURE__ */ jsx("nav", { className: `lg:hidden fixed left-0 right-0 bottom-0 z-40 ${shellClass} border-t border-white/10`, dir: "rtl", style: bottomSafeAreaStyle, children: /* @__PURE__ */ jsx("div", { className: "px-3 pt-2 grid grid-cols-5 gap-1", children: navItems.map(({
+    /* @__PURE__ */ jsx("nav", { className: `lg:hidden fixed left-0 right-0 bottom-0 z-40 ${shellClass} border-t border-slate-200 dark:border-white/10`, dir: "rtl", style: bottomSafeAreaStyle, children: /* @__PURE__ */ jsx("div", { className: "px-3 pt-2 grid grid-cols-5 gap-1", children: navItems.map(({
       key,
       href,
       label,
       Icon
     }) => {
       const isActive = active === key;
-      const itemClass = isActive ? "bg-white/10 text-white border-white/20" : "bg-white/[0.03] text-white/70 border-white/10";
-      const iconClass = isActive ? "text-emerald-200" : "text-white/70";
+      const itemClass = isActive ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20" : "bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10";
+      const iconClass = isActive ? "text-emerald-700 dark:text-emerald-200" : "text-slate-700 dark:text-white/70";
       return /* @__PURE__ */ jsxs("a", { href, className: `flex flex-col items-center justify-center gap-1 py-2 ${pillBase} ${itemClass}`, children: [
         /* @__PURE__ */ jsx(Icon, { className: `w-5 h-5 ${iconClass}` }),
         /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold", children: label })
@@ -34428,7 +34428,7 @@ const route44 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   loader
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-DzroxtTg.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-DSbz5QOB.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-zXLzfrN-.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-D9MXRK3M.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cwk-YKYD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/shield-CCvWcLx-.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/languages-But0n9zp.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B1eUTnOq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-DXOKmhfC.js','/assets/layout-dashboard-t_ubicMG.js','/assets/calculator-D3gGV-xi.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/arrow-left-1JW0wBZ5.js','/assets/trending-up-BgqdTk4e.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BSgE3vkV.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-DIXajbpT.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/refresh-cw-Da2g6MOO.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BPn57_Ub.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-DIXajbpT.js','/assets/save-BOlG9ZED.js','/assets/plus-COitwNGf.js','/assets/x-BFN3oNtP.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/style-DMXtuZsn.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/trending-up-BgqdTk4e.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-DhkqOS2v.js','/assets/index-5tUDjkqx.js','/assets/banknote-Dm0fgxyg.js','/assets/clock-qJJNJxIj.js','/assets/clipboard-check-C3cY-jb5.js','/assets/filter-DWyuYmH_.js','/assets/arrow-up-right-CWObQWyh.js','/assets/minus-CWNYa3a9.js','/assets/file-text-BbAMQB_x.js','/assets/info-DLQ0cRfG.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CWw12k98.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/arrow-left-1JW0wBZ5.js','/assets/GlassSelect-DIXajbpT.js','/assets/refresh-cw-Da2g6MOO.js','/assets/plus-COitwNGf.js','/assets/save-BOlG9ZED.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BDMLHdVG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/arrow-left-1JW0wBZ5.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-zXLzfrN-.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassPopover-CPp-olXN.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/exportUtils-Cbb5Err4.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-h3REE0u6.js','/assets/trash-2-CUHqd1bM.js','/assets/dateUtils-BnEiOKPy.js','/assets/package-B5TyyjiQ.js','/assets/pencil-Qtcayjw8.js','/assets/eye-DzINopbe.js','/assets/save-BOlG9ZED.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-BFN3oNtP.js','/assets/useQuery-DXOKmhfC.js','/assets/square-check-big-CIEQCGu_.js','/assets/square-BaqbmdHp.js','/assets/minus-CWNYa3a9.js','/assets/plus-COitwNGf.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BZ0Ft4ub.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DIXajbpT.js','/assets/payrollFormatters-DGy10whX.js','/assets/index-5tUDjkqx.js','/assets/wallet-D2SvD8wt.js','/assets/x-BFN3oNtP.js','/assets/save-BOlG9ZED.js','/assets/pencil-Qtcayjw8.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/trash-2-CUHqd1bM.js','/assets/useEmployeeLoans-DHt2h_Z2.js','/assets/filter-DWyuYmH_.js','/assets/plus-COitwNGf.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C0QF48RC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassMultiSelect-5iXGSpJz.js','/assets/x-BFN3oNtP.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/dollar-sign-B71BmmJE.js','/assets/percent-rKk3IsAD.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-gAS1hu6s.js','/assets/apiAuth-DIjdQgpG.js','/assets/index-zXLzfrN-.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/payrollCalculations-seahiZpF.js','/assets/info-DLQ0cRfG.js','/assets/lock-DlMx-7b2.js','/assets/circle-check-C2wUUs9F.js','/assets/clock-qJJNJxIj.js','/assets/style-DMXtuZsn.js','/assets/ban-Clrhs1az.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/GlassPopover-CPp-olXN.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/send-XB6sbGea.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/gift-CoWOgAjZ.js','/assets/trash-2-CUHqd1bM.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/wallet-D2SvD8wt.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CioDH7Be.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassDatePicker-B0hjAN4i.js','/assets/useQuery-DXOKmhfC.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-BFN3oNtP.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-StLlpOmS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/Sidebar-B6-B8HmO.js','/assets/trending-up-BgqdTk4e.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-check-big-YytesfJ2.js','/assets/clock-qJJNJxIj.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/sparkles-C1YLt276.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-BFN3oNtP.js','/assets/info-DLQ0cRfG.js','/assets/circle-alert-Wpb6PjST.js','/assets/triangle-alert-uVw7TkFw.js','/assets/package-plus-BtHolXRP.js','/assets/calendar-CLjHW5lb.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/activity-Db60x8DP.js','/assets/dollar-sign-B71BmmJE.js','/assets/package-B5TyyjiQ.js','/assets/exportUtils-Cbb5Err4.js','/assets/file-text-BbAMQB_x.js','/assets/search-D9t_ZA8c.js','/assets/download-BpfCRhOm.js','/assets/printer-DuxBl8tu.js','/assets/users-ypX0sR4t.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassDatePicker-B0hjAN4i.js','/assets/GlassMultiSelect-5iXGSpJz.js','/assets/layers-DDXVxWRY.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/dateUtils-BnEiOKPy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/calculator-D3gGV-xi.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BzY74Z6Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/Sidebar-B6-B8HmO.js','/assets/exportUtils-Cbb5Err4.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/building-2-Bi2MKt0x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/search-D9t_ZA8c.js','/assets/plus-COitwNGf.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/x-BFN3oNtP.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/package-B5TyyjiQ.js','/assets/file-text-BbAMQB_x.js','/assets/chevron-down-B3DRT4S3.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C4wds4bi.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/Sidebar-B6-B8HmO.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/employeeUtils-D69VYUwT.js','/assets/users-ypX0sR4t.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/search-D9t_ZA8c.js','/assets/GlassPopover-CPp-olXN.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-x-QgQZbgzI.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/briefcase-CGkzVZ7S.js','/assets/dollar-sign-B71BmmJE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/x-BFN3oNtP.js','/assets/mail-Cq7bg44q.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/plus-COitwNGf.js','/assets/triangle-alert-uVw7TkFw.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/package-B5TyyjiQ.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CaTOtzKH.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/layers-DDXVxWRY.js','/assets/x-BFN3oNtP.js','/assets/languages-But0n9zp.js','/assets/plus-COitwNGf.js','/assets/pencil-Qtcayjw8.js','/assets/GlassSelect-DIXajbpT.js','/assets/ban-Clrhs1az.js','/assets/Sidebar-B6-B8HmO.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassPopover-CPp-olXN.js','/assets/search-D9t_ZA8c.js','/assets/filter-DWyuYmH_.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/eye-DzINopbe.js','/assets/building-2-Bi2MKt0x.js','/assets/trash-2-CUHqd1bM.js','/assets/square-check-big-CIEQCGu_.js','/assets/clipboard-check-C3cY-jb5.js','/assets/square-BaqbmdHp.js','/assets/eye-off-CW9dHDyi.js','/assets/dollar-sign-B71BmmJE.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DQ5hQGWW.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-B6-B8HmO.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/exportUtils-Cbb5Err4.js','/assets/arrow-left-1JW0wBZ5.js','/assets/package-B5TyyjiQ.js','/assets/building-2-Bi2MKt0x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassSelect-DIXajbpT.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/hash-Crm7gKZz.js','/assets/calendar-CLjHW5lb.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-check-big-YytesfJ2.js','/assets/chevron-down-B3DRT4S3.js','/assets/GlassPopover-CPp-olXN.js','/assets/download-BpfCRhOm.js','/assets/dateUtils-BnEiOKPy.js','/assets/trending-up-BgqdTk4e.js','/assets/x-BFN3oNtP.js','/assets/LineChart-A-xmoYM-.js','/assets/package-plus-BtHolXRP.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-3yhtmv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/circle-alert-Wpb6PjST.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C78mSnh-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/Sidebar-B6-B8HmO.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/circle-x-QgQZbgzI.js','/assets/triangle-alert-uVw7TkFw.js','/assets/building-2-Bi2MKt0x.js','/assets/GlassSelect-DIXajbpT.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-CPp-olXN.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BIxTRhrQ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/Sidebar-B6-B8HmO.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calendar-check-CPdF76fv.js','/assets/package-plus-BtHolXRP.js','/assets/clock-qJJNJxIj.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassDatePicker-B0hjAN4i.js','/assets/filter-DWyuYmH_.js','/assets/x-BFN3oNtP.js','/assets/search-D9t_ZA8c.js','/assets/exportUtils-Cbb5Err4.js','/assets/GlassPopover-CPp-olXN.js','/assets/printer-DuxBl8tu.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/square-check-big-CIEQCGu_.js','/assets/trash-2-CUHqd1bM.js','/assets/square-BaqbmdHp.js','/assets/building-2-Bi2MKt0x.js','/assets/eye-DzINopbe.js','/assets/pencil-Qtcayjw8.js','/assets/calendar-CLjHW5lb.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/arrow-up-right-CWObQWyh.js','/assets/user-DfagCML7.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/hash-Crm7gKZz.js','/assets/circle-check-big-YytesfJ2.js','/assets/percent-rKk3IsAD.js','/assets/package-B5TyyjiQ.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/triangle-alert-uVw7TkFw.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dju8Xcwy.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-B6-B8HmO.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/GlassSelect-DIXajbpT.js','/assets/refresh-cw-Da2g6MOO.js','/assets/calendar-CLjHW5lb.js','/assets/chevron-down-B3DRT4S3.js','/assets/package-B5TyyjiQ.js','/assets/useQuery-DXOKmhfC.js','/assets/dateUtils-BnEiOKPy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/building-2-Bi2MKt0x.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/GlassPopover-CPp-olXN.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C4u-aKR7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/Sidebar-B6-B8HmO.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/triangle-alert-uVw7TkFw.js','/assets/trending-up-BgqdTk4e.js','/assets/GlassSelect-DIXajbpT.js','/assets/search-D9t_ZA8c.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-CPp-olXN.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/layers-DDXVxWRY.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DDXQ1asx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-DybopFDy.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-B6-B8HmO.js','/assets/Breadcrumb-0-w8T7Qy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/GlassSelect-DIXajbpT.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/trending-up-BgqdTk4e.js','/assets/triangle-alert-uVw7TkFw.js','/assets/GlassPopover-CPp-olXN.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CD4EIu_D.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/GlassSelect-DIXajbpT.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/circle-check-big-YytesfJ2.js','/assets/package-B5TyyjiQ.js','/assets/log-out-Bi9xsGKs.js','/assets/save-BOlG9ZED.js','/assets/trending-up-BgqdTk4e.js','/assets/search-D9t_ZA8c.js','/assets/arrow-left-1JW0wBZ5.js','/assets/layers-DDXVxWRY.js','/assets/filter-DWyuYmH_.js','/assets/circle-alert-Wpb6PjST.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Be1RZrRX.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/apiAuth-DIjdQgpG.js','/assets/globe-DKoGPur3.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/circle-check-C2wUUs9F.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Buhmop9h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-BH0niDrp.js','/assets/users-ypX0sR4t.js','/assets/arrow-left-1JW0wBZ5.js','/assets/dollar-sign-B71BmmJE.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-sSiHaBVF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/gift-CoWOgAjZ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-SKe3HWcc.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/Sidebar-BH0niDrp.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/users-ypX0sR4t.js','/assets/dollar-sign-B71BmmJE.js','/assets/image-Bggefa6I.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassMultiSelect-5iXGSpJz.js','/assets/GlassDatePicker-B0hjAN4i.js','/assets/useUpload-DNDH5__a.js','/assets/x-BFN3oNtP.js','/assets/user-DfagCML7.js','/assets/calendar-CLjHW5lb.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Mci1q9m9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/Sidebar-BH0niDrp.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/employeeUtils-D69VYUwT.js','/assets/search-D9t_ZA8c.js','/assets/users-ypX0sR4t.js','/assets/user-DfagCML7.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/ban-Clrhs1az.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/x-BFN3oNtP.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassMultiSelect-5iXGSpJz.js','/assets/GlassDatePicker-B0hjAN4i.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/circle-check-C2wUUs9F.js','/assets/briefcase-CGkzVZ7S.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-check-CPdF76fv.js','/assets/circle-x-QgQZbgzI.js','/assets/dollar-sign-B71BmmJE.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-5tUDjkqx.js','/assets/payrollFormatters-DGy10whX.js','/assets/save-BOlG9ZED.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/plus-COitwNGf.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-IFNLma9H.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-BH0niDrp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassMultiSelect-5iXGSpJz.js','/assets/payrollFormatters-DGy10whX.js','/assets/useEmployeeLoans-DHt2h_Z2.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/trash-2-CUHqd1bM.js','/assets/info-DLQ0cRfG.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-BFN3oNtP.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B7OPFusx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-BH0niDrp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DIXajbpT.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-gAS1hu6s.js','/assets/users-ypX0sR4t.js','/assets/ban-Clrhs1az.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/lock-DlMx-7b2.js','/assets/refresh-cw-Da2g6MOO.js','/assets/send-XB6sbGea.js','/assets/info-DLQ0cRfG.js','/assets/wallet-D2SvD8wt.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/clock-qJJNJxIj.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BzUtrwI0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DhjjJQev.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DybUZ9la.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/client-CINQ5WCN.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/image-Bggefa6I.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/download-BpfCRhOm.js','/assets/useMutation-h3REE0u6.js','/assets/upload-Bh8z_qYt.js','/assets/x-BFN3oNtP.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/useAdminAuth-DzloBQBL.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/send-XB6sbGea.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CvtaQwpI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/arrow-right-WBdEsbVb.js','/assets/external-link-DQg3IH_A.js','/assets/printer-DuxBl8tu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-84AisTv8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/coffee-Csx1FV89.js','/assets/plus-COitwNGf.js','/assets/x-BFN3oNtP.js','/assets/eye-off-CW9dHDyi.js','/assets/eye-DzINopbe.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-YRTmPZ6M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-NkHxHo4Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/shield-CCvWcLx-.js','/assets/globe-DKoGPur3.js','/assets/eye-DzINopbe.js','/assets/lock-DlMx-7b2.js','/assets/trash-2-CUHqd1bM.js','/assets/mail-Cq7bg44q.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BjiUDgca.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassDatePicker-B0hjAN4i.js','/assets/apiAuth-DIjdQgpG.js','/assets/languages-But0n9zp.js','/assets/useMutation-h3REE0u6.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/info-DLQ0cRfG.js','/assets/log-out-Bi9xsGKs.js','/assets/send-XB6sbGea.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-BFN3oNtP.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C67r8GK9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/globe-DKoGPur3.js','/assets/mail-Cq7bg44q.js','/assets/external-link-DQg3IH_A.js','/assets/shield-CCvWcLx-.js','/assets/file-text-BbAMQB_x.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dd5hrPuG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/circle-alert-Wpb6PjST.js','/assets/lock-DlMx-7b2.js','/assets/sparkles-C1YLt276.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-lFLkAyIj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-Bf2geqpp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/PriorityPill-CP72enKf.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/calendar-days-DtTAo565.js','/assets/loader-circle-F04ReFHa.js','/assets/circle-check-C2wUUs9F.js','/assets/message-square-D9Pxhv53.js','/assets/triangle-alert-uVw7TkFw.js','/assets/chevron-left-0ArjHZWp.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/activity-Db60x8DP.js','/assets/circle-DhkqOS2v.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-YpJCF3yL.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-Bf2geqpp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DIXajbpT.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/message-square-D9Pxhv53.js','/assets/plus-COitwNGf.js','/assets/search-D9t_ZA8c.js','/assets/chevron-left-0ArjHZWp.js','/assets/send-XB6sbGea.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-LDQGKCOp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-Bf2geqpp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/useUpload-DNDH5__a.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/circle-DhkqOS2v.js','/assets/x-BFN3oNtP.js','/assets/arrow-right-WBdEsbVb.js','/assets/GlassSelect-DIXajbpT.js','/assets/GlassDatePicker-B0hjAN4i.js','/assets/flag-B3Z7tId9.js','/assets/calendar-days-DtTAo565.js','/assets/upload-Bh8z_qYt.js','/assets/trash-2-CUHqd1bM.js','/assets/file-text-BbAMQB_x.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/PriorityPill-CP72enKf.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/circle-check-C2wUUs9F.js','/assets/search-D9t_ZA8c.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/triangle-alert-uVw7TkFw.js','/assets/activity-Db60x8DP.js','/assets/chevron-left-0ArjHZWp.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/square-check-big-CIEQCGu_.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DYxZomAa.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-Bf2geqpp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BwFnk79m.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-Bf2geqpp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DIXajbpT.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/file-text-BbAMQB_x.js','/assets/plus-COitwNGf.js','/assets/trash-2-CUHqd1bM.js','/assets/flag-B3Z7tId9.js','/assets/square-check-big-CIEQCGu_.js','/assets/loader-circle-F04ReFHa.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-CPp-olXN.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-DTH4b2r5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-af09ba80.js','version':'af09ba80','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-DzroxtTg.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-BUeXInfm.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-zXLzfrN-.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-B2xSf1xc.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cwk-YKYD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/shield-CCvWcLx-.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/languages-But0n9zp.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B1eUTnOq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-DXOKmhfC.js','/assets/layout-dashboard-t_ubicMG.js','/assets/calculator-D3gGV-xi.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/arrow-left-1JW0wBZ5.js','/assets/trending-up-BgqdTk4e.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-i-sApjUx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/refresh-cw-Da2g6MOO.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B_D1ee3R.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-sgzbAQR3.js','/assets/save-BOlG9ZED.js','/assets/plus-COitwNGf.js','/assets/x-BFN3oNtP.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/style-DMXtuZsn.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/trending-up-BgqdTk4e.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-DhkqOS2v.js','/assets/index-5tUDjkqx.js','/assets/banknote-Dm0fgxyg.js','/assets/clock-qJJNJxIj.js','/assets/clipboard-check-C3cY-jb5.js','/assets/filter-DWyuYmH_.js','/assets/arrow-up-right-CWObQWyh.js','/assets/minus-CWNYa3a9.js','/assets/file-text-BbAMQB_x.js','/assets/info-DLQ0cRfG.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CnnXkFuu.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/arrow-left-1JW0wBZ5.js','/assets/GlassSelect-sgzbAQR3.js','/assets/refresh-cw-Da2g6MOO.js','/assets/plus-COitwNGf.js','/assets/save-BOlG9ZED.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D_J8AeDa.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/arrow-left-1JW0wBZ5.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-zXLzfrN-.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/exportUtils-Cbb5Err4.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-h3REE0u6.js','/assets/trash-2-CUHqd1bM.js','/assets/dateUtils-BnEiOKPy.js','/assets/package-B5TyyjiQ.js','/assets/pencil-Qtcayjw8.js','/assets/eye-DzINopbe.js','/assets/save-BOlG9ZED.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-BFN3oNtP.js','/assets/useQuery-DXOKmhfC.js','/assets/square-check-big-CIEQCGu_.js','/assets/square-BaqbmdHp.js','/assets/minus-CWNYa3a9.js','/assets/plus-COitwNGf.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CRaMNFmF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/payrollFormatters-DGy10whX.js','/assets/index-5tUDjkqx.js','/assets/wallet-D2SvD8wt.js','/assets/x-BFN3oNtP.js','/assets/save-BOlG9ZED.js','/assets/pencil-Qtcayjw8.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/trash-2-CUHqd1bM.js','/assets/useEmployeeLoans-DHt2h_Z2.js','/assets/filter-DWyuYmH_.js','/assets/plus-COitwNGf.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-AaZD9JR9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/x-BFN3oNtP.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/dollar-sign-B71BmmJE.js','/assets/percent-rKk3IsAD.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-gAS1hu6s.js','/assets/apiAuth-DIjdQgpG.js','/assets/index-zXLzfrN-.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/payrollCalculations-seahiZpF.js','/assets/info-DLQ0cRfG.js','/assets/lock-DlMx-7b2.js','/assets/circle-check-C2wUUs9F.js','/assets/clock-qJJNJxIj.js','/assets/style-DMXtuZsn.js','/assets/ban-Clrhs1az.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/GlassPopover-BIRKUkqg.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/send-XB6sbGea.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/gift-CoWOgAjZ.js','/assets/trash-2-CUHqd1bM.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/wallet-D2SvD8wt.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CKkT5Qvz.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/useQuery-DXOKmhfC.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-BFN3oNtP.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-E9J1jKv8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/trending-up-BgqdTk4e.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-check-big-YytesfJ2.js','/assets/clock-qJJNJxIj.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/sparkles-C1YLt276.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-BFN3oNtP.js','/assets/info-DLQ0cRfG.js','/assets/circle-alert-Wpb6PjST.js','/assets/triangle-alert-uVw7TkFw.js','/assets/package-plus-BtHolXRP.js','/assets/calendar-CLjHW5lb.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/activity-Db60x8DP.js','/assets/dollar-sign-B71BmmJE.js','/assets/package-B5TyyjiQ.js','/assets/exportUtils-Cbb5Err4.js','/assets/file-text-BbAMQB_x.js','/assets/search-D9t_ZA8c.js','/assets/download-BpfCRhOm.js','/assets/printer-DuxBl8tu.js','/assets/users-ypX0sR4t.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/layers-DDXVxWRY.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/dateUtils-BnEiOKPy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/calculator-D3gGV-xi.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DEb73szR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/exportUtils-Cbb5Err4.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/building-2-Bi2MKt0x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/search-D9t_ZA8c.js','/assets/plus-COitwNGf.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/x-BFN3oNtP.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/package-B5TyyjiQ.js','/assets/file-text-BbAMQB_x.js','/assets/chevron-down-B3DRT4S3.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cjynmcap.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/employeeUtils-D69VYUwT.js','/assets/users-ypX0sR4t.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/search-D9t_ZA8c.js','/assets/GlassPopover-BIRKUkqg.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-x-QgQZbgzI.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/briefcase-CGkzVZ7S.js','/assets/dollar-sign-B71BmmJE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/x-BFN3oNtP.js','/assets/mail-Cq7bg44q.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/plus-COitwNGf.js','/assets/triangle-alert-uVw7TkFw.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/package-B5TyyjiQ.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CsukxIYe.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/layers-DDXVxWRY.js','/assets/x-BFN3oNtP.js','/assets/languages-But0n9zp.js','/assets/plus-COitwNGf.js','/assets/pencil-Qtcayjw8.js','/assets/GlassSelect-sgzbAQR3.js','/assets/ban-Clrhs1az.js','/assets/Sidebar-DclM5U7k.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassPopover-BIRKUkqg.js','/assets/search-D9t_ZA8c.js','/assets/filter-DWyuYmH_.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/eye-DzINopbe.js','/assets/building-2-Bi2MKt0x.js','/assets/trash-2-CUHqd1bM.js','/assets/square-check-big-CIEQCGu_.js','/assets/clipboard-check-C3cY-jb5.js','/assets/square-BaqbmdHp.js','/assets/eye-off-CW9dHDyi.js','/assets/dollar-sign-B71BmmJE.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BKtyxMBz.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/exportUtils-Cbb5Err4.js','/assets/arrow-left-1JW0wBZ5.js','/assets/package-B5TyyjiQ.js','/assets/building-2-Bi2MKt0x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/hash-Crm7gKZz.js','/assets/calendar-CLjHW5lb.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-check-big-YytesfJ2.js','/assets/chevron-down-B3DRT4S3.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/dateUtils-BnEiOKPy.js','/assets/trending-up-BgqdTk4e.js','/assets/x-BFN3oNtP.js','/assets/LineChart-A-xmoYM-.js','/assets/package-plus-BtHolXRP.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-1ioM7xxP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/circle-alert-Wpb6PjST.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dw74XgjF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/arrow-left-1JW0wBZ5.js','/assets/circle-x-QgQZbgzI.js','/assets/triangle-alert-uVw7TkFw.js','/assets/building-2-Bi2MKt0x.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-XB5DieRv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/Sidebar-DclM5U7k.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calendar-check-CPdF76fv.js','/assets/package-plus-BtHolXRP.js','/assets/clock-qJJNJxIj.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/filter-DWyuYmH_.js','/assets/x-BFN3oNtP.js','/assets/search-D9t_ZA8c.js','/assets/exportUtils-Cbb5Err4.js','/assets/GlassPopover-BIRKUkqg.js','/assets/printer-DuxBl8tu.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/square-check-big-CIEQCGu_.js','/assets/trash-2-CUHqd1bM.js','/assets/square-BaqbmdHp.js','/assets/building-2-Bi2MKt0x.js','/assets/eye-DzINopbe.js','/assets/pencil-Qtcayjw8.js','/assets/calendar-CLjHW5lb.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/arrow-up-right-CWObQWyh.js','/assets/user-DfagCML7.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/hash-Crm7gKZz.js','/assets/circle-check-big-YytesfJ2.js','/assets/percent-rKk3IsAD.js','/assets/package-B5TyyjiQ.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/triangle-alert-uVw7TkFw.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BjY-pjca.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/refresh-cw-Da2g6MOO.js','/assets/calendar-CLjHW5lb.js','/assets/chevron-down-B3DRT4S3.js','/assets/package-B5TyyjiQ.js','/assets/useQuery-DXOKmhfC.js','/assets/dateUtils-BnEiOKPy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/building-2-Bi2MKt0x.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/GlassPopover-BIRKUkqg.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BcN0FBZY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/triangle-alert-uVw7TkFw.js','/assets/trending-up-BgqdTk4e.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/layers-DDXVxWRY.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DksI9zjC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/arrow-left-1JW0wBZ5.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/trending-up-BgqdTk4e.js','/assets/triangle-alert-uVw7TkFw.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BvTMZ2xl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/GlassSelect-sgzbAQR3.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/circle-check-big-YytesfJ2.js','/assets/package-B5TyyjiQ.js','/assets/log-out-Bi9xsGKs.js','/assets/save-BOlG9ZED.js','/assets/trending-up-BgqdTk4e.js','/assets/search-D9t_ZA8c.js','/assets/arrow-left-1JW0wBZ5.js','/assets/layers-DDXVxWRY.js','/assets/filter-DWyuYmH_.js','/assets/circle-alert-Wpb6PjST.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Be1RZrRX.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/apiAuth-DIjdQgpG.js','/assets/globe-DKoGPur3.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/circle-check-C2wUUs9F.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Buhmop9h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-BH0niDrp.js','/assets/users-ypX0sR4t.js','/assets/arrow-left-1JW0wBZ5.js','/assets/dollar-sign-B71BmmJE.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-sSiHaBVF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/gift-CoWOgAjZ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-79myNoFY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/Sidebar-BH0niDrp.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/users-ypX0sR4t.js','/assets/dollar-sign-B71BmmJE.js','/assets/image-Bggefa6I.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/useUpload-DNDH5__a.js','/assets/x-BFN3oNtP.js','/assets/user-DfagCML7.js','/assets/calendar-CLjHW5lb.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CGbN-ihL.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/Sidebar-BH0niDrp.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/employeeUtils-D69VYUwT.js','/assets/search-D9t_ZA8c.js','/assets/users-ypX0sR4t.js','/assets/user-DfagCML7.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/ban-Clrhs1az.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/x-BFN3oNtP.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/circle-check-C2wUUs9F.js','/assets/briefcase-CGkzVZ7S.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-check-CPdF76fv.js','/assets/circle-x-QgQZbgzI.js','/assets/dollar-sign-B71BmmJE.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-5tUDjkqx.js','/assets/payrollFormatters-DGy10whX.js','/assets/save-BOlG9ZED.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/plus-COitwNGf.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ba1LE3pr.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-BH0niDrp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/payrollFormatters-DGy10whX.js','/assets/useEmployeeLoans-DHt2h_Z2.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/trash-2-CUHqd1bM.js','/assets/info-DLQ0cRfG.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-BFN3oNtP.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DobgwZ0g.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-BH0niDrp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-gAS1hu6s.js','/assets/users-ypX0sR4t.js','/assets/ban-Clrhs1az.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/lock-DlMx-7b2.js','/assets/refresh-cw-Da2g6MOO.js','/assets/send-XB6sbGea.js','/assets/info-DLQ0cRfG.js','/assets/wallet-D2SvD8wt.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/clock-qJJNJxIj.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BzUtrwI0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DhjjJQev.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DybUZ9la.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/client-CINQ5WCN.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/image-Bggefa6I.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/download-BpfCRhOm.js','/assets/useMutation-h3REE0u6.js','/assets/upload-Bh8z_qYt.js','/assets/x-BFN3oNtP.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/useAdminAuth-DzloBQBL.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/send-XB6sbGea.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CvtaQwpI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/arrow-right-WBdEsbVb.js','/assets/external-link-DQg3IH_A.js','/assets/printer-DuxBl8tu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-84AisTv8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/coffee-Csx1FV89.js','/assets/plus-COitwNGf.js','/assets/x-BFN3oNtP.js','/assets/eye-off-CW9dHDyi.js','/assets/eye-DzINopbe.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-YRTmPZ6M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-NkHxHo4Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/shield-CCvWcLx-.js','/assets/globe-DKoGPur3.js','/assets/eye-DzINopbe.js','/assets/lock-DlMx-7b2.js','/assets/trash-2-CUHqd1bM.js','/assets/mail-Cq7bg44q.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BW_6YK5Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/apiAuth-DIjdQgpG.js','/assets/languages-But0n9zp.js','/assets/useMutation-h3REE0u6.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/info-DLQ0cRfG.js','/assets/log-out-Bi9xsGKs.js','/assets/send-XB6sbGea.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-BFN3oNtP.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C67r8GK9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/globe-DKoGPur3.js','/assets/mail-Cq7bg44q.js','/assets/external-link-DQg3IH_A.js','/assets/shield-CCvWcLx-.js','/assets/file-text-BbAMQB_x.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dd5hrPuG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/circle-alert-Wpb6PjST.js','/assets/lock-DlMx-7b2.js','/assets/sparkles-C1YLt276.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CgwLYg1S.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/PriorityPill-CP72enKf.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/calendar-days-DtTAo565.js','/assets/loader-circle-F04ReFHa.js','/assets/circle-check-C2wUUs9F.js','/assets/message-square-D9Pxhv53.js','/assets/triangle-alert-uVw7TkFw.js','/assets/chevron-left-0ArjHZWp.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/activity-Db60x8DP.js','/assets/circle-DhkqOS2v.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ct_6BI2T.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/message-square-D9Pxhv53.js','/assets/plus-COitwNGf.js','/assets/search-D9t_ZA8c.js','/assets/chevron-left-0ArjHZWp.js','/assets/send-XB6sbGea.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DgxWaaR1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/useUpload-DNDH5__a.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/circle-DhkqOS2v.js','/assets/x-BFN3oNtP.js','/assets/arrow-right-WBdEsbVb.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/flag-B3Z7tId9.js','/assets/calendar-days-DtTAo565.js','/assets/upload-Bh8z_qYt.js','/assets/trash-2-CUHqd1bM.js','/assets/file-text-BbAMQB_x.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/PriorityPill-CP72enKf.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/circle-check-C2wUUs9F.js','/assets/search-D9t_ZA8c.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/triangle-alert-uVw7TkFw.js','/assets/activity-Db60x8DP.js','/assets/chevron-left-0ArjHZWp.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/square-check-big-CIEQCGu_.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CBAxjbPG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CWtgOp0L.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/file-text-BbAMQB_x.js','/assets/plus-COitwNGf.js','/assets/trash-2-CUHqd1bM.js','/assets/flag-B3Z7tId9.js','/assets/square-check-big-CIEQCGu_.js','/assets/loader-circle-F04ReFHa.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-DTH4b2r5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-d1daf2e2.js','version':'d1daf2e2','sri':undefined};
 
 const assetsBuildDirectory = "build\\client";
       const basename = "/";

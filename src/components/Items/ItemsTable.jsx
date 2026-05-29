@@ -116,18 +116,18 @@ export function ItemsTable({
 
   const sectionCard = `${ws.glass} ${ws.card} overflow-hidden`;
   const headerCell =
-    "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55 whitespace-nowrap";
+    "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 whitespace-nowrap";
   const colCount = 10;
 
   // checkbox styles
   const checkboxBase =
     "w-5 h-5 flex items-center justify-center cursor-pointer rounded-md transition-colors";
   const checkboxActive =
-    "bg-emerald-400/20 border border-emerald-400/40 text-emerald-300";
+    "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300";
   const checkboxInactive =
-    "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/15 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.07]";
+    "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border border-slate-200 dark:border-slate-200 dark:dark:border-white/15 text-slate-400 dark:text-slate-400 dark:dark:text-white/30 hover:bg-slate-200 dark:hover:bg-slate-200 dark:dark:hover:bg-white/[0.07]";
   const checkboxPartial =
-    "bg-emerald-400/10 border border-emerald-400/30 text-emerald-300";
+    "bg-emerald-400/10 border border-emerald-400/30 text-emerald-700 dark:text-emerald-300";
 
   const selectAllIcon = allSelected ? (
     <CheckSquare className="w-4 h-4" />
@@ -144,7 +144,7 @@ export function ItemsTable({
       : checkboxInactive;
 
   const headers = (
-    <tr className="bg-slate-100 dark:bg-white/[0.04]">
+    <tr className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]">
       <th className="px-4 py-4 w-12">
         <button
           type="button"
@@ -176,7 +176,7 @@ export function ItemsTable({
             <tr>
               <td
                 colSpan={colCount}
-                className="px-6 py-12 text-center text-slate-500 dark:text-white/45"
+                className="px-6 py-12 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/45"
               >
                 <Package className="w-12 h-12 mx-auto mb-3 opacity-40" />
                 <p>{message}</p>
@@ -198,7 +198,7 @@ export function ItemsTable({
               <tr>
                 <td
                   colSpan={colCount}
-                  className="px-6 py-12 text-center text-slate-600 dark:text-white/55"
+                  className="px-6 py-12 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55"
                 >
                   جاري التحميل…
                 </td>
@@ -239,12 +239,12 @@ export function ItemsTable({
                 const minThresholdText = `${minThresholdValue.toLocaleString()} ${unit}`;
 
                 const statusPillClass = !showInInventory
-                  ? `${ws.pill} bg-red-500/15 text-red-200 border-red-500/25`
+                  ? `${ws.pill} bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25`
                   : stockStatus === "out_of_stock"
-                    ? `${ws.pill} bg-red-500/15 text-red-200 border-red-500/25`
+                    ? `${ws.pill} bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25`
                     : stockStatus === "low_stock"
-                      ? `${ws.pill} bg-amber-500/15 text-amber-200 border-amber-500/25`
-                      : `${ws.pill} bg-emerald-500/15 text-emerald-200 border-emerald-500/25`;
+                      ? `${ws.pill} bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25`
+                      : `${ws.pill} bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25`;
 
                 const statusIcon = !showInInventory ? (
                   <EyeOff className="w-4 h-4" />
@@ -283,12 +283,12 @@ export function ItemsTable({
 
                 const rowBg = isChecked
                   ? "bg-emerald-400/[0.04]"
-                  : "hover:bg-slate-100 dark:hover:bg-white/[0.05]";
+                  : "hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.05]";
 
                 return (
                   <tr
                     key={item.id}
-                    className={`border-t border-slate-100 dark:border-white/5 transition-colors ${rowBg}`}
+                    className={`border-t border-slate-100 dark:border-slate-100 dark:dark:border-white/5 transition-colors ${rowBg}`}
                   >
                     {/* Checkbox */}
                     <td className="px-4 py-4">
@@ -310,12 +310,12 @@ export function ItemsTable({
                           <Package className="w-5 h-5" />
                         </div>
                         <div className="min-w-0">
-                          <div className="text-slate-900 dark:text-white font-medium truncate">
+                          <div className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium truncate">
                             {item?.name || "-"}
                           </div>
                           {item?.name_en ? (
                             <div
-                              className="text-slate-500 dark:text-white/45 text-xs truncate"
+                              className="text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-xs truncate"
                               dir="ltr"
                             >
                               {item.name_en}
@@ -326,7 +326,7 @@ export function ItemsTable({
                     </td>
 
                     {/* Description */}
-                    <td className="px-6 py-4 text-slate-700 dark:text-white/70 text-sm">
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm">
                       <div
                         className="line-clamp-2"
                         style={{ maxWidth: 260 }}
@@ -339,7 +339,7 @@ export function ItemsTable({
                     {/* Category */}
                     <td className="px-6 py-4">
                       <span
-                        className={`${ws.pill} bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10 inline-flex items-center gap-2`}
+                        className={`${ws.pill} bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10 inline-flex items-center gap-2`}
                       >
                         <Layers className="w-4 h-4" />
                         <span className="truncate max-w-[180px]">
@@ -349,9 +349,9 @@ export function ItemsTable({
                     </td>
 
                     {/* Unit */}
-                    <td className="px-6 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap">
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/75 whitespace-nowrap">
                       <span
-                        className={`${ws.pill} bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`}
+                        className={`${ws.pill} bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10`}
                       >
                         <span className="text-base">{getUnitIcon(unit)}</span>
                         <span className="mr-1">{unit}</span>
@@ -360,16 +360,16 @@ export function ItemsTable({
 
                     {/* Cost */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-slate-700 dark:text-white/75 font-medium">
+                      <div className="text-slate-700 dark:text-slate-700 dark:dark:text-white/75 font-medium">
                         {formatCost(item?.cost)}
                       </div>
                       {item?.linked_green_bean_name ? (
                         <div className="flex items-center gap-1 mt-1">
-                          <Link className="w-3 h-3 text-amber-300/50" />
-                          <span className="text-amber-200/50 text-[10px]">
+                          <Link className="w-3 h-3 text-amber-700 dark:text-amber-300/50" />
+                          <span className="text-amber-700 dark:text-amber-200/50 text-[10px]">
                             {item.linked_green_bean_name}
                             {item.last_order_date ? (
-                              <span className="text-slate-400 dark:text-white/30 mr-1">
+                              <span className="text-slate-400 dark:text-slate-400 dark:dark:text-white/30 mr-1">
                                 (
                                 {new Date(
                                   item.last_order_date,
@@ -383,12 +383,12 @@ export function ItemsTable({
                     </td>
 
                     {/* Min */}
-                    <td className="px-6 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap">
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/75 whitespace-nowrap">
                       {minThresholdText}
                     </td>
 
                     {/* Stock */}
-                    <td className="px-6 py-4 text-slate-800 dark:text-white/85 whitespace-nowrap">
+                    <td className="px-6 py-4 text-slate-800 dark:text-slate-800 dark:dark:text-white/85 whitespace-nowrap">
                       {stockText}
                     </td>
 
@@ -422,7 +422,7 @@ export function ItemsTable({
                           <button
                             type="button"
                             onClick={() => onManageBranches(item)}
-                            className={`${ws.iconButton} text-purple-200`}
+                            className={`${ws.iconButton} text-purple-700 dark:text-purple-200`}
                             aria-label="إدارة الفروع"
                             title={
                               Array.isArray(item?.disabled_branches) &&
@@ -437,7 +437,7 @@ export function ItemsTable({
                         <button
                           type="button"
                           onClick={() => onEdit(item)}
-                          className={`${ws.iconButton} text-sky-200`}
+                          className={`${ws.iconButton} text-sky-700 dark:text-sky-200`}
                           aria-label="تعديل"
                           title="تعديل"
                         >
@@ -446,7 +446,7 @@ export function ItemsTable({
                         <button
                           type="button"
                           onClick={() => onDelete(item)}
-                          className={`${ws.iconButton} text-red-200`}
+                          className={`${ws.iconButton} text-red-700 dark:text-red-200`}
                           aria-label="حذف"
                           title="حذف"
                         >
@@ -462,7 +462,7 @@ export function ItemsTable({
         </div>
 
         <div
-          className={`px-6 py-3 border-t ${ws.divider} text-xs text-slate-500 dark:text-white/45`}
+          className={`px-6 py-3 border-t ${ws.divider} text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45`}
         >
           تلميح: على الجوال تقدر تسحب يمين/يسار لعرض كل الأعمدة.
         </div>
@@ -475,23 +475,23 @@ export function ItemsTable({
           style={{ transform: "translateX(-50%)" }}
         >
           <div
-            className={`${ws.popover} border border-slate-200 dark:border-white/15 rounded-2xl px-5 py-3.5 flex items-center gap-4 shadow-2xl`}
+            className={`${ws.popover} border border-slate-200 dark:border-slate-200 dark:dark:border-white/15 rounded-2xl px-5 py-3.5 flex items-center gap-4 shadow-2xl`}
           >
             {/* Counter */}
-            <div className="flex items-center gap-2 text-slate-900 dark:text-white font-semibold whitespace-nowrap">
-              <CheckSquare className="w-5 h-5 text-emerald-300" />
+            <div className="flex items-center gap-2 text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold whitespace-nowrap">
+              <CheckSquare className="w-5 h-5 text-emerald-700 dark:text-emerald-300" />
               <span>{selectedCount}</span>
-              <span className="text-slate-500 dark:text-white/50 text-sm font-normal">محدد</span>
+              <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 text-sm font-normal">محدد</span>
             </div>
 
-            <div className="w-px h-7 bg-slate-200 dark:bg-white/10" />
+            <div className="w-px h-7 bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10" />
 
             {/* Enable in inventory */}
             <button
               type="button"
               disabled={isBatchPending}
               onClick={() => handleBatch(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-400/15 text-emerald-200 border border-emerald-400/25 font-semibold hover:bg-emerald-400/25 transition-colors disabled:opacity-50 whitespace-nowrap"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-400/15 text-emerald-700 dark:text-emerald-200 border border-emerald-400/25 font-semibold hover:bg-emerald-400/25 transition-colors disabled:opacity-50 whitespace-nowrap"
             >
               <ClipboardCheck className="w-4 h-4" />
               <span>فعّل في الجرد</span>
@@ -502,19 +502,19 @@ export function ItemsTable({
               type="button"
               disabled={isBatchPending}
               onClick={() => handleBatch(false)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/15 text-red-200 border border-red-500/25 font-semibold hover:bg-red-500/25 transition-colors disabled:opacity-50 whitespace-nowrap"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/15 text-red-700 dark:text-red-200 border border-red-500/25 font-semibold hover:bg-red-500/25 transition-colors disabled:opacity-50 whitespace-nowrap"
             >
               <ClipboardX className="w-4 h-4" />
               <span>أخفِ من الجرد</span>
             </button>
 
-            <div className="w-px h-7 bg-slate-200 dark:bg-white/10" />
+            <div className="w-px h-7 bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10" />
 
             {/* Cancel */}
             <button
               type="button"
               onClick={clearSelection}
-              className="flex items-center justify-center w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50 hover:bg-slate-200 dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-white/70 transition-colors"
+              className="flex items-center justify-center w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.05] border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 text-slate-500 dark:text-slate-500 dark:dark:text-white/50 hover:bg-slate-200 dark:hover:bg-slate-200 dark:dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-slate-700 dark:dark:hover:text-white/70 transition-colors"
               title="إلغاء التحديد"
             >
               <X className="w-4 h-4" />

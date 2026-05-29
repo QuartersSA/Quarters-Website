@@ -215,10 +215,10 @@ export function MonthlySummaryExport({ analytics, stats }) {
     <div className={`${ws.glassSoft} ${ws.card} p-5 mb-8`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h3 className="text-white font-bold tracking-tight">
+          <h3 className="text-slate-900 dark:text-white font-bold tracking-tight">
             📊 ملخص شهري قابل للتصدير
           </h3>
-          <p className="text-white/45 text-sm mt-0.5">
+          <p className="text-slate-500 dark:text-white/45 text-sm mt-0.5">
             تقرير شامل يشمل أداء الفروع + حالة المخزون + التكلفة + التوقعات
           </p>
         </div>

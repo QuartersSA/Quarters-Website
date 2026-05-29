@@ -41,17 +41,17 @@ export function StatsCards({ items, totalCount }) {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
       <div className={`${ws.glass} ${ws.card} p-6`}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`${ws.iconBox} text-purple-200`}>
+          <div className={`${ws.iconBox} text-purple-700 dark:text-purple-200`}>
             <Package className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">
+        <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1">
           {isFiltered ? "ضمن الفلتر" : "إجمالي الأصناف"}
         </p>
-        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+        <p className="text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight">
           {items.length}
           {isFiltered ? (
-            <span className="text-slate-500 dark:text-white/40 text-base font-normal">
+            <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-base font-normal">
               {" "}
               / {totalCount}
             </span>
@@ -61,36 +61,36 @@ export function StatsCards({ items, totalCount }) {
 
       <div className={`${ws.glass} ${ws.card} p-6`}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`${ws.iconBox} text-emerald-200`}>
+          <div className={`${ws.iconBox} text-emerald-700 dark:text-emerald-200`}>
             <CheckCircle className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">متوفر</p>
-        <p className="text-3xl font-bold text-emerald-200 tracking-tight">
+        <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1">متوفر</p>
+        <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-200 tracking-tight">
           {availableItems}
         </p>
       </div>
 
       <div className={`${ws.glass} ${ws.card} p-6`}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`${ws.iconBox} text-amber-200`}>
+          <div className={`${ws.iconBox} text-amber-700 dark:text-amber-200`}>
             <AlertTriangle className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">منخفض</p>
-        <p className="text-3xl font-bold text-amber-200 tracking-tight">
+        <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1">منخفض</p>
+        <p className="text-3xl font-bold text-amber-700 dark:text-amber-200 tracking-tight">
           {lowStockItems}
         </p>
       </div>
 
       <div className={`${ws.glass} ${ws.card} p-6`}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`${ws.iconBox} text-red-200`}>
+          <div className={`${ws.iconBox} text-red-700 dark:text-red-200`}>
             <XCircle className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">نفد</p>
-        <p className="text-3xl font-bold text-red-200 tracking-tight">
+        <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1">نفد</p>
+        <p className="text-3xl font-bold text-red-700 dark:text-red-200 tracking-tight">
           {outOfStockItems}
         </p>
       </div>

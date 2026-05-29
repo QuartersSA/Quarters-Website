@@ -65,31 +65,31 @@ export function ItemHistoryChart({
   let chartBody = null;
   if (!selectedItemId) {
     chartBody = (
-      <div className="text-center text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-white/55 py-10">
         اختر الصنف لعرض الرسم البياني
       </div>
     );
   } else if (needsDates) {
     chartBody = (
-      <div className="text-center text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-white/55 py-10">
         اختر التاريخ (من / إلى) لعرض البيانات
       </div>
     );
   } else if (isHistoryLoading) {
     chartBody = (
-      <div className="text-center text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-white/55 py-10">
         جاري تحميل البيانات...
       </div>
     );
   } else if (historyError) {
     chartBody = (
-      <div className="text-center text-red-200 py-10">
+      <div className="text-center text-red-700 dark:text-red-200 py-10">
         حدث خطأ أثناء تحميل بيانات الرسم البياني
       </div>
     );
   } else if (!chartHasData) {
     chartBody = (
-      <div className="text-center text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-white/55 py-10">
         لا توجد بيانات لهذا الصنف خلال الفترة المحددة
       </div>
     );
@@ -153,7 +153,7 @@ export function ItemHistoryChart({
         </div>
 
         {!selectedBranchId ? (
-          <p className="text-xs text-white/40 mt-3">
+          <p className="text-xs text-slate-500 dark:text-white/40 mt-3">
             ملاحظة: عند اختيار "كل الفروع"، يتم عرض خط منفصل لكل فرع (ألوان
             مختلفة).
           </p>
@@ -167,14 +167,14 @@ export function ItemHistoryChart({
       <div className={`p-6 border-b ${ws.divider}`}>
         <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
-              <div className={`${ws.iconBox} w-10 h-10 text-sky-200`}>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+              <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`}>
                 <BarChart3 className="w-5 h-5" />
               </div>
               {historyTitle}
             </h2>
             {historySubtitle ? (
-              <p className="text-white/45 text-sm mt-1">{historySubtitle}</p>
+              <p className="text-slate-500 dark:text-white/45 text-sm mt-1">{historySubtitle}</p>
             ) : null}
           </div>
 
@@ -194,7 +194,7 @@ export function ItemHistoryChart({
             />
 
             <div className="w-full">
-              <label className="block text-xs text-white/45 mb-1">من</label>
+              <label className="block text-xs text-slate-500 dark:text-white/45 mb-1">من</label>
               <GlassDatePicker
                 value={dateFrom}
                 onChange={setDateFrom}
@@ -204,7 +204,7 @@ export function ItemHistoryChart({
             </div>
 
             <div className="w-full">
-              <label className="block text-xs text-white/45 mb-1">إلى</label>
+              <label className="block text-xs text-slate-500 dark:text-white/45 mb-1">إلى</label>
               <GlassDatePicker
                 value={dateTo}
                 onChange={setDateTo}

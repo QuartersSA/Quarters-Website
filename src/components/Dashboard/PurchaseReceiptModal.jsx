@@ -139,7 +139,7 @@ export function PurchaseReceiptModal({
           className={`p-4 sm:p-6 flex items-center justify-between flex-shrink-0 ${ws.topBar}`}
         >
           <div className="min-w-0">
-            <h3 className="text-lg sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+            <h3 className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
               <span className={`${ws.iconBox} w-10 h-10 text-white/80`}>
                 <Package className="w-5 h-5" />
               </span>
@@ -147,7 +147,7 @@ export function PurchaseReceiptModal({
                 {isEditMode ? "تعديل الوارد" : "إضافة وارد مشتريات"}
               </span>
             </h3>
-            <p className="text-white/50 text-sm mt-1">
+            <p className="text-slate-500 dark:text-white/50 text-sm mt-1">
               {isEditMode
                 ? "عدّل بيانات الوارد والأصناف والكميات"
                 : "سجّل كميات واردة لعدة أصناف في نفس الوقت"}
@@ -159,7 +159,7 @@ export function PurchaseReceiptModal({
             onClick={close}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-white/60" />
           </button>
         </div>
 
@@ -176,7 +176,7 @@ export function PurchaseReceiptModal({
           {/* Branch + Date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-white/55 mb-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                 الفرع
               </label>
               <GlassSelect
@@ -188,7 +188,7 @@ export function PurchaseReceiptModal({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/55 mb-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                 تاريخ الوارد
               </label>
               <GlassDatePicker
@@ -199,7 +199,7 @@ export function PurchaseReceiptModal({
                 showTime
               />
               {isFutureDate ? (
-                <p className="mt-1.5 text-xs text-red-200">
+                <p className="mt-1.5 text-xs text-red-700 dark:text-red-200">
                   ⚠ التاريخ في المستقبل — لا يمكن الحفظ
                 </p>
               ) : null}
@@ -210,7 +210,7 @@ export function PurchaseReceiptModal({
           <div className="space-y-2">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_140px_120px] gap-3 items-end">
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   الصنف
                 </label>
                 <GlassSelect
@@ -222,7 +222,7 @@ export function PurchaseReceiptModal({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   الكمية
                 </label>
                 <input
@@ -249,10 +249,10 @@ export function PurchaseReceiptModal({
             {/* Current stock hint */}
             {showSelectedStock ? (
               <div className="flex items-center gap-2 px-1">
-                <Warehouse className="w-3.5 h-3.5 text-amber-300/70" />
-                <span className="text-xs text-amber-200/80">
+                <Warehouse className="w-3.5 h-3.5 text-amber-700 dark:text-amber-300/70" />
+                <span className="text-xs text-amber-700 dark:text-amber-200/80">
                   الكمية الحالية في الفرع:{" "}
-                  <span className="font-bold text-amber-200">
+                  <span className="font-bold text-amber-700 dark:text-amber-200">
                     {selectedStock}
                   </span>
                 </span>
@@ -262,7 +262,7 @@ export function PurchaseReceiptModal({
 
           {/* Note */}
           <div>
-            <label className="block text-xs font-semibold text-white/55 mb-2">
+            <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
               ملاحظة (اختياري)
             </label>
             <input
@@ -277,12 +277,12 @@ export function PurchaseReceiptModal({
           {/* Items list */}
           <div className={`${ws.glassSoft} ${ws.card} p-4`}>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-white font-bold">الأصناف المضافة</h4>
+              <h4 className="text-slate-900 dark:text-white font-bold">الأصناف المضافة</h4>
               <span className={`${ws.chip}`}>{itemsList.length} صنف</span>
             </div>
 
             {itemsList.length === 0 ? (
-              <div className="text-white/50 text-sm">
+              <div className="text-slate-500 dark:text-white/50 text-sm">
                 ما تم اختيار أصناف بعد
               </div>
             ) : (
@@ -297,14 +297,14 @@ export function PurchaseReceiptModal({
                   return (
                     <div
                       key={it.itemId}
-                      className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-white/[0.04] border border-white/10"
+                      className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10"
                     >
                       <div className="min-w-0">
-                        <div className="text-white font-semibold truncate">
+                        <div className="text-slate-900 dark:text-white font-semibold truncate">
                           {it.itemName}
                         </div>
                         {receiptBranchId && itemStock !== null ? (
-                          <div className="text-white/40 text-xs mt-0.5 flex items-center gap-1">
+                          <div className="text-slate-500 dark:text-white/40 text-xs mt-0.5 flex items-center gap-1">
                             <Warehouse className="w-3 h-3" />
                             المتوفر: {itemStock}
                           </div>
@@ -312,7 +312,7 @@ export function PurchaseReceiptModal({
                       </div>
                       <div className="flex items-center gap-2">
                         <span
-                          className={`${ws.pill} bg-white/[0.06] text-white border-white/10`}
+                          className={`${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-900 dark:text-white border-slate-200 dark:border-white/10`}
                         >
                           {it.quantity}
                         </span>

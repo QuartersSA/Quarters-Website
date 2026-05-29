@@ -13,40 +13,40 @@ import { ws } from "@/components/Workspace/ui";
 const TYPE_META = {
   Daily: {
     label: "يومي",
-    color: "text-sky-200",
+    color: "text-sky-700 dark:text-sky-200",
     bgColor: "bg-sky-500/10 border-sky-500/20",
     icon: ClipboardList,
   },
   Weekly: {
     label: "أسبوعي",
-    color: "text-purple-200",
+    color: "text-purple-700 dark:text-purple-200",
     bgColor: "bg-purple-500/10 border-purple-500/20",
     icon: Calendar,
   },
   Transfer: {
     label: "تحويل",
-    color: "text-amber-200",
+    color: "text-amber-700 dark:text-amber-200",
     bgColor: "bg-amber-500/10 border-amber-500/20",
     icon: ArrowLeftRight,
   },
   Receipt: {
     label: "وارد",
-    color: "text-emerald-200",
+    color: "text-emerald-700 dark:text-emerald-200",
     bgColor: "bg-emerald-500/10 border-emerald-500/20",
     icon: Truck,
   },
   Opening: {
     label: "افتتاحي",
-    color: "text-teal-200",
+    color: "text-teal-700 dark:text-teal-200",
     bgColor: "bg-teal-500/10 border-teal-500/20",
     icon: PackagePlus,
   },
 };
 
 const STATUS_ICON = {
-  Completed: { icon: CheckCircle, color: "text-emerald-300" },
-  Pending: { icon: Clock, color: "text-amber-300" },
-  "In Progress": { icon: AlertTriangle, color: "text-sky-300" },
+  Completed: { icon: CheckCircle, color: "text-emerald-700 dark:text-emerald-300" },
+  Pending: { icon: Clock, color: "text-amber-700 dark:text-amber-300" },
+  "In Progress": { icon: AlertTriangle, color: "text-sky-700 dark:text-sky-300" },
 };
 
 function formatRelativeTime(dateStr) {
@@ -84,13 +84,13 @@ export function OperationsTimeline({ timeline }) {
   return (
     <div className={`${ws.glass} ${ws.card} overflow-hidden mb-8`}>
       <div className={`p-6 border-b ${ws.divider}`}>
-        <h2 className="text-xl font-bold text-white flex items-center gap-2 tracking-tight">
-          <span className="text-emerald-200">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 tracking-tight">
+          <span className="text-emerald-700 dark:text-emerald-200">
             <ClipboardList className="w-6 h-6" />
           </span>
           آخر العمليات
         </h2>
-        <p className="text-white/45 text-sm mt-1">
+        <p className="text-slate-500 dark:text-white/45 text-sm mt-1">
           الشريط الزمني لآخر العمليات
         </p>
       </div>
@@ -98,13 +98,13 @@ export function OperationsTimeline({ timeline }) {
       <div className="p-6">
         {items.length === 0 ? (
           <div className="text-center py-8">
-            <ClipboardList className="w-12 h-12 mx-auto mb-3 text-white/20" />
-            <p className="text-white/50">لا توجد عمليات بعد</p>
+            <ClipboardList className="w-12 h-12 mx-auto mb-3 text-slate-300 dark:text-white/20" />
+            <p className="text-slate-500 dark:text-white/50">لا توجد عمليات بعد</p>
           </div>
         ) : (
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute right-[23px] top-0 bottom-0 w-px bg-white/10" />
+            <div className="absolute right-[23px] top-0 bottom-0 w-px bg-slate-200 dark:bg-white/10" />
 
             <div className="space-y-1">
               {items.map((item, i) => {
@@ -129,7 +129,7 @@ export function OperationsTimeline({ timeline }) {
                     </div>
 
                     {/* Content */}
-                    <div className="flex-1 min-w-0 pb-3 border-b border-white/5 group-last:border-0">
+                    <div className="flex-1 min-w-0 pb-3 border-b border-slate-100 dark:border-white/5 group-last:border-0">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                         <div className="flex items-center gap-2">
                           <span
@@ -141,7 +141,7 @@ export function OperationsTimeline({ timeline }) {
                             className={`w-4 h-4 ${statusMeta.color}`}
                           />
                         </div>
-                        <span className="text-white/40 text-xs">
+                        <span className="text-slate-500 dark:text-white/40 text-xs">
                           {formatRelativeTime(item.date)} •{" "}
                           {formatTime(item.date)}
                         </span>
@@ -149,24 +149,24 @@ export function OperationsTimeline({ timeline }) {
 
                       <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
                         {item.branch && (
-                          <span className="text-white/70">
+                          <span className="text-slate-700 dark:text-white/70">
                             📍 {item.branch}
                           </span>
                         )}
                         {item.employee && (
-                          <span className="text-white/50">
+                          <span className="text-slate-500 dark:text-white/50">
                             👤 {item.employee}
                           </span>
                         )}
                         {item.number && (
-                          <span className="text-white/35 font-mono text-xs">
+                          <span className="text-slate-400 dark:text-white/35 font-mono text-xs">
                             {item.number}
                           </span>
                         )}
                       </div>
 
                       {item.type === "Receipt" && item.itemName && (
-                        <div className="mt-1 text-xs text-emerald-200/70">
+                        <div className="mt-1 text-xs text-emerald-700 dark:text-emerald-200/70">
                           {item.itemName} — الكمية: {item.quantity}
                         </div>
                       )}

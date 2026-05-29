@@ -78,12 +78,12 @@ export default function GlassSelect({
         aria-expanded={open}
       >
         <span
-          className={`min-w-0 truncate ${selected ? "text-white" : "text-white/45"}`}
+          className={`min-w-0 truncate ${selected ? "text-slate-900 dark:text-white" : "text-slate-500 dark:text-white/45"}`}
         >
           {label}
         </span>
         <ChevronDown
-          className={`w-4 h-4 flex-shrink-0 ${open ? "text-white" : "text-white/60"}`}
+          className={`w-4 h-4 flex-shrink-0 ${open ? "text-slate-900 dark:text-white" : "text-slate-600 dark:text-white/60"}`}
         />
       </button>
 
@@ -91,7 +91,7 @@ export default function GlassSelect({
         open={open}
         anchorRef={btnRef}
         onClose={() => setOpen(false)}
-        className={`border border-white/15 ${menuClassName}`}
+        className={`border border-slate-200 dark:border-white/15 ${menuClassName}`}
       >
         <div className="max-h-[50vh] overflow-auto">
           {normalizedOptions.map((o) => {
@@ -99,7 +99,7 @@ export default function GlassSelect({
               return (
                 <div
                   key={`group-${o.value}-${o.label}`}
-                  className="px-4 py-2 text-xs font-bold text-white/45 border-t border-white/10 first:border-t-0"
+                  className="px-4 py-2 text-xs font-bold text-slate-500 dark:text-white/45 border-t border-slate-200 dark:border-white/10 first:border-t-0"
                   role="presentation"
                 >
                   {o.label}
@@ -111,10 +111,10 @@ export default function GlassSelect({
             const rowBase = `w-full flex items-center justify-between gap-3 px-4 py-3 ${textAlignClass} transition-colors`;
 
             const rowClass = o.disabled
-              ? "text-white/30 cursor-not-allowed"
+              ? "text-slate-400 dark:text-white/30 cursor-not-allowed"
               : active
-                ? "bg-white/10 text-white"
-                : "text-white/80 hover:bg-white/[0.06]";
+                ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white"
+                : "text-white/80 hover:bg-slate-100 dark:hover:bg-white/[0.06]";
 
             return (
               <button
@@ -128,7 +128,7 @@ export default function GlassSelect({
               >
                 <span className="min-w-0 truncate">{o.label}</span>
                 {active ? (
-                  <Check className="w-4 h-4 text-emerald-200 flex-shrink-0" />
+                  <Check className="w-4 h-4 text-emerald-700 dark:text-emerald-200 flex-shrink-0" />
                 ) : (
                   <span className="w-4 h-4 flex-shrink-0" />
                 )}

@@ -123,14 +123,14 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
       <div className={`p-6 border-b ${ws.divider}`}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className={`${ws.iconBox} text-purple-200`}>
+            <div className={`${ws.iconBox} text-purple-700 dark:text-purple-200`}>
               <FileText className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                 تقرير حركة المخزون
               </h2>
-              <p className="text-white/45 text-sm">{currentMonth}</p>
+              <p className="text-slate-500 dark:text-white/45 text-sm">{currentMonth}</p>
             </div>
           </div>
 
@@ -151,7 +151,7 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
 
             {/* Search */}
             <div className="relative">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/30" />
               <input
                 type="text"
                 placeholder="بحث صنف..."
@@ -172,17 +172,17 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
               </button>
               {showExport && (
                 <div
-                  className={`absolute left-0 top-full mt-1 z-20 ${ws.popover} rounded-xl border border-white/10 min-w-[140px]`}
+                  className={`absolute left-0 top-full mt-1 z-20 ${ws.popover} rounded-xl border border-slate-200 dark:border-white/10 min-w-[140px]`}
                 >
                   <button
                     onClick={handleExportExcel}
-                    className="w-full text-right px-4 py-2.5 text-sm text-white/80 hover:bg-white/[0.06]"
+                    className="w-full text-right px-4 py-2.5 text-sm text-white/80 hover:bg-slate-100 dark:hover:bg-white/[0.06]"
                   >
                     Excel
                   </button>
                   <button
                     onClick={handleExportPDF}
-                    className="w-full text-right px-4 py-2.5 text-sm text-white/80 hover:bg-white/[0.06]"
+                    className="w-full text-right px-4 py-2.5 text-sm text-white/80 hover:bg-slate-100 dark:hover:bg-white/[0.06]"
                   >
                     PDF
                   </button>
@@ -196,23 +196,23 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-white/[0.04]">
-              <th className="text-right px-5 py-3.5 text-sm font-semibold text-white/70">
+            <tr className="bg-slate-100 dark:bg-white/[0.04]">
+              <th className="text-right px-5 py-3.5 text-sm font-semibold text-slate-700 dark:text-white/70">
                 الصنف
               </th>
-              <th className="text-right px-5 py-3.5 text-sm font-semibold text-white/70">
+              <th className="text-right px-5 py-3.5 text-sm font-semibold text-slate-700 dark:text-white/70">
                 الوحدة
               </th>
-              <th className="text-center px-5 py-3.5 text-sm font-semibold text-white/70">
+              <th className="text-center px-5 py-3.5 text-sm font-semibold text-slate-700 dark:text-white/70">
                 أول الشهر
               </th>
-              <th className="text-center px-5 py-3.5 text-sm font-semibold text-emerald-200/70">
+              <th className="text-center px-5 py-3.5 text-sm font-semibold text-emerald-700 dark:text-emerald-200/70">
                 + الوارد
               </th>
-              <th className="text-center px-5 py-3.5 text-sm font-semibold text-red-200/70">
+              <th className="text-center px-5 py-3.5 text-sm font-semibold text-red-700 dark:text-red-200/70">
                 - المستهلك
               </th>
-              <th className="text-center px-5 py-3.5 text-sm font-semibold text-white/70">
+              <th className="text-center px-5 py-3.5 text-sm font-semibold text-slate-700 dark:text-white/70">
                 نهاية الشهر
               </th>
             </tr>
@@ -225,24 +225,24 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
                 return (
                   <tr
                     key={i}
-                    className="border-t border-white/5 hover:bg-white/[0.03]"
+                    className="border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.03]"
                   >
-                    <td className="px-5 py-3 text-white text-sm font-medium">
+                    <td className="px-5 py-3 text-slate-900 dark:text-white text-sm font-medium">
                       {row.item_name}
                     </td>
-                    <td className="px-5 py-3 text-white/50 text-sm">
+                    <td className="px-5 py-3 text-slate-500 dark:text-white/50 text-sm">
                       {row.unit}
                     </td>
-                    <td className="px-5 py-3 text-center text-white/70 text-sm">
+                    <td className="px-5 py-3 text-center text-slate-700 dark:text-white/70 text-sm">
                       {row.opening_qty}
                     </td>
-                    <td className="px-5 py-3 text-center text-emerald-200 text-sm font-semibold">
+                    <td className="px-5 py-3 text-center text-emerald-700 dark:text-emerald-200 text-sm font-semibold">
                       {row.received_qty > 0 ? `+${row.received_qty}` : "0"}
                     </td>
-                    <td className="px-5 py-3 text-center text-red-200 text-sm font-semibold">
+                    <td className="px-5 py-3 text-center text-red-700 dark:text-red-200 text-sm font-semibold">
                       {consumed > 0 ? `-${consumed}` : "0"}
                     </td>
-                    <td className="px-5 py-3 text-center text-white font-bold text-sm">
+                    <td className="px-5 py-3 text-center text-slate-900 dark:text-white font-bold text-sm">
                       {row.closing_qty}
                     </td>
                   </tr>
@@ -250,7 +250,7 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
               })
             ) : (
               <tr>
-                <td colSpan="6" className="px-5 py-8 text-center text-white/40">
+                <td colSpan="6" className="px-5 py-8 text-center text-slate-500 dark:text-white/40">
                   لا توجد بيانات
                 </td>
               </tr>
@@ -260,10 +260,10 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
       </div>
 
       {aggregated.length > 10 && (
-        <div className="p-4 text-center border-t border-white/5">
+        <div className="p-4 text-center border-t border-slate-100 dark:border-white/5">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-white/50 hover:text-white text-sm flex items-center gap-1 mx-auto"
+            className="text-slate-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white text-sm flex items-center gap-1 mx-auto"
           >
             {isExpanded ? (
               <>

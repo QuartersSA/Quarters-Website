@@ -51,7 +51,7 @@ export function SearchBar({
     <div className="mb-6 space-y-4">
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 dark:text-white/40" />
+          <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" />
           <input
             type="text"
             placeholder="البحث عن صنف..."
@@ -71,7 +71,7 @@ export function SearchBar({
             <Filter className="w-5 h-5" />
             <span>فلتر</span>
             {hasActiveFilters ? (
-              <span className="absolute -top-1 -left-1 w-5 h-5 bg-red-500 text-slate-900 dark:text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -left-1 w-5 h-5 bg-red-500 text-slate-900 dark:text-slate-900 dark:dark:text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                 !
               </span>
             ) : null}
@@ -105,12 +105,12 @@ export function SearchBar({
                   onExportExcel();
                   setShowExportMenu(false);
                 }}
-                className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-slate-800 dark:dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] transition-colors"
               >
-                <FileText className="w-5 h-5 text-emerald-200" />
+                <FileText className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">Excel</p>
-                  <p className="text-xs text-slate-500 dark:text-white/45">للتحليل والمعالجة</p>
+                  <p className="font-semibold text-slate-900 dark:text-slate-900 dark:dark:text-white">Excel</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45">للتحليل والمعالجة</p>
                 </div>
               </button>
               <button
@@ -119,12 +119,12 @@ export function SearchBar({
                   onExportPDF();
                   setShowExportMenu(false);
                 }}
-                className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10"
+                className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-slate-800 dark:dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-slate-200 dark:dark:border-white/10"
               >
-                <FileText className="w-5 h-5 text-red-200" />
+                <FileText className="w-5 h-5 text-red-700 dark:text-red-200" />
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-white">PDF</p>
-                  <p className="text-xs text-slate-500 dark:text-white/45">للطباعة والأرشفة</p>
+                  <p className="font-semibold text-slate-900 dark:text-slate-900 dark:dark:text-white">PDF</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45">للطباعة والأرشفة</p>
                 </div>
               </button>
             </GlassPopover>
@@ -157,7 +157,7 @@ export function SearchBar({
         <div className={`${ws.glassSoft} ${ws.card} p-4 sm:p-5`}>
           <div className="flex flex-col sm:flex-row gap-4 items-end">
             <div className="flex-1 min-w-[180px]">
-              <label className="block text-slate-600 dark:text-white/55 text-xs font-semibold mb-2">
+              <label className="block text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-xs font-semibold mb-2">
                 الفئة
               </label>
               <GlassSelect
@@ -169,7 +169,7 @@ export function SearchBar({
             </div>
 
             <div className="flex-1 min-w-[180px]">
-              <label className="block text-slate-600 dark:text-white/55 text-xs font-semibold mb-2">
+              <label className="block text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-xs font-semibold mb-2">
                 حالة المخزون
               </label>
               <GlassSelect

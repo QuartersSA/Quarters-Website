@@ -112,7 +112,7 @@ export default function ItemCategoriesModal({
         <div
           className={`p-6 flex items-center justify-between shrink-0 ${ws.topBar}`}
         >
-          <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight">
             <div className={`${ws.iconBox} w-10 h-10 text-white/80`}>
               <Layers className="w-5 h-5" />
             </div>
@@ -124,7 +124,7 @@ export default function ItemCategoriesModal({
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-slate-600 dark:text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" />
           </button>
         </div>
 
@@ -140,7 +140,7 @@ export default function ItemCategoriesModal({
                 dir="rtl"
               />
               <div className="relative">
-                <Languages className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35" />
+                <Languages className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-400 dark:dark:text-white/35" />
                 <input
                   value={nameEn}
                   onChange={(e) => setNameEn(e.target.value)}
@@ -163,18 +163,18 @@ export default function ItemCategoriesModal({
           </form>
 
           {localError ? (
-            <div className="mt-3 p-3 bg-red-500/10 border border-red-500/25 rounded-2xl text-red-200 text-sm">
+            <div className="mt-3 p-3 bg-red-500/10 border border-red-500/25 rounded-2xl text-red-700 dark:text-red-200 text-sm">
               {localError}
             </div>
           ) : null}
 
           <div className="mt-6">
-            <div className="text-sm text-slate-600 dark:text-white/55 mb-3">
+            <div className="text-sm text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-3">
               الفئات ({sorted.length})
             </div>
 
             {sorted.length === 0 ? (
-              <div className="p-6 text-center text-slate-500 dark:text-white/45 border border-slate-200 dark:border-white/10 rounded-3xl bg-slate-50 dark:bg-white/[0.03]">
+              <div className="p-6 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/45 border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-3xl bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03]">
                 ما فيه فئات حتى الآن. أضف أول فئة.
               </div>
             ) : (
@@ -185,7 +185,7 @@ export default function ItemCategoriesModal({
                   return (
                     <div
                       key={c.id}
-                      className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3`}
+                      className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl px-4 py-3`}
                     >
                       {!isEditing ? (
                         <div className="flex items-start justify-between gap-3">
@@ -194,7 +194,7 @@ export default function ItemCategoriesModal({
                               {c.name}
                             </div>
                             <div
-                              className="text-slate-600 dark:text-white/55 text-sm mt-1 truncate"
+                              className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mt-1 truncate"
                               dir="ltr"
                             >
                               {c.name_en || "-"}
@@ -204,7 +204,7 @@ export default function ItemCategoriesModal({
                           <button
                             type="button"
                             onClick={() => startEdit(c)}
-                            className={`${ws.iconButton} text-sky-200`}
+                            className={`${ws.iconButton} text-sky-700 dark:text-sky-200`}
                             aria-label="تعديل"
                             title="تعديل"
                           >
@@ -258,7 +258,7 @@ export default function ItemCategoriesModal({
               </div>
             )}
 
-            <div className="mt-5 text-xs text-slate-500 dark:text-white/40">
+            <div className="mt-5 text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/40">
               ملاحظة: حذف الفئات غير مفعّل حاليًا لتجنب مشاكل مع الأصناف المرتبطة.
             </div>
           </div>
