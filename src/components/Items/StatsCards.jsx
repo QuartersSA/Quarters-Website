@@ -45,13 +45,13 @@ export function StatsCards({ items, totalCount }) {
             <Package className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">
+        <p className="text-white/55 text-sm mb-1">
           {isFiltered ? "ضمن الفلتر" : "إجمالي الأصناف"}
         </p>
-        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+        <p className="text-3xl font-bold text-white tracking-tight">
           {items.length}
           {isFiltered ? (
-            <span className="text-slate-500 dark:text-white/40 text-base font-normal">
+            <span className="text-white/40 text-base font-normal">
               {" "}
               / {totalCount}
             </span>
@@ -65,7 +65,7 @@ export function StatsCards({ items, totalCount }) {
             <CheckCircle className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">متوفر</p>
+        <p className="text-white/55 text-sm mb-1">متوفر</p>
         <p className="text-3xl font-bold text-emerald-200 tracking-tight">
           {availableItems}
         </p>
@@ -77,7 +77,7 @@ export function StatsCards({ items, totalCount }) {
             <AlertTriangle className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">منخفض</p>
+        <p className="text-white/55 text-sm mb-1">منخفض</p>
         <p className="text-3xl font-bold text-amber-200 tracking-tight">
           {lowStockItems}
         </p>
@@ -89,7 +89,7 @@ export function StatsCards({ items, totalCount }) {
             <XCircle className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">نفد</p>
+        <p className="text-white/55 text-sm mb-1">نفد</p>
         <p className="text-3xl font-bold text-red-200 tracking-tight">
           {outOfStockItems}
         </p>

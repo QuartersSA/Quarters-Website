@@ -149,7 +149,7 @@ export default function EmployeesPage() {
             className={`${ws.glass} ${ws.card} p-4 mb-6 border border-red-500/20`}
           >
             <div className="text-red-100 font-semibold">{loadErrorMessage}</div>
-            <div className="text-slate-600 dark:text-white/60 text-sm mt-1">
+            <div className="text-white/60 text-sm mt-1">
               إذا استمرت المشكلة، افتح صفحة /api/employees في تبويب جديد وشوف هل
               ترجع بيانات أو خطأ.
             </div>

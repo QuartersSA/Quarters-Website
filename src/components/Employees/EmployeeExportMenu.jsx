@@ -111,23 +111,23 @@ export function EmployeeExportMenu({ employees }) {
         <button
           type="button"
           onClick={handleExportExcel}
-          className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors"
         >
           <FileText className="w-5 h-5 text-emerald-200" />
           <div>
-            <p className="font-semibold text-slate-900 dark:text-white">Excel</p>
-            <p className="text-xs text-slate-500 dark:text-white/45">للتحليل والمعالجة</p>
+            <p className="font-semibold text-white">Excel</p>
+            <p className="text-xs text-white/45">للتحليل والمعالجة</p>
           </div>
         </button>
         <button
           type="button"
           onClick={handleExportPDF}
-          className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10"
+          className="w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors border-t border-white/10"
         >
           <FileText className="w-5 h-5 text-red-200" />
           <div>
-            <p className="font-semibold text-slate-900 dark:text-white">PDF</p>
-            <p className="text-xs text-slate-500 dark:text-white/45">للطباعة والأرشفة</p>
+            <p className="font-semibold text-white">PDF</p>
+            <p className="text-xs text-white/45">للطباعة والأرشفة</p>
           </div>
         </button>
       </GlassPopover>

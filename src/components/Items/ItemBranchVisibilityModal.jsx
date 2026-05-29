@@ -136,7 +136,7 @@ export function ItemBranchVisibilityModal({
           className={`p-5 sm:p-6 flex items-center justify-between shrink-0 ${ws.topBar}`}
         >
           <div className="min-w-0">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+            <h3 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
               <div className={`${ws.iconBox} w-10 h-10 text-sky-200`}>
                 <Building2 className="w-5 h-5" />
               </div>
@@ -144,7 +144,7 @@ export function ItemBranchVisibilityModal({
                 إدارة الفروع لـ "{item.name}"
               </span>
             </h3>
-            <p className="text-slate-600 dark:text-white/55 text-sm mt-2 leading-relaxed">
+            <p className="text-white/55 text-sm mt-2 leading-relaxed">
               فعّل/ألغِ تفعيل هذا الصنف لكل فرع. الفروع المعطّلة لن تظهر
               في صفحات الجرد، التقارير، أو لوحة التحكم.
             </p>
@@ -156,7 +156,7 @@ export function ItemBranchVisibilityModal({
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-slate-600 dark:text-white/60" />
+            <X className="w-5 h-5 text-white/60" />
           </button>
         </div>
 
@@ -169,7 +169,7 @@ export function ItemBranchVisibilityModal({
           ) : null}
 
           {branchList.length === 0 ? (
-            <div className="text-center py-8 text-slate-600 dark:text-white/55">
+            <div className="text-center py-8 text-white/55">
               <Building2 className="w-12 h-12 mx-auto mb-3 opacity-40" />
               <p>لا توجد فروع</p>
             </div>
@@ -191,7 +191,7 @@ export function ItemBranchVisibilityModal({
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 ${
+                        className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 ${
                           isDisabled ? "bg-red-500/10" : "bg-emerald-500/10"
                         }`}
                       >
@@ -202,7 +202,7 @@ export function ItemBranchVisibilityModal({
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-slate-900 dark:text-white font-medium truncate">
+                        <p className="text-white font-medium truncate">
                           {branch.name}
                         </p>
                         <p

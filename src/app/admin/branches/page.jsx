@@ -182,8 +182,8 @@ export default function BranchesPage() {
                 <Building2 className="w-6 h-6" />
               </div>
             </div>
-            <p className="text-slate-600 dark:text-white/55 text-sm mb-1">إجمالي الفروع</p>
-            <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+            <p className="text-white/55 text-sm mb-1">إجمالي الفروع</p>
+            <p className="text-3xl font-bold text-white tracking-tight">
               {branches.length}
             </p>
           </div>
@@ -194,8 +194,8 @@ export default function BranchesPage() {
                 <MapPin className="w-6 h-6" />
               </div>
             </div>
-            <p className="text-slate-600 dark:text-white/55 text-sm mb-1">فروع مع موقع</p>
-            <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+            <p className="text-white/55 text-sm mb-1">فروع مع موقع</p>
+            <p className="text-3xl font-bold text-white tracking-tight">
               {branches.filter((b) => b.location).length}
             </p>
           </div>
@@ -206,8 +206,8 @@ export default function BranchesPage() {
                 <ClipboardList className="w-6 h-6" />
               </div>
             </div>
-            <p className="text-slate-600 dark:text-white/55 text-sm mb-1">إجمالي السجلات</p>
-            <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+            <p className="text-white/55 text-sm mb-1">إجمالي السجلات</p>
+            <p className="text-3xl font-bold text-white tracking-tight">
               {branches.length}
             </p>
           </div>
@@ -216,7 +216,7 @@ export default function BranchesPage() {
         {/* Search and Add Button */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/35" />
+            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/35" />
             <input
               type="text"
               placeholder="البحث عن فرع…"
@@ -238,7 +238,7 @@ export default function BranchesPage() {
         {/* Branches Table */}
         <div className={sectionCard}>
           <div className={`p-5 sm:p-6 border-b ${ws.divider}`}>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+            <h2 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
               <div className={`${ws.iconBox} w-10 h-10 text-white/80`}>
                 <Building2 className="w-5 h-5" />
               </div>
@@ -249,20 +249,20 @@ export default function BranchesPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-100 dark:bg-white/[0.04]">
-                  <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
+                <tr className="bg-white/[0.04]">
+                  <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
                     #
                   </th>
-                  <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
+                  <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
                     اسم الفرع
                   </th>
-                  <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
+                  <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
                     الموقع
                   </th>
-                  <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
+                  <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
                     تاريخ الإضافة
                   </th>
-                  <th className="text-center px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
+                  <th className="text-center px-6 py-4 text-sm font-semibold text-white/55">
                     الإجراءات
                   </th>
                 </tr>
@@ -272,7 +272,7 @@ export default function BranchesPage() {
                   <tr>
                     <td
                       colSpan="5"
-                      className="px-6 py-12 text-center text-slate-600 dark:text-white/55"
+                      className="px-6 py-12 text-center text-white/55"
                     >
                       <div className="flex items-center justify-center gap-2">
                         <div className="w-5 h-5 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" />
@@ -284,34 +284,34 @@ export default function BranchesPage() {
                   filteredBranches.map((branch, index) => (
                     <tr
                       key={branch.id}
-                      className="border-t border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors"
+                      className="border-t border-white/5 hover:bg-white/[0.05] transition-colors"
                     >
-                      <td className="px-6 py-4 text-slate-500 dark:text-white/45">{index + 1}</td>
+                      <td className="px-6 py-4 text-white/45">{index + 1}</td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div
-                            className={`${ws.iconBox} w-10 h-10 text-slate-700 dark:text-white/75`}
+                            className={`${ws.iconBox} w-10 h-10 text-white/75`}
                           >
                             <Building2 className="w-5 h-5" />
                           </div>
-                          <span className="text-slate-900 dark:text-white font-medium">
+                          <span className="text-white font-medium">
                             {branch.name}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         {branch.location ? (
-                          <div className="flex items-center gap-2 text-slate-700 dark:text-white/75">
+                          <div className="flex items-center gap-2 text-white/75">
                             <MapPin className="w-4 h-4 text-emerald-200" />
                             <span>{branch.location}</span>
                           </div>
                         ) : (
-                          <span className="text-slate-500 dark:text-white/45 text-sm">
+                          <span className="text-white/45 text-sm">
                             غير محدد
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-slate-500 dark:text-white/45 text-sm whitespace-nowrap">
+                      <td className="px-6 py-4 text-white/45 text-sm whitespace-nowrap">
                         {formatDateTime(branch.created_at)}
                       </td>
                       <td className="px-6 py-4">
@@ -340,7 +340,7 @@ export default function BranchesPage() {
                   <tr>
                     <td
                       colSpan="5"
-                      className="px-6 py-12 text-center text-slate-500 dark:text-white/45"
+                      className="px-6 py-12 text-center text-white/45"
                     >
                       <Building2 className="w-12 h-12 mx-auto mb-3 opacity-40" />
                       <p>
@@ -364,7 +364,7 @@ export default function BranchesPage() {
             <div
               className={`p-6 border-b ${ws.divider} flex items-center justify-between`}
             >
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+              <h3 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
                 <div className={`${ws.iconBox} w-10 h-10 text-white/80`}>
                   <Building2 className="w-5 h-5" />
                 </div>
@@ -379,13 +379,13 @@ export default function BranchesPage() {
                 className={ws.iconButton}
                 aria-label="إغلاق"
               >
-                <X className="w-5 h-5 text-slate-600 dark:text-white/60" />
+                <X className="w-5 h-5 text-white/60" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-slate-700 dark:text-white/70 text-sm font-semibold mb-2">
+                <label className="block text-white/70 text-sm font-semibold mb-2">
                   اسم الفرع <span className="text-red-300">*</span>
                 </label>
                 <input
@@ -401,7 +401,7 @@ export default function BranchesPage() {
               </div>
 
               <div>
-                <label className="block text-slate-700 dark:text-white/70 text-sm font-semibold mb-2">
+                <label className="block text-white/70 text-sm font-semibold mb-2">
                   الموقع
                 </label>
                 <input
@@ -461,7 +461,7 @@ export default function BranchesPage() {
             className={`${ws.glass} ${ws.card} w-full max-w-md shadow-2xl border border-red-500/25`}
           >
             <div className={`p-6 border-b ${ws.divider}`}>
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+              <h3 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
                 <div className={`${ws.iconBox} w-10 h-10 text-red-200`}>
                   <Trash2 className="w-5 h-5" />
                 </div>
@@ -472,7 +472,7 @@ export default function BranchesPage() {
             <div className="p-6">
               <p className="text-white/80 mb-4">
                 هل أنت متأكد من حذف الفرع{" "}
-                <span className="font-bold text-slate-900 dark:text-white">
+                <span className="font-bold text-white">
                   "{deleteConfirm.name}"
                 </span>
                 ؟

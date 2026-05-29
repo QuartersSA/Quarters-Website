@@ -13,15 +13,6 @@ export default function HRLayout({ children }) {
     }
   }, []);
 
-  // Force dark for HR — only the admin section exposes the toggle.
-  // Without this, navigating from admin-light to /hr would inherit
-  // the light class on documentElement and break the design.
-  React.useEffect(() => {
-    if (typeof document !== "undefined") {
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
-
   const Background = (
     <div
       className="pointer-events-none fixed inset-0 overflow-hidden"
@@ -32,10 +23,8 @@ export default function HRLayout({ children }) {
     </div>
   );
 
-  // Force dark styling for HR (design request — only the admin
-  // section exposes a light-mode toggle).
   return (
-    <div className={`dark min-h-[100svh] ${ws.appBg}`} dir="rtl">
+    <div className={`min-h-[100svh] ${ws.appBg}`} dir="rtl">
       {Background}
       <div className="relative">{children}</div>
     </div>
