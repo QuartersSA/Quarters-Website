@@ -10,6 +10,15 @@ const BRAND_LOGO_URL =
 export default function WorkspaceLayout({ children }) {
   const { ready, isAuthenticated, user } = useWorkspaceUser();
 
+  // Force documentElement.classList.add('dark') so portal popovers
+  // render dark even if the admin section flipped to light before
+  // the user navigated here.
+  React.useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
   React.useEffect(() => {
     if (!ready) return;
 
@@ -41,7 +50,7 @@ export default function WorkspaceLayout({ children }) {
 
     return (
       <div
-        className={`relative min-h-[100svh] ${ws.appBg} flex items-center justify-center p-6`}
+        className={`dark relative min-h-[100svh] ${ws.appBg} flex items-center justify-center p-6`}
         dir="rtl"
       >
         {Background}

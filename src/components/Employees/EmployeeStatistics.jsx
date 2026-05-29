@@ -16,8 +16,8 @@ export function EmployeeStatistics({
             <Users className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">إجمالي الموظفين</p>
-        <p className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">إجمالي الموظفين</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {totalEmployees}
         </p>
       </div>
@@ -28,8 +28,8 @@ export function EmployeeStatistics({
             <Shield className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">المدراء</p>
-        <p className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">المدراء</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {adminCount}
         </p>
       </div>
@@ -40,8 +40,8 @@ export function EmployeeStatistics({
             <User className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">موظفي الجرد</p>
-        <p className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">موظفي الجرد</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {employeeCount}
         </p>
       </div>
