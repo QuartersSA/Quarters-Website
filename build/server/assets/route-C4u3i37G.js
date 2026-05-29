@@ -419,7 +419,7 @@ async function POST(request) {
           SELECT
             COALESCE(
               SUM(
-                ROUND(COALESCE(e.base_salary, 0) / 30.0 * 2 * o.days, 2)
+                ROUND(COALESCE(e.base_salary, 0) / 30.0 * 1.5 * o.days, 2)
               ),
               0
             ) AS total_overtime,
