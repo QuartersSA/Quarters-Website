@@ -185,7 +185,7 @@ export default function EmployeeLoginPage() {
 
   return (
     <div
-      className={`min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`}
+      className={`dark min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`}
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       {/* Language toggle */}
