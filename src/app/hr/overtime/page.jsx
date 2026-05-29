@@ -49,7 +49,7 @@ function OvertimeDesktopHeader() {
           الأوفر تايم
         </h1>
         <p className="text-white/50 text-sm mt-0.5">
-          يُحسب القسط الإضافي تلقائياً: (الراتب الأساسي ÷ 30) × 2 × عدد
+          يُحسب القسط الإضافي تلقائياً: (الراتب الأساسي ÷ 30) × 1.5 × عدد
           الأيام.
         </p>
       </div>
@@ -67,7 +67,7 @@ function OvertimeInfoCard() {
         <div className="text-sm text-white/75 leading-relaxed">
           الصيغة:{" "}
           <span className="text-white/90 font-semibold">
-            (الراتب الأساسي ÷ 30) × 2
+            (الراتب الأساسي ÷ 30) × 1.5
           </span>{" "}
           لكل يوم. المبلغ يُضاف على راتب الموظف للشهر المختار ويظهر في
           مسير الرواتب في HR + المحاسبة تلقائياً. الأشهر المُقفلة لا
@@ -340,7 +340,7 @@ export default function HROvertimePage() {
                     : "إضافة"}
               </button>
               <div className="text-xs text-white/45">
-                الصيغة: (الراتب ÷ 30) × 2 × {formDays || "0"} يوم — تُطبَّق
+                الصيغة: (الراتب ÷ 30) × 1.5 × {formDays || "0"} يوم — تُطبَّق
                 لكل موظف
               </div>
             </div>

@@ -4,7 +4,7 @@
 // payroll month. The amount paid is derived from the employee's
 // current base_salary using the Saudi convention:
 //
-//   per_day_overtime = (base_salary / 30) * 2
+//   per_day_overtime = (base_salary / 30) * 1.5
 //   total            = per_day_overtime * days
 //
 // We store `days` (admin input) and `created_at` etc. The amount is
@@ -82,7 +82,7 @@ export async function GET(request) {
         -- Derived amount based on the employee's CURRENT base_salary,
         -- so the list shows what the payroll will actually post.
         ROUND(
-          COALESCE(e.base_salary, 0) / 30.0 * 2 * o.days,
+          COALESCE(e.base_salary, 0) / 30.0 * 1.5 * o.days,
           2
         ) AS amount,
         COALESCE(e.base_salary, 0) AS base_salary
