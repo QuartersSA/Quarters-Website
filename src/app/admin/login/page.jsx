@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Lock, User, Shield, AlertCircle, Sun, Moon } from "lucide-react";
+import { Lock, User, Shield, AlertCircle } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { ADMIN_TOKEN_KEY, clearEmployeeSessions } from "@/utils/apiAuth";
-import useAdminTheme from "@/hooks/useAdminTheme";
 
 export default function AdminLoginPage() {
-  const { isDark, toggleTheme } = useAdminTheme();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -93,22 +91,6 @@ export default function AdminLoginPage() {
       className={`min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`}
       dir="rtl"
     >
-      {/* Floating theme toggle — accessible BEFORE login so the
-          admin can land on the page in their preferred theme. */}
-      <button
-        type="button"
-        onClick={toggleTheme}
-        className={`${ws.iconButton} fixed top-4 left-4 z-50`}
-        title={isDark ? "الوضع الفاتح" : "الوضع الداكن"}
-        aria-label={isDark ? "Light mode" : "Dark mode"}
-      >
-        {isDark ? (
-          <Sun className="w-4 h-4" />
-        ) : (
-          <Moon className="w-4 h-4" />
-        )}
-      </button>
-
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <img
