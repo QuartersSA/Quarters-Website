@@ -29,7 +29,7 @@ export function StockValueFilters({
     <div className={`${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`}>
       <div className="flex flex-col lg:flex-row gap-3">
         <div className="flex-1 relative">
-          <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/35" />
+          <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/35" />
           <input
             type="text"
             placeholder="البحث عن صنف…"
@@ -41,7 +41,7 @@ export function StockValueFilters({
 
         {/* Branch picker — drives server-side per-branch slice. */}
         <div className="min-w-[200px] flex items-center gap-2">
-          <Building2 className="w-4 h-4 text-white/45 shrink-0" />
+          <Building2 className="w-4 h-4 text-slate-500 dark:text-white/45 shrink-0" />
           <GlassSelect
             value={selectedBranch}
             onChange={onBranchChange}
@@ -51,7 +51,7 @@ export function StockValueFilters({
         </div>
 
         <div className="min-w-[220px] flex items-center gap-2">
-          <ArrowUpDown className="w-4 h-4 text-white/45 shrink-0" />
+          <ArrowUpDown className="w-4 h-4 text-slate-500 dark:text-white/45 shrink-0" />
           <GlassSelect
             value={sortBy}
             onChange={onSortChange}

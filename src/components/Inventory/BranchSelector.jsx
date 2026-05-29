@@ -18,7 +18,7 @@ export default function BranchSelector({ selectedBranch, onSelectBranch }) {
   if (isLoading) {
     return (
       <div className={`${ws.glassSoft} ${ws.card} p-4`} dir="rtl">
-        <div className="animate-pulse h-10 bg-white/[0.06] rounded-2xl border border-white/10" />
+        <div className="animate-pulse h-10 bg-slate-100 dark:bg-white/[0.06] rounded-2xl border border-slate-200 dark:border-white/10" />
       </div>
     );
   }
@@ -33,7 +33,7 @@ export default function BranchSelector({ selectedBranch, onSelectBranch }) {
 
   return (
     <div className={`${ws.glassSoft} ${ws.card} p-4`} dir="rtl">
-      <label className="block text-sm font-semibold text-white/70 mb-2">
+      <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
         Select Branch
       </label>
 

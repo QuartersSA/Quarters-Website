@@ -10,27 +10,27 @@ export function VarianceStats({ rows }) {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
       <StatCard
         icon={<BarChart3 className="w-6 h-6" />}
-        iconColor="text-sky-200"
+        iconColor="text-sky-700 dark:text-sky-200"
         label="عدد عمليات الجرد"
         value={stats.count}
       />
       <StatCard
         icon={<TrendingDown className="w-6 h-6" />}
-        iconColor="text-red-200"
+        iconColor="text-red-700 dark:text-red-200"
         label="مجموع الفاقد"
         value={formatNumber(-stats.totalLoss)}
-        valueColor={stats.totalLoss > 0 ? "text-red-200" : "text-white"}
+        valueColor={stats.totalLoss > 0 ? "text-red-700 dark:text-red-200" : "text-slate-900 dark:text-white"}
       />
       <StatCard
         icon={<TrendingUp className="w-6 h-6" />}
-        iconColor="text-emerald-200"
+        iconColor="text-emerald-700 dark:text-emerald-200"
         label="مجموع الزيادة"
         value={formatNumber(stats.totalGain)}
-        valueColor={stats.totalGain > 0 ? "text-emerald-200" : "text-white"}
+        valueColor={stats.totalGain > 0 ? "text-emerald-700 dark:text-emerald-200" : "text-slate-900 dark:text-white"}
       />
       <StatCard
         icon={<AlertTriangle className="w-6 h-6" />}
-        iconColor="text-amber-200"
+        iconColor="text-amber-700 dark:text-amber-200"
         label="عمليات بفروقات كبيرة"
         value={stats.bigDiffsCount}
         sublabel="(>10% انحراف)"
@@ -45,15 +45,15 @@ function StatCard({ icon, iconColor, label, value, valueColor, sublabel }) {
       <div className="flex items-center justify-between mb-4">
         <div className={`${ws.iconBox} ${iconColor}`}>{icon}</div>
       </div>
-      <p className="text-white/55 text-sm mb-1">{label}</p>
+      <p className="text-slate-600 dark:text-white/55 text-sm mb-1">{label}</p>
       <p
-        className={`text-3xl font-bold tracking-tight ${valueColor || "text-white"}`}
+        className={`text-3xl font-bold tracking-tight ${valueColor || "text-slate-900 dark:text-white"}`}
         dir="ltr"
       >
         {value}
       </p>
       {sublabel ? (
-        <p className="text-white/40 text-xs mt-1">{sublabel}</p>
+        <p className="text-slate-500 dark:text-white/40 text-xs mt-1">{sublabel}</p>
       ) : null}
     </div>
   );

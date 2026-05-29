@@ -23,7 +23,7 @@ export function ReceiptsFilters({
     <div className={`${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
         <div>
-          <label className="block text-xs text-white/55 mb-1">الفرع</label>
+          <label className="block text-xs text-slate-600 dark:text-white/55 mb-1">الفرع</label>
           <GlassSelect
             value={selectedBranch}
             onChange={onBranchChange}
@@ -33,7 +33,7 @@ export function ReceiptsFilters({
         </div>
 
         <div>
-          <label className="block text-xs text-white/55 mb-1">الصنف</label>
+          <label className="block text-xs text-slate-600 dark:text-white/55 mb-1">الصنف</label>
           <GlassSelect
             value={selectedItem}
             onChange={onItemChange}
@@ -43,7 +43,7 @@ export function ReceiptsFilters({
         </div>
 
         <div>
-          <label className="block text-xs text-white/55 mb-1">من تاريخ</label>
+          <label className="block text-xs text-slate-600 dark:text-white/55 mb-1">من تاريخ</label>
           <input
             type="date"
             value={dateFrom}
@@ -53,7 +53,7 @@ export function ReceiptsFilters({
         </div>
 
         <div>
-          <label className="block text-xs text-white/55 mb-1">إلى تاريخ</label>
+          <label className="block text-xs text-slate-600 dark:text-white/55 mb-1">إلى تاريخ</label>
           <input
             type="date"
             value={dateTo}
@@ -63,7 +63,7 @@ export function ReceiptsFilters({
         </div>
 
         <div>
-          <label className="block text-xs text-white/55 mb-1">&nbsp;</label>
+          <label className="block text-xs text-slate-600 dark:text-white/55 mb-1">&nbsp;</label>
           <button
             type="button"
             onClick={onRefresh}

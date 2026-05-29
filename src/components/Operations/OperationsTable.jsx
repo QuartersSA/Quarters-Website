@@ -62,7 +62,7 @@ function getTypePill(type) {
   if (type === "Daily") {
     return {
       label: "يومي",
-      className: "bg-sky-500/10 text-sky-200 border-sky-500/20",
+      className: "bg-sky-500/10 text-sky-700 dark:text-sky-200 border-sky-500/20",
       Icon: Calendar,
     };
   }
@@ -70,7 +70,7 @@ function getTypePill(type) {
   if (type === "Weekly") {
     return {
       label: "أسبوعي",
-      className: "bg-fuchsia-500/10 text-fuchsia-200 border-fuchsia-500/20",
+      className: "bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-200 border-fuchsia-500/20",
       Icon: Calendar,
     };
   }
@@ -78,7 +78,7 @@ function getTypePill(type) {
   if (type === "Transfer") {
     return {
       label: "تحويل",
-      className: "bg-amber-500/10 text-amber-200 border-amber-500/20",
+      className: "bg-amber-500/10 text-amber-700 dark:text-amber-200 border-amber-500/20",
       Icon: ArrowLeftRight,
     };
   }
@@ -86,7 +86,7 @@ function getTypePill(type) {
   if (type === "Receipt") {
     return {
       label: "وارد",
-      className: "bg-emerald-500/10 text-emerald-200 border-emerald-500/20",
+      className: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-200 border-emerald-500/20",
       Icon: PackagePlus,
     };
   }
@@ -94,14 +94,14 @@ function getTypePill(type) {
   if (type === "Opening") {
     return {
       label: "مخزون افتتاحي",
-      className: "bg-teal-500/10 text-teal-200 border-teal-500/20",
+      className: "bg-teal-500/10 text-teal-700 dark:text-teal-200 border-teal-500/20",
       Icon: FolderOpen,
     };
   }
 
   return {
     label: type,
-    className: "bg-white/[0.06] text-white border-white/10",
+    className: "bg-slate-100 dark:bg-white/[0.06] text-slate-900 dark:text-white border-slate-200 dark:border-white/10",
     Icon: Calendar,
   };
 }
@@ -233,7 +233,7 @@ export function OperationsTable({
 
   const cardClass = `${ws.glass} ${ws.card} overflow-hidden`;
   const headerChip =
-    "px-3 py-1 rounded-full text-sm text-white/70 bg-white/[0.04] border border-white/10";
+    "px-3 py-1 rounded-full text-sm text-slate-700 dark:text-white/70 bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10";
 
   return (
     <div className={cardClass} dir="rtl">
@@ -245,10 +245,10 @@ export function OperationsTable({
             <ClipboardList className="w-6 h-6" />
           </div>
           <div className="min-w-0">
-            <h2 className="text-xl font-bold text-white tracking-tight">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               سجل عمليات الجرد
             </h2>
-            <div className="text-xs text-white/50">عرض وتصدير السجل</div>
+            <div className="text-xs text-slate-500 dark:text-white/50">عرض وتصدير السجل</div>
           </div>
           <span className={headerChip}>
             {filteredOperations?.length || 0} عملية
@@ -287,23 +287,23 @@ export function OperationsTable({
               <button
                 type="button"
                 onClick={handleExportExcel}
-                className="w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors"
               >
-                <FileText className="w-4 h-4 text-emerald-200" />
+                <FileText className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
                 <div>
-                  <p className="font-semibold text-white">Excel</p>
-                  <p className="text-xs text-white/45">ملف .xls</p>
+                  <p className="font-semibold text-slate-900 dark:text-white">Excel</p>
+                  <p className="text-xs text-slate-500 dark:text-white/45">ملف .xls</p>
                 </div>
               </button>
               <button
                 type="button"
                 onClick={handleExportPDF}
-                className="w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors border-t border-white/10"
+                className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10"
               >
-                <FileText className="w-4 h-4 text-red-200" />
+                <FileText className="w-4 h-4 text-red-700 dark:text-red-200" />
                 <div>
-                  <p className="font-semibold text-white">PDF</p>
-                  <p className="text-xs text-white/45">للطباعة والأرشفة</p>
+                  <p className="font-semibold text-slate-900 dark:text-white">PDF</p>
+                  <p className="text-xs text-slate-500 dark:text-white/45">للطباعة والأرشفة</p>
                 </div>
               </button>
             </GlassPopover>
@@ -315,15 +315,15 @@ export function OperationsTable({
         <div
           className={`px-5 py-3 border-b ${ws.divider} bg-emerald-400/[0.06] flex items-center justify-between gap-3`}
         >
-          <div className="flex items-center gap-3 text-sm text-white">
-            <CheckSquare className="w-4 h-4 text-emerald-300" />
+          <div className="flex items-center gap-3 text-sm text-slate-900 dark:text-white">
+            <CheckSquare className="w-4 h-4 text-emerald-700 dark:text-emerald-300" />
             <span>
-              تم تحديد <strong className="text-emerald-300">{selectedCount}</strong> عملية
+              تم تحديد <strong className="text-emerald-700 dark:text-emerald-300">{selectedCount}</strong> عملية
             </span>
             <button
               type="button"
               onClick={onClearSelection}
-              className="text-white/55 hover:text-white text-xs underline-offset-2 hover:underline"
+              className="text-slate-600 dark:text-white/55 hover:text-slate-900 dark:hover:text-white text-xs underline-offset-2 hover:underline"
             >
               إلغاء التحديد
             </button>
@@ -347,44 +347,44 @@ export function OperationsTable({
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-white/[0.04]">
+            <tr className="bg-slate-100 dark:bg-white/[0.04]">
               {selectionEnabled ? (
                 <th className="px-4 py-4 text-center" style={{ width: 48 }}>
                   <button
                     type="button"
                     onClick={onToggleSelectAll}
-                    className="inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-white/[0.06] transition-colors"
+                    className="inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors"
                     aria-label={allSelectedOnPage ? "إلغاء تحديد الكل" : "تحديد الكل"}
                     title={allSelectedOnPage ? "إلغاء تحديد الكل" : "تحديد الكل"}
                     disabled={selectableOps.length === 0}
                   >
                     {allSelectedOnPage ? (
-                      <CheckSquare className="w-5 h-5 text-emerald-300" />
+                      <CheckSquare className="w-5 h-5 text-emerald-700 dark:text-emerald-300" />
                     ) : (
-                      <Square className="w-5 h-5 text-white/40" />
+                      <Square className="w-5 h-5 text-slate-500 dark:text-white/40" />
                     )}
                   </button>
                 </th>
               ) : null}
-              <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
+              <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
                 رقم الجرد
               </th>
-              <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
+              <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
                 الفرع
               </th>
-              <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
+              <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
                 الموظف
               </th>
-              <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
+              <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
                 نوع الجرد
               </th>
-              <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
+              <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
                 تاريخ العملية
               </th>
-              <th className="text-right px-6 py-4 text-sm font-semibold text-white/55">
+              <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
                 تاريخ الإدخال
               </th>
-              <th className="text-center px-6 py-4 text-sm font-semibold text-white/55">
+              <th className="text-center px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55">
                 الإجراءات
               </th>
             </tr>
@@ -394,7 +394,7 @@ export function OperationsTable({
               <tr>
                 <td
                   colSpan={selectionEnabled ? "8" : "7"}
-                  className="px-6 py-12 text-center text-white/55"
+                  className="px-6 py-12 text-center text-slate-600 dark:text-white/55"
                 >
                   <div className="flex items-center justify-center gap-3">
                     <div className="w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" />
@@ -420,10 +420,10 @@ export function OperationsTable({
                 return (
                   <tr
                     key={operation.id}
-                    className={`border-t border-white/5 transition-colors ${
+                    className={`border-t border-slate-100 dark:border-white/5 transition-colors ${
                       isSelected
                         ? "bg-emerald-400/[0.06] hover:bg-emerald-400/[0.10]"
-                        : "hover:bg-white/[0.05]"
+                        : "hover:bg-slate-100 dark:hover:bg-white/[0.05]"
                     }`}
                   >
                     {selectionEnabled ? (
@@ -432,20 +432,20 @@ export function OperationsTable({
                           <button
                             type="button"
                             onClick={() => onToggleSelect(operation.id)}
-                            className="inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-white/[0.06] transition-colors"
+                            className="inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors"
                             aria-label={
                               isSelected ? "إلغاء التحديد" : "تحديد"
                             }
                           >
                             {isSelected ? (
-                              <CheckSquare className="w-5 h-5 text-emerald-300" />
+                              <CheckSquare className="w-5 h-5 text-emerald-700 dark:text-emerald-300" />
                             ) : (
-                              <Square className="w-5 h-5 text-white/40" />
+                              <Square className="w-5 h-5 text-slate-500 dark:text-white/40" />
                             )}
                           </button>
                         ) : (
                           <span
-                            className="text-white/20 text-xs"
+                            className="text-slate-300 dark:text-white/20 text-xs"
                             title="الواردات لا تُحذف من هنا"
                           >
                             —
@@ -455,8 +455,8 @@ export function OperationsTable({
                     ) : null}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-emerald-200" />
-                        <span className="text-white font-mono text-sm">
+                        <FileText className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
+                        <span className="text-slate-900 dark:text-white font-mono text-sm">
                           {operation.inventory_number}
                         </span>
                       </div>
@@ -464,7 +464,7 @@ export function OperationsTable({
 
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <Building2 className="w-4 h-4 text-white/35" />
+                        <Building2 className="w-4 h-4 text-slate-400 dark:text-white/35" />
                         <div className="min-w-0">
                           {isTransfer && transferParties ? (
                             // For transfer rows, name both parties
@@ -472,12 +472,12 @@ export function OperationsTable({
                             // for both the "out" and the "in" leg.
                             <>
                               <div className="text-white/80 font-medium truncate flex items-center gap-1">
-                                <transferParties.Icon className="w-3.5 h-3.5 text-emerald-200" />
+                                <transferParties.Icon className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-200" />
                                 <span>
                                   المستلم: {transferParties.receiver}
                                 </span>
                               </div>
-                              <div className="text-white/55 text-xs mt-1 truncate">
+                              <div className="text-slate-600 dark:text-white/55 text-xs mt-1 truncate">
                                 المرسل: {transferParties.sender}
                               </div>
                             </>
@@ -487,7 +487,7 @@ export function OperationsTable({
                                 {operation.branch_name || "غير محدد"}
                               </div>
                               {operation.branch_location ? (
-                                <div className="text-white/40 text-xs">
+                                <div className="text-slate-500 dark:text-white/40 text-xs">
                                   {operation.branch_location}
                                 </div>
                               ) : null}
@@ -500,17 +500,17 @@ export function OperationsTable({
                     <td className="px-6 py-4">
                       {operation.employee_name ? (
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 bg-white/[0.06] border border-white/10 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 rounded-full flex items-center justify-center flex-shrink-0">
                             <span className="text-white/80 text-xs font-bold">
                               {operation.employee_name.charAt(0)}
                             </span>
                           </div>
-                          <div className="text-white font-medium text-sm">
+                          <div className="text-slate-900 dark:text-white font-medium text-sm">
                             {operation.employee_name}
                           </div>
                         </div>
                       ) : (
-                        <span className="text-white/45 text-sm">غير محدد</span>
+                        <span className="text-slate-500 dark:text-white/45 text-sm">غير محدد</span>
                       )}
                     </td>
 
@@ -525,10 +525,10 @@ export function OperationsTable({
 
                     <td className="px-6 py-4">
                       <div className="text-sm">
-                        <div className="text-white">
+                        <div className="text-slate-900 dark:text-white">
                           {renderDateRiyadh(operationDateValue)}
                         </div>
-                        <div className="text-white/45 text-xs">
+                        <div className="text-slate-500 dark:text-white/45 text-xs">
                           {renderTimeRiyadh(operationDateValue)}
                         </div>
                       </div>
@@ -536,10 +536,10 @@ export function OperationsTable({
 
                     <td className="px-6 py-4">
                       <div className="text-sm">
-                        <div className="text-white/60">
+                        <div className="text-slate-600 dark:text-white/60">
                           {renderDateRiyadh(operation.created_at)}
                         </div>
-                        <div className="text-white/35 text-xs">
+                        <div className="text-slate-400 dark:text-white/35 text-xs">
                           {renderTimeRiyadh(operation.created_at)}
                         </div>
                       </div>
@@ -562,7 +562,7 @@ export function OperationsTable({
                             className={`${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`}
                             title="تعديل العملية"
                           >
-                            <Pencil className="w-4 h-4 text-sky-200" />
+                            <Pencil className="w-4 h-4 text-sky-700 dark:text-sky-200" />
                           </button>
                         ) : null}
                         <button
@@ -581,10 +581,10 @@ export function OperationsTable({
               <tr>
                 <td
                   colSpan={selectionEnabled ? "8" : "7"}
-                  className="px-6 py-12 text-center text-white/45"
+                  className="px-6 py-12 text-center text-slate-500 dark:text-white/45"
                 >
                   <ClipboardList className="w-12 h-12 mx-auto mb-3 opacity-40" />
-                  <p className="text-lg text-white/70">لا توجد عمليات جرد</p>
+                  <p className="text-lg text-slate-700 dark:text-white/70">لا توجد عمليات جرد</p>
                   {hasActiveFilters ? (
                     <p className="text-sm mt-2">جرّب تغيير الفلاتر أو مسحها</p>
                   ) : null}

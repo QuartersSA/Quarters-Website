@@ -17122,7 +17122,7 @@ function exportItemsSummaryToPDF(filteredItems) {
 function ItemsSummaryHeader() {
   return /* @__PURE__ */ jsxs("div", { className: "mb-8 mt-6 lg:mt-0", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-4", children: [
-      /* @__PURE__ */ jsx("a", { href: "/admin", className: "text-white/55 hover:text-white transition-colors", children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsx("a", { href: "/admin", className: "text-slate-600 dark:text-white/55 hover:text-slate-900 dark:hover:text-white transition-colors", children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-5 h-5" }) }),
       /* @__PURE__ */ jsx("h1", { className: `text-3xl sm:text-4xl ${ws.title}`, children: "ملخص الأصناف الشامل" })
     ] }),
     /* @__PURE__ */ jsx("p", { className: ws.muted, children: "عرض شامل لجميع الأصناف مع تفاصيل آخر عمليات الجرد في كل فرع" })
@@ -17136,28 +17136,28 @@ function ItemsSummaryStats({
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 mb-8", children: [
     /* @__PURE__ */ jsxs("div", { className: statCard, children: [
       /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-white/80`, children: /* @__PURE__ */ jsx(Package, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "إجمالي الأصناف" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.totalItems })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "إجمالي الأصناف" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.totalItems })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "عدد الفروع" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.totalBranches })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "عدد الفروع" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.totalBranches })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "إجمالي المخزون" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.totalStock.toLocaleString() })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "إجمالي المخزون" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.totalStock.toLocaleString() })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-amber-200`, children: /* @__PURE__ */ jsx(TrendingDown, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "أصناف منخفضة" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.lowStockCount })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(TrendingDown, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "أصناف منخفضة" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.lowStockCount })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-red-200`, children: /* @__PURE__ */ jsx(XCircle, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "غير متوفر" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.outOfStockCount })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-red-700 dark:text-red-200`, children: /* @__PURE__ */ jsx(XCircle, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "غير متوفر" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.outOfStockCount })
     ] })
   ] });
 }
@@ -17175,7 +17175,7 @@ function ItemsSummaryFilters({
 }) {
   return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col lg:flex-row gap-4", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex-1 relative", children: [
-      /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/35" }),
+      /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/35" }),
       /* @__PURE__ */ jsx("input", { type: "text", placeholder: "البحث عن صنف…", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), className: `${ws.input} pr-12 pl-4 py-3` })
     ] }),
     /* @__PURE__ */ jsx("div", { className: "min-w-[180px]", children: /* @__PURE__ */ jsx(GlassSelect, { value: selectedBranch, onChange: setSelectedBranch, options: branchOptions, buttonClassName: "px-4 py-3" }) }),
@@ -17200,11 +17200,11 @@ function ItemBranchDetails({
   minThreshold
 }) {
   const status = getStockStatus(branch.current_quantity, minThreshold);
-  return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-white/10 rounded-3xl p-4`, children: [
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4`, children: [
     /* @__PURE__ */ jsxs("div", { className: `flex items-start justify-between mb-3 pb-3 border-b ${ws.divider}`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-        /* @__PURE__ */ jsx("h5", { className: "text-white font-semibold mb-1", children: branch.branch_name }),
-        branch.branch_location ? /* @__PURE__ */ jsx("p", { className: "text-white/45 text-xs", children: branch.branch_location }) : null
+        /* @__PURE__ */ jsx("h5", { className: "text-slate-900 dark:text-white font-semibold mb-1", children: branch.branch_name }),
+        branch.branch_location ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-xs", children: branch.branch_location }) : null
       ] }),
       /* @__PURE__ */ jsxs("span", { className: `${ws.pill} inline-flex items-center gap-1 text-xs font-semibold border ${status.color}`, children: [
         /* @__PURE__ */ jsx(StatusIcon$1, { iconName: status.icon }),
@@ -17213,10 +17213,10 @@ function ItemBranchDetails({
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "mb-3", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-2", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55 text-sm", children: "الكمية الحالية" }),
-        /* @__PURE__ */ jsx("span", { className: "text-2xl font-bold text-white", children: branch.current_quantity })
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55 text-sm", children: "الكمية الحالية" }),
+        /* @__PURE__ */ jsx("span", { className: "text-2xl font-bold text-slate-900 dark:text-white", children: branch.current_quantity })
       ] }),
-      Number(branch.receipts_since_last_inventory) > 0 ? /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between text-xs mt-1", children: /* @__PURE__ */ jsxs("span", { className: "text-white/45", children: [
+      Number(branch.receipts_since_last_inventory) > 0 ? /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between text-xs mt-1", children: /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/45", children: [
         "آخر جرد: ",
         branch.last_inventory_quantity,
         " · وارد بعده: +",
@@ -17224,33 +17224,33 @@ function ItemBranchDetails({
       ] }) }) : null
     ] }),
     branch.operation_id ? /* @__PURE__ */ jsxs("div", { className: `space-y-2 pt-3 border-t ${ws.divider}`, children: [
-      /* @__PURE__ */ jsx("p", { className: "text-xs font-semibold text-white/55 mb-2", children: "آخر عملية جرد:" }),
+      /* @__PURE__ */ jsx("p", { className: "text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "آخر عملية جرد:" }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx(Hash, { className: "w-3 h-3 text-sky-200" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white/55", children: "رقم الجرد:" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white font-mono", children: branch.inventory_number })
+        /* @__PURE__ */ jsx(Hash, { className: "w-3 h-3 text-sky-700 dark:text-sky-200" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "رقم الجرد:" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-900 dark:text-white font-mono", children: branch.inventory_number })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx(Calendar, { className: "w-3 h-3 text-sky-200" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white/55", children: "التاريخ:" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white whitespace-nowrap", children: formatDateTime$2(branch.operation_date) })
+        /* @__PURE__ */ jsx(Calendar, { className: "w-3 h-3 text-sky-700 dark:text-sky-200" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "التاريخ:" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-900 dark:text-white whitespace-nowrap", children: formatDateTime$2(branch.operation_date) })
       ] }),
       branch.employee_name ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx(User, { className: "w-3 h-3 text-sky-200" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white/55", children: "الموظف:" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white", children: branch.employee_name })
+        /* @__PURE__ */ jsx(User, { className: "w-3 h-3 text-sky-700 dark:text-sky-200" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "الموظف:" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-900 dark:text-white", children: branch.employee_name })
       ] }) : null,
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-3 h-3 text-sky-200" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white/55", children: "نوع الجرد:" }),
+        /* @__PURE__ */ jsx(FileText, { className: "w-3 h-3 text-sky-700 dark:text-sky-200" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "نوع الجرد:" }),
         /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold text-white/80", children: branch.inventory_type === "Daily" ? "يومي" : branch.inventory_type === "Weekly" ? "أسبوعي" : branch.inventory_type === "Transfer" ? "تحويل" : branch.inventory_type === "Receipt" ? "وارد" : branch.inventory_type === "Opening" ? "مخزون افتتاحي" : branch.inventory_type || "-" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx(BarChart3, { className: "w-3 h-3 text-sky-200" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white/55", children: "إجمالي العمليات:" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-white", children: branch.total_operations })
+        /* @__PURE__ */ jsx(BarChart3, { className: "w-3 h-3 text-sky-700 dark:text-sky-200" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي العمليات:" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-900 dark:text-white", children: branch.total_operations })
       ] })
-    ] }) : /* @__PURE__ */ jsx("div", { className: `pt-3 border-t ${ws.divider}`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-amber-200", children: [
+    ] }) : /* @__PURE__ */ jsx("div", { className: `pt-3 border-t ${ws.divider}`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-amber-700 dark:text-amber-200", children: [
       /* @__PURE__ */ jsx(AlertTriangle, { className: "w-4 h-4" }),
       /* @__PURE__ */ jsx("span", { className: "text-xs", children: "لم يتم تنفيذ جرد لهذا الفرع بعد" })
     ] }) })
@@ -17263,44 +17263,44 @@ function ItemCard({
   onToggle
 }) {
   const totalQuantity = item.branches.reduce((sum, b) => sum + (Number(b.current_quantity) || 0), 0);
-  return /* @__PURE__ */ jsxs("div", { className: "hover:bg-white/[0.04] transition-colors", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "hover:bg-slate-100 dark:hover:bg-white/[0.04] transition-colors", children: [
     /* @__PURE__ */ jsx("div", { className: "p-6 cursor-pointer", onClick: onToggle, children: /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 flex-1", children: [
-      /* @__PURE__ */ jsx("div", { className: "w-16 h-16 bg-white/[0.04] rounded-2xl flex items-center justify-center border border-white/10 flex-shrink-0", children: /* @__PURE__ */ jsx(Package, { className: "w-8 h-8 text-white/60" }) }),
+      /* @__PURE__ */ jsx("div", { className: "w-16 h-16 bg-slate-100 dark:bg-white/[0.04] rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 flex-shrink-0", children: /* @__PURE__ */ jsx(Package, { className: "w-8 h-8 text-slate-600 dark:text-white/60" }) }),
       /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-1 flex-wrap", children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-white tracking-tight", children: item.name }),
-          item.unit ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-white/[0.04] text-white/70 border-white/10`, children: [
+          /* @__PURE__ */ jsx("h3", { className: "text-lg font-bold text-slate-900 dark:text-white tracking-tight", children: item.name }),
+          item.unit ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`, children: [
             /* @__PURE__ */ jsx("span", { className: "text-sm", children: getUnitIcon(item.unit) }),
             /* @__PURE__ */ jsx("span", { className: "mr-1", children: item.unit })
           ] }) : null
         ] }),
-        item.description ? /* @__PURE__ */ jsx("p", { className: "text-white/50 text-sm mb-2", children: item.description }) : null,
+        item.description ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-sm mb-2", children: item.description }) : null,
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
-          /* @__PURE__ */ jsxs("span", { className: "text-xs text-white/45", children: [
+          /* @__PURE__ */ jsxs("span", { className: "text-xs text-slate-500 dark:text-white/45", children: [
             "الحد الأدنى: ",
             item.min_stock_threshold,
             " ",
             item.unit || "وحدة"
           ] }),
-          /* @__PURE__ */ jsx("span", { className: "text-xs text-white/30", children: "•" }),
-          /* @__PURE__ */ jsxs("span", { className: "text-xs text-emerald-200 font-semibold", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-400 dark:text-white/30", children: "•" }),
+          /* @__PURE__ */ jsxs("span", { className: "text-xs text-emerald-700 dark:text-emerald-200 font-semibold", children: [
             "إجمالي المخزون: ",
             totalQuantity,
             " ",
             item.unit || "وحدة"
           ] }),
-          /* @__PURE__ */ jsx("span", { className: "text-xs text-white/30", children: "•" }),
-          /* @__PURE__ */ jsxs("span", { className: "text-xs text-sky-200", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-400 dark:text-white/30", children: "•" }),
+          /* @__PURE__ */ jsxs("span", { className: "text-xs text-sky-700 dark:text-sky-200", children: [
             item.branches.length,
             " فرع"
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "flex items-center gap-3", children: isExpanded ? /* @__PURE__ */ jsx(ChevronUp, { className: "w-5 h-5 text-white/45" }) : /* @__PURE__ */ jsx(ChevronDown, { className: "w-5 h-5 text-white/45" }) })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center gap-3", children: isExpanded ? /* @__PURE__ */ jsx(ChevronUp, { className: "w-5 h-5 text-slate-500 dark:text-white/45" }) : /* @__PURE__ */ jsx(ChevronDown, { className: "w-5 h-5 text-slate-500 dark:text-white/45" }) })
     ] }) }) }),
-    isExpanded ? /* @__PURE__ */ jsx("div", { className: "px-6 pb-6", children: /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-white/10 rounded-3xl p-6`, children: [
-      /* @__PURE__ */ jsxs("h4", { className: "text-sm font-bold text-white/70 mb-4 flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-sky-200" }),
+    isExpanded ? /* @__PURE__ */ jsx("div", { className: "px-6 pb-6", children: /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-6`, children: [
+      /* @__PURE__ */ jsxs("h4", { className: "text-sm font-bold text-slate-700 dark:text-white/70 mb-4 flex items-center gap-2", children: [
+        /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-sky-700 dark:text-sky-200" }),
         "تفاصيل الفروع وآخر عمليات الجرد"
       ] }),
       /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-4", children: item.branches.map((branch, idx) => /* @__PURE__ */ jsx(ItemBranchDetails, { branch, minThreshold: item.min_stock_threshold }, idx)) })
@@ -17331,18 +17331,18 @@ function ItemsSummaryExportMenu({
     /* @__PURE__ */ jsxs(GlassPopover, { open: showExportMenu, anchorRef: exportBtnRef, onClose: () => setShowExportMenu(false), style: {
       width: 224
     }, children: [
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-200" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "Excel" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "تقرير شامل ومفصل" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "تقرير شامل ومفصل" })
         ] })
       ] }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportPDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors border-t border-white/10", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-200" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportPDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-700 dark:text-red-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "PDF" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للطباعة والأرشفة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
         ] })
       ] })
     ] })
@@ -17360,7 +17360,7 @@ function ItemsList({
   const sectionCard = `${ws.glass} ${ws.card} overflow-hidden`;
   return /* @__PURE__ */ jsxs("div", { className: sectionCard, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-5 sm:p-6 border-b ${ws.divider} flex items-center justify-between gap-3`, children: [
-      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-white flex items-center gap-3 tracking-tight", children: [
+      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5" }) }),
         "تفاصيل الأصناف (",
         filteredItems.length,
@@ -17368,10 +17368,10 @@ function ItemsList({
       ] }),
       /* @__PURE__ */ jsx(ItemsSummaryExportMenu, { onExportExcel, onExportPDF })
     ] }),
-    isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
+    isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: "w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" }),
       /* @__PURE__ */ jsx("span", { children: "جاري التحميل…" })
-    ] }) }) : filteredItems.length > 0 ? /* @__PURE__ */ jsx("div", { className: "divide-y divide-white/5", children: filteredItems.map((item) => /* @__PURE__ */ jsx(ItemCard, { item, isExpanded: expandedItems.has(item.id), onToggle: () => onToggleExpansion(item.id) }, item.id)) }) : /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-white/45", children: [
+    ] }) }) : filteredItems.length > 0 ? /* @__PURE__ */ jsx("div", { className: "divide-y divide-white/5", children: filteredItems.map((item) => /* @__PURE__ */ jsx(ItemCard, { item, isExpanded: expandedItems.has(item.id), onToggle: () => onToggleExpansion(item.id) }, item.id)) }) : /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-slate-500 dark:text-white/45", children: [
       /* @__PURE__ */ jsx(Package, { className: "w-16 h-16 mx-auto mb-4 opacity-40" }),
       /* @__PURE__ */ jsx("p", { className: "text-lg mb-2", children: "لا توجد أصناف" }),
       /* @__PURE__ */ jsx("p", { className: "text-sm", children: "جرب تغيير الفلاتر أو إضافة أصناف جديدة" })
@@ -17470,10 +17470,10 @@ function ItemTimelineModal({
   return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 overflow-y-auto", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("div", { className: `w-full max-w-5xl ${ws.glass} ${ws.card} my-4 max-h-[calc(100vh-2rem)] overflow-hidden flex flex-col`, onClick: (e) => e.stopPropagation(), children: [
     /* @__PURE__ */ jsxs("div", { className: `p-5 sm:p-6 border-b ${ws.divider} flex items-start justify-between gap-3`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-emerald-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-6 h-6" }) }),
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-6 h-6" }) }),
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold text-white tracking-tight truncate", children: "تقرير زمني للصنف" }),
-          /* @__PURE__ */ jsxs("div", { className: "text-sm text-white/55 mt-0.5 truncate", children: [
+          /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold text-slate-900 dark:text-white tracking-tight truncate", children: "تقرير زمني للصنف" }),
+          /* @__PURE__ */ jsxs("div", { className: "text-sm text-slate-600 dark:text-white/55 mt-0.5 truncate", children: [
             item?.name || "…",
             " — فرع ",
             branch?.name || "…"
@@ -17494,8 +17494,8 @@ function ItemTimelineModal({
         /* @__PURE__ */ jsx(Stat, { label: "أعلى رصيد", value: maxBalance, accent: "sky" }),
         /* @__PURE__ */ jsx(Stat, { label: "أقل رصيد", value: minBalance, accent: "amber" })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-white/10 rounded-3xl p-4`, children: [
-        timelineQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "h-64 flex items-center justify-center text-white/55", children: "جاري التحميل…" }) : !events.length ? /* @__PURE__ */ jsxs("div", { className: "h-64 flex flex-col items-center justify-center text-white/55 gap-2", children: [
+      /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4`, children: [
+        timelineQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "h-64 flex items-center justify-center text-slate-600 dark:text-white/55", children: "جاري التحميل…" }) : !events.length ? /* @__PURE__ */ jsxs("div", { className: "h-64 flex flex-col items-center justify-center text-slate-600 dark:text-white/55 gap-2", children: [
           /* @__PURE__ */ jsx(Package, { className: "w-8 h-8 opacity-40" }),
           /* @__PURE__ */ jsx("div", { children: "لا توجد عمليات على هذا الصنف في هذا الفرع" })
         ] }) : /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: 280, children: /* @__PURE__ */ jsxs(LineChart, { data: chartData, margin: {
@@ -17523,15 +17523,15 @@ function ItemTimelineModal({
           /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "balance", stroke: "#34d399", strokeWidth: 2, dot: false, isAnimationActive: false }),
           chartData.map((p) => /* @__PURE__ */ jsx(ReferenceDot, { x: p.ts, y: p.balance, r: 4, fill: TYPE_COLOR[p.type] || "#34d399", stroke: "rgba(0,0,0,0.4)", strokeWidth: 1, isFront: true }, `${p.idx}`))
         ] }) }),
-        events.length > 0 ? /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-4 mt-3 flex-wrap text-xs", children: Object.entries(TYPE_LABEL).map(([k, label]) => /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 text-white/70", children: [
+        events.length > 0 ? /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-4 mt-3 flex-wrap text-xs", children: Object.entries(TYPE_LABEL).map(([k, label]) => /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 text-slate-700 dark:text-white/70", children: [
           /* @__PURE__ */ jsx("span", { className: "inline-block w-3 h-3 rounded-full", style: {
             background: TYPE_COLOR[k]
           } }),
           label
         ] }, k)) }) : null
       ] }),
-      events.length > 0 ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-white/10 rounded-3xl overflow-hidden`, children: [
-        /* @__PURE__ */ jsxs("div", { className: "px-4 py-3 border-b border-white/10 flex items-center gap-2 text-white/80 text-sm font-semibold", children: [
+      events.length > 0 ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden`, children: [
+        /* @__PURE__ */ jsxs("div", { className: "px-4 py-3 border-b border-slate-200 dark:border-white/10 flex items-center gap-2 text-white/80 text-sm font-semibold", children: [
           /* @__PURE__ */ jsx(Calendar, { className: "w-4 h-4" }),
           "سجل العمليات (",
           events.length,
@@ -17542,20 +17542,20 @@ function ItemTimelineModal({
           const isPositive = ev.delta > 0;
           const isNegative = ev.delta < 0;
           return /* @__PURE__ */ jsxs("div", { className: "px-4 py-3 flex items-center gap-3", children: [
-            /* @__PURE__ */ jsx("div", { className: `w-9 h-9 rounded-2xl flex items-center justify-center border border-white/10`, style: {
+            /* @__PURE__ */ jsx("div", { className: `w-9 h-9 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10`, style: {
               background: `${TYPE_COLOR[ev.inventory_type] || "#34d399"}22`
             }, children: /* @__PURE__ */ jsx(Icon, { className: "w-4 h-4", style: {
               color: TYPE_COLOR[ev.inventory_type] || "#34d399"
             } }) }),
             /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0", children: [
               /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
-                /* @__PURE__ */ jsx("span", { className: "text-white text-sm font-semibold truncate", children: describeEvent(ev) }),
-                ev.inventory_number ? /* @__PURE__ */ jsxs("span", { className: "text-[10px] px-2 py-0.5 rounded-full bg-white/[0.06] text-white/60 border border-white/10 flex items-center gap-1", dir: "ltr", children: [
+                /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white text-sm font-semibold truncate", children: describeEvent(ev) }),
+                ev.inventory_number ? /* @__PURE__ */ jsxs("span", { className: "text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border border-slate-200 dark:border-white/10 flex items-center gap-1", dir: "ltr", children: [
                   /* @__PURE__ */ jsx(Hash, { className: "w-3 h-3" }),
                   ev.inventory_number
                 ] }) : null
               ] }),
-              /* @__PURE__ */ jsxs("div", { className: "text-xs text-white/45 mt-0.5 flex items-center gap-2 flex-wrap", children: [
+              /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-0.5 flex items-center gap-2 flex-wrap", children: [
                 /* @__PURE__ */ jsx("span", { children: formatDateTime$3(ev.event_at) }),
                 ev.employee_name ? /* @__PURE__ */ jsxs("span", { children: [
                   "• ",
@@ -17564,14 +17564,14 @@ function ItemTimelineModal({
               ] })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 shrink-0", children: [
-              /* @__PURE__ */ jsxs("span", { className: `text-sm font-bold ${isPositive ? "text-emerald-200" : isNegative ? "text-rose-200" : "text-white/60"}`, children: [
+              /* @__PURE__ */ jsxs("span", { className: `text-sm font-bold ${isPositive ? "text-emerald-700 dark:text-emerald-200" : isNegative ? "text-rose-700 dark:text-rose-200" : "text-slate-600 dark:text-white/60"}`, children: [
                 isPositive ? /* @__PURE__ */ jsx(TrendingUp, { className: "inline w-3 h-3 ml-1" }) : isNegative ? /* @__PURE__ */ jsx(TrendingDown, { className: "inline w-3 h-3 ml-1" }) : null,
                 isPositive ? "+" : "",
                 ev.delta
               ] }),
               /* @__PURE__ */ jsxs("div", { className: "text-left", children: [
-                /* @__PURE__ */ jsx("div", { className: "text-xs text-white/40", children: "الرصيد" }),
-                /* @__PURE__ */ jsx("div", { className: "text-base font-bold text-white", children: ev.balance })
+                /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/40", children: "الرصيد" }),
+                /* @__PURE__ */ jsx("div", { className: "text-base font-bold text-slate-900 dark:text-white", children: ev.balance })
               ] })
             ] })
           ] }, `${ev.kind}-${ev.operation_id}-${idx}`);
@@ -17586,12 +17586,12 @@ function Stat({
   accent = "emerald"
 }) {
   const accentMap = {
-    emerald: "text-emerald-200",
-    sky: "text-sky-200",
-    amber: "text-amber-200"
+    emerald: "text-emerald-700 dark:text-emerald-200",
+    sky: "text-sky-700 dark:text-sky-200",
+    amber: "text-amber-700 dark:text-amber-200"
   };
-  return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-white/10 rounded-3xl p-3 sm:p-4`, children: [
-    /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55", children: label }),
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-3 sm:p-4`, children: [
+    /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: label }),
     /* @__PURE__ */ jsx("div", { className: `text-xl sm:text-2xl font-bold mt-1 ${accentMap[accent]}`, children: value })
   ] });
 }
@@ -17633,10 +17633,10 @@ function TimelineReportLauncher({
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4 sm:p-5 mb-6`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-3", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-emerald-200`, children: /* @__PURE__ */ jsx(LineChart$1, { className: "w-5 h-5" }) }),
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(LineChart$1, { className: "w-5 h-5" }) }),
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-white font-bold tracking-tight", children: "تقرير زمني" }),
-          /* @__PURE__ */ jsx("p", { className: "text-white/55 text-xs", children: "اختر صنف + فرع لعرض الكميات منذ البداية كرسم بياني وكسجل عمليات." })
+          /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "تقرير زمني" }),
+          /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-xs", children: "اختر صنف + فرع لعرض الكميات منذ البداية كرسم بياني وكسجل عمليات." })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3", children: [
@@ -18047,7 +18047,7 @@ function getLowStockStatus(item) {
 function LowStockHeader() {
   return /* @__PURE__ */ jsxs("div", { className: "mb-8 mt-6 lg:mt-0", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-4", children: [
-      /* @__PURE__ */ jsx("a", { href: "/admin", className: "text-white/55 hover:text-white transition-colors", children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsx("a", { href: "/admin", className: "text-slate-600 dark:text-white/55 hover:text-slate-900 dark:hover:text-white transition-colors", children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-5 h-5" }) }),
       /* @__PURE__ */ jsx("h1", { className: `text-3xl sm:text-4xl ${ws.title}`, children: "الأصناف منخفضة الكمية" })
     ] }),
     /* @__PURE__ */ jsx("p", { className: ws.muted, children: "متابعة الأصناف التي تحتاج إلى إعادة تعبئة بناءً على الحد الأدنى للمخزون" })
@@ -18059,10 +18059,10 @@ function LowStockStats({
   stats
 }) {
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8", children: [
-    /* @__PURE__ */ jsx(StatCard$1, { icon: /* @__PURE__ */ jsx(TrendingDown, { className: "w-6 h-6" }), iconColor: "text-amber-200", label: "إجمالي الأصناف المنخفضة", value: stats.totalLowStock }),
-    /* @__PURE__ */ jsx(StatCard$1, { icon: /* @__PURE__ */ jsx(XCircle, { className: "w-6 h-6" }), iconColor: "text-red-200", label: "غير متوفر", value: stats.outOfStock }),
-    /* @__PURE__ */ jsx(StatCard$1, { icon: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6" }), iconColor: "text-orange-200", label: "حالات حرجة", value: stats.criticalItems }),
-    /* @__PURE__ */ jsx(StatCard$1, { icon: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6" }), iconColor: "text-sky-200", label: "الفروع المتأثرة", value: stats.branches })
+    /* @__PURE__ */ jsx(StatCard$1, { icon: /* @__PURE__ */ jsx(TrendingDown, { className: "w-6 h-6" }), iconColor: "text-amber-700 dark:text-amber-200", label: "إجمالي الأصناف المنخفضة", value: stats.totalLowStock }),
+    /* @__PURE__ */ jsx(StatCard$1, { icon: /* @__PURE__ */ jsx(XCircle, { className: "w-6 h-6" }), iconColor: "text-red-700 dark:text-red-200", label: "غير متوفر", value: stats.outOfStock }),
+    /* @__PURE__ */ jsx(StatCard$1, { icon: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6" }), iconColor: "text-orange-700 dark:text-orange-200", label: "حالات حرجة", value: stats.criticalItems }),
+    /* @__PURE__ */ jsx(StatCard$1, { icon: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6" }), iconColor: "text-sky-700 dark:text-sky-200", label: "الفروع المتأثرة", value: stats.branches })
   ] });
 }
 function StatCard$1({
@@ -18073,8 +18073,8 @@ function StatCard$1({
 }) {
   return /* @__PURE__ */ jsxs("div", { className: statCard$2, children: [
     /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} ${iconColor}`, children: icon }) }),
-    /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: label }),
-    /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: value })
+    /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: label }),
+    /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: value })
   ] });
 }
 
@@ -18088,7 +18088,7 @@ function LowStockFilters({
 }) {
   return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col md:flex-row gap-4", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex-1 relative", children: [
-      /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/35" }),
+      /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/35" }),
       /* @__PURE__ */ jsx("input", { type: "text", placeholder: "البحث عن صنف…", value: searchQuery, onChange: (e) => onSearchChange(e.target.value), className: `${ws.input} pr-12 pl-4 py-3` })
     ] }),
     /* @__PURE__ */ jsx("div", { className: "min-w-[200px]", children: /* @__PURE__ */ jsx(GlassSelect, { value: selectedBranch, onChange: onBranchChange, options: branchOptions, buttonClassName: "px-4 py-3" }) }),
@@ -18122,18 +18122,18 @@ function LowStockExportMenu({
     /* @__PURE__ */ jsxs(GlassPopover, { open, anchorRef: btnRef, onClose: () => setOpen(false), style: {
       width: 224
     }, children: [
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-200" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "Excel" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للتحليل والمعالجة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للتحليل والمعالجة" })
         ] })
       ] }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handlePDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors border-t border-white/10", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-200" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handlePDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-700 dark:text-red-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "PDF" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للطباعة والأرشفة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
         ] })
       ] })
     ] })
@@ -18156,56 +18156,56 @@ function LowStockTable({
 }) {
   return /* @__PURE__ */ jsxs("div", { className: sectionCard$3, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-5 sm:p-6 border-b ${ws.divider} flex items-center justify-between gap-3`, children: [
-      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-white flex items-center gap-3 tracking-tight", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-amber-200`, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }) }),
         "قائمة الأصناف المنخفضة"
       ] }),
       /* @__PURE__ */ jsx(LowStockExportMenu, { onExportExcel, onExportPDF })
     ] }),
-    isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
+    isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: "w-6 h-6 border-2 border-amber-400/60 border-t-transparent rounded-full animate-spin" }),
       /* @__PURE__ */ jsx("span", { children: "جاري التحميل…" })
     ] }) }) : items.length > 0 ? /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04]", children: [
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "الصنف" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "الفرع" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "الكمية الحالية" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "الحد الأدنى" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "النقص" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "الحالة" })
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الصنف" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفرع" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الكمية الحالية" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الحد الأدنى" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "النقص" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الحالة" })
       ] }) }),
       /* @__PURE__ */ jsx("tbody", { children: items.map((item, index) => {
         const status = getLowStockStatus(item);
         const qty = Number(item.current_quantity) || 0;
         const threshold = Number(item.min_stock_threshold) || 0;
         const shortage = Math.max(0, threshold - qty);
-        const qtyClass = qty === 0 ? "text-red-200" : qty < threshold * 0.5 ? "text-orange-200" : "text-amber-200";
-        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/5 hover:bg-white/[0.05] transition-colors", children: [
+        const qtyClass = qty === 0 ? "text-red-700 dark:text-red-200" : qty < threshold * 0.5 ? "text-orange-700 dark:text-orange-200" : "text-amber-700 dark:text-amber-200";
+        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors", children: [
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-            /* @__PURE__ */ jsx("div", { className: "w-12 h-12 bg-white/[0.04] rounded-2xl flex items-center justify-center border border-white/10", children: /* @__PURE__ */ jsx(Package, { className: "w-6 h-6 text-amber-200" }) }),
+            /* @__PURE__ */ jsx("div", { className: "w-12 h-12 bg-slate-100 dark:bg-white/[0.04] rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10", children: /* @__PURE__ */ jsx(Package, { className: "w-6 h-6 text-amber-700 dark:text-amber-200" }) }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: item.name }),
-              item.description ? /* @__PURE__ */ jsx("p", { className: "text-white/50 text-sm", children: item.description }) : null
+              /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: item.name }),
+              item.description ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-sm", children: item.description }) : null
             ] })
           ] }) }),
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("p", { className: "text-white font-medium", children: item.branch_name }),
-            item.branch_location ? /* @__PURE__ */ jsx("p", { className: "text-white/50 text-sm", children: item.branch_location }) : null
+            /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-medium", children: item.branch_name }),
+            item.branch_location ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-sm", children: item.branch_location }) : null
           ] }) }),
           /* @__PURE__ */ jsxs("td", { className: "px-6 py-4", children: [
             /* @__PURE__ */ jsx("span", { className: `text-lg font-bold ${qtyClass}`, children: qty }),
-            /* @__PURE__ */ jsx("span", { className: "text-white/40 text-sm mr-1", children: item.unit || "حبة" })
+            /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40 text-sm mr-1", children: item.unit || "حبة" })
           ] }),
           /* @__PURE__ */ jsxs("td", { className: "px-6 py-4", children: [
-            /* @__PURE__ */ jsx("span", { className: "text-white/75 font-medium", children: threshold }),
-            /* @__PURE__ */ jsx("span", { className: "text-white/40 text-sm mr-1", children: item.unit || "حبة" })
+            /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/75 font-medium", children: threshold }),
+            /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40 text-sm mr-1", children: item.unit || "حبة" })
           ] }),
           /* @__PURE__ */ jsxs("td", { className: "px-6 py-4", children: [
-            /* @__PURE__ */ jsxs("span", { className: "text-red-200 font-bold", children: [
+            /* @__PURE__ */ jsxs("span", { className: "text-red-700 dark:text-red-200 font-bold", children: [
               "-",
               shortage
             ] }),
-            /* @__PURE__ */ jsx("span", { className: "text-white/40 text-sm mr-1", children: item.unit || "حبة" })
+            /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40 text-sm mr-1", children: item.unit || "حبة" })
           ] }),
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("span", { className: `${ws.pill} inline-flex items-center gap-2 text-sm font-semibold border ${status.color}`, children: [
             /* @__PURE__ */ jsx(StatusIcon, { severity: status.severity }),
@@ -18213,8 +18213,8 @@ function LowStockTable({
           ] }) })
         ] }, `${item.id}-${item.branch_id}-${index}`);
       }) })
-    ] }) }) : /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-white/50", children: [
-      /* @__PURE__ */ jsx(CheckCircle, { className: "w-16 h-16 mx-auto mb-4 opacity-50 text-emerald-200" }),
+    ] }) }) : /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-slate-500 dark:text-white/50", children: [
+      /* @__PURE__ */ jsx(CheckCircle, { className: "w-16 h-16 mx-auto mb-4 opacity-50 text-emerald-700 dark:text-emerald-200" }),
       /* @__PURE__ */ jsx("p", { className: "text-lg mb-2", children: "رائع! لا توجد أصناف منخفضة الكمية" }),
       /* @__PURE__ */ jsx("p", { className: "text-sm", children: "جميع الأصناف متوفرة بكميات كافية" })
     ] })
@@ -19071,38 +19071,38 @@ function OperationsStatistics({
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 md:grid-cols-5 gap-4 mb-6", dir: "rtl", children: [
     /* @__PURE__ */ jsx("div", { className: cardClass, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "إجمالي العمليات" }),
-        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.total })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "إجمالي العمليات" }),
+        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.total })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-white/75`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) })
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-slate-700 dark:text-white/75`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) })
     ] }) }),
     /* @__PURE__ */ jsx("div", { className: cardClass, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "جرد يومي" }),
-        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.daily })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "جرد يومي" }),
+        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.daily })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-blue-200`, children: /* @__PURE__ */ jsx(CalendarCheck, { className: "w-6 h-6" }) })
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-blue-700 dark:text-blue-200`, children: /* @__PURE__ */ jsx(CalendarCheck, { className: "w-6 h-6" }) })
     ] }) }),
     /* @__PURE__ */ jsx("div", { className: cardClass, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "تحويلات" }),
-        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.transfers })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "تحويلات" }),
+        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.transfers })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-amber-200`, children: /* @__PURE__ */ jsx(ArrowLeftRight, { className: "w-6 h-6" }) })
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(ArrowLeftRight, { className: "w-6 h-6" }) })
     ] }) }),
     /* @__PURE__ */ jsx("div", { className: cardClass, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "وارد" }),
-        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.receipts })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "وارد" }),
+        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.receipts })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-emerald-200`, children: /* @__PURE__ */ jsx(PackagePlus, { className: "w-6 h-6" }) })
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(PackagePlus, { className: "w-6 h-6" }) })
     ] }) }),
     /* @__PURE__ */ jsx("div", { className: cardClass, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "عمليات اليوم" }),
-        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: stats.today })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "عمليات اليوم" }),
+        /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.today })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-purple-200`, children: /* @__PURE__ */ jsx(Clock, { className: "w-6 h-6" }) })
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-purple-700 dark:text-purple-200`, children: /* @__PURE__ */ jsx(Clock, { className: "w-6 h-6" }) })
     ] }) })
   ] });
 }
@@ -19125,7 +19125,7 @@ function OperationsFilters({
   branches
 }) {
   const cardClass = `${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`;
-  const labelClass = "block text-xs font-semibold text-white/55 mb-2";
+  const labelClass = "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2";
   const branchOptions = [{
     value: "",
     label: "جميع الفروع"
@@ -19155,10 +19155,10 @@ function OperationsFilters({
   return /* @__PURE__ */ jsxs("div", { className: cardClass, dir: "rtl", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-11 h-11`, children: /* @__PURE__ */ jsx(Filter, { className: "w-5 h-5 text-white/70" }) }),
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-11 h-11`, children: /* @__PURE__ */ jsx(Filter, { className: "w-5 h-5 text-slate-700 dark:text-white/70" }) }),
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("h2", { className: "text-lg font-bold text-white tracking-tight", children: "الفلاتر والبحث" }),
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50", children: "فلتر بسرعة وبشكل مرتب" })
+          /* @__PURE__ */ jsx("h2", { className: "text-lg font-bold text-slate-900 dark:text-white tracking-tight", children: "الفلاتر والبحث" }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: "فلتر بسرعة وبشكل مرتب" })
         ] }),
         hasActiveFilters ? /* @__PURE__ */ jsx("span", { className: `${ws.chip} hidden sm:inline-flex`, children: "نشط" }) : null
       ] }),
@@ -19174,7 +19174,7 @@ function OperationsFilters({
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "relative mb-4", children: [
-      /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/35" }),
+      /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/35" }),
       /* @__PURE__ */ jsx("input", { type: "text", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), placeholder: "ابحث برقم الجرد…", className: `${ws.input} pr-12 pl-4 py-3` })
     ] }),
     showFilters ? /* @__PURE__ */ jsxs("div", { className: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t ${ws.divider}`, children: [
@@ -19224,41 +19224,41 @@ function getTypePill(type) {
   if (type === "Daily") {
     return {
       label: "يومي",
-      className: "bg-sky-500/10 text-sky-200 border-sky-500/20",
+      className: "bg-sky-500/10 text-sky-700 dark:text-sky-200 border-sky-500/20",
       Icon: Calendar
     };
   }
   if (type === "Weekly") {
     return {
       label: "أسبوعي",
-      className: "bg-fuchsia-500/10 text-fuchsia-200 border-fuchsia-500/20",
+      className: "bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-200 border-fuchsia-500/20",
       Icon: Calendar
     };
   }
   if (type === "Transfer") {
     return {
       label: "تحويل",
-      className: "bg-amber-500/10 text-amber-200 border-amber-500/20",
+      className: "bg-amber-500/10 text-amber-700 dark:text-amber-200 border-amber-500/20",
       Icon: ArrowLeftRight
     };
   }
   if (type === "Receipt") {
     return {
       label: "وارد",
-      className: "bg-emerald-500/10 text-emerald-200 border-emerald-500/20",
+      className: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-200 border-emerald-500/20",
       Icon: PackagePlus
     };
   }
   if (type === "Opening") {
     return {
       label: "مخزون افتتاحي",
-      className: "bg-teal-500/10 text-teal-200 border-teal-500/20",
+      className: "bg-teal-500/10 text-teal-700 dark:text-teal-200 border-teal-500/20",
       Icon: FolderOpen
     };
   }
   return {
     label: type,
-    className: "bg-white/[0.06] text-white border-white/10",
+    className: "bg-slate-100 dark:bg-white/[0.06] text-slate-900 dark:text-white border-slate-200 dark:border-white/10",
     Icon: Calendar
   };
 }
@@ -19365,14 +19365,14 @@ function OperationsTable({
     setShowExportMenu(false);
   };
   const cardClass = `${ws.glass} ${ws.card} overflow-hidden`;
-  const headerChip = "px-3 py-1 rounded-full text-sm text-white/70 bg-white/[0.04] border border-white/10";
+  const headerChip = "px-3 py-1 rounded-full text-sm text-slate-700 dark:text-white/70 bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10";
   return /* @__PURE__ */ jsxs("div", { className: cardClass, dir: "rtl", children: [
     /* @__PURE__ */ jsxs("div", { className: `p-5 sm:p-6 border-b ${ws.divider} flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-white/80`, children: /* @__PURE__ */ jsx(ClipboardList, { className: "w-6 h-6" }) }),
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold text-white tracking-tight", children: "سجل عمليات الجرد" }),
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50", children: "عرض وتصدير السجل" })
+          /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold text-slate-900 dark:text-white tracking-tight", children: "سجل عمليات الجرد" }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: "عرض وتصدير السجل" })
         ] }),
         /* @__PURE__ */ jsxs("span", { className: headerChip, children: [
           filteredOperations?.length || 0,
@@ -19393,18 +19393,18 @@ function OperationsTable({
           /* @__PURE__ */ jsxs(GlassPopover, { open: showExportMenu, anchorRef: exportBtnRef, onClose: () => setShowExportMenu(false), style: {
             width: 208
           }, children: [
-            /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors", children: [
-              /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-emerald-200" }),
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
+              /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-200" }),
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "Excel" }),
-                /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "ملف .xls" })
+                /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
+                /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "ملف .xls" })
               ] })
             ] }),
-            /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportPDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors border-t border-white/10", children: [
-              /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-red-200" }),
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExportPDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
+              /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-red-700 dark:text-red-200" }),
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "PDF" }),
-                /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للطباعة والأرشفة" })
+                /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
+                /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
               ] })
             ] })
           ] })
@@ -19412,14 +19412,14 @@ function OperationsTable({
       ] })
     ] }),
     selectionEnabled && selectedCount > 0 ? /* @__PURE__ */ jsxs("div", { className: `px-5 py-3 border-b ${ws.divider} bg-emerald-400/[0.06] flex items-center justify-between gap-3`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 text-sm text-white", children: [
-        /* @__PURE__ */ jsx(CheckSquare, { className: "w-4 h-4 text-emerald-300" }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 text-sm text-slate-900 dark:text-white", children: [
+        /* @__PURE__ */ jsx(CheckSquare, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-300" }),
         /* @__PURE__ */ jsxs("span", { children: [
           "تم تحديد ",
-          /* @__PURE__ */ jsx("strong", { className: "text-emerald-300", children: selectedCount }),
+          /* @__PURE__ */ jsx("strong", { className: "text-emerald-700 dark:text-emerald-300", children: selectedCount }),
           " عملية"
         ] }),
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: onClearSelection, className: "text-white/55 hover:text-white text-xs underline-offset-2 hover:underline", children: "إلغاء التحديد" })
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: onClearSelection, className: "text-slate-600 dark:text-white/55 hover:text-slate-900 dark:hover:text-white text-xs underline-offset-2 hover:underline", children: "إلغاء التحديد" })
       ] }),
       /* @__PURE__ */ jsxs("button", { type: "button", onClick: onBulkDelete, disabled: bulkDeleteDisabled, className: `${ws.btnDanger} px-4 py-2 text-sm justify-center disabled:opacity-50 disabled:cursor-not-allowed`, children: [
         /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }),
@@ -19427,19 +19427,19 @@ function OperationsTable({
       ] })
     ] }) : null,
     /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04]", children: [
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
         selectionEnabled ? /* @__PURE__ */ jsx("th", { className: "px-4 py-4 text-center", style: {
           width: 48
-        }, children: /* @__PURE__ */ jsx("button", { type: "button", onClick: onToggleSelectAll, className: "inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-white/[0.06] transition-colors", "aria-label": allSelectedOnPage ? "إلغاء تحديد الكل" : "تحديد الكل", title: allSelectedOnPage ? "إلغاء تحديد الكل" : "تحديد الكل", disabled: selectableOps.length === 0, children: allSelectedOnPage ? /* @__PURE__ */ jsx(CheckSquare, { className: "w-5 h-5 text-emerald-300" }) : /* @__PURE__ */ jsx(Square, { className: "w-5 h-5 text-white/40" }) }) }) : null,
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "رقم الجرد" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "الفرع" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "الموظف" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "نوع الجرد" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "تاريخ العملية" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-white/55", children: "تاريخ الإدخال" }),
-        /* @__PURE__ */ jsx("th", { className: "text-center px-6 py-4 text-sm font-semibold text-white/55", children: "الإجراءات" })
+        }, children: /* @__PURE__ */ jsx("button", { type: "button", onClick: onToggleSelectAll, className: "inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", "aria-label": allSelectedOnPage ? "إلغاء تحديد الكل" : "تحديد الكل", title: allSelectedOnPage ? "إلغاء تحديد الكل" : "تحديد الكل", disabled: selectableOps.length === 0, children: allSelectedOnPage ? /* @__PURE__ */ jsx(CheckSquare, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-300" }) : /* @__PURE__ */ jsx(Square, { className: "w-5 h-5 text-slate-500 dark:text-white/40" }) }) }) : null,
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "رقم الجرد" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفرع" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الموظف" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "نوع الجرد" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "تاريخ العملية" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "تاريخ الإدخال" }),
+        /* @__PURE__ */ jsx("th", { className: "text-center px-6 py-4 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الإجراءات" })
       ] }) }),
-      /* @__PURE__ */ jsx("tbody", { children: isLoading ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: selectionEnabled ? "8" : "7", className: "px-6 py-12 text-center text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
+      /* @__PURE__ */ jsx("tbody", { children: isLoading ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: selectionEnabled ? "8" : "7", className: "px-6 py-12 text-center text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
         /* @__PURE__ */ jsx("div", { className: "w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" }),
         /* @__PURE__ */ jsx("span", { children: "جاري التحميل…" })
       ] }) }) }) : filteredOperations?.length > 0 ? filteredOperations.map((operation) => {
@@ -19449,66 +19449,66 @@ function OperationsTable({
         const operationDateValue = operation.operation_date || operation.created_at;
         const isSelectable = isOperationSelectable();
         const isSelected = selectionEnabled && selectedIds.has(operation.id);
-        return /* @__PURE__ */ jsxs("tr", { className: `border-t border-white/5 transition-colors ${isSelected ? "bg-emerald-400/[0.06] hover:bg-emerald-400/[0.10]" : "hover:bg-white/[0.05]"}`, children: [
+        return /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-100 dark:border-white/5 transition-colors ${isSelected ? "bg-emerald-400/[0.06] hover:bg-emerald-400/[0.10]" : "hover:bg-slate-100 dark:hover:bg-white/[0.05]"}`, children: [
           selectionEnabled ? /* @__PURE__ */ jsx("td", { className: "px-4 py-4 text-center", style: {
             width: 48
-          }, children: isSelectable ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onToggleSelect(operation.id), className: "inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-white/[0.06] transition-colors", "aria-label": isSelected ? "إلغاء التحديد" : "تحديد", children: isSelected ? /* @__PURE__ */ jsx(CheckSquare, { className: "w-5 h-5 text-emerald-300" }) : /* @__PURE__ */ jsx(Square, { className: "w-5 h-5 text-white/40" }) }) : /* @__PURE__ */ jsx("span", { className: "text-white/20 text-xs", title: "الواردات لا تُحذف من هنا", children: "—" }) }) : null,
+          }, children: isSelectable ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onToggleSelect(operation.id), className: "inline-flex items-center justify-center w-6 h-6 rounded-md hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", "aria-label": isSelected ? "إلغاء التحديد" : "تحديد", children: isSelected ? /* @__PURE__ */ jsx(CheckSquare, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-300" }) : /* @__PURE__ */ jsx(Square, { className: "w-5 h-5 text-slate-500 dark:text-white/40" }) }) : /* @__PURE__ */ jsx("span", { className: "text-slate-300 dark:text-white/20 text-xs", title: "الواردات لا تُحذف من هنا", children: "—" }) }) : null,
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-emerald-200" }),
-            /* @__PURE__ */ jsx("span", { className: "text-white font-mono text-sm", children: operation.inventory_number })
+            /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-200" }),
+            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-mono text-sm", children: operation.inventory_number })
           ] }) }),
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4 text-white/35" }),
+            /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4 text-slate-400 dark:text-white/35" }),
             /* @__PURE__ */ jsx("div", { className: "min-w-0", children: isTransfer && transferParties ? (
               // For transfer rows, name both parties
               // explicitly so the cell reads identically
               // for both the "out" and the "in" leg.
               /* @__PURE__ */ jsxs(Fragment, { children: [
                 /* @__PURE__ */ jsxs("div", { className: "text-white/80 font-medium truncate flex items-center gap-1", children: [
-                  /* @__PURE__ */ jsx(transferParties.Icon, { className: "w-3.5 h-3.5 text-emerald-200" }),
+                  /* @__PURE__ */ jsx(transferParties.Icon, { className: "w-3.5 h-3.5 text-emerald-700 dark:text-emerald-200" }),
                   /* @__PURE__ */ jsxs("span", { children: [
                     "المستلم: ",
                     transferParties.receiver
                   ] })
                 ] }),
-                /* @__PURE__ */ jsxs("div", { className: "text-white/55 text-xs mt-1 truncate", children: [
+                /* @__PURE__ */ jsxs("div", { className: "text-slate-600 dark:text-white/55 text-xs mt-1 truncate", children: [
                   "المرسل: ",
                   transferParties.sender
                 ] })
               ] })
             ) : /* @__PURE__ */ jsxs(Fragment, { children: [
               /* @__PURE__ */ jsx("div", { className: "text-white/80 font-medium truncate", children: operation.branch_name || "غير محدد" }),
-              operation.branch_location ? /* @__PURE__ */ jsx("div", { className: "text-white/40 text-xs", children: operation.branch_location }) : null
+              operation.branch_location ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/40 text-xs", children: operation.branch_location }) : null
             ] }) })
           ] }) }),
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: operation.employee_name ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsx("div", { className: "w-8 h-8 bg-white/[0.06] border border-white/10 rounded-full flex items-center justify-center flex-shrink-0", children: /* @__PURE__ */ jsx("span", { className: "text-white/80 text-xs font-bold", children: operation.employee_name.charAt(0) }) }),
-            /* @__PURE__ */ jsx("div", { className: "text-white font-medium text-sm", children: operation.employee_name })
-          ] }) : /* @__PURE__ */ jsx("span", { className: "text-white/45 text-sm", children: "غير محدد" }) }),
+            /* @__PURE__ */ jsx("div", { className: "w-8 h-8 bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 rounded-full flex items-center justify-center flex-shrink-0", children: /* @__PURE__ */ jsx("span", { className: "text-white/80 text-xs font-bold", children: operation.employee_name.charAt(0) }) }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-medium text-sm", children: operation.employee_name })
+          ] }) : /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45 text-sm", children: "غير محدد" }) }),
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("span", { className: `${ws.pill} ${typeMeta.className} inline-flex items-center gap-1`, children: [
             /* @__PURE__ */ jsx(typeMeta.Icon, { className: "w-3 h-3" }),
             typeMeta.label
           ] }) }),
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "text-sm", children: [
-            /* @__PURE__ */ jsx("div", { className: "text-white", children: renderDateRiyadh(operationDateValue) }),
-            /* @__PURE__ */ jsx("div", { className: "text-white/45 text-xs", children: renderTimeRiyadh(operationDateValue) })
+            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white", children: renderDateRiyadh(operationDateValue) }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 text-xs", children: renderTimeRiyadh(operationDateValue) })
           ] }) }),
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "text-sm", children: [
-            /* @__PURE__ */ jsx("div", { className: "text-white/60", children: renderDateRiyadh(operation.created_at) }),
-            /* @__PURE__ */ jsx("div", { className: "text-white/35 text-xs", children: renderTimeRiyadh(operation.created_at) })
+            /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60", children: renderDateRiyadh(operation.created_at) }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-400 dark:text-white/35 text-xs", children: renderTimeRiyadh(operation.created_at) })
           ] }) }),
           /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
             /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onViewOperation(operation), className: `${ws.btnPrimary} px-3 py-1.5 text-sm justify-center`, children: [
               /* @__PURE__ */ jsx(Eye, { className: "w-4 h-4" }),
               /* @__PURE__ */ jsx("span", { children: "عرض" })
             ] }),
-            onEditOperation ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEditOperation(operation), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل العملية", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4 text-sky-200" }) }) : null,
+            onEditOperation ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEditOperation(operation), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل العملية", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4 text-sky-700 dark:text-sky-200" }) }) : null,
             /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDeleteOperation(operation), className: `${ws.btnDanger} px-3 py-1.5 text-sm justify-center`, children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
           ] }) })
         ] }, operation.id);
-      }) : /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: selectionEnabled ? "8" : "7", className: "px-6 py-12 text-center text-white/45", children: [
+      }) : /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: selectionEnabled ? "8" : "7", className: "px-6 py-12 text-center text-slate-500 dark:text-white/45", children: [
         /* @__PURE__ */ jsx(ClipboardList, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
-        /* @__PURE__ */ jsx("p", { className: "text-lg text-white/70", children: "لا توجد عمليات جرد" }),
+        /* @__PURE__ */ jsx("p", { className: "text-lg text-slate-700 dark:text-white/70", children: "لا توجد عمليات جرد" }),
         hasActiveFilters ? /* @__PURE__ */ jsx("p", { className: "text-sm mt-2", children: "جرّب تغيير الفلاتر أو مسحها" }) : null
       ] }) }) })
     ] }) })
@@ -19555,7 +19555,7 @@ function OperationInfoGrid({
   const transferParties = isTransfer ? getTransferParties(selectedOperation) : null;
   const operationDateValue = selectedOperation?.operation_date || selectedOperation?.created_at;
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
-    /* @__PURE__ */ jsxs("div", { className: "bg-white/5 rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-white/5 rounded-lg p-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
         /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: isTransfer ? "أطراف التحويل" : "الفرع" })
@@ -19564,8 +19564,8 @@ function OperationInfoGrid({
         // Show both parties so the modal makes sense regardless of
         // whether the user clicked the OUT or the IN row.
         /* @__PURE__ */ jsxs(Fragment, { children: [
-          /* @__PURE__ */ jsxs("p", { className: "text-white font-semibold flex items-center gap-2", children: [
-            /* @__PURE__ */ jsx(transferParties.Icon, { className: "w-4 h-4 text-emerald-200" }),
+          /* @__PURE__ */ jsxs("p", { className: "text-slate-900 dark:text-white font-semibold flex items-center gap-2", children: [
+            /* @__PURE__ */ jsx(transferParties.Icon, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-200" }),
             /* @__PURE__ */ jsxs("span", { children: [
               "المستلم: ",
               transferParties.receiver
@@ -19577,17 +19577,17 @@ function OperationInfoGrid({
           ] })
         ] })
       ) : /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: selectedOperation.branch_name || "غير محدد" }),
+        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: selectedOperation.branch_name || "غير محدد" }),
         selectedOperation.branch_location ? /* @__PURE__ */ jsx("p", { className: "text-gray-400 text-sm mt-2", children: selectedOperation.branch_location }) : null
       ] })
     ] }),
-    /* @__PURE__ */ jsxs("div", { className: "bg-white/5 rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-white/5 rounded-lg p-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
         isReceipt ? /* @__PURE__ */ jsx(PackagePlus, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(User, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: isReceipt ? "الصنف الوارد" : "الموظف المسؤول" })
       ] }),
       isReceipt ? /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: selectedOperation.receipt_item_name || "صنف" }),
+        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: selectedOperation.receipt_item_name || "صنف" }),
         /* @__PURE__ */ jsxs("p", { className: "text-gray-400 text-sm mt-1", children: [
           "الكمية: ",
           selectedOperation.receipt_quantity
@@ -19600,47 +19600,47 @@ function OperationInfoGrid({
           ] })
         ] }) : null
       ] }) : selectedOperation.employee_name ? /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: selectedOperation.employee_name }),
+        /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: selectedOperation.employee_name }),
         selectedOperation.employee_email && /* @__PURE__ */ jsx("p", { className: "text-gray-400 text-sm mt-1", children: selectedOperation.employee_email })
       ] }) : /* @__PURE__ */ jsx("p", { className: "text-gray-500", children: "غير محدد" })
     ] }),
-    /* @__PURE__ */ jsxs("div", { className: "bg-white/5 rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-white/5 rounded-lg p-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
         isTransfer ? /* @__PURE__ */ jsx(ArrowLeftRight, { className: "w-4 h-4" }) : isReceipt ? /* @__PURE__ */ jsx(PackagePlus, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Calendar, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: "نوع العملية" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: getInventoryTypeLabel$1(selectedOperation.inventory_type) })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: getInventoryTypeLabel$1(selectedOperation.inventory_type) })
     ] }),
-    /* @__PURE__ */ jsxs("div", { className: "bg-white/5 rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-white/5 rounded-lg p-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
         /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: "تاريخ العملية" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: formatDateTime$2(operationDateValue) })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: formatDateTime$2(operationDateValue) })
     ] }),
-    /* @__PURE__ */ jsxs("div", { className: "bg-white/5 rounded-lg p-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-white/5 rounded-lg p-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
         /* @__PURE__ */ jsx(CalendarPlus, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: "تاريخ الإدخال" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/70 font-semibold", children: formatDateTime$2(selectedOperation.created_at) })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-700 dark:text-white/70 font-semibold", children: formatDateTime$2(selectedOperation.created_at) })
     ] }),
-    totalQuantity !== void 0 ? /* @__PURE__ */ jsxs("div", { className: "bg-white/5 rounded-lg p-4", children: [
+    totalQuantity !== void 0 ? /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-white/5 rounded-lg p-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
         /* @__PURE__ */ jsx(BarChart3, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: "إجمالي الكميات" })
       ] }),
-      /* @__PURE__ */ jsxs("p", { className: "text-white font-semibold text-2xl", children: [
+      /* @__PURE__ */ jsxs("p", { className: "text-slate-900 dark:text-white font-semibold text-2xl", children: [
         totalQuantity,
         /* @__PURE__ */ jsx("span", { className: "text-sm text-gray-400 mr-2", children: "وحدة" })
       ] })
     ] }) : null,
-    selectedOperation.note ? /* @__PURE__ */ jsxs("div", { className: "bg-white/5 rounded-lg p-4 md:col-span-2", children: [
+    selectedOperation.note ? /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-white/5 rounded-lg p-4 md:col-span-2", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
         /* @__PURE__ */ jsx(StickyNote, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: "ملاحظة" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/85 whitespace-pre-wrap", children: selectedOperation.note })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-800 dark:text-white/85 whitespace-pre-wrap", children: selectedOperation.note })
     ] }) : null
   ] });
 }
@@ -19648,36 +19648,36 @@ function OperationInfoGrid({
 function OperationStatsCards({
   stats
 }) {
-  const card = `${ws.glassSoft} border border-white/10 rounded-3xl p-4`;
-  const label = "flex items-center gap-2 text-white/60 mb-2";
+  const card = `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4`;
+  const label = "flex items-center gap-2 text-slate-600 dark:text-white/60 mb-2";
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6", dir: "rtl", children: [
     /* @__PURE__ */ jsxs("div", { className: card, children: [
       /* @__PURE__ */ jsxs("div", { className: label, children: [
-        /* @__PURE__ */ jsx(Hash, { className: "w-4 h-4 text-white/60" }),
+        /* @__PURE__ */ jsx(Hash, { className: "w-4 h-4 text-slate-600 dark:text-white/60" }),
         /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold", children: "إجمالي الأصناف" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-white tracking-tight", children: stats.totalItems })
+      /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.totalItems })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: card, children: [
       /* @__PURE__ */ jsxs("div", { className: label, children: [
-        /* @__PURE__ */ jsx(CheckCircle, { className: "w-4 h-4 text-emerald-200" }),
+        /* @__PURE__ */ jsx(CheckCircle, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-200" }),
         /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold", children: "متوفر" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-white tracking-tight", children: stats.availableItems })
+      /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.availableItems })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: card, children: [
       /* @__PURE__ */ jsxs("div", { className: label, children: [
-        /* @__PURE__ */ jsx(X, { className: "w-4 h-4 text-red-200" }),
+        /* @__PURE__ */ jsx(X, { className: "w-4 h-4 text-red-700 dark:text-red-200" }),
         /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold", children: "غير متوفر" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-white tracking-tight", children: stats.unavailableItems })
+      /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: stats.unavailableItems })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: card, children: [
       /* @__PURE__ */ jsxs("div", { className: label, children: [
-        /* @__PURE__ */ jsx(Percent, { className: "w-4 h-4 text-sky-200" }),
+        /* @__PURE__ */ jsx(Percent, { className: "w-4 h-4 text-sky-700 dark:text-sky-200" }),
         /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold", children: "نسبة التوفر" })
       ] }),
-      /* @__PURE__ */ jsxs("p", { className: "text-2xl font-bold text-white tracking-tight", children: [
+      /* @__PURE__ */ jsxs("p", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: [
         stats.availabilityRate,
         "%"
       ] })
@@ -19688,18 +19688,18 @@ function OperationStatsCards({
 function AvailabilityProgressBar({
   stats
 }) {
-  return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-white/10 rounded-3xl p-4`, dir: "rtl", children: [
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4`, dir: "rtl", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-3", children: [
-      /* @__PURE__ */ jsx("span", { className: "text-sm font-semibold text-white/70", children: "نسبة توفر الأصناف" }),
-      /* @__PURE__ */ jsxs("span", { className: "text-sm font-bold text-emerald-200", children: [
+      /* @__PURE__ */ jsx("span", { className: "text-sm font-semibold text-slate-700 dark:text-white/70", children: "نسبة توفر الأصناف" }),
+      /* @__PURE__ */ jsxs("span", { className: "text-sm font-bold text-emerald-700 dark:text-emerald-200", children: [
         stats.availabilityRate,
         "%"
       ] })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "w-full bg-white/10 rounded-full h-3 overflow-hidden border border-white/10", children: /* @__PURE__ */ jsx("div", { className: "bg-emerald-400/60 h-full rounded-full transition-all duration-500", style: {
+    /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-200 dark:bg-white/10 rounded-full h-3 overflow-hidden border border-slate-200 dark:border-white/10", children: /* @__PURE__ */ jsx("div", { className: "bg-emerald-400/60 h-full rounded-full transition-all duration-500", style: {
       width: `${stats.availabilityRate}%`
     } }) }),
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mt-2 text-xs text-white/45", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mt-2 text-xs text-slate-500 dark:text-white/45", children: [
       /* @__PURE__ */ jsxs("span", { children: [
         stats.availableItems,
         " متوفر"
@@ -19717,7 +19717,7 @@ function OperationItemsList({
 }) {
   const isTransfer = operationDetails?.inventory_type === "Transfer";
   return /* @__PURE__ */ jsxs("div", { dir: "rtl", children: [
-    /* @__PURE__ */ jsxs("h4", { className: "text-lg font-bold text-white mb-4 flex items-center gap-3 tracking-tight", children: [
+    /* @__PURE__ */ jsxs("h4", { className: "text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-3 tracking-tight", children: [
       /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }) }),
       isTransfer ? "كميات النقل" : "تفاصيل الأصناف"
     ] }),
@@ -19726,17 +19726,17 @@ function OperationItemsList({
       const qty = isTransfer ? Number(movedRaw) || 0 : Number(item.quantity) || 0;
       const isZero = qty === 0;
       const useAvailabilityChrome = !isTransfer;
-      const badgeClass = useAvailabilityChrome && isZero ? `${ws.pill} bg-red-500/10 text-red-200 border-red-500/20` : useAvailabilityChrome ? `${ws.pill} bg-emerald-500/10 text-emerald-200 border-emerald-500/20` : `${ws.pill} bg-white/[0.06] text-white/70 border-white/10`;
-      const qtyColor = useAvailabilityChrome && isZero ? "text-red-200" : useAvailabilityChrome ? "text-emerald-200" : "text-white";
-      const iconBg = useAvailabilityChrome && isZero ? "bg-red-500/10" : useAvailabilityChrome ? "bg-emerald-500/10" : "bg-white/[0.04]";
-      const iconColor = useAvailabilityChrome && isZero ? "text-red-200" : useAvailabilityChrome ? "text-emerald-200" : "text-white/70";
+      const badgeClass = useAvailabilityChrome && isZero ? `${ws.pill} bg-red-500/10 text-red-700 dark:text-red-200 border-red-500/20` : useAvailabilityChrome ? `${ws.pill} bg-emerald-500/10 text-emerald-700 dark:text-emerald-200 border-emerald-500/20` : `${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`;
+      const qtyColor = useAvailabilityChrome && isZero ? "text-red-700 dark:text-red-200" : useAvailabilityChrome ? "text-emerald-700 dark:text-emerald-200" : "text-slate-900 dark:text-white";
+      const iconBg = useAvailabilityChrome && isZero ? "bg-red-500/10" : useAvailabilityChrome ? "bg-emerald-500/10" : "bg-slate-100 dark:bg-white/[0.04]";
+      const iconColor = useAvailabilityChrome && isZero ? "text-red-700 dark:text-red-200" : useAvailabilityChrome ? "text-emerald-700 dark:text-emerald-200" : "text-slate-700 dark:text-white/70";
       const badgeText = isTransfer ? "كمية النقل" : isZero ? "غير متوفر" : "وحدة متوفرة";
-      return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-white/10 rounded-3xl p-4 flex items-center justify-between hover:bg-white/[0.06] transition-colors`, children: [
+      return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4 flex items-center justify-between hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors`, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-1", children: [
-          /* @__PURE__ */ jsx("div", { className: `w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 ${iconBg}`, children: /* @__PURE__ */ jsx(Package, { className: `w-5 h-5 ${iconColor}` }) }),
+          /* @__PURE__ */ jsx("div", { className: `w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 ${iconBg}`, children: /* @__PURE__ */ jsx(Package, { className: `w-5 h-5 ${iconColor}` }) }),
           /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-            /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: item.item_name }),
-            item.item_description ? /* @__PURE__ */ jsx("p", { className: "text-white/45 text-sm", children: item.item_description }) : null
+            /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: item.item_name }),
+            item.item_description ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/45 text-sm", children: item.item_description }) : null
           ] })
         ] }),
         /* @__PURE__ */ jsx("div", { className: "flex items-center gap-3", children: isTransfer ? /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -19747,7 +19747,7 @@ function OperationItemsList({
           /* @__PURE__ */ jsx("span", { className: badgeClass, children: badgeText })
         ] }) })
       ] }, item.id ?? `${item.item_id}-${idx}`);
-    }) }) : /* @__PURE__ */ jsxs("div", { className: "text-center py-8 text-white/55", children: [
+    }) }) : /* @__PURE__ */ jsxs("div", { className: "text-center py-8 text-slate-600 dark:text-white/55", children: [
       /* @__PURE__ */ jsx(Package, { className: "w-12 h-12 mx-auto mb-3 opacity-40" }),
       /* @__PURE__ */ jsx("p", { children: "لا توجد تفاصيل متاحة" })
     ] })
@@ -20122,7 +20122,7 @@ function OperationDetailsModal({
   const isInventory = !isTransfer && !isReceipt;
   const titleText = isReceipt ? "تفاصيل الوارد" : isTransfer ? "تفاصيل التحويل" : "تفاصيل الجرد";
   const opStats = getOperationItemStats(operationDetails);
-  const titleIcon = isTransfer ? /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-amber-200`, children: /* @__PURE__ */ jsx(ArrowLeftRight, { className: "w-5 h-5" }) }) : isReceipt ? /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-emerald-200`, children: /* @__PURE__ */ jsx(PackagePlus, { className: "w-5 h-5" }) }) : null;
+  const titleIcon = isTransfer ? /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(ArrowLeftRight, { className: "w-5 h-5" }) }) : isReceipt ? /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(PackagePlus, { className: "w-5 h-5" }) }) : null;
   const handlePrint = () => {
     openPrintableReport(selectedOperation, operationDetails, opStats);
   };
@@ -20134,23 +20134,23 @@ function OperationDetailsModal({
   }, children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full sm:max-w-4xl max-h-[95dvh] sm:max-h-[90dvh] flex flex-col rounded-t-3xl sm:rounded-3xl overflow-hidden`, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-4 sm:p-6 flex items-center justify-between flex-shrink-0 ${ws.topBar}`, children: [
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsxs("h3", { className: "text-lg sm:text-2xl font-bold text-white tracking-tight mb-1 flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxs("h3", { className: "text-lg sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight mb-1 flex items-center gap-2", children: [
           titleIcon,
           /* @__PURE__ */ jsx("span", { className: "truncate", children: titleText })
         ] }),
-        /* @__PURE__ */ jsx("p", { className: "text-white/50 font-mono text-xs sm:text-sm truncate", children: selectedOperation.inventory_number })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 font-mono text-xs sm:text-sm truncate", children: selectedOperation.inventory_number })
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-white/60" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 min-h-0", children: !operationDetails ? /* @__PURE__ */ jsx("div", { className: "py-16 text-center text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
+    /* @__PURE__ */ jsx("div", { className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 min-h-0", children: !operationDetails ? /* @__PURE__ */ jsx("div", { className: "py-16 text-center text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: "w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" }),
       /* @__PURE__ */ jsx("span", { children: "جاري تحميل التفاصيل…" })
     ] }) }) : /* @__PURE__ */ jsxs(Fragment, { children: [
       isInventory && opStats ? /* @__PURE__ */ jsx(OperationStatsCards, { stats: opStats }) : null,
       /* @__PURE__ */ jsx(OperationInfoGrid, { selectedOperation, totalQuantity: isInventory ? opStats?.totalQuantity : void 0 }),
       isInventory && opStats ? /* @__PURE__ */ jsx(AvailabilityProgressBar, { stats: opStats }) : null,
-      isTransfer ? /* @__PURE__ */ jsx("div", { className: "bg-white/5 border border-white/10 rounded-2xl p-4 text-white/70 text-sm", children: "هذه عملية تحويل. القائمة أدناه تُظهر الكميات المسجلة للأصناف المتأثرة بعد التحويل." }) : null,
-      isReceipt ? /* @__PURE__ */ jsx("div", { className: "bg-emerald-500/5 border border-emerald-400/15 rounded-2xl p-4 text-white/70 text-sm", children: "هذا سجل وارد. القائمة أدناه تُظهر الصنف والكمية الواردة." }) : null,
+      isTransfer ? /* @__PURE__ */ jsx("div", { className: "bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-slate-700 dark:text-white/70 text-sm", children: "هذه عملية تحويل. القائمة أدناه تُظهر الكميات المسجلة للأصناف المتأثرة بعد التحويل." }) : null,
+      isReceipt ? /* @__PURE__ */ jsx("div", { className: "bg-emerald-500/5 border border-emerald-400/15 rounded-2xl p-4 text-slate-700 dark:text-white/70 text-sm", children: "هذا سجل وارد. القائمة أدناه تُظهر الصنف والكمية الواردة." }) : null,
       /* @__PURE__ */ jsx(OperationItemsList, { operationDetails })
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: `p-4 sm:p-6 border-t ${ws.divider} flex flex-col sm:flex-row gap-2 sm:gap-3 flex-shrink-0`, children: [
@@ -20166,7 +20166,7 @@ function OperationDetailsModal({
         onEdit(selectedOperation, operationDetails);
         onClose();
       }, disabled: !operationDetails, className: `${ws.btnNeutral} px-4 py-3 justify-center disabled:opacity-40 text-sm sm:text-base`, children: [
-        /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4 sm:w-5 sm:h-5 text-sky-200" }),
+        /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4 sm:w-5 sm:h-5 text-sky-700 dark:text-sky-200" }),
         /* @__PURE__ */ jsx("span", { children: "تعديل" })
       ] }) : null,
       onDelete ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => {
@@ -20521,13 +20521,13 @@ function TransferModal({
   }, ref: modalRef, children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full sm:max-w-2xl max-h-[95dvh] sm:max-h-[90dvh] flex flex-col rounded-t-3xl sm:rounded-3xl overflow-hidden`, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-4 sm:p-6 flex items-center justify-between flex-shrink-0 ${ws.topBar}`, children: [
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsxs("h3", { className: "text-lg sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxs("h3", { className: "text-lg sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2", children: [
           /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(ArrowLeftRight, { className: "w-5 h-5" }) }),
           /* @__PURE__ */ jsx("span", { className: "truncate", children: "تحويل بين الفروع" })
         ] }),
-        /* @__PURE__ */ jsx("p", { className: "text-white/50 text-sm mt-1", children: "خصم من فرع المرسل + إضافة لفرع المستقبل" })
+        /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-sm mt-1", children: "خصم من فرع المرسل + إضافة لفرع المستقبل" })
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-white/60" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 min-h-0", children: [
       error ? /* @__PURE__ */ jsxs("div", { className: "p-4 rounded-2xl border border-red-500/25 bg-red-500/10 text-red-100 flex items-start gap-2", children: [
@@ -20540,7 +20540,7 @@ function TransferModal({
       ] }) : null,
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "فرع المرسل" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "فرع المرسل" }),
           /* @__PURE__ */ jsx(GlassSelect, { value: fromBranchId, onChange: (v) => {
             setFromBranchId(v);
             setError(null);
@@ -20548,7 +20548,7 @@ function TransferModal({
           }, options: branchOptions, buttonClassName: "px-4 py-3" })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "فرع المستقبل" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "فرع المستقبل" }),
           /* @__PURE__ */ jsx(GlassSelect, { value: toBranchId, onChange: (v) => {
             setToBranchId(v);
             setError(null);
@@ -20556,14 +20556,14 @@ function TransferModal({
           }, options: branchOptions, buttonClassName: "px-4 py-3" })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "تاريخ العملية" }),
+          /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "تاريخ العملية" }),
           /* @__PURE__ */ jsx(GlassDatePicker, { value: operationDate, onChange: setOperationDate, placeholder: "اختر التاريخ", buttonClassName: "px-4 py-3", showTime: true })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
         /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-[1fr_140px_120px] gap-3 items-end", children: [
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الصنف" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "الصنف" }),
             /* @__PURE__ */ jsx(GlassSelect, { value: selectedItemId, onChange: (v) => {
               setSelectedItemId(v);
               setError(null);
@@ -20571,7 +20571,7 @@ function TransferModal({
             }, options: itemOptions, buttonClassName: "px-4 py-3" })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "الكمية" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "الكمية" }),
             /* @__PURE__ */ jsx("input", { type: "number", min: 0, step: "0.001", value: quantity, onChange: (e) => setQuantity(e.target.value), className: `${ws.input} px-4 py-3`, placeholder: "0" })
           ] }),
           /* @__PURE__ */ jsxs("button", { type: "button", onClick: addItem, className: `${ws.btnPrimary} px-4 py-3 justify-center`, disabled: itemsLoading, title: itemsLoading ? "جاري تحميل الأصناف" : "إضافة", children: [
@@ -20580,57 +20580,57 @@ function TransferModal({
           ] })
         ] }),
         selectedItem && (fromIdNum || toIdNum) ? /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2 items-center", children: [
-          fromIdNum && fromBranchStock !== null ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/[0.04] border border-white/10", children: [
-            /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-white/40" }),
-            /* @__PURE__ */ jsxs("span", { className: "text-xs text-white/55", children: [
+          fromIdNum && fromBranchStock !== null ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10", children: [
+            /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-slate-500 dark:text-white/40" }),
+            /* @__PURE__ */ jsxs("span", { className: "text-xs text-slate-600 dark:text-white/55", children: [
               "مخزون المرسل",
               " ",
               stockIsPointInTime ? "بتاريخ التحويل" : "الحالي",
               ":"
             ] }),
-            /* @__PURE__ */ jsx("span", { className: `text-sm font-bold ${fromBranchStock > 0 ? "text-emerald-300" : "text-red-300"}`, children: fromBranchStock })
+            /* @__PURE__ */ jsx("span", { className: `text-sm font-bold ${fromBranchStock > 0 ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`, children: fromBranchStock })
           ] }) : null,
-          toIdNum && toBranchStock !== null ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/[0.04] border border-white/10", children: [
-            /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-white/40" }),
-            /* @__PURE__ */ jsxs("span", { className: "text-xs text-white/55", children: [
+          toIdNum && toBranchStock !== null ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10", children: [
+            /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-slate-500 dark:text-white/40" }),
+            /* @__PURE__ */ jsxs("span", { className: "text-xs text-slate-600 dark:text-white/55", children: [
               "مخزون المستقبل",
               " ",
               stockIsPointInTime ? "بتاريخ التحويل" : "الحالي",
               ":"
             ] }),
-            /* @__PURE__ */ jsx("span", { className: `text-sm font-bold ${toBranchStock > 0 ? "text-emerald-300" : "text-amber-300"}`, children: toBranchStock })
+            /* @__PURE__ */ jsx("span", { className: `text-sm font-bold ${toBranchStock > 0 ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300"}`, children: toBranchStock })
           ] }) : null,
-          stockAtQuery.isFetching ? /* @__PURE__ */ jsx("span", { className: "text-[11px] text-white/40", children: "تحديث الرصيد…" }) : null
+          stockAtQuery.isFetching ? /* @__PURE__ */ jsx("span", { className: "text-[11px] text-slate-500 dark:text-white/40", children: "تحديث الرصيد…" }) : null
         ] }) : null
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "ملاحظة (اختياري)" }),
+        /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "ملاحظة (اختياري)" }),
         /* @__PURE__ */ jsx("textarea", { value: note, onChange: (e) => setNote(e.target.value), rows: 2, className: `${ws.input} px-4 py-3 resize-none`, placeholder: "مثال: تحويل مواد للفرع بسبب نفاد المخزون" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4`, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-3", children: [
-          /* @__PURE__ */ jsx("h4", { className: "text-white font-bold", children: "الأصناف المحددة" }),
+          /* @__PURE__ */ jsx("h4", { className: "text-slate-900 dark:text-white font-bold", children: "الأصناف المحددة" }),
           /* @__PURE__ */ jsxs("span", { className: `${ws.chip}`, children: [
             items.length,
             " صنف"
           ] })
         ] }),
-        items.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-white/50 text-sm", children: "ما تم اختيار أصناف بعد" }) : /* @__PURE__ */ jsx("div", { className: "space-y-2", children: items.map((it) => {
+        items.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/50 text-sm", children: "ما تم اختيار أصناف بعد" }) : /* @__PURE__ */ jsx("div", { className: "space-y-2", children: items.map((it) => {
           const stock = it.availableStock ?? 0;
           const pct = stock > 0 ? Math.round(it.quantity / stock * 100) : 100;
           const isHigh = pct >= 80;
-          const pctColor = isHigh ? "text-red-300" : "text-emerald-300";
+          const pctColor = isHigh ? "text-red-700 dark:text-red-300" : "text-emerald-700 dark:text-emerald-300";
           const barColor = isHigh ? "bg-red-400/60" : "bg-emerald-400/60";
-          return /* @__PURE__ */ jsxs("div", { className: "p-3 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2", children: [
+          return /* @__PURE__ */ jsxs("div", { className: "p-3 rounded-2xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 space-y-2", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
-              /* @__PURE__ */ jsx("div", { className: "min-w-0", children: /* @__PURE__ */ jsx("div", { className: "text-white font-semibold truncate", children: it.itemName }) }),
+              /* @__PURE__ */ jsx("div", { className: "min-w-0", children: /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-semibold truncate", children: it.itemName }) }),
               /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-                /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-white/[0.06] text-white border-white/10`, children: it.quantity }),
+                /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-900 dark:text-white border-slate-200 dark:border-white/10`, children: it.quantity }),
                 /* @__PURE__ */ jsx("button", { type: "button", onClick: () => removeItem(it.itemId), className: `${ws.btnDanger} px-3 py-2 text-sm justify-center`, "aria-label": "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
               ] })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx("div", { className: "flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: `h-full rounded-full transition-all ${barColor}`, style: {
+              /* @__PURE__ */ jsx("div", { className: "flex-1 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: `h-full rounded-full transition-all ${barColor}`, style: {
                 width: `${Math.min(pct, 100)}%`
               } }) }),
               /* @__PURE__ */ jsxs("span", { className: `text-[11px] font-semibold whitespace-nowrap ${pctColor}`, children: [
@@ -20708,28 +20708,28 @@ function DeleteOperationModal({
   const isTransfer = operation.inventory_type === "Transfer";
   return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-[60]", dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} max-w-lg w-full`, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-6 flex items-center justify-between border-b ${ws.divider}`, children: [
-      /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-white tracking-tight flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-red-200`, children: /* @__PURE__ */ jsx(Trash2, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsxs("h3", { className: "text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2", children: [
+        /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-red-700 dark:text-red-200`, children: /* @__PURE__ */ jsx(Trash2, { className: "w-5 h-5" }) }),
         /* @__PURE__ */ jsx("span", { children: "حذف العملية" })
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onCancel, className: ws.iconButton, "aria-label": "إغلاق", disabled: isPending, children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-white/60" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onCancel, className: ws.iconButton, "aria-label": "إغلاق", disabled: isPending, children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "p-6 space-y-5", children: [
-      /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-white/10 rounded-2xl p-4`, children: [
+      /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4`, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-3", children: [
-          /* @__PURE__ */ jsx("div", { className: `w-10 h-10 rounded-xl flex items-center justify-center ${isReceipt ? "bg-emerald-500/10 text-emerald-200" : isTransfer ? "bg-amber-500/10 text-amber-200" : "bg-sky-500/10 text-sky-200"}`, children: typeIcon }),
+          /* @__PURE__ */ jsx("div", { className: `w-10 h-10 rounded-xl flex items-center justify-center ${isReceipt ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-200" : isTransfer ? "bg-amber-500/10 text-amber-700 dark:text-amber-200" : "bg-sky-500/10 text-sky-700 dark:text-sky-200"}`, children: typeIcon }),
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("p", { className: "text-white font-semibold", children: typeLabel }),
-            /* @__PURE__ */ jsx("p", { className: "text-white/50 font-mono text-xs", children: operation.inventory_number })
+            /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold", children: typeLabel }),
+            /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 font-mono text-xs", children: operation.inventory_number })
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "space-y-1 text-sm", children: [
-          operation.branch_name ? /* @__PURE__ */ jsxs("p", { className: "text-white/60", children: [
-            /* @__PURE__ */ jsx("span", { className: "text-white/40", children: "الفرع: " }),
+          operation.branch_name ? /* @__PURE__ */ jsxs("p", { className: "text-slate-600 dark:text-white/60", children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40", children: "الفرع: " }),
             /* @__PURE__ */ jsx("span", { className: "text-white/80", children: operation.branch_name })
           ] }) : null,
-          isReceipt && operation.receipt_item_name ? /* @__PURE__ */ jsxs("p", { className: "text-white/60", children: [
-            /* @__PURE__ */ jsx("span", { className: "text-white/40", children: "الصنف: " }),
+          isReceipt && operation.receipt_item_name ? /* @__PURE__ */ jsxs("p", { className: "text-slate-600 dark:text-white/60", children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40", children: "الصنف: " }),
             /* @__PURE__ */ jsxs("span", { className: "text-white/80", children: [
               operation.receipt_item_name,
               " (",
@@ -20737,24 +20737,24 @@ function DeleteOperationModal({
               ")"
             ] })
           ] }) : null,
-          !isReceipt && operation.employee_name ? /* @__PURE__ */ jsxs("p", { className: "text-white/60", children: [
-            /* @__PURE__ */ jsx("span", { className: "text-white/40", children: "الموظف: " }),
+          !isReceipt && operation.employee_name ? /* @__PURE__ */ jsxs("p", { className: "text-slate-600 dark:text-white/60", children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40", children: "الموظف: " }),
             /* @__PURE__ */ jsx("span", { className: "text-white/80", children: operation.employee_name })
           ] }) : null,
-          isTransfer && operation.transfer_branch_name ? /* @__PURE__ */ jsxs("p", { className: "text-white/60", children: [
-            /* @__PURE__ */ jsx("span", { className: "text-white/40", children: "الفرع الآخر: " }),
+          isTransfer && operation.transfer_branch_name ? /* @__PURE__ */ jsxs("p", { className: "text-slate-600 dark:text-white/60", children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40", children: "الفرع الآخر: " }),
             /* @__PURE__ */ jsx("span", { className: "text-white/80", children: operation.transfer_branch_name })
           ] }) : null
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex items-start gap-3", children: [
-        /* @__PURE__ */ jsx(AlertTriangle, { className: "w-5 h-5 text-red-300 flex-shrink-0 mt-0.5" }),
+        /* @__PURE__ */ jsx(AlertTriangle, { className: "w-5 h-5 text-red-700 dark:text-red-300 flex-shrink-0 mt-0.5" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "text-red-200 font-semibold text-sm mb-1", children: "تحذير: لا يمكن التراجع عن هذا الإجراء" }),
-          /* @__PURE__ */ jsx("p", { className: "text-red-200/70 text-sm", children: warningText })
+          /* @__PURE__ */ jsx("p", { className: "text-red-700 dark:text-red-200 font-semibold text-sm mb-1", children: "تحذير: لا يمكن التراجع عن هذا الإجراء" }),
+          /* @__PURE__ */ jsx("p", { className: "text-red-700 dark:text-red-200/70 text-sm", children: warningText })
         ] })
       ] }),
-      error ? /* @__PURE__ */ jsx("div", { className: "bg-red-500/10 border border-red-500/20 rounded-2xl p-3 text-red-200 text-sm text-center", children: error }) : null
+      error ? /* @__PURE__ */ jsx("div", { className: "bg-red-500/10 border border-red-500/20 rounded-2xl p-3 text-red-700 dark:text-red-200 text-sm text-center", children: error }) : null
     ] }),
     /* @__PURE__ */ jsxs("div", { className: `p-6 border-t ${ws.divider} flex items-center gap-3`, children: [
       /* @__PURE__ */ jsx("button", { type: "button", onClick: onCancel, className: `${ws.btnNeutral} flex-1 px-4 py-3 justify-center`, disabled: isPending, children: /* @__PURE__ */ jsx("span", { children: "إلغاء" }) }),
@@ -21254,21 +21254,21 @@ function EditOperationModal({
     /* @__PURE__ */ jsxs("div", { className: `relative w-full max-w-3xl max-h-[95dvh] sm:max-h-[90dvh] flex flex-col ${ws.glass} ${ws.card} rounded-t-3xl sm:rounded-3xl overflow-hidden`, children: [
       /* @__PURE__ */ jsxs("div", { className: `p-4 sm:p-6 flex items-center justify-between flex-shrink-0 ${ws.topBar}`, children: [
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsxs("h3", { className: "text-lg sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxs("h3", { className: "text-lg sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2", children: [
             /* @__PURE__ */ jsx("span", { className: `${ws.iconBox} w-10 h-10 text-white/80`, children: /* @__PURE__ */ jsx(Pencil, { className: "w-5 h-5" }) }),
             /* @__PURE__ */ jsx("span", { className: "truncate", children: TYPE_LABELS[invType] || "تعديل العملية" })
           ] }),
-          /* @__PURE__ */ jsxs("p", { className: "text-white/50 text-sm mt-1", children: [
+          /* @__PURE__ */ jsxs("p", { className: "text-slate-500 dark:text-white/50 text-sm mt-1", children: [
             TYPE_DESCRIPTIONS[invType] || "عدّل بيانات العملية",
             " ",
-            /* @__PURE__ */ jsxs("span", { className: "text-white/30 font-mono", children: [
+            /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/30 font-mono", children: [
               "(",
               operation.inventory_number,
               ")"
             ] })
           ] })
         ] }),
-        /* @__PURE__ */ jsx("button", { type: "button", className: ws.iconButton, onClick: onClose, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-white/60" }) })
+        /* @__PURE__ */ jsx("button", { type: "button", className: ws.iconButton, onClick: onClose, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-600 dark:text-white/60" }) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 min-h-0", children: [
         error ? /* @__PURE__ */ jsxs("div", { className: "p-4 rounded-2xl border border-red-500/25 bg-red-500/10 text-red-100 flex items-start gap-2", children: [
@@ -21277,54 +21277,54 @@ function EditOperationModal({
         ] }) : null,
         /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "تاريخ العملية" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "تاريخ العملية" }),
             /* @__PURE__ */ jsx(GlassDatePicker, { value: opDate, onChange: setOpDate, placeholder: "اختر التاريخ", buttonClassName: "px-4 py-3", showTime: true })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-white/55 mb-2", children: "ملاحظة (اختياري)" }),
+            /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "ملاحظة (اختياري)" }),
             /* @__PURE__ */ jsx("input", { type: "text", value: note, onChange: (e) => setNote(e.target.value), className: `${ws.input} px-4 py-3`, placeholder: "ملاحظة..." })
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 p-3 rounded-2xl bg-sky-500/5 border border-sky-400/15", children: [
-          /* @__PURE__ */ jsx(TitleIcon, { className: "w-4 h-4 text-sky-200 flex-shrink-0" }),
-          /* @__PURE__ */ jsxs("span", { className: "text-xs text-white/60", children: [
+          /* @__PURE__ */ jsx(TitleIcon, { className: "w-4 h-4 text-sky-700 dark:text-sky-200 flex-shrink-0" }),
+          /* @__PURE__ */ jsxs("span", { className: "text-xs text-slate-600 dark:text-white/60", children: [
             "الفرع:",
             " ",
-            /* @__PURE__ */ jsx("span", { className: "text-white font-semibold", children: operation.branch_name || "غير محدد" }),
+            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold", children: operation.branch_name || "غير محدد" }),
             invType === "Transfer" && operation.transfer_branch_name ? /* @__PURE__ */ jsxs(Fragment, { children: [
               " ← ",
-              /* @__PURE__ */ jsx("span", { className: "text-white font-semibold", children: operation.transfer_branch_name })
+              /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold", children: operation.transfer_branch_name })
             ] }) : null
           ] })
         ] }),
         isTransfer ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 border-amber-400/15 flex items-start gap-2`, children: [
-          /* @__PURE__ */ jsx(AlertCircle, { className: "w-4 h-4 text-amber-200 flex-shrink-0 mt-0.5" }),
-          /* @__PURE__ */ jsx("div", { className: "text-white/70 text-xs leading-relaxed", children: "عدّل كمية النقل لكل صنف. لا يمكن إضافة أصناف جديدة أو إنزال الكمية إلى صفر — للتغيير الكامل احذف التحويل وأعد إنشاءه." })
+          /* @__PURE__ */ jsx(AlertCircle, { className: "w-4 h-4 text-amber-700 dark:text-amber-200 flex-shrink-0 mt-0.5" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/70 text-xs leading-relaxed", children: "عدّل كمية النقل لكل صنف. لا يمكن إضافة أصناف جديدة أو إنزال الكمية إلى صفر — للتغيير الكامل احذف التحويل وأعد إنشاءه." })
         ] }) : null,
         !isTransfer ? /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-          /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" }),
+          /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-white/40" }),
           /* @__PURE__ */ jsx("input", { type: "text", value: search, onChange: (e) => setSearch(e.target.value), className: `${ws.input} pr-10 pl-3 py-2.5`, placeholder: "ابحث عن صنف..." })
         ] }) : null,
-        /* @__PURE__ */ jsx("div", { className: `max-h-[40vh] overflow-auto rounded-3xl border ${ws.divider} bg-white/[0.02]`, children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-          /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04] sticky top-0", children: [
-            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/70", children: "الصنف" }),
-            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/70", children: "الوحدة" }),
-            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/70 w-40", children: isTransfer ? "كمية النقل" : "الكمية" })
+        /* @__PURE__ */ jsx("div", { className: `max-h-[40vh] overflow-auto rounded-3xl border ${ws.divider} bg-slate-50 dark:bg-white/[0.02]`, children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
+          /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04] sticky top-0", children: [
+            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70", children: "الصنف" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70", children: "الوحدة" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70 w-40", children: isTransfer ? "كمية النقل" : "الكمية" })
           ] }) }),
           /* @__PURE__ */ jsxs("tbody", { children: [
             (isTransfer ? activeItems.filter((it) => it.id in initialQtyMap) : filteredItems).map((it) => {
               it.id in qtyByItem;
               const currentVal = qtyByItem[it.id] ?? "";
               const wasInOriginal = it.id in initialQtyMap;
-              return /* @__PURE__ */ jsxs("tr", { className: `border-t border-white/5 ${wasInOriginal ? "bg-white/[0.02]" : ""}`, children: [
+              return /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-100 dark:border-white/5 ${wasInOriginal ? "bg-slate-50 dark:bg-white/[0.02]" : ""}`, children: [
                 /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
-                  /* @__PURE__ */ jsx("div", { className: "text-white font-medium text-sm", children: it.name }),
-                  wasInOriginal ? /* @__PURE__ */ jsxs("div", { className: "text-white/30 text-xs mt-0.5", children: [
+                  /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-medium text-sm", children: it.name }),
+                  wasInOriginal ? /* @__PURE__ */ jsxs("div", { className: "text-slate-400 dark:text-white/30 text-xs mt-0.5", children: [
                     "الأصلي: ",
                     initialQtyMap[it.id]
                   ] }) : null
                 ] }),
-                /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/65 text-sm", children: it.unit || "-" }),
+                /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65 text-sm", children: it.unit || "-" }),
                 /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "any", value: currentVal, onChange: (e) => {
                   const v = e.target.value;
                   setQtyByItem((prev) => ({
@@ -21334,7 +21334,7 @@ function EditOperationModal({
                 }, className: `${ws.input} px-3 py-2.5 w-full`, placeholder: "0" }) })
               ] }, it.id);
             }),
-            (isTransfer ? activeItems.filter((it) => it.id in initialQtyMap) : filteredItems).length === 0 ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 3, className: "px-4 py-10 text-center text-white/55", children: "لا توجد نتائج" }) }) : null
+            (isTransfer ? activeItems.filter((it) => it.id in initialQtyMap) : filteredItems).length === 0 ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 3, className: "px-4 py-10 text-center text-slate-600 dark:text-white/55", children: "لا توجد نتائج" }) }) : null
           ] })
         ] }) })
       ] }),
@@ -21628,23 +21628,23 @@ function ReceiptsFilters({
   const dateRingClass = dateRangeInvalid ? "ring-1 ring-red-400/60" : "";
   return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3", children: [
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "الفرع" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "الفرع" }),
       /* @__PURE__ */ jsx(GlassSelect, { value: selectedBranch, onChange: onBranchChange, options: branchOptions, buttonClassName: "px-4 py-3" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "الصنف" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "الصنف" }),
       /* @__PURE__ */ jsx(GlassSelect, { value: selectedItem, onChange: onItemChange, options: itemOptions, buttonClassName: "px-4 py-3" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "من تاريخ" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "من تاريخ" }),
       /* @__PURE__ */ jsx("input", { type: "date", value: dateFrom, onChange: (e) => onDateFromChange(e.target.value), className: `${ws.input} px-3 py-3 w-full ${dateRingClass}` })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "إلى تاريخ" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "إلى تاريخ" }),
       /* @__PURE__ */ jsx("input", { type: "date", value: dateTo, onChange: (e) => onDateToChange(e.target.value), className: `${ws.input} px-3 py-3 w-full ${dateRingClass}` })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: " " }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: " " }),
       /* @__PURE__ */ jsxs("button", { type: "button", onClick: onRefresh, className: `${ws.btnNeutral} px-4 py-3 justify-center w-full`, children: [
         /* @__PURE__ */ jsx(RefreshCw, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { children: "تحديث" })
@@ -21684,16 +21684,16 @@ function ReceiptCard({
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4 sm:p-5`, children: [
     /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setExpanded((s) => !s), className: "w-full flex items-center justify-between gap-3 text-right", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 min-w-0 flex-1", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-emerald-200`, children: /* @__PURE__ */ jsx(Truck, { className: "w-5 h-5" }) }),
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Truck, { className: "w-5 h-5" }) }),
         /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
           /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
-            /* @__PURE__ */ jsx("span", { className: "text-white font-semibold tracking-tight", children: group.branchName || "—" }),
-            group.isLegacy ? /* @__PURE__ */ jsx("span", { className: "text-[10px] text-white/40 px-2 py-0.5 rounded-full bg-white/5 border border-white/10", children: "قديم" }) : /* @__PURE__ */ jsxs("span", { className: "text-[10px] text-emerald-300 px-2 py-0.5 rounded-full bg-emerald-400/10 border border-emerald-400/30 font-mono", children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold tracking-tight", children: group.branchName || "—" }),
+            group.isLegacy ? /* @__PURE__ */ jsx("span", { className: "text-[10px] text-slate-500 dark:text-white/40 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10", children: "قديم" }) : /* @__PURE__ */ jsxs("span", { className: "text-[10px] text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full bg-emerald-400/10 border border-emerald-400/30 font-mono", children: [
               "RB-",
               String(group.batchId).slice(-8)
             ] })
           ] }),
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mt-1 text-xs text-white/50 flex-wrap", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-white/50 flex-wrap", children: [
             /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
               /* @__PURE__ */ jsx(Calendar, { className: "w-3 h-3" }),
               formatDate$1(group.receivedAt)
@@ -21712,28 +21712,28 @@ function ReceiptCard({
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-shrink-0", children: [
         /* @__PURE__ */ jsxs("div", { className: "text-left", children: [
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/40", children: "إجمالي الكمية" }),
-          /* @__PURE__ */ jsx("div", { className: "text-white font-bold", dir: "ltr", children: formatNumber$2(group.totalQty) })
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/40", children: "إجمالي الكمية" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatNumber$2(group.totalQty) })
         ] }),
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 text-white/40`, children: expanded ? /* @__PURE__ */ jsx(ChevronUp, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(ChevronDown, { className: "w-4 h-4" }) })
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 text-slate-500 dark:text-white/40`, children: expanded ? /* @__PURE__ */ jsx(ChevronUp, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(ChevronDown, { className: "w-4 h-4" }) })
       ] })
     ] }),
-    expanded ? /* @__PURE__ */ jsxs("div", { className: "mt-4 space-y-2 pt-4 border-t border-white/10", children: [
-      group.items.map((item) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10", children: [
+    expanded ? /* @__PURE__ */ jsxs("div", { className: "mt-4 space-y-2 pt-4 border-t border-slate-200 dark:border-white/10", children: [
+      group.items.map((item) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
-          /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-white/40 flex-shrink-0" }),
-          /* @__PURE__ */ jsx("span", { className: "text-white text-sm truncate", children: item.item_name }),
-          item.note ? /* @__PURE__ */ jsxs("span", { className: "text-white/40 text-xs", children: [
+          /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-slate-500 dark:text-white/40 flex-shrink-0" }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white text-sm truncate", children: item.item_name }),
+          item.note ? /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/40 text-xs", children: [
             "— ",
             item.note
           ] }) : null
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-sm flex-shrink-0", children: [
-          /* @__PURE__ */ jsxs("span", { className: "text-emerald-200 font-bold", dir: "ltr", children: [
+          /* @__PURE__ */ jsxs("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: [
             "+",
             formatNumber$2(item.quantity)
           ] }),
-          /* @__PURE__ */ jsx("span", { className: "text-white/40 text-xs", children: item.item_unit || "" })
+          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40 text-xs", children: item.item_unit || "" })
         ] })
       ] }, item.id)),
       group.note ? /* @__PURE__ */ jsxs("div", { className: "px-3 py-2 rounded-xl bg-amber-400/5 border border-amber-400/20 text-amber-100 text-sm", children: [
@@ -21749,16 +21749,16 @@ function ReceiptsList({
   error
 }) {
   if (isLoading) {
-    return /* @__PURE__ */ jsx("div", { className: `${sectionCard$2} p-12 text-center text-white/55`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
+    return /* @__PURE__ */ jsx("div", { className: `${sectionCard$2} p-12 text-center text-slate-600 dark:text-white/55`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: "w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" }),
       /* @__PURE__ */ jsx("span", { children: "جاري التحميل…" })
     ] }) });
   }
   if (error) {
-    return /* @__PURE__ */ jsx("div", { className: `${sectionCard$2} p-12 text-center text-red-300`, children: String(error?.message || error) });
+    return /* @__PURE__ */ jsx("div", { className: `${sectionCard$2} p-12 text-center text-red-700 dark:text-red-300`, children: String(error?.message || error) });
   }
   if (!Array.isArray(groups) || groups.length === 0) {
-    return /* @__PURE__ */ jsxs("div", { className: `${sectionCard$2} p-12 text-center text-white/50`, children: [
+    return /* @__PURE__ */ jsxs("div", { className: `${sectionCard$2} p-12 text-center text-slate-500 dark:text-white/50`, children: [
       /* @__PURE__ */ jsx(Truck, { className: "w-16 h-16 mx-auto mb-4 opacity-50" }),
       /* @__PURE__ */ jsx("p", { className: "text-lg mb-2", children: "لا توجد واردات في هذه الفترة" }),
       /* @__PURE__ */ jsx("p", { className: "text-sm", children: "جرّب تعديل الفلاتر أو توسيع الفترة الزمنية" })
@@ -22100,9 +22100,9 @@ function StockValueHeader({
 }) {
   return /* @__PURE__ */ jsxs("div", { className: "mb-8 mt-6 lg:mt-0", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-3 flex-wrap", children: [
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(Banknote, { className: "w-6 h-6" }) }),
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Banknote, { className: "w-6 h-6" }) }),
       /* @__PURE__ */ jsx("h1", { className: `text-3xl sm:text-4xl ${ws.title}`, children: "قيمة المخزون" }),
-      branchLabel ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} inline-flex items-center gap-2 bg-sky-400/10 border-sky-400/25 text-sky-200 text-sm font-bold`, children: [
+      branchLabel ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} inline-flex items-center gap-2 bg-sky-400/10 border-sky-400/25 text-sky-700 dark:text-sky-200 text-sm font-bold`, children: [
         /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4" }),
         branchLabel
       ] }) : null
@@ -22130,30 +22130,30 @@ function StockValueStats({
 }) {
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8", children: [
     /* @__PURE__ */ jsxs("div", { className: statCard$1, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-200`, children: /* @__PURE__ */ jsx(Banknote, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "إجمالي قيمة المخزون" }),
-      /* @__PURE__ */ jsxs("p", { className: "text-3xl font-bold text-emerald-200 tracking-tight", children: [
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Banknote, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "إجمالي قيمة المخزون" }),
+      /* @__PURE__ */ jsxs("p", { className: "text-3xl font-bold text-emerald-700 dark:text-emerald-200 tracking-tight", children: [
         fmtMoney$1(stats.totalValue),
         " ",
-        /* @__PURE__ */ jsx("span", { className: "text-base text-white/45 font-medium", children: "ر.س" })
+        /* @__PURE__ */ jsx("span", { className: "text-base text-slate-500 dark:text-white/45 font-medium", children: "ر.س" })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard$1, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-200`, children: /* @__PURE__ */ jsx(Package, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "عدد الأصناف" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-white tracking-tight", children: fmtCount(stats.itemCount) })
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(Package, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "عدد الأصناف" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-slate-900 dark:text-white tracking-tight", children: fmtCount(stats.itemCount) })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard$1, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-amber-200`, children: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "أصناف بدون سعر" }),
-      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-amber-200 tracking-tight", children: fmtCount(stats.missingCostCount) }),
-      stats.missingCostCount > 0 ? /* @__PURE__ */ jsx("p", { className: "text-xs text-white/40 mt-1", children: "لا تُحسب في الإجمالي" }) : null
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "أصناف بدون سعر" }),
+      /* @__PURE__ */ jsx("p", { className: "text-3xl font-bold text-amber-700 dark:text-amber-200 tracking-tight", children: fmtCount(stats.missingCostCount) }),
+      stats.missingCostCount > 0 ? /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/40 mt-1", children: "لا تُحسب في الإجمالي" }) : null
     ] }),
     /* @__PURE__ */ jsxs("div", { className: statCard$1, children: [
-      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-purple-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-6 h-6" }) }) }),
-      /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: "الأعلى قيمة" }),
-      /* @__PURE__ */ jsx("p", { className: "text-lg font-bold text-white truncate", children: stats.topItemName || "—" }),
-      stats.topItemValue > 0 ? /* @__PURE__ */ jsxs("p", { className: "text-xs text-purple-200 font-semibold mt-0.5", children: [
+      /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-purple-700 dark:text-purple-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-6 h-6" }) }) }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: "الأعلى قيمة" }),
+      /* @__PURE__ */ jsx("p", { className: "text-lg font-bold text-slate-900 dark:text-white truncate", children: stats.topItemName || "—" }),
+      stats.topItemValue > 0 ? /* @__PURE__ */ jsxs("p", { className: "text-xs text-purple-700 dark:text-purple-200 font-semibold mt-0.5", children: [
         fmtMoney$1(stats.topItemValue),
         " ر.س"
       ] }) : null
@@ -22196,15 +22196,15 @@ function StockValueFilters({
 }) {
   return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col lg:flex-row gap-3", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex-1 relative", children: [
-      /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/35" }),
+      /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/35" }),
       /* @__PURE__ */ jsx("input", { type: "text", placeholder: "البحث عن صنف…", value: searchQuery, onChange: (e) => onSearchChange(e.target.value), className: `${ws.input} pr-12 pl-4 py-3` })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "min-w-[200px] flex items-center gap-2", children: [
-      /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4 text-white/45 shrink-0" }),
+      /* @__PURE__ */ jsx(Building2, { className: "w-4 h-4 text-slate-500 dark:text-white/45 shrink-0" }),
       /* @__PURE__ */ jsx(GlassSelect, { value: selectedBranch, onChange: onBranchChange, options: branchOptions, buttonClassName: "px-4 py-3" })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "min-w-[220px] flex items-center gap-2", children: [
-      /* @__PURE__ */ jsx(ArrowUpDown, { className: "w-4 h-4 text-white/45 shrink-0" }),
+      /* @__PURE__ */ jsx(ArrowUpDown, { className: "w-4 h-4 text-slate-500 dark:text-white/45 shrink-0" }),
       /* @__PURE__ */ jsx(GlassSelect, { value: sortBy, onChange: onSortChange, options: SORT_OPTIONS$1, buttonClassName: "px-4 py-3" })
     ] }),
     /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onHideMissingCostChange(!hideMissingCost), className: `${hideMissingCost ? ws.btnPrimary : ws.btnNeutral} px-4 py-3 justify-center whitespace-nowrap`, title: "إخفاء الأصناف التي لا تملك سعر تكلفة", children: [
@@ -22241,18 +22241,18 @@ function StockValueExportMenu({
     /* @__PURE__ */ jsxs(GlassPopover, { open, anchorRef: btnRef, onClose: () => setOpen(false), style: {
       width: 224
     }, children: [
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-200" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "Excel" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للتحليل والمعالجة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للتحليل والمعالجة" })
         ] })
       ] }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handlePDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors border-t border-white/10", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-200" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handlePDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-700 dark:text-red-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "PDF" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للطباعة والأرشفة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
         ] })
       ] })
     ] })
@@ -22293,29 +22293,29 @@ function StockValueTable({
 }) {
   return /* @__PURE__ */ jsxs("div", { className: sectionCard$1, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-5 sm:p-6 border-b ${ws.divider} flex items-center justify-between gap-3 flex-wrap`, children: [
-      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-white flex items-center gap-3 tracking-tight", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-emerald-200`, children: /* @__PURE__ */ jsx(Banknote, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Banknote, { className: "w-5 h-5" }) }),
         "قيمة الأصناف"
       ] }),
       /* @__PURE__ */ jsx(StockValueExportMenu, { onExportExcel, onExportPDF })
     ] }),
-    isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
+    isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: "w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" }),
       /* @__PURE__ */ jsx("span", { children: "جاري التحميل…" })
-    ] }) }) : !Array.isArray(items) || items.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-white/50", children: [
+    ] }) }) : !Array.isArray(items) || items.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-slate-500 dark:text-white/50", children: [
       /* @__PURE__ */ jsx(Package, { className: "w-16 h-16 mx-auto mb-4 opacity-50" }),
       /* @__PURE__ */ jsx("p", { className: "text-lg mb-2", children: "لا توجد أصناف" }),
       /* @__PURE__ */ jsx("p", { className: "text-sm", children: "جرّب تعديل البحث أو الفلاتر" })
     ] }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04]", children: [
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55 w-16", children: "#" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الصنف" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الفئة" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الكمية" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الوحدة" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "سعر التكلفة" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "القيمة الإجمالية" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "النسبة" })
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55 w-16", children: "#" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الصنف" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفئة" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الكمية" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الوحدة" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "سعر التكلفة" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "القيمة الإجمالية" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "النسبة" })
       ] }) }),
       /* @__PURE__ */ jsx("tbody", { children: items.map((it, idx) => {
         const qty = Number(it.total_quantity) || 0;
@@ -22325,44 +22325,44 @@ function StockValueTable({
         const value = it.total_value == null ? null : Number(it.total_value);
         const missingCost = effCost == null || !Number.isFinite(effCost);
         const pctText = fmtPct(value, totalValue);
-        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/5 hover:bg-white/[0.05] transition-colors", children: [
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/45 text-sm", children: idx + 1 }),
+        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors", children: [
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-500 dark:text-white/45 text-sm", children: idx + 1 }),
           /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-            /* @__PURE__ */ jsx("div", { className: "w-9 h-9 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center shrink-0", children: /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-emerald-200" }) }),
+            /* @__PURE__ */ jsx("div", { className: "w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center shrink-0", children: /* @__PURE__ */ jsx(Package, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-200" }) }),
             /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-              /* @__PURE__ */ jsx("p", { className: "text-white font-semibold truncate", children: it.name }),
-              it.name_en ? /* @__PURE__ */ jsx("p", { className: "text-white/40 text-xs truncate", children: it.name_en }) : null
+              /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-white font-semibold truncate", children: it.name }),
+              it.name_en ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/40 text-xs truncate", children: it.name_en }) : null
             ] })
           ] }) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/75 text-sm", children: it.category_name ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 text-xs", children: [
-            /* @__PURE__ */ jsx(Layers, { className: "w-3 h-3 text-white/40" }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/75 text-sm", children: it.category_name ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 text-xs", children: [
+            /* @__PURE__ */ jsx(Layers, { className: "w-3 h-3 text-slate-500 dark:text-white/40" }),
             it.category_name
-          ] }) : /* @__PURE__ */ jsx("span", { className: "text-white/30", children: "—" }) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white font-semibold", dir: "ltr", children: fmtQty(qty) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/55 text-sm", children: it.unit || "—" }),
-          /* @__PURE__ */ jsx("td", { className: `px-4 py-3 ${missingCost ? "text-amber-300/80 text-xs" : "text-white/80"}`, dir: "ltr", children: missingCost ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+          ] }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30", children: "—" }) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-900 dark:text-white font-semibold", dir: "ltr", children: fmtQty(qty) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-sm", children: it.unit || "—" }),
+          /* @__PURE__ */ jsx("td", { className: `px-4 py-3 ${missingCost ? "text-amber-700 dark:text-amber-300/80 text-xs" : "text-white/80"}`, dir: "ltr", children: missingCost ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
             /* @__PURE__ */ jsx(AlertCircle, { className: "w-3.5 h-3.5" }),
             "غير محدد"
           ] }) : /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5", title: usedFallback ? "السعر من آخر طلب بن أخضر (i.cost = NULL)" : "سعر تكلفة الصنف المسجّل", children: [
             fmtMoney(effCost),
             " ر.س",
-            usedFallback ? /* @__PURE__ */ jsx("span", { className: "text-[10px] text-sky-200/80 bg-sky-400/10 border border-sky-400/20 rounded px-1 py-0.5", children: "بن" }) : null
+            usedFallback ? /* @__PURE__ */ jsx("span", { className: "text-[10px] text-sky-700 dark:text-sky-200/80 bg-sky-400/10 border border-sky-400/20 rounded px-1 py-0.5", children: "بن" }) : null
           ] }) }),
-          /* @__PURE__ */ jsx("td", { className: `px-4 py-3 font-extrabold ${missingCost ? "text-white/30" : "text-emerald-200"}`, dir: "ltr", children: missingCost ? "—" : `${fmtMoney(value)} ر.س` }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/55 text-sm", dir: "ltr", children: missingCost || !pctText ? "—" : pctText })
+          /* @__PURE__ */ jsx("td", { className: `px-4 py-3 font-extrabold ${missingCost ? "text-slate-400 dark:text-white/30" : "text-emerald-700 dark:text-emerald-200"}`, dir: "ltr", children: missingCost ? "—" : `${fmtMoney(value)} ر.س` }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-sm", dir: "ltr", children: missingCost || !pctText ? "—" : pctText })
         ] }, it.id);
       }) }),
-      /* @__PURE__ */ jsx("tfoot", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.06] border-t-2 border-white/10", children: [
+      /* @__PURE__ */ jsx("tfoot", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.06] border-t-2 border-slate-200 dark:border-white/10", children: [
         /* @__PURE__ */ jsxs("td", { colSpan: 6, className: "px-4 py-4 text-white/80 font-bold text-left", children: [
           "الإجمالي (",
           items.length,
           " صنف)"
         ] }),
-        /* @__PURE__ */ jsxs("td", { className: "px-4 py-4 text-emerald-200 font-extrabold text-lg", dir: "ltr", children: [
+        /* @__PURE__ */ jsxs("td", { className: "px-4 py-4 text-emerald-700 dark:text-emerald-200 font-extrabold text-lg", dir: "ltr", children: [
           fmtMoney(totalValue),
           " ر.س"
         ] }),
-        /* @__PURE__ */ jsx("td", { className: "px-4 py-4 text-white/40 text-sm", dir: "ltr", children: "100%" })
+        /* @__PURE__ */ jsx("td", { className: "px-4 py-4 text-slate-500 dark:text-white/40 text-sm", dir: "ltr", children: "100%" })
       ] }) })
     ] }) })
   ] });
@@ -22472,8 +22472,8 @@ const route19 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 function VarianceHeader() {
   return /* @__PURE__ */ jsxs("div", { className: "mb-8 mt-6 lg:mt-0", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mb-4", children: [
-      /* @__PURE__ */ jsx("a", { href: "/admin", className: "text-white/55 hover:text-white transition-colors", children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-5 h-5" }) }),
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-amber-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-6 h-6" }) }),
+      /* @__PURE__ */ jsx("a", { href: "/admin", className: "text-slate-600 dark:text-white/55 hover:text-slate-900 dark:hover:text-white transition-colors", children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-6 h-6" }) }),
       /* @__PURE__ */ jsx("h1", { className: `text-3xl sm:text-4xl ${ws.title}`, children: "تقرير الانحراف" })
     ] }),
     /* @__PURE__ */ jsx("p", { className: ws.muted, children: "مقارنة الكميات المتوقعة بالفعلية لكشف الفاقد أو الزيادة في المخزون" })
@@ -22500,32 +22500,32 @@ function VarianceFilters({
   const dateRangeInvalid = !!(dateFrom && dateTo && dateFrom > dateTo);
   return /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`, children: /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3", children: [
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "الفرع" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "الفرع" }),
       /* @__PURE__ */ jsx(GlassSelect, { value: selectedBranch, onChange: onBranchChange, options: branchOptions, buttonClassName: "px-4 py-3" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "الصنف" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "الصنف" }),
       /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-        /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/35 z-10 pointer-events-none" }),
+        /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35 z-10 pointer-events-none" }),
         /* @__PURE__ */ jsx("input", { type: "text", value: itemSearch, onChange: (e) => onItemSearchChange(e.target.value), placeholder: "ابحث عن صنف…", className: `${ws.input} pr-10 pl-3 py-3` })
       ] }),
-      hasSearch ? /* @__PURE__ */ jsx("p", { className: `mt-1 text-xs ${matchCount === 0 ? "text-red-200" : "text-white/45"}`, children: matchCount === 0 ? "لا توجد نتائج" : `${matchCount} نتيجة` }) : null
+      hasSearch ? /* @__PURE__ */ jsx("p", { className: `mt-1 text-xs ${matchCount === 0 ? "text-red-700 dark:text-red-200" : "text-slate-500 dark:text-white/45"}`, children: matchCount === 0 ? "لا توجد نتائج" : `${matchCount} نتيجة` }) : null
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "اختر الصنف" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "اختر الصنف" }),
       /* @__PURE__ */ jsx(GlassSelect, { value: selectedItem, onChange: onItemChange, options: itemOptions, buttonClassName: "px-4 py-3" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "من تاريخ" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "من تاريخ" }),
       /* @__PURE__ */ jsx("input", { type: "date", value: dateFrom, onChange: (e) => onDateFromChange(e.target.value), className: `${ws.input} px-3 py-3 w-full ${dateRangeInvalid ? "ring-1 ring-red-400/60" : ""}` })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs text-white/55 mb-1", children: "إلى تاريخ" }),
+      /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/55 mb-1", children: "إلى تاريخ" }),
       /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
         /* @__PURE__ */ jsx("input", { type: "date", value: dateTo, onChange: (e) => onDateToChange(e.target.value), className: `${ws.input} px-3 py-3 flex-1 ${dateRangeInvalid ? "ring-1 ring-red-400/60" : ""}` }),
         /* @__PURE__ */ jsx("button", { type: "button", onClick: onRefresh, className: `${ws.btnNeutral} px-3 py-3 justify-center`, title: "تحديث", children: /* @__PURE__ */ jsx(RefreshCw, { className: "w-4 h-4" }) })
       ] }),
-      dateRangeInvalid ? /* @__PURE__ */ jsx("p", { className: "mt-1 text-xs text-red-200", children: '⚠ "من" أحدث من "إلى"' }) : null
+      dateRangeInvalid ? /* @__PURE__ */ jsx("p", { className: "mt-1 text-xs text-red-700 dark:text-red-200", children: '⚠ "من" أحدث من "إلى"' }) : null
     ] })
   ] }) });
 }
@@ -22536,10 +22536,10 @@ function VarianceStats({
 }) {
   const stats = computeStats(rows);
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8", children: [
-    /* @__PURE__ */ jsx(StatCard, { icon: /* @__PURE__ */ jsx(BarChart3, { className: "w-6 h-6" }), iconColor: "text-sky-200", label: "عدد عمليات الجرد", value: stats.count }),
-    /* @__PURE__ */ jsx(StatCard, { icon: /* @__PURE__ */ jsx(TrendingDown, { className: "w-6 h-6" }), iconColor: "text-red-200", label: "مجموع الفاقد", value: formatNumber$1(-stats.totalLoss), valueColor: stats.totalLoss > 0 ? "text-red-200" : "text-white" }),
-    /* @__PURE__ */ jsx(StatCard, { icon: /* @__PURE__ */ jsx(TrendingUp, { className: "w-6 h-6" }), iconColor: "text-emerald-200", label: "مجموع الزيادة", value: formatNumber$1(stats.totalGain), valueColor: stats.totalGain > 0 ? "text-emerald-200" : "text-white" }),
-    /* @__PURE__ */ jsx(StatCard, { icon: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6" }), iconColor: "text-amber-200", label: "عمليات بفروقات كبيرة", value: stats.bigDiffsCount, sublabel: "(>10% انحراف)" })
+    /* @__PURE__ */ jsx(StatCard, { icon: /* @__PURE__ */ jsx(BarChart3, { className: "w-6 h-6" }), iconColor: "text-sky-700 dark:text-sky-200", label: "عدد عمليات الجرد", value: stats.count }),
+    /* @__PURE__ */ jsx(StatCard, { icon: /* @__PURE__ */ jsx(TrendingDown, { className: "w-6 h-6" }), iconColor: "text-red-700 dark:text-red-200", label: "مجموع الفاقد", value: formatNumber$1(-stats.totalLoss), valueColor: stats.totalLoss > 0 ? "text-red-700 dark:text-red-200" : "text-slate-900 dark:text-white" }),
+    /* @__PURE__ */ jsx(StatCard, { icon: /* @__PURE__ */ jsx(TrendingUp, { className: "w-6 h-6" }), iconColor: "text-emerald-700 dark:text-emerald-200", label: "مجموع الزيادة", value: formatNumber$1(stats.totalGain), valueColor: stats.totalGain > 0 ? "text-emerald-700 dark:text-emerald-200" : "text-slate-900 dark:text-white" }),
+    /* @__PURE__ */ jsx(StatCard, { icon: /* @__PURE__ */ jsx(AlertTriangle, { className: "w-6 h-6" }), iconColor: "text-amber-700 dark:text-amber-200", label: "عمليات بفروقات كبيرة", value: stats.bigDiffsCount, sublabel: "(>10% انحراف)" })
   ] });
 }
 function StatCard({
@@ -22552,9 +22552,9 @@ function StatCard({
 }) {
   return /* @__PURE__ */ jsxs("div", { className: statCard, children: [
     /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between mb-4", children: /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} ${iconColor}`, children: icon }) }),
-    /* @__PURE__ */ jsx("p", { className: "text-white/55 text-sm mb-1", children: label }),
-    /* @__PURE__ */ jsx("p", { className: `text-3xl font-bold tracking-tight ${valueColor || "text-white"}`, dir: "ltr", children: value }),
-    sublabel ? /* @__PURE__ */ jsx("p", { className: "text-white/40 text-xs mt-1", children: sublabel }) : null
+    /* @__PURE__ */ jsx("p", { className: "text-slate-600 dark:text-white/55 text-sm mb-1", children: label }),
+    /* @__PURE__ */ jsx("p", { className: `text-3xl font-bold tracking-tight ${valueColor || "text-slate-900 dark:text-white"}`, dir: "ltr", children: value }),
+    sublabel ? /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/40 text-xs mt-1", children: sublabel }) : null
   ] });
 }
 function computeStats(rows) {
@@ -22607,21 +22607,21 @@ function VarianceExportMenu({
       /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => {
         onExportExcel();
         setOpen(false);
-      }, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-200" }),
+      }, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "Excel" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للتحليل والمعالجة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للتحليل والمعالجة" })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => {
         onExportPDF();
         setOpen(false);
-      }, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors border-t border-white/10", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-200" }),
+      }, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-700 dark:text-red-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "PDF" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للطباعة والأرشفة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
         ] })
       ] })
     ] })
@@ -22652,9 +22652,9 @@ function formatDate(value) {
 }
 function getDeltaClass(delta) {
   const n = Number(delta) || 0;
-  if (n < -1e-3) return "text-red-200";
-  if (n > 1e-3) return "text-emerald-200";
-  return "text-white/55";
+  if (n < -1e-3) return "text-red-700 dark:text-red-200";
+  if (n > 1e-3) return "text-emerald-700 dark:text-emerald-200";
+  return "text-slate-600 dark:text-white/55";
 }
 function getDeltaPercent(delta, expected) {
   const d = Number(delta) || 0;
@@ -22676,60 +22676,60 @@ function VarianceTable({
   const f = filterStatus || {};
   return /* @__PURE__ */ jsxs("div", { className: sectionCard, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-5 sm:p-6 border-b ${ws.divider} flex items-center justify-between gap-3`, children: [
-      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-white flex items-center gap-3 tracking-tight", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-amber-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-5 h-5" }) }),
         "سجل الانحرافات"
       ] }),
       /* @__PURE__ */ jsx(VarianceExportMenu, { onExportExcel, onExportPDF })
     ] }),
-    !hasFilters ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-white/50", children: [
+    !hasFilters ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-slate-500 dark:text-white/50", children: [
       /* @__PURE__ */ jsx(Calendar, { className: "w-16 h-16 mx-auto mb-4 opacity-50" }),
       /* @__PURE__ */ jsx("p", { className: "text-lg mb-2", children: "اختر الفرع والصنف والفترة لعرض الانحرافات" }),
       /* @__PURE__ */ jsxs("div", { className: "mt-4 inline-flex flex-col gap-1.5 items-start text-sm", children: [
-        /* @__PURE__ */ jsxs("span", { className: f.branch ? "text-emerald-300" : "text-white/55", children: [
+        /* @__PURE__ */ jsxs("span", { className: f.branch ? "text-emerald-700 dark:text-emerald-300" : "text-slate-600 dark:text-white/55", children: [
           f.branch ? "✓" : "○",
           " الفرع"
         ] }),
-        /* @__PURE__ */ jsxs("span", { className: f.item ? "text-emerald-300" : "text-white/55", children: [
+        /* @__PURE__ */ jsxs("span", { className: f.item ? "text-emerald-700 dark:text-emerald-300" : "text-slate-600 dark:text-white/55", children: [
           f.item ? "✓" : "○",
           " الصنف"
         ] }),
-        /* @__PURE__ */ jsxs("span", { className: f.from ? "text-emerald-300" : "text-white/55", children: [
+        /* @__PURE__ */ jsxs("span", { className: f.from ? "text-emerald-700 dark:text-emerald-300" : "text-slate-600 dark:text-white/55", children: [
           f.from ? "✓" : "○",
           " من تاريخ"
         ] }),
-        /* @__PURE__ */ jsxs("span", { className: f.to ? "text-emerald-300" : "text-white/55", children: [
+        /* @__PURE__ */ jsxs("span", { className: f.to ? "text-emerald-700 dark:text-emerald-300" : "text-slate-600 dark:text-white/55", children: [
           f.to ? "✓" : "○",
           " إلى تاريخ"
         ] })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-xs text-white/40 mt-4", children: "المعادلة: المتوقع = آخر افتتاحي + الواردات بعده" })
-    ] }) : isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
+      /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/40 mt-4", children: "المعادلة: المتوقع = آخر افتتاحي + الواردات بعده" })
+    ] }) : isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: "w-6 h-6 border-2 border-amber-400/60 border-t-transparent rounded-full animate-spin" }),
       /* @__PURE__ */ jsx("span", { children: "جاري التحميل…" })
-    ] }) }) : !Array.isArray(rows) || rows.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-white/50", children: [
+    ] }) }) : !Array.isArray(rows) || rows.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-slate-500 dark:text-white/50", children: [
       /* @__PURE__ */ jsx("p", { className: "text-lg mb-2", children: "لا توجد بيانات في هذه الفترة" }),
       /* @__PURE__ */ jsx("p", { className: "text-sm", children: "جرّب تعديل الفلاتر أو توسيع الفترة الزمنية" })
     ] }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.04]", children: [
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "التاريخ" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "رقم الجرد" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "المتوقع" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الفعلي" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الفرق منذ الافتتاحي" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "الفرق منذ الجرد السابق" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-white/55", children: "النسبة" })
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "التاريخ" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "رقم الجرد" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "المتوقع" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفعلي" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفرق منذ الافتتاحي" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "الفرق منذ الجرد السابق" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55", children: "النسبة" })
       ] }) }),
       /* @__PURE__ */ jsx("tbody", { children: rows.map((r) => {
         const delta = Number(r.delta_quantity) || 0;
         const deltaPrev = r.delta_since_previous;
         const expected = Number(r.expected_quantity) || 0;
         const pct = getDeltaPercent(delta, expected);
-        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/5 hover:bg-white/[0.05] transition-colors", children: [
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/75 text-sm whitespace-nowrap", dir: "ltr", children: formatDate(r.created_at) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white/55 text-sm font-mono", children: r.inventory_number || "—" }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white text-sm font-semibold", dir: "ltr", children: formatNumber(r.expected_quantity) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-white text-sm font-semibold", dir: "ltr", children: formatNumber(r.actual_quantity) }),
+        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors", children: [
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/75 text-sm whitespace-nowrap", dir: "ltr", children: formatDate(r.created_at) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-sm font-mono", children: r.inventory_number || "—" }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-900 dark:text-white text-sm font-semibold", dir: "ltr", children: formatNumber(r.expected_quantity) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-900 dark:text-white text-sm font-semibold", dir: "ltr", children: formatNumber(r.actual_quantity) }),
           /* @__PURE__ */ jsxs("td", { className: `px-4 py-3 text-sm font-bold ${getDeltaClass(delta)}`, dir: "ltr", children: [
             delta > 0 ? "+" : "",
             formatNumber(r.delta_quantity)
@@ -34428,7 +34428,7 @@ const route44 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   loader
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-DzroxtTg.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-BUeXInfm.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-zXLzfrN-.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-B2xSf1xc.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cwk-YKYD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/shield-CCvWcLx-.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/languages-But0n9zp.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B1eUTnOq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-DXOKmhfC.js','/assets/layout-dashboard-t_ubicMG.js','/assets/calculator-D3gGV-xi.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/arrow-left-1JW0wBZ5.js','/assets/trending-up-BgqdTk4e.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-i-sApjUx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/refresh-cw-Da2g6MOO.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B_D1ee3R.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-sgzbAQR3.js','/assets/save-BOlG9ZED.js','/assets/plus-COitwNGf.js','/assets/x-BFN3oNtP.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/style-DMXtuZsn.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/trending-up-BgqdTk4e.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-DhkqOS2v.js','/assets/index-5tUDjkqx.js','/assets/banknote-Dm0fgxyg.js','/assets/clock-qJJNJxIj.js','/assets/clipboard-check-C3cY-jb5.js','/assets/filter-DWyuYmH_.js','/assets/arrow-up-right-CWObQWyh.js','/assets/minus-CWNYa3a9.js','/assets/file-text-BbAMQB_x.js','/assets/info-DLQ0cRfG.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CnnXkFuu.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/arrow-left-1JW0wBZ5.js','/assets/GlassSelect-sgzbAQR3.js','/assets/refresh-cw-Da2g6MOO.js','/assets/plus-COitwNGf.js','/assets/save-BOlG9ZED.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D_J8AeDa.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/arrow-left-1JW0wBZ5.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-zXLzfrN-.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/exportUtils-Cbb5Err4.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-h3REE0u6.js','/assets/trash-2-CUHqd1bM.js','/assets/dateUtils-BnEiOKPy.js','/assets/package-B5TyyjiQ.js','/assets/pencil-Qtcayjw8.js','/assets/eye-DzINopbe.js','/assets/save-BOlG9ZED.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-BFN3oNtP.js','/assets/useQuery-DXOKmhfC.js','/assets/square-check-big-CIEQCGu_.js','/assets/square-BaqbmdHp.js','/assets/minus-CWNYa3a9.js','/assets/plus-COitwNGf.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CRaMNFmF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/payrollFormatters-DGy10whX.js','/assets/index-5tUDjkqx.js','/assets/wallet-D2SvD8wt.js','/assets/x-BFN3oNtP.js','/assets/save-BOlG9ZED.js','/assets/pencil-Qtcayjw8.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/trash-2-CUHqd1bM.js','/assets/useEmployeeLoans-DHt2h_Z2.js','/assets/filter-DWyuYmH_.js','/assets/plus-COitwNGf.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-AaZD9JR9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/x-BFN3oNtP.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/dollar-sign-B71BmmJE.js','/assets/percent-rKk3IsAD.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-gAS1hu6s.js','/assets/apiAuth-DIjdQgpG.js','/assets/index-zXLzfrN-.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/payrollCalculations-seahiZpF.js','/assets/info-DLQ0cRfG.js','/assets/lock-DlMx-7b2.js','/assets/circle-check-C2wUUs9F.js','/assets/clock-qJJNJxIj.js','/assets/style-DMXtuZsn.js','/assets/ban-Clrhs1az.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/GlassPopover-BIRKUkqg.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/send-XB6sbGea.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/gift-CoWOgAjZ.js','/assets/trash-2-CUHqd1bM.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/wallet-D2SvD8wt.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CKkT5Qvz.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/useQuery-DXOKmhfC.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-BFN3oNtP.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-E9J1jKv8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/trending-up-BgqdTk4e.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-check-big-YytesfJ2.js','/assets/clock-qJJNJxIj.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/sparkles-C1YLt276.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-BFN3oNtP.js','/assets/info-DLQ0cRfG.js','/assets/circle-alert-Wpb6PjST.js','/assets/triangle-alert-uVw7TkFw.js','/assets/package-plus-BtHolXRP.js','/assets/calendar-CLjHW5lb.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/activity-Db60x8DP.js','/assets/dollar-sign-B71BmmJE.js','/assets/package-B5TyyjiQ.js','/assets/exportUtils-Cbb5Err4.js','/assets/file-text-BbAMQB_x.js','/assets/search-D9t_ZA8c.js','/assets/download-BpfCRhOm.js','/assets/printer-DuxBl8tu.js','/assets/users-ypX0sR4t.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/layers-DDXVxWRY.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/dateUtils-BnEiOKPy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/calculator-D3gGV-xi.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DEb73szR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/exportUtils-Cbb5Err4.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/building-2-Bi2MKt0x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/search-D9t_ZA8c.js','/assets/plus-COitwNGf.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/x-BFN3oNtP.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/package-B5TyyjiQ.js','/assets/file-text-BbAMQB_x.js','/assets/chevron-down-B3DRT4S3.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cjynmcap.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/employeeUtils-D69VYUwT.js','/assets/users-ypX0sR4t.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/search-D9t_ZA8c.js','/assets/GlassPopover-BIRKUkqg.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-x-QgQZbgzI.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/briefcase-CGkzVZ7S.js','/assets/dollar-sign-B71BmmJE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/x-BFN3oNtP.js','/assets/mail-Cq7bg44q.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/plus-COitwNGf.js','/assets/triangle-alert-uVw7TkFw.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/package-B5TyyjiQ.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CsukxIYe.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/layers-DDXVxWRY.js','/assets/x-BFN3oNtP.js','/assets/languages-But0n9zp.js','/assets/plus-COitwNGf.js','/assets/pencil-Qtcayjw8.js','/assets/GlassSelect-sgzbAQR3.js','/assets/ban-Clrhs1az.js','/assets/Sidebar-DclM5U7k.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassPopover-BIRKUkqg.js','/assets/search-D9t_ZA8c.js','/assets/filter-DWyuYmH_.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/eye-DzINopbe.js','/assets/building-2-Bi2MKt0x.js','/assets/trash-2-CUHqd1bM.js','/assets/square-check-big-CIEQCGu_.js','/assets/clipboard-check-C3cY-jb5.js','/assets/square-BaqbmdHp.js','/assets/eye-off-CW9dHDyi.js','/assets/dollar-sign-B71BmmJE.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BKtyxMBz.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/exportUtils-Cbb5Err4.js','/assets/arrow-left-1JW0wBZ5.js','/assets/package-B5TyyjiQ.js','/assets/building-2-Bi2MKt0x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/hash-Crm7gKZz.js','/assets/calendar-CLjHW5lb.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-check-big-YytesfJ2.js','/assets/chevron-down-B3DRT4S3.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/dateUtils-BnEiOKPy.js','/assets/trending-up-BgqdTk4e.js','/assets/x-BFN3oNtP.js','/assets/LineChart-A-xmoYM-.js','/assets/package-plus-BtHolXRP.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-1ioM7xxP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/circle-alert-Wpb6PjST.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dw74XgjF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/arrow-left-1JW0wBZ5.js','/assets/circle-x-QgQZbgzI.js','/assets/triangle-alert-uVw7TkFw.js','/assets/building-2-Bi2MKt0x.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-XB5DieRv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/Sidebar-DclM5U7k.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calendar-check-CPdF76fv.js','/assets/package-plus-BtHolXRP.js','/assets/clock-qJJNJxIj.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/filter-DWyuYmH_.js','/assets/x-BFN3oNtP.js','/assets/search-D9t_ZA8c.js','/assets/exportUtils-Cbb5Err4.js','/assets/GlassPopover-BIRKUkqg.js','/assets/printer-DuxBl8tu.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/square-check-big-CIEQCGu_.js','/assets/trash-2-CUHqd1bM.js','/assets/square-BaqbmdHp.js','/assets/building-2-Bi2MKt0x.js','/assets/eye-DzINopbe.js','/assets/pencil-Qtcayjw8.js','/assets/calendar-CLjHW5lb.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/arrow-up-right-CWObQWyh.js','/assets/user-DfagCML7.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/hash-Crm7gKZz.js','/assets/circle-check-big-YytesfJ2.js','/assets/percent-rKk3IsAD.js','/assets/package-B5TyyjiQ.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/triangle-alert-uVw7TkFw.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BjY-pjca.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/refresh-cw-Da2g6MOO.js','/assets/calendar-CLjHW5lb.js','/assets/chevron-down-B3DRT4S3.js','/assets/package-B5TyyjiQ.js','/assets/useQuery-DXOKmhfC.js','/assets/dateUtils-BnEiOKPy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/building-2-Bi2MKt0x.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/GlassPopover-BIRKUkqg.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BcN0FBZY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/triangle-alert-uVw7TkFw.js','/assets/trending-up-BgqdTk4e.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/layers-DDXVxWRY.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DksI9zjC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/arrow-left-1JW0wBZ5.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/trending-up-BgqdTk4e.js','/assets/triangle-alert-uVw7TkFw.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BvTMZ2xl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/GlassSelect-sgzbAQR3.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/circle-check-big-YytesfJ2.js','/assets/package-B5TyyjiQ.js','/assets/log-out-Bi9xsGKs.js','/assets/save-BOlG9ZED.js','/assets/trending-up-BgqdTk4e.js','/assets/search-D9t_ZA8c.js','/assets/arrow-left-1JW0wBZ5.js','/assets/layers-DDXVxWRY.js','/assets/filter-DWyuYmH_.js','/assets/circle-alert-Wpb6PjST.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Be1RZrRX.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/apiAuth-DIjdQgpG.js','/assets/globe-DKoGPur3.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/circle-check-C2wUUs9F.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Buhmop9h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-BH0niDrp.js','/assets/users-ypX0sR4t.js','/assets/arrow-left-1JW0wBZ5.js','/assets/dollar-sign-B71BmmJE.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-sSiHaBVF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/gift-CoWOgAjZ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-79myNoFY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/Sidebar-BH0niDrp.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/users-ypX0sR4t.js','/assets/dollar-sign-B71BmmJE.js','/assets/image-Bggefa6I.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/useUpload-DNDH5__a.js','/assets/x-BFN3oNtP.js','/assets/user-DfagCML7.js','/assets/calendar-CLjHW5lb.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CGbN-ihL.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/Sidebar-BH0niDrp.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/employeeUtils-D69VYUwT.js','/assets/search-D9t_ZA8c.js','/assets/users-ypX0sR4t.js','/assets/user-DfagCML7.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/ban-Clrhs1az.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/x-BFN3oNtP.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/circle-check-C2wUUs9F.js','/assets/briefcase-CGkzVZ7S.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-check-CPdF76fv.js','/assets/circle-x-QgQZbgzI.js','/assets/dollar-sign-B71BmmJE.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-5tUDjkqx.js','/assets/payrollFormatters-DGy10whX.js','/assets/save-BOlG9ZED.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/plus-COitwNGf.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ba1LE3pr.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-BH0niDrp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/payrollFormatters-DGy10whX.js','/assets/useEmployeeLoans-DHt2h_Z2.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/trash-2-CUHqd1bM.js','/assets/info-DLQ0cRfG.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-BFN3oNtP.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DobgwZ0g.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-BH0niDrp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-gAS1hu6s.js','/assets/users-ypX0sR4t.js','/assets/ban-Clrhs1az.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/lock-DlMx-7b2.js','/assets/refresh-cw-Da2g6MOO.js','/assets/send-XB6sbGea.js','/assets/info-DLQ0cRfG.js','/assets/wallet-D2SvD8wt.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/clock-qJJNJxIj.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BzUtrwI0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DhjjJQev.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DybUZ9la.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/client-CINQ5WCN.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/image-Bggefa6I.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/download-BpfCRhOm.js','/assets/useMutation-h3REE0u6.js','/assets/upload-Bh8z_qYt.js','/assets/x-BFN3oNtP.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/useAdminAuth-DzloBQBL.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/send-XB6sbGea.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CvtaQwpI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/arrow-right-WBdEsbVb.js','/assets/external-link-DQg3IH_A.js','/assets/printer-DuxBl8tu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-84AisTv8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/coffee-Csx1FV89.js','/assets/plus-COitwNGf.js','/assets/x-BFN3oNtP.js','/assets/eye-off-CW9dHDyi.js','/assets/eye-DzINopbe.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-YRTmPZ6M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-NkHxHo4Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/shield-CCvWcLx-.js','/assets/globe-DKoGPur3.js','/assets/eye-DzINopbe.js','/assets/lock-DlMx-7b2.js','/assets/trash-2-CUHqd1bM.js','/assets/mail-Cq7bg44q.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BW_6YK5Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/apiAuth-DIjdQgpG.js','/assets/languages-But0n9zp.js','/assets/useMutation-h3REE0u6.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/info-DLQ0cRfG.js','/assets/log-out-Bi9xsGKs.js','/assets/send-XB6sbGea.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-BFN3oNtP.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C67r8GK9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/globe-DKoGPur3.js','/assets/mail-Cq7bg44q.js','/assets/external-link-DQg3IH_A.js','/assets/shield-CCvWcLx-.js','/assets/file-text-BbAMQB_x.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dd5hrPuG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/circle-alert-Wpb6PjST.js','/assets/lock-DlMx-7b2.js','/assets/sparkles-C1YLt276.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CgwLYg1S.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/PriorityPill-CP72enKf.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/calendar-days-DtTAo565.js','/assets/loader-circle-F04ReFHa.js','/assets/circle-check-C2wUUs9F.js','/assets/message-square-D9Pxhv53.js','/assets/triangle-alert-uVw7TkFw.js','/assets/chevron-left-0ArjHZWp.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/activity-Db60x8DP.js','/assets/circle-DhkqOS2v.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ct_6BI2T.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/message-square-D9Pxhv53.js','/assets/plus-COitwNGf.js','/assets/search-D9t_ZA8c.js','/assets/chevron-left-0ArjHZWp.js','/assets/send-XB6sbGea.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DgxWaaR1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/useUpload-DNDH5__a.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/circle-DhkqOS2v.js','/assets/x-BFN3oNtP.js','/assets/arrow-right-WBdEsbVb.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/flag-B3Z7tId9.js','/assets/calendar-days-DtTAo565.js','/assets/upload-Bh8z_qYt.js','/assets/trash-2-CUHqd1bM.js','/assets/file-text-BbAMQB_x.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/PriorityPill-CP72enKf.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/circle-check-C2wUUs9F.js','/assets/search-D9t_ZA8c.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/triangle-alert-uVw7TkFw.js','/assets/activity-Db60x8DP.js','/assets/chevron-left-0ArjHZWp.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/square-check-big-CIEQCGu_.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CBAxjbPG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CWtgOp0L.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/file-text-BbAMQB_x.js','/assets/plus-COitwNGf.js','/assets/trash-2-CUHqd1bM.js','/assets/flag-B3Z7tId9.js','/assets/square-check-big-CIEQCGu_.js','/assets/loader-circle-F04ReFHa.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-DTH4b2r5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-d1daf2e2.js','version':'d1daf2e2','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-DzroxtTg.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-Bqit7nXQ.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-zXLzfrN-.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-DTcx19gc.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cwk-YKYD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/shield-CCvWcLx-.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/languages-But0n9zp.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B1eUTnOq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-DXOKmhfC.js','/assets/layout-dashboard-t_ubicMG.js','/assets/calculator-D3gGV-xi.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/arrow-left-1JW0wBZ5.js','/assets/trending-up-BgqdTk4e.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-i-sApjUx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/refresh-cw-Da2g6MOO.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B_D1ee3R.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-sgzbAQR3.js','/assets/save-BOlG9ZED.js','/assets/plus-COitwNGf.js','/assets/x-BFN3oNtP.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/style-DMXtuZsn.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/trending-up-BgqdTk4e.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-DhkqOS2v.js','/assets/index-5tUDjkqx.js','/assets/banknote-Dm0fgxyg.js','/assets/clock-qJJNJxIj.js','/assets/clipboard-check-C3cY-jb5.js','/assets/filter-DWyuYmH_.js','/assets/arrow-up-right-CWObQWyh.js','/assets/minus-CWNYa3a9.js','/assets/file-text-BbAMQB_x.js','/assets/info-DLQ0cRfG.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CnnXkFuu.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/arrow-left-1JW0wBZ5.js','/assets/GlassSelect-sgzbAQR3.js','/assets/refresh-cw-Da2g6MOO.js','/assets/plus-COitwNGf.js','/assets/save-BOlG9ZED.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D_J8AeDa.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/arrow-left-1JW0wBZ5.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-zXLzfrN-.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/exportUtils-Cbb5Err4.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-h3REE0u6.js','/assets/trash-2-CUHqd1bM.js','/assets/dateUtils-BnEiOKPy.js','/assets/package-B5TyyjiQ.js','/assets/pencil-Qtcayjw8.js','/assets/eye-DzINopbe.js','/assets/save-BOlG9ZED.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-BFN3oNtP.js','/assets/useQuery-DXOKmhfC.js','/assets/square-check-big-CIEQCGu_.js','/assets/square-BaqbmdHp.js','/assets/minus-CWNYa3a9.js','/assets/plus-COitwNGf.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CRaMNFmF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/payrollFormatters-DGy10whX.js','/assets/index-5tUDjkqx.js','/assets/wallet-D2SvD8wt.js','/assets/x-BFN3oNtP.js','/assets/save-BOlG9ZED.js','/assets/pencil-Qtcayjw8.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/trash-2-CUHqd1bM.js','/assets/useEmployeeLoans-DHt2h_Z2.js','/assets/filter-DWyuYmH_.js','/assets/plus-COitwNGf.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-AaZD9JR9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/x-BFN3oNtP.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/dollar-sign-B71BmmJE.js','/assets/percent-rKk3IsAD.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-gAS1hu6s.js','/assets/apiAuth-DIjdQgpG.js','/assets/index-zXLzfrN-.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/payrollCalculations-seahiZpF.js','/assets/info-DLQ0cRfG.js','/assets/lock-DlMx-7b2.js','/assets/circle-check-C2wUUs9F.js','/assets/clock-qJJNJxIj.js','/assets/style-DMXtuZsn.js','/assets/ban-Clrhs1az.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/GlassPopover-BIRKUkqg.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/send-XB6sbGea.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/gift-CoWOgAjZ.js','/assets/trash-2-CUHqd1bM.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/wallet-D2SvD8wt.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CKkT5Qvz.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DrOLFF4r.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/useQuery-DXOKmhfC.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-BFN3oNtP.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-E9J1jKv8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/trending-up-BgqdTk4e.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-check-big-YytesfJ2.js','/assets/clock-qJJNJxIj.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/sparkles-C1YLt276.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-BFN3oNtP.js','/assets/info-DLQ0cRfG.js','/assets/circle-alert-Wpb6PjST.js','/assets/triangle-alert-uVw7TkFw.js','/assets/package-plus-BtHolXRP.js','/assets/calendar-CLjHW5lb.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/activity-Db60x8DP.js','/assets/dollar-sign-B71BmmJE.js','/assets/package-B5TyyjiQ.js','/assets/exportUtils-Cbb5Err4.js','/assets/file-text-BbAMQB_x.js','/assets/search-D9t_ZA8c.js','/assets/download-BpfCRhOm.js','/assets/printer-DuxBl8tu.js','/assets/users-ypX0sR4t.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/layers-DDXVxWRY.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/dateUtils-BnEiOKPy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/calculator-D3gGV-xi.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DEb73szR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/exportUtils-Cbb5Err4.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/building-2-Bi2MKt0x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/search-D9t_ZA8c.js','/assets/plus-COitwNGf.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/x-BFN3oNtP.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/package-B5TyyjiQ.js','/assets/file-text-BbAMQB_x.js','/assets/chevron-down-B3DRT4S3.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cjynmcap.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/Sidebar-DclM5U7k.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/employeeUtils-D69VYUwT.js','/assets/users-ypX0sR4t.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/search-D9t_ZA8c.js','/assets/GlassPopover-BIRKUkqg.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-x-QgQZbgzI.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/briefcase-CGkzVZ7S.js','/assets/dollar-sign-B71BmmJE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/x-BFN3oNtP.js','/assets/mail-Cq7bg44q.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/plus-COitwNGf.js','/assets/triangle-alert-uVw7TkFw.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/package-B5TyyjiQ.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CsukxIYe.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/layers-DDXVxWRY.js','/assets/x-BFN3oNtP.js','/assets/languages-But0n9zp.js','/assets/plus-COitwNGf.js','/assets/pencil-Qtcayjw8.js','/assets/GlassSelect-sgzbAQR3.js','/assets/ban-Clrhs1az.js','/assets/Sidebar-DclM5U7k.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassPopover-BIRKUkqg.js','/assets/search-D9t_ZA8c.js','/assets/filter-DWyuYmH_.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/eye-DzINopbe.js','/assets/building-2-Bi2MKt0x.js','/assets/trash-2-CUHqd1bM.js','/assets/square-check-big-CIEQCGu_.js','/assets/clipboard-check-C3cY-jb5.js','/assets/square-BaqbmdHp.js','/assets/eye-off-CW9dHDyi.js','/assets/dollar-sign-B71BmmJE.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-6qfKLunP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/exportUtils-Cbb5Err4.js','/assets/arrow-left-1JW0wBZ5.js','/assets/package-B5TyyjiQ.js','/assets/building-2-Bi2MKt0x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/hash-Crm7gKZz.js','/assets/calendar-CLjHW5lb.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-check-big-YytesfJ2.js','/assets/chevron-down-B3DRT4S3.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/dateUtils-BnEiOKPy.js','/assets/trending-up-BgqdTk4e.js','/assets/x-BFN3oNtP.js','/assets/LineChart-A-xmoYM-.js','/assets/package-plus-BtHolXRP.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-1ioM7xxP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/circle-alert-Wpb6PjST.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dydfz7KM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/arrow-left-1JW0wBZ5.js','/assets/circle-x-QgQZbgzI.js','/assets/triangle-alert-uVw7TkFw.js','/assets/building-2-Bi2MKt0x.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CK5zXtD5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/Sidebar-DclM5U7k.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calendar-check-CPdF76fv.js','/assets/package-plus-BtHolXRP.js','/assets/clock-qJJNJxIj.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/filter-DWyuYmH_.js','/assets/x-BFN3oNtP.js','/assets/search-D9t_ZA8c.js','/assets/exportUtils-Cbb5Err4.js','/assets/GlassPopover-BIRKUkqg.js','/assets/printer-DuxBl8tu.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/square-check-big-CIEQCGu_.js','/assets/trash-2-CUHqd1bM.js','/assets/square-BaqbmdHp.js','/assets/building-2-Bi2MKt0x.js','/assets/eye-DzINopbe.js','/assets/pencil-Qtcayjw8.js','/assets/calendar-CLjHW5lb.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/arrow-up-right-CWObQWyh.js','/assets/user-DfagCML7.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/hash-Crm7gKZz.js','/assets/circle-check-big-YytesfJ2.js','/assets/percent-rKk3IsAD.js','/assets/package-B5TyyjiQ.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/triangle-alert-uVw7TkFw.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CR6xbuYa.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/GlassSelect-sgzbAQR3.js','/assets/refresh-cw-Da2g6MOO.js','/assets/calendar-CLjHW5lb.js','/assets/chevron-down-B3DRT4S3.js','/assets/package-B5TyyjiQ.js','/assets/useQuery-DXOKmhfC.js','/assets/dateUtils-BnEiOKPy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/triangle-alert-uVw7TkFw.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/building-2-Bi2MKt0x.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/GlassPopover-BIRKUkqg.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-I4D1dF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/triangle-alert-uVw7TkFw.js','/assets/trending-up-BgqdTk4e.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/layers-DDXVxWRY.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dw16XwQb.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-CW9OIpUK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-DclM5U7k.js','/assets/Breadcrumb-TnmHFNaG.js','/assets/arrow-left-1JW0wBZ5.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/GlassSelect-sgzbAQR3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/trending-up-BgqdTk4e.js','/assets/triangle-alert-uVw7TkFw.js','/assets/GlassPopover-BIRKUkqg.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/x-BFN3oNtP.js','/assets/menu-DGdqBOAS.js','/assets/layout-dashboard-t_ubicMG.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/banknote-Dm0fgxyg.js','/assets/log-out-Bi9xsGKs.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BvTMZ2xl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/GlassSelect-sgzbAQR3.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/circle-check-big-YytesfJ2.js','/assets/package-B5TyyjiQ.js','/assets/log-out-Bi9xsGKs.js','/assets/save-BOlG9ZED.js','/assets/trending-up-BgqdTk4e.js','/assets/search-D9t_ZA8c.js','/assets/arrow-left-1JW0wBZ5.js','/assets/layers-DDXVxWRY.js','/assets/filter-DWyuYmH_.js','/assets/circle-alert-Wpb6PjST.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Be1RZrRX.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/apiAuth-DIjdQgpG.js','/assets/globe-DKoGPur3.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/circle-check-C2wUUs9F.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Buhmop9h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-BH0niDrp.js','/assets/users-ypX0sR4t.js','/assets/arrow-left-1JW0wBZ5.js','/assets/dollar-sign-B71BmmJE.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-sSiHaBVF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/gift-CoWOgAjZ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-79myNoFY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/Sidebar-BH0niDrp.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/users-ypX0sR4t.js','/assets/dollar-sign-B71BmmJE.js','/assets/image-Bggefa6I.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/useUpload-DNDH5__a.js','/assets/x-BFN3oNtP.js','/assets/user-DfagCML7.js','/assets/calendar-CLjHW5lb.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CGbN-ihL.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/Sidebar-BH0niDrp.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/index-zXLzfrN-.js','/assets/useMutation-h3REE0u6.js','/assets/employeeUtils-D69VYUwT.js','/assets/search-D9t_ZA8c.js','/assets/users-ypX0sR4t.js','/assets/user-DfagCML7.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/ban-Clrhs1az.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/x-BFN3oNtP.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/circle-check-C2wUUs9F.js','/assets/briefcase-CGkzVZ7S.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-check-CPdF76fv.js','/assets/circle-x-QgQZbgzI.js','/assets/dollar-sign-B71BmmJE.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-5tUDjkqx.js','/assets/payrollFormatters-DGy10whX.js','/assets/save-BOlG9ZED.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/plus-COitwNGf.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ba1LE3pr.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-BH0niDrp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassMultiSelect-p-I2vzlS.js','/assets/payrollFormatters-DGy10whX.js','/assets/useEmployeeLoans-DHt2h_Z2.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/trash-2-CUHqd1bM.js','/assets/info-DLQ0cRfG.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/wallet-D2SvD8wt.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-BFN3oNtP.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DobgwZ0g.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/layout-B3PRhMPd.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-BH0niDrp.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-gAS1hu6s.js','/assets/users-ypX0sR4t.js','/assets/ban-Clrhs1az.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/lock-DlMx-7b2.js','/assets/refresh-cw-Da2g6MOO.js','/assets/send-XB6sbGea.js','/assets/info-DLQ0cRfG.js','/assets/wallet-D2SvD8wt.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/clock-qJJNJxIj.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BzUtrwI0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DhjjJQev.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DybUZ9la.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/client-CINQ5WCN.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/image-Bggefa6I.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/download-BpfCRhOm.js','/assets/useMutation-h3REE0u6.js','/assets/upload-Bh8z_qYt.js','/assets/x-BFN3oNtP.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/useAdminAuth-DzloBQBL.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/send-XB6sbGea.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CvtaQwpI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/arrow-right-WBdEsbVb.js','/assets/external-link-DQg3IH_A.js','/assets/printer-DuxBl8tu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-84AisTv8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/coffee-Csx1FV89.js','/assets/plus-COitwNGf.js','/assets/x-BFN3oNtP.js','/assets/eye-off-CW9dHDyi.js','/assets/eye-DzINopbe.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-YRTmPZ6M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-bNX9DKhL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/menu-DGdqBOAS.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-NkHxHo4Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/shield-CCvWcLx-.js','/assets/globe-DKoGPur3.js','/assets/eye-DzINopbe.js','/assets/lock-DlMx-7b2.js','/assets/trash-2-CUHqd1bM.js','/assets/mail-Cq7bg44q.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BW_6YK5Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/apiAuth-DIjdQgpG.js','/assets/languages-But0n9zp.js','/assets/useMutation-h3REE0u6.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/info-DLQ0cRfG.js','/assets/log-out-Bi9xsGKs.js','/assets/send-XB6sbGea.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-BFN3oNtP.js','/assets/chevron-left-0ArjHZWp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C67r8GK9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/globe-DKoGPur3.js','/assets/mail-Cq7bg44q.js','/assets/external-link-DQg3IH_A.js','/assets/shield-CCvWcLx-.js','/assets/file-text-BbAMQB_x.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dd5hrPuG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/circle-alert-Wpb6PjST.js','/assets/lock-DlMx-7b2.js','/assets/sparkles-C1YLt276.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CgwLYg1S.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/PriorityPill-CP72enKf.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/calendar-days-DtTAo565.js','/assets/loader-circle-F04ReFHa.js','/assets/circle-check-C2wUUs9F.js','/assets/message-square-D9Pxhv53.js','/assets/triangle-alert-uVw7TkFw.js','/assets/chevron-left-0ArjHZWp.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/activity-Db60x8DP.js','/assets/circle-DhkqOS2v.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ct_6BI2T.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/message-square-D9Pxhv53.js','/assets/plus-COitwNGf.js','/assets/search-D9t_ZA8c.js','/assets/chevron-left-0ArjHZWp.js','/assets/send-XB6sbGea.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DgxWaaR1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/useUpload-DNDH5__a.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/circle-DhkqOS2v.js','/assets/x-BFN3oNtP.js','/assets/arrow-right-WBdEsbVb.js','/assets/GlassSelect-sgzbAQR3.js','/assets/GlassDatePicker-Cjb30Un3.js','/assets/flag-B3Z7tId9.js','/assets/calendar-days-DtTAo565.js','/assets/upload-Bh8z_qYt.js','/assets/trash-2-CUHqd1bM.js','/assets/file-text-BbAMQB_x.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/PriorityPill-CP72enKf.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/circle-check-C2wUUs9F.js','/assets/search-D9t_ZA8c.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/triangle-alert-uVw7TkFw.js','/assets/activity-Db60x8DP.js','/assets/chevron-left-0ArjHZWp.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/square-check-big-CIEQCGu_.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CBAxjbPG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CWtgOp0L.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-vYsQ8Jhu.js','/assets/Sidebar-DSviZRqr.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-sgzbAQR3.js','/assets/useQuery-DXOKmhfC.js','/assets/useMutation-h3REE0u6.js','/assets/file-text-BbAMQB_x.js','/assets/plus-COitwNGf.js','/assets/trash-2-CUHqd1bM.js','/assets/flag-B3Z7tId9.js','/assets/square-check-big-CIEQCGu_.js','/assets/loader-circle-F04ReFHa.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AppSectionSwitcher-BYdJJ8Q8.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BIRKUkqg.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-DTH4b2r5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-ffde02cd.js','version':'ffde02cd','sri':undefined};
 
 const assetsBuildDirectory = "build\\client";
       const basename = "/";

@@ -18,56 +18,56 @@ export function ItemsSummaryStats({ stats }) {
             <Package className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">إجمالي الأصناف</p>
-        <p className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">إجمالي الأصناف</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {stats.totalItems}
         </p>
       </div>
 
       <div className={statCard}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`${ws.iconBox} text-sky-200`}>
+          <div className={`${ws.iconBox} text-sky-700 dark:text-sky-200`}>
             <Building2 className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">عدد الفروع</p>
-        <p className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">عدد الفروع</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {stats.totalBranches}
         </p>
       </div>
 
       <div className={statCard}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`${ws.iconBox} text-emerald-200`}>
+          <div className={`${ws.iconBox} text-emerald-700 dark:text-emerald-200`}>
             <BarChart3 className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">إجمالي المخزون</p>
-        <p className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">إجمالي المخزون</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {stats.totalStock.toLocaleString()}
         </p>
       </div>
 
       <div className={statCard}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`${ws.iconBox} text-amber-200`}>
+          <div className={`${ws.iconBox} text-amber-700 dark:text-amber-200`}>
             <TrendingDown className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">أصناف منخفضة</p>
-        <p className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">أصناف منخفضة</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {stats.lowStockCount}
         </p>
       </div>
 
       <div className={statCard}>
         <div className="flex items-center justify-between mb-4">
-          <div className={`${ws.iconBox} text-red-200`}>
+          <div className={`${ws.iconBox} text-red-700 dark:text-red-200`}>
             <XCircle className="w-6 h-6" />
           </div>
         </div>
-        <p className="text-white/55 text-sm mb-1">غير متوفر</p>
-        <p className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-slate-600 dark:text-white/55 text-sm mb-1">غير متوفر</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {stats.outOfStockCount}
         </p>
       </div>
