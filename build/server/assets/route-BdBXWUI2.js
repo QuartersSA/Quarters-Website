@@ -1,19 +1,26 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 // Minimal employees list for the bonuses entry UI
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
-    anyOf: [
-      { role: "Admin", permission: "can_access_hr" },
-      { role: "Admin", permission: "can_manage_accounting" },
-    ],
+    anyOf: [{
+      role: "Admin",
+      permission: "can_access_hr"
+    }, {
+      role: "Admin",
+      permission: "can_manage_accounting"
+    }]
   });
-
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     // Pull employee + first associated branch name. We surface the
     // branch on bonus / overtime / loan selectors so the operator can
@@ -45,13 +52,15 @@ export async function GET(request) {
       ) br ON true
       ORDER BY e.name ASC, e.id ASC
     `;
-
     return Response.json(rows);
   } catch (error) {
     console.error("HR: Error fetching bonuses employees:", error);
-    return Response.json(
-      { error: "Failed to fetch employees" },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch employees"
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET };
