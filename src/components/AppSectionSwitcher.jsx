@@ -163,15 +163,15 @@ export default function AppSectionSwitcher({
     // Previously this was w-full which squeezed sibling content (page title)
     // when used inline in a mobile top bar.
     <div
-      className={`inline-flex items-center gap-1 p-1 rounded-2xl border border-white/10 bg-white/[0.03] shrink-0 ${shellClass} ${className}`}
+      className={`inline-flex items-center gap-1 p-1 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] shrink-0 ${shellClass} ${className}`}
       dir="rtl"
     >
       {visibleItems.map(({ key, href, label, Icon, onClick }) => {
         const isActive = active === key;
 
         const btnClass = isActive
-          ? "bg-white/10 text-white border-white/20"
-          : "bg-transparent text-white/60 border-transparent hover:bg-white/[0.06] hover:text-white/80";
+          ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20"
+          : "bg-transparent text-slate-600 dark:text-white/60 border-transparent hover:bg-slate-100 dark:hover:bg-white/[0.06] hover:text-slate-800 dark:hover:text-white/80";
 
         return (
           <a
@@ -183,7 +183,7 @@ export default function AppSectionSwitcher({
             aria-label={label}
           >
             <Icon
-              className={`w-4 h-4 ${isActive ? "text-emerald-200" : "text-white/50"}`}
+              className={`w-4 h-4 ${isActive ? "text-emerald-700 dark:text-emerald-200" : "text-slate-500 dark:text-white/50"}`}
             />
             {/* Icon-only: every consumer renders inside a narrow container
                 (mobile top bar OR desktop w-72 sidebar = 288px). The old
