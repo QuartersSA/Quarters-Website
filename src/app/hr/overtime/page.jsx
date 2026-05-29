@@ -129,15 +129,25 @@ export default function HROvertimePage() {
   const createMutation = useCreateOvertime();
   const deleteMutation = useDeleteOvertime();
 
+  const formatEmployeeLabel = (e) =>
+    e.branch_name ? `${e.name} — ${e.branch_name}` : e.name;
+
   const employeeFormMultiOptions = useMemo(
-    () => employees.map((e) => ({ value: String(e.id), label: e.name })),
+    () =>
+      employees.map((e) => ({
+        value: String(e.id),
+        label: formatEmployeeLabel(e),
+      })),
     [employees],
   );
 
   const employeeFilterOptions = useMemo(
     () => [
       { value: "", label: "كل الموظفين" },
-      ...employees.map((e) => ({ value: String(e.id), label: e.name })),
+      ...employees.map((e) => ({
+        value: String(e.id),
+        label: formatEmployeeLabel(e),
+      })),
     ],
     [employees],
   );

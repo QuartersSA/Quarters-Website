@@ -32,7 +32,11 @@ export function HRBonusModal({
   const employeeSelectOptions = useMemo(() => {
     return employeeOptions.map((emp) => ({
       value: String(emp.id),
-      label: emp.name,
+      // Append the branch name when the API surfaces it so operators
+      // can disambiguate same-named employees across branches.
+      label: emp.branch_name
+        ? `${emp.name} — ${emp.branch_name}`
+        : emp.name,
     }));
   }, [employeeOptions]);
 
@@ -43,7 +47,12 @@ export function HRBonusModal({
   const selectedEmployeesPreview = useMemo(() => {
     if (!selectedEmployeeIds.length) return null;
 
-    const map = new Map(employeeOptions.map((e) => [String(e.id), e.name]));
+    const map = new Map(
+      employeeOptions.map((e) => [
+        String(e.id),
+        e.branch_name ? `${e.name} — ${e.branch_name}` : e.name,
+      ]),
+    );
     const names = selectedEmployeeIds
       .map((id) => map.get(id) || id)
       .filter(Boolean);
