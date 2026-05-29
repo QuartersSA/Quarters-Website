@@ -17,12 +17,12 @@ function HRPayrollMobileHeader() {
     <div
       className={`lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`}
     >
-      <div className="w-9 h-9 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
-        <Wallet className="w-5 h-5 text-amber-200" />
+      <div className="w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center">
+        <Wallet className="w-5 h-5 text-amber-700 dark:text-amber-200" />
       </div>
       <div>
-        <div className="font-bold text-white tracking-tight">مسير الرواتب</div>
-        <div className="text-xs text-white/50">إرسال إلى المحاسبة</div>
+        <div className="font-bold text-slate-900 dark:text-white tracking-tight">مسير الرواتب</div>
+        <div className="text-xs text-slate-500 dark:text-white/50">إرسال إلى المحاسبة</div>
       </div>
     </div>
   );
@@ -32,13 +32,13 @@ function HRPayrollDesktopHeader() {
   return (
     <div className="hidden lg:flex items-center gap-4">
       <div className={ws.iconBox}>
-        <Wallet className="w-6 h-6 text-amber-200" />
+        <Wallet className="w-6 h-6 text-amber-700 dark:text-amber-200" />
       </div>
       <div>
-        <h1 className="text-xl font-bold text-white tracking-tight">
+        <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
           مسير الرواتب
         </h1>
-        <p className="text-white/50 text-sm mt-0.5">
+        <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
           عرض المسير الحالي ثم إرساله إلى قسم المحاسبة بضغطة زر.
         </p>
       </div>
@@ -51,17 +51,17 @@ function HRPayrollInfoCard() {
     <div className={`${ws.glassSoft} ${ws.card} p-4`}>
       <div className="flex items-start gap-3">
         <div className={`${ws.iconBox} w-10 h-10`}>
-          <Info className="w-5 h-5 text-sky-200" />
+          <Info className="w-5 h-5 text-sky-700 dark:text-sky-200" />
         </div>
-        <div className="text-sm text-white/75 leading-relaxed">
+        <div className="text-sm text-slate-700 dark:text-white/75 leading-relaxed">
           هذه الصفحة تعرض مسير الرواتب للشهر المُختار حسب بيانات HR
           الحالية (الراتب، البدلات، البونص، الخصميات، السلف، تاريخ
           المباشرة، الإيقاف). اضغط{" "}
-          <span className="text-white/90 font-semibold">
+          <span className="text-slate-900 dark:text-white/90 font-semibold">
             «إرسال إلى المحاسبة»
           </span>{" "}
           لإنشاء أو تحديث المسير على{" "}
-          <span className="text-white/90 font-semibold">
+          <span className="text-slate-900 dark:text-white/90 font-semibold">
             /accounting/payroll
           </span>
           ، حيث يتولّى المحاسب تأكيد الدفع وتقفيل الشهر.
@@ -126,19 +126,19 @@ export default function HRPayrollPage() {
   let body = null;
   if (!ready) {
     body = (
-      <div className={`${ws.glass} ${ws.card} p-6 text-white/60`}>
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60`}>
         جاري التحميل…
       </div>
     );
   } else if (!employeeId) {
     body = (
-      <div className={`${ws.glass} ${ws.card} p-6 text-white/70`}>
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
         الرجاء تسجيل الدخول.
       </div>
     );
   } else if (!isAdmin) {
     body = (
-      <div className={`${ws.glass} ${ws.card} p-6 text-white/70`}>
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
         هذه الصفحة متاحة لمسؤولي HR فقط.
       </div>
     );
@@ -158,14 +158,14 @@ export default function HRPayrollPage() {
           >
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-2xl bg-red-500/15 border border-red-500/30 flex items-center justify-center shrink-0">
-                <AlertOctagon className="w-5 h-5 text-red-300" />
+                <AlertOctagon className="w-5 h-5 text-red-700 dark:text-red-300" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-red-200 font-bold tracking-tight">
+                  <span className="text-red-700 dark:text-red-200 font-bold tracking-tight">
                     الشهر مُقفّل من قِبَل قسم المحاسبة
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 border border-red-500/30 text-red-200">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 border border-red-500/30 text-red-700 dark:text-red-200">
                     <Lock className="w-3 h-3" />
                     مُقفل
                   </span>
@@ -179,7 +179,7 @@ export default function HRPayrollPage() {
                   </span>{" "}
                   ثم إعادة المحاولة من هنا.
                   {closedByName || closedAtText ? (
-                    <div className="text-xs text-red-200/70 mt-1.5">
+                    <div className="text-xs text-red-700 dark:text-red-200/70 mt-1.5">
                       {closedByName ? `أقفله: ${closedByName}` : ""}
                       {closedByName && closedAtText ? " — " : ""}
                       {closedAtText ? `بتاريخ ${closedAtText}` : ""}
@@ -195,7 +195,7 @@ export default function HRPayrollPage() {
         <div className={`${ws.glass} ${ws.card} p-4`}>
           <div className="flex flex-col md:flex-row md:items-center gap-3">
             <div className="min-w-[200px]">
-              <div className="text-xs text-white/55 mb-1">الشهر</div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">الشهر</div>
               <GlassSelect
                 value={month}
                 onChange={setMonth}

@@ -228,10 +228,10 @@ export default function HREmployeesPage() {
         dir="rtl"
       >
         <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full`}>
-          <div className="text-white font-bold text-lg mb-2">
+          <div className="text-slate-900 dark:text-white font-bold text-lg mb-2">
             جاري التحقق من الصلاحيات…
           </div>
-          <div className="text-white/60 text-sm leading-relaxed">لحظات.</div>
+          <div className="text-slate-600 dark:text-white/60 text-sm leading-relaxed">لحظات.</div>
         </div>
       </div>
     );
@@ -252,8 +252,8 @@ export default function HREmployeesPage() {
         dir="rtl"
       >
         <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full`}>
-          <div className="text-white font-bold text-lg mb-2">{title}</div>
-          <div className="text-white/60 text-sm leading-relaxed">{body}</div>
+          <div className="text-slate-900 dark:text-white font-bold text-lg mb-2">{title}</div>
+          <div className="text-slate-600 dark:text-white/60 text-sm leading-relaxed">{body}</div>
           <div className="mt-4 flex flex-col sm:flex-row gap-2">
             <a
               href="/admin/login"
@@ -295,7 +295,7 @@ export default function HREmployeesPage() {
             <h1
               className={`text-3xl sm:text-4xl ${ws.title} mb-2 flex items-center gap-3`}
             >
-              <Users className="w-8 h-8 sm:w-10 sm:h-10 text-amber-200" />
+              <Users className="w-8 h-8 sm:w-10 sm:h-10 text-amber-700 dark:text-amber-200" />
               إدارة الموظفين
             </h1>
             <p className={ws.muted}>بيانات الموظفين (HR)</p>

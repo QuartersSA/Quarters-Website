@@ -80,7 +80,7 @@ export function HREmployeeModal({
         >
           {/* Name */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <User className="w-4 h-4 inline ml-2" />
               الاسم الكامل *
             </label>
@@ -98,7 +98,7 @@ export function HREmployeeModal({
 
           {/* Phone */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <Phone className="w-4 h-4 inline ml-2" />
               رقم الجوال
             </label>
@@ -117,7 +117,7 @@ export function HREmployeeModal({
           {/* IQAMA */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <FileText className="w-4 h-4 inline ml-2" />
                 رقم الإقامة
               </label>
@@ -134,7 +134,7 @@ export function HREmployeeModal({
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <Calendar className="w-4 h-4 inline ml-2" />
                 موعد انتهاء الإقامة
               </label>
@@ -156,7 +156,7 @@ export function HREmployeeModal({
           {/* Flags */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <CheckCircle2 className="w-4 h-4 inline ml-2" />
                 تم نقل الكفالة
               </label>
@@ -169,7 +169,7 @@ export function HREmployeeModal({
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <CheckCircle2 className="w-4 h-4 inline ml-2" />
                 تم إصدار كرت عمل
               </label>
@@ -182,7 +182,7 @@ export function HREmployeeModal({
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <CheckCircle2 className="w-4 h-4 inline ml-2" />
                 تم إصدار كشف طبي
               </label>
@@ -195,7 +195,7 @@ export function HREmployeeModal({
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <CheckCircle2 className="w-4 h-4 inline ml-2" />
                 تم إصدار كرت صحي
               </label>
@@ -211,7 +211,7 @@ export function HREmployeeModal({
           {/* Position + Branch */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <Briefcase className="w-4 h-4 inline ml-2" />
                 المنصب
               </label>
@@ -227,7 +227,7 @@ export function HREmployeeModal({
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <Building2 className="w-4 h-4 inline ml-2" />
                 الفروع
               </label>
@@ -252,18 +252,18 @@ export function HREmployeeModal({
               null (employee paid full salary every month from creation
               onwards, no proration). */}
           <div
-            className={`${ws.glassSoft} border border-white/10 rounded-2xl p-4`}
+            className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4`}
           >
             <div className="flex items-start justify-between gap-3 flex-wrap">
               <div className="min-w-0">
-                <p className="text-white font-semibold">
+                <p className="text-slate-900 dark:text-white font-semibold">
                   <CalendarCheck className="w-4 h-4 inline ml-2" />
                   تاريخ المباشرة
                 </p>
-                <p className="text-sm text-white/55 mt-1 leading-relaxed">
+                <p className="text-sm text-slate-600 dark:text-white/55 mt-1 leading-relaxed">
                   فعّل وحدّد التاريخ ليبدأ مسير الرواتب من ذلك اليوم. مسير
                   الشهر الذي يقع فيه التاريخ يُحسب على أساس{" "}
-                  <span className="text-white/80">
+                  <span className="text-slate-800 dark:text-white/80">
                     (الراتب ÷ 30) × أيام العمل في الشهر
                   </span>
                   . الأشهر السابقة لا يُسجَّل لها راتب لهذا الموظف.
@@ -324,7 +324,7 @@ export function HREmployeeModal({
           {/* Salary */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <DollarSign className="w-4 h-4 inline ml-2" />
                 الراتب الأساسي
               </label>
@@ -343,7 +343,7 @@ export function HREmployeeModal({
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <DollarSign className="w-4 h-4 inline ml-2" />
                 بدلات أخرى
               </label>

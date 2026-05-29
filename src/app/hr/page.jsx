@@ -60,10 +60,10 @@ export default function HRHomePage() {
         dir="rtl"
       >
         <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full`}>
-          <div className="text-white font-bold text-lg mb-2">
+          <div className="text-slate-900 dark:text-white font-bold text-lg mb-2">
             جاري التحقق من الصلاحيات…
           </div>
-          <div className="text-white/60 text-sm leading-relaxed">لحظات.</div>
+          <div className="text-slate-600 dark:text-white/60 text-sm leading-relaxed">لحظات.</div>
         </div>
       </div>
     );
@@ -84,8 +84,8 @@ export default function HRHomePage() {
         dir="rtl"
       >
         <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full`}>
-          <div className="text-white font-bold text-lg mb-2">{title}</div>
-          <div className="text-white/60 text-sm leading-relaxed">{body}</div>
+          <div className="text-slate-900 dark:text-white font-bold text-lg mb-2">{title}</div>
+          <div className="text-slate-600 dark:text-white/60 text-sm leading-relaxed">{body}</div>
           <div className="mt-4 flex flex-col sm:flex-row gap-2">
             <a
               href="/admin/login"
@@ -112,10 +112,10 @@ export default function HRHomePage() {
         <HRSidebar onLogout={logout} active="deductions" />
         <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
           <div className={`${ws.glass} ${ws.card} p-6`}>
-            <div className="text-white font-bold">
+            <div className="text-slate-900 dark:text-white font-bold">
               جاري تحويلك إلى الخصميات…
             </div>
-            <div className="text-white/60 text-sm mt-1">
+            <div className="text-slate-600 dark:text-white/60 text-sm mt-1">
               هذا الحساب لديه صلاحية (الخصميات) فقط.
             </div>
             <a
@@ -146,47 +146,47 @@ export default function HRHomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <a
             href="/hr/employees"
-            className={`group ${ws.glass} ${ws.card} p-5 border border-white/10 hover:bg-white/[0.06] transition-colors`}
+            className={`group ${ws.glass} ${ws.card} p-5 border border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors`}
           >
             <div className="flex items-start justify-between gap-3">
               <div className={`${ws.iconBox} !bg-amber-500/10`}>
-                <Users className="w-6 h-6 text-amber-200" />
+                <Users className="w-6 h-6 text-amber-700 dark:text-amber-200" />
               </div>
-              <ArrowLeft className="w-5 h-5 text-white/40 group-hover:text-white/70 transition-colors" />
+              <ArrowLeft className="w-5 h-5 text-slate-500 dark:text-white/40 group-hover:text-slate-700 dark:group-hover:text-white/70 transition-colors" />
             </div>
-            <div className="mt-4 text-white font-bold text-lg tracking-tight">
+            <div className="mt-4 text-slate-900 dark:text-white font-bold text-lg tracking-tight">
               الموظفين
             </div>
-            <div className="text-white/55 text-sm mt-1">
+            <div className="text-slate-600 dark:text-white/55 text-sm mt-1">
               إضافة الموظفين وتعديل صلاحياتهم
             </div>
           </a>
 
           <a
             href="/hr/deductions"
-            className={`group ${ws.glass} ${ws.card} p-5 border border-white/10 hover:bg-white/[0.06] transition-colors`}
+            className={`group ${ws.glass} ${ws.card} p-5 border border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors`}
           >
             <div className="flex items-start justify-between gap-3">
               <div className={`${ws.iconBox} !bg-amber-500/10`}>
-                <DollarSign className="w-6 h-6 text-amber-200" />
+                <DollarSign className="w-6 h-6 text-amber-700 dark:text-amber-200" />
               </div>
-              <ArrowLeft className="w-5 h-5 text-white/40 group-hover:text-white/70 transition-colors" />
+              <ArrowLeft className="w-5 h-5 text-slate-500 dark:text-white/40 group-hover:text-slate-700 dark:group-hover:text-white/70 transition-colors" />
             </div>
-            <div className="mt-4 text-white font-bold text-lg tracking-tight">
+            <div className="mt-4 text-slate-900 dark:text-white font-bold text-lg tracking-tight">
               الخصميات
             </div>
-            <div className="text-white/55 text-sm mt-1">
+            <div className="text-slate-600 dark:text-white/55 text-sm mt-1">
               تسجيل خصميات ومخالفات الموظفين
             </div>
           </a>
 
           <div
-            className={`${ws.glass} ${ws.card} p-5 border border-white/10 bg-white/[0.02]`}
+            className={`${ws.glass} ${ws.card} p-5 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02]`}
           >
-            <div className="text-white font-bold text-lg tracking-tight">
+            <div className="text-slate-900 dark:text-white font-bold text-lg tracking-tight">
               قريبًا
             </div>
-            <div className="text-white/55 text-sm mt-1">
+            <div className="text-slate-600 dark:text-white/55 text-sm mt-1">
               (الحضور والانصراف، الإجازات، التقارير)
             </div>
           </div>

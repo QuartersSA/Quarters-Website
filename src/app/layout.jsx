@@ -86,8 +86,11 @@ function GlobalDarkEnforcer() {
   const location = useLocation();
   useEffect(() => {
     if (typeof document === "undefined") return;
-    const isAdmin = (location?.pathname || "").startsWith("/admin");
-    if (isAdmin) return; // admin's useAdminTheme owns the class
+    const path = location?.pathname || "";
+    // Admin + HR share useAdminTheme — let them own the class on
+    // their own routes. Workspace / accounting / marketing / public
+    // routes stay forced-dark.
+    if (path.startsWith("/admin") || path.startsWith("/hr")) return;
     document.documentElement.classList.add("dark");
   }, [location?.pathname]);
   return null;
