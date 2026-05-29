@@ -14,6 +14,11 @@
 export const ws = {
   // Background
   appBg:
+    // [color-scheme] tells the browser which native controls to use
+    // (scrollbars, date pickers, autofill). Light by default + dark
+    // override so Safari/iOS doesn't force light-mode chrome on the
+    // dark theme.
+    "[color-scheme:light] dark:[color-scheme:dark] " +
     "bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900 font-inter " +
     "dark:from-[#0d1426] dark:via-[#101c38] dark:to-[#090f1f] dark:text-white",
 
