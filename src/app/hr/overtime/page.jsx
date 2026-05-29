@@ -7,6 +7,7 @@ import HRSidebar from "@/components/HR/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import GlassMultiSelect from "@/components/Workspace/GlassMultiSelect";
 import {
   buildRecentMonthOptions,
   monthLabel,
@@ -89,8 +90,10 @@ export default function HROvertimePage() {
   });
   const [filterEmployee, setFilterEmployee] = useState("");
 
-  // Form state
-  const [formEmployee, setFormEmployee] = useState("");
+  // Form state — multi-employee.
+  // Storing IDs as strings so they round-trip through
+  // GlassMultiSelect's Set comparison cleanly.
+  const [formEmployees, setFormEmployees] = useState([]);
   const [formMonth, setFormMonth] = useState(filterMonth);
   const [formDays, setFormDays] = useState("");
   const [formReason, setFormReason] = useState("");
@@ -126,11 +129,8 @@ export default function HROvertimePage() {
   const createMutation = useCreateOvertime();
   const deleteMutation = useDeleteOvertime();
 
-  const employeeFormOptions = useMemo(
-    () => [
-      { value: "", label: "اختر الموظف" },
-      ...employees.map((e) => ({ value: String(e.id), label: e.name })),
-    ],
+  const employeeFormMultiOptions = useMemo(
+    () => employees.map((e) => ({ value: String(e.id), label: e.name })),
     [employees],
   );
 
@@ -142,44 +142,58 @@ export default function HROvertimePage() {
     [employees],
   );
 
-  // Live preview of the amount that will post for the form selection.
-  const previewAmount = useMemo(() => {
-    const empId = Number(formEmployee);
-    const days = Number(formDays);
-    if (!empId || !Number.isFinite(days) || days <= 0) return 0;
-    const emp = employees.find((e) => e.id === empId);
-    if (!emp) return 0;
-    // The /api/hr/bonuses/employees feed returns only id+name, so we
-    // don't have base_salary here. We'll fall back to "—" in the UI
-    // and let the row show the computed amount once it's saved.
-    return null;
-  }, [formEmployee, formDays, employees]);
-
   const canSubmit =
     !createMutation.isPending &&
-    !!formEmployee &&
+    formEmployees.length > 0 &&
     !!formMonth &&
     Number(formDays) > 0;
 
-  const handleSubmit = (e) => {
+  const handleSelectAllEmployees = () => {
+    setFormEmployees(employees.map((e) => String(e.id)));
+  };
+
+  const handleClearEmployees = () => {
+    setFormEmployees([]);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!canSubmit) return;
-    createMutation.mutate(
-      {
-        employee_id: Number(formEmployee),
-        month: formMonth,
-        days: Number(formDays),
-        reason: formReason ? formReason.trim() : null,
-      },
-      {
-        onSuccess: () => {
-          setFormDays("");
-          setFormReason("");
-          // Keep employee + month selections so the admin can add
-          // another row quickly.
-        },
-      },
-    );
+
+    const ids = formEmployees
+      .map((v) => Number(v))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    if (ids.length === 0) return;
+
+    const days = Number(formDays);
+    const month = formMonth;
+    const reason = formReason ? formReason.trim() : null;
+
+    // Sequential POSTs so each one carries its own toast / cache
+    // invalidation through the existing useCreateOvertime hook.
+    // mutateAsync returns the resolved value so we can count
+    // successes.
+    let succeeded = 0;
+    for (const employee_id of ids) {
+      try {
+        await createMutation.mutateAsync({
+          employee_id,
+          month,
+          days,
+          reason,
+        });
+        succeeded += 1;
+      } catch {
+        // toast is already raised inside the hook's onError
+      }
+    }
+
+    if (succeeded > 0) {
+      setFormDays("");
+      setFormReason("");
+      // Keep employee selection + month so the admin can record
+      // another batch quickly without re-picking everyone.
+    }
   };
 
   const handleDelete = (row) => {
@@ -234,12 +248,45 @@ export default function HROvertimePage() {
             onSubmit={handleSubmit}
             className="grid grid-cols-1 md:grid-cols-2 gap-3"
           >
-            <div>
-              <div className="text-xs text-white/55 mb-1">الموظف</div>
-              <GlassSelect
-                value={formEmployee}
-                onChange={setFormEmployee}
-                options={employeeFormOptions}
+            <div className="md:col-span-2">
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="text-xs text-white/55">
+                  الموظفون{" "}
+                  {formEmployees.length > 0 ? (
+                    <span className="text-white/40">
+                      ({formEmployees.length})
+                    </span>
+                  ) : null}
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSelectAllEmployees}
+                    disabled={
+                      employees.length === 0 ||
+                      formEmployees.length === employees.length
+                    }
+                    className={`${ws.btnNeutral} px-2.5 py-1 text-[11px] disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    تحديد الكل
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleClearEmployees}
+                    disabled={formEmployees.length === 0}
+                    className={`${ws.btnNeutral} px-2.5 py-1 text-[11px] disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    مسح
+                  </button>
+                </div>
+              </div>
+              <GlassMultiSelect
+                values={formEmployees}
+                onChange={(vals) =>
+                  setFormEmployees(Array.isArray(vals) ? vals : [])
+                }
+                options={employeeFormMultiOptions}
+                placeholder="اختر موظف أو أكثر"
               />
             </div>
             <div>
@@ -279,17 +326,22 @@ export default function HROvertimePage() {
               />
             </div>
 
-            <div className="md:col-span-2 flex items-center gap-2 pt-1">
+            <div className="md:col-span-2 flex items-center gap-2 pt-1 flex-wrap">
               <button
                 type="submit"
                 disabled={!canSubmit}
                 className={`${ws.btnPrimary} px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 <Plus className="w-4 h-4" />
-                {createMutation.isPending ? "جاري التسجيل…" : "إضافة"}
+                {createMutation.isPending
+                  ? "جاري التسجيل…"
+                  : formEmployees.length > 1
+                    ? `إضافة لـ ${formEmployees.length} موظف`
+                    : "إضافة"}
               </button>
               <div className="text-xs text-white/45">
-                الصيغة: (الراتب ÷ 30) × 2 × {formDays || "0"} يوم
+                الصيغة: (الراتب ÷ 30) × 2 × {formDays || "0"} يوم — تُطبَّق
+                لكل موظف
               </div>
             </div>
           </form>
