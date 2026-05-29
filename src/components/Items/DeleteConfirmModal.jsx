@@ -18,7 +18,7 @@ export function DeleteConfirmModal({
         className={`${ws.glass} ${ws.card} w-full max-w-md shadow-2xl border border-red-500/25`}
       >
         <div className={`p-6 border-b ${ws.divider}`}>
-          <h3 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
             <div className={`${ws.iconBox} w-10 h-10 text-red-200`}>
               <Trash2 className="w-5 h-5" />
             </div>
@@ -29,7 +29,7 @@ export function DeleteConfirmModal({
         <div className="p-6">
           <p className="text-white/80 mb-4">
             هل أنت متأكد من حذف الصنف{" "}
-            <span className="font-bold text-white">"{item.name}"</span>؟
+            <span className="font-bold text-slate-900 dark:text-white">"{item.name}"</span>؟
           </p>
           <p className="text-amber-200 text-sm flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3">
             <span className="text-lg">⚠️</span>

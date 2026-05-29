@@ -75,8 +75,8 @@ export function ItemFormModal({
     { value: "شدة", label: "شدة" },
   ];
 
-  const labelClass = "block text-white/70 text-sm font-semibold mb-2";
-  const helpClass = "text-white/40 text-xs mt-1";
+  const labelClass = "block text-slate-700 dark:text-white/70 text-sm font-semibold mb-2";
+  const helpClass = "text-slate-500 dark:text-white/40 text-xs mt-1";
 
   const categoryOptions = [
     { value: "", label: "بدون فئة" },
@@ -135,7 +135,7 @@ export function ItemFormModal({
         <div
           className={`p-6 flex items-center justify-between shrink-0 ${ws.topBar}`}
         >
-          <h3 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
             <div className={`${ws.iconBox} w-10 h-10 text-white/80`}>
               <Package className="w-5 h-5" />
             </div>
@@ -147,7 +147,7 @@ export function ItemFormModal({
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-white/60" />
           </button>
         </div>
 
@@ -296,15 +296,15 @@ export function ItemFormModal({
 
           {/* Unit Selection */}
           <div>
-            <label className="block text-white/70 text-sm font-semibold mb-3">
+            <label className="block text-slate-700 dark:text-white/70 text-sm font-semibold mb-3">
               نوع المنتج (الوحدة) <span className="text-red-300">*</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               {unitOptions.map((option, index) => {
                 const active = formData.unit === option.value;
                 const boxClass = active
-                  ? "bg-white/10 text-white border-white/20"
-                  : "bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06]";
+                  ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20"
+                  : "bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.06]";
 
                 return (
                   <label
@@ -323,7 +323,7 @@ export function ItemFormModal({
                       className="sr-only"
                     />
                     <span
-                      className={`font-semibold ${active ? "text-white" : "text-white/70"}`}
+                      className={`font-semibold ${active ? "text-slate-900 dark:text-white" : "text-slate-700 dark:text-white/70"}`}
                     >
                       {option.label}
                     </span>
@@ -362,7 +362,7 @@ export function ItemFormModal({
           <div>
             <label className={labelClass}>
               الحد الأقصى للتنبيه{" "}
-              <span className="text-white/40 text-xs">(اختياري)</span>
+              <span className="text-slate-500 dark:text-white/40 text-xs">(اختياري)</span>
             </label>
             <input
               type="number"
@@ -391,7 +391,7 @@ export function ItemFormModal({
 
           {/* Show in Inventory Toggle */}
           <div
-            className={`${ws.glassSoft} border border-white/10 rounded-2xl p-5`}
+            className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-5`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -402,7 +402,7 @@ export function ItemFormModal({
                   <p className="text-white/90 text-sm font-semibold">
                     تفعيل الصنف في الجرد
                   </p>
-                  <p className="text-white/40 text-xs mt-0.5">
+                  <p className="text-slate-500 dark:text-white/40 text-xs mt-0.5">
                     الصنف يظهر للموظفين عند تسجيل الجرد ويُحسب في التقارير
                   </p>
                 </div>

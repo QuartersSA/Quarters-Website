@@ -10,6 +10,14 @@ const BRAND_LOGO_URL =
 export default function AccountingLayout({ children }) {
   const { ready, isAuthenticated, user } = useWorkspaceUser();
 
+  // Force dark for Accounting — only the admin section exposes the
+  // light toggle. Mirrors the workspace + HR layouts.
+  React.useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
   React.useEffect(() => {
     if (!ready) return;
 
@@ -39,7 +47,7 @@ export default function AccountingLayout({ children }) {
 
     return (
       <div
-        className={`relative min-h-[100svh] ${ws.appBg} flex items-center justify-center p-6`}
+        className={`dark relative min-h-[100svh] ${ws.appBg} flex items-center justify-center p-6`}
         dir="rtl"
       >
         {Background}

@@ -43,26 +43,26 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
     return icons[unit] || "📦";
   };
 
-  const cardClass = `${ws.glass} ${ws.card} overflow-hidden hover:bg-white/[0.03] transition-colors`;
+  const cardClass = `${ws.glass} ${ws.card} overflow-hidden hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors`;
 
   const statusBadge =
     item.show_in_inventory === false ? (
-      <span className="px-3 py-1 bg-red-500/80 text-white text-xs font-semibold rounded-full inline-flex items-center gap-1">
+      <span className="px-3 py-1 bg-red-500/80 text-slate-900 dark:text-white text-xs font-semibold rounded-full inline-flex items-center gap-1">
         <EyeOff className="w-3 h-3" />
         معطّل
       </span>
     ) : stockStatus === "out_of_stock" ? (
-      <span className="px-3 py-1 bg-red-500/80 text-white text-xs font-semibold rounded-full inline-flex items-center gap-1">
+      <span className="px-3 py-1 bg-red-500/80 text-slate-900 dark:text-white text-xs font-semibold rounded-full inline-flex items-center gap-1">
         <XCircle className="w-3 h-3" />
         نفد
       </span>
     ) : stockStatus === "low_stock" ? (
-      <span className="px-3 py-1 bg-amber-500/80 text-white text-xs font-semibold rounded-full inline-flex items-center gap-1">
+      <span className="px-3 py-1 bg-amber-500/80 text-slate-900 dark:text-white text-xs font-semibold rounded-full inline-flex items-center gap-1">
         <AlertTriangle className="w-3 h-3" />
         منخفض
       </span>
     ) : (
-      <span className="px-3 py-1 bg-emerald-500/80 text-white text-xs font-semibold rounded-full inline-flex items-center gap-1">
+      <span className="px-3 py-1 bg-emerald-500/80 text-slate-900 dark:text-white text-xs font-semibold rounded-full inline-flex items-center gap-1">
         <CheckCircle className="w-3 h-3" />
         متوفر
       </span>
@@ -73,7 +73,7 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
       {/* Content */}
       <div className="p-5">
         <div className="flex items-start justify-between gap-3 mb-2">
-          <h3 className="text-xl font-bold text-white tracking-tight">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             {item.name}
           </h3>
 
@@ -86,7 +86,7 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
         <div className="flex items-center gap-2 flex-wrap mb-3">
           {item.category_name ? (
             <span
-              className={`${ws.pill} bg-white/[0.04] text-white/70 border-white/10`}
+              className={`${ws.pill} bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`}
             >
               <Layers className="w-4 h-4" />
               <span className="mr-1">{item.category_name}</span>
@@ -95,7 +95,7 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
 
           {item.unit ? (
             <span
-              className={`${ws.pill} bg-white/[0.04] text-white/70 border-white/10`}
+              className={`${ws.pill} bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`}
             >
               <span className="text-base">{getUnitIcon(item.unit)}</span>
               <span className="mr-1">الوحدة: {item.unit}</span>
@@ -104,7 +104,7 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
         </div>
 
         {item.description ? (
-          <p className="text-white/45 text-sm mb-4 line-clamp-2">
+          <p className="text-slate-500 dark:text-white/45 text-sm mb-4 line-clamp-2">
             {item.description}
           </p>
         ) : null}
@@ -112,13 +112,13 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
         {/* Stock Info */}
         <div className="space-y-2 mb-4">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-white/55">إجمالي المخزون:</span>
-            <span className="text-white font-bold">
+            <span className="text-slate-600 dark:text-white/55">إجمالي المخزون:</span>
+            <span className="text-slate-900 dark:text-white font-bold">
               {totalStock} {item.unit || "وحدة"}
             </span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-white/55">الحد الأدنى:</span>
+            <span className="text-slate-600 dark:text-white/55">الحد الأدنى:</span>
             <span className="text-amber-200 font-bold">
               {item.min_stock_threshold} {item.unit || "وحدة"}
             </span>

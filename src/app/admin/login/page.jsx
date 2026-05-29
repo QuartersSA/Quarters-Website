@@ -117,13 +117,13 @@ export default function AdminLoginPage() {
             <div>
               <label
                 htmlFor="username"
-                className="block text-sm font-semibold text-white/70 mb-2"
+                className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2"
               >
                 اسم المستخدم
               </label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                  <User className="w-5 h-5 text-white/40" />
+                  <User className="w-5 h-5 text-slate-500 dark:text-white/40" />
                 </div>
                 <input
                   id="username"
@@ -141,13 +141,13 @@ export default function AdminLoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-semibold text-white/70 mb-2"
+                className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2"
               >
                 كلمة المرور
               </label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                  <Lock className="w-5 h-5 text-white/40" />
+                  <Lock className="w-5 h-5 text-slate-500 dark:text-white/40" />
                 </div>
                 <input
                   id="password"

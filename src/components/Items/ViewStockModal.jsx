@@ -34,7 +34,7 @@ export function ViewStockModal({ item, onClose }) {
           className={`p-6 flex items-center justify-between shrink-0 ${ws.topBar}`}
         >
           <div className="min-w-0">
-            <h3 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
               <div className={`${ws.iconBox} w-10 h-10 text-sky-200`}>
                 <Building2 className="w-5 h-5" />
               </div>
@@ -43,7 +43,7 @@ export function ViewStockModal({ item, onClose }) {
             {item.unit ? (
               <div className="mt-2">
                 <span
-                  className={`${ws.pill} bg-white/[0.04] text-white/70 border-white/10`}
+                  className={`${ws.pill} bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`}
                 >
                   <span className="text-base">{getUnitIcon(item.unit)}</span>
                   <span className="mr-1">الوحدة: {item.unit}</span>
@@ -58,7 +58,7 @@ export function ViewStockModal({ item, onClose }) {
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-white/60" />
           </button>
         </div>
 
@@ -74,7 +74,7 @@ export function ViewStockModal({ item, onClose }) {
                 ? "bg-red-500/10 border-red-500/20"
                 : isLow
                   ? "bg-amber-500/10 border-amber-500/20"
-                  : "bg-white/[0.04] border-white/10";
+                  : "bg-slate-100 dark:bg-white/[0.04] border-slate-200 dark:border-white/10";
 
               const iconClass = isOutOfStock
                 ? "text-red-200"
@@ -86,7 +86,7 @@ export function ViewStockModal({ item, onClose }) {
                 ? "text-red-200"
                 : isLow
                   ? "text-amber-200"
-                  : "text-white";
+                  : "text-slate-900 dark:text-white";
 
               const statusLabel = isOutOfStock ? (
                 <p className="text-red-200 text-xs flex items-center gap-1">
@@ -115,7 +115,7 @@ export function ViewStockModal({ item, onClose }) {
                       <Building2 className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-white font-medium">
+                      <p className="text-slate-900 dark:text-white font-medium">
                         {stock.branch_name}
                       </p>
                       {statusLabel}
@@ -124,7 +124,7 @@ export function ViewStockModal({ item, onClose }) {
 
                   <div className="text-left">
                     <p className={`text-2xl font-bold ${qtyClass}`}>{qty}</p>
-                    <p className="text-white/45 text-xs">
+                    <p className="text-slate-500 dark:text-white/45 text-xs">
                       {item.unit || "وحدة"}
                     </p>
                   </div>
@@ -133,7 +133,7 @@ export function ViewStockModal({ item, onClose }) {
             })}
 
             {!item.branch_stock || item.branch_stock.length === 0 ? (
-              <div className="text-center py-8 text-white/55">
+              <div className="text-center py-8 text-slate-600 dark:text-white/55">
                 <Package className="w-12 h-12 mx-auto mb-3 opacity-40" />
                 <p>لا توجد بيانات مخزون لهذا الصنف</p>
               </div>
