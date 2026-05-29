@@ -93,7 +93,7 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
           />
 
           <div className="flex items-center gap-2 min-w-0">
-            <div className="text-slate-900 dark:text-slate-900 dark:dark:text-white text-sm font-bold tracking-tight whitespace-nowrap">
+            <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white text-sm font-bold tracking-tight whitespace-nowrap">
               {pageTitle}
             </div>
             <img
@@ -115,7 +115,7 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed right-0 top-0 h-[100svh] w-72 lg:w-72 p-6 overflow-y-auto z-50 transition-transform duration-300 ${ws.glass} ${ws.card} rounded-l-[28px] lg:rounded-none border-l border-slate-200 dark:border-slate-200 dark:dark:border-white/10 ${
+        className={`fixed right-0 top-0 h-[100svh] w-72 lg:w-72 p-6 overflow-y-auto z-50 transition-transform duration-300 ${ws.glass} ${ws.card} rounded-l-[28px] lg:rounded-none border-l border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 ${
           isMobileMenuOpen
             ? "translate-x-0"
             : "translate-x-full lg:translate-x-0"
@@ -129,10 +129,10 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             alt="Quarters Coffee Bar"
             className="h-16 w-auto mx-auto bg-white rounded-2xl p-2 mb-3"
           />
-          <h1 className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold text-lg tracking-tight">
+          <h1 className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-bold text-lg tracking-tight">
             لوحة الإدارة
           </h1>
-          <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-xs">أنظمة Quarters</p>
+          <p className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 text-xs">أنظمة Quarters</p>
 
           {/* Section switcher (Workspace / الجرد / المحاسبة) */}
           <div className="mt-4 flex justify-center">
@@ -146,8 +146,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             onClick={() => setIsMobileMenuOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
               activePage === "dashboard"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
             }`}
           >
             <LayoutDashboard className="w-5 h-5" />
@@ -161,8 +161,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             onClick={() => setIsMobileMenuOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
               activePage === "branches"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
             }`}
           >
             <Building2 className="w-5 h-5" />
@@ -176,8 +176,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             onClick={() => setIsMobileMenuOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
               activePage === "items"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
             }`}
           >
             <Package className="w-5 h-5" />
@@ -191,8 +191,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             onClick={() => setIsMobileMenuOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
               activePage === "operations"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
             }`}
           >
             <ClipboardList className="w-5 h-5" />
@@ -208,8 +208,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             onClick={() => setIsMobileMenuOpen(false)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
               activePage === "receipts"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
             }`}
           >
             <Truck className="w-5 h-5" />
@@ -221,7 +221,7 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
           <div>
             <button
               onClick={() => setIsInventorySummaryOpen(!isInventorySummaryOpen)}
-              className="w-full flex items-center justify-between gap-3 px-4 py-3 text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] rounded-2xl transition-colors border border-transparent"
+              className="w-full flex items-center justify-between gap-3 px-4 py-3 text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] rounded-2xl transition-colors border border-transparent"
             >
               <div className="flex items-center gap-3">
                 <FileText className="w-5 h-5" />
@@ -235,14 +235,14 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             </button>
 
             {isInventorySummaryOpen && (
-              <div className="mr-4 mt-2 space-y-1 border-r border-slate-200 dark:border-slate-200 dark:dark:border-white/10 pr-3">
+              <div className="mr-4 mt-2 space-y-1 border-r border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 pr-3">
                 <a
                   href="/admin/low-stock"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
                     activePage === "low-stock"
-                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                      : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                      : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
                   }`}
                 >
                   <TrendingDown className="w-4 h-4" />
@@ -260,8 +260,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
                     activePage === "items-summary"
-                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                      : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                      : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
                   }`}
                 >
                   <FileText className="w-4 h-4" />
@@ -279,8 +279,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
                     activePage === "variance"
-                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                      : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                      : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
                   }`}
                 >
                   <BarChart3 className="w-4 h-4" />
@@ -298,8 +298,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
                     activePage === "stock-value"
-                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                      : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                      : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
                   }`}
                 >
                   <Banknote className="w-4 h-4" />
@@ -321,8 +321,8 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
                 activePage === "employees"
-                  ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-white/20"
-                  : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] border-transparent"
+                  ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
+                  : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
               }`}
             >
               <Users className="w-5 h-5" />

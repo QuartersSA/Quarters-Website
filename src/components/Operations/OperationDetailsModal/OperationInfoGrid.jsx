@@ -49,7 +49,7 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="bg-slate-100 dark:bg-white/5 rounded-lg p-4">
+      <div className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 rounded-lg p-4">
         <div className="flex items-center gap-2 text-gray-400 mb-2">
           <Building2 className="w-4 h-4" />
           <span className="text-sm">
@@ -61,8 +61,8 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
           // Show both parties so the modal makes sense regardless of
           // whether the user clicked the OUT or the IN row.
           <>
-            <p className="text-slate-900 dark:text-white font-semibold flex items-center gap-2">
-              <transferParties.Icon className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
+            <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold flex items-center gap-2">
+              <transferParties.Icon className="w-4 h-4 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200" />
               <span>المستلم: {transferParties.receiver}</span>
             </p>
             <p className="text-gray-300 text-sm mt-2">
@@ -71,7 +71,7 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
           </>
         ) : (
           <>
-            <p className="text-slate-900 dark:text-white font-semibold">
+            <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">
               {selectedOperation.branch_name || "غير محدد"}
             </p>
             {selectedOperation.branch_location ? (
@@ -83,7 +83,7 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
         )}
       </div>
 
-      <div className="bg-slate-100 dark:bg-white/5 rounded-lg p-4">
+      <div className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 rounded-lg p-4">
         <div className="flex items-center gap-2 text-gray-400 mb-2">
           {isReceipt ? (
             <PackagePlus className="w-4 h-4" />
@@ -96,7 +96,7 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
         </div>
         {isReceipt ? (
           <>
-            <p className="text-slate-900 dark:text-white font-semibold">
+            <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">
               {selectedOperation.receipt_item_name || "صنف"}
             </p>
             <p className="text-gray-400 text-sm mt-1">
@@ -111,7 +111,7 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
           </>
         ) : selectedOperation.employee_name ? (
           <>
-            <p className="text-slate-900 dark:text-white font-semibold">
+            <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">
               {selectedOperation.employee_name}
             </p>
             {selectedOperation.employee_email && (
@@ -125,7 +125,7 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
         )}
       </div>
 
-      <div className="bg-slate-100 dark:bg-white/5 rounded-lg p-4">
+      <div className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 rounded-lg p-4">
         <div className="flex items-center gap-2 text-gray-400 mb-2">
           {isTransfer ? (
             <ArrowLeftRight className="w-4 h-4" />
@@ -136,38 +136,38 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
           )}
           <span className="text-sm">نوع العملية</span>
         </div>
-        <p className="text-slate-900 dark:text-white font-semibold">
+        <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">
           {getInventoryTypeLabel(selectedOperation.inventory_type)}
         </p>
       </div>
 
-      <div className="bg-slate-100 dark:bg-white/5 rounded-lg p-4">
+      <div className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 rounded-lg p-4">
         <div className="flex items-center gap-2 text-gray-400 mb-2">
           <Clock className="w-4 h-4" />
           <span className="text-sm">تاريخ العملية</span>
         </div>
-        <p className="text-slate-900 dark:text-white font-semibold">
+        <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">
           {formatDateTime(operationDateValue)}
         </p>
       </div>
 
-      <div className="bg-slate-100 dark:bg-white/5 rounded-lg p-4">
+      <div className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 rounded-lg p-4">
         <div className="flex items-center gap-2 text-gray-400 mb-2">
           <CalendarPlus className="w-4 h-4" />
           <span className="text-sm">تاريخ الإدخال</span>
         </div>
-        <p className="text-slate-700 dark:text-white/70 font-semibold">
+        <p className="text-slate-700 dark:text-slate-700 dark:dark:text-white/70 font-semibold">
           {formatDateTime(selectedOperation.created_at)}
         </p>
       </div>
 
       {totalQuantity !== undefined ? (
-        <div className="bg-slate-100 dark:bg-white/5 rounded-lg p-4">
+        <div className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 rounded-lg p-4">
           <div className="flex items-center gap-2 text-gray-400 mb-2">
             <BarChart3 className="w-4 h-4" />
             <span className="text-sm">إجمالي الكميات</span>
           </div>
-          <p className="text-slate-900 dark:text-white font-semibold text-2xl">
+          <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold text-2xl">
             {totalQuantity}
             <span className="text-sm text-gray-400 mr-2">وحدة</span>
           </p>
@@ -175,12 +175,12 @@ export function OperationInfoGrid({ selectedOperation, totalQuantity }) {
       ) : null}
 
       {selectedOperation.note ? (
-        <div className="bg-slate-100 dark:bg-white/5 rounded-lg p-4 md:col-span-2">
+        <div className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 rounded-lg p-4 md:col-span-2">
           <div className="flex items-center gap-2 text-gray-400 mb-2">
             <StickyNote className="w-4 h-4" />
             <span className="text-sm">ملاحظة</span>
           </div>
-          <p className="text-slate-800 dark:text-white/85 whitespace-pre-wrap">
+          <p className="text-slate-800 dark:text-slate-800 dark:dark:text-white/85 whitespace-pre-wrap">
             {selectedOperation.note}
           </p>
         </div>

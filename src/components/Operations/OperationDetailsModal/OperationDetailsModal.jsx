@@ -428,11 +428,11 @@ export function OperationDetailsModal({
   const opStats = getOperationItemStats(operationDetails);
 
   const titleIcon = isTransfer ? (
-    <span className={`${ws.iconBox} w-10 h-10 text-amber-700 dark:text-amber-200`}>
+    <span className={`${ws.iconBox} w-10 h-10 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200`}>
       <ArrowLeftRight className="w-5 h-5" />
     </span>
   ) : isReceipt ? (
-    <span className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+    <span className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200`}>
       <PackagePlus className="w-5 h-5" />
     </span>
   ) : null;
@@ -460,11 +460,11 @@ export function OperationDetailsModal({
           className={`p-4 sm:p-6 flex items-center justify-between flex-shrink-0 ${ws.topBar}`}
         >
           <div className="min-w-0">
-            <h3 className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight mb-1 flex items-center gap-2">
+            <h3 className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight mb-1 flex items-center gap-2">
               {titleIcon}
               <span className="truncate">{titleText}</span>
             </h3>
-            <p className="text-slate-500 dark:text-white/50 font-mono text-xs sm:text-sm truncate">
+            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 font-mono text-xs sm:text-sm truncate">
               {selectedOperation.inventory_number}
             </p>
           </div>
@@ -474,13 +474,13 @@ export function OperationDetailsModal({
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-slate-600 dark:text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 min-h-0">
           {!operationDetails ? (
-            <div className="py-16 text-center text-slate-600 dark:text-white/55">
+            <div className="py-16 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
               <div className="flex items-center justify-center gap-3">
                 <div className="w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" />
                 <span>جاري تحميل التفاصيل…</span>
@@ -502,14 +502,14 @@ export function OperationDetailsModal({
               ) : null}
 
               {isTransfer ? (
-                <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-slate-700 dark:text-white/70 text-sm">
+                <div className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl p-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm">
                   هذه عملية تحويل. القائمة أدناه تُظهر الكميات المسجلة للأصناف
                   المتأثرة بعد التحويل.
                 </div>
               ) : null}
 
               {isReceipt ? (
-                <div className="bg-emerald-500/5 border border-emerald-400/15 rounded-2xl p-4 text-slate-700 dark:text-white/70 text-sm">
+                <div className="bg-emerald-500/5 border border-emerald-400/15 rounded-2xl p-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm">
                   هذا سجل وارد. القائمة أدناه تُظهر الصنف والكمية الواردة.
                 </div>
               ) : null}
@@ -550,7 +550,7 @@ export function OperationDetailsModal({
               disabled={!operationDetails}
               className={`${ws.btnNeutral} px-4 py-3 justify-center disabled:opacity-40 text-sm sm:text-base`}
             >
-              <Pencil className="w-4 h-4 sm:w-5 sm:h-5 text-sky-700 dark:text-sky-200" />
+              <Pencil className="w-4 h-4 sm:w-5 sm:h-5 text-sky-700 dark:text-sky-700 dark:dark:text-sky-200" />
               <span>تعديل</span>
             </button>
           ) : null}

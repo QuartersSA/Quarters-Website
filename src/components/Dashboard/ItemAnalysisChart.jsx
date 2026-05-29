@@ -98,37 +98,37 @@ export function ItemAnalysisChart({
 
   if (!analysisItemId) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         اختر الصنف لعرض تحليل المخزون
       </div>
     );
   } else if (needsBranch) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         اختر الفرع لعرض البيانات
       </div>
     );
   } else if (needsDates) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         اختر التاريخ (من / إلى) لعرض البيانات
       </div>
     );
   } else if (isAnalysisLoading) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         جاري تحميل البيانات...
       </div>
     );
   } else if (analysisError) {
     chartBody = (
-      <div className="text-center text-red-700 dark:text-red-200 py-10">
+      <div className="text-center text-red-700 dark:text-red-700 dark:dark:text-red-200 py-10">
         حدث خطأ أثناء تحميل بيانات التحليل
       </div>
     );
   } else if (!analysisHasData) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         لا توجد بيانات لهذا الصنف خلال الفترة المحددة
       </div>
     );
@@ -203,12 +203,12 @@ export function ItemAnalysisChart({
                 className="inline-block w-3 h-3 rounded-full"
                 style={{ backgroundColor: s.color }}
               />
-              <span className="text-xs text-slate-500 dark:text-white/50">{s.name}</span>
+              <span className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/50">{s.name}</span>
             </div>
           ))}
         </div>
 
-        <p className="text-xs text-slate-500 dark:text-white/40 mt-3">
+        <p className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/40 mt-3">
           الخطوط تمثل كميات الجرد والوارد والمخزون الافتتاحي والتحويلات عبر
           الفترة المحددة
         </p>
@@ -221,16 +221,16 @@ export function ItemAnalysisChart({
       <div className={`p-6 border-b ${ws.divider}`}>
         <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
-              <div className={`${ws.iconBox} w-10 h-10 text-violet-700 dark:text-violet-200`}>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight">
+              <div className={`${ws.iconBox} w-10 h-10 text-violet-700 dark:text-violet-700 dark:dark:text-violet-200`}>
                 <Layers className="w-5 h-5" />
               </div>
               {title}
             </h2>
             {subtitle ? (
-              <p className="text-slate-500 dark:text-white/45 text-sm mt-1">{subtitle}</p>
+              <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm mt-1">{subtitle}</p>
             ) : null}
-            <p className="text-slate-500 dark:text-white/45 text-sm mt-0.5">
+            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm mt-0.5">
               الجرد • الوارد • المخزون الافتتاحي • التحويلات
             </p>
           </div>
@@ -252,7 +252,7 @@ export function ItemAnalysisChart({
             />
 
             <div className="w-full">
-              <label className="block text-xs text-slate-500 dark:text-white/45 mb-1">من</label>
+              <label className="block text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mb-1">من</label>
               <GlassDatePicker
                 value={analysisFrom}
                 onChange={setAnalysisFrom}
@@ -262,7 +262,7 @@ export function ItemAnalysisChart({
             </div>
 
             <div className="w-full">
-              <label className="block text-xs text-slate-500 dark:text-white/45 mb-1">إلى</label>
+              <label className="block text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mb-1">إلى</label>
               <GlassDatePicker
                 value={analysisTo}
                 onChange={setAnalysisTo}

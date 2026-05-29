@@ -133,14 +133,14 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
         {/* Header */}
         <div className={`p-5 sm:p-6 border-b ${ws.divider} flex items-start justify-between gap-3`}>
           <div className="flex items-center gap-3 min-w-0">
-            <div className={`${ws.iconBox} w-12 h-12 text-emerald-700 dark:text-emerald-200`}>
+            <div className={`${ws.iconBox} w-12 h-12 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200`}>
               <TrendingUp className="w-6 h-6" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight truncate">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight truncate">
                 تقرير زمني للصنف
               </h2>
-              <div className="text-sm text-slate-600 dark:text-white/55 mt-0.5 truncate">
+              <div className="text-sm text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mt-0.5 truncate">
                 {item?.name || "…"} — فرع {branch?.name || "…"}
               </div>
             </div>
@@ -177,13 +177,13 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
           </div>
 
           {/* Chart */}
-          <div className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4`}>
+          <div className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-3xl p-4`}>
             {timelineQuery.isLoading ? (
-              <div className="h-64 flex items-center justify-center text-slate-600 dark:text-white/55">
+              <div className="h-64 flex items-center justify-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                 جاري التحميل…
               </div>
             ) : !events.length ? (
-              <div className="h-64 flex flex-col items-center justify-center text-slate-600 dark:text-white/55 gap-2">
+              <div className="h-64 flex flex-col items-center justify-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 gap-2">
                 <Package className="w-8 h-8 opacity-40" />
                 <div>لا توجد عمليات على هذا الصنف في هذا الفرع</div>
               </div>
@@ -242,7 +242,7 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
             {events.length > 0 ? (
               <div className="flex items-center justify-center gap-4 mt-3 flex-wrap text-xs">
                 {Object.entries(TYPE_LABEL).map(([k, label]) => (
-                  <div key={k} className="flex items-center gap-1.5 text-slate-700 dark:text-white/70">
+                  <div key={k} className="flex items-center gap-1.5 text-slate-700 dark:text-slate-700 dark:dark:text-white/70">
                     <span
                       className="inline-block w-3 h-3 rounded-full"
                       style={{ background: TYPE_COLOR[k] }}
@@ -256,8 +256,8 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
 
           {/* Events table */}
           {events.length > 0 ? (
-            <div className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden`}>
-              <div className="px-4 py-3 border-b border-slate-200 dark:border-white/10 flex items-center gap-2 text-white/80 text-sm font-semibold">
+            <div className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-3xl overflow-hidden`}>
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-200 dark:dark:border-white/10 flex items-center gap-2 text-slate-800 dark:text-white/80 text-sm font-semibold">
                 <Calendar className="w-4 h-4" />
                 سجل العمليات ({events.length})
               </div>
@@ -275,7 +275,7 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
                         className="px-4 py-3 flex items-center gap-3"
                       >
                         <div
-                          className={`w-9 h-9 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10`}
+                          className={`w-9 h-9 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-slate-200 dark:dark:border-white/10`}
                           style={{
                             background: `${TYPE_COLOR[ev.inventory_type] || "#34d399"}22`,
                           }}
@@ -288,12 +288,12 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
 
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-slate-900 dark:text-white text-sm font-semibold truncate">
+                            <span className="text-slate-900 dark:text-slate-900 dark:dark:text-white text-sm font-semibold truncate">
                               {describeEvent(ev)}
                             </span>
                             {ev.inventory_number ? (
                               <span
-                                className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border border-slate-200 dark:border-white/10 flex items-center gap-1"
+                                className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.06] text-slate-600 dark:text-slate-600 dark:dark:text-white/60 border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 flex items-center gap-1"
                                 dir="ltr"
                               >
                                 <Hash className="w-3 h-3" />
@@ -301,7 +301,7 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
                               </span>
                             ) : null}
                           </div>
-                          <div className="text-xs text-slate-500 dark:text-white/45 mt-0.5 flex items-center gap-2 flex-wrap">
+                          <div className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mt-0.5 flex items-center gap-2 flex-wrap">
                             <span>{formatDateTime(ev.event_at)}</span>
                             {ev.employee_name ? <span>• {ev.employee_name}</span> : null}
                           </div>
@@ -311,10 +311,10 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
                           <span
                             className={`text-sm font-bold ${
                               isPositive
-                                ? "text-emerald-700 dark:text-emerald-200"
+                                ? "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200"
                                 : isNegative
-                                  ? "text-rose-700 dark:text-rose-200"
-                                  : "text-slate-600 dark:text-white/60"
+                                  ? "text-rose-700 dark:text-rose-700 dark:dark:text-rose-200"
+                                  : "text-slate-600 dark:text-slate-600 dark:dark:text-white/60"
                             }`}
                           >
                             {isPositive ? (
@@ -326,8 +326,8 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
                             {ev.delta}
                           </span>
                           <div className="text-left">
-                            <div className="text-xs text-slate-500 dark:text-white/40">الرصيد</div>
-                            <div className="text-base font-bold text-slate-900 dark:text-white">{ev.balance}</div>
+                            <div className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/40">الرصيد</div>
+                            <div className="text-base font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white">{ev.balance}</div>
                           </div>
                         </div>
                       </div>
@@ -344,13 +344,13 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
 
 function Stat({ label, value, accent = "emerald" }) {
   const accentMap = {
-    emerald: "text-emerald-700 dark:text-emerald-200",
-    sky: "text-sky-700 dark:text-sky-200",
-    amber: "text-amber-700 dark:text-amber-200",
+    emerald: "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200",
+    sky: "text-sky-700 dark:text-sky-700 dark:dark:text-sky-200",
+    amber: "text-amber-700 dark:text-amber-700 dark:dark:text-amber-200",
   };
   return (
-    <div className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-3 sm:p-4`}>
-      <div className="text-xs text-slate-600 dark:text-white/55">{label}</div>
+    <div className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-3xl p-3 sm:p-4`}>
+      <div className="text-xs text-slate-600 dark:text-slate-600 dark:dark:text-white/55">{label}</div>
       <div className={`text-xl sm:text-2xl font-bold mt-1 ${accentMap[accent]}`}>{value}</div>
     </div>
   );

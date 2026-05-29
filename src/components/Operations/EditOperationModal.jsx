@@ -294,17 +294,17 @@ export default function EditOperationModal({
           className={`p-4 sm:p-6 flex items-center justify-between flex-shrink-0 ${ws.topBar}`}
         >
           <div className="min-w-0">
-            <h3 className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-              <span className={`${ws.iconBox} w-10 h-10 text-white/80`}>
+            <h3 className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight flex items-center gap-2">
+              <span className={`${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/80`}>
                 <Pencil className="w-5 h-5" />
               </span>
               <span className="truncate">
                 {TYPE_LABELS[invType] || "تعديل العملية"}
               </span>
             </h3>
-            <p className="text-slate-500 dark:text-white/50 text-sm mt-1">
+            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 text-sm mt-1">
               {TYPE_DESCRIPTIONS[invType] || "عدّل بيانات العملية"}{" "}
-              <span className="text-slate-400 dark:text-white/30 font-mono">
+              <span className="text-slate-400 dark:text-slate-400 dark:dark:text-white/30 font-mono">
                 ({operation.inventory_number})
               </span>
             </p>
@@ -315,7 +315,7 @@ export default function EditOperationModal({
             onClick={onClose}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-slate-600 dark:text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" />
           </button>
         </div>
 
@@ -332,7 +332,7 @@ export default function EditOperationModal({
           {/* Date + Note */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2">
                 تاريخ العملية
               </label>
               <GlassDatePicker
@@ -344,7 +344,7 @@ export default function EditOperationModal({
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2">
                 ملاحظة (اختياري)
               </label>
               <input
@@ -359,16 +359,16 @@ export default function EditOperationModal({
 
           {/* Info banner */}
           <div className="flex items-center gap-2 p-3 rounded-2xl bg-sky-500/5 border border-sky-400/15">
-            <TitleIcon className="w-4 h-4 text-sky-700 dark:text-sky-200 flex-shrink-0" />
-            <span className="text-xs text-slate-600 dark:text-white/60">
+            <TitleIcon className="w-4 h-4 text-sky-700 dark:text-sky-700 dark:dark:text-sky-200 flex-shrink-0" />
+            <span className="text-xs text-slate-600 dark:text-slate-600 dark:dark:text-white/60">
               الفرع:{" "}
-              <span className="text-slate-900 dark:text-white font-semibold">
+              <span className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">
                 {operation.branch_name || "غير محدد"}
               </span>
               {invType === "Transfer" && operation.transfer_branch_name ? (
                 <>
                   {" ← "}
-                  <span className="text-slate-900 dark:text-white font-semibold">
+                  <span className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">
                     {operation.transfer_branch_name}
                   </span>
                 </>
@@ -383,8 +383,8 @@ export default function EditOperationModal({
             <div
               className={`${ws.glassSoft} ${ws.card} p-3 border-amber-400/15 flex items-start gap-2`}
             >
-              <AlertCircle className="w-4 h-4 text-amber-700 dark:text-amber-200 flex-shrink-0 mt-0.5" />
-              <div className="text-slate-700 dark:text-white/70 text-xs leading-relaxed">
+              <AlertCircle className="w-4 h-4 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200 flex-shrink-0 mt-0.5" />
+              <div className="text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-xs leading-relaxed">
                 عدّل كمية النقل لكل صنف. لا يمكن إضافة أصناف جديدة أو
                 إنزال الكمية إلى صفر — للتغيير الكامل احذف التحويل وأعد
                 إنشاءه.
@@ -394,7 +394,7 @@ export default function EditOperationModal({
 
           {!isTransfer ? (
             <div className="relative">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-white/40" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" />
               <input
                 type="text"
                 value={search}
@@ -408,18 +408,18 @@ export default function EditOperationModal({
           {/* Items table — shown for all op types now. Transfer is
               restricted to the original item set. */}
           <div
-            className={`max-h-[40vh] overflow-auto rounded-3xl border ${ws.divider} bg-slate-50 dark:bg-white/[0.02]`}
+            className={`max-h-[40vh] overflow-auto rounded-3xl border ${ws.divider} bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.02]`}
           >
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-100 dark:bg-white/[0.04] sticky top-0">
-                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70">
+                <tr className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] sticky top-0">
+                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70">
                     الصنف
                   </th>
-                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70">
+                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70">
                     الوحدة
                   </th>
-                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-white/70 w-40">
+                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70 w-40">
                     {isTransfer ? "كمية النقل" : "الكمية"}
                   </th>
                 </tr>
@@ -436,19 +436,19 @@ export default function EditOperationModal({
                   return (
                     <tr
                       key={it.id}
-                      className={`border-t border-slate-100 dark:border-white/5 ${wasInOriginal ? "bg-slate-50 dark:bg-white/[0.02]" : ""}`}
+                      className={`border-t border-slate-100 dark:border-slate-100 dark:dark:border-white/5 ${wasInOriginal ? "bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.02]" : ""}`}
                     >
                       <td className="px-4 py-3">
-                        <div className="text-slate-900 dark:text-white font-medium text-sm">
+                        <div className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium text-sm">
                           {it.name}
                         </div>
                         {wasInOriginal ? (
-                          <div className="text-slate-400 dark:text-white/30 text-xs mt-0.5">
+                          <div className="text-slate-400 dark:text-slate-400 dark:dark:text-white/30 text-xs mt-0.5">
                             الأصلي: {initialQtyMap[it.id]}
                           </div>
                         ) : null}
                       </td>
-                      <td className="px-4 py-3 text-slate-700 dark:text-white/65 text-sm">
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-700 dark:dark:text-white/65 text-sm">
                         {it.unit || "-"}
                       </td>
                       <td className="px-4 py-3">
@@ -479,7 +479,7 @@ export default function EditOperationModal({
                   <tr>
                     <td
                       colSpan={3}
-                      className="px-4 py-10 text-center text-slate-600 dark:text-white/55"
+                      className="px-4 py-10 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55"
                     >
                       لا توجد نتائج
                     </td>

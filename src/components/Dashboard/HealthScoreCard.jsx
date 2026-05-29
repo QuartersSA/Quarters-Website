@@ -4,16 +4,16 @@ import { ws } from "@/components/Workspace/ui";
 
 function getScoreColor(score) {
   if (score >= 80)
-    return { text: "text-emerald-700 dark:text-emerald-200", fill: "#34d399", label: "ممتاز 🟢" };
+    return { text: "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200", fill: "#34d399", label: "ممتاز 🟢" };
   if (score >= 60)
-    return { text: "text-amber-700 dark:text-amber-200", fill: "#fbbf24", label: "جيد 🟡" };
+    return { text: "text-amber-700 dark:text-amber-700 dark:dark:text-amber-200", fill: "#fbbf24", label: "جيد 🟡" };
   if (score >= 40)
     return {
-      text: "text-orange-700 dark:text-orange-200",
+      text: "text-orange-700 dark:text-orange-700 dark:dark:text-orange-200",
       fill: "#fb923c",
       label: "يحتاج تحسين 🟠",
     };
-  return { text: "text-red-700 dark:text-red-200", fill: "#f87171", label: "حرج 🔴" };
+  return { text: "text-red-700 dark:text-red-700 dark:dark:text-red-200", fill: "#f87171", label: "حرج 🔴" };
 }
 
 function formatCost(val) {
@@ -46,7 +46,7 @@ export function HealthScoreCard({
       >
         <div className="flex items-center gap-2 mb-4">
           <Activity className={`w-5 h-5 ${scoreInfo.text}`} />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight">
             صحة المخزون
           </h3>
         </div>
@@ -78,7 +78,7 @@ export function HealthScoreCard({
         <p className={`text-sm font-semibold mt-2 ${scoreInfo.text}`}>
           {scoreInfo.label}
         </p>
-        <p className="text-slate-500 dark:text-white/40 text-xs mt-1 text-center">
+        <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs mt-1 text-center">
           يعتمد على نسبة الأصناف المتوفرة وانتظام الجرد
         </p>
       </div>
@@ -86,18 +86,18 @@ export function HealthScoreCard({
       {/* Inventory Cost */}
       <div className={`${ws.glass} ${ws.card} p-6`}>
         <div className="flex items-center gap-2 mb-4">
-          <DollarSign className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+          <DollarSign className="w-5 h-5 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200" />
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight">
             قيمة المخزون
           </h3>
         </div>
 
         <div className="text-center mb-4">
-          <p className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+          <p className="text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight">
             {formatCost(totalCost)}{" "}
-            <span className="text-base text-slate-500 dark:text-white/50 font-normal">ر.س</span>
+            <span className="text-base text-slate-500 dark:text-slate-500 dark:dark:text-white/50 font-normal">ر.س</span>
           </p>
-          <p className="text-slate-500 dark:text-white/40 text-xs mt-1">
+          <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs mt-1">
             إجمالي قيمة المخزون الحالي
           </p>
         </div>
@@ -106,10 +106,10 @@ export function HealthScoreCard({
           {costByBranch.map((bc) => (
             <div
               key={bc.branch_id}
-              className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-white/5 last:border-0"
+              className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-100 dark:dark:border-white/5 last:border-0"
             >
-              <span className="text-slate-700 dark:text-white/70 text-sm">{bc.branch_name}</span>
-              <span className="text-slate-900 dark:text-white font-semibold text-sm">
+              <span className="text-slate-700 dark:text-slate-700 dark:dark:text-white/70 text-sm">{bc.branch_name}</span>
+              <span className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold text-sm">
                 {formatCost(bc.total_cost)} ر.س
               </span>
             </div>
@@ -120,8 +120,8 @@ export function HealthScoreCard({
       {/* Depletion Predictions */}
       <div className={`${ws.glass} ${ws.card} p-6`}>
         <div className="flex items-center gap-2 mb-4">
-          <TrendingDown className="w-5 h-5 text-amber-700 dark:text-amber-200" />
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+          <TrendingDown className="w-5 h-5 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200" />
+          <h3 className="text-lg font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight">
             توقع النفاد
           </h3>
         </div>
@@ -129,15 +129,15 @@ export function HealthScoreCard({
         {urgentItems.length === 0 &&
         (depletionPredictions || []).length === 0 ? (
           <div className="text-center py-6">
-            <Package className="w-10 h-10 mx-auto mb-2 text-white/15" />
-            <p className="text-slate-500 dark:text-white/40 text-sm">لا توجد بيانات كافية للتوقع</p>
+            <Package className="w-10 h-10 mx-auto mb-2 text-slate-300 dark:text-white/15" />
+            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-sm">لا توجد بيانات كافية للتوقع</p>
           </div>
         ) : urgentItems.length === 0 ? (
           <div className="text-center py-4">
-            <p className="text-emerald-700 dark:text-emerald-200 text-sm font-semibold">
+            <p className="text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 text-sm font-semibold">
               ✅ لا أصناف مهددة بالنفاد قريباً
             </p>
-            <p className="text-slate-500 dark:text-white/40 text-xs mt-1">
+            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs mt-1">
               أقرب نفاد متوقع بعد{" "}
               {depletionPredictions[0]?.days_to_depletion || "—"} يوم
             </p>
@@ -147,19 +147,19 @@ export function HealthScoreCard({
             {urgentItems.slice(0, 6).map((item, i) => {
               const daysColor =
                 item.days_to_depletion <= 2
-                  ? "text-red-700 dark:text-red-200 bg-red-500/10 border-red-500/20"
+                  ? "text-red-700 dark:text-red-700 dark:dark:text-red-200 bg-red-500/10 border-red-500/20"
                   : item.days_to_depletion <= 5
-                    ? "text-amber-700 dark:text-amber-200 bg-amber-500/10 border-amber-500/20"
-                    : "text-sky-700 dark:text-sky-200 bg-sky-500/10 border-sky-500/20";
+                    ? "text-amber-700 dark:text-amber-700 dark:dark:text-amber-200 bg-amber-500/10 border-amber-500/20"
+                    : "text-sky-700 dark:text-sky-700 dark:dark:text-sky-200 bg-sky-500/10 border-sky-500/20";
 
               return (
                 <div key={i} className={`${ws.glassSoft} rounded-xl p-3`}>
                   <div className="flex items-center justify-between">
                     <div className="min-w-0">
-                      <p className="text-slate-900 dark:text-white text-sm font-medium truncate">
+                      <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white text-sm font-medium truncate">
                         {item.item_name}
                       </p>
-                      <p className="text-slate-500 dark:text-white/40 text-xs">
+                      <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs">
                         {item.branch_name} • متبقي: {item.current_qty}{" "}
                         {item.unit}
                       </p>
@@ -176,7 +176,7 @@ export function HealthScoreCard({
 
         {(depletionPredictions || []).length > 0 &&
           urgentItems.length < (depletionPredictions || []).length && (
-            <p className="text-slate-400 dark:text-white/30 text-xs mt-3 text-center">
+            <p className="text-slate-400 dark:text-slate-400 dark:dark:text-white/30 text-xs mt-3 text-center">
               + {(depletionPredictions || []).length - urgentItems.length} أصناف
               أخرى في فترة أطول
             </p>

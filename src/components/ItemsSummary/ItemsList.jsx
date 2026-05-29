@@ -18,8 +18,8 @@ export function ItemsList({
       <div
         className={`p-5 sm:p-6 border-b ${ws.divider} flex items-center justify-between gap-3`}
       >
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
-          <div className={`${ws.iconBox} w-10 h-10 text-white/80`}>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight">
+          <div className={`${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/80`}>
             <FileText className="w-5 h-5" />
           </div>
           تفاصيل الأصناف ({filteredItems.length})
@@ -32,7 +32,7 @@ export function ItemsList({
       </div>
 
       {isLoading ? (
-        <div className="p-12 text-center text-slate-600 dark:text-white/55">
+        <div className="p-12 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
           <div className="flex items-center justify-center gap-3">
             <div className="w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" />
             <span>جاري التحميل…</span>
@@ -50,7 +50,7 @@ export function ItemsList({
           ))}
         </div>
       ) : (
-        <div className="p-12 text-center text-slate-500 dark:text-white/45">
+        <div className="p-12 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/45">
           <Package className="w-16 h-16 mx-auto mb-4 opacity-40" />
           <p className="text-lg mb-2">لا توجد أصناف</p>
           <p className="text-sm">جرب تغيير الفلاتر أو إضافة أصناف جديدة</p>

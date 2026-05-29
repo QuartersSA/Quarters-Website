@@ -104,11 +104,11 @@ export default function ReceiptsPage() {
           <div className="flex items-center gap-3 mb-4">
             <a
               href="/admin"
-              className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white transition-colors"
+              className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </a>
-            <div className={`${ws.iconBox} text-emerald-700 dark:text-emerald-200`}>
+            <div className={`${ws.iconBox} text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200`}>
               <Truck className="w-6 h-6" />
             </div>
             <h1 className={`text-3xl sm:text-4xl ${ws.title}`}>الواردات</h1>
@@ -135,7 +135,7 @@ export default function ReceiptsPage() {
 
         {dateRangeInvalid ? (
           <div className={`${ws.glassSoft} ${ws.card} p-5 mb-6 text-center`}>
-            <p className="text-red-700 dark:text-red-200 text-sm font-semibold">
+            <p className="text-red-700 dark:text-red-700 dark:dark:text-red-200 text-sm font-semibold">
               ⚠ "من تاريخ" أحدث من "إلى تاريخ" — صحّح الفترة لعرض النتائج
             </p>
           </div>

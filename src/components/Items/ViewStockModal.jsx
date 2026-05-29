@@ -34,8 +34,8 @@ export function ViewStockModal({ item, onClose }) {
           className={`p-6 flex items-center justify-between shrink-0 ${ws.topBar}`}
         >
           <div className="min-w-0">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight">
-              <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`}>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white flex items-center gap-3 tracking-tight">
+              <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-700 dark:dark:text-sky-200`}>
                 <Building2 className="w-5 h-5" />
               </div>
               <span className="truncate">مخزون "{item.name}" في الفروع</span>
@@ -43,7 +43,7 @@ export function ViewStockModal({ item, onClose }) {
             {item.unit ? (
               <div className="mt-2">
                 <span
-                  className={`${ws.pill} bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10`}
+                  className={`${ws.pill} bg-slate-100 dark:bg-slate-100 dark:dark:bg-slate-100 dark:dark:dark:bg-white/[0.04] text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10`}
                 >
                   <span className="text-base">{getUnitIcon(item.unit)}</span>
                   <span className="mr-1">الوحدة: {item.unit}</span>
@@ -58,7 +58,7 @@ export function ViewStockModal({ item, onClose }) {
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/60" />
           </button>
         </div>
 
@@ -74,32 +74,32 @@ export function ViewStockModal({ item, onClose }) {
                 ? "bg-red-500/10 border-red-500/20"
                 : isLow
                   ? "bg-amber-500/10 border-amber-500/20"
-                  : "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border-slate-200 dark:border-slate-200 dark:dark:border-white/10";
+                  : "bg-slate-100 dark:bg-slate-100 dark:dark:bg-slate-100 dark:dark:dark:bg-white/[0.04] border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10";
 
               const iconClass = isOutOfStock
-                ? "text-red-700 dark:text-red-200"
+                ? "text-red-700 dark:text-red-700 dark:dark:text-red-200"
                 : isLow
-                  ? "text-amber-700 dark:text-amber-200"
-                  : "text-sky-700 dark:text-sky-200";
+                  ? "text-amber-700 dark:text-amber-700 dark:dark:text-amber-200"
+                  : "text-sky-700 dark:text-sky-700 dark:dark:text-sky-200";
 
               const qtyClass = isOutOfStock
-                ? "text-red-700 dark:text-red-200"
+                ? "text-red-700 dark:text-red-700 dark:dark:text-red-200"
                 : isLow
-                  ? "text-amber-700 dark:text-amber-200"
-                  : "text-slate-900 dark:text-slate-900 dark:dark:text-white";
+                  ? "text-amber-700 dark:text-amber-700 dark:dark:text-amber-200"
+                  : "text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white";
 
               const statusLabel = isOutOfStock ? (
-                <p className="text-red-700 dark:text-red-200 text-xs flex items-center gap-1">
+                <p className="text-red-700 dark:text-red-700 dark:dark:text-red-200 text-xs flex items-center gap-1">
                   <XCircle className="w-3 h-3" />
                   نفد المخزون
                 </p>
               ) : isLow ? (
-                <p className="text-amber-700 dark:text-amber-200 text-xs flex items-center gap-1">
+                <p className="text-amber-700 dark:text-amber-700 dark:dark:text-amber-200 text-xs flex items-center gap-1">
                   <AlertTriangle className="w-3 h-3" />
                   أقل من الحد الأدنى
                 </p>
               ) : (
-                <p className="text-emerald-700 dark:text-emerald-200 text-xs flex items-center gap-1">
+                <p className="text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 text-xs flex items-center gap-1">
                   <CheckCircle className="w-3 h-3" />
                   متوفر
                 </p>
@@ -115,7 +115,7 @@ export function ViewStockModal({ item, onClose }) {
                       <Building2 className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium">
+                      <p className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-medium">
                         {stock.branch_name}
                       </p>
                       {statusLabel}
@@ -124,7 +124,7 @@ export function ViewStockModal({ item, onClose }) {
 
                   <div className="text-left">
                     <p className={`text-2xl font-bold ${qtyClass}`}>{qty}</p>
-                    <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-xs">
+                    <p className="text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/45 text-xs">
                       {item.unit || "وحدة"}
                     </p>
                   </div>
@@ -133,7 +133,7 @@ export function ViewStockModal({ item, onClose }) {
             })}
 
             {!item.branch_stock || item.branch_stock.length === 0 ? (
-              <div className="text-center py-8 text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
+              <div className="text-center py-8 text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55">
                 <Package className="w-12 h-12 mx-auto mb-3 opacity-40" />
                 <p>لا توجد بيانات مخزون لهذا الصنف</p>
               </div>

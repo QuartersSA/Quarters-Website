@@ -46,8 +46,8 @@ export function StockValueTable({
       <div
         className={`p-5 sm:p-6 border-b ${ws.divider} flex items-center justify-between gap-3 flex-wrap`}
       >
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
-          <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight">
+          <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200`}>
             <Banknote className="w-5 h-5" />
           </div>
           قيمة الأصناف
@@ -59,14 +59,14 @@ export function StockValueTable({
       </div>
 
       {isLoading ? (
-        <div className="p-12 text-center text-slate-600 dark:text-white/55">
+        <div className="p-12 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
           <div className="flex items-center justify-center gap-3">
             <div className="w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" />
             <span>جاري التحميل…</span>
           </div>
         </div>
       ) : !Array.isArray(items) || items.length === 0 ? (
-        <div className="p-12 text-center text-slate-500 dark:text-white/50">
+        <div className="p-12 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/50">
           <Package className="w-16 h-16 mx-auto mb-4 opacity-50" />
           <p className="text-lg mb-2">لا توجد أصناف</p>
           <p className="text-sm">جرّب تعديل البحث أو الفلاتر</p>
@@ -75,29 +75,29 @@ export function StockValueTable({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-slate-100 dark:bg-white/[0.04]">
-                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55 w-16">
+              <tr className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]">
+                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 w-16">
                   #
                 </th>
-                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
+                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                   الصنف
                 </th>
-                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
+                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                   الفئة
                 </th>
-                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
+                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                   الكمية
                 </th>
-                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
+                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                   الوحدة
                 </th>
-                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
+                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                   سعر التكلفة
                 </th>
-                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
+                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                   القيمة الإجمالية
                 </th>
-                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
+                <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                   النسبة
                 </th>
               </tr>
@@ -126,49 +126,49 @@ export function StockValueTable({
                 return (
                   <tr
                     key={it.id}
-                    className="border-t border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors"
+                    className="border-t border-slate-100 dark:border-slate-100 dark:dark:border-white/5 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.05] transition-colors"
                   >
-                    <td className="px-4 py-3 text-slate-500 dark:text-white/45 text-sm">
+                    <td className="px-4 py-3 text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm">
                       {idx + 1}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center shrink-0">
-                          <Package className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
+                        <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 flex items-center justify-center shrink-0">
+                          <Package className="w-4 h-4 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-slate-900 dark:text-white font-semibold truncate">
+                          <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold truncate">
                             {it.name}
                           </p>
                           {it.name_en ? (
-                            <p className="text-slate-500 dark:text-white/40 text-xs truncate">
+                            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs truncate">
                               {it.name_en}
                             </p>
                           ) : null}
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-slate-700 dark:text-white/75 text-sm">
+                    <td className="px-4 py-3 text-slate-700 dark:text-slate-700 dark:dark:text-white/75 text-sm">
                       {it.category_name ? (
                         <span className="inline-flex items-center gap-1.5 text-xs">
-                          <Layers className="w-3 h-3 text-slate-500 dark:text-white/40" />
+                          <Layers className="w-3 h-3 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" />
                           {it.category_name}
                         </span>
                       ) : (
-                        <span className="text-slate-400 dark:text-white/30">—</span>
+                        <span className="text-slate-400 dark:text-slate-400 dark:dark:text-white/30">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-slate-900 dark:text-white font-semibold" dir="ltr">
+                    <td className="px-4 py-3 text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold" dir="ltr">
                       {fmtQty(qty)}
                     </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-white/55 text-sm">
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm">
                       {it.unit || "—"}
                     </td>
                     <td
                       className={`px-4 py-3 ${
                         missingCost
-                          ? "text-amber-700 dark:text-amber-300/80 text-xs"
-                          : "text-white/80"
+                          ? "text-amber-700 dark:text-amber-700 dark:dark:text-amber-300/80 text-xs"
+                          : "text-slate-800 dark:text-white/80"
                       }`}
                       dir="ltr"
                     >
@@ -188,7 +188,7 @@ export function StockValueTable({
                         >
                           {fmtMoney(effCost)} ر.س
                           {usedFallback ? (
-                            <span className="text-[10px] text-sky-700 dark:text-sky-200/80 bg-sky-400/10 border border-sky-400/20 rounded px-1 py-0.5">
+                            <span className="text-[10px] text-sky-700 dark:text-sky-700 dark:dark:text-sky-200/80 bg-sky-400/10 border border-sky-400/20 rounded px-1 py-0.5">
                               بن
                             </span>
                           ) : null}
@@ -197,13 +197,13 @@ export function StockValueTable({
                     </td>
                     <td
                       className={`px-4 py-3 font-extrabold ${
-                        missingCost ? "text-slate-400 dark:text-white/30" : "text-emerald-700 dark:text-emerald-200"
+                        missingCost ? "text-slate-400 dark:text-slate-400 dark:dark:text-white/30" : "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200"
                       }`}
                       dir="ltr"
                     >
                       {missingCost ? "—" : `${fmtMoney(value)} ر.س`}
                     </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-white/55 text-sm" dir="ltr">
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm" dir="ltr">
                       {missingCost || !pctText ? "—" : pctText}
                     </td>
                   </tr>
@@ -211,20 +211,20 @@ export function StockValueTable({
               })}
             </tbody>
             <tfoot>
-              <tr className="bg-slate-100 dark:bg-white/[0.06] border-t-2 border-slate-200 dark:border-white/10">
+              <tr className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.06] border-t-2 border-slate-200 dark:border-slate-200 dark:dark:border-white/10">
                 <td
                   colSpan={6}
-                  className="px-4 py-4 text-white/80 font-bold text-left"
+                  className="px-4 py-4 text-slate-800 dark:text-white/80 font-bold text-left"
                 >
                   الإجمالي ({items.length} صنف)
                 </td>
                 <td
-                  className="px-4 py-4 text-emerald-700 dark:text-emerald-200 font-extrabold text-lg"
+                  className="px-4 py-4 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 font-extrabold text-lg"
                   dir="ltr"
                 >
                   {fmtMoney(totalValue)} ر.س
                 </td>
-                <td className="px-4 py-4 text-slate-500 dark:text-white/40 text-sm" dir="ltr">
+                <td className="px-4 py-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-sm" dir="ltr">
                   100%
                 </td>
               </tr>

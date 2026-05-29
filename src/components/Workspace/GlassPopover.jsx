@@ -153,7 +153,7 @@ export default function GlassPopover({
         ref={popoverRef}
         dir={dir}
         style={popoverStyle}
-        className={`${ws.popover} rounded-2xl border border-slate-200 dark:border-white/15 shadow-2xl ${pos.maxHeight ? "" : "overflow-hidden"} ${className}`}
+        className={`${ws.popover} rounded-2xl border border-slate-200 dark:border-slate-200 dark:dark:border-white/15 shadow-2xl ${pos.maxHeight ? "" : "overflow-hidden"} ${className}`}
         onClick={(e) => {
           // prevent click-away closing when clicking inside
           e.stopPropagation();

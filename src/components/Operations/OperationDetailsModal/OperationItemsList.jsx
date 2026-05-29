@@ -11,8 +11,8 @@ export function OperationItemsList({ operationDetails }) {
 
   return (
     <div dir="rtl">
-      <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-3 tracking-tight">
-        <div className={`${ws.iconBox} w-10 h-10 text-white/80`}>
+      <h4 className="text-lg font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white mb-4 flex items-center gap-3 tracking-tight">
+        <div className={`${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/80`}>
           <Package className="w-5 h-5" />
         </div>
         {isTransfer ? "كميات النقل" : "تفاصيل الأصناف"}
@@ -39,31 +39,31 @@ export function OperationItemsList({ operationDetails }) {
             const useAvailabilityChrome = !isTransfer;
             const badgeClass =
               useAvailabilityChrome && isZero
-                ? `${ws.pill} bg-red-500/10 text-red-700 dark:text-red-200 border-red-500/20`
+                ? `${ws.pill} bg-red-500/10 text-red-700 dark:text-red-700 dark:dark:text-red-200 border-red-500/20`
                 : useAvailabilityChrome
-                  ? `${ws.pill} bg-emerald-500/10 text-emerald-700 dark:text-emerald-200 border-emerald-500/20`
-                  : `${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`;
+                  ? `${ws.pill} bg-emerald-500/10 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 border-emerald-500/20`
+                  : `${ws.pill} bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.06] text-slate-700 dark:text-slate-700 dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-white/10`;
 
             const qtyColor =
               useAvailabilityChrome && isZero
-                ? "text-red-700 dark:text-red-200"
+                ? "text-red-700 dark:text-red-700 dark:dark:text-red-200"
                 : useAvailabilityChrome
-                  ? "text-emerald-700 dark:text-emerald-200"
-                  : "text-slate-900 dark:text-white";
+                  ? "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200"
+                  : "text-slate-900 dark:text-slate-900 dark:dark:text-white";
 
             const iconBg =
               useAvailabilityChrome && isZero
                 ? "bg-red-500/10"
                 : useAvailabilityChrome
                   ? "bg-emerald-500/10"
-                  : "bg-slate-100 dark:bg-white/[0.04]";
+                  : "bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]";
 
             const iconColor =
               useAvailabilityChrome && isZero
-                ? "text-red-700 dark:text-red-200"
+                ? "text-red-700 dark:text-red-700 dark:dark:text-red-200"
                 : useAvailabilityChrome
-                  ? "text-emerald-700 dark:text-emerald-200"
-                  : "text-slate-700 dark:text-white/70";
+                  ? "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200"
+                  : "text-slate-700 dark:text-slate-700 dark:dark:text-white/70";
 
             const badgeText = isTransfer
               ? "كمية النقل"
@@ -74,18 +74,18 @@ export function OperationItemsList({ operationDetails }) {
             return (
               <div
                 key={item.id ?? `${item.item_id}-${idx}`}
-                className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4 flex items-center justify-between hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors`}
+                className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-3xl p-4 flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] transition-colors`}
               >
                 <div className="flex items-center gap-3 flex-1">
                   <div
-                    className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 ${iconBg}`}
+                    className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 ${iconBg}`}
                   >
                     <Package className={`w-5 h-5 ${iconColor}`} />
                   </div>
                   <div className="flex-1">
-                    <p className="text-slate-900 dark:text-white font-semibold">{item.item_name}</p>
+                    <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">{item.item_name}</p>
                     {item.item_description ? (
-                      <p className="text-slate-500 dark:text-white/45 text-sm">
+                      <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm">
                         {item.item_description}
                       </p>
                     ) : null}
@@ -116,7 +116,7 @@ export function OperationItemsList({ operationDetails }) {
           })}
         </div>
       ) : (
-        <div className="text-center py-8 text-slate-600 dark:text-white/55">
+        <div className="text-center py-8 text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
           <Package className="w-12 h-12 mx-auto mb-3 opacity-40" />
           <p>لا توجد تفاصيل متاحة</p>
         </div>

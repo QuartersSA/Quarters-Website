@@ -52,39 +52,39 @@ export function WelcomeBanner({ stats, analytics }) {
 
       <div className="relative flex flex-col sm:flex-row sm:items-center gap-4">
         <div
-          className={`${ws.iconBox} w-14 h-14 text-emerald-700 dark:text-emerald-200 flex-shrink-0`}
+          className={`${ws.iconBox} w-14 h-14 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 flex-shrink-0`}
         >
           <Sparkles className="w-7 h-7" />
         </div>
 
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight">
             {greeting} {adminName ? `يا ${adminName}` : ""} 👋
           </h2>
 
           {summaryParts.length > 0 ? (
             <div className="flex flex-wrap gap-3 mt-3">
               {pendingOps > 0 && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-200 text-sm font-semibold">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200 text-sm font-semibold">
                   <Clock className="w-3.5 h-3.5" />
                   {pendingOps} قيد الانتظار
                 </span>
               )}
               {lowStockCount > 0 && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm font-semibold">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-700 dark:dark:text-red-200 text-sm font-semibold">
                   <TrendingDown className="w-3.5 h-3.5" />
                   {lowStockCount} منخفضة
                 </span>
               )}
               {todayOps > 0 && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-200 text-sm font-semibold">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 text-sm font-semibold">
                   <Sparkles className="w-3.5 h-3.5" />
                   {todayOps} عمليات اليوم
                 </span>
               )}
             </div>
           ) : (
-            <p className="text-slate-500 dark:text-white/50 mt-1">
+            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 mt-1">
               كل شي تمام! لا توجد تنبيهات حالياً
             </p>
           )}

@@ -12,17 +12,17 @@ import { ws } from "@/components/Workspace/ui";
 const ALERT_STYLES = {
   danger: {
     bg: "bg-red-500/10 border-red-500/20",
-    text: "text-red-700 dark:text-red-200",
+    text: "text-red-700 dark:text-red-700 dark:dark:text-red-200",
     icon: <AlertTriangle className="w-5 h-5" />,
   },
   warning: {
     bg: "bg-amber-500/10 border-amber-500/20",
-    text: "text-amber-700 dark:text-amber-200",
+    text: "text-amber-700 dark:text-amber-700 dark:dark:text-amber-200",
     icon: <AlertCircle className="w-5 h-5" />,
   },
   info: {
     bg: "bg-sky-500/10 border-sky-500/20",
-    text: "text-sky-700 dark:text-sky-200",
+    text: "text-sky-700 dark:text-sky-700 dark:dark:text-sky-200",
     icon: <Info className="w-5 h-5" />,
   },
 };

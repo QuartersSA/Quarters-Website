@@ -68,31 +68,31 @@ export function VarianceChart({
 
   if (!varianceBranchId || !varianceItemId) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         اختر الفرع والصنف لعرض المفترض مقابل الفعلي
       </div>
     );
   } else if (needsDates) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         اختر التاريخ (من / إلى) لعرض البيانات
       </div>
     );
   } else if (varianceLoading) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         جاري تحميل البيانات…
       </div>
     );
   } else if (varianceError) {
     chartBody = (
-      <div className="text-center text-red-700 dark:text-red-200 py-10">
+      <div className="text-center text-red-700 dark:text-red-700 dark:dark:text-red-200 py-10">
         حدث خطأ أثناء تحميل بيانات المفترض مقابل الفعلي
       </div>
     );
   } else if (!varianceHasData) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
         لا توجد بيانات جرد لهذا الصنف خلال الفترة المحددة
       </div>
     );
@@ -177,7 +177,7 @@ export function VarianceChart({
           </ResponsiveContainer>
         </div>
 
-        <p className="text-xs text-slate-500 dark:text-white/40 mt-3">
+        <p className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/40 mt-3">
           الفرق = الفعلي − المفترض (المخزون الافتتاحي + مجموع الوارد حتى تاريخ
           الجرد)
         </p>
@@ -189,13 +189,13 @@ export function VarianceChart({
     <div className={wrapperClass} dir="rtl">
       <div className={`p-6 border-b ${ws.divider}`}>
         <div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
-            <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight">
+            <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200`}>
               <TrendingUp className="w-5 h-5" />
             </div>
             المفترض مقابل الفعلي (افتتاحي + وارد + جرد)
           </h2>
-          <p className="text-slate-500 dark:text-white/45 text-sm mt-1">
+          <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm mt-1">
             المفترض ≈ المخزون الافتتاحي + الوارد • الفرق = الفعلي − المفترض
           </p>
         </div>
@@ -218,7 +218,7 @@ export function VarianceChart({
           />
 
           <div className="w-full">
-            <label className="block text-xs text-slate-500 dark:text-white/45 mb-1">من</label>
+            <label className="block text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mb-1">من</label>
             <GlassDatePicker
               value={varianceFrom}
               onChange={setVarianceFrom}
@@ -228,7 +228,7 @@ export function VarianceChart({
           </div>
 
           <div className="w-full">
-            <label className="block text-xs text-slate-500 dark:text-white/45 mb-1">إلى</label>
+            <label className="block text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mb-1">إلى</label>
             <GlassDatePicker
               value={varianceTo}
               onChange={setVarianceTo}

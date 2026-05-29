@@ -7,7 +7,7 @@ export function ItemsSummaryHeader() {
       <div className="flex items-center gap-3 mb-4">
         <a
           href="/admin"
-          className="text-slate-600 dark:text-white/55 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
         </a>

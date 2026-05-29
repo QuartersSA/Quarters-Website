@@ -40,25 +40,25 @@ function ReceiptCard({ group }) {
         className="w-full flex items-center justify-between gap-3 text-right"
       >
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <div className={`${ws.iconBox} w-12 h-12 text-emerald-700 dark:text-emerald-200`}>
+          <div className={`${ws.iconBox} w-12 h-12 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200`}>
             <Truck className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-slate-900 dark:text-white font-semibold tracking-tight">
+              <span className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold tracking-tight">
                 {group.branchName || "—"}
               </span>
               {group.isLegacy ? (
-                <span className="text-[10px] text-slate-500 dark:text-white/40 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                <span className="text-[10px] text-slate-500 dark:text-slate-500 dark:dark:text-white/40 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/5 border border-slate-200 dark:border-slate-200 dark:dark:border-white/10">
                   قديم
                 </span>
               ) : (
-                <span className="text-[10px] text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full bg-emerald-400/10 border border-emerald-400/30 font-mono">
+                <span className="text-[10px] text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-300 px-2 py-0.5 rounded-full bg-emerald-400/10 border border-emerald-400/30 font-mono">
                   RB-{String(group.batchId).slice(-8)}
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-white/50 flex-wrap">
+            <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/50 flex-wrap">
               <span className="inline-flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 {formatDate(group.receivedAt)}
@@ -77,12 +77,12 @@ function ReceiptCard({ group }) {
 
         <div className="flex items-center gap-3 flex-shrink-0">
           <div className="text-left">
-            <div className="text-xs text-slate-500 dark:text-white/40">إجمالي الكمية</div>
-            <div className="text-slate-900 dark:text-white font-bold" dir="ltr">
+            <div className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/40">إجمالي الكمية</div>
+            <div className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold" dir="ltr">
               {formatNumber(group.totalQty)}
             </div>
           </div>
-          <div className={`${ws.iconBox} w-9 h-9 text-slate-500 dark:text-white/40`}>
+          <div className={`${ws.iconBox} w-9 h-9 text-slate-500 dark:text-slate-500 dark:dark:text-white/40`}>
             {expanded ? (
               <ChevronUp className="w-4 h-4" />
             ) : (
@@ -93,26 +93,26 @@ function ReceiptCard({ group }) {
       </button>
 
       {expanded ? (
-        <div className="mt-4 space-y-2 pt-4 border-t border-slate-200 dark:border-white/10">
+        <div className="mt-4 space-y-2 pt-4 border-t border-slate-200 dark:border-slate-200 dark:dark:border-white/10">
           {group.items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10"
+              className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border border-slate-200 dark:border-slate-200 dark:dark:border-white/10"
             >
               <div className="flex items-center gap-2 min-w-0">
-                <Package className="w-4 h-4 text-slate-500 dark:text-white/40 flex-shrink-0" />
-                <span className="text-slate-900 dark:text-white text-sm truncate">
+                <Package className="w-4 h-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/40 flex-shrink-0" />
+                <span className="text-slate-900 dark:text-slate-900 dark:dark:text-white text-sm truncate">
                   {item.item_name}
                 </span>
                 {item.note ? (
-                  <span className="text-slate-500 dark:text-white/40 text-xs">— {item.note}</span>
+                  <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs">— {item.note}</span>
                 ) : null}
               </div>
               <div className="flex items-center gap-1 text-sm flex-shrink-0">
-                <span className="text-emerald-700 dark:text-emerald-200 font-bold" dir="ltr">
+                <span className="text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 font-bold" dir="ltr">
                   +{formatNumber(item.quantity)}
                 </span>
-                <span className="text-slate-500 dark:text-white/40 text-xs">
+                <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-xs">
                   {item.item_unit || ""}
                 </span>
               </div>
@@ -133,7 +133,7 @@ function ReceiptCard({ group }) {
 export function ReceiptsList({ groups, isLoading, error }) {
   if (isLoading) {
     return (
-      <div className={`${sectionCard} p-12 text-center text-slate-600 dark:text-white/55`}>
+      <div className={`${sectionCard} p-12 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55`}>
         <div className="flex items-center justify-center gap-3">
           <div className="w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" />
           <span>جاري التحميل…</span>
@@ -144,7 +144,7 @@ export function ReceiptsList({ groups, isLoading, error }) {
 
   if (error) {
     return (
-      <div className={`${sectionCard} p-12 text-center text-red-700 dark:text-red-300`}>
+      <div className={`${sectionCard} p-12 text-center text-red-700 dark:text-red-700 dark:dark:text-red-300`}>
         {String(error?.message || error)}
       </div>
     );
@@ -152,7 +152,7 @@ export function ReceiptsList({ groups, isLoading, error }) {
 
   if (!Array.isArray(groups) || groups.length === 0) {
     return (
-      <div className={`${sectionCard} p-12 text-center text-slate-500 dark:text-white/50`}>
+      <div className={`${sectionCard} p-12 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/50`}>
         <Truck className="w-16 h-16 mx-auto mb-4 opacity-50" />
         <p className="text-lg mb-2">لا توجد واردات في هذه الفترة</p>
         <p className="text-sm">جرّب تعديل الفلاتر أو توسيع الفترة الزمنية</p>
