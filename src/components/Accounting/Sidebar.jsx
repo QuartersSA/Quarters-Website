@@ -11,6 +11,7 @@ import {
   Banknote,
   Receipt,
   HandCoins,
+  ShoppingCart,
 } from "lucide-react";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
@@ -96,6 +97,12 @@ export default function AccountingSidebar({ active = "dashboard" }) {
       href: "/accounting/expenses",
       label: "المصروفات",
       Icon: Receipt,
+    },
+    {
+      key: "purchases",
+      href: "/accounting/purchases",
+      label: "المشتريات",
+      Icon: ShoppingCart,
     },
   ];
 

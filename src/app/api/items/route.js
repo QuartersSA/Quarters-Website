@@ -306,7 +306,14 @@ export async function POST(request) {
         : null;
     const showInInventory =
       show_in_inventory !== undefined ? show_in_inventory : true;
-    const active = showInInventory;
+    // is_active is independent from show_in_inventory. The two used
+    // to be coupled (active = showInInventory) which made any
+    // purchases-only item (show_in_inventory=false) silently get
+    // is_active=false and disappear from EVERY listing including
+    // the purchases panel. Now: respect is_active if the caller
+    // passes it; otherwise default to true.
+    const active =
+      is_active !== undefined ? !!is_active : true;
     const parsedCost =
       cost !== undefined && cost !== null && cost !== ""
         ? parseFloat(cost)
@@ -409,7 +416,11 @@ export async function PUT(request) {
 
     const showInInventory =
       show_in_inventory !== undefined ? show_in_inventory : true;
-    const active = showInInventory;
+    // Same decoupling on UPDATE — respect explicit is_active so a
+    // purchases-only item stays active even though it doesn't show
+    // up in inventory.
+    const active =
+      is_active !== undefined ? !!is_active : true;
     const parsedCost =
       cost !== undefined && cost !== null && cost !== ""
         ? parseFloat(cost)
