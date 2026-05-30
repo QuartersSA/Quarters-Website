@@ -150,65 +150,110 @@ async function GET(request) {
     // 4. Smart alerts
     const alerts = [];
 
-    // Stock-depletion alerts come in two flavors so the operator
-    // can distinguish urgency:
+    // Stock-depletion alerts — use the SAME timeline-aligned formula
+    // as items-summary so the two pages always agree:
     //
-    //   1. Fully-depleted items — every active branch's latest
-    //      physical reading sums to zero. Genuinely out of stock
-    //      across the whole company. Red, high urgency.
+    //   current = last_reset.quantity
+    //             + receipts arrived after last_reset
+    //             + transfer net (in − out) after last_reset
     //
-    //   2. Branch-depleted items — at least one active branch
-    //      has zero in its latest reading, but other branches
-    //      still have stock. Action: rebalance / transfer.
+    // Then per item: count branches where current = 0 and sum the
+    // current across every active branch.
     //
-    // The previous version conflated the two (showed branch-level
-    // zeros under the "نفدت تماماً" label) which confused the
-    // operator when they opened an item from the alert and saw
-    // healthy stock in the main warehouse. Both counts are now
-    // computed off the same CTE so they always tell a consistent
-    // story with the items-summary page.
+    // Two alerts, both from the same CTE:
+    //   🔴 fully-depleted     — sum = 0 across all enabled branches
+    //   🟡 branch-depleted    — at least one branch at 0 but item
+    //                          still has stock somewhere
     const depletionRows = await sql`
-      WITH latest_per_branch AS (
+      WITH per_branch AS (
         SELECT
           i.id AS item_id,
           i.name,
-          io.branch_id,
-          ii.quantity,
-          ROW_NUMBER() OVER (
-            PARTITION BY i.id, io.branch_id
-            ORDER BY COALESCE(io.operation_date, io.created_at) DESC,
-                     io.id DESC
-          ) AS rn
+          b.id AS branch_id,
+          (
+            COALESCE(last_reset.inv_quantity, 0)
+            + COALESCE(receipts_after.total_received, 0)
+            + COALESCE(transfers_after.net_transfer, 0)
+          )::numeric AS current_qty,
+          last_reset.op_date IS NOT NULL
+            OR COALESCE(receipts_after.total_received, 0) > 0
+            OR COALESCE(transfers_after.net_transfer, 0) <> 0
+            AS has_signal
         FROM items i
-        JOIN inventory_items ii ON ii.item_id = i.id
-        JOIN inventory_operations io ON io.id = ii.operation_id
+        CROSS JOIN branches b
         LEFT JOIN item_branch_disabled ibd
-          ON ibd.item_id = i.id AND ibd.branch_id = io.branch_id
-        WHERE i.is_active = true AND i.show_in_inventory = true
+          ON ibd.item_id = i.id AND ibd.branch_id = b.id
+
+        LEFT JOIN LATERAL (
+          SELECT ii.quantity AS inv_quantity,
+                 COALESCE(io.operation_date, io.created_at) AS op_date
+          FROM inventory_items ii
+          JOIN inventory_operations io ON io.id = ii.operation_id
+          WHERE ii.item_id  = i.id
+            AND io.branch_id = b.id
+            AND io.status    = 'Completed'
+            AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
+          ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
+          LIMIT 1
+        ) last_reset ON true
+
+        LEFT JOIN LATERAL (
+          SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
+          FROM purchase_receipts pr
+          WHERE pr.item_id   = i.id
+            AND pr.branch_id = b.id
+            AND (
+              last_reset.op_date IS NULL
+              OR GREATEST(pr.received_at, pr.created_at) > last_reset.op_date
+            )
+        ) receipts_after ON true
+
+        LEFT JOIN LATERAL (
+          SELECT COALESCE(SUM(
+            CASE io.transfer_direction
+              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
+              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+              ELSE 0
+            END
+          ), 0) AS net_transfer
+          FROM inventory_items ii
+          JOIN inventory_operations io ON io.id = ii.operation_id
+          WHERE ii.item_id   = i.id
+            AND ii.branch_id = b.id
+            AND io.status    = 'Completed'
+            AND io.inventory_type = 'Transfer'
+            AND (
+              last_reset.op_date IS NULL
+              OR COALESCE(io.operation_date, io.created_at) > last_reset.op_date
+            )
+        ) transfers_after ON true
+
+        WHERE i.is_active = true
+          AND i.show_in_inventory = true
           AND ibd.item_id IS NULL
-          AND io.status = 'Completed'
-          AND io.inventory_type IN ('Daily','Weekly','Opening')
       ),
       item_summary AS (
         SELECT
           item_id,
           name,
-          SUM(quantity)::numeric AS total_qty,
-          COUNT(*) FILTER (WHERE quantity = 0)::int AS zero_branches,
-          COUNT(*)::int          AS branch_count
-        FROM latest_per_branch
-        WHERE rn = 1
+          SUM(current_qty)::numeric AS total_qty,
+          COUNT(*) FILTER (
+            WHERE current_qty = 0 AND has_signal
+          )::int AS zero_branches,
+          COUNT(*) FILTER (WHERE has_signal)::int AS tracked_branches
+        FROM per_branch
         GROUP BY item_id, name
       )
       SELECT
         name,
         total_qty,
         zero_branches,
-        branch_count,
-        (total_qty = 0 AND branch_count > 0) AS fully_depleted,
-        (total_qty > 0 AND zero_branches > 0) AS branch_depleted
+        tracked_branches,
+        (total_qty = 0 AND tracked_branches > 0) AS fully_depleted,
+        (total_qty > 0 AND zero_branches > 0)    AS branch_depleted
       FROM item_summary
       WHERE zero_branches > 0
+      ORDER BY total_qty ASC, name ASC
     `;
     const fullyDepleted = depletionRows.filter(r => r.fully_depleted);
     const branchDepleted = depletionRows.filter(r => r.branch_depleted);
@@ -216,14 +261,14 @@ async function GET(request) {
       alerts.push({
         type: "danger",
         message: `${fullyDepleted.length} أصناف نفدت تماماً`,
-        items: fullyDepleted.slice(0, 5).map(r => r.name)
+        items: fullyDepleted.map(r => r.name)
       });
     }
     if (branchDepleted.length > 0) {
       alerts.push({
         type: "warning",
         message: `${branchDepleted.length} أصناف نفدت من فرع أو أكثر`,
-        items: branchDepleted.slice(0, 5).map(r => r.name)
+        items: branchDepleted.map(r => r.name)
       });
     }
 
