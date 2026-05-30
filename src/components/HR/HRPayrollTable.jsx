@@ -81,6 +81,17 @@ export function HRPayrollTable({ entries, isLoading }) {
             {entries.map((e) => {
               const isSuspended = !!e.is_suspended;
               const hasLoan = Number(e.loan_deduction || 0) > 0;
+              // HR view computes "الصافي" without bonuses + overtime
+              // on purpose (per business rule). Bonuses and overtime
+              // still travel inside the entry record so accounting
+              // sees the full picture and `e.net_salary` over there
+              // reflects the real take-home. Suspended rows stay at
+              // zero across the board.
+              const hrNet = isSuspended
+                ? 0
+                : Number(e.total_salary || 0) -
+                  Number(e.total_deductions || 0) -
+                  Number(e.loan_deduction || 0);
               return (
                 <tr
                   key={e.id}
@@ -140,7 +151,7 @@ export function HRPayrollTable({ entries, isLoading }) {
                     className="py-2 px-2 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right"
                     dir="ltr"
                   >
-                    {formatMoney(e.net_salary)}
+                    {formatMoney(hrNet)}
                   </td>
                 </tr>
               );
