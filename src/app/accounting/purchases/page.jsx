@@ -9,6 +9,8 @@ import {
   Building,
   Percent,
   Construction,
+  Contact,
+  HandCoins,
 } from "lucide-react";
 import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
@@ -27,6 +29,23 @@ import { ws } from "@/components/Workspace/ui";
  *   - الضريبة              — VAT settings + reports
  */
 
+const VENDOR_SUBTABS = [
+  {
+    key: "contacts",
+    label: "جهات الاتصال",
+    Icon: Contact,
+    description:
+      "قائمة جهات الاتصال التجارية — موردين، مكاتب، شركاء، إلخ.",
+  },
+  {
+    key: "beneficiaries",
+    label: "المستفيدون",
+    Icon: HandCoins,
+    description:
+      "قائمة المستفيدين الذين تُحوَّل لهم المدفوعات من حسابات البنك.",
+  },
+];
+
 const TABS = [
   {
     key: "invoices",
@@ -38,7 +57,8 @@ const TABS = [
     key: "vendors",
     label: "الموردين والمستفيدين",
     Icon: Users,
-    description: "إدارة الموردين والمستفيدين في قائمتين منفصلتين.",
+    description: "إدارة جهات الاتصال والمستفيدين في قائمتين منفصلتين.",
+    subTabs: VENDOR_SUBTABS,
   },
   {
     key: "catalog",
@@ -127,6 +147,18 @@ export default function PurchasesPage() {
   const isAdmin = user?.role === "Admin";
 
   const [activeTab, setActiveTab] = useState(TABS[0].key);
+  // Per top-level tab, remember which sub-tab the operator last
+  // picked. Keyed by parent tab.key so switching away and back
+  // returns to the same inner view.
+  const [activeSubTab, setActiveSubTab] = useState(() => {
+    const init = {};
+    for (const t of TABS) {
+      if (Array.isArray(t.subTabs) && t.subTabs.length > 0) {
+        init[t.key] = t.subTabs[0].key;
+      }
+    }
+    return init;
+  });
 
   let body = null;
   if (!ready) {
@@ -149,6 +181,12 @@ export default function PurchasesPage() {
     );
   } else {
     const tab = TABS.find((t) => t.key === activeTab) || TABS[0];
+    const subTabs = Array.isArray(tab.subTabs) ? tab.subTabs : null;
+    const subKey = subTabs ? activeSubTab[tab.key] : null;
+    const activeSub = subTabs
+      ? subTabs.find((s) => s.key === subKey) || subTabs[0]
+      : null;
+
     body = (
       <>
         {/* Tabs row — horizontally scrollable on mobile so the
@@ -176,7 +214,40 @@ export default function PurchasesPage() {
           </div>
         </div>
 
-        <ComingSoonCard tab={tab} />
+        {/* Sub-tabs row — only renders when the active top tab has
+            nested sections (e.g. الموردين والمستفيدين). Same segWrap
+            styling but smaller, scoped to this tab's children. */}
+        {subTabs ? (
+          <div className={`${ws.glassSoft} ${ws.card} p-2 overflow-x-auto`}>
+            <div className="flex items-center gap-1 min-w-max">
+              {subTabs.map((s) => {
+                const isActive = s.key === activeSub.key;
+                const Icon = s.Icon;
+                const cls = `${ws.segBtn} ${
+                  isActive ? ws.segActive : ws.segInactive
+                } flex items-center gap-2 whitespace-nowrap text-sm`;
+                return (
+                  <button
+                    key={s.key}
+                    type="button"
+                    onClick={() =>
+                      setActiveSubTab((prev) => ({
+                        ...prev,
+                        [tab.key]: s.key,
+                      }))
+                    }
+                    className={cls}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{s.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+
+        <ComingSoonCard tab={activeSub || tab} />
       </>
     );
   }
