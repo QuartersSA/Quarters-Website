@@ -293,6 +293,24 @@ export default function EmployeeInventoryPage() {
     return unit;
   };
 
+  // Translate the Arabic unit names to English when the page
+  // language is "en". Falls back to the original label for any
+  // unit the table doesn't cover (custom items, future units).
+  const UNIT_AR_TO_EN = {
+    حبة: "piece",
+    كيلو: "kg",
+    كرتون: "carton",
+    شدة: "bundle",
+    كيس: "bag",
+    رول: "roll",
+    "كرتون مفرد": "single carton",
+  };
+  const translateUnitLabel = (unit) => {
+    if (!unit) return unit;
+    if (language !== "en") return unit;
+    return UNIT_AR_TO_EN[unit] || unit;
+  };
+
   // Drop items disabled at THIS employee's branch (per-branch visibility
   // via item_branch_disabled). Otherwise the employee would see the row
   // and could submit a count for it; the API now rejects such counts so
@@ -716,7 +734,9 @@ export default function EmployeeInventoryPage() {
           {filteredItems.map((item) => {
             const hasValue = availableItems[item.id] !== undefined;
             const cardId = `inv-item-${item.id}`;
-            const normalizedUnit = normalizeUnitLabel(item.unit);
+            const normalizedUnit = translateUnitLabel(
+              normalizeUnitLabel(item.unit),
+            );
             const unitText = normalizedUnit || text.unit;
 
             const categoryLabel =
