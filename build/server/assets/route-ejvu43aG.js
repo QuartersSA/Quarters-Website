@@ -150,20 +150,24 @@ async function GET(request) {
     // 4. Smart alerts
     const alerts = [];
 
-    // Items completely out of stock across EVERY active branch.
+    // Stock-depletion alerts come in two flavors so the operator
+    // can distinguish urgency:
     //
-    // Previous version flagged items whose latest physical reading
-    // happened to be 0 in ANY single branch — but an item with 0
-    // in branch A, 3 in branch B, and 480 in the main warehouse is
-    // clearly not "depleted تماماً". That mismatch with the items
-    // summary page was the bug the user reported.
+    //   1. Fully-depleted items — every active branch's latest
+    //      physical reading sums to zero. Genuinely out of stock
+    //      across the whole company. Red, high urgency.
     //
-    // Now: take the latest physical reading per (item, branch),
-    // sum across every enabled branch for the item, flag only if
-    // the sum is exactly 0 AND we have at least one inventory
-    // reading to back it up (no false positives for items that
-    // were just added and never inventoried).
-    const outOfStockItems = await sql`
+    //   2. Branch-depleted items — at least one active branch
+    //      has zero in its latest reading, but other branches
+    //      still have stock. Action: rebalance / transfer.
+    //
+    // The previous version conflated the two (showed branch-level
+    // zeros under the "نفدت تماماً" label) which confused the
+    // operator when they opened an item from the alert and saw
+    // healthy stock in the main warehouse. Both counts are now
+    // computed off the same CTE so they always tell a consistent
+    // story with the items-summary page.
+    const depletionRows = await sql`
       WITH latest_per_branch AS (
         SELECT
           i.id AS item_id,
@@ -185,24 +189,41 @@ async function GET(request) {
           AND io.status = 'Completed'
           AND io.inventory_type IN ('Daily','Weekly','Opening')
       ),
-      item_totals AS (
-        SELECT item_id, name,
-               SUM(quantity)::numeric AS total_qty,
-               COUNT(*)::int          AS branch_count
+      item_summary AS (
+        SELECT
+          item_id,
+          name,
+          SUM(quantity)::numeric AS total_qty,
+          COUNT(*) FILTER (WHERE quantity = 0)::int AS zero_branches,
+          COUNT(*)::int          AS branch_count
         FROM latest_per_branch
         WHERE rn = 1
         GROUP BY item_id, name
       )
-      SELECT name
-      FROM item_totals
-      WHERE total_qty = 0 AND branch_count > 0
-      LIMIT 5
+      SELECT
+        name,
+        total_qty,
+        zero_branches,
+        branch_count,
+        (total_qty = 0 AND branch_count > 0) AS fully_depleted,
+        (total_qty > 0 AND zero_branches > 0) AS branch_depleted
+      FROM item_summary
+      WHERE zero_branches > 0
     `;
-    if (outOfStockItems.length > 0) {
+    const fullyDepleted = depletionRows.filter(r => r.fully_depleted);
+    const branchDepleted = depletionRows.filter(r => r.branch_depleted);
+    if (fullyDepleted.length > 0) {
       alerts.push({
         type: "danger",
-        message: `${outOfStockItems.length} أصناف نفدت تماماً`,
-        items: outOfStockItems.map(r => r.name)
+        message: `${fullyDepleted.length} أصناف نفدت تماماً`,
+        items: fullyDepleted.slice(0, 5).map(r => r.name)
+      });
+    }
+    if (branchDepleted.length > 0) {
+      alerts.push({
+        type: "warning",
+        message: `${branchDepleted.length} أصناف نفدت من فرع أو أكثر`,
+        items: branchDepleted.slice(0, 5).map(r => r.name)
       });
     }
 
