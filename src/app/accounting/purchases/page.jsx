@@ -19,8 +19,10 @@ import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
 import ContactModal from "@/components/Accounting/ContactModal";
 import ContactsList from "@/components/Accounting/ContactsList";
+import ContactsExportMenu from "@/components/Accounting/ContactsExportMenu";
 import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
 import BeneficiariesList from "@/components/Accounting/BeneficiariesList";
+import BeneficiariesExportMenu from "@/components/Accounting/BeneficiariesExportMenu";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -200,6 +202,7 @@ function ContactsPanel({ employeeId, isAdmin }) {
             عرض الموقوفين
           </label>
           <div className="flex-1" />
+          <ContactsExportMenu contacts={contacts} />
           <button
             type="button"
             onClick={() => setShowAdd(true)}
@@ -300,6 +303,7 @@ function BeneficiariesPanel({ employeeId, isAdmin }) {
             عرض الموقوفين
           </label>
           <div className="flex-1" />
+          <BeneficiariesExportMenu beneficiaries={beneficiaries} />
           <button
             type="button"
             onClick={() => setShowAdd(true)}
