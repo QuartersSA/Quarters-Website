@@ -60,11 +60,18 @@ function allowedModes(adminUser) {
 export default function AdminLayout({ children }) {
   const [showChooser, setShowChooser] = React.useState(false);
   const [noAccess, setNoAccess] = React.useState(false);
-  // Admin section owns the light-mode toggle. themeClass flips the
-  // outermost wrapper between dark and light so every ws.* token
-  // resolves against the chosen theme.
-  const { isDark } = useAdminTheme();
-  const themeClass = isDark ? "dark" : "";
+  // Admin section owns the light-mode toggle. useAdminTheme syncs
+  // the `dark` class to document.documentElement directly, and the
+  // anti-FOUC inline script in root.tsx sets that class BEFORE React
+  // paints the first frame. So the wrapper div doesn't need its own
+  // copy of the class — Tailwind's dark variant cascades from any
+  // ancestor and documentElement is the highest one.
+  //
+  // Keeping a wrapper-level themeClass caused a hydration mismatch:
+  // useState's default ("dark") on the first React render briefly
+  // disagreed with localStorage on a light-saved user, so they saw
+  // a flash of dark glass before the effect repainted.
+  useAdminTheme();
 
   const goInventory = React.useCallback(() => {
     try {
@@ -235,10 +242,7 @@ export default function AdminLayout({ children }) {
   const showMarketingBtn = can ? !!can.marketing : false;
 
   return (
-    <div
-      className={`${themeClass} min-h-[100svh] ${ws.appBg}`}
-      dir="rtl"
-    >
+    <div className={`min-h-[100svh] ${ws.appBg}`} dir="rtl">
       {Background}
       <AdminThemeToggle />
 

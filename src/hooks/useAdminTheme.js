@@ -58,9 +58,17 @@ function broadcastChange(value) {
  * `dark` class on the outermost div) on the same render cycle.
  */
 export default function useAdminTheme() {
-  const [theme, setThemeState] = useState(DEFAULT_THEME);
+  // Lazy initializer reads localStorage on first render (client side
+  // only — SSR keeps DEFAULT_THEME because window is undefined).
+  // Pair this with the anti-FOUC inline script in root.tsx so the
+  // first paint already has the correct `dark` class on
+  // documentElement before React mounts.
+  const [theme, setThemeState] = useState(readStored);
 
   useEffect(() => {
+    // Re-read on mount in case the lazy initializer ran during SSR
+    // (theme === DEFAULT_THEME) but the browser has a different
+    // stored value.
     setThemeState(readStored());
 
     // Cross-tab sync via the native storage event.

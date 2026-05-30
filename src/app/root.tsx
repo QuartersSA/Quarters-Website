@@ -455,6 +455,18 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {/* Anti-FOUC theme bootstrap. Runs SYNCHRONOUSLY before
+            React hydrates, so the dark/light class is on <html>
+            for the first paint. Without this React mounts with
+            useState's default ("dark"), then useEffect reads
+            localStorage and flips the class — that gap is what
+            the user was seeing as "sometimes light by mistake". */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var t=localStorage.getItem('adminTheme');var p=location.pathname||'';var isAdminOrHR=p.indexOf('/admin')===0||p.indexOf('/hr')===0;var dark=isAdminOrHR?(t!=='light'):true;if(dark){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){document.documentElement.classList.add('dark');}})();",
+          }}
+        />
         <script type="module" src="/src/__create/dev-error-overlay.js"></script>
         <link rel="icon" href="/src/__create/favicon.png" />
         {LoadFontsSSR ? <LoadFontsSSR /> : null}

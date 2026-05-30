@@ -15,11 +15,13 @@ export default function HRLayout({ children }) {
     }
   }, []);
 
-  // HR now shares the admin theme — useAdminTheme drives the class
-  // on document.documentElement, so the operator's preference rides
-  // across admin ↔ HR navigation without a "force dark" reset.
-  const { isDark } = useAdminTheme();
-  const themeClass = isDark ? "dark" : "";
+  // HR shares the admin theme. useAdminTheme drives the `dark` class
+  // on document.documentElement directly, and root.tsx ships an
+  // anti-FOUC inline script that sets it on first paint — no need
+  // for a redundant wrapper-level class (which used to flash dark
+  // for a tick on light-saved users while useState's default value
+  // disagreed with the stored preference).
+  useAdminTheme();
 
   const Background = (
     <div
@@ -32,7 +34,7 @@ export default function HRLayout({ children }) {
   );
 
   return (
-    <div className={`${themeClass} min-h-[100svh] ${ws.appBg}`} dir="rtl">
+    <div className={`min-h-[100svh] ${ws.appBg}`} dir="rtl">
       {Background}
       <AdminThemeToggle />
       <div className="relative">{children}</div>
