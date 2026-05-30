@@ -18,11 +18,18 @@ export function PayrollTableCard({
 }) {
   const isClosed = !!run?.is_closed;
 
-  const paidCount = useMemo(
-    () => entries.filter((e) => e.is_paid).length,
+  // Suspended employees are NOT payable this month — exclude them
+  // from both the numerator and denominator so "X / Y" reflects
+  // actual payable employees only.
+  const payableEntries = useMemo(
+    () => entries.filter((e) => !e.is_suspended),
     [entries],
   );
-  const totalCount = entries.length;
+  const paidCount = useMemo(
+    () => payableEntries.filter((e) => e.is_paid).length,
+    [payableEntries],
+  );
+  const totalCount = payableEntries.length;
   const allPaid = totalCount > 0 && paidCount === totalCount;
 
   const closeButtonLabel = isClosingMonth

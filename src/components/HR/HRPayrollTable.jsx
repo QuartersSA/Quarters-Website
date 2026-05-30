@@ -20,14 +20,14 @@ import { formatMoney } from "@/utils/payrollFormatters";
  * where the accountant handles payment.
  */
 export function HRPayrollTable({ entries, isLoading }) {
+  // HR view intentionally hides الأساسي / البونص / أوفر تايم —
+  // those still show up in /accounting/payroll after "إرسال إلى
+  // المحاسبة" so the accountant has the full breakdown.
   const headers = [
     "الموظف",
     "الفرع",
-    "الأساسي",
     "البدلات",
     "الإجمالي",
-    "البونص",
-    "أوفر تايم",
     "الخصم",
     "السلف",
     "الصافي",
@@ -114,12 +114,6 @@ export function HRPayrollTable({ entries, isLoading }) {
                     className="py-2 px-2 text-slate-600 dark:text-white/55 whitespace-nowrap text-right"
                     dir="ltr"
                   >
-                    {formatMoney(e.base_salary)}
-                  </td>
-                  <td
-                    className="py-2 px-2 text-slate-600 dark:text-white/55 whitespace-nowrap text-right"
-                    dir="ltr"
-                  >
                     {formatMoney(e.other_allowances)}
                   </td>
                   <td
@@ -127,29 +121,6 @@ export function HRPayrollTable({ entries, isLoading }) {
                     dir="ltr"
                   >
                     {formatMoney(e.total_salary)}
-                  </td>
-                  <td
-                    className="py-2 px-2 text-emerald-700 dark:text-emerald-200 whitespace-nowrap text-right"
-                    dir="ltr"
-                  >
-                    {formatMoney(e.total_bonuses)}
-                  </td>
-                  <td
-                    className={`py-2 px-2 whitespace-nowrap text-right ${
-                      Number(e.total_overtime || 0) > 0
-                        ? "text-sky-700 dark:text-sky-200"
-                        : "text-slate-400 dark:text-white/30"
-                    }`}
-                    dir="ltr"
-                    title={
-                      Number(e.overtime_days || 0) > 0
-                        ? `${Number(e.overtime_days)} يوم`
-                        : ""
-                    }
-                  >
-                    {Number(e.total_overtime || 0) > 0
-                      ? formatMoney(e.total_overtime)
-                      : "—"}
                   </td>
                   <td
                     className="py-2 px-2 text-red-700 dark:text-red-300/80 whitespace-nowrap text-right"

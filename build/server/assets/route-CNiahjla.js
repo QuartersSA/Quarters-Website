@@ -150,38 +150,131 @@ async function GET(request) {
     // 4. Smart alerts
     const alerts = [];
 
-    // Items completely out of stock. "Last count" here is the most
-    // recent physical recount (Daily / Weekly / Opening). Transfer
-    // rows are excluded because their stored absolute can drift and
-    // a transfer whose post-state happens to be 0 isn't the same
-    // signal as a physical recount of 0.
-    const outOfStockItems = await sql`
-      SELECT DISTINCT i.name
-      FROM items i
-      JOIN inventory_items ii ON ii.item_id = i.id
-      JOIN inventory_operations io ON io.id = ii.operation_id
-      LEFT JOIN item_branch_disabled ibd
-        ON ibd.item_id = i.id AND ibd.branch_id = io.branch_id
-      WHERE i.is_active = true AND i.show_in_inventory = true
-        AND ibd.item_id IS NULL
-        AND io.status = 'Completed'
-        AND ii.quantity = 0
-        AND io.id = (
-          SELECT io2.id FROM inventory_operations io2
-          JOIN inventory_items ii2 ON ii2.operation_id = io2.id
-          WHERE ii2.item_id = i.id AND io2.branch_id = io.branch_id
-            AND io2.status = 'Completed'
-            AND io2.inventory_type IN ('Daily','Weekly','Opening')
-          ORDER BY COALESCE(io2.operation_date, io2.created_at) DESC
+    // Stock-depletion alerts — use the SAME timeline-aligned formula
+    // as items-summary so the two pages always agree:
+    //
+    //   current = last_reset.quantity
+    //             + receipts arrived after last_reset
+    //             + transfer net (in − out) after last_reset
+    //
+    // Then per item: count branches where current = 0 and sum the
+    // current across every active branch.
+    //
+    // Two alerts, both from the same CTE:
+    //   🔴 fully-depleted     — sum = 0 across all enabled branches
+    //   🟡 branch-depleted    — at least one branch at 0 but item
+    //                          still has stock somewhere
+    const depletionRows = await sql`
+      WITH per_branch AS (
+        SELECT
+          i.id AS item_id,
+          i.name,
+          b.id AS branch_id,
+          (
+            COALESCE(last_reset.inv_quantity, 0)
+            + COALESCE(receipts_after.total_received, 0)
+            + COALESCE(transfers_after.net_transfer, 0)
+          )::numeric AS current_qty,
+          last_reset.op_date IS NOT NULL
+            OR COALESCE(receipts_after.total_received, 0) > 0
+            OR COALESCE(transfers_after.net_transfer, 0) <> 0
+            AS has_signal
+        FROM items i
+        CROSS JOIN branches b
+        LEFT JOIN item_branch_disabled ibd
+          ON ibd.item_id = i.id AND ibd.branch_id = b.id
+
+        LEFT JOIN LATERAL (
+          SELECT ii.quantity AS inv_quantity,
+                 COALESCE(io.operation_date, io.created_at) AS op_date
+          FROM inventory_items ii
+          JOIN inventory_operations io ON io.id = ii.operation_id
+          WHERE ii.item_id  = i.id
+            AND io.branch_id = b.id
+            AND io.status    = 'Completed'
+            AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
+          ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
           LIMIT 1
-        )
-      LIMIT 5
+        ) last_reset ON true
+
+        LEFT JOIN LATERAL (
+          SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
+          FROM purchase_receipts pr
+          WHERE pr.item_id   = i.id
+            AND pr.branch_id = b.id
+            AND (
+              last_reset.op_date IS NULL
+              OR GREATEST(pr.received_at, pr.created_at) > last_reset.op_date
+            )
+        ) receipts_after ON true
+
+        LEFT JOIN LATERAL (
+          SELECT COALESCE(SUM(
+            CASE io.transfer_direction
+              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
+              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+              ELSE 0
+            END
+          ), 0) AS net_transfer
+          FROM inventory_items ii
+          JOIN inventory_operations io ON io.id = ii.operation_id
+          WHERE ii.item_id   = i.id
+            AND ii.branch_id = b.id
+            AND io.status    = 'Completed'
+            AND io.inventory_type = 'Transfer'
+            AND (
+              last_reset.op_date IS NULL
+              OR COALESCE(io.operation_date, io.created_at) > last_reset.op_date
+            )
+        ) transfers_after ON true
+
+        WHERE i.is_active = true
+          AND i.show_in_inventory = true
+          AND ibd.item_id IS NULL
+      ),
+      item_summary AS (
+        SELECT
+          item_id,
+          name,
+          SUM(current_qty)::numeric AS total_qty,
+          -- Count EVERY branch whose current stock is 0, even ones
+          -- with no inventory history yet — items-summary shows
+          -- those cells as "غير متوفر" too, so the dashboard
+          -- alert must match.
+          COUNT(*) FILTER (WHERE current_qty = 0)::int AS zero_branches,
+          -- Tracked branches = branches we have any signal for.
+          -- Used only as a "fully depleted" sanity check so a
+          -- brand-new item that was never inventoried anywhere
+          -- doesn't trip the red 🔴 alert.
+          COUNT(*) FILTER (WHERE has_signal)::int AS tracked_branches
+        FROM per_branch
+        GROUP BY item_id, name
+      )
+      SELECT
+        name,
+        total_qty,
+        zero_branches,
+        tracked_branches,
+        (total_qty = 0 AND tracked_branches > 0) AS fully_depleted,
+        (total_qty > 0 AND zero_branches > 0)    AS branch_depleted
+      FROM item_summary
+      WHERE zero_branches > 0
+      ORDER BY total_qty ASC, name ASC
     `;
-    if (outOfStockItems.length > 0) {
+    const fullyDepleted = depletionRows.filter(r => r.fully_depleted);
+    const branchDepleted = depletionRows.filter(r => r.branch_depleted);
+    if (fullyDepleted.length > 0) {
       alerts.push({
         type: "danger",
-        message: `${outOfStockItems.length} أصناف نفدت تماماً`,
-        items: outOfStockItems.map(r => r.name)
+        message: `${fullyDepleted.length} أصناف نفدت تماماً`,
+        items: fullyDepleted.map(r => r.name)
+      });
+    }
+    if (branchDepleted.length > 0) {
+      alerts.push({
+        type: "warning",
+        message: `${branchDepleted.length} أصناف نفدت من فرع أو أكثر`,
+        items: branchDepleted.map(r => r.name)
       });
     }
 
