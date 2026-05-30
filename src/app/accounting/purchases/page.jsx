@@ -19,12 +19,20 @@ import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
 import ContactModal from "@/components/Accounting/ContactModal";
 import ContactsList from "@/components/Accounting/ContactsList";
+import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
+import BeneficiariesList from "@/components/Accounting/BeneficiariesList";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
   useUpdateAccountingContact,
   useDeleteAccountingContact,
 } from "@/hooks/useAccountingContacts";
+import {
+  useAccountingBeneficiaries,
+  useCreateAccountingBeneficiary,
+  useUpdateAccountingBeneficiary,
+  useDeleteAccountingBeneficiary,
+} from "@/hooks/useAccountingBeneficiaries";
 
 /**
  * Purchases section — scaffold.
@@ -225,6 +233,107 @@ function ContactsPanel({ employeeId, isAdmin }) {
   );
 }
 
+function BeneficiariesPanel({ employeeId, isAdmin }) {
+  const [q, setQ] = useState("");
+  const [includeInactive, setIncludeInactive] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [editing, setEditing] = useState(null);
+
+  // Beneficiaries pull contacts to render the link dropdown inside
+  // the modal AND to render the contact name on each list row.
+  const contactsQuery = useAccountingContacts({ employeeId, isAdmin });
+  const contacts = contactsQuery.data || [];
+
+  const benQuery = useAccountingBeneficiaries({
+    employeeId,
+    isAdmin,
+    q: q || null,
+    includeInactive,
+  });
+  const beneficiaries = benQuery.data || [];
+
+  const createMut = useCreateAccountingBeneficiary();
+  const updateMut = useUpdateAccountingBeneficiary();
+  const deleteMut = useDeleteAccountingBeneficiary();
+
+  const handleSubmit = (payload) => {
+    if (editing) {
+      updateMut.mutate(payload, {
+        onSuccess: () => setEditing(null),
+      });
+    } else {
+      createMut.mutate(payload, {
+        onSuccess: () => setShowAdd(false),
+      });
+    }
+  };
+
+  const handleDelete = (ben) => {
+    const ok = window.confirm(
+      `إيقاف "${ben.name}"؟ يمكنك تفعيله لاحقاً من قائمة الموقوفين.`,
+    );
+    if (!ok) return;
+    deleteMut.mutate({ id: ben.id, force: false });
+  };
+
+  return (
+    <>
+      <div className={`${ws.glass} ${ws.card} p-4`}>
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="relative flex-1 min-w-[220px]">
+            <Search className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/40 pointer-events-none" />
+            <input
+              type="text"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="ابحث بالاسم أو الآيبان أو البنك"
+              className={`${ws.input} px-3 py-2 pr-9`}
+            />
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75 shrink-0">
+            <input
+              type="checkbox"
+              checked={includeInactive}
+              onChange={(e) => setIncludeInactive(e.target.checked)}
+              className="accent-emerald-500"
+            />
+            عرض الموقوفين
+          </label>
+          <div className="flex-1" />
+          <button
+            type="button"
+            onClick={() => setShowAdd(true)}
+            className={`${ws.btnPrimary} px-4 py-2`}
+          >
+            <Plus className="w-4 h-4" />
+            إضافة مستفيد
+          </button>
+        </div>
+      </div>
+
+      <BeneficiariesList
+        beneficiaries={beneficiaries}
+        isLoading={benQuery.isLoading}
+        onEdit={(b) => setEditing(b)}
+        onDelete={handleDelete}
+        onAdd={() => setShowAdd(true)}
+      />
+
+      <BeneficiaryModal
+        open={showAdd || !!editing}
+        beneficiary={editing}
+        contacts={contacts}
+        isSubmitting={createMut.isPending || updateMut.isPending}
+        onClose={() => {
+          setShowAdd(false);
+          setEditing(null);
+        }}
+        onSubmit={handleSubmit}
+      />
+    </>
+  );
+}
+
 function ComingSoonCard({ tab }) {
   const Icon = tab?.Icon || Construction;
   return (
@@ -355,6 +464,9 @@ export default function PurchasesPage() {
 
         {activeTab === "vendors" && activeSub?.key === "contacts" ? (
           <ContactsPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTab === "vendors" &&
+          activeSub?.key === "beneficiaries" ? (
+          <BeneficiariesPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : (
           <ComingSoonCard tab={activeSub || tab} />
         )}
