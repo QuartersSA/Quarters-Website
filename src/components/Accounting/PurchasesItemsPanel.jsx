@@ -6,7 +6,6 @@ import {
   Search,
   Package,
   ShoppingCart,
-  Hash,
   Plus,
   Pencil,
   Trash2,
@@ -248,12 +247,6 @@ export default function PurchasesItemsPanel() {
                     التكلفة المرجعية
                   </th>
                   <th className="text-right font-semibold py-3 px-3 whitespace-nowrap">
-                    الحد الأدنى
-                  </th>
-                  <th className="text-right font-semibold py-3 px-3 whitespace-nowrap">
-                    الوصف
-                  </th>
-                  <th className="text-right font-semibold py-3 px-3 whitespace-nowrap">
                     النطاق
                   </th>
                   <th className="py-3 px-3" style={{ width: 90 }}></th>
@@ -309,20 +302,6 @@ export default function PurchasesItemsPanel() {
                     >
                       {formatCost(it.cost)}
                     </td>
-                    <td className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1">
-                        <Hash className="w-3 h-3" />
-                        {Number(it.min_stock_threshold || 0).toLocaleString()}
-                      </span>
-                    </td>
-                    <td
-                      className="py-3 px-3 text-slate-600 dark:text-white/60 text-xs"
-                      style={{ maxWidth: 280 }}
-                    >
-                      <div className="truncate" title={it.description || ""}>
-                        {it.description || "—"}
-                      </div>
-                    </td>
                     <td className="py-3 px-3 whitespace-nowrap">
                       {it.show_in_inventory !== false ? (
                         <span
@@ -352,20 +331,38 @@ export default function PurchasesItemsPanel() {
                         >
                           <Pencil className="w-3.5 h-3.5" />
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const ok = window.confirm(
-                              `حذف "${it.name}" نهائياً؟ سيؤثر هذا على كل تاريخ المخزون المرتبط بالصنف.`,
-                            );
-                            if (!ok) return;
-                            deleteMut.mutate(it.id);
-                          }}
-                          className={`${ws.iconButton} w-8 h-8 hover:bg-red-50 dark:hover:bg-red-500/15 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-700 dark:hover:text-red-200`}
-                          title="حذف"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        {/* Delete is ONLY allowed for purchases-only
+                            items (show_in_inventory=false). Shared
+                            items mirror inventory — operator can
+                            remove them from /admin/items if needed;
+                            from here we refuse to touch the row so
+                            the deletion can't propagate back to
+                            inventory. */}
+                        {it.show_in_inventory === false ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const ok = window.confirm(
+                                `حذف "${it.name}" نهائياً؟ سيُحذف من قائمة المشتريات.`,
+                              );
+                              if (!ok) return;
+                              deleteMut.mutate(it.id);
+                            }}
+                            className={`${ws.iconButton} w-8 h-8 hover:bg-red-50 dark:hover:bg-red-500/15 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-700 dark:hover:text-red-200`}
+                            title="حذف الصنف الخاص بالمشتريات"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled
+                            className={`${ws.iconButton} w-8 h-8 opacity-40 cursor-not-allowed`}
+                            title="هذا الصنف مرتبط بقسم المخزون — احذفه من /admin/items"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -376,9 +373,9 @@ export default function PurchasesItemsPanel() {
           <div
             className={`px-4 py-2 border-t ${ws.divider} text-[11px] text-slate-500 dark:text-white/45`}
           >
-            أي صنف يُضاف من إدارة المخزون يظهر هنا تلقائياً. يمكنك أيضاً
-            إضافة صنف خاص بالمشتريات فقط من زر «إضافة صنف» — ولا
-            يظهر في صفحات المخزون.
+            أي صنف يُضاف من إدارة المخزون يظهر هنا تلقائياً. أصناف
+            «مشتريات فقط» تُحذف من هنا فقط. الأصناف المرتبطة بقسم
+            المخزون لا يمكن حذفها من هنا — تُدار من /admin/items.
           </div>
         </div>
       )}
