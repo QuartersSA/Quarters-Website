@@ -20,20 +20,29 @@ export function PayrollTotals({
         totalUnpaid: 0,
       };
     }
+    // Suspended employees don't get paid this month — their row
+    // exists for visibility (showing the "موقوف" badge) but they
+    // must NOT count toward the denominator or the paid count.
+    // Otherwise the header reads "27 / 26" because the run has
+    // 26 active employees + 1 suspended that somehow flipped to
+    // paid in a previous version of the data.
     let paidCount = 0;
     let totalPaid = 0;
+    let totalCount = 0;
     for (const e of entries) {
+      if (e.is_suspended) continue;
+      totalCount += 1;
       if (e.is_paid) {
         paidCount += 1;
         totalPaid += Number(e.paid_amount ?? e.net_salary ?? 0);
       }
     }
-    const unpaidCount = entries.length - paidCount;
+    const unpaidCount = totalCount - paidCount;
     const totalUnpaid = totals.net - totalPaid;
     return {
       paidCount,
       unpaidCount,
-      totalCount: entries.length,
+      totalCount,
       totalPaid,
       totalUnpaid,
     };
