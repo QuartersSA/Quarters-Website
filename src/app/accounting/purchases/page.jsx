@@ -11,10 +11,20 @@ import {
   Construction,
   Contact,
   HandCoins,
+  Plus,
+  Search,
 } from "lucide-react";
 import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
+import ContactModal from "@/components/Accounting/ContactModal";
+import ContactsList from "@/components/Accounting/ContactsList";
+import {
+  useAccountingContacts,
+  useCreateAccountingContact,
+  useUpdateAccountingContact,
+  useDeleteAccountingContact,
+} from "@/hooks/useAccountingContacts";
 
 /**
  * Purchases section — scaffold.
@@ -116,6 +126,102 @@ function PurchasesDesktopHeader() {
         </p>
       </div>
     </div>
+  );
+}
+
+function ContactsPanel({ employeeId, isAdmin }) {
+  const [q, setQ] = useState("");
+  const [includeInactive, setIncludeInactive] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [editing, setEditing] = useState(null);
+
+  const contactsQuery = useAccountingContacts({
+    employeeId,
+    isAdmin,
+    q: q || null,
+    includeInactive,
+  });
+  const contacts = contactsQuery.data || [];
+
+  const createMut = useCreateAccountingContact();
+  const updateMut = useUpdateAccountingContact();
+  const deleteMut = useDeleteAccountingContact();
+
+  const handleSubmit = (payload) => {
+    if (editing) {
+      updateMut.mutate(payload, {
+        onSuccess: () => setEditing(null),
+      });
+    } else {
+      createMut.mutate(payload, {
+        onSuccess: () => setShowAdd(false),
+      });
+    }
+  };
+
+  const handleDelete = (contact) => {
+    const ok = window.confirm(
+      `إيقاف "${contact.name}"؟ يمكنك تفعيلها لاحقاً من قائمة الموقوفين.`,
+    );
+    if (!ok) return;
+    deleteMut.mutate({ id: contact.id, force: false });
+  };
+
+  return (
+    <>
+      {/* Toolbar */}
+      <div className={`${ws.glass} ${ws.card} p-4`}>
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="relative flex-1 min-w-[220px]">
+            <Search className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/40 pointer-events-none" />
+            <input
+              type="text"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="ابحث باسم المنشأة أو الرقم الضريبي"
+              className={`${ws.input} px-3 py-2 pr-9`}
+            />
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75 shrink-0">
+            <input
+              type="checkbox"
+              checked={includeInactive}
+              onChange={(e) => setIncludeInactive(e.target.checked)}
+              className="accent-emerald-500"
+            />
+            عرض الموقوفين
+          </label>
+          <div className="flex-1" />
+          <button
+            type="button"
+            onClick={() => setShowAdd(true)}
+            className={`${ws.btnPrimary} px-4 py-2`}
+          >
+            <Plus className="w-4 h-4" />
+            إضافة جهة اتصال
+          </button>
+        </div>
+      </div>
+
+      <ContactsList
+        contacts={contacts}
+        isLoading={contactsQuery.isLoading}
+        onEdit={(c) => setEditing(c)}
+        onDelete={handleDelete}
+        onAdd={() => setShowAdd(true)}
+      />
+
+      <ContactModal
+        open={showAdd || !!editing}
+        contact={editing}
+        isSubmitting={createMut.isPending || updateMut.isPending}
+        onClose={() => {
+          setShowAdd(false);
+          setEditing(null);
+        }}
+        onSubmit={handleSubmit}
+      />
+    </>
   );
 }
 
@@ -247,7 +353,11 @@ export default function PurchasesPage() {
           </div>
         ) : null}
 
-        <ComingSoonCard tab={activeSub || tab} />
+        {activeTab === "vendors" && activeSub?.key === "contacts" ? (
+          <ContactsPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : (
+          <ComingSoonCard tab={activeSub || tab} />
+        )}
       </>
     );
   }
