@@ -150,31 +150,52 @@ async function GET(request) {
     // 4. Smart alerts
     const alerts = [];
 
-    // Items completely out of stock. "Last count" here is the most
-    // recent physical recount (Daily / Weekly / Opening). Transfer
-    // rows are excluded because their stored absolute can drift and
-    // a transfer whose post-state happens to be 0 isn't the same
-    // signal as a physical recount of 0.
+    // Items completely out of stock across EVERY active branch.
+    //
+    // Previous version flagged items whose latest physical reading
+    // happened to be 0 in ANY single branch — but an item with 0
+    // in branch A, 3 in branch B, and 480 in the main warehouse is
+    // clearly not "depleted تماماً". That mismatch with the items
+    // summary page was the bug the user reported.
+    //
+    // Now: take the latest physical reading per (item, branch),
+    // sum across every enabled branch for the item, flag only if
+    // the sum is exactly 0 AND we have at least one inventory
+    // reading to back it up (no false positives for items that
+    // were just added and never inventoried).
     const outOfStockItems = await sql`
-      SELECT DISTINCT i.name
-      FROM items i
-      JOIN inventory_items ii ON ii.item_id = i.id
-      JOIN inventory_operations io ON io.id = ii.operation_id
-      LEFT JOIN item_branch_disabled ibd
-        ON ibd.item_id = i.id AND ibd.branch_id = io.branch_id
-      WHERE i.is_active = true AND i.show_in_inventory = true
-        AND ibd.item_id IS NULL
-        AND io.status = 'Completed'
-        AND ii.quantity = 0
-        AND io.id = (
-          SELECT io2.id FROM inventory_operations io2
-          JOIN inventory_items ii2 ON ii2.operation_id = io2.id
-          WHERE ii2.item_id = i.id AND io2.branch_id = io.branch_id
-            AND io2.status = 'Completed'
-            AND io2.inventory_type IN ('Daily','Weekly','Opening')
-          ORDER BY COALESCE(io2.operation_date, io2.created_at) DESC
-          LIMIT 1
-        )
+      WITH latest_per_branch AS (
+        SELECT
+          i.id AS item_id,
+          i.name,
+          io.branch_id,
+          ii.quantity,
+          ROW_NUMBER() OVER (
+            PARTITION BY i.id, io.branch_id
+            ORDER BY COALESCE(io.operation_date, io.created_at) DESC,
+                     io.id DESC
+          ) AS rn
+        FROM items i
+        JOIN inventory_items ii ON ii.item_id = i.id
+        JOIN inventory_operations io ON io.id = ii.operation_id
+        LEFT JOIN item_branch_disabled ibd
+          ON ibd.item_id = i.id AND ibd.branch_id = io.branch_id
+        WHERE i.is_active = true AND i.show_in_inventory = true
+          AND ibd.item_id IS NULL
+          AND io.status = 'Completed'
+          AND io.inventory_type IN ('Daily','Weekly','Opening')
+      ),
+      item_totals AS (
+        SELECT item_id, name,
+               SUM(quantity)::numeric AS total_qty,
+               COUNT(*)::int          AS branch_count
+        FROM latest_per_branch
+        WHERE rn = 1
+        GROUP BY item_id, name
+      )
+      SELECT name
+      FROM item_totals
+      WHERE total_qty = 0 AND branch_count > 0
       LIMIT 5
     `;
     if (outOfStockItems.length > 0) {
