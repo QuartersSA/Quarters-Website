@@ -23,6 +23,7 @@ import ContactsExportMenu from "@/components/Accounting/ContactsExportMenu";
 import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
 import BeneficiariesList from "@/components/Accounting/BeneficiariesList";
 import BeneficiariesExportMenu from "@/components/Accounting/BeneficiariesExportMenu";
+import PurchasesItemsPanel from "@/components/Accounting/PurchasesItemsPanel";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -66,6 +67,21 @@ const VENDOR_SUBTABS = [
   },
 ];
 
+const CATALOG_SUBTABS = [
+  {
+    key: "categories",
+    label: "فئات",
+    Icon: Layers,
+    description: "تصنيفات المشتريات المرتبطة بالأصناف.",
+  },
+  {
+    key: "items",
+    label: "أصناف",
+    Icon: ShoppingCart,
+    description: "كامل أصناف المخزون بصيغة موحّدة لقسم المشتريات.",
+  },
+];
+
 const TABS = [
   {
     key: "invoices",
@@ -85,6 +101,7 @@ const TABS = [
     label: "فئات وأصناف",
     Icon: Layers,
     description: "تصنيفات وأصناف المشتريات المرتبطة بالفواتير.",
+    subTabs: CATALOG_SUBTABS,
   },
   {
     key: "banks",
@@ -471,6 +488,8 @@ export default function PurchasesPage() {
         ) : activeTab === "vendors" &&
           activeSub?.key === "beneficiaries" ? (
           <BeneficiariesPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTab === "catalog" && activeSub?.key === "items" ? (
+          <PurchasesItemsPanel />
         ) : (
           <ComingSoonCard tab={activeSub || tab} />
         )}
