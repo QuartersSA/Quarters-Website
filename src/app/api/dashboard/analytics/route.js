@@ -252,9 +252,15 @@ export async function GET(request) {
           item_id,
           name,
           SUM(current_qty)::numeric AS total_qty,
-          COUNT(*) FILTER (
-            WHERE current_qty = 0 AND has_signal
-          )::int AS zero_branches,
+          -- Count EVERY branch whose current stock is 0, even ones
+          -- with no inventory history yet — items-summary shows
+          -- those cells as "غير متوفر" too, so the dashboard
+          -- alert must match.
+          COUNT(*) FILTER (WHERE current_qty = 0)::int AS zero_branches,
+          -- Tracked branches = branches we have any signal for.
+          -- Used only as a "fully depleted" sanity check so a
+          -- brand-new item that was never inventoried anywhere
+          -- doesn't trip the red 🔴 alert.
           COUNT(*) FILTER (WHERE has_signal)::int AS tracked_branches
         FROM per_branch
         GROUP BY item_id, name
