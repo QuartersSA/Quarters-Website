@@ -126,7 +126,7 @@ export default function AccountingSidebar({ active = "dashboard" }) {
       {/* Mobile top bar — sticky (in flow) single-row matching other sections:
           section switcher | logo + title */}
       <div
-        className={`lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.glass} border-b border-white/10`}
+        className={`lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.glass} border-b border-slate-200 dark:border-white/10`}
         dir="rtl"
       >
         <div className="px-4 py-3 flex items-center justify-between gap-3">
@@ -136,7 +136,7 @@ export default function AccountingSidebar({ active = "dashboard" }) {
           />
 
           <div className="flex items-center gap-2 min-w-0">
-            <div className="text-white text-sm font-bold tracking-tight whitespace-nowrap">
+            <div className="text-slate-900 dark:text-white text-sm font-bold tracking-tight whitespace-nowrap">
               المحاسبة
             </div>
             <img
@@ -150,13 +150,13 @@ export default function AccountingSidebar({ active = "dashboard" }) {
 
       {/* Desktop sidebar */}
       <aside
-        className={`hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-white/10`}
+        className={`hidden lg:flex fixed right-0 top-0 h-screen w-72 ${shellClass} border-l border-slate-200 dark:border-white/10`}
         dir="rtl"
       >
         <div className="flex flex-col w-full">
-          <div className="p-6 border-b border-white/10">
+          <div className="p-6 border-b border-slate-200 dark:border-white/10">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
+              <div className="w-11 h-11 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
                 <img
                   src={BRAND_LOGO_URL}
                   alt="Logo"
@@ -164,10 +164,10 @@ export default function AccountingSidebar({ active = "dashboard" }) {
                 />
               </div>
               <div className="min-w-0">
-                <div className="font-bold text-white truncate tracking-tight">
+                <div className="font-bold text-slate-900 dark:text-white truncate tracking-tight">
                   المحاسبة
                 </div>
-                <div className="text-xs text-white/55 truncate">
+                <div className="text-xs text-slate-600 dark:text-white/55 truncate">
                   أنظمة Quarters
                 </div>
               </div>
@@ -181,14 +181,14 @@ export default function AccountingSidebar({ active = "dashboard" }) {
             {userName ? (
               <div className={`mt-5 ${ws.glassSoft} ${ws.card} p-3`}>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center font-bold text-white shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center font-bold text-slate-900 dark:text-white shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
                     {avatarText}
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-bold text-white truncate tracking-tight">
+                    <div className="text-sm font-bold text-slate-900 dark:text-white truncate tracking-tight">
                       {userName}
                     </div>
-                    <div className="text-xs text-white/55 truncate">
+                    <div className="text-xs text-slate-600 dark:text-white/55 truncate">
                       {userRole || "موظف"}
                     </div>
                   </div>
@@ -202,10 +202,10 @@ export default function AccountingSidebar({ active = "dashboard" }) {
               const isActive = active === key;
 
               const itemClass = isActive
-                ? "bg-white/10 text-white border-white/20"
-                : "bg-white/[0.02] text-white/75 border-white/10 hover:bg-white/[0.06]";
+                ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20"
+                : "bg-slate-50 dark:bg-white/[0.02] text-slate-700 dark:text-white/75 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.06]";
 
-              const iconClass = isActive ? "text-emerald-200" : "text-white/70";
+              const iconClass = isActive ? "text-emerald-700 dark:text-emerald-200" : "text-slate-700 dark:text-white/70";
 
               return (
                 <a
@@ -213,7 +213,7 @@ export default function AccountingSidebar({ active = "dashboard" }) {
                   href={href}
                   className={`flex items-center gap-3 px-4 py-3 ${pillBase} ${itemClass}`}
                 >
-                  <div className="w-9 h-9 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
+                  <div className="w-9 h-9 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
                     <Icon className={`w-5 h-5 ${iconClass}`} />
                   </div>
                   <span className="font-semibold">{label}</span>
@@ -222,7 +222,7 @@ export default function AccountingSidebar({ active = "dashboard" }) {
             })}
           </nav>
 
-          <div className="p-4 border-t border-white/10">
+          <div className="p-4 border-t border-slate-200 dark:border-white/10">
             <button
               type="button"
               onClick={logout}
@@ -237,7 +237,7 @@ export default function AccountingSidebar({ active = "dashboard" }) {
 
       {/* Mobile bottom nav */}
       <nav
-        className={`lg:hidden fixed left-0 right-0 bottom-0 z-40 ${shellClass} border-t border-white/10`}
+        className={`lg:hidden fixed left-0 right-0 bottom-0 z-40 ${shellClass} border-t border-slate-200 dark:border-white/10`}
         dir="rtl"
         style={bottomSafeAreaStyle}
       >
@@ -246,10 +246,10 @@ export default function AccountingSidebar({ active = "dashboard" }) {
             const isActive = active === key;
 
             const itemClass = isActive
-              ? "bg-white/10 text-white border-white/20"
-              : "bg-white/[0.03] text-white/70 border-white/10";
+              ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border-slate-300 dark:border-white/20"
+              : "bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10";
 
-            const iconClass = isActive ? "text-emerald-200" : "text-white/70";
+            const iconClass = isActive ? "text-emerald-700 dark:text-emerald-200" : "text-slate-700 dark:text-white/70";
 
             return (
               <a

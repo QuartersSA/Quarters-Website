@@ -59,12 +59,12 @@ function ExpensesMobileHeader() {
     <div
       className={`lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`}
     >
-      <div className="w-9 h-9 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
-        <Receipt className="w-5 h-5 text-emerald-200" />
+      <div className="w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center">
+        <Receipt className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
       </div>
       <div>
-        <div className="font-bold text-white tracking-tight">المصروفات</div>
-        <div className="text-xs text-white/50">تسجيل وإدارة المصروفات</div>
+        <div className="font-bold text-slate-900 dark:text-white tracking-tight">المصروفات</div>
+        <div className="text-xs text-slate-500 dark:text-white/50">تسجيل وإدارة المصروفات</div>
       </div>
     </div>
   );
@@ -75,13 +75,13 @@ function ExpensesDesktopHeader() {
   return (
     <div className="hidden lg:flex items-center gap-4">
       <div className={ws.iconBox}>
-        <Receipt className="w-6 h-6 text-emerald-200" />
+        <Receipt className="w-6 h-6 text-emerald-700 dark:text-emerald-200" />
       </div>
       <div>
-        <h1 className="text-xl font-bold text-white tracking-tight">
+        <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
           المصروفات
         </h1>
-        <p className="text-white/50 text-sm mt-0.5">
+        <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
           تسجيل وإدارة المصروفات الشهرية
         </p>
       </div>
@@ -95,11 +95,11 @@ function ExpensesInfoCard() {
     <div className={`${ws.glassSoft} ${ws.card} p-4`}>
       <div className="flex items-start gap-3">
         <div className={`${ws.iconBox} w-10 h-10`}>
-          <Info className="w-5 h-5 text-sky-200" />
+          <Info className="w-5 h-5 text-sky-700 dark:text-sky-200" />
         </div>
         <div className="min-w-0">
-          <div className="font-bold text-white tracking-tight">ملاحظة</div>
-          <div className="text-sm text-white/60 mt-1 leading-6">
+          <div className="font-bold text-slate-900 dark:text-white tracking-tight">ملاحظة</div>
+          <div className="text-sm text-slate-600 dark:text-white/60 mt-1 leading-6">
             أضف المصروفات من قسم «مصروف متغيّر» ثم راجعها وأكّدها من قسم «رفع
             المصروفات» حسب الشهر.
           </div>
@@ -180,65 +180,65 @@ function ExpensesStatsCards({ expenses }) {
     <div className={`${ws.glassSoft} ${ws.card} p-5`}>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <div className={`${ws.glass} ${ws.card} p-3`}>
-          <div className="flex items-center gap-1 text-xs text-white/55">
-            <Banknote className="w-3 h-3 text-emerald-400" />
+          <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-white/55">
+            <Banknote className="w-3 h-3 text-emerald-700 dark:text-emerald-400" />
             إجمالي المصروفات
           </div>
-          <div className="text-white font-extrabold mt-1" dir="ltr">
+          <div className="text-slate-900 dark:text-white font-extrabold mt-1" dir="ltr">
             {formatMoney(stats.totalAmount)}
           </div>
-          <div className="text-xs text-white/40 mt-0.5">
+          <div className="text-xs text-slate-500 dark:text-white/40 mt-0.5">
             {stats.totalCount} مصروف
           </div>
         </div>
 
         <div className={`${ws.glass} ${ws.card} p-3`}>
-          <div className="flex items-center gap-1 text-xs text-white/55">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+          <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-white/55">
+            <CheckCircle2 className="w-3 h-3 text-emerald-700 dark:text-emerald-400" />
             تم التأكيد
           </div>
-          <div className="text-emerald-200 font-extrabold mt-1" dir="ltr">
+          <div className="text-emerald-700 dark:text-emerald-200 font-extrabold mt-1" dir="ltr">
             {formatMoney(stats.confirmedAmount)}
           </div>
-          <div className="text-xs text-white/40 mt-0.5">
+          <div className="text-xs text-slate-500 dark:text-white/40 mt-0.5">
             {stats.confirmedCount} / {stats.totalCount}
           </div>
         </div>
 
         <div className={`${ws.glass} ${ws.card} p-3`}>
-          <div className="flex items-center gap-1 text-xs text-white/55">
-            <Clock className="w-3 h-3 text-amber-400" />
+          <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-white/55">
+            <Clock className="w-3 h-3 text-amber-700 dark:text-amber-400" />
             بانتظار التأكيد
           </div>
-          <div className="text-amber-200 font-extrabold mt-1" dir="ltr">
+          <div className="text-amber-700 dark:text-amber-200 font-extrabold mt-1" dir="ltr">
             {formatMoney(stats.pendingAmount)}
           </div>
-          <div className="text-xs text-white/40 mt-0.5">
+          <div className="text-xs text-slate-500 dark:text-white/40 mt-0.5">
             {stats.pendingCount} مصروف
           </div>
         </div>
 
         <div className={`${ws.glass} ${ws.card} p-3`}>
-          <div className="flex items-center gap-1 text-xs text-white/55">
-            <TrendingUp className="w-3 h-3 text-sky-400" />
+          <div className="flex items-center gap-1 text-xs text-slate-600 dark:text-white/55">
+            <TrendingUp className="w-3 h-3 text-sky-700 dark:text-sky-400" />
             أعلى نوع مصروف
           </div>
-          <div className="text-white font-extrabold mt-1 text-sm truncate">
+          <div className="text-slate-900 dark:text-white font-extrabold mt-1 text-sm truncate">
             {stats.topTypeName}
           </div>
-          <div className="text-xs text-white/40 mt-0.5" dir="ltr">
+          <div className="text-xs text-slate-500 dark:text-white/40 mt-0.5" dir="ltr">
             {formatMoney(stats.topTypeAmount)}
           </div>
         </div>
 
         <div className={`${ws.glass} ${ws.card} p-3`}>
-          <div className="text-xs text-white/55">نسبة التأكيد</div>
-          <div className="text-white font-extrabold mt-1">
+          <div className="text-xs text-slate-600 dark:text-white/55">نسبة التأكيد</div>
+          <div className="text-slate-900 dark:text-white font-extrabold mt-1">
             {stats.totalCount > 0
               ? `${Math.round((stats.confirmedCount / stats.totalCount) * 100)}%`
               : "—"}
           </div>
-          <div className="w-full bg-white/10 rounded-full h-1.5 mt-2">
+          <div className="w-full bg-slate-200 dark:bg-white/10 rounded-full h-1.5 mt-2">
             <div
               className="bg-emerald-400 h-1.5 rounded-full transition-all"
               style={{
@@ -252,7 +252,7 @@ function ExpensesStatsCards({ expenses }) {
         </div>
 
         <div className={`${ws.glass} ${ws.card} p-3`}>
-          <div className="text-xs text-white/55">الفرق (مؤكد - أصلي)</div>
+          <div className="text-xs text-slate-600 dark:text-white/55">الفرق (مؤكد - أصلي)</div>
           {(() => {
             // Compare ONLY the confirmed rows' final vs original amounts.
             // Previously this subtracted the full month total (incl.
@@ -263,17 +263,17 @@ function ExpensesStatsCards({ expenses }) {
             const isPositive = diff > 0;
             const isNeg = diff < 0;
             const color = isPositive
-              ? "text-emerald-200"
+              ? "text-emerald-700 dark:text-emerald-200"
               : isNeg
-                ? "text-red-300"
-                : "text-white/70";
+                ? "text-red-700 dark:text-red-300"
+                : "text-slate-700 dark:text-white/70";
             return (
               <div className={`font-extrabold mt-1 ${color}`} dir="ltr">
                 {formatMoney(diff)}
               </div>
             );
           })()}
-          <div className="text-xs text-white/40 mt-0.5">
+          <div className="text-xs text-slate-500 dark:text-white/40 mt-0.5">
             {stats.confirmedCount > 0 ? "بعد التأكيد" : "لا يوجد مؤكد"}
           </div>
         </div>
@@ -487,7 +487,7 @@ export default function ExpensesPage() {
         <AccountingSidebar active="expenses" />
         <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
           <div className={`${ws.glassSoft} ${ws.card} p-6 text-center`}>
-            <div className="text-white/60">جاري التحميل…</div>
+            <div className="text-slate-600 dark:text-white/60">جاري التحميل…</div>
           </div>
         </main>
       </div>
@@ -500,7 +500,7 @@ export default function ExpensesPage() {
         <AccountingSidebar active="expenses" />
         <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
           <div className={`${ws.glassSoft} ${ws.card} p-6 text-center`}>
-            <div className="text-white/60">يرجى تسجيل الدخول</div>
+            <div className="text-slate-600 dark:text-white/60">يرجى تسجيل الدخول</div>
             <div className="mt-3">
               <a
                 href="/admin/login"
@@ -521,7 +521,7 @@ export default function ExpensesPage() {
         <AccountingSidebar active="expenses" />
         <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
           <div className={`${ws.glassSoft} ${ws.card} p-6 text-center`}>
-            <div className="text-white/60">غير مصرح لك بالوصول</div>
+            <div className="text-slate-600 dark:text-white/60">غير مصرح لك بالوصول</div>
           </div>
         </main>
       </div>
@@ -559,7 +559,7 @@ export default function ExpensesPage() {
               monthly total and made the header feel noisy). */}
           <div className={`${ws.glassSoft} ${ws.card} p-4`}>
             <div className="flex items-center gap-3 flex-wrap">
-              <div className="text-white/55 text-xs">الشهر</div>
+              <div className="text-slate-600 dark:text-white/55 text-xs">الشهر</div>
               <div className="w-44">
                 <GlassSelect
                   value={month}
@@ -584,7 +584,7 @@ export default function ExpensesPage() {
               <Anchor className="w-4 h-4" />
               مصروف ثابت
               {fixedExpenses.length > 0 && (
-                <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                <span className="bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
                   {fixedExpenses.length}
                 </span>
               )}
@@ -597,7 +597,7 @@ export default function ExpensesPage() {
               <FileText className="w-4 h-4" />
               مصروف متغيّر
               {variableTypes.length > 0 && (
-                <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                <span className="bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
                   {variableTypes.length}
                 </span>
               )}
@@ -618,7 +618,7 @@ export default function ExpensesPage() {
               <ListChecks className="w-4 h-4" />
               البنود
               {types.length > 0 && (
-                <span className="bg-white/10 text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                <span className="bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
                   {types.length}
                 </span>
               )}
@@ -638,7 +638,7 @@ export default function ExpensesPage() {
                   preserve access to the older "add arbitrary expense"
                   workflow (e.g. one-off items without a category). */}
               <details className={`${ws.glassSoft} ${ws.card} p-4`}>
-                <summary className="text-white/55 text-xs cursor-pointer select-none">
+                <summary className="text-slate-600 dark:text-white/55 text-xs cursor-pointer select-none">
                   إضافة مصروف خارج البنود (متقدم)
                 </summary>
                 <div className="mt-4">
@@ -676,13 +676,13 @@ export default function ExpensesPage() {
                   <div className="flex items-center justify-between gap-3 mb-4">
                     <div className="flex items-center gap-3">
                       <div className={ws.iconBox}>
-                        <Receipt className="w-5 h-5 text-emerald-200" />
+                        <Receipt className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
                       </div>
                       <div>
-                        <div className="font-bold text-white tracking-tight">
+                        <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                           المصروفات المضافة
                         </div>
-                        <div className="text-xs text-white/50 mt-0.5">
+                        <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
                           {monthHint} — {variableExpenses.length} مصروف متغير
                         </div>
                       </div>
@@ -703,29 +703,29 @@ export default function ExpensesPage() {
                     {variableExpenses.map((e) => {
                       const confirmedClass = e.is_confirmed
                         ? "border-emerald-400/20 bg-emerald-400/5"
-                        : "border-white/10 bg-white/[0.02]";
+                        : "border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02]";
                       return (
                         <div
                           key={e.id}
                           className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border ${confirmedClass}`}
                         >
                           <div className="flex items-center gap-2 min-w-0">
-                            <span className="text-white/40 text-xs shrink-0">
+                            <span className="text-slate-500 dark:text-white/40 text-xs shrink-0">
                               {e.expense_type_name}
                             </span>
-                            <span className="text-white text-sm font-semibold truncate">
+                            <span className="text-slate-900 dark:text-white text-sm font-semibold truncate">
                               {e.expense_name}
                             </span>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             <span
-                              className="text-white/70 text-sm font-semibold"
+                              className="text-slate-700 dark:text-white/70 text-sm font-semibold"
                               dir="ltr"
                             >
                               {formatMoney(e.amount)}
                             </span>
                             {e.is_confirmed && (
-                              <span className="text-emerald-300 text-[10px] font-bold">
+                              <span className="text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">
                                 ✓
                               </span>
                             )}
@@ -733,7 +733,7 @@ export default function ExpensesPage() {
                               <button
                                 type="button"
                                 onClick={() => handleEditExpense(e)}
-                                className="text-sky-300 text-[10px] font-bold bg-sky-500/10 border border-sky-500/20 px-1.5 py-0.5 rounded-md hover:bg-sky-500/20 transition-colors"
+                                className="text-sky-700 dark:text-sky-300 text-[10px] font-bold bg-sky-500/10 border border-sky-500/20 px-1.5 py-0.5 rounded-md hover:bg-sky-500/20 transition-colors"
                               >
                                 تعديل
                               </button>
@@ -752,13 +752,13 @@ export default function ExpensesPage() {
                 <div className={`${ws.glassSoft} ${ws.card} p-5`}>
                   <div className="flex items-center gap-3">
                     <div className={ws.iconBox}>
-                      <Receipt className="w-5 h-5 text-emerald-200" />
+                      <Receipt className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
                     </div>
                     <div>
-                      <div className="font-bold text-white tracking-tight">
+                      <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                         المصروفات المضافة
                       </div>
-                      <div className="text-xs text-white/50 mt-0.5">
+                      <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
                         اختر الشهر في نموذج الإضافة أعلاه لعرض المصروفات
                       </div>
                     </div>

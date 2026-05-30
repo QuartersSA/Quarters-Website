@@ -35,22 +35,22 @@ export function PayrollTableCard({
     <div className={`${ws.glassSoft} ${ws.card} p-5`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <div className="font-bold text-white tracking-tight">
+          <div className="font-bold text-slate-900 dark:text-white tracking-tight">
             جدول مسير الرواتب
           </div>
           {totalCount > 0 && (
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-xs text-white/50">
+              <span className="text-xs text-slate-500 dark:text-white/50">
                 تم الدفع: {paidCount} / {totalCount}
               </span>
               {allPaid && (
-                <span className="inline-flex items-center gap-1 text-xs text-emerald-300 font-semibold">
+                <span className="inline-flex items-center gap-1 text-xs text-emerald-700 dark:text-emerald-300 font-semibold">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   مكتمل
                 </span>
               )}
               {isClosed && (
-                <span className="inline-flex items-center gap-1 text-xs text-amber-300 font-semibold bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full">
+                <span className="inline-flex items-center gap-1 text-xs text-amber-700 dark:text-amber-300 font-semibold bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full">
                   <Lock className="w-3 h-3" />
                   مقفل
                 </span>

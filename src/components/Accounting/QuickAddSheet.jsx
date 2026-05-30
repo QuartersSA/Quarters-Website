@@ -72,10 +72,10 @@ export function QuickAddSheet({
       >
         <div className="flex items-center justify-between mb-4 sticky top-0 bg-transparent">
           <div>
-            <div className="font-bold text-white tracking-tight">
+            <div className="font-bold text-slate-900 dark:text-white tracking-tight">
               + إضافة مصروف سريع
             </div>
-            <div className="text-xs text-white/55 mt-0.5">
+            <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5">
               اكتب التفاصيل واحفظ — الإضافة تُسجَّل فوراً.
             </div>
           </div>

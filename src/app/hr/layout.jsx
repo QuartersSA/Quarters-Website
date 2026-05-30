@@ -2,6 +2,8 @@
 
 import React from "react";
 import { ws } from "@/components/Workspace/ui";
+import useAdminTheme from "@/hooks/useAdminTheme";
+import AdminThemeToggle from "@/components/Admin/AdminThemeToggle";
 
 export default function HRLayout({ children }) {
   React.useEffect(() => {
@@ -12,6 +14,12 @@ export default function HRLayout({ children }) {
       // ignore
     }
   }, []);
+
+  // HR now shares the admin theme — useAdminTheme drives the class
+  // on document.documentElement, so the operator's preference rides
+  // across admin ↔ HR navigation without a "force dark" reset.
+  const { isDark } = useAdminTheme();
+  const themeClass = isDark ? "dark" : "";
 
   const Background = (
     <div
@@ -24,8 +32,9 @@ export default function HRLayout({ children }) {
   );
 
   return (
-    <div className={`min-h-[100svh] ${ws.appBg}`} dir="rtl">
+    <div className={`${themeClass} min-h-[100svh] ${ws.appBg}`} dir="rtl">
       {Background}
+      <AdminThemeToggle />
       <div className="relative">{children}</div>
     </div>
   );

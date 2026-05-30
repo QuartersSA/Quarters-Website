@@ -21,9 +21,9 @@ const SCOPE_LABEL = {
 };
 
 const SCOPE_BADGE = {
-  fixed: "bg-sky-500/15 text-sky-200 border-sky-500/25",
-  variable: "bg-emerald-500/15 text-emerald-200 border-emerald-500/25",
-  both: "bg-amber-500/15 text-amber-200 border-amber-500/25",
+  fixed: "bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-500/25",
+  variable: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25",
+  both: "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25",
 };
 
 /**
@@ -151,13 +151,13 @@ export default function CategoriesManager() {
         <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
           <div className="flex items-center gap-3">
             <div className={ws.iconBox}>
-              <ListChecks className="w-5 h-5 text-emerald-200" />
+              <ListChecks className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div>
-              <div className="font-bold text-white tracking-tight">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                 البنود
               </div>
-              <div className="text-xs text-white/55 mt-0.5">
+              <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5">
                 أضف، حرّر، أو احذف بنود المصروفات وحدّد نطاق كل واحد
               </div>
             </div>
@@ -173,25 +173,25 @@ export default function CategoriesManager() {
         </div>
 
         {typesQuery.isLoading ? (
-          <div className="text-white/55 text-sm text-center py-6">
+          <div className="text-slate-600 dark:text-white/55 text-sm text-center py-6">
             جاري التحميل…
           </div>
         ) : types.length === 0 ? (
-          <div className="text-white/55 text-sm text-center py-6">
+          <div className="text-slate-600 dark:text-white/55 text-sm text-center py-6">
             لا توجد بنود بعد.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-white/[0.04]">
-                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                <tr className="bg-slate-100 dark:bg-white/[0.04]">
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     الاسم
                   </th>
-                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     النطاق
                   </th>
-                  <th className="text-center px-3 py-2 text-xs font-semibold text-white/55">
+                  <th className="text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     إجراءات
                   </th>
                 </tr>
@@ -202,15 +202,15 @@ export default function CategoriesManager() {
                   return (
                     <tr
                       key={t.id}
-                      className={`border-t border-white/5 hover:bg-white/[0.02] ${
+                      className={`border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02] ${
                         isInactive ? "opacity-50" : ""
                       }`}
                     >
-                      <td className="px-3 py-2 text-white text-sm font-medium">
+                      <td className="px-3 py-2 text-slate-900 dark:text-white text-sm font-medium">
                         <div className="flex items-center gap-2">
                           <span>{t.name}</span>
                           {isInactive ? (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/10 text-white/60">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60">
                               غير مفعّل
                             </span>
                           ) : null}
@@ -328,7 +328,7 @@ function CategoryFormModal({ target, onClose, onSubmit, isPending }) {
         className={`w-full max-w-sm ${ws.glass} ${ws.card} p-5 space-y-4`}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-white font-bold tracking-tight">
+          <h3 className="text-slate-900 dark:text-white font-bold tracking-tight">
             {target ? "تعديل البند" : "بند جديد"}
           </h3>
           <button
@@ -342,7 +342,7 @@ function CategoryFormModal({ target, onClose, onSubmit, isPending }) {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
+          <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
             الاسم *
           </label>
           <input
@@ -356,7 +356,7 @@ function CategoryFormModal({ target, onClose, onSubmit, isPending }) {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
+          <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
             النطاق *
           </label>
           <GlassSelect
@@ -365,7 +365,7 @@ function CategoryFormModal({ target, onClose, onSubmit, isPending }) {
             options={SCOPE_OPTIONS}
             buttonClassName="px-3 py-2.5"
           />
-          <p className="text-[10px] text-white/45 mt-1.5">
+          <p className="text-[10px] text-slate-500 dark:text-white/45 mt-1.5">
             «ثابت» يظهر في قوالب المصروف الثابت فقط. «متغيّر» يظهر في
             قائمة المتغيّر فقط. «الاثنين» يظهر في الاثنين.
           </p>

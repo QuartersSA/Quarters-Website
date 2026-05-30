@@ -107,10 +107,10 @@ export function ExpenseForm({
     <div className="space-y-4">
       {isEditing && (
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-400/10 border border-amber-400/20">
-          <span className="text-amber-200 text-xs font-semibold">
+          <span className="text-amber-700 dark:text-amber-200 text-xs font-semibold">
             ✏️ تعديل المصروف:
           </span>
-          <span className="text-white text-xs font-bold">
+          <span className="text-slate-900 dark:text-white text-xs font-bold">
             {editingExpense.expense_name}
           </span>
         </div>
@@ -120,7 +120,7 @@ export function ExpenseForm({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* الشهر */}
           <div>
-            <label className="block text-xs text-white/60 font-semibold mb-1.5">
+            <label className="block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5">
               الشهر
             </label>
             <GlassSelect
@@ -135,7 +135,7 @@ export function ExpenseForm({
 
           {/* نوع المصروف */}
           <div>
-            <label className="block text-xs text-white/60 font-semibold mb-1.5">
+            <label className="block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5">
               نوع المصروف
             </label>
             <GlassSelect
@@ -149,7 +149,7 @@ export function ExpenseForm({
 
           {/* اسم المصروف */}
           <div>
-            <label className="block text-xs text-white/60 font-semibold mb-1.5">
+            <label className="block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5">
               اسم المصروف
             </label>
             <input
@@ -163,7 +163,7 @@ export function ExpenseForm({
 
           {/* المبلغ */}
           <div>
-            <label className="block text-xs text-white/60 font-semibold mb-1.5">
+            <label className="block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5">
               المبلغ (ريال)
             </label>
             <input
@@ -228,7 +228,7 @@ export function ExpenseForm({
       {showNewType && !isEditing && (
         <form onSubmit={handleCreateType} className="flex items-end gap-2">
           <div className="flex-1">
-            <label className="block text-xs text-white/60 font-semibold mb-1.5">
+            <label className="block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5">
               اسم النوع الجديد
             </label>
             <input

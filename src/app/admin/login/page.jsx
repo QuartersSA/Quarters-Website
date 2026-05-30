@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Lock, User, Shield, AlertCircle } from "lucide-react";
+import { Lock, User, Shield, AlertCircle, Sun, Moon } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { ADMIN_TOKEN_KEY, clearEmployeeSessions } from "@/utils/apiAuth";
+import useAdminTheme from "@/hooks/useAdminTheme";
 
 export default function AdminLoginPage() {
+  const { isDark, toggleTheme } = useAdminTheme();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -91,6 +93,22 @@ export default function AdminLoginPage() {
       className={`min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`}
       dir="rtl"
     >
+      {/* Floating theme toggle — accessible BEFORE login so the
+          admin can land on the page in their preferred theme. */}
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className={`${ws.iconButton} fixed top-4 left-4 z-50`}
+        title={isDark ? "الوضع الفاتح" : "الوضع الداكن"}
+        aria-label={isDark ? "Light mode" : "Dark mode"}
+      >
+        {isDark ? (
+          <Sun className="w-4 h-4" />
+        ) : (
+          <Moon className="w-4 h-4" />
+        )}
+      </button>
+
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <img
@@ -103,7 +121,7 @@ export default function AdminLoginPage() {
         <div className={`${ws.glass} ${ws.card} p-8`}>
           <div className="text-center mb-8">
             <div
-              className={`${ws.iconBox} w-20 h-20 mx-auto mb-4 text-emerald-200`}
+              className={`${ws.iconBox} w-20 h-20 mx-auto mb-4 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200`}
             >
               <Shield className="w-10 h-10" />
             </div>
@@ -117,13 +135,13 @@ export default function AdminLoginPage() {
             <div>
               <label
                 htmlFor="username"
-                className="block text-sm font-semibold text-white/70 mb-2"
+                className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2"
               >
                 اسم المستخدم
               </label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                  <User className="w-5 h-5 text-white/40" />
+                  <User className="w-5 h-5 text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/40" />
                 </div>
                 <input
                   id="username"
@@ -141,13 +159,13 @@ export default function AdminLoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-semibold text-white/70 mb-2"
+                className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2"
               >
                 كلمة المرور
               </label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                  <Lock className="w-5 h-5 text-white/40" />
+                  <Lock className="w-5 h-5 text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/40" />
                 </div>
                 <input
                   id="password"
@@ -164,8 +182,8 @@ export default function AdminLoginPage() {
 
             {error ? (
               <div className="bg-red-500/10 border border-red-500/25 rounded-2xl p-3 backdrop-blur-sm flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-red-200 flex-shrink-0 mt-0.5" />
-                <p className="text-red-200 text-sm">{error}</p>
+                <AlertCircle className="w-5 h-5 text-red-700 dark:text-red-700 dark:dark:text-red-200 flex-shrink-0 mt-0.5" />
+                <p className="text-red-700 dark:text-red-700 dark:dark:text-red-200 text-sm">{error}</p>
               </div>
             ) : null}
 

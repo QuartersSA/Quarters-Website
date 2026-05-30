@@ -139,17 +139,17 @@ function PaymentRow({ entry, onSave, isClosed }) {
   return (
     <>
       <tr
-        className={`border-t border-white/10 hover:bg-white/[0.04] ${isSuspended ? "opacity-70" : ""}`}
+        className={`border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] ${isSuspended ? "opacity-70" : ""}`}
       >
         <td
-          className="py-2 px-1.5 font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis"
+          className="py-2 px-1.5 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis"
           style={{ maxWidth: 160 }}
         >
           <div className="flex items-center gap-1.5">
             <span className="truncate">{employeeName}</span>
             {isSuspended ? (
               <span
-                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-400/15 border border-amber-400/30 text-amber-200 shrink-0"
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-200 shrink-0"
                 title="موظف موقوف هذا الشهر"
               >
                 <Ban className="w-3 h-3" />
@@ -159,38 +159,38 @@ function PaymentRow({ entry, onSave, isClosed }) {
           </div>
         </td>
         <td
-          className="py-2 px-1.5 text-white/70 whitespace-nowrap overflow-hidden text-ellipsis"
+          className="py-2 px-1.5 text-slate-700 dark:text-white/70 whitespace-nowrap overflow-hidden text-ellipsis"
           style={{ maxWidth: 110 }}
         >
           {branchName}
         </td>
         <td
-          className="py-2 px-1.5 text-white/50 whitespace-nowrap text-right"
+          className="py-2 px-1.5 text-slate-500 dark:text-white/50 whitespace-nowrap text-right"
           dir="ltr"
         >
           {baseSalary}
         </td>
         <td
-          className="py-2 px-1.5 text-white/50 whitespace-nowrap text-right"
+          className="py-2 px-1.5 text-slate-500 dark:text-white/50 whitespace-nowrap text-right"
           dir="ltr"
         >
           {otherAllowances}
         </td>
         <td
-          className="py-2 px-1.5 text-white/70 whitespace-nowrap text-right"
+          className="py-2 px-1.5 text-slate-700 dark:text-white/70 whitespace-nowrap text-right"
           dir="ltr"
         >
           {totalSalary}
         </td>
         <td
-          className="py-2 px-1.5 text-emerald-200 whitespace-nowrap text-right"
+          className="py-2 px-1.5 text-emerald-700 dark:text-emerald-200 whitespace-nowrap text-right"
           dir="ltr"
         >
           {totalBonuses}
         </td>
         <td
           className={`py-2 px-1.5 whitespace-nowrap text-right ${
-            hasOvertime ? "text-sky-200" : "text-white/30"
+            hasOvertime ? "text-sky-700 dark:text-sky-200" : "text-slate-400 dark:text-white/30"
           }`}
           dir="ltr"
           title={hasOvertime ? `${overtimeDays} يوم` : ""}
@@ -198,14 +198,14 @@ function PaymentRow({ entry, onSave, isClosed }) {
           {hasOvertime ? totalOvertime : "—"}
         </td>
         <td
-          className="py-2 px-1.5 text-red-300/80 whitespace-nowrap text-right"
+          className="py-2 px-1.5 text-red-700 dark:text-red-300/80 whitespace-nowrap text-right"
           dir="ltr"
         >
           {totalDeductions}
         </td>
         <td
           className={`py-2 px-1.5 whitespace-nowrap text-right ${
-            hasLoan ? "text-amber-300/90" : "text-white/30"
+            hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"
           }`}
           dir="ltr"
           title={hasLoan ? "قسط شهري لقرض / سلفة نشطة" : ""}
@@ -213,7 +213,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
           {hasLoan ? loanDeduction : "—"}
         </td>
         <td
-          className="py-2 px-1.5 text-emerald-200 font-bold whitespace-nowrap text-right"
+          className="py-2 px-1.5 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right"
           dir="ltr"
         >
           {formattedNet}
@@ -223,7 +223,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
         <td className="py-2 px-1.5">
           {isPaid ? (
             isLocked ? (
-              <span className="text-white/70 text-xs">
+              <span className="text-slate-700 dark:text-white/70 text-xs">
                 {METHOD_LABELS[paymentMethod] || "—"}
               </span>
             ) : (
@@ -237,7 +237,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
               />
             )
           ) : (
-            <span className="text-white/30 text-xs">—</span>
+            <span className="text-slate-400 dark:text-white/30 text-xs">—</span>
           )}
         </td>
 
@@ -245,7 +245,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
         <td className="py-2 px-1.5">
           {isPaid ? (
             isLocked ? (
-              <span className="text-white/70 text-xs" dir="ltr">
+              <span className="text-slate-700 dark:text-white/70 text-xs" dir="ltr">
                 {formatMoney(paidAmount)}
               </span>
             ) : (
@@ -265,7 +265,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
               />
             )
           ) : (
-            <span className="text-white/30 text-xs">—</span>
+            <span className="text-slate-400 dark:text-white/30 text-xs">—</span>
           )}
         </td>
 
@@ -277,8 +277,8 @@ function PaymentRow({ entry, onSave, isClosed }) {
             disabled={isClosed || isLocked}
             className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${
               isPaid
-                ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-300"
-                : "bg-white/[0.04] border border-white/10 text-white/30 hover:bg-white/[0.08]"
+                ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300"
+                : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"
             } ${isClosed || isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
           >
             {isPaid ? (
@@ -300,8 +300,8 @@ function PaymentRow({ entry, onSave, isClosed }) {
                 disabled={isClosed}
                 className={`w-6 h-6 rounded-md flex items-center justify-center transition-all ${
                   paymentNote || amountDiffers
-                    ? "bg-amber-400/15 border border-amber-400/30 text-amber-300"
-                    : "bg-white/[0.04] border border-white/10 text-white/40 hover:bg-white/[0.08]"
+                    ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300"
+                    : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"
                 }`}
                 title="ملاحظة"
               >
@@ -314,7 +314,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
               <button
                 type="button"
                 onClick={handleEdit}
-                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-white/[0.04] border border-white/10 text-white/40 hover:bg-white/[0.08] hover:text-white/70"
+                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-white/70"
                 title="تعديل"
               >
                 <Pencil className="w-3 h-3" />
@@ -326,7 +326,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-300 hover:bg-red-500/20"
+                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300 hover:bg-red-500/20"
                 title="إلغاء"
               >
                 <X className="w-3 h-3" />
@@ -349,7 +349,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
 
       {/* صف الملاحظة */}
       {showNote && isPaid && (
-        <tr className="border-t border-white/5">
+        <tr className="border-t border-slate-100 dark:border-white/5">
           <td colSpan={14} className="py-2 px-2">
             <div className="flex items-start gap-2 mr-2">
               {amountDiffers && (
@@ -360,13 +360,13 @@ function PaymentRow({ entry, onSave, isClosed }) {
                       animation: "payrollPulse 2s ease-in-out infinite",
                     }}
                   />
-                  <span className="text-amber-300 text-xs font-semibold whitespace-nowrap">
+                  <span className="text-amber-700 dark:text-amber-300 text-xs font-semibold whitespace-nowrap">
                     المبلغ مختلف عن المعتمد
                   </span>
                 </div>
               )}
               {isLocked ? (
-                <span className="text-white/60 text-xs py-1.5 flex-1">
+                <span className="text-slate-600 dark:text-white/60 text-xs py-1.5 flex-1">
                   {paymentNote || "—"}
                 </span>
               ) : (
@@ -382,7 +382,7 @@ function PaymentRow({ entry, onSave, isClosed }) {
                   }
                   className={`${ws.input} text-xs py-1.5 px-3 rounded-xl flex-1 ${
                     amountDiffers && !paymentNote
-                      ? "border-amber-400/40 placeholder:text-amber-300/50"
+                      ? "border-amber-400/40 placeholder:text-amber-700 dark:placeholder:text-amber-300/50"
                       : ""
                   }`}
                 />
@@ -406,14 +406,14 @@ function PaymentRow({ entry, onSave, isClosed }) {
 
 export function PayrollTable({ entries, onPaymentSave, isClosed }) {
   if (entries.length === 0) {
-    return <div className="text-white/60">لا يوجد بيانات.</div>;
+    return <div className="text-slate-600 dark:text-white/60">لا يوجد بيانات.</div>;
   }
 
   return (
     <>
       <table className="w-full text-xs">
         <thead>
-          <tr className="text-white/70 text-[11px]">
+          <tr className="text-slate-700 dark:text-white/70 text-[11px]">
             <th className="text-right font-semibold py-2 px-1.5 whitespace-nowrap">
               الموظف
             </th>

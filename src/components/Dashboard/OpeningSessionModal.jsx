@@ -51,10 +51,10 @@ export function OpeningSessionModal({
           className={`p-5 border-b ${ws.divider} flex items-center justify-between gap-4`}
         >
           <div className="min-w-0">
-            <h3 className="text-white font-bold text-lg tracking-tight truncate">
+            <h3 className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold text-lg tracking-tight truncate">
               تسجيل مخزون افتتاحي
             </h3>
-            <p className="text-white/55 text-sm">
+            <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm">
               هذه الخطوة تعيد "المفترض" كنقطة بداية للفترة
             </p>
           </div>
@@ -78,7 +78,7 @@ export function OpeningSessionModal({
             />
 
             <div className="w-full">
-              <label className="block text-xs text-white/55 mb-1">
+              <label className="block text-xs text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-1">
                 تاريخ الافتتاحي
               </label>
               <GlassDatePicker
@@ -91,7 +91,7 @@ export function OpeningSessionModal({
             </div>
 
             <div className="w-full">
-              <label className="block text-xs text-white/55 mb-1">
+              <label className="block text-xs text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-1">
                 ملاحظة (اختياري)
               </label>
               <input
@@ -106,7 +106,7 @@ export function OpeningSessionModal({
 
           <div className="mb-3">
             <div className="relative">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" />
               <input
                 type="text"
                 value={openingSearch}
@@ -118,29 +118,29 @@ export function OpeningSessionModal({
           </div>
 
           <div
-            className={`max-h-[46vh] overflow-auto rounded-3xl border ${ws.divider} bg-white/[0.02]`}
+            className={`max-h-[46vh] overflow-auto rounded-3xl border ${ws.divider} bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.02]`}
           >
             <table className="w-full">
               <thead>
-                <tr className="bg-white/[0.04]">
-                  <th className="text-right px-4 py-3 text-sm font-semibold text-white/70">
+                <tr className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]">
+                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70">
                     الصنف
                   </th>
-                  <th className="text-right px-4 py-3 text-sm font-semibold text-white/70">
+                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70">
                     الوحدة
                   </th>
-                  <th className="text-right px-4 py-3 text-sm font-semibold text-white/70">
+                  <th className="text-right px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70">
                     الكمية الافتتاحية
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {filteredOpeningItems.map((it) => (
-                  <tr key={it.id} className="border-t border-white/5">
-                    <td className="px-4 py-3 text-white font-medium">
+                  <tr key={it.id} className="border-t border-slate-100 dark:border-slate-100 dark:dark:border-white/5">
+                    <td className="px-4 py-3 text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium">
                       {it.name}
                     </td>
-                    <td className="px-4 py-3 text-white/65 text-sm">
+                    <td className="px-4 py-3 text-slate-700 dark:text-slate-700 dark:dark:text-white/65 text-sm">
                       {it.unit || "-"}
                     </td>
                     <td className="px-4 py-3">
@@ -166,7 +166,7 @@ export function OpeningSessionModal({
                   <tr>
                     <td
                       colSpan={3}
-                      className="px-4 py-10 text-center text-white/55"
+                      className="px-4 py-10 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55"
                     >
                       لا توجد نتائج
                     </td>
@@ -177,13 +177,13 @@ export function OpeningSessionModal({
           </div>
 
           {openingSuccess && (
-            <div className="mt-4 p-3 bg-emerald-500/10 border border-emerald-400/30 rounded-2xl text-emerald-200 font-semibold">
+            <div className="mt-4 p-3 bg-emerald-500/10 border border-emerald-400/30 rounded-2xl text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 font-semibold">
               {openingSuccess}
             </div>
           )}
 
           {openingError && (
-            <div className="mt-4 p-3 bg-red-500/10 border border-red-400/30 rounded-2xl text-red-200">
+            <div className="mt-4 p-3 bg-red-500/10 border border-red-400/30 rounded-2xl text-red-700 dark:text-red-700 dark:dark:text-red-200">
               {openingError}
             </div>
           )}

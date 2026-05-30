@@ -183,14 +183,14 @@ export function HRDeductionModal({
       <div
         className={`${ws.glass} ${ws.card} w-full max-w-2xl max-h-[90svh] overflow-hidden`}
       >
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
-          <div className="text-white font-bold text-lg tracking-tight">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-white/10">
+          <div className="text-slate-900 dark:text-white font-bold text-lg tracking-tight">
             {title}
           </div>
           <button
             type="button"
             onClick={onClose}
-            className={`${ws.iconButton} text-white/70`}
+            className={`${ws.iconButton} text-slate-700 dark:text-white/70`}
             aria-label="إغلاق"
           >
             <X className="w-5 h-5" />
@@ -203,7 +203,7 @@ export function HRDeductionModal({
         >
           {/* Employee(s) */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <User className="w-4 h-4 inline ml-2" />
               الموظف {isEditing ? "*" : "/ الموظفين *"}
             </label>
@@ -231,11 +231,11 @@ export function HRDeductionModal({
                   placeholder="— اختر الموظفين —"
                 />
                 {selectedEmployeesPreview ? (
-                  <div className="mt-2 text-xs text-white/45">
+                  <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
                     المختار: {selectedEmployeesPreview}
                   </div>
                 ) : (
-                  <div className="mt-2 text-xs text-white/45">
+                  <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
                     تقدر تختار أكثر من موظف في نفس العملية.
                   </div>
                 )}
@@ -245,7 +245,7 @@ export function HRDeductionModal({
 
           {/* Date */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <Calendar className="w-4 h-4 inline ml-2" />
               تاريخ المخالفة *
             </label>
@@ -259,14 +259,14 @@ export function HRDeductionModal({
               allowClear
             />
 
-            <div className="mt-2 text-xs text-white/45">
+            <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
               * التاريخ يكون فارغ حتى تختار تاريخ.
             </div>
           </div>
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <FileText className="w-4 h-4 inline ml-2" />
               تصنيف المخالفة
             </label>
@@ -300,14 +300,14 @@ export function HRDeductionModal({
               />
             )}
 
-            <div className="mt-2 text-xs text-white/45">
+            <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
               ملاحظة: تم اعتماد قائمة ثابتة لتصنيفات الخصميات.
             </div>
           </div>
 
           {/* Reason */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <FileText className="w-4 h-4 inline ml-2" />
               السبب
             </label>
@@ -323,7 +323,7 @@ export function HRDeductionModal({
 
           {/* Amount */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <DollarSign className="w-4 h-4 inline ml-2" />
               المبلغ *
             </label>
@@ -345,14 +345,14 @@ export function HRDeductionModal({
 
           {/* Images */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <FileImage className="w-4 h-4 inline ml-2" />
               صور (اختياري — يمكن إضافة أكثر من صورة)
             </label>
 
             <div className={`${ws.glassSoft} ${ws.card} p-4`}>
               <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-                <div className="text-white/70 text-sm">
+                <div className="text-slate-700 dark:text-white/70 text-sm">
                   {currentImages.length > 0 ? (
                     <div>
                       عدد الصور المرفوعة: {currentImages.length}
@@ -397,7 +397,7 @@ export function HRDeductionModal({
               </div>
 
               {uploadError ? (
-                <div className="mt-3 text-sm text-red-200">{uploadError}</div>
+                <div className="mt-3 text-sm text-red-700 dark:text-red-200">{uploadError}</div>
               ) : null}
 
               {currentImages.length > 0 ? (
@@ -405,7 +405,7 @@ export function HRDeductionModal({
                   {currentImages.map((img, idx) => (
                     <div
                       key={`${img.url}-${idx}`}
-                      className="relative group rounded-xl overflow-hidden bg-black/20 border border-white/10"
+                      className="relative group rounded-xl overflow-hidden bg-black/20 border border-slate-200 dark:border-white/10"
                     >
                       <a
                         href={img.url}
@@ -422,7 +422,7 @@ export function HRDeductionModal({
                       <button
                         type="button"
                         onClick={() => onRemoveImage(idx)}
-                        className="absolute top-2 left-2 bg-black/60 hover:bg-red-500/80 text-white rounded-full p-1.5 transition-colors"
+                        className="absolute top-2 left-2 bg-black/60 hover:bg-red-500/80 text-slate-900 dark:text-white rounded-full p-1.5 transition-colors"
                         aria-label="حذف الصورة"
                         title="حذف الصورة"
                         disabled={uploading || isSubmitting}
@@ -431,7 +431,7 @@ export function HRDeductionModal({
                       </button>
                       {img.name ? (
                         <div
-                          className="absolute bottom-0 inset-x-0 px-2 py-1 text-[11px] text-white/80 bg-black/60 truncate"
+                          className="absolute bottom-0 inset-x-0 px-2 py-1 text-[11px] text-slate-800 dark:text-white/80 bg-black/60 truncate"
                           title={img.name}
                         >
                           {img.name}
@@ -446,17 +446,17 @@ export function HRDeductionModal({
 
           {/* Source (read-only) */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <FileText className="w-4 h-4 inline ml-2" />
               مصدر المخالفة
             </label>
             <div
-              className={`${ws.input} px-4 py-3 bg-white/[0.03] text-white/80`}
+              className={`${ws.input} px-4 py-3 bg-slate-50 dark:bg-white/[0.03] text-slate-800 dark:text-white/80`}
               title={sourceDisplay || ""}
             >
               {sourceDisplay || "-"}
             </div>
-            <div className="mt-2 text-xs text-white/45">
+            <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
               يتم تحديد المصدر تلقائيًا باسم المستخدم الذي أدخل البيانات.
             </div>
           </div>

@@ -106,11 +106,11 @@ export default function GreenBeanOrdersPage() {
   );
 
   const loadingOrAuth = !ready ? (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       جاري التحميل…
     </div>
   ) : !employeeId ? (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       لازم تسجيل دخول الإدارة أولًا.
       <div className="mt-2">
         <a
@@ -231,7 +231,7 @@ export default function GreenBeanOrdersPage() {
         <AccountingSidebar active="green-bean-orders" />
         <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
           <div className="mx-auto w-full max-w-[900px] space-y-4">
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/80`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-800 dark:text-white/80`}>
               هذه الصفحة خاصة بالمحاسبة.
               <div className="mt-3">
                 <a

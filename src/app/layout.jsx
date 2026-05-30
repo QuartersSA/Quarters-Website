@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useLocation } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { ws } from "@/components/Workspace/ui";
@@ -75,17 +76,36 @@ const queryClient = new QueryClient({
   },
 });
 
+// Force <html class="dark"> for every route OUTSIDE /admin/*. Admin
+// owns its own theme via useAdminTheme (light or dark per user
+// preference). Without this, navigating from admin-light to a
+// non-admin page would inherit `light` on documentElement and the
+// existing dark-styled marketing / employee / public pages would
+// render with white text on white background.
+function GlobalDarkEnforcer() {
+  const location = useLocation();
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const path = location?.pathname || "";
+    // Admin + HR share useAdminTheme — let them own the class on
+    // their own routes. Workspace / accounting / marketing / public
+    // routes stay forced-dark.
+    if (path.startsWith("/admin") || path.startsWith("/hr")) return;
+    document.documentElement.classList.add("dark");
+  }, [location?.pathname]);
+  return null;
+}
+
 export default function RootLayout({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
+      <GlobalDarkEnforcer />
       <FaviconSetter />
       <Toaster position="top-center" richColors dir="rtl" />
-      <div
-        // Safari/iOS sometimes forces light form controls unless color-scheme is dark.
-        // This makes inputs, pickers, and scrollbars match our dark Workspace theme.
-        style={{ colorScheme: "dark" }}
-        className={ws.appBg}
-      >
+      {/* color-scheme is now driven by Tailwind dark variants on
+          ws.appBg, so native controls (scrollbars, pickers) follow
+          the active theme. */}
+      <div className={ws.appBg}>
         {children}
       </div>
     </QueryClientProvider>

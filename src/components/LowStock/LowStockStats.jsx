@@ -8,25 +8,25 @@ export function LowStockStats({ stats }) {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
       <StatCard
         icon={<TrendingDown className="w-6 h-6" />}
-        iconColor="text-amber-200"
+        iconColor="text-amber-700 dark:text-amber-700 dark:dark:text-amber-200"
         label="إجمالي الأصناف المنخفضة"
         value={stats.totalLowStock}
       />
       <StatCard
         icon={<XCircle className="w-6 h-6" />}
-        iconColor="text-red-200"
+        iconColor="text-red-700 dark:text-red-700 dark:dark:text-red-200"
         label="غير متوفر"
         value={stats.outOfStock}
       />
       <StatCard
         icon={<AlertTriangle className="w-6 h-6" />}
-        iconColor="text-orange-200"
+        iconColor="text-orange-700 dark:text-orange-700 dark:dark:text-orange-200"
         label="حالات حرجة"
         value={stats.criticalItems}
       />
       <StatCard
         icon={<Building2 className="w-6 h-6" />}
-        iconColor="text-sky-200"
+        iconColor="text-sky-700 dark:text-sky-700 dark:dark:text-sky-200"
         label="الفروع المتأثرة"
         value={stats.branches}
       />
@@ -40,8 +40,8 @@ function StatCard({ icon, iconColor, label, value }) {
       <div className="flex items-center justify-between mb-4">
         <div className={`${ws.iconBox} ${iconColor}`}>{icon}</div>
       </div>
-      <p className="text-white/55 text-sm mb-1">{label}</p>
-      <p className="text-3xl font-bold text-white tracking-tight">{value}</p>
+      <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-sm mb-1">{label}</p>
+      <p className="text-3xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight">{value}</p>
     </div>
   );
 }

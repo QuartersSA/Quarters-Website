@@ -10,6 +10,8 @@ import {
   Megaphone,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import useAdminTheme from "@/hooks/useAdminTheme";
+import AdminThemeToggle from "@/components/Admin/AdminThemeToggle";
 
 function readAdminUser() {
   try {
@@ -58,6 +60,11 @@ function allowedModes(adminUser) {
 export default function AdminLayout({ children }) {
   const [showChooser, setShowChooser] = React.useState(false);
   const [noAccess, setNoAccess] = React.useState(false);
+  // Admin section owns the light-mode toggle. themeClass flips the
+  // outermost wrapper between dark and light so every ws.* token
+  // resolves against the chosen theme.
+  const { isDark } = useAdminTheme();
+  const themeClass = isDark ? "dark" : "";
 
   const goInventory = React.useCallback(() => {
     try {
@@ -228,8 +235,12 @@ export default function AdminLayout({ children }) {
   const showMarketingBtn = can ? !!can.marketing : false;
 
   return (
-    <div className={`min-h-[100svh] ${ws.appBg}`} dir="rtl">
+    <div
+      className={`${themeClass} min-h-[100svh] ${ws.appBg}`}
+      dir="rtl"
+    >
       {Background}
+      <AdminThemeToggle />
 
       <div className="relative">{children}</div>
 
@@ -238,17 +249,17 @@ export default function AdminLayout({ children }) {
           <div className={`w-full max-w-xl ${ws.glass} ${ws.card} p-6`}>
             <div className="flex items-start gap-3">
               <div className={`${ws.iconBox} w-12 h-12`}>
-                <AlertTriangle className="w-6 h-6 text-amber-200" />
+                <AlertTriangle className="w-6 h-6 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200" />
               </div>
               <div>
-                <div className="text-white text-xl font-bold tracking-tight">
+                <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white text-xl font-bold tracking-tight">
                   لا توجد صلاحيات
                 </div>
-                <div className="text-white/60 mt-1">
+                <div className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/60 mt-1">
                   هذا الحساب الإداري لا يملك أي صلاحية لعرض الأقسام (Workspace /
                   إدارة الجرد / Accounting / HR).
                 </div>
-                <div className="text-white/45 text-sm mt-3">
+                <div className="text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/45 text-sm mt-3">
                   حدّث الصلاحيات من شاشة الموظفين.
                 </div>
               </div>
@@ -263,10 +274,10 @@ export default function AdminLayout({ children }) {
             className={`w-full max-w-4xl ${ws.glass} ${ws.card} overflow-hidden`}
           >
             <div className={`p-6 border-b ${ws.divider}`}>
-              <div className="text-white text-2xl font-bold tracking-tight">
+              <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white text-2xl font-bold tracking-tight">
                 اختر القسم
               </div>
-              <div className="text-white/60 mt-2">
+              <div className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/60 mt-2">
                 الأقسام الظاهرة هنا حسب صلاحيات الحساب.
               </div>
             </div>
@@ -276,15 +287,15 @@ export default function AdminLayout({ children }) {
                 <button
                   type="button"
                   onClick={goInventory}
-                  className="p-5 rounded-3xl text-right transition-colors border border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                  className="p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-slate-50 dark:dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06]"
                 >
                   <div className={`${ws.iconBox} mb-4`}>
-                    <ClipboardList className="w-6 h-6 text-emerald-200" />
+                    <ClipboardList className="w-6 h-6 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200" />
                   </div>
-                  <div className="text-white font-bold text-lg tracking-tight">
+                  <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-bold text-lg tracking-tight">
                     إدارة الجرد
                   </div>
-                  <div className="text-white/55 text-sm mt-1">
+                  <div className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 text-sm mt-1">
                     إدارة المخزون + عمليات الجرد
                   </div>
                 </button>
@@ -294,15 +305,15 @@ export default function AdminLayout({ children }) {
                 <button
                   type="button"
                   onClick={goWorkspace}
-                  className="p-5 rounded-3xl text-right transition-colors border border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                  className="p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-slate-50 dark:dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06]"
                 >
                   <div className={`${ws.iconBox} mb-4`}>
-                    <Briefcase className="w-6 h-6 text-sky-200" />
+                    <Briefcase className="w-6 h-6 text-sky-700 dark:text-sky-700 dark:dark:text-sky-200" />
                   </div>
-                  <div className="text-white font-bold text-lg tracking-tight">
+                  <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-bold text-lg tracking-tight">
                     Workspace
                   </div>
-                  <div className="text-white/55 text-sm mt-1">
+                  <div className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 text-sm mt-1">
                     Inbox + My Tasks + Team Space
                   </div>
                 </button>
@@ -312,15 +323,15 @@ export default function AdminLayout({ children }) {
                 <button
                   type="button"
                   onClick={goAccounting}
-                  className="p-5 rounded-3xl text-right transition-colors border border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                  className="p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-slate-50 dark:dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06]"
                 >
                   <div className={`${ws.iconBox} mb-4`}>
-                    <Calculator className="w-6 h-6 text-fuchsia-200" />
+                    <Calculator className="w-6 h-6 text-fuchsia-700 dark:text-fuchsia-700 dark:dark:text-fuchsia-200" />
                   </div>
-                  <div className="text-white font-bold text-lg tracking-tight">
+                  <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-bold text-lg tracking-tight">
                     Accounting
                   </div>
-                  <div className="text-white/55 text-sm mt-1">
+                  <div className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 text-sm mt-1">
                     تقفيلة الشفت + تقارير المحاسبة
                   </div>
                 </button>
@@ -330,15 +341,15 @@ export default function AdminLayout({ children }) {
                 <button
                   type="button"
                   onClick={goHR}
-                  className="p-5 rounded-3xl text-right transition-colors border border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                  className="p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-slate-50 dark:dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06]"
                 >
                   <div className={`${ws.iconBox} mb-4`}>
-                    <Users className="w-6 h-6 text-amber-200" />
+                    <Users className="w-6 h-6 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200" />
                   </div>
-                  <div className="text-white font-bold text-lg tracking-tight">
+                  <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-bold text-lg tracking-tight">
                     HR
                   </div>
-                  <div className="text-white/55 text-sm mt-1">
+                  <div className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 text-sm mt-1">
                     الموظفين + الصلاحيات
                   </div>
                 </button>
@@ -348,22 +359,22 @@ export default function AdminLayout({ children }) {
                 <button
                   type="button"
                   onClick={goMarketing}
-                  className="p-5 rounded-3xl text-right transition-colors border border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
+                  className="p-5 rounded-3xl text-right transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-slate-50 dark:dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06]"
                 >
                   <div className={`${ws.iconBox} mb-4`}>
-                    <Megaphone className="w-6 h-6 text-pink-200" />
+                    <Megaphone className="w-6 h-6 text-pink-700 dark:text-pink-700 dark:dark:text-pink-200" />
                   </div>
-                  <div className="text-white font-bold text-lg tracking-tight">
+                  <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-bold text-lg tracking-tight">
                     التسويق
                   </div>
-                  <div className="text-white/55 text-sm mt-1">
+                  <div className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 text-sm mt-1">
                     البلوقرز + منيو الضيافة
                   </div>
                 </button>
               ) : null}
             </div>
 
-            <div className="px-6 pb-6 text-xs text-white/45">
+            <div className="px-6 pb-6 text-xs text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/45">
               تقدر تبدّل بين الأقسام لاحقًا من نفس شاشة الإدارة.
             </div>
           </div>

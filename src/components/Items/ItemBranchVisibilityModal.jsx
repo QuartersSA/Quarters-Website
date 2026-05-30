@@ -136,15 +136,15 @@ export function ItemBranchVisibilityModal({
           className={`p-5 sm:p-6 flex items-center justify-between shrink-0 ${ws.topBar}`}
         >
           <div className="min-w-0">
-            <h3 className="text-xl font-bold text-white flex items-center gap-3 tracking-tight">
-              <div className={`${ws.iconBox} w-10 h-10 text-sky-200`}>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white flex items-center gap-3 tracking-tight">
+              <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-700 dark:dark:text-sky-200`}>
                 <Building2 className="w-5 h-5" />
               </div>
               <span className="truncate">
                 إدارة الفروع لـ "{item.name}"
               </span>
             </h3>
-            <p className="text-white/55 text-sm mt-2 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 text-sm mt-2 leading-relaxed">
               فعّل/ألغِ تفعيل هذا الصنف لكل فرع. الفروع المعطّلة لن تظهر
               في صفحات الجرد، التقارير، أو لوحة التحكم.
             </p>
@@ -156,20 +156,20 @@ export function ItemBranchVisibilityModal({
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/60" />
           </button>
         </div>
 
         <div className="p-5 sm:p-6 overflow-y-auto flex-1">
           {errorMsg ? (
-            <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-start gap-2">
+            <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-700 dark:dark:text-red-200 text-sm flex items-start gap-2">
               <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
               {errorMsg}
             </div>
           ) : null}
 
           {branchList.length === 0 ? (
-            <div className="text-center py-8 text-white/55">
+            <div className="text-center py-8 text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55">
               <Building2 className="w-12 h-12 mx-auto mb-3 opacity-40" />
               <p>لا توجد فروع</p>
             </div>
@@ -191,23 +191,23 @@ export function ItemBranchVisibilityModal({
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 ${
+                        className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 ${
                           isDisabled ? "bg-red-500/10" : "bg-emerald-500/10"
                         }`}
                       >
                         {isDisabled ? (
-                          <EyeOff className="w-5 h-5 text-red-200" />
+                          <EyeOff className="w-5 h-5 text-red-700 dark:text-red-700 dark:dark:text-red-200" />
                         ) : (
-                          <Eye className="w-5 h-5 text-emerald-200" />
+                          <Eye className="w-5 h-5 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200" />
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-white font-medium truncate">
+                        <p className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-medium truncate">
                           {branch.name}
                         </p>
                         <p
                           className={`text-xs ${
-                            isDisabled ? "text-red-200" : "text-emerald-200"
+                            isDisabled ? "text-red-700 dark:text-red-700 dark:dark:text-red-200" : "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200"
                           }`}
                         >
                           {isDisabled ? "معطّل في هذا الفرع" : "مفعّل"}

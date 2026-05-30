@@ -363,13 +363,13 @@ export default function TransferModal({ branches, onClose }) {
           className={`p-4 sm:p-6 flex items-center justify-between flex-shrink-0 ${ws.topBar}`}
         >
           <div className="min-w-0">
-            <h3 className="text-lg sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-              <span className={`${ws.iconBox} w-10 h-10 text-white/80`}>
+            <h3 className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight flex items-center gap-2">
+              <span className={`${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/80`}>
                 <ArrowLeftRight className="w-5 h-5" />
               </span>
               <span className="truncate">تحويل بين الفروع</span>
             </h3>
-            <p className="text-white/50 text-sm mt-1">
+            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 text-sm mt-1">
               خصم من فرع المرسل + إضافة لفرع المستقبل
             </p>
           </div>
@@ -380,7 +380,7 @@ export default function TransferModal({ branches, onClose }) {
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" />
           </button>
         </div>
 
@@ -401,7 +401,7 @@ export default function TransferModal({ branches, onClose }) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-white/55 mb-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2">
                 فرع المرسل
               </label>
               <GlassSelect
@@ -417,7 +417,7 @@ export default function TransferModal({ branches, onClose }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/55 mb-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2">
                 فرع المستقبل
               </label>
               <GlassSelect
@@ -433,7 +433,7 @@ export default function TransferModal({ branches, onClose }) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-white/55 mb-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2">
                 تاريخ العملية
               </label>
               <GlassDatePicker
@@ -449,7 +449,7 @@ export default function TransferModal({ branches, onClose }) {
           <div className="space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-[1fr_140px_120px] gap-3 items-end">
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2">
                   الصنف
                 </label>
                 <GlassSelect
@@ -465,7 +465,7 @@ export default function TransferModal({ branches, onClose }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2">
                   الكمية
                 </label>
                 <input
@@ -498,35 +498,35 @@ export default function TransferModal({ branches, onClose }) {
             {selectedItem && (fromIdNum || toIdNum) ? (
               <div className="flex flex-wrap gap-2 items-center">
                 {fromIdNum && fromBranchStock !== null ? (
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/[0.04] border border-white/10">
-                    <Package className="w-4 h-4 text-white/40" />
-                    <span className="text-xs text-white/55">
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border border-slate-200 dark:border-slate-200 dark:dark:border-white/10">
+                    <Package className="w-4 h-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" />
+                    <span className="text-xs text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                       مخزون المرسل{" "}
                       {stockIsPointInTime ? "بتاريخ التحويل" : "الحالي"}:
                     </span>
                     <span
-                      className={`text-sm font-bold ${fromBranchStock > 0 ? "text-emerald-300" : "text-red-300"}`}
+                      className={`text-sm font-bold ${fromBranchStock > 0 ? "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-300" : "text-red-700 dark:text-red-700 dark:dark:text-red-300"}`}
                     >
                       {fromBranchStock}
                     </span>
                   </div>
                 ) : null}
                 {toIdNum && toBranchStock !== null ? (
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/[0.04] border border-white/10">
-                    <Package className="w-4 h-4 text-white/40" />
-                    <span className="text-xs text-white/55">
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border border-slate-200 dark:border-slate-200 dark:dark:border-white/10">
+                    <Package className="w-4 h-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/40" />
+                    <span className="text-xs text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
                       مخزون المستقبل{" "}
                       {stockIsPointInTime ? "بتاريخ التحويل" : "الحالي"}:
                     </span>
                     <span
-                      className={`text-sm font-bold ${toBranchStock > 0 ? "text-emerald-300" : "text-amber-300"}`}
+                      className={`text-sm font-bold ${toBranchStock > 0 ? "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-300" : "text-amber-700 dark:text-amber-700 dark:dark:text-amber-300"}`}
                     >
                       {toBranchStock}
                     </span>
                   </div>
                 ) : null}
                 {stockAtQuery.isFetching ? (
-                  <span className="text-[11px] text-white/40">
+                  <span className="text-[11px] text-slate-500 dark:text-slate-500 dark:dark:text-white/40">
                     تحديث الرصيد…
                   </span>
                 ) : null}
@@ -535,7 +535,7 @@ export default function TransferModal({ branches, onClose }) {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-white/55 mb-2">
+            <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2">
               ملاحظة (اختياري)
             </label>
             <textarea
@@ -549,12 +549,12 @@ export default function TransferModal({ branches, onClose }) {
 
           <div className={`${ws.glassSoft} ${ws.card} p-4`}>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-white font-bold">الأصناف المحددة</h4>
+              <h4 className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold">الأصناف المحددة</h4>
               <span className={`${ws.chip}`}>{items.length} صنف</span>
             </div>
 
             {items.length === 0 ? (
-              <div className="text-white/50 text-sm">
+              <div className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 text-sm">
                 ما تم اختيار أصناف بعد
               </div>
             ) : (
@@ -564,7 +564,7 @@ export default function TransferModal({ branches, onClose }) {
                   const pct =
                     stock > 0 ? Math.round((it.quantity / stock) * 100) : 100;
                   const isHigh = pct >= 80;
-                  const pctColor = isHigh ? "text-red-300" : "text-emerald-300";
+                  const pctColor = isHigh ? "text-red-700 dark:text-red-700 dark:dark:text-red-300" : "text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-300";
                   const barColor = isHigh
                     ? "bg-red-400/60"
                     : "bg-emerald-400/60";
@@ -572,17 +572,17 @@ export default function TransferModal({ branches, onClose }) {
                   return (
                     <div
                       key={it.itemId}
-                      className="p-3 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2"
+                      className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 space-y-2"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
-                          <div className="text-white font-semibold truncate">
+                          <div className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold truncate">
                             {it.itemName}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <span
-                            className={`${ws.pill} bg-white/[0.06] text-white border-white/10`}
+                            className={`${ws.pill} bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.06] text-slate-900 dark:text-slate-900 dark:dark:text-white border-slate-200 dark:border-slate-200 dark:dark:border-white/10`}
                           >
                             {it.quantity}
                           </span>
@@ -598,7 +598,7 @@ export default function TransferModal({ branches, onClose }) {
                       </div>
                       {/* Stock usage bar */}
                       <div className="flex items-center gap-3">
-                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all ${barColor}`}
                             style={{ width: `${Math.min(pct, 100)}%` }}

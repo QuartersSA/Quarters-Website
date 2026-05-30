@@ -59,7 +59,7 @@ export function HRBonusesTable({ bonuses, isLoading, onEdit, onDelete }) {
           <col style={{ width: 120 }} />
         </colgroup>
         <thead>
-          <tr className="text-white/70 border-b border-white/10">
+          <tr className="text-slate-700 dark:text-white/70 border-b border-slate-200 dark:border-white/10">
             {headerCells.map((h) => (
               <th
                 key={h}
@@ -80,7 +80,7 @@ export function HRBonusesTable({ bonuses, isLoading, onEdit, onDelete }) {
       <tr>
         <td
           colSpan={headerCells.length}
-          className="px-6 py-12 text-center text-white/55"
+          className="px-6 py-12 text-center text-slate-600 dark:text-white/55"
         >
           جاري التحميل…
         </td>
@@ -93,7 +93,7 @@ export function HRBonusesTable({ bonuses, isLoading, onEdit, onDelete }) {
       <tr>
         <td
           colSpan={headerCells.length}
-          className="px-6 py-12 text-center text-white/45"
+          className="px-6 py-12 text-center text-slate-500 dark:text-white/45"
         >
           <Users className="w-12 h-12 mx-auto mb-3 opacity-40" />
           <p>لا يوجد بونص</p>
@@ -120,22 +120,22 @@ export function HRBonusesTable({ bonuses, isLoading, onEdit, onDelete }) {
 
       const amountNode = percentValue ? (
         <span className="inline-flex items-center gap-2">
-          <span className="text-white/70">{percentValue}</span>
-          <span className="text-white/35">→</span>
-          <span className="text-emerald-200 font-semibold">{amountValue}</span>
+          <span className="text-slate-700 dark:text-white/70">{percentValue}</span>
+          <span className="text-slate-400 dark:text-white/35">→</span>
+          <span className="text-emerald-700 dark:text-emerald-200 font-semibold">{amountValue}</span>
         </span>
       ) : (
-        <span className="text-emerald-200 font-semibold">{amountValue}</span>
+        <span className="text-emerald-700 dark:text-emerald-200 font-semibold">{amountValue}</span>
       );
 
       return (
         <tr
           key={b.id}
-          className="border-t border-white/10 hover:bg-white/[0.04]"
+          className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]"
         >
-          <td className="py-3 px-3 font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis">
+          <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
             <div className="flex items-center gap-3 min-w-0">
-              <div className={`${ws.iconBox} w-9 h-9 text-white/85 shrink-0`}>
+              <div className={`${ws.iconBox} w-9 h-9 text-slate-800 dark:text-white/85 shrink-0`}>
                 <Gift className="w-5 h-5" />
               </div>
               <span className="truncate">{employeeName}</span>
@@ -143,7 +143,7 @@ export function HRBonusesTable({ bonuses, isLoading, onEdit, onDelete }) {
           </td>
 
           <td
-            className="py-3 px-3 text-white/70 whitespace-nowrap text-right"
+            className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap text-right"
             dir="ltr"
           >
             {monthValue}
@@ -153,7 +153,7 @@ export function HRBonusesTable({ bonuses, isLoading, onEdit, onDelete }) {
             {amountNode}
           </td>
 
-          <td className="py-3 px-3 text-white/70 whitespace-nowrap overflow-hidden text-ellipsis">
+          <td className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap overflow-hidden text-ellipsis">
             {sourceValue}
           </td>
 
@@ -162,7 +162,7 @@ export function HRBonusesTable({ bonuses, isLoading, onEdit, onDelete }) {
               <button
                 type="button"
                 onClick={() => onEdit?.(b)}
-                className={`${ws.iconButton} text-sky-200`}
+                className={`${ws.iconButton} text-sky-700 dark:text-sky-200`}
                 aria-label="تعديل"
               >
                 <Pencil className="w-4 h-4" />
@@ -170,7 +170,7 @@ export function HRBonusesTable({ bonuses, isLoading, onEdit, onDelete }) {
               <button
                 type="button"
                 onClick={() => onDelete?.(b.id)}
-                className={`${ws.iconButton} text-red-200`}
+                className={`${ws.iconButton} text-red-700 dark:text-red-200`}
                 aria-label="حذف"
               >
                 <Trash2 className="w-4 h-4" />

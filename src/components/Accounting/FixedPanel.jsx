@@ -184,33 +184,33 @@ export default function FixedPanel({
         <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
           <div className="flex items-center gap-3">
             <div className={ws.iconBox}>
-              <Anchor className="w-5 h-5 text-emerald-200" />
+              <Anchor className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div>
-              <div className="font-bold text-white tracking-tight">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                 المصروفات الثابتة
               </div>
-              <div className="text-xs text-white/55 mt-0.5">
+              <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5">
                 {monthLabel(month)} — أدخلها مرة، حدّد «تم السداد» كل شهر
               </div>
             </div>
           </div>
           <div className="flex items-center gap-4 text-xs flex-wrap">
             <div>
-              <span className="text-white/55">الإجمالي: </span>
-              <span className="text-white font-bold" dir="ltr">
+              <span className="text-slate-600 dark:text-white/55">الإجمالي: </span>
+              <span className="text-slate-900 dark:text-white font-bold" dir="ltr">
                 {formatMoney(totals.total)}
               </span>
             </div>
             <div>
-              <span className="text-white/55">مؤكد: </span>
-              <span className="text-emerald-200 font-bold" dir="ltr">
+              <span className="text-slate-600 dark:text-white/55">مؤكد: </span>
+              <span className="text-emerald-700 dark:text-emerald-200 font-bold" dir="ltr">
                 {formatMoney(totals.paid)}
               </span>
             </div>
             <div>
-              <span className="text-white/55">بانتظار: </span>
-              <span className="text-amber-200 font-bold" dir="ltr">
+              <span className="text-slate-600 dark:text-white/55">بانتظار: </span>
+              <span className="text-amber-700 dark:text-amber-200 font-bold" dir="ltr">
                 {formatMoney(totals.pending)}
               </span>
             </div>
@@ -226,33 +226,33 @@ export default function FixedPanel({
         </div>
 
         {templates.length === 0 ? (
-          <div className="text-white/55 text-sm text-center py-6">
+          <div className="text-slate-600 dark:text-white/55 text-sm text-center py-6">
             لا توجد قوالب ثابتة بعد. أضف قالباً لتعرضه هنا كل شهر.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-white/[0.04]">
-                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                <tr className="bg-slate-100 dark:bg-white/[0.04]">
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     البند
                   </th>
-                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     التصنيف
                   </th>
-                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     التكرار
                   </th>
-                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     الشهري (الإجمالي)
                   </th>
-                  <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+                  <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     مبلغ الشهر
                   </th>
-                  <th className="text-center px-3 py-2 text-xs font-semibold text-white/55">
+                  <th className="text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     تم السداد
                   </th>
-                  <th className="text-center px-3 py-2 text-xs font-semibold text-white/55">
+                  <th className="text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                     إجراءات
                   </th>
                 </tr>
@@ -264,12 +264,12 @@ export default function FixedPanel({
                   return (
                     <tr
                       key={t.id}
-                      className="border-t border-white/5 hover:bg-white/[0.02]"
+                      className="border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02]"
                     >
-                      <td className="px-3 py-2 text-white text-sm font-medium">
+                      <td className="px-3 py-2 text-slate-900 dark:text-white text-sm font-medium">
                         {t.expense_name}
                       </td>
-                      <td className="px-3 py-2 text-white/70 text-xs">
+                      <td className="px-3 py-2 text-slate-700 dark:text-white/70 text-xs">
                         {t.expense_type_name}
                       </td>
                       <td className="px-3 py-2 text-xs">
@@ -277,27 +277,27 @@ export default function FixedPanel({
                         {(() => {
                           const m = toMonthString(t.start_month);
                           return m ? (
-                            <div className="text-white/40 text-[10px] mt-0.5" dir="ltr">
+                            <div className="text-slate-500 dark:text-white/40 text-[10px] mt-0.5" dir="ltr">
                               من {m}
                             </div>
                           ) : null;
                         })()}
                       </td>
                       <td className="px-3 py-2 text-sm" dir="ltr">
-                        <div className="text-white font-semibold">
+                        <div className="text-slate-900 dark:text-white font-semibold">
                           {formatMoney(
                             perMonthAmount(t.default_amount, t.frequency),
                           )}
                         </div>
                         {(FREQ_CYCLE_MONTHS[t.frequency] || 1) > 1 ? (
-                          <div className="text-white/40 text-[10px] mt-0.5">
+                          <div className="text-slate-500 dark:text-white/40 text-[10px] mt-0.5">
                             إجمالي: {formatMoney(t.default_amount)}
                           </div>
                         ) : null}
                       </td>
                       <td className="px-3 py-2">
                         {paid ? (
-                          <span className="text-emerald-200 font-bold" dir="ltr">
+                          <span className="text-emerald-700 dark:text-emerald-200 font-bold" dir="ltr">
                             {formatMoney(paidInfo.amount)}
                           </span>
                         ) : (
@@ -327,8 +327,8 @@ export default function FixedPanel({
                           disabled={togglePaidMut.isPending}
                           className={`${
                             paid
-                              ? "text-emerald-200 hover:text-emerald-100"
-                              : "text-white/40 hover:text-white/70"
+                              ? "text-emerald-700 dark:text-emerald-200 hover:text-emerald-100"
+                              : "text-slate-500 dark:text-white/40 hover:text-slate-700 dark:hover:text-white/70"
                           } disabled:opacity-50 inline-flex`}
                           title={paid ? "إلغاء السداد" : "تعليم تم السداد"}
                         >
@@ -426,10 +426,10 @@ const FREQ_LABEL = {
 };
 
 const FREQ_BADGE = {
-  monthly: "bg-emerald-500/15 text-emerald-200 border-emerald-500/25",
-  quarterly: "bg-pink-500/15 text-pink-200 border-pink-500/25",
-  semi_annual: "bg-amber-500/15 text-amber-200 border-amber-500/25",
-  annual: "bg-sky-500/15 text-sky-200 border-sky-500/25",
+  monthly: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25",
+  quarterly: "bg-pink-500/15 text-pink-700 dark:text-pink-200 border-pink-500/25",
+  semi_annual: "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25",
+  annual: "bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-500/25",
 };
 
 const FREQ_CYCLE_MONTHS = {
@@ -529,7 +529,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
         className={`w-full max-w-md ${ws.glass} ${ws.card} p-5 space-y-4`}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-white font-bold tracking-tight">
+          <h3 className="text-slate-900 dark:text-white font-bold tracking-tight">
             {target ? "تعديل القالب" : "إضافة قالب ثابت"}
           </h3>
           <button
@@ -543,7 +543,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
+          <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
             اسم البند *
           </label>
           <input
@@ -559,7 +559,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
+          <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
             التصنيف *
           </label>
           <GlassSelect
@@ -568,14 +568,14 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             options={typeOptions}
             buttonClassName="px-3 py-2.5"
           />
-          <p className="text-[10px] text-white/45 mt-1.5 leading-relaxed">
+          <p className="text-[10px] text-slate-500 dark:text-white/45 mt-1.5 leading-relaxed">
             البند العام الذي ينتمي إليه هذا القالب — مثل «إيجار»،
             «كهرباء»، «اشتراك». يستخدم في تجميع المصاريف للتقارير.
           </p>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
+          <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
             إجمالي المبلغ للدورة *
           </label>
           <input
@@ -591,9 +591,9 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             dir="ltr"
           />
           {form.default_amount && form.frequency !== "monthly" ? (
-            <p className="text-[10px] text-white/55 mt-1.5">
+            <p className="text-[10px] text-slate-600 dark:text-white/55 mt-1.5">
               ينقسم إلى{" "}
-              <span className="text-emerald-200 font-bold" dir="ltr">
+              <span className="text-emerald-700 dark:text-emerald-200 font-bold" dir="ltr">
                 {perMonthAmount(form.default_amount, form.frequency)}
               </span>{" "}
               ر.س شهرياً (×{FREQ_CYCLE_MONTHS[form.frequency] || 1})
@@ -603,7 +603,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-white/55 mb-2">
+            <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
               التكرار *
             </label>
             <GlassSelect
@@ -614,7 +614,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-white/55 mb-2">
+            <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
               شهر البدء
             </label>
             <GlassSelect
@@ -626,7 +626,7 @@ function FixedFormModal({ target, types, onClose, onSubmit, isPending }) {
             />
           </div>
         </div>
-        <p className="text-[10px] text-white/45 leading-relaxed">
+        <p className="text-[10px] text-slate-500 dark:text-white/45 leading-relaxed">
           المبلغ الإجمالي ينقسم على شهور الدورة ويظهر كل شهر بدءاً من «شهر
           البدء». «شهري» × 1، «ربع سنوي» × 3، «نصف سنوي» × 6، «سنوي» × 12.
           اترك شهر البدء فارغاً لـ«من البداية دائماً».

@@ -211,10 +211,10 @@ export default function HRDeductionsPage() {
         dir="rtl"
       >
         <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full`}>
-          <div className="text-white font-bold text-lg mb-2">
+          <div className="text-slate-900 dark:text-white font-bold text-lg mb-2">
             جاري التحقق من الصلاحيات…
           </div>
-          <div className="text-white/60 text-sm leading-relaxed">لحظات.</div>
+          <div className="text-slate-600 dark:text-white/60 text-sm leading-relaxed">لحظات.</div>
         </div>
       </div>
     );
@@ -237,8 +237,8 @@ export default function HRDeductionsPage() {
         dir="rtl"
       >
         <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full`}>
-          <div className="text-white font-bold text-lg mb-2">{title}</div>
-          <div className="text-white/60 text-sm leading-relaxed">{body}</div>
+          <div className="text-slate-900 dark:text-white font-bold text-lg mb-2">{title}</div>
+          <div className="text-slate-600 dark:text-white/60 text-sm leading-relaxed">{body}</div>
           <div className="mt-4 flex flex-col sm:flex-row gap-2">
             <a
               href="/admin/login"
@@ -458,7 +458,7 @@ export default function HRDeductionsPage() {
             <h1
               className={`text-3xl sm:text-4xl ${ws.title} mb-2 flex items-center gap-3`}
             >
-              <DollarSign className="w-8 h-8 sm:w-10 sm:h-10 text-amber-200" />
+              <DollarSign className="w-8 h-8 sm:w-10 sm:h-10 text-amber-700 dark:text-amber-200" />
               الخصميات
             </h1>
             <p className={ws.muted}>تسجيل خصميات ومخالفات الموظفين</p>
@@ -505,7 +505,7 @@ export default function HRDeductionsPage() {
 
         <div className="flex flex-col lg:flex-row gap-4 mb-6">
           <div className={`${ws.glassSoft} ${ws.card} p-4 w-full lg:w-[380px]`}>
-            <div className="text-white/70 text-sm font-semibold mb-2">
+            <div className="text-slate-700 dark:text-white/70 text-sm font-semibold mb-2">
               فلتر حسب الموظف
             </div>
 
@@ -519,7 +519,7 @@ export default function HRDeductionsPage() {
           </div>
 
           <div className={`${ws.glassSoft} ${ws.card} p-4 w-full lg:w-[380px]`}>
-            <div className="text-white/70 text-sm font-semibold mb-2">
+            <div className="text-slate-700 dark:text-white/70 text-sm font-semibold mb-2">
               فلتر حسب الشهر
             </div>
 
@@ -546,10 +546,10 @@ export default function HRDeductionsPage() {
           <div className={`${ws.glassSoft} ${ws.card} p-4 mt-4`}>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <div className="text-white font-bold">
+                <div className="text-slate-900 dark:text-white font-bold">
                   إرسال مسير الرواتب
                 </div>
-                <div className="text-white/60 text-sm">
+                <div className="text-slate-600 dark:text-white/60 text-sm">
                   تم نقل زر «إرسال إلى المحاسبة» إلى صفحة مسير الرواتب
                   المستقلة. افتحها لمراجعة المسير ثم الإرسال.
                 </div>

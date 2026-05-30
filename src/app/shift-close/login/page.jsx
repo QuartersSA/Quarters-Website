@@ -592,7 +592,7 @@ export default function ShiftCloseLoginPage() {
   if (stage === "checking") {
     return (
       <div
-        className={`min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`}
+        className={`dark min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`}
         dir={dir}
       >
         <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
@@ -609,7 +609,7 @@ export default function ShiftCloseLoginPage() {
 
     return (
       <div
-        className={`min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`}
+        className={`dark min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`}
         dir={dir}
       >
         <div className="w-full max-w-md">
@@ -746,7 +746,7 @@ export default function ShiftCloseLoginPage() {
   const cardShell = `${ws.glass} ${ws.card} p-6 sm:p-7`;
 
   return (
-    <div className={`min-h-[100svh] px-4 py-8 ${ws.appBg}`} dir={dir}>
+    <div className={`dark min-h-[100svh] px-4 py-8 ${ws.appBg}`} dir={dir}>
       <div className="mx-auto w-full max-w-3xl space-y-5">
         {languagePicker}
 

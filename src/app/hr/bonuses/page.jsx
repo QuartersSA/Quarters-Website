@@ -27,10 +27,10 @@ export default function HRBonusesPage() {
         dir="rtl"
       >
         <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full`}>
-          <div className="text-white font-bold text-lg mb-2">
+          <div className="text-slate-900 dark:text-white font-bold text-lg mb-2">
             جاري التحقق من الصلاحيات…
           </div>
-          <div className="text-white/60 text-sm leading-relaxed">لحظات.</div>
+          <div className="text-slate-600 dark:text-white/60 text-sm leading-relaxed">لحظات.</div>
         </div>
       </div>
     );
@@ -53,11 +53,11 @@ export default function HRBonusesPage() {
         <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full`}>
           <div className="flex items-center gap-3">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <Gift className="w-5 h-5 text-emerald-200" />
+              <Gift className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
-            <div className="text-white font-bold text-lg">{title}</div>
+            <div className="text-slate-900 dark:text-white font-bold text-lg">{title}</div>
           </div>
-          <div className="text-white/60 text-sm leading-relaxed mt-3">
+          <div className="text-slate-600 dark:text-white/60 text-sm leading-relaxed mt-3">
             {body}
           </div>
 
@@ -91,12 +91,12 @@ export default function HRBonusesPage() {
     >
       <div className={`${ws.glass} ${ws.card} p-6 max-w-lg w-full text-center`}>
         <div className={`${ws.iconBox} w-12 h-12 mx-auto`}>
-          <Gift className="w-6 h-6 text-emerald-200" />
+          <Gift className="w-6 h-6 text-emerald-700 dark:text-emerald-200" />
         </div>
-        <div className="text-white font-bold text-lg mt-3">
+        <div className="text-slate-900 dark:text-white font-bold text-lg mt-3">
           جاري التحويل إلى مسير الرواتب…
         </div>
-        <div className="text-white/60 text-sm mt-1">
+        <div className="text-slate-600 dark:text-white/60 text-sm mt-1">
           إدارة البونص أصبحت داخل المحاسبة.
         </div>
       </div>

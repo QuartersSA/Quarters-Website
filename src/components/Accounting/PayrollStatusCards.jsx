@@ -3,7 +3,7 @@ import { ws } from "@/components/Workspace/ui";
 
 export function MonthEmptyCard() {
   return (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       اختر الشهر لعرض المسير.
       <div className="mt-3">
         <a
@@ -19,7 +19,7 @@ export function MonthEmptyCard() {
 
 export function LoadingCard() {
   return (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       جاري التحميل…
     </div>
   );
@@ -27,7 +27,7 @@ export function LoadingCard() {
 
 export function ErrorCard({ message }) {
   return (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-red-300`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-red-700 dark:text-red-300`}>
       {message}
     </div>
   );
@@ -36,9 +36,9 @@ export function ErrorCard({ message }) {
 export function NoRunCard({ monthHint, onRebuild, isRebuilding }) {
   return (
     <>
-      <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+      <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
         لا يوجد مسير محفوظ لهذا الشهر ({monthHint}).
-        <div className="text-white/50 text-sm mt-2">
+        <div className="text-slate-500 dark:text-white/50 text-sm mt-2">
           اضغط "تحديث مسير الرواتب" من الأسفل لإنشاء المسير لهذا الشهر.
         </div>
       </div>
@@ -61,7 +61,7 @@ export function NoRunCard({ monthHint, onRebuild, isRebuilding }) {
 
 export function LoginCard() {
   return (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       لازم تسجيل دخول الإدارة أولًا.
       <div className="mt-2">
         <a
@@ -77,7 +77,7 @@ export function LoginCard() {
 
 export function NotAccountingCard() {
   return (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       هذه الصفحة للمحاسبة فقط.
     </div>
   );

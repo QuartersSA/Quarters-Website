@@ -273,7 +273,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
 
   if (templatesQuery.isLoading) {
     return (
-      <div className={`${ws.glass} ${ws.card} p-5 text-white/55 text-sm text-center py-6`}>
+      <div className={`${ws.glass} ${ws.card} p-5 text-slate-600 dark:text-white/55 text-sm text-center py-6`}>
         جاري التحميل…
       </div>
     );
@@ -284,7 +284,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
       <>
         <div className={`${ws.glass} ${ws.card} p-5`}>
           <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div className="text-white/55 text-sm">
+            <div className="text-slate-600 dark:text-white/55 text-sm">
               لا توجد قوالب متغيرة بعد. أضف أول قالب للبدء.
             </div>
             {addCta}
@@ -300,33 +300,33 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
       <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className={ws.iconBox}>
-            <Receipt className="w-5 h-5 text-emerald-200" />
+            <Receipt className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
           </div>
           <div>
-            <div className="font-bold text-white tracking-tight">
+            <div className="font-bold text-slate-900 dark:text-white tracking-tight">
               المصروفات المتغيرة
             </div>
-            <div className="text-xs text-white/55 mt-0.5">
+            <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5">
               {monthLabel(month)} — القوالب موحّدة كل شهر، يتغيّر المبلغ فقط
             </div>
           </div>
         </div>
         <div className="flex items-center gap-4 text-xs flex-wrap">
           <div>
-            <span className="text-white/55">الإجمالي: </span>
-            <span className="text-white font-bold" dir="ltr">
+            <span className="text-slate-600 dark:text-white/55">الإجمالي: </span>
+            <span className="text-slate-900 dark:text-white font-bold" dir="ltr">
               {formatMoney(totals.total)}
             </span>
           </div>
           <div>
-            <span className="text-white/55">مؤكد: </span>
-            <span className="text-emerald-200 font-bold" dir="ltr">
+            <span className="text-slate-600 dark:text-white/55">مؤكد: </span>
+            <span className="text-emerald-700 dark:text-emerald-200 font-bold" dir="ltr">
               {formatMoney(totals.paid)}
             </span>
           </div>
           <div>
-            <span className="text-white/55">بانتظار: </span>
-            <span className="text-amber-200 font-bold" dir="ltr">
+            <span className="text-slate-600 dark:text-white/55">بانتظار: </span>
+            <span className="text-amber-700 dark:text-amber-200 font-bold" dir="ltr">
               {formatMoney(totals.pending)}
             </span>
           </div>
@@ -337,20 +337,20 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-white/[0.04]">
-              <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+            <tr className="bg-slate-100 dark:bg-white/[0.04]">
+              <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                 البند
               </th>
-              <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+              <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                 التصنيف
               </th>
-              <th className="text-right px-3 py-2 text-xs font-semibold text-white/55">
+              <th className="text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                 المبلغ
               </th>
-              <th className="text-center px-3 py-2 text-xs font-semibold text-white/55">
+              <th className="text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                 الحالة
               </th>
-              <th className="text-center px-3 py-2 text-xs font-semibold text-white/55">
+              <th className="text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55">
                 إجراء
               </th>
             </tr>
@@ -362,14 +362,14 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
               return (
                 <tr
                   key={t.id}
-                  className="border-t border-white/5 hover:bg-white/[0.02]"
+                  className="border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02]"
                 >
                   <td className="px-3 py-2">
-                    <div className="text-white text-sm font-medium">
+                    <div className="text-slate-900 dark:text-white text-sm font-medium">
                       {t.name}
                     </div>
                   </td>
-                  <td className="px-3 py-2 text-white/70 text-xs">
+                  <td className="px-3 py-2 text-slate-700 dark:text-white/70 text-xs">
                     {t.expense_type_name}
                   </td>
                   <td className="px-3 py-2">
@@ -400,14 +400,14 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
                   </td>
                   <td className="px-3 py-2 text-center">
                     {confirmed ? (
-                      <span className="inline-flex items-center gap-1 text-xs text-emerald-200">
+                      <span className="inline-flex items-center gap-1 text-xs text-emerald-700 dark:text-emerald-200">
                         <CheckCircle2 className="w-3 h-3" />
                         مؤكد
                       </span>
                     ) : row ? (
-                      <span className="text-xs text-amber-200">بانتظار</span>
+                      <span className="text-xs text-amber-700 dark:text-amber-200">بانتظار</span>
                     ) : (
-                      <span className="text-xs text-white/35">—</span>
+                      <span className="text-xs text-slate-400 dark:text-white/35">—</span>
                     )}
                   </td>
                   <td className="px-3 py-2 text-center">
@@ -568,7 +568,7 @@ function VariableTemplateModal({
         className={`w-full max-w-md ${ws.glass} ${ws.card} p-5 space-y-4`}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-white font-bold tracking-tight">
+          <h3 className="text-slate-900 dark:text-white font-bold tracking-tight">
             {target ? "تعديل قالب متغيّر" : "إضافة قالب متغيّر"}
           </h3>
           <button
@@ -582,7 +582,7 @@ function VariableTemplateModal({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
+          <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
             اسم البند *
           </label>
           <input
@@ -597,7 +597,7 @@ function VariableTemplateModal({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
+          <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
             التصنيف *
           </label>
           <GlassSelect
@@ -606,13 +606,13 @@ function VariableTemplateModal({
             options={typeOptions}
             buttonClassName="px-3 py-2.5"
           />
-          <p className="text-[10px] text-white/45 mt-1.5">
+          <p className="text-[10px] text-slate-500 dark:text-white/45 mt-1.5">
             البنود المعروضة هنا فقط من التصنيفات المرتبطة بـ«مصروف متغيّر».
           </p>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-white/55 mb-2">
+          <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
             إجمالي المبلغ المتوقع
           </label>
           <input
@@ -626,19 +626,19 @@ function VariableTemplateModal({
             placeholder="0"
           />
           {historyHint ? (
-            <p className="text-[10px] text-emerald-200/80 mt-1.5">
+            <p className="text-[10px] text-emerald-700 dark:text-emerald-200/80 mt-1.5">
               تمت تعبئته من شهر{" "}
               <span dir="ltr">{historyHint.month}</span> (
               <span dir="ltr">{formatMoney(historyHint.amount)}</span>)
             </p>
           ) : (
-            <p className="text-[10px] text-white/45 mt-1.5">
+            <p className="text-[10px] text-slate-500 dark:text-white/45 mt-1.5">
               يستخدم كقيمة افتراضية كل شهر — يمكن تغييرها لاحقاً.
             </p>
           )}
         </div>
 
-        <p className="text-[10px] text-white/45 leading-relaxed">
+        <p className="text-[10px] text-slate-500 dark:text-white/45 leading-relaxed">
           القالب يتكرر كل شهر في قائمة المصروفات المتغيرة. تعديل المبلغ
           الشهري لا يؤثر على الأشهر الماضية.
         </p>

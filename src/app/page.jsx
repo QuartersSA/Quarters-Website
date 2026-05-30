@@ -130,7 +130,7 @@ export default function HomePage() {
 
   return (
     <div
-      className="min-h-[100svh] flex items-center justify-center px-4 py-10"
+      className={`dark min-h-[100svh] flex items-center justify-center px-4 py-10 ${ws.appBg}`}
       dir={dir}
     >
       <div className="w-full max-w-5xl">

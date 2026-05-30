@@ -115,7 +115,7 @@ export default function GlassMultiSelect({
         aria-expanded={open}
       >
         <span
-          className={`min-w-0 truncate ${selectedLabels.length ? "text-white" : "text-white/45"}`}
+          className={`min-w-0 truncate ${selectedLabels.length ? "text-slate-900 dark:text-slate-900 dark:dark:text-white" : "text-slate-500 dark:text-slate-500 dark:dark:text-white/45"}`}
         >
           {label}
         </span>
@@ -137,7 +137,7 @@ export default function GlassMultiSelect({
                   clearAll();
                 }
               }}
-              className="p-1 rounded-md hover:bg-white/10 text-white/60"
+              className="p-1 rounded-md hover:bg-slate-200 dark:hover:bg-slate-200 dark:dark:hover:bg-white/10 text-slate-600 dark:text-slate-600 dark:dark:text-white/60"
               aria-label="مسح"
               title="مسح"
             >
@@ -145,7 +145,7 @@ export default function GlassMultiSelect({
             </span>
           ) : null}
           <ChevronDown
-            className={`w-4 h-4 ${open ? "text-white" : "text-white/60"}`}
+            className={`w-4 h-4 ${open ? "text-slate-900 dark:text-slate-900 dark:dark:text-white" : "text-slate-600 dark:text-slate-600 dark:dark:text-white/60"}`}
           />
         </span>
       </button>
@@ -154,18 +154,18 @@ export default function GlassMultiSelect({
         open={open}
         anchorRef={btnRef}
         onClose={() => setOpen(false)}
-        className={`border border-white/15 ${menuClassName}`}
+        className={`border border-slate-200 dark:border-slate-200 dark:dark:border-white/15 ${menuClassName}`}
       >
         <div className="max-h-[50vh] overflow-auto">
-          <div className="px-4 py-2 border-b border-white/10 flex items-center justify-between gap-3">
-            <div className="text-xs font-semibold text-white/55">
+          <div className="px-4 py-2 border-b border-slate-200 dark:border-slate-200 dark:dark:border-white/10 flex items-center justify-between gap-3">
+            <div className="text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
               اختيار متعدد
             </div>
             <button
               type="button"
               onClick={clearAll}
               disabled={disabled || selectedLabels.length === 0}
-              className="text-xs text-white/70 hover:text-white disabled:opacity-40"
+              className="text-xs text-slate-700 dark:text-slate-700 dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-white disabled:opacity-40"
             >
               مسح الكل
             </button>
@@ -176,7 +176,7 @@ export default function GlassMultiSelect({
               return (
                 <div
                   key={`group-${o.value}-${o.label}`}
-                  className="px-4 py-2 text-xs font-bold text-white/45 border-t border-white/10 first:border-t-0"
+                  className="px-4 py-2 text-xs font-bold text-slate-500 dark:text-slate-500 dark:dark:text-white/45 border-t border-slate-200 dark:border-slate-200 dark:dark:border-white/10 first:border-t-0"
                   role="presentation"
                 >
                   {o.label}
@@ -188,10 +188,10 @@ export default function GlassMultiSelect({
             const rowBase = `w-full flex items-center justify-between gap-3 px-4 py-3 ${textAlignClass} transition-colors`;
 
             const rowClass = o.disabled
-              ? "text-white/30 cursor-not-allowed"
+              ? "text-slate-400 dark:text-slate-400 dark:dark:text-white/30 cursor-not-allowed"
               : active
-                ? "bg-white/10 text-white"
-                : "text-white/80 hover:bg-white/[0.06]";
+                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-white"
+                : "text-slate-800 dark:text-white/80 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06]";
 
             return (
               <button
@@ -205,7 +205,7 @@ export default function GlassMultiSelect({
               >
                 <span className="min-w-0 truncate">{o.label}</span>
                 {active ? (
-                  <Check className="w-4 h-4 text-emerald-200 flex-shrink-0" />
+                  <Check className="w-4 h-4 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200 flex-shrink-0" />
                 ) : (
                   <span className="w-4 h-4 flex-shrink-0" />
                 )}

@@ -6,10 +6,10 @@ export function PayrollFilters({ month, monthOptions, onMonthChange }) {
     <div className={`${ws.glassSoft} ${ws.card} p-5`}>
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <div className="font-bold text-white tracking-tight">
+          <div className="font-bold text-slate-900 dark:text-white tracking-tight">
             فلترة مسير الرواتب
           </div>
-          <div className="text-xs text-white/50 mt-1">
+          <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
             اختر الشهر لرؤية النتائج
           </div>
         </div>

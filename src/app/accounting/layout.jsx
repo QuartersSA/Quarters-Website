@@ -10,6 +10,14 @@ const BRAND_LOGO_URL =
 export default function AccountingLayout({ children }) {
   const { ready, isAuthenticated, user } = useWorkspaceUser();
 
+  // Force dark for Accounting — only the admin section exposes the
+  // light toggle. Mirrors the workspace + HR layouts.
+  React.useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
   React.useEffect(() => {
     if (!ready) return;
 
@@ -39,14 +47,14 @@ export default function AccountingLayout({ children }) {
 
     return (
       <div
-        className={`relative min-h-[100svh] ${ws.appBg} flex items-center justify-center p-6`}
+        className={`dark relative min-h-[100svh] ${ws.appBg} flex items-center justify-center p-6`}
         dir="rtl"
       >
         {Background}
         <div className="relative w-full max-w-md">
           <div className={`${ws.glass} rounded-3xl p-6`}>
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center overflow-hidden border border-white/10">
+              <div className="w-14 h-14 rounded-2xl bg-slate-200 dark:bg-white/10 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-white/10">
                 <img
                   src={BRAND_LOGO_URL}
                   alt="Logo"
@@ -54,10 +62,10 @@ export default function AccountingLayout({ children }) {
                 />
               </div>
               <div className="min-w-0">
-                <div className="text-white font-bold text-lg tracking-tight">
+                <div className="text-slate-900 dark:text-white font-bold text-lg tracking-tight">
                   المحاسبة
                 </div>
-                <div className="text-white/70 text-sm truncate">
+                <div className="text-slate-700 dark:text-white/70 text-sm truncate">
                   {name ? `مرحباً ${name}` : "جاري التحميل…"}
                 </div>
               </div>
@@ -65,7 +73,7 @@ export default function AccountingLayout({ children }) {
 
             <div className="mt-5 flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-emerald-400" />
-              <div className="text-white/70 text-sm">نجهّز الصفحة…</div>
+              <div className="text-slate-700 dark:text-white/70 text-sm">نجهّز الصفحة…</div>
             </div>
           </div>
         </div>

@@ -52,11 +52,11 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-white/[0.04]">
+              <tr className="bg-slate-100 dark:bg-white/[0.04]">
                 {headerCells.map((h) => (
                   <th
                     key={h}
-                    className="text-right px-5 py-4 text-sm font-semibold text-white/55 whitespace-nowrap"
+                    className="text-right px-5 py-4 text-sm font-semibold text-slate-600 dark:text-white/55 whitespace-nowrap"
                   >
                     {h}
                   </th>
@@ -67,7 +67,7 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
               <tr>
                 <td
                   colSpan={headerCells.length}
-                  className="px-6 py-12 text-center text-white/55"
+                  className="px-6 py-12 text-center text-slate-600 dark:text-white/55"
                 >
                   جاري التحميل…
                 </td>
@@ -85,11 +85,11 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-white/[0.04]">
+              <tr className="bg-slate-100 dark:bg-white/[0.04]">
                 {headerCells.map((h) => (
                   <th
                     key={h}
-                    className="text-right px-5 py-4 text-sm font-semibold text-white/55 whitespace-nowrap"
+                    className="text-right px-5 py-4 text-sm font-semibold text-slate-600 dark:text-white/55 whitespace-nowrap"
                   >
                     {h}
                   </th>
@@ -100,7 +100,7 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
               <tr>
                 <td
                   colSpan={headerCells.length}
-                  className="px-6 py-12 text-center text-white/45"
+                  className="px-6 py-12 text-center text-slate-500 dark:text-white/45"
                 >
                   <Users className="w-12 h-12 mx-auto mb-3 opacity-40" />
                   <p>لا يوجد خصميات</p>
@@ -118,11 +118,11 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-white/[0.04]">
+            <tr className="bg-slate-100 dark:bg-white/[0.04]">
               {headerCells.map((h) => (
                 <th
                   key={h}
-                  className="text-right px-5 py-4 text-sm font-semibold text-white/55 whitespace-nowrap"
+                  className="text-right px-5 py-4 text-sm font-semibold text-slate-600 dark:text-white/55 whitespace-nowrap"
                 >
                   {h}
                 </th>
@@ -147,44 +147,44 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
               return (
                 <tr
                   key={d.id}
-                  className="border-t border-white/5 hover:bg-white/[0.05] transition-colors"
+                  className="border-t border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors"
                 >
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3 min-w-[220px]">
-                      <div className={`${ws.iconBox} w-10 h-10 text-white/85`}>
+                      <div className={`${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/85`}>
                         <DollarSign className="w-5 h-5" />
                       </div>
-                      <span className="text-white font-medium truncate">
+                      <span className="text-slate-900 dark:text-white font-medium truncate">
                         {employeeName}
                       </span>
                     </div>
                   </td>
 
                   <td
-                    className="px-5 py-4 text-white/75 whitespace-nowrap"
+                    className="px-5 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap"
                     dir="ltr"
                   >
                     {dateValue}
                   </td>
 
-                  <td className="px-5 py-4 text-white/75 whitespace-nowrap">
+                  <td className="px-5 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap">
                     {categoryValue}
                   </td>
 
-                  <td className="px-5 py-4 text-white/70 min-w-[240px]">
+                  <td className="px-5 py-4 text-slate-700 dark:text-white/70 min-w-[240px]">
                     <div className="truncate" title={reasonValue}>
                       {reasonValue}
                     </div>
                   </td>
 
                   <td
-                    className="px-5 py-4 text-white/75 whitespace-nowrap"
+                    className="px-5 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap"
                     dir="ltr"
                   >
                     {amountValue}
                   </td>
 
-                  <td className="px-5 py-4 text-white/75 whitespace-nowrap">
+                  <td className="px-5 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap">
                     {sourceValue}
                   </td>
 
@@ -194,7 +194,7 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
                         href={firstImageUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className={`${ws.iconButton} text-emerald-200 inline-flex items-center gap-1`}
+                        className={`${ws.iconButton} text-emerald-700 dark:text-emerald-200 inline-flex items-center gap-1`}
                         aria-label="عرض المرفق"
                         title={
                           imagesCount > 1
@@ -210,7 +210,7 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
                         ) : null}
                       </a>
                     ) : (
-                      <span className="text-white/30">-</span>
+                      <span className="text-slate-400 dark:text-white/30">-</span>
                     )}
                   </td>
 
@@ -219,7 +219,7 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
                       <button
                         type="button"
                         onClick={() => onEdit?.(d)}
-                        className={`${ws.iconButton} text-sky-200`}
+                        className={`${ws.iconButton} text-sky-700 dark:text-sky-200`}
                         aria-label="تعديل"
                       >
                         <Pencil className="w-4 h-4" />
@@ -227,7 +227,7 @@ export function HRDeductionsTable({ deductions, isLoading, onEdit, onDelete }) {
                       <button
                         type="button"
                         onClick={() => onDelete?.(d.id)}
-                        className={`${ws.iconButton} text-red-200`}
+                        className={`${ws.iconButton} text-red-700 dark:text-red-200`}
                         aria-label="حذف"
                       >
                         <Trash2 className="w-4 h-4" />

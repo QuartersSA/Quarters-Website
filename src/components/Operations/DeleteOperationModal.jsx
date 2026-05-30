@@ -64,8 +64,8 @@ export default function DeleteOperationModal({
         <div
           className={`p-6 flex items-center justify-between border-b ${ws.divider}`}
         >
-          <h3 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            <span className={`${ws.iconBox} w-10 h-10 text-red-200`}>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight flex items-center gap-2">
+            <span className={`${ws.iconBox} w-10 h-10 text-red-700 dark:text-red-700 dark:dark:text-red-200`}>
               <Trash2 className="w-5 h-5" />
             </span>
             <span>حذف العملية</span>
@@ -77,7 +77,7 @@ export default function DeleteOperationModal({
             aria-label="إغلاق"
             disabled={isPending}
           >
-            <X className="w-5 h-5 text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-white/60" />
           </button>
         </div>
 
@@ -85,23 +85,23 @@ export default function DeleteOperationModal({
         <div className="p-6 space-y-5">
           {/* Operation info */}
           <div
-            className={`${ws.glassSoft} border border-white/10 rounded-2xl p-4`}
+            className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 rounded-2xl p-4`}
           >
             <div className="flex items-center gap-3 mb-3">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                   isReceipt
-                    ? "bg-emerald-500/10 text-emerald-200"
+                    ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200"
                     : isTransfer
-                      ? "bg-amber-500/10 text-amber-200"
-                      : "bg-sky-500/10 text-sky-200"
+                      ? "bg-amber-500/10 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200"
+                      : "bg-sky-500/10 text-sky-700 dark:text-sky-700 dark:dark:text-sky-200"
                 }`}
               >
                 {typeIcon}
               </div>
               <div>
-                <p className="text-white font-semibold">{typeLabel}</p>
-                <p className="text-white/50 font-mono text-xs">
+                <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">{typeLabel}</p>
+                <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 font-mono text-xs">
                   {operation.inventory_number}
                 </p>
               </div>
@@ -109,31 +109,31 @@ export default function DeleteOperationModal({
 
             <div className="space-y-1 text-sm">
               {operation.branch_name ? (
-                <p className="text-white/60">
-                  <span className="text-white/40">الفرع: </span>
-                  <span className="text-white/80">{operation.branch_name}</span>
+                <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/60">
+                  <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40">الفرع: </span>
+                  <span className="text-slate-800 dark:text-white/80">{operation.branch_name}</span>
                 </p>
               ) : null}
               {isReceipt && operation.receipt_item_name ? (
-                <p className="text-white/60">
-                  <span className="text-white/40">الصنف: </span>
-                  <span className="text-white/80">
+                <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/60">
+                  <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40">الصنف: </span>
+                  <span className="text-slate-800 dark:text-white/80">
                     {operation.receipt_item_name} ({operation.receipt_quantity})
                   </span>
                 </p>
               ) : null}
               {!isReceipt && operation.employee_name ? (
-                <p className="text-white/60">
-                  <span className="text-white/40">الموظف: </span>
-                  <span className="text-white/80">
+                <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/60">
+                  <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40">الموظف: </span>
+                  <span className="text-slate-800 dark:text-white/80">
                     {operation.employee_name}
                   </span>
                 </p>
               ) : null}
               {isTransfer && operation.transfer_branch_name ? (
-                <p className="text-white/60">
-                  <span className="text-white/40">الفرع الآخر: </span>
-                  <span className="text-white/80">
+                <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/60">
+                  <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40">الفرع الآخر: </span>
+                  <span className="text-slate-800 dark:text-white/80">
                     {operation.transfer_branch_name}
                   </span>
                 </p>
@@ -143,18 +143,18 @@ export default function DeleteOperationModal({
 
           {/* Warning */}
           <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-red-300 flex-shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-red-700 dark:text-red-700 dark:dark:text-red-300 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-red-200 font-semibold text-sm mb-1">
+              <p className="text-red-700 dark:text-red-700 dark:dark:text-red-200 font-semibold text-sm mb-1">
                 تحذير: لا يمكن التراجع عن هذا الإجراء
               </p>
-              <p className="text-red-200/70 text-sm">{warningText}</p>
+              <p className="text-red-700 dark:text-red-700 dark:dark:text-red-200/70 text-sm">{warningText}</p>
             </div>
           </div>
 
           {/* Error */}
           {error ? (
-            <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3 text-red-200 text-sm text-center">
+            <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-3 text-red-700 dark:text-red-700 dark:dark:text-red-200 text-sm text-center">
               {error}
             </div>
           ) : null}

@@ -126,13 +126,13 @@ export default function SuspensionModal({ open, onClose, employee }) {
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <Ban className="w-5 h-5 text-amber-300" />
+              <Ban className="w-5 h-5 text-amber-700 dark:text-amber-300" />
             </div>
             <div>
-              <div className="font-bold text-white tracking-tight">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                 إيقاف موظف
               </div>
-              <div className="text-xs text-white/55 mt-0.5">
+              <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5">
                 {employee?.name || "—"}
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function SuspensionModal({ open, onClose, employee }) {
         <form onSubmit={handleSubmit} className="space-y-3">
           {kind === "monthly" ? (
             <div>
-              <div className="text-xs text-white/55 mb-1">الشهر المُوقَف</div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">الشهر المُوقَف</div>
               <GlassSelect
                 value={month}
                 onChange={setMonth}
@@ -178,20 +178,20 @@ export default function SuspensionModal({ open, onClose, employee }) {
                 placeholder="اختر الشهر"
                 buttonClassName="text-sm py-2.5 px-3"
               />
-              <div className="text-[11px] text-white/35 mt-1">
+              <div className="text-[11px] text-slate-400 dark:text-white/35 mt-1">
                 يُستبعد الموظف من مسير الرواتب لهذا الشهر فقط.
               </div>
             </div>
           ) : (
             <div>
-              <div className="text-xs text-white/55 mb-1">تاريخ بدء الإيقاف</div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">تاريخ بدء الإيقاف</div>
               <GlassDatePicker
                 value={effectiveFrom}
                 onChange={(v) => setEffectiveFrom(v || "")}
                 placeholder="اختر التاريخ"
                 allowClear
               />
-              <div className="text-[11px] text-white/35 mt-1">
+              <div className="text-[11px] text-slate-400 dark:text-white/35 mt-1">
                 يُستبعد الموظف من كل مسير رواتب يبدأ من هذا التاريخ أو بعده،
                 حتى يتم إلغاء الإيقاف يدوياً.
               </div>
@@ -199,8 +199,8 @@ export default function SuspensionModal({ open, onClose, employee }) {
           )}
 
           <div>
-            <div className="text-xs text-white/55 mb-1">
-              السبب <span className="text-white/35">(اختياري)</span>
+            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+              السبب <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
             </div>
             <input
               type="text"
@@ -231,14 +231,14 @@ export default function SuspensionModal({ open, onClose, employee }) {
         </form>
 
         {/* Active suspensions list */}
-        <div className="mt-5 pt-4 border-t border-white/10">
-          <div className="text-sm font-semibold text-white/80 mb-2">
+        <div className="mt-5 pt-4 border-t border-slate-200 dark:border-white/10">
+          <div className="text-sm font-semibold text-slate-800 dark:text-white/80 mb-2">
             الإيقافات النشطة
           </div>
           {suspensionsQuery.isLoading ? (
-            <div className="text-white/55 text-xs py-3">جاري التحميل…</div>
+            <div className="text-slate-600 dark:text-white/55 text-xs py-3">جاري التحميل…</div>
           ) : suspensions.length === 0 ? (
-            <div className="text-white/45 text-xs py-3">
+            <div className="text-slate-500 dark:text-white/45 text-xs py-3">
               لا توجد إيقافات نشطة لهذا الموظف.
             </div>
           ) : (
@@ -255,14 +255,14 @@ export default function SuspensionModal({ open, onClose, employee }) {
                     className={`${ws.glassSoft} ${ws.card} p-3 flex items-center gap-3`}
                   >
                     <div className={`${ws.iconBox} w-8 h-8 shrink-0`}>
-                      <Icon className="w-4 h-4 text-amber-200" />
+                      <Icon className="w-4 h-4 text-amber-700 dark:text-amber-200" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-white">
+                      <div className="text-sm font-semibold text-slate-900 dark:text-white">
                         {label}
                       </div>
                       {s.reason ? (
-                        <div className="text-xs text-white/55 mt-0.5 truncate">
+                        <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5 truncate">
                           {s.reason}
                         </div>
                       ) : null}
@@ -271,7 +271,7 @@ export default function SuspensionModal({ open, onClose, employee }) {
                       type="button"
                       onClick={() => handleCancel(s)}
                       disabled={cancelMutation.isPending}
-                      className={`${ws.iconButton} w-8 h-8 hover:bg-emerald-500/15 hover:border-emerald-500/30 hover:text-emerald-200`}
+                      className={`${ws.iconButton} w-8 h-8 hover:bg-emerald-500/15 hover:border-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-200`}
                       title="إلغاء الإيقاف"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />

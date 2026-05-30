@@ -17,7 +17,7 @@ export function ItemsSummaryFilters({
     <div className={`${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`}>
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/35" />
+          <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-400 dark:dark:text-white/35" />
           <input
             type="text"
             placeholder="البحث عن صنف…"

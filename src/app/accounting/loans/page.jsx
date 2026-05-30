@@ -23,12 +23,12 @@ function LoansMobileHeader() {
     <div
       className={`lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`}
     >
-      <div className="w-9 h-9 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
-        <Wallet className="w-5 h-5 text-emerald-200" />
+      <div className="w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center">
+        <Wallet className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
       </div>
       <div>
-        <div className="font-bold text-white tracking-tight">السلف والقروض</div>
-        <div className="text-xs text-white/50">إدارة سلف الموظفين</div>
+        <div className="font-bold text-slate-900 dark:text-white tracking-tight">السلف والقروض</div>
+        <div className="text-xs text-slate-500 dark:text-white/50">إدارة سلف الموظفين</div>
       </div>
     </div>
   );
@@ -40,13 +40,13 @@ function LoansDesktopHeader({ onAdd }) {
     <div className="hidden lg:flex items-center justify-between gap-4">
       <div className="flex items-center gap-4">
         <div className={ws.iconBox}>
-          <Wallet className="w-6 h-6 text-emerald-200" />
+          <Wallet className="w-6 h-6 text-emerald-700 dark:text-emerald-200" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-white tracking-tight">
+          <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
             السلف والقروض
           </h1>
-          <p className="text-white/50 text-sm mt-0.5">
+          <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
             تقسيم القرض على أقساط شهرية تُخصم تلقائياً من مسير الرواتب.
           </p>
         </div>
@@ -65,7 +65,7 @@ function LoansDesktopHeader({ onAdd }) {
 
 function NotAccountingCard() {
   return (
-    <div className={`${ws.glass} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       هذا القسم متاح فقط لمستخدمي المحاسبة.
     </div>
   );
@@ -73,7 +73,7 @@ function NotAccountingCard() {
 
 function LoginCard() {
   return (
-    <div className={`${ws.glass} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       الرجاء تسجيل الدخول.
     </div>
   );
@@ -84,9 +84,9 @@ function LoansInfoCard() {
     <div className={`${ws.glassSoft} ${ws.card} p-4`}>
       <div className="flex items-start gap-3">
         <div className={`${ws.iconBox} w-10 h-10`}>
-          <Info className="w-5 h-5 text-sky-200" />
+          <Info className="w-5 h-5 text-sky-700 dark:text-sky-200" />
         </div>
-        <div className="min-w-0 text-sm text-white/75 leading-relaxed">
+        <div className="min-w-0 text-sm text-slate-700 dark:text-white/75 leading-relaxed">
           مبلغ القرض يُقسم على عدد الأقساط، ويُخصم القسط الشهري تلقائياً من
           صافي راتب الموظف ابتداءً من شهر البدء المحدد ولمدة الأقساط فقط.
           إيقاف القرض يوقف الخصم في الأشهر القادمة ولا يؤثر على المسير
@@ -188,7 +188,7 @@ export default function LoansPage() {
   let body = null;
   if (!ready) {
     body = (
-      <div className={`${ws.glass} ${ws.card} p-6 text-white/60`}>
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60`}>
         جاري التحميل…
       </div>
     );
@@ -204,32 +204,32 @@ export default function LoansPage() {
         {/* Totals */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className={`${ws.glass} ${ws.card} p-4`}>
-            <div className="text-xs text-white/55">قروض نشطة</div>
-            <div className="text-2xl font-bold text-white mt-1">
+            <div className="text-xs text-slate-600 dark:text-white/55">قروض نشطة</div>
+            <div className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
               {totals.activeCount}
             </div>
-            <div className="text-[11px] text-white/40 mt-1">
+            <div className="text-[11px] text-slate-500 dark:text-white/40 mt-1">
               من إجمالي {totals.total}
             </div>
           </div>
           <div className={`${ws.glass} ${ws.card} p-4`}>
-            <div className="text-xs text-white/55">إجمالي الخصم الشهري</div>
+            <div className="text-xs text-slate-600 dark:text-white/55">إجمالي الخصم الشهري</div>
             <div
-              className="text-2xl font-bold text-emerald-200 mt-1"
+              className="text-2xl font-bold text-emerald-700 dark:text-emerald-200 mt-1"
               dir="ltr"
             >
               {formatMoney(totals.monthly)}
             </div>
-            <div className="text-[11px] text-white/40 mt-1">
+            <div className="text-[11px] text-slate-500 dark:text-white/40 mt-1">
               يُطرح من المسير
             </div>
           </div>
           <div className={`${ws.glass} ${ws.card} p-4 col-span-2`}>
-            <div className="text-xs text-white/55">المتبقي للسداد</div>
-            <div className="text-2xl font-bold text-white mt-1" dir="ltr">
+            <div className="text-xs text-slate-600 dark:text-white/55">المتبقي للسداد</div>
+            <div className="text-2xl font-bold text-slate-900 dark:text-white mt-1" dir="ltr">
               {formatMoney(totals.outstanding)}
             </div>
-            <div className="text-[11px] text-white/40 mt-1">
+            <div className="text-[11px] text-slate-500 dark:text-white/40 mt-1">
               للقروض النشطة فقط
             </div>
           </div>
@@ -238,7 +238,7 @@ export default function LoansPage() {
         {/* Filters */}
         <div className={`${ws.glass} ${ws.card} p-4`}>
           <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-2 text-white/55 text-xs">
+            <div className="flex items-center gap-2 text-slate-600 dark:text-white/55 text-xs">
               <Filter className="w-4 h-4" />
               تصفية
             </div>
@@ -250,7 +250,7 @@ export default function LoansPage() {
                 buttonClassName="text-sm py-2 px-3"
               />
             </div>
-            <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-white/75">
+            <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75">
               <input
                 type="checkbox"
                 checked={includeInactive}

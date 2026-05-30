@@ -84,14 +84,14 @@ export function HRBonusModal({
       <div
         className={`${ws.glass} ${ws.card} w-full max-w-2xl max-h-[90svh] overflow-hidden`}
       >
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
-          <div className="text-white font-bold text-lg tracking-tight">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-white/10">
+          <div className="text-slate-900 dark:text-white font-bold text-lg tracking-tight">
             {title}
           </div>
           <button
             type="button"
             onClick={onClose}
-            className={`${ws.iconButton} text-white/70`}
+            className={`${ws.iconButton} text-slate-700 dark:text-white/70`}
             aria-label="إغلاق"
           >
             <X className="w-5 h-5" />
@@ -104,7 +104,7 @@ export function HRBonusModal({
         >
           {/* Employee(s) */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <User className="w-4 h-4 inline ml-2" />
               الموظف {isEditing ? "*" : "/ الموظفين *"}
             </label>
@@ -132,11 +132,11 @@ export function HRBonusModal({
                   placeholder="— اختر الموظفين —"
                 />
                 {selectedEmployeesPreview ? (
-                  <div className="mt-2 text-xs text-white/45">
+                  <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
                     المختار: {selectedEmployeesPreview}
                   </div>
                 ) : (
-                  <div className="mt-2 text-xs text-white/45">
+                  <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
                     تقدر تختار أكثر من موظف في نفس العملية.
                   </div>
                 )}
@@ -146,25 +146,25 @@ export function HRBonusModal({
 
           {/* Month (read-only, selected from the page filter) */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <FileText className="w-4 h-4 inline ml-2" />
               شهر البونص *
             </label>
             <div
-              className={`${ws.input} px-4 py-3 bg-white/[0.03] text-white/80`}
+              className={`${ws.input} px-4 py-3 bg-slate-50 dark:bg-white/[0.03] text-slate-800 dark:text-white/80`}
               title={monthText}
               dir="ltr"
             >
               {monthText}
             </div>
-            <div className="mt-2 text-xs text-white/45">
+            <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
               يتم تحديد الشهر من فلتر مسير الرواتب.
             </div>
           </div>
 
           {/* Amount mode */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <DollarSign className="w-4 h-4 inline ml-2" />
               طريقة احتساب البونص *
             </label>
@@ -192,7 +192,7 @@ export function HRBonusModal({
           {/* Amount / Percent */}
           {amountMode === "percent" ? (
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <Percent className="w-4 h-4 inline ml-2" />
                 النسبة (%) *
               </label>
@@ -210,13 +210,13 @@ export function HRBonusModal({
                 placeholder="مثال: 10"
                 dir="ltr"
               />
-              <div className="mt-2 text-xs text-white/45">
+              <div className="mt-2 text-xs text-slate-500 dark:text-white/45">
                 يتم حسابها من إجمالي الراتب (الأساسي + البدلات) لكل موظف.
               </div>
             </div>
           ) : (
             <div>
-              <label className="block text-sm font-semibold text-white/70 mb-2">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                 <DollarSign className="w-4 h-4 inline ml-2" />
                 المبلغ *
               </label>
@@ -239,12 +239,12 @@ export function HRBonusModal({
 
           {/* Source (read-only) */}
           <div>
-            <label className="block text-sm font-semibold text-white/70 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
               <FileText className="w-4 h-4 inline ml-2" />
               مصدر البونص
             </label>
             <div
-              className={`${ws.input} px-4 py-3 bg-white/[0.03] text-white/80`}
+              className={`${ws.input} px-4 py-3 bg-slate-50 dark:bg-white/[0.03] text-slate-800 dark:text-white/80`}
               title={sourceDisplay || ""}
             >
               {sourceDisplay || "-"}

@@ -25,12 +25,12 @@ function OvertimeMobileHeader() {
     <div
       className={`lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`}
     >
-      <div className="w-9 h-9 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
-        <Clock className="w-5 h-5 text-emerald-200" />
+      <div className="w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center">
+        <Clock className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
       </div>
       <div>
-        <div className="font-bold text-white tracking-tight">الأوفر تايم</div>
-        <div className="text-xs text-white/50">
+        <div className="font-bold text-slate-900 dark:text-white tracking-tight">الأوفر تايم</div>
+        <div className="text-xs text-slate-500 dark:text-white/50">
           ساعات إضافية تُضاف لمسير الرواتب
         </div>
       </div>
@@ -42,13 +42,13 @@ function OvertimeDesktopHeader() {
   return (
     <div className="hidden lg:flex items-center gap-4">
       <div className={ws.iconBox}>
-        <Clock className="w-6 h-6 text-emerald-200" />
+        <Clock className="w-6 h-6 text-emerald-700 dark:text-emerald-200" />
       </div>
       <div>
-        <h1 className="text-xl font-bold text-white tracking-tight">
+        <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
           الأوفر تايم
         </h1>
-        <p className="text-white/50 text-sm mt-0.5">
+        <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
           يُحسب القسط الإضافي تلقائياً: (الراتب الأساسي ÷ 30) × 1.5 × عدد
           الأيام.
         </p>
@@ -62,11 +62,11 @@ function OvertimeInfoCard() {
     <div className={`${ws.glassSoft} ${ws.card} p-4`}>
       <div className="flex items-start gap-3">
         <div className={`${ws.iconBox} w-10 h-10`}>
-          <Info className="w-5 h-5 text-sky-200" />
+          <Info className="w-5 h-5 text-sky-700 dark:text-sky-200" />
         </div>
-        <div className="text-sm text-white/75 leading-relaxed">
+        <div className="text-sm text-slate-700 dark:text-white/75 leading-relaxed">
           الصيغة:{" "}
-          <span className="text-white/90 font-semibold">
+          <span className="text-slate-900 dark:text-white/90 font-semibold">
             (الراتب الأساسي ÷ 30) × 1.5
           </span>{" "}
           لكل يوم. المبلغ يُضاف على راتب الموظف للشهر المختار ويظهر في
@@ -217,19 +217,19 @@ export default function HROvertimePage() {
   let body = null;
   if (!ready) {
     body = (
-      <div className={`${ws.glass} ${ws.card} p-6 text-white/60`}>
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60`}>
         جاري التحميل…
       </div>
     );
   } else if (!employeeId) {
     body = (
-      <div className={`${ws.glass} ${ws.card} p-6 text-white/70`}>
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
         الرجاء تسجيل الدخول.
       </div>
     );
   } else if (!isAdmin) {
     body = (
-      <div className={`${ws.glass} ${ws.card} p-6 text-white/70`}>
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
         متاح لمسؤولي HR فقط.
       </div>
     );
@@ -242,13 +242,13 @@ export default function HROvertimePage() {
         <div className={`${ws.glass} ${ws.card} p-5`}>
           <div className="flex items-center gap-3 mb-4">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <Plus className="w-5 h-5 text-emerald-200" />
+              <Plus className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div>
-              <div className="font-bold text-white tracking-tight">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                 تسجيل أوفر تايم
               </div>
-              <div className="text-xs text-white/50 mt-0.5">
+              <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
                 يُضاف للموظف على راتب الشهر المختار
               </div>
             </div>
@@ -260,10 +260,10 @@ export default function HROvertimePage() {
           >
             <div className="md:col-span-2">
               <div className="flex items-center justify-between gap-2 mb-1">
-                <div className="text-xs text-white/55">
+                <div className="text-xs text-slate-600 dark:text-white/55">
                   الموظفون{" "}
                   {formEmployees.length > 0 ? (
-                    <span className="text-white/40">
+                    <span className="text-slate-500 dark:text-white/40">
                       ({formEmployees.length})
                     </span>
                   ) : null}
@@ -300,7 +300,7 @@ export default function HROvertimePage() {
               />
             </div>
             <div>
-              <div className="text-xs text-white/55 mb-1">الشهر</div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">الشهر</div>
               <GlassSelect
                 value={formMonth}
                 onChange={setFormMonth}
@@ -309,7 +309,7 @@ export default function HROvertimePage() {
               />
             </div>
             <div>
-              <div className="text-xs text-white/55 mb-1">
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
                 عدد أيام الأوفر تايم
               </div>
               <input
@@ -324,8 +324,8 @@ export default function HROvertimePage() {
               />
             </div>
             <div>
-              <div className="text-xs text-white/55 mb-1">
-                ملاحظة <span className="text-white/35">(اختياري)</span>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+                ملاحظة <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
               </div>
               <input
                 type="text"
@@ -349,7 +349,7 @@ export default function HROvertimePage() {
                     ? `إضافة لـ ${formEmployees.length} موظف`
                     : "إضافة"}
               </button>
-              <div className="text-xs text-white/45">
+              <div className="text-xs text-slate-500 dark:text-white/45">
                 الصيغة: (الراتب ÷ 30) × 1.5 × {formDays || "0"} يوم — تُطبَّق
                 لكل موظف
               </div>
@@ -361,7 +361,7 @@ export default function HROvertimePage() {
         <div className={`${ws.glass} ${ws.card} p-4`}>
           <div className="flex items-center gap-3 flex-wrap">
             <div className="min-w-[180px]">
-              <div className="text-xs text-white/55 mb-1">الشهر</div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">الشهر</div>
               <GlassSelect
                 value={filterMonth}
                 onChange={setFilterMonth}
@@ -371,7 +371,7 @@ export default function HROvertimePage() {
               />
             </div>
             <div className="min-w-[200px]">
-              <div className="text-xs text-white/55 mb-1">الموظف</div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">الموظف</div>
               <GlassSelect
                 value={filterEmployee}
                 onChange={setFilterEmployee}
@@ -385,13 +385,13 @@ export default function HROvertimePage() {
         {/* List */}
         <div className={`${ws.glass} ${ws.card} overflow-hidden`}>
           {overtimeQuery.isLoading ? (
-            <div className="p-6 text-white/60 text-sm">جاري التحميل…</div>
+            <div className="p-6 text-slate-600 dark:text-white/60 text-sm">جاري التحميل…</div>
           ) : overtimeRows.length === 0 ? (
-            <div className="p-8 text-center text-white/60">
+            <div className="p-8 text-center text-slate-600 dark:text-white/60">
               <div className={`${ws.iconBox} w-12 h-12 mx-auto mb-3`}>
-                <Clock className="w-5 h-5 text-white/50" />
+                <Clock className="w-5 h-5 text-slate-500 dark:text-white/50" />
               </div>
-              <div className="text-sm font-semibold text-white/75">
+              <div className="text-sm font-semibold text-slate-700 dark:text-white/75">
                 لا توجد سجلات أوفر تايم
               </div>
             </div>
@@ -399,7 +399,7 @@ export default function HROvertimePage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-white/70 text-xs">
+                  <tr className="text-slate-700 dark:text-white/70 text-xs">
                     <th className="text-right font-semibold py-3 px-3">
                       الموظف
                     </th>
@@ -425,34 +425,34 @@ export default function HROvertimePage() {
                   {overtimeRows.map((r) => (
                     <tr
                       key={r.id}
-                      className="border-t border-white/10 hover:bg-white/[0.04]"
+                      className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]"
                     >
-                      <td className="py-3 px-3 font-semibold text-white">
+                      <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
                         {r.employee_name || `#${r.employee_id}`}
                       </td>
-                      <td className="py-3 px-3 text-white/75">
+                      <td className="py-3 px-3 text-slate-700 dark:text-white/75">
                         {monthLabel(String(r.month).slice(0, 7))}
                       </td>
                       <td
-                        className="py-3 px-3 text-white/85 text-right"
+                        className="py-3 px-3 text-slate-800 dark:text-white/85 text-right"
                         dir="ltr"
                       >
                         {Number(r.days || 0)}
                       </td>
                       <td
-                        className="py-3 px-3 text-white/55 text-right"
+                        className="py-3 px-3 text-slate-600 dark:text-white/55 text-right"
                         dir="ltr"
                       >
                         {formatMoney(r.base_salary)}
                       </td>
                       <td
-                        className="py-3 px-3 text-emerald-200 font-bold text-right"
+                        className="py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold text-right"
                         dir="ltr"
                       >
                         {formatMoney(r.amount)}
                       </td>
                       <td
-                        className="py-3 px-3 text-white/60 text-xs"
+                        className="py-3 px-3 text-slate-600 dark:text-white/60 text-xs"
                         style={{ maxWidth: 240 }}
                       >
                         <div className="truncate" title={r.reason || ""}>
@@ -463,7 +463,7 @@ export default function HROvertimePage() {
                         <button
                           type="button"
                           onClick={() => handleDelete(r)}
-                          className={`${ws.iconButton} w-8 h-8 hover:bg-red-500/15 hover:border-red-500/30 hover:text-red-200`}
+                          className={`${ws.iconButton} w-8 h-8 hover:bg-red-500/15 hover:border-red-500/30 hover:text-red-700 dark:hover:text-red-200`}
                           title="حذف"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
