@@ -45,7 +45,7 @@ import {
  *
  *   - فواتير المشتريات     — purchase invoices ledger
  *   - الموردين والمستفيدين  — two-pane (suppliers + beneficiaries)
- *   - فئات وأصناف          — purchase-side categories + items
+ *   - التصنيفات والأصناف   — purchase-side categories + items
  *   - الحسابات البنكية      — bank accounts master list
  *   - الضريبة              — VAT settings + reports
  */
@@ -148,7 +148,7 @@ function PurchasesDesktopHeader() {
           المشتريات
         </h1>
         <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
-          فواتير المشتريات، الموردين والمستفيدين، فئات وأصناف،
+          فواتير المشتريات، الموردين والمستفيدين، التصنيفات والأصناف،
           الحسابات البنكية، والضريبة.
         </p>
       </div>
