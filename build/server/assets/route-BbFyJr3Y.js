@@ -287,7 +287,13 @@ async function POST(request) {
     const maxThreshold = max_stock_threshold !== undefined && max_stock_threshold !== null && max_stock_threshold !== "" ? parseInt(max_stock_threshold) : null;
     const safeMaxThreshold = maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold > 0 ? maxThreshold : null;
     const showInInventory = show_in_inventory !== undefined ? show_in_inventory : true;
-    const active = showInInventory;
+    // is_active is independent from show_in_inventory. The two used
+    // to be coupled (active = showInInventory) which made any
+    // purchases-only item (show_in_inventory=false) silently get
+    // is_active=false and disappear from EVERY listing including
+    // the purchases panel. Now: respect is_active if the caller
+    // passes it; otherwise default to true.
+    const active = is_active !== undefined ? !!is_active : true;
     const parsedCost = cost !== undefined && cost !== null && cost !== "" ? parseFloat(cost) : null;
     const resolvedCategoryId = category_id !== undefined && category_id !== null && category_id !== "" ? parseInt(category_id) : categoryId !== undefined && categoryId !== null && categoryId !== "" ? parseInt(categoryId) : null;
     const safeCategoryId = resolvedCategoryId && !Number.isNaN(resolvedCategoryId) ? resolvedCategoryId : null;
@@ -367,7 +373,10 @@ async function PUT(request) {
     const resolvedCategoryId = category_id !== undefined && category_id !== null && category_id !== "" ? parseInt(category_id) : categoryId !== undefined && categoryId !== null && categoryId !== "" ? parseInt(categoryId) : null;
     const safeCategoryId = resolvedCategoryId && !Number.isNaN(resolvedCategoryId) ? resolvedCategoryId : null;
     const showInInventory = show_in_inventory !== undefined ? show_in_inventory : true;
-    const active = showInInventory;
+    // Same decoupling on UPDATE — respect explicit is_active so a
+    // purchases-only item stays active even though it doesn't show
+    // up in inventory.
+    const active = is_active !== undefined ? !!is_active : true;
     const parsedCost = cost !== undefined && cost !== null && cost !== "" ? parseFloat(cost) : null;
     const safeLinkedBeanId = linked_green_bean_id !== undefined && linked_green_bean_id !== null && linked_green_bean_id !== "" ? parseInt(linked_green_bean_id) : null;
     const maxThreshold = max_stock_threshold !== undefined && max_stock_threshold !== null && max_stock_threshold !== "" ? parseInt(max_stock_threshold) : null;

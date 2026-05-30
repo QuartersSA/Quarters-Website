@@ -1,11 +1,23 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Search, Package, ShoppingCart, Hash } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  Search,
+  Package,
+  ShoppingCart,
+  Hash,
+  Plus,
+  Pencil,
+  Trash2,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import { toast } from "sonner";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
+import PurchaseItemModal from "@/components/Accounting/PurchaseItemModal";
 
 function unitLabel(unit) {
   return unit || "حبة";
@@ -28,8 +40,11 @@ function formatCost(value) {
  * "edit an item" forms.
  */
 export default function PurchasesItemsPanel() {
+  const queryClient = useQueryClient();
   const [q, setQ] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [showAdd, setShowAdd] = useState(false);
+  const [editing, setEditing] = useState(null);
 
   const itemsQuery = useQuery({
     queryKey: ["purchases_items"],
@@ -38,6 +53,76 @@ export default function PurchasesItemsPanel() {
       if (!r.ok) throw new Error("Failed to load items");
       return r.json();
     },
+  });
+
+  const categoriesQuery = useQuery({
+    queryKey: ["purchases_item_categories"],
+    queryFn: async () => {
+      const r = await adminFetch("/api/item-categories");
+      if (!r.ok) throw new Error("Failed to load categories");
+      return r.json();
+    },
+  });
+
+  const invalidate = () => {
+    queryClient.invalidateQueries({ queryKey: ["purchases_items"] });
+    // Cross-invalidate the admin items page caches so /admin/items
+    // also picks up changes immediately.
+    queryClient.invalidateQueries({ queryKey: ["items"] });
+  };
+
+  const createMut = useMutation({
+    mutationFn: async (payload) => {
+      const r = await adminFetch("/api/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data?.error || "فشل الإضافة");
+      return data;
+    },
+    onSuccess: () => {
+      invalidate();
+      toast.success("تم إضافة الصنف");
+      setShowAdd(false);
+    },
+    onError: (e) => toast.error(`فشل الإضافة: ${e.message}`),
+  });
+
+  const updateMut = useMutation({
+    mutationFn: async (payload) => {
+      const r = await adminFetch("/api/items", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data?.error || "فشل التعديل");
+      return data;
+    },
+    onSuccess: () => {
+      invalidate();
+      toast.success("تم حفظ التعديلات");
+      setEditing(null);
+    },
+    onError: (e) => toast.error(`فشل التعديل: ${e.message}`),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: async (id) => {
+      const r = await adminFetch(`/api/items?id=${id}`, {
+        method: "DELETE",
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data?.error || "فشل الحذف");
+      return data;
+    },
+    onSuccess: () => {
+      invalidate();
+      toast.success("تم حذف الصنف");
+    },
+    onError: (e) => toast.error(`فشل الحذف: ${e.message}`),
   });
 
   const items = useMemo(() => {
@@ -120,6 +205,15 @@ export default function PurchasesItemsPanel() {
             </span>{" "}
             / {items.length}
           </div>
+          <div className="flex-1" />
+          <button
+            type="button"
+            onClick={() => setShowAdd(true)}
+            className={`${ws.btnPrimary} px-4 py-2`}
+          >
+            <Plus className="w-4 h-4" />
+            إضافة صنف
+          </button>
         </div>
       </div>
 
@@ -159,6 +253,10 @@ export default function PurchasesItemsPanel() {
                   <th className="text-right font-semibold py-3 px-3 whitespace-nowrap">
                     الوصف
                   </th>
+                  <th className="text-right font-semibold py-3 px-3 whitespace-nowrap">
+                    النطاق
+                  </th>
+                  <th className="py-3 px-3" style={{ width: 90 }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -225,6 +323,51 @@ export default function PurchasesItemsPanel() {
                         {it.description || "—"}
                       </div>
                     </td>
+                    <td className="py-3 px-3 whitespace-nowrap">
+                      {it.show_in_inventory !== false ? (
+                        <span
+                          className={`${ws.pill} bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25 inline-flex items-center gap-1`}
+                          title="يظهر في المخزون والمشتريات"
+                        >
+                          <Eye className="w-3 h-3" />
+                          مخزون + مشتريات
+                        </span>
+                      ) : (
+                        <span
+                          className={`${ws.pill} bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10 inline-flex items-center gap-1`}
+                          title="مخصص للمشتريات فقط"
+                        >
+                          <EyeOff className="w-3 h-3" />
+                          مشتريات فقط
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-3 px-3">
+                      <div className="flex items-center justify-end gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setEditing(it)}
+                          className={`${ws.iconButton} w-8 h-8`}
+                          title="تعديل"
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const ok = window.confirm(
+                              `حذف "${it.name}" نهائياً؟ سيؤثر هذا على كل تاريخ المخزون المرتبط بالصنف.`,
+                            );
+                            if (!ok) return;
+                            deleteMut.mutate(it.id);
+                          }}
+                          className={`${ws.iconButton} w-8 h-8 hover:bg-red-50 dark:hover:bg-red-500/15 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-700 dark:hover:text-red-200`}
+                          title="حذف"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -233,11 +376,30 @@ export default function PurchasesItemsPanel() {
           <div
             className={`px-4 py-2 border-t ${ws.divider} text-[11px] text-slate-500 dark:text-white/45`}
           >
-            البيانات مسحوبة مباشرة من قسم إدارة الأصناف. للتعديل، انتقل
-            إلى /admin/items.
+            أي صنف يُضاف من إدارة المخزون يظهر هنا تلقائياً. يمكنك أيضاً
+            إضافة صنف خاص بالمشتريات فقط من زر «إضافة صنف» — ولا
+            يظهر في صفحات المخزون.
           </div>
         </div>
       )}
+
+      <PurchaseItemModal
+        open={showAdd || !!editing}
+        item={editing}
+        categories={Array.isArray(categoriesQuery.data) ? categoriesQuery.data : []}
+        isSubmitting={createMut.isPending || updateMut.isPending}
+        onClose={() => {
+          setShowAdd(false);
+          setEditing(null);
+        }}
+        onSubmit={(payload) => {
+          if (editing) {
+            updateMut.mutate(payload);
+          } else {
+            createMut.mutate(payload);
+          }
+        }}
+      />
     </>
   );
 }
