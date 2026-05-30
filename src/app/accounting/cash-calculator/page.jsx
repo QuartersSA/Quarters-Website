@@ -320,7 +320,7 @@ export default function CashCalculatorPage() {
   );
   const saveLabel = isSaving ? "جاري الحفظ…" : saved ? "تم الحفظ" : "حفظ";
   const saveBtnExtra = saved
-    ? "bg-emerald-500/20 text-emerald-200 border border-emerald-400/30"
+    ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-200 border border-emerald-400/30"
     : "";
 
   /* ─── access guard ─── */
@@ -330,7 +330,7 @@ export default function CashCalculatorPage() {
         <AccountingSidebar active="cash-calculator" />
         <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
           <div className="mx-auto w-full max-w-[900px] space-y-4">
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/80`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-800 dark:text-white/80`}>
               هذه الصفحة خاصة بالمحاسبة.
               <div className="mt-3">
                 <a
@@ -357,13 +357,13 @@ export default function CashCalculatorPage() {
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <Banknote className="w-5 h-5 text-emerald-200" />
+              <Banknote className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div className="min-w-0">
-              <div className="font-bold text-white tracking-tight truncate">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
                 المحاسبة
               </div>
-              <div className="text-xs text-white/50 truncate">حاسبة الكاش</div>
+              <div className="text-xs text-slate-500 dark:text-white/50 truncate">حاسبة الكاش</div>
             </div>
           </div>
         </div>
@@ -375,13 +375,13 @@ export default function CashCalculatorPage() {
           <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={ws.iconBox}>
-                <Banknote className="w-5 h-5 text-emerald-200" />
+                <Banknote className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white tracking-tight">
+                <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
                   حاسبة الكاش
                 </div>
-                <div className="text-white/55 mt-1">
+                <div className="text-slate-600 dark:text-white/55 mt-1">
                   حساب وتخزين فئات الكاش حسب الفرع والشهر
                 </div>
               </div>
@@ -389,9 +389,9 @@ export default function CashCalculatorPage() {
           </div>
 
           {!ready ? (
-            <div className={`${cardShell} text-white/70`}>جاري التحميل…</div>
+            <div className={`${cardShell} text-slate-700 dark:text-white/70`}>جاري التحميل…</div>
           ) : !employeeId ? (
-            <div className={`${cardShell} text-white/70`}>
+            <div className={`${cardShell} text-slate-700 dark:text-white/70`}>
               لازم تسجيل دخول الإدارة أولاً.
               <div className="mt-2">
                 <a
@@ -403,11 +403,11 @@ export default function CashCalculatorPage() {
               </div>
             </div>
           ) : branchesLoading && allBranchesQuery.isLoading ? (
-            <div className={`${cardShell} text-white/70`}>
+            <div className={`${cardShell} text-slate-700 dark:text-white/70`}>
               جاري تحميل الفروع…
             </div>
           ) : branches.length === 0 ? (
-            <div className={`${cardShell} text-white/70`}>
+            <div className={`${cardShell} text-slate-700 dark:text-white/70`}>
               لا يوجد فروع مرتبطة بهذا الحساب.
             </div>
           ) : (
@@ -416,13 +416,13 @@ export default function CashCalculatorPage() {
               <div className={cardShell}>
                 <div className="flex items-center gap-2 mb-4">
                   <div className={`${ws.iconBox} w-10 h-10`}>
-                    <Building2 className="w-5 h-5 text-white/70" />
+                    <Building2 className="w-5 h-5 text-slate-700 dark:text-white/70" />
                   </div>
                   <div>
-                    <div className="font-bold text-white tracking-tight">
+                    <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                       اختر الفرع والشهر
                     </div>
-                    <div className="text-xs text-white/50 mt-0.5">
+                    <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
                       يتم حفظ الحاسبة لكل فرع وشهر بشكل منفصل
                     </div>
                   </div>
@@ -430,7 +430,7 @@ export default function CashCalculatorPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-semibold text-white/70 mb-2">
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                       الفرع
                     </label>
                     <GlassSelect
@@ -441,8 +441,8 @@ export default function CashCalculatorPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-white/70 mb-2">
-                      <CalendarDays className="inline w-4 h-4 ml-1 text-white/50" />
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
+                      <CalendarDays className="inline w-4 h-4 ml-1 text-slate-500 dark:text-white/50" />
                       الشهر
                     </label>
                     <GlassSelect
@@ -458,13 +458,13 @@ export default function CashCalculatorPage() {
               {/* Loading state */}
               {recordQuery.isLoading ? (
                 <div
-                  className={`${cardShell} text-white/70 flex items-center gap-2`}
+                  className={`${cardShell} text-slate-700 dark:text-white/70 flex items-center gap-2`}
                 >
                   <RefreshCw className="w-4 h-4" />
                   جاري التحميل…
                 </div>
               ) : recordQuery.error ? (
-                <div className={`${cardShell} text-red-300`}>
+                <div className={`${cardShell} text-red-700 dark:text-red-300`}>
                   {recordQuery.error?.message || "فشل تحميل البيانات"}
                 </div>
               ) : (
@@ -472,14 +472,14 @@ export default function CashCalculatorPage() {
                   {/* Calculator Table */}
                   <div className={cardShell}>
                     <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
-                      <div className="font-bold text-white tracking-tight text-lg">
+                      <div className="font-bold text-slate-900 dark:text-white tracking-tight text-lg">
                         فئات الكاش
                       </div>
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
                           onClick={handleToggleLogs}
-                          className={`${showLogs ? "bg-sky-400/15 text-sky-200 border-sky-400/25" : ""} ${ws.btnNeutral} px-4 py-2.5 text-sm`}
+                          className={`${showLogs ? "bg-sky-400/15 text-sky-700 dark:text-sky-200 border-sky-400/25" : ""} ${ws.btnNeutral} px-4 py-2.5 text-sm`}
                         >
                           <History className="w-4 h-4" />
                           {showLogs ? "إخفاء السجل" : "عرض السجل"}
@@ -497,7 +497,7 @@ export default function CashCalculatorPage() {
                     </div>
 
                     {saveMutation.error ? (
-                      <div className="text-red-300 text-sm mb-3">
+                      <div className="text-red-700 dark:text-red-300 text-sm mb-3">
                         {saveMutation.error?.message || "فشل في الحفظ"}
                       </div>
                     ) : null}
@@ -506,7 +506,7 @@ export default function CashCalculatorPage() {
                     <div className="hidden sm:block overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="text-white/70 border-b border-white/10">
+                          <tr className="text-slate-700 dark:text-white/70 border-b border-slate-200 dark:border-white/10">
                             <th className="text-right font-semibold py-3 px-3 w-[140px]">
                               الفئة (ريال)
                             </th>
@@ -524,16 +524,16 @@ export default function CashCalculatorPage() {
                             return (
                               <tr
                                 key={d.key}
-                                className="border-b border-white/[0.06] hover:bg-white/[0.03]"
+                                className="border-b border-white/[0.06] hover:bg-slate-50 dark:hover:bg-white/[0.03]"
                               >
                                 <td className="py-3 px-3">
                                   <div className="flex items-center gap-2">
                                     <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-400/15 flex items-center justify-center">
-                                      <span className="text-emerald-200 font-bold text-xs">
+                                      <span className="text-emerald-700 dark:text-emerald-200 font-bold text-xs">
                                         {d.label}
                                       </span>
                                     </div>
-                                    <span className="text-white font-semibold">
+                                    <span className="text-slate-900 dark:text-white font-semibold">
                                       {d.label} ريال
                                     </span>
                                   </div>
@@ -553,7 +553,7 @@ export default function CashCalculatorPage() {
                                   />
                                 </td>
                                 <td className="py-3 px-3">
-                                  <span className="text-white font-bold tabular-nums">
+                                  <span className="text-slate-900 dark:text-white font-bold tabular-nums">
                                     {formatMoney(total)}
                                   </span>
                                 </td>
@@ -564,17 +564,17 @@ export default function CashCalculatorPage() {
                         <tfoot>
                           <tr className="border-t-2 border-emerald-400/20">
                             <td className="py-4 px-3">
-                              <span className="text-emerald-200 font-extrabold text-base">
+                              <span className="text-emerald-700 dark:text-emerald-200 font-extrabold text-base">
                                 المجموع الكلي
                               </span>
                             </td>
                             <td className="py-4 px-3">
-                              <span className="text-white/60 font-semibold tabular-nums">
+                              <span className="text-slate-600 dark:text-white/60 font-semibold tabular-nums">
                                 {totalNotes} ورقة
                               </span>
                             </td>
                             <td className="py-4 px-3">
-                              <span className="text-emerald-200 font-extrabold text-xl tabular-nums">
+                              <span className="text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums">
                                 {formatMoney(denomTotals.grand)}
                               </span>
                             </td>
@@ -595,15 +595,15 @@ export default function CashCalculatorPage() {
                             <div className="flex items-center justify-between gap-3 mb-3">
                               <div className="flex items-center gap-2">
                                 <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-400/15 flex items-center justify-center">
-                                  <span className="text-emerald-200 font-bold text-xs">
+                                  <span className="text-emerald-700 dark:text-emerald-200 font-bold text-xs">
                                     {d.label}
                                   </span>
                                 </div>
-                                <span className="text-white font-semibold">
+                                <span className="text-slate-900 dark:text-white font-semibold">
                                   {d.label} ريال
                                 </span>
                               </div>
-                              <span className="text-white font-bold tabular-nums">
+                              <span className="text-slate-900 dark:text-white font-bold tabular-nums">
                                 {formatMoney(total)}
                               </span>
                             </div>
@@ -627,14 +627,14 @@ export default function CashCalculatorPage() {
                       >
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            <div className="text-emerald-200 font-extrabold text-base">
+                            <div className="text-emerald-700 dark:text-emerald-200 font-extrabold text-base">
                               المجموع الكلي
                             </div>
-                            <div className="text-white/50 text-xs mt-1">
+                            <div className="text-slate-500 dark:text-white/50 text-xs mt-1">
                               {totalNotes} ورقة
                             </div>
                           </div>
-                          <span className="text-emerald-200 font-extrabold text-xl tabular-nums">
+                          <span className="text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums">
                             {formatMoney(denomTotals.grand)}
                           </span>
                         </div>
@@ -643,7 +643,7 @@ export default function CashCalculatorPage() {
 
                     {/* Note */}
                     <div className="mt-5">
-                      <label className="block text-sm font-semibold text-white/70 mb-2">
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                         ملاحظة (اختياري)
                       </label>
                       <textarea
@@ -663,14 +663,14 @@ export default function CashCalculatorPage() {
                   {showLogs ? (
                     <div ref={logsRef} className={cardShell}>
                       <div className="flex items-center gap-2 mb-4">
-                        <History className="w-5 h-5 text-white/60" />
-                        <div className="font-bold text-white tracking-tight">
+                        <History className="w-5 h-5 text-slate-600 dark:text-white/60" />
+                        <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                           سجل التعديلات
                         </div>
                       </div>
 
                       {logs.length === 0 ? (
-                        <div className="text-white/60 text-sm">
+                        <div className="text-slate-600 dark:text-white/60 text-sm">
                           لا يوجد سجل تعديلات بعد لهذا الشهر.
                         </div>
                       ) : (
@@ -679,8 +679,8 @@ export default function CashCalculatorPage() {
                             const isCreated = log.action === "created";
                             const actionText = isCreated ? "إنشاء" : "تعديل";
                             const actionPill = isCreated
-                              ? `${ws.pill} bg-emerald-400/15 text-emerald-200 border-emerald-400/25`
-                              : `${ws.pill} bg-sky-400/15 text-sky-200 border-sky-400/25`;
+                              ? `${ws.pill} bg-emerald-400/15 text-emerald-700 dark:text-emerald-200 border-emerald-400/25`
+                              : `${ws.pill} bg-sky-400/15 text-sky-700 dark:text-sky-200 border-sky-400/25`;
 
                             const vals =
                               typeof log.new_values === "string"
@@ -697,17 +697,17 @@ export default function CashCalculatorPage() {
                                     <span className={actionPill}>
                                       {actionText}
                                     </span>
-                                    <span className="text-white/80 font-semibold text-sm">
+                                    <span className="text-slate-800 dark:text-white/80 font-semibold text-sm">
                                       {log.actor_name || "—"}
                                     </span>
                                   </div>
-                                  <span className="text-white/50 text-xs">
+                                  <span className="text-slate-500 dark:text-white/50 text-xs">
                                     {formatDateTime(log.created_at)}
                                   </span>
                                 </div>
 
                                 {log.summary ? (
-                                  <div className="text-white/60 text-sm mb-2">
+                                  <div className="text-slate-600 dark:text-white/60 text-sm mb-2">
                                     {log.summary}
                                   </div>
                                 ) : null}
@@ -718,12 +718,12 @@ export default function CashCalculatorPage() {
                                     return (
                                       <div
                                         key={d.key}
-                                        className="bg-white/[0.04] rounded-xl p-2 text-center"
+                                        className="bg-slate-100 dark:bg-white/[0.04] rounded-xl p-2 text-center"
                                       >
-                                        <div className="text-white/40 text-[10px]">
+                                        <div className="text-slate-500 dark:text-white/40 text-[10px]">
                                           {d.label}
                                         </div>
-                                        <div className="text-white font-bold text-sm tabular-nums">
+                                        <div className="text-slate-900 dark:text-white font-bold text-sm tabular-nums">
                                           {v}
                                         </div>
                                       </div>
@@ -732,7 +732,7 @@ export default function CashCalculatorPage() {
                                 </div>
 
                                 <div className="mt-2 text-left">
-                                  <span className="text-emerald-200 font-extrabold tabular-nums">
+                                  <span className="text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums">
                                     {formatMoney(vals.total_amount || 0)}
                                   </span>
                                 </div>
@@ -754,13 +754,13 @@ export default function CashCalculatorPage() {
                           key={d.key}
                           className={`${ws.glassSoft} ${ws.card} p-4 text-center`}
                         >
-                          <div className="text-white/50 text-xs mb-1">
+                          <div className="text-slate-500 dark:text-white/50 text-xs mb-1">
                             {d.label} ريال
                           </div>
-                          <div className="text-white font-bold tabular-nums">
-                            {c} <span className="text-white/40">×</span>
+                          <div className="text-slate-900 dark:text-white font-bold tabular-nums">
+                            {c} <span className="text-slate-500 dark:text-white/40">×</span>
                           </div>
-                          <div className="text-emerald-200 font-extrabold tabular-nums mt-1">
+                          <div className="text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums mt-1">
                             {formatMoney(t)}
                           </div>
                         </div>

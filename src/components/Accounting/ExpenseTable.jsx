@@ -25,19 +25,19 @@ function PendingFixedRow({ pending, month, onConfirmFixed }) {
 
   return (
     <>
-      <tr className="border-t border-white/10 hover:bg-white/[0.04] bg-emerald-400/[0.03]">
+      <tr className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] bg-emerald-400/[0.03]">
         <td
-          className="py-2.5 px-2 text-white/70 whitespace-nowrap text-sm"
+          className="py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm"
           style={{ maxWidth: 120 }}
         >
           {typeName}
         </td>
         <td
-          className="py-2.5 px-2 font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm"
+          className="py-2.5 px-2 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm"
           style={{ maxWidth: 200 }}
         >
           <span className="inline-flex items-center gap-1.5">
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/15 border border-emerald-400/30 text-emerald-200 text-[10px] font-bold">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/15 border border-emerald-400/30 text-emerald-700 dark:text-emerald-200 text-[10px] font-bold">
               <Anchor className="w-2.5 h-2.5" />
               ثابت
             </span>
@@ -45,7 +45,7 @@ function PendingFixedRow({ pending, month, onConfirmFixed }) {
           </span>
         </td>
         <td
-          className="py-2.5 px-2 text-white/70 whitespace-nowrap text-right text-sm"
+          className="py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm"
           dir="ltr"
         >
           {defaultFormatted}
@@ -62,7 +62,7 @@ function PendingFixedRow({ pending, month, onConfirmFixed }) {
           />
         </td>
         <td className="py-2.5 px-1 text-center">
-          <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-white/[0.04] border border-white/10 text-white/30">
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30">
             <X className="w-3.5 h-3.5" />
           </span>
         </td>
@@ -73,8 +73,8 @@ function PendingFixedRow({ pending, month, onConfirmFixed }) {
               onClick={() => setShowNote(!showNote)}
               className={`w-6 h-6 rounded-md inline-flex items-center justify-center transition-all ${
                 note
-                  ? "bg-amber-400/15 border border-amber-400/30 text-amber-300"
-                  : "bg-white/[0.04] border border-white/10 text-white/40 hover:bg-white/[0.08]"
+                  ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300"
+                  : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"
               }`}
               title="ملاحظة"
             >
@@ -93,7 +93,7 @@ function PendingFixedRow({ pending, month, onConfirmFixed }) {
       </tr>
 
       {showNote && (
-        <tr className="border-t border-white/5">
+        <tr className="border-t border-slate-100 dark:border-white/5">
           <td colSpan={6} className="py-2 px-2">
             <div className="flex items-start gap-2 mr-2">
               <input
@@ -211,21 +211,21 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
 
   return (
     <>
-      <tr className="border-t border-white/10 hover:bg-white/[0.04]">
+      <tr className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]">
         <td
-          className="py-2.5 px-2 text-white/70 whitespace-nowrap text-sm"
+          className="py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm"
           style={{ maxWidth: 120 }}
         >
           {typeName}
         </td>
         <td
-          className="py-2.5 px-2 font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm"
+          className="py-2.5 px-2 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm"
           style={{ maxWidth: 200 }}
         >
           {expenseName}
         </td>
         <td
-          className="py-2.5 px-2 text-white/70 whitespace-nowrap text-right text-sm"
+          className="py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm"
           dir="ltr"
         >
           {formattedAmount}
@@ -235,7 +235,7 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
         <td className="py-2.5 px-2">
           {isConfirmed ? (
             isLocked ? (
-              <span className="text-white/70 text-xs" dir="ltr">
+              <span className="text-slate-700 dark:text-white/70 text-xs" dir="ltr">
                 {formatMoney(confirmedAmount)}
               </span>
             ) : (
@@ -254,7 +254,7 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
               />
             )
           ) : (
-            <span className="text-white/30 text-xs">—</span>
+            <span className="text-slate-400 dark:text-white/30 text-xs">—</span>
           )}
         </td>
 
@@ -266,8 +266,8 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
             disabled={isLocked}
             className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${
               isConfirmed
-                ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-300"
-                : "bg-white/[0.04] border border-white/10 text-white/30 hover:bg-white/[0.08]"
+                ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300"
+                : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"
             } ${isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
           >
             {isConfirmed ? (
@@ -287,8 +287,8 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
                 onClick={() => setShowNote(!showNote)}
                 className={`w-6 h-6 rounded-md flex items-center justify-center transition-all ${
                   confirmedNote || amountDiffers
-                    ? "bg-amber-400/15 border border-amber-400/30 text-amber-300"
-                    : "bg-white/[0.04] border border-white/10 text-white/40 hover:bg-white/[0.08]"
+                    ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300"
+                    : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"
                 }`}
                 title="ملاحظة"
               >
@@ -301,7 +301,7 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
               <button
                 type="button"
                 onClick={() => onEdit(expense)}
-                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-sky-500/10 border border-sky-500/25 text-sky-300 hover:bg-sky-500/20"
+                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-sky-500/10 border border-sky-500/25 text-sky-700 dark:text-sky-300 hover:bg-sky-500/20"
                 title="تعديل المصروف"
               >
                 <Pencil className="w-3 h-3" />
@@ -313,7 +313,7 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
               <button
                 type="button"
                 onClick={handleEditConfirm}
-                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-white/[0.04] border border-white/10 text-white/40 hover:bg-white/[0.08] hover:text-white/70"
+                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-white/70"
                 title="تعديل التأكيد"
               >
                 <Pencil className="w-3 h-3" />
@@ -324,7 +324,7 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
               <button
                 type="button"
                 onClick={handleCancelEditConfirm}
-                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-300 hover:bg-red-500/20"
+                className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300 hover:bg-red-500/20"
                 title="إلغاء"
               >
                 <X className="w-3 h-3" />
@@ -347,7 +347,7 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
                   onDelete(expense.id);
                 }
               }}
-              className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-300 hover:bg-red-500/20"
+              className="w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300 hover:bg-red-500/20"
               title={savedConfirmed ? "حذف (مؤكد)" : "حذف"}
             >
               <Trash2 className="w-3 h-3" />
@@ -367,7 +367,7 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
       </tr>
 
       {showNote && isConfirmed && (
-        <tr className="border-t border-white/5">
+        <tr className="border-t border-slate-100 dark:border-white/5">
           <td colSpan={6} className="py-2 px-2">
             <div className="flex items-start gap-2 mr-2">
               {amountDiffers && (
@@ -378,13 +378,13 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
                       animation: "expensePulse 2s ease-in-out infinite",
                     }}
                   />
-                  <span className="text-amber-300 text-xs font-semibold whitespace-nowrap">
+                  <span className="text-amber-700 dark:text-amber-300 text-xs font-semibold whitespace-nowrap">
                     المبلغ مختلف عن الأصلي
                   </span>
                 </div>
               )}
               {isLocked ? (
-                <span className="text-white/60 text-xs py-1.5 flex-1">
+                <span className="text-slate-600 dark:text-white/60 text-xs py-1.5 flex-1">
                   {confirmedNote || "—"}
                 </span>
               ) : (
@@ -399,7 +399,7 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
                   }
                   className={`${ws.input} text-xs py-1.5 px-3 rounded-xl flex-1 ${
                     amountDiffers && !confirmedNote
-                      ? "border-amber-400/40 placeholder:text-amber-300/50"
+                      ? "border-amber-400/40 placeholder:text-amber-700 dark:placeholder:text-amber-300/50"
                       : ""
                   }`}
                 />
@@ -437,8 +437,8 @@ export function ExpenseTable({
   if (!hasAny) {
     return (
       <div className="text-center py-8">
-        <div className="text-white/40 text-sm">لا يوجد مصروفات لهذا الشهر</div>
-        <div className="text-white/25 text-xs mt-1">
+        <div className="text-slate-500 dark:text-white/40 text-sm">لا يوجد مصروفات لهذا الشهر</div>
+        <div className="text-slate-400 dark:text-white/25 text-xs mt-1">
           أضف مصروفات من قسم مصروف متغيّر أو سجّل مصاريف ثابتة
         </div>
       </div>
@@ -455,31 +455,31 @@ export function ExpenseTable({
   return (
     <>
       <div className="flex flex-wrap items-center gap-3 mb-3">
-        <span className="text-xs text-white/50">
+        <span className="text-xs text-slate-500 dark:text-white/50">
           تم التأكيد: {confirmedCount} / {expenses.length}
         </span>
         {pendingCount > 0 && (
           <>
-            <span className="text-xs text-white/40">|</span>
-            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-200">
+            <span className="text-xs text-slate-500 dark:text-white/40">|</span>
+            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-200">
               <Anchor className="w-3 h-3" />
               مصروفات ثابتة بانتظار التأكيد: {pendingCount}
             </span>
           </>
         )}
-        <span className="text-xs text-white/40">|</span>
-        <span className="text-xs text-white/50">
+        <span className="text-xs text-slate-500 dark:text-white/40">|</span>
+        <span className="text-xs text-slate-500 dark:text-white/50">
           إجمالي المصروفات:{" "}
-          <span className="text-white/80 font-semibold" dir="ltr">
+          <span className="text-slate-800 dark:text-white/80 font-semibold" dir="ltr">
             {formatMoney(totalOriginal)}
           </span>
         </span>
         {confirmedCount > 0 && (
           <>
-            <span className="text-xs text-white/40">|</span>
-            <span className="text-xs text-white/50">
+            <span className="text-xs text-slate-500 dark:text-white/40">|</span>
+            <span className="text-xs text-slate-500 dark:text-white/50">
               إجمالي المؤكد:{" "}
-              <span className="text-emerald-200 font-semibold" dir="ltr">
+              <span className="text-emerald-700 dark:text-emerald-200 font-semibold" dir="ltr">
                 {formatMoney(totalConfirmed)}
               </span>
             </span>
@@ -489,7 +489,7 @@ export function ExpenseTable({
 
       <table className="w-full text-xs">
         <thead>
-          <tr className="text-white/70 text-[11px]">
+          <tr className="text-slate-700 dark:text-white/70 text-[11px]">
             <th className="text-right font-semibold py-2 px-2 whitespace-nowrap">
               النوع
             </th>

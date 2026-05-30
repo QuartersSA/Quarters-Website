@@ -77,13 +77,13 @@ export function FixedExpenseForm({
     <div className={`${ws.glass} ${ws.card} p-5`}>
       <div className="flex items-center gap-3 mb-4">
         <div className={`${ws.iconBox} w-10 h-10`}>
-          <Banknote className="w-5 h-5 text-emerald-200" />
+          <Banknote className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
         </div>
         <div>
-          <div className="font-bold text-white tracking-tight">
+          <div className="font-bold text-slate-900 dark:text-white tracking-tight">
             {isEditing ? "تعديل مصروف ثابت" : "إضافة مصروف ثابت"}
           </div>
-          <div className="text-xs text-white/50 mt-0.5">
+          <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
             يُسجَّل مرة واحدة ويظهر تلقائياً في رفع المصروفات لكل شهر للتأكيد.
           </div>
         </div>
@@ -94,7 +94,7 @@ export function FixedExpenseForm({
         className="grid grid-cols-1 md:grid-cols-2 gap-3"
       >
         <div>
-          <div className="text-xs text-white/55 mb-1">النوع</div>
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1">النوع</div>
           <GlassSelect
             value={typeId}
             onChange={setTypeId}
@@ -103,7 +103,7 @@ export function FixedExpenseForm({
         </div>
 
         <div>
-          <div className="text-xs text-white/55 mb-1">اسم المصروف</div>
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1">اسم المصروف</div>
           <input
             type="text"
             value={expenseName}
@@ -114,7 +114,7 @@ export function FixedExpenseForm({
         </div>
 
         <div>
-          <div className="text-xs text-white/55 mb-1">المبلغ الافتراضي</div>
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1">المبلغ الافتراضي</div>
           <input
             type="number"
             value={defaultAmount}
@@ -128,9 +128,9 @@ export function FixedExpenseForm({
         </div>
 
         <div>
-          <div className="text-xs text-white/55 mb-1">
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
             شهر البداية{" "}
-            <span className="text-white/35">(اختياري)</span>
+            <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
           </div>
           <GlassSelect
             value={startMonth}
@@ -139,7 +139,7 @@ export function FixedExpenseForm({
             placeholder="بدون شهر بداية"
             buttonClassName="text-sm py-2.5 px-3"
           />
-          <div className="text-[11px] text-white/35 mt-1">
+          <div className="text-[11px] text-slate-400 dark:text-white/35 mt-1">
             إذا تُرك فارغاً يطبَّق على كل الأشهر السابقة واللاحقة.
           </div>
         </div>

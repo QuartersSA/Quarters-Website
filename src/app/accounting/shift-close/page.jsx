@@ -29,12 +29,12 @@ function diffLabel(value) {
 
 function pillClassForTone(tone) {
   if (tone === "good") {
-    return `${ws.pill} bg-emerald-400/15 text-emerald-200 border-emerald-400/25`;
+    return `${ws.pill} bg-emerald-400/15 text-emerald-700 dark:text-emerald-200 border-emerald-400/25`;
   }
   if (tone === "bad") {
-    return `${ws.pill} bg-red-500/15 text-red-200 border-red-500/25`;
+    return `${ws.pill} bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25`;
   }
-  return `${ws.pill} bg-white/[0.06] text-white/70 border-white/10`;
+  return `${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`;
 }
 
 export default function ShiftClosePage() {
@@ -164,11 +164,11 @@ export default function ShiftClosePage() {
     <div className={`${ws.glassSoft} ${ws.card} p-4`}>
       <div className="flex items-start gap-3">
         <div className={`${ws.iconBox} w-10 h-10`}>
-          <Info className="w-5 h-5 text-sky-200" />
+          <Info className="w-5 h-5 text-sky-700 dark:text-sky-200" />
         </div>
         <div className="min-w-0">
-          <div className="font-bold text-white tracking-tight">ملاحظة</div>
-          <div className="text-sm text-white/60 mt-1 leading-6">
+          <div className="font-bold text-slate-900 dark:text-white tracking-tight">ملاحظة</div>
+          <div className="text-sm text-slate-600 dark:text-white/60 mt-1 leading-6">
             هذه الصفحة للمحاسبة فقط، وتعرض تقفيلات الشفت المرسلة من صفحة الكاشير
             (
             <a className="underline" href="/shift-close/login">
@@ -189,7 +189,7 @@ export default function ShiftClosePage() {
         <AccountingSidebar active="shift-close" />
         <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
           <div className="mx-auto w-full max-w-[900px] space-y-4">
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/80`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-800 dark:text-white/80`}>
               هذه الصفحة خاصة بالمحاسبة.
               <div className="mt-3">
                 <a
@@ -215,13 +215,13 @@ export default function ShiftClosePage() {
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <Calculator className="w-5 h-5 text-emerald-200" />
+              <Calculator className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div className="min-w-0">
-              <div className="font-bold text-white tracking-tight truncate">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
                 المحاسبة
               </div>
-              <div className="text-xs text-white/50 truncate">
+              <div className="text-xs text-slate-500 dark:text-white/50 truncate">
                 تقفيلة الشفت — السجل
               </div>
             </div>
@@ -235,13 +235,13 @@ export default function ShiftClosePage() {
           <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={ws.iconBox}>
-                <Calculator className="w-5 h-5 text-emerald-200" />
+                <Calculator className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white tracking-tight">
+                <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
                   المحاسبة
                 </div>
-                <div className="text-white/55 mt-1">تقفيلة الشفت — السجل</div>
+                <div className="text-slate-600 dark:text-white/55 mt-1">تقفيلة الشفت — السجل</div>
               </div>
             </div>
           </div>
@@ -249,11 +249,11 @@ export default function ShiftClosePage() {
           {infoCard}
 
           {!ready ? (
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
               جاري التحميل…
             </div>
           ) : !employeeId ? (
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
               لازم تسجيل دخول الإدارة أولًا.
               <div className="mt-2">
                 <a
@@ -265,19 +265,19 @@ export default function ShiftClosePage() {
               </div>
             </div>
           ) : !isAdmin ? (
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
               هذه الصفحة للمحاسبة فقط.
             </div>
           ) : branchesLoading && allBranchesQuery.isLoading ? (
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
               جاري تحميل الفروع…
             </div>
           ) : branchesLoading && allBranchesQuery.error ? (
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-red-300`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-red-700 dark:text-red-300`}>
               {allBranchesQuery.error?.message || "فشل تحميل الفروع"}
             </div>
           ) : branches.length === 0 ? (
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
               لا يوجد فروع مرتبطة بهذا الحساب.
             </div>
           ) : (
@@ -287,13 +287,13 @@ export default function ShiftClosePage() {
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div className="flex items-center gap-2">
                     <div className={`${ws.iconBox} w-10 h-10`}>
-                      <Building2 className="w-5 h-5 text-white/70" />
+                      <Building2 className="w-5 h-5 text-slate-700 dark:text-white/70" />
                     </div>
                     <div>
-                      <div className="font-bold text-white tracking-tight">
+                      <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                         فلترة السجل
                       </div>
-                      <div className="text-xs text-white/50 mt-1">
+                      <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
                         حسب الفرع — آخر 250 سجل
                       </div>
                     </div>
@@ -330,11 +330,11 @@ export default function ShiftClosePage() {
                 </div>
 
                 <div className="mt-4">
-                  <label className="block text-sm font-semibold text-white/70 mb-2">
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                     الفرع
                   </label>
                   <div className="relative">
-                    <Building2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/35" />
+                    <Building2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35" />
 
                     {/* Use themed GlassSelect everywhere (matches "تحليل الجرد حسب الصنف") */}
                     <GlassSelect
@@ -349,23 +349,23 @@ export default function ShiftClosePage() {
 
               {/* Table */}
               <div className={cardShell}>
-                <div className="font-bold text-white tracking-tight">
+                <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                   جدول تقفيلات الشفت
                 </div>
 
                 <div className="mt-4 overflow-x-auto">
                   {closingsQuery.isLoading ? (
-                    <div className="text-white/60">جاري التحميل…</div>
+                    <div className="text-slate-600 dark:text-white/60">جاري التحميل…</div>
                   ) : closingsQuery.error ? (
-                    <div className="text-red-300">
+                    <div className="text-red-700 dark:text-red-300">
                       {closingsQuery.error?.message || "فشل تحميل السجل"}
                     </div>
                   ) : tableRows.length === 0 ? (
-                    <div className="text-white/60">لا يوجد سجلات بعد.</div>
+                    <div className="text-slate-600 dark:text-white/60">لا يوجد سجلات بعد.</div>
                   ) : (
                     <table className="min-w-[1200px] w-full text-sm">
                       <thead>
-                        <tr className="text-white/70">
+                        <tr className="text-slate-700 dark:text-white/70">
                           <th className="text-right font-semibold py-2 px-3">
                             التاريخ
                           </th>
@@ -413,35 +413,35 @@ export default function ShiftClosePage() {
                           return (
                             <tr
                               key={r.id}
-                              className="border-t border-white/10 hover:bg-white/[0.04]"
+                              className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]"
                             >
-                              <td className="py-3 px-3 font-semibold text-white">
+                              <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
                                 {r.shift_date || "—"}
                               </td>
-                              <td className="py-3 px-3 text-white/70">
+                              <td className="py-3 px-3 text-slate-700 dark:text-white/70">
                                 {r.branch_name}
                               </td>
-                              <td className="py-3 px-3 text-white/70">
+                              <td className="py-3 px-3 text-slate-700 dark:text-white/70">
                                 {r.shift_label}
                               </td>
-                              <td className="py-3 px-3 text-white/70">
+                              <td className="py-3 px-3 text-slate-700 dark:text-white/70">
                                 {r.employee_name}
                               </td>
-                              <td className="py-3 px-3 text-white/70">
+                              <td className="py-3 px-3 text-slate-700 dark:text-white/70">
                                 {r.actual_cash}
                               </td>
-                              <td className="py-3 px-3 text-white/70">
+                              <td className="py-3 px-3 text-slate-700 dark:text-white/70">
                                 {r.actual_card}
                               </td>
-                              <td className="py-3 px-3 text-white/70">
+                              <td className="py-3 px-3 text-slate-700 dark:text-white/70">
                                 {r.foodics_cash}
                               </td>
-                              <td className="py-3 px-3 text-white/70">
+                              <td className="py-3 px-3 text-slate-700 dark:text-white/70">
                                 {r.foodics_card}
                               </td>
                               <td className="py-3 px-3">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-white/85 font-semibold">
+                                  <span className="text-slate-800 dark:text-white/85 font-semibold">
                                     {formatMoney(r.cashDiff)}
                                   </span>
                                   <span className={pillClassForTone(cash.tone)}>
@@ -451,7 +451,7 @@ export default function ShiftClosePage() {
                               </td>
                               <td className="py-3 px-3">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-white/85 font-semibold">
+                                  <span className="text-slate-800 dark:text-white/85 font-semibold">
                                     {formatMoney(r.cardDiff)}
                                   </span>
                                   <span className={pillClassForTone(card.tone)}>
@@ -461,7 +461,7 @@ export default function ShiftClosePage() {
                               </td>
                               <td className="py-3 px-3">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-white font-extrabold">
+                                  <span className="text-slate-900 dark:text-white font-extrabold">
                                     {formatMoney(r.totalDiff)}
                                   </span>
                                   <span
@@ -471,7 +471,7 @@ export default function ShiftClosePage() {
                                   </span>
                                 </div>
                               </td>
-                              <td className="py-3 px-3 text-white/55 max-w-[240px] truncate">
+                              <td className="py-3 px-3 text-slate-600 dark:text-white/55 max-w-[240px] truncate">
                                 {r.note || "—"}
                               </td>
                             </tr>

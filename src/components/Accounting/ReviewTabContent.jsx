@@ -152,8 +152,8 @@ export default function ReviewTabContent({
   if (!month) {
     return (
       <div className={`${ws.glassSoft} ${ws.card} p-8 text-center`}>
-        <Receipt className="w-10 h-10 mx-auto mb-3 text-white/30" />
-        <div className="text-white/60 text-sm">
+        <Receipt className="w-10 h-10 mx-auto mb-3 text-slate-400 dark:text-white/30" />
+        <div className="text-slate-600 dark:text-white/60 text-sm">
           اختر الشهر من القائمة في الأعلى لعرض المراجعة
         </div>
       </div>
@@ -196,7 +196,7 @@ export default function ReviewTabContent({
           label="نسبة التأكيد"
           value={`${confirmationPct}%`}
           sub={
-            <div className="w-full bg-white/10 rounded-full h-1.5 mt-2">
+            <div className="w-full bg-slate-200 dark:bg-white/10 rounded-full h-1.5 mt-2">
               <div
                 className="bg-emerald-400 h-1.5 rounded-full transition-all"
                 style={{ width: `${confirmationPct}%` }}
@@ -213,20 +213,20 @@ export default function ReviewTabContent({
         {/* Top categories */}
         <div className={`${ws.glass} ${ws.card} p-5`}>
           <div className="flex items-center gap-2 mb-4">
-            <div className={`${ws.iconBox} w-9 h-9 text-amber-200`}>
+            <div className={`${ws.iconBox} w-9 h-9 text-amber-700 dark:text-amber-200`}>
               <Trophy className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-white font-bold text-sm">
+              <div className="text-slate-900 dark:text-white font-bold text-sm">
                 أعلى التصنيفات
               </div>
-              <div className="text-white/55 text-xs">
+              <div className="text-slate-600 dark:text-white/55 text-xs">
                 ترتيب حسب الإجمالي
               </div>
             </div>
           </div>
           {stats.topTypes.length === 0 ? (
-            <div className="text-white/45 text-xs text-center py-6">
+            <div className="text-slate-500 dark:text-white/45 text-xs text-center py-6">
               لا توجد بيانات
             </div>
           ) : (
@@ -240,24 +240,24 @@ export default function ReviewTabContent({
                   <div key={t.name}>
                     <div className="flex items-center justify-between text-xs mb-1">
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-white/40 text-[10px]">
+                        <span className="text-slate-500 dark:text-white/40 text-[10px]">
                           {idx + 1}.
                         </span>
-                        <span className="text-white font-semibold truncate">
+                        <span className="text-slate-900 dark:text-white font-semibold truncate">
                           {t.name}
                         </span>
                       </div>
-                      <div className="text-white/80 font-bold" dir="ltr">
+                      <div className="text-slate-800 dark:text-white/80 font-bold" dir="ltr">
                         {formatMoney(t.total)}
                       </div>
                     </div>
-                    <div className="w-full bg-white/[0.04] rounded-full h-1.5 overflow-hidden">
+                    <div className="w-full bg-slate-100 dark:bg-white/[0.04] rounded-full h-1.5 overflow-hidden">
                       <div
                         className="bg-gradient-to-r from-emerald-400/70 to-sky-400/70 h-full rounded-full"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <div className="text-[10px] text-white/35 mt-0.5">
+                    <div className="text-[10px] text-slate-400 dark:text-white/35 mt-0.5">
                       {Math.round(pct)}% — {t.count} مصروف
                     </div>
                   </div>
@@ -278,13 +278,13 @@ export default function ReviewTabContent({
         <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
           <div className="flex items-center gap-3">
             <div className={ws.iconBox}>
-              <ClipboardCheck className="w-5 h-5 text-emerald-200" />
+              <ClipboardCheck className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div>
-              <div className="font-bold text-white tracking-tight">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                 سجل المصروفات
               </div>
-              <div className="text-xs text-white/50 mt-0.5">
+              <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
                 {monthHint} — {filteredExpenses.length} من{" "}
                 {stats.totalCount}
               </div>
@@ -293,7 +293,7 @@ export default function ReviewTabContent({
 
           {/* Status filter chips */}
           <div
-            className={`inline-flex items-center gap-1 p-1 rounded-2xl border border-white/10 bg-white/[0.03]`}
+            className={`inline-flex items-center gap-1 p-1 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03]`}
           >
             {STATUS_CHIPS.map((chip) => {
               const Icon = chip.icon;
@@ -305,8 +305,8 @@ export default function ReviewTabContent({
                   onClick={() => onStatusFilterChange(chip.value)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-colors ${
                     active
-                      ? "bg-white/10 text-white border border-white/20"
-                      : "text-white/55 hover:text-white/80 border border-transparent"
+                      ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border border-slate-300 dark:border-white/20"
+                      : "text-slate-600 dark:text-white/55 hover:text-slate-800 dark:hover:text-white/80 border border-transparent"
                   }`}
                 >
                   <Icon className="w-3 h-3" />
@@ -318,11 +318,11 @@ export default function ReviewTabContent({
         </div>
 
         {expensesQuery.isLoading ? (
-          <div className="text-center py-8 text-white/60 text-sm">
+          <div className="text-center py-8 text-slate-600 dark:text-white/60 text-sm">
             جاري التحميل…
           </div>
         ) : expensesQuery.error ? (
-          <div className="text-center py-8 text-red-300 text-sm">
+          <div className="text-center py-8 text-red-700 dark:text-red-300 text-sm">
             {String(expensesQuery.error.message)}
           </div>
         ) : (
@@ -346,10 +346,10 @@ export default function ReviewTabContent({
 /* ──────────────────────────────────────────────────────────────── */
 
 const ACCENT = {
-  emerald: { text: "text-emerald-200", icon: "text-emerald-200" },
-  amber: { text: "text-amber-200", icon: "text-amber-200" },
-  sky: { text: "text-sky-200", icon: "text-sky-200" },
-  white: { text: "text-white", icon: "text-white/70" },
+  emerald: { text: "text-emerald-700 dark:text-emerald-200", icon: "text-emerald-700 dark:text-emerald-200" },
+  amber: { text: "text-amber-700 dark:text-amber-200", icon: "text-amber-700 dark:text-amber-200" },
+  sky: { text: "text-sky-700 dark:text-sky-200", icon: "text-sky-700 dark:text-sky-200" },
+  white: { text: "text-slate-900 dark:text-white", icon: "text-slate-700 dark:text-white/70" },
 };
 
 function HeroStat({
@@ -366,7 +366,7 @@ function HeroStat({
     <div className={`${ws.glass} ${ws.card} p-4`}>
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="text-xs text-white/55">{label}</div>
+          <div className="text-xs text-slate-600 dark:text-white/55">{label}</div>
           <div className={`font-extrabold mt-1 text-xl ${a.text}`} dir="ltr">
             {value}
           </div>
@@ -380,19 +380,19 @@ function HeroStat({
       {momDelta !== null && momDelta !== undefined ? (
         <div className="flex items-center gap-1 text-[10px] mt-1.5">
           {momDelta > 0 ? (
-            <ArrowUpRight className="w-3 h-3 text-red-300" />
+            <ArrowUpRight className="w-3 h-3 text-red-700 dark:text-red-300" />
           ) : momDelta < 0 ? (
-            <ArrowDownRight className="w-3 h-3 text-emerald-300" />
+            <ArrowDownRight className="w-3 h-3 text-emerald-700 dark:text-emerald-300" />
           ) : (
-            <Minus className="w-3 h-3 text-white/40" />
+            <Minus className="w-3 h-3 text-slate-500 dark:text-white/40" />
           )}
           <span
             className={
               momDelta > 0
-                ? "text-red-300"
+                ? "text-red-700 dark:text-red-300"
                 : momDelta < 0
-                  ? "text-emerald-300"
-                  : "text-white/40"
+                  ? "text-emerald-700 dark:text-emerald-300"
+                  : "text-slate-500 dark:text-white/40"
             }
             dir="ltr"
           >
@@ -402,10 +402,10 @@ function HeroStat({
               ? ` (${momPct > 0 ? "+" : ""}${Math.round(momPct)}%)`
               : ""}
           </span>
-          <span className="text-white/35">عن الشهر السابق</span>
+          <span className="text-slate-400 dark:text-white/35">عن الشهر السابق</span>
         </div>
       ) : sub && typeof sub === "string" ? (
-        <div className="text-xs text-white/40 mt-1">{sub}</div>
+        <div className="text-xs text-slate-500 dark:text-white/40 mt-1">{sub}</div>
       ) : sub ? (
         <>{sub}</>
       ) : null}

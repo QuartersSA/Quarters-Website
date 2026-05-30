@@ -20,10 +20,10 @@ export function PayrollBonusManagement({
     <div className={`${ws.glassSoft} ${ws.card} p-5`}>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <div className="font-bold text-white tracking-tight">
+          <div className="font-bold text-slate-900 dark:text-white tracking-tight">
             البونص ({monthHint})
           </div>
-          <div className="text-xs text-white/50 mt-1">
+          <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
             إضافة/تعديل/حذف بونص لهذا الشهر (يتم تحديث المسير بعد كل تغيير)
           </div>
         </div>

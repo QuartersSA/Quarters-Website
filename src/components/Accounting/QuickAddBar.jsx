@@ -36,7 +36,7 @@ export function QuickAddBar({
         >
           <Plus className="w-4 h-4" />
           <span>مصروف سريع</span>
-          <kbd className="hidden sm:inline-flex items-center text-[10px] font-mono bg-white/10 border border-white/15 rounded px-1.5 py-0.5">
+          <kbd className="hidden sm:inline-flex items-center text-[10px] font-mono bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/15 rounded px-1.5 py-0.5">
             Ctrl+N
           </kbd>
         </button>
@@ -54,16 +54,16 @@ export function QuickAddBar({
         <div
           className={`${ws.glass} ${ws.card} px-3 py-2 flex items-center gap-2 flex-1 min-w-0`}
         >
-          <Banknote className="w-4 h-4 text-emerald-200 shrink-0" />
+          <Banknote className="w-4 h-4 text-emerald-700 dark:text-emerald-200 shrink-0" />
           <div className="flex flex-col leading-tight min-w-0">
-            <div className="text-[10px] text-white/50 truncate">
+            <div className="text-[10px] text-slate-500 dark:text-white/50 truncate">
               {month
                 ? `إجمالي ${monthLabel(month)}`
                 : "إجمالي مصروفات الشهر"}
             </div>
-            <div className="text-white font-extrabold text-sm" dir="ltr">
+            <div className="text-slate-900 dark:text-white font-extrabold text-sm" dir="ltr">
               {formatMoney(totalAmount)}{" "}
-              <span className="text-white/40 text-[10px] font-normal">
+              <span className="text-slate-500 dark:text-white/40 text-[10px] font-normal">
                 ({totalCount} مصروف)
               </span>
             </div>

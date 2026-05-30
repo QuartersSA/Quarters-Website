@@ -69,7 +69,7 @@ function TooltipBox({ active, payload, labelFormatter }) {
       dir="rtl"
     >
       {payload[0]?.payload?.month || payload[0]?.name ? (
-        <div className="text-white/55 mb-1">
+        <div className="text-slate-600 dark:text-white/55 mb-1">
           {labelFormatter
             ? labelFormatter(payload[0].payload?.month || payload[0].name)
             : payload[0].payload?.month || payload[0].name}
@@ -81,8 +81,8 @@ function TooltipBox({ active, payload, labelFormatter }) {
             className="inline-block w-2.5 h-2.5 rounded-full"
             style={{ background: p.color || p.fill }}
           />
-          <span className="text-white/70">{p.name}:</span>
-          <span className="text-white font-bold" dir="ltr">
+          <span className="text-slate-700 dark:text-white/70">{p.name}:</span>
+          <span className="text-slate-900 dark:text-white font-bold" dir="ltr">
             {formatMoney(p.value)}
           </span>
         </div>
@@ -151,7 +151,7 @@ export default function ExpensesCharts({ month }) {
   if (trendQuery.isLoading) {
     return (
       <div className={`${ws.glass} ${ws.card} p-5`}>
-        <div className="h-64 flex items-center justify-center text-white/55">
+        <div className="h-64 flex items-center justify-center text-slate-600 dark:text-white/55">
           جاري تحميل الرسوم البيانية…
         </div>
       </div>
@@ -160,7 +160,7 @@ export default function ExpensesCharts({ month }) {
 
   if (trendQuery.isError) {
     return (
-      <div className={`${ws.glass} ${ws.card} p-5 text-red-200 text-sm`}>
+      <div className={`${ws.glass} ${ws.card} p-5 text-red-700 dark:text-red-200 text-sm`}>
         {trendQuery.error?.message || "تعذّر تحميل البيانات"}
       </div>
     );
@@ -171,12 +171,12 @@ export default function ExpensesCharts({ month }) {
       {/* Trend line — spans 2 cols on lg */}
       <div className={`${ws.glass} ${ws.card} p-5 lg:col-span-2`}>
         <div className="flex items-center gap-2 mb-3">
-          <div className={`${ws.iconBox} w-9 h-9 text-emerald-200`}>
+          <div className={`${ws.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200`}>
             <TrendingUp className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-white font-bold text-sm">آخر 12 شهر</div>
-            <div className="text-white/55 text-xs">
+            <div className="text-slate-900 dark:text-white font-bold text-sm">آخر 12 شهر</div>
+            <div className="text-slate-600 dark:text-white/55 text-xs">
               مؤكد + بانتظار التأكيد
             </div>
           </div>
@@ -240,7 +240,7 @@ export default function ExpensesCharts({ month }) {
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-64 flex items-center justify-center text-white/55 text-sm">
+          <div className="h-64 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm">
             لا توجد بيانات بعد
           </div>
         )}
@@ -249,12 +249,12 @@ export default function ExpensesCharts({ month }) {
       {/* Pie by type */}
       <div className={`${ws.glass} ${ws.card} p-5`}>
         <div className="flex items-center gap-2 mb-3">
-          <div className={`${ws.iconBox} w-9 h-9 text-sky-200`}>
+          <div className={`${ws.iconBox} w-9 h-9 text-sky-700 dark:text-sky-200`}>
             <PieIcon className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-white font-bold text-sm">توزيع الشهر</div>
-            <div className="text-white/55 text-xs">
+            <div className="text-slate-900 dark:text-white font-bold text-sm">توزيع الشهر</div>
+            <div className="text-slate-600 dark:text-white/55 text-xs">
               {monthLabel(month) || "—"}
             </div>
           </div>
@@ -290,7 +290,7 @@ export default function ExpensesCharts({ month }) {
             </PieChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-64 flex items-center justify-center text-white/55 text-sm">
+          <div className="h-64 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm">
             لا توجد مصروفات لهذا الشهر
           </div>
         )}
@@ -299,12 +299,12 @@ export default function ExpensesCharts({ month }) {
       {/* Bar by type — spans full width below */}
       <div className={`${ws.glass} ${ws.card} p-5 lg:col-span-3`}>
         <div className="flex items-center gap-2 mb-3">
-          <div className={`${ws.iconBox} w-9 h-9 text-pink-200`}>
+          <div className={`${ws.iconBox} w-9 h-9 text-pink-700 dark:text-pink-200`}>
             <BarChart3 className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-white font-bold text-sm">حسب النوع</div>
-            <div className="text-white/55 text-xs">
+            <div className="text-slate-900 dark:text-white font-bold text-sm">حسب النوع</div>
+            <div className="text-slate-600 dark:text-white/55 text-xs">
               {monthLabel(month) || "—"}
             </div>
           </div>
@@ -353,7 +353,7 @@ export default function ExpensesCharts({ month }) {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="h-32 flex items-center justify-center text-white/55 text-sm">
+          <div className="h-32 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm">
             لا توجد مصروفات لهذا الشهر
           </div>
         )}

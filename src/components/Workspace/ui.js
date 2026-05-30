@@ -19,28 +19,37 @@ export const ws = {
     "bg-gradient-to-b from-slate-50 via-white to-slate-100/80 text-slate-900 font-inter " +
     "dark:from-[#0d1426] dark:via-[#101c38] dark:to-[#090f1f] dark:text-white",
 
-  // Surfaces — frosted-glass cards. Light uses a near-white
-  // background + soft translucent slate border + a layered shadow:
-  // a tight 1-px stroke up top (highlight) and a wide diffuse drop
-  // shadow below (lift). Dark unchanged.
+  // Surfaces — frosted glass.
+  //
+  // Light mode is now fully opaque (bg-white instead of /85) so any
+  // card that lands above a dark modal backdrop reads as a real
+  // sheet of paper, not a translucent foggy panel. Borders are
+  // tighter (slate-200, not /70) and the shadow is the layered
+  // 3-stop "highlight + tight + diffuse" stack that gives the
+  // card real depth.
+  //
+  // Dark unchanged — it always looked correct.
   glass:
-    "bg-white/85 supports-[backdrop-filter]:bg-white/70 border border-slate-200/70 backdrop-blur-xl " +
-    "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_1px_2px_rgba(15,23,42,0.04),0_20px_40px_-12px_rgba(15,23,42,0.08)] " +
+    "bg-white border border-slate-200 " +
+    "shadow-[0_1px_0_rgba(255,255,255,0.95)_inset,0_1px_2px_rgba(15,23,42,0.05),0_24px_48px_-16px_rgba(15,23,42,0.15)] " +
     "dark:bg-[#132044]/70 dark:supports-[backdrop-filter]:bg-[#132044]/50 dark:border-white/10 " +
+    "dark:backdrop-blur-xl " +
     "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_18px_50px_rgba(0,0,0,0.35)]",
   glassSoft:
-    "bg-white/70 supports-[backdrop-filter]:bg-white/55 border border-slate-200/60 backdrop-blur-xl " +
-    "shadow-[0_1px_0_rgba(255,255,255,0.8)_inset,0_1px_2px_rgba(15,23,42,0.03)] " +
+    "bg-white/95 border border-slate-200/80 " +
+    "shadow-[0_1px_0_rgba(255,255,255,0.95)_inset,0_1px_2px_rgba(15,23,42,0.03)] " +
     "dark:bg-[#132044]/55 dark:supports-[backdrop-filter]:bg-[#132044]/40 dark:border-white/10 " +
+    "dark:backdrop-blur-xl " +
     "dark:shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]",
 
-  // Popovers / Menus — heavier shadow so they read as floating above
-  // the surface beneath them. Light uses a more saturated drop.
+  // Popovers / Menus / Modals — fully opaque white in light so they
+  // never blend into the backdrop behind them. Heavier shadow gives
+  // them clear "floating above the page" depth.
   popover:
-    "bg-white/95 supports-[backdrop-filter]:bg-white/90 backdrop-blur-2xl " +
-    "border border-slate-200/60 " +
-    "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_8px_24px_-4px_rgba(15,23,42,0.12),0_24px_60px_-12px_rgba(15,23,42,0.18)] " +
+    "bg-white border border-slate-200 " +
+    "shadow-[0_1px_0_rgba(255,255,255,0.95)_inset,0_8px_24px_-4px_rgba(15,23,42,0.15),0_32px_72px_-16px_rgba(15,23,42,0.22)] " +
     "dark:bg-[#132044]/92 dark:supports-[backdrop-filter]:bg-[#132044]/75 dark:border-white/15 " +
+    "dark:backdrop-blur-2xl " +
     "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_20px_70px_rgba(0,0,0,0.55)]",
 
   // Top bars

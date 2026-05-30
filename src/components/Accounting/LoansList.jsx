@@ -21,7 +21,7 @@ export default function LoansList({
 }) {
   if (isLoading) {
     return (
-      <div className={`${ws.glass} ${ws.card} p-6 text-white/60 text-sm`}>
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60 text-sm`}>
         جاري التحميل…
       </div>
     );
@@ -30,17 +30,17 @@ export default function LoansList({
   if (!loans || loans.length === 0) {
     return (
       <div
-        className={`${ws.glass} ${ws.card} p-8 text-center text-white/60`}
+        className={`${ws.glass} ${ws.card} p-8 text-center text-slate-600 dark:text-white/60`}
       >
         <div
           className={`${ws.iconBox} w-12 h-12 mx-auto mb-3`}
         >
-          <Wallet className="w-5 h-5 text-white/50" />
+          <Wallet className="w-5 h-5 text-slate-500 dark:text-white/50" />
         </div>
-        <div className="text-sm font-semibold text-white/75">
+        <div className="text-sm font-semibold text-slate-700 dark:text-white/75">
           لا توجد سلف مسجّلة
         </div>
-        <div className="text-xs text-white/45 mt-1">
+        <div className="text-xs text-slate-500 dark:text-white/45 mt-1">
           أضف قرضاً جديداً ليُخصم تلقائياً من مسير الرواتب الشهري.
         </div>
       </div>
@@ -52,7 +52,7 @@ export default function LoansList({
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-white/70 text-xs">
+            <tr className="text-slate-700 dark:text-white/70 text-xs">
               <th className="text-right font-semibold py-3 px-3 whitespace-nowrap">
                 الموظف
               </th>
@@ -96,37 +96,37 @@ export default function LoansList({
               return (
                 <tr
                   key={l.id}
-                  className="border-t border-white/10 hover:bg-white/[0.04]"
+                  className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]"
                 >
-                  <td className="py-3 px-3 font-semibold text-white whitespace-nowrap">
+                  <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white whitespace-nowrap">
                     {l.employee_name || `#${l.employee_id}`}
                   </td>
                   <td
-                    className="py-3 px-3 text-white/85 whitespace-nowrap text-right"
+                    className="py-3 px-3 text-slate-800 dark:text-white/85 whitespace-nowrap text-right"
                     dir="ltr"
                   >
                     {formatMoney(l.total_amount)}
                   </td>
                   <td
-                    className="py-3 px-3 text-emerald-200 font-bold whitespace-nowrap text-right"
+                    className="py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right"
                     dir="ltr"
                   >
                     {formatMoney(l.monthly_amount)}
                   </td>
-                  <td className="py-3 px-3 text-white/75 whitespace-nowrap">
+                  <td className="py-3 px-3 text-slate-700 dark:text-white/75 whitespace-nowrap">
                     {inst} شهر
                   </td>
-                  <td className="py-3 px-3 text-white/70 whitespace-nowrap">
+                  <td className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap">
                     {startMonthShort
                       ? monthLabel(startMonthShort)
                       : "—"}
                   </td>
                   <td className="py-3 px-3 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <span className="text-white/75 text-xs">
+                      <span className="text-slate-700 dark:text-white/75 text-xs">
                         {paid} / {inst}
                       </span>
-                      <div className="w-20 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                      <div className="w-20 h-1.5 rounded-full bg-slate-100 dark:bg-white/[0.06] overflow-hidden">
                         <div
                           className="h-full bg-emerald-400/60"
                           style={{
@@ -138,7 +138,7 @@ export default function LoansList({
                         />
                       </div>
                       {remaining === 0 ? (
-                        <span className="text-[10px] text-emerald-300/80">
+                        <span className="text-[10px] text-emerald-700 dark:text-emerald-300/80">
                           مكتمل
                         </span>
                       ) : null}
@@ -148,15 +148,15 @@ export default function LoansList({
                     <span
                       className={`${ws.pill} ${
                         isActive
-                          ? "text-emerald-200 border-emerald-400/30 bg-emerald-400/10"
-                          : "text-white/50 border-white/15 bg-white/[0.04]"
+                          ? "text-emerald-700 dark:text-emerald-200 border-emerald-400/30 bg-emerald-400/10"
+                          : "text-slate-500 dark:text-white/50 border-slate-200 dark:border-white/15 bg-slate-100 dark:bg-white/[0.04]"
                       }`}
                     >
                       {isActive ? "نشط" : "موقوف"}
                     </span>
                   </td>
                   <td
-                    className="py-3 px-3 text-white/60 text-xs"
+                    className="py-3 px-3 text-slate-600 dark:text-white/60 text-xs"
                     style={{ maxWidth: 200 }}
                   >
                     <div className="truncate" title={l.note || ""}>
@@ -184,7 +184,7 @@ export default function LoansList({
                       <button
                         type="button"
                         onClick={() => onDelete(l)}
-                        className={`${ws.iconButton} w-8 h-8 hover:bg-red-500/15 hover:border-red-500/30 hover:text-red-200`}
+                        className={`${ws.iconButton} w-8 h-8 hover:bg-red-500/15 hover:border-red-500/30 hover:text-red-700 dark:hover:text-red-200`}
                         title="حذف نهائي"
                       >
                         <Trash2 className="w-3.5 h-3.5" />

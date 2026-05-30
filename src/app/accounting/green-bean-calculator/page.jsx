@@ -55,7 +55,7 @@ export default function GreenBeanCalculatorPage() {
         <AccountingSidebar active="green-bean" />
         <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
           <div className="mx-auto w-full max-w-[900px] space-y-4">
-            <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/80`}>
+            <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-800 dark:text-white/80`}>
               هذه الصفحة خاصة بالمحاسبة.
               <div className="mt-3">
                 <a
@@ -73,11 +73,11 @@ export default function GreenBeanCalculatorPage() {
   }
 
   const loadingOrAuth = !ready ? (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       جاري التحميل…
     </div>
   ) : !employeeId ? (
-    <div className={`${ws.glassSoft} ${ws.card} p-6 text-white/70`}>
+    <div className={`${ws.glassSoft} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
       لازم تسجيل دخول الإدارة أولًا.
       <div className="mt-2">
         <a
@@ -96,22 +96,22 @@ export default function GreenBeanCalculatorPage() {
 
   let beansStatusBlock = null;
   if (beansQuery.isLoading) {
-    beansStatusBlock = <div className="mt-4 text-white/60">جاري التحميل…</div>;
+    beansStatusBlock = <div className="mt-4 text-slate-600 dark:text-white/60">جاري التحميل…</div>;
   } else if (beansQuery.error) {
     beansStatusBlock = (
-      <div className="mt-4 text-red-300">{beansErrorText}</div>
+      <div className="mt-4 text-red-700 dark:text-red-300">{beansErrorText}</div>
     );
   } else if (beans.length === 0) {
     beansStatusBlock = (
-      <div className="mt-4 text-white/60">لا يوجد بن مضاف بعد.</div>
+      <div className="mt-4 text-slate-600 dark:text-white/60">لا يوجد بن مضاف بعد.</div>
     );
   }
 
   const errorBlock = error ? (
-    <div className="mt-4 text-red-300">{error}</div>
+    <div className="mt-4 text-red-700 dark:text-red-300">{error}</div>
   ) : null;
   const successBlock = success ? (
-    <div className="mt-4 text-emerald-200">{success}</div>
+    <div className="mt-4 text-emerald-700 dark:text-emerald-200">{success}</div>
   ) : null;
 
   const refreshDisabled = beansQuery.isFetching || !canInteract;
@@ -126,7 +126,7 @@ export default function GreenBeanCalculatorPage() {
 
   const savingBlock =
     updateBeanMutation.isPending || createSupplyMutation.isPending ? (
-      <div className="mt-3 text-white/60">جاري الحفظ…</div>
+      <div className="mt-3 text-slate-600 dark:text-white/60">جاري الحفظ…</div>
     ) : null;
 
   return (
