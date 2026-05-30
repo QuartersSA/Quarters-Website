@@ -1,0 +1,196 @@
+"use client";
+
+import React, { useState } from "react";
+import {
+  ShoppingCart,
+  FileText,
+  Users,
+  Layers,
+  Building,
+  Percent,
+  Construction,
+} from "lucide-react";
+import AccountingSidebar from "@/components/Accounting/Sidebar";
+import useWorkspaceUser from "@/hooks/useWorkspaceUser";
+import { ws } from "@/components/Workspace/ui";
+
+/**
+ * Purchases section — scaffold.
+ *
+ * Five top-level tabs, each a placeholder right now. Content lands
+ * in follow-up commits as we flesh out each area:
+ *
+ *   - فواتير المشتريات     — purchase invoices ledger
+ *   - الموردين والمستفيدين  — two-pane (suppliers + beneficiaries)
+ *   - فئات وأصناف          — purchase-side categories + items
+ *   - الحسابات البنكية      — bank accounts master list
+ *   - الضريبة              — VAT settings + reports
+ */
+
+const TABS = [
+  {
+    key: "invoices",
+    label: "فواتير المشتريات",
+    Icon: FileText,
+    description: "إدخال ومتابعة فواتير المشتريات لكل مورد.",
+  },
+  {
+    key: "vendors",
+    label: "الموردين والمستفيدين",
+    Icon: Users,
+    description: "إدارة الموردين والمستفيدين في قائمتين منفصلتين.",
+  },
+  {
+    key: "catalog",
+    label: "فئات وأصناف",
+    Icon: Layers,
+    description: "تصنيفات وأصناف المشتريات المرتبطة بالفواتير.",
+  },
+  {
+    key: "banks",
+    label: "الحسابات البنكية",
+    Icon: Building,
+    description: "حسابات البنك المستخدمة في عمليات الدفع.",
+  },
+  {
+    key: "tax",
+    label: "الضريبة",
+    Icon: Percent,
+    description: "إعدادات ضريبة القيمة المضافة + تقارير الضريبة.",
+  },
+];
+
+function PurchasesMobileHeader() {
+  return (
+    <div
+      className={`lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`}
+    >
+      <div className="w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center">
+        <ShoppingCart className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
+      </div>
+      <div>
+        <div className="font-bold text-slate-900 dark:text-white tracking-tight">
+          المشتريات
+        </div>
+        <div className="text-xs text-slate-500 dark:text-white/50">
+          فواتير، موردين، أصناف، بنوك، وضريبة
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PurchasesDesktopHeader() {
+  return (
+    <div className="hidden lg:flex items-center gap-4">
+      <div className={ws.iconBox}>
+        <ShoppingCart className="w-6 h-6 text-emerald-700 dark:text-emerald-200" />
+      </div>
+      <div>
+        <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+          المشتريات
+        </h1>
+        <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
+          فواتير المشتريات، الموردين والمستفيدين، فئات وأصناف،
+          الحسابات البنكية، والضريبة.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ComingSoonCard({ tab }) {
+  const Icon = tab?.Icon || Construction;
+  return (
+    <div className={`${ws.glass} ${ws.card} p-10 text-center`}>
+      <div
+        className={`${ws.iconBox} w-14 h-14 mx-auto mb-4 text-emerald-700 dark:text-emerald-200`}
+      >
+        <Icon className="w-7 h-7" />
+      </div>
+      <div className="text-lg font-bold text-slate-900 dark:text-white tracking-tight mb-1">
+        {tab?.label}
+      </div>
+      <div className="text-sm text-slate-600 dark:text-white/60 max-w-md mx-auto leading-relaxed">
+        {tab?.description}
+      </div>
+      <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-700 dark:text-amber-200 text-xs font-semibold">
+        <Construction className="w-3.5 h-3.5" />
+        قيد التطوير
+      </div>
+    </div>
+  );
+}
+
+export default function PurchasesPage() {
+  const { ready, employeeId, user } = useWorkspaceUser();
+  const isAdmin = user?.role === "Admin";
+
+  const [activeTab, setActiveTab] = useState(TABS[0].key);
+
+  let body = null;
+  if (!ready) {
+    body = (
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60`}>
+        جاري التحميل…
+      </div>
+    );
+  } else if (!employeeId) {
+    body = (
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
+        الرجاء تسجيل الدخول.
+      </div>
+    );
+  } else if (!isAdmin) {
+    body = (
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
+        هذا القسم متاح فقط لمستخدمي المحاسبة.
+      </div>
+    );
+  } else {
+    const tab = TABS.find((t) => t.key === activeTab) || TABS[0];
+    body = (
+      <>
+        {/* Tabs row — horizontally scrollable on mobile so the
+            5-tab set never gets squeezed. */}
+        <div className={`${ws.glass} ${ws.card} p-2 overflow-x-auto`}>
+          <div className="flex items-center gap-1 min-w-max">
+            {TABS.map((t) => {
+              const isActive = t.key === activeTab;
+              const Icon = t.Icon;
+              const cls = `${ws.segBtn} ${
+                isActive ? ws.segActive : ws.segInactive
+              } flex items-center gap-2 whitespace-nowrap`;
+              return (
+                <button
+                  key={t.key}
+                  type="button"
+                  onClick={() => setActiveTab(t.key)}
+                  className={cls}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{t.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <ComingSoonCard tab={tab} />
+      </>
+    );
+  }
+
+  return (
+    <div className="min-h-[100svh] pb-24 lg:pb-0" dir="rtl">
+      <AccountingSidebar active="purchases" />
+      <PurchasesMobileHeader />
+      <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto w-full space-y-5">
+          <PurchasesDesktopHeader />
+          {body}
+        </div>
+      </main>
+    </div>
+  );
+}
