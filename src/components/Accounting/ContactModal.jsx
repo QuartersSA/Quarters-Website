@@ -2,9 +2,30 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { createPortal } from "react-dom";
-import { Save, X, Contact, Percent } from "lucide-react";
+import {
+  Save,
+  X,
+  Contact,
+  Percent,
+  HandCoins,
+  Plus,
+  Link as LinkIcon,
+  Pencil,
+  Unlink,
+} from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import {
+  useAccountingBeneficiaries,
+  useCreateAccountingBeneficiary,
+  useUpdateAccountingBeneficiary,
+} from "@/hooks/useAccountingBeneficiaries";
+import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
+
+function formatIban(iban) {
+  if (!iban) return "";
+  return String(iban).replace(/(.{4})/g, "$1 ").trim();
+}
 
 const COUNTRIES = [
   { value: "", label: "اختياري" },
@@ -25,6 +46,192 @@ const TAX_RATE_OPTIONS = [
   { value: "0", label: "غير خاضع للضريبة (0.00%)" },
   { value: "15", label: "ضريبة القيمة المضافة على الإيرادات (15.00%)" },
 ];
+
+/**
+ * Linked-beneficiaries panel.
+ *
+ * Lives at the bottom of ContactModal in edit mode. Shows every
+ * beneficiary currently linked to this contact, lets the operator:
+ *   - create a fresh beneficiary pre-linked to the contact
+ *   - link an existing unattached beneficiary via a dropdown
+ *   - edit a linked beneficiary inline
+ *   - unlink (sets contact_id=null on the beneficiary; does not
+ *     delete the bank record)
+ */
+function BeneficiariesPanel({ contactId }) {
+  const linkedQuery = useAccountingBeneficiaries({
+    employeeId: true, // hook gate is `!!employeeId && isAdmin`;
+    isAdmin: true,    // both already enforced by parent route
+    contactId,
+  });
+  const unattachedQuery = useAccountingBeneficiaries({
+    employeeId: true,
+    isAdmin: true,
+    contactId: null,
+  });
+
+  const linked = linkedQuery.data || [];
+  // Filter unattached client-side — endpoint with contact_id=null
+  // returns everything; we want only beneficiaries with no link.
+  const unattached = (unattachedQuery.data || []).filter(
+    (b) => !b.contact_id,
+  );
+
+  const createMut = useCreateAccountingBeneficiary();
+  const updateMut = useUpdateAccountingBeneficiary();
+
+  const [showAdd, setShowAdd] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [linkValue, setLinkValue] = useState("");
+
+  const unattachedOptions = [
+    { value: "", label: "اختر مستفيداً قائماً للربط" },
+    ...unattached.map((b) => ({
+      value: String(b.id),
+      label: `${b.name} — ${b.bank_name || "بدون بنك"}`,
+    })),
+  ];
+
+  const handleLink = () => {
+    const id = Number(linkValue);
+    if (!Number.isFinite(id) || id <= 0) return;
+    updateMut.mutate(
+      { id, contact_id: contactId },
+      { onSuccess: () => setLinkValue("") },
+    );
+  };
+
+  const handleUnlink = (ben) => {
+    const ok = window.confirm(
+      `فك ربط "${ben.name}" عن هذه الجهة؟ (لا يُحذف المستفيد، يصير مستقلاً)`,
+    );
+    if (!ok) return;
+    updateMut.mutate({ id: ben.id, contact_id: null });
+  };
+
+  const handleSubmit = (payload) => {
+    if (editing) {
+      updateMut.mutate(payload, { onSuccess: () => setEditing(null) });
+    } else {
+      createMut.mutate(payload, { onSuccess: () => setShowAdd(false) });
+    }
+  };
+
+  return (
+    <section className="space-y-3">
+      <div className="flex items-center gap-2">
+        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
+        <h3 className="text-xs font-bold text-slate-700 dark:text-white/75 whitespace-nowrap flex items-center gap-1">
+          <HandCoins className="w-3.5 h-3.5" />
+          المستفيدون البنكيون
+        </h3>
+        <div className="h-px flex-1 bg-slate-200 dark:bg-white/10" />
+      </div>
+
+      {linkedQuery.isLoading ? (
+        <div className="text-xs text-slate-500 dark:text-white/50">
+          جاري التحميل…
+        </div>
+      ) : linked.length === 0 ? (
+        <div className="text-xs text-slate-500 dark:text-white/50">
+          لا يوجد مستفيدون مربوطون بهذه الجهة بعد.
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {linked.map((b) => (
+            <div
+              key={b.id}
+              className={`${ws.glassSoft} ${ws.card} px-3 py-2 flex items-center justify-between gap-2`}
+            >
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                  {b.name}
+                </div>
+                <div
+                  className="text-[11px] text-slate-500 dark:text-white/45 font-mono truncate"
+                  dir="ltr"
+                >
+                  {formatIban(b.iban)}
+                  {b.bank_name ? ` · ${b.bank_name}` : ""}
+                </div>
+              </div>
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setEditing(b)}
+                  className={`${ws.iconButton} w-8 h-8`}
+                  title="تعديل"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleUnlink(b)}
+                  className={`${ws.iconButton} w-8 h-8 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:border-amber-200 dark:hover:border-amber-500/30 hover:text-amber-700 dark:hover:text-amber-200`}
+                  title="فك الربط"
+                >
+                  <Unlink className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Action row: link existing OR create new */}
+      <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex-1 flex items-center gap-2">
+          <div className="flex-1 min-w-0">
+            <GlassSelect
+              value={linkValue}
+              onChange={setLinkValue}
+              options={unattachedOptions}
+              placeholder={
+                unattached.length === 0
+                  ? "لا يوجد مستفيدون غير مربوطين"
+                  : "اختر مستفيداً قائماً للربط"
+              }
+              disabled={unattached.length === 0}
+              buttonClassName="text-sm py-2.5 px-3"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={handleLink}
+            disabled={!linkValue || updateMut.isPending}
+            className={`${ws.btnNeutral} px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed shrink-0`}
+            title="ربط مستفيد قائم بهذه الجهة"
+          >
+            <LinkIcon className="w-4 h-4" />
+            ربط
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setShowAdd(true)}
+          className={`${ws.btnPrimary} px-3 py-2 shrink-0`}
+        >
+          <Plus className="w-4 h-4" />
+          إنشاء مستفيد جديد
+        </button>
+      </div>
+
+      <BeneficiaryModal
+        open={showAdd || !!editing}
+        beneficiary={editing}
+        lockedContactId={contactId}
+        contacts={[]}
+        isSubmitting={createMut.isPending || updateMut.isPending}
+        onClose={() => {
+          setShowAdd(false);
+          setEditing(null);
+        }}
+        onSubmit={handleSubmit}
+      />
+    </section>
+  );
+}
 
 /**
  * "إضافة جهة اتصال" modal — matches the design supplied by the
@@ -278,6 +485,18 @@ export default function ContactModal({
               className={`${ws.input} px-3 py-2`}
             />
           </section>
+
+          {/* ── المستفيدون البنكيون لهذه الجهة ── */}
+          {isEditing ? (
+            <BeneficiariesPanel contactId={contact.id} />
+          ) : (
+            <div
+              className={`${ws.glassSoft} ${ws.card} px-3 py-2 text-xs text-slate-500 dark:text-white/50`}
+            >
+              لإضافة مستفيدين بنكيين لهذه الجهة، احفظ أولاً ثم افتح
+              التعديل.
+            </div>
+          )}
 
           {isEditing ? (
             <label className="flex items-center gap-2 cursor-pointer select-none">

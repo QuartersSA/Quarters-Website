@@ -34,11 +34,17 @@ export default function BeneficiaryModal({
   open,
   beneficiary,
   contacts,
+  // When provided, the contact dropdown is locked to this id and
+  // hidden — used when the modal is opened from inside the
+  // ContactModal so the new beneficiary is unambiguously linked
+  // to the contact the operator is editing.
+  lockedContactId = null,
   isSubmitting,
   onClose,
   onSubmit,
 }) {
   const isEditing = !!beneficiary;
+  const isContactLocked = lockedContactId !== null && lockedContactId !== undefined;
 
   const [name, setName] = useState("");
   const [iban, setIban] = useState("");
@@ -68,11 +74,11 @@ export default function BeneficiaryModal({
       setCurrency("SAR");
       setBankName("");
       setSwift("");
-      setContactId("");
+      setContactId(isContactLocked ? String(lockedContactId) : "");
       setNotes("");
       setIsActive(true);
     }
-  }, [open, beneficiary]);
+  }, [open, beneficiary, isContactLocked, lockedContactId]);
 
   const contactOptions = useMemo(
     () => [
@@ -159,22 +165,34 @@ export default function BeneficiaryModal({
             />
           </div>
 
-          <div>
-            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
-              جهة الاتصال{" "}
-              <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
+          {isContactLocked ? (
+            // Modal opened from within ContactModal — contact is
+            // pinned. Show it as a read-only hint instead of an
+            // active dropdown so the operator can't accidentally
+            // unlink the new beneficiary.
+            <div
+              className={`${ws.glassSoft} ${ws.card} px-3 py-2 text-xs text-slate-600 dark:text-white/55`}
+            >
+              مربوط بجهة الاتصال الحالية تلقائياً.
             </div>
-            <GlassSelect
-              value={contactId}
-              onChange={setContactId}
-              options={contactOptions}
-              placeholder="ابحث/اختر جهة اتصال"
-              buttonClassName="text-sm py-2.5 px-3"
-            />
-            <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
-              ربط المستفيد بجهة اتصال يُظهر حسابه عند دفع فواتير تلك الجهة.
+          ) : (
+            <div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+                جهة الاتصال{" "}
+                <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
+              </div>
+              <GlassSelect
+                value={contactId}
+                onChange={setContactId}
+                options={contactOptions}
+                placeholder="ابحث/اختر جهة اتصال"
+                buttonClassName="text-sm py-2.5 px-3"
+              />
+              <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                ربط المستفيد بجهة اتصال يُظهر حسابه عند دفع فواتير تلك الجهة.
+              </div>
             </div>
-          </div>
+          )}
 
           <div>
             <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
