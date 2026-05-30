@@ -70,7 +70,7 @@ const VENDOR_SUBTABS = [
 const CATALOG_SUBTABS = [
   {
     key: "categories",
-    label: "فئات",
+    label: "التصنيفات",
     Icon: Layers,
     description: "تصنيفات المشتريات المرتبطة بالأصناف.",
   },
@@ -98,7 +98,7 @@ const TABS = [
   },
   {
     key: "catalog",
-    label: "فئات وأصناف",
+    label: "التصنيفات والأصناف",
     Icon: Layers,
     description: "تصنيفات وأصناف المشتريات المرتبطة بالفواتير.",
     subTabs: CATALOG_SUBTABS,
