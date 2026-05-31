@@ -80,10 +80,10 @@ export default function WorkspaceTeamPage() {
               <Users className="w-5 h-5 text-emerald-200" />
             </div>
             <div className="min-w-0">
-              <div className="font-bold text-white tracking-tight truncate">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
                 {header.title}
               </div>
-              <div className="text-xs text-white/50 truncate">
+              <div className="text-xs text-slate-500 dark:text-white/50 truncate">
                 {header.subtitle}
               </div>
             </div>
@@ -108,10 +108,10 @@ export default function WorkspaceTeamPage() {
                 <Users className="w-5 h-5 text-emerald-200" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white tracking-tight">
+                <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
                   {header.title}
                 </div>
-                <div className="text-white/55 mt-1">{header.subtitle}</div>
+                <div className="text-slate-600 dark:text-white/55 mt-1">{header.subtitle}</div>
               </div>
             </div>
 
@@ -132,10 +132,10 @@ export default function WorkspaceTeamPage() {
                   <Users className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-bold text-white tracking-tight">
+                  <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                     المساحات
                   </div>
-                  <div className="text-sm text-white/55">
+                  <div className="text-sm text-slate-600 dark:text-white/55">
                     أنشئ مساحات لفريقك ونظّم المهام داخلها
                   </div>
                 </div>
@@ -144,12 +144,12 @@ export default function WorkspaceTeamPage() {
           </div>
 
           {spacesQuery.isLoading ? (
-            <div className="text-white/60">جاري التحميل…</div>
+            <div className="text-slate-600 dark:text-white/60">جاري التحميل…</div>
           ) : spacesQuery.error ? (
             <div className="text-red-300">فشل تحميل المساحات</div>
           ) : spaces.length === 0 ? (
             <div className={cardClass}>
-              <div className="text-white/60">
+              <div className="text-slate-600 dark:text-white/60">
                 لا يوجد مساحات حالياً. اضغط "إضافة مساحة" لبدء تنظيم الفريق.
               </div>
             </div>
@@ -163,35 +163,35 @@ export default function WorkspaceTeamPage() {
                   <div key={s.id} className={cardClass}>
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <div className="font-bold text-white truncate tracking-tight">
+                        <div className="font-bold text-slate-900 dark:text-white truncate tracking-tight">
                           {s.name}
                         </div>
                         {desc ? (
-                          <div className="text-sm text-white/70 mt-1 line-clamp-2">
+                          <div className="text-sm text-slate-700 dark:text-white/70 mt-1 line-clamp-2">
                             {desc}
                           </div>
                         ) : (
-                          <div className="text-sm text-white/40 mt-1">
+                          <div className="text-sm text-slate-400 dark:text-white/40 mt-1">
                             بدون وصف
                           </div>
                         )}
                       </div>
                       <div className={ws.iconBox}>
-                        <FolderKanban className="w-5 h-5 text-white/70" />
+                        <FolderKanban className="w-5 h-5 text-slate-700 dark:text-white/70" />
                       </div>
                     </div>
 
                     <div className="mt-4 flex items-center justify-between text-sm">
-                      <div className="inline-flex items-center gap-2 text-white/60">
+                      <div className="inline-flex items-center gap-2 text-slate-600 dark:text-white/60">
                         <Users className="w-4 h-4" />
                         <span>الفريق</span>
                       </div>
-                      <div className="text-white font-bold">
+                      <div className="text-slate-900 dark:text-white font-bold">
                         {tasksCount} مهام
                       </div>
                     </div>
 
-                    <div className="mt-4 text-xs text-white/45">
+                    <div className="mt-4 text-xs text-slate-500 dark:text-white/45">
                       أنشأه: {s.created_by_name || "—"}
                     </div>
                   </div>
@@ -208,8 +208,8 @@ export default function WorkspaceTeamPage() {
             className={`w-full max-w-lg ${ws.glass} ${ws.card} overflow-hidden`}
             dir="rtl"
           >
-            <div className="p-5 border-b border-white/10 flex items-center justify-between">
-              <div className="font-bold text-white tracking-tight">
+            <div className="p-5 border-b border-slate-200 dark:border-white/10 flex items-center justify-between">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                 إضافة مساحة
               </div>
               <button
@@ -223,7 +223,7 @@ export default function WorkspaceTeamPage() {
 
             <div className="p-5 space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-white/70 mb-2">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                   الاسم
                 </label>
                 <input
@@ -235,7 +235,7 @@ export default function WorkspaceTeamPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-white/70 mb-2">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
                   الوصف
                 </label>
                 <textarea

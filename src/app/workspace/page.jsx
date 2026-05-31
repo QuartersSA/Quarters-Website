@@ -81,36 +81,36 @@ function QuickTaskRow({ task, onQuickStatus, isChanging }) {
     onQuickStatus(task.id, nextStatus(status));
   };
 
-  const rowClass = `flex items-center gap-3 p-3 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] transition-colors ${isDone ? "opacity-60" : ""}`;
+  const rowClass = `flex items-center gap-3 p-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:bg-white/[0.06] transition-colors ${isDone ? "opacity-60" : ""}`;
 
   return (
     <div className={rowClass}>
       <button
         type="button"
         onClick={handleCycleStatus}
-        className="flex-shrink-0 w-8 h-8 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center hover:bg-white/[0.08] transition-colors"
+        className="flex-shrink-0 w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center hover:bg-slate-200 dark:bg-white/[0.08] transition-colors"
         title={`تغيير إلى: ${nextStatus(status)}`}
         disabled={isChanging}
       >
         {isChanging ? (
-          <Loader2 className="w-4 h-4 text-white/50 animate-spin" />
+          <Loader2 className="w-4 h-4 text-slate-500 dark:text-white/50 animate-spin" />
         ) : isDone ? (
           <CheckCircle2 className="w-4 h-4 text-emerald-300" />
         ) : status === "In Progress" ? (
           <PlayCircle className="w-4 h-4 text-sky-300" />
         ) : (
-          <Circle className="w-4 h-4 text-white/35" />
+          <Circle className="w-4 h-4 text-slate-400 dark:text-white/35" />
         )}
       </button>
 
       <div className="flex-1 min-w-0">
         <div
-          className={`font-semibold text-sm truncate tracking-tight ${isDone ? "line-through text-white/50" : "text-white"}`}
+          className={`font-semibold text-sm truncate tracking-tight ${isDone ? "line-through text-slate-500 dark:text-white/50" : "text-slate-900 dark:text-white"}`}
         >
           {task.title}
         </div>
         {task.space_name ? (
-          <div className="text-xs text-white/45 truncate mt-0.5">
+          <div className="text-xs text-slate-500 dark:text-white/45 truncate mt-0.5">
             {task.space_name}
           </div>
         ) : null}
@@ -131,17 +131,17 @@ function HealthScoreCard({ healthScore }) {
     return (
       <div className={`${ws.glassSoft} ${ws.card} p-5`}>
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center">
-            <HeartPulse className="w-5 h-5 text-white/50" />
+          <div className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 flex items-center justify-center">
+            <HeartPulse className="w-5 h-5 text-slate-500 dark:text-white/50" />
           </div>
           <div>
-            <div className="font-bold text-white tracking-tight">
+            <div className="font-bold text-slate-900 dark:text-white tracking-tight">
               مؤشر صحة المهام
             </div>
-            <div className="text-xs text-white/50">أداء الإنجاز هذا الشهر</div>
+            <div className="text-xs text-slate-500 dark:text-white/50">أداء الإنجاز هذا الشهر</div>
           </div>
         </div>
-        <div className="text-white/50 text-sm text-center py-4">
+        <div className="text-slate-500 dark:text-white/50 text-sm text-center py-4">
           لا توجد مهام مكتملة هذا الشهر بعد
         </div>
       </div>
@@ -177,10 +177,10 @@ function HealthScoreCard({ healthScore }) {
           <HeartPulse className="w-5 h-5" />
         </div>
         <div>
-          <div className="font-bold text-white tracking-tight">
+          <div className="font-bold text-slate-900 dark:text-white tracking-tight">
             مؤشر صحة المهام
           </div>
-          <div className="text-xs text-white/50">
+          <div className="text-xs text-slate-500 dark:text-white/50">
             المهام المُقفلة هذا الشهر بناءً على سجل التأخير
           </div>
         </div>
@@ -216,7 +216,7 @@ function HealthScoreCard({ healthScore }) {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-3xl font-black text-white">{safePercent}%</div>
+            <div className="text-3xl font-black text-slate-900 dark:text-white">{safePercent}%</div>
             <div
               className="text-xs font-semibold"
               style={{ color: gaugeColor }}
@@ -228,9 +228,9 @@ function HealthScoreCard({ healthScore }) {
 
         {/* Details */}
         <div className="flex-1 grid grid-cols-3 gap-3 w-full">
-          <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-3 text-center">
-            <div className="text-xl font-bold text-white">{totalDone}</div>
-            <div className="text-xs text-white/50 mt-1">مُقفلة</div>
+          <div className="rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 p-3 text-center">
+            <div className="text-xl font-bold text-slate-900 dark:text-white">{totalDone}</div>
+            <div className="text-xs text-slate-500 dark:text-white/50 mt-1">مُقفلة</div>
           </div>
           <div className="rounded-2xl bg-emerald-400/[0.06] border border-emerald-400/15 p-3 text-center">
             <div className="text-xl font-bold text-emerald-200">{onTime}</div>
@@ -334,10 +334,10 @@ export default function WorkspaceSummaryPage() {
             <CalendarDays className="w-5 h-5 text-emerald-200" />
           </div>
           <div className="min-w-0">
-            <div className="font-bold text-white tracking-tight truncate">
+            <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
               {greeting}، {userName || ""}
             </div>
-            <div className="text-xs text-white/50 truncate">ملخص يومك</div>
+            <div className="text-xs text-slate-500 dark:text-white/50 truncate">ملخص يومك</div>
           </div>
         </div>
       </div>
@@ -351,17 +351,17 @@ export default function WorkspaceSummaryPage() {
                 <CalendarDays className="w-5 h-5 text-emerald-200" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-white tracking-tight">
+                <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
                   {greeting}، {userName}
                 </div>
-                <div className="text-white/55 mt-1">ملخص اليوم وأهم المهام</div>
+                <div className="text-slate-600 dark:text-white/55 mt-1">ملخص اليوم وأهم المهام</div>
               </div>
             </div>
           </div>
 
           {isLoading ? (
             <div className={cardClass}>
-              <div className="text-white/60 flex items-center gap-2">
+              <div className="text-slate-600 dark:text-white/60 flex items-center gap-2">
                 <Loader2 className="w-5 h-5 animate-spin" />
                 جاري التحميل…
               </div>
@@ -376,70 +376,70 @@ export default function WorkspaceSummaryPage() {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <a
                   href="/workspace/tasks"
-                  className={`${cardClass} hover:bg-white/[0.06] transition-colors block`}
+                  className={`${cardClass} hover:bg-slate-100 dark:bg-white/[0.06] transition-colors block`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-amber-400/15 text-amber-200 border border-amber-400/25 flex items-center justify-center">
                       <ListTodo className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-white">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white">
                         {stats.todo}
                       </div>
-                      <div className="text-xs text-white/55">للإنجاز</div>
+                      <div className="text-xs text-slate-600 dark:text-white/55">للإنجاز</div>
                     </div>
                   </div>
                 </a>
 
                 <a
                   href="/workspace/tasks"
-                  className={`${cardClass} hover:bg-white/[0.06] transition-colors block`}
+                  className={`${cardClass} hover:bg-slate-100 dark:bg-white/[0.06] transition-colors block`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-sky-400/15 text-sky-200 border border-sky-400/25 flex items-center justify-center">
                       <PlayCircle className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-white">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white">
                         {stats.inProgress}
                       </div>
-                      <div className="text-xs text-white/55">قيد التنفيذ</div>
+                      <div className="text-xs text-slate-600 dark:text-white/55">قيد التنفيذ</div>
                     </div>
                   </div>
                 </a>
 
                 <a
                   href="/workspace/tasks"
-                  className={`${cardClass} hover:bg-white/[0.06] transition-colors block`}
+                  className={`${cardClass} hover:bg-slate-100 dark:bg-white/[0.06] transition-colors block`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-emerald-400/15 text-emerald-200 border border-emerald-400/25 flex items-center justify-center">
                       <CheckCircle2 className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-white">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white">
                         {stats.done}
                       </div>
-                      <div className="text-xs text-white/55">مكتملة</div>
+                      <div className="text-xs text-slate-600 dark:text-white/55">مكتملة</div>
                     </div>
                   </div>
                 </a>
 
                 <a
                   href="/workspace/inbox"
-                  className={`${cardClass} hover:bg-white/[0.06] transition-colors block`}
+                  className={`${cardClass} hover:bg-slate-100 dark:bg-white/[0.06] transition-colors block`}
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-10 h-10 rounded-2xl ${unreadCount > 0 ? "bg-rose-400/15 text-rose-200 border-rose-400/25" : "bg-white/[0.05] text-white/70 border-white/10"} border flex items-center justify-center`}
+                      className={`w-10 h-10 rounded-2xl ${unreadCount > 0 ? "bg-rose-400/15 text-rose-200 border-rose-400/25" : "bg-slate-100 dark:bg-white/[0.05] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10"} border flex items-center justify-center`}
                     >
                       <MessageSquare className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-white">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white">
                         {unreadCount}
                       </div>
-                      <div className="text-xs text-white/55">
+                      <div className="text-xs text-slate-600 dark:text-white/55">
                         رسائل غير مقروءة
                       </div>
                     </div>
@@ -460,10 +460,10 @@ export default function WorkspaceSummaryPage() {
                       <AlertTriangle className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="font-bold text-white tracking-tight">
+                      <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                         مهام متأخرة ({overdueTasks.length})
                       </div>
-                      <div className="text-xs text-white/50">
+                      <div className="text-xs text-slate-500 dark:text-white/50">
                         تجاوزت موعد الاستحقاق
                       </div>
                     </div>
@@ -489,13 +489,13 @@ export default function WorkspaceSummaryPage() {
                       <CalendarDays className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="font-bold text-white tracking-tight">
+                      <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                         مهام اليوم{" "}
                         {todayTasks.length > 0
                           ? `(${todayPendingCount} متبقية)`
                           : ""}
                       </div>
-                      <div className="text-xs text-white/50">
+                      <div className="text-xs text-slate-500 dark:text-white/50">
                         المهام المستحقة اليوم
                       </div>
                     </div>
@@ -510,7 +510,7 @@ export default function WorkspaceSummaryPage() {
                 </div>
 
                 {todayTasks.length === 0 ? (
-                  <div className="text-white/50 text-sm py-4 text-center">
+                  <div className="text-slate-500 dark:text-white/50 text-sm py-4 text-center">
                     🎉 لا توجد مهام مستحقة اليوم
                   </div>
                 ) : (
@@ -536,14 +536,14 @@ export default function WorkspaceSummaryPage() {
                       <CalendarRange className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="font-bold text-white tracking-tight">
+                      <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                         القادمة
                       </div>
-                      <div className="text-xs text-white/50">خلال 7 أيام</div>
+                      <div className="text-xs text-slate-500 dark:text-white/50">خلال 7 أيام</div>
                     </div>
                   </div>
                   {upcomingTasks.length === 0 ? (
-                    <div className="text-white/50 text-sm py-3 text-center">
+                    <div className="text-slate-500 dark:text-white/50 text-sm py-3 text-center">
                       لا توجد مهام قادمة
                     </div>
                   ) : (
@@ -551,21 +551,21 @@ export default function WorkspaceSummaryPage() {
                       {upcomingTasks.map((t) => (
                         <div
                           key={t.id}
-                          className="flex items-center gap-3 p-3 rounded-2xl border border-white/10 bg-white/[0.03]"
+                          className="flex items-center gap-3 p-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03]"
                         >
                           <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-sm text-white truncate tracking-tight">
+                            <div className="font-semibold text-sm text-slate-900 dark:text-white truncate tracking-tight">
                               {t.title}
                             </div>
                             {t.space_name ? (
-                              <div className="text-xs text-white/45 truncate mt-0.5">
+                              <div className="text-xs text-slate-500 dark:text-white/45 truncate mt-0.5">
                                 {t.space_name}
                               </div>
                             ) : null}
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
                             <span className={ws.chip}>
-                              <CalendarDays className="w-3.5 h-3.5 text-white/55" />
+                              <CalendarDays className="w-3.5 h-3.5 text-slate-600 dark:text-white/55" />
                               {formatDateOnly(t.due_date)}
                             </span>
                             <PriorityPill priority={t.priority || "Normal"} />
@@ -583,16 +583,16 @@ export default function WorkspaceSummaryPage() {
                       <Activity className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="font-bold text-white tracking-tight">
+                      <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                         آخر النشاطات
                       </div>
-                      <div className="text-xs text-white/50">
+                      <div className="text-xs text-slate-500 dark:text-white/50">
                         تحديثات الفريق
                       </div>
                     </div>
                   </div>
                   {recentActivity.length === 0 ? (
-                    <div className="text-white/50 text-sm py-3 text-center">
+                    <div className="text-slate-500 dark:text-white/50 text-sm py-3 text-center">
                       لا توجد نشاطات حديثة
                     </div>
                   ) : (
@@ -600,9 +600,9 @@ export default function WorkspaceSummaryPage() {
                       {recentActivity.map((ev) => (
                         <div
                           key={ev.id}
-                          className="flex items-start gap-3 p-3 rounded-2xl border border-white/10 bg-white/[0.03]"
+                          className="flex items-start gap-3 p-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03]"
                         >
-                          <div className="w-8 h-8 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <div className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                             {ev.event_type === "created" ? (
                               <Circle className="w-3.5 h-3.5 text-emerald-300" />
                             ) : (
@@ -610,14 +610,14 @@ export default function WorkspaceSummaryPage() {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm text-white font-semibold truncate">
+                            <div className="text-sm text-slate-900 dark:text-white font-semibold truncate">
                               {ev.task_title || "مهمة"}
                             </div>
-                            <div className="text-xs text-white/55 mt-0.5">
+                            <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5">
                               {ev.actor_name || "—"} · {ev.summary}
                             </div>
                           </div>
-                          <div className="text-xs text-white/40 flex-shrink-0 mt-1">
+                          <div className="text-xs text-slate-400 dark:text-white/40 flex-shrink-0 mt-1">
                             {formatTimeAgo(ev.created_at)}
                           </div>
                         </div>

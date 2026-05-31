@@ -81,8 +81,8 @@ export default function MarketingSettingsPage() {
               <Settings className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">إعدادات التسويق</h1>
-              <p className="text-white/55 text-sm mt-1">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">إعدادات التسويق</h1>
+              <p className="text-slate-600 dark:text-white/55 text-sm mt-1">
                 الإعدادات تنطبق على بطاقات الدعوة + شاشة الترحيب.
               </p>
             </div>
@@ -90,7 +90,7 @@ export default function MarketingSettingsPage() {
         </div>
 
         {settingsQuery.isLoading || !form ? (
-          <div className={`${ws.glass} ${ws.card} p-8 text-center text-white/55`}>
+          <div className={`${ws.glass} ${ws.card} p-8 text-center text-slate-600 dark:text-white/55`}>
             جاري التحميل…
           </div>
         ) : (
@@ -108,7 +108,7 @@ export default function MarketingSettingsPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   اسم الكوفي (إنجليزي)
                 </label>
                 <input
@@ -122,7 +122,7 @@ export default function MarketingSettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   اسم الكوفي (عربي)
                 </label>
                 <input
@@ -136,7 +136,7 @@ export default function MarketingSettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   الـ Tagline (مثل BAR)
                 </label>
                 <input
@@ -150,7 +150,7 @@ export default function MarketingSettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   حرف الشعار (للأماكن المختصرة)
                 </label>
                 <input
@@ -167,7 +167,7 @@ export default function MarketingSettingsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2 flex items-center gap-2">
                   <Palette className="w-4 h-4" /> اللون الأساسي (Olive)
                 </label>
                 <div className="flex items-center gap-3">
@@ -177,7 +177,7 @@ export default function MarketingSettingsPage() {
                     onChange={(e) =>
                       setForm({ ...form, accent_color: e.target.value })
                     }
-                    className="h-12 w-16 rounded-2xl border border-white/10 bg-transparent cursor-pointer"
+                    className="h-12 w-16 rounded-2xl border border-slate-200 dark:border-white/10 bg-transparent cursor-pointer"
                   />
                   <input
                     type="text"
@@ -191,7 +191,7 @@ export default function MarketingSettingsPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2 flex items-center gap-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2 flex items-center gap-2">
                   <Palette className="w-4 h-4" /> لون النص (Cream)
                 </label>
                 <div className="flex items-center gap-3">
@@ -201,7 +201,7 @@ export default function MarketingSettingsPage() {
                     onChange={(e) =>
                       setForm({ ...form, cream_color: e.target.value })
                     }
-                    className="h-12 w-16 rounded-2xl border border-white/10 bg-transparent cursor-pointer"
+                    className="h-12 w-16 rounded-2xl border border-slate-200 dark:border-white/10 bg-transparent cursor-pointer"
                   />
                   <input
                     type="text"
@@ -215,7 +215,7 @@ export default function MarketingSettingsPage() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   معاينة الـ Wordmark
                 </label>
                 <div
@@ -262,7 +262,7 @@ export default function MarketingSettingsPage() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   عنوان الترحيب
                 </label>
                 <input
@@ -276,7 +276,7 @@ export default function MarketingSettingsPage() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   نص الترحيب الفرعي
                 </label>
                 <input

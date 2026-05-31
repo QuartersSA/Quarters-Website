@@ -217,7 +217,7 @@ export default function WorkspaceTasksPage() {
     tasksQuery.isLoading || usersQuery.isLoading || spacesQuery.isLoading;
   const hasError = tasksQuery.error || usersQuery.error || spacesQuery.error;
 
-  const emptyCardClass = `${ws.glassSoft} rounded-3xl p-6 text-white/60`;
+  const emptyCardClass = `${ws.glassSoft} rounded-3xl p-6 text-slate-600 dark:text-white/60`;
 
   const overdueCardClass = `${ws.glassSoft} ${ws.card} p-4`;
 
@@ -225,11 +225,11 @@ export default function WorkspaceTasksPage() {
     if (scope !== "team") return null;
 
     if (!overdueEnabled) {
-      return <div className="text-white/60">جاري التحميل…</div>;
+      return <div className="text-slate-600 dark:text-white/60">جاري التحميل…</div>;
     }
 
     if (overdueQuery.isLoading) {
-      return <div className="text-white/60">جاري تحميل السجل…</div>;
+      return <div className="text-slate-600 dark:text-white/60">جاري تحميل السجل…</div>;
     }
 
     if (overdueQuery.error) {
@@ -237,7 +237,7 @@ export default function WorkspaceTasksPage() {
     }
 
     if (!overdueTasks.length) {
-      return <div className="text-white/60">لا يوجد مهام متأخرة مسجّلة.</div>;
+      return <div className="text-slate-600 dark:text-white/60">لا يوجد مهام متأخرة مسجّلة.</div>;
     }
 
     const rows = overdueTasks.map((t) => {
@@ -273,7 +273,7 @@ export default function WorkspaceTasksPage() {
       <div className="overflow-x-auto">
         <table className="min-w-[820px] w-full text-sm">
           <thead>
-            <tr className="text-white/70">
+            <tr className="text-slate-700 dark:text-white/70">
               <th className="text-right font-semibold py-2 px-3">المهمة</th>
               <th className="text-right font-semibold py-2 px-3">المساحة</th>
               <th className="text-right font-semibold py-2 px-3">المكلفون</th>
@@ -288,23 +288,23 @@ export default function WorkspaceTasksPage() {
               return (
                 <tr
                   key={r.id}
-                  className="border-t border-white/10 hover:bg-white/[0.04] cursor-pointer"
+                  className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:bg-white/[0.04] cursor-pointer"
                   onClick={() => {
                     const task = overdueTasks.find((x) => x.id === r.id);
                     if (task) openEdit(task);
                   }}
                 >
-                  <td className="py-3 px-3 font-semibold text-white">
+                  <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
                     {r.title}
                   </td>
-                  <td className="py-3 px-3 text-white/70">{r.spaceName}</td>
-                  <td className="py-3 px-3 text-white/70">{r.assigneesText}</td>
-                  <td className="py-3 px-3 text-white/70">{r.due}</td>
+                  <td className="py-3 px-3 text-slate-700 dark:text-white/70">{r.spaceName}</td>
+                  <td className="py-3 px-3 text-slate-700 dark:text-white/70">{r.assigneesText}</td>
+                  <td className="py-3 px-3 text-slate-700 dark:text-white/70">{r.due}</td>
                   <td className="py-3 px-3">
                     <StatusPill status={r.status} />
                   </td>
-                  <td className="py-3 px-3 text-white/70">{r.completed}</td>
-                  <td className="py-3 px-3 text-white/70">{r.note}</td>
+                  <td className="py-3 px-3 text-slate-700 dark:text-white/70">{r.completed}</td>
+                  <td className="py-3 px-3 text-slate-700 dark:text-white/70">{r.note}</td>
                 </tr>
               );
             })}
@@ -365,10 +365,10 @@ export default function WorkspaceTasksPage() {
                   <AlertTriangle className="w-5 h-5 text-red-200" />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-bold text-white tracking-tight">
+                  <div className="font-bold text-slate-900 dark:text-white tracking-tight">
                     سجل المهام المتأخرة
                   </div>
-                  <div className="text-xs text-white/50">
+                  <div className="text-xs text-slate-500 dark:text-white/50">
                     يبقى كمرجع حتى لو تغيّرت الحالة لاحقاً
                   </div>
                 </div>
@@ -420,11 +420,11 @@ export default function WorkspaceTasksPage() {
               <div className={`${ws.iconBox} w-10 h-10 text-red-200`}>
                 <AlertTriangle className="w-5 h-5" />
               </div>
-              <div className="font-bold text-white text-lg tracking-tight">
+              <div className="font-bold text-slate-900 dark:text-white text-lg tracking-tight">
                 حذف المهمة؟
               </div>
             </div>
-            <div className="text-white/65 text-sm leading-relaxed mb-5">
+            <div className="text-slate-600 dark:text-white/65 text-sm leading-relaxed mb-5">
               سيتم حذف "{editingTask?.title || "المهمة"}" نهائياً ولا يمكن
               التراجع.
             </div>
