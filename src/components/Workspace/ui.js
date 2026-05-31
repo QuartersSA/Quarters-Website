@@ -21,7 +21,11 @@ export const ws = {
     // slate-50/100 gradient read as flat grey.
     "bg-white text-slate-900 font-inter " +
     "bg-gradient-to-b from-white via-white to-slate-50/40 " +
-    "dark:from-[#0d1426] dark:via-[#101c38] dark:to-[#090f1f] dark:text-white",
+    // Dark: lifted-navy gradient. The previous #0d1426 → #090f1f range
+    // read as near-black; the operator asked for it to be lightened.
+    // These shades stay clearly "dark" while keeping enough luminance
+    // that cards and content read as floating ON the surface.
+    "dark:from-[#1a2540] dark:via-[#1f2c52] dark:to-[#16203a] dark:text-white",
 
   // Surfaces — frosted glass.
   //
