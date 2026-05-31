@@ -16,7 +16,11 @@ export const ws = {
   // "documents on a desk" feel.
   appBg:
     "[color-scheme:light] dark:[color-scheme:dark] " +
-    "bg-gradient-to-b from-slate-50 via-white to-slate-100/80 text-slate-900 font-inter " +
+    // Light: near-white surface, the faintest hint of slate at the
+    // very bottom only — operator complained the previous
+    // slate-50/100 gradient read as flat grey.
+    "bg-white text-slate-900 font-inter " +
+    "bg-gradient-to-b from-white via-white to-slate-50/40 " +
     "dark:from-[#0d1426] dark:via-[#101c38] dark:to-[#090f1f] dark:text-white",
 
   // Surfaces — frosted glass.
