@@ -1,4 +1,6 @@
-import { useState, useMemo } from "react";
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   LayoutDashboard,
   Building2,
@@ -15,9 +17,106 @@ import {
   BarChart3,
   Truck,
   Banknote,
+  Search,
+  Globe,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
 import AppSectionSwitcher from "@/components/AppSectionSwitcher";
+import { CommandPalette } from "./CommandPalette";
+
+/**
+ * Admin sidebar — Wafeq-inspired layout.
+ *
+ *   ┌─────────────────────────────┐
+ *   │ [logo] Quarters Coffee Bar │  brand chip (static)
+ *   │ [section switcher (icons)] │  jump to Workspace/Accounting/HR/…
+ *   │ [🔍 search…]      Ctrl+K   │  opens CommandPalette
+ *   │ ─────────────────────────── │
+ *   │ • Dashboard                 │  nav rows (active = violet tint)
+ *   │ • Branches                  │
+ *   │ • Items                     │
+ *   │ • Operations                │
+ *   │ • Receipts                  │
+ *   │ ▾ ملخص جرد الأصناف           │  collapsible group
+ *   │     └ low stock              │
+ *   │     └ items summary          │
+ *   │     └ variance               │
+ *   │     └ stock value            │
+ *   │ • Employees (if allowed)    │
+ *   │ ─────────────────────────── │
+ *   │ 🌐 English                   │  language toggle
+ *   │ 🚪 تسجيل الخروج               │  logout
+ *   └─────────────────────────────┘
+ *
+ * Active state mirrors Wafeq's violet accent (bg-violet-50 / text-violet-700)
+ * on a clean light surface. Dark-mode tokens kick in via the existing
+ * `dark:` Tailwind class applied at the admin layout root.
+ */
+
+const QUARTERS_LOGO =
+  "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/";
+
+function NavRow({
+  href,
+  icon: Icon,
+  label,
+  active,
+  level = 0,
+  onClick,
+}) {
+  const baseSize = level === 0 ? "px-3 py-2.5" : "px-3 py-2 mr-3 text-sm";
+  const iconSize = level === 0 ? "w-5 h-5" : "w-4 h-4";
+
+  const activeCls =
+    "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-100";
+  const inactiveCls =
+    "text-slate-700 hover:bg-slate-100 hover:text-slate-900 " +
+    "dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
+
+  return (
+    <a
+      href={href}
+      onClick={onClick}
+      className={`flex items-center gap-3 ${baseSize} rounded-xl transition-colors ${
+        active ? activeCls : inactiveCls
+      }`}
+    >
+      <Icon
+        className={`shrink-0 ${iconSize} ${
+          active ? "text-violet-600 dark:text-violet-200" : ""
+        }`}
+      />
+      <span className={`flex-1 ${active ? "font-semibold" : ""}`}>{label}</span>
+    </a>
+  );
+}
+
+function readAdminUserFlags() {
+  if (typeof window === "undefined") {
+    return { canManageEmployees: true };
+  }
+  try {
+    const auth = localStorage.getItem("adminAuth");
+    const raw = localStorage.getItem("adminUser");
+    if (!auth || !raw) return { canManageEmployees: true };
+    const u = JSON.parse(raw);
+    const flag = u?.can_manage_employees;
+    return {
+      canManageEmployees:
+        flag === undefined || flag === null ? true : !!flag,
+    };
+  } catch {
+    return { canManageEmployees: true };
+  }
+}
+
+function readLang() {
+  if (typeof window === "undefined") return "ar";
+  try {
+    return localStorage.getItem("adminLang") || "ar";
+  } catch {
+    return "ar";
+  }
+}
 
 export function Sidebar({ onLogout, activePage = "dashboard" }) {
   const [isInventorySummaryOpen, setIsInventorySummaryOpen] = useState(
@@ -26,27 +125,47 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
       activePage === "variance" ||
       activePage === "stock-value",
   );
-
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // Sidebar mounts on every admin page navigation (it's rendered per-page,
-  // not in the layout). Previously this used useState(true) + useEffect to
-  // hydrate `canManageEmployees` from localStorage, which causes two
-  // renders per mount and runs localStorage.getItem + JSON.parse every
-  // time. Lazy `useState` initializer collapses it to a single render and
-  // a single read.
-  const [canManageEmployees] = useState(() => {
-    if (typeof window === "undefined") return true;
-    try {
-      const auth = localStorage.getItem("adminAuth");
-      const raw = localStorage.getItem("adminUser");
-      if (!auth || !raw) return true;
-      const u = JSON.parse(raw);
-      const flag = u?.can_manage_employees;
-      return flag === undefined || flag === null ? true : !!flag;
-    } catch {
-      return true;
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  // Lazy-init both reads — runs once at mount instead of triggering a
+  // post-mount re-render via useEffect.
+  const [{ canManageEmployees }] = useState(readAdminUserFlags);
+  const [lang] = useState(readLang);
+
+  const closeMobile = useCallback(() => setIsMobileMenuOpen(false), []);
+  const openPalette = useCallback(() => setPaletteOpen(true), []);
+  const closePalette = useCallback(() => setPaletteOpen(false), []);
+
+  // Global Cmd/Ctrl+K → open the palette. Mounted at sidebar level so
+  // every admin page picks it up automatically.
+  useEffect(() => {
+    function onKey(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
     }
-  });
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // English / العربية toggle — flips a localStorage flag and reloads so
+  // any consumer that reads `adminLang` on mount picks up the new value.
+  // No-op visual change today (admin pages aren't translated yet), but
+  // the storage key + custom event are in place for future i18n.
+  const toggleLang = useCallback(() => {
+    try {
+      const next = lang === "ar" ? "en" : "ar";
+      localStorage.setItem("adminLang", next);
+      window.dispatchEvent(
+        new CustomEvent("adminLangChange", { detail: next }),
+      );
+      window.location.reload();
+    } catch {
+      // ignore
+    }
+  }, [lang]);
 
   const pageTitle = useMemo(() => {
     const titles = {
@@ -61,23 +180,20 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
       receipts: "الواردات",
       "stock-value": "قيمة المخزون",
     };
-
     return titles[activePage] || "أنظمة Quarters";
   }, [activePage]);
 
   return (
     <>
-      {/* Mobile top bar — sticky (in flow) so page content naturally renders
-          below it instead of hiding under a fixed overlay. Layout matches
-          the design across all admin sections: hamburger | logo+title | switcher */}
+      {/* Mobile top bar */}
       <div
-        className={`lg:hidden sticky top-0 left-0 right-0 z-40 ${ws.topBar}`}
+        className="lg:hidden sticky top-0 left-0 right-0 z-40 bg-white/85 supports-[backdrop-filter]:bg-white/70 dark:bg-[#132044]/70 backdrop-blur-xl border-b border-slate-200/70 dark:border-white/10"
         dir="rtl"
       >
         <div className="px-4 py-3 flex items-center justify-between gap-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`${ws.iconButton}`}
+            className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 hover:border-slate-300 dark:bg-white/[0.03] dark:text-white dark:border-white/10 dark:hover:bg-white/[0.06] transition-colors"
             aria-label={isMobileMenuOpen ? "إغلاق القائمة" : "فتح القائمة"}
           >
             {isMobileMenuOpen ? (
@@ -93,11 +209,11 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
           />
 
           <div className="flex items-center gap-2 min-w-0">
-            <div className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white text-sm font-bold tracking-tight whitespace-nowrap">
+            <div className="text-slate-900 dark:text-white text-sm font-bold tracking-tight whitespace-nowrap">
               {pageTitle}
             </div>
             <img
-              src="https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/"
+              src={QUARTERS_LOGO}
               alt="Quarters"
               className="h-8 w-auto bg-white rounded-xl p-1 shrink-0"
             />
@@ -105,248 +221,203 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
         </div>
       </div>
 
-      {/* Overlay for mobile */}
+      {/* Mobile overlay */}
       {isMobileMenuOpen && (
         <div
-          onClick={() => setIsMobileMenuOpen(false)}
-          className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+          onClick={closeMobile}
+          className="lg:hidden fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-40"
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed right-0 top-0 h-[100svh] w-72 lg:w-72 p-6 overflow-y-auto z-50 transition-transform duration-300 ${ws.glass} ${ws.card} rounded-l-[28px] lg:rounded-none border-l border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 ${
+        className={`fixed right-0 top-0 h-[100svh] w-72 lg:w-72 z-50 flex flex-col transition-transform duration-300 bg-white border-l border-slate-200 dark:bg-[#0f1a35] dark:border-white/10 ${
           isMobileMenuOpen
             ? "translate-x-0"
             : "translate-x-full lg:translate-x-0"
         }`}
         dir="rtl"
       >
-        {/* Logo */}
-        <div className="mb-8 text-center">
-          <img
-            src="https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/"
-            alt="Quarters Coffee Bar"
-            className="h-16 w-auto mx-auto bg-white rounded-2xl p-2 mb-3"
-          />
-          <h1 className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-bold text-lg tracking-tight">
-            لوحة الإدارة
-          </h1>
-          <p className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/55 text-xs">أنظمة Quarters</p>
+        {/* Brand chip */}
+        <div className="px-5 pt-6 pb-4 border-b border-slate-100 dark:border-white/[0.06]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-white border border-slate-200 dark:bg-white dark:border-white/30 flex items-center justify-center overflow-hidden shrink-0">
+              <img
+                src={QUARTERS_LOGO}
+                alt="Quarters"
+                className="w-8 h-8 object-contain"
+              />
+            </div>
+            <div className="min-w-0">
+              <div className="text-slate-900 dark:text-white font-bold text-sm tracking-tight truncate">
+                Quarters Coffee Bar
+              </div>
+              <div className="text-slate-500 dark:text-white/55 text-xs truncate">
+                لوحة الإدارة
+              </div>
+            </div>
+          </div>
 
-          {/* Section switcher (Workspace / الجرد / المحاسبة) */}
+          {/* Section switcher (Workspace / Inventory / Accounting / HR / Marketing) */}
           <div className="mt-4 flex justify-center">
             <AppSectionSwitcher active="inventory" className="scale-95" />
           </div>
+
+          {/* Command-palette trigger */}
+          <button
+            type="button"
+            onClick={openPalette}
+            className="mt-4 w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-500 dark:bg-white/[0.04] dark:hover:bg-white/[0.07] dark:border-white/10 dark:text-white/50 transition-colors"
+            aria-label="بحث (Ctrl+K)"
+          >
+            <span className="flex items-center gap-2 text-sm">
+              <Search className="w-4 h-4" />
+              <span>الذهاب إلى صفحة…</span>
+            </span>
+            <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-white border border-slate-200 text-slate-500 dark:bg-white/10 dark:border-white/10 dark:text-white/60">
+              Ctrl + K
+            </kbd>
+          </button>
         </div>
 
-        <nav className="space-y-2">
-          <a
+        {/* Nav — scrollable middle zone */}
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+          <NavRow
             href="/admin"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
-              activePage === "dashboard"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-            }`}
-          >
-            <LayoutDashboard className="w-5 h-5" />
-            <span className={activePage === "dashboard" ? "font-semibold" : ""}>
-              لوحة التحكم
-            </span>
-          </a>
-
-          <a
+            icon={LayoutDashboard}
+            label="لوحة التحكم"
+            active={activePage === "dashboard"}
+            onClick={closeMobile}
+          />
+          <NavRow
             href="/admin/branches"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
-              activePage === "branches"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-            }`}
-          >
-            <Building2 className="w-5 h-5" />
-            <span className={activePage === "branches" ? "font-semibold" : ""}>
-              الفروع
-            </span>
-          </a>
-
-          <a
+            icon={Building2}
+            label="الفروع"
+            active={activePage === "branches"}
+            onClick={closeMobile}
+          />
+          <NavRow
             href="/admin/items"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
-              activePage === "items"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-            }`}
-          >
-            <Package className="w-5 h-5" />
-            <span className={activePage === "items" ? "font-semibold" : ""}>
-              إدارة الأصناف
-            </span>
-          </a>
-
-          <a
+            icon={Package}
+            label="إدارة الأصناف"
+            active={activePage === "items"}
+            onClick={closeMobile}
+          />
+          <NavRow
             href="/admin/operations"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
-              activePage === "operations"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-            }`}
-          >
-            <ClipboardList className="w-5 h-5" />
-            <span
-              className={activePage === "operations" ? "font-semibold" : ""}
-            >
-              عمليات المخزون
-            </span>
-          </a>
-
-          <a
+            icon={ClipboardList}
+            label="عمليات المخزون"
+            active={activePage === "operations"}
+            onClick={closeMobile}
+          />
+          <NavRow
             href="/admin/receipts"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
-              activePage === "receipts"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-            }`}
-          >
-            <Truck className="w-5 h-5" />
-            <span className={activePage === "receipts" ? "font-semibold" : ""}>
-              الواردات
-            </span>
-          </a>
+            icon={Truck}
+            label="الواردات"
+            active={activePage === "receipts"}
+            onClick={closeMobile}
+          />
 
-          <div>
+          {/* Collapsible: ملخص جرد الأصناف */}
+          <div className="pt-1">
             <button
-              onClick={() => setIsInventorySummaryOpen(!isInventorySummaryOpen)}
-              className="w-full flex items-center justify-between gap-3 px-4 py-3 text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] rounded-2xl transition-colors border border-transparent"
+              type="button"
+              onClick={() => setIsInventorySummaryOpen((v) => !v)}
+              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white transition-colors"
+              aria-expanded={isInventorySummaryOpen}
             >
               <div className="flex items-center gap-3">
                 <FileText className="w-5 h-5" />
                 <span>ملخص جرد الأصناف</span>
               </div>
               {isInventorySummaryOpen ? (
-                <ChevronUp className="w-4 h-4" />
+                <ChevronUp className="w-4 h-4 text-slate-400 dark:text-white/40" />
               ) : (
-                <ChevronDown className="w-4 h-4" />
+                <ChevronDown className="w-4 h-4 text-slate-400 dark:text-white/40" />
               )}
             </button>
 
             {isInventorySummaryOpen && (
-              <div className="mr-4 mt-2 space-y-1 border-r border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 pr-3">
-                <a
+              <div className="mt-1 space-y-0.5 border-r border-slate-200 dark:border-white/10 mr-5 pr-1">
+                <NavRow
                   href="/admin/low-stock"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
-                    activePage === "low-stock"
-                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                      : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-                  }`}
-                >
-                  <TrendingDown className="w-4 h-4" />
-                  <span
-                    className={
-                      activePage === "low-stock" ? "font-semibold" : ""
-                    }
-                  >
-                    الأصناف منخفضة الكمية
-                  </span>
-                </a>
-
-                <a
+                  icon={TrendingDown}
+                  label="الأصناف منخفضة الكمية"
+                  active={activePage === "low-stock"}
+                  level={1}
+                  onClick={closeMobile}
+                />
+                <NavRow
                   href="/admin/items-summary"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
-                    activePage === "items-summary"
-                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                      : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-                  }`}
-                >
-                  <FileText className="w-4 h-4" />
-                  <span
-                    className={
-                      activePage === "items-summary" ? "font-semibold" : ""
-                    }
-                  >
-                    ملخص الأصناف
-                  </span>
-                </a>
-
-                <a
+                  icon={FileText}
+                  label="ملخص الأصناف"
+                  active={activePage === "items-summary"}
+                  level={1}
+                  onClick={closeMobile}
+                />
+                <NavRow
                   href="/admin/variance"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
-                    activePage === "variance"
-                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                      : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-                  }`}
-                >
-                  <BarChart3 className="w-4 h-4" />
-                  <span
-                    className={
-                      activePage === "variance" ? "font-semibold" : ""
-                    }
-                  >
-                    تقرير الانحراف
-                  </span>
-                </a>
-
-                <a
+                  icon={BarChart3}
+                  label="تقرير الانحراف"
+                  active={activePage === "variance"}
+                  level={1}
+                  onClick={closeMobile}
+                />
+                <NavRow
                   href="/admin/stock-value"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-2xl transition-colors text-sm border ${
-                    activePage === "stock-value"
-                      ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                      : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-                  }`}
-                >
-                  <Banknote className="w-4 h-4" />
-                  <span
-                    className={
-                      activePage === "stock-value" ? "font-semibold" : ""
-                    }
-                  >
-                    قيمة المخزون
-                  </span>
-                </a>
+                  icon={Banknote}
+                  label="قيمة المخزون"
+                  active={activePage === "stock-value"}
+                  level={1}
+                  onClick={closeMobile}
+                />
               </div>
             )}
           </div>
 
           {canManageEmployees ? (
-            <a
+            <NavRow
               href="/admin/employees"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors border ${
-                activePage === "employees"
-                  ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                  : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 hover:text-slate-900 dark:hover:text-slate-900 dark:dark:hover:text-slate-900 dark:dark:dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] border-transparent"
-              }`}
-            >
-              <Users className="w-5 h-5" />
-              <span
-                className={activePage === "employees" ? "font-semibold" : ""}
-              >
-                الموظفين
-              </span>
-            </a>
+              icon={Users}
+              label="الموظفين"
+              active={activePage === "employees"}
+              onClick={closeMobile}
+            />
           ) : null}
-
         </nav>
 
-        <button
-          onClick={onLogout}
-          className={`mt-8 w-full flex items-center justify-center gap-2 px-4 py-3 ${ws.btnDanger}`}
-        >
-          <LogOut className="w-5 h-5" />
-          <span>تسجيل الخروج</span>
-        </button>
+        {/* Footer — language toggle + logout */}
+        <div className="border-t border-slate-100 dark:border-white/[0.06] p-3 space-y-1">
+          <button
+            type="button"
+            onClick={toggleLang}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white transition-colors"
+            aria-label="تبديل اللغة"
+          >
+            <Globe className="w-5 h-5 shrink-0" />
+            <span className="flex-1 text-sm font-medium">
+              {lang === "ar" ? "English" : "العربية"}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-500/10 transition-colors"
+          >
+            <LogOut className="w-5 h-5 shrink-0" />
+            <span className="flex-1 text-sm font-semibold text-right">
+              تسجيل الخروج
+            </span>
+          </button>
+        </div>
       </aside>
 
-      {/* Spacer for mobile topbar so content doesn't sit behind it */}
+      {/* Spacer so page content sits below the mobile top bar */}
       <div className="lg:hidden h-[64px]" />
+
+      {/* Global command palette */}
+      <CommandPalette open={paletteOpen} onClose={closePalette} />
     </>
   );
 }
