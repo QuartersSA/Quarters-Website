@@ -170,7 +170,7 @@ export default function HRPayrollPage() {
                     مُقفل
                   </span>
                 </div>
-                <div className="text-sm text-red-100/80 mt-1 leading-relaxed">
+                <div className="text-sm text-red-800 dark:text-red-100/80 mt-1 leading-relaxed">
                   لا يمكن إعادة إرسال مسير الرواتب لشهر {monthHint} ما
                   دام مُقفّلاً. على المحاسبة فتح الشهر أولاً من زر
                   «إلغاء التقفيل» في صفحة{" "}

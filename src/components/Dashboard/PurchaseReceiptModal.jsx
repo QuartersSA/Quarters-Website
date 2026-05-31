@@ -167,7 +167,7 @@ export function PurchaseReceiptModal({
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 min-h-0">
           {/* Error */}
           {receiptError ? (
-            <div className="p-4 rounded-2xl border border-red-500/25 bg-red-500/10 text-red-100 flex items-start gap-2">
+            <div className="p-4 rounded-2xl border border-red-500/25 bg-red-500/10 text-red-800 dark:text-red-100 flex items-start gap-2">
               <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
               <div className="text-sm">{receiptError}</div>
             </div>

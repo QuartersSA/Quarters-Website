@@ -479,7 +479,7 @@ export default function HRDeductionsPage() {
           <div
             className={`${ws.glass} ${ws.card} p-4 mb-6 border border-red-500/20`}
           >
-            <div className="text-red-100 font-semibold">{loadErrorMessage}</div>
+            <div className="text-red-800 dark:text-red-100 font-semibold">{loadErrorMessage}</div>
             {employeesErrorMsg.includes("[401]") ? (
               <div className="mt-3 flex flex-col sm:flex-row gap-2">
                 <a
