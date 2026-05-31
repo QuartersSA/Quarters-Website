@@ -74,7 +74,7 @@ function NavRow({
   const iconSize = level === 0 ? "w-5 h-5" : "w-4 h-4";
 
   const activeCls =
-    "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100";
+    "bg-brand-50 text-brand-700 dark:bg-white/10 dark:text-white";
   const inactiveCls =
     "text-slate-700 hover:bg-slate-100 hover:text-slate-900 " +
     "dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
@@ -89,7 +89,7 @@ function NavRow({
     >
       <Icon
         className={`shrink-0 ${iconSize} ${
-          active ? "text-brand-600 dark:text-brand-200" : ""
+          active ? "text-brand-600 dark:text-white" : ""
         }`}
       />
       <span className={`flex-1 ${active ? "font-semibold" : ""}`}>{label}</span>
@@ -197,7 +197,7 @@ function NavGroup({ icon: Icon, label, items, closeMobile }) {
   }, [open]);
 
   const triggerCls = groupActive
-    ? "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100"
+    ? "bg-brand-50 text-brand-700 dark:bg-white/10 dark:text-white"
     : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
 
   const chevronOpenCls = open
@@ -217,7 +217,7 @@ function NavGroup({ icon: Icon, label, items, closeMobile }) {
         <div className="flex items-center gap-3">
           <Icon
             className={`w-5 h-5 shrink-0 ${
-              groupActive ? "text-brand-600 dark:text-brand-200" : ""
+              groupActive ? "text-brand-600 dark:text-white" : ""
             }`}
           />
           <span className={groupActive ? "font-semibold" : ""}>{label}</span>
@@ -246,7 +246,7 @@ function NavGroup({ icon: Icon, label, items, closeMobile }) {
                 {items.map((it) => {
                   const ChildIcon = it.icon;
                   const itemCls = it.active
-                    ? "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100"
+                    ? "bg-brand-50 text-brand-700 dark:bg-white/10 dark:text-white"
                     : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
                   return (
                     <a
@@ -261,7 +261,7 @@ function NavGroup({ icon: Icon, label, items, closeMobile }) {
                       <ChildIcon
                         className={`w-4 h-4 shrink-0 ${
                           it.active
-                            ? "text-brand-600 dark:text-brand-200"
+                            ? "text-brand-600 dark:text-white"
                             : "text-slate-500 dark:text-white/55"
                         }`}
                       />
@@ -285,7 +285,7 @@ function NavGroup({ icon: Icon, label, items, closeMobile }) {
           {items.map((it) => {
             const ChildIcon = it.icon;
             const itemCls = it.active
-              ? "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100"
+              ? "bg-brand-50 text-brand-700 dark:bg-white/10 dark:text-white"
               : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
             return (
               <a
@@ -300,7 +300,7 @@ function NavGroup({ icon: Icon, label, items, closeMobile }) {
                 <ChildIcon
                   className={`w-4 h-4 shrink-0 ${
                     it.active
-                      ? "text-brand-600 dark:text-brand-200"
+                      ? "text-brand-600 dark:text-white"
                       : "text-slate-500 dark:text-white/55"
                   }`}
                 />
