@@ -11,11 +11,11 @@ export function ModalShell({ title, children, onClose }) {
         tabIndex={0}
       />
       <div
-        className={`${ws.glassSoft} ${ws.card} relative w-full max-w-[1000px] max-h-[85svh] overflow-hidden border border-white/10`}
+        className={`${ws.glassSoft} ${ws.card} relative w-full max-w-[1000px] max-h-[85svh] overflow-hidden border border-slate-200 dark:border-white/10`}
         dir="rtl"
       >
-        <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between gap-3">
-          <div className="text-white font-bold tracking-tight">{title}</div>
+        <div className="px-5 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between gap-3">
+          <div className="text-slate-900 dark:text-white font-bold tracking-tight">{title}</div>
           <button
             type="button"
             onClick={onClose}

@@ -6011,8 +6011,8 @@ function MobileHeader$1() {
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
       /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10`, children: /* @__PURE__ */ jsx(Leaf$1, { className: "w-5 h-5 text-emerald-200" }) }),
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: "font-bold text-white tracking-tight truncate", children: "المحاسبة" }),
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 truncate", children: "حاسبة البن الأخضر" })
+        /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight truncate", children: "المحاسبة" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 truncate", children: "حاسبة البن الأخضر" })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("a", { href: "/accounting", className: `${ws.btnNeutral} px-3 py-2 text-sm`, children: [
@@ -6026,8 +6026,8 @@ function DesktopHeader$1() {
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: ws.iconBox, children: /* @__PURE__ */ jsx(Leaf$1, { className: "w-5 h-5 text-emerald-200" }) }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-white tracking-tight", children: "المحاسبة" }),
-        /* @__PURE__ */ jsx("div", { className: "text-white/55 mt-1", children: "حاسبة البن الأخضر" })
+        /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: "المحاسبة" }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 mt-1", children: "حاسبة البن الأخضر" })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("a", { href: "/accounting", className: `${ws.btnNeutral} px-4 py-2`, children: [
@@ -6057,8 +6057,8 @@ function BeanSelector({
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3 flex-wrap", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-white font-bold tracking-tight", children: "البن الأخضر" }),
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mt-1", children: "إضافة اسم فقط، ثم اختره واملأ الأسعار. (الضريبة 15%)" })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "البن الأخضر" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1", children: "إضافة اسم فقط، ثم اختره واملأ الأسعار. (الضريبة 15%)" })
       ] }),
       /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleRefresh, className: `${ws.btnNeutral} px-4 py-2`, disabled: refreshDisabled, children: [
         /* @__PURE__ */ jsx(RefreshCw, { className: "w-4 h-4" }),
@@ -6067,12 +6067,12 @@ function BeanSelector({
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-sm font-semibold text-white/70 mb-2", children: "اختر البن (في وضع التسجيل)" }),
+        /* @__PURE__ */ jsx("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: "اختر البن (في وضع التسجيل)" }),
         /* @__PURE__ */ jsx(GlassSelect, { value: selectedId, onChange: setSelectedId, options: beanOptions, disabled: selectDisabled }),
-        selectDisabled ? /* @__PURE__ */ jsx("div", { className: "mt-2 text-xs text-white/40", children: 'أنت الآن في وضع "تسعير فقط" — اختيار البن معطّل حتى لا يرتبط التسعير باسم.' }) : null
+        selectDisabled ? /* @__PURE__ */ jsx("div", { className: "mt-2 text-xs text-slate-400 dark:text-white/40", children: 'أنت الآن في وضع "تسعير فقط" — اختيار البن معطّل حتى لا يرتبط التسعير باسم.' }) : null
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-sm font-semibold text-white/70 mb-2", children: "إضافة بن جديد (اسم فقط)" }),
+        /* @__PURE__ */ jsx("label", { className: "block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: "إضافة بن جديد (اسم فقط)" }),
         /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
           /* @__PURE__ */ jsx("input", { className: `${ws.input} px-4 py-2.5`, value: newName, onChange: handleChangeNewName, placeholder: "مثال: كولومبيا" }),
           /* @__PURE__ */ jsxs("button", { type: "button", onClick: onAdd, disabled: addDisabled, className: `${ws.btnPrimary} px-4 py-2.5 justify-center whitespace-nowrap`, children: [
@@ -6093,10 +6093,10 @@ function FieldRow({
   hint,
   children
 }) {
-  return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-[320px_1fr] gap-2 md:gap-4 py-3 border-t border-white/10", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-[320px_1fr] gap-2 md:gap-4 py-3 border-t border-slate-200 dark:border-white/10", children: [
     /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-white/80 font-semibold", children: label }),
-      hint ? /* @__PURE__ */ jsx("div", { className: "text-xs text-white/45 mt-1", children: hint }) : null
+      /* @__PURE__ */ jsx("div", { className: "text-slate-800 dark:text-white/80 font-semibold", children: label }),
+      hint ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1", children: hint }) : null
     ] }),
     /* @__PURE__ */ jsx("div", { className: "min-w-0", children })
   ] });
@@ -6119,41 +6119,41 @@ function CalculatorForm({
 }) {
   const isRegister = calculatorMode === "register";
   if (isRegister && !selectedBean) {
-    return /* @__PURE__ */ jsx("div", { className: "mt-4 text-white/60", children: "اختر البن من الأعلى." });
+    return /* @__PURE__ */ jsx("div", { className: "mt-4 text-slate-600 dark:text-white/60", children: "اختر البن من الأعلى." });
   }
   const roastExclBtnClass = roastInputMode === "excl" ? `${ws.btnPrimary} px-3 py-2 text-sm` : `${ws.btnNeutral} px-3 py-2 text-sm`;
   const roastInclBtnClass = roastInputMode === "incl" ? `${ws.btnPrimary} px-3 py-2 text-sm` : `${ws.btnNeutral} px-3 py-2 text-sm`;
   const headerTitle = isRegister ? "البن:" : "تسعير فقط:";
   const headerValue = isRegister ? selectedBean?.name : "غير مرتبط باسم بن";
-  const headerUpdatedAt = isRegister ? /* @__PURE__ */ jsxs("div", { className: "text-xs text-white/40", children: [
+  const headerUpdatedAt = isRegister ? /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-400 dark:text-white/40", children: [
     "آخر تحديث: ",
     selectedUpdatedAtText
-  ] }) : /* @__PURE__ */ jsx("div", { className: "text-xs text-white/40", children: "لن يتم حفظ أي شيء عند هذا الوضع." });
+  ] }) : /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-400 dark:text-white/40", children: "لن يتم حفظ أي شيء عند هذا الوضع." });
   return /* @__PURE__ */ jsxs("div", { className: "mt-4", children: [
-    /* @__PURE__ */ jsxs("div", { className: "rounded-3xl border border-white/10 overflow-hidden", children: [
-      /* @__PURE__ */ jsxs("div", { className: "px-4 py-3 bg-white/[0.03] flex items-center justify-between gap-2 flex-wrap", children: [
-        /* @__PURE__ */ jsxs("div", { className: "text-white/80", children: [
+    /* @__PURE__ */ jsxs("div", { className: "rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden", children: [
+      /* @__PURE__ */ jsxs("div", { className: "px-4 py-3 bg-slate-50 dark:bg-white/[0.03] flex items-center justify-between gap-2 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { className: "text-slate-800 dark:text-white/80", children: [
           headerTitle,
           " ",
-          /* @__PURE__ */ jsx("span", { className: "font-bold text-white", children: headerValue })
+          /* @__PURE__ */ jsx("span", { className: "font-bold text-slate-900 dark:text-white", children: headerValue })
         ] }),
         headerUpdatedAt
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "px-4", children: [
         /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو الخام", hint: "Excl. tax", children: /* @__PURE__ */ jsx("input", { className: `${ws.input} px-4 py-2.5`, type: "number", step: "0.01", inputMode: "decimal", value: draft.priceKgExclTax, onChange: handleChangePriceKgExclTax, placeholder: "مثال: 35" }) }),
         /* @__PURE__ */ jsx(FieldRow, { label: "حجم الخيشة", hint: "بالكيلو", children: /* @__PURE__ */ jsx("input", { className: `${ws.input} px-4 py-2.5`, type: "number", step: "0.001", inputMode: "decimal", value: draft.bagSizeKg, onChange: handleChangeBagSizeKg, placeholder: "مثال: 60" }) }),
-        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "غير شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-white font-bold`, children: formatMoney$6(computed.bagCostExcl) }) }),
-        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-white font-bold`, children: formatMoney$6(computed.bagCostIncl) }) }),
+        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "غير شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$6(computed.bagCostExcl) }) }),
+        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$6(computed.bagCostIncl) }) }),
         !isRegister ? /* @__PURE__ */ jsxs(Fragment, { children: [
           /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة التحميص", hint: "اختر الإدخال: غير شامل الضريبة أو شامل الضريبة", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-2", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex gap-2 flex-wrap", children: [
               /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setRoastInputMode("excl"), className: roastExclBtnClass, children: "غير شامل" }),
               /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setRoastInputMode("incl"), className: roastInclBtnClass, children: "شامل" }),
-              /* @__PURE__ */ jsx("div", { className: "text-xs text-white/40 self-center", children: "(الضريبة 15%)" })
+              /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-400 dark:text-white/40 self-center", children: "(الضريبة 15%)" })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-2", children: [
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mb-1", children: "غير شامل الضريبة" }),
+                /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mb-1", children: "غير شامل الضريبة" }),
                 /* @__PURE__ */ jsx("input", { className: `${ws.input} px-4 py-2.5`, type: "number", step: "0.01", inputMode: "decimal", list: "roastExclOptions", value: draft.roastCostExclTax, onChange: handleChangeRoastCostExclTax, disabled: roastInputMode !== "excl" }),
                 /* @__PURE__ */ jsxs("datalist", { id: "roastExclOptions", children: [
                   /* @__PURE__ */ jsx("option", { value: "7" }),
@@ -6162,7 +6162,7 @@ function CalculatorForm({
                 ] })
               ] }),
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mb-1", children: "شامل الضريبة" }),
+                /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mb-1", children: "شامل الضريبة" }),
                 /* @__PURE__ */ jsx("input", { className: `${ws.input} px-4 py-2.5`, type: "number", step: "0.01", inputMode: "decimal", list: "roastInclOptions", value: draft.roastCostInclTax, onChange: handleChangeRoastCostInclTax, disabled: roastInputMode !== "incl" }),
                 /* @__PURE__ */ jsxs("datalist", { id: "roastInclOptions", children: [
                   /* @__PURE__ */ jsx("option", { value: "8.05" }),
@@ -6172,11 +6172,11 @@ function CalculatorForm({
               ] })
             ] })
           ] }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الاجماليه للتحميص", hint: "حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-white font-bold`, children: formatMoney$6(computed.roastTotalIncl) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الاجماليه للتحميص", hint: "حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$6(computed.roastTotalIncl) }) }),
           /* @__PURE__ */ jsx(FieldRow, { label: "الواصل بعد الهدر", hint: "مدخل (بالكيلو)", children: /* @__PURE__ */ jsx("input", { className: `${ws.input} px-4 py-2.5`, type: "number", step: "0.001", inputMode: "decimal", value: draft.receivedKg, onChange: handleChangeReceivedKg, placeholder: "مثال: 50" }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "نسبة الهدر", hint: "% (محسوبة تلقائيًا من الكمية الواصلة)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-white font-bold`, children: formatMoney$6(computed.wastePercentDerived) }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "الإجمالي", hint: "شامل الضريبة", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-white font-extrabold`, children: formatMoney$6(computed.totalIncl) }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو النهائي", hint: "(الإجمالي / الواصل بعد الهدر)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-white font-extrabold`, children: formatMoney$6(computed.finalPricePerKg) }) })
+          /* @__PURE__ */ jsx(FieldRow, { label: "نسبة الهدر", hint: "% (محسوبة تلقائيًا من الكمية الواصلة)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$6(computed.wastePercentDerived) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "الإجمالي", hint: "شامل الضريبة", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$6(computed.totalIncl) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو النهائي", hint: "(الإجمالي / الواصل بعد الهدر)", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$6(computed.finalPricePerKg) }) })
         ] }) : null,
         /* @__PURE__ */ jsx("div", { className: "py-4" })
       ] })
@@ -6210,8 +6210,8 @@ function CalculatorCard({
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3 flex-wrap", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-white font-bold tracking-tight", children: "جدول الحاسبة" }),
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mt-1", children: "اختر وضع الاستخدام ثم أدخل القيم." })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "جدول الحاسبة" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1", children: "اختر وضع الاستخدام ثم أدخل القيم." })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
         /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setCalculatorMode("pricing"), className: pricingBtnClass, children: "تسعير فقط" }),
@@ -6225,7 +6225,7 @@ function CalculatorCard({
         ] })
       ] })
     ] }),
-    calculatorMode === "pricing" ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-white/45", children: "وضع تسعير فقط: عند اختيار هذا الوضع يتم تصفير الحقول ولا يتم ربط التسعير بأي اسم، ولا يتم حفظ أي بيانات." }) : /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-white/45", children: 'وضع التسجيل: يتم حفظ سعر الكيلو وحجم الخيشة فقط. لتسعير كامل مع التحميص والهدر استخدم وضع "تسعير فقط".' }),
+    calculatorMode === "pricing" ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-slate-500 dark:text-white/45", children: "وضع تسعير فقط: عند اختيار هذا الوضع يتم تصفير الحقول ولا يتم ربط التسعير بأي اسم، ولا يتم حفظ أي بيانات." }) : /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-slate-500 dark:text-white/45", children: 'وضع التسجيل: يتم حفظ سعر الكيلو وحجم الخيشة فقط. لتسعير كامل مع التحميص والهدر استخدم وضع "تسعير فقط".' }),
     /* @__PURE__ */ jsx(CalculatorForm, { calculatorMode, selectedBean, selectedUpdatedAtText, draft, handleChangePriceKgExclTax, handleChangeBagSizeKg, roastInputMode, setRoastInputMode, handleChangeRoastCostExclTax, handleChangeRoastCostInclTax, handleChangeReceivedKg, computed, savingBlock })
   ] });
 }
@@ -6335,8 +6335,8 @@ function MobileHeader() {
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
       /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10`, children: /* @__PURE__ */ jsx(Leaf$1, { className: "w-5 h-5 text-emerald-200" }) }),
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: "font-bold text-white tracking-tight truncate", children: "المحاسبة" }),
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 truncate", children: "توريد البن الأخضر" })
+        /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight truncate", children: "المحاسبة" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 truncate", children: "توريد البن الأخضر" })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("a", { href: "/accounting", className: `${ws.btnNeutral} px-3 py-2 text-sm`, children: [
@@ -6350,8 +6350,8 @@ function DesktopHeader() {
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: ws.iconBox, children: /* @__PURE__ */ jsx(Leaf$1, { className: "w-5 h-5 text-emerald-200" }) }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-white tracking-tight", children: "المحاسبة" }),
-        /* @__PURE__ */ jsx("div", { className: "text-white/55 mt-1", children: "طلبات توريد البن الأخضر" })
+        /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: "المحاسبة" }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 mt-1", children: "طلبات توريد البن الأخضر" })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("a", { href: "/accounting", className: `${ws.btnNeutral} px-4 py-2`, children: [
@@ -6379,8 +6379,8 @@ function ActionsCard({
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3 flex-wrap", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-white font-bold tracking-tight", children: "توريد البن الأخضر" }),
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mt-1", children: "اختر أنواع البن ثم احفظ الطلب ليظهر في الأرشيف حسب التاريخ." })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "توريد البن الأخضر" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1", children: "اختر أنواع البن ثم احفظ الطلب ليظهر في الأرشيف حسب التاريخ." })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex gap-2 flex-wrap", children: [
         /* @__PURE__ */ jsxs("button", { type: "button", onClick: onRefresh, className: `${ws.btnNeutral} px-4 py-2`, disabled: refreshDisabled, children: [
@@ -6425,18 +6425,18 @@ function ExportMenu({
     /* @__PURE__ */ jsxs(GlassPopover, { open, anchorRef, onClose: () => setOpen(false), style: {
       width: 220
     }, children: [
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors", children: [
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:bg-white/[0.06] transition-colors", children: [
         /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "Excel" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "ملف .xls" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "ملف .xls" })
         ] })
       ] }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handlePDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-white/85 hover:bg-white/[0.06] transition-colors border-t border-white/10", children: [
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handlePDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
         /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-200" }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-white", children: "PDF" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-white/45", children: "للطباعة والأرشفة" })
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
         ] })
       ] })
     ] })
@@ -7243,11 +7243,11 @@ function OrdersList({
   const exportHint = exportFrom && exportTo ? `${exportFrom} → ${exportTo}` : "";
   let content = null;
   if (isLoading) {
-    content = /* @__PURE__ */ jsx("div", { className: "mt-4 text-white/60", children: "جاري التحميل…" });
+    content = /* @__PURE__ */ jsx("div", { className: "mt-4 text-slate-600 dark:text-white/60", children: "جاري التحميل…" });
   } else if (error) {
     content = /* @__PURE__ */ jsx("div", { className: "mt-4 text-red-300", children: error });
   } else if (!Array.isArray(orders) || orders.length === 0) {
-    content = /* @__PURE__ */ jsx("div", { className: "mt-4 text-white/60", children: "لا يوجد طلبات بعد." });
+    content = /* @__PURE__ */ jsx("div", { className: "mt-4 text-slate-600 dark:text-white/60", children: "لا يوجد طلبات بعد." });
   } else {
     content = /* @__PURE__ */ jsxs("div", { className: "mt-4 overflow-x-auto", children: [
       /* @__PURE__ */ jsxs("table", { className: "w-full table-fixed border-separate border-spacing-0", children: [
@@ -7268,7 +7268,7 @@ function OrdersList({
             width: "120px"
           } })
         ] }),
-        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-xs text-white/55", children: [
+        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-xs text-slate-600 dark:text-white/55", children: [
           /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "رقم" }),
           /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "التاريخ" }),
           /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "المورّد" }),
@@ -7277,21 +7277,21 @@ function OrdersList({
         ] }) }),
         /* @__PURE__ */ jsx("tbody", { children: orders.map((o) => {
           const isSelected = String(o.id) === String(selectedOrderId);
-          const rowClass = isSelected ? "bg-white/10" : "bg-white/[0.02] hover:bg-white/[0.05]";
-          return /* @__PURE__ */ jsxs("tr", { className: `${rowClass} border-t border-white/10 cursor-pointer transition-colors`, onClick: () => onSelectOrder(String(o.id)), role: "button", tabIndex: 0, onKeyDown: (e) => {
+          const rowClass = isSelected ? "bg-slate-200 dark:bg-white/10" : "bg-slate-50/50 dark:bg-white/[0.02] hover:bg-slate-100 dark:bg-white/[0.05]";
+          return /* @__PURE__ */ jsxs("tr", { className: `${rowClass} border-t border-slate-200 dark:border-white/10 cursor-pointer transition-colors`, onClick: () => onSelectOrder(String(o.id)), role: "button", tabIndex: 0, onKeyDown: (e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               onSelectOrder(String(o.id));
             }
           }, children: [
-            /* @__PURE__ */ jsxs("td", { className: "py-2 text-white/85 font-semibold truncate", children: [
+            /* @__PURE__ */ jsxs("td", { className: "py-2 text-slate-800 dark:text-white/85 font-semibold truncate", children: [
               "#",
               o.id
             ] }),
-            /* @__PURE__ */ jsx("td", { className: "py-2 text-white/75 truncate", children: String(o.order_date || "—") }),
-            /* @__PURE__ */ jsx("td", { className: "py-2 text-white/75 truncate", children: o.supplier_name || "—" }),
-            /* @__PURE__ */ jsx("td", { className: "py-2 text-white/75 truncate", children: o.items_count ?? 0 }),
-            /* @__PURE__ */ jsx("td", { className: "py-2 text-white font-bold truncate", children: formatMoney$5(o.total_incl) })
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: String(o.order_date || "—") }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: o.supplier_name || "—" }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: o.items_count ?? 0 }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-bold truncate", children: formatMoney$5(o.total_incl) })
           ] }, o.id);
         }) })
       ] }),
@@ -7311,38 +7311,38 @@ function OrdersList({
   }, [onFilterMonthChange]);
   const filterMonthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
-    /* @__PURE__ */ jsx("div", { className: "text-white font-bold tracking-tight", children: "الطلبات" }),
-    /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mt-1", children: "اختر طلب لفتح تفاصيله." }),
+    /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "الطلبات" }),
+    /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1", children: "اختر طلب لفتح تفاصيله." }),
     /* @__PURE__ */ jsxs("div", { className: "mt-3 max-w-[280px]", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "فلترة حسب الشهر" }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "فلترة حسب الشهر" }),
       /* @__PURE__ */ jsx(GlassSelect, { value: filterMonth, onChange: handleFilterMonthChange, options: filterMonthOptions }),
-      /* @__PURE__ */ jsx("div", { className: "text-[11px] text-white/40 mt-1", children: 'اختر "اختر الشهر" لعرض كل الطلبات.' })
+      /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-400 dark:text-white/40 mt-1", children: 'اختر "اختر الشهر" لعرض كل الطلبات.' })
     ] }),
     content,
-    /* @__PURE__ */ jsxs("div", { className: "mt-4 pt-4 border-t border-white/10", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-white font-bold tracking-tight", children: "تصدير الأرشيف" }),
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mt-1", children: "تصدير مفصل للأصناف داخل الطلبات (Excel / PDF)." }),
+    /* @__PURE__ */ jsxs("div", { className: "mt-4 pt-4 border-t border-slate-200 dark:border-white/10", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "تصدير الأرشيف" }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1", children: "تصدير مفصل للأصناف داخل الطلبات (Excel / PDF)." }),
       /* @__PURE__ */ jsxs("div", { className: "mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3", children: [
         /* @__PURE__ */ jsxs("label", { className: "block", children: [
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "شهر" }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "شهر" }),
           /* @__PURE__ */ jsx("input", { type: "month", className: `${ws.input} px-3 py-2 w-full`, value: exportMonth, onChange: handleExportMonthChange })
         ] }),
         /* @__PURE__ */ jsxs("label", { className: "block", children: [
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "من" }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "من" }),
           /* @__PURE__ */ jsx("input", { type: "date", className: `${ws.input} px-3 py-2 w-full`, value: exportFrom, onChange: handleExportFromChange })
         ] }),
         /* @__PURE__ */ jsxs("label", { className: "block", children: [
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "إلى" }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "إلى" }),
           /* @__PURE__ */ jsx("input", { type: "date", className: `${ws.input} px-3 py-2 w-full`, value: exportTo, onChange: handleExportToChange })
         ] })
       ] }),
-      exportHint ? /* @__PURE__ */ jsxs("div", { className: "mt-2 text-xs text-white/45", children: [
+      exportHint ? /* @__PURE__ */ jsxs("div", { className: "mt-2 text-xs text-slate-500 dark:text-white/45", children: [
         "الفترة: ",
         exportHint
       ] }) : null,
       /* @__PURE__ */ jsxs("div", { className: "mt-3 flex items-center gap-2 flex-wrap", children: [
         /* @__PURE__ */ jsx(ExportMenu, { label: "تصدير الطلبات", onExcel: handleExportExcelClick, onPDF: handleExportPdfClick, disabled: isExporting }),
-        isExporting ? /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55", children: "جاري تجهيز التصدير…" }) : null
+        isExporting ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "جاري تجهيز التصدير…" }) : null
       ] })
     ] })
   ] });
@@ -7699,8 +7699,8 @@ function OrderDetailsHeader({
 }) {
   return /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("div", { className: "text-white font-bold tracking-tight", children: "تفاصيل الطلب" }),
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mt-1", children: "يظهر لك سعر الكيلو الصافي لكل نوع بن داخل الطلب." })
+      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "تفاصيل الطلب" }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1", children: "يظهر لك سعر الكيلو الصافي لكل نوع بن داخل الطلب." })
     ] }),
     showHeaderActions ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
       orderDetails?.id ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: onOpenDepositModal, className: `${ws.btnPrimary} px-4 py-2`, style: {
@@ -7730,25 +7730,25 @@ function OrderInfo({
   const supplierText = orderDetails?.supplier_name ? String(orderDetails.supplier_name) : "";
   const noteText = orderDetails?.note ? String(orderDetails.note) : "";
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: "mt-4 text-white/80", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mt-4 text-slate-800 dark:text-white/80", children: [
       /* @__PURE__ */ jsxs("div", { className: "text-sm", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "رقم الطلب:" }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "رقم الطلب:" }),
         " ",
         orderIdText
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "text-sm mt-1", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "التاريخ:" }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "التاريخ:" }),
         " ",
         orderDateText
       ] }),
       supplierText ? /* @__PURE__ */ jsxs("div", { className: "text-sm mt-1", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "المورّد:" }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "المورّد:" }),
         " ",
         supplierText
       ] }) : null
     ] }),
-    noteText ? /* @__PURE__ */ jsxs("div", { className: "mt-4 text-sm text-white/70", children: [
-      /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "ملاحظة:" }),
+    noteText ? /* @__PURE__ */ jsxs("div", { className: "mt-4 text-sm text-slate-700 dark:text-white/70", children: [
+      /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "ملاحظة:" }),
       " ",
       noteText
     ] }) : null
@@ -7774,7 +7774,7 @@ function OrderDetailsTable({
   }, [onSaveReceived]);
   const tableRows = useMemo(() => {
     if (!Array.isArray(groupedItems) || groupedItems.length === 0) {
-      return /* @__PURE__ */ jsx("tr", { className: "bg-white/[0.02] border-t border-white/10", children: /* @__PURE__ */ jsx("td", { className: "py-3 text-white/60", colSpan: 7, children: "لا توجد أصناف." }) });
+      return /* @__PURE__ */ jsx("tr", { className: "bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10", children: /* @__PURE__ */ jsx("td", { className: "py-3 text-slate-600 dark:text-white/60", colSpan: 7, children: "لا توجد أصناف." }) });
     }
     return groupedItems.map((g) => {
       const it = g.firstItem;
@@ -7783,8 +7783,8 @@ function OrderDetailsTable({
       const extraCostKgText = it.extra_cost_kg != null ? formatQty(it.extra_cost_kg) : "الكل";
       const totalReceivedDisplay = formatQty(g.totalReceived);
       const showBagCount = g.bagCount > 1;
-      return /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.02] border-t border-white/10", children: [
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white font-semibold truncate", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+      return /* @__PURE__ */ jsxs("tr", { className: "bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10", children: [
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-semibold truncate", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
           /* @__PURE__ */ jsx("span", { children: beanName }),
           showBagCount ? /* @__PURE__ */ jsxs("span", { className: "text-xs text-emerald-200/80 font-bold bg-emerald-400/10 border border-emerald-400/20 rounded-lg px-1.5 py-0.5", children: [
             "× ",
@@ -7792,10 +7792,10 @@ function OrderDetailsTable({
             " خيشة"
           ] }) : null
         ] }) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white/80", children: formatMoney$5(it.price_kg_excl_tax) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white/80", children: formatMoney$5(it.waste_percent) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white/80", children: extraCostKgText }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white/80", children: totalReceivedDisplay }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$5(it.price_kg_excl_tax) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$5(it.waste_percent) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: extraCostKgText }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: totalReceivedDisplay }),
         /* @__PURE__ */ jsx("td", { className: "py-2 text-emerald-200 font-extrabold", children: formatMoney$5(it.computed_final_price_per_kg) }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
           /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-[110px]`, type: "number", step: "0.001", inputMode: "decimal", value: receivedValue, "data-group-key": g.groupKey, onChange: handleReceivedInputChange, placeholder: showBagCount ? `إجمالي ${g.bagCount} خياشات` : "مثال: 58", disabled: isRowSaving, title: showBagCount ? `القيمة المُدخلة تُوزَّع بالتساوي على ${g.bagCount} خياشات` : "كمية الواصل بعد الهدر" }),
@@ -7828,7 +7828,7 @@ function OrderDetailsTable({
         width: "160px"
       } })
     ] }),
-    /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-xs text-white/55", children: [
+    /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-xs text-slate-600 dark:text-white/55", children: [
       /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "البن" }),
       /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "سعر الكيلو" }),
       /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "الهدر %" }),
@@ -7857,11 +7857,11 @@ function OrderSummary({
     }, {
       label: "مجموع الكيلوات",
       value: `${formatMoney$5(totals.totalKg)} كغ`,
-      color: "text-white"
+      color: "text-slate-900 dark:text-white"
     }, {
       label: "مجموع الكيلوات الواصلة بعد الهدر",
       value: `${formatMoney$5(totals.totalReceivedKg)} كغ`,
-      color: "text-white"
+      color: "text-slate-900 dark:text-white"
     }, {
       label: "كمية الهدر",
       value: `${formatMoney$5(totals.wasteKg)} كغ (${formatMoney$5(totals.wastePercent)}%)`,
@@ -7869,32 +7869,32 @@ function OrderSummary({
     }, {
       label: "إجمالي تكلفة البن (شامل الضريبة)",
       value: `${formatMoney$5(totals.totalBeanCostIncl)} ر.س`,
-      color: "text-white"
+      color: "text-slate-900 dark:text-white"
     }, {
       label: "إجمالي تكلفة التحميص (شامل الضريبة)",
       value: `${formatMoney$5(totals.totalRoastIncl)} ر.س`,
-      color: "text-white"
+      color: "text-slate-900 dark:text-white"
     }, {
       label: "إجمالي التكلفة الإضافية",
       value: `${formatMoney$5(totals.totalExtra)} ر.س`,
-      color: "text-white"
+      color: "text-slate-900 dark:text-white"
     }, {
       label: "متوسط السعر الصافي / كغ",
       value: `${formatMoney$5(totals.avgPricePerKg)} ر.س`,
       color: "text-emerald-200"
     }];
-    return /* @__PURE__ */ jsxs("div", { className: "mt-5 pt-4 border-t border-white/10", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-white font-bold text-sm mb-3", children: "ملخص الطلب" }),
+    return /* @__PURE__ */ jsxs("div", { className: "mt-5 pt-4 border-t border-slate-200 dark:border-white/10", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm mb-3", children: "ملخص الطلب" }),
       /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-2", children: [
         statItems.map((item) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm", children: [
-          /* @__PURE__ */ jsxs("span", { className: "text-white/55", children: [
+          /* @__PURE__ */ jsxs("span", { className: "text-slate-600 dark:text-white/55", children: [
             item.label,
             ":"
           ] }),
           /* @__PURE__ */ jsx("span", { className: `font-bold ${item.color}`, children: item.value })
         ] }, item.label)),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm mt-2 pt-3 border-t border-white/15", children: [
-          /* @__PURE__ */ jsx("span", { className: "text-white font-bold", children: "إجمالي الطلب (شامل):" }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm mt-2 pt-3 border-t border-slate-200 dark:border-white/15", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", children: "إجمالي الطلب (شامل):" }),
           /* @__PURE__ */ jsxs("span", { className: "text-emerald-200 font-extrabold text-base", children: [
             formatMoney$5(totals.totalGrand),
             " ر.س"
@@ -7918,7 +7918,7 @@ function DepositSuccess({
       /* @__PURE__ */ jsx(CheckCircle, { className: "w-6 h-6 text-emerald-400 flex-shrink-0" }),
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("div", { className: "text-emerald-300 font-bold", children: "تم الإيداع بنجاح" }),
-        /* @__PURE__ */ jsxs("div", { className: "text-sm text-white/70 mt-1", children: [
+        /* @__PURE__ */ jsxs("div", { className: "text-sm text-slate-700 dark:text-white/70 mt-1", children: [
           "تم إيداع ",
           depositResult.deposited,
           ' نوع بن في فرع "',
@@ -7928,13 +7928,13 @@ function DepositSuccess({
       ] })
     ] }),
     Array.isArray(depositResult.receipts) && depositResult.receipts.length > 0 ? /* @__PURE__ */ jsxs("div", { className: "mb-4", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-2", children: "الأصناف المودعة (مجمّعة حسب النوع):" }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-2", children: "الأصناف المودعة (مجمّعة حسب النوع):" }),
       /* @__PURE__ */ jsx("div", { className: "space-y-1", children: depositResult.receipts.map((r) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm p-2 rounded-lg", style: {
         background: "rgba(255,255,255,0.04)"
       }, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsx("span", { className: "text-white/80", children: r.inventoryItemName || r.beanName }),
-          r.bagCount > 1 ? /* @__PURE__ */ jsxs("span", { className: "text-white/40 text-xs", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80", children: r.inventoryItemName || r.beanName }),
+          r.bagCount > 1 ? /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/40 text-xs", children: [
             "(",
             r.bagCount,
             " خيشة)"
@@ -7954,7 +7954,7 @@ function DepositSuccess({
         /* @__PURE__ */ jsx(AlertTriangle, { className: "w-4 h-4 text-amber-400" }),
         /* @__PURE__ */ jsx("span", { className: "text-amber-300 text-sm font-bold", children: "أصناف لم تتم إيداعها" })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-white/60", children: depositResult.unlinked.map((u) => /* @__PURE__ */ jsxs("div", { className: "mt-1", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/60", children: depositResult.unlinked.map((u) => /* @__PURE__ */ jsxs("div", { className: "mt-1", children: [
         "• ",
         u.beanName,
         u.reason ? ` — ${u.reason}` : " — غير مربوط بصنف مخزون"
@@ -7977,13 +7977,13 @@ function DepositForm({
 }) {
   return /* @__PURE__ */ jsxs("div", { children: [
     /* @__PURE__ */ jsxs("div", { className: "mb-4", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-2", children: "الأصناف التي سيتم إيداعها (الكمية الواصلة بعد الهدر — مجمّعة حسب النوع):" }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-2", children: "الأصناف التي سيتم إيداعها (الكمية الواصلة بعد الهدر — مجمّعة حسب النوع):" }),
       /* @__PURE__ */ jsx("div", { className: "space-y-1 max-h-[200px] overflow-y-auto", children: depositPreviewItems.map((item, idx) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm p-2 rounded-lg", style: {
         background: "rgba(255,255,255,0.04)"
       }, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsx("span", { className: "text-white/80", children: item.beanName }),
-          item.bagCount > 1 ? /* @__PURE__ */ jsxs("span", { className: "text-white/40 text-xs", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80", children: item.beanName }),
+          item.bagCount > 1 ? /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/40 text-xs", children: [
             "(",
             item.bagCount,
             " خيشة)"
@@ -7996,11 +7996,11 @@ function DepositForm({
       ] }, idx)) })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "mb-4", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "الفرع المستلم" }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "الفرع المستلم" }),
       /* @__PURE__ */ jsx(GlassSelect, { value: depositBranchId, onChange: setDepositBranchId, options: branchOptions })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "mb-5", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "ملاحظة (اختياري)" }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "ملاحظة (اختياري)" }),
       /* @__PURE__ */ jsx("input", { type: "text", className: `${ws.input} px-3 py-2 w-full`, value: depositNote, onChange: (e) => setDepositNote(e.target.value), placeholder: "ملاحظة إضافية…" })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
@@ -8044,8 +8044,8 @@ function DepositModal({
           background: "rgba(16, 185, 129, 0.15)"
         }, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5 text-emerald-400" }) }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "text-white font-bold", children: "الإيداع في المخزون" }),
-          /* @__PURE__ */ jsxs("div", { className: "text-xs text-white/50", children: [
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold", children: "الإيداع في المخزون" }),
+          /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/50", children: [
             "طلب #",
             orderDetails?.id,
             " — ",
@@ -8053,7 +8053,7 @@ function DepositModal({
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onCloseDepositModal, className: "text-white/40 hover:text-white/80 transition-colors", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onCloseDepositModal, className: "text-slate-400 dark:text-white/40 hover:text-slate-800 dark:text-white/80 transition-colors", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
     ] }),
     depositResult ? /* @__PURE__ */ jsx(DepositSuccess, { depositResult, onCloseDepositModal }) : /* @__PURE__ */ jsx(DepositForm, { depositPreviewItems, depositBranchId, setDepositBranchId, branchOptions, depositNote, setDepositNote, onConfirmDeposit, onCloseDepositModal, depositMutation })
   ] }) });
@@ -8545,13 +8545,13 @@ function OrderDetails({
   }, [orderItems]);
   let body = null;
   if (!selectedOrderId) {
-    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-white/60", children: "اختر طلب من القائمة." });
+    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-slate-600 dark:text-white/60", children: "اختر طلب من القائمة." });
   } else if (isLoading) {
-    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-white/60", children: "جاري التحميل…" });
+    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-slate-600 dark:text-white/60", children: "جاري التحميل…" });
   } else if (error) {
     body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-red-300", children: error });
   } else if (!orderDetails) {
-    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-white/60", children: "لا يوجد تفاصيل." });
+    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-slate-600 dark:text-white/60", children: "لا يوجد تفاصيل." });
   } else {
     body = /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx(OrderInfo, { orderDetails }),
@@ -8605,25 +8605,25 @@ function BeansList({
   }, [onDecrementQty]);
   let body = null;
   if (isLoading) {
-    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-white/60", children: "جاري التحميل…" });
+    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-slate-600 dark:text-white/60", children: "جاري التحميل…" });
   } else if (error) {
     body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-red-300", children: error });
   } else if (!Array.isArray(beans) || beans.length === 0) {
-    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-white/60", children: "لا يوجد بن مسجّل." });
+    body = /* @__PURE__ */ jsx("div", { className: "mt-4 text-slate-600 dark:text-white/60", children: "لا يوجد بن مسجّل." });
   } else {
     const rows = beans.map((b) => {
       const isSelected = selectedSet.has(String(b.id));
       const qty = beanQtyMap?.[String(b.id)] || 0;
-      const rowClass = isSelected ? "bg-white/10" : "bg-white/[0.02] hover:bg-white/[0.05]";
+      const rowClass = isSelected ? "bg-slate-200 dark:bg-white/10" : "bg-slate-50/50 dark:bg-white/[0.02] hover:bg-slate-100 dark:bg-white/[0.05]";
       const Icon = isSelected ? CheckSquare : Square;
-      const iconClass = isSelected ? "text-emerald-200" : "text-white/40";
-      return /* @__PURE__ */ jsxs("tr", { "data-bean-id": String(b.id), className: `${rowClass} border-t border-white/10 cursor-pointer`, onClick: onRowClick, title: "اختيار/إلغاء اختيار", children: [
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white/80", children: /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center", children: /* @__PURE__ */ jsx(Icon, { className: `w-5 h-5 ${iconClass}` }) }) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white font-semibold truncate", children: b.name }),
+      const iconClass = isSelected ? "text-emerald-200" : "text-slate-400 dark:text-white/40";
+      return /* @__PURE__ */ jsxs("tr", { "data-bean-id": String(b.id), className: `${rowClass} border-t border-slate-200 dark:border-white/10 cursor-pointer`, onClick: onRowClick, title: "اختيار/إلغاء اختيار", children: [
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center", children: /* @__PURE__ */ jsx(Icon, { className: `w-5 h-5 ${iconClass}` }) }) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-semibold truncate", children: b.name }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: isSelected ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 justify-center", children: [
-          /* @__PURE__ */ jsx("button", { type: "button", "data-qty-btn": "true", "data-bean-id": String(b.id), onClick: onMinusClick, className: "w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors", title: "تقليل", children: /* @__PURE__ */ jsx(Minus, { className: "w-3.5 h-3.5" }) }),
+          /* @__PURE__ */ jsx("button", { type: "button", "data-qty-btn": "true", "data-bean-id": String(b.id), onClick: onMinusClick, className: "w-7 h-7 rounded-lg bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:bg-white/20 flex items-center justify-center text-slate-800 dark:text-white/80 transition-colors", title: "تقليل", children: /* @__PURE__ */ jsx(Minus, { className: "w-3.5 h-3.5" }) }),
           /* @__PURE__ */ jsx("span", { className: "min-w-[28px] text-center text-emerald-200 font-bold text-sm", children: qty }),
-          /* @__PURE__ */ jsx("button", { type: "button", "data-qty-btn": "true", "data-bean-id": String(b.id), onClick: onPlusClick, className: "w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors", title: "زيادة", children: /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }) })
+          /* @__PURE__ */ jsx("button", { type: "button", "data-qty-btn": "true", "data-bean-id": String(b.id), onClick: onPlusClick, className: "w-7 h-7 rounded-lg bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:bg-white/20 flex items-center justify-center text-slate-800 dark:text-white/80 transition-colors", title: "زيادة", children: /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }) })
         ] }) : null })
       ] }, b.id);
     });
@@ -8637,7 +8637,7 @@ function BeansList({
           width: "120px"
         } })
       ] }),
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-xs text-white/55", children: [
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-xs text-slate-600 dark:text-white/55", children: [
         /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: " " }),
         /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "الاسم" }),
         /* @__PURE__ */ jsx("th", { className: "text-center py-2", children: "عدد الخياش" })
@@ -8646,10 +8646,10 @@ function BeansList({
     ] }) });
   }
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
-    /* @__PURE__ */ jsx("div", { className: "text-white font-bold tracking-tight", children: "أنواع البن" }),
-    /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mt-1", children: "اضغط على نوع البن لإضافته، واستخدم + / − لزيادة عدد الخياش." }),
+    /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: "أنواع البن" }),
+    /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1", children: "اضغط على نوع البن لإضافته، واستخدم + / − لزيادة عدد الخياش." }),
     body,
-    /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-white/45", children: "ملاحظة: إضافة/تعديل أنواع البن يتم من صفحة حاسبة البن الأخضر." })
+    /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-slate-500 dark:text-white/45", children: "ملاحظة: إضافة/تعديل أنواع البن يتم من صفحة حاسبة البن الأخضر." })
   ] });
 }
 
@@ -8777,7 +8777,7 @@ function OrderBuilder({
   }, [onDecrementQty]);
   const tableBody = useMemo(() => {
     if (!hasItems) {
-      return /* @__PURE__ */ jsx("tr", { className: "bg-white/[0.02] border-t border-white/10", children: /* @__PURE__ */ jsx("td", { className: "py-3 text-white/60", colSpan: 11, children: "اختر نوع/أنواع البن من القائمة." }) });
+      return /* @__PURE__ */ jsx("tr", { className: "bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10", children: /* @__PURE__ */ jsx("td", { className: "py-3 text-slate-600 dark:text-white/60", colSpan: 11, children: "اختر نوع/أنواع البن من القائمة." }) });
     }
     return previewRows.map((row) => {
       const beanIdText = String(row.beanId);
@@ -8786,12 +8786,12 @@ function OrderBuilder({
       const qty = row.qty || 1;
       const wasteText = Number.isFinite(computed?.wastePercent) ? `${formatMoney$5(computed.wastePercent)}%` : "—";
       const finalPriceText = formatMoney$5(computed?.finalPricePerKg);
-      return /* @__PURE__ */ jsxs("tr", { className: "bg-white/[0.02] border-t border-white/10", children: [
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white font-semibold truncate", children: row.beanName }),
+      return /* @__PURE__ */ jsxs("tr", { className: "bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10", children: [
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-semibold truncate", children: row.beanName }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 justify-center", children: [
-          /* @__PURE__ */ jsx("button", { type: "button", className: "w-6 h-6 rounded-md bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors", "data-bean-id": beanIdText, onClick: handleMinusClick, disabled: isSaving, title: "تقليل", children: /* @__PURE__ */ jsx(Minus, { className: "w-3 h-3" }) }),
+          /* @__PURE__ */ jsx("button", { type: "button", className: "w-6 h-6 rounded-md bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:bg-white/20 flex items-center justify-center text-slate-800 dark:text-white/80 transition-colors", "data-bean-id": beanIdText, onClick: handleMinusClick, disabled: isSaving, title: "تقليل", children: /* @__PURE__ */ jsx(Minus, { className: "w-3 h-3" }) }),
           /* @__PURE__ */ jsx("span", { className: "min-w-[24px] text-center text-emerald-200 font-bold text-sm", children: qty }),
-          /* @__PURE__ */ jsx("button", { type: "button", className: "w-6 h-6 rounded-md bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors", "data-bean-id": beanIdText, onClick: handlePlusClick, disabled: isSaving, title: "زيادة", children: /* @__PURE__ */ jsx(Plus, { className: "w-3 h-3" }) })
+          /* @__PURE__ */ jsx("button", { type: "button", className: "w-6 h-6 rounded-md bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:bg-white/20 flex items-center justify-center text-slate-800 dark:text-white/80 transition-colors", "data-bean-id": beanIdText, onClick: handlePlusClick, disabled: isSaving, title: "زيادة", children: /* @__PURE__ */ jsx(Plus, { className: "w-3 h-3" }) })
         ] }) }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-[120px]`, type: "number", step: "0.01", inputMode: "decimal", value: line.priceKgExclTax, "data-bean-id": beanIdText, "data-field": "priceKgExclTax", onChange: handleItemChange, placeholder: "مثال: 45", disabled: isSaving }) }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-[120px]`, type: "number", step: "0.001", inputMode: "decimal", value: line.bagSizeKg, "data-bean-id": beanIdText, "data-field": "bagSizeKg", onChange: handleItemChange, placeholder: "مثال: 60", disabled: isSaving }) }),
@@ -8799,7 +8799,7 @@ function OrderBuilder({
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-[140px]`, type: "number", step: "0.01", inputMode: "decimal", value: line.extraCostPerKg, "data-bean-id": beanIdText, "data-field": "extraCostPerKg", onChange: handleItemChange, placeholder: "0", disabled: isSaving }) }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-[140px]`, type: "number", step: "0.001", inputMode: "decimal", value: line.extraCostKg, "data-bean-id": beanIdText, "data-field": "extraCostKg", onChange: handleItemChange, placeholder: "الكل", disabled: isSaving }) }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-[150px]`, type: "number", step: "0.001", inputMode: "decimal", value: line.receivedAfterWasteKg, "data-bean-id": beanIdText, "data-field": "receivedAfterWasteKg", onChange: handleItemChange, placeholder: "الواصل", disabled: isSaving }) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-white/80", children: wasteText }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: wasteText }),
         /* @__PURE__ */ jsx("td", { className: "py-2 text-emerald-200 font-extrabold", children: finalPriceText }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsx("button", { type: "button", className: `${ws.btnDanger} px-3 py-2`, "data-bean-id": beanIdText, onClick: handleRemoveClick, disabled: isSaving, title: "إزالة", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) }) })
       ] }, beanIdText);
@@ -8815,8 +8815,8 @@ function OrderBuilder({
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-white font-bold tracking-tight", children: isEditMode ? `تعديل الطلب #${editingOrderId}` : "عناصر الطلب" }),
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 mt-1", children: isEditMode ? "عدّل البيانات ثم اضغط حفظ التعديل." : "اختر أنواع البن (يسار) ثم اكتب الكميات الواصلة واحفظ الطلب." })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: isEditMode ? `تعديل الطلب #${editingOrderId}` : "عناصر الطلب" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1", children: isEditMode ? "عدّل البيانات ثم اضغط حفظ التعديل." : "اختر أنواع البن (يسار) ثم اكتب الكميات الواصلة واحفظ الطلب." })
       ] }),
       isEditMode && onCancelEdit ? /* @__PURE__ */ jsxs("button", { type: "button", className: `${ws.btnDanger} px-4 py-2`, onClick: onCancelEdit, disabled: isSaving, children: [
         /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }),
@@ -8825,15 +8825,15 @@ function OrderBuilder({
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "تاريخ الطلب" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "تاريخ الطلب" }),
         /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-full`, type: "date", value: draft.orderDate, onChange: onChangeOrderDate, disabled: isSaving })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "المورّد (اختياري)" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "المورّد (اختياري)" }),
         /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-full`, value: draft.supplierName, onChange: onChangeSupplier, placeholder: "اسم المورد", disabled: isSaving })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55 mb-1", children: "ملاحظة (اختياري)" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "ملاحظة (اختياري)" }),
         /* @__PURE__ */ jsx("input", { className: `${ws.input} px-3 py-2 w-full`, value: draft.note, onChange: onChangeNote, placeholder: "مثال: توريد صباحي", disabled: isSaving })
       ] })
     ] }),
@@ -8873,7 +8873,7 @@ function OrderBuilder({
           width: "60px"
         } })
       ] }),
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-xs text-white/55", children: [
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-xs text-slate-600 dark:text-white/55", children: [
         /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "البن" }),
         /* @__PURE__ */ jsx("th", { className: "text-center py-2", children: "عدد الخياش" }),
         /* @__PURE__ */ jsx("th", { className: "text-right py-2", children: "سعر الكيلو (Excl)" }),
@@ -8889,45 +8889,45 @@ function OrderBuilder({
       /* @__PURE__ */ jsx("tbody", { children: tableBody })
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: "mt-4 flex flex-col gap-2", children: [
-      /* @__PURE__ */ jsxs("div", { className: "text-white/75 text-sm", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "عدد الخياش:" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-slate-700 dark:text-white/75 text-sm", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "عدد الخياش:" }),
         " ",
         /* @__PURE__ */ jsx("span", { className: "font-bold", children: totalBagsText })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: "text-white/75 text-sm", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "مجموع الكيلوات:" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-slate-700 dark:text-white/75 text-sm", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مجموع الكيلوات:" }),
         " ",
         /* @__PURE__ */ jsxs("span", { className: "font-bold", children: [
           totalKgText,
           " كغ"
         ] })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: "text-white/75 text-sm", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "مجموع الكيلوات الواصلة بعد الهدر:" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-slate-700 dark:text-white/75 text-sm", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مجموع الكيلوات الواصلة بعد الهدر:" }),
         " ",
         /* @__PURE__ */ jsxs("span", { className: "font-bold", children: [
           totalReceivedKgText,
           " كغ"
         ] })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: "text-white/75 text-sm", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "إجمالي تكلفة البن (شامل الضريبة):" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-slate-700 dark:text-white/75 text-sm", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "إجمالي تكلفة البن (شامل الضريبة):" }),
         " ",
         /* @__PURE__ */ jsx("span", { className: "font-bold", children: totalBeanCostText })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: "text-white/75 text-sm", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "إجمالي تكلفة التحميص (شامل الضريبة):" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-slate-700 dark:text-white/75 text-sm", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "إجمالي تكلفة التحميص (شامل الضريبة):" }),
         " ",
         /* @__PURE__ */ jsx("span", { className: "font-bold", children: totalRoastText })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: "text-white/75 text-sm", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "إجمالي التكلفة الإضافية:" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-slate-700 dark:text-white/75 text-sm", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "إجمالي التكلفة الإضافية:" }),
         " ",
         /* @__PURE__ */ jsx("span", { className: "font-bold", children: totalExtraText })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 flex-wrap", children: [
-        /* @__PURE__ */ jsxs("div", { className: "text-white/75", children: [
-          /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "إجمالي الطلب (شامل):" }),
+        /* @__PURE__ */ jsxs("div", { className: "text-slate-700 dark:text-white/75", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "إجمالي الطلب (شامل):" }),
           " ",
           /* @__PURE__ */ jsx("span", { className: "font-extrabold", children: grandTotalText })
         ] }),
@@ -8941,8 +8941,8 @@ function OrderBuilder({
       ] })
     ] }),
     error ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-red-300", children: error }) : null,
-    isSaving ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-white/60", children: "جاري الحفظ…" }) : null,
-    /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-white/45", children: isEditMode ? "سيتم تحديث الطلب واستبدال الأصناف القديمة." : "يتم حفظ الطلب كأرشيف بتاريخ الطلب." })
+    isSaving ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-slate-600 dark:text-white/60", children: "جاري الحفظ…" }) : null,
+    /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-slate-500 dark:text-white/45", children: isEditMode ? "سيتم تحديث الطلب واستبدال الأصناف القديمة." : "يتم حفظ الطلب كأرشيف بتاريخ الطلب." })
   ] });
 }
 
@@ -32771,7 +32771,7 @@ function StatusPill({
   const raw = status || "Todo";
   const isClosed = raw === "Done" && !!isClosedNotCompleted;
   const label = isClosed ? "مغلقة" : STATUS_LABELS_AR[raw] || raw;
-  let className = "bg-white/[0.04] text-white/70 border-white/10";
+  let className = "bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10";
   if (raw === "Todo") className = "bg-slate-500/15 text-slate-200 border-slate-500/25";
   if (raw === "In Progress") className = "bg-sky-500/15 text-sky-200 border-sky-500/25";
   if (raw === "Done") {
@@ -32794,7 +32794,7 @@ function PriorityPill({
 }) {
   const raw = priority || "Normal";
   const label = PRIORITY_LABELS_AR[raw] || raw;
-  let className = "bg-white/[0.04] text-white/70 border-white/10";
+  let className = "bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10";
   if (raw === "Low") className = "bg-slate-500/15 text-slate-200 border-slate-500/25";
   if (raw === "Normal") className = "bg-indigo-500/15 text-indigo-200 border-indigo-500/25";
   if (raw === "High") className = "bg-amber-500/15 text-amber-200 border-amber-500/25";
@@ -34122,22 +34122,22 @@ function TaskModalHeader({
   onGoToParent
 }) {
   const titleText = mode === "edit" ? "تعديل المهمة" : "إضافة مهمة";
-  return /* @__PURE__ */ jsxs("div", { className: "p-5 border-b border-white/10 flex-shrink-0", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "p-5 border-b border-slate-200 dark:border-white/10 flex-shrink-0", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 ${isSubtask ? "!bg-violet-500/15 !border-violet-400/20" : ""}`, children: isSubtask ? /* @__PURE__ */ jsx(GitBranch, { className: "w-5 h-5 text-violet-300" }) : /* @__PURE__ */ jsx(Circle, { className: "w-5 h-5 text-white/70" }) }),
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 ${isSubtask ? "!bg-violet-500/15 !border-violet-400/20" : ""}`, children: isSubtask ? /* @__PURE__ */ jsx(GitBranch, { className: "w-5 h-5 text-violet-300" }) : /* @__PURE__ */ jsx(Circle, { className: "w-5 h-5 text-slate-700 dark:text-white/70" }) }),
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("div", { className: "font-bold text-white tracking-tight truncate", children: isSubtask ? "تعديل مهمة فرعية" : titleText }),
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 truncate", children: isSubtask ? "هذه مهمة فرعية مرتبطة بمهمة رئيسية" : "عدّل التفاصيل ثم احفظ" })
+          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight truncate", children: isSubtask ? "تعديل مهمة فرعية" : titleText }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 truncate", children: isSubtask ? "هذه مهمة فرعية مرتبطة بمهمة رئيسية" : "عدّل التفاصيل ثم احفظ" })
         ] })
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.iconButton} flex items-center justify-center`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-white" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.iconButton} flex items-center justify-center`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5 text-slate-900 dark:text-white" }) })
     ] }),
     isSubtask && parentTaskTitle ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: onGoToParent, className: "mt-3 w-full flex items-center gap-2 rounded-2xl border border-violet-400/15 bg-violet-500/[0.06] px-3.5 py-2.5 hover:bg-violet-500/[0.12] transition-colors text-right", children: [
       /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4 text-violet-300 flex-shrink-0" }),
       /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0", children: [
         /* @__PURE__ */ jsx("div", { className: "text-[11px] text-violet-300/70 font-semibold", children: "المهمة الرئيسية" }),
-        /* @__PURE__ */ jsx("div", { className: "text-sm text-white/85 truncate font-semibold", children: parentTaskTitle })
+        /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-800 dark:text-white/85 truncate font-semibold", children: parentTaskTitle })
       ] })
     ] }) : null
   ] });
@@ -34155,7 +34155,7 @@ function TaskModalFooter({
 }) {
   const submitText = mode === "edit" ? "تحديث المهمة" : "حفظ";
   const allowDelete = mode === "edit" && !!initialTask?.id;
-  return /* @__PURE__ */ jsxs("div", { className: "pt-5 px-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] border-t border-white/10 flex-shrink-0", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "pt-5 px-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] border-t border-slate-200 dark:border-white/10 flex-shrink-0", children: [
     submitError ? /* @__PURE__ */ jsx("div", { className: "mb-3 text-sm text-red-300", children: submitError }) : validationMessage ? /* @__PURE__ */ jsx("div", { className: "mb-3 text-sm text-amber-200", children: validationMessage }) : null,
     /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row items-stretch sm:items-center gap-3", children: [
       allowDelete ? /* @__PURE__ */ jsx("button", { type: "button", onClick: onDelete, className: `${ws.btnDanger} px-4 py-3 justify-center`, children: "حذف" }) : null,
@@ -34168,8 +34168,8 @@ function FormRowLabel({
   icon,
   label
 }) {
-  return /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm font-semibold text-white/70", children: [
-    /* @__PURE__ */ jsx("span", { className: "text-white/60", children: icon }),
+  return /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-white/70", children: [
+    /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/60", children: icon }),
     label
   ] });
 }
@@ -34187,16 +34187,16 @@ function MultiUserPicker({
     onChange(Array.from(next));
   };
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} rounded-3xl overflow-hidden`, children: [
-    /* @__PURE__ */ jsx("div", { className: "px-4 py-3 bg-white/[0.03] text-xs font-bold text-white/60 border-b border-white/10", children: "اختر موظف أو أكثر" }),
+    /* @__PURE__ */ jsx("div", { className: "px-4 py-3 bg-slate-50 dark:bg-white/[0.03] text-xs font-bold text-slate-600 dark:text-white/60 border-b border-slate-200 dark:border-white/10", children: "اختر موظف أو أكثر" }),
     /* @__PURE__ */ jsx("div", { className: "max-h-[220px] overflow-auto divide-y divide-white/10", children: users.map((u) => {
       const id = u.id;
       const checked = selectedSet.has(id);
       const role = u.role || "";
-      const badgeClass = role === "Admin" ? "bg-emerald-400/15 text-emerald-200 border border-emerald-400/25" : "bg-white/[0.04] text-white/70 border border-white/10";
-      const checkboxClass = checked ? "bg-emerald-400/20 border-emerald-400/30" : "border-white/25";
-      return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => toggle(id), className: "w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-white/[0.06]", children: [
+      const badgeClass = role === "Admin" ? "bg-emerald-400/15 text-emerald-200 border border-emerald-400/25" : "bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border border-slate-200 dark:border-white/10";
+      const checkboxClass = checked ? "bg-emerald-400/20 border-emerald-400/30" : "border-slate-300 dark:border-white/25";
+      return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => toggle(id), className: "w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-slate-100 dark:bg-white/[0.06]", children: [
         /* @__PURE__ */ jsxs("div", { className: "min-w-0 text-right", children: [
-          /* @__PURE__ */ jsx("div", { className: "font-semibold text-white truncate", children: u.name }),
+          /* @__PURE__ */ jsx("div", { className: "font-semibold text-slate-900 dark:text-white truncate", children: u.name }),
           /* @__PURE__ */ jsx("div", { className: "mt-1", children: /* @__PURE__ */ jsx("span", { className: `inline-flex px-2 py-1 rounded-full text-[11px] font-bold ${badgeClass}`, children: role }) })
         ] }),
         /* @__PURE__ */ jsx("div", { className: "flex items-center gap-2 flex-shrink-0", children: /* @__PURE__ */ jsx("div", { className: `w-5 h-5 rounded-md border shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] ${checkboxClass}` }) })
@@ -34288,11 +34288,11 @@ function TaskFormFields({
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("div", { className: "lg:col-span-3 space-y-4", children: [
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-white/70 mb-2", children: "عنوان المهمة" }),
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: "عنوان المهمة" }),
         /* @__PURE__ */ jsx("input", { value: title, onChange: (e) => setTitle(e.target.value), className: inputClass, placeholder: "مثال: متابعة توريد البن" })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-white/70 mb-2", children: "الوصف" }),
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: "الوصف" }),
         /* @__PURE__ */ jsx("textarea", { value: description, onChange: (e) => setDescription(e.target.value), className: `${inputClass} min-h-[140px] resize-y`, placeholder: "تفاصيل إضافية…" })
       ] }),
       children,
@@ -34303,15 +34303,15 @@ function TaskFormFields({
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "lg:col-span-2 space-y-4", children: [
       /* @__PURE__ */ jsxs("div", { className: sideCardClass, children: [
-        showCreatedMeta ? /* @__PURE__ */ jsxs("div", { className: "mb-4 rounded-2xl bg-white/[0.03] border border-white/10 px-3 py-3", children: [
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/55", children: "معلومات" }),
-          createdByName ? /* @__PURE__ */ jsxs("div", { className: "mt-1 text-sm text-white/85", children: [
-            /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "أنشأها: " }),
-            /* @__PURE__ */ jsx("span", { className: "font-semibold text-white", children: createdByName })
+        showCreatedMeta ? /* @__PURE__ */ jsxs("div", { className: "mb-4 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 px-3 py-3", children: [
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "معلومات" }),
+          createdByName ? /* @__PURE__ */ jsxs("div", { className: "mt-1 text-sm text-slate-800 dark:text-white/85", children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "أنشأها: " }),
+            /* @__PURE__ */ jsx("span", { className: "font-semibold text-slate-900 dark:text-white", children: createdByName })
           ] }) : null,
-          createdAtText ? /* @__PURE__ */ jsxs("div", { className: "mt-1 text-sm text-white/85", children: [
-            /* @__PURE__ */ jsx("span", { className: "text-white/55", children: "تاريخ الإنشاء: " }),
-            /* @__PURE__ */ jsx("span", { className: "font-semibold text-white", children: createdAtText })
+          createdAtText ? /* @__PURE__ */ jsxs("div", { className: "mt-1 text-sm text-slate-800 dark:text-white/85", children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "تاريخ الإنشاء: " }),
+            /* @__PURE__ */ jsx("span", { className: "font-semibold text-slate-900 dark:text-white", children: createdAtText })
           ] }) : null
         ] }) : null,
         /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 gap-4", children: [
@@ -34322,11 +34322,11 @@ function TaskFormFields({
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx(FormRowLabel, { icon: /* @__PURE__ */ jsx(Flag, { className: "w-4 h-4" }), label: "الأولوية" }),
             /* @__PURE__ */ jsx(GlassSelect, { value: priority, onChange: setPriority, options: priorityOptions, className: "mt-2", buttonClassName: "px-4 py-3" }),
-            /* @__PURE__ */ jsxs("label", { className: "mt-3 flex items-start gap-3 rounded-2xl bg-white/[0.03] border border-white/10 px-3 py-3", children: [
+            /* @__PURE__ */ jsxs("label", { className: "mt-3 flex items-start gap-3 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 px-3 py-3", children: [
               /* @__PURE__ */ jsx("input", { type: "checkbox", checked: isCloseNotCompleted, onChange: handleCloseNotCompletedChange, className: "mt-1 h-4 w-4 accent-white" }),
               /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-                /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-white", children: "إغلاق المهمة لعدم إتمامها" }),
-                /* @__PURE__ */ jsx("div", { className: "text-xs text-white/60", children: 'عند التفعيل سيتم إغلاق المهمة وتتحول إلى "منتهية" بدون اعتبارها مكتملة.' })
+                /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-900 dark:text-white", children: "إغلاق المهمة لعدم إتمامها" }),
+                /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/60", children: 'عند التفعيل سيتم إغلاق المهمة وتتحول إلى "منتهية" بدون اعتبارها مكتملة.' })
               ] })
             ] }) 
           ] }),
@@ -34377,21 +34377,21 @@ function TaskImageAttachment({
     if (!url) {
       return null;
     }
-    const openTarget = /* @__PURE__ */ jsx("a", { href: url, target: "_blank", rel: "noreferrer", className: "block", children: isImage ? /* @__PURE__ */ jsx("img", { src: url, alt: name, className: "w-full h-[140px] object-cover rounded-2xl border border-white/10" }) : /* @__PURE__ */ jsxs("div", { className: `flex items-center justify-between gap-3 ${ws.glass} ${ws.card} px-4 py-3 border border-white/10`, children: [
+    const openTarget = /* @__PURE__ */ jsx("a", { href: url, target: "_blank", rel: "noreferrer", className: "block", children: isImage ? /* @__PURE__ */ jsx("img", { src: url, alt: name, className: "w-full h-[140px] object-cover rounded-2xl border border-slate-200 dark:border-white/10" }) : /* @__PURE__ */ jsxs("div", { className: `flex items-center justify-between gap-3 ${ws.glass} ${ws.card} px-4 py-3 border border-slate-200 dark:border-white/10`, children: [
       /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-2 min-w-0", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-white/70" }),
-        /* @__PURE__ */ jsx("span", { className: "text-sm text-white/85 truncate", children: name })
+        /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-slate-700 dark:text-white/70" }),
+        /* @__PURE__ */ jsx("span", { className: "text-sm text-slate-800 dark:text-white/85 truncate", children: name })
       ] }),
-      /* @__PURE__ */ jsx("span", { className: "text-xs text-white/55", children: "فتح" })
+      /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "فتح" })
     ] }) });
     return /* @__PURE__ */ jsxs("div", { className: "relative", children: [
       openTarget,
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => removeAt(idx), className: "absolute top-2 left-2 w-9 h-9 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center text-white/80 hover:bg-black/60", title: "إزالة", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => removeAt(idx), className: "absolute top-2 left-2 w-9 h-9 rounded-2xl bg-black/50 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-800 dark:text-white/80 hover:bg-black/60", title: "إزالة", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
     ] }, `${url}-${idx}`);
   };
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4`, children: [
     /* @__PURE__ */ jsx(FormRowLabel, { icon: labelIcon, label: "المرفقات" }),
-    /* @__PURE__ */ jsxs("div", { className: "mt-1 text-xs text-white/50", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mt-1 text-xs text-slate-500 dark:text-white/50", children: [
       "الحد الأقصى: ",
       maxCount,
       " ملفات — ",
@@ -34409,9 +34409,9 @@ function TaskImageAttachment({
         "إزالة الكل"
       ] }) }) : null
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm text-white/60", children: summaryText }),
+    /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm text-slate-600 dark:text-white/60", children: summaryText }),
     error ? /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm text-red-300", children: error }) : null,
-    hasAny ? /* @__PURE__ */ jsx("div", { className: "mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3", children: safe.map(renderAttachment) }) : /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm text-white/55", children: "لا يوجد مرفقات." })
+    hasAny ? /* @__PURE__ */ jsx("div", { className: "mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3", children: safe.map(renderAttachment) }) : /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm text-slate-600 dark:text-white/55", children: "لا يوجد مرفقات." })
   ] });
 }
 
@@ -34577,14 +34577,14 @@ function TaskUpdatesSection({
     const isImage = !!mime && mime.startsWith("image/");
     if (!url) return null;
     if (isImage) {
-      return /* @__PURE__ */ jsx("a", { href: url, target: "_blank", rel: "noreferrer", className: "block", children: /* @__PURE__ */ jsx("img", { src: url, alt: name, className: "w-full h-[160px] object-cover rounded-2xl border border-white/10" }) }, `${url}-${idx}`);
+      return /* @__PURE__ */ jsx("a", { href: url, target: "_blank", rel: "noreferrer", className: "block", children: /* @__PURE__ */ jsx("img", { src: url, alt: name, className: "w-full h-[160px] object-cover rounded-2xl border border-slate-200 dark:border-white/10" }) }, `${url}-${idx}`);
     }
-    return /* @__PURE__ */ jsxs("a", { href: url, target: "_blank", rel: "noreferrer", className: `flex items-center justify-between gap-3 ${ws.glass} ${ws.card} px-4 py-3 border border-white/10`, children: [
+    return /* @__PURE__ */ jsxs("a", { href: url, target: "_blank", rel: "noreferrer", className: `flex items-center justify-between gap-3 ${ws.glass} ${ws.card} px-4 py-3 border border-slate-200 dark:border-white/10`, children: [
       /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-2 min-w-0", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-white/70" }),
-        /* @__PURE__ */ jsx("span", { className: "text-sm text-white/85 truncate", children: name })
+        /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4 text-slate-700 dark:text-white/70" }),
+        /* @__PURE__ */ jsx("span", { className: "text-sm text-slate-800 dark:text-white/85 truncate", children: name })
       ] }),
-      /* @__PURE__ */ jsx("span", { className: "text-xs text-white/55", children: "فتح" })
+      /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "فتح" })
     ] }, `${url}-${idx}`);
   };
   const renderUpdate = (u) => {
@@ -34594,35 +34594,35 @@ function TaskUpdatesSection({
     const list = Array.isArray(u?.attachments) ? u.attachments : [];
     const hasAttachments = list.length > 0;
     const attachmentsView = !hasAttachments ? null : /* @__PURE__ */ jsx("div", { className: "mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3", children: list.map(renderAttachment) });
-    return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4 border border-white/10`, children: [
+    return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4 border border-slate-200 dark:border-white/10`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3", children: [
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-white truncate", children: author }),
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/45 mt-1", children: at })
+          /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-900 dark:text-white truncate", children: author }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1", children: at })
         ] }),
-        /* @__PURE__ */ jsx("span", { className: `${ws.pill} border bg-white/[0.06] text-white/70 border-white/10`, children: "تحديث" })
+        /* @__PURE__ */ jsx("span", { className: `${ws.pill} border bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`, children: "تحديث" })
       ] }),
-      bodyText ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-white/80 whitespace-pre-wrap leading-6", children: bodyText }) : null,
+      bodyText ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-slate-800 dark:text-white/80 whitespace-pre-wrap leading-6", children: bodyText }) : null,
       attachmentsView
     ] }, u.id);
   };
   if (mode !== "edit" || !taskId) {
     return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4`, children: [
       /* @__PURE__ */ jsx(FormRowLabel, { icon: /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4" }), label: "ملاحظات وتحديثات" }),
-      /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-white/60", children: "بعد حفظ المهمة، تقدر تضيف ملاحظات وتحديثات هنا." })
+      /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-slate-600 dark:text-white/60", children: "بعد حفظ المهمة، تقدر تضيف ملاحظات وتحديثات هنا." })
     ] });
   }
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4`, children: [
     /* @__PURE__ */ jsx(FormRowLabel, { icon: /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4" }), label: "ملاحظات وتحديثات" }),
     /* @__PURE__ */ jsxs("div", { className: "mt-3", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-white/70 mb-2", children: 'اكتب تحديث (سيتم حفظه عند الضغط على زر "تحديث المهمة")' }),
+      /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: 'اكتب تحديث (سيتم حفظه عند الضغط على زر "تحديث المهمة")' }),
       /* @__PURE__ */ jsx("textarea", { value: draftBody, onChange: (e) => setDraftBody(e.target.value), className: `${ws.input} px-4 py-3 min-h-[110px] resize-y`, placeholder: "اكتب ملاحظة أو تحديث…" }),
       /* @__PURE__ */ jsx(TaskImageAttachment, { attachments, error: attachmentsError, uploading: uploadingAttachments, fileInputRef, onPickFiles, onFilesSelected, removeAt, clearAll, summaryText, maxCount, maxMb }),
       attachmentsError ? /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm text-red-300", children: attachmentsError }) : null
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "mt-5", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-white/70 mb-2", children: "آخر التحديثات" }),
-      !viewerEmployeeId ? /* @__PURE__ */ jsx("div", { className: "text-sm text-white/60", children: "لا يمكن تحميل التحديثات بدون هوية المستخدم" }) : isLoading ? /* @__PURE__ */ jsx("div", { className: "text-sm text-white/60", children: "جاري تحميل التحديثات…" }) : error ? /* @__PURE__ */ jsx("div", { className: "text-sm text-red-300", children: error?.message || "فشل تحميل التحديثات" }) : updates.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-sm text-white/60", children: "لا يوجد تحديثات حتى الآن." }) : /* @__PURE__ */ jsx("div", { className: "space-y-3", children: updates.map(renderUpdate) })
+      /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-700 dark:text-white/70 mb-2", children: "آخر التحديثات" }),
+      !viewerEmployeeId ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-600 dark:text-white/60", children: "لا يمكن تحميل التحديثات بدون هوية المستخدم" }) : isLoading ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-600 dark:text-white/60", children: "جاري تحميل التحديثات…" }) : error ? /* @__PURE__ */ jsx("div", { className: "text-sm text-red-300", children: error?.message || "فشل تحميل التحديثات" }) : updates.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-600 dark:text-white/60", children: "لا يوجد تحديثات حتى الآن." }) : /* @__PURE__ */ jsx("div", { className: "space-y-3", children: updates.map(renderUpdate) })
     ] })
   ] });
 }
@@ -34645,7 +34645,7 @@ function TaskHistorySection({
     else if (type === "overdue") badge = "تأخير";
     else if (type === "deleted") badge = "حذف";
     else badge = String(type || "");
-    const badgeClass = type === "overdue" ? "bg-red-500/15 text-red-200 border-red-500/25" : type === "created" ? "bg-emerald-500/15 text-emerald-200 border-emerald-500/25" : type === "deleted" ? "bg-amber-500/15 text-amber-200 border-amber-500/25" : "bg-white/[0.06] text-white/70 border-white/10";
+    const badgeClass = type === "overdue" ? "bg-red-500/15 text-red-200 border-red-500/25" : type === "created" ? "bg-emerald-500/15 text-emerald-200 border-emerald-500/25" : type === "deleted" ? "bg-amber-500/15 text-amber-200 border-amber-500/25" : "bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10";
     const summary = e?.summary ? String(e.summary) : "—";
     const meta = safeMeta(e?.meta);
     const diff = meta?.diff;
@@ -34654,11 +34654,11 @@ function TaskHistorySection({
       userNameById
     });
     const showChanges = type === "updated" && changeLines.length > 0;
-    return /* @__PURE__ */ jsxs("div", { className: "py-3 border-t border-white/10 first:border-t-0", children: [
+    return /* @__PURE__ */ jsxs("div", { className: "py-3 border-t border-slate-200 dark:border-white/10 first:border-t-0", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-white truncate", children: summary }),
-          /* @__PURE__ */ jsxs("div", { className: "text-xs text-white/45 mt-1", children: [
+          /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-900 dark:text-white truncate", children: summary }),
+          /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1", children: [
             actor,
             " • ",
             at
@@ -34666,18 +34666,18 @@ function TaskHistorySection({
         ] }),
         badge ? /* @__PURE__ */ jsx("span", { className: `${ws.pill} border ${badgeClass}`, children: badge }) : null
       ] }),
-      showChanges ? /* @__PURE__ */ jsxs("div", { className: "mt-3 text-xs text-white/60 space-y-1", children: [
+      showChanges ? /* @__PURE__ */ jsxs("div", { className: "mt-3 text-xs text-slate-600 dark:text-white/60 space-y-1", children: [
         changeLines.slice(0, 8).map((c) => {
           const lineText = `${c.label}: من ${c.fromText} إلى ${c.toText}`;
           return /* @__PURE__ */ jsx("div", { className: "leading-5", children: lineText }, c.label);
         }),
-        changeLines.length > 8 ? /* @__PURE__ */ jsx("div", { className: "text-white/45", children: "…" }) : null
+        changeLines.length > 8 ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "…" }) : null
       ] }) : null
     ] }, e.id);
   };
   return /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4`, children: [
     /* @__PURE__ */ jsx(FormRowLabel, { icon: /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4" }), label: "سجل التغييرات" }),
-    !viewerEmployeeId ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-white/50", children: "لا يمكن تحميل السجل بدون هوية المستخدم" }) : isLoading ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-white/60", children: "جاري تحميل السجل…" }) : error ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-red-300", children: error?.message || "فشل تحميل السجل" }) : events.length === 0 ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-white/60", children: "لا يوجد سجل تغييرات حتى الآن." }) : /* @__PURE__ */ jsx("div", { className: "mt-3 max-h-[260px] overflow-y-auto", children: events.map(renderEventLine) })
+    !viewerEmployeeId ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-xs text-slate-500 dark:text-white/50", children: "لا يمكن تحميل السجل بدون هوية المستخدم" }) : isLoading ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-slate-600 dark:text-white/60", children: "جاري تحميل السجل…" }) : error ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-red-300", children: error?.message || "فشل تحميل السجل" }) : events.length === 0 ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-slate-600 dark:text-white/60", children: "لا يوجد سجل تغييرات حتى الآن." }) : /* @__PURE__ */ jsx("div", { className: "mt-3 max-h-[260px] overflow-y-auto", children: events.map(renderEventLine) })
   ] });
 }
 
@@ -34727,7 +34727,7 @@ function SubtaskRow({
     if (isChanging) return;
     onQuickStatus(subtask.id, nextStatus$1(status));
   };
-  const statusIconEl = isChanging ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 text-white/40" }) : isDone ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-4 h-4 text-emerald-300" }) : status === "In Progress" ? /* @__PURE__ */ jsx(PlayCircle, { className: "w-4 h-4 text-sky-300" }) : /* @__PURE__ */ jsx(Circle, { className: "w-4 h-4 text-white/35" });
+  const statusIconEl = isChanging ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 text-slate-400 dark:text-white/40" }) : isDone ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-4 h-4 text-emerald-300" }) : status === "In Progress" ? /* @__PURE__ */ jsx(PlayCircle, { className: "w-4 h-4 text-sky-300" }) : /* @__PURE__ */ jsx(Circle, { className: "w-4 h-4 text-slate-400 dark:text-white/35" });
   const assignees = Array.isArray(subtask.assignees) ? subtask.assignees : [];
   const assigneeNames = assignees.map((a) => a?.name).filter(Boolean).join("، ");
   const dueDateDisplay = formatShortDate(subtask.due_date);
@@ -34737,21 +34737,21 @@ function SubtaskRow({
   }, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2.5", children: [
       /* @__PURE__ */ jsx("button", { type: "button", onClick: handleCycle, disabled: isChanging, className: "flex-shrink-0 w-6 h-6 flex items-center justify-center", title: `تغيير إلى: ${nextStatus$1(status)}`, children: statusIconEl }),
-      /* @__PURE__ */ jsx("div", { className: "flex-1 min-w-0", children: /* @__PURE__ */ jsx("div", { className: `text-sm font-semibold truncate ${isDone ? "line-through text-white/40" : "text-white/85"}`, children: subtask.title }) }),
+      /* @__PURE__ */ jsx("div", { className: "flex-1 min-w-0", children: /* @__PURE__ */ jsx("div", { className: `text-sm font-semibold truncate ${isDone ? "line-through text-slate-400 dark:text-white/40" : "text-slate-800 dark:text-white/85"}`, children: subtask.title }) }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 flex-shrink-0", children: [
         /* @__PURE__ */ jsx(PriorityPill, { priority: subtask.priority || "Normal" }),
         /* @__PURE__ */ jsx("button", { type: "button", onClick: (e) => {
           e.stopPropagation();
           onUnlink(subtask.id);
-        }, className: "opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center text-white/30 hover:text-red-300", title: "إلغاء الربط", children: /* @__PURE__ */ jsx(Unlink, { className: "w-3.5 h-3.5" }) })
+        }, className: "opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center text-slate-400 dark:text-white/30 hover:text-red-300", title: "إلغاء الربط", children: /* @__PURE__ */ jsx(Unlink, { className: "w-3.5 h-3.5" }) })
       ] })
     ] }),
     assigneeNames || dueDateDisplay ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mt-1.5 mr-8", children: [
-      assigneeNames ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-[11px] text-white/45", children: [
+      assigneeNames ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-[11px] text-slate-500 dark:text-white/45", children: [
         /* @__PURE__ */ jsx(User2, { className: "w-3 h-3" }),
         /* @__PURE__ */ jsx("span", { className: "truncate max-w-[120px]", children: assigneeNames })
       ] }) : null,
-      dueDateDisplay ? /* @__PURE__ */ jsxs("div", { className: `flex items-center gap-1 text-[11px] ${overdue ? "text-red-300" : "text-white/45"}`, children: [
+      dueDateDisplay ? /* @__PURE__ */ jsxs("div", { className: `flex items-center gap-1 text-[11px] ${overdue ? "text-red-300" : "text-slate-500 dark:text-white/45"}`, children: [
         /* @__PURE__ */ jsx(CalendarDays, { className: "w-3 h-3" }),
         /* @__PURE__ */ jsx("span", { children: dueDateDisplay })
       ] }) : null
@@ -34933,18 +34933,18 @@ function SubtasksSection({
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-3", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
         /* @__PURE__ */ jsx(GitBranch, { className: "w-4 h-4 text-violet-300" }),
-        /* @__PURE__ */ jsx("span", { className: "font-bold text-white text-sm tracking-tight", children: "المهام الفرعية" })
+        /* @__PURE__ */ jsx("span", { className: "font-bold text-slate-900 dark:text-white text-sm tracking-tight", children: "المهام الفرعية" })
       ] }),
-      totalCount > 0 ? /* @__PURE__ */ jsxs("span", { className: "text-xs text-white/55", children: [
+      totalCount > 0 ? /* @__PURE__ */ jsxs("span", { className: "text-xs text-slate-600 dark:text-white/55", children: [
         completedCount,
         "/",
         totalCount
       ] }) : null
     ] }),
-    totalCount > 0 ? /* @__PURE__ */ jsx("div", { className: "mb-3", children: /* @__PURE__ */ jsx("div", { className: "h-1.5 rounded-full bg-white/10 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "h-full rounded-full bg-violet-400/60 transition-all duration-300", style: {
+    totalCount > 0 ? /* @__PURE__ */ jsx("div", { className: "mb-3", children: /* @__PURE__ */ jsx("div", { className: "h-1.5 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "h-full rounded-full bg-violet-400/60 transition-all duration-300", style: {
       width: `${progressPercent}%`
     } }) }) }) : null,
-    subtasksQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-white/50 text-xs py-2", children: "جاري التحميل…" }) : /* @__PURE__ */ jsx("div", { className: "space-y-0.5", children: subtasks.map((st) => /* @__PURE__ */ jsx(SubtaskRow, { subtask: st, onQuickStatus: handleQuickStatus, isChanging: changingId === st.id, onUnlink: handleUnlink, onOpen: onOpenSubtask }, st.id)) }),
+    subtasksQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/50 text-xs py-2", children: "جاري التحميل…" }) : /* @__PURE__ */ jsx("div", { className: "space-y-0.5", children: subtasks.map((st) => /* @__PURE__ */ jsx(SubtaskRow, { subtask: st, onQuickStatus: handleQuickStatus, isChanging: changingId === st.id, onUnlink: handleUnlink, onOpen: onOpenSubtask }, st.id)) }),
     /* @__PURE__ */ jsxs("div", { className: "mt-3 space-y-2", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
         /* @__PURE__ */ jsx("input", { value: newTitle, onChange: (e) => setNewTitle(e.target.value), onKeyDown: handleKeyDown, onFocus: () => setShowAddFields(true), className: `flex-1 ${ws.input} px-3 py-2 text-sm`, placeholder: "أضف مهمة فرعية جديدة…" }),
@@ -34953,32 +34953,32 @@ function SubtasksSection({
       ] }),
       showAddFields && hasNewTitle ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 mr-1 flex-wrap", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5", children: [
-          /* @__PURE__ */ jsx(User2, { className: "w-3.5 h-3.5 text-white/40" }),
+          /* @__PURE__ */ jsx(User2, { className: "w-3.5 h-3.5 text-slate-400 dark:text-white/40" }),
           /* @__PURE__ */ jsxs("select", { value: newAssignee || "", onChange: (e) => setNewAssignee(e.target.value ? Number(e.target.value) : null), className: `${ws.input} px-2 py-1.5 text-xs !rounded-lg !w-auto min-w-[100px]`, children: [
             /* @__PURE__ */ jsx("option", { value: "", children: "بدون مكلف" }),
             safeUsers.map((u) => /* @__PURE__ */ jsx("option", { value: u.id, children: u.name }, u.id))
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5", children: [
-          /* @__PURE__ */ jsx(CalendarDays, { className: "w-3.5 h-3.5 text-white/40" }),
+          /* @__PURE__ */ jsx(CalendarDays, { className: "w-3.5 h-3.5 text-slate-400 dark:text-white/40" }),
           /* @__PURE__ */ jsx("input", { type: "date", value: newDueDate, onChange: (e) => setNewDueDate(e.target.value), className: `${ws.input} px-2 py-1.5 text-xs !rounded-lg !w-auto`, style: {
             colorScheme: "dark"
           } })
         ] })
       ] }) : null,
-      showLinkPicker ? /* @__PURE__ */ jsxs("div", { className: "rounded-2xl border border-white/10 bg-white/[0.03] p-3", children: [
+      showLinkPicker ? /* @__PURE__ */ jsxs("div", { className: "rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] p-3", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-2", children: [
-          /* @__PURE__ */ jsx("span", { className: "text-xs text-white/70 font-semibold", children: "ربط مهمة موجودة" }),
+          /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-700 dark:text-white/70 font-semibold", children: "ربط مهمة موجودة" }),
           /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
             setShowLinkPicker(false);
             setLinkSearch("");
-          }, className: "w-5 h-5 flex items-center justify-center text-white/40 hover:text-white", children: /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) })
+          }, className: "w-5 h-5 flex items-center justify-center text-slate-400 dark:text-white/40 hover:text-slate-900 dark:text-white", children: /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) })
         ] }),
         /* @__PURE__ */ jsx("input", { value: linkSearch, onChange: (e) => setLinkSearch(e.target.value), className: `${ws.input} px-3 py-2 text-sm w-full mb-2`, placeholder: "ابحث عن مهمة…", autoFocus: true }),
-        /* @__PURE__ */ jsx("div", { className: "max-h-[180px] overflow-y-auto space-y-1", children: linkableTasks.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-xs text-white/40 py-2 text-center", children: "لا توجد مهام متاحة للربط" }) : linkableTasks.slice(0, 20).map((t) => /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => linkMutation.mutate(t.id), disabled: linkMutation.isPending, className: "w-full text-right flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/[0.06] transition-colors", children: [
+        /* @__PURE__ */ jsx("div", { className: "max-h-[180px] overflow-y-auto space-y-1", children: linkableTasks.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-400 dark:text-white/40 py-2 text-center", children: "لا توجد مهام متاحة للربط" }) : linkableTasks.slice(0, 20).map((t) => /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => linkMutation.mutate(t.id), disabled: linkMutation.isPending, className: "w-full text-right flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-slate-100 dark:bg-white/[0.06] transition-colors", children: [
           /* @__PURE__ */ jsx(StatusPill, { status: t.status }),
-          /* @__PURE__ */ jsx("span", { className: "flex-1 text-sm text-white/85 truncate", children: t.title }),
-          /* @__PURE__ */ jsxs("span", { className: "text-xs text-white/40", children: [
+          /* @__PURE__ */ jsx("span", { className: "flex-1 text-sm text-slate-800 dark:text-white/85 truncate", children: t.title }),
+          /* @__PURE__ */ jsxs("span", { className: "text-xs text-slate-400 dark:text-white/40", children: [
             "#",
             t.id
           ] })
@@ -35232,7 +35232,7 @@ function TaskFilters({
   const cardClass = `${ws.glassSoft} ${ws.card} p-4`;
   const inputClass = `${ws.input} pr-11 pl-4 py-3`;
   const selectClass = `${ws.select} px-4 py-3`;
-  const labelClass = "text-xs font-semibold text-white/55 mb-2";
+  const labelClass = "text-xs font-semibold text-slate-600 dark:text-white/55 mb-2";
   const statusOptions = [{
     value: "all",
     label: "كل الحالات"
@@ -35266,17 +35266,17 @@ function TaskFilters({
   const spaceColClass = "lg:col-span-3";
   return /* @__PURE__ */ jsxs("div", { className: cardClass, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10`, children: /* @__PURE__ */ jsx(SlidersHorizontal, { className: "w-5 h-5 text-white/70" }) }),
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10`, children: /* @__PURE__ */ jsx(SlidersHorizontal, { className: "w-5 h-5 text-slate-700 dark:text-white/70" }) }),
       /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: "font-bold text-white tracking-tight", children: "الفلاتر" }),
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50", children: "ابحث وفلتر بسرعة" })
+        /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "الفلاتر" }),
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: "ابحث وفلتر بسرعة" })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: gridColsClass, children: [
       /* @__PURE__ */ jsxs("div", { className: searchColClass, children: [
         /* @__PURE__ */ jsx("div", { className: labelClass, children: "بحث" }),
         /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-          /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" }),
+          /* @__PURE__ */ jsx(Search, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/40" }),
           /* @__PURE__ */ jsx("input", { value: q, onChange: (e) => setQ(e.target.value), placeholder: "بحث في المهام…", className: inputClass })
         ] })
       ] }),
@@ -35287,14 +35287,14 @@ function TaskFilters({
       /* @__PURE__ */ jsxs("div", { className: spaceColClass, children: [
         /* @__PURE__ */ jsx("div", { className: labelClass, children: "المساحة" }),
         /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-          /* @__PURE__ */ jsx(LayoutGrid, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/35 pointer-events-none" }),
+          /* @__PURE__ */ jsx(LayoutGrid, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35 pointer-events-none" }),
           /* @__PURE__ */ jsx(GlassSelect, { value: spaceFilter, onChange: setSpaceFilter, options: spaceOptions, className: "w-full", buttonClassName: `${selectClass} pr-11`, placeholder: "كل المساحات" })
         ] })
       ] }),
       showAssigneeFilter ? /* @__PURE__ */ jsxs("div", { className: "lg:col-span-3", children: [
         /* @__PURE__ */ jsx("div", { className: labelClass, children: "المكلف" }),
         /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-          /* @__PURE__ */ jsx(Users2, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/35 pointer-events-none" }),
+          /* @__PURE__ */ jsx(Users2, { className: "absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35 pointer-events-none" }),
           /* @__PURE__ */ jsx(GlassSelect, { value: assigneeFilter, onChange: setAssigneeFilter, options: assigneeOptions, className: "w-full", buttonClassName: `${selectClass} pr-11` })
         ] })
       ] }) : null
@@ -35306,15 +35306,15 @@ function TaskStats({
   stats
 }) {
   const cardClass = `${ws.glassSoft} ${ws.card} p-4`;
-  const labelClass = "text-xs font-semibold text-white/55";
+  const labelClass = "text-xs font-semibold text-slate-600 dark:text-white/55";
   const numberClass = "mt-2 text-3xl font-extrabold tracking-tight";
   const items = [{
     key: "total",
     label: "الإجمالي",
     value: stats.total,
     Icon: ListTodo,
-    tint: "text-white",
-    iconTint: "text-white/75"
+    tint: "text-slate-900 dark:text-white",
+    iconTint: "text-slate-700 dark:text-white/75"
   }, {
     key: "overdue",
     label: "متأخرة",
@@ -35366,9 +35366,9 @@ function AssigneesStack({
     /* @__PURE__ */ jsx("div", { className: "flex -space-x-2", children: visible.map((a) => {
       const key = a?.id || a?.name;
       const label = initials(a?.name);
-      return /* @__PURE__ */ jsx("div", { title: a?.name || "", className: "w-8 h-8 rounded-full bg-white/[0.05] text-white border border-white/10 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] flex items-center justify-center text-xs font-bold", children: label }, key);
+      return /* @__PURE__ */ jsx("div", { title: a?.name || "", className: "w-8 h-8 rounded-full bg-slate-100 dark:bg-white/[0.05] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] flex items-center justify-center text-xs font-bold", children: label }, key);
     }) }),
-    remaining > 0 ? /* @__PURE__ */ jsxs("div", { className: "ml-2 text-xs font-semibold text-white/60", children: [
+    remaining > 0 ? /* @__PURE__ */ jsxs("div", { className: "ml-2 text-xs font-semibold text-slate-600 dark:text-white/60", children: [
       "+",
       remaining
     ] }) : null
@@ -35404,12 +35404,12 @@ function TaskCard({
     if (isChanging || !onQuickStatus) return;
     onQuickStatus(task.id, nextStatus(status));
   };
-  const iconWrapClass = "w-10 h-10 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] hover:bg-white/[0.08] transition-colors cursor-pointer";
-  const statusIcon = isChanging ? /* @__PURE__ */ jsx(Loader2, { className: "w-5 h-5 text-white/50 animate-spin" }) : status === "Done" ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-5 h-5 text-emerald-200" }) : status === "In Progress" ? /* @__PURE__ */ jsx(PlayCircle, { className: "w-5 h-5 text-sky-300" }) : /* @__PURE__ */ jsx(Circle, { className: "w-5 h-5 text-white/35" });
+  const iconWrapClass = "w-10 h-10 rounded-2xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] hover:bg-slate-200 dark:bg-white/[0.08] transition-colors cursor-pointer";
+  const statusIcon = isChanging ? /* @__PURE__ */ jsx(Loader2, { className: "w-5 h-5 text-slate-500 dark:text-white/50 animate-spin" }) : status === "Done" ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-5 h-5 text-emerald-200" }) : status === "In Progress" ? /* @__PURE__ */ jsx(PlayCircle, { className: "w-5 h-5 text-sky-300" }) : /* @__PURE__ */ jsx(Circle, { className: "w-5 h-5 text-slate-400 dark:text-white/35" });
   const hasSpace = !!task.space_name;
   const spaceName = task.space_name || "";
   const hasAttachment = !!task.image_url || Number(task?.attachments_count || 0) > 0;
-  const cardClass = isSubtask ? `w-full text-right ${ws.glassSoft} ${ws.card} p-4 transition-colors hover:bg-violet-500/[0.06] !border-violet-400/15 bg-violet-500/[0.03]` : `w-full text-right ${ws.glassSoft} ${ws.card} p-4 transition-colors hover:bg-white/[0.06]`;
+  const cardClass = isSubtask ? `w-full text-right ${ws.glassSoft} ${ws.card} p-4 transition-colors hover:bg-violet-500/[0.06] !border-violet-400/15 bg-violet-500/[0.03]` : `w-full text-right ${ws.glassSoft} ${ws.card} p-4 transition-colors hover:bg-slate-100 dark:bg-white/[0.06]`;
   return /* @__PURE__ */ jsxs("div", { role: "button", tabIndex: 0, onClick: () => onOpen(task), onKeyDown: (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -35429,21 +35429,21 @@ function TaskCard({
           }
         }, title: onQuickStatus ? `تغيير إلى: ${nextStatus(status)}` : void 0, children: statusIcon }),
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("div", { className: "font-bold text-white truncate tracking-tight", children: title }),
-          hasSpace ? /* @__PURE__ */ jsx("div", { className: "mt-1 text-xs text-white/55 truncate", children: spaceName }) : null
+          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white truncate tracking-tight", children: title }),
+          hasSpace ? /* @__PURE__ */ jsx("div", { className: "mt-1 text-xs text-slate-600 dark:text-white/55 truncate", children: spaceName }) : null
         ] })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-2", children: [
-        hasAttachment ? /* @__PURE__ */ jsx("div", { className: "hidden sm:flex w-9 h-9 rounded-2xl bg-white/[0.03] border border-white/10 items-center justify-center text-white/60", title: "يوجد مرفق", children: /* @__PURE__ */ jsx(Paperclip, { className: "w-4 h-4" }) }) : null,
+        hasAttachment ? /* @__PURE__ */ jsx("div", { className: "hidden sm:flex w-9 h-9 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 items-center justify-center text-slate-600 dark:text-white/60", title: "يوجد مرفق", children: /* @__PURE__ */ jsx(Paperclip, { className: "w-4 h-4" }) }) : null,
         /* @__PURE__ */ jsx(AssigneesStack, { assignees: task.assignees }),
-        /* @__PURE__ */ jsx("div", { className: "hidden sm:flex w-9 h-9 rounded-2xl bg-white/[0.03] border border-white/10 items-center justify-center text-white/60", children: /* @__PURE__ */ jsx(ChevronLeft, { className: "w-4 h-4" }) })
+        /* @__PURE__ */ jsx("div", { className: "hidden sm:flex w-9 h-9 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 items-center justify-center text-slate-600 dark:text-white/60", children: /* @__PURE__ */ jsx(ChevronLeft, { className: "w-4 h-4" }) })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "mt-3 flex flex-wrap items-center gap-2", children: [
       /* @__PURE__ */ jsx(StatusPill, { status, isClosedNotCompleted }),
       /* @__PURE__ */ jsx(PriorityPill, { priority }),
       /* @__PURE__ */ jsxs("span", { className: ws.chip, children: [
-        /* @__PURE__ */ jsx(CalendarDays, { className: "w-4 h-4 text-white/55" }),
+        /* @__PURE__ */ jsx(CalendarDays, { className: "w-4 h-4 text-slate-600 dark:text-white/55" }),
         dueLabel
       ] }),
       Number(task.subtasks_total || 0) > 0 ? /* @__PURE__ */ jsxs("span", { className: ws.chip, children: [
@@ -35454,7 +35454,7 @@ function TaskCard({
       ] }) : null
     ] }),
     tags.length ? /* @__PURE__ */ jsx("div", { className: "mt-3 flex flex-wrap gap-2", children: tags.slice(0, 6).map((t) => /* @__PURE__ */ jsx("span", { className: ws.chip, children: t }, t)) }) : null,
-    task.description ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-white/70 line-clamp-2", children: task.description }) : null
+    task.description ? /* @__PURE__ */ jsx("div", { className: "mt-3 text-sm text-slate-700 dark:text-white/70 line-clamp-2", children: task.description }) : null
   ] });
 }
 
@@ -35465,9 +35465,9 @@ function TaskBoardView({
   changingId
 }) {
   const columnClass = `${ws.glassSoft} ${ws.card} overflow-hidden`;
-  const columnHeaderClass = "px-4 py-3 border-b border-white/10 font-bold text-white flex items-center justify-between tracking-tight bg-white/[0.02]";
-  const countClass = "text-xs text-white/55 bg-white/[0.04] border border-white/10 rounded-full px-2 py-1 shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]";
-  const emptyTextClass = "text-sm text-white/50";
+  const columnHeaderClass = "px-4 py-3 border-b border-slate-200 dark:border-white/10 font-bold text-slate-900 dark:text-white flex items-center justify-between tracking-tight bg-slate-50/50 dark:bg-white/[0.02]";
+  const countClass = "text-xs text-slate-600 dark:text-white/55 bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 rounded-full px-2 py-1 shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]";
+  const emptyTextClass = "text-sm text-slate-500 dark:text-white/50";
   return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-4", children: [
     /* @__PURE__ */ jsxs("div", { className: columnClass, children: [
       /* @__PURE__ */ jsxs("div", { className: columnHeaderClass, children: [
@@ -35538,7 +35538,7 @@ function TaskViewControls({
         /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setScope("team"), className: `${baseBtnClass} ${scopeTeamClass}`, children: "مهام الفريق" })
       ] }),
       sortBy !== void 0 && setSortBy ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-        /* @__PURE__ */ jsx(ArrowUpDown, { className: "w-4 h-4 text-white/50" }),
+        /* @__PURE__ */ jsx(ArrowUpDown, { className: "w-4 h-4 text-slate-500 dark:text-white/50" }),
         /* @__PURE__ */ jsx(GlassSelect, { value: sortBy || "default", onChange: setSortBy, options: SORT_OPTIONS, buttonClassName: `${ws.select} px-3 py-2 text-sm min-w-[160px]` })
       ] }) : null
     ] }),
@@ -35563,8 +35563,8 @@ function TaskPageHeader({
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10`, children: /* @__PURE__ */ jsx(CheckSquare, { className: "w-5 h-5 text-emerald-200" }) }),
         /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-          /* @__PURE__ */ jsx("div", { className: "font-bold text-white tracking-tight truncate", children: "المهام" }),
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-white/50 truncate", children: "مهامك + مهام الفريق" })
+          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight truncate", children: "المهام" }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 truncate", children: "مهامك + مهام الفريق" })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("button", { type: "button", onClick: onOpenCreate, className: `${ws.btnPrimary} px-3 py-2`, children: [
@@ -35576,8 +35576,8 @@ function TaskPageHeader({
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
         /* @__PURE__ */ jsx("div", { className: ws.iconBox, children: /* @__PURE__ */ jsx(CheckSquare, { className: "w-5 h-5 text-emerald-200" }) }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-white tracking-tight", children: "المهام" }),
-          /* @__PURE__ */ jsx("div", { className: "text-white/55 mt-1", children: "مهامك + مهام الفريق" })
+          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white tracking-tight", children: "المهام" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 mt-1", children: "مهامك + مهام الفريق" })
         ] })
       ] }),
       /* @__PURE__ */ jsxs("button", { type: "button", onClick: onOpenCreate, className: `${ws.btnPrimary} px-4 py-3`, children: [
@@ -36564,7 +36564,7 @@ const route45 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   loader
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-DzroxtTg.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-BbYvXRl-.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-zXLzfrN-.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-BtnqmT5n.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D3Oi-f8X.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/shield-CCvWcLx-.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/languages-But0n9zp.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BbKGIWZT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-CNh4op8S.js','/assets/layout-dashboard-t_ubicMG.js','/assets/calculator-D3gGV-xi.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/arrow-left-1JW0wBZ5.js','/assets/trending-up-BgqdTk4e.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C4nZI_pM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-DG8X3EHB.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/refresh-cw-Da2g6MOO.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BBlVZA9f.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-DG8X3EHB.js','/assets/save-BOlG9ZED.js','/assets/plus-COitwNGf.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/style-DMXtuZsn.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/trending-up-BgqdTk4e.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/index-zXLzfrN-.js','/assets/useMutation-3v6f9hvE.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-DhkqOS2v.js','/assets/index-5tUDjkqx.js','/assets/banknote-Dm0fgxyg.js','/assets/clock-qJJNJxIj.js','/assets/clipboard-check-C3cY-jb5.js','/assets/filter-DWyuYmH_.js','/assets/arrow-up-right-CWObQWyh.js','/assets/minus-CWNYa3a9.js','/assets/file-text-BbAMQB_x.js','/assets/info-DLQ0cRfG.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dp9dkq2C.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/arrow-left-1JW0wBZ5.js','/assets/GlassSelect-DG8X3EHB.js','/assets/refresh-cw-Da2g6MOO.js','/assets/plus-COitwNGf.js','/assets/save-BOlG9ZED.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CO8qximj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/arrow-left-1JW0wBZ5.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-zXLzfrN-.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/exportUtils-Cbb5Err4.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-3v6f9hvE.js','/assets/trash-2-CUHqd1bM.js','/assets/dateUtils-BnEiOKPy.js','/assets/search-CAVoYLYn.js','/assets/pencil-Qtcayjw8.js','/assets/eye-DzINopbe.js','/assets/save-BOlG9ZED.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-C065pfaU.js','/assets/useQuery-CNh4op8S.js','/assets/square-check-big-CIEQCGu_.js','/assets/square-BaqbmdHp.js','/assets/minus-CWNYa3a9.js','/assets/plus-COitwNGf.js','/assets/SidebarShell-DMBQv04V.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-76gqigHn.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/payrollFormatters-DGy10whX.js','/assets/index-5tUDjkqx.js','/assets/wallet-D2SvD8wt.js','/assets/x-C065pfaU.js','/assets/save-BOlG9ZED.js','/assets/pencil-Qtcayjw8.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/trash-2-CUHqd1bM.js','/assets/useEmployeeLoans-DgzUOTgC.js','/assets/filter-DWyuYmH_.js','/assets/plus-COitwNGf.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/useQuery-CNh4op8S.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/useMutation-3v6f9hvE.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-By25ZM7B.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/x-C065pfaU.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/dollar-sign-B71BmmJE.js','/assets/percent-rKk3IsAD.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-BLkySydv.js','/assets/apiAuth-DIjdQgpG.js','/assets/index-zXLzfrN-.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/payrollCalculations-seahiZpF.js','/assets/info-DLQ0cRfG.js','/assets/lock-DlMx-7b2.js','/assets/circle-check-C2wUUs9F.js','/assets/clock-qJJNJxIj.js','/assets/style-DMXtuZsn.js','/assets/ban-Clrhs1az.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/GlassPopover-DwhRKxws.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/send-XB6sbGea.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/gift-CoWOgAjZ.js','/assets/trash-2-CUHqd1bM.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/wallet-D2SvD8wt.js','/assets/SidebarShell-DMBQv04V.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CijTNv0Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/index-5tUDjkqx.js','/assets/GlassSelect-DG8X3EHB.js','/assets/apiAuth-DIjdQgpG.js','/assets/index-zXLzfrN-.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/percent-rKk3IsAD.js','/assets/pencil-Qtcayjw8.js','/assets/unlink-Dqrq7WdR.js','/assets/link-9LyDjdl8.js','/assets/plus-COitwNGf.js','/assets/map-pin-D8YZz9SK.js','/assets/circle-check-C2wUUs9F.js','/assets/hash-Crm7gKZz.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassPopover-DwhRKxws.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/search-CAVoYLYn.js','/assets/eye-DzINopbe.js','/assets/eye-off-CW9dHDyi.js','/assets/users-ypX0sR4t.js','/assets/layers-DDXVxWRY.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BU4XwFYr.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/useQuery-CNh4op8S.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BQM1s-UZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/Sidebar-BjYA2ZAg.js','/assets/trending-up-BgqdTk4e.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-check-big-YytesfJ2.js','/assets/clock-qJJNJxIj.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/sparkles-C1YLt276.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-C065pfaU.js','/assets/info-DLQ0cRfG.js','/assets/circle-alert-Wpb6PjST.js','/assets/triangle-alert-uVw7TkFw.js','/assets/package-plus-BtHolXRP.js','/assets/calendar-CLjHW5lb.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/activity-Db60x8DP.js','/assets/dollar-sign-B71BmmJE.js','/assets/search-CAVoYLYn.js','/assets/exportUtils-Cbb5Err4.js','/assets/file-text-BbAMQB_x.js','/assets/download-BpfCRhOm.js','/assets/printer-DuxBl8tu.js','/assets/users-ypX0sR4t.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/layers-DDXVxWRY.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/dateUtils-BnEiOKPy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/SidebarShell-DMBQv04V.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-DwhRKxws.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BICWO2aq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/Sidebar-BjYA2ZAg.js','/assets/exportUtils-Cbb5Err4.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/building-2-Bi2MKt0x.js','/assets/map-pin-D8YZz9SK.js','/assets/clipboard-list-CAvNJvX_.js','/assets/search-CAVoYLYn.js','/assets/plus-COitwNGf.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/x-C065pfaU.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/triangle-alert-uVw7TkFw.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-2jR21uv3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/Sidebar-BjYA2ZAg.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/index-zXLzfrN-.js','/assets/useMutation-3v6f9hvE.js','/assets/employeeUtils-D69VYUwT.js','/assets/users-ypX0sR4t.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/search-CAVoYLYn.js','/assets/GlassPopover-DwhRKxws.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-x-QgQZbgzI.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/briefcase-CGkzVZ7S.js','/assets/dollar-sign-B71BmmJE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/x-C065pfaU.js','/assets/mail-Cq7bg44q.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/plus-COitwNGf.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/triangle-alert-uVw7TkFw.js','/assets/SidebarShell-DMBQv04V.js','/assets/index-5tUDjkqx.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CeHU8MX7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/layers-DDXVxWRY.js','/assets/x-C065pfaU.js','/assets/languages-But0n9zp.js','/assets/plus-COitwNGf.js','/assets/pencil-Qtcayjw8.js','/assets/GlassSelect-DG8X3EHB.js','/assets/ban-Clrhs1az.js','/assets/Sidebar-BjYA2ZAg.js','/assets/search-CAVoYLYn.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassPopover-DwhRKxws.js','/assets/filter-DWyuYmH_.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/link-9LyDjdl8.js','/assets/eye-DzINopbe.js','/assets/building-2-Bi2MKt0x.js','/assets/trash-2-CUHqd1bM.js','/assets/square-check-big-CIEQCGu_.js','/assets/clipboard-check-C3cY-jb5.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/square-BaqbmdHp.js','/assets/eye-off-CW9dHDyi.js','/assets/dollar-sign-B71BmmJE.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-rXS-K3Pf.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/exportUtils-Cbb5Err4.js','/assets/arrow-left-1JW0wBZ5.js','/assets/search-CAVoYLYn.js','/assets/building-2-Bi2MKt0x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassSelect-DG8X3EHB.js','/assets/refresh-cw-Da2g6MOO.js','/assets/hash-Crm7gKZz.js','/assets/calendar-CLjHW5lb.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-check-big-YytesfJ2.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/dateUtils-BnEiOKPy.js','/assets/trending-up-BgqdTk4e.js','/assets/x-C065pfaU.js','/assets/LineChart-A-xmoYM-.js','/assets/package-plus-BtHolXRP.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-pYkFMDFm.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/apiAuth-DIjdQgpG.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/circle-alert-Wpb6PjST.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/triangle-alert-uVw7TkFw.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BApILZOT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/arrow-left-1JW0wBZ5.js','/assets/circle-x-QgQZbgzI.js','/assets/triangle-alert-uVw7TkFw.js','/assets/building-2-Bi2MKt0x.js','/assets/GlassSelect-DG8X3EHB.js','/assets/search-CAVoYLYn.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-big-YytesfJ2.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CJwqqBYj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/Sidebar-BjYA2ZAg.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calendar-check-CPdF76fv.js','/assets/package-plus-BtHolXRP.js','/assets/clock-qJJNJxIj.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/filter-DWyuYmH_.js','/assets/x-C065pfaU.js','/assets/search-CAVoYLYn.js','/assets/exportUtils-Cbb5Err4.js','/assets/GlassPopover-DwhRKxws.js','/assets/printer-DuxBl8tu.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/square-check-big-CIEQCGu_.js','/assets/trash-2-CUHqd1bM.js','/assets/square-BaqbmdHp.js','/assets/building-2-Bi2MKt0x.js','/assets/eye-DzINopbe.js','/assets/pencil-Qtcayjw8.js','/assets/calendar-CLjHW5lb.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/arrow-up-right-CWObQWyh.js','/assets/user-DfagCML7.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/hash-Crm7gKZz.js','/assets/circle-check-big-YytesfJ2.js','/assets/percent-rKk3IsAD.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/triangle-alert-uVw7TkFw.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-2z7VAg3p.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/GlassSelect-DG8X3EHB.js','/assets/refresh-cw-Da2g6MOO.js','/assets/calendar-CLjHW5lb.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/search-CAVoYLYn.js','/assets/useQuery-CNh4op8S.js','/assets/dateUtils-BnEiOKPy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/triangle-alert-uVw7TkFw.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/building-2-Bi2MKt0x.js','/assets/layout-dashboard-t_ubicMG.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/GlassPopover-DwhRKxws.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BwOCF2-l.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/search-CAVoYLYn.js','/assets/triangle-alert-uVw7TkFw.js','/assets/trending-up-BgqdTk4e.js','/assets/GlassSelect-DG8X3EHB.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/layers-DDXVxWRY.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-WSlUxFTB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/arrow-left-1JW0wBZ5.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/GlassSelect-DG8X3EHB.js','/assets/search-CAVoYLYn.js','/assets/refresh-cw-Da2g6MOO.js','/assets/trending-up-BgqdTk4e.js','/assets/triangle-alert-uVw7TkFw.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/building-2-Bi2MKt0x.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D57NmdZC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/GlassSelect-DG8X3EHB.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/circle-check-big-YytesfJ2.js','/assets/search-CAVoYLYn.js','/assets/log-out-Bi9xsGKs.js','/assets/save-BOlG9ZED.js','/assets/trending-up-BgqdTk4e.js','/assets/arrow-left-1JW0wBZ5.js','/assets/layers-DDXVxWRY.js','/assets/filter-DWyuYmH_.js','/assets/circle-alert-Wpb6PjST.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-cPdEhY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/apiAuth-DIjdQgpG.js','/assets/globe-DKoGPur3.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/circle-check-C2wUUs9F.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CPcJoufO.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-DwNQQjYL.js','/assets/users-ypX0sR4t.js','/assets/arrow-left-1JW0wBZ5.js','/assets/dollar-sign-B71BmmJE.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/apiAuth-DIjdQgpG.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/useQuery-CNh4op8S.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-dHxXxI7G.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/useAdminAuth-DzloBQBL.js','/assets/gift-CoWOgAjZ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/apiAuth-DIjdQgpG.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D-Q3ZGZN.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/Sidebar-DwNQQjYL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/index-zXLzfrN-.js','/assets/useMutation-3v6f9hvE.js','/assets/users-ypX0sR4t.js','/assets/dollar-sign-B71BmmJE.js','/assets/image-Bggefa6I.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/useUpload-DNDH5__a.js','/assets/x-C065pfaU.js','/assets/user-DfagCML7.js','/assets/calendar-CLjHW5lb.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/SidebarShell-DMBQv04V.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CODCX4TQ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/Sidebar-DwNQQjYL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/index-zXLzfrN-.js','/assets/useMutation-3v6f9hvE.js','/assets/employeeUtils-D69VYUwT.js','/assets/search-CAVoYLYn.js','/assets/users-ypX0sR4t.js','/assets/user-DfagCML7.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/ban-Clrhs1az.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/x-C065pfaU.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/circle-check-C2wUUs9F.js','/assets/briefcase-CGkzVZ7S.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-check-CPdF76fv.js','/assets/circle-x-QgQZbgzI.js','/assets/dollar-sign-B71BmmJE.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-5tUDjkqx.js','/assets/payrollFormatters-DGy10whX.js','/assets/save-BOlG9ZED.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/plus-COitwNGf.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DOByEBJZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-DwNQQjYL.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/payrollFormatters-DGy10whX.js','/assets/useEmployeeLoans-DgzUOTgC.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/trash-2-CUHqd1bM.js','/assets/info-DLQ0cRfG.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CtsUFgrK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-DwNQQjYL.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-BLkySydv.js','/assets/users-ypX0sR4t.js','/assets/ban-Clrhs1az.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/lock-DlMx-7b2.js','/assets/refresh-cw-Da2g6MOO.js','/assets/send-XB6sbGea.js','/assets/info-DLQ0cRfG.js','/assets/wallet-D2SvD8wt.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/useQuery-CNh4op8S.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/clock-qJJNJxIj.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/useMutation-3v6f9hvE.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BX7RawsU.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-TNQh527r.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DMp6-s6q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-BeTrAQTK.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/client-CINQ5WCN.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/image-Bggefa6I.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/download-BpfCRhOm.js','/assets/useMutation-3v6f9hvE.js','/assets/upload-Bh8z_qYt.js','/assets/x-C065pfaU.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/useAdminAuth-DzloBQBL.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/send-XB6sbGea.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CFK0vOZw.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-BeTrAQTK.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/arrow-right-WBdEsbVb.js','/assets/external-link-DQg3IH_A.js','/assets/printer-DuxBl8tu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B2EziyHi.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-BeTrAQTK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/coffee-Csx1FV89.js','/assets/plus-COitwNGf.js','/assets/x-C065pfaU.js','/assets/eye-off-CW9dHDyi.js','/assets/eye-DzINopbe.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ben-6QF-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-BeTrAQTK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CAYCDj4P.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/shield-CCvWcLx-.js','/assets/globe-DKoGPur3.js','/assets/eye-DzINopbe.js','/assets/lock-DlMx-7b2.js','/assets/trash-2-CUHqd1bM.js','/assets/mail-Cq7bg44q.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ConqovyJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/apiAuth-DIjdQgpG.js','/assets/languages-But0n9zp.js','/assets/useMutation-3v6f9hvE.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/info-DLQ0cRfG.js','/assets/log-out-Bi9xsGKs.js','/assets/send-XB6sbGea.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-C065pfaU.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-iIabyyq-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/globe-DKoGPur3.js','/assets/mail-Cq7bg44q.js','/assets/external-link-DQg3IH_A.js','/assets/shield-CCvWcLx-.js','/assets/file-text-BbAMQB_x.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BnuC5Abx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/circle-alert-Wpb6PjST.js','/assets/lock-DlMx-7b2.js','/assets/sparkles-C1YLt276.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-6w5Vt2og.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/PriorityPill-Du8ph28q.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/calendar-days-DtTAo565.js','/assets/loader-circle-F04ReFHa.js','/assets/circle-check-C2wUUs9F.js','/assets/message-square-D9Pxhv53.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/activity-Db60x8DP.js','/assets/circle-DhkqOS2v.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-k-Yv2PNG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/message-square-D9Pxhv53.js','/assets/plus-COitwNGf.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/send-XB6sbGea.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-zVAFvVWS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/useUpload-DNDH5__a.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/circle-DhkqOS2v.js','/assets/x-C065pfaU.js','/assets/arrow-right-WBdEsbVb.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/flag-B3Z7tId9.js','/assets/calendar-days-DtTAo565.js','/assets/upload-Bh8z_qYt.js','/assets/trash-2-CUHqd1bM.js','/assets/file-text-BbAMQB_x.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/PriorityPill-Du8ph28q.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/unlink-Dqrq7WdR.js','/assets/circle-check-C2wUUs9F.js','/assets/search-CAVoYLYn.js','/assets/SidebarShell-DMBQv04V.js','/assets/triangle-alert-uVw7TkFw.js','/assets/activity-Db60x8DP.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/square-check-big-CIEQCGu_.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/users-ypX0sR4t.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CNmBRy7g.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CT24vMLq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/file-text-BbAMQB_x.js','/assets/plus-COitwNGf.js','/assets/trash-2-CUHqd1bM.js','/assets/flag-B3Z7tId9.js','/assets/square-check-big-CIEQCGu_.js','/assets/loader-circle-F04ReFHa.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-DTH4b2r5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-fa6a82b7.js','version':'fa6a82b7','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-DzroxtTg.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-D0GARxqw.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-zXLzfrN-.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-q2zb8XP1.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D3Oi-f8X.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/shield-CCvWcLx-.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/languages-But0n9zp.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BbKGIWZT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-CNh4op8S.js','/assets/layout-dashboard-t_ubicMG.js','/assets/calculator-D3gGV-xi.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/arrow-left-1JW0wBZ5.js','/assets/trending-up-BgqdTk4e.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C4nZI_pM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-DG8X3EHB.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/refresh-cw-Da2g6MOO.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BBlVZA9f.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-DG8X3EHB.js','/assets/save-BOlG9ZED.js','/assets/plus-COitwNGf.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/style-DMXtuZsn.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/trending-up-BgqdTk4e.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/index-zXLzfrN-.js','/assets/useMutation-3v6f9hvE.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-DhkqOS2v.js','/assets/index-5tUDjkqx.js','/assets/banknote-Dm0fgxyg.js','/assets/clock-qJJNJxIj.js','/assets/clipboard-check-C3cY-jb5.js','/assets/filter-DWyuYmH_.js','/assets/arrow-up-right-CWObQWyh.js','/assets/minus-CWNYa3a9.js','/assets/file-text-BbAMQB_x.js','/assets/info-DLQ0cRfG.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BeMW4Sqh.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/arrow-left-1JW0wBZ5.js','/assets/GlassSelect-DG8X3EHB.js','/assets/refresh-cw-Da2g6MOO.js','/assets/plus-COitwNGf.js','/assets/save-BOlG9ZED.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-nTigNqog.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/arrow-left-1JW0wBZ5.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-zXLzfrN-.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/exportUtils-Cbb5Err4.js','/assets/apiAuth-DIjdQgpG.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-3v6f9hvE.js','/assets/trash-2-CUHqd1bM.js','/assets/dateUtils-BnEiOKPy.js','/assets/search-CAVoYLYn.js','/assets/pencil-Qtcayjw8.js','/assets/eye-DzINopbe.js','/assets/save-BOlG9ZED.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-C065pfaU.js','/assets/useQuery-CNh4op8S.js','/assets/square-check-big-CIEQCGu_.js','/assets/square-BaqbmdHp.js','/assets/minus-CWNYa3a9.js','/assets/plus-COitwNGf.js','/assets/SidebarShell-DMBQv04V.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-76gqigHn.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/payrollFormatters-DGy10whX.js','/assets/index-5tUDjkqx.js','/assets/wallet-D2SvD8wt.js','/assets/x-C065pfaU.js','/assets/save-BOlG9ZED.js','/assets/pencil-Qtcayjw8.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/trash-2-CUHqd1bM.js','/assets/useEmployeeLoans-DgzUOTgC.js','/assets/filter-DWyuYmH_.js','/assets/plus-COitwNGf.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/useQuery-CNh4op8S.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/useMutation-3v6f9hvE.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-By25ZM7B.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/x-C065pfaU.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/dollar-sign-B71BmmJE.js','/assets/percent-rKk3IsAD.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-BLkySydv.js','/assets/apiAuth-DIjdQgpG.js','/assets/index-zXLzfrN-.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/payrollCalculations-seahiZpF.js','/assets/info-DLQ0cRfG.js','/assets/lock-DlMx-7b2.js','/assets/circle-check-C2wUUs9F.js','/assets/clock-qJJNJxIj.js','/assets/style-DMXtuZsn.js','/assets/ban-Clrhs1az.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/GlassPopover-DwhRKxws.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/send-XB6sbGea.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/gift-CoWOgAjZ.js','/assets/trash-2-CUHqd1bM.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/wallet-D2SvD8wt.js','/assets/SidebarShell-DMBQv04V.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CijTNv0Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/index-5tUDjkqx.js','/assets/GlassSelect-DG8X3EHB.js','/assets/apiAuth-DIjdQgpG.js','/assets/index-zXLzfrN-.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/percent-rKk3IsAD.js','/assets/pencil-Qtcayjw8.js','/assets/unlink-Dqrq7WdR.js','/assets/link-9LyDjdl8.js','/assets/plus-COitwNGf.js','/assets/map-pin-D8YZz9SK.js','/assets/circle-check-C2wUUs9F.js','/assets/hash-Crm7gKZz.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassPopover-DwhRKxws.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/search-CAVoYLYn.js','/assets/eye-DzINopbe.js','/assets/eye-off-CW9dHDyi.js','/assets/users-ypX0sR4t.js','/assets/layers-DDXVxWRY.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BU4XwFYr.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-C4VYhxKf.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/useQuery-CNh4op8S.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BQM1s-UZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/Sidebar-BjYA2ZAg.js','/assets/trending-up-BgqdTk4e.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-check-big-YytesfJ2.js','/assets/clock-qJJNJxIj.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/sparkles-C1YLt276.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-C065pfaU.js','/assets/info-DLQ0cRfG.js','/assets/circle-alert-Wpb6PjST.js','/assets/triangle-alert-uVw7TkFw.js','/assets/package-plus-BtHolXRP.js','/assets/calendar-CLjHW5lb.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/activity-Db60x8DP.js','/assets/dollar-sign-B71BmmJE.js','/assets/search-CAVoYLYn.js','/assets/exportUtils-Cbb5Err4.js','/assets/file-text-BbAMQB_x.js','/assets/download-BpfCRhOm.js','/assets/printer-DuxBl8tu.js','/assets/users-ypX0sR4t.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/layers-DDXVxWRY.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/dateUtils-BnEiOKPy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/SidebarShell-DMBQv04V.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-DwhRKxws.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BICWO2aq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/Sidebar-BjYA2ZAg.js','/assets/exportUtils-Cbb5Err4.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/building-2-Bi2MKt0x.js','/assets/map-pin-D8YZz9SK.js','/assets/clipboard-list-CAvNJvX_.js','/assets/search-CAVoYLYn.js','/assets/plus-COitwNGf.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/x-C065pfaU.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/triangle-alert-uVw7TkFw.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-2jR21uv3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/Sidebar-BjYA2ZAg.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/index-zXLzfrN-.js','/assets/useMutation-3v6f9hvE.js','/assets/employeeUtils-D69VYUwT.js','/assets/users-ypX0sR4t.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/search-CAVoYLYn.js','/assets/GlassPopover-DwhRKxws.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-x-QgQZbgzI.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/briefcase-CGkzVZ7S.js','/assets/dollar-sign-B71BmmJE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/x-C065pfaU.js','/assets/mail-Cq7bg44q.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/plus-COitwNGf.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/triangle-alert-uVw7TkFw.js','/assets/SidebarShell-DMBQv04V.js','/assets/index-5tUDjkqx.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CeHU8MX7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/layers-DDXVxWRY.js','/assets/x-C065pfaU.js','/assets/languages-But0n9zp.js','/assets/plus-COitwNGf.js','/assets/pencil-Qtcayjw8.js','/assets/GlassSelect-DG8X3EHB.js','/assets/ban-Clrhs1az.js','/assets/Sidebar-BjYA2ZAg.js','/assets/search-CAVoYLYn.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassPopover-DwhRKxws.js','/assets/filter-DWyuYmH_.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/link-9LyDjdl8.js','/assets/eye-DzINopbe.js','/assets/building-2-Bi2MKt0x.js','/assets/trash-2-CUHqd1bM.js','/assets/square-check-big-CIEQCGu_.js','/assets/clipboard-check-C3cY-jb5.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/square-BaqbmdHp.js','/assets/eye-off-CW9dHDyi.js','/assets/dollar-sign-B71BmmJE.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-rXS-K3Pf.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/exportUtils-Cbb5Err4.js','/assets/arrow-left-1JW0wBZ5.js','/assets/search-CAVoYLYn.js','/assets/building-2-Bi2MKt0x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassSelect-DG8X3EHB.js','/assets/refresh-cw-Da2g6MOO.js','/assets/hash-Crm7gKZz.js','/assets/calendar-CLjHW5lb.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-check-big-YytesfJ2.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/dateUtils-BnEiOKPy.js','/assets/trending-up-BgqdTk4e.js','/assets/x-C065pfaU.js','/assets/LineChart-A-xmoYM-.js','/assets/package-plus-BtHolXRP.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-pYkFMDFm.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/apiAuth-DIjdQgpG.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/circle-alert-Wpb6PjST.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/triangle-alert-uVw7TkFw.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BApILZOT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/arrow-left-1JW0wBZ5.js','/assets/circle-x-QgQZbgzI.js','/assets/triangle-alert-uVw7TkFw.js','/assets/building-2-Bi2MKt0x.js','/assets/GlassSelect-DG8X3EHB.js','/assets/search-CAVoYLYn.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-big-YytesfJ2.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CJwqqBYj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/Sidebar-BjYA2ZAg.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calendar-check-CPdF76fv.js','/assets/package-plus-BtHolXRP.js','/assets/clock-qJJNJxIj.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/filter-DWyuYmH_.js','/assets/x-C065pfaU.js','/assets/search-CAVoYLYn.js','/assets/exportUtils-Cbb5Err4.js','/assets/GlassPopover-DwhRKxws.js','/assets/printer-DuxBl8tu.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/square-check-big-CIEQCGu_.js','/assets/trash-2-CUHqd1bM.js','/assets/square-BaqbmdHp.js','/assets/building-2-Bi2MKt0x.js','/assets/eye-DzINopbe.js','/assets/pencil-Qtcayjw8.js','/assets/calendar-CLjHW5lb.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/arrow-up-right-CWObQWyh.js','/assets/user-DfagCML7.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/hash-Crm7gKZz.js','/assets/circle-check-big-YytesfJ2.js','/assets/percent-rKk3IsAD.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/triangle-alert-uVw7TkFw.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-2z7VAg3p.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/GlassSelect-DG8X3EHB.js','/assets/refresh-cw-Da2g6MOO.js','/assets/calendar-CLjHW5lb.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/search-CAVoYLYn.js','/assets/useQuery-CNh4op8S.js','/assets/dateUtils-BnEiOKPy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/triangle-alert-uVw7TkFw.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/building-2-Bi2MKt0x.js','/assets/layout-dashboard-t_ubicMG.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/GlassPopover-DwhRKxws.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BwOCF2-l.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/search-CAVoYLYn.js','/assets/triangle-alert-uVw7TkFw.js','/assets/trending-up-BgqdTk4e.js','/assets/GlassSelect-DG8X3EHB.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/layers-DDXVxWRY.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-WSlUxFTB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DTa6Iux-.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/Sidebar-BjYA2ZAg.js','/assets/Breadcrumb-CNFyF5u-.js','/assets/arrow-left-1JW0wBZ5.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/GlassSelect-DG8X3EHB.js','/assets/search-CAVoYLYn.js','/assets/refresh-cw-Da2g6MOO.js','/assets/trending-up-BgqdTk4e.js','/assets/triangle-alert-uVw7TkFw.js','/assets/GlassPopover-DwhRKxws.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-DMBQv04V.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/building-2-Bi2MKt0x.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D57NmdZC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/GlassSelect-DG8X3EHB.js','/assets/apiAuth-DIjdQgpG.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/circle-check-big-YytesfJ2.js','/assets/search-CAVoYLYn.js','/assets/log-out-Bi9xsGKs.js','/assets/save-BOlG9ZED.js','/assets/trending-up-BgqdTk4e.js','/assets/arrow-left-1JW0wBZ5.js','/assets/layers-DDXVxWRY.js','/assets/filter-DWyuYmH_.js','/assets/circle-alert-Wpb6PjST.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-cPdEhY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/apiAuth-DIjdQgpG.js','/assets/globe-DKoGPur3.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/circle-check-C2wUUs9F.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CPcJoufO.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/useAdminAuth-DzloBQBL.js','/assets/Sidebar-DwNQQjYL.js','/assets/users-ypX0sR4t.js','/assets/arrow-left-1JW0wBZ5.js','/assets/dollar-sign-B71BmmJE.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/apiAuth-DIjdQgpG.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/useQuery-CNh4op8S.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-dHxXxI7G.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/useAdminAuth-DzloBQBL.js','/assets/gift-CoWOgAjZ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/apiAuth-DIjdQgpG.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D-Q3ZGZN.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/Sidebar-DwNQQjYL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/index-zXLzfrN-.js','/assets/useMutation-3v6f9hvE.js','/assets/users-ypX0sR4t.js','/assets/dollar-sign-B71BmmJE.js','/assets/image-Bggefa6I.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/useUpload-DNDH5__a.js','/assets/x-C065pfaU.js','/assets/user-DfagCML7.js','/assets/calendar-CLjHW5lb.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/SidebarShell-DMBQv04V.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CODCX4TQ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/Sidebar-DwNQQjYL.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/index-zXLzfrN-.js','/assets/useMutation-3v6f9hvE.js','/assets/employeeUtils-D69VYUwT.js','/assets/search-CAVoYLYn.js','/assets/users-ypX0sR4t.js','/assets/user-DfagCML7.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/ban-Clrhs1az.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/x-C065pfaU.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/circle-check-C2wUUs9F.js','/assets/briefcase-CGkzVZ7S.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-check-CPdF76fv.js','/assets/circle-x-QgQZbgzI.js','/assets/dollar-sign-B71BmmJE.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-5tUDjkqx.js','/assets/payrollFormatters-DGy10whX.js','/assets/save-BOlG9ZED.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/plus-COitwNGf.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DOByEBJZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-DwNQQjYL.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassMultiSelect-BN8stnnm.js','/assets/payrollFormatters-DGy10whX.js','/assets/useEmployeeLoans-DgzUOTgC.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/trash-2-CUHqd1bM.js','/assets/info-DLQ0cRfG.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CtsUFgrK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/layout-DsBgTDE2.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-DwNQQjYL.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-BLkySydv.js','/assets/users-ypX0sR4t.js','/assets/ban-Clrhs1az.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/lock-DlMx-7b2.js','/assets/refresh-cw-Da2g6MOO.js','/assets/send-XB6sbGea.js','/assets/info-DLQ0cRfG.js','/assets/wallet-D2SvD8wt.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-DhcuP90N.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/useQuery-CNh4op8S.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/clock-qJJNJxIj.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/useMutation-3v6f9hvE.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BX7RawsU.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-TNQh527r.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DMp6-s6q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-BeTrAQTK.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DIjdQgpG.js','/assets/client-CINQ5WCN.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/image-Bggefa6I.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/download-BpfCRhOm.js','/assets/useMutation-3v6f9hvE.js','/assets/upload-Bh8z_qYt.js','/assets/x-C065pfaU.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/useAdminAuth-DzloBQBL.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/send-XB6sbGea.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CFK0vOZw.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-BeTrAQTK.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/arrow-right-WBdEsbVb.js','/assets/external-link-DQg3IH_A.js','/assets/printer-DuxBl8tu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B2EziyHi.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-BeTrAQTK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/coffee-Csx1FV89.js','/assets/plus-COitwNGf.js','/assets/x-C065pfaU.js','/assets/eye-off-CW9dHDyi.js','/assets/eye-DzINopbe.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ben-6QF-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-BeTrAQTK.js','/assets/useAdminAuth-DzloBQBL.js','/assets/apiAuth-DIjdQgpG.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CAYCDj4P.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/shield-CCvWcLx-.js','/assets/globe-DKoGPur3.js','/assets/eye-DzINopbe.js','/assets/lock-DlMx-7b2.js','/assets/trash-2-CUHqd1bM.js','/assets/mail-Cq7bg44q.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ConqovyJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/apiAuth-DIjdQgpG.js','/assets/languages-But0n9zp.js','/assets/useMutation-3v6f9hvE.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/info-DLQ0cRfG.js','/assets/log-out-Bi9xsGKs.js','/assets/send-XB6sbGea.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-C065pfaU.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-iIabyyq-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/globe-DKoGPur3.js','/assets/mail-Cq7bg44q.js','/assets/external-link-DQg3IH_A.js','/assets/shield-CCvWcLx-.js','/assets/file-text-BbAMQB_x.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BnuC5Abx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/circle-alert-Wpb6PjST.js','/assets/lock-DlMx-7b2.js','/assets/sparkles-C1YLt276.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BK_EghQB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/PriorityPill-BSG05eNO.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/calendar-days-DtTAo565.js','/assets/loader-circle-F04ReFHa.js','/assets/circle-check-C2wUUs9F.js','/assets/message-square-D9Pxhv53.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/activity-Db60x8DP.js','/assets/circle-DhkqOS2v.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-k-Yv2PNG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/message-square-D9Pxhv53.js','/assets/plus-COitwNGf.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/send-XB6sbGea.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DMgWG7L4.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/useUpload-DNDH5__a.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/circle-DhkqOS2v.js','/assets/x-C065pfaU.js','/assets/arrow-right-WBdEsbVb.js','/assets/GlassSelect-DG8X3EHB.js','/assets/GlassDatePicker-Ce1OSXOl.js','/assets/flag-B3Z7tId9.js','/assets/calendar-days-DtTAo565.js','/assets/upload-Bh8z_qYt.js','/assets/trash-2-CUHqd1bM.js','/assets/file-text-BbAMQB_x.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/PriorityPill-BSG05eNO.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/unlink-Dqrq7WdR.js','/assets/circle-check-C2wUUs9F.js','/assets/search-CAVoYLYn.js','/assets/SidebarShell-DMBQv04V.js','/assets/triangle-alert-uVw7TkFw.js','/assets/activity-Db60x8DP.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/square-check-big-CIEQCGu_.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/users-ypX0sR4t.js','/assets/apiAuth-DIjdQgpG.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CNmBRy7g.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CT24vMLq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-e56x6RPX.js','/assets/Sidebar-xutWlDQ8.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-DG8X3EHB.js','/assets/useQuery-CNh4op8S.js','/assets/useMutation-3v6f9hvE.js','/assets/file-text-BbAMQB_x.js','/assets/plus-COitwNGf.js','/assets/trash-2-CUHqd1bM.js','/assets/flag-B3Z7tId9.js','/assets/square-check-big-CIEQCGu_.js','/assets/loader-circle-F04ReFHa.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-DMBQv04V.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DIjdQgpG.js','/assets/search-CAVoYLYn.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-DwhRKxws.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-DTH4b2r5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-8206b430.js','version':'8206b430','sri':undefined};
 
 const assetsBuildDirectory = "build\\client";
       const basename = "/";

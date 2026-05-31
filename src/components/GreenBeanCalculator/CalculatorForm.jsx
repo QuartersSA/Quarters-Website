@@ -20,7 +20,7 @@ export function CalculatorForm({
   const isRegister = calculatorMode === "register";
 
   if (isRegister && !selectedBean) {
-    return <div className="mt-4 text-white/60">اختر البن من الأعلى.</div>;
+    return <div className="mt-4 text-slate-600 dark:text-white/60">اختر البن من الأعلى.</div>;
   }
 
   const roastExclBtnClass =
@@ -38,22 +38,22 @@ export function CalculatorForm({
   const headerValue = isRegister ? selectedBean?.name : "غير مرتبط باسم بن";
 
   const headerUpdatedAt = isRegister ? (
-    <div className="text-xs text-white/40">
+    <div className="text-xs text-slate-400 dark:text-white/40">
       آخر تحديث: {selectedUpdatedAtText}
     </div>
   ) : (
-    <div className="text-xs text-white/40">
+    <div className="text-xs text-slate-400 dark:text-white/40">
       لن يتم حفظ أي شيء عند هذا الوضع.
     </div>
   );
 
   return (
     <div className="mt-4">
-      <div className="rounded-3xl border border-white/10 overflow-hidden">
-        <div className="px-4 py-3 bg-white/[0.03] flex items-center justify-between gap-2 flex-wrap">
-          <div className="text-white/80">
+      <div className="rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden">
+        <div className="px-4 py-3 bg-slate-50 dark:bg-white/[0.03] flex items-center justify-between gap-2 flex-wrap">
+          <div className="text-slate-800 dark:text-white/80">
             {headerTitle}{" "}
-            <span className="font-bold text-white">{headerValue}</span>
+            <span className="font-bold text-slate-900 dark:text-white">{headerValue}</span>
           </div>
           {headerUpdatedAt}
         </div>
@@ -88,7 +88,7 @@ export function CalculatorForm({
             hint="غير شامل الضريبة (محسوبة تلقائيًا)"
           >
             <div
-              className={`${ws.glass} ${ws.card} px-4 py-3 text-white font-bold`}
+              className={`${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-bold`}
             >
               {formatMoney(computed.bagCostExcl)}
             </div>
@@ -96,7 +96,7 @@ export function CalculatorForm({
 
           <FieldRow label="تكلفة الخيشة" hint="شامل الضريبة (محسوبة تلقائيًا)">
             <div
-              className={`${ws.glass} ${ws.card} px-4 py-3 text-white font-bold`}
+              className={`${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-bold`}
             >
               {formatMoney(computed.bagCostIncl)}
             </div>
@@ -124,14 +124,14 @@ export function CalculatorForm({
                     >
                       شامل
                     </button>
-                    <div className="text-xs text-white/40 self-center">
+                    <div className="text-xs text-slate-400 dark:text-white/40 self-center">
                       (الضريبة 15%)
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div>
-                      <div className="text-xs text-white/50 mb-1">
+                      <div className="text-xs text-slate-500 dark:text-white/50 mb-1">
                         غير شامل الضريبة
                       </div>
                       <input
@@ -152,7 +152,7 @@ export function CalculatorForm({
                     </div>
 
                     <div>
-                      <div className="text-xs text-white/50 mb-1">
+                      <div className="text-xs text-slate-500 dark:text-white/50 mb-1">
                         شامل الضريبة
                       </div>
                       <input
@@ -180,7 +180,7 @@ export function CalculatorForm({
                 hint="حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)"
               >
                 <div
-                  className={`${ws.glass} ${ws.card} px-4 py-3 text-white font-bold`}
+                  className={`${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-bold`}
                 >
                   {formatMoney(computed.roastTotalIncl)}
                 </div>
@@ -203,7 +203,7 @@ export function CalculatorForm({
                 hint="% (محسوبة تلقائيًا من الكمية الواصلة)"
               >
                 <div
-                  className={`${ws.glass} ${ws.card} px-4 py-3 text-white font-bold`}
+                  className={`${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-bold`}
                 >
                   {formatMoney(computed.wastePercentDerived)}
                 </div>
@@ -211,7 +211,7 @@ export function CalculatorForm({
 
               <FieldRow label="الإجمالي" hint="شامل الضريبة">
                 <div
-                  className={`${ws.glass} ${ws.card} px-4 py-3 text-white font-extrabold`}
+                  className={`${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-extrabold`}
                 >
                   {formatMoney(computed.totalIncl)}
                 </div>
@@ -222,7 +222,7 @@ export function CalculatorForm({
                 hint="(الإجمالي / الواصل بعد الهدر)"
               >
                 <div
-                  className={`${ws.glass} ${ws.card} px-4 py-3 text-white font-extrabold`}
+                  className={`${ws.glass} ${ws.card} px-4 py-3 text-slate-900 dark:text-white font-extrabold`}
                 >
                   {formatMoney(computed.finalPricePerKg)}
                 </div>

@@ -49,16 +49,16 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
   };
 
   const iconWrapClass =
-    "w-10 h-10 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] hover:bg-white/[0.08] transition-colors cursor-pointer";
+    "w-10 h-10 rounded-2xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset] hover:bg-slate-200 dark:bg-white/[0.08] transition-colors cursor-pointer";
 
   const statusIcon = isChanging ? (
-    <Loader2 className="w-5 h-5 text-white/50 animate-spin" />
+    <Loader2 className="w-5 h-5 text-slate-500 dark:text-white/50 animate-spin" />
   ) : status === "Done" ? (
     <CheckCircle2 className="w-5 h-5 text-emerald-200" />
   ) : status === "In Progress" ? (
     <PlayCircle className="w-5 h-5 text-sky-300" />
   ) : (
-    <Circle className="w-5 h-5 text-white/35" />
+    <Circle className="w-5 h-5 text-slate-400 dark:text-white/35" />
   );
 
   const hasSpace = !!task.space_name;
@@ -69,7 +69,7 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
 
   const cardClass = isSubtask
     ? `w-full text-right ${ws.glassSoft} ${ws.card} p-4 transition-colors hover:bg-violet-500/[0.06] !border-violet-400/15 bg-violet-500/[0.03]`
-    : `w-full text-right ${ws.glassSoft} ${ws.card} p-4 transition-colors hover:bg-white/[0.06]`;
+    : `w-full text-right ${ws.glassSoft} ${ws.card} p-4 transition-colors hover:bg-slate-100 dark:bg-white/[0.06]`;
 
   return (
     <div
@@ -114,11 +114,11 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
             {statusIcon}
           </div>
           <div className="min-w-0">
-            <div className="font-bold text-white truncate tracking-tight">
+            <div className="font-bold text-slate-900 dark:text-white truncate tracking-tight">
               {title}
             </div>
             {hasSpace ? (
-              <div className="mt-1 text-xs text-white/55 truncate">
+              <div className="mt-1 text-xs text-slate-600 dark:text-white/55 truncate">
                 {spaceName}
               </div>
             ) : null}
@@ -128,14 +128,14 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
         <div className="flex items-start gap-2">
           {hasAttachment ? (
             <div
-              className="hidden sm:flex w-9 h-9 rounded-2xl bg-white/[0.03] border border-white/10 items-center justify-center text-white/60"
+              className="hidden sm:flex w-9 h-9 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 items-center justify-center text-slate-600 dark:text-white/60"
               title="يوجد مرفق"
             >
               <Paperclip className="w-4 h-4" />
             </div>
           ) : null}
           <AssigneesStack assignees={task.assignees} />
-          <div className="hidden sm:flex w-9 h-9 rounded-2xl bg-white/[0.03] border border-white/10 items-center justify-center text-white/60">
+          <div className="hidden sm:flex w-9 h-9 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 items-center justify-center text-slate-600 dark:text-white/60">
             <ChevronLeft className="w-4 h-4" />
           </div>
         </div>
@@ -149,7 +149,7 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
         <PriorityPill priority={priority} />
 
         <span className={ws.chip}>
-          <CalendarDays className="w-4 h-4 text-white/55" />
+          <CalendarDays className="w-4 h-4 text-slate-600 dark:text-white/55" />
           {dueLabel}
         </span>
 
@@ -172,7 +172,7 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
       ) : null}
 
       {task.description ? (
-        <div className="mt-3 text-sm text-white/70 line-clamp-2">
+        <div className="mt-3 text-sm text-slate-700 dark:text-white/70 line-clamp-2">
           {task.description}
         </div>
       ) : null}

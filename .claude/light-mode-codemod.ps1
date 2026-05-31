@@ -83,11 +83,17 @@ $replacements = @(
 
 $paths = @(
   "src\app\marketing",
-  "src\components\Marketing",
   "src\app\workspace",
-  "src\components\Workspace",
   "src\app\accounting",
-  "src\components\Accounting"
+  "src\app\admin",
+  "src\app\hr",
+  "src\components"
+)
+
+# Files that intentionally stay dark-only OR are design-token files
+# that the codemod must not touch. Matched on the path suffix.
+$excludes = @(
+  "src\components\Workspace\ui.js"
 )
 
 $totalFiles = 0
@@ -98,6 +104,13 @@ foreach ($p in $paths) {
 
   $files = Get-ChildItem -Recurse -Path $p -Include *.jsx,*.tsx,*.js,*.ts -ErrorAction SilentlyContinue
   foreach ($f in $files) {
+    $rel = $f.FullName.Substring($PWD.Path.Length + 1)
+    $skip = $false
+    foreach ($ex in $excludes) {
+      if ($rel -eq $ex) { $skip = $true; break }
+    }
+    if ($skip) { continue }
+
     $totalFiles++
     $content = [System.IO.File]::ReadAllText($f.FullName)
     $original = $content

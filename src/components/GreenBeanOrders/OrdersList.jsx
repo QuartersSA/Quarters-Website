@@ -281,11 +281,11 @@ export function OrdersList({
   let content = null;
 
   if (isLoading) {
-    content = <div className="mt-4 text-white/60">جاري التحميل…</div>;
+    content = <div className="mt-4 text-slate-600 dark:text-white/60">جاري التحميل…</div>;
   } else if (error) {
     content = <div className="mt-4 text-red-300">{error}</div>;
   } else if (!Array.isArray(orders) || orders.length === 0) {
-    content = <div className="mt-4 text-white/60">لا يوجد طلبات بعد.</div>;
+    content = <div className="mt-4 text-slate-600 dark:text-white/60">لا يوجد طلبات بعد.</div>;
   } else {
     content = (
       <div className="mt-4 overflow-x-auto">
@@ -298,7 +298,7 @@ export function OrdersList({
             <col style={{ width: "120px" }} />
           </colgroup>
           <thead>
-            <tr className="text-xs text-white/55">
+            <tr className="text-xs text-slate-600 dark:text-white/55">
               <th className="text-right py-2">رقم</th>
               <th className="text-right py-2">التاريخ</th>
               <th className="text-right py-2">المورّد</th>
@@ -310,13 +310,13 @@ export function OrdersList({
             {orders.map((o) => {
               const isSelected = String(o.id) === String(selectedOrderId);
               const rowClass = isSelected
-                ? "bg-white/10"
-                : "bg-white/[0.02] hover:bg-white/[0.05]";
+                ? "bg-slate-200 dark:bg-white/10"
+                : "bg-slate-50/50 dark:bg-white/[0.02] hover:bg-slate-100 dark:bg-white/[0.05]";
 
               return (
                 <tr
                   key={o.id}
-                  className={`${rowClass} border-t border-white/10 cursor-pointer transition-colors`}
+                  className={`${rowClass} border-t border-slate-200 dark:border-white/10 cursor-pointer transition-colors`}
                   onClick={() => onSelectOrder(String(o.id))}
                   role="button"
                   tabIndex={0}
@@ -327,19 +327,19 @@ export function OrdersList({
                     }
                   }}
                 >
-                  <td className="py-2 text-white/85 font-semibold truncate">
+                  <td className="py-2 text-slate-800 dark:text-white/85 font-semibold truncate">
                     #{o.id}
                   </td>
-                  <td className="py-2 text-white/75 truncate">
+                  <td className="py-2 text-slate-700 dark:text-white/75 truncate">
                     {String(o.order_date || "—")}
                   </td>
-                  <td className="py-2 text-white/75 truncate">
+                  <td className="py-2 text-slate-700 dark:text-white/75 truncate">
                     {o.supplier_name || "—"}
                   </td>
-                  <td className="py-2 text-white/75 truncate">
+                  <td className="py-2 text-slate-700 dark:text-white/75 truncate">
                     {o.items_count ?? 0}
                   </td>
-                  <td className="py-2 text-white font-bold truncate">
+                  <td className="py-2 text-slate-900 dark:text-white font-bold truncate">
                     {formatMoney(o.total_incl)}
                   </td>
                 </tr>
@@ -384,32 +384,32 @@ export function OrdersList({
 
   return (
     <div className={cardShell}>
-      <div className="text-white font-bold tracking-tight">الطلبات</div>
-      <div className="text-xs text-white/50 mt-1">اختر طلب لفتح تفاصيله.</div>
+      <div className="text-slate-900 dark:text-white font-bold tracking-tight">الطلبات</div>
+      <div className="text-xs text-slate-500 dark:text-white/50 mt-1">اختر طلب لفتح تفاصيله.</div>
 
       <div className="mt-3 max-w-[280px]">
-        <div className="text-xs text-white/55 mb-1">فلترة حسب الشهر</div>
+        <div className="text-xs text-slate-600 dark:text-white/55 mb-1">فلترة حسب الشهر</div>
         <GlassSelect
           value={filterMonth}
           onChange={handleFilterMonthChange}
           options={filterMonthOptions}
         />
-        <div className="text-[11px] text-white/40 mt-1">
+        <div className="text-[11px] text-slate-400 dark:text-white/40 mt-1">
           اختر "اختر الشهر" لعرض كل الطلبات.
         </div>
       </div>
 
       {content}
 
-      <div className="mt-4 pt-4 border-t border-white/10">
-        <div className="text-white font-bold tracking-tight">تصدير الأرشيف</div>
-        <div className="text-xs text-white/50 mt-1">
+      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
+        <div className="text-slate-900 dark:text-white font-bold tracking-tight">تصدير الأرشيف</div>
+        <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
           تصدير مفصل للأصناف داخل الطلبات (Excel / PDF).
         </div>
 
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
           <label className="block">
-            <div className="text-xs text-white/55 mb-1">شهر</div>
+            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">شهر</div>
             <input
               type="month"
               className={`${ws.input} px-3 py-2 w-full`}
@@ -419,7 +419,7 @@ export function OrdersList({
           </label>
 
           <label className="block">
-            <div className="text-xs text-white/55 mb-1">من</div>
+            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">من</div>
             <input
               type="date"
               className={`${ws.input} px-3 py-2 w-full`}
@@ -429,7 +429,7 @@ export function OrdersList({
           </label>
 
           <label className="block">
-            <div className="text-xs text-white/55 mb-1">إلى</div>
+            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">إلى</div>
             <input
               type="date"
               className={`${ws.input} px-3 py-2 w-full`}
@@ -440,7 +440,7 @@ export function OrdersList({
         </div>
 
         {exportHint ? (
-          <div className="mt-2 text-xs text-white/45">الفترة: {exportHint}</div>
+          <div className="mt-2 text-xs text-slate-500 dark:text-white/45">الفترة: {exportHint}</div>
         ) : null}
 
         <div className="mt-3 flex items-center gap-2 flex-wrap">
@@ -451,7 +451,7 @@ export function OrdersList({
             disabled={isExporting}
           />
           {isExporting ? (
-            <div className="text-xs text-white/55">جاري تجهيز التصدير…</div>
+            <div className="text-xs text-slate-600 dark:text-white/55">جاري تجهيز التصدير…</div>
           ) : null}
         </div>
       </div>

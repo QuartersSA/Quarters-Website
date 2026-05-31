@@ -14,7 +14,7 @@ export function TaskModalFooter({
   const allowDelete = mode === "edit" && !!initialTask?.id;
 
   return (
-    <div className="pt-5 px-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] border-t border-white/10 flex-shrink-0">
+    <div className="pt-5 px-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] border-t border-slate-200 dark:border-white/10 flex-shrink-0">
       {submitError ? (
         <div className="mb-3 text-sm text-red-300">{submitError}</div>
       ) : validationMessage ? (

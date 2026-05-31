@@ -12,23 +12,23 @@ export function OrderInfo({ orderDetails }) {
 
   return (
     <>
-      <div className="mt-4 text-white/80">
+      <div className="mt-4 text-slate-800 dark:text-white/80">
         <div className="text-sm">
-          <span className="text-white/55">رقم الطلب:</span> {orderIdText}
+          <span className="text-slate-600 dark:text-white/55">رقم الطلب:</span> {orderIdText}
         </div>
         <div className="text-sm mt-1">
-          <span className="text-white/55">التاريخ:</span> {orderDateText}
+          <span className="text-slate-600 dark:text-white/55">التاريخ:</span> {orderDateText}
         </div>
         {supplierText ? (
           <div className="text-sm mt-1">
-            <span className="text-white/55">المورّد:</span> {supplierText}
+            <span className="text-slate-600 dark:text-white/55">المورّد:</span> {supplierText}
           </div>
         ) : null}
       </div>
 
       {noteText ? (
-        <div className="mt-4 text-sm text-white/70">
-          <span className="text-white/55">ملاحظة:</span> {noteText}
+        <div className="mt-4 text-sm text-slate-700 dark:text-white/70">
+          <span className="text-slate-600 dark:text-white/55">ملاحظة:</span> {noteText}
         </div>
       ) : null}
     </>

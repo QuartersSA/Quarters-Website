@@ -88,7 +88,7 @@ export function TaskFormFields({
     <>
       <div className="lg:col-span-3 space-y-4">
         <div>
-          <div className="text-sm font-semibold text-white/70 mb-2">
+          <div className="text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
             عنوان المهمة
           </div>
           <input
@@ -100,7 +100,7 @@ export function TaskFormFields({
         </div>
 
         <div>
-          <div className="text-sm font-semibold text-white/70 mb-2">الوصف</div>
+          <div className="text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">الوصف</div>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -131,20 +131,20 @@ export function TaskFormFields({
       <div className="lg:col-span-2 space-y-4">
         <div className={sideCardClass}>
           {showCreatedMeta ? (
-            <div className="mb-4 rounded-2xl bg-white/[0.03] border border-white/10 px-3 py-3">
-              <div className="text-xs text-white/55">معلومات</div>
+            <div className="mb-4 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 px-3 py-3">
+              <div className="text-xs text-slate-600 dark:text-white/55">معلومات</div>
               {createdByName ? (
-                <div className="mt-1 text-sm text-white/85">
-                  <span className="text-white/55">أنشأها: </span>
-                  <span className="font-semibold text-white">
+                <div className="mt-1 text-sm text-slate-800 dark:text-white/85">
+                  <span className="text-slate-600 dark:text-white/55">أنشأها: </span>
+                  <span className="font-semibold text-slate-900 dark:text-white">
                     {createdByName}
                   </span>
                 </div>
               ) : null}
               {createdAtText ? (
-                <div className="mt-1 text-sm text-white/85">
-                  <span className="text-white/55">تاريخ الإنشاء: </span>
-                  <span className="font-semibold text-white">
+                <div className="mt-1 text-sm text-slate-800 dark:text-white/85">
+                  <span className="text-slate-600 dark:text-white/55">تاريخ الإنشاء: </span>
+                  <span className="font-semibold text-slate-900 dark:text-white">
                     {createdAtText}
                   </span>
                 </div>
@@ -181,7 +181,7 @@ export function TaskFormFields({
               />
 
               {showCloseRow ? (
-                <label className="mt-3 flex items-start gap-3 rounded-2xl bg-white/[0.03] border border-white/10 px-3 py-3">
+                <label className="mt-3 flex items-start gap-3 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 px-3 py-3">
                   <input
                     type="checkbox"
                     checked={isCloseNotCompleted}
@@ -189,10 +189,10 @@ export function TaskFormFields({
                     className="mt-1 h-4 w-4 accent-white"
                   />
                   <div className="min-w-0">
-                    <div className="text-sm font-semibold text-white">
+                    <div className="text-sm font-semibold text-slate-900 dark:text-white">
                       إغلاق المهمة لعدم إتمامها
                     </div>
-                    <div className="text-xs text-white/60">
+                    <div className="text-xs text-slate-600 dark:text-white/60">
                       عند التفعيل سيتم إغلاق المهمة وتتحول إلى "منتهية" بدون
                       اعتبارها مكتملة.
                     </div>

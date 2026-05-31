@@ -36,8 +36,8 @@ export function OrderDetailsTable({
   const tableRows = useMemo(() => {
     if (!Array.isArray(groupedItems) || groupedItems.length === 0) {
       return (
-        <tr className="bg-white/[0.02] border-t border-white/10">
-          <td className="py-3 text-white/60" colSpan={7}>
+        <tr className="bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10">
+          <td className="py-3 text-slate-600 dark:text-white/60" colSpan={7}>
             لا توجد أصناف.
           </td>
         </tr>
@@ -56,9 +56,9 @@ export function OrderDetailsTable({
       return (
         <tr
           key={g.groupKey}
-          className="bg-white/[0.02] border-t border-white/10"
+          className="bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10"
         >
-          <td className="py-2 text-white font-semibold truncate">
+          <td className="py-2 text-slate-900 dark:text-white font-semibold truncate">
             <div className="flex items-center gap-2 flex-wrap">
               <span>{beanName}</span>
               {showBagCount ? (
@@ -68,12 +68,12 @@ export function OrderDetailsTable({
               ) : null}
             </div>
           </td>
-          <td className="py-2 text-white/80">
+          <td className="py-2 text-slate-800 dark:text-white/80">
             {formatMoney(it.price_kg_excl_tax)}
           </td>
-          <td className="py-2 text-white/80">{formatMoney(it.waste_percent)}</td>
-          <td className="py-2 text-white/80">{extraCostKgText}</td>
-          <td className="py-2 text-white/80">{totalReceivedDisplay}</td>
+          <td className="py-2 text-slate-800 dark:text-white/80">{formatMoney(it.waste_percent)}</td>
+          <td className="py-2 text-slate-800 dark:text-white/80">{extraCostKgText}</td>
+          <td className="py-2 text-slate-800 dark:text-white/80">{totalReceivedDisplay}</td>
           <td className="py-2 text-emerald-200 font-extrabold">
             {formatMoney(it.computed_final_price_per_kg)}
           </td>
@@ -135,7 +135,7 @@ export function OrderDetailsTable({
           <col style={{ width: "160px" }} />
         </colgroup>
         <thead>
-          <tr className="text-xs text-white/55">
+          <tr className="text-xs text-slate-600 dark:text-white/55">
             <th className="text-right py-2">البن</th>
             <th className="text-right py-2">سعر الكيلو</th>
             <th className="text-right py-2">الهدر %</th>

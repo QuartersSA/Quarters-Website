@@ -46,8 +46,8 @@ export function DepositModal({
               <Package className="w-5 h-5 text-emerald-400" />
             </div>
             <div>
-              <div className="text-white font-bold">الإيداع في المخزون</div>
-              <div className="text-xs text-white/50">
+              <div className="text-slate-900 dark:text-white font-bold">الإيداع في المخزون</div>
+              <div className="text-xs text-slate-500 dark:text-white/50">
                 طلب #{orderDetails?.id} — {orderDetails?.supplier_name || ""}
               </div>
             </div>
@@ -55,7 +55,7 @@ export function DepositModal({
           <button
             type="button"
             onClick={onCloseDepositModal}
-            className="text-white/40 hover:text-white/80 transition-colors"
+            className="text-slate-400 dark:text-white/40 hover:text-slate-800 dark:text-white/80 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

@@ -12,10 +12,10 @@ export function TaskPageHeader({ onOpenCreate }) {
               <CheckSquare className="w-5 h-5 text-emerald-200" />
             </div>
             <div className="min-w-0">
-              <div className="font-bold text-white tracking-tight truncate">
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
                 المهام
               </div>
-              <div className="text-xs text-white/50 truncate">
+              <div className="text-xs text-slate-500 dark:text-white/50 truncate">
                 مهامك + مهام الفريق
               </div>
             </div>
@@ -39,10 +39,10 @@ export function TaskPageHeader({ onOpenCreate }) {
             <CheckSquare className="w-5 h-5 text-emerald-200" />
           </div>
           <div>
-            <div className="text-2xl font-bold text-white tracking-tight">
+            <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
               المهام
             </div>
-            <div className="text-white/55 mt-1">مهامك + مهام الفريق</div>
+            <div className="text-slate-600 dark:text-white/55 mt-1">مهامك + مهام الفريق</div>
           </div>
         </div>
         <button

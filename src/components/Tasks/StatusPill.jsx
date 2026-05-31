@@ -12,7 +12,7 @@ export function StatusPill({ status, isClosedNotCompleted = false }) {
   const isClosed = raw === "Done" && !!isClosedNotCompleted;
   const label = isClosed ? "مغلقة" : STATUS_LABELS_AR[raw] || raw;
 
-  let className = "bg-white/[0.04] text-white/70 border-white/10";
+  let className = "bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10";
 
   if (raw === "Todo")
     className = "bg-slate-500/15 text-slate-200 border-slate-500/25";

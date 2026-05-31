@@ -13,7 +13,7 @@ export function MultiUserPicker({ users, selectedIds, onChange }) {
 
   return (
     <div className={`${ws.glassSoft} rounded-3xl overflow-hidden`}>
-      <div className="px-4 py-3 bg-white/[0.03] text-xs font-bold text-white/60 border-b border-white/10">
+      <div className="px-4 py-3 bg-slate-50 dark:bg-white/[0.03] text-xs font-bold text-slate-600 dark:text-white/60 border-b border-slate-200 dark:border-white/10">
         اختر موظف أو أكثر
       </div>
       <div className="max-h-[220px] overflow-auto divide-y divide-white/10">
@@ -25,21 +25,21 @@ export function MultiUserPicker({ users, selectedIds, onChange }) {
           const badgeClass =
             role === "Admin"
               ? "bg-emerald-400/15 text-emerald-200 border border-emerald-400/25"
-              : "bg-white/[0.04] text-white/70 border border-white/10";
+              : "bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border border-slate-200 dark:border-white/10";
 
           const checkboxClass = checked
             ? "bg-emerald-400/20 border-emerald-400/30"
-            : "border-white/25";
+            : "border-slate-300 dark:border-white/25";
 
           return (
             <button
               key={id}
               type="button"
               onClick={() => toggle(id)}
-              className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-white/[0.06]"
+              className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-slate-100 dark:bg-white/[0.06]"
             >
               <div className="min-w-0 text-right">
-                <div className="font-semibold text-white truncate">
+                <div className="font-semibold text-slate-900 dark:text-white truncate">
                   {u.name}
                 </div>
                 <div className="mt-1">

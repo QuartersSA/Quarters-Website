@@ -11,7 +11,7 @@ export function TaskModalHeader({
   const titleText = mode === "edit" ? "تعديل المهمة" : "إضافة مهمة";
 
   return (
-    <div className="p-5 border-b border-white/10 flex-shrink-0">
+    <div className="p-5 border-b border-slate-200 dark:border-white/10 flex-shrink-0">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0">
           <div
@@ -20,14 +20,14 @@ export function TaskModalHeader({
             {isSubtask ? (
               <GitBranch className="w-5 h-5 text-violet-300" />
             ) : (
-              <Circle className="w-5 h-5 text-white/70" />
+              <Circle className="w-5 h-5 text-slate-700 dark:text-white/70" />
             )}
           </div>
           <div className="min-w-0">
-            <div className="font-bold text-white tracking-tight truncate">
+            <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
               {isSubtask ? "تعديل مهمة فرعية" : titleText}
             </div>
-            <div className="text-xs text-white/50 truncate">
+            <div className="text-xs text-slate-500 dark:text-white/50 truncate">
               {isSubtask
                 ? "هذه مهمة فرعية مرتبطة بمهمة رئيسية"
                 : "عدّل التفاصيل ثم احفظ"}
@@ -41,7 +41,7 @@ export function TaskModalHeader({
           className={`${ws.iconButton} flex items-center justify-center`}
           aria-label="إغلاق"
         >
-          <X className="w-5 h-5 text-white" />
+          <X className="w-5 h-5 text-slate-900 dark:text-white" />
         </button>
       </div>
 
@@ -57,7 +57,7 @@ export function TaskModalHeader({
             <div className="text-[11px] text-violet-300/70 font-semibold">
               المهمة الرئيسية
             </div>
-            <div className="text-sm text-white/85 truncate font-semibold">
+            <div className="text-sm text-slate-800 dark:text-white/85 truncate font-semibold">
               {parentTaskTitle}
             </div>
           </div>

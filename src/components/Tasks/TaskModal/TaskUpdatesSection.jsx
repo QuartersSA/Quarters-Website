@@ -44,7 +44,7 @@ export function TaskUpdatesSection({
           <img
             src={url}
             alt={name}
-            className="w-full h-[160px] object-cover rounded-2xl border border-white/10"
+            className="w-full h-[160px] object-cover rounded-2xl border border-slate-200 dark:border-white/10"
           />
         </a>
       );
@@ -56,13 +56,13 @@ export function TaskUpdatesSection({
         href={url}
         target="_blank"
         rel="noreferrer"
-        className={`flex items-center justify-between gap-3 ${ws.glass} ${ws.card} px-4 py-3 border border-white/10`}
+        className={`flex items-center justify-between gap-3 ${ws.glass} ${ws.card} px-4 py-3 border border-slate-200 dark:border-white/10`}
       >
         <span className="inline-flex items-center gap-2 min-w-0">
-          <FileText className="w-4 h-4 text-white/70" />
-          <span className="text-sm text-white/85 truncate">{name}</span>
+          <FileText className="w-4 h-4 text-slate-700 dark:text-white/70" />
+          <span className="text-sm text-slate-800 dark:text-white/85 truncate">{name}</span>
         </span>
-        <span className="text-xs text-white/55">فتح</span>
+        <span className="text-xs text-slate-600 dark:text-white/55">فتح</span>
       </a>
     );
   };
@@ -84,24 +84,24 @@ export function TaskUpdatesSection({
     return (
       <div
         key={u.id}
-        className={`${ws.glassSoft} ${ws.card} p-4 border border-white/10`}
+        className={`${ws.glassSoft} ${ws.card} p-4 border border-slate-200 dark:border-white/10`}
       >
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-sm font-semibold text-white truncate">
+            <div className="text-sm font-semibold text-slate-900 dark:text-white truncate">
               {author}
             </div>
-            <div className="text-xs text-white/45 mt-1">{at}</div>
+            <div className="text-xs text-slate-500 dark:text-white/45 mt-1">{at}</div>
           </div>
           <span
-            className={`${ws.pill} border bg-white/[0.06] text-white/70 border-white/10`}
+            className={`${ws.pill} border bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`}
           >
             تحديث
           </span>
         </div>
 
         {bodyText ? (
-          <div className="mt-3 text-sm text-white/80 whitespace-pre-wrap leading-6">
+          <div className="mt-3 text-sm text-slate-800 dark:text-white/80 whitespace-pre-wrap leading-6">
             {bodyText}
           </div>
         ) : null}
@@ -118,7 +118,7 @@ export function TaskUpdatesSection({
           icon={<Clock className="w-4 h-4" />}
           label="ملاحظات وتحديثات"
         />
-        <div className="mt-3 text-sm text-white/60">
+        <div className="mt-3 text-sm text-slate-600 dark:text-white/60">
           بعد حفظ المهمة، تقدر تضيف ملاحظات وتحديثات هنا.
         </div>
       </div>
@@ -133,7 +133,7 @@ export function TaskUpdatesSection({
       />
 
       <div className="mt-3">
-        <div className="text-sm font-semibold text-white/70 mb-2">
+        <div className="text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
           اكتب تحديث (سيتم حفظه عند الضغط على زر "تحديث المهمة")
         </div>
         <textarea
@@ -163,22 +163,22 @@ export function TaskUpdatesSection({
       </div>
 
       <div className="mt-5">
-        <div className="text-sm font-semibold text-white/70 mb-2">
+        <div className="text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
           آخر التحديثات
         </div>
 
         {!viewerEmployeeId ? (
-          <div className="text-sm text-white/60">
+          <div className="text-sm text-slate-600 dark:text-white/60">
             لا يمكن تحميل التحديثات بدون هوية المستخدم
           </div>
         ) : isLoading ? (
-          <div className="text-sm text-white/60">جاري تحميل التحديثات…</div>
+          <div className="text-sm text-slate-600 dark:text-white/60">جاري تحميل التحديثات…</div>
         ) : error ? (
           <div className="text-sm text-red-300">
             {error?.message || "فشل تحميل التحديثات"}
           </div>
         ) : updates.length === 0 ? (
-          <div className="text-sm text-white/60">لا يوجد تحديثات حتى الآن.</div>
+          <div className="text-sm text-slate-600 dark:text-white/60">لا يوجد تحديثات حتى الآن.</div>
         ) : (
           <div className="space-y-3">{updates.map(renderUpdate)}</div>
         )}

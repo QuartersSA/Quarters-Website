@@ -10,7 +10,7 @@ import { ws } from "@/components/Workspace/ui";
 export function TaskStats({ stats }) {
   const cardClass = `${ws.glassSoft} ${ws.card} p-4`;
 
-  const labelClass = "text-xs font-semibold text-white/55";
+  const labelClass = "text-xs font-semibold text-slate-600 dark:text-white/55";
   const numberClass = "mt-2 text-3xl font-extrabold tracking-tight";
 
   const items = [
@@ -19,8 +19,8 @@ export function TaskStats({ stats }) {
       label: "الإجمالي",
       value: stats.total,
       Icon: ListTodo,
-      tint: "text-white",
-      iconTint: "text-white/75",
+      tint: "text-slate-900 dark:text-white",
+      iconTint: "text-slate-700 dark:text-white/75",
     },
     {
       key: "overdue",

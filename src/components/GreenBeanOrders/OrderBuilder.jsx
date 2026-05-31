@@ -176,8 +176,8 @@ export function OrderBuilder({
   const tableBody = useMemo(() => {
     if (!hasItems) {
       return (
-        <tr className="bg-white/[0.02] border-t border-white/10">
-          <td className="py-3 text-white/60" colSpan={11}>
+        <tr className="bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10">
+          <td className="py-3 text-slate-600 dark:text-white/60" colSpan={11}>
             اختر نوع/أنواع البن من القائمة.
           </td>
         </tr>
@@ -199,16 +199,16 @@ export function OrderBuilder({
       return (
         <tr
           key={beanIdText}
-          className="bg-white/[0.02] border-t border-white/10"
+          className="bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10"
         >
-          <td className="py-2 text-white font-semibold truncate">
+          <td className="py-2 text-slate-900 dark:text-white font-semibold truncate">
             {row.beanName}
           </td>
           <td className="py-2">
             <div className="flex items-center gap-1 justify-center">
               <button
                 type="button"
-                className="w-6 h-6 rounded-md bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors"
+                className="w-6 h-6 rounded-md bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:bg-white/20 flex items-center justify-center text-slate-800 dark:text-white/80 transition-colors"
                 data-bean-id={beanIdText}
                 onClick={handleMinusClick}
                 disabled={isSaving}
@@ -221,7 +221,7 @@ export function OrderBuilder({
               </span>
               <button
                 type="button"
-                className="w-6 h-6 rounded-md bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 transition-colors"
+                className="w-6 h-6 rounded-md bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:bg-white/20 flex items-center justify-center text-slate-800 dark:text-white/80 transition-colors"
                 data-bean-id={beanIdText}
                 onClick={handlePlusClick}
                 disabled={isSaving}
@@ -315,7 +315,7 @@ export function OrderBuilder({
               disabled={isSaving}
             />
           </td>
-          <td className="py-2 text-white/80">{wasteText}</td>
+          <td className="py-2 text-slate-800 dark:text-white/80">{wasteText}</td>
           <td className="py-2 text-emerald-200 font-extrabold">
             {finalPriceText}
           </td>
@@ -360,10 +360,10 @@ export function OrderBuilder({
     <div className={cardShell}>
       <div className="flex items-center justify-between gap-3">
         <div>
-          <div className="text-white font-bold tracking-tight">
+          <div className="text-slate-900 dark:text-white font-bold tracking-tight">
             {isEditMode ? `تعديل الطلب #${editingOrderId}` : "عناصر الطلب"}
           </div>
-          <div className="text-xs text-white/50 mt-1">
+          <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
             {isEditMode
               ? "عدّل البيانات ثم اضغط حفظ التعديل."
               : "اختر أنواع البن (يسار) ثم اكتب الكميات الواصلة واحفظ الطلب."}
@@ -384,7 +384,7 @@ export function OrderBuilder({
 
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-          <div className="text-xs text-white/55 mb-1">تاريخ الطلب</div>
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1">تاريخ الطلب</div>
           <input
             className={`${ws.input} px-3 py-2 w-full`}
             type="date"
@@ -394,7 +394,7 @@ export function OrderBuilder({
           />
         </div>
         <div>
-          <div className="text-xs text-white/55 mb-1">المورّد (اختياري)</div>
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1">المورّد (اختياري)</div>
           <input
             className={`${ws.input} px-3 py-2 w-full`}
             value={draft.supplierName}
@@ -404,7 +404,7 @@ export function OrderBuilder({
           />
         </div>
         <div>
-          <div className="text-xs text-white/55 mb-1">ملاحظة (اختياري)</div>
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1">ملاحظة (اختياري)</div>
           <input
             className={`${ws.input} px-3 py-2 w-full`}
             value={draft.note}
@@ -431,7 +431,7 @@ export function OrderBuilder({
             <col style={{ width: "60px" }} />
           </colgroup>
           <thead>
-            <tr className="text-xs text-white/55">
+            <tr className="text-xs text-slate-600 dark:text-white/55">
               <th className="text-right py-2">البن</th>
               <th className="text-center py-2">عدد الخياش</th>
               <th className="text-right py-2">سعر الكيلو (Excl)</th>
@@ -450,39 +450,39 @@ export function OrderBuilder({
       </div>
 
       <div className="mt-4 flex flex-col gap-2">
-        <div className="text-white/75 text-sm">
-          <span className="text-white/55">عدد الخياش:</span>{" "}
+        <div className="text-slate-700 dark:text-white/75 text-sm">
+          <span className="text-slate-600 dark:text-white/55">عدد الخياش:</span>{" "}
           <span className="font-bold">{totalBagsText}</span>
         </div>
-        <div className="text-white/75 text-sm">
-          <span className="text-white/55">مجموع الكيلوات:</span>{" "}
+        <div className="text-slate-700 dark:text-white/75 text-sm">
+          <span className="text-slate-600 dark:text-white/55">مجموع الكيلوات:</span>{" "}
           <span className="font-bold">{totalKgText} كغ</span>
         </div>
-        <div className="text-white/75 text-sm">
-          <span className="text-white/55">
+        <div className="text-slate-700 dark:text-white/75 text-sm">
+          <span className="text-slate-600 dark:text-white/55">
             مجموع الكيلوات الواصلة بعد الهدر:
           </span>{" "}
           <span className="font-bold">{totalReceivedKgText} كغ</span>
         </div>
-        <div className="text-white/75 text-sm">
-          <span className="text-white/55">
+        <div className="text-slate-700 dark:text-white/75 text-sm">
+          <span className="text-slate-600 dark:text-white/55">
             إجمالي تكلفة البن (شامل الضريبة):
           </span>{" "}
           <span className="font-bold">{totalBeanCostText}</span>
         </div>
-        <div className="text-white/75 text-sm">
-          <span className="text-white/55">
+        <div className="text-slate-700 dark:text-white/75 text-sm">
+          <span className="text-slate-600 dark:text-white/55">
             إجمالي تكلفة التحميص (شامل الضريبة):
           </span>{" "}
           <span className="font-bold">{totalRoastText}</span>
         </div>
-        <div className="text-white/75 text-sm">
-          <span className="text-white/55">إجمالي التكلفة الإضافية:</span>{" "}
+        <div className="text-slate-700 dark:text-white/75 text-sm">
+          <span className="text-slate-600 dark:text-white/55">إجمالي التكلفة الإضافية:</span>{" "}
           <span className="font-bold">{totalExtraText}</span>
         </div>
         <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div className="text-white/75">
-            <span className="text-white/55">إجمالي الطلب (شامل):</span>{" "}
+          <div className="text-slate-700 dark:text-white/75">
+            <span className="text-slate-600 dark:text-white/55">إجمالي الطلب (شامل):</span>{" "}
             <span className="font-extrabold">{grandTotalText}</span>
           </div>
 
@@ -515,9 +515,9 @@ export function OrderBuilder({
       </div>
 
       {error ? <div className="mt-3 text-red-300">{error}</div> : null}
-      {isSaving ? <div className="mt-3 text-white/60">جاري الحفظ…</div> : null}
+      {isSaving ? <div className="mt-3 text-slate-600 dark:text-white/60">جاري الحفظ…</div> : null}
 
-      <div className="mt-3 text-xs text-white/45">
+      <div className="mt-3 text-xs text-slate-500 dark:text-white/45">
         {isEditMode
           ? "سيتم تحديث الطلب واستبدال الأصناف القديمة."
           : "يتم حفظ الطلب كأرشيف بتاريخ الطلب."}
