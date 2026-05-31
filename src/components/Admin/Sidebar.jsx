@@ -47,7 +47,7 @@ import { CommandPalette } from "./CommandPalette";
  *   │ 🚪 تسجيل الخروج               │  logout
  *   └─────────────────────────────┘
  *
- * Active state mirrors Wafeq's violet accent (bg-violet-50 / text-violet-700)
+ * Active state mirrors Wafeq's violet accent (bg-brand-50 / text-brand-700)
  * on a clean light surface. Dark-mode tokens kick in via the existing
  * `dark:` Tailwind class applied at the admin layout root.
  */
@@ -67,7 +67,7 @@ function NavRow({
   const iconSize = level === 0 ? "w-5 h-5" : "w-4 h-4";
 
   const activeCls =
-    "bg-violet-50 text-violet-700 dark:bg-violet-500/15 dark:text-violet-100";
+    "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100";
   const inactiveCls =
     "text-slate-700 hover:bg-slate-100 hover:text-slate-900 " +
     "dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
@@ -82,7 +82,7 @@ function NavRow({
     >
       <Icon
         className={`shrink-0 ${iconSize} ${
-          active ? "text-violet-600 dark:text-violet-200" : ""
+          active ? "text-brand-600 dark:text-brand-200" : ""
         }`}
       />
       <span className={`flex-1 ${active ? "font-semibold" : ""}`}>{label}</span>

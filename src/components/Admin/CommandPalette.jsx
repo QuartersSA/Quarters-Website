@@ -282,21 +282,21 @@ export function CommandPalette({ open, onClose }) {
                   }}
                   className={`w-full flex items-center gap-3 px-5 py-2.5 text-right transition-colors ${
                     isActive
-                      ? "bg-violet-50 dark:bg-violet-500/15"
+                      ? "bg-brand-50 dark:bg-brand-500/15"
                       : "hover:bg-slate-50 dark:hover:bg-white/[0.04]"
                   }`}
                 >
                   <Icon
                     className={`w-4 h-4 shrink-0 ${
                       isActive
-                        ? "text-violet-600 dark:text-violet-200"
+                        ? "text-brand-600 dark:text-brand-200"
                         : "text-slate-500 dark:text-white/55"
                     }`}
                   />
                   <span
                     className={`flex-1 text-sm truncate ${
                       isActive
-                        ? "text-violet-700 dark:text-violet-100 font-semibold"
+                        ? "text-brand-700 dark:text-brand-100 font-semibold"
                         : "text-slate-700 dark:text-white/80"
                     }`}
                   >
@@ -308,7 +308,7 @@ export function CommandPalette({ open, onClose }) {
                     </span>
                   ) : null}
                   {isActive ? (
-                    <ArrowLeft className="w-3.5 h-3.5 text-violet-500 dark:text-violet-300 shrink-0" />
+                    <ArrowLeft className="w-3.5 h-3.5 text-brand-500 dark:text-brand-300 shrink-0" />
                   ) : null}
                 </button>
               );
