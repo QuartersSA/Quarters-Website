@@ -212,7 +212,7 @@ export default function WorkspaceTemplatesPage() {
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <FileText className="w-5 h-5 text-emerald-200" />
+              <FileText className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div className="min-w-0">
               <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
@@ -239,7 +239,7 @@ export default function WorkspaceTemplatesPage() {
           <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={ws.iconBox}>
-                <FileText className="w-5 h-5 text-emerald-200" />
+                <FileText className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
@@ -265,7 +265,7 @@ export default function WorkspaceTemplatesPage() {
             <div
               className={`${ws.glassSoft} ${ws.card} p-4 border-emerald-400/20`}
             >
-              <div className="text-emerald-200 font-semibold text-sm">
+              <div className="text-emerald-700 dark:text-emerald-200 font-semibold text-sm">
                 ✓ تم إنشاء المهمة من القالب بنجاح
               </div>
             </div>

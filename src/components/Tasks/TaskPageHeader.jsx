@@ -9,7 +9,7 @@ export function TaskPageHeader({ onOpenCreate }) {
         <div className="px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <CheckSquare className="w-5 h-5 text-emerald-200" />
+              <CheckSquare className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div className="min-w-0">
               <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
@@ -36,7 +36,7 @@ export function TaskPageHeader({ onOpenCreate }) {
       <div className="hidden lg:flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className={ws.iconBox}>
-            <CheckSquare className="w-5 h-5 text-emerald-200" />
+            <CheckSquare className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
           </div>
           <div>
             <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">

@@ -177,7 +177,7 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
                   ملف ZIP يحتوي صورة لكل بلوقر باسمه
                 </div>
                 {busy === "zip" && progress ? (
-                  <div className="text-amber-200 text-xs mt-1">
+                  <div className="text-amber-700 dark:text-amber-200 text-xs mt-1">
                     جاري التصدير… {progress.done} / {progress.total}
                   </div>
                 ) : null}
@@ -190,7 +190,7 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
               disabled={!!busy}
               className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-slate-100 dark:bg-white/[0.06] disabled:opacity-50"
             >
-              <div className={`${ws.iconBox} w-9 h-9 text-emerald-200 shrink-0`}>
+              <div className={`${ws.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200 shrink-0`}>
                 <ImageIcon className="w-4 h-4" />
               </div>
               <div className="min-w-0 flex-1">
@@ -239,7 +239,7 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
               disabled={!!busy}
               className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-slate-100 dark:bg-white/[0.06] disabled:opacity-50"
             >
-              <div className={`${ws.iconBox} w-9 h-9 text-sky-200 shrink-0`}>
+              <div className={`${ws.iconBox} w-9 h-9 text-sky-700 dark:text-sky-200 shrink-0`}>
                 <FileSpreadsheet className="w-4 h-4" />
               </div>
               <div className="min-w-0">

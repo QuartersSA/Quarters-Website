@@ -16,9 +16,9 @@ export function PriorityPill({ priority }) {
   if (raw === "Low")
     className = "bg-slate-500/15 text-slate-200 border-slate-500/25";
   if (raw === "Normal")
-    className = "bg-indigo-500/15 text-indigo-200 border-indigo-500/25";
+    className = "bg-indigo-500/15 text-indigo-700 dark:text-indigo-200 border-indigo-500/25";
   if (raw === "High")
-    className = "bg-amber-500/15 text-amber-200 border-amber-500/25";
+    className = "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25";
   if (raw === "Urgent")
     className = "bg-red-500/15 text-red-200 border-red-500/25";
 

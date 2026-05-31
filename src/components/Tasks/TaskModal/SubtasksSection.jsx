@@ -66,9 +66,9 @@ function SubtaskRow({ subtask, onQuickStatus, isChanging, onUnlink, onOpen }) {
   const statusIconEl = isChanging ? (
     <Loader2 className="w-4 h-4 text-slate-400 dark:text-white/40" />
   ) : isDone ? (
-    <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+    <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-300" />
   ) : status === "In Progress" ? (
-    <PlayCircle className="w-4 h-4 text-sky-300" />
+    <PlayCircle className="w-4 h-4 text-sky-700 dark:text-sky-300" />
   ) : (
     <Circle className="w-4 h-4 text-slate-400 dark:text-white/35" />
   );
@@ -331,7 +331,7 @@ export function SubtasksSection({
     <div className={sectionClass}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <GitBranch className="w-4 h-4 text-violet-300" />
+          <GitBranch className="w-4 h-4 text-violet-700 dark:text-violet-300" />
           <span className="font-bold text-slate-900 dark:text-white text-sm tracking-tight">
             المهام الفرعية
           </span>

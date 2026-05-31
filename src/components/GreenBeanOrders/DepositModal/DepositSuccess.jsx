@@ -13,9 +13,9 @@ export function DepositSuccess({ depositResult, onCloseDepositModal }) {
           border: "1px solid rgba(16, 185, 129, 0.2)",
         }}
       >
-        <CheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+        <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
         <div>
-          <div className="text-emerald-300 font-bold">تم الإيداع بنجاح</div>
+          <div className="text-emerald-700 dark:text-emerald-300 font-bold">تم الإيداع بنجاح</div>
           <div className="text-sm text-slate-700 dark:text-white/70 mt-1">
             تم إيداع {depositResult.deposited} نوع بن في فرع "
             {depositResult.branchName}"
@@ -47,7 +47,7 @@ export function DepositSuccess({ depositResult, onCloseDepositModal }) {
                     </span>
                   ) : null}
                 </div>
-                <span className="text-emerald-300 font-bold">
+                <span className="text-emerald-700 dark:text-emerald-300 font-bold">
                   {formatQty(r.quantity)} كغ
                 </span>
               </div>
@@ -67,8 +67,8 @@ export function DepositSuccess({ depositResult, onCloseDepositModal }) {
           }}
         >
           <div className="flex items-center gap-2 mb-2">
-            <AlertTriangle className="w-4 h-4 text-amber-400" />
-            <span className="text-amber-300 text-sm font-bold">
+            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            <span className="text-amber-700 dark:text-amber-300 text-sm font-bold">
               أصناف لم تتم إيداعها
             </span>
           </div>

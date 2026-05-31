@@ -54,9 +54,9 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
   const statusIcon = isChanging ? (
     <Loader2 className="w-5 h-5 text-slate-500 dark:text-white/50 animate-spin" />
   ) : status === "Done" ? (
-    <CheckCircle2 className="w-5 h-5 text-emerald-200" />
+    <CheckCircle2 className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
   ) : status === "In Progress" ? (
-    <PlayCircle className="w-5 h-5 text-sky-300" />
+    <PlayCircle className="w-5 h-5 text-sky-700 dark:text-sky-300" />
   ) : (
     <Circle className="w-5 h-5 text-slate-400 dark:text-white/35" />
   );
@@ -87,8 +87,8 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
       {/* Subtask badge */}
       {isSubtask ? (
         <div className="flex items-center gap-1.5 mb-2">
-          <GitBranch className="w-3 h-3 text-violet-300" />
-          <span className="text-[11px] font-semibold text-violet-300/80">
+          <GitBranch className="w-3 h-3 text-violet-700 dark:text-violet-300" />
+          <span className="text-[11px] font-semibold text-violet-700 dark:text-violet-300/80">
             مهمة فرعية
           </span>
         </div>
@@ -155,7 +155,7 @@ export function TaskCard({ task, onOpen, onQuickStatus, changingId }) {
 
         {Number(task.subtasks_total || 0) > 0 ? (
           <span className={ws.chip}>
-            <GitBranch className="w-3.5 h-3.5 text-violet-300" />
+            <GitBranch className="w-3.5 h-3.5 text-violet-700 dark:text-violet-300" />
             {Number(task.subtasks_done || 0)}/{Number(task.subtasks_total || 0)}
           </span>
         ) : null}

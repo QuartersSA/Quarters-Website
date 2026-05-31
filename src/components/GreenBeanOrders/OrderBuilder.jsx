@@ -216,7 +216,7 @@ export function OrderBuilder({
               >
                 <Minus className="w-3 h-3" />
               </button>
-              <span className="min-w-[24px] text-center text-emerald-200 font-bold text-sm">
+              <span className="min-w-[24px] text-center text-emerald-700 dark:text-emerald-200 font-bold text-sm">
                 {qty}
               </span>
               <button
@@ -316,7 +316,7 @@ export function OrderBuilder({
             />
           </td>
           <td className="py-2 text-slate-800 dark:text-white/80">{wasteText}</td>
-          <td className="py-2 text-emerald-200 font-extrabold">
+          <td className="py-2 text-emerald-700 dark:text-emerald-200 font-extrabold">
             {finalPriceText}
           </td>
           <td className="py-2">

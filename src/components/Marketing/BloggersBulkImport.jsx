@@ -196,7 +196,7 @@ export default function BloggersBulkImport({ onClose }) {
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <div className="flex items-center gap-3">
                 <div
-                  className={`${ws.iconBox} w-10 h-10 text-emerald-200`}
+                  className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}
                 >
                   <FileSpreadsheet className="w-5 h-5" />
                 </div>
@@ -226,7 +226,7 @@ export default function BloggersBulkImport({ onClose }) {
           >
             <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
               <div className="flex items-center gap-3">
-                <div className={`${ws.iconBox} w-10 h-10 text-sky-200`}>
+                <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`}>
                   <Upload className="w-5 h-5" />
                 </div>
                 <div>
@@ -334,7 +334,7 @@ export default function BloggersBulkImport({ onClose }) {
               className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden`}
             >
               <div className="px-4 py-3 border-b border-slate-200 dark:border-white/10 flex items-center gap-2 text-slate-800 dark:text-white/80 text-sm font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-200" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
                 نتيجة الرفع
               </div>
               <div className="p-4 grid grid-cols-3 gap-3 text-center">
@@ -346,13 +346,13 @@ export default function BloggersBulkImport({ onClose }) {
                 </div>
                 <div>
                   <div className="text-xs text-slate-600 dark:text-white/55">تم إضافتهم</div>
-                  <div className="text-2xl font-bold text-emerald-200">
+                  <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-200">
                     {result.counts?.created ?? 0}
                   </div>
                 </div>
                 <div>
                   <div className="text-xs text-slate-600 dark:text-white/55">تم تخطيهم</div>
-                  <div className="text-2xl font-bold text-amber-200">
+                  <div className="text-2xl font-bold text-amber-700 dark:text-amber-200">
                     {result.counts?.skipped ?? 0}
                   </div>
                 </div>
@@ -366,7 +366,7 @@ export default function BloggersBulkImport({ onClose }) {
                     {result.skipped.slice(0, 50).map((s, i) => (
                       <div
                         key={i}
-                        className="text-xs text-amber-200/80 bg-amber-500/5 border border-amber-500/15 rounded-xl px-3 py-1.5"
+                        className="text-xs text-amber-700 dark:text-amber-200/80 bg-amber-500/5 border border-amber-500/15 rounded-xl px-3 py-1.5"
                       >
                         الصف {s.row}: {s.reason}
                       </div>

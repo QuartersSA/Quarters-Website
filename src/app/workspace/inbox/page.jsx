@@ -310,7 +310,7 @@ export default function WorkspaceInboxPage() {
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <MessageSquare className="w-5 h-5 text-emerald-200" />
+              <MessageSquare className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div className="min-w-0">
               <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
@@ -392,12 +392,12 @@ export default function WorkspaceInboxPage() {
                 const subtitleClass = "text-slate-600 dark:text-white/55";
 
                 const avatarClass = isActive
-                  ? "bg-emerald-400/15 text-emerald-200 border-emerald-400/25"
+                  ? "bg-emerald-400/15 text-emerald-700 dark:text-emerald-200 border-emerald-400/25"
                   : "bg-slate-100 dark:bg-white/[0.05] text-slate-900 dark:text-white/90 border-slate-200 dark:border-white/10";
 
                 const badge =
                   unread > 0 ? (
-                    <div className="min-w-[26px] h-[26px] px-2 rounded-full bg-emerald-400/20 text-emerald-200 text-xs font-bold flex items-center justify-center border border-emerald-400/25">
+                    <div className="min-w-[26px] h-[26px] px-2 rounded-full bg-emerald-400/20 text-emerald-700 dark:text-emerald-200 text-xs font-bold flex items-center justify-center border border-emerald-400/25">
                       {unread}
                     </div>
                   ) : null;
@@ -529,7 +529,7 @@ export default function WorkspaceInboxPage() {
                 // second message can't be sent. Multiple in-flight mutates
                 // is OK because each optimistic batch is appended to prev.
                 disabled={!compose.trim() || !selectedThreadId}
-                className="inline-flex items-center justify-center w-12 h-12 rounded-3xl bg-emerald-400/15 text-emerald-200 border border-emerald-400/25 disabled:opacity-50 hover:bg-emerald-400/20"
+                className="inline-flex items-center justify-center w-12 h-12 rounded-3xl bg-emerald-400/15 text-emerald-700 dark:text-emerald-200 border border-emerald-400/25 disabled:opacity-50 hover:bg-emerald-400/20"
                 aria-label="إرسال"
               >
                 <Send className="w-5 h-5" />

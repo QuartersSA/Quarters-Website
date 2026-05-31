@@ -128,7 +128,7 @@ export function OrderItemRow({
           </div>
           <div className={`${ws.glass} ${ws.card} p-3`}>
             <div className="text-xs text-slate-500 dark:text-white/50">سعر الكيلو الصافي</div>
-            <div className="text-emerald-200 font-extrabold mt-1">
+            <div className="text-emerald-700 dark:text-emerald-200 font-extrabold mt-1">
               {formatMoney(computed.finalPricePerKg)}
             </div>
           </div>

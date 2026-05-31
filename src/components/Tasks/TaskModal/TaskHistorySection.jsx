@@ -31,9 +31,9 @@ export function TaskHistorySection({
       type === "overdue"
         ? "bg-red-500/15 text-red-200 border-red-500/25"
         : type === "created"
-          ? "bg-emerald-500/15 text-emerald-200 border-emerald-500/25"
+          ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25"
           : type === "deleted"
-            ? "bg-amber-500/15 text-amber-200 border-amber-500/25"
+            ? "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25"
             : "bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10";
 
     const summary = e?.summary ? String(e.summary) : "—";

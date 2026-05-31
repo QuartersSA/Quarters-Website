@@ -24,7 +24,7 @@ export function MultiUserPicker({ users, selectedIds, onChange }) {
 
           const badgeClass =
             role === "Admin"
-              ? "bg-emerald-400/15 text-emerald-200 border border-emerald-400/25"
+              ? "bg-emerald-400/15 text-emerald-700 dark:text-emerald-200 border border-emerald-400/25"
               : "bg-slate-50 dark:bg-white/[0.04] text-slate-700 dark:text-white/70 border border-slate-200 dark:border-white/10";
 
           const checkboxClass = checked

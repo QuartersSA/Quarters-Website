@@ -77,7 +77,7 @@ export default function MarketingSettingsPage() {
       <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
         <div className={`${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`}>
           <div className="flex items-center gap-3">
-            <div className={`${ws.iconBox} w-12 h-12 text-sky-200`}>
+            <div className={`${ws.iconBox} w-12 h-12 text-sky-700 dark:text-sky-200`}>
               <Settings className="w-6 h-6" />
             </div>
             <div>
@@ -101,7 +101,7 @@ export default function MarketingSettingsPage() {
               </div>
             ) : null}
             {saved ? (
-              <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 text-sm">
+              <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-200 text-sm">
                 ✓ تم الحفظ
               </div>
             ) : null}

@@ -18,7 +18,7 @@ export function TaskModalHeader({
             className={`${ws.iconBox} w-10 h-10 ${isSubtask ? "!bg-violet-500/15 !border-violet-400/20" : ""}`}
           >
             {isSubtask ? (
-              <GitBranch className="w-5 h-5 text-violet-300" />
+              <GitBranch className="w-5 h-5 text-violet-700 dark:text-violet-300" />
             ) : (
               <Circle className="w-5 h-5 text-slate-700 dark:text-white/70" />
             )}
@@ -52,9 +52,9 @@ export function TaskModalHeader({
           onClick={onGoToParent}
           className="mt-3 w-full flex items-center gap-2 rounded-2xl border border-violet-400/15 bg-violet-500/[0.06] px-3.5 py-2.5 hover:bg-violet-500/[0.12] transition-colors text-right"
         >
-          <ArrowRight className="w-4 h-4 text-violet-300 flex-shrink-0" />
+          <ArrowRight className="w-4 h-4 text-violet-700 dark:text-violet-300 flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <div className="text-[11px] text-violet-300/70 font-semibold">
+            <div className="text-[11px] text-violet-700 dark:text-violet-300/70 font-semibold">
               المهمة الرئيسية
             </div>
             <div className="text-sm text-slate-800 dark:text-white/85 truncate font-semibold">

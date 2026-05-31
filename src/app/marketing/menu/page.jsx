@@ -175,7 +175,7 @@ export default function MarketingMenuPage() {
         <div className={`${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`}>
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-3">
-              <div className={`${ws.iconBox} w-12 h-12 text-amber-200`}>
+              <div className={`${ws.iconBox} w-12 h-12 text-amber-700 dark:text-amber-200`}>
                 <Coffee className="w-6 h-6" />
               </div>
               <div>

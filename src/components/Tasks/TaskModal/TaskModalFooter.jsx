@@ -18,7 +18,7 @@ export function TaskModalFooter({
       {submitError ? (
         <div className="mb-3 text-sm text-red-300">{submitError}</div>
       ) : validationMessage ? (
-        <div className="mb-3 text-sm text-amber-200">{validationMessage}</div>
+        <div className="mb-3 text-sm text-amber-700 dark:text-amber-200">{validationMessage}</div>
       ) : null}
 
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">

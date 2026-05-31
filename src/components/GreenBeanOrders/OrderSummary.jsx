@@ -29,7 +29,7 @@ export function OrderSummary({ totals }) {
       {
         label: "كمية الهدر",
         value: `${formatMoney(totals.wasteKg)} كغ (${formatMoney(totals.wastePercent)}%)`,
-        color: "text-orange-200",
+        color: "text-orange-700 dark:text-orange-200",
       },
       {
         label: "إجمالي تكلفة البن (شامل الضريبة)",
@@ -49,7 +49,7 @@ export function OrderSummary({ totals }) {
       {
         label: "متوسط السعر الصافي / كغ",
         value: `${formatMoney(totals.avgPricePerKg)} ر.س`,
-        color: "text-emerald-200",
+        color: "text-emerald-700 dark:text-emerald-200",
       },
     ];
 
@@ -69,7 +69,7 @@ export function OrderSummary({ totals }) {
 
           <div className="flex items-center justify-between text-sm mt-2 pt-3 border-t border-slate-200 dark:border-white/15">
             <span className="text-slate-900 dark:text-white font-bold">إجمالي الطلب (شامل):</span>
-            <span className="text-emerald-200 font-extrabold text-base">
+            <span className="text-emerald-700 dark:text-emerald-200 font-extrabold text-base">
               {formatMoney(totals.totalGrand)} ر.س
             </span>
           </div>

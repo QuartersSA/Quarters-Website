@@ -39,11 +39,11 @@ export function DepositForm({
                 ) : null}
               </div>
               {item.hasReceived ? (
-                <span className="text-emerald-300 font-bold">
+                <span className="text-emerald-700 dark:text-emerald-300 font-bold">
                   {formatQty(item.receivedKg)} كغ
                 </span>
               ) : (
-                <span className="text-amber-300 text-xs">غير محدد</span>
+                <span className="text-amber-700 dark:text-amber-300 text-xs">غير محدد</span>
               )}
             </div>
           ))}

@@ -160,7 +160,7 @@ export function OrderDetails({
 
       {rowError ? <div className="mt-3 text-red-300">{rowError}</div> : null}
       {rowSuccess ? (
-        <div className="mt-3 text-emerald-200">{rowSuccess}</div>
+        <div className="mt-3 text-emerald-700 dark:text-emerald-200">{rowSuccess}</div>
       ) : null}
 
       {body}

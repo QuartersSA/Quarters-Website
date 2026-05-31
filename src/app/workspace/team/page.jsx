@@ -77,7 +77,7 @@ export default function WorkspaceTeamPage() {
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
             <div className={`${ws.iconBox} w-10 h-10`}>
-              <Users className="w-5 h-5 text-emerald-200" />
+              <Users className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
             </div>
             <div className="min-w-0">
               <div className="font-bold text-slate-900 dark:text-white tracking-tight truncate">
@@ -105,7 +105,7 @@ export default function WorkspaceTeamPage() {
           <div className="hidden lg:flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className={ws.iconBox}>
-                <Users className="w-5 h-5 text-emerald-200" />
+                <Users className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
@@ -128,7 +128,7 @@ export default function WorkspaceTeamPage() {
           <div className="mb-5">
             <div className={`${ws.glassSoft} ${ws.card} p-4`}>
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-emerald-400/15 text-emerald-200 border border-emerald-400/25 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
+                <div className="w-11 h-11 rounded-2xl bg-emerald-400/15 text-emerald-700 dark:text-emerald-200 border border-emerald-400/25 flex items-center justify-center shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]">
                   <Users className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">

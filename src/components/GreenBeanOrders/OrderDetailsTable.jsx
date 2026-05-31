@@ -62,7 +62,7 @@ export function OrderDetailsTable({
             <div className="flex items-center gap-2 flex-wrap">
               <span>{beanName}</span>
               {showBagCount ? (
-                <span className="text-xs text-emerald-200/80 font-bold bg-emerald-400/10 border border-emerald-400/20 rounded-lg px-1.5 py-0.5">
+                <span className="text-xs text-emerald-700 dark:text-emerald-200/80 font-bold bg-emerald-400/10 border border-emerald-400/20 rounded-lg px-1.5 py-0.5">
                   × {g.bagCount} خيشة
                 </span>
               ) : null}
@@ -74,7 +74,7 @@ export function OrderDetailsTable({
           <td className="py-2 text-slate-800 dark:text-white/80">{formatMoney(it.waste_percent)}</td>
           <td className="py-2 text-slate-800 dark:text-white/80">{extraCostKgText}</td>
           <td className="py-2 text-slate-800 dark:text-white/80">{totalReceivedDisplay}</td>
-          <td className="py-2 text-emerald-200 font-extrabold">
+          <td className="py-2 text-emerald-700 dark:text-emerald-200 font-extrabold">
             {formatMoney(it.computed_final_price_per_kg)}
           </td>
           <td className="py-2">

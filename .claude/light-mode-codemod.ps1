@@ -78,7 +78,30 @@ $replacements = @(
   # hover borders
   @{ from = '(?<!\S*dark:\S*)\bhover:border-white/10\b'; to = 'hover:border-slate-300 dark:hover:border-white/10' },
   @{ from = '(?<!\S*dark:\S*)\bhover:border-white/15\b'; to = 'hover:border-slate-300 dark:hover:border-white/15' },
-  @{ from = '(?<!\S*dark:\S*)\bhover:border-white/20\b'; to = 'hover:border-slate-400 dark:hover:border-white/20' }
+  @{ from = '(?<!\S*dark:\S*)\bhover:border-white/20\b'; to = 'hover:border-slate-400 dark:hover:border-white/20' },
+
+  # Accent text colours used for icons / pills / chips. The pale 200/300
+  # shades are designed to read on a dark surface; on a white card they
+  # disappear. Pair each with a stronger 600/700 light variant.
+  @{ from = '(?<!\S*dark:\S*)\btext-emerald-200\b'; to = 'text-emerald-700 dark:text-emerald-200' },
+  @{ from = '(?<!\S*dark:\S*)\btext-emerald-300\b'; to = 'text-emerald-700 dark:text-emerald-300' },
+  @{ from = '(?<!\S*dark:\S*)\btext-emerald-400\b'; to = 'text-emerald-600 dark:text-emerald-400' },
+  @{ from = '(?<!\S*dark:\S*)\btext-amber-200\b';   to = 'text-amber-700 dark:text-amber-200' },
+  @{ from = '(?<!\S*dark:\S*)\btext-amber-300\b';   to = 'text-amber-700 dark:text-amber-300' },
+  @{ from = '(?<!\S*dark:\S*)\btext-amber-400\b';   to = 'text-amber-600 dark:text-amber-400' },
+  @{ from = '(?<!\S*dark:\S*)\btext-sky-200\b';     to = 'text-sky-700 dark:text-sky-200' },
+  @{ from = '(?<!\S*dark:\S*)\btext-sky-300\b';     to = 'text-sky-700 dark:text-sky-300' },
+  @{ from = '(?<!\S*dark:\S*)\btext-sky-400\b';     to = 'text-sky-600 dark:text-sky-400' },
+  @{ from = '(?<!\S*dark:\S*)\btext-fuchsia-200\b'; to = 'text-fuchsia-700 dark:text-fuchsia-200' },
+  @{ from = '(?<!\S*dark:\S*)\btext-fuchsia-300\b'; to = 'text-fuchsia-700 dark:text-fuchsia-300' },
+  @{ from = '(?<!\S*dark:\S*)\btext-rose-200\b';    to = 'text-rose-700 dark:text-rose-200' },
+  @{ from = '(?<!\S*dark:\S*)\btext-rose-300\b';    to = 'text-rose-700 dark:text-rose-300' },
+  @{ from = '(?<!\S*dark:\S*)\btext-indigo-200\b';  to = 'text-indigo-700 dark:text-indigo-200' },
+  @{ from = '(?<!\S*dark:\S*)\btext-indigo-300\b';  to = 'text-indigo-700 dark:text-indigo-300' },
+  @{ from = '(?<!\S*dark:\S*)\btext-violet-200\b';  to = 'text-violet-700 dark:text-violet-200' },
+  @{ from = '(?<!\S*dark:\S*)\btext-violet-300\b';  to = 'text-violet-700 dark:text-violet-300' },
+  @{ from = '(?<!\S*dark:\S*)\btext-orange-200\b';  to = 'text-orange-700 dark:text-orange-200' },
+  @{ from = '(?<!\S*dark:\S*)\btext-orange-300\b';  to = 'text-orange-700 dark:text-orange-300' }
 )
 
 $paths = @(

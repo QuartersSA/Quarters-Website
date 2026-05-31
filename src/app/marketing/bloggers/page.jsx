@@ -393,7 +393,7 @@ export default function BloggersPage() {
                               }
                               target="_blank"
                               rel="noreferrer noopener"
-                              className="text-emerald-200/80 hover:text-emerald-200 text-xs mt-0.5 inline-block truncate max-w-[18rem]"
+                              className="text-emerald-700 dark:text-emerald-200/80 hover:text-emerald-700 dark:text-emerald-200 text-xs mt-0.5 inline-block truncate max-w-[18rem]"
                               dir="ltr"
                               title={b.handle}
                             >
@@ -405,23 +405,23 @@ export default function BloggersPage() {
                           ) : null}
                         </td>
                         <td className="px-4 py-3">
-                          <code className="text-emerald-200 text-sm bg-slate-50 dark:bg-white/[0.04] px-2 py-1 rounded">
+                          <code className="text-emerald-700 dark:text-emerald-200 text-sm bg-slate-50 dark:bg-white/[0.04] px-2 py-1 rounded">
                             {b.slug}
                           </code>
                         </td>
                         <td className="px-4 py-3">
                           {isActive ? (
-                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-500/25">
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border border-emerald-500/25">
                               <CheckCircle2 className="w-3 h-3" />
                               مُفعَّل
                             </span>
                           ) : isInvited ? (
-                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-sky-500/15 text-sky-200 border border-sky-500/25">
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-200 border border-sky-500/25">
                               <MailCheck className="w-3 h-3" />
                               تمت الدعوة
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-200 border border-amber-500/25">
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-200 border border-amber-500/25">
                               <Clock className="w-3 h-3" />
                               بانتظار التفعيل
                             </span>
@@ -429,13 +429,13 @@ export default function BloggersPage() {
                         </td>
                         <td className="px-4 py-3 text-slate-600 dark:text-white/55 text-xs">
                           {isActive ? (
-                            <span className="inline-flex items-center gap-1 text-xs text-emerald-200">
+                            <span className="inline-flex items-center gap-1 text-xs text-emerald-700 dark:text-emerald-200">
                               <CheckCircle2 className="w-3 h-3" />
                               تم
                             </span>
                           ) : isInvited ? (
                             <div className="flex flex-col">
-                              <span className="inline-flex items-center gap-1 text-xs text-sky-200">
+                              <span className="inline-flex items-center gap-1 text-xs text-sky-700 dark:text-sky-200">
                                 <MailCheck className="w-3 h-3" />
                                 تمت
                               </span>

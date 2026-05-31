@@ -67,7 +67,7 @@ export function BeansList({
         : "bg-slate-50/50 dark:bg-white/[0.02] hover:bg-slate-100 dark:bg-white/[0.05]";
 
       const Icon = isSelected ? CheckSquare : Square;
-      const iconClass = isSelected ? "text-emerald-200" : "text-slate-400 dark:text-white/40";
+      const iconClass = isSelected ? "text-emerald-700 dark:text-emerald-200" : "text-slate-400 dark:text-white/40";
 
       return (
         <tr
@@ -96,7 +96,7 @@ export function BeansList({
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className="min-w-[28px] text-center text-emerald-200 font-bold text-sm">
+                <span className="min-w-[28px] text-center text-emerald-700 dark:text-emerald-200 font-bold text-sm">
                   {qty}
                 </span>
                 <button

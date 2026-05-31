@@ -61,7 +61,7 @@ function ChecklistAssigneePicker({ value, users, onChange }) {
   const label = selectedUser?.name || null;
 
   const btnClass = label
-    ? "bg-sky-400/10 border border-sky-400/20 text-sky-200"
+    ? "bg-sky-400/10 border border-sky-400/20 text-sky-700 dark:text-sky-200"
     : "bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/40 hover:text-slate-600 dark:text-white/60";
 
   return (
@@ -143,7 +143,7 @@ function ChecklistItemRow({
   const titleClass = completed ? "line-through text-slate-400 dark:text-white/40" : "text-slate-800 dark:text-white/85";
 
   const spinnerIcon = <Loader2 className="w-4 h-4 text-slate-400 dark:text-white/40" />;
-  const completedIcon = <CheckSquare2 className="w-4 h-4 text-emerald-300" />;
+  const completedIcon = <CheckSquare2 className="w-4 h-4 text-emerald-700 dark:text-emerald-300" />;
   const uncheckedIcon = <Square className="w-4 h-4 text-slate-400 dark:text-white/35" />;
 
   let checkIcon = uncheckedIcon;
@@ -342,7 +342,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
     <div className={sectionClass}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <CheckSquare className="w-4 h-4 text-emerald-200" />
+          <CheckSquare className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
           <span className="font-bold text-slate-900 dark:text-white text-sm tracking-tight">
             قائمة المهام الفرعية
           </span>
