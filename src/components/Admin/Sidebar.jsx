@@ -1,6 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 import {
   LayoutDashboard,
   Building2,
@@ -9,8 +17,7 @@ import {
   ClipboardList,
   LogOut,
   FileText,
-  ChevronDown,
-  ChevronUp,
+  ChevronLeft,
   TrendingDown,
   Menu,
   X,
@@ -90,6 +97,225 @@ function NavRow({
   );
 }
 
+/**
+ * Collapsible nav group rendered as a Wafeq-style flyout popover.
+ *
+ * Clicking the parent row positions a panel next to the sidebar (to the
+ * LEFT in RTL, since the aside is pinned to the viewport's right edge)
+ * containing the sub-items. The previous inline expand-in-place pattern
+ * pushed everything below it downward and felt cramped at desktop
+ * widths; the popover lets the eye scan the whole hierarchy at once.
+ *
+ * Behaviour:
+ *   - Click parent → opens; sets `groupActive` styling if any child is current.
+ *   - Click outside / Esc / scroll the underlying page → closes.
+ *   - Position is recomputed on every open so the panel always anchors
+ *     to the row even after the page scrolls or the sidebar reflows.
+ *   - Falls back to inline expansion on viewports < lg (sidebar is a
+ *     slide-out drawer there; a flyout would overflow the drawer width).
+ */
+function NavGroup({ icon: Icon, label, items, closeMobile }) {
+  const [open, setOpen] = useState(false);
+  const buttonRef = useRef(null);
+  const popoverRef = useRef(null);
+  const [pos, setPos] = useState(null);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.matchMedia("(min-width: 1024px)").matches;
+  });
+
+  const groupActive = items.some((it) => it.active);
+
+  // Track viewport size so we switch between flyout (desktop) and
+  // inline expansion (mobile/tablet) without remounting the component.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = (e) => setIsDesktop(e.matches);
+    setIsDesktop(mq.matches);
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+
+  const computePos = useCallback(() => {
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (!rect) return null;
+    // Sidebar is fixed right (w-72 = 288px). The flyout sits in the
+    // content area to the LEFT of the sidebar's left edge.
+    const right = window.innerWidth - rect.left + 8;
+    return {
+      top: Math.max(8, rect.top),
+      right: Math.max(8, right),
+    };
+  }, []);
+
+  function toggleOpen() {
+    if (open) {
+      setOpen(false);
+      return;
+    }
+    if (isDesktop) {
+      setPos(computePos());
+    }
+    setOpen(true);
+  }
+
+  // Re-anchor on scroll/resize so the popover sticks to its row.
+  useLayoutEffect(() => {
+    if (!open || !isDesktop) return;
+    function reposition() {
+      const next = computePos();
+      if (next) setPos(next);
+    }
+    window.addEventListener("scroll", reposition, true);
+    window.addEventListener("resize", reposition);
+    return () => {
+      window.removeEventListener("scroll", reposition, true);
+      window.removeEventListener("resize", reposition);
+    };
+  }, [open, isDesktop, computePos]);
+
+  // Outside-click + Escape to close.
+  useEffect(() => {
+    if (!open) return;
+    function onPointerDown(e) {
+      if (buttonRef.current?.contains(e.target)) return;
+      if (popoverRef.current?.contains(e.target)) return;
+      setOpen(false);
+    }
+    function onKey(e) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("touchstart", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("touchstart", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const triggerCls = groupActive
+    ? "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100"
+    : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
+
+  const chevronOpenCls = open
+    ? "rotate-90"
+    : ""; // ChevronLeft points → ; rotate so it points down/up when open.
+
+  return (
+    <>
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={toggleOpen}
+        className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl transition-colors ${triggerCls}`}
+        aria-expanded={open}
+        aria-haspopup="menu"
+      >
+        <div className="flex items-center gap-3">
+          <Icon
+            className={`w-5 h-5 shrink-0 ${
+              groupActive ? "text-brand-600 dark:text-brand-200" : ""
+            }`}
+          />
+          <span className={groupActive ? "font-semibold" : ""}>{label}</span>
+        </div>
+        <ChevronLeft
+          className={`w-4 h-4 text-slate-400 dark:text-white/40 transition-transform ${chevronOpenCls}`}
+        />
+      </button>
+
+      {/* Desktop: portal-rendered flyout next to the row. */}
+      {open && isDesktop && pos && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              ref={popoverRef}
+              role="menu"
+              dir="rtl"
+              className="fixed z-[60] w-64 bg-white dark:bg-[#0f1a35] border border-slate-200 dark:border-white/10 rounded-2xl shadow-[0_8px_24px_-4px_rgba(15,23,42,0.15),0_32px_72px_-16px_rgba(15,23,42,0.22)] dark:shadow-[0_20px_70px_rgba(0,0,0,0.55)] py-2"
+              style={{ top: pos.top, right: pos.right }}
+            >
+              <div className="px-4 pb-2 mb-1 border-b border-slate-100 dark:border-white/[0.06]">
+                <div className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-white/55 font-semibold">
+                  {label}
+                </div>
+              </div>
+              <div className="px-2 py-1 space-y-0.5">
+                {items.map((it) => {
+                  const ChildIcon = it.icon;
+                  const itemCls = it.active
+                    ? "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100"
+                    : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
+                  return (
+                    <a
+                      key={it.href}
+                      href={it.href}
+                      onClick={() => {
+                        closeMobile?.();
+                        setOpen(false);
+                      }}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors ${itemCls}`}
+                    >
+                      <ChildIcon
+                        className={`w-4 h-4 shrink-0 ${
+                          it.active
+                            ? "text-brand-600 dark:text-brand-200"
+                            : "text-slate-500 dark:text-white/55"
+                        }`}
+                      />
+                      <span
+                        className={`flex-1 ${it.active ? "font-semibold" : ""}`}
+                      >
+                        {it.label}
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
+
+      {/* Mobile / tablet fallback: inline expansion under the trigger. */}
+      {open && !isDesktop ? (
+        <div className="mt-1 space-y-0.5 border-r border-slate-200 dark:border-white/10 mr-5 pr-1">
+          {items.map((it) => {
+            const ChildIcon = it.icon;
+            const itemCls = it.active
+              ? "bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-100"
+              : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white";
+            return (
+              <a
+                key={it.href}
+                href={it.href}
+                onClick={() => {
+                  closeMobile?.();
+                  setOpen(false);
+                }}
+                className={`flex items-center gap-3 px-3 py-2 mr-3 rounded-xl text-sm transition-colors ${itemCls}`}
+              >
+                <ChildIcon
+                  className={`w-4 h-4 shrink-0 ${
+                    it.active
+                      ? "text-brand-600 dark:text-brand-200"
+                      : "text-slate-500 dark:text-white/55"
+                  }`}
+                />
+                <span className={`flex-1 ${it.active ? "font-semibold" : ""}`}>
+                  {it.label}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      ) : null}
+    </>
+  );
+}
+
 function readAdminUserFlags() {
   if (typeof window === "undefined") {
     return { canManageEmployees: true };
@@ -119,12 +345,6 @@ function readLang() {
 }
 
 export function Sidebar({ onLogout, activePage = "dashboard" }) {
-  const [isInventorySummaryOpen, setIsInventorySummaryOpen] = useState(
-    activePage === "low-stock" ||
-      activePage === "items-summary" ||
-      activePage === "variance" ||
-      activePage === "stock-value",
-  );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -318,61 +538,39 @@ export function Sidebar({ onLogout, activePage = "dashboard" }) {
             onClick={closeMobile}
           />
 
-          {/* Collapsible: ملخص جرد الأصناف */}
+          {/* ملخص جرد الأصناف — flyout popover on desktop, inline on mobile. */}
           <div className="pt-1">
-            <button
-              type="button"
-              onClick={() => setIsInventorySummaryOpen((v) => !v)}
-              className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white transition-colors"
-              aria-expanded={isInventorySummaryOpen}
-            >
-              <div className="flex items-center gap-3">
-                <FileText className="w-5 h-5" />
-                <span>ملخص جرد الأصناف</span>
-              </div>
-              {isInventorySummaryOpen ? (
-                <ChevronUp className="w-4 h-4 text-slate-400 dark:text-white/40" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-slate-400 dark:text-white/40" />
-              )}
-            </button>
-
-            {isInventorySummaryOpen && (
-              <div className="mt-1 space-y-0.5 border-r border-slate-200 dark:border-white/10 mr-5 pr-1">
-                <NavRow
-                  href="/admin/low-stock"
-                  icon={TrendingDown}
-                  label="الأصناف منخفضة الكمية"
-                  active={activePage === "low-stock"}
-                  level={1}
-                  onClick={closeMobile}
-                />
-                <NavRow
-                  href="/admin/items-summary"
-                  icon={FileText}
-                  label="ملخص الأصناف"
-                  active={activePage === "items-summary"}
-                  level={1}
-                  onClick={closeMobile}
-                />
-                <NavRow
-                  href="/admin/variance"
-                  icon={BarChart3}
-                  label="تقرير الانحراف"
-                  active={activePage === "variance"}
-                  level={1}
-                  onClick={closeMobile}
-                />
-                <NavRow
-                  href="/admin/stock-value"
-                  icon={Banknote}
-                  label="قيمة المخزون"
-                  active={activePage === "stock-value"}
-                  level={1}
-                  onClick={closeMobile}
-                />
-              </div>
-            )}
+            <NavGroup
+              icon={FileText}
+              label="ملخص جرد الأصناف"
+              closeMobile={closeMobile}
+              items={[
+                {
+                  href: "/admin/low-stock",
+                  icon: TrendingDown,
+                  label: "الأصناف منخفضة الكمية",
+                  active: activePage === "low-stock",
+                },
+                {
+                  href: "/admin/items-summary",
+                  icon: FileText,
+                  label: "ملخص الأصناف",
+                  active: activePage === "items-summary",
+                },
+                {
+                  href: "/admin/variance",
+                  icon: BarChart3,
+                  label: "تقرير الانحراف",
+                  active: activePage === "variance",
+                },
+                {
+                  href: "/admin/stock-value",
+                  icon: Banknote,
+                  label: "قيمة المخزون",
+                  active: activePage === "stock-value",
+                },
+              ]}
+            />
           </div>
 
           {canManageEmployees ? (
