@@ -327,10 +327,23 @@ function readCollapsed() {
   }
 }
 
-// Hard-coded zoom factor applied to <body> for every admin route.
-// 0.9 = "browser zoom −10%". Operator wants the whole shell to look
-// 10% denser by default rather than expose an optional toggle.
-const ADMIN_BODY_ZOOM = "0.9";
+// Operator wants every admin route to render at 90% of native size.
+// We do this by overriding the root font-size: Tailwind utilities
+// (padding, margin, gap, width, font-size) are all rem-based, so they
+// scale proportionally when `html { font-size }` shrinks. 16px × 0.9
+// = 14.4px.
+//
+// Why not `body { zoom: 0.9 }`? `zoom` is a non-standard property that
+// only became part of CSS Zoom Level 1 recently (Firefox ≥ 126 only),
+// causes subpixel blur on high-DPI displays, breaks fixed-position
+// math (our flyout popovers compute via getBoundingClientRect), and
+// confuses media queries because the viewport doesn't shrink with
+// the content. Root font-size scaling avoids every one of those.
+//
+// Applied desktop-only (lg+) — on mobile, shrinking the root rem
+// makes tap targets too small for accessibility.
+const ADMIN_ROOT_FONT_SIZE = "14.4px";
+const ADMIN_SCALE_MQ = "(min-width: 1024px)";
 
 export function SidebarShell({
   section,
@@ -386,17 +399,27 @@ export function SidebarShell({
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Force the whole admin shell to render at 90% via the CSS `zoom`
-  // property on <body>. `zoom` reflows layout (unlike transform:scale)
-  // so the page genuinely behaves like a smaller viewport. CSS Zoom
-  // Level 1 ships in every current browser (Chromium 125+, WebKit,
-  // Firefox 126+). Reset on unmount so non-admin routes go back to
-  // 100%.
+  // Apply root font-size scaling on desktop so every rem-based
+  // Tailwind utility renders at 90% of native size. See the comment
+  // on ADMIN_ROOT_FONT_SIZE above for the rationale. Cleared on
+  // unmount so non-admin routes go back to the 16px default.
   useEffect(() => {
-    if (typeof document === "undefined") return undefined;
-    document.body.style.zoom = ADMIN_BODY_ZOOM;
+    if (typeof document === "undefined" || typeof window === "undefined") {
+      return undefined;
+    }
+    const root = document.documentElement;
+    const mq = window.matchMedia(ADMIN_SCALE_MQ);
+
+    function applyScale() {
+      root.style.fontSize = mq.matches ? ADMIN_ROOT_FONT_SIZE : "";
+    }
+
+    applyScale();
+    mq.addEventListener?.("change", applyScale);
+
     return () => {
-      document.body.style.zoom = "";
+      root.style.fontSize = "";
+      mq.removeEventListener?.("change", applyScale);
     };
   }, []);
 
