@@ -18,8 +18,11 @@ import {
   Globe,
   PanelRightClose,
   PanelRightOpen,
+  Sun,
+  Moon,
 } from "lucide-react";
 import AppSectionSwitcher from "@/components/AppSectionSwitcher";
+import useAdminTheme from "@/hooks/useAdminTheme";
 import { CommandPalette } from "./CommandPalette";
 
 /**
@@ -341,6 +344,7 @@ export function SidebarShell({
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(readCollapsed);
   const [lang] = useState(readLang);
+  const { isDark, toggleTheme } = useAdminTheme();
 
   const closeMobile = useCallback(() => setIsMobileMenuOpen(false), []);
   const openPalette = useCallback(() => setPaletteOpen(true), []);
@@ -619,6 +623,27 @@ export function SidebarShell({
                   {lang === "ar" ? "English" : "العربية"}
                 </span>
               </>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={toggleTheme}
+            title={isDark ? "الوضع الفاتح" : "الوضع الداكن"}
+            aria-label="تبديل الوضع"
+            className={`w-full flex items-center gap-3 ${
+              isCollapsed ? "justify-center px-0 py-2.5" : "px-3 py-2.5"
+            } rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white transition-colors`}
+          >
+            {isDark ? (
+              <Sun className="w-5 h-5 shrink-0" />
+            ) : (
+              <Moon className="w-5 h-5 shrink-0" />
+            )}
+            {isCollapsed ? null : (
+              <span className="flex-1 text-sm font-medium text-right">
+                {isDark ? "الوضع الفاتح" : "الوضع الداكن"}
+              </span>
             )}
           </button>
 

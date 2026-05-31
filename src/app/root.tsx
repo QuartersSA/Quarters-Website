@@ -464,7 +464,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){try{var t=localStorage.getItem('adminTheme');var p=location.pathname||'';var isAdminOrHR=p.indexOf('/admin')===0||p.indexOf('/hr')===0;var dark=isAdminOrHR?(t!=='light'):true;if(dark){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){document.documentElement.classList.add('dark');}})();",
+              "(function(){try{var t=localStorage.getItem('adminTheme');var p=location.pathname||'';var isAdminShell=p.indexOf('/admin')===0||p.indexOf('/hr')===0||p.indexOf('/workspace')===0||p.indexOf('/accounting')===0||p.indexOf('/marketing')===0;var dark=isAdminShell?(t!=='light'):true;if(dark){document.documentElement.classList.add('dark');}else{document.documentElement.classList.remove('dark');}}catch(e){document.documentElement.classList.add('dark');}})();",
           }}
         />
         <script type="module" src="/src/__create/dev-error-overlay.js"></script>
