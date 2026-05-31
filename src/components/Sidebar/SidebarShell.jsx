@@ -18,6 +18,7 @@ import {
   Globe,
   PanelRightClose,
   PanelRightOpen,
+  ZoomOut,
 } from "lucide-react";
 import AppSectionSwitcher from "@/components/AppSectionSwitcher";
 import { CommandPalette } from "./CommandPalette";
@@ -327,6 +328,22 @@ function readCollapsed() {
   }
 }
 
+// Zoom levels offered by the footer button. Cycles 100% → 90% → 85% → 80%
+// then wraps. 0.9 is the "less cramped than 100% but still fits a 13-inch
+// MacBook" sweet spot we land on most often.
+const ZOOM_STEPS = [1, 0.9, 0.85, 0.8];
+const ZOOM_KEY = "adminZoom";
+
+function readZoom() {
+  if (typeof window === "undefined") return 1;
+  try {
+    const v = parseFloat(localStorage.getItem(ZOOM_KEY) || "1");
+    return Number.isFinite(v) && v > 0 ? v : 1;
+  } catch {
+    return 1;
+  }
+}
+
 export function SidebarShell({
   section,
   brand,
@@ -341,6 +358,7 @@ export function SidebarShell({
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(readCollapsed);
   const [lang] = useState(readLang);
+  const [zoom, setZoom] = useState(readZoom);
 
   const closeMobile = useCallback(() => setIsMobileMenuOpen(false), []);
   const openPalette = useCallback(() => setPaletteOpen(true), []);
@@ -379,6 +397,31 @@ export function SidebarShell({
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Apply the persisted zoom level to <body>. `zoom` is a real CSS
+  // property again as of CSS Zoom Level 1 and is implemented in every
+  // current browser (Chromium 125+, WebKit, Firefox 126+). Reset on
+  // unmount so non-admin routes (which don't mount this shell) render
+  // at 100%.
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+    document.body.style.zoom = String(zoom);
+    try {
+      localStorage.setItem(ZOOM_KEY, String(zoom));
+    } catch {
+      // ignore
+    }
+    return () => {
+      document.body.style.zoom = "";
+    };
+  }, [zoom]);
+
+  const cycleZoom = useCallback(() => {
+    setZoom((cur) => {
+      const idx = ZOOM_STEPS.indexOf(cur);
+      return idx === -1 ? ZOOM_STEPS[1] : ZOOM_STEPS[(idx + 1) % ZOOM_STEPS.length];
+    });
   }, []);
 
   const toggleLang = useCallback(() => {
@@ -617,6 +660,32 @@ export function SidebarShell({
                 <Globe className="w-5 h-5 shrink-0" />
                 <span className="flex-1 text-sm font-medium">
                   {lang === "ar" ? "English" : "العربية"}
+                </span>
+              </>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={cycleZoom}
+            title={`تكبير العرض (${Math.round(zoom * 100)}%)`}
+            aria-label="تغيير حجم العرض"
+            className={`w-full flex items-center gap-3 ${
+              isCollapsed ? "justify-center px-0 py-2.5" : "px-3 py-2.5"
+            } rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white transition-colors`}
+          >
+            {isCollapsed ? (
+              <span className="text-[10px] font-semibold tracking-wide">
+                {Math.round(zoom * 100)}%
+              </span>
+            ) : (
+              <>
+                <ZoomOut className="w-5 h-5 shrink-0" />
+                <span className="flex-1 text-sm font-medium text-right">
+                  حجم العرض
+                </span>
+                <span className="text-xs font-mono text-slate-500 dark:text-white/55 shrink-0">
+                  {Math.round(zoom * 100)}%
                 </span>
               </>
             )}
