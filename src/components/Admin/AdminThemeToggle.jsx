@@ -5,14 +5,17 @@ import { ws } from "@/components/Workspace/ui";
 import useAdminTheme from "@/hooks/useAdminTheme";
 
 /**
- * Floating theme toggle pinned to the viewport's top-left corner.
+ * Floating theme toggle — mobile only.
  *
- * Lives at the admin layout level so it shows up on every admin
- * page (dashboard + items / branches / employees / operations /
- * receipts / variance / etc.) without each page having to wire its
- * own toggle. Same hook drives the Sidebar button + the admin login
- * floating button, so the choice stays in sync wherever the operator
- * triggers it from.
+ * Desktop hides it entirely (`lg:hidden`) because the sidebar
+ * already exposes the same toggle, and an extra fixed button in
+ * the top-left corner was redundant. Mobile keeps it because the
+ * sidebar is a bottom-nav strip there and doesn't carry the
+ * toggle text option.
+ *
+ * Same useAdminTheme hook drives every entry point (sidebar
+ * button + this floating button + login), so the choice stays in
+ * sync regardless of which surface fires the toggle.
  */
 export default function AdminThemeToggle() {
   const { isDark, toggleTheme } = useAdminTheme();
@@ -20,7 +23,7 @@ export default function AdminThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className={`${ws.iconButton} fixed top-4 left-4 z-[60] w-10 h-10 shadow-lg`}
+      className={`${ws.iconButton} fixed top-4 left-4 z-[60] w-10 h-10 shadow-lg lg:hidden`}
       title={isDark ? "الوضع الفاتح" : "الوضع الداكن"}
       aria-label={isDark ? "Light mode" : "Dark mode"}
     >
