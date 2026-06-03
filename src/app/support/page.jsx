@@ -14,7 +14,7 @@ export default function SupportPage() {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 mb-6">
-            <HelpCircle className="w-10 h-10 text-emerald-400" />
+            <HelpCircle className="w-10 h-10 text-emerald-700 dark:text-emerald-400" />
           </div>
           <h1 className="text-4xl font-black text-white mb-4">
             Help & Support
@@ -23,7 +23,7 @@ export default function SupportPage() {
             We're here to help you with any questions or issues
           </p>
           <div className="flex items-center justify-center gap-2 mt-4">
-            <Globe className="w-4 h-4 text-white/40" />
+            <Globe className="w-4 h-4 text-slate-400 dark:text-white/40" />
             <a
               href="https://quarters.sa"
               target="_blank"
@@ -38,7 +38,7 @@ export default function SupportPage() {
         {/* Contact Information */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-4 mb-6">
-            <Mail className="w-6 h-6 text-purple-400" />
+            <Mail className="w-6 h-6 text-purple-700 dark:text-purple-400" />
             <h2 className="text-2xl font-bold text-white">Contact Us</h2>
           </div>
           <div className="space-y-4">
@@ -73,7 +73,7 @@ export default function SupportPage() {
         {/* FAQ Section */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-4 mb-6">
-            <HelpCircle className="w-6 h-6 text-blue-400" />
+            <HelpCircle className="w-6 h-6 text-blue-700 dark:text-blue-400" />
             <h2 className="text-2xl font-bold text-white">
               Frequently Asked Questions
             </h2>
@@ -105,7 +105,7 @@ export default function SupportPage() {
         {/* Privacy Policy Link */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
           <div className="flex items-center gap-4 mb-4">
-            <Shield className="w-6 h-6 text-emerald-400" />
+            <Shield className="w-6 h-6 text-emerald-700 dark:text-emerald-400" />
             <h2 className="text-2xl font-bold text-white">
               Privacy & Security
             </h2>

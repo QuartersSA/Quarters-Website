@@ -204,7 +204,7 @@ export default function ShiftCloseLoginPage() {
       <div
         className={`${ws.glassSoft} ${ws.card} px-3 py-2 inline-flex items-center gap-2`}
       >
-        <Languages className="w-4 h-4 text-white/70" />
+        <Languages className="w-4 h-4 text-slate-600 dark:text-white/70" />
         <div className="text-xs text-white/60">{t("language")}</div>
 
         <div className={ws.segWrap}>
@@ -634,7 +634,7 @@ export default function ShiftCloseLoginPage() {
           <div className={`${ws.glass} ${ws.card} p-8`}>
             <div className="text-center mb-7">
               <div className={`${ws.iconBox} w-20 h-20 mx-auto mb-4`}>
-                <Calculator className="w-10 h-10 text-fuchsia-200" />
+                <Calculator className="w-10 h-10 text-fuchsia-700 dark:text-fuchsia-200" />
               </div>
               <h1 className={`text-3xl font-bold ${ws.title} mb-2`}>
                 {t("pageTitle")}
@@ -644,7 +644,7 @@ export default function ShiftCloseLoginPage() {
               <div className={`mt-4 ${ws.glassSoft} ${ws.card} p-3`}>
                 <div className="flex items-start gap-3">
                   <div className={`${ws.iconBox} w-10 h-10`}>
-                    <Building2 className="w-5 h-5 text-sky-200" />
+                    <Building2 className="w-5 h-5 text-sky-700 dark:text-sky-200" />
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-white/80">
@@ -665,7 +665,7 @@ export default function ShiftCloseLoginPage() {
                 </label>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                    <User className="w-5 h-5 text-white/40" />
+                    <User className="w-5 h-5 text-slate-400 dark:text-white/40" />
                   </div>
                   <input
                     value={username}
@@ -685,7 +685,7 @@ export default function ShiftCloseLoginPage() {
                 </label>
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                    <Lock className="w-5 h-5 text-white/40" />
+                    <Lock className="w-5 h-5 text-slate-400 dark:text-white/40" />
                   </div>
                   <input
                     type="password"
@@ -729,7 +729,7 @@ export default function ShiftCloseLoginPage() {
     <div className={`${ws.glassSoft} ${ws.card} p-4`}>
       <div className="flex items-start gap-3">
         <div className={`${ws.iconBox} w-10 h-10`}>
-          <Info className="w-5 h-5 text-sky-200" />
+          <Info className="w-5 h-5 text-sky-700 dark:text-sky-200" />
         </div>
         <div className="min-w-0">
           <div className="font-bold text-white tracking-tight">
@@ -785,7 +785,7 @@ export default function ShiftCloseLoginPage() {
           <div className={cardShell}>
             <div className="flex items-center gap-2 mb-4">
               <div className={`${ws.iconBox} w-10 h-10`}>
-                <Send className="w-5 h-5 text-white/70" />
+                <Send className="w-5 h-5 text-slate-600 dark:text-white/70" />
               </div>
               <div>
                 <div className="font-bold text-white tracking-tight">
@@ -804,7 +804,7 @@ export default function ShiftCloseLoginPage() {
                 </label>
                 <div className="relative">
                   <Building2
-                    className={`pointer-events-none absolute top-1/2 -translate-y-1/2 w-4 h-4 text-white/35 ${branchIconPos}`}
+                    className={`pointer-events-none absolute top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35 ${branchIconPos}`}
                   />
                   {branches.length === 1 ? (
                     <input

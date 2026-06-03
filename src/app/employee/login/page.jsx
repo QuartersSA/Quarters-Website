@@ -244,7 +244,7 @@ export default function EmployeeLoginPage() {
                 <div
                   className={`absolute ${language === "ar" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2`}
                 >
-                  <User className="w-5 h-5 text-white/40" />
+                  <User className="w-5 h-5 text-slate-400 dark:text-white/40" />
                 </div>
                 <input
                   id="username"
@@ -271,7 +271,7 @@ export default function EmployeeLoginPage() {
                 <div
                   className={`absolute ${language === "ar" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2`}
                 >
-                  <Lock className="w-5 h-5 text-white/40" />
+                  <Lock className="w-5 h-5 text-slate-400 dark:text-white/40" />
                 </div>
                 <input
                   id="password"

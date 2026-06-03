@@ -23,7 +23,7 @@ export function ItemsGrid({
   if (items.length === 0) {
     return (
       <div className="col-span-full text-center py-20">
-        <Package className="w-16 h-16 mx-auto mb-4 text-gray-600" />
+        <Package className="w-16 h-16 mx-auto mb-4 text-gray-600 dark:text-gray-300" />
         <p className="text-gray-500">
           {searchTerm ? "لا توجد نتائج للبحث" : "لا توجد أصناف حتى الآن"}
         </p>

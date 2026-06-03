@@ -548,7 +548,7 @@ export default function EmployeeInventoryPage() {
       >
         <div className="text-center">
           <div className="inline-flex items-center justify-center w-28 h-28 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full mb-6 shadow-2xl">
-            <CheckCircle className="w-16 h-16 text-white" />
+            <CheckCircle className="w-16 h-16 text-slate-700 dark:text-white" />
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             {text.successTitle}
@@ -612,7 +612,7 @@ export default function EmployeeInventoryPage() {
         <div className="mb-6 bg-white/5 rounded-xl shadow-lg p-5 border border-white/10">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-6 h-6 text-teal-300" />
+              <TrendingUp className="w-6 h-6 text-teal-700 dark:text-teal-300" />
               <span className="font-bold text-white text-lg">
                 {text.progress}
               </span>
@@ -654,7 +654,7 @@ export default function EmployeeInventoryPage() {
         <div className="mb-4 flex flex-col sm:flex-row gap-3">
           <div className="flex-1 relative">
             <Search
-              className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 ${language === "ar" ? "right-4" : "left-4"}`}
+              className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/40 ${language === "ar" ? "right-4" : "left-4"}`}
             />
             <input
               type="text"
@@ -671,7 +671,7 @@ export default function EmployeeInventoryPage() {
                 className={`absolute top-1/2 -translate-y-1/2 ${language === "ar" ? "left-3" : "right-3"} p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10`}
                 title="Clear"
               >
-                <ArrowLeft className="w-4 h-4 text-gray-300" />
+                <ArrowLeft className="w-4 h-4 text-gray-700 dark:text-gray-300" />
               </button>
             )}
 
@@ -685,7 +685,7 @@ export default function EmployeeInventoryPage() {
           <div className="min-w-[180px]">
             <div className="relative">
               <Layers
-                className={`pointer-events-none absolute top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 ${language === "ar" ? "right-4" : "left-4"}`}
+                className={`pointer-events-none absolute top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-white/40 ${language === "ar" ? "right-4" : "left-4"}`}
               />
 
               <GlassSelect
@@ -721,7 +721,7 @@ export default function EmployeeInventoryPage() {
 
         {error && (
           <div className="mb-6 p-4 bg-red-500/10 border border-red-400/30 rounded-xl flex items-start gap-3 shadow">
-            <AlertCircle className="w-6 h-6 text-red-300 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-6 h-6 text-red-700 dark:text-red-300 flex-shrink-0 mt-0.5" />
             <div>
               <h3 className="font-semibold text-red-100 mb-1">{text.error}</h3>
               <p className="text-red-200">{error}</p>
@@ -798,7 +798,7 @@ export default function EmployeeInventoryPage() {
                   {hasValue && (
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-2 bg-[#0b1220] border border-white/10 rounded-lg px-4 py-2">
-                        <CheckCircle className="w-5 h-5 text-emerald-300" />
+                        <CheckCircle className="w-5 h-5 text-emerald-700 dark:text-emerald-300" />
                         <span className="font-bold text-emerald-200 text-2xl">
                           {availableItems[item.id]}
                         </span>
@@ -825,7 +825,7 @@ export default function EmployeeInventoryPage() {
                     {/* Quick Buttons */}
                     <div className="mb-4">
                       <label className="block text-sm font-bold text-gray-200 mb-2 flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-amber-300" />
+                        <Zap className="w-4 h-4 text-amber-700 dark:text-amber-300" />
                         {text.quickButtons}
                       </label>
                       <div className="grid grid-cols-6 gap-2">
