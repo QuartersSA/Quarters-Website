@@ -28,8 +28,13 @@ export default function HRLayout({ children }) {
       className="pointer-events-none fixed inset-0 overflow-hidden"
       aria-hidden="true"
     >
-      <div className="absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full bg-amber-500/10 blur-[90px]" />
-      <div className="absolute -bottom-56 -left-56 w-[620px] h-[620px] rounded-full bg-sky-500/10 blur-[110px]" />
+      {/* Light-mode orbs — match the admin dashboard's look so every
+          section feels like one product family. */}
+      <div className="absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full bg-emerald-500/10 blur-[90px] dark:hidden" />
+      <div className="absolute -bottom-56 -left-56 w-[620px] h-[620px] rounded-full bg-sky-500/10 blur-[110px] dark:hidden" />
+      {/* Dark-mode orbs — keep the original section flavor (amber). */}
+      <div className="hidden dark:block absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full bg-amber-500/10 blur-[90px]" />
+      <div className="hidden dark:block absolute -bottom-56 -left-56 w-[620px] h-[620px] rounded-full bg-sky-500/10 blur-[110px]" />
     </div>
   );
 

@@ -27,12 +27,15 @@ export default function WorkspaceLayout({ children }) {
 
   const Background = (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* soft highlights (Apple-like) */}
-      <div className="absolute -top-40 right-[-120px] h-[520px] w-[520px] rounded-full bg-emerald-500/10 blur-[90px]" />
-      <div className="absolute top-[30%] left-[-140px] h-[520px] w-[520px] rounded-full bg-sky-500/10 blur-[100px]" />
-      <div className="absolute bottom-[-220px] right-[20%] h-[520px] w-[520px] rounded-full bg-fuchsia-500/8 blur-[110px]" />
-      {/* subtle vignette */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/35" />
+      {/* Light-mode orbs — same pair the admin dashboard uses so
+          every section feels like one product family. */}
+      <div className="absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full bg-emerald-500/10 blur-[90px] dark:hidden" />
+      <div className="absolute -bottom-56 -left-56 w-[620px] h-[620px] rounded-full bg-sky-500/10 blur-[110px] dark:hidden" />
+      {/* Dark-mode orbs — keep the original 3-orb Apple-style highlights. */}
+      <div className="hidden dark:block absolute -top-40 right-[-120px] h-[520px] w-[520px] rounded-full bg-emerald-500/10 blur-[90px]" />
+      <div className="hidden dark:block absolute top-[30%] left-[-140px] h-[520px] w-[520px] rounded-full bg-sky-500/10 blur-[100px]" />
+      <div className="hidden dark:block absolute bottom-[-220px] right-[20%] h-[520px] w-[520px] rounded-full bg-fuchsia-500/8 blur-[110px]" />
+      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/35" />
     </div>
   );
 
