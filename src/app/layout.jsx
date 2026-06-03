@@ -76,21 +76,27 @@ const queryClient = new QueryClient({
   },
 });
 
-// Force <html class="dark"> for every route OUTSIDE /admin/*. Admin
-// owns its own theme via useAdminTheme (light or dark per user
-// preference). Without this, navigating from admin-light to a
-// non-admin page would inherit `light` on documentElement and the
-// existing dark-styled marketing / employee / public pages would
-// render with white text on white background.
+// Force <html class="dark"> for every route OUTSIDE the admin shell
+// sections. Admin / HR / Workspace / Accounting / Marketing all share
+// useAdminTheme (light or dark per user preference). Public routes
+// (landing, /login, /employee/*, /shift-close/*) stay forced-dark
+// because they're still authored as dark-only and would render
+// white-on-white if the stored admin theme was 'light' when the user
+// last visited.
 function GlobalDarkEnforcer() {
   const location = useLocation();
   useEffect(() => {
     if (typeof document === "undefined") return;
     const path = location?.pathname || "";
-    // Admin + HR share useAdminTheme — let them own the class on
-    // their own routes. Workspace / accounting / marketing / public
-    // routes stay forced-dark.
-    if (path.startsWith("/admin") || path.startsWith("/hr")) return;
+    if (
+      path.startsWith("/admin") ||
+      path.startsWith("/hr") ||
+      path.startsWith("/workspace") ||
+      path.startsWith("/accounting") ||
+      path.startsWith("/marketing")
+    ) {
+      return;
+    }
     document.documentElement.classList.add("dark");
   }, [location?.pathname]);
   return null;

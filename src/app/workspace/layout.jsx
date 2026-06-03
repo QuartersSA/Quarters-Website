@@ -10,15 +10,6 @@ const BRAND_LOGO_URL =
 export default function WorkspaceLayout({ children }) {
   const { ready, isAuthenticated, user } = useWorkspaceUser();
 
-  // Force documentElement.classList.add('dark') so portal popovers
-  // render dark even if the admin section flipped to light before
-  // the user navigated here.
-  React.useEffect(() => {
-    if (typeof document !== "undefined") {
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
-
   React.useEffect(() => {
     if (!ready) return;
 
@@ -36,12 +27,15 @@ export default function WorkspaceLayout({ children }) {
 
   const Background = (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* soft highlights (Apple-like) */}
-      <div className="absolute -top-40 right-[-120px] h-[520px] w-[520px] rounded-full bg-emerald-500/10 blur-[90px]" />
-      <div className="absolute top-[30%] left-[-140px] h-[520px] w-[520px] rounded-full bg-sky-500/10 blur-[100px]" />
-      <div className="absolute bottom-[-220px] right-[20%] h-[520px] w-[520px] rounded-full bg-fuchsia-500/8 blur-[110px]" />
-      {/* subtle vignette */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/35" />
+      {/* Light-mode orbs — same pair the admin dashboard uses so
+          every section feels like one product family. */}
+      <div className="absolute -top-40 -right-40 w-[520px] h-[520px] rounded-full bg-emerald-500/10 blur-[90px] dark:hidden" />
+      <div className="absolute -bottom-56 -left-56 w-[620px] h-[620px] rounded-full bg-sky-500/10 blur-[110px] dark:hidden" />
+      {/* Dark-mode orbs — keep the original 3-orb Apple-style highlights. */}
+      <div className="hidden dark:block absolute -top-40 right-[-120px] h-[520px] w-[520px] rounded-full bg-emerald-500/10 blur-[90px]" />
+      <div className="hidden dark:block absolute top-[30%] left-[-140px] h-[520px] w-[520px] rounded-full bg-sky-500/10 blur-[100px]" />
+      <div className="hidden dark:block absolute bottom-[-220px] right-[20%] h-[520px] w-[520px] rounded-full bg-fuchsia-500/8 blur-[110px]" />
+      <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/35" />
     </div>
   );
 
@@ -50,14 +44,14 @@ export default function WorkspaceLayout({ children }) {
 
     return (
       <div
-        className={`dark relative min-h-[100svh] ${ws.appBg} flex items-center justify-center p-6`}
+        className={`relative min-h-[100svh] ${ws.appBg} flex items-center justify-center p-6`}
         dir="rtl"
       >
         {Background}
         <div className="relative w-full max-w-md">
           <div className={`${ws.glass} rounded-3xl p-6`}>
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center overflow-hidden border border-white/10">
+              <div className="w-14 h-14 rounded-2xl bg-slate-200 dark:bg-white/10 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-white/10">
                 <img
                   src={BRAND_LOGO_URL}
                   alt="Logo"
@@ -65,10 +59,10 @@ export default function WorkspaceLayout({ children }) {
                 />
               </div>
               <div className="min-w-0">
-                <div className="text-white font-bold text-lg tracking-tight">
+                <div className="text-slate-900 dark:text-white font-bold text-lg tracking-tight">
                   مساحة العمل
                 </div>
-                <div className="text-white/70 text-sm truncate">
+                <div className="text-slate-700 dark:text-white/70 text-sm truncate">
                   {name ? `مرحباً ${name}` : "جاري التحميل…"}
                 </div>
               </div>
@@ -76,7 +70,7 @@ export default function WorkspaceLayout({ children }) {
 
             <div className="mt-5 flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-emerald-400" />
-              <div className="text-white/70 text-sm">نجهّز الصفحة…</div>
+              <div className="text-slate-700 dark:text-white/70 text-sm">نجهّز الصفحة…</div>
             </div>
           </div>
         </div>
@@ -84,9 +78,8 @@ export default function WorkspaceLayout({ children }) {
     );
   }
 
-  // Force dark styling for Workspace pages (design request)
   return (
-    <div className={`dark relative min-h-[100svh] ${ws.appBg}`} dir="rtl">
+    <div className={`relative min-h-[100svh] ${ws.appBg}`} dir="rtl">
       {Background}
       <div className="relative">{children}</div>
     </div>

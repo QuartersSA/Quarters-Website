@@ -37,10 +37,10 @@ export function CalculatorCard({
     <div className={cardShell}>
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <div className="text-white font-bold tracking-tight">
+          <div className="text-slate-900 dark:text-white font-bold tracking-tight">
             جدول الحاسبة
           </div>
-          <div className="text-xs text-white/50 mt-1">
+          <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
             اختر وضع الاستخدام ثم أدخل القيم.
           </div>
         </div>
@@ -85,12 +85,12 @@ export function CalculatorCard({
       </div>
 
       {calculatorMode === "pricing" ? (
-        <div className="mt-3 text-xs text-white/45">
+        <div className="mt-3 text-xs text-slate-500 dark:text-white/45">
           وضع تسعير فقط: عند اختيار هذا الوضع يتم تصفير الحقول ولا يتم ربط
           التسعير بأي اسم، ولا يتم حفظ أي بيانات.
         </div>
       ) : (
-        <div className="mt-3 text-xs text-white/45">
+        <div className="mt-3 text-xs text-slate-500 dark:text-white/45">
           وضع التسجيل: يتم حفظ سعر الكيلو وحجم الخيشة فقط. لتسعير كامل مع
           التحميص والهدر استخدم وضع "تسعير فقط".
         </div>

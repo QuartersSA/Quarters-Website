@@ -18,8 +18,8 @@ export function OrderDetailsHeader({
   return (
     <div className="flex items-center justify-between gap-3">
       <div>
-        <div className="text-white font-bold tracking-tight">تفاصيل الطلب</div>
-        <div className="text-xs text-white/50 mt-1">
+        <div className="text-slate-900 dark:text-white font-bold tracking-tight">تفاصيل الطلب</div>
+        <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
           يظهر لك سعر الكيلو الصافي لكل نوع بن داخل الطلب.
         </div>
       </div>

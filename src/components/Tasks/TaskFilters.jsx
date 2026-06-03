@@ -20,7 +20,7 @@ export function TaskFilters({
   const inputClass = `${ws.input} pr-11 pl-4 py-3`;
   const selectClass = `${ws.select} px-4 py-3`;
 
-  const labelClass = "text-xs font-semibold text-white/55 mb-2";
+  const labelClass = "text-xs font-semibold text-slate-600 dark:text-white/55 mb-2";
 
   const statusOptions = [
     { value: "all", label: "كل الحالات" },
@@ -51,11 +51,11 @@ export function TaskFilters({
     <div className={cardClass}>
       <div className="flex items-center gap-2 mb-4">
         <div className={`${ws.iconBox} w-10 h-10`}>
-          <SlidersHorizontal className="w-5 h-5 text-white/70" />
+          <SlidersHorizontal className="w-5 h-5 text-slate-700 dark:text-white/70" />
         </div>
         <div className="min-w-0">
-          <div className="font-bold text-white tracking-tight">الفلاتر</div>
-          <div className="text-xs text-white/50">ابحث وفلتر بسرعة</div>
+          <div className="font-bold text-slate-900 dark:text-white tracking-tight">الفلاتر</div>
+          <div className="text-xs text-slate-500 dark:text-white/50">ابحث وفلتر بسرعة</div>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ export function TaskFilters({
         <div className={searchColClass}>
           <div className={labelClass}>بحث</div>
           <div className="relative">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/40" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
@@ -87,7 +87,7 @@ export function TaskFilters({
         <div className={spaceColClass}>
           <div className={labelClass}>المساحة</div>
           <div className="relative">
-            <LayoutGrid className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/35 pointer-events-none" />
+            <LayoutGrid className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35 pointer-events-none" />
             <GlassSelect
               value={spaceFilter}
               onChange={setSpaceFilter}
@@ -103,7 +103,7 @@ export function TaskFilters({
           <div className="lg:col-span-3">
             <div className={labelClass}>المكلف</div>
             <div className="relative">
-              <Users2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/35 pointer-events-none" />
+              <Users2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35 pointer-events-none" />
               <GlassSelect
                 value={assigneeFilter}
                 onChange={setAssigneeFilter}

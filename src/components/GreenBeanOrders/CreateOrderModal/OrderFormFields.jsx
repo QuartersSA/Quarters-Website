@@ -5,7 +5,7 @@ export function OrderFormFields({ orderDraft, setOrderDraft }) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-white/70 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
             تاريخ الطلب
           </label>
           <input
@@ -19,7 +19,7 @@ export function OrderFormFields({ orderDraft, setOrderDraft }) {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-white/70 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
             المورّد (اختياري)
           </label>
           <input
@@ -34,7 +34,7 @@ export function OrderFormFields({ orderDraft, setOrderDraft }) {
       </div>
 
       <div className="mt-3">
-        <label className="block text-sm font-semibold text-white/70 mb-2">
+        <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
           ملاحظة (اختياري)
         </label>
         <textarea

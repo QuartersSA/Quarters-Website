@@ -22,8 +22,8 @@ export function CreateOrderModal({
 
       <div className="mt-5 flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <div className="text-white font-bold tracking-tight">أصناف الطلب</div>
-          <div className="text-xs text-white/50 mt-1">
+          <div className="text-slate-900 dark:text-white font-bold tracking-tight">أصناف الطلب</div>
+          <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
             اكتب السعر والهدر لكل نوع بن داخل هذا الطلب.
           </div>
         </div>
@@ -76,7 +76,7 @@ export function CreateOrderModal({
         </button>
       </div>
 
-      {isPending ? <div className="mt-3 text-white/60">جاري الحفظ…</div> : null}
+      {isPending ? <div className="mt-3 text-slate-600 dark:text-white/60">جاري الحفظ…</div> : null}
     </ModalShell>
   );
 }

@@ -83,7 +83,7 @@ export function EmployeeFormFields({
     <div className="space-y-6">
       {/* Name */}
       <div>
-        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2">
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
           <User className="w-4 h-4 inline ml-2" />
           الاسم الكامل *
         </label>
@@ -99,7 +99,7 @@ export function EmployeeFormFields({
 
       {/* Phone */}
       <div>
-        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2">
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
           <Phone className="w-4 h-4 inline ml-2" />
           رقم الجوال
         </label>
@@ -111,7 +111,7 @@ export function EmployeeFormFields({
           placeholder="+9665xxxxxxxx أو 05xxxxxxxx"
           dir="ltr"
         />
-        <p className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/45 mt-2">
+        <p className="text-xs text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45 mt-2">
           يستخدم لإشعارات واتساب (مثلاً: تقفيلة الشفت / جرد جديد / تحديثات
           المهام).
         </p>
@@ -119,7 +119,7 @@ export function EmployeeFormFields({
 
       {/* Email */}
       <div>
-        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2">
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
           <Mail className="w-4 h-4 inline ml-2" />
           البريد الإلكتروني
         </label>
@@ -134,7 +134,7 @@ export function EmployeeFormFields({
 
       {/* Username */}
       <div>
-        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2">
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
           <UserCog className="w-4 h-4 inline ml-2" />
           اسم المستخدم *
         </label>
@@ -152,7 +152,7 @@ export function EmployeeFormFields({
 
       {/* Password */}
       <div>
-        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2">
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
           <Lock className="w-4 h-4 inline ml-2" />
           كلمة المرور {isEditing ? "" : "*"}
         </label>
@@ -172,7 +172,7 @@ export function EmployeeFormFields({
 
       {/* Role */}
       <div>
-        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2">
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
           <Shield className="w-4 h-4 inline ml-2" />
           الصلاحية *
         </label>
@@ -205,8 +205,8 @@ export function EmployeeFormFields({
             }
             className={`p-4 rounded-2xl border transition-colors ${
               formData.role === "Admin"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                : `${ws.glassSoft} text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/60 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06]`
+                ? "bg-slate-200 dark:bg-slate-200 dark:bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white border-slate-300 dark:border-slate-300 dark:border-slate-300 dark:border-white/20"
+                : `${ws.glassSoft} text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/60 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.06]`
             }`}
           >
             <Shield className="w-6 h-6 mx-auto mb-2" />
@@ -235,8 +235,8 @@ export function EmployeeFormFields({
             }
             className={`p-4 rounded-2xl border transition-colors ${
               formData.role === "Employee"
-                ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                : `${ws.glassSoft} text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/60 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06]`
+                ? "bg-slate-200 dark:bg-slate-200 dark:bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white border-slate-300 dark:border-slate-300 dark:border-slate-300 dark:border-white/20"
+                : `${ws.glassSoft} text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/60 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.06]`
             }`}
           >
             <User className="w-6 h-6 mx-auto mb-2" />
@@ -249,12 +249,12 @@ export function EmployeeFormFields({
       {/* Admin options */}
       {showAdminOptions ? (
         <div
-          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 rounded-2xl p-4`}
+          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-2xl p-4`}
         >
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="min-w-0">
-              <p className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-semibold">صلاحيات أقسام الإدارة</p>
-              <p className="text-sm text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/50 mt-1">
+              <p className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-semibold">صلاحيات أقسام الإدارة</p>
+              <p className="text-sm text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/50 mt-1">
                 هذه الصلاحيات تحدد أي الأقسام تظهر بعد تسجيل الدخول.
               </p>
             </div>
@@ -401,12 +401,12 @@ export function EmployeeFormFields({
       {/* NEW: Admin WhatsApp notification preferences */}
       {showAdminOptions ? (
         <div
-          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 rounded-2xl p-4`}
+          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-2xl p-4`}
         >
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="min-w-0">
-              <p className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-semibold">إشعارات واتساب</p>
-              <p className="text-sm text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/50 mt-1">
+              <p className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-semibold">إشعارات واتساب</p>
+              <p className="text-sm text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/50 mt-1">
                 تصل على رقم الجوال المسجل أعلاه.
               </p>
             </div>
@@ -458,16 +458,16 @@ export function EmployeeFormFields({
       {/* Employee options */}
       {showEmployeeOptions ? (
         <div
-          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 rounded-2xl p-4`}
+          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-2xl p-4`}
         >
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="min-w-0">
-              <p className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white font-semibold">صلاحيات الموظف</p>
-              <p className="text-sm text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/50 mt-1">
+              <p className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-semibold">صلاحيات الموظف</p>
+              <p className="text-sm text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/50 mt-1">
                 تقدر تختار أكثر من صلاحية لنفس الموظف.
               </p>
               {needsBranch ? (
-                <p className="text-xs text-amber-700 dark:text-amber-700 dark:dark:text-amber-200/90 mt-2">
+                <p className="text-xs text-amber-700 dark:text-amber-700 dark:text-amber-200/90 mt-2">
                   تنبيه: لازم تختار فرع واحد على الأقل عند تفعيل (تسجيل الجرد)
                   أو (تسجيل تقفيل الشفت).
                 </p>
@@ -520,19 +520,19 @@ export function EmployeeFormFields({
       {/* Branches (not needed for Admin) */}
       {showBranches ? (
         <div>
-          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
             <Building2 className="w-4 h-4 inline ml-2" />
             الفروع
           </label>
           <div
-            className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 rounded-2xl p-4 max-h-48 overflow-y-auto`}
+            className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-2xl p-4 max-h-48 overflow-y-auto`}
           >
             <div className="grid grid-cols-2 gap-3">
               {branches && branches.length > 0 ? (
                 branches.map((branch) => (
                   <label
                     key={branch.id}
-                    className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-50 dark:dark:bg-slate-50 dark:dark:dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06] rounded-2xl cursor-pointer transition-colors border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10"
+                    className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.03] hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.06] rounded-2xl cursor-pointer transition-colors border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10"
                   >
                     <input
                       type="checkbox"
@@ -541,29 +541,29 @@ export function EmployeeFormFields({
                       className="w-4 h-4"
                     />
                     <div className="flex-1">
-                      <p className="text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white text-sm font-medium">
+                      <p className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white text-sm font-medium">
                         {branch.name}
                       </p>
-                      <p className="text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/45 text-xs">{branch.location}</p>
+                      <p className="text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45 text-xs">{branch.location}</p>
                     </div>
                   </label>
                 ))
               ) : (
-                <p className="col-span-2 text-center text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/45 py-4">
+                <p className="col-span-2 text-center text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45 py-4">
                   لا توجد فروع متاحة
                 </p>
               )}
             </div>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/45 mt-2">
+          <p className="text-xs text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45 mt-2">
             {formData.branchIds.length} فرع محدد
           </p>
         </div>
       ) : (
         <div
-          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 rounded-2xl p-4`}
+          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-2xl p-4`}
         >
-          <p className="text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 text-sm">المدير لا يحتاج تحديد فروع.</p>
+          <p className="text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 text-sm">المدير لا يحتاج تحديد فروع.</p>
         </div>
       )}
     </div>

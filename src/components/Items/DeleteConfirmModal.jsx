@@ -18,8 +18,8 @@ export function DeleteConfirmModal({
         className={`${ws.glass} ${ws.card} w-full max-w-md shadow-2xl border border-red-500/25`}
       >
         <div className={`p-6 border-b ${ws.divider}`}>
-          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white flex items-center gap-3 tracking-tight">
-            <div className={`${ws.iconBox} w-10 h-10 text-red-700 dark:text-red-700 dark:dark:text-red-200`}>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+            <div className={`${ws.iconBox} w-10 h-10 text-red-700 dark:text-red-700 dark:text-red-200`}>
               <Trash2 className="w-5 h-5" />
             </div>
             تأكيد الحذف
@@ -29,16 +29,16 @@ export function DeleteConfirmModal({
         <div className="p-6">
           <p className="text-slate-800 dark:text-white/80 mb-4">
             هل أنت متأكد من حذف الصنف{" "}
-            <span className="font-bold text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white">"{item.name}"</span>؟
+            <span className="font-bold text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white">"{item.name}"</span>؟
           </p>
-          <p className="text-amber-700 dark:text-amber-700 dark:dark:text-amber-200 text-sm flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3">
+          <p className="text-amber-700 dark:text-amber-700 dark:text-amber-200 text-sm flex items-start gap-2 bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3">
             <span className="text-lg">⚠️</span>
             <span>لا يمكن حذف الصنف إذا كان مرتبطاً بعمليات جرد</span>
           </p>
 
           {deleteMutation.error ? (
             <div className="mt-4 p-4 bg-red-500/10 border border-red-500/25 rounded-2xl">
-              <p className="text-red-700 dark:text-red-700 dark:dark:text-red-200 text-sm">
+              <p className="text-red-700 dark:text-red-700 dark:text-red-200 text-sm">
                 {deleteMutation.error.message}
               </p>
             </div>

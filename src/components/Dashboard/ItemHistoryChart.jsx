@@ -12,6 +12,7 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import useAdminTheme from "@/hooks/useAdminTheme";
 
 export function ItemHistoryChart({
   selectedItemId,
@@ -31,6 +32,16 @@ export function ItemHistoryChart({
   branchSeries,
   chartHasData,
 }) {
+  const { isDark } = useAdminTheme();
+  // Recharts axes/grid/legend ignore Tailwind dark: classes; resolve per-theme.
+  const gridStroke = isDark ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.10)";
+  const axisStroke = isDark ? "rgba(255,255,255,0.55)" : "rgba(15,23,42,0.55)";
+  const legendColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
+  const tooltipBg = isDark ? "rgba(15, 23, 42, 0.96)" : "rgba(255, 255, 255, 0.98)";
+  const tooltipBorder = isDark ? "rgba(255,255,255,0.15)" : "rgba(15,23,42,0.12)";
+  const tooltipLabel = isDark ? "rgba(255,255,255,0.55)" : "rgb(71, 85, 105)";
+  const tooltipText = isDark ? "#fff" : "rgb(15, 23, 42)";
+
   const historyTitle = selectedItemName
     ? `تحليل الجرد للصنف: ${selectedItemName}`
     : "تحليل الجرد حسب الصنف";
@@ -65,31 +76,31 @@ export function ItemHistoryChart({
   let chartBody = null;
   if (!selectedItemId) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-white/55 py-10">
         اختر الصنف لعرض الرسم البياني
       </div>
     );
   } else if (needsDates) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-white/55 py-10">
         اختر التاريخ (من / إلى) لعرض البيانات
       </div>
     );
   } else if (isHistoryLoading) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-white/55 py-10">
         جاري تحميل البيانات...
       </div>
     );
   } else if (historyError) {
     chartBody = (
-      <div className="text-center text-red-700 dark:text-red-700 dark:dark:text-red-200 py-10">
+      <div className="text-center text-red-700 dark:text-red-200 py-10">
         حدث خطأ أثناء تحميل بيانات الرسم البياني
       </div>
     );
   } else if (!chartHasData) {
     chartBody = (
-      <div className="text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55 py-10">
+      <div className="text-center text-slate-600 dark:text-white/55 py-10">
         لا توجد بيانات لهذا الصنف خلال الفترة المحددة
       </div>
     );
@@ -102,37 +113,37 @@ export function ItemHistoryChart({
               data={chartData}
               margin={{ top: 8, right: 10, left: 0, bottom: 60 }}
             >
-              <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
+              <CartesianGrid stroke={gridStroke} strokeDasharray="3 3" />
               <XAxis
                 dataKey="shortLabel"
                 angle={-25}
                 textAnchor="end"
                 height={70}
-                tick={{ fill: "#cbd5e1", fontSize: 12 }}
-                axisLine={{ stroke: "#475569" }}
-                tickLine={{ stroke: "#475569" }}
+                tick={{ fill: axisStroke, fontSize: 12 }}
+                axisLine={{ stroke: axisStroke }}
+                tickLine={{ stroke: axisStroke }}
               />
               <YAxis
-                tick={{ fill: "#cbd5e1", fontSize: 12 }}
-                axisLine={{ stroke: "#475569" }}
-                tickLine={{ stroke: "#475569" }}
+                tick={{ fill: axisStroke, fontSize: 12 }}
+                axisLine={{ stroke: axisStroke }}
+                tickLine={{ stroke: axisStroke }}
               />
               <Tooltip
                 formatter={tooltipFormatter}
                 labelFormatter={tooltipLabelFormatter}
                 contentStyle={{
-                  backgroundColor: "#0b1220",
-                  border: "1px solid rgba(255,255,255,0.12)",
+                  backgroundColor: tooltipBg,
+                  border: `1px solid ${tooltipBorder}`,
                   borderRadius: 12,
-                  color: "#fff",
+                  color: tooltipText,
                 }}
-                labelStyle={{ color: "#cbd5e1" }}
+                labelStyle={{ color: tooltipLabel }}
               />
 
               <Legend
-                wrapperStyle={{ color: "#cbd5e1" }}
+                wrapperStyle={{ color: legendColor }}
                 formatter={(value) => (
-                  <span style={{ color: "#cbd5e1" }}>{value}</span>
+                  <span style={{ color: legendColor }}>{value}</span>
                 )}
               />
 
@@ -153,7 +164,7 @@ export function ItemHistoryChart({
         </div>
 
         {!selectedBranchId ? (
-          <p className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/40 mt-3">
+          <p className="text-xs text-slate-500 dark:text-white/40 mt-3">
             ملاحظة: عند اختيار "كل الفروع"، يتم عرض خط منفصل لكل فرع (ألوان
             مختلفة).
           </p>
@@ -167,14 +178,14 @@ export function ItemHistoryChart({
       <div className={`p-6 border-b ${ws.divider}`}>
         <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight">
-              <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-700 dark:dark:text-sky-200`}>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+              <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`}>
                 <BarChart3 className="w-5 h-5" />
               </div>
               {historyTitle}
             </h2>
             {historySubtitle ? (
-              <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/45 text-sm mt-1">{historySubtitle}</p>
+              <p className="text-slate-500 dark:text-white/45 text-sm mt-1">{historySubtitle}</p>
             ) : null}
           </div>
 
@@ -194,7 +205,7 @@ export function ItemHistoryChart({
             />
 
             <div className="w-full">
-              <label className="block text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mb-1">من</label>
+              <label className="block text-xs text-slate-500 dark:text-white/45 mb-1">من</label>
               <GlassDatePicker
                 value={dateFrom}
                 onChange={setDateFrom}
@@ -204,7 +215,7 @@ export function ItemHistoryChart({
             </div>
 
             <div className="w-full">
-              <label className="block text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mb-1">إلى</label>
+              <label className="block text-xs text-slate-500 dark:text-white/45 mb-1">إلى</label>
               <GlassDatePicker
                 value={dateTo}
                 onChange={setDateTo}

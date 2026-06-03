@@ -10,12 +10,12 @@ export function TaskBoardView({
   const columnClass = `${ws.glassSoft} ${ws.card} overflow-hidden`;
 
   const columnHeaderClass =
-    "px-4 py-3 border-b border-white/10 font-bold text-white flex items-center justify-between tracking-tight bg-white/[0.02]";
+    "px-4 py-3 border-b border-slate-200 dark:border-white/10 font-bold text-slate-900 dark:text-white flex items-center justify-between tracking-tight bg-slate-50/50 dark:bg-white/[0.02]";
 
   const countClass =
-    "text-xs text-white/55 bg-white/[0.04] border border-white/10 rounded-full px-2 py-1 shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]";
+    "text-xs text-slate-600 dark:text-white/55 bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 rounded-full px-2 py-1 shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]";
 
-  const emptyTextClass = "text-sm text-white/50";
+  const emptyTextClass = "text-sm text-slate-500 dark:text-white/50";
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

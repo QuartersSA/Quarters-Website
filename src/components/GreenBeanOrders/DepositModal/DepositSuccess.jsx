@@ -13,10 +13,10 @@ export function DepositSuccess({ depositResult, onCloseDepositModal }) {
           border: "1px solid rgba(16, 185, 129, 0.2)",
         }}
       >
-        <CheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+        <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
         <div>
-          <div className="text-emerald-300 font-bold">تم الإيداع بنجاح</div>
-          <div className="text-sm text-white/70 mt-1">
+          <div className="text-emerald-700 dark:text-emerald-300 font-bold">تم الإيداع بنجاح</div>
+          <div className="text-sm text-slate-700 dark:text-white/70 mt-1">
             تم إيداع {depositResult.deposited} نوع بن في فرع "
             {depositResult.branchName}"
           </div>
@@ -27,7 +27,7 @@ export function DepositSuccess({ depositResult, onCloseDepositModal }) {
       {Array.isArray(depositResult.receipts) &&
       depositResult.receipts.length > 0 ? (
         <div className="mb-4">
-          <div className="text-xs text-white/55 mb-2">
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-2">
             الأصناف المودعة (مجمّعة حسب النوع):
           </div>
           <div className="space-y-1">
@@ -38,16 +38,16 @@ export function DepositSuccess({ depositResult, onCloseDepositModal }) {
                 style={{ background: "rgba(255,255,255,0.04)" }}
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-white/80">
+                  <span className="text-slate-800 dark:text-white/80">
                     {r.inventoryItemName || r.beanName}
                   </span>
                   {r.bagCount > 1 ? (
-                    <span className="text-white/40 text-xs">
+                    <span className="text-slate-400 dark:text-white/40 text-xs">
                       ({r.bagCount} خيشة)
                     </span>
                   ) : null}
                 </div>
-                <span className="text-emerald-300 font-bold">
+                <span className="text-emerald-700 dark:text-emerald-300 font-bold">
                   {formatQty(r.quantity)} كغ
                 </span>
               </div>
@@ -67,12 +67,12 @@ export function DepositSuccess({ depositResult, onCloseDepositModal }) {
           }}
         >
           <div className="flex items-center gap-2 mb-2">
-            <AlertTriangle className="w-4 h-4 text-amber-400" />
-            <span className="text-amber-300 text-sm font-bold">
+            <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            <span className="text-amber-700 dark:text-amber-300 text-sm font-bold">
               أصناف لم تتم إيداعها
             </span>
           </div>
-          <div className="text-xs text-white/60">
+          <div className="text-xs text-slate-600 dark:text-white/60">
             {depositResult.unlinked.map((u) => (
               <div key={u.beanId || u.beanName} className="mt-1">
                 • {u.beanName}

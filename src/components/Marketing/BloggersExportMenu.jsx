@@ -164,20 +164,20 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
               type="button"
               onClick={handleZip}
               disabled={!!busy}
-              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
+              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-slate-100 dark:bg-white/[0.06] disabled:opacity-50"
             >
-              <div className={`${ws.iconBox} w-9 h-9 text-pink-200 shrink-0`}>
+              <div className={`${ws.iconBox} w-9 h-9 text-pink-700 dark:text-pink-200 shrink-0`}>
                 <ImageIcon className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <div className="text-white font-semibold text-sm">
+                <div className="text-slate-900 dark:text-white font-semibold text-sm">
                   تصدير الدعوات (كل البلوقرز)
                 </div>
-                <div className="text-white/55 text-xs mt-0.5">
+                <div className="text-slate-600 dark:text-white/55 text-xs mt-0.5">
                   ملف ZIP يحتوي صورة لكل بلوقر باسمه
                 </div>
                 {busy === "zip" && progress ? (
-                  <div className="text-amber-200 text-xs mt-1">
+                  <div className="text-amber-700 dark:text-amber-200 text-xs mt-1">
                     جاري التصدير… {progress.done} / {progress.total}
                   </div>
                 ) : null}
@@ -188,40 +188,40 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
               type="button"
               onClick={() => setShowPicker((v) => !v)}
               disabled={!!busy}
-              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
+              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-slate-100 dark:bg-white/[0.06] disabled:opacity-50"
             >
-              <div className={`${ws.iconBox} w-9 h-9 text-emerald-200 shrink-0`}>
+              <div className={`${ws.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200 shrink-0`}>
                 <ImageIcon className="w-4 h-4" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="text-white font-semibold text-sm flex items-center justify-between gap-2">
+                <div className="text-slate-900 dark:text-white font-semibold text-sm flex items-center justify-between gap-2">
                   <span>تصدير دعوة بلوقر واحد</span>
                   <ChevronDown
                     className={`w-4 h-4 opacity-60 transition-transform ${showPicker ? "rotate-180" : ""}`}
                   />
                 </div>
-                <div className="text-white/55 text-xs mt-0.5">
+                <div className="text-slate-600 dark:text-white/55 text-xs mt-0.5">
                   اختر البلوقر من القائمة
                 </div>
               </div>
             </button>
 
             {showPicker ? (
-              <div className="mt-1 mb-1 max-h-64 overflow-y-auto border border-white/10 rounded-xl bg-black/30">
+              <div className="mt-1 mb-1 max-h-64 overflow-y-auto border border-slate-200 dark:border-white/10 rounded-xl bg-black/30">
                 {list.map((b) => (
                   <button
                     key={b.id}
                     type="button"
                     onClick={() => handleSingle(b)}
                     disabled={!!busy}
-                    className="w-full text-right px-3 py-2 hover:bg-white/[0.06] disabled:opacity-50 border-b border-white/5 last:border-b-0"
+                    className="w-full text-right px-3 py-2 hover:bg-slate-100 dark:bg-white/[0.06] disabled:opacity-50 border-b border-slate-100 dark:border-white/5 last:border-b-0"
                   >
-                    <div className="text-white text-sm font-medium truncate">
+                    <div className="text-slate-900 dark:text-white text-sm font-medium truncate">
                       {b.name}
                     </div>
                     {b.handle ? (
                       <div
-                        className="text-white/45 text-xs truncate max-w-[14rem]"
+                        className="text-slate-500 dark:text-white/45 text-xs truncate max-w-[14rem]"
                         dir="ltr"
                         title={b.handle}
                       >
@@ -237,23 +237,23 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
               type="button"
               onClick={handleData}
               disabled={!!busy}
-              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-white/[0.06] disabled:opacity-50"
+              className="w-full flex items-start gap-3 px-3 py-3 rounded-xl text-right hover:bg-slate-100 dark:bg-white/[0.06] disabled:opacity-50"
             >
-              <div className={`${ws.iconBox} w-9 h-9 text-sky-200 shrink-0`}>
+              <div className={`${ws.iconBox} w-9 h-9 text-sky-700 dark:text-sky-200 shrink-0`}>
                 <FileSpreadsheet className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <div className="text-white font-semibold text-sm">
+                <div className="text-slate-900 dark:text-white font-semibold text-sm">
                   تصدير بيانات البلوقرز
                 </div>
-                <div className="text-white/55 text-xs mt-0.5">
+                <div className="text-slate-600 dark:text-white/55 text-xs mt-0.5">
                   Excel: الاسم، رابط الحساب، الحالة، وقت التفعيل
                 </div>
               </div>
             </button>
 
             {error ? (
-              <div className="px-3 py-2 text-xs text-red-200 bg-red-500/10 border border-red-500/20 rounded-xl mt-1">
+              <div className="px-3 py-2 text-xs text-red-700 dark:text-red-200 bg-red-500/10 border border-red-500/20 rounded-xl mt-1">
                 {error}
               </div>
             ) : null}

@@ -7,7 +7,7 @@ export default function PrivacyPolicyPage() {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 mb-6">
-            <Shield className="w-10 h-10 text-emerald-400" />
+            <Shield className="w-10 h-10 text-emerald-700 dark:text-emerald-400" />
           </div>
           <h1 className="text-4xl font-black text-white mb-4">
             Privacy Policy
@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
             })}
           </p>
           <div className="flex items-center justify-center gap-2 mt-4">
-            <Globe className="w-4 h-4 text-white/40" />
+            <Globe className="w-4 h-4 text-slate-400 dark:text-white/40" />
             <a
               href="https://quarters.sa"
               target="_blank"
@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Data Collection */}
         <Section
-          icon={<Eye className="w-6 h-6 text-blue-400" />}
+          icon={<Eye className="w-6 h-6 text-blue-700 dark:text-blue-400" />}
           title="Data We Collect"
         >
           <ul className="space-y-3 text-white/70">
@@ -69,7 +69,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Data Usage */}
         <Section
-          icon={<Lock className="w-6 h-6 text-purple-400" />}
+          icon={<Lock className="w-6 h-6 text-purple-700 dark:text-purple-400" />}
           title="How We Use Your Data"
         >
           <ul className="space-y-3 text-white/70">
@@ -97,7 +97,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Data Storage */}
         <Section
-          icon={<Shield className="w-6 h-6 text-emerald-400" />}
+          icon={<Shield className="w-6 h-6 text-emerald-700 dark:text-emerald-400" />}
           title="Data Storage"
         >
           <p className="text-white/70 leading-relaxed mb-4">
@@ -117,7 +117,7 @@ export default function PrivacyPolicyPage() {
 
         {/* Data Sharing */}
         <Section
-          icon={<Lock className="w-6 h-6 text-yellow-400" />}
+          icon={<Lock className="w-6 h-6 text-yellow-700 dark:text-yellow-400" />}
           title="Data Sharing"
         >
           <p className="text-white/70 leading-relaxed mb-4">
@@ -144,7 +144,7 @@ export default function PrivacyPolicyPage() {
 
         {/* User Rights */}
         <Section
-          icon={<Trash2 className="w-6 h-6 text-red-400" />}
+          icon={<Trash2 className="w-6 h-6 text-red-700 dark:text-red-400" />}
           title="Your Rights"
         >
           <ul className="space-y-3 text-white/70">
@@ -173,7 +173,7 @@ export default function PrivacyPolicyPage() {
         {/* Contact */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
           <div className="flex items-center gap-4 mb-6">
-            <Mail className="w-6 h-6 text-purple-400" />
+            <Mail className="w-6 h-6 text-purple-700 dark:text-purple-400" />
             <h2 className="text-2xl font-bold text-white">Contact Us</h2>
           </div>
           <p className="text-white/70 leading-relaxed mb-4">

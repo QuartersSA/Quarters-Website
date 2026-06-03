@@ -107,11 +107,11 @@ export default function BloggerCardPage() {
         </div>
 
         {bloggerQuery.isLoading ? (
-          <div className={`${ws.glass} ${ws.card} p-8 text-center text-white/55`}>
+          <div className={`${ws.glass} ${ws.card} p-8 text-center text-slate-600 dark:text-white/55`}>
             جاري التحميل…
           </div>
         ) : !b ? (
-          <div className={`${ws.glass} ${ws.card} p-8 text-center text-red-200`}>
+          <div className={`${ws.glass} ${ws.card} p-8 text-center text-red-700 dark:text-red-200`}>
             لم يُعثر على البلوقر.
           </div>
         ) : (

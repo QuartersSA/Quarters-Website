@@ -19,7 +19,7 @@ export function DepositForm({
     <div>
       {/* Items preview */}
       <div className="mb-4">
-        <div className="text-xs text-white/55 mb-2">
+        <div className="text-xs text-slate-600 dark:text-white/55 mb-2">
           الأصناف التي سيتم إيداعها (الكمية الواصلة بعد الهدر — مجمّعة حسب
           النوع):
         </div>
@@ -31,19 +31,19 @@ export function DepositForm({
               style={{ background: "rgba(255,255,255,0.04)" }}
             >
               <div className="flex items-center gap-2">
-                <span className="text-white/80">{item.beanName}</span>
+                <span className="text-slate-800 dark:text-white/80">{item.beanName}</span>
                 {item.bagCount > 1 ? (
-                  <span className="text-white/40 text-xs">
+                  <span className="text-slate-400 dark:text-white/40 text-xs">
                     ({item.bagCount} خيشة)
                   </span>
                 ) : null}
               </div>
               {item.hasReceived ? (
-                <span className="text-emerald-300 font-bold">
+                <span className="text-emerald-700 dark:text-emerald-300 font-bold">
                   {formatQty(item.receivedKg)} كغ
                 </span>
               ) : (
-                <span className="text-amber-300 text-xs">غير محدد</span>
+                <span className="text-amber-700 dark:text-amber-300 text-xs">غير محدد</span>
               )}
             </div>
           ))}
@@ -52,7 +52,7 @@ export function DepositForm({
 
       {/* Branch selector */}
       <div className="mb-4">
-        <div className="text-xs text-white/55 mb-1">الفرع المستلم</div>
+        <div className="text-xs text-slate-600 dark:text-white/55 mb-1">الفرع المستلم</div>
         <GlassSelect
           value={depositBranchId}
           onChange={setDepositBranchId}
@@ -62,7 +62,7 @@ export function DepositForm({
 
       {/* Note */}
       <div className="mb-5">
-        <div className="text-xs text-white/55 mb-1">ملاحظة (اختياري)</div>
+        <div className="text-xs text-slate-600 dark:text-white/55 mb-1">ملاحظة (اختياري)</div>
         <input
           type="text"
           className={`${ws.input} px-3 py-2 w-full`}
@@ -97,7 +97,7 @@ export function DepositForm({
       </div>
 
       {depositMutation.isError ? (
-        <div className="mt-3 text-sm text-red-300">
+        <div className="mt-3 text-sm text-red-700 dark:text-red-300">
           {depositMutation.error?.message || "فشل الإيداع"}
         </div>
       ) : null}

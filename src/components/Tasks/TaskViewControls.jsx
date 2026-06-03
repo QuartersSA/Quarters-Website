@@ -54,7 +54,7 @@ export function TaskViewControls({
 
         {sortBy !== undefined && setSortBy ? (
           <div className="flex items-center gap-2">
-            <ArrowUpDown className="w-4 h-4 text-white/50" />
+            <ArrowUpDown className="w-4 h-4 text-slate-500 dark:text-white/50" />
             <GlassSelect
               value={sortBy || "default"}
               onChange={setSortBy}

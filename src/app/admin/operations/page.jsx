@@ -306,7 +306,7 @@ export default function OperationsPage() {
                 onClick={openingSession.openOpeningModal}
                 className={`${ws.btnNeutral} px-4 py-2 justify-center`}
               >
-                <PlusCircle className="w-5 h-5 text-sky-700 dark:text-sky-700 dark:dark:text-sky-200" />
+                <PlusCircle className="w-5 h-5 text-sky-700 dark:text-sky-700 dark:text-sky-200" />
                 <span>مخزون افتتاحي</span>
               </button>
 
@@ -315,7 +315,7 @@ export default function OperationsPage() {
                 onClick={purchaseReceipt.openReceiptModal}
                 className={`${ws.btnNeutral} px-4 py-2 justify-center`}
               >
-                <Truck className="w-5 h-5 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200" />
+                <Truck className="w-5 h-5 text-amber-700 dark:text-amber-700 dark:text-amber-200" />
                 <span>إضافة وارد</span>
               </button>
 

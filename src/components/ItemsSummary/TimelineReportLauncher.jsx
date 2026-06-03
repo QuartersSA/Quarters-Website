@@ -42,12 +42,12 @@ export default function TimelineReportLauncher({ groupedItems, branches }) {
     <>
       <div className={`${ws.glassSoft} ${ws.card} p-4 sm:p-5 mb-6`}>
         <div className="flex items-center gap-3 mb-3">
-          <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200`}>
+          <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-700 dark:text-emerald-200`}>
             <LineChartIcon className="w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-bold tracking-tight">تقرير زمني</h3>
-            <p className="text-slate-600 dark:text-slate-600 dark:dark:text-white/55 text-xs">
+            <h3 className="text-slate-900 dark:text-slate-900 dark:text-white font-bold tracking-tight">تقرير زمني</h3>
+            <p className="text-slate-600 dark:text-slate-600 dark:text-white/55 text-xs">
               اختر صنف + فرع لعرض الكميات منذ البداية كرسم بياني وكسجل عمليات.
             </p>
           </div>

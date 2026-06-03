@@ -23,10 +23,10 @@ export function ActionsCard({
     <div className={cardShell}>
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <div className="text-white font-bold tracking-tight">
+          <div className="text-slate-900 dark:text-white font-bold tracking-tight">
             توريد البن الأخضر
           </div>
-          <div className="text-xs text-white/50 mt-1">
+          <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
             اختر أنواع البن ثم احفظ الطلب ليظهر في الأرشيف حسب التاريخ.
           </div>
         </div>
@@ -73,8 +73,8 @@ export function ActionsCard({
         </div>
       </div>
 
-      {error ? <div className="mt-4 text-red-300">{error}</div> : null}
-      {success ? <div className="mt-4 text-emerald-200">{success}</div> : null}
+      {error ? <div className="mt-4 text-red-700 dark:text-red-300">{error}</div> : null}
+      {success ? <div className="mt-4 text-emerald-700 dark:text-emerald-200">{success}</div> : null}
     </div>
   );
 }

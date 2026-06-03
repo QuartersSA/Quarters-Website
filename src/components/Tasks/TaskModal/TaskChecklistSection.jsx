@@ -61,8 +61,8 @@ function ChecklistAssigneePicker({ value, users, onChange }) {
   const label = selectedUser?.name || null;
 
   const btnClass = label
-    ? "bg-sky-400/10 border border-sky-400/20 text-sky-200"
-    : "bg-white/[0.04] border border-white/10 text-white/40 hover:text-white/60";
+    ? "bg-sky-400/10 border border-sky-400/20 text-sky-700 dark:text-sky-200"
+    : "bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/40 hover:text-slate-600 dark:text-white/60";
 
   return (
     <div className="relative">
@@ -95,8 +95,8 @@ function ChecklistAssigneePicker({ value, users, onChange }) {
             }}
             className={`w-full text-right px-3 py-2.5 text-sm transition-colors ${
               !value
-                ? "bg-white/10 text-white"
-                : "text-white/60 hover:bg-white/[0.06]"
+                ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white"
+                : "text-slate-600 dark:text-white/60 hover:bg-slate-100 dark:bg-white/[0.06]"
             }`}
           >
             بدون مكلف
@@ -104,8 +104,8 @@ function ChecklistAssigneePicker({ value, users, onChange }) {
           {(users || []).map((u) => {
             const active = String(u.id) === String(value);
             const rowClass = active
-              ? "bg-white/10 text-white"
-              : "text-white/80 hover:bg-white/[0.06]";
+              ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white"
+              : "text-slate-800 dark:text-white/80 hover:bg-slate-100 dark:bg-white/[0.06]";
             return (
               <button
                 key={u.id}
@@ -140,18 +140,18 @@ function ChecklistItemRow({
   const dueDateDisplay = formatShortDate(dateOnly);
   const overdue = !completed && isDateOverdue(dateOnly);
 
-  const titleClass = completed ? "line-through text-white/40" : "text-white/85";
+  const titleClass = completed ? "line-through text-slate-400 dark:text-white/40" : "text-slate-800 dark:text-white/85";
 
-  const spinnerIcon = <Loader2 className="w-4 h-4 text-white/40" />;
-  const completedIcon = <CheckSquare2 className="w-4 h-4 text-emerald-300" />;
-  const uncheckedIcon = <Square className="w-4 h-4 text-white/35" />;
+  const spinnerIcon = <Loader2 className="w-4 h-4 text-slate-400 dark:text-white/40" />;
+  const completedIcon = <CheckSquare2 className="w-4 h-4 text-emerald-700 dark:text-emerald-300" />;
+  const uncheckedIcon = <Square className="w-4 h-4 text-slate-400 dark:text-white/35" />;
 
   let checkIcon = uncheckedIcon;
   if (isToggling) checkIcon = spinnerIcon;
   else if (completed) checkIcon = completedIcon;
 
   return (
-    <div className="group rounded-xl py-2 px-2 hover:bg-white/[0.04] transition-colors">
+    <div className="group rounded-xl py-2 px-2 hover:bg-slate-50 dark:bg-white/[0.04] transition-colors">
       {/* Top row: checkbox + title + delete */}
       <div className="flex items-center gap-2">
         <button
@@ -168,7 +168,7 @@ function ChecklistItemRow({
         <button
           type="button"
           onClick={() => onDelete(item.id)}
-          className="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center text-white/30 hover:text-red-300"
+          className="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center text-slate-400 dark:text-white/30 hover:text-red-700 dark:hover:text-red-300"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
@@ -342,13 +342,13 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
     <div className={sectionClass}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <CheckSquare className="w-4 h-4 text-emerald-200" />
-          <span className="font-bold text-white text-sm tracking-tight">
+          <CheckSquare className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
+          <span className="font-bold text-slate-900 dark:text-white text-sm tracking-tight">
             قائمة المهام الفرعية
           </span>
         </div>
         {totalCount > 0 ? (
-          <span className="text-xs text-white/55">
+          <span className="text-xs text-slate-600 dark:text-white/55">
             {completedCount}/{totalCount}
           </span>
         ) : null}
@@ -357,7 +357,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
       {/* Progress bar */}
       {totalCount > 0 ? (
         <div className="mb-3">
-          <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-1.5 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
             <div
               className="h-full rounded-full bg-emerald-400/60 transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
@@ -368,7 +368,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
 
       {/* Items */}
       {checklistQuery.isLoading ? (
-        <div className="text-white/50 text-xs py-2">جاري التحميل…</div>
+        <div className="text-slate-500 dark:text-white/50 text-xs py-2">جاري التحميل…</div>
       ) : (
         <div className="space-y-1">
           {items.map((item) => (
@@ -410,7 +410,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
         {showAddFields && hasNewTitle ? (
           <div className="flex items-center gap-3 mr-1">
             <div className="flex items-center gap-1.5">
-              <User2 className="w-3.5 h-3.5 text-white/40" />
+              <User2 className="w-3.5 h-3.5 text-slate-400 dark:text-white/40" />
               <select
                 value={newItemAssignee || ""}
                 onChange={(e) =>
@@ -430,7 +430,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
             </div>
 
             <div className="flex items-center gap-1.5">
-              <CalendarDays className="w-3.5 h-3.5 text-white/40" />
+              <CalendarDays className="w-3.5 h-3.5 text-slate-400 dark:text-white/40" />
               <input
                 type="date"
                 value={newItemDueDate}
@@ -444,7 +444,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
       </div>
 
       {addMutation.error ? (
-        <div className="text-xs text-red-300 mt-1">
+        <div className="text-xs text-red-700 dark:text-red-300 mt-1">
           {addMutation.error.message}
         </div>
       ) : null}

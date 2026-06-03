@@ -21,6 +21,7 @@ import { TrendingUp, PieChart as PieIcon, BarChart3 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
+import useAdminTheme from "@/hooks/useAdminTheme";
 
 /**
  * Three views on the month's expenses:
@@ -55,21 +56,32 @@ function shortMonth(label) {
   return `${m}/${y.slice(2)}`;
 }
 
-function TooltipBox({ active, payload, labelFormatter }) {
+function TooltipBox({ active, payload, labelFormatter, isDark }) {
   if (!active || !payload || !payload.length) return null;
+  // Theme-aware tooltip surface. Recharts renders this in an inline
+  // SVG-adjacent div outside the Tailwind `dark:` context, so the
+  // styling has to be driven from the `isDark` prop, not utility
+  // classes that key off documentElement.
+  const bg = isDark ? "rgba(15, 23, 42, 0.96)" : "rgba(255, 255, 255, 0.98)";
+  const borderColor = isDark
+    ? "rgba(255,255,255,0.15)"
+    : "rgba(15, 23, 42, 0.12)";
+  const labelColor = isDark ? "rgba(255,255,255,0.55)" : "rgb(71, 85, 105)";
+  const nameColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
+  const valueColor = isDark ? "#fff" : "rgb(15, 23, 42)";
   return (
     <div
-      className="text-xs px-3 py-2 rounded-xl"
+      className="text-xs px-3 py-2 rounded-xl shadow-lg"
       style={{
-        background: "rgba(15, 23, 42, 0.96)",
-        border: "1px solid rgba(255,255,255,0.15)",
-        color: "#fff",
+        background: bg,
+        border: `1px solid ${borderColor}`,
+        color: valueColor,
         minWidth: 140,
       }}
       dir="rtl"
     >
       {payload[0]?.payload?.month || payload[0]?.name ? (
-        <div className="text-slate-600 dark:text-white/55 mb-1">
+        <div className="mb-1" style={{ color: labelColor }}>
           {labelFormatter
             ? labelFormatter(payload[0].payload?.month || payload[0].name)
             : payload[0].payload?.month || payload[0].name}
@@ -81,8 +93,8 @@ function TooltipBox({ active, payload, labelFormatter }) {
             className="inline-block w-2.5 h-2.5 rounded-full"
             style={{ background: p.color || p.fill }}
           />
-          <span className="text-slate-700 dark:text-white/70">{p.name}:</span>
-          <span className="text-slate-900 dark:text-white font-bold" dir="ltr">
+          <span style={{ color: nameColor }}>{p.name}:</span>
+          <span className="font-bold" style={{ color: valueColor }} dir="ltr">
             {formatMoney(p.value)}
           </span>
         </div>
@@ -92,6 +104,14 @@ function TooltipBox({ active, payload, labelFormatter }) {
 }
 
 export default function ExpensesCharts({ month }) {
+  const { isDark } = useAdminTheme();
+  // Recharts axes/grid/legend render as inline SVG outside the
+  // Tailwind class-cascade, so colors must be picked per-theme here
+  // rather than via dark: utilities (which silently noop on SVG attrs).
+  const gridStroke = isDark ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.10)";
+  const axisStroke = isDark ? "rgba(255,255,255,0.55)" : "rgba(15,23,42,0.55)";
+  const legendColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
+
   const trendQuery = useQuery({
     queryKey: ["accounting-expenses-trend", month, 12],
     enabled: !!month,
@@ -187,27 +207,30 @@ export default function ExpensesCharts({ month }) {
               data={trendData}
               margin={{ top: 6, right: 12, left: 0, bottom: 6 }}
             >
-              <CartesianGrid stroke="rgba(255,255,255,0.06)" />
+              <CartesianGrid stroke={gridStroke} />
               <XAxis
                 dataKey="month"
                 tickFormatter={shortMonth}
-                stroke="rgba(255,255,255,0.55)"
-                tick={{ fontSize: 11 }}
+                stroke={axisStroke}
+                tick={{ fontSize: 11, fill: axisStroke }}
               />
               <YAxis
-                stroke="rgba(255,255,255,0.55)"
-                tick={{ fontSize: 11 }}
+                stroke={axisStroke}
+                tick={{ fontSize: 11, fill: axisStroke }}
                 tickFormatter={(v) =>
                   v >= 1000 ? `${Math.round(v / 1000)}k` : v
                 }
               />
               <Tooltip
                 content={
-                  <TooltipBox labelFormatter={(m) => monthLabel(m)} />
+                  <TooltipBox
+                    isDark={isDark}
+                    labelFormatter={(m) => monthLabel(m)}
+                  />
                 }
               />
               <Legend
-                wrapperStyle={{ color: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                wrapperStyle={{ color: legendColor, fontSize: 12 }}
               />
               <Line
                 type="monotone"
@@ -280,10 +303,10 @@ export default function ExpensesCharts({ month }) {
                   />
                 ))}
               </Pie>
-              <Tooltip content={<TooltipBox />} />
+              <Tooltip content={<TooltipBox isDark={isDark} />} />
               <Legend
                 wrapperStyle={{
-                  color: "rgba(255,255,255,0.7)",
+                  color: legendColor,
                   fontSize: 11,
                 }}
               />
@@ -315,26 +338,26 @@ export default function ExpensesCharts({ month }) {
               data={barData}
               margin={{ top: 6, right: 12, left: 0, bottom: 6 }}
             >
-              <CartesianGrid stroke="rgba(255,255,255,0.06)" />
+              <CartesianGrid stroke={gridStroke} />
               <XAxis
                 dataKey="name"
-                stroke="rgba(255,255,255,0.55)"
-                tick={{ fontSize: 11 }}
+                stroke={axisStroke}
+                tick={{ fontSize: 11, fill: axisStroke }}
                 interval={0}
                 angle={-15}
                 textAnchor="end"
                 height={50}
               />
               <YAxis
-                stroke="rgba(255,255,255,0.55)"
-                tick={{ fontSize: 11 }}
+                stroke={axisStroke}
+                tick={{ fontSize: 11, fill: axisStroke }}
                 tickFormatter={(v) =>
                   v >= 1000 ? `${Math.round(v / 1000)}k` : v
                 }
               />
-              <Tooltip content={<TooltipBox />} />
+              <Tooltip content={<TooltipBox isDark={isDark} />} />
               <Legend
-                wrapperStyle={{ color: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                wrapperStyle={{ color: legendColor, fontSize: 12 }}
               />
               <Bar
                 dataKey="total"

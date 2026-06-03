@@ -175,12 +175,12 @@ export default function MarketingMenuPage() {
         <div className={`${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`}>
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-3">
-              <div className={`${ws.iconBox} w-12 h-12 text-amber-200`}>
+              <div className={`${ws.iconBox} w-12 h-12 text-amber-700 dark:text-amber-200`}>
                 <Coffee className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">منيو الضيافة</h1>
-                <p className="text-white/55 text-sm mt-1">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">منيو الضيافة</h1>
+                <p className="text-slate-600 dark:text-white/55 text-sm mt-1">
                   الأصناف التي ستعرض للبلوقر بعد تفعيل بطاقته.
                 </p>
               </div>
@@ -198,7 +198,7 @@ export default function MarketingMenuPage() {
         {showForm ? (
           <div className={`${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 {editing ? "تعديل صنف" : "صنف جديد"}
               </h3>
               <button onClick={resetForm} className={ws.iconButton} aria-label="إغلاق">
@@ -207,7 +207,7 @@ export default function MarketingMenuPage() {
             </div>
 
             {error ? (
-              <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm">
+              <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm">
                 {error}
               </div>
             ) : null}
@@ -217,7 +217,7 @@ export default function MarketingMenuPage() {
               className="grid grid-cols-1 sm:grid-cols-2 gap-4"
             >
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   التصنيف *
                 </label>
                 <input
@@ -236,7 +236,7 @@ export default function MarketingMenuPage() {
                 </datalist>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   ترتيب العرض
                 </label>
                 <input
@@ -247,7 +247,7 @@ export default function MarketingMenuPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   الاسم (عربي) *
                 </label>
                 <input
@@ -259,7 +259,7 @@ export default function MarketingMenuPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   الاسم (إنجليزي)
                 </label>
                 <input
@@ -270,7 +270,7 @@ export default function MarketingMenuPage() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   وصف (اختياري)
                 </label>
                 <textarea
@@ -283,7 +283,7 @@ export default function MarketingMenuPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   السعر (ر.س — اختياري)
                 </label>
                 <input
@@ -305,7 +305,7 @@ export default function MarketingMenuPage() {
                   }
                   className="w-5 h-5"
                 />
-                <label htmlFor="active" className="text-white text-sm">
+                <label htmlFor="active" className="text-slate-900 dark:text-white text-sm">
                   نشط (يظهر للبلوقر)
                 </label>
               </div>
@@ -331,48 +331,48 @@ export default function MarketingMenuPage() {
 
         <div className="space-y-6">
           {itemsQuery.isLoading ? (
-            <div className={`${ws.glass} ${ws.card} p-8 text-center text-white/55`}>
+            <div className={`${ws.glass} ${ws.card} p-8 text-center text-slate-600 dark:text-white/55`}>
               جاري التحميل…
             </div>
           ) : Object.keys(grouped).length === 0 ? (
-            <div className={`${ws.glass} ${ws.card} p-12 text-center text-white/55`}>
+            <div className={`${ws.glass} ${ws.card} p-12 text-center text-slate-600 dark:text-white/55`}>
               <Coffee className="w-12 h-12 mx-auto mb-3 opacity-40" />
               <p>لا توجد أصناف. ابدأ بإضافة منيو الضيافة.</p>
             </div>
           ) : (
             Object.entries(grouped).map(([category, list]) => (
               <div key={category} className={`${ws.glass} ${ws.card} overflow-hidden`}>
-                <div className="px-5 py-3 border-b border-white/[0.06] bg-white/[0.03]">
-                  <h3 className="text-white font-bold">{category}</h3>
+                <div className="px-5 py-3 border-b border-white/[0.06] bg-slate-50 dark:bg-white/[0.03]">
+                  <h3 className="text-slate-900 dark:text-white font-bold">{category}</h3>
                 </div>
                 <table className="w-full">
                   <tbody>
                     {list.map((it) => (
                       <tr
                         key={it.id}
-                        className="border-t border-white/[0.04] hover:bg-white/[0.02]"
+                        className="border-t border-white/[0.04] hover:bg-slate-50/50 dark:bg-white/[0.02]"
                       >
                         <td className="px-4 py-3">
-                          <div className="text-white font-medium">
+                          <div className="text-slate-900 dark:text-white font-medium">
                             {it.name_ar}
                             {!it.is_active ? (
-                              <span className="mr-2 text-xs px-2 py-0.5 rounded-full bg-white/[0.06] text-white/55">
+                              <span className="mr-2 text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/55">
                                 مخفي
                               </span>
                             ) : null}
                           </div>
                           {it.name_en ? (
-                            <div className="text-white/45 text-xs mt-0.5">
+                            <div className="text-slate-500 dark:text-white/45 text-xs mt-0.5">
                               {it.name_en}
                             </div>
                           ) : null}
                           {it.description ? (
-                            <div className="text-white/40 text-xs mt-1 leading-relaxed">
+                            <div className="text-slate-400 dark:text-white/40 text-xs mt-1 leading-relaxed">
                               {it.description}
                             </div>
                           ) : null}
                         </td>
-                        <td className="px-4 py-3 text-white/70 text-sm whitespace-nowrap">
+                        <td className="px-4 py-3 text-slate-700 dark:text-white/70 text-sm whitespace-nowrap">
                           {it.price !== null && it.price !== undefined
                             ? `${Number(it.price).toFixed(2)} ر.س`
                             : "—"}

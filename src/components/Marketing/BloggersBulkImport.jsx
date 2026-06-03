@@ -166,14 +166,14 @@ export default function BloggersBulkImport({ onClose }) {
           className={`p-5 sm:p-6 border-b ${ws.divider} flex items-start justify-between gap-3`}
         >
           <div className="flex items-center gap-3 min-w-0">
-            <div className={`${ws.iconBox} w-12 h-12 text-pink-200`}>
+            <div className={`${ws.iconBox} w-12 h-12 text-pink-700 dark:text-pink-200`}>
               <Upload className="w-6 h-6" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-xl font-bold text-white tracking-tight">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                 رفع البلوقرز من ملف
               </h2>
-              <div className="text-sm text-white/55 mt-0.5">
+              <div className="text-sm text-slate-600 dark:text-white/55 mt-0.5">
                 حمّل القالب، عبّ الأسماء، ثم ارفع الملف لإضافتهم دفعة واحدة.
               </div>
             </div>
@@ -191,20 +191,20 @@ export default function BloggersBulkImport({ onClose }) {
         <div className="overflow-y-auto p-5 sm:p-6 space-y-5">
           {/* Step 1: template */}
           <div
-            className={`${ws.glassSoft} border border-white/10 rounded-3xl p-4`}
+            className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4`}
           >
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <div className="flex items-center gap-3">
                 <div
-                  className={`${ws.iconBox} w-10 h-10 text-emerald-200`}
+                  className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}
                 >
                   <FileSpreadsheet className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-white font-semibold text-sm">
+                  <div className="text-slate-900 dark:text-white font-semibold text-sm">
                     القالب (CSV)
                   </div>
-                  <div className="text-white/55 text-xs">
+                  <div className="text-slate-600 dark:text-white/55 text-xs">
                     الأعمدة: name | handle | phone | note
                   </div>
                 </div>
@@ -222,18 +222,18 @@ export default function BloggersBulkImport({ onClose }) {
 
           {/* Step 2: upload */}
           <div
-            className={`${ws.glassSoft} border border-white/10 rounded-3xl p-4`}
+            className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl p-4`}
           >
             <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
               <div className="flex items-center gap-3">
-                <div className={`${ws.iconBox} w-10 h-10 text-sky-200`}>
+                <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`}>
                   <Upload className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-white font-semibold text-sm">
+                  <div className="text-slate-900 dark:text-white font-semibold text-sm">
                     ارفع الملف بعد التعبئة
                   </div>
-                  <div className="text-white/55 text-xs">
+                  <div className="text-slate-600 dark:text-white/55 text-xs">
                     احفظه كـ CSV من Excel أو Sheets
                   </div>
                 </div>
@@ -256,14 +256,14 @@ export default function BloggersBulkImport({ onClose }) {
             </div>
 
             {fileName ? (
-              <div className="text-white/70 text-xs flex items-center gap-2">
-                <span className="text-white/45">الملف:</span>
+              <div className="text-slate-700 dark:text-white/70 text-xs flex items-center gap-2">
+                <span className="text-slate-500 dark:text-white/45">الملف:</span>
                 <span dir="ltr">{fileName}</span>
               </div>
             ) : null}
 
             {parseError ? (
-              <div className="mt-3 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-start gap-2">
+              <div className="mt-3 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>{parseError}</span>
               </div>
@@ -279,40 +279,40 @@ export default function BloggersBulkImport({ onClose }) {
           {/* Preview table */}
           {parsedRows && parsedRows.length > 0 && !result ? (
             <div
-              className={`${ws.glassSoft} border border-white/10 rounded-3xl overflow-hidden`}
+              className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden`}
             >
-              <div className="px-4 py-3 border-b border-white/10 text-white/80 text-sm font-semibold">
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-white/10 text-slate-800 dark:text-white/80 text-sm font-semibold">
                 معاينة أول 10 صفوف
               </div>
               <div className="max-h-[260px] overflow-y-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-white/[0.04] sticky top-0">
-                      <th className="text-right px-3 py-2 text-white/65 font-semibold">
+                    <tr className="bg-slate-50 dark:bg-white/[0.04] sticky top-0">
+                      <th className="text-right px-3 py-2 text-slate-600 dark:text-white/65 font-semibold">
                         الاسم
                       </th>
-                      <th className="text-right px-3 py-2 text-white/65 font-semibold">
+                      <th className="text-right px-3 py-2 text-slate-600 dark:text-white/65 font-semibold">
                         الرابط
                       </th>
-                      <th className="text-right px-3 py-2 text-white/65 font-semibold">
+                      <th className="text-right px-3 py-2 text-slate-600 dark:text-white/65 font-semibold">
                         الجوال
                       </th>
-                      <th className="text-right px-3 py-2 text-white/65 font-semibold">
+                      <th className="text-right px-3 py-2 text-slate-600 dark:text-white/65 font-semibold">
                         ملاحظة
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {parsedRows.slice(0, 10).map((row, idx) => (
-                      <tr key={idx} className="border-t border-white/5">
-                        <td className="px-3 py-2 text-white">{row.name}</td>
-                        <td className="px-3 py-2 text-white/70 truncate max-w-[18rem]" dir="ltr">
+                      <tr key={idx} className="border-t border-slate-100 dark:border-white/5">
+                        <td className="px-3 py-2 text-slate-900 dark:text-white">{row.name}</td>
+                        <td className="px-3 py-2 text-slate-700 dark:text-white/70 truncate max-w-[18rem]" dir="ltr">
                           {row.handle || ""}
                         </td>
-                        <td className="px-3 py-2 text-white/70" dir="ltr">
+                        <td className="px-3 py-2 text-slate-700 dark:text-white/70" dir="ltr">
                           {row.phone}
                         </td>
-                        <td className="px-3 py-2 text-white/70">
+                        <td className="px-3 py-2 text-slate-700 dark:text-white/70">
                           {row.note}
                         </td>
                       </tr>
@@ -321,7 +321,7 @@ export default function BloggersBulkImport({ onClose }) {
                 </table>
               </div>
               {parsedRows.length > 10 ? (
-                <div className="px-4 py-2 text-white/45 text-xs border-t border-white/5">
+                <div className="px-4 py-2 text-slate-500 dark:text-white/45 text-xs border-t border-slate-100 dark:border-white/5">
                   … و {parsedRows.length - 10} صف إضافي
                 </div>
               ) : null}
@@ -331,42 +331,42 @@ export default function BloggersBulkImport({ onClose }) {
           {/* Result */}
           {result ? (
             <div
-              className={`${ws.glassSoft} border border-white/10 rounded-3xl overflow-hidden`}
+              className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden`}
             >
-              <div className="px-4 py-3 border-b border-white/10 flex items-center gap-2 text-white/80 text-sm font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-200" />
+              <div className="px-4 py-3 border-b border-slate-200 dark:border-white/10 flex items-center gap-2 text-slate-800 dark:text-white/80 text-sm font-semibold">
+                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
                 نتيجة الرفع
               </div>
               <div className="p-4 grid grid-cols-3 gap-3 text-center">
                 <div>
-                  <div className="text-xs text-white/55">إجمالي</div>
-                  <div className="text-2xl font-bold text-white">
+                  <div className="text-xs text-slate-600 dark:text-white/55">إجمالي</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">
                     {result.counts?.total ?? 0}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-white/55">تم إضافتهم</div>
-                  <div className="text-2xl font-bold text-emerald-200">
+                  <div className="text-xs text-slate-600 dark:text-white/55">تم إضافتهم</div>
+                  <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-200">
                     {result.counts?.created ?? 0}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-white/55">تم تخطيهم</div>
-                  <div className="text-2xl font-bold text-amber-200">
+                  <div className="text-xs text-slate-600 dark:text-white/55">تم تخطيهم</div>
+                  <div className="text-2xl font-bold text-amber-700 dark:text-amber-200">
                     {result.counts?.skipped ?? 0}
                   </div>
                 </div>
               </div>
               {Array.isArray(result.skipped) && result.skipped.length > 0 ? (
                 <div className="px-4 pb-4">
-                  <div className="text-white/55 text-xs mb-2">
+                  <div className="text-slate-600 dark:text-white/55 text-xs mb-2">
                     أسباب التخطي:
                   </div>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
                     {result.skipped.slice(0, 50).map((s, i) => (
                       <div
                         key={i}
-                        className="text-xs text-amber-200/80 bg-amber-500/5 border border-amber-500/15 rounded-xl px-3 py-1.5"
+                        className="text-xs text-amber-700 dark:text-amber-200/80 bg-amber-500/5 border border-amber-500/15 rounded-xl px-3 py-1.5"
                       >
                         الصف {s.row}: {s.reason}
                       </div>
@@ -378,7 +378,7 @@ export default function BloggersBulkImport({ onClose }) {
           ) : null}
 
           {uploadMutation.isError ? (
-            <div className="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-start gap-2">
+            <div className="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm flex items-start gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{uploadMutation.error?.message || "فشل الرفع"}</span>
             </div>
@@ -428,7 +428,7 @@ export default function BloggersBulkImport({ onClose }) {
               >
                 {uploadMutation.isPending ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white/40 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-slate-400 dark:border-white/40 border-t-transparent rounded-full animate-spin" />
                     <span>جاري الرفع…</span>
                   </>
                 ) : (

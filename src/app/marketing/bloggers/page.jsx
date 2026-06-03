@@ -202,12 +202,12 @@ export default function BloggersPage() {
         <div className={`${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`}>
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-3">
-              <div className={`${ws.iconBox} w-12 h-12 text-pink-200`}>
+              <div className={`${ws.iconBox} w-12 h-12 text-pink-700 dark:text-pink-200`}>
                 <Megaphone className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">بطاقات البلوقرز</h1>
-                <p className="text-white/55 text-sm mt-1">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">بطاقات البلوقرز</h1>
+                <p className="text-slate-600 dark:text-white/55 text-sm mt-1">
                   أنشئ بطاقات دعوة لكل بلوقر مع كود QR للتفعيل عبر الكاشير.
                 </p>
               </div>
@@ -235,7 +235,7 @@ export default function BloggersPage() {
         {showForm ? (
           <div className={`${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 {editing ? "تعديل بلوقر" : "بلوقر جديد"}
               </h3>
               <button onClick={resetForm} className={ws.iconButton} aria-label="إغلاق">
@@ -244,14 +244,14 @@ export default function BloggersPage() {
             </div>
 
             {error ? (
-              <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm">
+              <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm">
                 {error}
               </div>
             ) : null}
 
             <form onSubmit={submit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   الاسم *
                 </label>
                 <input
@@ -264,7 +264,7 @@ export default function BloggersPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   رابط صفحة البلوقر (اختياري)
                 </label>
                 <input
@@ -278,7 +278,7 @@ export default function BloggersPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   الجوال (اختياري)
                 </label>
                 <input
@@ -290,7 +290,7 @@ export default function BloggersPage() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-white/55 mb-2">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2">
                   ملاحظة (اختياري)
                 </label>
                 <textarea
@@ -323,9 +323,9 @@ export default function BloggersPage() {
 
         <div className={`${ws.glass} ${ws.card} overflow-hidden`}>
           {bloggersQuery.isLoading ? (
-            <div className="p-8 text-center text-white/55">جاري التحميل…</div>
+            <div className="p-8 text-center text-slate-600 dark:text-white/55">جاري التحميل…</div>
           ) : bloggers.length === 0 ? (
-            <div className="p-12 text-center text-white/55">
+            <div className="p-12 text-center text-slate-600 dark:text-white/55">
               <Megaphone className="w-12 h-12 mx-auto mb-3 opacity-40" />
               <p>لا يوجد بلوقرز بعد. ابدأ بإضافة واحد.</p>
             </div>
@@ -333,26 +333,26 @@ export default function BloggersPage() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="bg-white/[0.04]">
-                    <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
+                  <tr className="bg-slate-50 dark:bg-white/[0.04]">
+                    <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
                       الاسم
                     </th>
-                    <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
+                    <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
                       الكود
                     </th>
-                    <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
+                    <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
                       الحالة
                     </th>
-                    <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
+                    <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
                       الدعوة
                     </th>
-                    <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
+                    <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
                       التفعيل
                     </th>
-                    <th className="text-right px-4 py-3 text-sm font-semibold text-white/55">
+                    <th className="text-right px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
                       أُنشئ
                     </th>
-                    <th className="text-center px-4 py-3 text-sm font-semibold text-white/55">
+                    <th className="text-center px-4 py-3 text-sm font-semibold text-slate-600 dark:text-white/55">
                       إجراءات
                     </th>
                   </tr>
@@ -364,7 +364,7 @@ export default function BloggersPage() {
                     return (
                       <tr
                         key={b.id}
-                        className="border-t border-white/[0.04] hover:bg-white/[0.02]"
+                        className="border-t border-white/[0.04] hover:bg-slate-50/50 dark:bg-white/[0.02]"
                       >
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
@@ -377,12 +377,12 @@ export default function BloggersPage() {
                               className={`${ws.btnNeutral} w-8 h-8 p-0 justify-center shrink-0 disabled:opacity-50`}
                             >
                               {downloadingId === b.id ? (
-                                <div className="w-3.5 h-3.5 border-2 border-white/40 border-t-transparent rounded-full animate-spin" />
+                                <div className="w-3.5 h-3.5 border-2 border-slate-400 dark:border-white/40 border-t-transparent rounded-full animate-spin" />
                               ) : (
                                 <Download className="w-3.5 h-3.5" />
                               )}
                             </button>
-                            <div className="text-white font-medium">{b.name}</div>
+                            <div className="text-slate-900 dark:text-white font-medium">{b.name}</div>
                           </div>
                           {b.handle ? (
                             <a
@@ -393,7 +393,7 @@ export default function BloggersPage() {
                               }
                               target="_blank"
                               rel="noreferrer noopener"
-                              className="text-emerald-200/80 hover:text-emerald-200 text-xs mt-0.5 inline-block truncate max-w-[18rem]"
+                              className="text-emerald-700 dark:text-emerald-200/80 hover:text-emerald-700 dark:text-emerald-200 text-xs mt-0.5 inline-block truncate max-w-[18rem]"
                               dir="ltr"
                               title={b.handle}
                             >
@@ -401,46 +401,46 @@ export default function BloggersPage() {
                             </a>
                           ) : null}
                           {b.phone ? (
-                            <div className="text-white/45 text-xs">{b.phone}</div>
+                            <div className="text-slate-500 dark:text-white/45 text-xs">{b.phone}</div>
                           ) : null}
                         </td>
                         <td className="px-4 py-3">
-                          <code className="text-emerald-200 text-sm bg-white/[0.04] px-2 py-1 rounded">
+                          <code className="text-emerald-700 dark:text-emerald-200 text-sm bg-slate-50 dark:bg-white/[0.04] px-2 py-1 rounded">
                             {b.slug}
                           </code>
                         </td>
                         <td className="px-4 py-3">
                           {isActive ? (
-                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-500/25">
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border border-emerald-500/25">
                               <CheckCircle2 className="w-3 h-3" />
                               مُفعَّل
                             </span>
                           ) : isInvited ? (
-                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-sky-500/15 text-sky-200 border border-sky-500/25">
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-sky-500/15 text-sky-700 dark:text-sky-200 border border-sky-500/25">
                               <MailCheck className="w-3 h-3" />
                               تمت الدعوة
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-200 border border-amber-500/25">
+                            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-200 border border-amber-500/25">
                               <Clock className="w-3 h-3" />
                               بانتظار التفعيل
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-white/55 text-xs">
+                        <td className="px-4 py-3 text-slate-600 dark:text-white/55 text-xs">
                           {isActive ? (
-                            <span className="inline-flex items-center gap-1 text-xs text-emerald-200">
+                            <span className="inline-flex items-center gap-1 text-xs text-emerald-700 dark:text-emerald-200">
                               <CheckCircle2 className="w-3 h-3" />
                               تم
                             </span>
                           ) : isInvited ? (
                             <div className="flex flex-col">
-                              <span className="inline-flex items-center gap-1 text-xs text-sky-200">
+                              <span className="inline-flex items-center gap-1 text-xs text-sky-700 dark:text-sky-200">
                                 <MailCheck className="w-3 h-3" />
                                 تمت
                               </span>
                               {b.invited_at ? (
-                                <span className="text-white/35 text-[10px] mt-0.5">
+                                <span className="text-slate-400 dark:text-white/35 text-[10px] mt-0.5">
                                   {formatDateTime(b.invited_at)}
                                 </span>
                               ) : null}
@@ -457,7 +457,7 @@ export default function BloggersPage() {
                             >
                               {markInvitedMut.isPending &&
                               markInvitedMut.variables === b.id ? (
-                                <div className="w-3 h-3 border-2 border-white/40 border-t-transparent rounded-full animate-spin" />
+                                <div className="w-3 h-3 border-2 border-slate-400 dark:border-white/40 border-t-transparent rounded-full animate-spin" />
                               ) : (
                                 <Send className="w-3 h-3" />
                               )}
@@ -465,21 +465,21 @@ export default function BloggersPage() {
                             </button>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-white/55 text-xs">
+                        <td className="px-4 py-3 text-slate-600 dark:text-white/55 text-xs">
                           {b.activated_at ? (
                             <>
                               <div>{formatDateTime(b.activated_at)}</div>
                               {b.activated_by_employee_name ? (
-                                <div className="text-white/35 mt-0.5">
+                                <div className="text-slate-400 dark:text-white/35 mt-0.5">
                                   {b.activated_by_employee_name}
                                 </div>
                               ) : null}
                             </>
                           ) : (
-                            <span className="text-white/35">—</span>
+                            <span className="text-slate-400 dark:text-white/35">—</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-white/55 text-xs">
+                        <td className="px-4 py-3 text-slate-600 dark:text-white/55 text-xs">
                           {formatDateTime(b.created_at)}
                         </td>
                         <td className="px-4 py-3">

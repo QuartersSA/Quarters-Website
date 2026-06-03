@@ -10,7 +10,7 @@ import { ws } from "@/components/Workspace/ui";
 export function TaskStats({ stats }) {
   const cardClass = `${ws.glassSoft} ${ws.card} p-4`;
 
-  const labelClass = "text-xs font-semibold text-white/55";
+  const labelClass = "text-xs font-semibold text-slate-600 dark:text-white/55";
   const numberClass = "mt-2 text-3xl font-extrabold tracking-tight";
 
   const items = [
@@ -19,40 +19,40 @@ export function TaskStats({ stats }) {
       label: "الإجمالي",
       value: stats.total,
       Icon: ListTodo,
-      tint: "text-white",
-      iconTint: "text-white/75",
+      tint: "text-slate-900 dark:text-white",
+      iconTint: "text-slate-700 dark:text-white/75",
     },
     {
       key: "overdue",
       label: "متأخرة",
       value: stats.overdue,
       Icon: AlertTriangle,
-      tint: "text-red-300",
-      iconTint: "text-red-200",
+      tint: "text-red-700 dark:text-red-300",
+      iconTint: "text-red-700 dark:text-red-200",
     },
     {
       key: "today",
       label: "اليوم",
       value: stats.today,
       Icon: CalendarDays,
-      tint: "text-amber-300",
-      iconTint: "text-amber-200",
+      tint: "text-amber-700 dark:text-amber-300",
+      iconTint: "text-amber-700 dark:text-amber-200",
     },
     {
       key: "inProgress",
       label: "قيد التنفيذ",
       value: stats.inProgress,
       Icon: Activity,
-      tint: "text-sky-300",
-      iconTint: "text-sky-200",
+      tint: "text-sky-700 dark:text-sky-300",
+      iconTint: "text-sky-700 dark:text-sky-200",
     },
     {
       key: "done",
       label: "مكتملة",
       value: stats.done,
       Icon: CheckCircle2,
-      tint: "text-emerald-300",
-      iconTint: "text-emerald-200",
+      tint: "text-emerald-700 dark:text-emerald-300",
+      iconTint: "text-emerald-700 dark:text-emerald-200",
     },
   ];
 

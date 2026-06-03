@@ -16,8 +16,16 @@ export const ws = {
   // "documents on a desk" feel.
   appBg:
     "[color-scheme:light] dark:[color-scheme:dark] " +
-    "bg-gradient-to-b from-slate-50 via-white to-slate-100/80 text-slate-900 font-inter " +
-    "dark:from-[#0d1426] dark:via-[#101c38] dark:to-[#090f1f] dark:text-white",
+    // Light: near-white surface, the faintest hint of slate at the
+    // very bottom only — operator complained the previous
+    // slate-50/100 gradient read as flat grey.
+    "bg-white text-slate-900 font-inter " +
+    "bg-gradient-to-b from-white via-white to-slate-50/40 " +
+    // Dark: lifted-navy gradient. The previous #0d1426 → #090f1f range
+    // read as near-black; the operator asked for it to be lightened.
+    // These shades stay clearly "dark" while keeping enough luminance
+    // that cards and content read as floating ON the surface.
+    "dark:from-[#1a2540] dark:via-[#1f2c52] dark:to-[#16203a] dark:text-white",
 
   // Surfaces — frosted glass.
   //
@@ -61,26 +69,30 @@ export const ws = {
   title: "text-slate-900 dark:text-white font-bold tracking-tight",
   muted: "text-slate-600 dark:text-white/60",
 
-  // Inputs — slightly more rounded feel + an emerald focus ring
-  // that's visible against light bg without being garish.
+  // Inputs — slightly off-white surface so the field reads as a real
+  // input on top of a white card (without the contrast feeling
+  // aggressive). Focus state bumps to pure white + emerald ring so
+  // the active control is unmistakable.
   input:
-    "w-full appearance-none rounded-2xl bg-white/90 supports-[backdrop-filter]:bg-white/75 border border-slate-200 text-slate-900 placeholder:text-slate-400 " +
+    "w-full appearance-none rounded-2xl bg-slate-50/70 supports-[backdrop-filter]:bg-slate-50/60 border border-slate-200 text-slate-900 placeholder:text-slate-400 " +
     "shadow-[0_1px_2px_rgba(15,23,42,0.03)] " +
     "transition-colors transition-shadow " +
-    "focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 focus:bg-white " +
+    "hover:border-slate-300 hover:bg-white " +
+    "focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-400/20 focus:bg-white " +
     "disabled:opacity-50 disabled:cursor-not-allowed " +
     "dark:bg-[#132044]/55 dark:supports-[backdrop-filter]:bg-[#132044]/35 dark:border-white/10 dark:text-white dark:placeholder:text-white/35 " +
-    "dark:shadow-none dark:focus:border-white/20 dark:focus:ring-emerald-400/10 dark:focus:bg-[#132044]/55 " +
+    "dark:shadow-none dark:hover:border-white/15 dark:hover:bg-[#132044]/55 dark:focus:border-white/20 dark:focus:ring-emerald-400/10 dark:focus:bg-[#132044]/55 " +
     "[&:-webkit-autofill]:shadow-[0_0_0_1000px_white_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:#0f172a] " +
     "dark:[&:-webkit-autofill]:shadow-[0_0_0_1000px_rgba(19,32,68,0.55)_inset] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)]",
   select:
-    "w-full appearance-none rounded-2xl bg-white/90 supports-[backdrop-filter]:bg-white/75 border border-slate-200 text-slate-900 " +
+    "w-full appearance-none rounded-2xl bg-slate-50/70 supports-[backdrop-filter]:bg-slate-50/60 border border-slate-200 text-slate-900 " +
     "shadow-[0_1px_2px_rgba(15,23,42,0.03)] " +
     "transition-colors transition-shadow " +
-    "focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 focus:bg-white " +
+    "hover:border-slate-300 hover:bg-white " +
+    "focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-400/20 focus:bg-white " +
     "disabled:opacity-50 disabled:cursor-not-allowed " +
     "dark:bg-[#132044]/55 dark:supports-[backdrop-filter]:bg-[#132044]/35 dark:border-white/10 dark:text-white " +
-    "dark:shadow-none dark:focus:border-white/20 dark:focus:ring-emerald-400/10 dark:focus:bg-[#132044]/55",
+    "dark:shadow-none dark:hover:border-white/15 dark:hover:bg-[#132044]/55 dark:focus:border-white/20 dark:focus:ring-emerald-400/10 dark:focus:bg-[#132044]/55",
 
   // Buttons — emerald primary uses a stronger, more saturated light
   // pair so it pops on white surfaces. Neutral / danger get gentler
@@ -121,6 +133,21 @@ export const ws = {
   // Common building blocks
   card: "rounded-3xl",
   divider: "border-slate-200/60 dark:border-white/10",
+
+  // Inner card — for tinted output panels / nested value boxes
+  // sitting INSIDE a `ws.glass` shell. Plain `ws.glass` on top of
+  // another `ws.glass` looks flat (white-on-white in light), so this
+  // token gives those inner surfaces a subtle slate tint that reads
+  // as "this is data, not chrome".
+  innerCard:
+    "rounded-2xl bg-slate-50 border border-slate-200 " +
+    "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] " +
+    "dark:bg-white/[0.03] dark:border-white/10 dark:shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]",
+  // Soft section header bar — used at the top of a card or above a
+  // grouped form row. Pairs with `innerCard` for grouped panels.
+  sectionHeader:
+    "px-4 py-3 bg-slate-50/80 border-b border-slate-200/70 " +
+    "dark:bg-white/[0.03] dark:border-white/10",
   // Icon container — used for the big rounded squares that hold a
   // single icon (sidebar item icons, modal headers, etc). Light
   // version has a subtle vertical gradient + tighter border so the

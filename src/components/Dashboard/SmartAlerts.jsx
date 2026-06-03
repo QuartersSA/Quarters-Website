@@ -9,20 +9,24 @@ import {
 import { useState } from "react";
 import { ws } from "@/components/Workspace/ui";
 
+// Light mode keeps the soft tinted panel (works on the near-white
+// page bg). Dark mode darkens the surface so the alert reads as a
+// solid near-black card with a colored cast, matching the rest of
+// the dashboard's dark cards instead of the washed-out 10% tint.
 const ALERT_STYLES = {
   danger: {
-    bg: "bg-red-500/10 border-red-500/20",
-    text: "text-red-700 dark:text-red-700 dark:dark:text-red-200",
+    bg: "bg-red-500/10 border-red-500/20 dark:bg-red-950/40 dark:border-red-900/50",
+    text: "text-red-700 dark:text-red-200",
     icon: <AlertTriangle className="w-5 h-5" />,
   },
   warning: {
-    bg: "bg-amber-500/10 border-amber-500/20",
-    text: "text-amber-700 dark:text-amber-700 dark:dark:text-amber-200",
+    bg: "bg-amber-500/10 border-amber-500/20 dark:bg-amber-950/40 dark:border-amber-900/50",
+    text: "text-amber-700 dark:text-amber-200",
     icon: <AlertCircle className="w-5 h-5" />,
   },
   info: {
-    bg: "bg-sky-500/10 border-sky-500/20",
-    text: "text-sky-700 dark:text-sky-700 dark:dark:text-sky-200",
+    bg: "bg-sky-500/10 border-sky-500/20 dark:bg-sky-950/40 dark:border-sky-900/50",
+    text: "text-sky-700 dark:text-sky-200",
     icon: <Info className="w-5 h-5" />,
   },
 };

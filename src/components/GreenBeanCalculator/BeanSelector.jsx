@@ -25,8 +25,8 @@ export function BeanSelector({
     <div className={cardShell}>
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <div className="text-white font-bold tracking-tight">البن الأخضر</div>
-          <div className="text-xs text-white/50 mt-1">
+          <div className="text-slate-900 dark:text-white font-bold tracking-tight">البن الأخضر</div>
+          <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
             إضافة اسم فقط، ثم اختره واملأ الأسعار. (الضريبة 15%)
           </div>
         </div>
@@ -44,7 +44,7 @@ export function BeanSelector({
 
       <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-semibold text-white/70 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
             اختر البن (في وضع التسجيل)
           </label>
           <GlassSelect
@@ -54,7 +54,7 @@ export function BeanSelector({
             disabled={selectDisabled}
           />
           {selectDisabled ? (
-            <div className="mt-2 text-xs text-white/40">
+            <div className="mt-2 text-xs text-slate-400 dark:text-white/40">
               أنت الآن في وضع "تسعير فقط" — اختيار البن معطّل حتى لا يرتبط
               التسعير باسم.
             </div>
@@ -62,7 +62,7 @@ export function BeanSelector({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-white/70 mb-2">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
             إضافة بن جديد (اسم فقط)
           </label>
           <div className="flex gap-2">

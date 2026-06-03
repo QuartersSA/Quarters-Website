@@ -36,17 +36,17 @@ export function TaskImageAttachment({
           <img
             src={url}
             alt={name}
-            className="w-full h-[140px] object-cover rounded-2xl border border-white/10"
+            className="w-full h-[140px] object-cover rounded-2xl border border-slate-200 dark:border-white/10"
           />
         ) : (
           <div
-            className={`flex items-center justify-between gap-3 ${ws.glass} ${ws.card} px-4 py-3 border border-white/10`}
+            className={`flex items-center justify-between gap-3 ${ws.glass} ${ws.card} px-4 py-3 border border-slate-200 dark:border-white/10`}
           >
             <span className="inline-flex items-center gap-2 min-w-0">
-              <FileText className="w-4 h-4 text-white/70" />
-              <span className="text-sm text-white/85 truncate">{name}</span>
+              <FileText className="w-4 h-4 text-slate-700 dark:text-white/70" />
+              <span className="text-sm text-slate-800 dark:text-white/85 truncate">{name}</span>
             </span>
-            <span className="text-xs text-white/55">فتح</span>
+            <span className="text-xs text-slate-600 dark:text-white/55">فتح</span>
           </div>
         )}
       </a>
@@ -58,7 +58,7 @@ export function TaskImageAttachment({
         <button
           type="button"
           onClick={() => removeAt(idx)}
-          className="absolute top-2 left-2 w-9 h-9 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center text-white/80 hover:bg-black/60"
+          className="absolute top-2 left-2 w-9 h-9 rounded-2xl bg-black/50 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-800 dark:text-white/80 hover:bg-black/60"
           title="إزالة"
         >
           <X className="w-4 h-4" />
@@ -71,7 +71,7 @@ export function TaskImageAttachment({
     <div className={`${ws.glassSoft} ${ws.card} p-4`}>
       <FormRowLabel icon={labelIcon} label="المرفقات" />
 
-      <div className="mt-1 text-xs text-white/50">
+      <div className="mt-1 text-xs text-slate-500 dark:text-white/50">
         الحد الأقصى: {maxCount} ملفات — {maxMb}MB لكل ملف
       </div>
 
@@ -111,16 +111,16 @@ export function TaskImageAttachment({
         ) : null}
       </div>
 
-      <div className="mt-2 text-sm text-white/60">{summaryText}</div>
+      <div className="mt-2 text-sm text-slate-600 dark:text-white/60">{summaryText}</div>
 
-      {error ? <div className="mt-2 text-sm text-red-300">{error}</div> : null}
+      {error ? <div className="mt-2 text-sm text-red-700 dark:text-red-300">{error}</div> : null}
 
       {hasAny ? (
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
           {safe.map(renderAttachment)}
         </div>
       ) : (
-        <div className="mt-2 text-sm text-white/55">لا يوجد مرفقات.</div>
+        <div className="mt-2 text-sm text-slate-600 dark:text-white/55">لا يوجد مرفقات.</div>
       )}
     </div>
   );

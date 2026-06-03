@@ -148,6 +148,9 @@ export function usePurchaseReceipt(
       // bare ["low-stock"] key invalidated nothing.
       queryClient.invalidateQueries({ queryKey: ["low-stock"] });
       queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
+      queryClient.invalidateQueries({ queryKey: ["over-stock"] });
+      queryClient.invalidateQueries({ queryKey: ["stock-value"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
       queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
     },
     onError: (err) => {
@@ -192,6 +195,9 @@ export function usePurchaseReceipt(
       // bare ["low-stock"] key invalidated nothing.
       queryClient.invalidateQueries({ queryKey: ["low-stock"] });
       queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
+      queryClient.invalidateQueries({ queryKey: ["over-stock"] });
+      queryClient.invalidateQueries({ queryKey: ["stock-value"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
       queryClient.invalidateQueries({ queryKey: ["operation-details"] });
       queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
     },

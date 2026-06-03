@@ -310,7 +310,7 @@ export function HREmployeeLogsModal({ isOpen, employee, onClose }) {
     );
   } else if (logsError) {
     content = (
-      <div className="text-center text-red-100 py-10">
+      <div className="text-center text-red-800 dark:text-red-100 py-10">
         تعذر تحميل السجل. حاول مرة ثانية.
       </div>
     );

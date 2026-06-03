@@ -75,8 +75,8 @@ export function ItemFormModal({
     { value: "شدة", label: "شدة" },
   ];
 
-  const labelClass = "block text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 text-sm font-semibold mb-2";
-  const helpClass = "text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/40 text-xs mt-1";
+  const labelClass = "block text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 text-sm font-semibold mb-2";
+  const helpClass = "text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/40 text-xs mt-1";
 
   const categoryOptions = [
     { value: "", label: "بدون فئة" },
@@ -135,7 +135,7 @@ export function ItemFormModal({
         <div
           className={`p-6 flex items-center justify-between shrink-0 ${ws.topBar}`}
         >
-          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white flex items-center gap-3 tracking-tight">
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
             <div className={`${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/80`}>
               <Package className="w-5 h-5" />
             </div>
@@ -147,7 +147,7 @@ export function ItemFormModal({
             className={ws.iconButton}
             aria-label="إغلاق"
           >
-            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/60" />
+            <X className="w-5 h-5 text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/60" />
           </button>
         </div>
 
@@ -180,7 +180,7 @@ export function ItemFormModal({
               className={`${ws.glassSoft} border border-amber-500/20 rounded-2xl p-5`}
             >
               <label
-                className={`${labelClass} flex items-center gap-2 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200/80`}
+                className={`${labelClass} flex items-center gap-2 text-amber-700 dark:text-amber-700 dark:text-amber-200/80`}
               >
                 <Link className="w-4 h-4" />
                 ربط ببن أخضر
@@ -198,20 +198,20 @@ export function ItemFormModal({
                 placeholder="اختر البن الأخضر…"
               />
 
-              <p className="text-amber-700 dark:text-amber-700 dark:dark:text-amber-200/40 text-xs mt-2">
+              <p className="text-amber-700 dark:text-amber-700 dark:text-amber-200/40 text-xs mt-2">
                 عند ربط الصنف ببن أخضر، التكلفة تتحدث تلقائياً مع كل طلب توريد
                 جديد
               </p>
 
               {lastOrderInfo ? (
                 <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/15 rounded-xl">
-                  <p className="text-amber-700 dark:text-amber-700 dark:dark:text-amber-200/80 text-xs">
+                  <p className="text-amber-700 dark:text-amber-700 dark:text-amber-200/80 text-xs">
                     آخر تكلفة توريد ({lastOrderInfo.beanName}):{" "}
                     <span className="font-bold text-amber-100">
                       {lastOrderInfo.price} ر.س/كغ
                     </span>
                     {lastOrderInfo.date ? (
-                      <span className="text-amber-700 dark:text-amber-700 dark:dark:text-amber-200/50 mr-2">
+                      <span className="text-amber-700 dark:text-amber-700 dark:text-amber-200/50 mr-2">
                         — {lastOrderInfo.date}
                       </span>
                     ) : null}
@@ -224,7 +224,7 @@ export function ItemFormModal({
           {/* Arabic Name */}
           <div>
             <label className={labelClass}>
-              اسم الصنف (عربي) <span className="text-red-700 dark:text-red-700 dark:dark:text-red-300">*</span>
+              اسم الصنف (عربي) <span className="text-red-700 dark:text-red-700 dark:text-red-300">*</span>
             </label>
             <input
               type="text"
@@ -243,7 +243,7 @@ export function ItemFormModal({
           <div>
             <label className={`${labelClass} flex items-center gap-2`}>
               <Languages className="w-4 h-4" />
-              اسم الصنف (إنجليزي) <span className="text-red-700 dark:text-red-700 dark:dark:text-red-300">*</span>
+              اسم الصنف (إنجليزي) <span className="text-red-700 dark:text-red-700 dark:text-red-300">*</span>
             </label>
             <input
               type="text"
@@ -296,15 +296,15 @@ export function ItemFormModal({
 
           {/* Unit Selection */}
           <div>
-            <label className="block text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 text-sm font-semibold mb-3">
-              نوع المنتج (الوحدة) <span className="text-red-700 dark:text-red-700 dark:dark:text-red-300">*</span>
+            <label className="block text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 text-sm font-semibold mb-3">
+              نوع المنتج (الوحدة) <span className="text-red-700 dark:text-red-700 dark:text-red-300">*</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               {unitOptions.map((option, index) => {
                 const active = formData.unit === option.value;
                 const boxClass = active
-                  ? "bg-slate-200 dark:bg-slate-200 dark:dark:bg-slate-200 dark:dark:dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white border-slate-300 dark:border-slate-300 dark:dark:border-slate-300 dark:dark:dark:border-white/20"
-                  : "bg-slate-50 dark:bg-slate-50 dark:dark:bg-slate-50 dark:dark:dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70 border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-slate-100 dark:dark:dark:hover:bg-white/[0.06]";
+                  ? "bg-slate-200 dark:bg-slate-200 dark:bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white border-slate-300 dark:border-slate-300 dark:border-slate-300 dark:border-white/20"
+                  : "bg-slate-50 dark:bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.06]";
 
                 return (
                   <label
@@ -323,7 +323,7 @@ export function ItemFormModal({
                       className="sr-only"
                     />
                     <span
-                      className={`font-semibold ${active ? "text-slate-900 dark:text-slate-900 dark:dark:text-slate-900 dark:dark:dark:text-white" : "text-slate-700 dark:text-slate-700 dark:dark:text-slate-700 dark:dark:dark:text-white/70"}`}
+                      className={`font-semibold ${active ? "text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white" : "text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70"}`}
                     >
                       {option.label}
                     </span>
@@ -337,7 +337,7 @@ export function ItemFormModal({
           {/* Min Stock Threshold */}
           <div>
             <label className={labelClass}>
-              الحد الأدنى للتنبيه <span className="text-red-700 dark:text-red-700 dark:dark:text-red-300">*</span>
+              الحد الأدنى للتنبيه <span className="text-red-700 dark:text-red-700 dark:text-red-300">*</span>
             </label>
             <input
               type="number"
@@ -362,7 +362,7 @@ export function ItemFormModal({
           <div>
             <label className={labelClass}>
               الحد الأقصى للتنبيه{" "}
-              <span className="text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/40 text-xs">(اختياري)</span>
+              <span className="text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/40 text-xs">(اختياري)</span>
             </label>
             <input
               type="number"
@@ -391,18 +391,18 @@ export function ItemFormModal({
 
           {/* Show in Inventory Toggle */}
           <div
-            className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:dark:border-slate-200 dark:dark:dark:border-white/10 rounded-2xl p-5`}
+            className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-2xl p-5`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={`${ws.iconBox} w-9 h-9 text-blue-700 dark:text-blue-700 dark:dark:text-blue-200`}>
+                <div className={`${ws.iconBox} w-9 h-9 text-blue-700 dark:text-blue-700 dark:text-blue-200`}>
                   <ClipboardList className="w-4 h-4" />
                 </div>
                 <div>
                   <p className="text-slate-900 dark:text-white/90 text-sm font-semibold">
                     تفعيل الصنف في الجرد
                   </p>
-                  <p className="text-slate-500 dark:text-slate-500 dark:dark:text-slate-500 dark:dark:dark:text-white/40 text-xs mt-0.5">
+                  <p className="text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/40 text-xs mt-0.5">
                     الصنف يظهر للموظفين عند تسجيل الجرد ويُحسب في التقارير
                   </p>
                 </div>
@@ -445,7 +445,7 @@ export function ItemFormModal({
 
           {errorMessage ? (
             <div className="p-4 bg-red-500/10 border border-red-500/25 rounded-2xl">
-              <p className="text-red-700 dark:text-red-700 dark:dark:text-red-200 text-sm">{errorMessage}</p>
+              <p className="text-red-700 dark:text-red-700 dark:text-red-200 text-sm">{errorMessage}</p>
             </div>
           ) : null}
 

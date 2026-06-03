@@ -41,18 +41,18 @@ export function Breadcrumb({ activePage }) {
         const isLast = i === crumbs.length - 1;
         return (
           <span key={i} className="flex items-center gap-1.5">
-            {i > 0 && <ChevronLeft className="w-3.5 h-3.5 text-slate-400 dark:text-slate-400 dark:dark:text-white/30" />}
+            {i > 0 && <ChevronLeft className="w-3.5 h-3.5 text-slate-400 dark:text-slate-400 dark:text-white/30" />}
             {crumb.href && !isLast ? (
               <a
                 href={crumb.href}
-                className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 hover:text-slate-800 dark:hover:text-white/80 transition-colors"
+                className="text-slate-500 dark:text-slate-500 dark:text-white/50 hover:text-slate-800 dark:hover:text-white/80 transition-colors"
               >
                 {crumb.label}
               </a>
             ) : (
               <span
                 className={
-                  isLast ? "text-slate-800 dark:text-white/80 font-semibold" : "text-slate-500 dark:text-slate-500 dark:dark:text-white/50"
+                  isLast ? "text-slate-800 dark:text-white/80 font-semibold" : "text-slate-500 dark:text-slate-500 dark:text-white/50"
                 }
               >
                 {crumb.label}

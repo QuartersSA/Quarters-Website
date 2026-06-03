@@ -118,13 +118,13 @@ export function OrderDetails({
 
   let body = null;
   if (!selectedOrderId) {
-    body = <div className="mt-4 text-white/60">اختر طلب من القائمة.</div>;
+    body = <div className="mt-4 text-slate-600 dark:text-white/60">اختر طلب من القائمة.</div>;
   } else if (isLoading) {
-    body = <div className="mt-4 text-white/60">جاري التحميل…</div>;
+    body = <div className="mt-4 text-slate-600 dark:text-white/60">جاري التحميل…</div>;
   } else if (error) {
-    body = <div className="mt-4 text-red-300">{error}</div>;
+    body = <div className="mt-4 text-red-700 dark:text-red-300">{error}</div>;
   } else if (!orderDetails) {
-    body = <div className="mt-4 text-white/60">لا يوجد تفاصيل.</div>;
+    body = <div className="mt-4 text-slate-600 dark:text-white/60">لا يوجد تفاصيل.</div>;
   } else {
     body = (
       <>
@@ -158,9 +158,9 @@ export function OrderDetails({
         isLoading={isLoading}
       />
 
-      {rowError ? <div className="mt-3 text-red-300">{rowError}</div> : null}
+      {rowError ? <div className="mt-3 text-red-700 dark:text-red-300">{rowError}</div> : null}
       {rowSuccess ? (
-        <div className="mt-3 text-emerald-200">{rowSuccess}</div>
+        <div className="mt-3 text-emerald-700 dark:text-emerald-200">{rowSuccess}</div>
       ) : null}
 
       {body}

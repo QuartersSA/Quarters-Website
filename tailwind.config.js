@@ -1584,6 +1584,26 @@ module.exports = {
 				'zilla-slab': 'Zilla Slab',
 				'zilla-slab-highlight': 'Zilla Slab Highlight',
 			},
+			// Quarters brand palette — built from the operator-supplied
+			// olive anchor #70765a (=500). Hue/sat fixed at hsl(72°, 14%)
+			// with stepped lightness so 50→950 reads as a coherent scale,
+			// not a hand-picked grab bag. Replaces the previous violet
+			// accent used in the admin sidebar / command palette.
+			colors: {
+				brand: {
+					50:  '#f7f8f4',
+					100: '#edf0e6',
+					200: '#d8ddcc',
+					300: '#b9c0a8',
+					400: '#8f9879',
+					500: '#70765a',
+					600: '#5a5f48',
+					700: '#4a4e3b',
+					800: '#373a2c',
+					900: '#24261d',
+					950: '#161712',
+				},
+			},
 		},
 	},
 };
