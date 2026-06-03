@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { X, Ruler } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -24,7 +25,7 @@ export default function MeasurementUnitModal({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  if (!isOpen) return null;
+  if (!isOpen || typeof document === "undefined") return null;
 
   const reset = () => {
     setNameAr("");
@@ -72,12 +73,30 @@ export default function MeasurementUnitModal({
     }
   };
 
-  return (
+  // Portal to document.body so this modal escapes its parent
+  // (which is the ItemFormModal / PurchaseItemModal <form>).
+  // Without the portal the inner submit button was being treated
+  // as a submit for the OUTER form — HTML disallows nested <form>
+  // tags, so the browser collapsed them and the parent modal
+  // closed/submitted whenever the operator added a new unit.
+  return createPortal(
     <div
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[1100] p-4"
       dir="rtl"
+      onMouseDown={(e) => {
+        // Backdrop click closes this modal only — don't let the
+        // event bubble up and dismiss the parent modal underneath.
+        if (e.target === e.currentTarget) {
+          e.stopPropagation();
+          handleClose();
+        }
+      }}
     >
-      <div className={`${ws.glass} ${ws.card} w-full max-w-md shadow-2xl`}>
+      <div
+        className={`${ws.glass} ${ws.card} w-full max-w-md shadow-2xl`}
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div
           className={`p-5 flex items-center justify-between shrink-0 ${ws.topBar}`}
         >
@@ -153,6 +172,7 @@ export default function MeasurementUnitModal({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
