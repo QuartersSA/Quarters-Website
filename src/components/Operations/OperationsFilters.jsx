@@ -21,7 +21,7 @@ export function OperationsFilters({
   branches,
 }) {
   const cardClass = `${ws.glassSoft} ${ws.card} p-4 sm:p-6 mb-6`;
-  const labelClass = "block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55 mb-2";
+  const labelClass = "block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2";
 
   const branchOptions = [
     { value: "", label: "جميع الفروع" },
@@ -45,13 +45,13 @@ export function OperationsFilters({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 min-w-0">
           <div className={`${ws.iconBox} w-11 h-11`}>
-            <Filter className="w-5 h-5 text-slate-700 dark:text-slate-700 dark:dark:text-white/70" />
+            <Filter className="w-5 h-5 text-slate-700 dark:text-slate-700 dark:text-white/70" />
           </div>
           <div className="min-w-0">
-            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white tracking-tight">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-900 dark:text-white tracking-tight">
               الفلاتر والبحث
             </h2>
-            <div className="text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/50">فلتر بسرعة وبشكل مرتب</div>
+            <div className="text-xs text-slate-500 dark:text-slate-500 dark:text-white/50">فلتر بسرعة وبشكل مرتب</div>
           </div>
           {hasActiveFilters ? (
             <span className={`${ws.chip} hidden sm:inline-flex`}>نشط</span>
@@ -82,7 +82,7 @@ export function OperationsFilters({
       </div>
 
       <div className="relative mb-4">
-        <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-400 dark:dark:text-white/35" />
+        <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-400 dark:text-white/35" />
         <input
           type="text"
           value={searchQuery}

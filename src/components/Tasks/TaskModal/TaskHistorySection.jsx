@@ -29,7 +29,7 @@ export function TaskHistorySection({
 
     const badgeClass =
       type === "overdue"
-        ? "bg-red-500/15 text-red-200 border-red-500/25"
+        ? "bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25"
         : type === "created"
           ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25"
           : type === "deleted"
@@ -96,7 +96,7 @@ export function TaskHistorySection({
       ) : isLoading ? (
         <div className="mt-3 text-sm text-slate-600 dark:text-white/60">جاري تحميل السجل…</div>
       ) : error ? (
-        <div className="mt-3 text-sm text-red-300">
+        <div className="mt-3 text-sm text-red-700 dark:text-red-300">
           {error?.message || "فشل تحميل السجل"}
         </div>
       ) : events.length === 0 ? (

@@ -20,7 +20,7 @@ export function PriorityPill({ priority }) {
   if (raw === "High")
     className = "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25";
   if (raw === "Urgent")
-    className = "bg-red-500/15 text-red-200 border-red-500/25";
+    className = "bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25";
 
   return <span className={`${ws.pill} ${className}`}>{label}</span>;
 }

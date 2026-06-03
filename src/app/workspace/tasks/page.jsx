@@ -233,7 +233,7 @@ export default function WorkspaceTasksPage() {
     }
 
     if (overdueQuery.error) {
-      return <div className="text-red-300">فشل تحميل سجل المهام المتأخرة</div>;
+      return <div className="text-red-700 dark:text-red-300">فشل تحميل سجل المهام المتأخرة</div>;
     }
 
     if (!overdueTasks.length) {
@@ -362,7 +362,7 @@ export default function WorkspaceTasksPage() {
             <div className={overdueCardClass}>
               <div className="flex items-center gap-2 mb-3">
                 <div className={`${ws.iconBox} w-10 h-10`}>
-                  <AlertTriangle className="w-5 h-5 text-red-200" />
+                  <AlertTriangle className="w-5 h-5 text-red-700 dark:text-red-200" />
                 </div>
                 <div className="min-w-0">
                   <div className="font-bold text-slate-900 dark:text-white tracking-tight">
@@ -382,7 +382,7 @@ export default function WorkspaceTasksPage() {
             <div className={emptyCardClass}>جاري التحميل…</div>
           ) : hasError ? (
             <div
-              className={`${ws.glassSoft} border-red-500/30 rounded-3xl p-6 text-red-300`}
+              className={`${ws.glassSoft} border-red-500/30 rounded-3xl p-6 text-red-700 dark:text-red-300`}
             >
               فشل تحميل بيانات المهام
             </div>
@@ -417,7 +417,7 @@ export default function WorkspaceTasksPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className={`${ws.iconBox} w-10 h-10 text-red-200`}>
+              <div className={`${ws.iconBox} w-10 h-10 text-red-700 dark:text-red-200`}>
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div className="font-bold text-slate-900 dark:text-white text-lg tracking-tight">

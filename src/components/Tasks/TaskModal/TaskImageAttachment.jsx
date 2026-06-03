@@ -113,7 +113,7 @@ export function TaskImageAttachment({
 
       <div className="mt-2 text-sm text-slate-600 dark:text-white/60">{summaryText}</div>
 
-      {error ? <div className="mt-2 text-sm text-red-300">{error}</div> : null}
+      {error ? <div className="mt-2 text-sm text-red-700 dark:text-red-300">{error}</div> : null}
 
       {hasAny ? (
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">

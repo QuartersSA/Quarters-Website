@@ -207,7 +207,7 @@ export default function MarketingMenuPage() {
             </div>
 
             {error ? (
-              <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm">
+              <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm">
                 {error}
               </div>
             ) : null}

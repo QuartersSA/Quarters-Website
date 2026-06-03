@@ -166,7 +166,7 @@ export default function BloggersBulkImport({ onClose }) {
           className={`p-5 sm:p-6 border-b ${ws.divider} flex items-start justify-between gap-3`}
         >
           <div className="flex items-center gap-3 min-w-0">
-            <div className={`${ws.iconBox} w-12 h-12 text-pink-200`}>
+            <div className={`${ws.iconBox} w-12 h-12 text-pink-700 dark:text-pink-200`}>
               <Upload className="w-6 h-6" />
             </div>
             <div className="min-w-0">
@@ -263,7 +263,7 @@ export default function BloggersBulkImport({ onClose }) {
             ) : null}
 
             {parseError ? (
-              <div className="mt-3 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-start gap-2">
+              <div className="mt-3 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <span>{parseError}</span>
               </div>
@@ -378,7 +378,7 @@ export default function BloggersBulkImport({ onClose }) {
           ) : null}
 
           {uploadMutation.isError ? (
-            <div className="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-start gap-2">
+            <div className="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm flex items-start gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{uploadMutation.error?.message || "فشل الرفع"}</span>
             </div>
@@ -428,7 +428,7 @@ export default function BloggersBulkImport({ onClose }) {
               >
                 {uploadMutation.isPending ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white/40 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-slate-400 dark:border-white/40 border-t-transparent rounded-full animate-spin" />
                     <span>جاري الرفع…</span>
                   </>
                 ) : (

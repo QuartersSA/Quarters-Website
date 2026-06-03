@@ -146,7 +146,7 @@ export default function WorkspaceTeamPage() {
           {spacesQuery.isLoading ? (
             <div className="text-slate-600 dark:text-white/60">جاري التحميل…</div>
           ) : spacesQuery.error ? (
-            <div className="text-red-300">فشل تحميل المساحات</div>
+            <div className="text-red-700 dark:text-red-300">فشل تحميل المساحات</div>
           ) : spaces.length === 0 ? (
             <div className={cardClass}>
               <div className="text-slate-600 dark:text-white/60">
@@ -247,7 +247,7 @@ export default function WorkspaceTeamPage() {
               </div>
 
               {createMutation.error ? (
-                <div className="text-sm text-red-300">
+                <div className="text-sm text-red-700 dark:text-red-300">
                   {createMutation.error.message}
                 </div>
               ) : null}

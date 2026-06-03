@@ -73,7 +73,7 @@ export function ActionsCard({
         </div>
       </div>
 
-      {error ? <div className="mt-4 text-red-300">{error}</div> : null}
+      {error ? <div className="mt-4 text-red-700 dark:text-red-300">{error}</div> : null}
       {success ? <div className="mt-4 text-emerald-700 dark:text-emerald-200">{success}</div> : null}
     </div>
   );

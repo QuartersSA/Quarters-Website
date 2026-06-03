@@ -129,7 +129,7 @@ export default function EmployeesPage() {
             <h1
               className={`text-3xl sm:text-4xl ${ws.title} mb-2 flex items-center gap-3`}
             >
-              <Users className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200" />
+              <Users className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-700 dark:text-emerald-700 dark:text-emerald-200" />
               إدارة الموظفين
             </h1>
             <p className={ws.muted}>إدارة حسابات الموظفين وصلاحياتهم</p>
@@ -149,7 +149,7 @@ export default function EmployeesPage() {
             className={`${ws.glass} ${ws.card} p-4 mb-6 border border-red-500/20`}
           >
             <div className="text-red-800 dark:text-red-100 font-semibold">{loadErrorMessage}</div>
-            <div className="text-slate-600 dark:text-slate-600 dark:dark:text-slate-600 dark:dark:dark:text-white/60 text-sm mt-1">
+            <div className="text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/60 text-sm mt-1">
               إذا استمرت المشكلة، افتح صفحة /api/employees في تبويب جديد وشوف هل
               ترجع بيانات أو خطأ.
             </div>

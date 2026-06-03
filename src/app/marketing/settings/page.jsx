@@ -96,7 +96,7 @@ export default function MarketingSettingsPage() {
         ) : (
           <form onSubmit={submit} className={`${ws.glass} ${ws.card} p-5 sm:p-6 space-y-5`}>
             {error ? (
-              <div className="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm">
+              <div className="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm">
                 {error}
               </div>
             ) : null}

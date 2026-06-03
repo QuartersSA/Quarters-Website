@@ -111,7 +111,7 @@ export default function BloggerCardPage() {
             جاري التحميل…
           </div>
         ) : !b ? (
-          <div className={`${ws.glass} ${ws.card} p-8 text-center text-red-200`}>
+          <div className={`${ws.glass} ${ws.card} p-8 text-center text-red-700 dark:text-red-200`}>
             لم يُعثر على البلوقر.
           </div>
         ) : (

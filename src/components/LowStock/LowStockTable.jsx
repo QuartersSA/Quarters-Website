@@ -28,8 +28,8 @@ export function LowStockTable({
       <div
         className={`p-5 sm:p-6 border-b ${ws.divider} flex items-center justify-between gap-3`}
       >
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:dark:text-white flex items-center gap-3 tracking-tight">
-          <div className={`${ws.iconBox} w-10 h-10 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200`}>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-900 dark:text-white flex items-center gap-3 tracking-tight">
+          <div className={`${ws.iconBox} w-10 h-10 text-amber-700 dark:text-amber-700 dark:text-amber-200`}>
             <Package className="w-5 h-5" />
           </div>
           قائمة الأصناف المنخفضة
@@ -42,7 +42,7 @@ export function LowStockTable({
       </div>
 
       {isLoading ? (
-        <div className="p-12 text-center text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
+        <div className="p-12 text-center text-slate-600 dark:text-slate-600 dark:text-white/55">
           <div className="flex items-center justify-center gap-3">
             <div className="w-6 h-6 border-2 border-amber-400/60 border-t-transparent rounded-full animate-spin" />
             <span>جاري التحميل…</span>
@@ -52,23 +52,23 @@ export function LowStockTable({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04]">
-                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
+              <tr className="bg-slate-100 dark:bg-slate-100 dark:bg-white/[0.04]">
+                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
                   الصنف
                 </th>
-                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
+                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
                   الفرع
                 </th>
-                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
+                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
                   الكمية الحالية
                 </th>
-                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
+                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
                   الحد الأدنى
                 </th>
-                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
+                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
                   النقص
                 </th>
-                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:dark:text-white/55">
+                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
                   الحالة
                 </th>
               </tr>
@@ -84,27 +84,27 @@ export function LowStockTable({
                 const shortage = Math.max(0, threshold - qty);
                 const qtyClass =
                   qty === 0
-                    ? "text-red-700 dark:text-red-700 dark:dark:text-red-200"
+                    ? "text-red-700 dark:text-red-700 dark:text-red-200"
                     : qty < threshold * 0.5
-                      ? "text-orange-700 dark:text-orange-700 dark:dark:text-orange-200"
-                      : "text-amber-700 dark:text-amber-700 dark:dark:text-amber-200";
+                      ? "text-orange-700 dark:text-orange-700 dark:text-orange-200"
+                      : "text-amber-700 dark:text-amber-700 dark:text-amber-200";
 
                 return (
                   <tr
                     key={`${item.id}-${item.branch_id}-${index}`}
-                    className="border-t border-slate-100 dark:border-slate-100 dark:dark:border-white/5 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.05] transition-colors"
+                    className="border-t border-slate-100 dark:border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-slate-100 dark:bg-slate-100 dark:dark:bg-white/[0.04] rounded-2xl flex items-center justify-center border border-slate-200 dark:border-slate-200 dark:dark:border-white/10">
-                          <Package className="w-6 h-6 text-amber-700 dark:text-amber-700 dark:dark:text-amber-200" />
+                        <div className="w-12 h-12 bg-slate-100 dark:bg-slate-100 dark:bg-white/[0.04] rounded-2xl flex items-center justify-center border border-slate-200 dark:border-slate-200 dark:border-white/10">
+                          <Package className="w-6 h-6 text-amber-700 dark:text-amber-700 dark:text-amber-200" />
                         </div>
                         <div>
-                          <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-semibold">
+                          <p className="text-slate-900 dark:text-slate-900 dark:text-white font-semibold">
                             {item.name}
                           </p>
                           {item.description ? (
-                            <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 text-sm">
+                            <p className="text-slate-500 dark:text-slate-500 dark:text-white/50 text-sm">
                               {item.description}
                             </p>
                           ) : null}
@@ -113,11 +113,11 @@ export function LowStockTable({
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="text-slate-900 dark:text-slate-900 dark:dark:text-white font-medium">
+                        <p className="text-slate-900 dark:text-slate-900 dark:text-white font-medium">
                           {item.branch_name}
                         </p>
                         {item.branch_location ? (
-                          <p className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 text-sm">
+                          <p className="text-slate-500 dark:text-slate-500 dark:text-white/50 text-sm">
                             {item.branch_location}
                           </p>
                         ) : null}
@@ -127,23 +127,23 @@ export function LowStockTable({
                       <span className={`text-lg font-bold ${qtyClass}`}>
                         {qty}
                       </span>
-                      <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-sm mr-1">
+                      <span className="text-slate-500 dark:text-slate-500 dark:text-white/40 text-sm mr-1">
                         {item.unit || "حبة"}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-slate-700 dark:text-slate-700 dark:dark:text-white/75 font-medium">
+                      <span className="text-slate-700 dark:text-slate-700 dark:text-white/75 font-medium">
                         {threshold}
                       </span>
-                      <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-sm mr-1">
+                      <span className="text-slate-500 dark:text-slate-500 dark:text-white/40 text-sm mr-1">
                         {item.unit || "حبة"}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-red-700 dark:text-red-700 dark:dark:text-red-200 font-bold">
+                      <span className="text-red-700 dark:text-red-700 dark:text-red-200 font-bold">
                         -{shortage}
                       </span>
-                      <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/40 text-sm mr-1">
+                      <span className="text-slate-500 dark:text-slate-500 dark:text-white/40 text-sm mr-1">
                         {item.unit || "حبة"}
                       </span>
                     </td>
@@ -162,8 +162,8 @@ export function LowStockTable({
           </table>
         </div>
       ) : (
-        <div className="p-12 text-center text-slate-500 dark:text-slate-500 dark:dark:text-white/50">
-          <CheckCircle className="w-16 h-16 mx-auto mb-4 opacity-50 text-emerald-700 dark:text-emerald-700 dark:dark:text-emerald-200" />
+        <div className="p-12 text-center text-slate-500 dark:text-slate-500 dark:text-white/50">
+          <CheckCircle className="w-16 h-16 mx-auto mb-4 opacity-50 text-emerald-700 dark:text-emerald-700 dark:text-emerald-200" />
           <p className="text-lg mb-2">رائع! لا توجد أصناف منخفضة الكمية</p>
           <p className="text-sm">جميع الأصناف متوفرة بكميات كافية</p>
         </div>

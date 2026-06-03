@@ -158,7 +158,7 @@ export function TaskUpdatesSection({
         />
 
         {attachmentsError ? (
-          <div className="mt-2 text-sm text-red-300">{attachmentsError}</div>
+          <div className="mt-2 text-sm text-red-700 dark:text-red-300">{attachmentsError}</div>
         ) : null}
       </div>
 
@@ -174,7 +174,7 @@ export function TaskUpdatesSection({
         ) : isLoading ? (
           <div className="text-sm text-slate-600 dark:text-white/60">جاري تحميل التحديثات…</div>
         ) : error ? (
-          <div className="text-sm text-red-300">
+          <div className="text-sm text-red-700 dark:text-red-300">
             {error?.message || "فشل تحميل التحديثات"}
           </div>
         ) : updates.length === 0 ? (

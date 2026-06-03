@@ -97,7 +97,7 @@ export function DepositForm({
       </div>
 
       {depositMutation.isError ? (
-        <div className="mt-3 text-sm text-red-300">
+        <div className="mt-3 text-sm text-red-700 dark:text-red-300">
           {depositMutation.error?.message || "فشل الإيداع"}
         </div>
       ) : null}

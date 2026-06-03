@@ -273,7 +273,7 @@ export default function WorkspaceTemplatesPage() {
 
           {useTemplateMutation.error ? (
             <div className={`${ws.glassSoft} ${ws.card} p-4 border-red-400/20`}>
-              <div className="text-red-300 font-semibold text-sm">
+              <div className="text-red-700 dark:text-red-300 font-semibold text-sm">
                 {useTemplateMutation.error.message}
               </div>
             </div>
@@ -284,11 +284,11 @@ export default function WorkspaceTemplatesPage() {
               <div className="text-slate-600 dark:text-white/60">جاري التحميل…</div>
             </div>
           ) : templatesQuery.error ? (
-            <div className={`${cardClass} text-red-300`}>فشل تحميل القوالب</div>
+            <div className={`${cardClass} text-red-700 dark:text-red-300`}>فشل تحميل القوالب</div>
           ) : templates.length === 0 ? (
             <div className={cardClass}>
               <div className="text-slate-600 dark:text-white/60 text-center py-6">
-                <FileText className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                <FileText className="w-12 h-12 text-slate-300 dark:text-white/20 mx-auto mb-3" />
                 <div className="font-semibold text-slate-700 dark:text-white/70 mb-1">
                   لا توجد قوالب
                 </div>
@@ -321,7 +321,7 @@ export default function WorkspaceTemplatesPage() {
                         onClick={() => handleDeleteTemplate(t)}
                         disabled={deleteMutation.isPending}
                         title="حذف القالب"
-                        className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-white/30 hover:text-red-300 hover:bg-red-400/10 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                        className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-white/30 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-400/10 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -476,7 +476,7 @@ export default function WorkspaceTemplatesPage() {
               </div>
 
               {createMutation.error ? (
-                <div className="text-sm text-red-300">
+                <div className="text-sm text-red-700 dark:text-red-300">
                   {createMutation.error.message}
                 </div>
               ) : null}

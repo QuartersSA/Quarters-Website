@@ -514,7 +514,7 @@ export function OrderBuilder({
         </div>
       </div>
 
-      {error ? <div className="mt-3 text-red-300">{error}</div> : null}
+      {error ? <div className="mt-3 text-red-700 dark:text-red-300">{error}</div> : null}
       {isSaving ? <div className="mt-3 text-slate-600 dark:text-white/60">جاري الحفظ…</div> : null}
 
       <div className="mt-3 text-xs text-slate-500 dark:text-white/45">

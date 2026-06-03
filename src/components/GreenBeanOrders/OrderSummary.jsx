@@ -9,12 +9,12 @@ export function OrderSummary({ totals }) {
       {
         label: "عدد أنواع البن",
         value: String(totals.beanTypesCount),
-        color: "text-blue-200",
+        color: "text-blue-700 dark:text-blue-200",
       },
       {
         label: "عدد الخياش",
         value: String(totals.totalBags),
-        color: "text-blue-200",
+        color: "text-blue-700 dark:text-blue-200",
       },
       {
         label: "مجموع الكيلوات",

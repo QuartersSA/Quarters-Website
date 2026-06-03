@@ -55,7 +55,7 @@ export function BeansList({
   if (isLoading) {
     body = <div className="mt-4 text-slate-600 dark:text-white/60">جاري التحميل…</div>;
   } else if (error) {
-    body = <div className="mt-4 text-red-300">{error}</div>;
+    body = <div className="mt-4 text-red-700 dark:text-red-300">{error}</div>;
   } else if (!Array.isArray(beans) || beans.length === 0) {
     body = <div className="mt-4 text-slate-600 dark:text-white/60">لا يوجد بن مسجّل.</div>;
   } else {

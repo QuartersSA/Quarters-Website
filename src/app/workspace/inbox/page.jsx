@@ -366,7 +366,7 @@ export default function WorkspaceInboxPage() {
             {threadsQuery.isLoading ? (
               <div className="p-4 text-slate-600 dark:text-white/60">جاري التحميل…</div>
             ) : threadsQuery.error ? (
-              <div className="p-4 text-red-300">فشل تحميل المحادثات</div>
+              <div className="p-4 text-red-700 dark:text-red-300">فشل تحميل المحادثات</div>
             ) : filteredThreads.length === 0 ? (
               <div className="p-4 text-slate-600 dark:text-white/60">
                 لا توجد محادثات. اضغط "جديد" لبدء محادثة.
@@ -467,7 +467,7 @@ export default function WorkspaceInboxPage() {
             {messagesQuery.isLoading ? (
               <div className="text-slate-600 dark:text-white/60">جاري تحميل الرسائل…</div>
             ) : messagesQuery.error ? (
-              <div className="text-red-300">فشل تحميل الرسائل</div>
+              <div className="text-red-700 dark:text-red-300">فشل تحميل الرسائل</div>
             ) : messages.length === 0 ? (
               <div className="text-slate-600 dark:text-white/60">ابدأ أول رسالة…</div>
             ) : (
@@ -580,7 +580,7 @@ export default function WorkspaceInboxPage() {
               </button>
 
               {createThreadMutation.error ? (
-                <div className="text-sm text-red-300">
+                <div className="text-sm text-red-700 dark:text-red-300">
                   {createThreadMutation.error.message}
                 </div>
               ) : null}

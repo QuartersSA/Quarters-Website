@@ -168,7 +168,7 @@ function ChecklistItemRow({
         <button
           type="button"
           onClick={() => onDelete(item.id)}
-          className="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center text-slate-400 dark:text-white/30 hover:text-red-300"
+          className="opacity-0 group-hover:opacity-100 transition-opacity w-5 h-5 flex items-center justify-center text-slate-400 dark:text-white/30 hover:text-red-700 dark:hover:text-red-300"
         >
           <Trash2 className="w-3.5 h-3.5" />
         </button>
@@ -444,7 +444,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
       </div>
 
       {addMutation.error ? (
-        <div className="text-xs text-red-300 mt-1">
+        <div className="text-xs text-red-700 dark:text-red-300 mt-1">
           {addMutation.error.message}
         </div>
       ) : null}

@@ -135,7 +135,7 @@ export default function GlassDatePicker({
     [setValue],
   );
 
-  const buttonTextClass = value ? "text-slate-900 dark:text-slate-900 dark:dark:text-white" : "text-slate-400 dark:text-slate-400 dark:dark:text-white/35";
+  const buttonTextClass = value ? "text-slate-900 dark:text-slate-900 dark:text-white" : "text-slate-400 dark:text-slate-400 dark:text-white/35";
 
   // IMPORTANT: react-day-picker v9 changed classNames keys.
   // We extend defaults to avoid layout glitches (like days appearing in a vertical list).
@@ -161,11 +161,11 @@ export default function GlassDatePicker({
       nav: `${defaultClassNames.nav} flex items-center gap-1`,
       button_previous: `${defaultClassNames.button_previous} ${navBtn}`,
       button_next: `${defaultClassNames.button_next} ${navBtn}`,
-      chevron: `${defaultClassNames.chevron} text-slate-700 dark:text-slate-700 dark:dark:text-white/70`,
+      chevron: `${defaultClassNames.chevron} text-slate-700 dark:text-slate-700 dark:text-white/70`,
 
       month_grid: `${defaultClassNames.month_grid} w-full border-collapse table-fixed`,
       weekdays: `${defaultClassNames.weekdays} `,
-      weekday: `${defaultClassNames.weekday} p-1 text-center text-[11px] text-slate-500 dark:text-slate-500 dark:dark:text-white/45 font-semibold`,
+      weekday: `${defaultClassNames.weekday} p-1 text-center text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 font-semibold`,
 
       weeks: `${defaultClassNames.weeks} `,
       week: `${defaultClassNames.week} `,
@@ -174,11 +174,11 @@ export default function GlassDatePicker({
       day: `${defaultClassNames.day} p-1 text-center`,
       day_button:
         `${defaultClassNames.day_button} h-8 w-8 rounded-xl mx-auto ` +
-        "text-slate-800 dark:text-slate-800 dark:dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:dark:hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-emerald-400/20 flex items-center justify-center",
+        "text-slate-800 dark:text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-emerald-400/20 flex items-center justify-center",
 
-      today: `${defaultClassNames.today} text-sky-700 dark:text-sky-700 dark:dark:text-sky-200`,
-      outside: `${defaultClassNames.outside} text-slate-400 dark:text-slate-400 dark:dark:text-white/25`,
-      disabled: `${defaultClassNames.disabled} text-slate-400 dark:text-slate-400 dark:dark:text-white/25 line-through`,
+      today: `${defaultClassNames.today} text-sky-700 dark:text-sky-700 dark:text-sky-200`,
+      outside: `${defaultClassNames.outside} text-slate-400 dark:text-slate-400 dark:text-white/25`,
+      disabled: `${defaultClassNames.disabled} text-slate-400 dark:text-slate-400 dark:text-white/25 line-through`,
       selected: `${defaultClassNames.selected} bg-emerald-400/20 text-emerald-100 border border-emerald-400/30`,
     };
   }, [defaultClassNames]);
@@ -214,13 +214,13 @@ export default function GlassDatePicker({
           <span className={`truncate ${buttonTextClass}`}>{displayLabel}</span>
 
           <div
-            className={`${ws.iconBox} w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.03] flex-shrink-0`}
+            className={`${ws.iconBox} w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.03] flex-shrink-0`}
             aria-hidden="true"
           >
             {showTime ? (
-              <Clock className="w-4 h-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/65" />
+              <Clock className="w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/65" />
             ) : (
-              <CalendarDays className="w-4 h-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/65" />
+              <CalendarDays className="w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/65" />
             )}
           </div>
         </button>
@@ -232,7 +232,7 @@ export default function GlassDatePicker({
             className={`absolute left-2 top-1/2 -translate-y-1/2 ${ws.iconButton} w-9 h-9 rounded-xl flex items-center justify-center`}
             aria-label="مسح التاريخ"
           >
-            <X className="w-4 h-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70" />
+            <X className="w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70" />
           </button>
         ) : null}
       </div>
@@ -286,7 +286,7 @@ export default function GlassDatePicker({
           </div>
 
           {/* Prevent any tiny overflow from showing outside rounded corners */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-200 dark:dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:dark:bg-white/[0.02] p-2 overflow-hidden">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.02] p-2 overflow-hidden">
             <DayPicker
               mode="single"
               captionLayout="label"
@@ -328,13 +328,13 @@ export default function GlassDatePicker({
                     if (props.orientation === "left") {
                       return (
                         <ChevronRight
-                          className={`${className} w-4 h-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70`}
+                          className={`${className} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70`}
                         />
                       );
                     }
                     return (
                       <ChevronLeft
-                        className={`${className} w-4 h-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70`}
+                        className={`${className} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70`}
                       />
                     );
                   }
@@ -343,14 +343,14 @@ export default function GlassDatePicker({
                   if (props.orientation === "left") {
                     return (
                       <ChevronLeft
-                        className={`${className} w-4 h-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70`}
+                        className={`${className} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70`}
                       />
                     );
                   }
 
                   return (
                     <ChevronRight
-                      className={`${className} w-4 h-4 text-slate-700 dark:text-slate-700 dark:dark:text-white/70`}
+                      className={`${className} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70`}
                     />
                   );
                 },
@@ -364,16 +364,16 @@ export default function GlassDatePicker({
 
           {/* Time picker section */}
           {showTime ? (
-            <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-200 dark:dark:border-white/10">
+            <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-200 dark:border-white/10">
               <div className="flex items-center gap-2 mb-2">
-                <Clock className="w-4 h-4 text-slate-500 dark:text-slate-500 dark:dark:text-white/50" />
-                <span className="text-sm font-semibold text-slate-700 dark:text-slate-700 dark:dark:text-white/70">
+                <Clock className="w-4 h-4 text-slate-500 dark:text-slate-500 dark:text-white/50" />
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-white/70">
                   الوقت
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex-1">
-                  <label className="block text-[11px] text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mb-1">
+                  <label className="block text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 mb-1">
                     الساعة
                   </label>
                   <select
@@ -394,9 +394,9 @@ export default function GlassDatePicker({
                     ))}
                   </select>
                 </div>
-                <span className="text-slate-500 dark:text-slate-500 dark:dark:text-white/50 text-lg font-bold mt-4">:</span>
+                <span className="text-slate-500 dark:text-slate-500 dark:text-white/50 text-lg font-bold mt-4">:</span>
                 <div className="flex-1">
-                  <label className="block text-[11px] text-slate-500 dark:text-slate-500 dark:dark:text-white/45 mb-1">
+                  <label className="block text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 mb-1">
                     الدقيقة
                   </label>
                   <select
@@ -430,7 +430,7 @@ export default function GlassDatePicker({
             </div>
           ) : null}
 
-          <div className="pt-2 text-xs text-slate-500 dark:text-slate-500 dark:dark:text-white/45">
+          <div className="pt-2 text-xs text-slate-500 dark:text-slate-500 dark:text-white/45">
             {showTime
               ? "* اختر التاريخ والوقت"
               : "* اختيار تاريخ بنمط Workspace (بدون واجهة المتصفح البيضاء)"}

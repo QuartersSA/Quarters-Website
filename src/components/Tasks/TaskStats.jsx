@@ -27,8 +27,8 @@ export function TaskStats({ stats }) {
       label: "متأخرة",
       value: stats.overdue,
       Icon: AlertTriangle,
-      tint: "text-red-300",
-      iconTint: "text-red-200",
+      tint: "text-red-700 dark:text-red-300",
+      iconTint: "text-red-700 dark:text-red-200",
     },
     {
       key: "today",

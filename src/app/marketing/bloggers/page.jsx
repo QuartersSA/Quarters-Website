@@ -202,7 +202,7 @@ export default function BloggersPage() {
         <div className={`${ws.glass} ${ws.card} p-5 sm:p-6 mb-6`}>
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-3">
-              <div className={`${ws.iconBox} w-12 h-12 text-pink-200`}>
+              <div className={`${ws.iconBox} w-12 h-12 text-pink-700 dark:text-pink-200`}>
                 <Megaphone className="w-6 h-6" />
               </div>
               <div>
@@ -244,7 +244,7 @@ export default function BloggersPage() {
             </div>
 
             {error ? (
-              <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm">
+              <div className="mb-4 p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-200 text-sm">
                 {error}
               </div>
             ) : null}
@@ -377,7 +377,7 @@ export default function BloggersPage() {
                               className={`${ws.btnNeutral} w-8 h-8 p-0 justify-center shrink-0 disabled:opacity-50`}
                             >
                               {downloadingId === b.id ? (
-                                <div className="w-3.5 h-3.5 border-2 border-white/40 border-t-transparent rounded-full animate-spin" />
+                                <div className="w-3.5 h-3.5 border-2 border-slate-400 dark:border-white/40 border-t-transparent rounded-full animate-spin" />
                               ) : (
                                 <Download className="w-3.5 h-3.5" />
                               )}
@@ -457,7 +457,7 @@ export default function BloggersPage() {
                             >
                               {markInvitedMut.isPending &&
                               markInvitedMut.variables === b.id ? (
-                                <div className="w-3 h-3 border-2 border-white/40 border-t-transparent rounded-full animate-spin" />
+                                <div className="w-3 h-3 border-2 border-slate-400 dark:border-white/40 border-t-transparent rounded-full animate-spin" />
                               ) : (
                                 <Send className="w-3 h-3" />
                               )}

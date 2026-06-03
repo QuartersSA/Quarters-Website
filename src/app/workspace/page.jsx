@@ -161,7 +161,7 @@ function HealthScoreCard({ healthScore }) {
       ? "bg-emerald-400/15 border-emerald-400/25 text-emerald-700 dark:text-emerald-200"
       : safePercent >= 50
         ? "bg-amber-400/15 border-amber-400/25 text-amber-700 dark:text-amber-200"
-        : "bg-red-400/15 border-red-400/25 text-red-200";
+        : "bg-red-400/15 border-red-400/25 text-red-700 dark:text-red-200";
 
   // SVG arc for the gauge
   const radius = 52;
@@ -237,8 +237,8 @@ function HealthScoreCard({ healthScore }) {
             <div className="text-xs text-emerald-700 dark:text-emerald-200/60 mt-1">بدون تأخير</div>
           </div>
           <div className="rounded-2xl bg-red-400/[0.06] border border-red-400/15 p-3 text-center">
-            <div className="text-xl font-bold text-red-200">{late}</div>
-            <div className="text-xs text-red-200/60 mt-1">سجل المتأخرة</div>
+            <div className="text-xl font-bold text-red-700 dark:text-red-200">{late}</div>
+            <div className="text-xs text-red-700 dark:text-red-200/60 mt-1">سجل المتأخرة</div>
           </div>
         </div>
       </div>
@@ -367,7 +367,7 @@ export default function WorkspaceSummaryPage() {
               </div>
             </div>
           ) : hasError ? (
-            <div className={`${cardClass} border-red-500/30 text-red-300`}>
+            <div className={`${cardClass} border-red-500/30 text-red-700 dark:text-red-300`}>
               فشل تحميل الملخص
             </div>
           ) : (
@@ -456,7 +456,7 @@ export default function WorkspaceSummaryPage() {
                   className={`${ws.glassSoft} ${ws.card} p-5 border-red-500/20`}
                 >
                   <div className="flex items-center gap-2 mb-4">
-                    <div className="w-10 h-10 rounded-2xl bg-red-400/15 text-red-200 border border-red-400/25 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-2xl bg-red-400/15 text-red-700 dark:text-red-200 border border-red-400/25 flex items-center justify-center">
                       <AlertTriangle className="w-5 h-5" />
                     </div>
                     <div>

@@ -215,7 +215,7 @@ export function TaskFormFields({
                 />
               </div>
               {requireDueDate && !dueDate ? (
-                <div className="mt-2 text-xs text-red-300">
+                <div className="mt-2 text-xs text-red-700 dark:text-red-300">
                   تاريخ الاستحقاق مطلوب
                 </div>
               ) : null}
@@ -256,7 +256,7 @@ export function TaskFormFields({
                 buttonClassName="px-4 py-3"
               />
               {requireSpace && !spaceId ? (
-                <div className="mt-2 text-xs text-red-300">المساحة مطلوبة</div>
+                <div className="mt-2 text-xs text-red-700 dark:text-red-300">المساحة مطلوبة</div>
               ) : null}
             </div>
           </div>
