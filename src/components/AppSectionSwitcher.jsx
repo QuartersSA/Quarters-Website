@@ -65,7 +65,7 @@ export default function AppSectionSwitcher({
   const items = [
     {
       key: "workspace",
-      href: "/workspace/inbox",
+      href: "/workspace",
       label: "مساحة العمل",
       Icon: LayoutGrid,
       gate: (p) => (p ? p.can_access_workspace : true),
