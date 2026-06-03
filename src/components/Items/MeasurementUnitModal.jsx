@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { X, Ruler } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { adminFetch } from "@/utils/apiAuth";
 
 /**
  * Small modal for adding a new measurement unit to the global
@@ -50,14 +51,13 @@ export default function MeasurementUnitModal({
 
     setSaving(true);
     try {
-      const res = await fetch("/api/measurement-units", {
+      const res = await adminFetch("/api/measurement-units", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name_ar: nameAr.trim(),
           name_en: nameEn.trim() || null,
         }),
-        credentials: "include",
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));

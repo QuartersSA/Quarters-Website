@@ -6,6 +6,7 @@ import { Plus, Trash2, Star, Ruler, ShoppingCart, Boxes } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import MeasurementUnitModal from "@/components/Items/MeasurementUnitModal";
+import { adminFetch } from "@/utils/apiAuth";
 
 /**
  * Editor for the multi-unit panel on an item.
@@ -50,7 +51,7 @@ export default function ItemUnitsPanel({
   const catalogQuery = useQuery({
     queryKey: ["measurement-units"],
     queryFn: async () => {
-      const res = await fetch("/api/measurement-units", { credentials: "include" });
+      const res = await adminFetch("/api/measurement-units");
       if (!res.ok) throw new Error("failed to load units");
       return res.json();
     },
