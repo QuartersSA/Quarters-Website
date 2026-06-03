@@ -16,25 +16,34 @@ import {
   Cell,
 } from "recharts";
 import { ws } from "@/components/Workspace/ui";
+import useAdminTheme from "@/hooks/useAdminTheme";
 
 function getBranchHealthColor(lowStock, outOfStock, tracked) {
   if (tracked === 0)
-    return { dot: "bg-gray-400", label: "لا بيانات", color: "text-slate-500 dark:text-slate-500 dark:text-white/40" };
+    return { dot: "bg-gray-400", label: "لا بيانات", color: "text-slate-500 dark:text-white/40" };
   const ratio = (lowStock + outOfStock * 2) / Math.max(tracked, 1);
   if (ratio === 0)
-    return { dot: "bg-emerald-400", label: "ممتاز", color: "text-emerald-700 dark:text-emerald-700 dark:text-emerald-200" };
+    return { dot: "bg-emerald-400", label: "ممتاز", color: "text-emerald-700 dark:text-emerald-200" };
   if (ratio < 0.15)
-    return { dot: "bg-emerald-400", label: "جيد", color: "text-emerald-700 dark:text-emerald-700 dark:text-emerald-200" };
+    return { dot: "bg-emerald-400", label: "جيد", color: "text-emerald-700 dark:text-emerald-200" };
   if (ratio < 0.3)
     return {
       dot: "bg-amber-400",
       label: "تحتاج متابعة",
-      color: "text-amber-700 dark:text-amber-700 dark:text-amber-200",
+      color: "text-amber-700 dark:text-amber-200",
     };
-  return { dot: "bg-red-400", label: "حالة حرجة", color: "text-red-700 dark:text-red-700 dark:text-red-200" };
+  return { dot: "bg-red-400", label: "حالة حرجة", color: "text-red-700 dark:text-red-200" };
 }
 
 export function BranchPerformanceCard({ branchPerformance, weekComparison }) {
+  const { isDark } = useAdminTheme();
+  // Recharts axes/grid/tooltip render outside Tailwind dark: cascade.
+  const axisStrokeMuted = isDark ? "rgba(255,255,255,0.4)" : "rgba(15,23,42,0.45)";
+  const axisStroke = isDark ? "rgba(255,255,255,0.7)" : "rgba(15,23,42,0.7)";
+  const tooltipBg = isDark ? "rgba(19,32,68,0.95)" : "rgba(255, 255, 255, 0.98)";
+  const tooltipBorder = isDark ? "rgba(255,255,255,0.1)" : "rgba(15,23,42,0.12)";
+  const tooltipText = isDark ? "white" : "rgb(15, 23, 42)";
+
   if (!branchPerformance || branchPerformance.length === 0) return null;
 
   const chartData = branchPerformance.map((b) => ({
@@ -54,27 +63,27 @@ export function BranchPerformanceCard({ branchPerformance, weekComparison }) {
 
   const changeIcon =
     weekComparison?.changePercent >= 0 ? (
-      <TrendingUp className="w-4 h-4 text-emerald-700 dark:text-emerald-700 dark:text-emerald-300" />
+      <TrendingUp className="w-4 h-4 text-emerald-700 dark:text-emerald-300" />
     ) : (
-      <TrendingDown className="w-4 h-4 text-red-700 dark:text-red-700 dark:text-red-300" />
+      <TrendingDown className="w-4 h-4 text-red-700 dark:text-red-300" />
     );
 
   const changeColor =
-    weekComparison?.changePercent >= 0 ? "text-emerald-700 dark:text-emerald-700 dark:text-emerald-200" : "text-red-700 dark:text-red-700 dark:text-red-200";
+    weekComparison?.changePercent >= 0 ? "text-emerald-700 dark:text-emerald-200" : "text-red-700 dark:text-red-200";
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8">
       {/* Week comparison card */}
       <div className={`${ws.glass} ${ws.card} p-6`}>
         <div className="flex items-center gap-3 mb-5">
-          <div className={`${ws.iconBox} text-sky-700 dark:text-sky-700 dark:text-sky-200`}>
+          <div className={`${ws.iconBox} text-sky-700 dark:text-sky-200`}>
             <BarChart3 className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-900 dark:text-white tracking-tight">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
               مقارنة أسبوعية
             </h3>
-            <p className="text-slate-500 dark:text-slate-500 dark:text-white/45 text-sm">
+            <p className="text-slate-500 dark:text-white/45 text-sm">
               عدد العمليات هذا الأسبوع مقارنة بالأسبوع الماضي
             </p>
           </div>
@@ -82,19 +91,19 @@ export function BranchPerformanceCard({ branchPerformance, weekComparison }) {
 
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className={`${ws.glassSoft} rounded-2xl p-4 text-center`}>
-            <p className="text-slate-500 dark:text-slate-500 dark:text-white/50 text-xs mb-1">هذا الأسبوع</p>
-            <p className="text-2xl font-bold text-slate-900 dark:text-slate-900 dark:text-white">
+            <p className="text-slate-500 dark:text-white/50 text-xs mb-1">هذا الأسبوع</p>
+            <p className="text-2xl font-bold text-slate-900 dark:text-white">
               {weekComparison?.thisWeek || 0}
             </p>
           </div>
           <div className={`${ws.glassSoft} rounded-2xl p-4 text-center`}>
-            <p className="text-slate-500 dark:text-slate-500 dark:text-white/50 text-xs mb-1">الأسبوع الماضي</p>
-            <p className="text-2xl font-bold text-slate-900 dark:text-slate-900 dark:text-white">
+            <p className="text-slate-500 dark:text-white/50 text-xs mb-1">الأسبوع الماضي</p>
+            <p className="text-2xl font-bold text-slate-900 dark:text-white">
               {weekComparison?.lastWeek || 0}
             </p>
           </div>
           <div className={`${ws.glassSoft} rounded-2xl p-4 text-center`}>
-            <p className="text-slate-500 dark:text-slate-500 dark:text-white/50 text-xs mb-1">التغيير</p>
+            <p className="text-slate-500 dark:text-white/50 text-xs mb-1">التغيير</p>
             <div className="flex items-center justify-center gap-1.5">
               {changeIcon}
               <p className={`text-2xl font-bold ${changeColor}`}>
@@ -115,24 +124,24 @@ export function BranchPerformanceCard({ branchPerformance, weekComparison }) {
               >
                 <XAxis
                   type="number"
-                  tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 11 }}
+                  tick={{ fill: axisStrokeMuted, fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
                   dataKey="name"
                   type="category"
-                  tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+                  tick={{ fill: axisStroke, fontSize: 12 }}
                   axisLine={false}
                   tickLine={false}
                   width={80}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "rgba(19,32,68,0.95)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    backgroundColor: tooltipBg,
+                    border: `1px solid ${tooltipBorder}`,
                     borderRadius: "12px",
-                    color: "white",
+                    color: tooltipText,
                     fontSize: "13px",
                   }}
                 />
@@ -158,14 +167,14 @@ export function BranchPerformanceCard({ branchPerformance, weekComparison }) {
       {/* Branch health status */}
       <div className={`${ws.glass} ${ws.card} p-6`}>
         <div className="flex items-center gap-3 mb-5">
-          <div className={`${ws.iconBox} text-emerald-700 dark:text-emerald-700 dark:text-emerald-200`}>
+          <div className={`${ws.iconBox} text-emerald-700 dark:text-emerald-200`}>
             <Building2 className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-900 dark:text-white tracking-tight">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
               حالة الفروع
             </h3>
-            <p className="text-slate-500 dark:text-slate-500 dark:text-white/45 text-sm">
+            <p className="text-slate-500 dark:text-white/45 text-sm">
               نظرة سريعة على حالة المخزون في كل فرع
             </p>
           </div>
@@ -189,8 +198,8 @@ export function BranchPerformanceCard({ branchPerformance, weekComparison }) {
                   <div className="flex items-center gap-3">
                     <div className={`w-3 h-3 rounded-full ${health.dot}`} />
                     <div>
-                      <p className="text-slate-900 dark:text-slate-900 dark:text-white font-semibold">{branch.name}</p>
-                      <p className="text-slate-500 dark:text-slate-500 dark:text-white/40 text-xs">
+                      <p className="text-slate-900 dark:text-white font-semibold">{branch.name}</p>
+                      <p className="text-slate-500 dark:text-white/40 text-xs">
                         {branch.location || ""}
                       </p>
                     </div>
@@ -200,14 +209,14 @@ export function BranchPerformanceCard({ branchPerformance, weekComparison }) {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-500 dark:text-white/50 mt-2">
+                <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-white/50 mt-2">
                   <span className="flex items-center gap-1">
-                    <CheckCircle className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-700 dark:text-emerald-300" />
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-300" />
                     اكتمال {completionRate}%
                   </span>
                   <span>عمليات الشهر: {branch.ops_this_month}</span>
                   {branch.low_stock_count > 0 && (
-                    <span className="flex items-center gap-1 text-amber-700 dark:text-amber-700 dark:text-amber-200">
+                    <span className="flex items-center gap-1 text-amber-700 dark:text-amber-200">
                       <AlertCircle className="w-3.5 h-3.5" />
                       {branch.low_stock_count} منخفض
                     </span>
@@ -215,7 +224,7 @@ export function BranchPerformanceCard({ branchPerformance, weekComparison }) {
                 </div>
 
                 {/* Mini progress bar */}
-                <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-100 dark:bg-white/5 rounded-full mt-2 overflow-hidden">
+                <div className="w-full h-1.5 bg-slate-100 dark:bg-white/5 rounded-full mt-2 overflow-hidden">
                   <div
                     className="h-full rounded-full bg-emerald-400/60"
                     style={{ width: `${completionRate}%` }}
