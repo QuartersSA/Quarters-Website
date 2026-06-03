@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   X,
   Plus,
@@ -11,6 +11,30 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+
+/**
+ * Look up the multi-unit array on an item. Falls back to an empty list
+ * for legacy rows still on the old schema (no `units`).
+ */
+function getItemUnits(item) {
+  return Array.isArray(item?.units) ? item.units : [];
+}
+
+/**
+ * Default unit row for the operator to pre-select. Tries the explicit
+ * `default_purchase_unit_id`/`default_inventory_unit_id` pointer first,
+ * then falls back to the base row, then the first row.
+ */
+function pickDefaultUnit(item, defaultKey) {
+  const units = getItemUnits(item);
+  if (units.length === 0) return null;
+  const defaultId = item?.[defaultKey];
+  if (defaultId != null) {
+    const hit = units.find((u) => String(u.id) === String(defaultId));
+    if (hit) return hit;
+  }
+  return units.find((u) => u.is_base) || units[0] || null;
+}
 
 function getStock(stockMap, branchId, itemId) {
   if (!stockMap || !branchId || !itemId) return null;
@@ -80,6 +104,120 @@ export function PurchaseReceiptModal({
     }));
     return [...base, ...mapped];
   }, [activeItems, receiptBranchId]);
+
+  // ── Unit selector state ──────────────────────────────────────────────
+  //
+  // The "selected item" carries an inline `units` array (per-item rows
+  // from `item_units`). Each row has its own `conversion_factor` against
+  // the item's base unit. The qty input below is in the *picked unit*;
+  // we convert to base before pushing into `receiptItems` so the existing
+  // submit pipeline (which ships base-unit qty to the API) stays untouched.
+  //
+  // `displayByItem` lets the preview list show "5 كرتون" instead of just
+  // the converted base number ("120"). Keyed by itemId so removal stays
+  // O(1) and survives re-renders.
+  const selectedItem = useMemo(() => {
+    const idNum = Number(receiptItemId);
+    if (!Number.isFinite(idNum) || idNum <= 0) return null;
+    return (activeItems || []).find((i) => Number(i.id) === idNum) || null;
+  }, [activeItems, receiptItemId]);
+
+  const selectedUnits = getItemUnits(selectedItem);
+  const [selectedUnitId, setSelectedUnitId] = useState("");
+  const [displayByItem, setDisplayByItem] = useState({});
+  const pendingAddRef = useRef(null);
+
+  // Reset the unit picker to the item's default whenever the operator
+  // switches items. Empty `units` array → leave it blank and we'll
+  // fall back to factor=1 on add.
+  useEffect(() => {
+    if (!selectedItem) {
+      setSelectedUnitId("");
+      return;
+    }
+    const def = pickDefaultUnit(selectedItem, "default_purchase_unit_id");
+    setSelectedUnitId(def ? String(def.id) : "");
+  }, [selectedItem]);
+
+  const unitOptions = useMemo(() => {
+    if (selectedUnits.length === 0) return [];
+    const sorted = selectedUnits
+      .slice()
+      .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+    return sorted.map((u) => ({
+      value: String(u.id),
+      label: u.name_ar || u.name_en || "—",
+    }));
+  }, [selectedUnits]);
+
+  const pickedUnit = useMemo(() => {
+    if (selectedUnits.length === 0) return null;
+    return (
+      selectedUnits.find((u) => String(u.id) === String(selectedUnitId)) || null
+    );
+  }, [selectedUnits, selectedUnitId]);
+
+  // After a conversion the hook's `receiptQty` updates; fire `addReceiptItem`
+  // on the next render so the hook's `useCallback` sees the converted value.
+  useEffect(() => {
+    const pending = pendingAddRef.current;
+    if (!pending) return;
+    if (String(receiptQty) !== String(pending.baseQty)) return;
+    pendingAddRef.current = null;
+    setDisplayByItem((prev) => ({
+      ...prev,
+      [pending.itemId]: {
+        qty: pending.displayQty,
+        unitLabel: pending.unitLabel,
+      },
+    }));
+    addReceiptItem();
+  }, [receiptQty, addReceiptItem]);
+
+  const handleAddWithUnit = () => {
+    const rawQty = Number(receiptQty);
+    if (!Number.isFinite(rawQty) || rawQty <= 0) {
+      // Let the hook surface its own validation error.
+      addReceiptItem();
+      return;
+    }
+    const itemIdNum = Number(receiptItemId);
+    if (!Number.isFinite(itemIdNum) || itemIdNum <= 0) {
+      addReceiptItem();
+      return;
+    }
+    const factor = pickedUnit
+      ? Number(pickedUnit.conversion_factor) || 1
+      : 1;
+    const unitLabel = pickedUnit?.name_ar || pickedUnit?.name_en || "";
+    if (factor === 1) {
+      // No conversion needed — bookkeep label only.
+      setDisplayByItem((prev) => ({
+        ...prev,
+        [itemIdNum]: { qty: rawQty, unitLabel },
+      }));
+      addReceiptItem();
+      return;
+    }
+    const baseQty = Math.round(rawQty * factor * 1000) / 1000;
+    pendingAddRef.current = {
+      itemId: itemIdNum,
+      displayQty: rawQty,
+      unitLabel,
+      baseQty: String(baseQty),
+    };
+    setReceiptQty(String(baseQty));
+  };
+
+  const handleRemoveWithUnit = (itemId) => {
+    setDisplayByItem((prev) => {
+      if (!(itemId in prev)) return prev;
+      const next = { ...prev };
+      delete next[itemId];
+      return next;
+    });
+    removeReceiptItem(itemId);
+  };
 
   if (!receiptModalOpen) {
     return null;
@@ -208,7 +346,13 @@ export function PurchaseReceiptModal({
 
           {/* Add item row */}
           <div className="space-y-2">
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_140px_120px] gap-3 items-end">
+            <div
+              className={`grid grid-cols-1 gap-3 items-end ${
+                unitOptions.length > 0
+                  ? "md:grid-cols-[1fr_120px_140px_120px]"
+                  : "md:grid-cols-[1fr_140px_120px]"
+              }`}
+            >
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
                   الصنف
@@ -220,6 +364,20 @@ export function PurchaseReceiptModal({
                   buttonClassName="px-4 py-3"
                 />
               </div>
+
+              {unitOptions.length > 0 ? (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
+                    الوحدة
+                  </label>
+                  <GlassSelect
+                    value={selectedUnitId}
+                    onChange={setSelectedUnitId}
+                    options={unitOptions}
+                    buttonClassName="px-4 py-3"
+                  />
+                </div>
+              ) : null}
 
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
@@ -238,7 +396,7 @@ export function PurchaseReceiptModal({
 
               <button
                 type="button"
-                onClick={addReceiptItem}
+                onClick={handleAddWithUnit}
                 className={`${ws.btnPrimary} px-4 py-3 justify-center`}
               >
                 <Plus className="w-4 h-4" />
@@ -293,6 +451,14 @@ export function PurchaseReceiptModal({
                     receiptBranchId,
                     it.itemId,
                   );
+                  // Prefer the operator's typed qty+unit when available;
+                  // fall back to the raw base-unit number for edit-mode
+                  // rows we hydrated from the server (no display label
+                  // tracked for those).
+                  const display = displayByItem[it.itemId];
+                  const qtyLabel = display
+                    ? `${display.qty}${display.unitLabel ? ` ${display.unitLabel}` : ""}`
+                    : String(it.quantity);
 
                   return (
                     <div
@@ -314,11 +480,11 @@ export function PurchaseReceiptModal({
                         <span
                           className={`${ws.pill} bg-slate-100 dark:bg-slate-100 dark:bg-white/[0.06] text-slate-900 dark:text-slate-900 dark:text-white border-slate-200 dark:border-slate-200 dark:border-white/10`}
                         >
-                          {it.quantity}
+                          {qtyLabel}
                         </span>
                         <button
                           type="button"
-                          onClick={() => removeReceiptItem(it.itemId)}
+                          onClick={() => handleRemoveWithUnit(it.itemId)}
                           className={`${ws.btnDanger} px-3 py-2 text-sm justify-center`}
                           aria-label="حذف"
                         >

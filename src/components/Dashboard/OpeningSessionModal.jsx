@@ -1,7 +1,26 @@
+import { useEffect, useState } from "react";
 import { X, Search } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+
+// Per-item `units` array from the API. Legacy items still without a
+// multi-unit setup return [] — we fall back to factor=1 (qty as-typed)
+// and hide the dropdown.
+function getItemUnits(item) {
+  return Array.isArray(item?.units) ? item.units : [];
+}
+
+function pickDefaultUnit(item, defaultKey) {
+  const units = getItemUnits(item);
+  if (units.length === 0) return null;
+  const defaultId = item?.[defaultKey];
+  if (defaultId != null) {
+    const hit = units.find((u) => String(u.id) === String(defaultId));
+    if (hit) return hit;
+  }
+  return units.find((u) => u.is_base) || units[0] || null;
+}
 
 export function OpeningSessionModal({
   openingModalOpen,
@@ -23,6 +42,60 @@ export function OpeningSessionModal({
   createOpeningMutation,
   branches,
 }) {
+  // ── Per-item unit selection ────────────────────────────────────────
+  //
+  // Each item carries an inline `units` array (from `item_units`). The
+  // operator types a qty in the picked unit; we convert to base before
+  // writing to `openingQtyByItem` so the existing submit pipeline (which
+  // ships the map straight to the API as base-unit qty) stays untouched.
+  //
+  // `displayQtyByItem` is the user-facing number; `unitByItem` is the
+  // selected unit-row id. Both are local state and reset whenever the
+  // modal is opened (i.e. when `filteredOpeningItems` changes shape).
+  const [displayQtyByItem, setDisplayQtyByItem] = useState({});
+  const [unitByItem, setUnitByItem] = useState({});
+
+  // Seed defaults whenever the item list changes (modal opens, branch
+  // filter changes). We only fill *missing* keys so an operator's
+  // mid-entry edits aren't blown away on every re-render.
+  useEffect(() => {
+    if (!Array.isArray(filteredOpeningItems)) return;
+    setUnitByItem((prev) => {
+      const next = { ...prev };
+      let changed = false;
+      for (const it of filteredOpeningItems) {
+        if (next[it.id] != null) continue;
+        const def = pickDefaultUnit(it, "default_inventory_unit_id");
+        if (def) {
+          next[it.id] = String(def.id);
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [filteredOpeningItems]);
+
+  const computeBaseQty = (item, displayQty, unitId) => {
+    const units = getItemUnits(item);
+    const picked = units.find((u) => String(u.id) === String(unitId));
+    const factor = picked ? Number(picked.conversion_factor) || 1 : 1;
+    const n = Number(displayQty);
+    if (!Number.isFinite(n)) return 0;
+    return Math.round(n * factor * 1000) / 1000;
+  };
+
+  const handleDisplayChange = (item, value) => {
+    setDisplayQtyByItem((prev) => ({ ...prev, [item.id]: value }));
+    const baseQty = computeBaseQty(item, value, unitByItem[item.id]);
+    setOpeningQtyByItem((prev) => ({ ...prev, [item.id]: baseQty }));
+  };
+
+  const handleUnitChange = (item, unitId) => {
+    setUnitByItem((prev) => ({ ...prev, [item.id]: unitId }));
+    const baseQty = computeBaseQty(item, displayQtyByItem[item.id], unitId);
+    setOpeningQtyByItem((prev) => ({ ...prev, [item.id]: baseQty }));
+  };
+
   if (!openingModalOpen) {
     return null;
   }
@@ -135,32 +208,57 @@ export function OpeningSessionModal({
                 </tr>
               </thead>
               <tbody>
-                {filteredOpeningItems.map((it) => (
-                  <tr key={it.id} className="border-t border-slate-100 dark:border-slate-100 dark:border-white/5">
-                    <td className="px-4 py-3 text-slate-900 dark:text-slate-900 dark:text-white font-medium">
-                      {it.name}
-                    </td>
-                    <td className="px-4 py-3 text-slate-700 dark:text-slate-700 dark:text-white/65 text-sm">
-                      {it.unit || "-"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        min="0"
-                        step="any"
-                        value={openingQtyByItem[it.id] ?? 0}
-                        onChange={(e) => {
-                          const v = e.target.value;
-                          setOpeningQtyByItem((prev) => ({
-                            ...prev,
-                            [it.id]: v,
-                          }));
-                        }}
-                        className={`${ws.input} px-3 py-2.5`}
-                      />
-                    </td>
-                  </tr>
-                ))}
+                {filteredOpeningItems.map((it) => {
+                  const units = getItemUnits(it);
+                  const unitOptions = units
+                    .slice()
+                    .sort(
+                      (a, b) =>
+                        Number(a.sort_order || 0) - Number(b.sort_order || 0),
+                    )
+                    .map((u) => ({
+                      value: String(u.id),
+                      label: u.name_ar || u.name_en || "—",
+                    }));
+                  // Display qty: prefer the typed value, fall back to the
+                  // base qty already in the map (covers re-opens / hydration).
+                  const displayValue =
+                    displayQtyByItem[it.id] ??
+                    openingQtyByItem[it.id] ??
+                    0;
+                  return (
+                    <tr
+                      key={it.id}
+                      className="border-t border-slate-100 dark:border-slate-100 dark:border-white/5"
+                    >
+                      <td className="px-4 py-3 text-slate-900 dark:text-slate-900 dark:text-white font-medium">
+                        {it.name}
+                      </td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-700 dark:text-white/65 text-sm min-w-[140px]">
+                        {unitOptions.length > 0 ? (
+                          <GlassSelect
+                            value={unitByItem[it.id] || ""}
+                            onChange={(v) => handleUnitChange(it, v)}
+                            options={unitOptions}
+                            buttonClassName="px-3 py-2"
+                          />
+                        ) : (
+                          <span>{it.unit || "-"}</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
+                        <input
+                          type="number"
+                          min="0"
+                          step="any"
+                          value={displayValue}
+                          onChange={(e) => handleDisplayChange(it, e.target.value)}
+                          className={`${ws.input} px-3 py-2.5`}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
 
                 {filteredOpeningItems.length === 0 && (
                   <tr>

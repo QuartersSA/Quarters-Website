@@ -35,12 +35,37 @@ function inventoryDraftKey(employeeId) {
 
 const EMPLOYEE_LOGIN_PATH = "/employee/login";
 
+// Per-item `units` array from the API. Legacy items still without a
+// multi-unit setup return [] — we fall back to factor=1 (qty as-typed)
+// and hide the dropdown.
+function getItemUnits(item) {
+  return Array.isArray(item?.units) ? item.units : [];
+}
+
+function pickDefaultUnit(item, defaultKey) {
+  const units = getItemUnits(item);
+  if (units.length === 0) return null;
+  const defaultId = item?.[defaultKey];
+  if (defaultId != null) {
+    const hit = units.find((u) => String(u.id) === String(defaultId));
+    if (hit) return hit;
+  }
+  return units.find((u) => u.is_base) || units[0] || null;
+}
+
 export default function EmployeeInventoryPage() {
   const [employee, setEmployee] = useState(null);
   const [language, setLanguage] = useState("ar");
   const [availableItems, setAvailableItems] = useState({});
   const [selectedItem, setSelectedItem] = useState(null);
   const [quantity, setQuantity] = useState("");
+  // Per-item display qty + unit selection. `availableItems` stays in
+  // base units (what the API expects); these two maps drive the UI so
+  // the operator sees "5 كرتون" instead of the converted base number.
+  const [displayQtyByItem, setDisplayQtyByItem] = useState({});
+  const [unitLabelByItem, setUnitLabelByItem] = useState({});
+  const [unitByItem, setUnitByItem] = useState({});
+  const [selectedUnitId, setSelectedUnitId] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -467,11 +492,40 @@ export default function EmployeeInventoryPage() {
     setQuantity("");
   };
 
-  const setItemValue = (itemId, value) => {
+  // Look up the operator's currently-picked unit for `itemId`. Falls
+  // back to the item's `default_inventory_unit_id`, then base row.
+  const getPickedUnit = (itemId, overrideUnitId) => {
+    const item = (items || []).find((i) => Number(i.id) === Number(itemId));
+    const units = getItemUnits(item);
+    if (units.length === 0) return null;
+    const wanted =
+      overrideUnitId != null && overrideUnitId !== ""
+        ? overrideUnitId
+        : unitByItem[itemId];
+    if (wanted != null && wanted !== "") {
+      const hit = units.find((u) => String(u.id) === String(wanted));
+      if (hit) return hit;
+    }
+    return pickDefaultUnit(item, "default_inventory_unit_id");
+  };
+
+  const setItemValue = (itemId, displayValue, overrideUnitId) => {
+    const picked = getPickedUnit(itemId, overrideUnitId);
+    const factor = picked ? Number(picked.conversion_factor) || 1 : 1;
+    const n = Number(displayValue);
+    const baseQty = Number.isFinite(n)
+      ? Math.round(n * factor * 1000) / 1000
+      : 0;
+    const unitLabel = picked?.name_ar || picked?.name_en || "";
     setAvailableItems((prev) => ({
       ...prev,
-      [itemId]: value,
+      [itemId]: baseQty,
     }));
+    setDisplayQtyByItem((prev) => ({ ...prev, [itemId]: n }));
+    setUnitLabelByItem((prev) => ({ ...prev, [itemId]: unitLabel }));
+    if (picked) {
+      setUnitByItem((prev) => ({ ...prev, [itemId]: String(picked.id) }));
+    }
   };
 
   const handleQuickSet = (itemId, value) => {
@@ -485,13 +539,29 @@ export default function EmployeeInventoryPage() {
     }
 
     const currentId = selectedItem;
-    setItemValue(currentId, parseFloat(quantity));
+    setItemValue(currentId, parseFloat(quantity), selectedUnitId);
     goToNextPending(currentId);
   };
 
   const handleEditItem = (itemId) => {
     setSelectedItem(itemId);
-    setQuantity(availableItems[itemId].toString());
+    // Restore the operator's last typed value, not the base-unit number.
+    const displayQty =
+      displayQtyByItem[itemId] != null
+        ? displayQtyByItem[itemId]
+        : availableItems[itemId];
+    setQuantity(String(displayQty));
+    // And restore their picked unit so the same factor applies on save.
+    const savedUnit = unitByItem[itemId];
+    if (savedUnit) {
+      setSelectedUnitId(savedUnit);
+    } else {
+      const item = (items || []).find(
+        (i) => Number(i.id) === Number(itemId),
+      );
+      const def = pickDefaultUnit(item, "default_inventory_unit_id");
+      setSelectedUnitId(def ? String(def.id) : "");
+    }
     const newAvailableItems = { ...availableItems };
     delete newAvailableItems[itemId];
     setAvailableItems(newAvailableItems);
@@ -757,7 +827,37 @@ export default function EmployeeInventoryPage() {
                 return;
               }
               setSelectedItem(item.id);
+              // Pre-select the item's default unit so the operator can
+              // just type and hit done — no extra picker tap on the hot path.
+              const savedUnit = unitByItem[item.id];
+              if (savedUnit) {
+                setSelectedUnitId(savedUnit);
+              } else {
+                const def = pickDefaultUnit(
+                  item,
+                  "default_inventory_unit_id",
+                );
+                setSelectedUnitId(def ? String(def.id) : "");
+              }
             };
+
+            const itemUnits = getItemUnits(item);
+            const itemUnitOptions = itemUnits
+              .slice()
+              .sort(
+                (a, b) =>
+                  Number(a.sort_order || 0) - Number(b.sort_order || 0),
+              )
+              .map((u) => ({
+                value: String(u.id),
+                label: u.name_ar || u.name_en || "—",
+              }));
+            const completedUnitLabel =
+              unitLabelByItem[item.id] || unitText;
+            const completedDisplayQty =
+              displayQtyByItem[item.id] != null
+                ? displayQtyByItem[item.id]
+                : availableItems[item.id];
 
             return (
               <div
@@ -800,10 +900,10 @@ export default function EmployeeInventoryPage() {
                       <div className="flex items-center gap-2 bg-[#0b1220] border border-white/10 rounded-lg px-4 py-2">
                         <CheckCircle className="w-5 h-5 text-emerald-700 dark:text-emerald-300" />
                         <span className="font-bold text-emerald-200 text-2xl">
-                          {availableItems[item.id]}
+                          {completedDisplayQty}
                         </span>
                         <span className="text-gray-400 text-sm">
-                          {unitText}
+                          {completedUnitLabel}
                         </span>
                       </div>
                       <button
@@ -885,6 +985,24 @@ export default function EmployeeInventoryPage() {
                           </div>
                         </div>
                       </div>
+
+                      {itemUnitOptions.length > 0 ? (
+                        <div
+                          className="w-36 self-end"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <label className="block text-sm font-bold text-gray-200 mb-2">
+                            {text.unit}
+                          </label>
+                          <GlassSelect
+                            value={selectedUnitId}
+                            onChange={setSelectedUnitId}
+                            options={itemUnitOptions}
+                            dir={language === "ar" ? "rtl" : "ltr"}
+                            buttonClassName="px-3 py-3"
+                          />
+                        </div>
+                      ) : null}
 
                       {/* Single button: "تم" saves and jumps to next */}
                       <div className="flex flex-col gap-2 self-end">
