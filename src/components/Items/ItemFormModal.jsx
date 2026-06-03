@@ -4,12 +4,12 @@ import {
   X,
   Languages,
   Layers,
-  DollarSign,
   ClipboardList,
   Link,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import ItemUnitsPanel from "@/components/Items/ItemUnitsPanel";
 
 export function ItemFormModal({
   isOpen,
@@ -65,17 +65,7 @@ export function ItemFormModal({
 
   if (!isOpen) return null;
 
-  const unitOptions = [
-    { value: "حبة", label: "حبة" },
-    { value: "كيلو", label: "كيلو" },
-    { value: "كرتون", label: "كرتون" },
-    { value: "كرتون مفرد", label: "كرتون مفرد" },
-    { value: "كيس", label: "كيس" },
-    { value: "رول", label: "رول" },
-    { value: "شدة", label: "شدة" },
-  ];
-
-  const labelClass = "block text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 text-sm font-semibold mb-2";
+  const labelClass = "block text-slate-700 dark:text-white/70 text-sm font-semibold mb-2";
   const helpClass = "text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/40 text-xs mt-1";
 
   const categoryOptions = [
@@ -273,66 +263,24 @@ export function ItemFormModal({
             />
           </div>
 
-          {/* Cost */}
-          <div>
-            <label className={`${labelClass} flex items-center gap-2`}>
-              <DollarSign className="w-4 h-4" />
-              تكلفة المنتج (ر.س)
-            </label>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={formData.cost}
-              onChange={(e) =>
-                setFormData({ ...formData, cost: e.target.value })
-              }
-              className={`${ws.input} px-4 py-3`}
-              placeholder="0.00"
-              dir="ltr"
-            />
-            <p className={helpClass}>سعر التكلفة للوحدة الواحدة (اختياري)</p>
-          </div>
-
-          {/* Unit Selection */}
-          <div>
-            <label className="block text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 text-sm font-semibold mb-3">
-              نوع المنتج (الوحدة) <span className="text-red-700 dark:text-red-700 dark:text-red-300">*</span>
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              {unitOptions.map((option, index) => {
-                const active = formData.unit === option.value;
-                const boxClass = active
-                  ? "bg-slate-200 dark:bg-slate-200 dark:bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white border-slate-300 dark:border-slate-300 dark:border-slate-300 dark:border-white/20"
-                  : "bg-slate-50 dark:bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.03] text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.06]";
-
-                return (
-                  <label
-                    key={option.value}
-                    className={`relative flex items-center justify-center p-4 border rounded-2xl cursor-pointer transition-colors ${boxClass}`}
-                  >
-                    <input
-                      type="radio"
-                      name="unit"
-                      value={option.value}
-                      checked={formData.unit === option.value}
-                      onChange={(e) =>
-                        setFormData({ ...formData, unit: e.target.value })
-                      }
-                      required={index === 0}
-                      className="sr-only"
-                    />
-                    <span
-                      className={`font-semibold ${active ? "text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white" : "text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70"}`}
-                    >
-                      {option.label}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
-            <p className={helpClass}>اختر وحدة القياس المناسبة لهذا الصنف</p>
-          </div>
+          {/* Multi-unit panel — replaces the old single-unit radio
+              grid and the standalone "تكلفة المنتج" input. The panel
+              owns base_purchase_cost + the per-item units array. The
+              legacy `formData.cost` stays in sync with the base cost
+              so older code paths (reports / API consumers) keep
+              working without change. */}
+          <ItemUnitsPanel
+            units={formData.units || []}
+            setUnits={(next) => setFormData({ ...formData, units: next })}
+            basePurchaseCost={formData.base_purchase_cost}
+            setBasePurchaseCost={(v) =>
+              setFormData({
+                ...formData,
+                base_purchase_cost: v,
+                cost: v, // legacy mirror
+              })
+            }
+          />
 
           {/* Min Stock Threshold */}
           <div>
