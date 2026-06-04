@@ -129,56 +129,24 @@ export async function GET(request) {
         i.id,
         i.name,
         i.name_en,
+        i.unit,
         i.image_url,
-        -- Display unit = default inventory unit name (whatever the
-        -- operator picked as "وحدة المخزون الافتراضية"). Falls back
-        -- to the legacy flat i.unit text for un-migrated items.
-        COALESCE(purch_unit.name_ar, i.unit) AS unit,
-        COALESCE(purch_unit.factor, 1)::numeric(14, 4) AS unit_factor,
-        -- Keep legacy alias for the StockValueTable's "بن fallback"
-        -- indicator (checks if i.cost is NULL to decide whether the
-        -- effective cost came from the green-bean price).
-        i.cost AS cost,
-        COALESCE(i.base_purchase_cost, i.cost) AS base_cost,
-        -- effective_cost is now the displayed PER-INVENTORY-UNIT
-        -- cost — base cost × conversion factor of the picked unit.
-        -- Total monetary value stays invariant because the base-unit
-        -- quantity is divided by the same factor below.
-        (COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price)
-          * COALESCE(purch_unit.factor, 1))::numeric(14, 4) AS effective_cost,
+        i.cost,
+        COALESCE(i.cost, last_bean_price.final_price) AS effective_cost,
         last_bean_price.final_price AS fallback_cost,
         c.name AS category_name,
-        -- total_quantity is also expressed in the displayed unit so
-        -- the table reads cohesively (unit pill + qty match).
-        (COALESCE(it.total_quantity, 0) / NULLIF(COALESCE(purch_unit.factor, 1), 0))::numeric(12, 3) AS total_quantity,
-        -- Total monetary value: base_qty × base_cost. Independent of
-        -- whichever display unit the operator picked.
+        COALESCE(it.total_quantity, 0)::numeric(12, 3) AS total_quantity,
         CASE
-          WHEN COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) IS NULL
+          WHEN COALESCE(i.cost, last_bean_price.final_price) IS NULL
             THEN NULL
           ELSE (
             COALESCE(it.total_quantity, 0)
-              * COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price)
+              * COALESCE(i.cost, last_bean_price.final_price)
           )::numeric(14, 2)
         END AS total_value
       FROM items i
       LEFT JOIN item_categories c ON c.id = i.category_id
       LEFT JOIN item_totals it ON it.item_id = i.id
-      -- Show the report in **inventory** terms: the unit the
-      -- operator picked as "وحدة المخزون الافتراضية" on the item.
-      -- All math threads through that single pointer:
-      --   unit  = default_inventory_unit.name_ar
-      --   qty   = stored_base_qty / inventory_unit.conversion_factor
-      --   cost  = base_cost × inventory_unit.conversion_factor
-      -- Falls back to the legacy flat i.unit text + factor=1 when an
-      -- item still has no item_units rows.
-      LEFT JOIN LATERAL (
-        SELECT mu.name_ar, iu.conversion_factor AS factor
-        FROM item_units iu
-        JOIN measurement_units mu ON mu.id = iu.unit_id
-        WHERE iu.id = i.default_inventory_unit_id
-        LIMIT 1
-      ) purch_unit ON TRUE
       LEFT JOIN LATERAL (
         SELECT oi.computed_final_price_per_kg AS final_price
         FROM accounting_green_bean_order_items oi

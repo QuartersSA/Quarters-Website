@@ -29,19 +29,9 @@ export function OperationItemsList({ operationDetails }) {
               item.transfer_quantity !== undefined
                 ? item.transfer_quantity
                 : item.quantity;
-            const storedQty = isTransfer
+            const qty = isTransfer
               ? Number(movedRaw) || 0
               : Number(item.quantity) || 0;
-            // Quantities everywhere in inventory_items/purchase_receipts
-            // are stored in the BASE unit. To show the operator the
-            // amount in their picked inventory unit we divide by the
-            // unit's cumulative conversion factor (= base units per
-            // ONE of this unit). Falls back to raw stored value for
-            // legacy items that have no item_units row yet.
-            const unitFactor = Number(item.item_unit_factor) || 1;
-            const qty =
-              unitFactor > 0 ? storedQty / unitFactor : storedQty;
-            const unitLabel = item.item_unit || "";
             const isZero = qty === 0;
 
             // For Transfer rows, drop the availability-flavoured styling
@@ -93,14 +83,7 @@ export function OperationItemsList({ operationDetails }) {
                     <Package className={`w-5 h-5 ${iconColor}`} />
                   </div>
                   <div className="flex-1">
-                    <p className="text-slate-900 dark:text-slate-900 dark:text-white font-semibold flex items-center gap-2 flex-wrap">
-                      <span>{item.item_name}</span>
-                      {unitLabel ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-white/[0.05] text-slate-700 dark:text-white/70 border border-slate-200 dark:border-white/10">
-                          {unitLabel}
-                        </span>
-                      ) : null}
-                    </p>
+                    <p className="text-slate-900 dark:text-slate-900 dark:text-white font-semibold">{item.item_name}</p>
                     {item.item_description ? (
                       <p className="text-slate-500 dark:text-slate-500 dark:text-white/45 text-sm">
                         {item.item_description}
@@ -113,11 +96,7 @@ export function OperationItemsList({ operationDetails }) {
                   {isTransfer ? (
                     <>
                       <span className={`text-2xl font-bold ${qtyColor}`}>
-                        {Number.isInteger(qty)
-                          ? qty.toLocaleString()
-                          : qty.toLocaleString(undefined, {
-                              maximumFractionDigits: 3,
-                            })}
+                        {qty}
                       </span>
                       <span className={badgeClass}>{badgeText}</span>
                     </>
@@ -126,11 +105,7 @@ export function OperationItemsList({ operationDetails }) {
                   ) : (
                     <>
                       <span className={`text-2xl font-bold ${qtyColor}`}>
-                        {Number.isInteger(qty)
-                          ? qty.toLocaleString()
-                          : qty.toLocaleString(undefined, {
-                              maximumFractionDigits: 3,
-                            })}
+                        {qty}
                       </span>
                       <span className={badgeClass}>{badgeText}</span>
                     </>

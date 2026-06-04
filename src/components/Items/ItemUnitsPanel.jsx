@@ -9,7 +9,7 @@ import {
   Ruler,
   ShoppingCart,
   Boxes,
-  Info,
+  CornerDownLeft,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
@@ -17,33 +17,48 @@ import MeasurementUnitModal from "@/components/Items/MeasurementUnitModal";
 import { adminFetch } from "@/utils/apiAuth";
 
 /**
- * Flat multi-unit editor — every row is an independent factor
- * against ONE base unit. No hierarchical cascading, no parent/child
- * confusion.
+ * Hierarchical multi-unit editor.
  *
- * The schema/DB contract is preserved: `conversion_factor` =
- * "base units per ONE of this unit". The base row is whichever has
- * is_base=true; it's locked at factor=1.
+ * The chain reads top-down "biggest → smallest". Row 0 is the base
+ * (factor=1, price = base_purchase_cost). Each row below is a
+ * subdivision of the row immediately above it: the input field
+ * holds the "parent count" — how many of THIS unit fit inside the
+ * row directly above.
  *
- * Recommended setup (per the help text below): the operator picks
- * the SMALLEST physical unit as base. Larger containers are added
- * as rows with a factor > 1.
+ *   كرتون (base, 5.00 ر.س)
+ *     ↳ شدة, parent_count = 20    →  derived cost = 5.00 ÷ 20 = 0.25
+ *        ↳ حبة, parent_count = 50  →  derived cost = 0.25 ÷ 50 = 0.005
  *
- *   base = حبة (factor=1, sell-by smallest)
- *     ↳ شدة, factor = 20    (1 شدة contains 20 حبة)
- *     ↳ كرتون, factor = 400 (1 كرتون contains 400 حبة)
+ * The DB still stores `conversion_factor` as "base units per ONE
+ * of this unit" (cumulative ratio), so every consumer downstream
+ * (purchase receipts, transfers, inventory ops) keeps working
+ * unchanged — they do `qty × conversion_factor` and land on a
+ * base-unit value. Conversion between the UI's parent_count and
+ * the stored cumulative factor is local to this panel:
  *
- * Cost cascade is automatic: each row's cost = base_cost × factor.
- * Quantity conversion (used by every modal that records inventory)
- * is `display_qty × factor = stored_qty_in_base`. Display reads
- * `stored ÷ factor` to reverse it.
+ *   factor[0]   = 1
+ *   factor[i]   = factor[i-1] / parent_count[i]
+ *   derived[0]  = base_cost
+ *   derived[i]  = derived[i-1] / parent_count[i]    (= base_cost × factor[i])
  *
- * Storage stays anchored to ONE base regardless of what the
- * operator does in this panel, so there's no semantic drift when
- * adding/removing alternate units.
+ * When the operator edits the parent_count of any non-base row,
+ * the panel re-derives every downstream factor so the visible
+ * chain stays consistent with what the operator typed.
  */
 
 const SENTINEL_CREATE = "__create_new_unit__";
+
+// Compute the per-row "parent count" (how many of THIS unit fit
+// in the row above) directly from the stored cumulative factors.
+// Row 0 (base) has no parent, so its parent_count = 1.
+function parentCountOf(units, i) {
+  if (i <= 0) return 1;
+  const prev = Number(units[i - 1]?.conversion_factor) || 0;
+  const curr = Number(units[i]?.conversion_factor) || 0;
+  if (prev <= 0 || curr <= 0) return 0;
+  // Tiny rounding so 12.000000001 reads as 12 in the input field.
+  return Math.round((prev / curr) * 10000) / 10000;
+}
 
 export default function ItemUnitsPanel({
   units,
@@ -89,25 +104,7 @@ export default function ItemUnitsPanel({
   }, []);
 
   const safeUnits = Array.isArray(units) ? units : [];
-  // Render order: base first, then by factor ascending (smaller
-  // containers near the top, larger ones near the bottom). The
-  // underlying array order is preserved for save — sort is purely
-  // visual via a `displayIndex` array.
-  const displayOrder = useMemo(() => {
-    const idxs = safeUnits.map((_, i) => i);
-    return idxs.sort((a, b) => {
-      const ua = safeUnits[a];
-      const ub = safeUnits[b];
-      if (ua.is_base && !ub.is_base) return -1;
-      if (!ua.is_base && ub.is_base) return 1;
-      return (
-        (Number(ua.conversion_factor) || 0) -
-        (Number(ub.conversion_factor) || 0)
-      );
-    });
-  }, [safeUnits]);
-
-  const baseRow = safeUnits.find((u) => u.is_base) || safeUnits[0] || null;
+  const baseRow = safeUnits[0] || null; // always row 0 in the chain
   const baseCost = Number(basePurchaseCost) || 0;
 
   const updateRow = (index, patch) => {
@@ -115,30 +112,52 @@ export default function ItemUnitsPanel({
     setUnits(next);
   };
 
-  const updateFactor = (index, value) => {
-    const row = safeUnits[index];
-    if (!row) return;
-    if (row.is_base) return; // base locked at 1
-    const safe = value === "" ? "" : Number(value);
-    if (safe !== "" && (!Number.isFinite(safe) || safe < 0)) return;
-    updateRow(index, { conversion_factor: safe === "" ? "" : safe });
+  // Operator edited a parent_count input. Recompute the cumulative
+  // `conversion_factor` for that row AND for every row below it so
+  // the chain stays internally consistent with what they typed.
+  const updateParentCount = (index, value) => {
+    if (index <= 0) return; // base row's parent_count is always 1
+    const next = [...safeUnits];
+    // Snapshot the old parent_count for every row so the downstream
+    // rows preserve their relative subdivision after the change.
+    const oldParentCounts = next.map((_, k) => parentCountOf(next, k));
+    const safe = value === "" ? 0 : Number(value);
+    if (!Number.isFinite(safe) || safe < 0) return;
+    oldParentCounts[index] = safe;
+    // Rebuild every factor from the freshly-edited parent_count chain.
+    let cumulative = 1;
+    for (let k = 0; k < next.length; k++) {
+      if (k === 0) {
+        cumulative = 1;
+      } else {
+        const pc = oldParentCounts[k];
+        cumulative = pc > 0 ? cumulative / pc : 0;
+      }
+      next[k] = { ...next[k], conversion_factor: cumulative };
+    }
+    setUnits(next);
   };
 
-  // Switch the base flag to a new row. All factors rescale by
-  // dividing through the new base's old factor so the physical
-  // ratios stay identical.
+  // Re-anchor: a different row becomes the base. The picked row is
+  // pulled to index 0 (the chain reads top-down) and every factor
+  // re-scales relative to the new base so the underlying physical
+  // ratios stay the same.
   const setAsBase = (index) => {
+    if (index === 0) return;
     const picked = safeUnits[index];
-    if (!picked || picked.is_base) return;
+    if (!picked) return;
     const denom = Number(picked.conversion_factor) || 1;
     if (denom <= 0) return;
-    const next = safeUnits.map((u, i) => ({
+    const rescaled = safeUnits.map((u) => ({
       ...u,
-      is_base: i === index,
-      conversion_factor:
-        i === index ? 1 : (Number(u.conversion_factor) || 0) / denom,
+      conversion_factor: (Number(u.conversion_factor) || 0) / denom,
+      is_base: false,
     }));
-    setUnits(next);
+    // Pull picked to the top + force exact 1.
+    const pulled = { ...rescaled[index], is_base: true, conversion_factor: 1 };
+    rescaled.splice(index, 1);
+    rescaled.unshift(pulled);
+    setUnits(rescaled);
   };
 
   const setDefault = (index, key) => {
@@ -147,15 +166,18 @@ export default function ItemUnitsPanel({
   };
 
   const addRow = () => {
+    // Default new row parent_count = 1 (factor inherits the previous
+    // row's factor) so the operator types the real number in the
+    // input field next; cost cell stays at "—" until they do.
+    const prevFactor =
+      Number(safeUnits[safeUnits.length - 1]?.conversion_factor) || 1;
     setUnits([
       ...safeUnits,
       {
         unit_id: null,
         name_ar: "",
         name_en: null,
-        // Start at 1 — operator types the real "base units per ONE
-        // of this new unit" value below.
-        conversion_factor: 1,
+        conversion_factor: prevFactor, // parent_count defaults to 1
         is_base: false,
         default_purchase: false,
         default_inventory: false,
@@ -164,16 +186,10 @@ export default function ItemUnitsPanel({
   };
 
   const removeRow = (index) => {
-    const row = safeUnits[index];
-    if (row?.is_base) return; // base stays
+    if (index === 0) return; // base row stays put
     const next = safeUnits.filter((_, i) => i !== index);
-    const baseIdx = next.findIndex((u) => u.is_base);
-    if (!next.some((u) => u.default_purchase) && baseIdx >= 0) {
-      next[baseIdx].default_purchase = true;
-    }
-    if (!next.some((u) => u.default_inventory) && baseIdx >= 0) {
-      next[baseIdx].default_inventory = true;
-    }
+    if (!next.some((u) => u.default_purchase)) next[0].default_purchase = true;
+    if (!next.some((u) => u.default_inventory)) next[0].default_inventory = true;
     setUnits(next);
   };
 
@@ -232,6 +248,22 @@ export default function ItemUnitsPanel({
     (u) => u.default_inventory,
   );
 
+  // Pre-compute derived display costs once per render so the cells
+  // and the inline "X ÷ Y" rationale share the same number.
+  const derivedCosts = useMemo(() => {
+    const arr = new Array(safeUnits.length);
+    for (let i = 0; i < safeUnits.length; i++) {
+      if (i === 0) {
+        arr[i] = baseCost;
+      } else {
+        const pc = parentCountOf(safeUnits, i);
+        const prev = arr[i - 1];
+        arr[i] = pc > 0 && prev > 0 ? prev / pc : 0;
+      }
+    }
+    return arr;
+  }, [safeUnits, baseCost]);
+
   return (
     <div
       className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4 space-y-4`}
@@ -246,10 +278,12 @@ export default function ItemUnitsPanel({
             وحدات القياس
           </p>
           <p className="text-slate-500 dark:text-white/50 text-xs mt-1 leading-relaxed">
-            اختر الوحدة الأصغر (مثلاً حبة) كأساسية. أضف الوحدات الأكبر مع
-            معدّل التحويل = <span className="text-slate-700 dark:text-white/70 font-medium">كم وحدة أساسية في 1 من هذه الوحدة</span>.
+            الترتيب من الأكبر إلى الأصغر. كل وحدة جزء من الوحدة فوقها — اكتب
+            "كم من هذه الوحدة في الوحدة الأعلى". السعر يتقسّم تلقائياً:
             <br />
-            مثال: حبة (أساسية، factor=1) • شدة factor=20 • كرتون factor=400.
+            <span className="text-slate-700 dark:text-white/70 font-medium">
+              سعر الوحدة = سعر الوحدة الأعلى ÷ معدّل التحويل
+            </span>
           </p>
         </div>
       </div>
@@ -267,7 +301,7 @@ export default function ItemUnitsPanel({
         <input
           type="number"
           min="0"
-          step="0.0001"
+          step="0.01"
           value={basePurchaseCost}
           onChange={(e) => setBasePurchaseCost(e.target.value)}
           className={`${ws.input} px-4 py-3`}
@@ -276,119 +310,129 @@ export default function ItemUnitsPanel({
         />
       </div>
 
-      {/* Flat units list */}
+      {/* Hierarchical chain — one card per row, indented by depth so
+          the "below = part of above" relationship is visually obvious */}
       <div className="space-y-2">
-        {displayOrder.map((i) => {
-          const u = safeUnits[i];
-          const factor = Number(u.conversion_factor) || 0;
-          const cost = baseCost > 0 && factor > 0 ? baseCost * factor : 0;
+        {safeUnits.map((u, i) => {
+          const parentRow = i > 0 ? safeUnits[i - 1] : null;
+          const parentName = parentRow?.name_ar || "";
+          const parentCost = i > 0 ? derivedCosts[i - 1] : 0;
+          const myCost = derivedCosts[i];
+          const parentCount = parentCountOf(safeUnits, i);
           const unitSelectValue = u.unit_id ? String(u.unit_id) : "";
+          const indentClass = i === 0 ? "" : "mr-6 sm:mr-10";
 
           return (
-            <div
-              key={i}
-              className={`grid grid-cols-1 sm:grid-cols-[1fr,160px,1fr,auto] items-start gap-2 p-3 rounded-xl border ${
-                u.is_base
-                  ? "bg-emerald-50/40 dark:bg-emerald-500/[0.04] border-emerald-300/50 dark:border-emerald-400/20"
-                  : "bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10"
-              }`}
-            >
-              {/* Unit name */}
-              <div className="min-w-0">
-                <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
-                  اسم الوحدة
+            <div key={i} className={indentClass}>
+              {/* Inline relationship hint */}
+              {i > 0 ? (
+                <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-white/45 mb-1 pr-1">
+                  <CornerDownLeft className="w-3 h-3" />
+                  جزء من:{" "}
+                  <span className="text-slate-700 dark:text-white/70 font-semibold">
+                    {parentName || "الوحدة الأعلى"}
+                  </span>
                 </div>
-                <GlassSelect
-                  value={unitSelectValue}
-                  onChange={(v) => handleUnitPick(i, v)}
-                  options={unitOptions}
-                  placeholder="اختر الوحدة"
-                />
-              </div>
+              ) : null}
 
-              {/* Factor (= base units per 1 of this unit) */}
-              <div>
-                <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
-                  معدّل التحويل
+              <div
+                className={`grid grid-cols-1 sm:grid-cols-[1fr,140px,1fr,auto] items-start gap-2 p-3 rounded-xl border ${
+                  i === 0
+                    ? "bg-emerald-50/40 dark:bg-emerald-500/[0.04] border-emerald-300/50 dark:border-emerald-400/20"
+                    : "bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10"
+                }`}
+              >
+                {/* Unit name */}
+                <div className="min-w-0">
+                  <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
+                    اسم الوحدة
+                  </div>
+                  <GlassSelect
+                    value={unitSelectValue}
+                    onChange={(v) => handleUnitPick(i, v)}
+                    options={unitOptions}
+                    placeholder="اختر الوحدة"
+                  />
                 </div>
-                <input
-                  type="number"
-                  min="0"
-                  step="any"
-                  value={u.is_base ? 1 : u.conversion_factor}
-                  onChange={(e) => updateFactor(i, e.target.value)}
-                  disabled={u.is_base}
-                  className={`${ws.input} px-3 py-2 disabled:opacity-60 disabled:cursor-not-allowed`}
-                  placeholder={u.is_base ? "1" : "مثال: 20"}
-                  dir="ltr"
-                />
-                <div className="text-[10px] text-slate-500 dark:text-white/40 mt-1 leading-tight">
-                  {u.is_base ? (
-                    <span className="inline-flex items-center gap-1">
-                      <Info className="w-3 h-3" />
-                      الأساسية ثابتة على 1
-                    </span>
-                  ) : factor > 0 && baseRow?.name_ar && u.name_ar ? (
-                    <>
-                      1 {u.name_ar} = {factor}{" "}
-                      {baseRow.name_ar}
-                    </>
-                  ) : (
-                    <>كم {baseRow?.name_ar || "وحدة أساسية"} في 1 {u.name_ar || "وحدة"}؟</>
-                  )}
-                </div>
-              </div>
 
-              {/* Derived cost */}
-              <div>
-                <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
-                  سعر الشراء (محسوب)
+                {/* Parent count input (factor in chain) */}
+                <div>
+                  <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
+                    معدّل التحويل
+                  </div>
+                  <input
+                    type="number"
+                    min="0.0001"
+                    step="0.0001"
+                    value={i === 0 ? 1 : parentCount || ""}
+                    onChange={(e) => updateParentCount(i, e.target.value)}
+                    disabled={i === 0}
+                    className={`${ws.input} px-3 py-2 disabled:opacity-60 disabled:cursor-not-allowed`}
+                    placeholder={i === 0 ? "1" : "مثال: 20"}
+                    dir="ltr"
+                  />
+                  {i > 0 ? (
+                    <div className="text-[10px] text-slate-500 dark:text-white/40 mt-1 leading-tight">
+                      {parentCount > 0 && parentName
+                        ? `${parentCount} ${u.name_ar || "وحدة"} في كل ${parentName}`
+                        : `كم ${u.name_ar || "وحدة"} في كل ${parentName || "وحدة أعلى"}؟`}
+                    </div>
+                  ) : null}
                 </div>
-                <div
-                  className="px-3 py-2 rounded-xl bg-white/60 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 font-mono text-sm text-slate-900 dark:text-white"
-                  dir="ltr"
-                >
-                  {cost > 0 ? `${cost.toFixed(cost < 1 ? 4 : 2)} ر.س` : "—"}
-                </div>
-                {!u.is_base && baseCost > 0 && factor > 0 ? (
+
+                {/* Derived cost cell — show the actual division for
+                    every non-base row so the operator can verify */}
+                <div>
+                  <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
+                    سعر الشراء (محسوب)
+                  </div>
                   <div
-                    className="text-[10px] text-slate-500 dark:text-white/40 mt-1 leading-tight font-mono"
+                    className="px-3 py-2 rounded-xl bg-white/60 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 font-mono text-sm text-slate-900 dark:text-white"
                     dir="ltr"
                   >
-                    = {baseCost.toFixed(baseCost < 1 ? 4 : 2)} × {factor}
+                    {myCost > 0 ? `${myCost.toFixed(myCost < 1 ? 4 : 2)} ر.س` : "—"}
                   </div>
-                ) : null}
-              </div>
+                  {i > 0 && parentCost > 0 && parentCount > 0 ? (
+                    <div
+                      className="text-[10px] text-slate-500 dark:text-white/40 mt-1 leading-tight font-mono"
+                      dir="ltr"
+                    >
+                      = {parentCost.toFixed(parentCost < 1 ? 4 : 2)} ÷{" "}
+                      {parentCount}
+                    </div>
+                  ) : null}
+                </div>
 
-              {/* Actions */}
-              <div className="flex flex-col sm:flex-row sm:items-end gap-1 sm:gap-2 justify-end">
-                {u.is_base ? (
-                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-200">
-                    <Star className="w-3 h-3 fill-current" />
-                    أساسية
-                  </span>
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => setAsBase(i)}
-                      disabled={!u.name_ar || !(factor > 0)}
-                      className={`${ws.btnNeutral} px-2 py-1 text-[11px] disabled:opacity-40 disabled:cursor-not-allowed`}
-                      title="جعل هذه الوحدة هي الأساسية"
-                    >
-                      <Star className="w-3 h-3" />
-                      تعيين أساسية
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => removeRow(i)}
-                      className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-red-700 dark:text-red-300 hover:bg-red-500/10"
-                      aria-label="حذف الوحدة"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </>
-                )}
+                {/* Actions: base badge / set-as-base / delete */}
+                <div className="flex flex-col sm:flex-row sm:items-end gap-1 sm:gap-2 justify-end">
+                  {i === 0 ? (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-bold bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-200">
+                      <Star className="w-3 h-3 fill-current" />
+                      أساسية
+                    </span>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setAsBase(i)}
+                        disabled={!u.name_ar || !(parentCount > 0)}
+                        className={`${ws.btnNeutral} px-2 py-1 text-[11px] disabled:opacity-40 disabled:cursor-not-allowed`}
+                        title="جعل هذه الوحدة هي الأساسية"
+                      >
+                        <Star className="w-3 h-3" />
+                        تعيين أساسية
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeRow(i)}
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-red-700 dark:text-red-300 hover:bg-red-500/10"
+                        aria-label="حذف الوحدة"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           );
@@ -401,7 +445,7 @@ export default function ItemUnitsPanel({
         className="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10 rounded-xl"
       >
         <Plus className="w-4 h-4" />
-        إضافة وحدة جديدة
+        إضافة وحدة أصغر
       </button>
 
       {/* Two defaults — purchases + inventory */}
