@@ -149,15 +149,13 @@ async function GET(request) {
         )::numeric(14, 4) AS effective_cost,
         last_bean_price.final_price AS fallback_cost,
         c.name AS category_name,
-        -- Display quantity = stored base qty / inventory unit factor,
-        -- so the qty column reads in the same unit the cost column
-        -- reads in. Visible math: qty × cost = total_value, holds for
-        -- every choice of inventory unit. (Falls through with
-        -- divide-by-one when the item has no item_units row yet.)
-        (
-          COALESCE(it.total_quantity, 0)
-            / NULLIF(COALESCE(inv_unit.factor, 1), 0)
-        )::numeric(12, 3) AS total_quantity,
+        -- Display quantity = the raw summed base-unit stock, so
+        -- this column matches "إجمالي المخزون" on the items table
+        -- (which the operator confirmed is the canonical reference).
+        -- effective_cost is still per-inventory-unit, so qty × cost
+        -- intentionally does NOT equal total_value when inv_factor
+        -- ≠ 1; total_value below stays correct monetarily.
+        COALESCE(it.total_quantity, 0)::numeric(12, 3) AS total_quantity,
         -- Total value = (displayed_qty × displayed_cost) so the
         -- on-screen multiplication holds exactly. Mathematically
         -- equivalent to base_qty × base_cost (the factor cancels)
