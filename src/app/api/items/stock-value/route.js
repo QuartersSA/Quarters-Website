@@ -145,9 +145,20 @@ export async function GET(request) {
         )::numeric(14, 4) AS effective_cost,
         last_bean_price.final_price AS fallback_cost,
         c.name AS category_name,
-        COALESCE(it.total_quantity, 0)::numeric(12, 3) AS total_quantity,
-        -- total_value stays in monetary terms — base_qty × base_cost
-        -- — so the grand total reconciles with the dashboard.
+        -- Display quantity = stored base qty / inventory unit factor,
+        -- so the qty column reads in the same unit the cost column
+        -- reads in. Visible math: qty × cost = total_value, holds for
+        -- every choice of inventory unit. (Falls through with
+        -- divide-by-one when the item has no item_units row yet.)
+        (
+          COALESCE(it.total_quantity, 0)
+            / NULLIF(COALESCE(inv_unit.factor, 1), 0)
+        )::numeric(12, 3) AS total_quantity,
+        -- Total value = (displayed_qty × displayed_cost) so the
+        -- on-screen multiplication holds exactly. Mathematically
+        -- equivalent to base_qty × base_cost (the factor cancels)
+        -- so the grand total still reconciles with the dashboard
+        -- "قيمة المخزون" stat.
         CASE
           WHEN COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) IS NULL
             THEN NULL
