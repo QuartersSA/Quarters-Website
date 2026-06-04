@@ -129,24 +129,43 @@ export async function GET(request) {
         i.id,
         i.name,
         i.name_en,
-        i.unit,
+        -- Display unit pill shows whichever unit the operator picked
+        -- as "وحدة المخزون الافتراضية" on the item. Falls back to
+        -- the legacy flat i.unit text when no multi-unit row exists.
+        COALESCE(inv_unit.name_ar, i.unit) AS unit,
         i.image_url,
         i.cost,
-        COALESCE(i.cost, last_bean_price.final_price) AS effective_cost,
+        -- effective_cost = cost PER INVENTORY UNIT, derived from the
+        -- base cost × that unit's conversion_factor. Bean-link
+        -- fallback chain is unchanged for items that get their cost
+        -- from green-bean orders.
+        (
+          COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price)
+            * COALESCE(inv_unit.factor, 1)
+        )::numeric(14, 4) AS effective_cost,
         last_bean_price.final_price AS fallback_cost,
         c.name AS category_name,
         COALESCE(it.total_quantity, 0)::numeric(12, 3) AS total_quantity,
+        -- total_value stays in monetary terms — base_qty × base_cost
+        -- — so the grand total reconciles with the dashboard.
         CASE
-          WHEN COALESCE(i.cost, last_bean_price.final_price) IS NULL
+          WHEN COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) IS NULL
             THEN NULL
           ELSE (
             COALESCE(it.total_quantity, 0)
-              * COALESCE(i.cost, last_bean_price.final_price)
+              * COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price)
           )::numeric(14, 2)
         END AS total_value
       FROM items i
       LEFT JOIN item_categories c ON c.id = i.category_id
       LEFT JOIN item_totals it ON it.item_id = i.id
+      LEFT JOIN LATERAL (
+        SELECT mu.name_ar, iu.conversion_factor AS factor
+        FROM item_units iu
+        JOIN measurement_units mu ON mu.id = iu.unit_id
+        WHERE iu.id = i.default_inventory_unit_id
+        LIMIT 1
+      ) inv_unit ON TRUE
       LEFT JOIN LATERAL (
         SELECT oi.computed_final_price_per_kg AS final_price
         FROM accounting_green_bean_order_items oi
