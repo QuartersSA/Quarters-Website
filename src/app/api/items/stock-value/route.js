@@ -130,12 +130,13 @@ export async function GET(request) {
         i.name,
         i.name_en,
         i.image_url,
-        -- Display unit comes from the operator-picked
-        -- "default inventory unit" (item_units row referenced by
-        -- items.default_inventory_unit_id). Falls back to the legacy
+        -- Stock-value reports on **purchase** terms — the operator
+        -- thinks of valuation in "كم كرتون موجود + بكم"، not the
+        -- smaller inventory unit. Pull the default purchase unit
+        -- (items.default_purchase_unit_id). Falls back to the legacy
         -- flat i.unit text for un-migrated items.
-        COALESCE(inv_unit.name_ar, i.unit) AS unit,
-        COALESCE(inv_unit.factor, 1)::numeric(14, 4) AS unit_factor,
+        COALESCE(purch_unit.name_ar, i.unit) AS unit,
+        COALESCE(purch_unit.factor, 1)::numeric(14, 4) AS unit_factor,
         -- Keep legacy alias for the StockValueTable's "بن fallback"
         -- indicator (checks if i.cost is NULL to decide whether the
         -- effective cost came from the green-bean price).
@@ -146,12 +147,12 @@ export async function GET(request) {
         -- Total monetary value stays invariant because the base-unit
         -- quantity is divided by the same factor below.
         (COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price)
-          * COALESCE(inv_unit.factor, 1))::numeric(14, 4) AS effective_cost,
+          * COALESCE(purch_unit.factor, 1))::numeric(14, 4) AS effective_cost,
         last_bean_price.final_price AS fallback_cost,
         c.name AS category_name,
         -- total_quantity is also expressed in the displayed unit so
         -- the table reads cohesively (unit pill + qty match).
-        (COALESCE(it.total_quantity, 0) / NULLIF(COALESCE(inv_unit.factor, 1), 0))::numeric(12, 3) AS total_quantity,
+        (COALESCE(it.total_quantity, 0) / NULLIF(COALESCE(purch_unit.factor, 1), 0))::numeric(12, 3) AS total_quantity,
         -- Total monetary value: base_qty × base_cost. Independent of
         -- whichever display unit the operator picked.
         CASE
@@ -169,9 +170,9 @@ export async function GET(request) {
         SELECT mu.name_ar, iu.conversion_factor AS factor
         FROM item_units iu
         JOIN measurement_units mu ON mu.id = iu.unit_id
-        WHERE iu.id = i.default_inventory_unit_id
+        WHERE iu.id = i.default_purchase_unit_id
         LIMIT 1
-      ) inv_unit ON TRUE
+      ) purch_unit ON TRUE
       LEFT JOIN LATERAL (
         SELECT oi.computed_final_price_per_kg AS final_price
         FROM accounting_green_bean_order_items oi
