@@ -156,17 +156,20 @@ async function GET(request) {
         -- intentionally does NOT equal total_value when inv_factor
         -- ≠ 1; total_value below stays correct monetarily.
         COALESCE(it.total_quantity, 0)::numeric(12, 3) AS total_quantity,
-        -- Total value = (displayed_qty × displayed_cost) so the
-        -- on-screen multiplication holds exactly. Mathematically
-        -- equivalent to base_qty × base_cost (the factor cancels)
-        -- so the grand total still reconciles with the dashboard
-        -- "قيمة المخزون" stat.
+        -- Total value = displayed_qty × displayed_cost — exactly
+        -- what the operator reads on screen (qty column × cost
+        -- column). qty is in BASE units, cost is per INVENTORY unit,
+        -- so the product carries the inv_factor as a real multiplier.
+        -- This intentionally diverges from the dashboard's
+        -- "قيمة المخزون" stat when inv_factor ≠ 1 — operator wants
+        -- the on-screen math to multiply out cleanly.
         CASE
           WHEN COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) IS NULL
             THEN NULL
           ELSE (
             COALESCE(it.total_quantity, 0)
               * COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price)
+              * COALESCE(inv_unit.factor, 1)
           )::numeric(14, 2)
         END AS total_value
       FROM items i
