@@ -166,11 +166,19 @@ export async function GET(request) {
       FROM items i
       LEFT JOIN item_categories c ON c.id = i.category_id
       LEFT JOIN item_totals it ON it.item_id = i.id
+      -- Pick the LARGEST unit on each item — the one with the
+      -- highest cumulative conversion_factor (= most base units in
+      -- ONE of this unit). For a chain base=شدة + كرتون @ factor 20,
+      -- this picks كرتون so the stock-value report reads "5 كرتون"
+      -- instead of "100 شدة". When an item only has the auto-seeded
+      -- base row, this falls through to that single row (factor=1)
+      -- and the displayed qty is unchanged.
       LEFT JOIN LATERAL (
         SELECT mu.name_ar, iu.conversion_factor AS factor
         FROM item_units iu
         JOIN measurement_units mu ON mu.id = iu.unit_id
-        WHERE iu.id = i.default_purchase_unit_id
+        WHERE iu.item_id = i.id
+        ORDER BY iu.conversion_factor DESC, iu.id
         LIMIT 1
       ) purch_unit ON TRUE
       LEFT JOIN LATERAL (
