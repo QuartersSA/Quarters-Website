@@ -130,11 +130,9 @@ export async function GET(request) {
         i.name,
         i.name_en,
         i.image_url,
-        -- Stock-value reports on **purchase** terms — the operator
-        -- thinks of valuation in "كم كرتون موجود + بكم"، not the
-        -- smaller inventory unit. Pull the default purchase unit
-        -- (items.default_purchase_unit_id). Falls back to the legacy
-        -- flat i.unit text for un-migrated items.
+        -- Display unit = default inventory unit name (whatever the
+        -- operator picked as "وحدة المخزون الافتراضية"). Falls back
+        -- to the legacy flat i.unit text for un-migrated items.
         COALESCE(purch_unit.name_ar, i.unit) AS unit,
         COALESCE(purch_unit.factor, 1)::numeric(14, 4) AS unit_factor,
         -- Keep legacy alias for the StockValueTable's "بن fallback"
@@ -166,19 +164,19 @@ export async function GET(request) {
       FROM items i
       LEFT JOIN item_categories c ON c.id = i.category_id
       LEFT JOIN item_totals it ON it.item_id = i.id
-      -- Pick the LARGEST unit on each item — the one with the
-      -- highest cumulative conversion_factor (= most base units in
-      -- ONE of this unit). For a chain base=شدة + كرتون @ factor 20,
-      -- this picks كرتون so the stock-value report reads "5 كرتون"
-      -- instead of "100 شدة". When an item only has the auto-seeded
-      -- base row, this falls through to that single row (factor=1)
-      -- and the displayed qty is unchanged.
+      -- Show the report in **inventory** terms: the unit the
+      -- operator picked as "وحدة المخزون الافتراضية" on the item.
+      -- All math threads through that single pointer:
+      --   unit  = default_inventory_unit.name_ar
+      --   qty   = stored_base_qty / inventory_unit.conversion_factor
+      --   cost  = base_cost × inventory_unit.conversion_factor
+      -- Falls back to the legacy flat i.unit text + factor=1 when an
+      -- item still has no item_units rows.
       LEFT JOIN LATERAL (
         SELECT mu.name_ar, iu.conversion_factor AS factor
         FROM item_units iu
         JOIN measurement_units mu ON mu.id = iu.unit_id
-        WHERE iu.item_id = i.id
-        ORDER BY iu.conversion_factor DESC, iu.id
+        WHERE iu.id = i.default_inventory_unit_id
         LIMIT 1
       ) purch_unit ON TRUE
       LEFT JOIN LATERAL (
