@@ -98,15 +98,22 @@ export default function PurchaseItemModal({
     e.preventDefault();
     if (!canSubmit) return;
     const baseRow = (units || []).find((u) => u.is_base);
-    const baseUnitText = baseRow?.name_ar || "حبة";
+    const defaultInvRow = (units || []).find((u) => u.default_inventory);
+    // Mirror the OPERATOR-PICKED default inventory unit into the
+    // legacy `items.unit` text column so anything else that still
+    // reads that flat field (table cards, older exports) sees the
+    // unit the operator chose — not whatever happens to be base.
+    const baseUnitText =
+      defaultInvRow?.name_ar || baseRow?.name_ar || "حبة";
     const baseCostNum =
       basePurchaseCost === "" ? null : Number(basePurchaseCost);
     const payload = {
       name: name.trim(),
       name_en: nameEn.trim() || null,
       description: description.trim() || null,
-      // Legacy `unit` text mirrors the base unit name so older
-      // reports/exports that still read items.unit keep working.
+      // Legacy `unit` text mirrors the default inventory unit so
+      // older reports/exports that still read items.unit keep
+      // showing the unit the operator picked.
       unit: baseUnitText,
       category_id: categoryId ? Number(categoryId) : null,
       cost: baseCostNum,

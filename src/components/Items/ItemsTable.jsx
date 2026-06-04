@@ -227,7 +227,34 @@ export function ItemsTable({
               {items.map((item) => {
                 const isChecked = selectedIds.has(item.id);
                 const categoryName = item?.category_name || "-";
-                const unit = item?.unit || "حبة";
+                // The displayed unit + cost should reflect whichever
+                // unit the operator picked as "وحدة المخزون
+                // الافتراضية" — not necessarily the base. Falls back
+                // to the legacy text column for items that haven't
+                // been migrated to multi-unit yet.
+                const itemUnits = Array.isArray(item?.units)
+                  ? item.units
+                  : [];
+                const defaultInvUnit =
+                  itemUnits.find(
+                    (u) => u.id === item?.default_inventory_unit_id,
+                  ) ||
+                  itemUnits.find((u) => u.is_base) ||
+                  null;
+                const unit =
+                  defaultInvUnit?.name_ar || item?.unit || "حبة";
+                const baseCost = Number(item?.base_purchase_cost);
+                const fallbackCost = Number(item?.cost);
+                const rawBaseCost = Number.isFinite(baseCost)
+                  ? baseCost
+                  : Number.isFinite(fallbackCost)
+                    ? fallbackCost
+                    : null;
+                const displayCost =
+                  rawBaseCost != null && defaultInvUnit
+                    ? rawBaseCost *
+                      (Number(defaultInvUnit.conversion_factor) || 1)
+                    : rawBaseCost;
                 const totalStock = computeTotalStock(item);
                 const stockStatus = computeStockStatus(item);
                 const hasBranchStock = Array.isArray(item?.branch_stock);
@@ -358,10 +385,10 @@ export function ItemsTable({
                       </span>
                     </td>
 
-                    {/* Cost */}
+                    {/* Cost — shown per default inventory unit. */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/75 font-medium">
-                        {formatCost(item?.cost)}
+                        {formatCost(displayCost)}
                       </div>
                       {item?.linked_green_bean_name ? (
                         <div className="flex items-center gap-1 mt-1">
