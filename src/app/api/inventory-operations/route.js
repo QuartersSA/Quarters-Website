@@ -344,6 +344,11 @@ export async function GET(request) {
           pr.item_id,
           i.name   AS item_name,
           i.description AS item_description,
+          -- default-inventory unit name + cumulative factor — let
+          -- the operation details modal render the qty in whichever
+          -- unit the operator picked as "وحدة المخزون الافتراضية".
+          mu.name_ar AS item_unit,
+          COALESCE(iu.conversion_factor, 1) AS item_unit_factor,
           pr.quantity,
           pr.received_at,
           pr.note,
@@ -354,6 +359,8 @@ export async function GET(request) {
         FROM purchase_receipts pr
         LEFT JOIN branches b ON b.id = pr.branch_id
         LEFT JOIN items    i ON i.id = pr.item_id
+        LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
+        LEFT JOIN measurement_units mu ON mu.id = iu.unit_id
         LEFT JOIN employees e ON e.id = pr.created_by_employee_id
         WHERE pr.receipt_batch_id = $1
         ORDER BY i.name`,
@@ -395,6 +402,8 @@ export async function GET(request) {
           quantity: Number(r.quantity),
           item_name: r.item_name,
           item_description: r.item_description,
+          item_unit: r.item_unit || null,
+          item_unit_factor: Number(r.item_unit_factor) || 1,
         })),
       });
     }
@@ -411,6 +420,8 @@ export async function GET(request) {
           pr.item_id,
           i.name   AS item_name,
           i.description AS item_description,
+          mu.name_ar AS item_unit,
+          COALESCE(iu.conversion_factor, 1) AS item_unit_factor,
           pr.quantity,
           pr.received_at,
           pr.note,
@@ -420,6 +431,8 @@ export async function GET(request) {
         FROM purchase_receipts pr
         LEFT JOIN branches b ON b.id = pr.branch_id
         LEFT JOIN items    i ON i.id = pr.item_id
+        LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
+        LEFT JOIN measurement_units mu ON mu.id = iu.unit_id
         LEFT JOIN employees e ON e.id = pr.created_by_employee_id
         WHERE pr.id = ${receiptId}
       `;
@@ -459,6 +472,8 @@ export async function GET(request) {
             quantity: Number(rcpt.quantity),
             item_name: rcpt.item_name,
             item_description: rcpt.item_description,
+            item_unit: rcpt.item_unit || null,
+            item_unit_factor: Number(rcpt.item_unit_factor) || 1,
           },
         ],
       });
@@ -510,9 +525,13 @@ export async function GET(request) {
           ii.quantity,
           ii.transfer_quantity,
           i.name as item_name,
-          i.description as item_description
+          i.description as item_description,
+          mu.name_ar AS item_unit,
+          COALESCE(iu.conversion_factor, 1) AS item_unit_factor
         FROM inventory_items ii
         LEFT JOIN items i ON ii.item_id = i.id
+        LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
+        LEFT JOIN measurement_units mu ON mu.id = iu.unit_id
         WHERE ii.operation_id = ${parseInt(operationId)}
         ORDER BY i.name
       `;
