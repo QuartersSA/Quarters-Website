@@ -25,20 +25,40 @@ import { Breadcrumb } from "@/components/Dashboard/Breadcrumb";
 
 function getItemTotalStock(item) {
   const list = Array.isArray(item?.branch_stock) ? item.branch_stock : [];
-  return list.reduce((sum, s) => {
+  // Sum branch quantities (stored in BASE units), then divide by the
+  // operator-picked default inventory unit's conversion_factor so
+  // this matches the on-screen table + the stock-value report.
+  const rawBaseStock = list.reduce((sum, s) => {
     const qty = Number(s?.quantity || 0);
     return sum + (Number.isFinite(qty) ? qty : 0);
   }, 0);
+  const itemUnits = Array.isArray(item?.units) ? item.units : [];
+  const defaultInvUnit =
+    itemUnits.find((u) => u.id === item?.default_inventory_unit_id) ||
+    itemUnits.find((u) => u.is_base) ||
+    null;
+  const factor =
+    defaultInvUnit && Number(defaultInvUnit.conversion_factor) > 0
+      ? Number(defaultInvUnit.conversion_factor)
+      : 1;
+  return rawBaseStock / factor;
 }
 
 function getItemStockStatus(item) {
   if (item?.show_in_inventory === false) return "disabled";
   const list = Array.isArray(item?.branch_stock) ? item.branch_stock : [];
   if (list.length === 0) return "available";
+  // Compare RAW base stock vs min_stock_threshold (both in legacy
+  // base-unit semantics) — getItemTotalStock now returns the
+  // inv-unit-divided value for the display column, which would
+  // break the threshold comparison otherwise.
+  const rawBaseStock = list.reduce((sum, s) => {
+    const qty = Number(s?.quantity || 0);
+    return sum + (Number.isFinite(qty) ? qty : 0);
+  }, 0);
   const threshold = Number(item?.min_stock_threshold || 0);
-  const totalStock = getItemTotalStock(item);
-  if (totalStock === 0) return "out_of_stock";
-  if (totalStock < threshold) return "low_stock";
+  if (rawBaseStock === 0) return "out_of_stock";
+  if (rawBaseStock < threshold) return "low_stock";
   return "available";
 }
 

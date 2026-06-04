@@ -20,11 +20,20 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
     itemUnits.find((u) => u.is_base) ||
     null;
   const displayUnit = defaultInvUnit?.name_ar || item?.unit || "";
-  const totalStock =
+  // Sum branch_stock (in base units), then divide by the inventory
+  // unit's conversion_factor so the card matches the stock-value
+  // page's "الكمية" column. `parseFloat` preserves fractional rows
+  // (NUMERIC(12,3) on the storage side).
+  const rawBaseStock =
     item.branch_stock?.reduce(
-      (sum, stock) => sum + parseInt(stock.quantity || 0),
+      (sum, stock) => sum + (parseFloat(stock.quantity) || 0),
       0,
     ) || 0;
+  const invFactor =
+    defaultInvUnit && Number(defaultInvUnit.conversion_factor) > 0
+      ? Number(defaultInvUnit.conversion_factor)
+      : 1;
+  const totalStock = rawBaseStock / invFactor;
 
   const threshold = Number(item.min_stock_threshold || 0);
 
@@ -123,7 +132,10 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
           <div className="flex items-center justify-between text-sm">
             <span className="text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/55">إجمالي المخزون:</span>
             <span className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-bold">
-              {totalStock} {displayUnit || "وحدة"}
+              {totalStock.toLocaleString(undefined, {
+                maximumFractionDigits: 3,
+              })}{" "}
+              {displayUnit || "وحدة"}
             </span>
           </div>
           <div className="flex items-center justify-between text-sm">

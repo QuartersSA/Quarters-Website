@@ -255,7 +255,16 @@ export function ItemsTable({
                     ? rawBaseCost *
                       (Number(defaultInvUnit.conversion_factor) || 1)
                     : rawBaseCost;
-                const totalStock = computeTotalStock(item);
+                // Convert the summed base-unit stock to the operator's
+                // picked default inventory unit so this column matches
+                // the stock-value report row-for-row.
+                const rawBaseStock = computeTotalStock(item);
+                const invFactor =
+                  defaultInvUnit &&
+                  Number(defaultInvUnit.conversion_factor) > 0
+                    ? Number(defaultInvUnit.conversion_factor)
+                    : 1;
+                const totalStock = rawBaseStock / invFactor;
                 const stockStatus = computeStockStatus(item);
                 const hasBranchStock = Array.isArray(item?.branch_stock);
                 const showInInventory = item?.show_in_inventory !== false;
@@ -292,7 +301,9 @@ export function ItemsTable({
                       : "متوفر";
 
                 const stockText = hasBranchStock
-                  ? `${totalStock.toLocaleString()} ${unit}`
+                  ? `${totalStock.toLocaleString(undefined, {
+                      maximumFractionDigits: 3,
+                    })} ${unit}`
                   : "-";
 
                 const viewStockTitle = hasBranchStock
