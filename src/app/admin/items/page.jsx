@@ -114,9 +114,21 @@ export default function ItemsPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Mirror the default inventory unit name into the legacy
+    // `item.unit` text field so any caller that still reads the
+    // flat column (older reports, exports, third-party consumers)
+    // sees the unit the operator actually picked — not the base.
+    const defaultInvRow = (formData.units || []).find(
+      (u) => u.default_inventory,
+    );
+    const baseRow = (formData.units || []).find((u) => u.is_base);
+    const unitText =
+      defaultInvRow?.name_ar || baseRow?.name_ar || formData.unit || "حبة";
+    const payload = { ...formData, unit: unitText };
+
     if (editingItem) {
       updateMutation.mutate(
-        { id: editingItem.id, ...formData },
+        { id: editingItem.id, ...payload },
         {
           onSuccess: () => {
             handleCloseModal();
@@ -124,7 +136,7 @@ export default function ItemsPage() {
         },
       );
     } else {
-      createMutation.mutate(formData, {
+      createMutation.mutate(payload, {
         onSuccess: () => {
           handleCloseModal();
         },
@@ -188,15 +200,42 @@ export default function ItemsPage() {
     return result;
   }, [items, searchTerm, selectedCategory, selectedStatus]);
 
+  // Resolve the display unit + per-unit cost the same way the
+  // table/cards do — pick the row that the operator flagged as the
+  // default inventory unit, fall back to the legacy text + cost.
+  const resolveDisplay = (item) => {
+    const itemUnits = Array.isArray(item?.units) ? item.units : [];
+    const def =
+      itemUnits.find((u) => u.id === item?.default_inventory_unit_id) ||
+      itemUnits.find((u) => u.is_base) ||
+      null;
+    const unit = def?.name_ar || item?.unit || "حبة";
+    const baseCost = Number(item?.base_purchase_cost);
+    const legacyCost = Number(item?.cost);
+    const raw = Number.isFinite(baseCost)
+      ? baseCost
+      : Number.isFinite(legacyCost)
+        ? legacyCost
+        : null;
+    const cost =
+      raw != null && def
+        ? raw * (Number(def.conversion_factor) || 1)
+        : raw;
+    return { unit, cost };
+  };
+
   // Export handlers
   const handleExportExcel = () => {
     const columns = [
       { header: "اسم الصنف", accessor: (item) => item.name },
       { header: "الفئة", accessor: (item) => item.category_name || "-" },
-      { header: "نوع المنتج", accessor: (item) => item.unit || "حبة" },
+      {
+        header: "نوع المنتج",
+        accessor: (item) => resolveDisplay(item).unit,
+      },
       {
         header: "التكلفة (ر.س)",
-        accessor: (item) => item.cost,
+        accessor: (item) => resolveDisplay(item).cost,
         format: (value) => (value != null ? Number(value).toFixed(2) : "-"),
       },
       { header: "الوصف", accessor: (item) => item.description || "-" },
@@ -238,10 +277,13 @@ export default function ItemsPage() {
       { header: "اسم الصنف", accessor: (item) => item.name },
       { header: "الوصف", accessor: (item) => item.description || "-" },
       { header: "الفئة", accessor: (item) => item.category_name || "-" },
-      { header: "النوع", accessor: (item) => item.unit || "حبة" },
+      {
+        header: "النوع",
+        accessor: (item) => resolveDisplay(item).unit,
+      },
       {
         header: "التكلفة",
-        accessor: (item) => item.cost,
+        accessor: (item) => resolveDisplay(item).cost,
         format: (value) => (value != null ? Number(value).toFixed(2) : "-"),
       },
       {

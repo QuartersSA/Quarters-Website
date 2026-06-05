@@ -58,12 +58,32 @@ function nowLocalDatetime() {
   }
 }
 
+// Per-item `units` array from the API. Each row carries its own
+// `conversion_factor` against the item's base unit. Legacy items still
+// without a multi-unit setup return an empty list → we fall back to
+// factor=1 (i.e. typed qty == base qty).
+function getItemUnits(item) {
+  return Array.isArray(item?.units) ? item.units : [];
+}
+
+function pickDefaultUnit(item, defaultKey) {
+  const units = getItemUnits(item);
+  if (units.length === 0) return null;
+  const defaultId = item?.[defaultKey];
+  if (defaultId != null) {
+    const hit = units.find((u) => String(u.id) === String(defaultId));
+    if (hit) return hit;
+  }
+  return units.find((u) => u.is_base) || units[0] || null;
+}
+
 export default function TransferModal({ branches, onClose }) {
   const [fromBranchId, setFromBranchId] = useState("");
   const [toBranchId, setToBranchId] = useState("");
   const [operationDate, setOperationDate] = useState(nowLocalDatetime());
   const [selectedItemId, setSelectedItemId] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [selectedUnitId, setSelectedUnitId] = useState("");
   const [note, setNote] = useState("");
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
@@ -145,6 +165,45 @@ export default function TransferModal({ branches, onClose }) {
     return activeItems.find((i) => Number(i.id) === idNum) || null;
   }, [activeItems, selectedItemId]);
 
+  // ── Unit selector ──────────────────────────────────────────────────
+  //
+  // Transfers move stock between branches at the *inventory* default
+  // unit. The dropdown shows that item's `units` rows; we convert the
+  // operator's typed qty into base units before pushing into `items`
+  // so the existing submit pipeline (which sends base-unit qty) stays
+  // unchanged.
+  const selectedUnits = getItemUnits(selectedItem);
+
+  const unitOptions = useMemo(() => {
+    if (selectedUnits.length === 0) return [];
+    return selectedUnits
+      .slice()
+      .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0))
+      .map((u) => ({
+        value: String(u.id),
+        label: u.name_ar || u.name_en || "—",
+      }));
+  }, [selectedUnits]);
+
+  // Switch to the new item's default inventory unit whenever the
+  // operator picks a different row. Empty units (legacy item) → blank
+  // and we'll fall back to factor=1.
+  useEffect(() => {
+    if (!selectedItem) {
+      setSelectedUnitId("");
+      return;
+    }
+    const def = pickDefaultUnit(selectedItem, "default_inventory_unit_id");
+    setSelectedUnitId(def ? String(def.id) : "");
+  }, [selectedItem]);
+
+  const pickedUnit = useMemo(() => {
+    if (selectedUnits.length === 0) return null;
+    return (
+      selectedUnits.find((u) => String(u.id) === String(selectedUnitId)) || null
+    );
+  }, [selectedUnits, selectedUnitId]);
+
   // ─── Point-in-time stock for the chosen operation date ─────────────
   //
   // Backend validation runs against the stock AT `operationDate`, not
@@ -221,9 +280,17 @@ export default function TransferModal({ branches, onClose }) {
     const itemIdNum = toNumberOrNull(selectedItemId);
     // Allow decimal quantities (e.g. 12.5 kg, 0.75 liters). Round to 3 decimals.
     const rawQty = Number(quantity);
-    const qtyNum = Number.isFinite(rawQty)
+    const displayQty = Number.isFinite(rawQty)
       ? Math.round(rawQty * 1000) / 1000
       : NaN;
+    // Convert from picked unit → base. Empty `units` (legacy) → factor=1.
+    const factor = pickedUnit
+      ? Number(pickedUnit.conversion_factor) || 1
+      : 1;
+    const qtyNum = Number.isFinite(displayQty)
+      ? Math.round(displayQty * factor * 1000) / 1000
+      : NaN;
+    const unitLabel = pickedUnit?.name_ar || pickedUnit?.name_en || "";
 
     if (!fromIdNum) {
       setError("اختر فرع المرسل");
@@ -247,7 +314,7 @@ export default function TransferModal({ branches, onClose }) {
       return;
     }
 
-    // Check stock availability in sender branch
+    // Check stock availability in sender branch — both numbers in base units.
     const availableStock = fromBranchStock ?? 0;
     const existingEntry = items.find((x) => x.itemId === itemIdNum);
     const alreadyAdded = existingEntry ? existingEntry.quantity : 0;
@@ -272,9 +339,19 @@ export default function TransferModal({ branches, onClose }) {
       const existsIdx = prev.findIndex((x) => x.itemId === itemIdNum);
       if (existsIdx >= 0) {
         const copy = prev.slice();
+        const prevDisplay = Number(copy[existsIdx].displayQty) || 0;
         copy[existsIdx] = {
           ...copy[existsIdx],
           quantity: copy[existsIdx].quantity + qtyNum,
+          // Only merge the display qty when the unit matches — otherwise
+          // we'd be adding "5 كرتون" + "3 حبة" and showing nonsense. On
+          // mismatch fall back to the base number.
+          displayQty:
+            copy[existsIdx].unitLabel === unitLabel
+              ? prevDisplay + displayQty
+              : copy[existsIdx].quantity + qtyNum,
+          unitLabel:
+            copy[existsIdx].unitLabel === unitLabel ? unitLabel : "",
         };
         return copy;
       }
@@ -284,6 +361,8 @@ export default function TransferModal({ branches, onClose }) {
           itemId: itemIdNum,
           itemName: selectedItem.name,
           quantity: qtyNum,
+          displayQty,
+          unitLabel,
           availableStock,
         },
       ];
@@ -447,7 +526,13 @@ export default function TransferModal({ branches, onClose }) {
           </div>
 
           <div className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_140px_120px] gap-3 items-end">
+            <div
+              className={`grid grid-cols-1 gap-3 items-end ${
+                unitOptions.length > 0
+                  ? "md:grid-cols-[1fr_120px_140px_120px]"
+                  : "md:grid-cols-[1fr_140px_120px]"
+              }`}
+            >
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
                   الصنف
@@ -463,6 +548,20 @@ export default function TransferModal({ branches, onClose }) {
                   buttonClassName="px-4 py-3"
                 />
               </div>
+
+              {unitOptions.length > 0 ? (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
+                    الوحدة
+                  </label>
+                  <GlassSelect
+                    value={selectedUnitId}
+                    onChange={setSelectedUnitId}
+                    options={unitOptions}
+                    buttonClassName="px-4 py-3"
+                  />
+                </div>
+              ) : null}
 
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
@@ -568,6 +667,9 @@ export default function TransferModal({ branches, onClose }) {
                   const barColor = isHigh
                     ? "bg-red-400/60"
                     : "bg-emerald-400/60";
+                  const qtyLabel = it.unitLabel
+                    ? `${it.displayQty} ${it.unitLabel}`
+                    : String(it.quantity);
 
                   return (
                     <div
@@ -584,7 +686,7 @@ export default function TransferModal({ branches, onClose }) {
                           <span
                             className={`${ws.pill} bg-slate-100 dark:bg-slate-100 dark:bg-white/[0.06] text-slate-900 dark:text-slate-900 dark:text-white border-slate-200 dark:border-slate-200 dark:border-white/10`}
                           >
-                            {it.quantity}
+                            {qtyLabel}
                           </span>
                           <button
                             type="button"

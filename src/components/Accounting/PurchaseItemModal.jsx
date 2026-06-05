@@ -5,16 +5,7 @@ import { createPortal } from "react-dom";
 import { Save, X, Package } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
-
-const UNIT_OPTIONS = [
-  { value: "حبة", label: "حبة" },
-  { value: "كيلو", label: "كيلو" },
-  { value: "كرتون", label: "كرتون" },
-  { value: "كرتون مفرد", label: "كرتون مفرد" },
-  { value: "شدة", label: "شدة" },
-  { value: "كيس", label: "كيس" },
-  { value: "رول", label: "رول" },
-];
+import ItemUnitsPanel from "@/components/Items/ItemUnitsPanel";
 
 /**
  * Modal used by the Purchases items panel to create / edit items.
@@ -39,9 +30,9 @@ export default function PurchaseItemModal({
   const [name, setName] = useState("");
   const [nameEn, setNameEn] = useState("");
   const [description, setDescription] = useState("");
-  const [unit, setUnit] = useState("حبة");
   const [categoryId, setCategoryId] = useState("");
-  const [cost, setCost] = useState("");
+  const [basePurchaseCost, setBasePurchaseCost] = useState("");
+  const [units, setUnits] = useState([]);
   const [minThreshold, setMinThreshold] = useState("");
   const [showInInventory, setShowInInventory] = useState(false);
 
@@ -51,12 +42,25 @@ export default function PurchaseItemModal({
       setName(item.name || "");
       setNameEn(item.name_en || "");
       setDescription(item.description || "");
-      setUnit(item.unit || "حبة");
       setCategoryId(item.category_id ? String(item.category_id) : "");
-      setCost(
-        item.cost === null || item.cost === undefined
-          ? ""
-          : String(item.cost),
+      const baseCost =
+        item.base_purchase_cost != null
+          ? item.base_purchase_cost
+          : item.cost != null
+            ? item.cost
+            : "";
+      setBasePurchaseCost(baseCost === null ? "" : String(baseCost));
+      const serverUnits = Array.isArray(item.units) ? item.units : [];
+      setUnits(
+        serverUnits.map((u) => ({
+          unit_id: u.unit_id,
+          name_ar: u.name_ar,
+          name_en: u.name_en || null,
+          conversion_factor: Number(u.conversion_factor) || 1,
+          is_base: !!u.is_base,
+          default_purchase: u.id === item.default_purchase_unit_id,
+          default_inventory: u.id === item.default_inventory_unit_id,
+        })),
       );
       setMinThreshold(
         item.min_stock_threshold === null ||
@@ -69,9 +73,9 @@ export default function PurchaseItemModal({
       setName("");
       setNameEn("");
       setDescription("");
-      setUnit("حبة");
       setCategoryId("");
-      setCost("");
+      setBasePurchaseCost("");
+      setUnits([]);
       setMinThreshold("");
       setShowInInventory(false);
     }
@@ -93,13 +97,28 @@ export default function PurchaseItemModal({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!canSubmit) return;
+    const baseRow = (units || []).find((u) => u.is_base);
+    const defaultInvRow = (units || []).find((u) => u.default_inventory);
+    // Mirror the OPERATOR-PICKED default inventory unit into the
+    // legacy `items.unit` text column so anything else that still
+    // reads that flat field (table cards, older exports) sees the
+    // unit the operator chose — not whatever happens to be base.
+    const baseUnitText =
+      defaultInvRow?.name_ar || baseRow?.name_ar || "حبة";
+    const baseCostNum =
+      basePurchaseCost === "" ? null : Number(basePurchaseCost);
     const payload = {
       name: name.trim(),
       name_en: nameEn.trim() || null,
       description: description.trim() || null,
-      unit: unit || "حبة",
+      // Legacy `unit` text mirrors the default inventory unit so
+      // older reports/exports that still read items.unit keep
+      // showing the unit the operator picked.
+      unit: baseUnitText,
       category_id: categoryId ? Number(categoryId) : null,
-      cost: cost === "" ? null : Number(cost),
+      cost: baseCostNum,
+      base_purchase_cost: baseCostNum,
+      units,
       min_stock_threshold:
         minThreshold === "" ? 10 : Number(minThreshold),
       show_in_inventory: !!showInInventory,
@@ -178,63 +197,43 @@ export default function PurchaseItemModal({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
-                الفئة
-              </div>
-              <GlassSelect
-                value={categoryId}
-                onChange={setCategoryId}
-                options={categoryOptions}
-                placeholder="اختر الفئة"
-                buttonClassName="text-sm py-2.5 px-3"
-              />
+          <div>
+            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+              الفئة
             </div>
-            <div>
-              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
-                الوحدة
-              </div>
-              <GlassSelect
-                value={unit}
-                onChange={setUnit}
-                options={UNIT_OPTIONS}
-                buttonClassName="text-sm py-2.5 px-3"
-              />
-            </div>
+            <GlassSelect
+              value={categoryId}
+              onChange={setCategoryId}
+              options={categoryOptions}
+              placeholder="اختر الفئة"
+              buttonClassName="text-sm py-2.5 px-3"
+            />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
-                التكلفة المرجعية (ر.س)
-              </div>
-              <input
-                type="number"
-                value={cost}
-                onChange={(e) => setCost(e.target.value)}
-                className={`${ws.input} px-3 py-2 text-right`}
-                step="0.01"
-                min="0"
-                dir="ltr"
-                placeholder="0.00"
-              />
+          {/* Multi-unit panel — same component the inventory items
+              modal uses. Replaces the old single-unit dropdown +
+              standalone "التكلفة المرجعية" input. */}
+          <ItemUnitsPanel
+            units={units}
+            setUnits={setUnits}
+            basePurchaseCost={basePurchaseCost}
+            setBasePurchaseCost={setBasePurchaseCost}
+          />
+
+          <div>
+            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+              الحد الأدنى للمخزون
             </div>
-            <div>
-              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
-                الحد الأدنى للمخزون
-              </div>
-              <input
-                type="number"
-                value={minThreshold}
-                onChange={(e) => setMinThreshold(e.target.value)}
-                className={`${ws.input} px-3 py-2 text-right`}
-                step="1"
-                min="0"
-                dir="ltr"
-                placeholder="10"
-              />
-            </div>
+            <input
+              type="number"
+              value={minThreshold}
+              onChange={(e) => setMinThreshold(e.target.value)}
+              className={`${ws.input} px-3 py-2 text-right`}
+              step="1"
+              min="0"
+              dir="ltr"
+              placeholder="10"
+            />
           </div>
 
           <div>

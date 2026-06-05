@@ -29,6 +29,114 @@ async function ensureSchema() {
   } catch (e) {
     console.error("ensureSchema item_branch_disabled:", e?.message);
   }
+
+  // ─── Multi-unit support ──────────────────────────────────────────
+  // measurement_units = catalog عام (reusable عبر كل الأصناف).
+  // item_units = ربط بالصنف + معدّل التحويل.
+  // أرقام الكميات في inventory_items / opening_session_items / إلخ
+  // كلها تبقى محفوظة بالـ "الوحدة الأساسية" — التحويل يحصل عند الإدخال.
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS measurement_units (
+        id          SERIAL PRIMARY KEY,
+        name_ar     TEXT NOT NULL UNIQUE,
+        name_en     TEXT,
+        created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      )
+    `;
+  } catch (e) {
+    console.error("ensureSchema measurement_units:", e?.message);
+  }
+
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS item_units (
+        id                SERIAL PRIMARY KEY,
+        item_id           INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+        unit_id           INTEGER NOT NULL REFERENCES measurement_units(id) ON DELETE RESTRICT,
+        conversion_factor NUMERIC(14, 4) NOT NULL CHECK (conversion_factor > 0),
+        is_base           BOOLEAN NOT NULL DEFAULT FALSE,
+        sort_order        INTEGER NOT NULL DEFAULT 0,
+        UNIQUE(item_id, unit_id)
+      )
+    `;
+  } catch (e) {
+    console.error("ensureSchema item_units:", e?.message);
+  }
+
+  // Exactly one base unit per item — enforced at the DB level so a
+  // racing UPDATE can never leave two rows with is_base=TRUE.
+  try {
+    await sql`
+      CREATE UNIQUE INDEX IF NOT EXISTS item_units_one_base_per_item
+        ON item_units(item_id) WHERE is_base = TRUE
+    `;
+  } catch (e) {
+    console.error("ensureSchema item_units_one_base_per_item:", e?.message);
+  }
+
+  // Two unit-default pointers on items + a single base_purchase_cost
+  // (per the spec the cost lives on the BASE unit only — other units
+  // derive their cost as base_cost × conversion_factor).
+  try {
+    await sql`
+      ALTER TABLE items
+        ADD COLUMN IF NOT EXISTS default_purchase_unit_id  INTEGER REFERENCES item_units(id) ON DELETE SET NULL,
+        ADD COLUMN IF NOT EXISTS default_inventory_unit_id INTEGER REFERENCES item_units(id) ON DELETE SET NULL,
+        ADD COLUMN IF NOT EXISTS base_purchase_cost        NUMERIC(14, 2)
+    `;
+  } catch (e) {
+    console.error("ensureSchema items multi-unit columns:", e?.message);
+  }
+
+  // Auto-seed: every item without an item_units row gets one based on
+  // its legacy `items.unit` text field. The legacy text becomes the
+  // base unit at factor=1, the catalog row is created on demand, and
+  // both default pointers (purchase + inventory) get wired up. Cost
+  // copied from items.cost into base_purchase_cost when missing.
+  // Runs once per item — the WHERE NOT EXISTS guard keeps it cheap
+  // on every subsequent request.
+  try {
+    await sql`
+      WITH legacy AS (
+        SELECT
+          i.id   AS item_id,
+          COALESCE(NULLIF(TRIM(i.unit), ''), 'حبة') AS unit_name,
+          i.cost AS legacy_cost
+        FROM items i
+        WHERE NOT EXISTS (
+          SELECT 1 FROM item_units iu WHERE iu.item_id = i.id
+        )
+      ),
+      unit_upsert AS (
+        INSERT INTO measurement_units (name_ar)
+        SELECT DISTINCT unit_name FROM legacy
+        ON CONFLICT (name_ar) DO UPDATE SET name_ar = EXCLUDED.name_ar
+        RETURNING id, name_ar
+      ),
+      all_units AS (
+        SELECT id, name_ar FROM unit_upsert
+        UNION
+        SELECT id, name_ar FROM measurement_units
+      ),
+      inserted AS (
+        INSERT INTO item_units (item_id, unit_id, conversion_factor, is_base, sort_order)
+        SELECT l.item_id, u.id, 1, TRUE, 0
+        FROM legacy l
+        JOIN all_units u ON u.name_ar = l.unit_name
+        RETURNING id, item_id
+      )
+      UPDATE items i
+      SET
+        default_purchase_unit_id  = COALESCE(i.default_purchase_unit_id,  ins.id),
+        default_inventory_unit_id = COALESCE(i.default_inventory_unit_id, ins.id),
+        base_purchase_cost        = COALESCE(i.base_purchase_cost, i.cost)
+      FROM inserted ins
+      WHERE i.id = ins.item_id
+    `;
+  } catch (e) {
+    console.error("ensureSchema auto-seed item_units:", e?.message);
+  }
 }
 
 export async function GET(request) {
@@ -59,6 +167,9 @@ export async function GET(request) {
         i.is_active,
         i.category_id,
         i.cost,
+        i.base_purchase_cost,
+        i.default_purchase_unit_id,
+        i.default_inventory_unit_id,
         i.show_in_inventory,
         i.linked_green_bean_id,
         c.name as category_name,
@@ -232,6 +343,47 @@ export async function GET(request) {
       }
     }
 
+    // Multi-unit attachment: every item gets a `units` array
+    // [{ id, unit_id, name_ar, name_en, conversion_factor, is_base, sort_order }]
+    // ordered by (is_base DESC, sort_order, id) so the base unit is
+    // always first — frontend code can take units[0] when it needs
+    // the canonical reference.
+    const unitsByItem = new Map();
+    if (itemIds.length > 0) {
+      const unitRows = await sql(
+        `
+          SELECT
+            iu.id,
+            iu.item_id,
+            iu.unit_id,
+            iu.conversion_factor,
+            iu.is_base,
+            iu.sort_order,
+            mu.name_ar,
+            mu.name_en
+          FROM item_units iu
+          JOIN measurement_units mu ON mu.id = iu.unit_id
+          WHERE iu.item_id = ANY($1::bigint[])
+          ORDER BY iu.item_id, iu.is_base DESC, iu.sort_order, iu.id
+        `,
+        [itemIds],
+      );
+      for (const row of unitRows) {
+        const key = String(row.item_id);
+        const arr = unitsByItem.get(key) || [];
+        arr.push({
+          id: Number(row.id),
+          unit_id: Number(row.unit_id),
+          name_ar: row.name_ar,
+          name_en: row.name_en,
+          conversion_factor: Number(row.conversion_factor),
+          is_base: !!row.is_base,
+          sort_order: Number(row.sort_order),
+        });
+        unitsByItem.set(key, arr);
+      }
+    }
+
     const itemsWithStock = items.map((item) => {
       const branchStock = stockRowsByItem.get(String(item.id)) || [];
       const greenBeanInfo = item.linked_green_bean_id
@@ -239,10 +391,14 @@ export async function GET(request) {
         : null;
       const disabledBranches =
         disabledByItem.get(String(item.id)) || [];
+      const units = unitsByItem.get(String(item.id)) || [];
+      const baseUnit = units.find((u) => u.is_base) || units[0] || null;
       return {
         ...item,
         branch_stock: branchStock.length > 0 ? branchStock : null,
         disabled_branches: disabledBranches,
+        units,
+        base_unit: baseUnit,
         last_order_price_per_kg:
           greenBeanInfo?.last_order_price_per_kg || null,
         last_order_date: greenBeanInfo?.last_order_date || null,
@@ -258,6 +414,92 @@ export async function GET(request) {
       { status: 500 },
     );
   }
+}
+
+// Resolve a measurement_units.id for a unit-row payload. Inserts a
+// catalog row if `unit_id` wasn't provided and `name_ar` doesn't
+// already exist. Returns the catalog id.
+async function resolveMeasurementUnitId({ unit_id, name_ar, name_en }) {
+  if (unit_id) {
+    const n = parseInt(unit_id);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  const trimmedAr = (name_ar || "").trim();
+  if (!trimmedAr) {
+    throw new Error("اسم الوحدة مطلوب");
+  }
+  const trimmedEn = name_en ? String(name_en).trim() || null : null;
+  // INSERT ... ON CONFLICT (name_ar) DO UPDATE so RETURNING fires
+  // on both the new-row and existing-row paths. A plain DO NOTHING
+  // returns zero rows on conflict and forces a second SELECT.
+  const rows = await sql`
+    INSERT INTO measurement_units (name_ar, name_en)
+    VALUES (${trimmedAr}, ${trimmedEn})
+    ON CONFLICT (name_ar)
+      DO UPDATE SET name_en = COALESCE(measurement_units.name_en, EXCLUDED.name_en)
+    RETURNING id
+  `;
+  return Number(rows[0].id);
+}
+
+// Replace every item_units row for `itemId` from the supplied
+// `units` array, then point the two default_* columns at whichever
+// row carried the matching flag. Returns nothing — caller re-reads
+// the item.
+async function writeItemUnits(itemId, units) {
+  if (!Array.isArray(units) || units.length === 0) return;
+
+  // Validation: exactly one base, every factor > 0.
+  const baseCount = units.filter((u) => u.is_base).length;
+  if (baseCount !== 1) {
+    throw new Error("يجب اختيار وحدة أساسية واحدة بالضبط");
+  }
+  for (const u of units) {
+    const f = Number(u.conversion_factor);
+    if (!Number.isFinite(f) || f <= 0) {
+      throw new Error("معدّل التحويل يجب أن يكون رقم موجب");
+    }
+    if (u.is_base && Math.abs(f - 1) > 1e-6) {
+      throw new Error("معدّل التحويل للوحدة الأساسية يجب أن يكون 1");
+    }
+  }
+
+  // Wipe + reinsert. ON DELETE SET NULL on items.default_*_unit_id
+  // keeps the parent row valid while the children swap in.
+  await sql`DELETE FROM item_units WHERE item_id = ${itemId}`;
+
+  let defaultPurchaseId = null;
+  let defaultInventoryId = null;
+
+  for (let i = 0; i < units.length; i++) {
+    const u = units[i];
+    const unitId = await resolveMeasurementUnitId({
+      unit_id: u.unit_id,
+      name_ar: u.name_ar,
+      name_en: u.name_en,
+    });
+    const inserted = await sql`
+      INSERT INTO item_units (item_id, unit_id, conversion_factor, is_base, sort_order)
+      VALUES (${itemId}, ${unitId}, ${Number(u.conversion_factor)}, ${!!u.is_base}, ${i})
+      RETURNING id
+    `;
+    const newId = Number(inserted[0].id);
+    if (u.default_purchase) defaultPurchaseId = newId;
+    if (u.default_inventory) defaultInventoryId = newId;
+    // Fallback: if the caller forgot the default_* flags, point both
+    // defaults at the base row so the item stays usable.
+    if (u.is_base) {
+      defaultPurchaseId = defaultPurchaseId || newId;
+      defaultInventoryId = defaultInventoryId || newId;
+    }
+  }
+
+  await sql`
+    UPDATE items
+    SET default_purchase_unit_id  = ${defaultPurchaseId},
+        default_inventory_unit_id = ${defaultInventoryId}
+    WHERE id = ${itemId}
+  `;
 }
 
 export async function POST(request) {
@@ -285,8 +527,10 @@ export async function POST(request) {
       category_id,
       categoryId,
       cost,
+      base_purchase_cost,
       show_in_inventory,
       linked_green_bean_id,
+      units,
     } = body;
 
     if (!name || !name.trim()) {
@@ -319,6 +563,15 @@ export async function POST(request) {
         ? parseFloat(cost)
         : null;
 
+    // base_purchase_cost = canonical cost per ONE base unit. Falls
+    // back to `cost` so older callers keep working.
+    const parsedBaseCost =
+      base_purchase_cost !== undefined &&
+      base_purchase_cost !== null &&
+      base_purchase_cost !== ""
+        ? parseFloat(base_purchase_cost)
+        : parsedCost;
+
     const resolvedCategoryId =
       category_id !== undefined && category_id !== null && category_id !== ""
         ? parseInt(category_id)
@@ -340,17 +593,33 @@ export async function POST(request) {
 
     await ensureSchema();
     const result = await sql`
-      INSERT INTO items (name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id)
-      VALUES (${name.trim()}, ${name_en || null}, ${description || null}, ${image_url || null}, ${unit || null}, ${threshold}, ${safeMaxThreshold}, ${active}, ${safeCategoryId}, ${parsedCost}, ${showInInventory}, ${safeLinkedBeanId})
-      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id, created_at
+      INSERT INTO items (name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id)
+      VALUES (${name.trim()}, ${name_en || null}, ${description || null}, ${image_url || null}, ${unit || null}, ${threshold}, ${safeMaxThreshold}, ${active}, ${safeCategoryId}, ${parsedCost}, ${parsedBaseCost}, ${showInInventory}, ${safeLinkedBeanId})
+      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id, created_at
     `;
+
+    const newItemId = result[0].id;
+
+    // Write units (multi-unit panel). Empty/missing units array →
+    // ensureSchema auto-seed handles it on the next request, so no
+    // hard failure here.
+    if (Array.isArray(units) && units.length > 0) {
+      try {
+        await writeItemUnits(newItemId, units);
+      } catch (e) {
+        // Roll back the items row so we never leave an orphaned
+        // item with no units when the units payload was bad.
+        await sql`DELETE FROM items WHERE id = ${newItemId}`;
+        return Response.json({ error: e.message }, { status: 400 });
+      }
+    }
 
     const withCategory = await sql`
       SELECT i.*, c.name as category_name, c.name_en as category_name_en, gb.name as linked_green_bean_name
       FROM items i
       LEFT JOIN item_categories c ON c.id = i.category_id
       LEFT JOIN accounting_green_beans gb ON gb.id = i.linked_green_bean_id
-      WHERE i.id = ${result[0].id}
+      WHERE i.id = ${newItemId}
     `;
 
     console.log("Item created successfully:", withCategory[0]);
@@ -390,8 +659,10 @@ export async function PUT(request) {
       category_id,
       categoryId,
       cost,
+      base_purchase_cost,
       show_in_inventory,
       linked_green_bean_id,
+      units,
     } = body;
 
     if (!id) {
@@ -425,6 +696,12 @@ export async function PUT(request) {
       cost !== undefined && cost !== null && cost !== ""
         ? parseFloat(cost)
         : null;
+    const parsedBaseCost =
+      base_purchase_cost !== undefined &&
+      base_purchase_cost !== null &&
+      base_purchase_cost !== ""
+        ? parseFloat(base_purchase_cost)
+        : parsedCost;
 
     const safeLinkedBeanId =
       linked_green_bean_id !== undefined &&
@@ -458,14 +735,25 @@ export async function PUT(request) {
         is_active = ${active},
         category_id = ${safeCategoryId},
         cost = ${parsedCost},
+        base_purchase_cost = ${parsedBaseCost},
         show_in_inventory = ${showInInventory},
         linked_green_bean_id = ${safeLinkedBeanId}
       WHERE id = ${id}
-      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, show_in_inventory, linked_green_bean_id, created_at
+      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id, created_at
     `;
 
     if (result.length === 0) {
       return Response.json({ error: "الصنف غير موجود" }, { status: 404 });
+    }
+
+    // Replace per-item units if the caller supplied any. Omitted →
+    // existing units stay untouched (partial-update semantics).
+    if (Array.isArray(units) && units.length > 0) {
+      try {
+        await writeItemUnits(id, units);
+      } catch (e) {
+        return Response.json({ error: e.message }, { status: 400 });
+      }
     }
 
     const withCategory = await sql`

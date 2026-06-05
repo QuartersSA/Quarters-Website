@@ -11,6 +11,15 @@ import {
 import { ws } from "@/components/Workspace/ui";
 
 export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
+  // Resolve the display unit from the multi-unit "default inventory"
+  // pointer, falling back to the legacy text column for un-migrated
+  // items. Same logic the table view uses.
+  const itemUnits = Array.isArray(item?.units) ? item.units : [];
+  const defaultInvUnit =
+    itemUnits.find((u) => u.id === item?.default_inventory_unit_id) ||
+    itemUnits.find((u) => u.is_base) ||
+    null;
+  const displayUnit = defaultInvUnit?.name_ar || item?.unit || "";
   const totalStock =
     item.branch_stock?.reduce(
       (sum, stock) => sum + parseInt(stock.quantity || 0),
@@ -93,12 +102,12 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
             </span>
           ) : null}
 
-          {item.unit ? (
+          {displayUnit ? (
             <span
               className={`${ws.pill} bg-slate-100 dark:bg-slate-100 dark:bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10`}
             >
-              <span className="text-base">{getUnitIcon(item.unit)}</span>
-              <span className="mr-1">الوحدة: {item.unit}</span>
+              <span className="text-base">{getUnitIcon(displayUnit)}</span>
+              <span className="mr-1">الوحدة: {displayUnit}</span>
             </span>
           ) : null}
         </div>
@@ -114,13 +123,13 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
           <div className="flex items-center justify-between text-sm">
             <span className="text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/55">إجمالي المخزون:</span>
             <span className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-bold">
-              {totalStock} {item.unit || "وحدة"}
+              {totalStock} {displayUnit || "وحدة"}
             </span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/55">الحد الأدنى:</span>
             <span className="text-amber-700 dark:text-amber-700 dark:text-amber-200 font-bold">
-              {item.min_stock_threshold} {item.unit || "وحدة"}
+              {item.min_stock_threshold} {displayUnit || "وحدة"}
             </span>
           </div>
         </div>
