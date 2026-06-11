@@ -95,6 +95,7 @@ async function GET(request, {
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
+        TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
         e.position,
         e.base_salary,
         e.other_allowances,
@@ -177,6 +178,7 @@ async function PUT(request, {
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
+        TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
         e.position,
         e.base_salary,
         e.other_allowances,
@@ -222,6 +224,7 @@ async function PUT(request, {
       work_card_issued,
       medical_check_issued,
       health_card_issued,
+      health_card_expiry_date,
       position,
       base_salary,
       other_allowances,
@@ -269,6 +272,18 @@ async function PUT(request, {
     if (health_card_issued !== undefined) {
       updates.push(`health_card_issued = $${paramCount}`);
       values.push(!!health_card_issued);
+      paramCount++;
+      // Turning the card off clears its expiry so a stale date never
+      // resurfaces when the card is re-issued later.
+      if (!health_card_issued) {
+        updates.push(`health_card_expiry_date = $${paramCount}`);
+        values.push(null);
+        paramCount++;
+      }
+    }
+    if (health_card_expiry_date !== undefined && (health_card_issued === undefined || health_card_issued)) {
+      updates.push(`health_card_expiry_date = $${paramCount}`);
+      values.push(normalizeIsoDate(health_card_expiry_date) || null);
       paramCount++;
     }
     if (position !== undefined) {
@@ -337,6 +352,7 @@ async function PUT(request, {
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
+        TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
         e.position,
         e.base_salary,
         e.other_allowances,
@@ -366,8 +382,8 @@ async function PUT(request, {
       GROUP BY e.id
     `;
     const changedFields = {};
-    const keys = ["name", "phone", "iqama_number", "iqama_expiry_date", "sponsorship_transferred", "work_card_issued", "medical_check_issued", "health_card_issued", "position", "base_salary", "other_allowances", "start_date"];
-    const isDateField = key => key === "iqama_expiry_date" || key === "start_date";
+    const keys = ["name", "phone", "iqama_number", "iqama_expiry_date", "sponsorship_transferred", "work_card_issued", "medical_check_issued", "health_card_issued", "health_card_expiry_date", "position", "base_salary", "other_allowances", "start_date"];
+    const isDateField = key => key === "iqama_expiry_date" || key === "start_date" || key === "health_card_expiry_date";
     for (const key of keys) {
       const beforeValRaw = before?.[key];
       const afterValRaw = updated?.[key];
