@@ -64,6 +64,13 @@ async function ensureHrSchema() {
     ALTER TABLE employees
     ADD COLUMN IF NOT EXISTS start_date DATE
   `;
+  // Expiry of the health card. Only meaningful while
+  // health_card_issued = true; the date may legitimately be in the
+  // past (an issued-but-expired card the operator needs to track).
+  await sql`
+    ALTER TABLE employees
+    ADD COLUMN IF NOT EXISTS health_card_expiry_date DATE
+  `;
 }
 
 // HR Employees API (separate from /api/employees)
@@ -91,6 +98,7 @@ export async function GET(request) {
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
+        TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
         e.position,
         e.base_salary,
         e.other_allowances,
@@ -153,6 +161,7 @@ export async function POST(request) {
       work_card_issued,
       medical_check_issued,
       health_card_issued,
+      health_card_expiry_date,
       position,
       base_salary,
       other_allowances,
@@ -178,6 +187,7 @@ export async function POST(request) {
         work_card_issued,
         medical_check_issued,
         health_card_issued,
+        health_card_expiry_date,
         position,
         base_salary,
         other_allowances,
@@ -192,6 +202,7 @@ export async function POST(request) {
         ${!!work_card_issued},
         ${!!medical_check_issued},
         ${!!health_card_issued},
+        ${health_card_issued ? normalizeIsoDate(health_card_expiry_date) || null : null},
         ${position || null},
         ${base_salary ?? null},
         ${other_allowances ?? null},
@@ -231,6 +242,7 @@ export async function POST(request) {
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
+        TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
         e.position,
         e.base_salary,
         e.other_allowances,
@@ -284,6 +296,12 @@ export async function POST(request) {
           work_card_issued: { from: null, to: !!work_card_issued },
           medical_check_issued: { from: null, to: !!medical_check_issued },
           health_card_issued: { from: null, to: !!health_card_issued },
+          health_card_expiry_date: {
+            from: null,
+            to: health_card_issued
+              ? normalizeIsoDate(health_card_expiry_date || null)
+              : null,
+          },
           position: { from: null, to: position || null },
           base_salary: { from: null, to: base_salary ?? null },
           other_allowances: { from: null, to: other_allowances ?? null },

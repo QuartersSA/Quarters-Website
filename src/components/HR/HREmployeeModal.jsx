@@ -19,6 +19,16 @@ import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassMultiSelect from "@/components/Workspace/GlassMultiSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 
+// Local-wall-clock today as YYYY-MM-DD. toISOString() would compare
+// against UTC and flip the "منتهي" flag 3 hours early in Riyadh.
+function todayLocalISO() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 function YesNoSelect({ value, onChange }) {
   const stringValue = value ? "yes" : "no";
 
@@ -202,11 +212,48 @@ export function HREmployeeModal({
               <YesNoSelect
                 value={!!formData.health_card_issued}
                 onChange={(v) =>
-                  setFormData({ ...formData, health_card_issued: v })
+                  setFormData({
+                    ...formData,
+                    health_card_issued: v,
+                    // Switching to "لا" clears the date so a stale
+                    // expiry never lingers in the form state.
+                    health_card_expiry_date: v
+                      ? formData.health_card_expiry_date || ""
+                      : "",
+                  })
                 }
               />
             </div>
           </div>
+
+          {/* Health card expiry — only shown while the card is
+              issued. Past dates are intentionally allowed: an
+              issued-but-expired card is a real state HR tracks. */}
+          {formData.health_card_issued ? (
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-white/70 mb-2">
+                <Calendar className="w-4 h-4 inline ml-2" />
+                موعد انتهاء الكرت الصحي
+              </label>
+              <GlassDatePicker
+                value={formData.health_card_expiry_date || ""}
+                onChange={(v) =>
+                  setFormData({
+                    ...formData,
+                    health_card_expiry_date: v || "",
+                  })
+                }
+                placeholder="اختر التاريخ"
+                allowClear
+              />
+              {formData.health_card_expiry_date &&
+              formData.health_card_expiry_date < todayLocalISO() ? (
+                <p className="text-xs text-red-700 dark:text-red-300 mt-1 font-semibold">
+                  ⚠️ الكرت الصحي منتهي
+                </p>
+              ) : null}
+            </div>
+          ) : null}
 
           {/* Position + Branch */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

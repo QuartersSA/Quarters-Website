@@ -51,6 +51,7 @@ export default function HREmployeesPage() {
       work_card_issued: false,
       medical_check_issued: false,
       health_card_issued: false,
+      health_card_expiry_date: "",
       position: "",
       // Array of branch ids (strings, to match GlassMultiSelect's
       // value model). Multi-branch employees keep every assignment
@@ -98,6 +99,7 @@ export default function HREmployeesPage() {
         work_card_issued: !!employee.work_card_issued,
         medical_check_issued: !!employee.medical_check_issued,
         health_card_issued: !!employee.health_card_issued,
+        health_card_expiry_date: toInputDate(employee.health_card_expiry_date),
         position: employee.position || "",
         branchIds,
         base_salary:
@@ -184,6 +186,9 @@ export default function HREmployeesPage() {
       work_card_issued: !!formData.work_card_issued,
       medical_check_issued: !!formData.medical_check_issued,
       health_card_issued: !!formData.health_card_issued,
+      health_card_expiry_date: formData.health_card_issued
+        ? formData.health_card_expiry_date || null
+        : null,
       position: formData.position ? String(formData.position) : null,
       base_salary: baseSalaryValue,
       other_allowances: otherAllowancesValue,
