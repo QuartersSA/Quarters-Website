@@ -225,7 +225,9 @@ export function HREmployeeTable({
                       {employee.health_card_issued &&
                       employee.health_card_expiry_date &&
                       String(employee.health_card_expiry_date).slice(0, 10) <
-                        new Date().toLocaleDateString("en-CA") ? (
+                        new Date().toLocaleDateString("en-CA", {
+                          timeZone: "Asia/Riyadh",
+                        }) ? (
                         <span
                           className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-red-500/15 border border-red-500/30 text-red-700 dark:text-red-300"
                           title={`انتهى في ${String(employee.health_card_expiry_date).slice(0, 10)}`}

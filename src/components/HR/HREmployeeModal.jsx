@@ -19,14 +19,14 @@ import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassMultiSelect from "@/components/Workspace/GlassMultiSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 
-// Local-wall-clock today as YYYY-MM-DD. toISOString() would compare
-// against UTC and flip the "منتهي" flag 3 hours early in Riyadh.
+// Today as YYYY-MM-DD pinned to Asia/Riyadh — the project's
+// canonical timezone — so the "منتهي" flag flips at Riyadh midnight
+// regardless of the viewer's device timezone. en-CA locale formats
+// as YYYY-MM-DD natively.
 function todayLocalISO() {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  return new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Riyadh",
+  });
 }
 
 function YesNoSelect({ value, onChange }) {
