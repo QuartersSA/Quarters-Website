@@ -510,16 +510,20 @@ export default function EmployeeInventoryPage() {
   };
 
   const setItemValue = (itemId, displayValue, overrideUnitId) => {
+    // The employee counts in the item's "وحدة المخزون الافتراضية"
+    // (locked, chosen by admin). The number they type IS the stored
+    // quantity — no conversion-factor multiplication. Multiplying
+    // here was storing entered×factor (e.g. 100 → 10 when the unit's
+    // factor was 0.1), which made the admin "إجمالي المخزون" column
+    // disagree with what the employee actually counted. The unit is
+    // a label; the count is taken as-is.
     const picked = getPickedUnit(itemId, overrideUnitId);
-    const factor = picked ? Number(picked.conversion_factor) || 1 : 1;
     const n = Number(displayValue);
-    const baseQty = Number.isFinite(n)
-      ? Math.round(n * factor * 1000) / 1000
-      : 0;
+    const qty = Number.isFinite(n) ? Math.round(n * 1000) / 1000 : 0;
     const unitLabel = picked?.name_ar || picked?.name_en || "";
     setAvailableItems((prev) => ({
       ...prev,
-      [itemId]: baseQty,
+      [itemId]: qty,
     }));
     setDisplayQtyByItem((prev) => ({ ...prev, [itemId]: n }));
     setUnitLabelByItem((prev) => ({ ...prev, [itemId]: unitLabel }));
@@ -807,7 +811,18 @@ export default function EmployeeInventoryPage() {
             const normalizedUnit = translateUnitLabel(
               normalizeUnitLabel(item.unit),
             );
-            const unitText = normalizedUnit || text.unit;
+            // Locked inventory unit = the admin-picked "وحدة المخزون
+            // الافتراضية". The employee can't change it; it's shown
+            // as a read-only label next to the number they type.
+            const lockedInvUnit = pickDefaultUnit(
+              item,
+              "default_inventory_unit_id",
+            );
+            const unitText =
+              lockedInvUnit?.name_ar ||
+              lockedInvUnit?.name_en ||
+              normalizedUnit ||
+              text.unit;
 
             const categoryLabel =
               language === "ar"
@@ -841,17 +856,6 @@ export default function EmployeeInventoryPage() {
               }
             };
 
-            const itemUnits = getItemUnits(item);
-            const itemUnitOptions = itemUnits
-              .slice()
-              .sort(
-                (a, b) =>
-                  Number(a.sort_order || 0) - Number(b.sort_order || 0),
-              )
-              .map((u) => ({
-                value: String(u.id),
-                label: u.name_ar || u.name_en || "—",
-              }));
             const completedUnitLabel =
               unitLabelByItem[item.id] || unitText;
             const completedDisplayQty =
@@ -986,23 +990,10 @@ export default function EmployeeInventoryPage() {
                         </div>
                       </div>
 
-                      {itemUnitOptions.length > 0 ? (
-                        <div
-                          className="w-36 self-end"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <label className="block text-sm font-bold text-gray-200 mb-2">
-                            {text.unit}
-                          </label>
-                          <GlassSelect
-                            value={selectedUnitId}
-                            onChange={setSelectedUnitId}
-                            options={itemUnitOptions}
-                            dir={language === "ar" ? "rtl" : "ltr"}
-                            buttonClassName="px-3 py-3"
-                          />
-                        </div>
-                      ) : null}
+                      {/* Unit is LOCKED to the admin-chosen default
+                          inventory unit — the employee neither picks
+                          nor changes it. It's shown read-only as the
+                          input suffix ({unitText}) above. */}
 
                       {/* Single button: "تم" saves and jumps to next */}
                       <div className="flex flex-col gap-2 self-end">
