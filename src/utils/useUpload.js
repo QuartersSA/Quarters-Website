@@ -1,5 +1,6 @@
 import * as React from "react";
 import { authedFetch } from "@/utils/apiAuth";
+import { compressImage } from "@/utils/compressImage";
 
 function useUpload() {
   const [loading, setLoading] = React.useState(false);
@@ -77,7 +78,14 @@ function useUpload() {
         }
 
         try {
-          for (let i = 0; i < totalChunks; i += 1) {
+          // Upload chunks with bounded concurrency instead of one
+          // strictly-sequential round-trip at a time. Each chunk is
+          // tiny (128KB) but the per-request latency dominates over
+          // a phone connection, so firing several in parallel cuts
+          // wall-clock roughly N-fold. Cap kept modest so we don't
+          // overwhelm the function/DB or trip rate limits.
+          const CONCURRENCY = 6;
+          const uploadOneChunk = async (i) => {
             const start = i * CHUNK_SIZE;
             const end = Math.min(file.size, start + CHUNK_SIZE);
             const slice = file.slice(start, end);
@@ -101,6 +109,20 @@ function useUpload() {
                   `When POSTing a chunk, the response was [${chunkRes.status}] ${chunkRes.statusText}`,
               );
             }
+          };
+
+          for (let base = 0; base < totalChunks; base += CONCURRENCY) {
+            const batch = [];
+            for (
+              let i = base;
+              i < Math.min(base + CONCURRENCY, totalChunks);
+              i += 1
+            ) {
+              batch.push(uploadOneChunk(i));
+            }
+            // If any chunk in the batch fails, the whole upload aborts
+            // (the catch below cleans up the session).
+            await Promise.all(batch);
           }
 
           const completeRes = await authedFetch(`/api/uploads/${uploadId}/complete`, {
@@ -132,7 +154,14 @@ function useUpload() {
       };
 
       if ("file" in input && input.file) {
-        const file = input.file;
+        // Downscale + re-encode photos before chunking. A receipt
+        // shot at 8MB becomes ~300KB, turning a 60-chunk sequential
+        // upload into a 2–3 chunk one. No-op for non-images, tiny
+        // images, or anything the browser can't decode. `unoptimized`
+        // lets a caller opt out (e.g. originals that must stay exact).
+        const file = input.unoptimized
+          ? input.file
+          : await compressImage(input.file);
 
         if (typeof file?.size === "number" && file.size > MAX_UPLOAD_BYTES) {
           throw new Error(
