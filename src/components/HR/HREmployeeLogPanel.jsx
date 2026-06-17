@@ -10,21 +10,36 @@ import { useHREmployeeLogs } from "@/hooks/useHREmployeeLogs";
 // embedded inline inside HREmployeeModal so the operator sees the
 // employee's full change history in the same popup they edit from.
 
+// Build a fixed "YYYY/MM/DD HH:mm" string in Asia/Riyadh. The old
+// `toLocaleString("ar-SA-…")` produced an Arabic-comma'd string whose
+// day/month/year got reordered by RTL rendering into garbage like
+// "25، 09:38 ·2026/05/". formatToParts lets us assemble the pieces
+// ourselves in a stable LTR order, and the caller renders it dir=ltr.
 function formatDateTime(value) {
   if (!value) return "-";
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return String(value);
   try {
-    return d.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
+    const parts = new Intl.DateTimeFormat("en-CA", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
+      hour12: false,
       timeZone: "Asia/Riyadh",
-    });
+    }).formatToParts(d);
+    const get = (t) => parts.find((p) => p.type === t)?.value || "";
+    const y = get("year");
+    const mo = get("month");
+    const da = get("day");
+    let hh = get("hour");
+    if (hh === "24") hh = "00"; // some engines emit 24 for midnight
+    const mi = get("minute");
+    if (!y || !mo || !da) return d.toISOString().slice(0, 16).replace("T", " ");
+    return `${y}/${mo}/${da} ${hh}:${mi}`;
   } catch {
-    return d.toISOString();
+    return d.toISOString().slice(0, 16).replace("T", " ");
   }
 }
 
