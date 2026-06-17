@@ -12,12 +12,14 @@ import {
   Building2,
   DollarSign,
   CalendarCheck,
+  ScrollText,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import HRModalHeader from "@/components/HR/HRModalHeader";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassMultiSelect from "@/components/Workspace/GlassMultiSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import { HREmployeeLogPanel } from "@/components/HR/HREmployeeLogPanel";
 
 // Today as YYYY-MM-DD pinned to Asia/Riyadh — the project's
 // canonical timezone — so the "منتهي" flag flips at Riyadh midnight
@@ -49,6 +51,7 @@ function YesNoSelect({ value, onChange }) {
 export function HREmployeeModal({
   isOpen,
   isEditing,
+  employeeId = null,
   formData,
   setFormData,
   branches,
@@ -426,6 +429,33 @@ export function HREmployeeModal({
               إلغاء
             </button>
           </div>
+
+          {/* Activity log — embedded inline when editing an existing
+              employee so the operator sees the full change history in
+              the same popup. Hidden when adding a new employee (no
+              history yet, no id to fetch). */}
+          {isEditing && employeeId ? (
+            <div className={`pt-5 mt-1 border-t ${ws.divider}`}>
+              <div className="flex items-center gap-2 mb-3">
+                <div className={`${ws.iconBox} w-9 h-9 text-slate-700 dark:text-white/80`}>
+                  <ScrollText className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-slate-900 dark:text-white font-bold text-sm tracking-tight">
+                    سجل التعديلات
+                  </p>
+                  <p className="text-slate-500 dark:text-white/50 text-xs mt-0.5">
+                    كل تغيير على بيانات هذا الموظف — آخر 200 حركة
+                  </p>
+                </div>
+              </div>
+              <HREmployeeLogPanel
+                employeeId={employeeId}
+                enabled={isOpen}
+                compact
+              />
+            </div>
+          ) : null}
         </form>
       </div>
     </div>
