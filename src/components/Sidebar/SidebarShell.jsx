@@ -111,6 +111,7 @@ function NavGroup({
   const [open, setOpen] = useState(false);
   const buttonRef = useRef(null);
   const popoverRef = useRef(null);
+  const mobileRef = useRef(null);
   const [pos, setPos] = useState(null);
   const [isDesktop, setIsDesktop] = useState(() => {
     if (typeof window === "undefined") return true;
@@ -168,6 +169,11 @@ function NavGroup({
     function onPointerDown(e) {
       if (buttonRef.current?.contains(e.target)) return;
       if (popoverRef.current?.contains(e.target)) return;
+      // On mobile the sub-links render inline (not in the desktop
+      // portal). Without this guard, a touch on a sub-link fired
+      // touchstart → closed the group → the <a> click never landed,
+      // so the links were untappable on phones.
+      if (mobileRef.current?.contains(e.target)) return;
       setOpen(false);
     }
     function onKey(e) {
@@ -274,7 +280,10 @@ function NavGroup({
         : null}
 
       {open && !isDesktop ? (
-        <div className="mt-1 space-y-0.5 border-r border-slate-200 dark:border-white/10 mr-5 pr-1">
+        <div
+          ref={mobileRef}
+          className="mt-1 space-y-0.5 border-r border-slate-200 dark:border-white/10 mr-5 pr-1"
+        >
           {items.map((it) => {
             const ChildIcon = it.icon;
             const itemActive = it.activeKey === activeKey;
