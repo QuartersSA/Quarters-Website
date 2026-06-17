@@ -361,6 +361,7 @@ export default function HREmployeesPage() {
       <HREmployeeModal
         isOpen={showModal}
         isEditing={!!editingEmployee}
+        employeeId={editingEmployee?.id || null}
         formData={formData}
         setFormData={setFormData}
         branches={branches}
