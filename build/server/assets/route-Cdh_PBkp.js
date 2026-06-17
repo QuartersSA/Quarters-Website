@@ -337,16 +337,33 @@ async function GET(request) {
             + COALESCE(receipts_after.total_received, 0)
             + COALESCE(transfers_after.net_transfer, 0)
           )
-          * COALESCE(i.cost, last_bean_price.final_price, 0)
+          -- inventory quantities are recorded in the item's DEFAULT
+          -- INVENTORY UNIT (e.g. حبة) while the cost below is the
+          -- price of ONE BASE unit. Multiply by the unit's
+          -- conversion_factor ("base units per inventory unit") to
+          -- turn the counted qty into base units before pricing —
+          -- otherwise a حبة-count gets priced as if it were
+          -- base-unit-count, inflating the total by ~1/factor.
+          -- Matches /api/items/stock-value exactly. Factor defaults
+          -- to 1 for items with no configured inventory unit.
+          * COALESCE(inv_unit.factor, 1)
+          * COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price, 0)
         ) as total_cost,
         COUNT(*) FILTER (
-          WHERE COALESCE(i.cost, last_bean_price.final_price) IS NOT NULL
-            AND COALESCE(i.cost, last_bean_price.final_price) > 0
+          WHERE COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) IS NOT NULL
+            AND COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) > 0
         ) as priced_items
       FROM branches b
       CROSS JOIN items i
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
+
+      LEFT JOIN LATERAL (
+        SELECT iu.conversion_factor AS factor
+        FROM item_units iu
+        WHERE iu.id = i.default_inventory_unit_id
+        LIMIT 1
+      ) inv_unit ON true
 
       LEFT JOIN LATERAL (
         SELECT ii.quantity AS inv_quantity,

@@ -152,13 +152,18 @@ export async function GET(request) {
         -- intentionally does NOT equal total_value when inv_factor
         -- ≠ 1; total_value below stays correct monetarily.
         COALESCE(it.total_quantity, 0)::numeric(12, 3) AS total_quantity,
-        -- Total value = displayed_qty × displayed_cost — exactly
-        -- what the operator reads on screen (qty column × cost
-        -- column). qty is in BASE units, cost is per INVENTORY unit,
-        -- so the product carries the inv_factor as a real multiplier.
-        -- This intentionally diverges from the dashboard's
-        -- "قيمة المخزون" stat when inv_factor ≠ 1 — operator wants
-        -- the on-screen math to multiply out cleanly.
+        -- Total value = stored_qty × base_cost × inv_factor.
+        --
+        -- Critical: inventory_items.quantity is recorded in the
+        -- item's DEFAULT INVENTORY UNIT (the employee counts e.g. in
+        -- حبة), while base_purchase_cost is the price of ONE BASE
+        -- unit. conversion_factor = "base units per one inventory
+        -- unit", so qty × factor converts the count to base units,
+        -- and × base_cost yields real money. Equivalently this is
+        -- qty × (base_cost × factor) = displayed_qty × displayed
+        -- per-unit cost. Factor-1 items (incl. all pre-multi-unit
+        -- rows whose default unit auto-seeded at factor 1) are
+        -- unaffected.
         CASE
           WHEN COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) IS NULL
             THEN NULL
