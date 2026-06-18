@@ -25,6 +25,9 @@ import GlassSelect from "@/components/Workspace/GlassSelect";
 import { ExpenseForm } from "@/components/Accounting/ExpenseForm";
 import { ExpenseTable } from "@/components/Accounting/ExpenseTable";
 import ExpensesCharts from "@/components/Accounting/ExpensesCharts";
+import ExpenseFilters from "@/components/Accounting/ExpenseFilters";
+import ExpensesExportMenu from "@/components/Accounting/ExpensesExportMenu";
+import ExpensesAnalytics from "@/components/Accounting/ExpensesAnalytics";
 import FixedPanel from "@/components/Accounting/FixedPanel";
 import VariableGrid from "@/components/Accounting/VariableGrid";
 import CategoriesManager from "@/components/Accounting/CategoriesManager";
@@ -299,6 +302,25 @@ export default function ExpensesPage() {
   const [activeTab, setActiveTab] = useState("fixed");
   // Review-tab filter chips: all | confirmed | pending.
   const [reviewStatusFilter, setReviewStatusFilter] = useState("all");
+
+  // ── Shared filter/search/sort state for the variable-expense lists ──
+  // (register + review tabs). The page owns it; both tabs derive their
+  // displayed rows from `filteredExpenses` below.
+  const [filterType, setFilterType] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterSearch, setFilterSearch] = useState("");
+  const [filterSort, setFilterSort] = useState("amount_desc");
+  const resetFilters = () => {
+    setFilterType("");
+    setFilterStatus("all");
+    setFilterSearch("");
+    setFilterSort("amount_desc");
+  };
+  const hasActiveFilters =
+    !!filterType ||
+    filterStatus !== "all" ||
+    !!filterSearch.trim() ||
+    filterSort !== "amount_desc";
   const [editingExpense, setEditingExpense] = useState(null);
   const [editingFixed, setEditingFixed] = useState(null);
   const [quickAddOpen, setQuickAddOpen] = useState(false);
@@ -444,6 +466,66 @@ export default function ExpensesPage() {
         return s + (Number.isFinite(n) ? n : 0);
       }, 0),
     [expenses],
+  );
+
+  // Type options for the filter bar — every distinct type name present
+  // in the current month's expenses (so empty types don't clutter the
+  // list). Sorted alphabetically.
+  const filterTypeOptions = useMemo(() => {
+    const names = new Set();
+    for (const e of expenses) {
+      if (e.expense_type_name) names.add(e.expense_type_name);
+    }
+    return Array.from(names)
+      .sort((a, b) => a.localeCompare(b, "ar"))
+      .map((n) => ({ value: n, label: n }));
+  }, [expenses]);
+
+  // Derived, filtered + sorted view of the month's expenses. Shared by
+  // the register tab's list AND the review tab (composes with the review
+  // tab's own all/confirmed/pending chips). Does NOT touch pending_fixed
+  // rows — those flow through untouched.
+  const filteredExpenses = useMemo(() => {
+    const q = filterSearch.trim().toLowerCase();
+    let out = expenses.filter((e) => {
+      if (filterType && e.expense_type_name !== filterType) return false;
+      if (filterStatus === "confirmed" && !e.is_confirmed) return false;
+      if (filterStatus === "pending" && e.is_confirmed) return false;
+      if (q) {
+        const name = String(e.expense_name || "").toLowerCase();
+        if (!name.includes(q)) return false;
+      }
+      return true;
+    });
+
+    const num = (v) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    };
+    out = out.slice().sort((a, b) => {
+      switch (filterSort) {
+        case "amount_asc":
+          return num(a.amount) - num(b.amount);
+        case "name_asc":
+          return String(a.expense_name || "").localeCompare(
+            String(b.expense_name || ""),
+            "ar",
+          );
+        case "status":
+          // Pending first (false sorts before true).
+          return Number(!!a.is_confirmed) - Number(!!b.is_confirmed);
+        case "amount_desc":
+        default:
+          return num(b.amount) - num(a.amount);
+      }
+    });
+    return out;
+  }, [expenses, filterType, filterStatus, filterSearch, filterSort]);
+
+  const todayRiyadh = useMemo(
+    () =>
+      new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Riyadh" }),
+    [],
   );
 
   const handleQuickAddSubmit = (data) => {
@@ -659,91 +741,93 @@ export default function ExpensesPage() {
                 </div>
               </details>
 
+              {/* Analytics — month-over-month + by-category breakdown.
+                  Complements ExpensesCharts (rendered in the review tab). */}
+              {month && expenses.length > 0 && (
+                <ExpensesAnalytics month={month} expenses={expenses} />
+              )}
+
               {/* Quick expenses list for current month — variable only.
                   Fixed-template entries belong to the "مصروف ثابت"
                   tab, so we filter them out here. Variable rows are
-                  those that DON'T carry a fixed_expense_id link. */}
+                  those that DON'T carry a fixed_expense_id link. The
+                  shared filter/search/sort bar drives the displayed
+                  rows via `filteredExpenses`, then we drop fixed links. */}
               {month &&
                 (() => {
-                  const variableExpenses = (expenses || []).filter(
+                  const allVariable = (expenses || []).filter(
                     (e) =>
                       e.fixed_expense_id === null ||
                       e.fixed_expense_id === undefined,
                   );
-                  if (variableExpenses.length === 0) return null;
+                  if (allVariable.length === 0) return null;
+                  // Apply the shared filters/sort, then keep variable-only.
+                  const variableExpenses = filteredExpenses.filter(
+                    (e) =>
+                      e.fixed_expense_id === null ||
+                      e.fixed_expense_id === undefined,
+                  );
                   return (
-                <div className={`${ws.glassSoft} ${ws.card} p-5`}>
-                  <div className="flex items-center justify-between gap-3 mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className={ws.iconBox}>
-                        <Receipt className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-slate-900 dark:text-white tracking-tight">
-                          المصروفات المضافة
-                        </div>
-                        <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
-                          {monthHint} — {variableExpenses.length} مصروف متغير
-                        </div>
-                      </div>
-                    </div>
-                    {/* Month quick-switch */}
-                    <div className="w-44">
-                      <GlassSelect
-                        value={month}
-                        onChange={setMonth}
-                        options={monthOptions}
-                        placeholder="الشهر"
-                        buttonClassName="text-xs py-2 px-2.5"
+                    <>
+                      <ExpenseFilters
+                        typeFilter={filterType}
+                        onTypeFilterChange={setFilterType}
+                        statusFilter={filterStatus}
+                        onStatusFilterChange={setFilterStatus}
+                        search={filterSearch}
+                        onSearchChange={setFilterSearch}
+                        sort={filterSort}
+                        onSortChange={setFilterSort}
+                        typeOptions={filterTypeOptions}
+                        onReset={resetFilters}
+                        hasActiveFilters={hasActiveFilters}
                       />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    {variableExpenses.map((e) => {
-                      const confirmedClass = e.is_confirmed
-                        ? "border-emerald-400/20 bg-emerald-400/5"
-                        : "border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.02]";
-                      return (
-                        <div
-                          key={e.id}
-                          className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl border ${confirmedClass}`}
-                        >
-                          <div className="flex items-center gap-2 min-w-0">
-                            <span className="text-slate-500 dark:text-white/40 text-xs shrink-0">
-                              {e.expense_type_name}
-                            </span>
-                            <span className="text-slate-900 dark:text-white text-sm font-semibold truncate">
-                              {e.expense_name}
-                            </span>
+                      <div className={`${ws.glassSoft} ${ws.card} p-5`}>
+                        <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
+                          <div className="flex items-center gap-3">
+                            <div className={ws.iconBox}>
+                              <Receipt className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
+                            </div>
+                            <div>
+                              <div className="font-bold text-slate-900 dark:text-white tracking-tight">
+                                المصروفات المضافة
+                              </div>
+                              <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5">
+                                {monthHint} — {variableExpenses.length} من{" "}
+                                {allVariable.length} مصروف متغير
+                              </div>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <span
-                              className="text-slate-700 dark:text-white/70 text-sm font-semibold"
-                              dir="ltr"
-                            >
-                              {formatMoney(e.amount)}
-                            </span>
-                            {e.is_confirmed && (
-                              <span className="text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">
-                                ✓
-                              </span>
-                            )}
-                            {!e.is_confirmed && (
-                              <button
-                                type="button"
-                                onClick={() => handleEditExpense(e)}
-                                className="text-sky-700 dark:text-sky-300 text-[10px] font-bold bg-sky-500/10 border border-sky-500/20 px-1.5 py-0.5 rounded-md hover:bg-sky-500/20 transition-colors"
-                              >
-                                تعديل
-                              </button>
-                            )}
+                          <div className="flex items-center gap-2">
+                            <ExpensesExportMenu
+                              expenses={variableExpenses}
+                              month={month}
+                              todayRiyadh={todayRiyadh}
+                            />
+                            {/* Month quick-switch */}
+                            <div className="w-40">
+                              <GlassSelect
+                                value={month}
+                                onChange={setMonth}
+                                options={monthOptions}
+                                placeholder="الشهر"
+                                buttonClassName="text-xs py-2 px-2.5"
+                              />
+                            </div>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
+
+                        <div className="overflow-x-auto">
+                          <ExpenseTable
+                            expenses={variableExpenses}
+                            month={month}
+                            onConfirm={handleConfirmExpense}
+                            onDelete={handleDeleteExpense}
+                            onEdit={handleEditExpense}
+                          />
+                        </div>
+                      </div>
+                    </>
                   );
                 })()}
 
@@ -770,19 +854,48 @@ export default function ExpensesPage() {
 
           {/* ═══════ Review Tab ═══════ */}
           {isReviewTab && (
-            <ReviewTabContent
-              month={month}
-              monthHint={monthHint}
-              expenses={expenses}
-              pendingFixed={pendingFixed}
-              expensesQuery={expensesQuery}
-              statusFilter={reviewStatusFilter}
-              onStatusFilterChange={setReviewStatusFilter}
-              onConfirm={handleConfirmExpense}
-              onDelete={handleDeleteExpense}
-              onEdit={handleEditExpense}
-              onConfirmFixed={handleConfirmFixedExpense}
-            />
+            <>
+              {/* Shared filters compose with the review tab's own
+                  all/confirmed/pending status chips. Export reflects the
+                  currently filtered set. */}
+              {month && expenses.length > 0 && (
+                <>
+                  <ExpenseFilters
+                    typeFilter={filterType}
+                    onTypeFilterChange={setFilterType}
+                    statusFilter={filterStatus}
+                    onStatusFilterChange={setFilterStatus}
+                    search={filterSearch}
+                    onSearchChange={setFilterSearch}
+                    sort={filterSort}
+                    onSortChange={setFilterSort}
+                    typeOptions={filterTypeOptions}
+                    onReset={resetFilters}
+                    hasActiveFilters={hasActiveFilters}
+                  />
+                  <div className="flex items-center justify-end">
+                    <ExpensesExportMenu
+                      expenses={filteredExpenses}
+                      month={month}
+                      todayRiyadh={todayRiyadh}
+                    />
+                  </div>
+                </>
+              )}
+              <ReviewTabContent
+                month={month}
+                monthHint={monthHint}
+                expenses={filteredExpenses}
+                pendingFixed={pendingFixed}
+                expensesQuery={expensesQuery}
+                statusFilter={reviewStatusFilter}
+                onStatusFilterChange={setReviewStatusFilter}
+                onConfirm={handleConfirmExpense}
+                onDelete={handleDeleteExpense}
+                onEdit={handleEditExpense}
+                onConfirmFixed={handleConfirmFixedExpense}
+              />
+            </>
           )}
 
           {/* ═══════ Fixed Expenses Tab ═══════ */}
