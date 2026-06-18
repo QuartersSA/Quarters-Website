@@ -7,6 +7,7 @@ import {
   ArrowLeft,
   Calculator,
   Languages,
+  Trash2,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -49,6 +50,9 @@ export default function HomePage() {
           shiftDesc:
             "للكاشير: رفع تقرير الكاش والشبكة (الفعلي وفودكس) وحساب العجز/الزيادة.",
           shiftBtn: "دخول تقفيلة الشفت",
+          wasteTitle: "تسجيل دخول الهدر",
+          wasteDesc: "للموظفين: تسجيل هدر المخبوزات والحلويات حسب الفرع.",
+          wasteBtn: "دخول الهدر",
           hint: "إذا كنت موظف وتحتاج تغيير اللغة أو اختيار الفرع، بتظهر لك الخيارات بعد تسجيل الدخول.",
           language: "اللغة",
           arabic: "عربي",
@@ -69,6 +73,9 @@ export default function HomePage() {
           shiftDesc:
             "For cashiers: submit cash/card report (actual vs Foodics) and calculate variance.",
           shiftBtn: "Enter Shift Close",
+          wasteTitle: "Waste Logging Login",
+          wasteDesc: "For employees: log bakery & sweets waste by branch.",
+          wasteBtn: "Enter Waste",
           hint: "If you're an employee and need to change language or branch, you'll see those options after login.",
           language: "Language",
           arabic: "Arabic",
@@ -117,6 +124,14 @@ export default function HomePage() {
         icon: Calculator,
         accent: "text-fuchsia-200",
         buttonLabel: t("shiftBtn"),
+      },
+      {
+        title: t("wasteTitle"),
+        description: t("wasteDesc"),
+        href: "/waste/login",
+        icon: Trash2,
+        accent: "text-amber-200",
+        buttonLabel: t("wasteBtn"),
       },
     ];
   }, [t]);
