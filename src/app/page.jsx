@@ -128,7 +128,7 @@ export default function HomePage() {
       {
         title: t("wasteTitle"),
         description: t("wasteDesc"),
-        href: "/waste/login",
+        href: "/employee/waste/login",
         icon: Trash2,
         accent: "text-amber-200",
         buttonLabel: t("wasteBtn"),
