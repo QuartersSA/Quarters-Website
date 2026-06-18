@@ -25,6 +25,26 @@ import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney } from "@/utils/payrollFormatters";
 
+/* Map a picked Riyadh calendar date (YYYY-MM-DD) to the UTC instant
+ * bounds of that day. Riyadh is a fixed UTC+03:00 (no DST), so the
+ * day runs from `YYYY-MM-DDT00:00:00+03:00` to `…T23:59:59.999+03:00`.
+ * Without this the date-only string compared against the TIMESTAMPTZ
+ * created_at as UTC midnight, so "today" excluded every Riyadh-day
+ * entry (and the day appeared to shift). Returns an ISO UTC instant.
+ */
+function riyadhDayStartUTC(dateStr) {
+  if (!dateStr) return null;
+  const d = String(dateStr).slice(0, 10);
+  const t = new Date(`${d}T00:00:00+03:00`);
+  return Number.isNaN(t.getTime()) ? null : t.toISOString();
+}
+function riyadhDayEndUTC(dateStr) {
+  if (!dateStr) return null;
+  const d = String(dateStr).slice(0, 10);
+  const t = new Date(`${d}T23:59:59.999+03:00`);
+  return Number.isNaN(t.getTime()) ? null : t.toISOString();
+}
+
 /* Riyadh-local timestamp. Avoid toLocaleString("ar-SA") — it scrambles in RTL. */
 function fmtDateTime(value) {
   if (!value) return "—";
@@ -380,8 +400,13 @@ export default function WastePage() {
       const qs = new URLSearchParams();
       if (branchFilter) qs.set("branchId", String(branchFilter));
       if (reasonFilter) qs.set("reason", reasonFilter);
-      if (from) qs.set("from", from);
-      if (to) qs.set("to", to);
+      // Send the selected Riyadh calendar days as their full UTC
+      // instant range so a same-day filter actually covers the whole
+      // Riyadh day (00:00 → 23:59:59.999 local).
+      const fromUTC = riyadhDayStartUTC(from);
+      const toUTC = riyadhDayEndUTC(to);
+      if (fromUTC) qs.set("from", fromUTC);
+      if (toUTC) qs.set("to", toUTC);
       const url = qs.toString() ? `/api/waste?${qs.toString()}` : "/api/waste";
       const res = await adminFetch(url);
       const data = await res.json().catch(() => ({}));
