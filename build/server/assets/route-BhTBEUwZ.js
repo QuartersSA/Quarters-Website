@@ -91,11 +91,15 @@ async function GET(request, {
         e.created_at,
         e.iqama_number,
         e.iqama_expiry_date,
+        e.iqama_expiry_calendar,
+        e.iqama_expiry_hijri,
         COALESCE(e.sponsorship_transferred, false) as sponsorship_transferred,
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
         TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
+        e.health_card_expiry_calendar,
+        e.health_card_expiry_hijri,
         e.position,
         e.base_salary,
         e.other_allowances,
@@ -174,11 +178,15 @@ async function PUT(request, {
         e.phone,
         e.iqama_number,
         e.iqama_expiry_date,
+        e.iqama_expiry_calendar,
+        e.iqama_expiry_hijri,
         COALESCE(e.sponsorship_transferred, false) as sponsorship_transferred,
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
         TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
+        e.health_card_expiry_calendar,
+        e.health_card_expiry_hijri,
         e.position,
         e.base_salary,
         e.other_allowances,
@@ -220,11 +228,15 @@ async function PUT(request, {
       phone,
       iqama_number,
       iqama_expiry_date,
+      iqama_expiry_calendar,
+      iqama_expiry_hijri,
       sponsorship_transferred,
       work_card_issued,
       medical_check_issued,
       health_card_issued,
       health_card_expiry_date,
+      health_card_expiry_calendar,
+      health_card_expiry_hijri,
       position,
       base_salary,
       other_allowances,
@@ -254,6 +266,16 @@ async function PUT(request, {
       values.push(iqama_expiry_date);
       paramCount++;
     }
+    if (iqama_expiry_calendar !== undefined) {
+      updates.push(`iqama_expiry_calendar = $${paramCount}`);
+      values.push(iqama_expiry_calendar || null);
+      paramCount++;
+    }
+    if (iqama_expiry_hijri !== undefined) {
+      updates.push(`iqama_expiry_hijri = $${paramCount}`);
+      values.push(iqama_expiry_hijri || null);
+      paramCount++;
+    }
     if (sponsorship_transferred !== undefined) {
       updates.push(`sponsorship_transferred = $${paramCount}`);
       values.push(!!sponsorship_transferred);
@@ -274,9 +296,16 @@ async function PUT(request, {
       values.push(!!health_card_issued);
       paramCount++;
       // Turning the card off clears its expiry so a stale date never
-      // resurfaces when the card is re-issued later.
+      // resurfaces when the card is re-issued later. Mirror the same
+      // clear for the dual-calendar metadata.
       if (!health_card_issued) {
         updates.push(`health_card_expiry_date = $${paramCount}`);
+        values.push(null);
+        paramCount++;
+        updates.push(`health_card_expiry_calendar = $${paramCount}`);
+        values.push(null);
+        paramCount++;
+        updates.push(`health_card_expiry_hijri = $${paramCount}`);
         values.push(null);
         paramCount++;
       }
@@ -284,6 +313,16 @@ async function PUT(request, {
     if (health_card_expiry_date !== undefined && (health_card_issued === undefined || health_card_issued)) {
       updates.push(`health_card_expiry_date = $${paramCount}`);
       values.push(normalizeIsoDate(health_card_expiry_date) || null);
+      paramCount++;
+    }
+    if (health_card_expiry_calendar !== undefined && (health_card_issued === undefined || health_card_issued)) {
+      updates.push(`health_card_expiry_calendar = $${paramCount}`);
+      values.push(health_card_expiry_calendar || null);
+      paramCount++;
+    }
+    if (health_card_expiry_hijri !== undefined && (health_card_issued === undefined || health_card_issued)) {
+      updates.push(`health_card_expiry_hijri = $${paramCount}`);
+      values.push(health_card_expiry_hijri || null);
       paramCount++;
     }
     if (position !== undefined) {
@@ -348,11 +387,15 @@ async function PUT(request, {
         e.created_at,
         e.iqama_number,
         e.iqama_expiry_date,
+        e.iqama_expiry_calendar,
+        e.iqama_expiry_hijri,
         COALESCE(e.sponsorship_transferred, false) as sponsorship_transferred,
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
         TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
+        e.health_card_expiry_calendar,
+        e.health_card_expiry_hijri,
         e.position,
         e.base_salary,
         e.other_allowances,

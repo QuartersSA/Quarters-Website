@@ -19,6 +19,7 @@ import HRModalHeader from "@/components/HR/HRModalHeader";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassMultiSelect from "@/components/Workspace/GlassMultiSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import DualCalendarDatePicker from "@/components/Workspace/DualCalendarDatePicker";
 import { HREmployeeLogPanel } from "@/components/HR/HREmployeeLogPanel";
 
 // Today as YYYY-MM-DD pinned to Asia/Riyadh — the project's
@@ -152,12 +153,16 @@ export function HREmployeeModal({
                 موعد انتهاء الإقامة
               </label>
 
-              <GlassDatePicker
-                value={formData.iqama_expiry_date || ""}
-                onChange={(v) =>
+              <DualCalendarDatePicker
+                gregorianValue={formData.iqama_expiry_date || ""}
+                calendar={formData.iqama_expiry_calendar || "gregory"}
+                hijriValue={formData.iqama_expiry_hijri || ""}
+                onChange={(next) =>
                   setFormData({
                     ...formData,
-                    iqama_expiry_date: v || "",
+                    iqama_expiry_date: next.gregorian || "",
+                    iqama_expiry_calendar: next.calendar || "gregory",
+                    iqama_expiry_hijri: next.hijri || "",
                   })
                 }
                 placeholder="اختر التاريخ"
@@ -219,9 +224,16 @@ export function HREmployeeModal({
                     ...formData,
                     health_card_issued: v,
                     // Switching to "لا" clears the date so a stale
-                    // expiry never lingers in the form state.
+                    // expiry never lingers in the form state. Mirror
+                    // the same clear for the calendar + Hijri fields.
                     health_card_expiry_date: v
                       ? formData.health_card_expiry_date || ""
+                      : "",
+                    health_card_expiry_calendar: v
+                      ? formData.health_card_expiry_calendar || "gregory"
+                      : "gregory",
+                    health_card_expiry_hijri: v
+                      ? formData.health_card_expiry_hijri || ""
                       : "",
                   })
                 }
@@ -238,12 +250,16 @@ export function HREmployeeModal({
                 <Calendar className="w-4 h-4 inline ml-2" />
                 موعد انتهاء الكرت الصحي
               </label>
-              <GlassDatePicker
-                value={formData.health_card_expiry_date || ""}
-                onChange={(v) =>
+              <DualCalendarDatePicker
+                gregorianValue={formData.health_card_expiry_date || ""}
+                calendar={formData.health_card_expiry_calendar || "gregory"}
+                hijriValue={formData.health_card_expiry_hijri || ""}
+                onChange={(next) =>
                   setFormData({
                     ...formData,
-                    health_card_expiry_date: v || "",
+                    health_card_expiry_date: next.gregorian || "",
+                    health_card_expiry_calendar: next.calendar || "gregory",
+                    health_card_expiry_hijri: next.hijri || "",
                   })
                 }
                 placeholder="اختر التاريخ"

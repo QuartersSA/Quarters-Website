@@ -3,6 +3,20 @@ import { Check, X, MessageSquare, Pencil, Trash2, Anchor } from "lucide-react";
 import { formatMoney } from "@/utils/payrollFormatters";
 import { ws } from "@/components/Workspace/ui";
 
+/* Status badge — مؤكد emerald, بانتظار amber. Shared by the mobile cards. */
+function StatusBadge({ confirmed }) {
+  return confirmed ? (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-400/15 dark:text-emerald-200 dark:border-emerald-400/25">
+      <Check className="w-2.5 h-2.5" />
+      مؤكد
+    </span>
+  ) : (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-400/15 dark:text-amber-200 dark:border-amber-400/25">
+      بانتظار
+    </span>
+  );
+}
+
 // Row for a fixed-expense template that has not been confirmed yet for the
 // current month. User can confirm payment (with optional override amount).
 function PendingFixedRow({ pending, month, onConfirmFixed }) {
@@ -421,6 +435,347 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
   );
 }
 
+/* ─────────────────────────────────────────────────────────────────
+ * Mobile (lg-down) stacked cards. They mirror the desktop rows'
+ * confirm-state machine so the same confirm / edit / delete / note
+ * actions work without a table. The desktop <table> stays gated to
+ * lg+ — the row callbacks/props contract is unchanged.
+ * ───────────────────────────────────────────────────────────────── */
+
+function PendingFixedCard({ pending, month, onConfirmFixed }) {
+  const [amount, setAmount] = useState(String(pending.default_amount || ""));
+  const [note, setNote] = useState("");
+  const [showNote, setShowNote] = useState(false);
+
+  const handleConfirm = () => {
+    onConfirmFixed({
+      id: pending.id,
+      month,
+      confirmed_amount:
+        amount !== "" ? Number(amount) : Number(pending.default_amount),
+      confirmed_note: note || null,
+    });
+  };
+
+  return (
+    <div className={`${ws.innerCard} p-3 bg-emerald-400/[0.04]`}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/15 border border-emerald-400/30 text-emerald-700 dark:text-emerald-200 text-[10px] font-bold">
+              <Anchor className="w-2.5 h-2.5" />
+              ثابت
+            </span>
+            <span className="text-slate-500 dark:text-white/40 text-[11px]">
+              {pending.expense_type_name || "—"}
+            </span>
+          </div>
+          <div className="text-slate-900 dark:text-white text-sm font-semibold truncate">
+            {pending.expense_name || "—"}
+          </div>
+        </div>
+        <div className="text-left shrink-0">
+          <div className="text-[10px] text-slate-500 dark:text-white/40">
+            الافتراضي
+          </div>
+          <div className="text-slate-700 dark:text-white/70 text-sm font-semibold" dir="ltr">
+            {formatMoney(pending.default_amount)}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 mt-3">
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className={`${ws.input} text-xs py-1.5 px-2 rounded-lg w-[110px] text-right`}
+          dir="ltr"
+          placeholder={String(pending.default_amount || 0)}
+          step="0.01"
+        />
+        <button
+          type="button"
+          onClick={() => setShowNote((s) => !s)}
+          className={`w-8 h-8 rounded-lg inline-flex items-center justify-center transition-all ${
+            note
+              ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300"
+              : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40"
+          }`}
+          title="ملاحظة"
+        >
+          <MessageSquare className="w-3.5 h-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={handleConfirm}
+          className={`${ws.btnPrimary} text-xs px-3 py-1.5 rounded-lg flex-1 justify-center`}
+        >
+          تأكيد الدفع
+        </button>
+      </div>
+
+      {showNote && (
+        <input
+          type="text"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="ملاحظة (اختياري)…"
+          className={`${ws.input} text-xs py-1.5 px-3 rounded-xl mt-2`}
+        />
+      )}
+    </div>
+  );
+}
+
+function ExpenseCard({ expense, onConfirm, onDelete, onEdit }) {
+  const savedConfirmed = !!expense.is_confirmed;
+
+  const [isConfirmed, setIsConfirmed] = useState(savedConfirmed);
+  const [confirmedAmount, setConfirmedAmount] = useState(
+    expense.confirmed_amount !== null && expense.confirmed_amount !== undefined
+      ? String(expense.confirmed_amount)
+      : "",
+  );
+  const [confirmedNote, setConfirmedNote] = useState(
+    expense.confirmed_note || "",
+  );
+  const [showNote, setShowNote] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const [isEditingConfirm, setIsEditingConfirm] = useState(false);
+
+  const isLocked = savedConfirmed && !isEditingConfirm && !dirty;
+  const originalAmount = Number(expense.amount || 0);
+  const currentConfirmedAmount =
+    confirmedAmount !== "" ? Number(confirmedAmount) : null;
+  const amountDiffers =
+    currentConfirmedAmount !== null &&
+    Math.abs(currentConfirmedAmount - originalAmount) >= 0.01;
+
+  useEffect(() => {
+    setIsConfirmed(!!expense.is_confirmed);
+    setConfirmedAmount(
+      expense.confirmed_amount !== null &&
+        expense.confirmed_amount !== undefined
+        ? String(expense.confirmed_amount)
+        : "",
+    );
+    setConfirmedNote(expense.confirmed_note || "");
+    setShowNote(false);
+    setDirty(false);
+    setIsEditingConfirm(false);
+  }, [expense.is_confirmed, expense.confirmed_amount, expense.confirmed_note]);
+
+  const handleToggleConfirmed = () => {
+    if (isLocked) return;
+    const next = !isConfirmed;
+    setIsConfirmed(next);
+    if (next && !confirmedAmount) setConfirmedAmount(String(originalAmount));
+    if (!next) {
+      setConfirmedAmount("");
+      setConfirmedNote("");
+      setShowNote(false);
+    }
+    setDirty(true);
+  };
+
+  const handleSave = () => {
+    onConfirm({
+      id: expense.id,
+      is_confirmed: isConfirmed,
+      confirmed_amount:
+        isConfirmed && confirmedAmount !== "" ? Number(confirmedAmount) : null,
+      confirmed_note: isConfirmed && confirmedNote ? confirmedNote : null,
+    });
+    setDirty(false);
+    setIsEditingConfirm(false);
+  };
+
+  const handleCancelEditConfirm = () => {
+    setIsConfirmed(!!expense.is_confirmed);
+    setConfirmedAmount(
+      expense.confirmed_amount !== null &&
+        expense.confirmed_amount !== undefined
+        ? String(expense.confirmed_amount)
+        : "",
+    );
+    setConfirmedNote(expense.confirmed_note || "");
+    setShowNote(false);
+    setDirty(false);
+    setIsEditingConfirm(false);
+  };
+
+  return (
+    <div
+      className={`${ws.innerCard} p-3 ${
+        savedConfirmed ? "bg-emerald-400/[0.04]" : ""
+      }`}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <div className="text-slate-500 dark:text-white/40 text-[11px] mb-0.5">
+            {expense.expense_type_name || "—"}
+          </div>
+          <div className="text-slate-900 dark:text-white text-sm font-semibold truncate">
+            {expense.expense_name || "—"}
+          </div>
+        </div>
+        <div className="flex flex-col items-end gap-1 shrink-0">
+          <span className="text-slate-800 dark:text-white/80 text-sm font-bold" dir="ltr">
+            {formatMoney(expense.amount)}
+          </span>
+          <StatusBadge confirmed={isConfirmed} />
+        </div>
+      </div>
+
+      {/* Confirmed amount input when toggled on and editable */}
+      {isConfirmed && !isLocked && (
+        <div className="mt-2 flex items-center gap-2">
+          <span className="text-[11px] text-slate-500 dark:text-white/45">
+            المبلغ المؤكد
+          </span>
+          <input
+            type="number"
+            value={confirmedAmount}
+            onChange={(e) => {
+              setConfirmedAmount(e.target.value);
+              setDirty(true);
+            }}
+            className={`${ws.input} text-xs py-1.5 px-2 rounded-lg w-[110px] text-right ${
+              amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""
+            }`}
+            dir="ltr"
+            placeholder={String(originalAmount)}
+            step="0.01"
+          />
+        </div>
+      )}
+      {isConfirmed && isLocked && (
+        <div className="mt-1.5 text-[11px] text-slate-500 dark:text-white/45">
+          المبلغ المؤكد:{" "}
+          <span className="text-slate-700 dark:text-white/70 font-semibold" dir="ltr">
+            {formatMoney(confirmedAmount)}
+          </span>
+        </div>
+      )}
+
+      {showNote && isConfirmed && (
+        <div className="mt-2">
+          {isLocked ? (
+            <div className="text-[11px] text-slate-600 dark:text-white/60">
+              {confirmedNote || "—"}
+            </div>
+          ) : (
+            <input
+              type="text"
+              value={confirmedNote}
+              onChange={(e) => {
+                setConfirmedNote(e.target.value);
+                setDirty(true);
+              }}
+              placeholder={
+                amountDiffers ? "سبب اختلاف المبلغ…" : "ملاحظة (اختياري)…"
+              }
+              className={`${ws.input} text-xs py-1.5 px-3 rounded-xl ${
+                amountDiffers && !confirmedNote ? "border-amber-400/40" : ""
+              }`}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Actions */}
+      <div className="flex items-center gap-1.5 mt-3 flex-wrap">
+        <button
+          type="button"
+          onClick={handleToggleConfirmed}
+          disabled={isLocked}
+          className={`h-8 px-3 rounded-lg inline-flex items-center gap-1.5 text-xs font-semibold transition-all ${
+            isConfirmed
+              ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300"
+              : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50"
+          } ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
+        >
+          {isConfirmed ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+          {isConfirmed ? "مؤكد" : "تأكيد"}
+        </button>
+
+        {isConfirmed && (
+          <button
+            type="button"
+            onClick={() => setShowNote((s) => !s)}
+            className={`w-8 h-8 rounded-lg inline-flex items-center justify-center transition-all ${
+              confirmedNote || amountDiffers
+                ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300"
+                : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40"
+            }`}
+            title="ملاحظة"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+          </button>
+        )}
+
+        {!savedConfirmed && onEdit && (
+          <button
+            type="button"
+            onClick={() => onEdit(expense)}
+            className="w-8 h-8 rounded-lg inline-flex items-center justify-center bg-sky-500/10 border border-sky-500/25 text-sky-700 dark:text-sky-300"
+            title="تعديل المصروف"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+          </button>
+        )}
+
+        {isLocked && (
+          <button
+            type="button"
+            onClick={() => setIsEditingConfirm(true)}
+            className="w-8 h-8 rounded-lg inline-flex items-center justify-center bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40"
+            title="تعديل التأكيد"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+          </button>
+        )}
+
+        {isEditingConfirm && (
+          <button
+            type="button"
+            onClick={handleCancelEditConfirm}
+            className="w-8 h-8 rounded-lg inline-flex items-center justify-center bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300"
+            title="إلغاء"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        )}
+
+        <button
+          type="button"
+          onClick={() => {
+            const msg = savedConfirmed
+              ? "هذا المصروف مؤكد — هل أنت متأكد من حذفه؟"
+              : "هل تريد حذف هذا المصروف؟";
+            if (window.confirm(msg)) onDelete(expense.id);
+          }}
+          className="w-8 h-8 rounded-lg inline-flex items-center justify-center bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300"
+          title={savedConfirmed ? "حذف (مؤكد)" : "حذف"}
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+        </button>
+
+        {dirty && (
+          <button
+            type="button"
+            onClick={handleSave}
+            className={`${ws.btnPrimary} text-xs px-3 py-1.5 rounded-lg mr-auto`}
+          >
+            حفظ
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function ExpenseTable({
   expenses,
   pendingFixed = [],
@@ -487,7 +842,8 @@ export function ExpenseTable({
         )}
       </div>
 
-      <table className="w-full text-xs">
+      {/* Desktop table — lg+ only */}
+      <table className="w-full text-xs hidden lg:table">
         <thead>
           <tr className="text-slate-700 dark:text-white/70 text-[11px]">
             <th className="text-right font-semibold py-2 px-2 whitespace-nowrap">
@@ -529,6 +885,28 @@ export function ExpenseTable({
           ))}
         </tbody>
       </table>
+
+      {/* Mobile stacked cards — lg-down only */}
+      <div className="lg:hidden space-y-2.5">
+        {Array.isArray(pendingFixed) &&
+          pendingFixed.map((p) => (
+            <PendingFixedCard
+              key={`fixed-${p.id}`}
+              pending={p}
+              month={month}
+              onConfirmFixed={onConfirmFixed}
+            />
+          ))}
+        {expenses.map((e) => (
+          <ExpenseCard
+            key={e.id}
+            expense={e}
+            onConfirm={onConfirm}
+            onDelete={onDelete}
+            onEdit={onEdit}
+          />
+        ))}
+      </div>
       <style jsx global>{`
         @keyframes expensePulse {
           0%, 100% { opacity: 1; }
