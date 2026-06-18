@@ -42,6 +42,16 @@ function getItemUnits(item) {
   return Array.isArray(item?.units) ? item.units : [];
 }
 
+// Categories excluded from the daily inventory entry (tracked
+// elsewhere). Matched loosely on the Arabic name so a stray space or
+// a "سكر و محليات" / "سكر ومحليات" variant still resolves. Resilient
+// to the "و" being attached or separate.
+function isExcludedInventoryCategory(categoryName) {
+  const n = String(categoryName || "").replace(/\s+/g, "");
+  if (!n) return false;
+  return n.includes("سكر") && n.includes("محلي");
+}
+
 function pickDefaultUnit(item, defaultKey) {
   const units = getItemUnits(item);
   if (units.length === 0) return null;
@@ -344,6 +354,9 @@ export default function EmployeeInventoryPage() {
   const activeItems =
     items?.filter((item) => {
       if (item.show_in_inventory === false) return false;
+      // "سكر ومحليات" is tracked outside the daily inventory count —
+      // hide every item in that category from the inventory entry.
+      if (isExcludedInventoryCategory(item.category_name)) return false;
       if (
         Array.isArray(item.disabled_branches) &&
         Number.isFinite(employeeBranchId) &&
@@ -362,15 +375,19 @@ export default function EmployeeInventoryPage() {
       },
     ];
 
-    const mapped = (Array.isArray(categories) ? categories : []).map((c) => {
-      const label =
-        language === "ar" ? c.name : c.name_en || c.name || String(c.id);
+    const mapped = (Array.isArray(categories) ? categories : [])
+      // Drop the excluded category from the filter chips too — no
+      // point offering a filter for a category with no visible items.
+      .filter((c) => !isExcludedInventoryCategory(c.name))
+      .map((c) => {
+        const label =
+          language === "ar" ? c.name : c.name_en || c.name || String(c.id);
 
-      return {
-        value: String(c.id),
-        label,
-      };
-    });
+        return {
+          value: String(c.id),
+          label,
+        };
+      });
 
     return [...base, ...mapped];
   }, [categories, language]);
