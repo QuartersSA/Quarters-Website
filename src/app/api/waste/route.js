@@ -42,7 +42,24 @@ async function ensureSchema() {
   } catch (e) {
     console.error("ensureSchema waste_items:", e?.message);
   }
+  // Per-line waste reason + optional note (e.g. invoice number for a
+  // customer return). reason holds a stable language-agnostic key —
+  // the frontend maps it to the operator's language.
+  try {
+    await sql`ALTER TABLE waste_items ADD COLUMN IF NOT EXISTS reason TEXT`;
+    await sql`ALTER TABLE waste_items ADD COLUMN IF NOT EXISTS note TEXT`;
+  } catch (e) {
+    console.error("ensureSchema waste_items reason/note:", e?.message);
+  }
 }
+
+// Stable reason keys. Labels live in the frontend (AR/EN).
+const WASTE_REASONS = new Set([
+  "expiry", // تاريخ صلاحية
+  "customer_return", // إرجاع من العميل (note = رقم الفاتورة)
+  "order_error", // خطأ في الطلب
+  "not_sellable", // غير صالح للبيع
+]);
 
 // ── POST: employee (or admin) submits a waste log ──
 export async function POST(request) {
@@ -81,12 +98,18 @@ export async function POST(request) {
       }
     }
 
-    // Normalize + drop zero/empty rows.
+    // Normalize + drop zero/empty rows. reason must be one of the
+    // known keys (or null); note is free text (e.g. invoice number).
     const clean = items
-      .map((it) => ({
-        itemId: Number(it?.itemId),
-        quantity: Number(it?.quantity),
-      }))
+      .map((it) => {
+        const reasonRaw = it?.reason ? String(it.reason) : null;
+        return {
+          itemId: Number(it?.itemId),
+          quantity: Number(it?.quantity),
+          reason: reasonRaw && WASTE_REASONS.has(reasonRaw) ? reasonRaw : null,
+          note: it?.note ? String(it.note).slice(0, 500) : null,
+        };
+      })
       .filter(
         (it) =>
           Number.isFinite(it.itemId) &&
@@ -133,8 +156,8 @@ export async function POST(request) {
     for (const c of clean) {
       const meta = itemMap.get(c.itemId) || {};
       await sql`
-        INSERT INTO waste_items (operation_id, item_id, item_name, quantity, unit_cost)
-        VALUES (${op.id}, ${c.itemId}, ${meta.name || null}, ${c.quantity}, ${meta.unit_cost ?? null})
+        INSERT INTO waste_items (operation_id, item_id, item_name, quantity, unit_cost, reason, note)
+        VALUES (${op.id}, ${c.itemId}, ${meta.name || null}, ${c.quantity}, ${meta.unit_cost ?? null}, ${c.reason}, ${c.note})
       `;
     }
 
@@ -173,6 +196,11 @@ export async function GET(request) {
         ? Number(branchId)
         : null;
 
+    const reasonFilter = searchParams.get("reason");
+    const rFilter = reasonFilter && WASTE_REASONS.has(reasonFilter)
+      ? reasonFilter
+      : null;
+
     const ops = await sql(
       `
         SELECT
@@ -191,6 +219,8 @@ export async function GET(request) {
                 'item_name', wi.item_name,
                 'quantity', wi.quantity,
                 'unit_cost', wi.unit_cost,
+                'reason', wi.reason,
+                'note', wi.note,
                 'cost', ROUND(COALESCE(wi.quantity, 0) * COALESCE(wi.unit_cost, 0), 2)
               )
               ORDER BY wi.id
@@ -201,12 +231,57 @@ export async function GET(request) {
           ROUND(SUM(COALESCE(wi.quantity, 0) * COALESCE(wi.unit_cost, 0)), 2) AS total_cost
         FROM waste_operations o
         LEFT JOIN waste_items wi ON wi.operation_id = o.id
+          AND ($4::text IS NULL OR wi.reason = $4::text)
         WHERE ($1::int IS NULL OR o.branch_id = $1::int)
           AND ($2::timestamptz IS NULL OR o.created_at >= $2::timestamptz)
           AND ($3::timestamptz IS NULL OR o.created_at <= $3::timestamptz)
+          -- when filtering by reason, drop operations with no matching line
+          AND ($4::text IS NULL OR EXISTS (
+            SELECT 1 FROM waste_items x
+            WHERE x.operation_id = o.id AND x.reason = $4::text
+          ))
         GROUP BY o.id
         ORDER BY o.created_at DESC
         LIMIT 500
+      `,
+      [bFilter, from || null, to || null, rFilter],
+    );
+
+    // Per-reason totals (across the same filter window, ignoring the
+    // reason filter itself so the breakdown always shows all reasons).
+    const reasonRows = await sql(
+      `
+        SELECT
+          COALESCE(wi.reason, 'unspecified') AS reason,
+          COUNT(wi.id)::int AS lines,
+          ROUND(SUM(COALESCE(wi.quantity, 0) * COALESCE(wi.unit_cost, 0)), 2) AS cost
+        FROM waste_operations o
+        JOIN waste_items wi ON wi.operation_id = o.id
+        WHERE ($1::int IS NULL OR o.branch_id = $1::int)
+          AND ($2::timestamptz IS NULL OR o.created_at >= $2::timestamptz)
+          AND ($3::timestamptz IS NULL OR o.created_at <= $3::timestamptz)
+        GROUP BY COALESCE(wi.reason, 'unspecified')
+        ORDER BY cost DESC NULLS LAST
+      `,
+      [bFilter, from || null, to || null],
+    );
+
+    // Top wasted items by cost (same window).
+    const topItems = await sql(
+      `
+        SELECT
+          wi.item_id,
+          wi.item_name,
+          ROUND(SUM(COALESCE(wi.quantity, 0)), 3) AS total_quantity,
+          ROUND(SUM(COALESCE(wi.quantity, 0) * COALESCE(wi.unit_cost, 0)), 2) AS total_cost
+        FROM waste_operations o
+        JOIN waste_items wi ON wi.operation_id = o.id
+        WHERE ($1::int IS NULL OR o.branch_id = $1::int)
+          AND ($2::timestamptz IS NULL OR o.created_at >= $2::timestamptz)
+          AND ($3::timestamptz IS NULL OR o.created_at <= $3::timestamptz)
+        GROUP BY wi.item_id, wi.item_name
+        ORDER BY total_cost DESC NULLS LAST
+        LIMIT 10
       `,
       [bFilter, from || null, to || null],
     );
@@ -215,11 +290,18 @@ export async function GET(request) {
       (s, o) => s + (Number(o.total_cost) || 0),
       0,
     );
+    const totalLines = ops.reduce(
+      (s, o) => s + (Number(o.items_count) || 0),
+      0,
+    );
 
     return Response.json({
       operations: ops,
+      by_reason: reasonRows,
+      top_items: topItems,
       summary: {
         operations_count: ops.length,
+        items_count: totalLines,
         total_cost: Math.round(grandTotal * 100) / 100,
       },
     });

@@ -41,8 +41,15 @@ export default function WastePage() {
   const [language, setLanguage] = useState("ar");
   // itemId -> stored quantity (the typed number, as-is)
   const [availableItems, setAvailableItems] = useState({});
+  // itemId -> chosen waste reason (stable key) + note (free text)
+  const [reasonByItem, setReasonByItem] = useState({});
+  const [noteByItem, setNoteByItem] = useState({});
   const [selectedItem, setSelectedItem] = useState(null);
   const [quantity, setQuantity] = useState("");
+  // active-item draft reason + note (committed on "تم")
+  const [reason, setReason] = useState("");
+  const [note, setNote] = useState("");
+  const [reasonError, setReasonError] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -213,6 +220,14 @@ export default function WastePage() {
       autoSaved: "تم الحفظ التلقائي",
       completed: "مكتمل",
       pending: "متبقي",
+      wasteReason: "سبب الهدر",
+      reasonExpiry: "تاريخ صلاحية",
+      reasonCustomerReturn: "إرجاع من العميل",
+      reasonOrderError: "خطأ في الطلب",
+      reasonNotSellable: "غير صالح للبيع",
+      selectReason: "اختر سبب الهدر",
+      invoiceLabel: "سجّل رقم الفاتورة",
+      enterInvoice: "أدخل رقم الفاتورة",
     },
     en: {
       title: "Waste Logging",
@@ -239,10 +254,28 @@ export default function WastePage() {
       autoSaved: "Auto-saved",
       completed: "Completed",
       pending: "Pending",
+      wasteReason: "Waste reason",
+      reasonExpiry: "Expiry",
+      reasonCustomerReturn: "Customer return",
+      reasonOrderError: "Order error",
+      reasonNotSellable: "Not sellable",
+      selectReason: "Select a waste reason",
+      invoiceLabel: "Record invoice number",
+      enterInvoice: "Enter the invoice number",
     },
   };
 
   const text = t[language];
+
+  // Stable reason keys -> localized labels. The key is what gets POSTed.
+  const REASON_OPTIONS = [
+    { key: "expiry", label: text.reasonExpiry },
+    { key: "customer_return", label: text.reasonCustomerReturn },
+    { key: "order_error", label: text.reasonOrderError },
+    { key: "not_sellable", label: text.reasonNotSellable },
+  ];
+  const reasonLabel = (key) =>
+    REASON_OPTIONS.find((o) => o.key === key)?.label || "";
 
   // ADD: normalize legacy unit label ("مفرد") to the new label ("كرتون مفرد")
   const normalizeUnitLabel = (unit) => {
@@ -408,6 +441,9 @@ export default function WastePage() {
 
   const goToNextPending = (fromItemId) => {
     const nextId = findNextPendingItemId(fromItemId);
+    setReason("");
+    setNote("");
+    setReasonError(null);
     if (!nextId) {
       setSelectedItem(null);
       setQuantity("");
@@ -417,7 +453,7 @@ export default function WastePage() {
     setQuantity("");
   };
 
-  const setItemValue = (itemId, displayValue) => {
+  const setItemValue = (itemId, displayValue, reasonKey, noteText) => {
     // The employee logs waste in the item's default unit (a plain text
     // label from item.unit). The number they type IS the stored
     // quantity — no conversion-factor multiplication.
@@ -427,26 +463,58 @@ export default function WastePage() {
       ...prev,
       [itemId]: qty,
     }));
+    setReasonByItem((prev) => ({
+      ...prev,
+      [itemId]: reasonKey || "",
+    }));
+    setNoteByItem((prev) => ({
+      ...prev,
+      [itemId]: reasonKey === "customer_return" ? noteText || "" : "",
+    }));
   };
 
   const handleQuickSet = (itemId, value) => {
-    setItemValue(itemId, value);
+    // Quick-set confirms immediately, so it must also pass reason validation.
+    if (!reason) {
+      setReasonError(text.selectReason);
+      return;
+    }
+    const trimmedNote = note.trim();
+    if (reason === "customer_return" && trimmedNote === "") {
+      setReasonError(text.enterInvoice);
+      return;
+    }
+    setItemValue(itemId, value, reason, trimmedNote);
     goToNextPending(itemId);
   };
 
+  // "تم" confirm — requires a reason; customer_return also needs the invoice.
   const handleConfirmAndNext = () => {
     if (!selectedItem || quantity === "") {
       return;
     }
 
+    if (!reason) {
+      setReasonError(text.selectReason);
+      return;
+    }
+    const trimmedNote = note.trim();
+    if (reason === "customer_return" && trimmedNote === "") {
+      setReasonError(text.enterInvoice);
+      return;
+    }
+
     const currentId = selectedItem;
-    setItemValue(currentId, parseFloat(quantity));
+    setItemValue(currentId, parseFloat(quantity), reason, trimmedNote);
     goToNextPending(currentId);
   };
 
   const handleEditItem = (itemId) => {
     setSelectedItem(itemId);
     setQuantity(String(availableItems[itemId]));
+    setReason(reasonByItem[itemId] || "");
+    setNote(noteByItem[itemId] || "");
+    setReasonError(null);
     const newAvailableItems = { ...availableItems };
     delete newAvailableItems[itemId];
     setAvailableItems(newAvailableItems);
@@ -460,9 +528,12 @@ export default function WastePage() {
     const payloadItems = Object.entries(availableItems)
       .map(([itemId, qty]) => {
         const n = Number(qty);
+        const reasonKey = reasonByItem[itemId] || "";
         return {
           itemId: Number(itemId),
           quantity: Number.isFinite(n) ? n : 0,
+          reason: reasonKey,
+          note: reasonKey === "customer_return" ? noteByItem[itemId] || "" : "",
         };
       })
       .filter((row) => row.quantity > 0);
@@ -728,6 +799,7 @@ export default function WastePage() {
 
             const completedUnitLabel = unitText;
             const completedDisplayQty = availableItems[item.id];
+            const completedReasonLabel = reasonLabel(reasonByItem[item.id]);
 
             return (
               <div
@@ -771,6 +843,11 @@ export default function WastePage() {
                           {completedUnitLabel}
                         </span>
                       </div>
+                      {completedReasonLabel ? (
+                        <span className="inline-flex items-center px-3 py-1 bg-amber-500/15 text-amber-100 border border-amber-400/30 rounded-full text-xs font-bold">
+                          {completedReasonLabel}
+                        </span>
+                      ) : null}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -869,6 +946,69 @@ export default function WastePage() {
                         </button>
                       </div>
                     </div>
+
+                    {/* Waste reason selector — operator must pick one. */}
+                    <div className="mt-4">
+                      <label className="block text-sm font-bold text-gray-200 mb-2 flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-amber-700 dark:text-amber-300" />
+                        {text.wasteReason}
+                      </label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {REASON_OPTIONS.map((opt) => {
+                          const isActive = reason === opt.key;
+                          return (
+                            <button
+                              key={opt.key}
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setReason(opt.key);
+                                setReasonError(null);
+                                if (opt.key !== "customer_return") {
+                                  setNote("");
+                                }
+                              }}
+                              className={`px-4 py-3 rounded-lg font-bold text-sm sm:text-base transition-colors border ${
+                                isActive
+                                  ? "bg-emerald-500/20 text-emerald-100 border-emerald-400/40"
+                                  : "bg-white/10 text-white border-white/10 hover:bg-white/15"
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Invoice number — only for customer_return. */}
+                    {reason === "customer_return" && (
+                      <div className="mt-4">
+                        <label className="block text-sm font-bold text-gray-200 mb-2">
+                          {text.invoiceLabel}
+                        </label>
+                        <input
+                          type="text"
+                          value={note}
+                          onChange={(e) => {
+                            setNote(e.target.value);
+                            setReasonError(null);
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          placeholder={text.invoiceLabel}
+                          className={`${ws.input} px-4 py-3 text-lg shadow`}
+                        />
+                      </div>
+                    )}
+
+                    {reasonError && (
+                      <div className="mt-3 p-3 bg-red-500/10 border border-red-400/30 rounded-lg flex items-center gap-2">
+                        <AlertCircle className="w-5 h-5 text-red-700 dark:text-red-300 flex-shrink-0" />
+                        <span className="text-red-200 text-sm font-semibold">
+                          {reasonError}
+                        </span>
+                      </div>
+                    )}
 
                     <div className="mt-3 text-xs text-gray-400">
                       {text.done} = {text.next}
