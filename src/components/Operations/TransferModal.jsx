@@ -83,7 +83,6 @@ export default function TransferModal({ branches, onClose }) {
   const [operationDate, setOperationDate] = useState(nowLocalDatetime());
   const [selectedItemId, setSelectedItemId] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [selectedUnitId, setSelectedUnitId] = useState("");
   const [note, setNote] = useState("");
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
@@ -165,44 +164,18 @@ export default function TransferModal({ branches, onClose }) {
     return activeItems.find((i) => Number(i.id) === idNum) || null;
   }, [activeItems, selectedItemId]);
 
-  // ── Unit selector ──────────────────────────────────────────────────
+  // ── Unit (locked) ──────────────────────────────────────────────────
   //
-  // Transfers move stock between branches at the *inventory* default
-  // unit. The dropdown shows that item's `units` rows; we convert the
-  // operator's typed qty into base units before pushing into `items`
-  // so the existing submit pipeline (which sends base-unit qty) stays
-  // unchanged.
-  const selectedUnits = getItemUnits(selectedItem);
-
-  const unitOptions = useMemo(() => {
-    if (selectedUnits.length === 0) return [];
-    return selectedUnits
-      .slice()
-      .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0))
-      .map((u) => ({
-        value: String(u.id),
-        label: u.name_ar || u.name_en || "—",
-      }));
-  }, [selectedUnits]);
-
-  // Switch to the new item's default inventory unit whenever the
-  // operator picks a different row. Empty units (legacy item) → blank
-  // and we'll fall back to factor=1.
-  useEffect(() => {
-    if (!selectedItem) {
-      setSelectedUnitId("");
-      return;
-    }
-    const def = pickDefaultUnit(selectedItem, "default_inventory_unit_id");
-    setSelectedUnitId(def ? String(def.id) : "");
-  }, [selectedItem]);
-
-  const pickedUnit = useMemo(() => {
-    if (selectedUnits.length === 0) return null;
-    return (
-      selectedUnits.find((u) => String(u.id) === String(selectedUnitId)) || null
-    );
-  }, [selectedUnits, selectedUnitId]);
+  // Transfers move stock at the item's DEFAULT INVENTORY UNIT. The
+  // operator does NOT pick a unit and the typed qty is stored as-is —
+  // no conversion-factor multiplication (downstream stock-value math
+  // applies the factor). We only show the unit name as a read-only
+  // label. Matches the employee-inventory fix (commit 160292b).
+  const lockedUnit = useMemo(
+    () => pickDefaultUnit(selectedItem, "default_inventory_unit_id"),
+    [selectedItem],
+  );
+  const lockedUnitLabel = lockedUnit?.name_ar || lockedUnit?.name_en || "";
 
   // ─── Point-in-time stock for the chosen operation date ─────────────
   //
@@ -283,14 +256,13 @@ export default function TransferModal({ branches, onClose }) {
     const displayQty = Number.isFinite(rawQty)
       ? Math.round(rawQty * 1000) / 1000
       : NaN;
-    // Convert from picked unit → base. Empty `units` (legacy) → factor=1.
-    const factor = pickedUnit
-      ? Number(pickedUnit.conversion_factor) || 1
-      : 1;
-    const qtyNum = Number.isFinite(displayQty)
-      ? Math.round(displayQty * factor * 1000) / 1000
-      : NaN;
-    const unitLabel = pickedUnit?.name_ar || pickedUnit?.name_en || "";
+    // Store the typed count as-is — NO conversion-factor multiplication.
+    // The unit is locked to the item's default inventory unit (display
+    // label only); downstream stock-value/dashboard math applies the
+    // factor. Matches the employee-inventory fix (commit 160292b).
+    const qtyNum = displayQty;
+    const lockedUnit = pickDefaultUnit(selectedItem, "default_inventory_unit_id");
+    const unitLabel = lockedUnit?.name_ar || lockedUnit?.name_en || "";
 
     if (!fromIdNum) {
       setError("اختر فرع المرسل");
@@ -526,13 +498,7 @@ export default function TransferModal({ branches, onClose }) {
           </div>
 
           <div className="space-y-3">
-            <div
-              className={`grid grid-cols-1 gap-3 items-end ${
-                unitOptions.length > 0
-                  ? "md:grid-cols-[1fr_120px_140px_120px]"
-                  : "md:grid-cols-[1fr_140px_120px]"
-              }`}
-            >
+            <div className="grid grid-cols-1 gap-3 items-end md:grid-cols-[1fr_140px_120px]">
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
                   الصنف
@@ -549,23 +515,15 @@ export default function TransferModal({ branches, onClose }) {
                 />
               </div>
 
-              {unitOptions.length > 0 ? (
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
-                    الوحدة
-                  </label>
-                  <GlassSelect
-                    value={selectedUnitId}
-                    onChange={setSelectedUnitId}
-                    options={unitOptions}
-                    buttonClassName="px-4 py-3"
-                  />
-                </div>
-              ) : null}
-
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
                   الكمية
+                  {lockedUnitLabel ? (
+                    <span className="font-normal text-slate-500 dark:text-slate-500 dark:text-white/40">
+                      {" "}
+                      ({lockedUnitLabel})
+                    </span>
+                  ) : null}
                 </label>
                 <input
                   type="number"

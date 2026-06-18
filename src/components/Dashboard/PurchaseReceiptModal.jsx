@@ -122,43 +122,23 @@ export function PurchaseReceiptModal({
     return (activeItems || []).find((i) => Number(i.id) === idNum) || null;
   }, [activeItems, receiptItemId]);
 
-  const selectedUnits = getItemUnits(selectedItem);
-  const [selectedUnitId, setSelectedUnitId] = useState("");
   const [displayByItem, setDisplayByItem] = useState({});
   const pendingAddRef = useRef(null);
 
-  // Reset the unit picker to the item's default whenever the operator
-  // switches items. Empty `units` array → leave it blank and we'll
-  // fall back to factor=1 on add.
-  useEffect(() => {
-    if (!selectedItem) {
-      setSelectedUnitId("");
-      return;
-    }
-    const def = pickDefaultUnit(selectedItem, "default_purchase_unit_id");
-    setSelectedUnitId(def ? String(def.id) : "");
-  }, [selectedItem]);
+  // Unit is LOCKED to the item's default inventory unit. The operator
+  // can't pick a unit; we only show its name as a read-only label next
+  // to the qty input and on the added rows. The typed qty is stored
+  // as-is — no factor conversion.
+  const lockedUnit = useMemo(
+    () => pickDefaultUnit(selectedItem, "default_inventory_unit_id"),
+    [selectedItem],
+  );
+  const lockedUnitLabel = lockedUnit?.name_ar || lockedUnit?.name_en || "";
 
-  const unitOptions = useMemo(() => {
-    if (selectedUnits.length === 0) return [];
-    const sorted = selectedUnits
-      .slice()
-      .sort((a, b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
-    return sorted.map((u) => ({
-      value: String(u.id),
-      label: u.name_ar || u.name_en || "—",
-    }));
-  }, [selectedUnits]);
-
-  const pickedUnit = useMemo(() => {
-    if (selectedUnits.length === 0) return null;
-    return (
-      selectedUnits.find((u) => String(u.id) === String(selectedUnitId)) || null
-    );
-  }, [selectedUnits, selectedUnitId]);
-
-  // After a conversion the hook's `receiptQty` updates; fire `addReceiptItem`
-  // on the next render so the hook's `useCallback` sees the converted value.
+  // When the stored qty differs from what's currently in `receiptQty`
+  // (rounding to 3 decimals), we bump `receiptQty` first and defer the
+  // add to the next render so the hook's `useCallback` sees the rounded
+  // value. Same deferred-add plumbing as before — just no factor.
   useEffect(() => {
     const pending = pendingAddRef.current;
     if (!pending) return;
@@ -186,27 +166,28 @@ export function PurchaseReceiptModal({
       addReceiptItem();
       return;
     }
-    const factor = pickedUnit
-      ? Number(pickedUnit.conversion_factor) || 1
-      : 1;
-    const unitLabel = pickedUnit?.name_ar || pickedUnit?.name_en || "";
-    if (factor === 1) {
-      // No conversion needed — bookkeep label only.
+    // Store the typed count as-is — NO conversion-factor multiplication.
+    // The unit is locked to the item's default inventory unit (label
+    // only); downstream stock-value math applies the factor. Matches the
+    // employee-inventory fix (commit 160292b).
+    const storedQty = Math.round(rawQty * 1000) / 1000;
+    const unitLabel = lockedUnitLabel;
+    if (String(receiptQty) === String(storedQty)) {
+      // No rounding change — bookkeep the label and add inline.
       setDisplayByItem((prev) => ({
         ...prev,
-        [itemIdNum]: { qty: rawQty, unitLabel },
+        [itemIdNum]: { qty: storedQty, unitLabel },
       }));
       addReceiptItem();
       return;
     }
-    const baseQty = Math.round(rawQty * factor * 1000) / 1000;
     pendingAddRef.current = {
       itemId: itemIdNum,
-      displayQty: rawQty,
+      displayQty: storedQty,
       unitLabel,
-      baseQty: String(baseQty),
+      baseQty: String(storedQty),
     };
-    setReceiptQty(String(baseQty));
+    setReceiptQty(String(storedQty));
   };
 
   const handleRemoveWithUnit = (itemId) => {
@@ -346,13 +327,7 @@ export function PurchaseReceiptModal({
 
           {/* Add item row */}
           <div className="space-y-2">
-            <div
-              className={`grid grid-cols-1 gap-3 items-end ${
-                unitOptions.length > 0
-                  ? "md:grid-cols-[1fr_120px_140px_120px]"
-                  : "md:grid-cols-[1fr_140px_120px]"
-              }`}
-            >
+            <div className="grid grid-cols-1 gap-3 items-end md:grid-cols-[1fr_140px_120px]">
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
                   الصنف
@@ -365,23 +340,15 @@ export function PurchaseReceiptModal({
                 />
               </div>
 
-              {unitOptions.length > 0 ? (
-                <div>
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
-                    الوحدة
-                  </label>
-                  <GlassSelect
-                    value={selectedUnitId}
-                    onChange={setSelectedUnitId}
-                    options={unitOptions}
-                    buttonClassName="px-4 py-3"
-                  />
-                </div>
-              ) : null}
-
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55 mb-2">
                   الكمية
+                  {lockedUnitLabel ? (
+                    <span className="font-normal text-slate-500 dark:text-slate-500 dark:text-white/40">
+                      {" "}
+                      ({lockedUnitLabel})
+                    </span>
+                  ) : null}
                 </label>
                 <input
                   type="number"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { X, Search } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
@@ -42,57 +42,25 @@ export function OpeningSessionModal({
   createOpeningMutation,
   branches,
 }) {
-  // ── Per-item unit selection ────────────────────────────────────────
-  //
-  // Each item carries an inline `units` array (from `item_units`). The
-  // operator types a qty in the picked unit; we convert to base before
-  // writing to `openingQtyByItem` so the existing submit pipeline (which
-  // ships the map straight to the API as base-unit qty) stays untouched.
-  //
-  // `displayQtyByItem` is the user-facing number; `unitByItem` is the
-  // selected unit-row id. Both are local state and reset whenever the
-  // modal is opened (i.e. when `filteredOpeningItems` changes shape).
+  // The operator types a qty in the item's locked default inventory unit
+  // (shown read-only). `displayQtyByItem` is the user-facing number; it's
+  // stored as-is into `openingQtyByItem` (no factor) for the submit
+  // pipeline. Local state, resets when the modal re-opens.
   const [displayQtyByItem, setDisplayQtyByItem] = useState({});
-  const [unitByItem, setUnitByItem] = useState({});
 
-  // Seed defaults whenever the item list changes (modal opens, branch
-  // filter changes). We only fill *missing* keys so an operator's
-  // mid-entry edits aren't blown away on every re-render.
-  useEffect(() => {
-    if (!Array.isArray(filteredOpeningItems)) return;
-    setUnitByItem((prev) => {
-      const next = { ...prev };
-      let changed = false;
-      for (const it of filteredOpeningItems) {
-        if (next[it.id] != null) continue;
-        const def = pickDefaultUnit(it, "default_inventory_unit_id");
-        if (def) {
-          next[it.id] = String(def.id);
-          changed = true;
-        }
-      }
-      return changed ? next : prev;
-    });
-  }, [filteredOpeningItems]);
-
-  const computeBaseQty = (item, displayQty, unitId) => {
-    const units = getItemUnits(item);
-    const picked = units.find((u) => String(u.id) === String(unitId));
-    const factor = picked ? Number(picked.conversion_factor) || 1 : 1;
+  // Store the typed count as-is — NO conversion-factor multiplication.
+  // The unit is locked to the item's default inventory unit (label only);
+  // downstream stock-value math applies the factor. Matches the
+  // employee-inventory fix (commit 160292b).
+  const computeBaseQty = (item, displayQty) => {
     const n = Number(displayQty);
     if (!Number.isFinite(n)) return 0;
-    return Math.round(n * factor * 1000) / 1000;
+    return Math.round(n * 1000) / 1000;
   };
 
   const handleDisplayChange = (item, value) => {
     setDisplayQtyByItem((prev) => ({ ...prev, [item.id]: value }));
-    const baseQty = computeBaseQty(item, value, unitByItem[item.id]);
-    setOpeningQtyByItem((prev) => ({ ...prev, [item.id]: baseQty }));
-  };
-
-  const handleUnitChange = (item, unitId) => {
-    setUnitByItem((prev) => ({ ...prev, [item.id]: unitId }));
-    const baseQty = computeBaseQty(item, displayQtyByItem[item.id], unitId);
+    const baseQty = computeBaseQty(item, value);
     setOpeningQtyByItem((prev) => ({ ...prev, [item.id]: baseQty }));
   };
 
@@ -209,17 +177,18 @@ export function OpeningSessionModal({
               </thead>
               <tbody>
                 {filteredOpeningItems.map((it) => {
-                  const units = getItemUnits(it);
-                  const unitOptions = units
-                    .slice()
-                    .sort(
-                      (a, b) =>
-                        Number(a.sort_order || 0) - Number(b.sort_order || 0),
-                    )
-                    .map((u) => ({
-                      value: String(u.id),
-                      label: u.name_ar || u.name_en || "—",
-                    }));
+                  // Unit is LOCKED to the item's default inventory unit —
+                  // shown as a read-only label, not a picker. The typed
+                  // qty is stored as-is (no factor).
+                  const lockedUnit = pickDefaultUnit(
+                    it,
+                    "default_inventory_unit_id",
+                  );
+                  const lockedUnitLabel =
+                    lockedUnit?.name_ar ||
+                    lockedUnit?.name_en ||
+                    it.unit ||
+                    "-";
                   // Display qty: prefer the typed value, fall back to the
                   // base qty already in the map (covers re-opens / hydration).
                   const displayValue =
@@ -235,16 +204,7 @@ export function OpeningSessionModal({
                         {it.name}
                       </td>
                       <td className="px-4 py-3 text-slate-700 dark:text-slate-700 dark:text-white/65 text-sm min-w-[140px]">
-                        {unitOptions.length > 0 ? (
-                          <GlassSelect
-                            value={unitByItem[it.id] || ""}
-                            onChange={(v) => handleUnitChange(it, v)}
-                            options={unitOptions}
-                            buttonClassName="px-3 py-2"
-                          />
-                        ) : (
-                          <span>{it.unit || "-"}</span>
-                        )}
+                        <span>{lockedUnitLabel}</span>
                       </td>
                       <td className="px-4 py-3">
                         <input
