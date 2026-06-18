@@ -1,6 +1,35 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+// Riyadh wall-clock Y/M/D + weekday for an instant. Riyadh is a
+// fixed UTC+03:00 (no DST). Used to compute day/week/month window
+// boundaries in Riyadh time rather than the server's zone (Railway
+// runs UTC, which would shift "today/this week/this month" by 3h
+// and mislabel records near midnight).
+const RIYADH_OFFSET = "+03:00";
+function riyadhParts(instant) {
+  const p = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Riyadh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+  }).formatToParts(instant);
+  const g = (t) => p.find((x) => x.type === t)?.value;
+  const wdMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  return {
+    y: g("year"),
+    m: g("month"),
+    d: g("day"),
+    wd: wdMap[g("weekday")] ?? 0,
+  };
+}
+// UTC instant for Riyadh-local midnight of that day string (YYYY-MM-DD).
+function riyadhMidnight(y, m, d) {
+  return new Date(`${y}-${m}-${d}T00:00:00${RIYADH_OFFSET}`);
+}
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 export async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
@@ -12,22 +41,28 @@ export async function GET(request) {
 
   try {
     const now = new Date();
-    const startOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-    );
-    const startOfThisWeek = new Date(startOfToday);
-    startOfThisWeek.setDate(
-      startOfThisWeek.getDate() - startOfThisWeek.getDay(),
-    );
-    const startOfLastWeek = new Date(startOfThisWeek);
-    startOfLastWeek.setDate(startOfLastWeek.getDate() - 7);
+    const rp = riyadhParts(now);
+
+    // Riyadh-local midnight today (as a UTC instant). Week starts
+    // Sunday. Riyadh has no DST so day-count arithmetic in ms is safe
+    // across these boundaries.
+    const startOfToday = riyadhMidnight(rp.y, rp.m, rp.d);
+    const startOfThisWeek = new Date(startOfToday.getTime() - rp.wd * DAY_MS);
+    const startOfLastWeek = new Date(startOfThisWeek.getTime() - 7 * DAY_MS);
     const endOfLastWeek = new Date(startOfThisWeek);
 
-    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    // Month boundaries in Riyadh: first day of this/last month at
+    // Riyadh midnight; end of last month = start of this month.
+    const startOfThisMonth = riyadhMidnight(rp.y, rp.m, "01");
+    const thisMonthNum = Number(rp.m);
+    const lastMonthY = thisMonthNum === 1 ? Number(rp.y) - 1 : Number(rp.y);
+    const lastMonthM = thisMonthNum === 1 ? 12 : thisMonthNum - 1;
+    const startOfLastMonth = riyadhMidnight(
+      String(lastMonthY),
+      String(lastMonthM).padStart(2, "0"),
+      "01",
+    );
+    const endOfLastMonth = new Date(startOfThisMonth);
 
     // 1. Week-over-week comparison.
     // Two separate COUNT(*) queries used to round-trip twice. Single query
