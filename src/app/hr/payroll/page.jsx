@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Send, Wallet, RefreshCw, Info, Lock, AlertOctagon } from "lucide-react";
 import { toast } from "sonner";
 import HRSidebar from "@/components/HR/Sidebar";
@@ -99,6 +99,36 @@ export default function HRPayrollPage() {
   const closedByName = run?.closed_by_employee_name
     ? String(run.closed_by_employee_name)
     : "";
+
+  // Auto-resync an OPEN month's payroll from live HR data on load.
+  // The run is a snapshot taken at build time, so edits to an
+  // employee's name / salary / allowances in hr/employees don't
+  // reach an already-built run. For a NOT-closed month that's just
+  // stale — rebuild re-reads live employee data and PRESERVES
+  // payment status (the server reapplies is_paid rows), so it's
+  // safe to do silently. Closed months stay frozen for the audit
+  // trail. Guarded by a ref so it fires once per month, never loops.
+  const autoSyncedMonthRef = useRef(null);
+  useEffect(() => {
+    if (!month || !run || run.is_closed) return;
+    if (rebuildMutation.isPending) return;
+    if (autoSyncedMonthRef.current === month) return;
+    autoSyncedMonthRef.current = month;
+    rebuildMutation.mutate(
+      { month },
+      {
+        onSuccess: () => {
+          payrollQuery.refetch();
+        },
+        onError: () => {
+          // Let the operator retry manually via "إرسال إلى المحاسبة";
+          // clear the guard so a later load can try again.
+          autoSyncedMonthRef.current = null;
+        },
+      },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [month, run?.id, run?.is_closed]);
 
   const handleSend = () => {
     if (!month) {
