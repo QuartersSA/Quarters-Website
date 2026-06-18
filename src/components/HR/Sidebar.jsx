@@ -30,6 +30,25 @@ const DEDUCTIONS_ONLY_NAV = [
   { kind: "row", key: "deductions", href: "/hr/deductions", icon: DollarSign, label: "الخصميات" },
 ];
 
+// Fallback logout for HR pages that render the sidebar without
+// passing an `onLogout` (e.g. overtime, payroll). Without it the
+// footer's "تسجيل الخروج" button got onClick={undefined} and did
+// nothing. Mirrors useAdminAuth.logout — clears the admin session
+// keys + token, then returns to the admin login.
+function defaultHrLogout() {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem("adminAuth");
+    localStorage.removeItem("adminUser");
+    localStorage.removeItem("adminMode");
+    localStorage.removeItem("workspaceUser");
+    localStorage.removeItem("adminToken");
+  } catch {
+    // ignore storage failures — still redirect below
+  }
+  window.location.href = "/admin/login";
+}
+
 function readHasFullHr() {
   if (typeof window === "undefined") return true;
   try {
@@ -70,7 +89,7 @@ export default function HRSidebar({ onLogout, active = "dashboard" }) {
       activeKey={active}
       pageTitleMap={PAGE_TITLES}
       paletteRoutes={paletteRoutes}
-      onLogout={onLogout}
+      onLogout={onLogout || defaultHrLogout}
     />
   );
 }

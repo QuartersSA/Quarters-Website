@@ -359,6 +359,27 @@ export function SidebarShell({
   const openPalette = useCallback(() => setPaletteOpen(true), []);
   const closePalette = useCallback(() => setPaletteOpen(false), []);
 
+  // Safety net: never render a dead "تسجيل الخروج" button. If a page
+  // forgot to pass onLogout, fall back to clearing the known session
+  // keys and returning to the admin login instead of doing nothing.
+  const handleLogout = useCallback(() => {
+    if (typeof onLogout === "function") {
+      onLogout();
+      return;
+    }
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.removeItem("adminAuth");
+      localStorage.removeItem("adminUser");
+      localStorage.removeItem("adminMode");
+      localStorage.removeItem("workspaceUser");
+      localStorage.removeItem("adminToken");
+    } catch {
+      // ignore — still redirect
+    }
+    window.location.href = "/admin/login";
+  }, [onLogout]);
+
   useEffect(() => {
     try {
       localStorage.setItem(COLLAPSE_KEY, isCollapsed ? "1" : "0");
@@ -658,7 +679,7 @@ export function SidebarShell({
 
           <button
             type="button"
-            onClick={onLogout}
+            onClick={handleLogout}
             title="تسجيل الخروج"
             aria-label="تسجيل الخروج"
             className={`w-full flex items-center gap-3 ${
