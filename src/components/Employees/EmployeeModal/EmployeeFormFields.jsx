@@ -15,6 +15,7 @@ import {
   Bell,
   DollarSign,
   Megaphone,
+  Trash2,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -32,13 +33,19 @@ export function EmployeeFormFields({
 
   const needsBranch =
     formData.role === "Employee" &&
-    (!!formData.can_do_inventory || !!formData.can_close_shift);
+    (!!formData.can_do_inventory ||
+      !!formData.can_close_shift ||
+      !!formData.can_log_waste);
 
   const employeeInventoryBtnClass = formData.can_do_inventory
     ? `${ws.btnPrimary} px-4 py-2`
     : `${ws.btnNeutral} px-4 py-2`;
 
   const employeeShiftCloseBtnClass = formData.can_close_shift
+    ? `${ws.btnPrimary} px-4 py-2`
+    : `${ws.btnNeutral} px-4 py-2`;
+
+  const employeeWasteBtnClass = formData.can_log_waste
     ? `${ws.btnPrimary} px-4 py-2`
     : `${ws.btnNeutral} px-4 py-2`;
 
@@ -188,6 +195,7 @@ export function EmployeeFormFields({
                 // صلاحيات الموظف
                 can_do_inventory: false,
                 can_close_shift: false,
+                can_log_waste: false,
                 // صلاحيات أقسام الإدارة (افتراضيًا: مفعلة)
                 can_access_workspace: true,
                 can_manage_inventory: true,
@@ -511,6 +519,25 @@ export function EmployeeFormFields({
                 )}
                 <Calculator className="w-4 h-4" />
                 تسجيل تقفيل الشفت
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    can_log_waste: !p.can_log_waste,
+                  }))
+                }
+                className={employeeWasteBtnClass}
+              >
+                {formData.can_log_waste ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                <Trash2 className="w-4 h-4" />
+                تسجيل الهدر
               </button>
             </div>
           </div>

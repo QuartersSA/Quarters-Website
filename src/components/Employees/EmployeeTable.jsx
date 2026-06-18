@@ -44,6 +44,7 @@ export function EmployeeTable({
     const tasks = [];
     if (employee.can_do_inventory) tasks.push("تسجيل الجرد");
     if (employee.can_close_shift) tasks.push("تسجيل تقفيل الشفت");
+    if (employee.can_log_waste) tasks.push("تسجيل الهدر");
     return tasks;
   };
 

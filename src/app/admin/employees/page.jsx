@@ -63,7 +63,9 @@ export default function EmployeesPage() {
 
     const needsBranch =
       formData.role !== "Admin" &&
-      (!!formData.can_do_inventory || !!formData.can_close_shift);
+      (!!formData.can_do_inventory ||
+        !!formData.can_close_shift ||
+        !!formData.can_log_waste);
 
     if (needsBranch && !hasBranch) {
       toast.error("لا يمكن إضافة/تحديث الموظف بدون تحديد فرع واحد على الأقل");

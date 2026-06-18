@@ -1,6 +1,7 @@
 export const ADMIN_TOKEN_KEY = "adminToken";
 export const EMPLOYEE_INVENTORY_TOKEN_KEY = "employeeInventoryToken";
 export const SHIFT_CLOSE_TOKEN_KEY = "shiftCloseToken";
+export const EMPLOYEE_WASTE_TOKEN_KEY = "employeeWasteToken";
 
 function safeGetItem(key) {
   if (typeof window === "undefined") return null;
@@ -21,6 +22,10 @@ export function getEmployeeInventoryToken() {
 
 export function getShiftCloseToken() {
   return safeGetItem(SHIFT_CLOSE_TOKEN_KEY);
+}
+
+export function getEmployeeWasteToken() {
+  return safeGetItem(EMPLOYEE_WASTE_TOKEN_KEY);
 }
 
 export function withBearer(token, init = {}) {
@@ -49,6 +54,11 @@ export function shiftCloseFetch(url, init = {}) {
   return fetch(url, withBearer(token, init));
 }
 
+export function employeeWasteFetch(url, init = {}) {
+  const token = getEmployeeWasteToken();
+  return fetch(url, withBearer(token, init));
+}
+
 /**
  * `fetch` that attaches whichever session token the user currently has,
  * preferring stronger sessions (admin) first. Used by features whose API
@@ -63,6 +73,7 @@ export function authedFetch(url, init = {}) {
     getAdminToken() ||
     getEmployeeInventoryToken() ||
     getShiftCloseToken() ||
+    getEmployeeWasteToken() ||
     null;
   return fetch(url, withBearer(token, init));
 }
