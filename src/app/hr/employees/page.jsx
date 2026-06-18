@@ -9,11 +9,23 @@ import { useHREmployeesData } from "@/hooks/useHREmployeesData";
 import { useHREmployeeMutations } from "@/hooks/useHREmployeeMutations";
 import { filterEmployees } from "@/utils/employeeUtils";
 import HRSearchBar from "@/components/HR/HRSearchBar";
+import HREmployeeStats from "@/components/HR/HREmployeeStats";
+import HREmployeeFilters from "@/components/HR/HREmployeeFilters";
+import HREmployeeExportMenu from "@/components/HR/HREmployeeExportMenu";
 import { HREmployeeTable } from "@/components/HR/HREmployeeTable";
 import { HREmployeeModal } from "@/components/HR/HREmployeeModal";
 import { HREmployeeLogsModal } from "@/components/HR/HREmployeeLogsModal";
 import SuspensionModal from "@/components/HR/SuspensionModal";
 import { toast } from "sonner";
+
+/* Bucket an ISO date against Riyadh today / +30d windows. */
+function expiryBucket(dateStr, todayRiyadh, soonRiyadh) {
+  if (!dateStr) return null;
+  const d = String(dateStr).slice(0, 10);
+  if (d < todayRiyadh) return "expired";
+  if (d <= soonRiyadh) return "soon";
+  return null;
+}
 
 function toInputDate(value) {
   if (!value) return "";
@@ -68,6 +80,11 @@ export default function HREmployeesPage() {
   const [editingEmployee, setEditingEmployee] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [branchFilter, setBranchFilter] = useState("");
+  const [positionFilter, setPositionFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [sortBy, setSortBy] = useState("name_asc");
 
   const [logsEmployee, setLogsEmployee] = useState(null);
   const [showLogsModal, setShowLogsModal] = useState(false);
@@ -224,7 +241,148 @@ export default function HREmployeesPage() {
     }
   };
 
-  const filteredEmployees = filterEmployees(employees, searchTerm);
+  // Riyadh today / +30d windows (plain YYYY-MM-DD; lexicographic
+  // compare works for ISO dates).
+  const todayRiyadh = useMemo(
+    () => new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Riyadh" }),
+    [],
+  );
+  const soonRiyadh = useMemo(
+    () =>
+      new Date(Date.now() + 30 * 864e5).toLocaleDateString("en-CA", {
+        timeZone: "Asia/Riyadh",
+      }),
+    [],
+  );
+
+  // Distinct positions for the filter dropdown.
+  const positions = useMemo(() => {
+    const set = new Set();
+    for (const e of employees || []) {
+      const p = (e.position || "").trim();
+      if (p) set.add(p);
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "ar"));
+  }, [employees]);
+
+  // search → branch → position → status → sort.
+  const displayedEmployees = useMemo(() => {
+    let list = filterEmployees(employees, searchTerm);
+
+    if (branchFilter) {
+      list = list.filter((e) =>
+        (Array.isArray(e.branches) ? e.branches : []).some(
+          (b) => String(b?.id) === String(branchFilter),
+        ),
+      );
+    }
+
+    if (positionFilter) {
+      list = list.filter((e) => (e.position || "") === positionFilter);
+    }
+
+    if (statusFilter) {
+      list = list.filter((e) => {
+        const iq = expiryBucket(e.iqama_expiry_date, todayRiyadh, soonRiyadh);
+        const hc = e.health_card_issued
+          ? expiryBucket(e.health_card_expiry_date, todayRiyadh, soonRiyadh)
+          : null;
+        switch (statusFilter) {
+          case "iqama_expired":
+            return iq === "expired";
+          case "iqama_soon":
+            return iq === "soon";
+          case "health_expired":
+            return hc === "expired";
+          case "health_soon":
+            return hc === "soon";
+          case "docs_complete":
+            return (
+              e.work_card_issued &&
+              e.medical_check_issued &&
+              e.health_card_issued
+            );
+          default:
+            return true;
+        }
+      });
+    }
+
+    const num = (v) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    };
+
+    const sorted = [...list];
+    switch (sortBy) {
+      case "salary_desc":
+        sorted.sort(
+          (a, b) =>
+            num(b.base_salary) +
+            num(b.other_allowances) -
+            (num(a.base_salary) + num(a.other_allowances)),
+        );
+        break;
+      case "salary_asc":
+        sorted.sort(
+          (a, b) =>
+            num(a.base_salary) +
+            num(a.other_allowances) -
+            (num(b.base_salary) + num(b.other_allowances)),
+        );
+        break;
+      case "start_desc":
+        sorted.sort((a, b) =>
+          String(b.start_date || "").localeCompare(String(a.start_date || "")),
+        );
+        break;
+      case "iqama_soonest":
+        // Nulls sort last; otherwise ascending by expiry date.
+        sorted.sort((a, b) => {
+          const av = a.iqama_expiry_date
+            ? String(a.iqama_expiry_date).slice(0, 10)
+            : "9999-99-99";
+          const bv = b.iqama_expiry_date
+            ? String(b.iqama_expiry_date).slice(0, 10)
+            : "9999-99-99";
+          return av.localeCompare(bv);
+        });
+        break;
+      case "name_asc":
+      default:
+        sorted.sort((a, b) =>
+          String(a.name || "").localeCompare(String(b.name || ""), "ar"),
+        );
+        break;
+    }
+
+    return sorted;
+  }, [
+    employees,
+    searchTerm,
+    branchFilter,
+    positionFilter,
+    statusFilter,
+    sortBy,
+    todayRiyadh,
+    soonRiyadh,
+  ]);
+
+  const hasActiveFilters = !!(
+    searchTerm ||
+    branchFilter ||
+    positionFilter ||
+    statusFilter ||
+    sortBy !== "name_asc"
+  );
+
+  const resetFilters = () => {
+    setSearchTerm("");
+    setBranchFilter("");
+    setPositionFilter("");
+    setStatusFilter("");
+    setSortBy("name_asc");
+  };
 
   if (!checked) {
     return (
@@ -306,14 +464,20 @@ export default function HREmployeesPage() {
             <p className={ws.muted}>بيانات الموظفين (HR)</p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleOpenModal()}
-            className={`${ws.btnPrimary} px-6 py-3 justify-center w-full sm:w-auto`}
-          >
-            <Plus className="w-5 h-5" />
-            <span className="font-semibold">إضافة موظف</span>
-          </button>
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <HREmployeeExportMenu
+              employees={displayedEmployees}
+              todayRiyadh={todayRiyadh}
+            />
+            <button
+              type="button"
+              onClick={() => handleOpenModal()}
+              className={`${ws.btnPrimary} px-6 py-3 justify-center w-full sm:w-auto`}
+            >
+              <Plus className="w-5 h-5" />
+              <span className="font-semibold">إضافة موظف</span>
+            </button>
+          </div>
         </div>
 
         {loadErrorMessage ? (
@@ -344,12 +508,31 @@ export default function HREmployeesPage() {
           </div>
         ) : null}
 
+        <HREmployeeStats employees={displayedEmployees} />
+
+        <div className="mb-6">
+          <HREmployeeFilters
+            branches={branches}
+            positions={positions}
+            branchFilter={branchFilter}
+            onBranchChange={setBranchFilter}
+            positionFilter={positionFilter}
+            onPositionChange={setPositionFilter}
+            statusFilter={statusFilter}
+            onStatusChange={setStatusFilter}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            onReset={resetFilters}
+            hasActiveFilters={hasActiveFilters}
+          />
+        </div>
+
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <HRSearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         </div>
 
         <HREmployeeTable
-          employees={filteredEmployees}
+          employees={displayedEmployees}
           isLoading={isLoadingEmployees}
           onEdit={handleOpenModal}
           onDelete={handleDelete}
