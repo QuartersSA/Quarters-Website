@@ -47,6 +47,15 @@ export async function GET(request) {
           OR c.name_en ILIKE '%sweet%'
           OR c.name_en ILIKE '%dessert%'
         )
+        -- Exclude the "سكر ومحليات" (sugar & sweeteners) category: its
+        -- English name "Sweeteners" was being caught by the %sweet%
+        -- pattern above (sweets vs sweeteners). Sweeteners are not
+        -- baked goods / sweets, so drop them from the waste catalog.
+        AND NOT (
+          (c.name ILIKE '%سكر%' AND c.name ILIKE '%محلي%')
+          OR c.name_en ILIKE '%sweetener%'
+          OR c.name_en ILIKE '%sugar%'
+        )
       ORDER BY c.name ASC, i.name ASC
     `;
 
