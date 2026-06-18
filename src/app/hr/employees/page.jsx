@@ -59,11 +59,15 @@ export default function HREmployeesPage() {
       phone: "",
       iqama_number: "",
       iqama_expiry_date: "",
+      iqama_expiry_calendar: "gregory",
+      iqama_expiry_hijri: "",
       sponsorship_transferred: false,
       work_card_issued: false,
       medical_check_issued: false,
       health_card_issued: false,
       health_card_expiry_date: "",
+      health_card_expiry_calendar: "gregory",
+      health_card_expiry_hijri: "",
       position: "",
       // Array of branch ids (strings, to match GlassMultiSelect's
       // value model). Multi-branch employees keep every assignment
@@ -112,11 +116,16 @@ export default function HREmployeesPage() {
         phone: employee.phone || "",
         iqama_number: employee.iqama_number || "",
         iqama_expiry_date: toInputDate(employee.iqama_expiry_date),
+        iqama_expiry_calendar: employee.iqama_expiry_calendar || "gregory",
+        iqama_expiry_hijri: employee.iqama_expiry_hijri || "",
         sponsorship_transferred: !!employee.sponsorship_transferred,
         work_card_issued: !!employee.work_card_issued,
         medical_check_issued: !!employee.medical_check_issued,
         health_card_issued: !!employee.health_card_issued,
         health_card_expiry_date: toInputDate(employee.health_card_expiry_date),
+        health_card_expiry_calendar:
+          employee.health_card_expiry_calendar || "gregory",
+        health_card_expiry_hijri: employee.health_card_expiry_hijri || "",
         position: employee.position || "",
         branchIds,
         base_salary:
@@ -199,12 +208,20 @@ export default function HREmployeesPage() {
         ? String(formData.iqama_number)
         : null,
       iqama_expiry_date: formData.iqama_expiry_date || null,
+      iqama_expiry_calendar: formData.iqama_expiry_calendar || "gregory",
+      iqama_expiry_hijri: formData.iqama_expiry_hijri || null,
       sponsorship_transferred: !!formData.sponsorship_transferred,
       work_card_issued: !!formData.work_card_issued,
       medical_check_issued: !!formData.medical_check_issued,
       health_card_issued: !!formData.health_card_issued,
       health_card_expiry_date: formData.health_card_issued
         ? formData.health_card_expiry_date || null
+        : null,
+      health_card_expiry_calendar: formData.health_card_issued
+        ? formData.health_card_expiry_calendar || "gregory"
+        : null,
+      health_card_expiry_hijri: formData.health_card_issued
+        ? formData.health_card_expiry_hijri || null
         : null,
       position: formData.position ? String(formData.position) : null,
       base_salary: baseSalaryValue,

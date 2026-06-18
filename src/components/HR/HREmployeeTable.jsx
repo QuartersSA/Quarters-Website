@@ -2,12 +2,46 @@
 
 import { Users, User, Pencil, Trash2, ScrollText, Ban } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { formatHijriLabel } from "@/utils/hijri";
 
 function formatIsoDate(value) {
   if (!value) return "-";
   const s = String(value);
   if (s.length >= 10) return s.slice(0, 10);
   return s;
+}
+
+/* Expiry date display. When the operator entered the date in the Hijri
+ * (umalqura) calendar, the Hijri label leads with the Gregorian ISO in
+ * a small muted sub-line. Otherwise the Gregorian date is primary. The
+ * expiry status/tint is always driven by the Gregorian value upstream,
+ * so display calendar never affects the alerts. `tintClass` styles the
+ * primary line (carries the expired/soon color). */
+function ExpiryDateDisplay({ gregorian, calendar, hijri, tintClass }) {
+  const gregText = formatIsoDate(gregorian);
+  const isHijri = calendar === "umalqura" && hijri;
+
+  if (isHijri) {
+    return (
+      <span className="inline-flex flex-col leading-tight">
+        <span className={tintClass} dir="rtl">
+          {formatHijriLabel(hijri)}
+        </span>
+        <span
+          className="text-[10px] text-slate-400 dark:text-white/40"
+          dir="ltr"
+        >
+          {gregText}
+        </span>
+      </span>
+    );
+  }
+
+  return (
+    <span className={tintClass} dir="ltr">
+      {gregText}
+    </span>
+  );
 }
 
 function formatMoney(value) {
@@ -134,16 +168,27 @@ function EmployeeCard({
         <div>
           <div className="text-[11px] text-slate-500 dark:text-white/45">انتهاء الإقامة</div>
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-800 dark:text-white/85" dir="ltr">
-              {formatIsoDate(employee.iqama_expiry_date)}
-            </span>
+            <ExpiryDateDisplay
+              gregorian={employee.iqama_expiry_date}
+              calendar={employee.iqama_expiry_calendar}
+              hijri={employee.iqama_expiry_hijri}
+              tintClass="text-slate-800 dark:text-white/85"
+            />
             <ExpiryBadge status={iqamaStatus} dateStr={employee.iqama_expiry_date} />
           </div>
         </div>
         <div>
           <div className="text-[11px] text-slate-500 dark:text-white/45">كرت صحي</div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <YesNoPill value={employee.health_card_issued} />
+            {employee.health_card_issued && employee.health_card_expiry_date ? (
+              <ExpiryDateDisplay
+                gregorian={employee.health_card_expiry_date}
+                calendar={employee.health_card_expiry_calendar}
+                hijri={employee.health_card_expiry_hijri}
+                tintClass="text-slate-800 dark:text-white/85 text-xs"
+              />
+            ) : null}
             <ExpiryBadge
               status={healthStatus}
               dateStr={employee.health_card_expiry_date}
@@ -308,9 +353,6 @@ export function HREmployeeTable({
               {employees.map((employee) => {
                 const phoneValue = employee.phone || "-";
                 const iqamaNumberValue = employee.iqama_number || "-";
-                const iqamaExpiryValue = formatIsoDate(
-                  employee.iqama_expiry_date,
-                );
                 const positionValue = employee.position || "-";
                 const branchLabel = branchLabelFor(employee);
 
@@ -383,9 +425,12 @@ export function HREmployeeTable({
 
                     <td className="px-5 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-1.5">
-                        <span className={iqamaCellTint} dir="ltr">
-                          {iqamaExpiryValue}
-                        </span>
+                        <ExpiryDateDisplay
+                          gregorian={employee.iqama_expiry_date}
+                          calendar={employee.iqama_expiry_calendar}
+                          hijri={employee.iqama_expiry_hijri}
+                          tintClass={iqamaCellTint}
+                        />
                         <ExpiryBadge
                           status={iqamaStatus}
                           dateStr={employee.iqama_expiry_date}
@@ -408,6 +453,15 @@ export function HREmployeeTable({
                     <td className="px-5 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-1.5">
                         <YesNoPill value={employee.health_card_issued} />
+                        {employee.health_card_issued &&
+                        employee.health_card_expiry_date ? (
+                          <ExpiryDateDisplay
+                            gregorian={employee.health_card_expiry_date}
+                            calendar={employee.health_card_expiry_calendar}
+                            hijri={employee.health_card_expiry_hijri}
+                            tintClass="text-slate-700 dark:text-white/75 text-xs"
+                          />
+                        ) : null}
                         <ExpiryBadge
                           status={healthStatus}
                           dateStr={employee.health_card_expiry_date}

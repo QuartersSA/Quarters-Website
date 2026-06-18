@@ -72,6 +72,26 @@ async function ensureHrSchema() {
     ALTER TABLE employees
     ADD COLUMN IF NOT EXISTS health_card_expiry_date DATE
   `;
+  // Dual-calendar metadata for the two expiry dates. The Gregorian
+  // DATE columns above stay the source of truth (sorting / alerts);
+  // these record which calendar the operator entered ("gregory" |
+  // "umalqura") and the Hijri "YYYY-MM-DD" string for display.
+  await sql`
+    ALTER TABLE employees
+    ADD COLUMN IF NOT EXISTS iqama_expiry_calendar TEXT
+  `;
+  await sql`
+    ALTER TABLE employees
+    ADD COLUMN IF NOT EXISTS iqama_expiry_hijri TEXT
+  `;
+  await sql`
+    ALTER TABLE employees
+    ADD COLUMN IF NOT EXISTS health_card_expiry_calendar TEXT
+  `;
+  await sql`
+    ALTER TABLE employees
+    ADD COLUMN IF NOT EXISTS health_card_expiry_hijri TEXT
+  `;
 }
 
 // HR Employees API (separate from /api/employees)
@@ -98,11 +118,15 @@ async function GET(request) {
         e.created_at,
         e.iqama_number,
         e.iqama_expiry_date,
+        e.iqama_expiry_calendar,
+        e.iqama_expiry_hijri,
         COALESCE(e.sponsorship_transferred, false) as sponsorship_transferred,
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
         TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
+        e.health_card_expiry_calendar,
+        e.health_card_expiry_hijri,
         e.position,
         e.base_salary,
         e.other_allowances,
@@ -163,11 +187,15 @@ async function POST(request) {
       phone,
       iqama_number,
       iqama_expiry_date,
+      iqama_expiry_calendar,
+      iqama_expiry_hijri,
       sponsorship_transferred,
       work_card_issued,
       medical_check_issued,
       health_card_issued,
       health_card_expiry_date,
+      health_card_expiry_calendar,
+      health_card_expiry_hijri,
       position,
       base_salary,
       other_allowances,
@@ -188,11 +216,15 @@ async function POST(request) {
         phone,
         iqama_number,
         iqama_expiry_date,
+        iqama_expiry_calendar,
+        iqama_expiry_hijri,
         sponsorship_transferred,
         work_card_issued,
         medical_check_issued,
         health_card_issued,
         health_card_expiry_date,
+        health_card_expiry_calendar,
+        health_card_expiry_hijri,
         position,
         base_salary,
         other_allowances,
@@ -203,11 +235,15 @@ async function POST(request) {
         ${phone || null},
         ${iqama_number || null},
         ${iqama_expiry_date || null},
+        ${iqama_expiry_calendar || null},
+        ${iqama_expiry_hijri || null},
         ${!!sponsorship_transferred},
         ${!!work_card_issued},
         ${!!medical_check_issued},
         ${!!health_card_issued},
         ${health_card_issued ? normalizeIsoDate(health_card_expiry_date) || null : null},
+        ${health_card_issued ? health_card_expiry_calendar || null : null},
+        ${health_card_issued ? health_card_expiry_hijri || null : null},
         ${position || null},
         ${base_salary ?? null},
         ${other_allowances ?? null},
@@ -240,11 +276,15 @@ async function POST(request) {
         e.created_at,
         e.iqama_number,
         e.iqama_expiry_date,
+        e.iqama_expiry_calendar,
+        e.iqama_expiry_hijri,
         COALESCE(e.sponsorship_transferred, false) as sponsorship_transferred,
         COALESCE(e.work_card_issued, false) as work_card_issued,
         COALESCE(e.medical_check_issued, false) as medical_check_issued,
         COALESCE(e.health_card_issued, false) as health_card_issued,
         TO_CHAR(e.health_card_expiry_date, 'YYYY-MM-DD') AS health_card_expiry_date,
+        e.health_card_expiry_calendar,
+        e.health_card_expiry_hijri,
         e.position,
         e.base_salary,
         e.other_allowances,
