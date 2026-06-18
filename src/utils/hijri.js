@@ -11,6 +11,33 @@
 // All conversions anchor at 12:00 UTC of the day to avoid any
 // timezone rollover affecting which calendar day we resolve.
 
+// Calendar id. The official Saudi Umm al-Qura (as printed on iqamas)
+// matches Intl's "islamic-rgsa" (real Saudi sighting) — NOT
+// "islamic-umalqura", whose ICU tables run a day ahead for some
+// historical dates (e.g. 16 ذو القعدة 1416 resolves to 1996-04-04 under
+// rgsa, matching official documents, but 1996-04-05 under umalqura).
+// "islamic-rgsa" also reproduces every modern official anchor
+// (1 رمضان 1445 = 2024-03-11, 1 محرم 1447 = 2025-06-26). Fall back to
+// the next supported id if a runtime lacks rgsa.
+const HIJRI_CALENDAR = (() => {
+  const prefs = ["islamic-rgsa", "islamic", "islamic-umalqura"];
+  for (const c of prefs) {
+    try {
+      const fmt = new Intl.DateTimeFormat(`en-US-u-ca-${c}`, {
+        year: "numeric",
+      });
+      // resolvedOptions().calendar falls back to a generic id when the
+      // requested calendar isn't supported — only accept an exact match.
+      if (fmt.resolvedOptions().calendar === c) return c;
+    } catch {
+      // try next
+    }
+  }
+  return "islamic-umalqura";
+})();
+
+const HIJRI_LOCALE = `en-US-u-ca-${HIJRI_CALENDAR}-nu-latn`;
+
 const HIJRI_MONTHS_AR = [
   "محرم",
   "صفر",
@@ -41,7 +68,7 @@ export function gregorianToHijriParts(iso) {
   const date = new Date(`${String(iso).slice(0, 10)}T12:00:00Z`);
   if (Number.isNaN(date.getTime())) return null;
   try {
-    const parts = new Intl.DateTimeFormat("en-US-u-ca-islamic-umalqura-nu-latn", {
+    const parts = new Intl.DateTimeFormat(HIJRI_LOCALE, {
       year: "numeric",
       month: "numeric",
       day: "numeric",
@@ -75,7 +102,7 @@ export function hijriToGregorian(hy, hm, hd) {
   const d = Number(hd);
   if (!y || !m || !d || m < 1 || m > 12 || d < 1 || d > 30) return "";
 
-  const fmt = new Intl.DateTimeFormat("en-US-u-ca-islamic-umalqura-nu-latn", {
+  const fmt = new Intl.DateTimeFormat(HIJRI_LOCALE, {
     year: "numeric",
     month: "numeric",
     day: "numeric",
@@ -115,7 +142,7 @@ export function hijriMonthLength(hy, hm) {
 // Today's Hijri parts in Asia/Riyadh.
 export function todayHijriPartsRiyadh() {
   try {
-    const parts = new Intl.DateTimeFormat("en-US-u-ca-islamic-umalqura-nu-latn", {
+    const parts = new Intl.DateTimeFormat(HIJRI_LOCALE, {
       year: "numeric",
       month: "numeric",
       day: "numeric",

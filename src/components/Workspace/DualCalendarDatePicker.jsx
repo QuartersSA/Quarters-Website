@@ -187,31 +187,48 @@ export default function DualCalendarDatePicker({
         </div>
       ) : (
         <div>
+          {/* Order مطابق للتاريخ الهجري: يوم / شهر / سنة (يمين→يسار في
+              RTL) مع عناوين واضحة فوق كل قائمة. */}
           <div className="grid grid-cols-3 gap-2">
-            {/* Year */}
-            <GlassSelect
-              value={String(hijriParts.y)}
-              onChange={(v) => onHijriChange({ y: Number(v) })}
-              options={yearOptions}
-              placeholder="السنة"
-              buttonClassName="px-3 py-3 text-sm"
-            />
-            {/* Month */}
-            <GlassSelect
-              value={String(hijriParts.m)}
-              onChange={(v) => onHijriChange({ m: Number(v) })}
-              options={monthOptions}
-              placeholder="الشهر"
-              buttonClassName="px-3 py-3 text-sm"
-            />
             {/* Day */}
-            <GlassSelect
-              value={String(hijriParts.d)}
-              onChange={(v) => onHijriChange({ d: Number(v) })}
-              options={dayOptions}
-              placeholder="اليوم"
-              buttonClassName="px-3 py-3 text-sm"
-            />
+            <div>
+              <label className="block text-[11px] font-semibold text-slate-500 dark:text-white/50 mb-1">
+                اليوم
+              </label>
+              <GlassSelect
+                value={String(hijriParts.d)}
+                onChange={(v) => onHijriChange({ d: Number(v) })}
+                options={dayOptions}
+                placeholder="اليوم"
+                buttonClassName="px-3 py-3 text-sm"
+              />
+            </div>
+            {/* Month */}
+            <div>
+              <label className="block text-[11px] font-semibold text-slate-500 dark:text-white/50 mb-1">
+                الشهر
+              </label>
+              <GlassSelect
+                value={String(hijriParts.m)}
+                onChange={(v) => onHijriChange({ m: Number(v) })}
+                options={monthOptions}
+                placeholder="الشهر"
+                buttonClassName="px-3 py-3 text-sm"
+              />
+            </div>
+            {/* Year */}
+            <div>
+              <label className="block text-[11px] font-semibold text-slate-500 dark:text-white/50 mb-1">
+                السنة
+              </label>
+              <GlassSelect
+                value={String(hijriParts.y)}
+                onChange={(v) => onHijriChange({ y: Number(v) })}
+                options={yearOptions}
+                placeholder="السنة"
+                buttonClassName="px-3 py-3 text-sm"
+              />
+            </div>
           </div>
 
           <div className="flex items-center justify-between gap-2 mt-1">
