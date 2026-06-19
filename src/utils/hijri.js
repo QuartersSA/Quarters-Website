@@ -1,8 +1,7 @@
-// Hijri (Umm al-Qura) ⇄ Gregorian conversion built on the platform
-// Intl calendar (islamic-umalqura). Both Node 18+ and modern browsers
-// ship this calendar, so no external dependency is needed.
+// Hijri/Gregorian conversion for HR employee expiry fields only.
+// Built on platform Intl calendars, so no external dependency is needed.
 //
-// Storage contract used across the app:
+// Storage contract for HR employee fields:
 //   - the canonical value is always the GREGORIAN ISO date "YYYY-MM-DD"
 //     (so expiry alerts / sorting / DATE columns keep working);
 //   - alongside it we persist which calendar the operator entered

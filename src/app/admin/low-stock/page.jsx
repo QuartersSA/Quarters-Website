@@ -10,6 +10,7 @@ import { LowStockStats } from "@/components/LowStock/LowStockStats";
 import { LowStockFilters } from "@/components/LowStock/LowStockFilters";
 import { LowStockTable } from "@/components/LowStock/LowStockTable";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 export default function LowStockPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -67,7 +68,7 @@ export default function LowStockPage() {
 
     exportToExcelHTML(
       filteredItems,
-      `الأصناف_منخفضة_الكمية_${new Date().toISOString().split("T")[0]}`,
+      `الأصناف_منخفضة_الكمية_${todayRiyadhDateKey()}`,
       columns,
       "تقرير الأصناف منخفضة الكمية",
     );
@@ -105,7 +106,7 @@ export default function LowStockPage() {
 
     exportToPDF(
       filteredItems,
-      `الأصناف_منخفضة_الكمية_${new Date().toISOString().split("T")[0]}`,
+      `الأصناف_منخفضة_الكمية_${todayRiyadhDateKey()}`,
       columns,
       "تقرير الأصناف منخفضة الكمية",
     );

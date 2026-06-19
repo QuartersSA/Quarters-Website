@@ -10,6 +10,7 @@ import { StockValueStats } from "@/components/StockValue/StockValueStats";
 import { StockValueFilters } from "@/components/StockValue/StockValueFilters";
 import { StockValueTable } from "@/components/StockValue/StockValueTable";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 export default function StockValuePage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -80,7 +81,7 @@ export default function StockValuePage() {
   ];
 
   const handleExportExcel = () => {
-    const dateSlug = new Date().toISOString().split("T")[0];
+    const dateSlug = todayRiyadhDateKey();
     const scope = branchLabel ? `_${branchLabel}` : "";
     const titleSuffix = branchLabel
       ? ` — فرع "${branchLabel}"`
@@ -94,7 +95,7 @@ export default function StockValuePage() {
   };
 
   const handleExportPDF = () => {
-    const dateSlug = new Date().toISOString().split("T")[0];
+    const dateSlug = todayRiyadhDateKey();
     const scope = branchLabel ? `_${branchLabel}` : "";
     const titleSuffix = branchLabel
       ? ` — فرع "${branchLabel}"`

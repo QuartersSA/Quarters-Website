@@ -2,7 +2,9 @@
  * Unified date utilities for Quarters Website.
  *
  * Project policy (Quarters Coffee Bar):
- *   - **Gregorian calendar ONLY** — never Hijri.
+ *   - Business dates are Gregorian and pinned to Asia/Riyadh.
+ *   - Hijri entry/display is allowed only in HR employee fields
+ *     (iqama expiry + health-card expiry) through `src/utils/hijri.js`.
  *   - Display dates in Arabic month names but with Latin (Western) digits.
  *   - Use `LOCALE` constant everywhere instead of "ar-SA" / "ar-SA-u-nu-latn",
  *     since plain "ar-SA" defaults to the Umm al-Qura (Hijri) calendar in JS Intl.
@@ -65,6 +67,46 @@ export function formatRiyadhDateForInput(d) {
   } catch {
     return formatDateForInput(date);
   }
+}
+
+/**
+ * Today's business date as `YYYY-MM-DD` in Asia/Riyadh.
+ *
+ * Use this for export filenames, local draft keys, default filters, and
+ * "today" values in business flows. Do not use `toISOString().split("T")[0]`
+ * for those cases; it is UTC and flips to the wrong day around Riyadh
+ * midnight.
+ */
+export function todayRiyadhDateKey() {
+  return formatRiyadhDateForInput(new Date());
+}
+
+/**
+ * Business date offset from Riyadh today as `YYYY-MM-DD`.
+ */
+export function riyadhDateKeyFromOffset(days = 0) {
+  const n = Number(days);
+  const offset = Number.isFinite(n) ? Math.trunc(n) : 0;
+  const today = todayRiyadhDateKey();
+  if (!offset) return today;
+
+  const d = new Date(`${today}T00:00:00+03:00`);
+  d.setUTCDate(d.getUTCDate() + offset);
+  return formatRiyadhDateForInput(d);
+}
+
+/**
+ * Business date month offset from Riyadh today as `YYYY-MM-DD`.
+ */
+export function riyadhDateKeyFromMonthOffset(months = 0) {
+  const n = Number(months);
+  const offset = Number.isFinite(n) ? Math.trunc(n) : 0;
+  const today = todayRiyadhDateKey();
+  if (!offset) return today;
+
+  const d = new Date(`${today}T00:00:00+03:00`);
+  d.setUTCMonth(d.getUTCMonth() + offset);
+  return formatRiyadhDateForInput(d);
 }
 
 /**

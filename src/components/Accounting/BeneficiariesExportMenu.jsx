@@ -9,6 +9,7 @@ import {
   exportToPDF,
   formatDateTime,
 } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 function formatIban(iban) {
   if (!iban) return "-";
@@ -51,7 +52,7 @@ export default function BeneficiariesExportMenu({ beneficiaries }) {
   const handleExportExcel = () => {
     exportToExcelHTML(
       beneficiaries || [],
-      `المستفيدون_${new Date().toISOString().split("T")[0]}`,
+      `المستفيدون_${todayRiyadhDateKey()}`,
       excelColumns,
       "المستفيدون - قسم المشتريات",
     );
@@ -61,7 +62,7 @@ export default function BeneficiariesExportMenu({ beneficiaries }) {
   const handleExportPDF = () => {
     exportToPDF(
       beneficiaries || [],
-      `المستفيدون_${new Date().toISOString().split("T")[0]}`,
+      `المستفيدون_${todayRiyadhDateKey()}`,
       pdfColumns,
       "المستفيدون - قسم المشتريات",
     );

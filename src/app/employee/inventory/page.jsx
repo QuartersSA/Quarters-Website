@@ -22,15 +22,14 @@ import {
   EMPLOYEE_INVENTORY_TOKEN_KEY,
   employeeInventoryFetch,
 } from "@/utils/apiAuth";
-import { formatDateForInput } from "@/utils/dateUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 // Build a deterministic localStorage key for the auto-saved draft.
-// MUST use ISO YYYY-MM-DD (not toLocaleDateString) — browser locale otherwise
-// produces Hijri strings on Arabic systems, which:
-//   - changes the key day-to-day inconsistently
-//   - collides with admin-side date handling (Gregorian-only policy)
+// MUST use Riyadh ISO YYYY-MM-DD. Plain Arabic locale can produce Hijri
+// strings, and UTC date keys can flip around Riyadh midnight. Hijri entry
+// is limited to HR employee fields only.
 function inventoryDraftKey(employeeId) {
-  return `inventory_${employeeId}_${formatDateForInput(new Date())}`;
+  return `inventory_${employeeId}_${todayRiyadhDateKey()}`;
 }
 
 const EMPLOYEE_LOGIN_PATH = "/employee/login";

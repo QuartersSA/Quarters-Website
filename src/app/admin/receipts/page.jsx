@@ -11,20 +11,17 @@ import { ReceiptsFilters } from "@/components/Receipts/ReceiptsFilters";
 import { ReceiptsList } from "@/components/Receipts/ReceiptsList";
 import { useReceiptsData } from "@/hooks/useReceiptsData";
 import { ws } from "@/components/Workspace/ui";
-import { formatDateForInput } from "@/utils/dateUtils";
+import {
+  riyadhDateKeyFromMonthOffset,
+  todayRiyadhDateKey,
+} from "@/utils/dateUtils";
 
-// `toISOString()` previously was used here, but it treats the Date as UTC,
-// so at local time ~02:00 in +03:00 the result is *yesterday* in UTC and
-// the date filter loads the wrong day. `formatDateForInput` reads
-// getFullYear / getMonth / getDate from local wall-clock and is TZ-stable.
 function defaultFromDate() {
-  const d = new Date();
-  d.setMonth(d.getMonth() - 1);
-  return formatDateForInput(d);
+  return riyadhDateKeyFromMonthOffset(-1);
 }
 
 function defaultToDate() {
-  return formatDateForInput(new Date());
+  return todayRiyadhDateKey();
 }
 
 export default function ReceiptsPage() {

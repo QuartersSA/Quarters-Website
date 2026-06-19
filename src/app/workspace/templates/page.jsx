@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import { riyadhDateKeyFromOffset } from "@/utils/dateUtils";
 
 export default function WorkspaceTemplatesPage() {
   const { employeeId } = useWorkspaceUser();
@@ -108,9 +109,7 @@ export default function WorkspaceTemplatesPage() {
 
   const useTemplateMutation = useMutation({
     mutationFn: async (template) => {
-      const today = new Date();
-      today.setDate(today.getDate() + 3);
-      const dueDate = today.toISOString().split("T")[0];
+      const dueDate = riyadhDateKeyFromOffset(3);
 
       const res = await fetch("/api/workspace/tasks", {
         method: "POST",
