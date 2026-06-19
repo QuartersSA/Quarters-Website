@@ -207,18 +207,14 @@ export default function WorkspaceInboxPage() {
       return data;
     },
     onMutate: async (text) => {
-      await queryClient.cancelQueries({
-        queryKey: ["workspaceMessages", selectedThreadId, myId],
-      });
+      const queryKey = ["workspaceMessages", selectedThreadId, myId];
+      await queryClient.cancelQueries({ queryKey });
 
-      const prev = queryClient.getQueryData([
-        "workspaceMessages",
-        selectedThreadId,
-        myId,
-      ]);
-
+      const optimisticId = `optimistic-${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2)}`;
       const optimistic = {
-        id: `optimistic-${Date.now()}`,
+        id: optimisticId,
         thread_id: selectedThreadId,
         sender_employee_id: myId,
         sender_name: user?.name || "أنا",
@@ -226,23 +222,23 @@ export default function WorkspaceInboxPage() {
         created_at: new Date().toISOString(),
       };
 
-      queryClient.setQueryData(
-        ["workspaceMessages", selectedThreadId, myId],
-        (old) => {
-          const oldMessages = old?.messages || [];
-          return { ...old, messages: [...oldMessages, optimistic] };
-        },
-      );
+      queryClient.setQueryData(queryKey, (old) => {
+        const oldMessages = old?.messages || [];
+        return { ...old, messages: [...oldMessages, optimistic] };
+      });
 
-      return { prev };
+      return { optimisticId, queryKey };
     },
     onError: (err, _text, ctx) => {
       console.error(err);
-      if (ctx?.prev) {
-        queryClient.setQueryData(
-          ["workspaceMessages", selectedThreadId, myId],
-          ctx.prev,
-        );
+      if (ctx?.queryKey && ctx?.optimisticId) {
+        queryClient.setQueryData(ctx.queryKey, (old) => {
+          if (!old?.messages) return old;
+          return {
+            ...old,
+            messages: old.messages.filter((m) => m.id !== ctx.optimisticId),
+          };
+        });
       }
     },
     onSuccess: () => {

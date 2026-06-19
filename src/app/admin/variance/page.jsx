@@ -222,6 +222,7 @@ export default function VariancePage() {
             item: !!selectedItem,
             from: !!dateFrom,
             to: !!dateTo,
+            rangeInvalid: dateRangeInvalid,
           }}
           onExportExcel={handleExportExcel}
           onExportPDF={handleExportPDF}

@@ -53,6 +53,7 @@ export function VarianceTable({
   onExportPDF,
 }) {
   const f = filterStatus || {};
+  const rangeInvalid = !!f.rangeInvalid;
   return (
     <div className={sectionCard}>
       <div
@@ -74,7 +75,15 @@ export function VarianceTable({
       {!hasFilters ? (
         <div className="p-12 text-center text-slate-500 dark:text-slate-500 dark:text-white/50">
           <Calendar className="w-16 h-16 mx-auto mb-4 opacity-50" />
-          <p className="text-lg mb-2">اختر الفرع والصنف والفترة لعرض الانحرافات</p>
+          <p
+            className={`text-lg mb-2 ${
+              rangeInvalid ? "text-red-700 dark:text-red-200" : ""
+            }`}
+          >
+            {rangeInvalid
+              ? "الفترة غير صحيحة: تاريخ البداية أحدث من تاريخ النهاية"
+              : "اختر الفرع والصنف والفترة لعرض الانحرافات"}
+          </p>
           {/* Per-filter status so user sees what's left */}
           <div className="mt-4 inline-flex flex-col gap-1.5 items-start text-sm">
             <span className={f.branch ? "text-emerald-700 dark:text-emerald-700 dark:text-emerald-300" : "text-slate-600 dark:text-slate-600 dark:text-white/55"}>
