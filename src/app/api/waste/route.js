@@ -10,7 +10,8 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 //                      item's cost changes later.
 //
 // Quantities are stored as recorded (the employee waste page locks the
-// unit, same as the inventory flow). cost = quantity × unit_cost.
+// default inventory unit, same as the inventory flow). unit_cost is
+// the default inventory unit cost snapshot, so cost = quantity × unit_cost.
 
 async function ensureSchema() {
   try {
@@ -50,6 +51,27 @@ async function ensureSchema() {
     await sql`ALTER TABLE waste_items ADD COLUMN IF NOT EXISTS note TEXT`;
   } catch (e) {
     console.error("ensureSchema waste_items reason/note:", e?.message);
+  }
+  // Early waste rows snapshotted the base purchase cost. Waste quantities are
+  // entered in the default inventory unit, so correct only rows that still
+  // exactly match the item's base cost and have a non-1 inventory factor.
+  try {
+    await sql`
+      UPDATE waste_items wi
+      SET unit_cost = ROUND(
+        COALESCE(i.base_purchase_cost, i.cost) * COALESCE(inv.conversion_factor, 1),
+        4
+      )
+      FROM items i
+      LEFT JOIN item_units inv ON inv.id = i.default_inventory_unit_id
+      WHERE wi.item_id = i.id
+        AND COALESCE(i.base_purchase_cost, i.cost) IS NOT NULL
+        AND wi.unit_cost IS NOT NULL
+        AND COALESCE(inv.conversion_factor, 1) <> 1
+        AND ROUND(wi.unit_cost, 4) = ROUND(COALESCE(i.base_purchase_cost, i.cost), 4)
+    `;
+  } catch (e) {
+    console.error("ensureSchema waste_items unit_cost correction:", e?.message);
   }
 }
 
@@ -125,12 +147,25 @@ export async function POST(request) {
       );
     }
 
-    // Resolve branch name + each item's name + current cost (snapshot).
+    // Resolve branch name + each item's name + current default-inventory-unit
+    // cost snapshot. Item base_purchase_cost is the base unit price; multiply
+    // by the selected inventory unit factor to match the quantity being logged.
     const [branch] = await sql`SELECT name FROM branches WHERE id = ${branchId}`;
     const itemIds = clean.map((c) => c.itemId);
     const itemRows = await sql(
-      `SELECT id, name, COALESCE(base_purchase_cost, cost) AS unit_cost
-       FROM items WHERE id = ANY($1::bigint[])`,
+      `SELECT
+         i.id,
+         i.name,
+         CASE
+           WHEN COALESCE(i.base_purchase_cost, i.cost) IS NULL THEN NULL
+           ELSE ROUND(
+             COALESCE(i.base_purchase_cost, i.cost) * COALESCE(inv.conversion_factor, 1),
+             4
+           )
+         END AS unit_cost
+       FROM items i
+       LEFT JOIN item_units inv ON inv.id = i.default_inventory_unit_id
+       WHERE i.id = ANY($1::bigint[])`,
       [itemIds],
     );
     const itemMap = new Map();
