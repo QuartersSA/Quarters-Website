@@ -227,6 +227,9 @@ export function VarianceChart({
             onChange={setVarianceItemId}
             options={itemOptions}
             buttonClassName="px-3 py-2"
+            searchable
+            searchPlaceholder="ابحث عن صنف..."
+            noResultsLabel="لا يوجد صنف مطابق"
           />
 
           <div className="w-full">

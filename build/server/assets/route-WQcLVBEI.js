@@ -1,5 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -18,6 +19,7 @@ async function GET(request, {
     });
   }
   try {
+    await ensureInventoryUnitSnapshotSchema();
     const itemId = parseInt(params.id);
     if (!itemId || Number.isNaN(itemId)) {
       return Response.json({
@@ -69,9 +71,14 @@ async function GET(request, {
         COALESCE(io.operation_date, io.created_at) as created_at,
         io.branch_id,
         b.name as branch_name,
-        ii.quantity
+        (
+          ii.quantity::numeric
+            * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+        ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity
       FROM inventory_items ii
       JOIN inventory_operations io ON io.id = ii.operation_id
+      JOIN items i ON i.id = ii.item_id
+      LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
       LEFT JOIN branches b ON b.id = io.branch_id
       ${where}
       ORDER BY COALESCE(io.operation_date, io.created_at) ASC

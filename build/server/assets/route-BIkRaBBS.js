@@ -1,5 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureInventoryUnitSnapshotSchema, g as getDefaultInventoryUnitSnapshots, s as snapshotForItem } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import { f as formatRiyadhDateForInput } from './dateUtils-FqivhP-u.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -62,6 +63,8 @@ async function POST(request, {
   }
   const note = body?.note ? String(body.note).trim() : null;
   try {
+    await ensureInventoryUnitSnapshotSchema();
+
     // 1. Verify the order exists
     const [order] = await sql(`SELECT id, order_date, supplier_name FROM accounting_green_bean_orders WHERE id = $1 LIMIT 1`, [orderId]);
     if (!order) {
@@ -212,23 +215,50 @@ async function POST(request, {
     const orderRef = orderDateStr ? `#${orderId} (تاريخ الطلب ${orderDateStr})` : `#${orderId}`;
     const depositNote = note ? `إيداع من طلب بن أخضر ${orderRef} — ${note}` : `إيداع من طلب بن أخضر ${orderRef}`;
     const batchId = `GB-${orderId}-${Date.now()}`;
-    const receipts = [];
-    for (const item of linked) {
-      // Round quantity to 3 decimal places
-      const roundedQty = Math.round(item.quantity * 1000) / 1000;
-      const [row] = await sql(`INSERT INTO purchase_receipts
-           (branch_id, item_id, quantity, received_at, note,
-            created_by_employee_id, created_by_employee_name, receipt_batch_id)
-         VALUES ($1, $2, $3, $4::timestamp, $5, $6, $7, $8)
-         RETURNING id, branch_id, item_id, quantity, received_at, note, created_at,
-                   created_by_employee_id, created_by_employee_name, receipt_batch_id`, [branchId, item.inventoryItemId, roundedQty, receivedAt, depositNote, actingEmployeeId, actingEmployeeName, batchId]);
-      receipts.push({
+    const unitSnapshots = await getDefaultInventoryUnitSnapshots(linked.map(item => item.inventoryItemId));
+    const itemIds = linked.map(item => Number(item.inventoryItemId));
+    const quantities = linked.map(item => Math.round(Number(item.quantity) * 1000) / 1000);
+    const unitIds = linked.map(item => {
+      const snap = snapshotForItem(unitSnapshots, item.inventoryItemId);
+      return snap.unitId;
+    });
+    const unitNames = linked.map(item => {
+      const snap = snapshotForItem(unitSnapshots, item.inventoryItemId);
+      return snap.unitName;
+    });
+    const unitFactors = linked.map(item => {
+      const snap = snapshotForItem(unitSnapshots, item.inventoryItemId);
+      return snap.unitFactor;
+    });
+    const insertedReceipts = await sql(`WITH rows AS (
+         SELECT
+           unnest($7::int[]) AS item_id,
+           unnest($8::numeric[]) AS quantity,
+           unnest($9::int[]) AS unit_id,
+           unnest($10::text[]) AS unit_name,
+           unnest($11::numeric[]) AS unit_factor
+       )
+       INSERT INTO purchase_receipts
+         (branch_id, item_id, quantity, received_at, note,
+          created_by_employee_id, created_by_employee_name, receipt_batch_id,
+          unit_id, unit_name, unit_factor)
+       SELECT
+         $1, rows.item_id, rows.quantity, $2::timestamp, $3,
+         $4, $5, $6, rows.unit_id, rows.unit_name, rows.unit_factor
+       FROM rows
+       RETURNING id, branch_id, item_id, quantity, received_at, note, created_at,
+                 created_by_employee_id, created_by_employee_name, receipt_batch_id,
+                 unit_id, unit_name, unit_factor`, [branchId, receivedAt, depositNote, actingEmployeeId, actingEmployeeName, batchId, itemIds, quantities, unitIds, unitNames, unitFactors]);
+    const linkedByItemId = new Map(linked.map(item => [Number(item.inventoryItemId), item]));
+    const receipts = insertedReceipts.map(row => {
+      const item = linkedByItemId.get(Number(row.item_id)) || {};
+      return {
         ...row,
         beanName: item.beanName,
         inventoryItemName: item.inventoryItemName,
         bagCount: item.bagCount
-      });
-    }
+      };
+    });
     return Response.json({
       ok: true,
       deposited: receipts.length,

@@ -336,6 +336,9 @@ export function PurchaseReceiptModal({
                   onChange={setReceiptItemId}
                   options={itemOptions}
                   buttonClassName="px-4 py-3"
+                  searchable
+                  searchPlaceholder="ابحث عن صنف..."
+                  noResultsLabel="لا يوجد صنف مطابق"
                 />
               </div>
 

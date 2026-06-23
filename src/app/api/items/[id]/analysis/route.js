@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
 
 /**
  * GET /api/items/:id/analysis?branchIds=1,2,3&from=&to=
@@ -22,6 +23,8 @@ export async function GET(request, { params }) {
   }
 
   try {
+    await ensureInventoryUnitSnapshotSchema();
+
     const itemId = parseInt(params.id);
     if (!itemId || Number.isNaN(itemId)) {
       return Response.json({ error: "معرّف الصنف غير صحيح" }, { status: 400 });
@@ -56,13 +59,18 @@ export async function GET(request, { params }) {
     const inventoryRows = await sql(
       `SELECT
          COALESCE(io.operation_date, io.created_at) AS event_date,
-         ii.quantity,
+         (
+           ii.quantity::numeric
+             * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+         ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity,
          io.inventory_type,
          io.branch_id,
          b.name AS branch_name,
          'inventory' AS source
        FROM inventory_items ii
        JOIN inventory_operations io ON io.id = ii.operation_id
+       JOIN items i ON i.id = ii.item_id
+       LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
        LEFT JOIN branches b ON b.id = io.branch_id
        WHERE ii.item_id = $1
          AND io.branch_id IN (${branchPlaceholders})
@@ -78,11 +86,16 @@ export async function GET(request, { params }) {
     const receiptRows = await sql(
       `SELECT
          pr.received_at AS event_date,
-         pr.quantity,
+         (
+           pr.quantity::numeric
+             * COALESCE(pr.unit_factor, iu.conversion_factor, 1)::numeric
+         ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity,
          pr.branch_id,
          b.name AS branch_name,
          'receipt' AS source
        FROM purchase_receipts pr
+       JOIN items i ON i.id = pr.item_id
+       LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
        LEFT JOIN branches b ON b.id = pr.branch_id
        WHERE pr.item_id = $1
          AND pr.branch_id IN (${branchPlaceholders})
@@ -96,12 +109,17 @@ export async function GET(request, { params }) {
     const openingRows = await sql(
       `SELECT
          os.opened_at AS event_date,
-         osi.quantity,
+         (
+           osi.quantity::numeric
+             * COALESCE(osi.unit_factor, iu.conversion_factor, 1)::numeric
+         ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity,
          os.branch_id,
          b.name AS branch_name,
          'opening' AS source
        FROM opening_session_items osi
        JOIN opening_sessions os ON os.id = osi.session_id
+       JOIN items i ON i.id = osi.item_id
+       LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
        LEFT JOIN branches b ON b.id = os.branch_id
        WHERE osi.item_id = $1
          AND os.branch_id IN (${branchPlaceholders})
@@ -115,12 +133,17 @@ export async function GET(request, { params }) {
     const transferInRows = await sql(
       `SELECT
          COALESCE(io.operation_date, io.created_at) AS event_date,
-         ii.quantity,
+         (
+           COALESCE(ii.transfer_quantity, ii.quantity)::numeric
+             * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+         ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity,
          io.branch_id,
          b.name AS branch_name,
          'transfer_in' AS source
        FROM inventory_items ii
        JOIN inventory_operations io ON io.id = ii.operation_id
+       JOIN items i ON i.id = ii.item_id
+       LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
        LEFT JOIN branches b ON b.id = io.branch_id
        WHERE ii.item_id = $1
          AND io.branch_id IN (${branchPlaceholders})
@@ -137,12 +160,17 @@ export async function GET(request, { params }) {
     const transferOutRows = await sql(
       `SELECT
          COALESCE(io.operation_date, io.created_at) AS event_date,
-         ii.quantity,
+         (
+           COALESCE(ii.transfer_quantity, ii.quantity)::numeric
+             * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+         ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity,
          io.branch_id,
          b.name AS branch_name,
          'transfer_out' AS source
        FROM inventory_items ii
        JOIN inventory_operations io ON io.id = ii.operation_id
+       JOIN items i ON i.id = ii.item_id
+       LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
        LEFT JOIN branches b ON b.id = io.branch_id
        WHERE ii.item_id = $1
          AND io.branch_id IN (${branchPlaceholders})
