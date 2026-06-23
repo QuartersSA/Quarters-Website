@@ -22,15 +22,19 @@ export function processItemHistoryChartData(rows) {
       year: "2-digit",
       month: "short",
       day: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
     const time = dt.toLocaleTimeString(LOCALE, {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
 
     const tsKey = dt.toISOString();
     const shortLabel = `${day} ${time}`;
-    const fullLabel = dt.toLocaleString(LOCALE);
+    const fullLabel = dt.toLocaleString(LOCALE, {
+      timeZone: "Asia/Riyadh",
+    });
 
     const existing = byTs.get(tsKey) || {
       ts: dt.getTime(),
@@ -82,16 +86,18 @@ export function processVarianceChartData(varianceRows) {
       year: "2-digit",
       month: "short",
       day: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
     const time = dt.toLocaleTimeString(LOCALE, {
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
 
     data.push({
       ts: dt.getTime(),
       label: `${day} ${time}`,
-      fullLabel: dt.toLocaleString(LOCALE),
+      fullLabel: dt.toLocaleString(LOCALE, { timeZone: "Asia/Riyadh" }),
       expected: Number(r.expected_quantity) || 0,
       actual: Number(r.actual_quantity) || 0,
       delta: Number(r.delta_quantity) || 0,
@@ -190,10 +196,12 @@ export function processItemAnalysisChartData(analysisData) {
         year: "2-digit",
         month: "short",
         day: "2-digit",
+        timeZone: "Asia/Riyadh",
       });
       const time = dt.toLocaleTimeString(LOCALE, {
         hour: "2-digit",
         minute: "2-digit",
+        timeZone: "Asia/Riyadh",
       });
       const label = `${day} ${time}`;
       const fullLabel = dt.toLocaleString(LOCALE, {
@@ -203,6 +211,7 @@ export function processItemAnalysisChartData(analysisData) {
         weekday: "long",
         hour: "2-digit",
         minute: "2-digit",
+        timeZone: "Asia/Riyadh",
       });
 
       byTimestamp.set(tsKey, {

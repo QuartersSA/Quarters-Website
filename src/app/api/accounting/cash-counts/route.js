@@ -1,4 +1,21 @@
 import sql from "@/app/api/utils/sql";
+import { requireAuth } from "@/app/api/utils/sessionToken";
+
+const REQUIRE_ACCOUNTING = {
+  role: "Admin",
+  permission: "can_manage_accounting",
+};
+
+function validMonth(value) {
+  return /^\d{4}-(0[1-9]|1[0-2])$/.test(String(value || ""));
+}
+
+function safeCount(value) {
+  const count = Number(value ?? 0);
+  return Number.isInteger(count) && count >= 0 && count <= 1_000_000
+    ? count
+    : null;
+}
 
 /**
  * GET /api/accounting/cash-counts?branchId=X&month=YYYY-MM
@@ -7,6 +24,11 @@ import sql from "@/app/api/utils/sql";
  * Or GET /api/accounting/cash-counts?branchId=X  (returns all months for that branch)
  */
 export async function GET(request) {
+  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
+
   try {
     const url = new URL(request.url);
     const branchId = url.searchParams.get("branchId");
@@ -20,8 +42,13 @@ export async function GET(request) {
       return Response.json({ branches });
     }
 
-    if (!branchId) {
+    const parsedBranchId = Number(branchId);
+    if (!Number.isInteger(parsedBranchId) || parsedBranchId <= 0) {
       return Response.json({ error: "branchId مطلوب" }, { status: 400 });
+    }
+
+    if (month && !validMonth(month)) {
+      return Response.json({ error: "صيغة الشهر غير صحيحة" }, { status: 400 });
     }
 
     if (month) {
@@ -30,7 +57,7 @@ export async function GET(request) {
 
       const rows = await sql`
         SELECT * FROM accounting_cash_counts
-        WHERE branch_id = ${Number(branchId)}
+        WHERE branch_id = ${parsedBranchId}
           AND count_month = ${monthDate}
         LIMIT 1
       `;
@@ -53,7 +80,7 @@ export async function GET(request) {
     // All months for branch
     const rows = await sql`
       SELECT * FROM accounting_cash_counts
-      WHERE branch_id = ${Number(branchId)}
+      WHERE branch_id = ${parsedBranchId}
       ORDER BY count_month DESC
       LIMIT 100
     `;
@@ -75,6 +102,11 @@ export async function GET(request) {
  * Body: { branchId, month (YYYY-MM), d500, d200, d100, d50, d20, d10, d5, d1, note?, employeeId?, employeeName? }
  */
 export async function POST(request) {
+  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
+
   try {
     const body = await request.json();
     const {
@@ -89,11 +121,14 @@ export async function POST(request) {
       d5 = 0,
       d1 = 0,
       note = "",
-      employeeId,
-      employeeName,
     } = body;
 
-    if (!branchId || !month) {
+    const parsedBranchId = Number(branchId);
+    if (
+      !Number.isInteger(parsedBranchId) ||
+      parsedBranchId <= 0 ||
+      !validMonth(month)
+    ) {
       return Response.json(
         { error: "branchId و month مطلوبين" },
         { status: 400 },
@@ -102,20 +137,32 @@ export async function POST(request) {
 
     const monthDate = `${month}-01`;
 
+    const counts = [d500, d200, d100, d50, d20, d10, d5, d1].map(safeCount);
+    if (counts.some((value) => value === null)) {
+      return Response.json(
+        { error: "أعداد الفئات يجب أن تكون أرقاماً صحيحة وغير سالبة" },
+        { status: 400 },
+      );
+    }
+    const [c500, c200, c100, c50, c20, c10, c5, c1] = counts;
+    const actorId = Number(auth.user?.id) || null;
+    const actorName =
+      String(auth.user?.name || auth.user?.username || "").trim() || null;
+
     const totalAmount =
-      Number(d500) * 500 +
-      Number(d200) * 200 +
-      Number(d100) * 100 +
-      Number(d50) * 50 +
-      Number(d20) * 20 +
-      Number(d10) * 10 +
-      Number(d5) * 5 +
-      Number(d1) * 1;
+      c500 * 500 +
+      c200 * 200 +
+      c100 * 100 +
+      c50 * 50 +
+      c20 * 20 +
+      c10 * 10 +
+      c5 * 5 +
+      c1;
 
     // Check if record exists
     const existing = await sql`
       SELECT * FROM accounting_cash_counts
-      WHERE branch_id = ${Number(branchId)}
+      WHERE branch_id = ${parsedBranchId}
         AND count_month = ${monthDate}
       LIMIT 1
     `;
@@ -143,14 +190,14 @@ export async function POST(request) {
       const updated = await sql`
         UPDATE accounting_cash_counts
         SET
-          d500 = ${Number(d500)},
-          d200 = ${Number(d200)},
-          d100 = ${Number(d100)},
-          d50 = ${Number(d50)},
-          d20 = ${Number(d20)},
-          d10 = ${Number(d10)},
-          d5 = ${Number(d5)},
-          d1 = ${Number(d1)},
+          d500 = ${c500},
+          d200 = ${c200},
+          d100 = ${c100},
+          d50 = ${c50},
+          d20 = ${c20},
+          d10 = ${c10},
+          d5 = ${c5},
+          d1 = ${c1},
           total_amount = ${totalAmount},
           note = ${note || null},
           updated_at = CURRENT_TIMESTAMP
@@ -165,7 +212,7 @@ export async function POST(request) {
         INSERT INTO accounting_cash_counts
           (branch_id, count_month, d500, d200, d100, d50, d20, d10, d5, d1, total_amount, note, created_by_employee_id, created_by_employee_name)
         VALUES
-          (${Number(branchId)}, ${monthDate}, ${Number(d500)}, ${Number(d200)}, ${Number(d100)}, ${Number(d50)}, ${Number(d20)}, ${Number(d10)}, ${Number(d5)}, ${Number(d1)}, ${totalAmount}, ${note || null}, ${employeeId ? Number(employeeId) : null}, ${employeeName || null})
+          (${parsedBranchId}, ${monthDate}, ${c500}, ${c200}, ${c100}, ${c50}, ${c20}, ${c10}, ${c5}, ${c1}, ${totalAmount}, ${note || null}, ${actorId}, ${actorName})
         RETURNING *
       `;
       record = inserted[0];
@@ -173,14 +220,14 @@ export async function POST(request) {
 
     // Insert log
     const newValues = {
-      d500: Number(d500),
-      d200: Number(d200),
-      d100: Number(d100),
-      d50: Number(d50),
-      d20: Number(d20),
-      d10: Number(d10),
-      d5: Number(d5),
-      d1: Number(d1),
+      d500: c500,
+      d200: c200,
+      d100: c100,
+      d50: c50,
+      d20: c20,
+      d10: c10,
+      d5: c5,
+      d1: c1,
       total_amount: totalAmount,
       note: note || null,
     };
@@ -196,7 +243,7 @@ export async function POST(request) {
       INSERT INTO accounting_cash_count_logs
         (cash_count_id, action, actor_employee_id, actor_name, summary, old_values, new_values)
       VALUES
-        (${record.id}, ${action}, ${employeeId ? Number(employeeId) : null}, ${employeeName || null}, ${summary}, ${oldValuesJson}::jsonb, ${JSON.stringify(newValues)}::jsonb)
+        (${record.id}, ${action}, ${actorId}, ${actorName}, ${summary}, ${oldValuesJson}::jsonb, ${JSON.stringify(newValues)}::jsonb)
     `;
 
     return Response.json({ record, action });

@@ -15,6 +15,7 @@ import {
   riyadhDateKeyFromMonthOffset,
   todayRiyadhDateKey,
 } from "@/utils/dateUtils";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 function defaultFromDate() {
   return riyadhDateKeyFromMonthOffset(-1);
@@ -35,7 +36,7 @@ export default function ReceiptsPage() {
   const [dateTo, setDateTo] = useState(defaultToDate());
 
   const { data: branches = [] } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
       if (!res.ok) throw new Error("Failed to fetch branches");
@@ -45,7 +46,7 @@ export default function ReceiptsPage() {
   });
 
   const { data: items = [] } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useHREmployeeLogs({ employeeId, enabled }) {
   const employeeIdNumber = Number(employeeId);
@@ -8,7 +9,7 @@ export function useHREmployeeLogs({ employeeId, enabled }) {
     : null;
 
   const logsQuery = useQuery({
-    queryKey: ["hr-employee-logs", safeEmployeeId],
+    queryKey: queryKeys.hrEmployeeLogs(safeEmployeeId),
     queryFn: async () => {
       const response = await adminFetch(
         `/api/hr/employees/${safeEmployeeId}/logs`,

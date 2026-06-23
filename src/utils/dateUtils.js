@@ -81,6 +81,41 @@ export function todayRiyadhDateKey() {
   return formatRiyadhDateForInput(new Date());
 }
 
+/** Format an instant for a datetime-local input in Riyadh wall-clock time. */
+export function formatRiyadhDateTimeForInput(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  try {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Riyadh",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(date);
+    const get = (type) => parts.find((part) => part.type === type)?.value || "";
+    let hour = get("hour");
+    if (hour === "24") hour = "00";
+    const year = get("year");
+    const month = get("month");
+    const day = get("day");
+    const minute = get("minute");
+    return year && month && day && hour && minute
+      ? `${year}-${month}-${day}T${hour}:${minute}`
+      : "";
+  } catch {
+    return "";
+  }
+}
+
+/** Current hour (0-23) in Asia/Riyadh. */
+export function currentRiyadhHour() {
+  const hour = Number(formatRiyadhDateTimeForInput().slice(11, 13));
+  return Number.isFinite(hour) ? hour : 0;
+}
+
 /**
  * Business date offset from Riyadh today as `YYYY-MM-DD`.
  */
@@ -104,9 +139,27 @@ export function riyadhDateKeyFromMonthOffset(months = 0) {
   const today = todayRiyadhDateKey();
   if (!offset) return today;
 
-  const d = new Date(`${today}T00:00:00+03:00`);
-  d.setUTCMonth(d.getUTCMonth() + offset);
-  return formatRiyadhDateForInput(d);
+  const [year, month, day] = today.split("-").map(Number);
+  const target = new Date(Date.UTC(year, month - 1 + offset, 1));
+  const targetYear = target.getUTCFullYear();
+  const targetMonth = target.getUTCMonth();
+  const lastDay = new Date(Date.UTC(targetYear, targetMonth + 1, 0)).getUTCDate();
+  const safeDay = Math.min(day, lastDay);
+  return `${targetYear}-${String(targetMonth + 1).padStart(2, "0")}-${String(safeDay).padStart(2, "0")}`;
+}
+
+/** Current business month as `YYYY-MM`, pinned to Asia/Riyadh. */
+export function currentRiyadhMonthKey() {
+  return todayRiyadhDateKey().slice(0, 7);
+}
+
+/** Business month offset from Riyadh's current month as `YYYY-MM`. */
+export function riyadhMonthKeyFromOffset(months = 0) {
+  const n = Number(months);
+  const offset = Number.isFinite(n) ? Math.trunc(n) : 0;
+  const [year, month] = currentRiyadhMonthKey().split("-").map(Number);
+  const target = new Date(Date.UTC(year, month - 1 + offset, 1));
+  return `${target.getUTCFullYear()}-${String(target.getUTCMonth() + 1).padStart(2, "0")}`;
 }
 
 /**
@@ -198,7 +251,17 @@ export function parseUserDate(value) {
 
   // Date-only — append local midnight to avoid UTC interpretation.
   if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    const d = new Date(`${str}T00:00:00`);
+    const d = new Date(`${str}T00:00:00+03:00`);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/.test(str)) {
+    const d = new Date(`${str}+03:00`);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?$/.test(str)) {
+    const d = new Date(`${str.replace(" ", "T")}+03:00`);
     return Number.isNaN(d.getTime()) ? null : d;
   }
 
@@ -215,13 +278,8 @@ export function parseUserDate(value) {
 export function toDbTimestamp(value) {
   const d = value instanceof Date ? value : parseUserDate(value);
   if (!d) return null;
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const mn = String(d.getMinutes()).padStart(2, "0");
-  const ss = String(d.getSeconds()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd} ${hh}:${mn}:${ss}`;
+  const local = formatRiyadhDateTimeForInput(d);
+  return local ? `${local.replace("T", " ")}:00` : null;
 }
 
 /**
@@ -238,7 +296,7 @@ export function validateBusinessDate(value, options = {}) {
   const d = parseUserDate(value);
   if (!d) return { ok: false, error: `${label} غير صالح` };
 
-  const year = d.getFullYear();
+  const year = Number(formatRiyadhDateForInput(d).slice(0, 4));
   if (year < minYear) {
     return { ok: false, error: `${label} قديم جداً (قبل ${minYear})` };
   }
@@ -250,4 +308,10 @@ export function validateBusinessDate(value, options = {}) {
   }
 
   return { ok: true, date: d };
+}
+
+/** Validate and normalize a user-entered Riyadh wall-clock timestamp for SQL. */
+export function parseBusinessTimestamp(value, options = {}) {
+  const result = validateBusinessDate(value, options);
+  return result.ok ? toDbTimestamp(result.date) : null;
 }

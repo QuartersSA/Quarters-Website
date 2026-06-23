@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 /**
  * Data + derived state for the /admin/low-stock page.
@@ -19,7 +20,7 @@ export function useLowStockData({ isAuthenticated, searchQuery, selectedBranch }
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["low-stock-items"],
+    queryKey: queryKeys.lowStock(),
     queryFn: async () => {
       const response = await adminFetch("/api/items/low-stock");
       if (!response.ok) throw new Error("Failed to fetch low stock items");
@@ -29,7 +30,7 @@ export function useLowStockData({ isAuthenticated, searchQuery, selectedBranch }
   });
 
   const { data: branches = [] } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");

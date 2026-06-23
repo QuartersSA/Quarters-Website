@@ -16,7 +16,10 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import { StatusPill } from "../StatusPill";
 import { PriorityPill } from "../PriorityPill";
+import { workspaceFetch } from "@/utils/apiAuth";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import { queryKeys } from "../../../utils/queryKeys.js";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 const STATUS_CYCLE = ["Todo", "In Progress", "Done"];
 function nextStatus(current) {
@@ -28,11 +31,12 @@ function nextStatus(current) {
 function formatShortDate(dateStr) {
   if (!dateStr) return null;
   try {
-    const d = new Date(dateStr);
+    const d = new Date(`${String(dateStr).slice(0, 10)}T00:00:00+03:00`);
     if (Number.isNaN(d.getTime())) return null;
     return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       month: "short",
       day: "numeric",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
     return null;
@@ -41,16 +45,7 @@ function formatShortDate(dateStr) {
 
 function isDateOverdue(dateStr) {
   if (!dateStr) return false;
-  try {
-    const d = new Date(dateStr);
-    if (Number.isNaN(d.getTime())) return false;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    d.setHours(0, 0, 0, 0);
-    return d < today;
-  } catch {
-    return false;
-  }
+  return String(dateStr).slice(0, 10) < todayRiyadhDateKey();
 }
 
 function SubtaskRow({ subtask, onQuickStatus, isChanging, onUnlink, onOpen }) {
@@ -170,10 +165,10 @@ export function SubtasksSection({
   const safeUsers = Array.isArray(users) ? users : [];
 
   const subtasksQuery = useQuery({
-    queryKey: ["workspaceSubtasks", taskId, viewerEmployeeId],
+    queryKey: queryKeys.workspaceSubtasks(taskId,viewerEmployeeId),
     enabled: !!taskId && !!viewerEmployeeId,
     queryFn: async () => {
-      const res = await fetch(
+      const res = await workspaceFetch(
         `/api/workspace/tasks/${taskId}/subtasks?employeeId=${viewerEmployeeId}`,
       );
       if (!res.ok) throw new Error("فشل تحميل المهام الفرعية");
@@ -188,14 +183,14 @@ export function SubtasksSection({
     totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   const invalidateAll = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ["workspaceSubtasks", taskId] });
-    queryClient.invalidateQueries({ queryKey: ["workspaceTasks"] });
+    queryClient.invalidateQueries({ queryKey: queryKeys.workspaceSubtasks(taskId) });
+    queryClient.invalidateQueries({ queryKey: queryKeys.workspaceTasks() });
   }, [queryClient, taskId]);
 
   // Create subtask
   const createMutation = useMutation({
     mutationFn: async ({ title, dueDate, assigneeEmployeeIds }) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/subtasks`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/subtasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -220,7 +215,7 @@ export function SubtasksSection({
   // Link existing task
   const linkMutation = useMutation({
     mutationFn: async (childTaskId) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/subtasks`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/subtasks`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -244,7 +239,7 @@ export function SubtasksSection({
   // Unlink subtask
   const unlinkMutation = useMutation({
     mutationFn: async (childTaskId) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/subtasks`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/subtasks`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -261,7 +256,7 @@ export function SubtasksSection({
   // Quick status change for subtask
   const quickStatusMutation = useMutation({
     mutationFn: async ({ subtaskId, status }) => {
-      const res = await fetch("/api/workspace/tasks/quick-status", {
+      const res = await workspaceFetch("/api/workspace/tasks/quick-status", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -22,6 +22,7 @@ import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
 import useAdminTheme from "@/hooks/useAdminTheme";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 /**
  * Three views on the month's expenses:
@@ -113,7 +114,7 @@ export default function ExpensesCharts({ month }) {
   const legendColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
 
   const trendQuery = useQuery({
-    queryKey: ["accounting-expenses-trend", month, 12],
+    queryKey: queryKeys.accountingExpenseTrend(month,12),
     enabled: !!month,
     queryFn: async () => {
       const params = new URLSearchParams({

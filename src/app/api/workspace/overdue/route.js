@@ -16,7 +16,7 @@ export async function GET(request) {
     const params = getSearchParams(request);
     const employeeIdRaw = params.get("employeeId");
 
-    const auth = await requireWorkspaceEmployee(employeeIdRaw);
+    const auth = await requireWorkspaceEmployee(request, employeeIdRaw);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }

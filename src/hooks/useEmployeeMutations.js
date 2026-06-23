@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useEmployeeMutations() {
   const queryClient = useQueryClient();
@@ -21,7 +22,7 @@ export function useEmployeeMutations() {
       return result;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.employees() });
       toast.success("تم إضافة الموظف بنجاح");
     },
     onError: (error) => {
@@ -46,7 +47,7 @@ export function useEmployeeMutations() {
       return result;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.employees() });
       toast.success("تم تحديث الموظف بنجاح");
     },
     onError: (error) => {
@@ -64,7 +65,7 @@ export function useEmployeeMutations() {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.employees() });
       toast.success("تم حذف الموظف بنجاح");
     },
     onError: (error) => {

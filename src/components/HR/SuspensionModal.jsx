@@ -15,6 +15,7 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 import { buildRecentMonthOptions, monthLabel } from "@/utils/payrollFormatters";
+import { riyadhMonthKeyFromOffset } from "@/utils/dateUtils";
 import {
   useEmployeeSuspensions,
   useCreateSuspension,
@@ -44,14 +45,8 @@ export default function SuspensionModal({ open, onClose, employee }) {
   // Wider month picker so admins can suspend a future month too.
   const monthOptions = useMemo(() => {
     const opts = buildRecentMonthOptions(36).filter((o) => o.value !== "");
-    const now = new Date();
     for (let i = 1; i <= 6; i += 1) {
-      const d = new Date(
-        Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1),
-      );
-      const y = d.getUTCFullYear();
-      const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-      const value = `${y}-${m}`;
+      const value = riyadhMonthKeyFromOffset(i);
       if (!opts.find((o) => o.value === value)) {
         opts.unshift({ value, label: monthLabel(value) });
       }

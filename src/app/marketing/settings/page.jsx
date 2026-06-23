@@ -7,6 +7,7 @@ import MarketingSidebar from "@/components/Marketing/Sidebar";
 import { ws } from "@/components/Workspace/ui";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 export default function MarketingSettingsPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -19,7 +20,7 @@ export default function MarketingSettingsPage() {
   const [saved, setSaved] = useState(false);
 
   const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
+    queryKey: queryKeys.marketingSettings(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/settings");
@@ -46,7 +47,7 @@ export default function MarketingSettingsPage() {
       return d;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["marketing-settings"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingSettings() });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     },

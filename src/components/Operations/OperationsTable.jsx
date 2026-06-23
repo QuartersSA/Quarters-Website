@@ -570,6 +570,8 @@ export function OperationsTable({
                           type="button"
                           onClick={() => onDeleteOperation(operation)}
                           className={`${ws.btnDanger} px-3 py-1.5 text-sm justify-center`}
+                          aria-label="حذف العملية"
+                          title="حذف العملية"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

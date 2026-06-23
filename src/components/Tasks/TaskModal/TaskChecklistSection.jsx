@@ -13,6 +13,9 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassPopover from "@/components/Workspace/GlassPopover";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import { workspaceFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../../utils/queryKeys.js";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 /* ─── Helpers ─── */
 function parseDateStr(raw) {
@@ -25,11 +28,12 @@ function parseDateStr(raw) {
 function formatShortDate(dateStr) {
   if (!dateStr) return null;
   try {
-    const d = new Date(`${dateStr}T00:00:00`);
+    const d = new Date(`${String(dateStr).slice(0, 10)}T00:00:00+03:00`);
     if (Number.isNaN(d.getTime())) return null;
     return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       month: "short",
       day: "numeric",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
     return null;
@@ -38,14 +42,7 @@ function formatShortDate(dateStr) {
 
 function isDateOverdue(dateStr) {
   if (!dateStr) return false;
-  try {
-    const d = new Date(`${dateStr}T00:00:00`);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return d < today;
-  } catch {
-    return false;
-  }
+  return String(dateStr).slice(0, 10) < todayRiyadhDateKey();
 }
 
 /* ─── Inline assignee picker (compact) ─── */
@@ -208,10 +205,10 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
   const safeUsers = Array.isArray(users) ? users : [];
 
   const checklistQuery = useQuery({
-    queryKey: ["workspaceTaskChecklist", taskId, viewerEmployeeId],
+    queryKey: queryKeys.workspaceTaskChecklist(taskId,viewerEmployeeId),
     enabled: !!taskId && !!viewerEmployeeId,
     queryFn: async () => {
-      const res = await fetch(
+      const res = await workspaceFetch(
         `/api/workspace/tasks/${taskId}/checklist?employeeId=${viewerEmployeeId}`,
       );
       if (!res.ok) throw new Error("فشل تحميل القائمة");
@@ -227,14 +224,14 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
 
   const invalidateChecklist = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ["workspaceTaskChecklist", taskId],
+      queryKey: queryKeys.workspaceTaskChecklist(taskId),
     });
-    queryClient.invalidateQueries({ queryKey: ["workspaceTasks"] });
+    queryClient.invalidateQueries({ queryKey: queryKeys.workspaceTasks() });
   }, [queryClient, taskId]);
 
   const addMutation = useMutation({
     mutationFn: async ({ title, assignee_employee_id, due_date }) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/checklist`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/checklist`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -258,7 +255,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
 
   const toggleMutation = useMutation({
     mutationFn: async ({ itemId, isCompleted }) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/checklist`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/checklist`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -277,7 +274,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
 
   const updateFieldMutation = useMutation({
     mutationFn: async ({ itemId, field, fieldValue }) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/checklist`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/checklist`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -294,7 +291,7 @@ export function TaskChecklistSection({ taskId, viewerEmployeeId, users }) {
 
   const deleteMutation = useMutation({
     mutationFn: async (itemId) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/checklist`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/checklist`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: viewerEmployeeId, itemId }),

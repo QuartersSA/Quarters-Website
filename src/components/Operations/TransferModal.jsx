@@ -15,6 +15,8 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 import { useCreateTransfer } from "@/hooks/useCreateTransfer";
+import { formatRiyadhDateTimeForInput } from "@/utils/dateUtils";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 function toNumberOrNull(value) {
   const n = Number(value);
@@ -22,40 +24,6 @@ function toNumberOrNull(value) {
     return null;
   }
   return n;
-}
-
-// Always returns the current wall-clock in Riyadh, regardless of the
-// browser's or server's local timezone setting. Using `new Date()` with
-// `getFullYear/Date/Hours` returned whatever the runtime's TZ was —
-// which on SSR (Railway UTC) or a mis-configured client could be a
-// full day behind Riyadh at the midnight rollover, defaulting the
-// picker to "yesterday" and tripping the backdate guard.
-function nowLocalDatetime() {
-  try {
-    const fmt = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Riyadh",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-    const parts = fmt.formatToParts(new Date());
-    const get = (t) => parts.find((p) => p.type === t)?.value || "00";
-    // Intl en-CA outputs "24" for midnight hour in some engines — normalize.
-    const hh = get("hour") === "24" ? "00" : get("hour");
-    return `${get("year")}-${get("month")}-${get("day")}T${hh}:${get("minute")}`;
-  } catch {
-    // Last-resort fallback if Intl is broken: local time.
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-  }
 }
 
 // Per-item `units` array from the API. Each row carries its own
@@ -80,7 +48,9 @@ function pickDefaultUnit(item, defaultKey) {
 export default function TransferModal({ branches, onClose }) {
   const [fromBranchId, setFromBranchId] = useState("");
   const [toBranchId, setToBranchId] = useState("");
-  const [operationDate, setOperationDate] = useState(nowLocalDatetime());
+  const [operationDate, setOperationDate] = useState(
+    formatRiyadhDateTimeForInput(),
+  );
   const [selectedItemId, setSelectedItemId] = useState("");
   const [quantity, setQuantity] = useState("");
   const [note, setNote] = useState("");
@@ -98,12 +68,12 @@ export default function TransferModal({ branches, onClose }) {
   // two admins opening the modal at the same time both saw stale
   // branch_stock and could oversell. Empty dep array = runs once on mount.
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["items"] });
+    queryClient.invalidateQueries({ queryKey: queryKeys.items() });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { data: allItems = [], isLoading: itemsLoading } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await adminFetch("/api/items");
       if (!response.ok) {
@@ -196,13 +166,7 @@ export default function TransferModal({ branches, onClose }) {
   };
 
   const stockAtQuery = useQuery({
-    queryKey: [
-      "branch-stock-at",
-      fromIdNum,
-      toIdNum,
-      selectedItem?.id,
-      operationDate,
-    ],
+    queryKey: queryKeys.branchStockAt(fromIdNum,toIdNum,selectedItem?.id,operationDate),
     enabled: !!(selectedItem?.id && (fromIdNum || toIdNum)),
     queryFn: async () => {
       const ids = [fromIdNum, toIdNum].filter(Boolean);

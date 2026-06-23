@@ -1,5 +1,6 @@
 node_modules/
 .react-router/
+.vitest/
 
 # Build output
 # IMPORTANT: build/ MUST be committed — Railway serves these files directly.

@@ -160,7 +160,7 @@ export const ws = {
     "dark:bg-white/[0.05] dark:bg-none dark:border-white/10 " +
     "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
   iconButton:
-    "inline-flex items-center justify-center w-10 h-10 rounded-2xl " +
+    "inline-flex items-center justify-center w-11 h-11 rounded-2xl touch-manipulation " +
     "bg-white text-slate-700 border border-slate-200 " +
     "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_1px_2px_rgba(15,23,42,0.04)] " +
     "transition-colors " +

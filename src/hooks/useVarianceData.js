@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useVarianceData(
   isAuthenticated,
@@ -13,13 +14,7 @@ export function useVarianceData(
     isLoading: varianceLoading,
     error: varianceError,
   } = useQuery({
-    queryKey: [
-      "variance",
-      varianceBranchId,
-      varianceItemId,
-      varianceFrom,
-      varianceTo,
-    ],
+    queryKey: queryKeys.variance(varianceBranchId,varianceItemId,varianceFrom,varianceTo),
     queryFn: async () => {
       const params = new URLSearchParams();
       params.set("branchId", String(varianceBranchId));

@@ -1,6 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { adminFetch } from "@/utils/apiAuth";
+import {
+  invalidatePayrollQueries,
+  queryKeys,
+} from "../utils/queryKeys.js";
 
 function getCreatedCount(result) {
   if (!result) return 0;
@@ -15,6 +19,11 @@ function getCreatedCount(result) {
 
 export function useHRBonusMutations() {
   const queryClient = useQueryClient();
+  const invalidateAffectedQueries = () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: queryKeys.hrBonuses() }),
+      invalidatePayrollQueries(queryClient),
+    ]);
 
   const createMutation = useMutation({
     mutationFn: async (data) => {
@@ -29,8 +38,8 @@ export function useHRBonusMutations() {
       }
       return result;
     },
-    onSuccess: (result) => {
-      queryClient.invalidateQueries({ queryKey: ["hr-bonuses"] });
+    onSuccess: async (result) => {
+      await invalidateAffectedQueries();
 
       const count = getCreatedCount(result);
       if (count > 1) {
@@ -58,8 +67,8 @@ export function useHRBonusMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hr-bonuses"] });
+    onSuccess: async () => {
+      await invalidateAffectedQueries();
       toast.success("تم تحديث البونص");
     },
     onError: (error) => {
@@ -79,8 +88,8 @@ export function useHRBonusMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hr-bonuses"] });
+    onSuccess: async () => {
+      await invalidateAffectedQueries();
       toast.success("تم حذف البونص");
     },
     onError: (error) => {

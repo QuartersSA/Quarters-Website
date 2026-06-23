@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch, clearAdminSession } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 function statusFromError(err) {
   const status = err?.status;
@@ -39,13 +40,13 @@ async function checkedAdminFetch(url) {
 
 export function useHREmployeesData(isAuthenticated) {
   const employeesQuery = useQuery({
-    queryKey: ["hr-employees"],
+    queryKey: queryKeys.hrEmployees(),
     queryFn: async () => checkedAdminFetch("/api/hr/employees"),
     enabled: isAuthenticated,
   });
 
   const branchesQuery = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => checkedAdminFetch("/api/branches"),
     enabled: isAuthenticated,
   });

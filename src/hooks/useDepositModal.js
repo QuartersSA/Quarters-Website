@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useDepositModal() {
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -10,7 +11,7 @@ export function useDepositModal() {
   const [depositResult, setDepositResult] = useState(null);
 
   const branchesQuery = useQuery({
-    queryKey: ["branches-for-deposit"],
+    queryKey: queryKeys.branchesForDeposit(),
     enabled: showDepositModal,
     queryFn: async () => {
       const res = await adminFetch("/api/branches");

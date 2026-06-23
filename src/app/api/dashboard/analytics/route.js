@@ -719,8 +719,8 @@ export async function GET(request) {
 
         const daysToDepletion = Math.round(currentQty / dailyConsumption);
         const predictedDepletionDate = new Date(latestDate);
-        predictedDepletionDate.setDate(
-          predictedDepletionDate.getDate() + daysToDepletion,
+        predictedDepletionDate.setUTCDate(
+          predictedDepletionDate.getUTCDate() + daysToDepletion,
         );
 
         return {

@@ -1,0 +1,1 @@
+import{c as r}from"./ui-CGxEAera.js";if(typeof window<"u"){const s={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},s,n),{get(e,o){return o in e?e[o]:void 0},has(){return!0}})}const t=r("ArrowUpRight",[["path",{d:"M7 7h10v10",key:"1tivn9"}],["path",{d:"M7 17 17 7",key:"1vkiza"}]]);export{t as A};

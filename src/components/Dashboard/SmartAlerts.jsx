@@ -59,12 +59,15 @@ export function SmartAlerts({ alerts }) {
                 <p className="font-semibold text-sm">{alert.message}</p>
                 {hasItems && (
                   <button
+                    type="button"
                     onClick={() => {
                       const next = new Set(expanded);
                       if (isExpanded) next.delete(i);
                       else next.add(i);
                       setExpanded(next);
                     }}
+                    aria-label={isExpanded ? "إخفاء التفاصيل" : "عرض التفاصيل"}
+                    title={isExpanded ? "إخفاء التفاصيل" : "عرض التفاصيل"}
                     className="opacity-70 hover:opacity-100 transition-opacity"
                   >
                     {isExpanded ? (
@@ -89,7 +92,10 @@ export function SmartAlerts({ alerts }) {
               )}
             </div>
             <button
+              type="button"
               onClick={() => setDismissed((prev) => new Set([...prev, i]))}
+              aria-label="إخفاء التنبيه"
+              title="إخفاء التنبيه"
               className="opacity-50 hover:opacity-100 transition-opacity flex-shrink-0"
             >
               <X className="w-4 h-4" />

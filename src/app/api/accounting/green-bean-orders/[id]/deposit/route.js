@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 /**
  * POST /api/accounting/green-bean-orders/:id/deposit
@@ -194,7 +195,7 @@ export async function POST(request, { params }) {
     // Format order_date as YYYY-MM-DD for the audit note (best-effort).
     let orderDateStr = null;
     if (order.order_date instanceof Date) {
-      orderDateStr = order.order_date.toISOString().slice(0, 10);
+      orderDateStr = formatRiyadhDateForInput(order.order_date);
     } else if (order.order_date) {
       const raw = String(order.order_date);
       const isoMatch = raw.match(/^(\d{4}-\d{2}-\d{2})/);
@@ -203,7 +204,7 @@ export async function POST(request, { params }) {
       } else {
         const parsed = new Date(raw);
         if (!isNaN(parsed.getTime())) {
-          orderDateStr = parsed.toISOString().slice(0, 10);
+          orderDateStr = formatRiyadhDateForInput(parsed);
         }
       }
     }

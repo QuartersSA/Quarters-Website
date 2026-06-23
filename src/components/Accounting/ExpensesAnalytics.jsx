@@ -14,6 +14,7 @@ import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
 import useAdminTheme from "@/hooks/useAdminTheme";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 function safeNum(v) {
   const n = Number(v);
@@ -51,7 +52,7 @@ export default function ExpensesAnalytics({ month, expenses }) {
   const { isDark } = useAdminTheme();
 
   const trendQuery = useQuery({
-    queryKey: ["accounting-expenses-trend", month, 12],
+    queryKey: queryKeys.accountingExpenseTrend(month,12),
     enabled: !!month,
     queryFn: async () => {
       const params = new URLSearchParams({

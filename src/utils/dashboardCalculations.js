@@ -22,14 +22,10 @@ export function calculateDashboardStats(
       ? Math.round((completedOperations / totalOperations) * 100)
       : 0;
 
-  const now = new Date();
-  const startOfToday = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
+  const startOfToday = new Date(`${todayRiyadhDateKey()}T00:00:00+03:00`);
+  const startOfLast7 = new Date(
+    `${riyadhDateKeyFromOffset(-6)}T00:00:00+03:00`,
   );
-  const startOfLast7 = new Date(startOfToday);
-  startOfLast7.setDate(startOfLast7.getDate() - 6);
 
   const operationsToday =
     operations?.filter((op) => new Date(op.created_at) >= startOfToday)
@@ -65,3 +61,4 @@ export function getSelectedItemName(selectedItemId, activeItems) {
   const match = activeItems.find((it) => it.id === idNum);
   return match?.name || "";
 }
+import { riyadhDateKeyFromOffset, todayRiyadhDateKey } from "./dateUtils.js";

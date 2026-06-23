@@ -1,11 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { invalidateInventoryQueries, queryKeys } from "@/utils/queryKeys";
 
 export function useOperationsData(isAuthenticated) {
   const queryClient = useQueryClient();
 
   const { data: operations, isLoading } = useQuery({
-    queryKey: ["inventory-operations"],
+    queryKey: queryKeys.inventoryOperations(),
     queryFn: async () => {
       const response = await adminFetch("/api/inventory-operations");
       if (!response.ok) throw new Error("Failed to fetch operations");
@@ -15,7 +16,7 @@ export function useOperationsData(isAuthenticated) {
   });
 
   const { data: branches } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");
@@ -37,16 +38,7 @@ export function useOperationsData(isAuthenticated) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
-      queryClient.invalidateQueries({ queryKey: ["items-summary"] });
-      // `useLowStockData` keys its query as ["low-stock-items"]; the
-      // bare ["low-stock"] key invalidated nothing.
-      queryClient.invalidateQueries({ queryKey: ["low-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
-      queryClient.invalidateQueries({ queryKey: ["purchase-receipts"] });
-      // Timeline report walks the same chain; stale cache would show
-      // pre-delete events / balances after a transfer is removed.
-      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
+      invalidateInventoryQueries(queryClient);
     },
   });
 

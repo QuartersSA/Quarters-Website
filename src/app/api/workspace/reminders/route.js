@@ -1,4 +1,5 @@
 import sql from "@/app/api/utils/sql";
+import { requireCronSecret } from "@/app/api/utils/cronAuth";
 import {
   buildTaskLinkLine,
   formatDateOnly,
@@ -140,7 +141,12 @@ function buildOverdueMessage(task, assigneesText) {
 // Runs WhatsApp reminders (Riyadh time):
 // - Due soon: due tomorrow ("باقي يوم واحد") OR due today ("استحقاق اليوم"), every 4 hours
 // - Overdue: once when a task becomes overdue (next day after due_date)
-export async function POST() {
+export async function POST(request) {
+  const auth = requireCronSecret(request, "WORKSPACE_CRON_SECRET");
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
+
   try {
     // 1) Mark newly overdue tasks once (for consistency) + add history event
     // NOTE: Use Riyadh-local date because DB server time is UTC.

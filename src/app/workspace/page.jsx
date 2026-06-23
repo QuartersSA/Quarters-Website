@@ -4,6 +4,7 @@ import React, { useMemo, useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import WorkspaceSidebar from "@/components/Workspace/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
+import { workspaceFetch } from "@/utils/apiAuth";
 import {
   CalendarDays,
   CheckCircle2,
@@ -23,7 +24,8 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import { StatusPill } from "@/components/Tasks/StatusPill";
 import { PriorityPill } from "@/components/Tasks/PriorityPill";
-import { LOCALE } from "@/utils/dateUtils";
+import { currentRiyadhHour, LOCALE } from "@/utils/dateUtils";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 function formatDateOnly(d) {
   if (!d) return "—";
@@ -56,7 +58,7 @@ function formatTimeAgo(dateStr) {
 }
 
 function greetingText() {
-  const hr = new Date().getHours();
+  const hr = currentRiyadhHour();
   if (hr < 12) return "صباح الخير";
   if (hr < 17) return "مساء الخير";
   return "مساء الخير";
@@ -252,11 +254,11 @@ export default function WorkspaceSummaryPage() {
   const myId = employeeId;
 
   const summaryQuery = useQuery({
-    queryKey: ["workspaceSummary", myId],
+    queryKey: queryKeys.workspaceSummary(myId),
     enabled: !!myId,
     refetchInterval: 30000,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/summary?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/summary?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`[${res.status}] ${res.statusText}`);
       }
@@ -282,7 +284,7 @@ export default function WorkspaceSummaryPage() {
 
   const quickStatusMutation = useMutation({
     mutationFn: async ({ taskId, status }) => {
-      const res = await fetch("/api/workspace/tasks/quick-status", {
+      const res = await workspaceFetch("/api/workspace/tasks/quick-status", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: myId, taskId, status }),
@@ -296,8 +298,8 @@ export default function WorkspaceSummaryPage() {
       setChangingTaskId(taskId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workspaceSummary"] });
-      queryClient.invalidateQueries({ queryKey: ["workspaceTasks"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceSummary() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceTasks() });
     },
     onSettled: () => {
       setChangingTaskId(null);

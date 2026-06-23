@@ -1,25 +1,15 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { assertItemsEnabledAtBranch } from "@/app/api/utils/branchVisibility";
+import { validateBusinessDate } from "@/utils/dateUtils";
 
 /**
  * Validate a received_at value.
  * Returns the parsed Date or null when out of business range.
  */
 function validateReceivedAt(value) {
-  if (!value) return null;
-  const str = String(value).trim();
-  if (!str) return null;
-  let d;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    d = new Date(`${str}T00:00:00`);
-  } else {
-    d = new Date(str);
-  }
-  if (isNaN(d.getTime())) return null;
-  if (d.getFullYear() < 2020) return null;
-  if (d > new Date(Date.now() + 24 * 60 * 60 * 1000)) return null;
-  return d;
+  const result = validateBusinessDate(value, { allowFuture: 1, minYear: 2020 });
+  return result.ok ? result.date : null;
 }
 
 export async function GET(request) {
@@ -59,11 +49,11 @@ export async function GET(request) {
 
     const hasFromTo = !!fromRaw && !!toRaw;
     if (hasFromTo) {
-      where += ` AND pr.received_at::date >= $${idx}::date`;
+      where += ` AND (pr.received_at AT TIME ZONE 'Asia/Riyadh')::date >= $${idx}::date`;
       values.push(fromRaw);
       idx += 1;
 
-      where += ` AND pr.received_at::date <= $${idx}::date`;
+      where += ` AND (pr.received_at AT TIME ZONE 'Asia/Riyadh')::date <= $${idx}::date`;
       values.push(toRaw);
       idx += 1;
     }

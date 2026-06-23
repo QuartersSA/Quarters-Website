@@ -16,6 +16,8 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { riyadhDateKeyFromOffset } from "@/utils/dateUtils";
+import { workspaceFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 export default function WorkspaceTemplatesPage() {
   const { employeeId } = useWorkspaceUser();
@@ -31,20 +33,20 @@ export default function WorkspaceTemplatesPage() {
   const [formChecklistText, setFormChecklistText] = useState("");
 
   const templatesQuery = useQuery({
-    queryKey: ["workspaceTemplates", myId],
+    queryKey: queryKeys.workspaceTemplates(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/templates?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/templates?employeeId=${myId}`);
       if (!res.ok) throw new Error("فشل تحميل القوالب");
       return res.json();
     },
   });
 
   const spacesQuery = useQuery({
-    queryKey: ["workspaceSpaces", myId],
+    queryKey: queryKeys.workspaceSpaces(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/spaces?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/spaces?employeeId=${myId}`);
       if (!res.ok) throw new Error("فشل تحميل المساحات");
       return res.json();
     },
@@ -61,7 +63,7 @@ export default function WorkspaceTemplatesPage() {
         .filter(Boolean)
         .map((title) => ({ title }));
 
-      const res = await fetch("/api/workspace/templates", {
+      const res = await workspaceFetch("/api/workspace/templates", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -81,7 +83,7 @@ export default function WorkspaceTemplatesPage() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workspaceTemplates"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceTemplates() });
       setShowCreate(false);
       setFormName("");
       setFormTitle("");
@@ -94,7 +96,7 @@ export default function WorkspaceTemplatesPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (templateId) => {
-      const res = await fetch("/api/workspace/templates", {
+      const res = await workspaceFetch("/api/workspace/templates", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: myId, templateId }),
@@ -103,7 +105,7 @@ export default function WorkspaceTemplatesPage() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workspaceTemplates"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceTemplates() });
     },
   });
 
@@ -111,7 +113,7 @@ export default function WorkspaceTemplatesPage() {
     mutationFn: async (template) => {
       const dueDate = riyadhDateKeyFromOffset(3);
 
-      const res = await fetch("/api/workspace/tasks", {
+      const res = await workspaceFetch("/api/workspace/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -140,7 +142,7 @@ export default function WorkspaceTemplatesPage() {
         for (const item of checklistItems) {
           const itemTitle = item?.title || "";
           if (!itemTitle) continue;
-          await fetch(`/api/workspace/tasks/${taskId}/checklist`, {
+          await workspaceFetch(`/api/workspace/tasks/${taskId}/checklist`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ employeeId: myId, title: itemTitle }),
@@ -151,8 +153,8 @@ export default function WorkspaceTemplatesPage() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workspaceTasks"] });
-      queryClient.invalidateQueries({ queryKey: ["workspaceSummary"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceTasks() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceSummary() });
     },
   });
 

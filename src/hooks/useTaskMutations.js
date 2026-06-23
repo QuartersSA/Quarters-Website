@@ -1,21 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { workspaceFetch } from "@/utils/apiAuth";
+import { invalidateWorkspaceTaskQueries } from "../utils/queryKeys.js";
 
 export function useTaskMutations(myId, closeModal) {
   const queryClient = useQueryClient();
 
-  const invalidateAll = () => {
-    queryClient.invalidateQueries({ queryKey: ["workspaceTasks"] });
-    queryClient.invalidateQueries({
-      queryKey: ["workspaceOverdueTasks", myId],
-    });
-
-    // NEW: task modal also shows history + updates, so refresh those too
-    queryClient.invalidateQueries({ queryKey: ["workspaceTaskUpdates"] });
-    queryClient.invalidateQueries({ queryKey: ["workspaceTaskHistory"] });
-    queryClient.invalidateQueries({ queryKey: ["workspaceTaskAttachments"] });
-    queryClient.invalidateQueries({ queryKey: ["workspaceTaskChecklist"] });
-    queryClient.invalidateQueries({ queryKey: ["workspaceSubtasks"] });
-  };
+  const invalidateAll = () => invalidateWorkspaceTaskQueries(queryClient);
 
   const createMutation = useMutation({
     mutationFn: async (payload) => {
@@ -23,7 +13,7 @@ export function useTaskMutations(myId, closeModal) {
       const safePayload = payload && typeof payload === "object" ? payload : {};
       const { taskUpdate, ...taskPayload } = safePayload;
 
-      const res = await fetch("/api/workspace/tasks", {
+      const res = await workspaceFetch("/api/workspace/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: myId, ...taskPayload }),
@@ -34,8 +24,8 @@ export function useTaskMutations(myId, closeModal) {
       }
       return data;
     },
-    onSuccess: () => {
-      invalidateAll();
+    onSuccess: async () => {
+      await invalidateAll();
       closeModal();
     },
   });
@@ -46,7 +36,7 @@ export function useTaskMutations(myId, closeModal) {
       const { taskUpdate, ...taskPayload } = safePayload;
 
       // 1) Update the task itself
-      const res = await fetch(`/api/workspace/tasks/${id}`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: myId, ...taskPayload }),
@@ -69,7 +59,7 @@ export function useTaskMutations(myId, closeModal) {
         // The updates endpoint requires text, so if user attached files only, send a short default note.
         const finalText = bodyText.length > 0 ? bodyText : "تم إضافة مرفقات";
 
-        const res2 = await fetch(`/api/workspace/tasks/${id}/updates`, {
+        const res2 = await workspaceFetch(`/api/workspace/tasks/${id}/updates`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -94,15 +84,15 @@ export function useTaskMutations(myId, closeModal) {
 
       return data;
     },
-    onSuccess: () => {
-      invalidateAll();
+    onSuccess: async () => {
+      await invalidateAll();
       closeModal();
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await fetch(`/api/workspace/tasks/${id}`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: myId }),
@@ -113,8 +103,8 @@ export function useTaskMutations(myId, closeModal) {
       }
       return data;
     },
-    onSuccess: () => {
-      invalidateAll();
+    onSuccess: async () => {
+      await invalidateAll();
       closeModal();
     },
   });

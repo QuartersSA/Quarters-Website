@@ -23,6 +23,7 @@ import { PurchaseReceiptModal } from "@/components/Dashboard/PurchaseReceiptModa
 import EditOperationModal from "@/components/Operations/EditOperationModal";
 import { ws } from "@/components/Workspace/ui";
 import { Breadcrumb } from "@/components/Dashboard/Breadcrumb";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 export default function OperationsPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -33,7 +34,7 @@ export default function OperationsPage() {
 
   /* ── items (needed for opening-session & receipt modals) ── */
   const { data: items } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await adminFetch("/api/items");
       if (!response.ok) throw new Error("Failed to fetch items");

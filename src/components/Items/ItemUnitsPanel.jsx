@@ -15,6 +15,7 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import MeasurementUnitModal from "@/components/Items/MeasurementUnitModal";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 /**
  * Hierarchical multi-unit editor.
@@ -71,7 +72,7 @@ export default function ItemUnitsPanel({
   const [pendingRowIndex, setPendingRowIndex] = useState(null);
 
   const catalogQuery = useQuery({
-    queryKey: ["measurement-units"],
+    queryKey: queryKeys.measurementUnits(),
     queryFn: async () => {
       const res = await adminFetch("/api/measurement-units");
       if (!res.ok) throw new Error("failed to load units");
@@ -213,7 +214,7 @@ export default function ItemUnitsPanel({
   };
 
   const handleUnitCreated = (row) => {
-    queryClient.invalidateQueries({ queryKey: ["measurement-units"] });
+    queryClient.invalidateQueries({ queryKey: queryKeys.measurementUnits() });
     const idx = pendingRowIndex;
     setPendingRowIndex(null);
     if (idx == null) return;

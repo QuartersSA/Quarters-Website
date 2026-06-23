@@ -4,14 +4,13 @@
 // Requires a secret key to prevent unauthorized access.
 
 import sql from "@/app/api/utils/sql";
+import { requireCronSecret } from "@/app/api/utils/cronAuth";
 import {
   buildTaskLinkLine,
   formatDateOnly,
   formatTaskLine,
   notifyAssigneesOnTaskWhatsApp,
 } from "@/app/api/workspace/_notify";
-
-const CRON_SECRET = process.env.WORKSPACE_CRON_SECRET || "";
 
 function toInt(value) {
   if (value === null || value === undefined || value === "") return null;
@@ -333,15 +332,12 @@ async function runReminders() {
 }
 
 export async function GET(request) {
+  const auth = requireCronSecret(request, "WORKSPACE_CRON_SECRET");
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
+
   try {
-    // Validate cron secret (if WORKSPACE_CRON_SECRET is set, require it; otherwise allow open access)
-    const url = new URL(request.url);
-    const key = url.searchParams.get("key") || "";
-
-    if (CRON_SECRET && key !== CRON_SECRET) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const result = await runReminders();
 
     console.log("Cron: reminders completed", JSON.stringify(result));

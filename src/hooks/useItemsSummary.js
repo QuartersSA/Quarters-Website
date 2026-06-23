@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useItemsSummary(isAuthenticated) {
   const {
@@ -8,7 +9,7 @@ export function useItemsSummary(isAuthenticated) {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["items-summary"],
+    queryKey: queryKeys.itemsSummary(),
     queryFn: async () => {
       const response = await adminFetch("/api/items/summary");
       if (!response.ok) throw new Error("Failed to fetch items summary");
@@ -18,7 +19,7 @@ export function useItemsSummary(isAuthenticated) {
   });
 
   const { data: branches = [] } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");

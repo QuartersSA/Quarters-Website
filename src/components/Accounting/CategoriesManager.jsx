@@ -7,6 +7,7 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 const SCOPE_OPTIONS = [
   { value: "both", label: "الاثنين (ثابت + متغيّر)" },
@@ -37,7 +38,7 @@ export default function CategoriesManager() {
   // (active + inactive). Other endpoints continue to filter inactive
   // ones out by default.
   const typesQuery = useQuery({
-    queryKey: ["accounting_expense_types_full"],
+    queryKey: queryKeys.accountingExpenseTypesFull(),
     queryFn: async () => {
       const r = await adminFetch(
         "/api/accounting/expense-types?includeInactive=1",
@@ -49,9 +50,9 @@ export default function CategoriesManager() {
   });
 
   const invalidate = () => {
-    queryClient.invalidateQueries({ queryKey: ["accounting_expense_types"] });
+    queryClient.invalidateQueries({ queryKey: queryKeys.accountingExpenseTypes() });
     queryClient.invalidateQueries({
-      queryKey: ["accounting_expense_types_full"],
+      queryKey: queryKeys.accountingExpenseTypesFull(),
     });
   };
 
@@ -116,9 +117,9 @@ export default function CategoriesManager() {
       invalidate();
       // The mutation also invalidates expenses + fixed-expenses since
       // a force delete drops rows there too.
-      queryClient.invalidateQueries({ queryKey: ["accounting_expenses"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountingExpenses() });
       queryClient.invalidateQueries({
-        queryKey: ["accounting_fixed_expenses"],
+        queryKey: queryKeys.accountingFixedExpenses(),
       });
       toast.success("تم الحذف");
     },

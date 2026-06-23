@@ -24,6 +24,7 @@ import {
   employeeWasteFetch,
 } from "@/utils/apiAuth";
 import { todayRiyadhDateKey } from "@/utils/dateUtils";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 // Build a deterministic localStorage key for the auto-saved draft.
 // MUST use Riyadh ISO YYYY-MM-DD. Plain Arabic locale can produce Hijri
@@ -147,7 +148,7 @@ export default function WastePage() {
   }, [selectedItem]);
 
   const { data: items } = useQuery({
-    queryKey: ["waste-items"],
+    queryKey: queryKeys.wasteItems(),
     queryFn: async () => {
       const response = await employeeWasteFetch("/api/waste/items");
       if (!response.ok) {

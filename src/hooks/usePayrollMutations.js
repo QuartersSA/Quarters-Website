@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function usePayrollRebuild() {
   const queryClient = useQueryClient();
@@ -23,7 +24,7 @@ export function usePayrollRebuild() {
     },
     onSuccess: async (_data, vars) => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll", String(vars.month)],
+        queryKey: queryKeys.accountingPayroll(String(vars.month)),
       });
       toast.success("تم تحديث مسير الرواتب");
     },
@@ -64,12 +65,12 @@ export function usePayrollPayment(month) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll", String(month)],
+        queryKey: queryKeys.accountingPayroll(String(month)),
       });
       // Marking an entry paid (or un-paid) inside a closed month
       // changes the loans page's paid_months_to_date counter.
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_employee_loans"],
+        queryKey: queryKeys.employeeLoans(),
       });
     },
     onError: (error) => {
@@ -97,14 +98,14 @@ export function usePayrollClose(month) {
     },
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll", String(month)],
+        queryKey: queryKeys.accountingPayroll(String(month)),
       });
       // Closing / reopening the month flips which entries the loans
       // page counts as paid installments — refresh the loans cache so
       // the "x / N شهر" column reflects reality without a manual
       // page reload.
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_employee_loans"],
+        queryKey: queryKeys.employeeLoans(),
       });
       const msg = data?.run?.is_closed
         ? "تم تقفيل الشهر بنجاح"

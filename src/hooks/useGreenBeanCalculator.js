@@ -11,6 +11,7 @@ import {
   computeGreenBeanMetrics,
 } from "@/utils/greenBeanCalculations";
 import { formatRunCreatedAt } from "@/utils/payrollCalculations";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useGreenBeanCalculator({ ready, isAuthenticated, isAdmin }) {
   const queryClient = useQueryClient();
@@ -66,7 +67,7 @@ export function useGreenBeanCalculator({ ready, isAuthenticated, isAdmin }) {
   const calculatorMode = calculatorModeInternal;
 
   const beansQuery = useQuery({
-    queryKey: ["accounting", "greenBeans"],
+    queryKey: queryKeys.accountingGreenBeans(),
     enabled: !!ready && !!isAuthenticated && !!isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/green-beans");
@@ -166,7 +167,7 @@ export function useGreenBeanCalculator({ ready, isAuthenticated, isAdmin }) {
     },
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeans"],
+        queryKey: queryKeys.accountingGreenBeans(),
       });
 
       // After adding a bean, we want to continue in "register" mode and clear the form.
@@ -208,7 +209,7 @@ export function useGreenBeanCalculator({ ready, isAuthenticated, isAdmin }) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeans"],
+        queryKey: queryKeys.accountingGreenBeans(),
       });
     },
   });
@@ -231,7 +232,7 @@ export function useGreenBeanCalculator({ ready, isAuthenticated, isAdmin }) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"],
+        queryKey: queryKeys.accountingGreenBeanOrders(),
       });
     },
   });

@@ -1,4 +1,4 @@
-import { Banknote, Package, Layers, AlertCircle } from "lucide-react";
+import { Banknote, Package, Layers, AlertCircle, RefreshCw } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { StockValueExportMenu } from "./StockValueExportMenu";
 
@@ -38,6 +38,9 @@ export function StockValueTable({
   items,
   totalValue,
   isLoading,
+  isFetching,
+  error,
+  onRetry,
   onExportExcel,
   onExportPDF,
 }) {
@@ -58,7 +61,25 @@ export function StockValueTable({
         />
       </div>
 
-      {isLoading ? (
+      {error ? (
+        <div className="p-10 text-center" role="alert">
+          <AlertCircle className="mx-auto mb-3 h-10 w-10 text-red-600 dark:text-red-300" />
+          <p className="font-semibold text-slate-900 dark:text-white">
+            تعذر تحميل قيمة المخزون
+          </p>
+          <p className="mt-1 text-sm text-slate-600 dark:text-white/60">
+            تحقق من الاتصال ثم أعد المحاولة.
+          </p>
+          <button
+            type="button"
+            onClick={onRetry}
+            className={`${ws.btnSecondary} mt-4`}
+          >
+            <RefreshCw className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`} />
+            إعادة المحاولة
+          </button>
+        </div>
+      ) : isLoading ? (
         <div className="p-12 text-center text-slate-600 dark:text-slate-600 dark:text-white/55">
           <div className="flex items-center justify-center gap-3">
             <div className="w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" />

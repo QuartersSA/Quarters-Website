@@ -23,6 +23,7 @@ import {
   employeeInventoryFetch,
 } from "@/utils/apiAuth";
 import { todayRiyadhDateKey } from "@/utils/dateUtils";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 // Build a deterministic localStorage key for the auto-saved draft.
 // MUST use Riyadh ISO YYYY-MM-DD. Plain Arabic locale can produce Hijri
@@ -187,7 +188,7 @@ export default function EmployeeInventoryPage() {
   }, [selectedItem]);
 
   const { data: categories = [] } = useQuery({
-    queryKey: ["item-categories"],
+    queryKey: queryKeys.itemCategories(),
     queryFn: async () => {
       const response = await employeeInventoryFetch("/api/item-categories");
       if (!response.ok) {
@@ -199,7 +200,7 @@ export default function EmployeeInventoryPage() {
   });
 
   const { data: items } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await employeeInventoryFetch("/api/items");
       if (!response.ok) {

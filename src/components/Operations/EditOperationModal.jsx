@@ -15,6 +15,8 @@ import {
 import { adminFetch } from "@/utils/apiAuth";
 import { ws } from "@/components/Workspace/ui";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import { formatRiyadhDateTimeForInput } from "@/utils/dateUtils";
+import { invalidateInventoryQueries, queryKeys } from "@/utils/queryKeys";
 
 const TYPE_LABELS = {
   Daily: "تعديل الجرد اليومي",
@@ -38,35 +40,6 @@ const TYPE_ICONS = {
   Opening: FolderOpen,
 };
 
-function formatDateForInput(dateStr) {
-  if (!dateStr) return "";
-  // Storage convention (post-fix): DB stores the real moment as UTC.
-  // The picker expects a Riyadh wall-clock string ("YYYY-MM-DDTHH:mm").
-  // Use Intl with `timeZone: "Asia/Riyadh"` to convert independent of
-  // the runtime TZ (SSR, mis-configured browser, etc.). The old
-  // `stripTZ`-based formatter silently returned the UTC wall-clock,
-  // 3 hours behind real Riyadh time.
-  try {
-    const d = new Date(dateStr);
-    if (Number.isNaN(d.getTime())) return "";
-    const fmt = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Riyadh",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-    const parts = fmt.formatToParts(d);
-    const get = (t) => parts.find((p) => p.type === t)?.value || "00";
-    const hh = get("hour") === "24" ? "00" : get("hour");
-    return `${get("year")}-${get("month")}-${get("day")}T${hh}:${get("minute")}`;
-  } catch {
-    return "";
-  }
-}
-
 export default function EditOperationModal({
   operation,
   operationDetails,
@@ -87,7 +60,9 @@ export default function EditOperationModal({
   const [note, setNote] = useState(
     operationDetails?.note ?? operation?.note ?? "",
   );
-  const [opDate, setOpDate] = useState(formatDateForInput(initialDate));
+  const [opDate, setOpDate] = useState(
+    formatRiyadhDateTimeForInput(initialDate),
+  );
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
 
@@ -118,7 +93,7 @@ export default function EditOperationModal({
 
   // Fetch all items for the full list
   const { data: allItemsRaw = [] } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");
@@ -179,19 +154,7 @@ export default function EditOperationModal({
     },
     onSuccess: () => {
       setError(null);
-      queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      queryClient.invalidateQueries({ queryKey: ["items-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["variance"] });
-      // `useLowStockData` keys its query as ["low-stock-items"] — the
-      // bare ["low-stock"] invalidation was hitting nothing.
-      queryClient.invalidateQueries({ queryKey: ["low-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
-      queryClient.invalidateQueries({ queryKey: ["operation-details"] });
-      queryClient.invalidateQueries({ queryKey: ["opening-sessions"] });
-      // Timeline report reads the same chain, so its cached events
-      // need refreshing too after any quantity/date edit.
-      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
+      invalidateInventoryQueries(queryClient);
       onClose();
     },
     onError: (err) => {

@@ -9,6 +9,7 @@ import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 function formatMoney(value) {
   const n = Number(value);
@@ -44,7 +45,7 @@ export default function ShiftClosePage() {
   const branchesFromUser = Array.isArray(user?.branches) ? user.branches : [];
 
   const allBranchesQuery = useQuery({
-    queryKey: ["allBranchesForShiftClose"],
+    queryKey: queryKeys.shiftCloseBranches(),
     enabled: isAdmin && branchesFromUser.length === 0,
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
@@ -89,7 +90,7 @@ export default function ShiftClosePage() {
   const [to, setTo] = useState("");
 
   const closingsQuery = useQuery({
-    queryKey: ["shiftClosings_admin", employeeId, branchId, from, to],
+    queryKey: queryKeys.shiftClosings(employeeId,branchId,from,to),
     enabled: !!employeeId && isAdmin && (!!branchId || branchId === "all"),
     queryFn: async () => {
       const qs = new URLSearchParams({

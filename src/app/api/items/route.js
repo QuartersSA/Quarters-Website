@@ -4,7 +4,9 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 // Idempotent schema additions; runs cheaply on every request.
 async function ensureSchema() {
   try {
-    await sql`ALTER TABLE items ADD COLUMN IF NOT EXISTS max_stock_threshold INTEGER`;
+    await sql`ALTER TABLE items ADD COLUMN IF NOT EXISTS max_stock_threshold NUMERIC(12, 3)`;
+    await sql`ALTER TABLE items ALTER COLUMN min_stock_threshold TYPE NUMERIC(12, 3) USING min_stock_threshold::numeric`;
+    await sql`ALTER TABLE items ALTER COLUMN max_stock_threshold TYPE NUMERIC(12, 3) USING max_stock_threshold::numeric`;
   } catch (e) {
     // Don't fail the request if the migration has already been applied
     // by a concurrent request or if the user lacks ALTER permission.
@@ -59,6 +61,11 @@ async function ensureSchema() {
         sort_order        INTEGER NOT NULL DEFAULT 0,
         UNIQUE(item_id, unit_id)
       )
+    `;
+    await sql`
+      ALTER TABLE item_units
+      ALTER COLUMN conversion_factor TYPE NUMERIC(20, 8)
+      USING conversion_factor::numeric
     `;
   } catch (e) {
     console.error("ensureSchema item_units:", e?.message);
@@ -454,6 +461,12 @@ async function writeItemUnits(itemId, units) {
   if (baseCount !== 1) {
     throw new Error("يجب اختيار وحدة أساسية واحدة بالضبط");
   }
+  if (units.filter((u) => u.default_purchase).length !== 1) {
+    throw new Error("يجب اختيار وحدة مشتريات افتراضية واحدة");
+  }
+  if (units.filter((u) => u.default_inventory).length !== 1) {
+    throw new Error("يجب اختيار وحدة مخزون افتراضية واحدة");
+  }
   for (const u of units) {
     const f = Number(u.conversion_factor);
     if (!Number.isFinite(f) || f <= 0) {
@@ -464,13 +477,7 @@ async function writeItemUnits(itemId, units) {
     }
   }
 
-  // Wipe + reinsert. ON DELETE SET NULL on items.default_*_unit_id
-  // keeps the parent row valid while the children swap in.
-  await sql`DELETE FROM item_units WHERE item_id = ${itemId}`;
-
-  let defaultPurchaseId = null;
-  let defaultInventoryId = null;
-
+  const resolvedUnits = [];
   for (let i = 0; i < units.length; i++) {
     const u = units[i];
     const unitId = await resolveMeasurementUnitId({
@@ -478,28 +485,68 @@ async function writeItemUnits(itemId, units) {
       name_ar: u.name_ar,
       name_en: u.name_en,
     });
-    const inserted = await sql`
-      INSERT INTO item_units (item_id, unit_id, conversion_factor, is_base, sort_order)
-      VALUES (${itemId}, ${unitId}, ${Number(u.conversion_factor)}, ${!!u.is_base}, ${i})
-      RETURNING id
-    `;
-    const newId = Number(inserted[0].id);
-    if (u.default_purchase) defaultPurchaseId = newId;
-    if (u.default_inventory) defaultInventoryId = newId;
-    // Fallback: if the caller forgot the default_* flags, point both
-    // defaults at the base row so the item stays usable.
-    if (u.is_base) {
-      defaultPurchaseId = defaultPurchaseId || newId;
-      defaultInventoryId = defaultInventoryId || newId;
-    }
+    resolvedUnits.push({
+      unit_id: unitId,
+      conversion_factor: Number(u.conversion_factor),
+      is_base: !!u.is_base,
+      sort_order: i,
+      default_purchase: !!u.default_purchase,
+      default_inventory: !!u.default_inventory,
+    });
   }
 
-  await sql`
-    UPDATE items
-    SET default_purchase_unit_id  = ${defaultPurchaseId},
-        default_inventory_unit_id = ${defaultInventoryId}
-    WHERE id = ${itemId}
+  if (new Set(resolvedUnits.map((unitRow) => unitRow.unit_id)).size !== resolvedUnits.length) {
+    throw new Error("لا يمكن إضافة وحدة القياس نفسها مرتين");
+  }
+
+  const generatedIds = await sql`
+    SELECT nextval(pg_get_serial_sequence('item_units', 'id'))::integer AS id
+    FROM generate_series(1, ${resolvedUnits.length}::integer)
   `;
+  if (generatedIds.length !== resolvedUnits.length) {
+    throw new Error("Failed to reserve unit identifiers");
+  }
+
+  const rowsWithIds = resolvedUnits.map((unitRow, index) => ({
+    ...unitRow,
+    id: Number(generatedIds[index].id),
+  }));
+  const defaultPurchaseId = rowsWithIds.find(
+    (unitRow) => unitRow.default_purchase,
+  ).id;
+  const defaultInventoryId = rowsWithIds.find(
+    (unitRow) => unitRow.default_inventory,
+  ).id;
+
+  const statements = [
+    sql`
+      UPDATE items
+      SET default_purchase_unit_id = NULL,
+          default_inventory_unit_id = NULL
+      WHERE id = ${itemId}
+    `,
+    sql`DELETE FROM item_units WHERE item_id = ${itemId}`,
+    ...rowsWithIds.map(
+      (unitRow) => sql`
+        INSERT INTO item_units
+          (id, item_id, unit_id, conversion_factor, is_base, sort_order)
+        VALUES (
+          ${unitRow.id}, ${itemId}, ${unitRow.unit_id},
+          ${unitRow.conversion_factor}, ${unitRow.is_base},
+          ${unitRow.sort_order}
+        )
+      `,
+    ),
+    sql`
+      UPDATE items
+      SET default_purchase_unit_id = ${defaultPurchaseId},
+          default_inventory_unit_id = ${defaultInventoryId}
+      WHERE id = ${itemId}
+    `,
+  ];
+
+  // The Neon transaction keeps the item valid if any insert fails.
+  await sql.transaction(statements);
 }
 
 export async function POST(request) {
@@ -537,15 +584,19 @@ export async function POST(request) {
       return Response.json({ error: "اسم الصنف مطلوب" }, { status: 400 });
     }
 
-    const threshold = min_stock_threshold || 10;
+    const parsedThreshold = Number(min_stock_threshold ?? 10);
+    const threshold =
+      Number.isFinite(parsedThreshold) && parsedThreshold >= 0
+        ? parsedThreshold
+        : 10;
     const maxThreshold =
       max_stock_threshold !== undefined &&
       max_stock_threshold !== null &&
       max_stock_threshold !== ""
-        ? parseInt(max_stock_threshold)
+        ? Number(max_stock_threshold)
         : null;
     const safeMaxThreshold =
-      maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold > 0
+      maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold >= 0
         ? maxThreshold
         : null;
     const showInInventory =
@@ -714,12 +765,17 @@ export async function PUT(request) {
       max_stock_threshold !== undefined &&
       max_stock_threshold !== null &&
       max_stock_threshold !== ""
-        ? parseInt(max_stock_threshold)
+        ? Number(max_stock_threshold)
         : null;
     const safeMaxThreshold =
-      maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold > 0
+      maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold >= 0
         ? maxThreshold
         : null;
+    const parsedMinThreshold = Number(min_stock_threshold ?? 10);
+    const safeMinThreshold =
+      Number.isFinite(parsedMinThreshold) && parsedMinThreshold >= 0
+        ? parsedMinThreshold
+        : 10;
 
     await ensureSchema();
     const result = await sql`
@@ -730,7 +786,7 @@ export async function PUT(request) {
         description = ${description || null},
         image_url = ${image_url || null},
         unit = ${unit || null},
-        min_stock_threshold = ${min_stock_threshold || 10},
+        min_stock_threshold = ${safeMinThreshold},
         max_stock_threshold = ${safeMaxThreshold},
         is_active = ${active},
         category_id = ${safeCategoryId},

@@ -275,6 +275,8 @@ function PaymentRow({ entry, onSave, isClosed }) {
             type="button"
             onClick={handleTogglePaid}
             disabled={isClosed || isLocked}
+            aria-label={isPaid ? "إلغاء حالة الدفع" : "تحديد الراتب كمدفوع"}
+            title={isPaid ? "إلغاء حالة الدفع" : "تم الدفع"}
             className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${
               isPaid
                 ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300"

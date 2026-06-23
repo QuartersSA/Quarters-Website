@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle } from "lucide-react";
 import WorkspaceSidebar from "@/components/Workspace/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
+import { workspaceFetch } from "@/utils/apiAuth";
 import { todayISO, safeArray } from "@/utils/taskUtils";
 import {
   useTasksData,
@@ -27,6 +28,7 @@ import {
   formatDateTime,
   formatDate as formatDateOnly,
 } from "@/utils/dateUtils";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 export default function WorkspaceTasksPage() {
   const { employeeId } = useWorkspaceUser();
@@ -106,10 +108,10 @@ export default function WorkspaceTasksPage() {
 
   const overdueEnabled = !!myId && scope === "team";
   const overdueQuery = useQuery({
-    queryKey: ["workspaceOverdueTasks", myId],
+    queryKey: queryKeys.workspaceOverdueTasks(myId),
     enabled: overdueEnabled,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/overdue?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/overdue?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(
           `When fetching /api/workspace/overdue, the response was [${res.status}] ${res.statusText}`,
@@ -183,7 +185,7 @@ export default function WorkspaceTasksPage() {
 
   const quickStatusMutation = useMutation({
     mutationFn: async ({ taskId, status }) => {
-      const res = await fetch("/api/workspace/tasks/quick-status", {
+      const res = await workspaceFetch("/api/workspace/tasks/quick-status", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: myId, taskId, status }),
@@ -197,9 +199,9 @@ export default function WorkspaceTasksPage() {
       setChangingTaskId(taskId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workspaceTasks"] });
-      queryClient.invalidateQueries({ queryKey: ["workspaceSummary"] });
-      queryClient.invalidateQueries({ queryKey: ["workspaceOverdueTasks"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceTasks() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceSummary() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceOverdueTasks() });
     },
     onSettled: () => {
       setChangingTaskId(null);

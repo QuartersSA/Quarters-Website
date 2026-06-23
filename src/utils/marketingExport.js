@@ -22,7 +22,7 @@ import JSZip from "jszip";
 import { toPng, getFontEmbedCSS } from "html-to-image";
 import { BloggerInvitationCard } from "@/components/Marketing/BloggerInvitationCard";
 import { exportToExcelHTML } from "@/utils/exportUtils";
-import { formatDateTime } from "@/utils/dateUtils";
+import { formatDateTime, todayRiyadhDateKey } from "@/utils/dateUtils";
 
 // PNG capture options.
 //
@@ -275,7 +275,7 @@ export async function exportInvitationsZip(
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  const stamp = new Date().toISOString().slice(0, 10);
+  const stamp = todayRiyadhDateKey();
   a.download = `quarters-bloggers-invitations-${stamp}.zip`;
   document.body.appendChild(a);
   a.click();
@@ -339,7 +339,7 @@ export function exportBloggersData(bloggers) {
     },
   ];
 
-  const stamp = new Date().toISOString().slice(0, 10);
+  const stamp = todayRiyadhDateKey();
   exportToExcelHTML(
     bloggers || [],
     `quarters-bloggers-${stamp}`,

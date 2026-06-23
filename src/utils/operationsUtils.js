@@ -1,6 +1,11 @@
+import {
+  formatRiyadhDateForInput,
+  todayRiyadhDateKey,
+} from "@/utils/dateUtils";
+
 export function calculateOperationStats(filteredOperations) {
   const ops = filteredOperations || [];
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = todayRiyadhDateKey();
   return {
     total: ops.length,
     receipts: ops.filter((op) => op.inventory_type === "Receipt").length,
@@ -8,7 +13,7 @@ export function calculateOperationStats(filteredOperations) {
     transfers: ops.filter((op) => op.inventory_type === "Transfer").length,
     today: ops.filter(
       (op) =>
-        (op.operation_date || op.created_at || "").slice(0, 10) === todayStr,
+        formatRiyadhDateForInput(op.operation_date || op.created_at) === todayStr,
     ).length,
   };
 }

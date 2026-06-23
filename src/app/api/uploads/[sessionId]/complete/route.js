@@ -3,7 +3,7 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureUploadTables, getOwnedSession } from "../../_utils";
 
 export async function POST(request, { params: { sessionId } }) {
-  const auth = requireAuth(request);
+  const auth = requireAuth(request, { role: "Admin" });
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }
@@ -19,9 +19,6 @@ export async function POST(request, { params: { sessionId } }) {
     if (!Number.isFinite(id)) {
       return Response.json({ error: "معرّف الرفع غير صحيح" }, { status: 400 });
     }
-
-    const body = await request.json().catch(() => ({}));
-    const totalChunksClient = Number(body?.totalChunks);
 
     const owned = await getOwnedSession(id, userId);
     if (owned.error) {
@@ -40,23 +37,33 @@ export async function POST(request, { params: { sessionId } }) {
       );
     }
 
-    const totalChunks = Number.isFinite(totalChunksClient)
-      ? totalChunksClient
-      : Number(session.total_chunks);
+    const totalChunks = Number(session.total_chunks);
 
     if (!Number.isFinite(totalChunks) || totalChunks <= 0) {
       return Response.json({ error: "عدد الأجزاء غير صحيح" }, { status: 400 });
     }
 
-    const [{ count: countRaw } = { count: 0 }] = await sql`
-      SELECT COUNT(*)::int AS count
+    const [integrity = {}] = await sql`
+      SELECT
+        COUNT(*)::int AS count,
+        COALESCE(SUM(OCTET_LENGTH(data)), 0)::bigint AS total_bytes,
+        MIN(chunk_index)::int AS min_index,
+        MAX(chunk_index)::int AS max_index
       FROM upload_chunks
       WHERE session_id = ${id}
     `;
 
-    const uploadedChunks = Number(countRaw) || 0;
+    const uploadedChunks = Number(integrity.count) || 0;
+    const uploadedBytes = Number(integrity.total_bytes) || 0;
+    const indexesComplete =
+      Number(integrity.min_index) === 0 &&
+      Number(integrity.max_index) === totalChunks - 1;
 
-    if (uploadedChunks !== totalChunks) {
+    if (
+      uploadedChunks !== totalChunks ||
+      !indexesComplete ||
+      uploadedBytes !== Number(session.size_bytes)
+    ) {
       return Response.json(
         {
           error: `لم يكتمل رفع الملف (${uploadedChunks}/${totalChunks}). جرّب مرة ثانية.`,

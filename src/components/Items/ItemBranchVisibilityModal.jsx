@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { X, Building2, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { invalidateInventoryQueries } from "@/utils/queryKeys";
 import { adminFetch } from "@/utils/apiAuth";
 
 // Per-branch enable/disable for a single item. The default state is
@@ -73,15 +74,7 @@ export function ItemBranchVisibilityModal({
       setPendingBranchId(null);
       // Refresh dependent views so the new disabled state is reflected
       // immediately on items / summary / low-stock / dashboard.
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      queryClient.invalidateQueries({ queryKey: ["items-summary"] });
-      // `useLowStockData` keys its query as ["low-stock-items"]; the
-      // bare ["low-stock"] key never matched its cache.
-      queryClient.invalidateQueries({ queryKey: ["low-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
-      queryClient.invalidateQueries({ queryKey: ["over-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["stock-value"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
+      invalidateInventoryQueries(queryClient);
     },
   });
 

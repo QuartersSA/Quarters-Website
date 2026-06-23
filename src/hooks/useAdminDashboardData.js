@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 // 5 minutes — matches the admin analytics auto-refresh interval and
 // avoids a refetch storm when navigating between admin pages.
@@ -7,7 +8,7 @@ const FIVE_MINUTES = 5 * 60 * 1000;
 
 export function useAdminDashboardData(isAuthenticated) {
   const { data: operations } = useQuery({
-    queryKey: ["inventory-operations"],
+    queryKey: queryKeys.inventoryOperations(),
     queryFn: async () => {
       const response = await adminFetch("/api/inventory-operations");
       if (!response.ok) {
@@ -22,7 +23,7 @@ export function useAdminDashboardData(isAuthenticated) {
   });
 
   const { data: branches } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) {
@@ -38,7 +39,7 @@ export function useAdminDashboardData(isAuthenticated) {
   });
 
   const { data: items } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await adminFetch("/api/items");
       if (!response.ok) {
@@ -54,7 +55,7 @@ export function useAdminDashboardData(isAuthenticated) {
   });
 
   const { data: employees } = useQuery({
-    queryKey: ["employees"],
+    queryKey: queryKeys.employees(),
     queryFn: async () => {
       const response = await adminFetch("/api/employees");
       if (!response.ok) {

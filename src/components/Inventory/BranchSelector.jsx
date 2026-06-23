@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 export default function BranchSelector({ selectedBranch, onSelectBranch }) {
   const { data: branches, isLoading } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) {

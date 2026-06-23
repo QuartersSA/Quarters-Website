@@ -1,6 +1,7 @@
 import { BarChart3, Calendar } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { VarianceExportMenu } from "./VarianceExportMenu";
+import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 const sectionCard = `${ws.glass} ${ws.card} overflow-hidden`;
 
@@ -15,13 +16,9 @@ function formatNumber(n) {
 
 function formatDate(value) {
   if (!value) return "—";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(value))) return String(value);
   try {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
+    return formatRiyadhDateForInput(value) || String(value).slice(0, 10);
   } catch {
     return String(value).slice(0, 10);
   }

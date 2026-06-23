@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Sparkles, AlertTriangle, Clock, TrendingDown } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { currentRiyadhHour } from "@/utils/dateUtils";
 
 function getGreeting() {
-  const h = new Date().getHours();
+  const h = currentRiyadhHour();
   if (h < 6) return "مساء الخير";
   if (h < 12) return "صباح الخير";
   if (h < 18) return "مساء الخير";

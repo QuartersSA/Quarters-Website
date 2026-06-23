@@ -1,1 +1,0 @@
-import{c as r}from"./createLucideIcon-kT1gL1p0.js";if(typeof window<"u"){const s={};globalThis.process??={};const n=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},s,n),{get(e,o){return o in e?e[o]:void 0},has(){return!0}})}const c=r("ArrowLeft",[["path",{d:"m12 19-7-7 7-7",key:"1l729n"}],["path",{d:"M19 12H5",key:"x3x0zl"}]]);export{c as A};

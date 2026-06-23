@@ -1,10 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { invalidatePayrollQueries, queryKeys } from "../utils/queryKeys.js";
 
 export function useBonusesEmployees(employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_payroll_bonus_employees"],
+    queryKey: queryKeys.accountingPayrollBonusEmployees(),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/hr/bonuses/employees");
@@ -22,7 +23,7 @@ export function useBonusesEmployees(employeeId, isAdmin) {
 
 export function useBonuses(month, employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_payroll_bonuses", month],
+    queryKey: queryKeys.accountingPayrollBonuses(month),
     enabled: !!employeeId && isAdmin && !!month,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -61,11 +62,12 @@ export function useCreateBonus(month, payrollRebuildMutation) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll_bonuses", month],
+        queryKey: queryKeys.accountingPayrollBonuses(month),
       });
       if (month) {
         await payrollRebuildMutation.mutateAsync({ month });
       }
+      await invalidatePayrollQueries(queryClient);
       toast.success("تم إضافة البونص");
     },
     onError: (error) => {
@@ -96,11 +98,12 @@ export function useUpdateBonus(month, payrollRebuildMutation) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll_bonuses", month],
+        queryKey: queryKeys.accountingPayrollBonuses(month),
       });
       if (month) {
         await payrollRebuildMutation.mutateAsync({ month });
       }
+      await invalidatePayrollQueries(queryClient);
       toast.success("تم تحديث البونص");
     },
     onError: (error) => {
@@ -129,11 +132,12 @@ export function useDeleteBonus(month, payrollRebuildMutation) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll_bonuses", month],
+        queryKey: queryKeys.accountingPayrollBonuses(month),
       });
       if (month) {
         await payrollRebuildMutation.mutateAsync({ month });
       }
+      await invalidatePayrollQueries(queryClient);
       toast.success("تم حذف البونص");
     },
     onError: (error) => {

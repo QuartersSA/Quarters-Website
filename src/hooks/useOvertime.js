@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { invalidatePayrollQueries, queryKeys } from "../utils/queryKeys.js";
 
 // Best-effort rebuild of every unclosed payroll run so a new
 // overtime entry reflects in HR's and accounting's payroll tables
@@ -37,7 +38,7 @@ async function rebuildUnclosedPayrollRuns() {
 
 export function useOvertime({ month, employeeId: filterId } = {}) {
   return useQuery({
-    queryKey: ["hr_overtime", month || null, filterId || null],
+    queryKey: queryKeys.hrOvertime(month||null,filterId||null),
     queryFn: async () => {
       const qs = new URLSearchParams();
       if (month) qs.set("month", String(month));
@@ -72,10 +73,7 @@ export function useCreateOvertime() {
     },
     onSuccess: async () => {
       const rebuilt = await rebuildUnclosedPayrollRuns();
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["hr_overtime"] }),
-        queryClient.invalidateQueries({ queryKey: ["accounting_payroll"] }),
-      ]);
+      await invalidatePayrollQueries(queryClient);
       toast.success(
         rebuilt.length > 0
           ? `تم تسجيل الأوفر تايم وتحديث مسير الرواتب (${rebuilt.length} شهر)`
@@ -104,10 +102,7 @@ export function useDeleteOvertime() {
     },
     onSuccess: async () => {
       const rebuilt = await rebuildUnclosedPayrollRuns();
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["hr_overtime"] }),
-        queryClient.invalidateQueries({ queryKey: ["accounting_payroll"] }),
-      ]);
+      await invalidatePayrollQueries(queryClient);
       toast.success(
         rebuilt.length > 0
           ? `تم الحذف وتحديث مسير الرواتب (${rebuilt.length} شهر)`

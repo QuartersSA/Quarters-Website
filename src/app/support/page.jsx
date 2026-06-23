@@ -131,7 +131,7 @@ export default function SupportPage() {
             our app.
           </p>
           <p className="text-white/30 text-xs">
-            © {new Date().getFullYear()} Quarters · quarters.sa
+            © {new Date().toLocaleDateString("en-US", { year: "numeric", timeZone: "Asia/Riyadh" })} Quarters · quarters.sa
           </p>
         </div>
       </div>

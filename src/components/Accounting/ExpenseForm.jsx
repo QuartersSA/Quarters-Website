@@ -3,6 +3,7 @@ import { Plus, Tag, Save, X } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { buildRecentMonthOptions } from "@/utils/payrollFormatters";
+import { currentRiyadhMonthKey } from "@/utils/dateUtils";
 
 export function ExpenseForm({
   types,
@@ -38,10 +39,7 @@ export function ExpenseForm({
       setFormMonth(defaultMonth);
       return;
     }
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    setFormMonth(`${y}-${m}`);
+    setFormMonth(currentRiyadhMonthKey());
     // We deliberately only run this once on mount; subsequent month
     // changes are user-driven via the GlassSelect.
     // eslint-disable-next-line react-hooks/exhaustive-deps

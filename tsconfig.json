@@ -21,6 +21,8 @@
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
 		"strict": true,
+		"allowJs": true,
+		"checkJs": false,
 		"paths": {
 			"@/*": ["./src/*"]
 		}

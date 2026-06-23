@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useHRDeductionsData(isAuthenticated, employeeId, month) {
   const employeeKey = employeeId ? Number(employeeId) : null;
   const monthKey = month ? String(month) : "";
 
   const deductionsQuery = useQuery({
-    queryKey: ["hr-deductions", employeeKey || "all", monthKey || "all"],
+    queryKey: queryKeys.hrDeductions(employeeKey||"all",monthKey||"all"),
     queryFn: async () => {
       const params = new URLSearchParams();
       if (employeeKey) {

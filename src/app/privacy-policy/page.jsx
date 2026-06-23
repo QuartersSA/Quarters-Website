@@ -18,6 +18,7 @@ export default function PrivacyPolicyPage() {
               year: "numeric",
               month: "long",
               day: "numeric",
+              timeZone: "Asia/Riyadh",
             })}
           </p>
           <div className="flex items-center justify-center gap-2 mt-4">
@@ -205,7 +206,7 @@ export default function PrivacyPolicyPage() {
             will be notified of any material changes.
           </p>
           <p className="text-white/30 text-xs">
-            © {new Date().getFullYear()} Quarters · quarters.sa
+            © {new Date().toLocaleDateString("en-US", { year: "numeric", timeZone: "Asia/Riyadh" })} Quarters · quarters.sa
           </p>
         </div>
       </div>

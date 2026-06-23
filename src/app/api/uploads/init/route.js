@@ -1,10 +1,14 @@
 import crypto from "node:crypto";
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
-import { ensureUploadTables, MAX_UPLOAD_BYTES } from "../_utils";
+import {
+  ensureUploadTables,
+  MAX_UPLOAD_BYTES,
+  MAX_UPLOAD_CHUNKS,
+} from "../_utils";
 
 export async function POST(request) {
-  const auth = requireAuth(request);
+  const auth = requireAuth(request, { role: "Admin" });
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }
@@ -17,15 +21,15 @@ export async function POST(request) {
     await ensureUploadTables();
 
     const body = await request.json().catch(() => ({}));
-    const fileName = body?.fileName ? String(body.fileName) : null;
-    const mimeType = body?.mimeType ? String(body.mimeType) : null;
+    const fileName = body?.fileName ? String(body.fileName).trim() : null;
+    const mimeType = body?.mimeType ? String(body.mimeType).trim() : null;
     const sizeBytes = Number(body?.sizeBytes);
     const totalChunks = Number(body?.totalChunks);
 
     if (
       !fileName ||
       !Number.isFinite(sizeBytes) ||
-      !Number.isFinite(totalChunks)
+      !Number.isInteger(totalChunks)
     ) {
       return Response.json(
         { error: "بيانات الرفع غير صحيحة" },
@@ -33,7 +37,14 @@ export async function POST(request) {
       );
     }
 
-    if (sizeBytes <= 0 || totalChunks <= 0) {
+    if (
+      sizeBytes <= 0 ||
+      !Number.isInteger(sizeBytes) ||
+      totalChunks <= 0 ||
+      totalChunks > MAX_UPLOAD_CHUNKS ||
+      fileName.length > 255 ||
+      (mimeType && mimeType.length > 120)
+    ) {
       return Response.json(
         { error: "بيانات الرفع غير صحيحة" },
         { status: 400 },

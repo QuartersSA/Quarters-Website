@@ -2,6 +2,7 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 import { findDisabledItemsAtBranch } from "@/app/api/utils/branchVisibility";
+import { parseBusinessTimestamp } from "@/utils/dateUtils";
 
 async function notifyAdminsWhatsAppInventoryTransfer({
   fromBranchName,
@@ -206,32 +207,7 @@ async function getQuantitiesAtTime({ txn, branchId, itemIds, atTime }) {
  *   - dates before 2020 (sanity floor for this business)
  */
 function parseOperationDate(value) {
-  if (!value) return null;
-  const str = String(value).trim();
-  if (!str) return null;
-
-  // Date-only input → append local midnight to avoid UTC interpretation
-  let d;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    d = new Date(`${str}T00:00:00`);
-  } else {
-    d = new Date(str);
-  }
-  if (isNaN(d.getTime())) return null;
-
-  // Sanity bounds — guard against bogus dates
-  if (d.getFullYear() < 2020) return null;
-  const maxFuture = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  if (d > maxFuture) return null;
-
-  // Format as local wall-clock, no timezone marker
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const mn = String(d.getMinutes()).padStart(2, "0");
-  const ss = String(d.getSeconds()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd} ${hh}:${mn}:${ss}`;
+  return parseBusinessTimestamp(value, { allowFuture: 1, minYear: 2020 });
 }
 
 export async function POST(request) {

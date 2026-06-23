@@ -44,6 +44,11 @@ export function adminFetch(url, init = {}) {
   return fetch(url, withBearer(token, init));
 }
 
+export function workspaceFetch(url, init = {}) {
+  const token = getAdminToken();
+  return fetch(url, withBearer(token, init));
+}
+
 export function employeeInventoryFetch(url, init = {}) {
   const token = getEmployeeInventoryToken();
   return fetch(url, withBearer(token, init));
@@ -100,6 +105,9 @@ export function clearEmployeeSessions() {
 
     localStorage.removeItem("shiftCloseUser");
     localStorage.removeItem(SHIFT_CLOSE_TOKEN_KEY);
+
+    localStorage.removeItem("employeeWasteSession");
+    localStorage.removeItem(EMPLOYEE_WASTE_TOKEN_KEY);
   } catch {
     // ignore
   }

@@ -32,6 +32,7 @@ import { useNavigate } from 'react-router';
 import { serializeError } from 'serialize-error';
 import { Toaster, toast } from 'sonner';
 import { useDevServerHeartbeat } from '../__create/useDevServerHeartbeat';
+import useMediaQuery from '@/hooks/useMediaQuery';
 import type { Route } from './+types/root';
 
 export const links = () => [];
@@ -82,7 +83,7 @@ function InternalErrorBoundary({ error: errorArg }: Route.ErrorBoundaryProps) {
   const asyncError = useAsyncError();
   const error = errorArg ?? asyncError ?? routeError;
   const [isOpen, setIsOpen] = useState(false);
-  const shouldScale = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+  const shouldScale = useMediaQuery('(max-width: 767px)');
   const scaleFactor = shouldScale ? 1.02 : 1;
   const copyButtonTextClass = shouldScale ? 'text-sm' : 'text-xs';
   const copyButtonPaddingClass = shouldScale ? 'px-[10px] py-[5px]' : 'px-[6px] py-[3px]';
@@ -423,7 +424,7 @@ export function Layout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location?.pathname;
-  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+  const isMobile = useMediaQuery('(max-width: 767px)');
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.type === 'sandbox:navigation') {

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export default function useItemCategories(enabled = true) {
   const queryClient = useQueryClient();
@@ -9,7 +10,7 @@ export default function useItemCategories(enabled = true) {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["item-categories"],
+    queryKey: queryKeys.itemCategories(),
     queryFn: async () => {
       const response = await adminFetch("/api/item-categories");
       if (!response.ok) {
@@ -44,7 +45,7 @@ export default function useItemCategories(enabled = true) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["item-categories"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.itemCategories() });
     },
   });
 
@@ -70,7 +71,7 @@ export default function useItemCategories(enabled = true) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["item-categories"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.itemCategories() });
     },
   });
 

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "@/utils/queryKeys";
 
 // Wraps `/api/items/stock-value` + branches list + client-side search,
 // sort, hide-missing-cost. Aggregates stats over the *filtered* set so
@@ -22,12 +23,15 @@ export function useStockValueData({
   const {
     data: rows = [],
     isLoading,
+    isFetching,
+    isError,
+    error,
     refetch,
   } = useQuery({
     // Include branch in the cache key so each branch slice is cached
     // independently. Switching between branches feels instant once
     // each has been viewed once.
-    queryKey: ["stock-value", branchFilter || "all"],
+    queryKey: queryKeys.stockValue(branchFilter || "all"),
     queryFn: async () => {
       const qs = branchFilter
         ? `?branchId=${encodeURIComponent(branchFilter)}`
@@ -40,7 +44,7 @@ export function useStockValueData({
   });
 
   const { data: branches = [] } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
       if (!res.ok) throw new Error("Failed to fetch branches");
@@ -143,6 +147,9 @@ export function useStockValueData({
     branches,
     stats,
     isLoading,
+    isFetching,
+    isError,
+    error,
     refetch,
   };
 }

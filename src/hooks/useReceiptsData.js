@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 /**
  * Fetches purchase receipts with optional filters and groups by receipt_batch_id.
@@ -21,7 +22,7 @@ export function useReceiptsData({
   dateTo,
 }) {
   const query = useQuery({
-    queryKey: ["purchase-receipts", branchId, itemId, dateFrom, dateTo],
+    queryKey: queryKeys.purchaseReceipts(branchId,itemId,dateFrom,dateTo),
     enabled: isAuthenticated,
     queryFn: async () => {
       const qs = new URLSearchParams();

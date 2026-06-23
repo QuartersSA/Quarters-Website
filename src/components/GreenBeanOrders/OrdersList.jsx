@@ -10,6 +10,7 @@ import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, formatQty } from "@/utils/greenBeanOrderUtils";
 import { buildRecentMonthOptions } from "@/utils/payrollFormatters";
+import { currentRiyadhMonthKey } from "@/utils/dateUtils";
 
 function computeMonthRange(monthValue) {
   const text = String(monthValue || "");
@@ -35,14 +36,7 @@ function computeMonthRange(monthValue) {
 }
 
 function defaultMonthValue() {
-  try {
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    return `${yyyy}-${mm}`;
-  } catch {
-    return "";
-  }
+  return currentRiyadhMonthKey();
 }
 
 export function OrdersList({

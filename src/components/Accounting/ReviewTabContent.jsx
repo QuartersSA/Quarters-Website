@@ -21,6 +21,7 @@ import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
 import ExpensesCharts from "@/components/Accounting/ExpensesCharts";
 import { ExpenseTable } from "@/components/Accounting/ExpenseTable";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 const STATUS_CHIPS = [
   { value: "all", label: "الكل", icon: Filter },
@@ -59,7 +60,7 @@ export default function ReviewTabContent({
   // MoM delta on the hero row. Cached for 60s and shared with the
   // ExpensesCharts component's cache.
   const trendQuery = useQuery({
-    queryKey: ["accounting-expenses-trend", month, 12],
+    queryKey: queryKeys.accountingExpenseTrend(month,12),
     enabled: !!month,
     queryFn: async () => {
       const params = new URLSearchParams({

@@ -44,7 +44,9 @@ const DEFAULT_COMPONENTS = {
 		<img className="mx-auto my-4 rounded" {...props} />
 	),
 	table: ({ node, ...props }) => (
-		<table className="min-w-full border-collapse" {...props} />
+		<div className="my-4 w-full overflow-x-auto">
+			<table className="min-w-full border-collapse" {...props} />
+		</div>
 	),
 	thead: ({ node, ...props }) => (
 		<thead className="border-gray-200 border-b-2" {...props} />

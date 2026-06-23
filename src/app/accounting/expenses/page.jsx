@@ -39,6 +39,7 @@ import { getMissingPresetCategories } from "@/utils/cafeExpenseCategories";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { currentRiyadhMonthKey } from "@/utils/dateUtils";
 import {
   useExpensesData,
   useExpenseTypes,
@@ -55,6 +56,7 @@ import {
   useDeleteFixedExpense,
   useConfirmFixedExpense,
 } from "@/hooks/useFixedExpenses";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 /* ── Mobile Header ── */
 function ExpensesMobileHeader() {
@@ -290,12 +292,7 @@ export default function ExpensesPage() {
   const { ready, employeeId, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
 
-  const [month, setMonth] = useState(() => {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
-  });
+  const [month, setMonth] = useState(currentRiyadhMonthKey);
   const monthOptions = useMemo(() => buildRecentMonthOptions(30), []);
   const monthHint = month ? monthLabel(month) : "";
 
@@ -445,7 +442,7 @@ export default function ExpensesPage() {
         }
       }
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_expense_types"],
+        queryKey: queryKeys.accountingExpenseTypes(),
       });
       if (added > 0) {
         toast.success(
