@@ -1,5 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -31,103 +32,24 @@ async function GET(request) {
     });
   }
   try {
+    await ensureInventoryUnitSnapshotSchema();
     const {
       searchParams
     } = new URL(request.url);
     const branchIdRaw = searchParams.get("branchId");
     const parsedBranchId = branchIdRaw ? Number(branchIdRaw) : null;
     const branchFilter = Number.isFinite(parsedBranchId) && parsedBranchId > 0 ? parsedBranchId : null;
-
-    // Explicit-params form (`sql(query, params)`) rather than tagged
-    // template — tagged template with conditional interpolation inside
-    // a SQL comment was producing extra/unused parameters that the
-    // Neon HTTP driver couldn't validate, returning an empty array
-    // silently. A single parameter referenced twice in the WHERE is
-    // unambiguous.
-    // last_reset is the most recent Daily/Weekly/Opening per (item, branch).
-    // Transfers are NOT a reset — they're layered as signed deltas on top
-    // via transfers_after, mirroring /api/items/summary and the timeline
-    // report.
     const query = `
-      WITH last_reset AS (
-        SELECT DISTINCT ON (ii.item_id, io.branch_id)
-          ii.item_id,
-          io.branch_id,
-          ii.quantity AS inv_quantity,
-          COALESCE(io.operation_date, io.created_at) AS op_date
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE io.status = 'Completed'
-          AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
-        ORDER BY
-          ii.item_id,
-          io.branch_id,
-          COALESCE(io.operation_date, io.created_at) DESC,
-          io.id DESC
-      ),
-      receipts_after AS (
-        SELECT
-          pr.item_id,
-          pr.branch_id,
-          SUM(pr.quantity) AS total_received
-        FROM purchase_receipts pr
-        LEFT JOIN last_reset li
-          ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
-        WHERE (
-          li.op_date IS NULL
-          OR GREATEST(pr.received_at, pr.created_at) > li.op_date
-        )
-        GROUP BY pr.item_id, pr.branch_id
-      ),
-      transfers_after AS (
-        SELECT
-          ii.item_id,
-          ii.branch_id,
-          SUM(
-            CASE io.transfer_direction
-              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
-              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
-              ELSE 0
-            END
-          ) AS net_transfer
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        LEFT JOIN last_reset li
-          ON li.item_id = ii.item_id AND li.branch_id = ii.branch_id
-        WHERE io.status = 'Completed'
-          AND io.inventory_type = 'Transfer'
-          AND (
-            li.op_date IS NULL
-            OR COALESCE(io.operation_date, io.created_at) > li.op_date
-          )
-        GROUP BY ii.item_id, ii.branch_id
-      ),
-      per_branch AS (
-        SELECT
-          i.id AS item_id,
-          b.id AS branch_id,
-          COALESCE(li.inv_quantity, 0)
-            + COALESCE(ra.total_received, 0)
-            + COALESCE(ta.net_transfer, 0) AS qty
-        FROM items i
-        CROSS JOIN branches b
-        LEFT JOIN last_reset li
-          ON li.item_id = i.id AND li.branch_id = b.id
-        LEFT JOIN receipts_after ra
-          ON ra.item_id = i.id AND ra.branch_id = b.id
-        LEFT JOIN transfers_after ta
-          ON ta.item_id = i.id AND ta.branch_id = b.id
-        LEFT JOIN item_branch_disabled ibd
-          ON ibd.item_id = i.id AND ibd.branch_id = b.id
-        WHERE ($1::int IS NULL OR b.id = $1::int)
-          AND ibd.item_id IS NULL
-      ),
       item_totals AS (
         SELECT
-          pb.item_id,
-          SUM(pb.qty)::numeric(12, 3) AS total_quantity
-        FROM per_branch pb
-        GROUP BY pb.item_id
+          cs.item_id,
+          SUM(COALESCE(cs.current_quantity, 0))::numeric(12, 3) AS total_quantity
+        FROM inventory_current_stock_v cs
+        LEFT JOIN item_branch_disabled ibd
+          ON ibd.item_id = cs.item_id AND ibd.branch_id = cs.branch_id
+        WHERE ($1::int IS NULL OR cs.branch_id = $1::int)
+          AND ibd.item_id IS NULL
+        GROUP BY cs.item_id
       )
       SELECT
         i.id,

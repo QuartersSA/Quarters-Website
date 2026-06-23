@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
 
 export async function GET(request) {
   const auth = requireAuth(request, {
@@ -11,6 +12,8 @@ export async function GET(request) {
   }
 
   try {
+    await ensureInventoryUnitSnapshotSchema();
+
     const { searchParams } = new URL(request.url);
     const branchIdRaw = searchParams.get("branchId");
     const itemIdRaw = searchParams.get("itemId");
@@ -55,21 +58,21 @@ export async function GET(request) {
         b.name as branch_name,
         ii.item_id,
         i.name as item_name,
-        ii.quantity::numeric as actual_quantity,
+        qty.actual_quantity,
         os.id as opening_session_id,
         os.opened_at as opening_opened_at,
-        COALESCE(osi.quantity, 0)::numeric as opening_quantity,
+        qty.opening_quantity,
         COALESCE(rso.sum_qty, 0)::numeric as receipts_quantity,
         COALESCE(tso.net_transfer, 0)::numeric as net_transfer_quantity,
         (
-          COALESCE(osi.quantity, 0)::numeric
+          qty.opening_quantity
           + COALESCE(rso.sum_qty, 0)::numeric
           + COALESCE(tso.net_transfer, 0)::numeric
         ) as expected_quantity,
         (
-          ii.quantity::numeric
+          qty.actual_quantity
           - (
-              COALESCE(osi.quantity, 0)::numeric
+              qty.opening_quantity
               + COALESCE(rso.sum_qty, 0)::numeric
               + COALESCE(tso.net_transfer, 0)::numeric
             )
@@ -87,7 +90,7 @@ export async function GET(request) {
         CASE
           WHEN prev.prev_quantity IS NULL THEN NULL
           ELSE (
-            ii.quantity::numeric
+            qty.actual_quantity
             - (
                 prev.prev_quantity::numeric
                 + COALESCE(rsp.sum_qty, 0)::numeric
@@ -99,6 +102,7 @@ export async function GET(request) {
       JOIN inventory_items ii ON ii.operation_id = io.id
       LEFT JOIN branches b ON b.id = io.branch_id
       LEFT JOIN items i ON i.id = ii.item_id
+      LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
       LEFT JOIN LATERAL (
         SELECT os2.*
         FROM opening_sessions os2
@@ -109,6 +113,20 @@ export async function GET(request) {
       ) os ON TRUE
       LEFT JOIN opening_session_items osi
         ON osi.session_id = os.id AND osi.item_id = ii.item_id
+      LEFT JOIN LATERAL (
+        SELECT
+          (
+            ii.quantity::numeric
+              * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+          ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS actual_quantity,
+          COALESCE(
+            (
+              osi.quantity::numeric
+                * COALESCE(osi.unit_factor, iu.conversion_factor, 1)::numeric
+            ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0),
+            0
+          ) AS opening_quantity
+      ) qty ON TRUE
       -- Previous physical count (NOT a transfer). Variance's
       -- "expected_since_previous" baseline is the last human-observed
       -- snapshot. Transfer rows store a post-transfer absolute that
@@ -119,7 +137,10 @@ export async function GET(request) {
       -- wants.
       LEFT JOIN LATERAL (
         SELECT
-          ii_p.quantity::numeric AS prev_quantity,
+          (
+            ii_p.quantity::numeric
+              * COALESCE(ii_p.unit_factor, iu.conversion_factor, 1)::numeric
+          ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS prev_quantity,
           COALESCE(io_p.operation_date, io_p.created_at) AS prev_op_date
         FROM inventory_items ii_p
         JOIN inventory_operations io_p ON io_p.id = ii_p.operation_id
@@ -147,10 +168,12 @@ export async function GET(request) {
       LEFT JOIN LATERAL (
         SELECT COALESCE(SUM(
           CASE io_t.transfer_direction
-            WHEN 'in'  THEN  COALESCE(ii_t.transfer_quantity, 0)
-            WHEN 'out' THEN -COALESCE(ii_t.transfer_quantity, 0)
+            WHEN 'in'  THEN  COALESCE(ii_t.transfer_quantity, 0)::numeric
+            WHEN 'out' THEN -COALESCE(ii_t.transfer_quantity, 0)::numeric
             ELSE 0
           END
+          * COALESCE(ii_t.unit_factor, iu.conversion_factor, 1)::numeric
+          / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0)
         ), 0)::numeric AS net_transfer
         FROM inventory_items ii_t
         JOIN inventory_operations io_t ON io_t.id = ii_t.operation_id
@@ -169,7 +192,11 @@ export async function GET(request) {
         -- green-bean deposits that stored order_date in received_at.
         -- Without this, a deposit booked today against an old order
         -- date would be excluded from "receipts since opening".
-        SELECT SUM(pr.quantity)::numeric AS sum_qty
+        SELECT SUM(
+          pr.quantity::numeric
+            * COALESCE(pr.unit_factor, iu.conversion_factor, 1)::numeric
+            / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0)
+        )::numeric AS sum_qty
         FROM purchase_receipts pr
         WHERE pr.branch_id = io.branch_id
           AND pr.item_id = ii.item_id
@@ -187,10 +214,12 @@ export async function GET(request) {
       LEFT JOIN LATERAL (
         SELECT COALESCE(SUM(
           CASE io_t.transfer_direction
-            WHEN 'in'  THEN  COALESCE(ii_t.transfer_quantity, 0)
-            WHEN 'out' THEN -COALESCE(ii_t.transfer_quantity, 0)
+            WHEN 'in'  THEN  COALESCE(ii_t.transfer_quantity, 0)::numeric
+            WHEN 'out' THEN -COALESCE(ii_t.transfer_quantity, 0)::numeric
             ELSE 0
           END
+          * COALESCE(ii_t.unit_factor, iu.conversion_factor, 1)::numeric
+          / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0)
         ), 0)::numeric AS net_transfer
         FROM inventory_items ii_t
         JOIN inventory_operations io_t ON io_t.id = ii_t.operation_id
@@ -207,7 +236,11 @@ export async function GET(request) {
               <= COALESCE(io.operation_date, io.created_at)
       ) tso ON TRUE
       LEFT JOIN LATERAL (
-        SELECT SUM(pr.quantity)::numeric AS sum_qty
+        SELECT SUM(
+          pr.quantity::numeric
+            * COALESCE(pr.unit_factor, iu.conversion_factor, 1)::numeric
+            / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0)
+        )::numeric AS sum_qty
         FROM purchase_receipts pr
         WHERE prev.prev_op_date IS NOT NULL
           AND pr.branch_id = io.branch_id

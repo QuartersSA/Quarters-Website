@@ -1,5 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import { p as parseBusinessTimestamp } from './dateUtils-FqivhP-u.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -62,6 +63,7 @@ async function GET(request) {
   }
   const atTime = parseAtTime(atRaw);
   try {
+    await ensureInventoryUnitSnapshotSchema();
     // Point-in-time stock: last RESET (Daily/Weekly/Opening physical
     // count) + receipts after that reset + signed transfer deltas
     // after that reset, all bounded by $3 (atTime). Mirrors the
@@ -72,13 +74,20 @@ async function GET(request) {
     const rows = await sql(`
         SELECT
           i.id AS item_id,
-          COALESCE(last_reset.inv_quantity, 0)
-            + COALESCE(receipts_after.total_received, 0)
-            + COALESCE(transfers_after.net_transfer, 0) AS quantity_at_t
+          (
+            COALESCE(last_reset.inv_base_quantity, 0)
+              + COALESCE(receipts_after.total_received_base, 0)
+              + COALESCE(transfers_after.net_transfer_base, 0)
+          ) / NULLIF(COALESCE(current_unit.conversion_factor, 1), 0) AS quantity_at_t
         FROM items i
+        LEFT JOIN item_units current_unit
+          ON current_unit.id = i.default_inventory_unit_id
 
         LEFT JOIN LATERAL (
-          SELECT ii.quantity AS inv_quantity,
+          SELECT
+                 ii.quantity::numeric
+                   * COALESCE(ii.unit_factor, current_unit.conversion_factor, 1)::numeric
+                   AS inv_base_quantity,
                  COALESCE(io.operation_date, io.created_at) AS op_date
           FROM inventory_items ii
           JOIN inventory_operations io ON io.id = ii.operation_id
@@ -95,7 +104,10 @@ async function GET(request) {
         ) last_reset ON true
 
         LEFT JOIN LATERAL (
-          SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
+          SELECT COALESCE(SUM(
+            pr.quantity::numeric
+              * COALESCE(pr.unit_factor, current_unit.conversion_factor, 1)::numeric
+          ), 0) AS total_received_base
           FROM purchase_receipts pr
           WHERE pr.item_id = i.id
             AND pr.branch_id = $1
@@ -112,11 +124,12 @@ async function GET(request) {
         LEFT JOIN LATERAL (
           SELECT COALESCE(SUM(
             CASE io.transfer_direction
-              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
-              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)::numeric
+              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)::numeric
               ELSE 0
             END
-          ), 0) AS net_transfer
+            * COALESCE(ii.unit_factor, current_unit.conversion_factor, 1)::numeric
+          ), 0) AS net_transfer_base
           FROM inventory_items ii
           JOIN inventory_operations io ON io.id = ii.operation_id
           WHERE ii.item_id   = i.id

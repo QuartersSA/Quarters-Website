@@ -1,5 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -34,6 +35,7 @@ async function GET(request, {
     });
   }
   try {
+    await ensureInventoryUnitSnapshotSchema();
     const itemId = parseInt(params.id);
     if (!Number.isFinite(itemId) || itemId <= 0) {
       return Response.json({
@@ -57,7 +59,17 @@ async function GET(request, {
 
     // Item + branch metadata for the report header.
     const [item] = await sql`
-      SELECT id, name, description FROM items WHERE id = ${itemId} LIMIT 1
+      SELECT
+        i.id,
+        i.name,
+        i.description,
+        COALESCE(mu.name_ar, i.unit, 'حبة') AS unit,
+        COALESCE(iu.conversion_factor, 1)::numeric AS current_factor
+      FROM items i
+      LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
+      LEFT JOIN measurement_units mu ON mu.id = iu.unit_id
+      WHERE i.id = ${itemId}
+      LIMIT 1
     `;
     if (!item) {
       return Response.json({
@@ -92,10 +104,18 @@ async function GET(request, {
         io.note,
         COALESCE(io.operation_date, io.created_at) AS event_at,
         e.name             AS employee_name,
-        ii.quantity        AS new_quantity,
-        ii.transfer_quantity
+        (
+          ii.quantity::numeric
+            * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+        ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS new_quantity,
+        (
+          ii.transfer_quantity::numeric
+            * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+        ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS transfer_quantity
       FROM inventory_items ii
       JOIN inventory_operations io ON io.id = ii.operation_id
+      JOIN items i ON i.id = ii.item_id
+      LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
       LEFT JOIN branches tb ON tb.id = io.transfer_branch_id
       LEFT JOIN employees e ON e.id = io.employee_id
       WHERE ii.item_id = ${itemId}
@@ -109,11 +129,16 @@ async function GET(request, {
       SELECT
         pr.id                                        AS operation_id,
         pr.receipt_batch_id                          AS inventory_number,
-        pr.quantity                                  AS delta,
+        (
+          pr.quantity::numeric
+            * COALESCE(pr.unit_factor, iu.conversion_factor, 1)::numeric
+        ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS delta,
         pr.note,
         GREATEST(pr.received_at, pr.created_at)      AS event_at,
         COALESCE(pr.created_by_employee_name, e.name) AS employee_name
       FROM purchase_receipts pr
+      JOIN items i ON i.id = pr.item_id
+      LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
       LEFT JOIN employees e ON e.id = pr.created_by_employee_id
       WHERE pr.item_id = ${itemId}
         AND pr.branch_id = ${branchId}

@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
 
 // Riyadh wall-clock Y/M/D + weekday for an instant. Riyadh is a
 // fixed UTC+03:00 (no DST). Used to compute day/week/month window
@@ -40,6 +41,8 @@ export async function GET(request) {
   }
 
   try {
+    await ensureInventoryUnitSnapshotSchema();
+
     const now = new Date();
     const rp = riyadhParts(now);
 
@@ -117,80 +120,21 @@ export async function GET(request) {
         b.id as branch_id,
         b.name as branch_name,
         COUNT(*) FILTER (
-          WHERE (
-            COALESCE(last_reset.inv_quantity, 0)
-            + COALESCE(receipts_after.total_received, 0)
-            + COALESCE(transfers_after.net_transfer, 0)
-          ) < i.min_stock_threshold
-          AND (
-            last_reset.op_date IS NOT NULL
-            OR receipts_after.total_received > 0
-            OR transfers_after.net_transfer <> 0
-          )
+          WHERE cs.current_quantity < i.min_stock_threshold
+            AND cs.has_signal
         ) as low_stock_count,
         COUNT(*) FILTER (
-          WHERE (
-            COALESCE(last_reset.inv_quantity, 0)
-            + COALESCE(receipts_after.total_received, 0)
-            + COALESCE(transfers_after.net_transfer, 0)
-          ) = 0
-          AND last_reset.op_date IS NOT NULL
+          WHERE cs.current_quantity = 0
+            AND cs.operation_date IS NOT NULL
         ) as out_of_stock_count,
         COUNT(*) FILTER (
-          WHERE
-            last_reset.op_date IS NOT NULL
-            OR receipts_after.total_received > 0
-            OR transfers_after.net_transfer <> 0
+          WHERE cs.has_signal
         ) as tracked_items
       FROM branches b
-      CROSS JOIN items i
+      JOIN inventory_current_stock_v cs ON cs.branch_id = b.id
+      JOIN items i ON i.id = cs.item_id
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
-
-      LEFT JOIN LATERAL (
-        SELECT ii.quantity AS inv_quantity,
-               COALESCE(io.operation_date, io.created_at) AS op_date
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id  = i.id
-          AND io.branch_id = b.id
-          AND io.status    = 'Completed'
-          AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
-        LIMIT 1
-      ) last_reset ON true
-
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
-        FROM purchase_receipts pr
-        WHERE pr.item_id   = i.id
-          AND pr.branch_id = b.id
-          AND (
-            last_reset.op_date IS NULL
-            OR GREATEST(pr.received_at, pr.created_at) > last_reset.op_date
-          )
-      ) receipts_after ON true
-
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(
-          CASE io.transfer_direction
-            WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
-            WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
-            ELSE 0
-          END
-        ), 0) AS net_transfer
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id   = i.id
-          AND ii.branch_id = b.id
-          AND io.status    = 'Completed'
-          AND io.inventory_type = 'Transfer'
-          AND (
-            last_reset.op_date IS NULL
-            OR COALESCE(io.operation_date, io.created_at) > last_reset.op_date
-          )
-      ) transfers_after ON true
-
       WHERE i.is_active = true AND i.show_in_inventory = true
         AND ibd.item_id IS NULL
       GROUP BY b.id, b.name
@@ -220,64 +164,13 @@ export async function GET(request) {
           i.id AS item_id,
           i.name,
           b.id AS branch_id,
-          (
-            COALESCE(last_reset.inv_quantity, 0)
-            + COALESCE(receipts_after.total_received, 0)
-            + COALESCE(transfers_after.net_transfer, 0)
-          )::numeric AS current_qty,
-          last_reset.op_date IS NOT NULL
-            OR COALESCE(receipts_after.total_received, 0) > 0
-            OR COALESCE(transfers_after.net_transfer, 0) <> 0
-            AS has_signal
+          cs.current_quantity::numeric AS current_qty,
+          cs.has_signal
         FROM items i
-        CROSS JOIN branches b
+        JOIN inventory_current_stock_v cs ON cs.item_id = i.id
+        JOIN branches b ON b.id = cs.branch_id
         LEFT JOIN item_branch_disabled ibd
           ON ibd.item_id = i.id AND ibd.branch_id = b.id
-
-        LEFT JOIN LATERAL (
-          SELECT ii.quantity AS inv_quantity,
-                 COALESCE(io.operation_date, io.created_at) AS op_date
-          FROM inventory_items ii
-          JOIN inventory_operations io ON io.id = ii.operation_id
-          WHERE ii.item_id  = i.id
-            AND io.branch_id = b.id
-            AND io.status    = 'Completed'
-            AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
-          ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
-          LIMIT 1
-        ) last_reset ON true
-
-        LEFT JOIN LATERAL (
-          SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
-          FROM purchase_receipts pr
-          WHERE pr.item_id   = i.id
-            AND pr.branch_id = b.id
-            AND (
-              last_reset.op_date IS NULL
-              OR GREATEST(pr.received_at, pr.created_at) > last_reset.op_date
-            )
-        ) receipts_after ON true
-
-        LEFT JOIN LATERAL (
-          SELECT COALESCE(SUM(
-            CASE io.transfer_direction
-              WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
-              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
-              ELSE 0
-            END
-          ), 0) AS net_transfer
-          FROM inventory_items ii
-          JOIN inventory_operations io ON io.id = ii.operation_id
-          WHERE ii.item_id   = i.id
-            AND ii.branch_id = b.id
-            AND io.status    = 'Completed'
-            AND io.inventory_type = 'Transfer'
-            AND (
-              last_reset.op_date IS NULL
-              OR COALESCE(io.operation_date, io.created_at) > last_reset.op_date
-            )
-        ) transfers_after ON true
-
         WHERE i.is_active = true
           AND i.show_in_inventory = true
           AND ibd.item_id IS NULL
@@ -389,11 +282,7 @@ export async function GET(request) {
         b.id as branch_id,
         b.name as branch_name,
         SUM(
-          (
-            COALESCE(last_reset.inv_quantity, 0)
-            + COALESCE(receipts_after.total_received, 0)
-            + COALESCE(transfers_after.net_transfer, 0)
-          )
+          cs.current_quantity
           -- inventory quantities are recorded in the item's DEFAULT
           -- INVENTORY UNIT (e.g. حبة) while the cost below is the
           -- price of ONE BASE unit. Multiply by the unit's
@@ -411,7 +300,8 @@ export async function GET(request) {
             AND COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) > 0
         ) as priced_items
       FROM branches b
-      CROSS JOIN items i
+      JOIN inventory_current_stock_v cs ON cs.branch_id = b.id
+      JOIN items i ON i.id = cs.item_id
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
 
@@ -421,50 +311,6 @@ export async function GET(request) {
         WHERE iu.id = i.default_inventory_unit_id
         LIMIT 1
       ) inv_unit ON true
-
-      LEFT JOIN LATERAL (
-        SELECT ii.quantity AS inv_quantity,
-               COALESCE(io.operation_date, io.created_at) AS op_date
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id  = i.id
-          AND io.branch_id = b.id
-          AND io.status    = 'Completed'
-          AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
-        LIMIT 1
-      ) last_reset ON true
-
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
-        FROM purchase_receipts pr
-        WHERE pr.item_id   = i.id
-          AND pr.branch_id = b.id
-          AND (
-            last_reset.op_date IS NULL
-            OR GREATEST(pr.received_at, pr.created_at) > last_reset.op_date
-          )
-      ) receipts_after ON true
-
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(
-          CASE io.transfer_direction
-            WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
-            WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
-            ELSE 0
-          END
-        ), 0) AS net_transfer
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id   = i.id
-          AND ii.branch_id = b.id
-          AND io.status    = 'Completed'
-          AND io.inventory_type = 'Transfer'
-          AND (
-            last_reset.op_date IS NULL
-            OR COALESCE(io.operation_date, io.created_at) > last_reset.op_date
-          )
-      ) transfers_after ON true
 
       LEFT JOIN LATERAL (
         SELECT oi.computed_final_price_per_kg AS final_price
@@ -478,11 +324,7 @@ export async function GET(request) {
 
       WHERE i.is_active = true AND i.show_in_inventory = true
         AND ibd.item_id IS NULL
-        AND (
-          last_reset.op_date IS NOT NULL
-          OR receipts_after.total_received > 0
-          OR transfers_after.net_transfer <> 0
-        )
+        AND cs.has_signal
       GROUP BY b.id, b.name
       ORDER BY b.name
     `;
@@ -534,9 +376,17 @@ export async function GET(request) {
         b.name as branch_name,
         COALESCE(opening.qty, 0) as opening_qty,
         COALESCE(received.qty, 0) as received_qty,
-        COALESCE(closing.qty, 0) as closing_qty
+        COALESCE(current_stock.current_quantity, 0) as closing_qty
       FROM items i
       CROSS JOIN branches b
+      LEFT JOIN inventory_current_stock_v current_stock
+        ON current_stock.item_id = i.id AND current_stock.branch_id = b.id
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(iu.conversion_factor, 1)::numeric AS factor
+        FROM item_units iu
+        WHERE iu.id = i.default_inventory_unit_id
+        LIMIT 1
+      ) inv_unit ON true
 
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
@@ -544,7 +394,10 @@ export async function GET(request) {
       -- opening: stock balance just before the month started
       LEFT JOIN LATERAL (
         WITH last_reset AS (
-          SELECT ii.quantity AS inv_quantity,
+          SELECT
+                 ii.quantity::numeric
+                   * COALESCE(ii.unit_factor, inv_unit.factor, 1)::numeric
+                   AS inv_base_quantity,
                  COALESCE(io.operation_date, io.created_at) AS op_date
           FROM inventory_items ii
           JOIN inventory_operations io ON io.id = ii.operation_id
@@ -557,9 +410,12 @@ export async function GET(request) {
         )
         SELECT
           (
-            COALESCE((SELECT inv_quantity FROM last_reset), 0)
+            COALESCE((SELECT inv_base_quantity FROM last_reset), 0)
             + COALESCE((
-                SELECT SUM(pr.quantity)
+                SELECT SUM(
+                  pr.quantity::numeric
+                    * COALESCE(pr.unit_factor, inv_unit.factor, 1)::numeric
+                )
                 FROM purchase_receipts pr
                 WHERE pr.item_id = i.id AND pr.branch_id = b.id
                   AND (
@@ -571,10 +427,11 @@ export async function GET(request) {
             + COALESCE((
                 SELECT SUM(
                   CASE io2.transfer_direction
-                    WHEN 'in'  THEN  COALESCE(ii2.transfer_quantity, 0)
-                    WHEN 'out' THEN -COALESCE(ii2.transfer_quantity, 0)
+                    WHEN 'in'  THEN  COALESCE(ii2.transfer_quantity, 0)::numeric
+                    WHEN 'out' THEN -COALESCE(ii2.transfer_quantity, 0)::numeric
                     ELSE 0
                   END
+                  * COALESCE(ii2.unit_factor, inv_unit.factor, 1)::numeric
                 )
                 FROM inventory_items ii2
                 JOIN inventory_operations io2 ON io2.id = ii2.operation_id
@@ -587,67 +444,29 @@ export async function GET(request) {
                   )
                   AND COALESCE(io2.operation_date, io2.created_at) < ${startOfThisMonth.toISOString()}
               ), 0)
-          ) AS qty
+          ) / NULLIF(COALESCE(inv_unit.factor, 1)::numeric, 0) AS qty
       ) opening ON true
 
       -- received: receipts inside the month (unchanged semantics)
       LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(pr.quantity), 0) as qty
+        SELECT COALESCE(SUM(
+          pr.quantity::numeric
+            * COALESCE(pr.unit_factor, inv_unit.factor, 1)::numeric
+            / NULLIF(COALESCE(inv_unit.factor, 1)::numeric, 0)
+        ), 0) as qty
         FROM purchase_receipts pr
         WHERE pr.item_id = i.id AND pr.branch_id = b.id
           AND pr.received_at >= ${startOfThisMonth.toISOString()}
           AND pr.received_at < ${now.toISOString()}
       ) received ON true
 
-      -- closing: current stock balance, same formula as items-summary
-      LEFT JOIN LATERAL (
-        WITH last_reset AS (
-          SELECT ii.quantity AS inv_quantity,
-                 COALESCE(io.operation_date, io.created_at) AS op_date
-          FROM inventory_items ii
-          JOIN inventory_operations io ON io.id = ii.operation_id
-          WHERE ii.item_id = i.id AND io.branch_id = b.id
-            AND io.status = 'Completed'
-            AND io.inventory_type IN ('Daily','Weekly','Opening')
-          ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
-          LIMIT 1
-        )
-        SELECT
-          (
-            COALESCE((SELECT inv_quantity FROM last_reset), 0)
-            + COALESCE((
-                SELECT SUM(pr.quantity)
-                FROM purchase_receipts pr
-                WHERE pr.item_id = i.id AND pr.branch_id = b.id
-                  AND (
-                    (SELECT op_date FROM last_reset) IS NULL
-                    OR GREATEST(pr.received_at, pr.created_at) > (SELECT op_date FROM last_reset)
-                  )
-              ), 0)
-            + COALESCE((
-                SELECT SUM(
-                  CASE io2.transfer_direction
-                    WHEN 'in'  THEN  COALESCE(ii2.transfer_quantity, 0)
-                    WHEN 'out' THEN -COALESCE(ii2.transfer_quantity, 0)
-                    ELSE 0
-                  END
-                )
-                FROM inventory_items ii2
-                JOIN inventory_operations io2 ON io2.id = ii2.operation_id
-                WHERE ii2.item_id = i.id AND ii2.branch_id = b.id
-                  AND io2.status = 'Completed'
-                  AND io2.inventory_type = 'Transfer'
-                  AND (
-                    (SELECT op_date FROM last_reset) IS NULL
-                    OR COALESCE(io2.operation_date, io2.created_at) > (SELECT op_date FROM last_reset)
-                  )
-              ), 0)
-          ) AS qty
-      ) closing ON true
-
       WHERE i.is_active = true AND i.show_in_inventory = true
         AND ibd.item_id IS NULL
-        AND (opening.qty <> 0 OR received.qty > 0 OR closing.qty <> 0)
+        AND (
+          opening.qty <> 0
+          OR received.qty > 0
+          OR COALESCE(current_stock.current_quantity, 0) <> 0
+        )
       ORDER BY i.name, b.name
     `;
 
@@ -667,12 +486,23 @@ export async function GET(request) {
         prev.op_date as prev_date
       FROM items i
       CROSS JOIN branches b
+      LEFT JOIN LATERAL (
+        SELECT COALESCE(iu.conversion_factor, 1)::numeric AS factor
+        FROM item_units iu
+        WHERE iu.id = i.default_inventory_unit_id
+        LIMIT 1
+      ) inv_unit ON true
 
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
 
       LEFT JOIN LATERAL (
-        SELECT ii.quantity as qty, COALESCE(io.operation_date, io.created_at) as op_date
+        SELECT
+          (
+            ii.quantity::numeric
+              * COALESCE(ii.unit_factor, inv_unit.factor, 1)::numeric
+          ) / NULLIF(COALESCE(inv_unit.factor, 1)::numeric, 0) as qty,
+          COALESCE(io.operation_date, io.created_at) as op_date
         FROM inventory_items ii
         JOIN inventory_operations io ON io.id = ii.operation_id
         WHERE ii.item_id = i.id AND io.branch_id = b.id
@@ -683,7 +513,12 @@ export async function GET(request) {
       ) latest ON true
 
       LEFT JOIN LATERAL (
-        SELECT ii.quantity as qty, COALESCE(io.operation_date, io.created_at) as op_date
+        SELECT
+          (
+            ii.quantity::numeric
+              * COALESCE(ii.unit_factor, inv_unit.factor, 1)::numeric
+          ) / NULLIF(COALESCE(inv_unit.factor, 1)::numeric, 0) as qty,
+          COALESCE(io.operation_date, io.created_at) as op_date
         FROM inventory_items ii
         JOIN inventory_operations io ON io.id = ii.operation_id
         WHERE ii.item_id = i.id AND io.branch_id = b.id
@@ -765,13 +600,17 @@ export async function GET(request) {
         pr.receipt_batch_id,
         b.name as branch_name,
         i.name as item_name,
-        pr.quantity,
+        (
+          pr.quantity::numeric
+            * COALESCE(pr.unit_factor, iu.conversion_factor, 1)::numeric
+        ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity,
         pr.received_at as op_date,
         COALESCE(pr.created_by_employee_name, e.name) as employee_name,
         pr.note
       FROM purchase_receipts pr
       LEFT JOIN branches b ON b.id = pr.branch_id
       LEFT JOIN items i ON i.id = pr.item_id
+      LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
       LEFT JOIN employees e ON e.id = pr.created_by_employee_id
       ORDER BY pr.received_at DESC
       LIMIT 5

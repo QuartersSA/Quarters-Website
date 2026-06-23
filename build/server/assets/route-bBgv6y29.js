@@ -1,5 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -146,6 +147,11 @@ async function ensureSchema() {
   } catch (e) {
     console.error("ensureSchema auto-seed item_units:", e?.message);
   }
+  try {
+    await ensureInventoryUnitSnapshotSchema();
+  } catch (e) {
+    console.error("ensureSchema inventory unit snapshots:", e?.message);
+  }
 }
 async function GET(request) {
   const auth = requireAuth(request, {
@@ -226,87 +232,23 @@ async function GET(request) {
     const itemIds = items.map(it => it.id);
     const stockRowsByItem = new Map();
     if (itemIds.length > 0) {
-      // current quantity = last RESET (Daily/Weekly/Opening) +
-      // receipts after that reset + signed transfer deltas after that
-      // reset. Same formula as /api/items/summary and the timeline
-      // report so the numbers stay consistent across endpoints.
+      // Current quantity comes from the shared DB view. The view
+      // normalizes each historical row from its saved unit snapshot
+      // into the item's current default inventory unit, so changing an
+      // item's default unit no longer reinterprets old quantities.
       const stockRows = await sql(`
-          WITH last_reset AS (
-            SELECT DISTINCT ON (ii.item_id, io.branch_id)
-              ii.item_id,
-              io.branch_id,
-              ii.quantity AS inv_quantity,
-              COALESCE(io.operation_date, io.created_at) AS op_date
-            FROM inventory_items ii
-            JOIN inventory_operations io ON io.id = ii.operation_id
-            WHERE ii.item_id = ANY($1::bigint[])
-              AND io.status = 'Completed'
-              AND io.inventory_type IN ('Daily','Weekly','Opening')
-            ORDER BY
-              ii.item_id,
-              io.branch_id,
-              COALESCE(io.operation_date, io.created_at) DESC,
-              io.id DESC
-          ),
-          receipts_after AS (
-            SELECT
-              pr.item_id,
-              pr.branch_id,
-              SUM(pr.quantity) AS total_received
-            FROM purchase_receipts pr
-            LEFT JOIN last_reset li
-              ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
-            WHERE pr.item_id = ANY($1::bigint[])
-              AND (
-                li.op_date IS NULL
-                OR GREATEST(pr.received_at, pr.created_at) > li.op_date
-              )
-            GROUP BY pr.item_id, pr.branch_id
-          ),
-          transfers_after AS (
-            SELECT
-              ii.item_id,
-              ii.branch_id,
-              SUM(
-                CASE io.transfer_direction
-                  WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
-                  WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
-                  ELSE 0
-                END
-              ) AS net_transfer
-            FROM inventory_items ii
-            JOIN inventory_operations io ON io.id = ii.operation_id
-            LEFT JOIN last_reset li
-              ON li.item_id = ii.item_id AND li.branch_id = ii.branch_id
-            WHERE ii.item_id = ANY($1::bigint[])
-              AND io.status = 'Completed'
-              AND io.inventory_type = 'Transfer'
-              AND (
-                li.op_date IS NULL
-                OR COALESCE(io.operation_date, io.created_at) > li.op_date
-              )
-            GROUP BY ii.item_id, ii.branch_id
-          )
           SELECT
-            ix.id          AS item_id,
-            b.id           AS branch_id,
-            b.name         AS branch_name,
-            COALESCE(li.inv_quantity, 0)
-              + COALESCE(ra.total_received, 0)
-              + COALESCE(ta.net_transfer, 0)
-            AS quantity
-          FROM (SELECT unnest($1::bigint[]) AS id) ix
-          CROSS JOIN branches b
-          LEFT JOIN last_reset li
-            ON li.item_id = ix.id AND li.branch_id = b.id
-          LEFT JOIN receipts_after ra
-            ON ra.item_id = ix.id AND ra.branch_id = b.id
-          LEFT JOIN transfers_after ta
-            ON ta.item_id = ix.id AND ta.branch_id = b.id
+            cs.item_id,
+            b.id AS branch_id,
+            b.name AS branch_name,
+            COALESCE(cs.current_quantity, 0) AS quantity
+          FROM inventory_current_stock_v cs
+          JOIN branches b ON b.id = cs.branch_id
           LEFT JOIN item_branch_disabled ibd
-            ON ibd.item_id = ix.id AND ibd.branch_id = b.id
-          WHERE ibd.item_id IS NULL
-          ORDER BY ix.id, b.name
+            ON ibd.item_id = cs.item_id AND ibd.branch_id = b.id
+          WHERE cs.item_id = ANY($1::bigint[])
+            AND ibd.item_id IS NULL
+          ORDER BY cs.item_id, b.name
         `, [itemIds]);
       for (const row of stockRows) {
         // Key as String so the lookup below tolerates the postgres
