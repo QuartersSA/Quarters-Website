@@ -42,6 +42,7 @@ import {
   PayrollMobileHeader,
   PayrollDesktopHeader,
 } from "@/components/Accounting/PayrollHeader";
+import { currentRiyadhMonthKey } from "@/utils/dateUtils";
 
 export default function PayrollPage() {
   const { ready, employeeId, user } = useWorkspaceUser();
@@ -49,12 +50,7 @@ export default function PayrollPage() {
 
   // Default to the current calendar month so first paint shows usable data
   // instead of a "اختر الشهر" empty card — matches the expenses page.
-  const [month, setMonth] = useState(() => {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
-  });
+  const [month, setMonth] = useState(currentRiyadhMonthKey);
   const monthOptions = useMemo(() => buildRecentMonthOptions(30), []);
   const monthHint = month ? monthLabel(month) : "";
 

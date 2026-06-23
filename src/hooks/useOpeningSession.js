@@ -1,16 +1,8 @@
 import { useState, useCallback, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
-
-function nowLocalDatetime() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const min = String(d.getMinutes()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-}
+import { formatRiyadhDateTimeForInput } from "@/utils/dateUtils";
+import { invalidateInventoryQueries } from "@/utils/queryKeys";
 
 export function useOpeningSession(
   activeItems,
@@ -51,11 +43,7 @@ export function useOpeningSession(
       console.log("Opening session saved successfully!");
       setOpeningError(null);
       setOpeningSuccess("تم حفظ المخزون الافتتاحي بنجاح ✅");
-      queryClient.invalidateQueries({ queryKey: ["variance"] });
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      queryClient.invalidateQueries({ queryKey: ["opening-sessions"] });
-      queryClient.invalidateQueries({ queryKey: ["operations"] });
-      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
+      invalidateInventoryQueries(queryClient);
       // Close modal after a brief success message
       setTimeout(() => {
         setOpeningModalOpen(false);
@@ -96,7 +84,7 @@ export function useOpeningSession(
     setOpeningSuccess(null);
     setOpeningModalOpen(true);
     // Default to current date/time — user can change if needed
-    setOpeningOpenedAt(nowLocalDatetime());
+    setOpeningOpenedAt(formatRiyadhDateTimeForInput());
     setOpeningNote("");
     setOpeningSearch("");
 

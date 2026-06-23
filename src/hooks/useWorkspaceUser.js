@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { getAdminToken } from "@/utils/apiAuth";
 
 function readInitialUser() {
   if (typeof window === "undefined") return null;
@@ -33,11 +34,12 @@ export default function useWorkspaceUser() {
     if (Number.isFinite(maybe)) return maybe;
     return null;
   }, [user]);
+  const hasSessionToken = !!getAdminToken();
 
   return {
     ready,
     user,
     employeeId,
-    isAuthenticated: !!employeeId,
+    isAuthenticated: !!employeeId && hasSessionToken,
   };
 }

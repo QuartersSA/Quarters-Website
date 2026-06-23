@@ -13,6 +13,10 @@ import {
   monthLabel,
   formatMoney,
 } from "@/utils/payrollFormatters";
+import {
+  currentRiyadhMonthKey,
+  riyadhMonthKeyFromOffset,
+} from "@/utils/dateUtils";
 import { useLoanEmployees } from "@/hooks/useEmployeeLoans";
 import {
   useOvertime,
@@ -82,12 +86,7 @@ export default function HROvertimePage() {
   const { ready, employeeId, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
 
-  const [filterMonth, setFilterMonth] = useState(() => {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
-  });
+  const [filterMonth, setFilterMonth] = useState(currentRiyadhMonthKey);
   const [filterEmployee, setFilterEmployee] = useState("");
 
   // Form state — multi-employee.
@@ -102,14 +101,8 @@ export default function HROvertimePage() {
   const monthOptionsForm = useMemo(() => {
     const base = buildRecentMonthOptions(30).filter((o) => o.value !== "");
     // Allow a few future months for scheduled overtime
-    const now = new Date();
     for (let i = 1; i <= 3; i += 1) {
-      const d = new Date(
-        Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1),
-      );
-      const y = d.getUTCFullYear();
-      const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-      const value = `${y}-${m}`;
+      const value = riyadhMonthKeyFromOffset(i);
       if (!base.find((o) => o.value === value)) {
         base.unshift({ value, label: monthLabel(value) });
       }

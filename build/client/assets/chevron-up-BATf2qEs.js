@@ -1,1 +1,0 @@
-import{c as r}from"./createLucideIcon-kT1gL1p0.js";if(typeof window<"u"){const o={};globalThis.process??={};const s=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},o,s),{get(e,n){return n in e?e[n]:void 0},has(){return!0}})}const i=r("ChevronUp",[["path",{d:"m18 15-6-6-6 6",key:"153udz"}]]);export{i as C};

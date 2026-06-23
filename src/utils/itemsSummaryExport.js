@@ -4,6 +4,7 @@ import {
   formatInventoryType,
   formatDateTime,
 } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 export function exportItemsSummaryToExcel(filteredItems) {
   // Flatten data for export - one row per item-branch combination
@@ -61,7 +62,7 @@ export function exportItemsSummaryToExcel(filteredItems) {
 
   exportToExcelHTML(
     exportData,
-    `ملخص_الأصناف_الشامل_${new Date().toISOString().split("T")[0]}`,
+    `ملخص_الأصناف_الشامل_${todayRiyadhDateKey()}`,
     columns,
     "ملخص الأصناف الشامل - نظام إدارة المخزون",
   );
@@ -104,7 +105,7 @@ export function exportItemsSummaryToPDF(filteredItems) {
 
   exportToPDF(
     exportData,
-    `ملخص_الأصناف_${new Date().toISOString().split("T")[0]}`,
+    `ملخص_الأصناف_${todayRiyadhDateKey()}`,
     columns,
     "ملخص الأصناف الشامل",
   );

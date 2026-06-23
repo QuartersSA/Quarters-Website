@@ -1,9 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useGreenBeans(ready, isAuthenticated, isAdmin) {
   return useQuery({
-    queryKey: ["accounting", "greenBeans"],
+    queryKey: queryKeys.accountingGreenBeans(),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/green-beans");
@@ -38,7 +39,7 @@ function monthToRange(monthValue) {
 
 export function useOrders(ready, isAuthenticated, isAdmin, month = "") {
   return useQuery({
-    queryKey: ["accounting", "greenBeanOrders", month || "all"],
+    queryKey: queryKeys.accountingGreenBeanOrders(month||"all"),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -68,7 +69,7 @@ export function useOrderDetails(
   selectedOrderId,
 ) {
   return useQuery({
-    queryKey: ["accounting", "greenBeanOrders", selectedOrderId],
+    queryKey: queryKeys.accountingGreenBeanOrders(selectedOrderId),
     enabled:
       ready &&
       isAuthenticated &&
@@ -112,7 +113,7 @@ export function useCreateOrder(onSuccess, onError) {
     },
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"],
+        queryKey: queryKeys.accountingGreenBeanOrders(),
       });
       onSuccess(data);
     },
@@ -139,7 +140,7 @@ export function useDeleteOrder(onSuccess, onError) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"],
+        queryKey: queryKeys.accountingGreenBeanOrders(),
       });
       onSuccess();
     },
@@ -172,11 +173,11 @@ export function useUpdateOrderItemReceived(onSuccess, onError) {
     onSuccess: async ({ data, orderId }) => {
       if (orderId) {
         await queryClient.invalidateQueries({
-          queryKey: ["accounting", "greenBeanOrders", String(orderId)],
+          queryKey: queryKeys.accountingGreenBeanOrders(String(orderId)),
         });
       }
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"],
+        queryKey: queryKeys.accountingGreenBeanOrders(),
       });
       onSuccess?.(data);
     },
@@ -209,11 +210,11 @@ export function useUpdateOrder(onSuccess, onError) {
     onSuccess: async ({ data, orderId }) => {
       if (orderId) {
         await queryClient.invalidateQueries({
-          queryKey: ["accounting", "greenBeanOrders", String(orderId)],
+          queryKey: queryKeys.accountingGreenBeanOrders(String(orderId)),
         });
       }
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"],
+        queryKey: queryKeys.accountingGreenBeanOrders(),
       });
       onSuccess?.(data, orderId);
     },

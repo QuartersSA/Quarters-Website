@@ -1,23 +1,12 @@
 import { useState } from "react";
 import { Truck, ChevronDown, ChevronUp, Package, Calendar } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { formatDateTime as formatRiyadhDateTime } from "@/utils/dateUtils";
 
 const sectionCard = `${ws.glass} ${ws.card} overflow-hidden`;
 
 function formatDate(value) {
-  if (!value) return "—";
-  try {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const mn = String(d.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd} ${hh}:${mn}`;
-  } catch {
-    return String(value).slice(0, 16);
-  }
+  return formatRiyadhDateTime(value);
 }
 
 function formatNumber(n) {

@@ -13,6 +13,7 @@ import {
 import Papa from "papaparse";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 /**
  * Bulk blogger import via CSV.
@@ -88,7 +89,7 @@ export default function BloggersBulkImport({ onClose }) {
     },
     onSuccess: (data) => {
       setResult(data);
-      queryClient.invalidateQueries({ queryKey: ["marketing-bloggers"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingBloggers() });
     },
   });
 
@@ -284,8 +285,8 @@ export default function BloggersBulkImport({ onClose }) {
               <div className="px-4 py-3 border-b border-slate-200 dark:border-white/10 text-slate-800 dark:text-white/80 text-sm font-semibold">
                 معاينة أول 10 صفوف
               </div>
-              <div className="max-h-[260px] overflow-y-auto">
-                <table className="w-full text-sm">
+              <div className="max-h-[260px] overflow-auto">
+                <table className="min-w-[640px] w-full text-sm">
                   <thead>
                     <tr className="bg-slate-50 dark:bg-white/[0.04] sticky top-0">
                       <th className="text-right px-3 py-2 text-slate-600 dark:text-white/65 font-semibold">

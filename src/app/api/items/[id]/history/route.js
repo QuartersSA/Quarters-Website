@@ -40,11 +40,11 @@ export async function GET(request, { params }) {
     const hasFromTo = !!fromRaw && !!toRaw;
     if (hasFromTo) {
       // Treat inputs as DATE (YYYY-MM-DD). Include the full end day by using < (to + 1 day).
-      where += ` AND COALESCE(io.operation_date, io.created_at) >= $${idx}::date`;
+      where += ` AND COALESCE(io.operation_date, io.created_at) >= ($${idx}::date::timestamp AT TIME ZONE 'Asia/Riyadh')`;
       values.push(fromRaw);
       idx += 1;
 
-      where += ` AND COALESCE(io.operation_date, io.created_at) < ($${idx}::date + INTERVAL '1 day')`;
+      where += ` AND COALESCE(io.operation_date, io.created_at) < (($${idx}::date + INTERVAL '1 day')::timestamp AT TIME ZONE 'Asia/Riyadh')`;
       values.push(toRaw);
       idx += 1;
     } else {

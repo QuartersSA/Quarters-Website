@@ -9,6 +9,7 @@ export const formatDateTime = (dateString) => {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
     return String(dateString);
@@ -22,6 +23,7 @@ export const formatDateOnly = (dateString) => {
       year: "numeric",
       month: "short",
       day: "numeric",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
     return String(dateString);

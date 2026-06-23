@@ -10,31 +10,10 @@
 
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { parseBusinessTimestamp } from "@/utils/dateUtils";
 
 function parseAtTime(value) {
-  if (!value) return null;
-  const str = String(value).trim();
-  if (!str) return null;
-
-  let d;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    d = new Date(`${str}T00:00:00`);
-  } else {
-    d = new Date(str);
-  }
-  if (Number.isNaN(d.getTime())) return null;
-  if (d.getFullYear() < 2020) return null;
-  // Allow up to 1 day in the future for clock-skew + intentional
-  // forward-dating; further than that is almost certainly a typo.
-  if (d > new Date(Date.now() + 24 * 60 * 60 * 1000)) return null;
-
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const mn = String(d.getMinutes()).padStart(2, "0");
-  const ss = String(d.getSeconds()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd} ${hh}:${mn}:${ss}`;
+  return parseBusinessTimestamp(value, { allowFuture: 1, minYear: 2020 });
 }
 
 export async function GET(request) {

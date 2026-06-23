@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useAccountingContacts({
   employeeId,
@@ -9,7 +10,7 @@ export function useAccountingContacts({
   includeInactive,
 } = {}) {
   return useQuery({
-    queryKey: ["accounting_contacts", q || "", !!includeInactive],
+    queryKey: queryKeys.accountingContacts(q||"",!!includeInactive),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -45,7 +46,7 @@ export function useCreateAccountingContact() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_contacts"],
+        queryKey: queryKeys.accountingContacts(),
       });
       toast.success("تم إضافة جهة الاتصال");
     },
@@ -73,7 +74,7 @@ export function useUpdateAccountingContact() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_contacts"],
+        queryKey: queryKeys.accountingContacts(),
       });
       toast.success("تم حفظ التعديلات");
     },
@@ -100,7 +101,7 @@ export function useDeleteAccountingContact() {
     },
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_contacts"],
+        queryKey: queryKeys.accountingContacts(),
       });
       toast.success(data?.hard ? "تم الحذف نهائياً" : "تم إيقاف الجهة");
     },

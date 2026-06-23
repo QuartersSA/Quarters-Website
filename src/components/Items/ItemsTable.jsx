@@ -19,6 +19,8 @@ import {
   Building2,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { sumStockQuantities } from "@/utils/inventoryMath";
+import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 function getUnitIcon(unit) {
   const icons = {
@@ -34,11 +36,7 @@ function getUnitIcon(unit) {
 }
 
 function computeTotalStock(item) {
-  const list = Array.isArray(item?.branch_stock) ? item.branch_stock : [];
-  return list.reduce((sum, stock) => {
-    const qty = Number(stock?.quantity || 0);
-    return sum + (Number.isFinite(qty) ? qty : 0);
-  }, 0);
+  return sumStockQuantities(item?.branch_stock);
 }
 
 function computeStockStatus(item) {
@@ -46,10 +44,7 @@ function computeStockStatus(item) {
   const threshold = Number(item?.min_stock_threshold || 0);
   if (list.length === 0) return "available";
 
-  const totalStock = list.reduce((sum, s) => {
-    const qty = Number(s?.quantity || 0);
-    return sum + (Number.isFinite(qty) ? qty : 0);
-  }, 0);
+  const totalStock = sumStockQuantities(list);
 
   if (totalStock === 0) return "out_of_stock";
   if (totalStock < threshold) return "low_stock";
@@ -322,6 +317,8 @@ export function ItemsTable({
                       <button
                         type="button"
                         onClick={() => toggleOne(item.id)}
+                        aria-label={`تحديد ${item.name}`}
+                        title={`تحديد ${item.name}`}
                         className={`${checkboxBase} ${rowCheckClass}`}
                       >
                         {rowCheckIcon}
@@ -398,9 +395,7 @@ export function ItemsTable({
                             {item.last_order_date ? (
                               <span className="text-slate-400 dark:text-slate-400 dark:text-slate-400 dark:text-white/30 mr-1">
                                 (
-                                {new Date(
-                                  item.last_order_date,
-                                ).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn")}
+                                {formatRiyadhDateForInput(item.last_order_date)}
                                 )
                               </span>
                             ) : null}

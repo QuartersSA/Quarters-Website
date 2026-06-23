@@ -1,11 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { invalidateExpenseQueries, queryKeys } from "../utils/queryKeys.js";
 
 // List active fixed-expense templates
 export function useFixedExpenses(employeeId, isAdmin, includeInactive = false) {
   return useQuery({
-    queryKey: ["accounting_fixed_expenses", { includeInactive }],
+    queryKey: queryKeys.accountingFixedExpenses({includeInactive}),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const qs = includeInactive ? "?includeInactive=1" : "";
@@ -45,13 +46,7 @@ export function useCreateFixedExpense() {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_fixed_expenses"],
-      });
-      // Also refresh expenses list since pending_fixed will change
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"],
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم إضافة المصروف الثابت بنجاح");
     },
     onError: (error) => {
@@ -77,12 +72,7 @@ export function useUpdateFixedExpense() {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_fixed_expenses"],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"],
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم تعديل المصروف الثابت");
     },
     onError: (error) => {
@@ -106,12 +96,7 @@ export function useDeleteFixedExpense() {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_fixed_expenses"],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"],
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم إلغاء تنشيط المصروف الثابت");
     },
     onError: (error) => {
@@ -142,9 +127,7 @@ export function useConfirmFixedExpense() {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"],
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم تأكيد الدفع");
     },
     onError: (error) => {

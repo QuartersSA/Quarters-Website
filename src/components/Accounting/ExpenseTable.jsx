@@ -278,6 +278,8 @@ function ExpenseRow({ expense, onConfirm, onDelete, onEdit }) {
             type="button"
             onClick={handleToggleConfirmed}
             disabled={isLocked}
+            aria-label={isConfirmed ? "إلغاء تأكيد المصروف" : "تأكيد المصروف"}
+            title={isConfirmed ? "إلغاء التأكيد" : "تأكيد المصروف"}
             className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${
               isConfirmed
                 ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300"

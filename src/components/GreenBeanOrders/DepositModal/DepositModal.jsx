@@ -55,6 +55,8 @@ export function DepositModal({
           <button
             type="button"
             onClick={onCloseDepositModal}
+            aria-label="إغلاق"
+            title="إغلاق"
             className="text-slate-400 dark:text-white/40 hover:text-slate-800 dark:text-white/80 transition-colors"
           >
             <X className="w-5 h-5" />

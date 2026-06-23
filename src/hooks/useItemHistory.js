@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useItemHistory(
   isAuthenticated,
@@ -13,13 +14,7 @@ export function useItemHistory(
     isLoading: isHistoryLoading,
     error: historyError,
   } = useQuery({
-    queryKey: [
-      "item-history",
-      selectedItemId,
-      selectedBranchId,
-      dateFrom,
-      dateTo,
-    ],
+    queryKey: queryKeys.itemHistory(selectedItemId,selectedBranchId,dateFrom,dateTo),
     queryFn: async () => {
       const branchQuery = selectedBranchId
         ? `&branchId=${encodeURIComponent(selectedBranchId)}`

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ConnectionStatus from "@/components/System/ConnectionStatus";
 import { Toaster } from "sonner";
 import { ws } from "@/components/Workspace/ui";
 
@@ -70,9 +71,15 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 30_000, // 30 sec – avoid redundant refetches on quick navigations
       gcTime: 5 * 60_000, // 5 min garbage-collection window
-      retry: 1,
+      retry: (failureCount, error) => {
+        const status = Number(error?.status || error?.response?.status);
+        if ([400, 401, 403, 404].includes(status)) return false;
+        return failureCount < 1;
+      },
       refetchOnWindowFocus: false,
+      refetchOnReconnect: true,
     },
+    mutations: { retry: 0 },
   },
 });
 
@@ -105,6 +112,7 @@ function GlobalDarkEnforcer() {
 export default function RootLayout({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
+      <ConnectionStatus />
       <GlobalDarkEnforcer />
       <FaviconSetter />
       <Toaster position="top-center" richColors dir="rtl" />

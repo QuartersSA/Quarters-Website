@@ -1,25 +1,15 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { assertItemsEnabledAtBranch } from "@/app/api/utils/branchVisibility";
+import { validateBusinessDate } from "@/utils/dateUtils";
 
 /**
  * Validate a user-supplied openedAt value.
  * Returns null if invalid / out of business range.
  */
 function validateOpenedAt(value) {
-  if (!value) return null;
-  const str = String(value).trim();
-  if (!str) return null;
-  let d;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    d = new Date(`${str}T00:00:00`);
-  } else {
-    d = new Date(str);
-  }
-  if (isNaN(d.getTime())) return null;
-  if (d.getFullYear() < 2020) return null;
-  if (d > new Date(Date.now() + 24 * 60 * 60 * 1000)) return null;
-  return d;
+  const result = validateBusinessDate(value, { allowFuture: 1, minYear: 2020 });
+  return result.ok ? result.date : null;
 }
 
 export async function GET(request) {
@@ -218,7 +208,7 @@ export async function POST(request) {
       `SELECT id FROM inventory_operations
        WHERE branch_id = $1
          AND inventory_type = 'Opening'
-         AND (COALESCE(operation_date, created_at))::date = $2::date`,
+         AND (COALESCE(operation_date, created_at) AT TIME ZONE 'Asia/Riyadh')::date = $2::date`,
       [branchIdNum, openedAtDateOnly],
     );
 

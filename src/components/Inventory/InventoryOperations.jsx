@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Package, User, Calendar, AlertCircle } from "lucide-react";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 export default function InventoryOperations({ selectedBranch }) {
   const {
@@ -8,7 +9,7 @@ export default function InventoryOperations({ selectedBranch }) {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["inventory-operations", selectedBranch],
+    queryKey: queryKeys.inventoryOperations(selectedBranch),
     queryFn: async () => {
       const url = selectedBranch
         ? `/api/inventory-operations?branchId=${selectedBranch}`
@@ -115,6 +116,7 @@ export default function InventoryOperations({ selectedBranch }) {
                         day: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        timeZone: "Asia/Riyadh",
                       })}
                     </span>
                   </div>

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useItemAnalysis(
   isAuthenticated,
@@ -13,7 +14,7 @@ export function useItemAnalysis(
     isLoading: isAnalysisLoading,
     error: analysisError,
   } = useQuery({
-    queryKey: ["item-analysis", itemId, branchIds, dateFrom, dateTo],
+    queryKey: queryKeys.itemAnalysis(itemId,branchIds,dateFrom,dateTo),
     queryFn: async () => {
       const qs = new URLSearchParams({
         branchIds: branchIds.join(","),

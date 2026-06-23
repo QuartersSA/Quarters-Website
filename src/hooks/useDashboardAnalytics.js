@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useDashboardAnalytics(isAuthenticated) {
   const {
@@ -7,7 +8,7 @@ export function useDashboardAnalytics(isAuthenticated) {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["dashboard-analytics"],
+    queryKey: queryKeys.dashboardAnalytics(),
     queryFn: async () => {
       const response = await adminFetch("/api/dashboard/analytics");
       if (!response.ok) {

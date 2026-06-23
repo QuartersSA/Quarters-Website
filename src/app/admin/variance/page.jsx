@@ -11,19 +11,18 @@ import { VarianceFilters } from "@/components/Variance/VarianceFilters";
 import { VarianceStats } from "@/components/Variance/VarianceStats";
 import { VarianceTable } from "@/components/Variance/VarianceTable";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
-import { formatDateForInput } from "@/utils/dateUtils";
+import {
+  riyadhDateKeyFromMonthOffset,
+  todayRiyadhDateKey,
+} from "@/utils/dateUtils";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
-// `toISOString()` treats the Date as UTC, which shifts the result back
-// one day at local times before the UTC offset wraps. `formatDateForInput`
-// reads local wall-clock fields and is TZ-stable.
 function defaultFromDate() {
-  const d = new Date();
-  d.setMonth(d.getMonth() - 1);
-  return formatDateForInput(d);
+  return riyadhDateKeyFromMonthOffset(-1);
 }
 
 function defaultToDate() {
-  return formatDateForInput(new Date());
+  return todayRiyadhDateKey();
 }
 
 export default function VariancePage() {
@@ -38,7 +37,7 @@ export default function VariancePage() {
   const [dateTo, setDateTo] = useState(defaultToDate());
 
   const { data: branches = [] } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
       if (!res.ok) throw new Error("Failed to fetch branches");
@@ -48,7 +47,7 @@ export default function VariancePage() {
   });
 
   const { data: items = [] } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");
@@ -103,7 +102,7 @@ export default function VariancePage() {
     !dateRangeInvalid;
 
   const varianceQuery = useQuery({
-    queryKey: ["variance", selectedBranch, selectedItem, dateFrom, dateTo],
+    queryKey: queryKeys.variance(selectedBranch,selectedItem,dateFrom,dateTo),
     enabled: isAuthenticated && hasFilters,
     queryFn: async () => {
       const qs = new URLSearchParams({
@@ -224,6 +223,7 @@ export default function VariancePage() {
             item: !!selectedItem,
             from: !!dateFrom,
             to: !!dateTo,
+            rangeInvalid: dateRangeInvalid,
           }}
           onExportExcel={handleExportExcel}
           onExportPDF={handleExportPDF}

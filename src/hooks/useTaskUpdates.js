@@ -1,13 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { workspaceFetch } from "@/utils/apiAuth";
+import {
+  invalidateWorkspaceTaskQueries,
+  queryKeys,
+} from "../utils/queryKeys.js";
 
 export function useTaskUpdates(taskId, viewerEmployeeId, enabled = true) {
   const queryClient = useQueryClient();
 
   const updatesQuery = useQuery({
-    queryKey: ["workspaceTaskUpdates", viewerEmployeeId, taskId],
+    queryKey: queryKeys.workspaceTaskUpdates(viewerEmployeeId,taskId),
     enabled: enabled && !!taskId && !!viewerEmployeeId,
     queryFn: async () => {
-      const res = await fetch(
+      const res = await workspaceFetch(
         `/api/workspace/tasks/${taskId}/updates?employeeId=${viewerEmployeeId}`,
       );
       const data = await res.json();
@@ -23,7 +28,7 @@ export function useTaskUpdates(taskId, viewerEmployeeId, enabled = true) {
       const bodyText = String(body || "").trim();
       const list = Array.isArray(attachments) ? attachments : [];
 
-      const res = await fetch(`/api/workspace/tasks/${taskId}/updates`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/updates`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -43,13 +48,8 @@ export function useTaskUpdates(taskId, viewerEmployeeId, enabled = true) {
       }
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["workspaceTaskUpdates", viewerEmployeeId, taskId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["workspaceTaskHistory", viewerEmployeeId, taskId],
-      });
+    onSuccess: async () => {
+      await invalidateWorkspaceTaskQueries(queryClient);
     },
   });
 

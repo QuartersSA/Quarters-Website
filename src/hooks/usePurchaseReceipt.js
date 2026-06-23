@@ -1,16 +1,8 @@
 import { useState, useCallback, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
-
-function nowLocalDatetime() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const min = String(d.getMinutes()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-}
+import { formatRiyadhDateTimeForInput } from "@/utils/dateUtils";
+import { invalidateInventoryQueries, queryKeys } from "@/utils/queryKeys";
 
 export function usePurchaseReceipt(
   selectedBranchId,
@@ -35,7 +27,7 @@ export function usePurchaseReceipt(
 
   // Fetch all items for name lookup
   const { data: allItemsRaw = [] } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");
@@ -45,7 +37,7 @@ export function usePurchaseReceipt(
 
   // Fetch items-summary for stock quantities per branch
   const { data: itemsSummaryRaw = [] } = useQuery({
-    queryKey: ["items-summary"],
+    queryKey: queryKeys.itemsSummary(),
     queryFn: async () => {
       const res = await adminFetch("/api/items/summary");
       if (!res.ok) throw new Error("Failed to fetch items summary");
@@ -140,18 +132,7 @@ export function usePurchaseReceipt(
       setReceiptNote("");
       setReceiptItemId("");
       setEditingOperation(null);
-      queryClient.invalidateQueries({ queryKey: ["variance"] });
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
-      queryClient.invalidateQueries({ queryKey: ["items-summary"] });
-      // `useLowStockData` keys its query as ["low-stock-items"]; the
-      // bare ["low-stock"] key invalidated nothing.
-      queryClient.invalidateQueries({ queryKey: ["low-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
-      queryClient.invalidateQueries({ queryKey: ["over-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["stock-value"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
-      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
+      invalidateInventoryQueries(queryClient);
     },
     onError: (err) => {
       console.error(err);
@@ -187,19 +168,7 @@ export function usePurchaseReceipt(
       setReceiptNote("");
       setReceiptItemId("");
       setEditingOperation(null);
-      queryClient.invalidateQueries({ queryKey: ["variance"] });
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
-      queryClient.invalidateQueries({ queryKey: ["items-summary"] });
-      // `useLowStockData` keys its query as ["low-stock-items"]; the
-      // bare ["low-stock"] key invalidated nothing.
-      queryClient.invalidateQueries({ queryKey: ["low-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
-      queryClient.invalidateQueries({ queryKey: ["over-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["stock-value"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
-      queryClient.invalidateQueries({ queryKey: ["operation-details"] });
-      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
+      invalidateInventoryQueries(queryClient);
     },
     onError: (err) => {
       console.error(err);
@@ -215,7 +184,7 @@ export function usePurchaseReceipt(
     const defaultBranch = varianceBranchId || selectedBranchId || "";
     setReceiptBranchId(defaultBranch);
     // Default to current date/time — user can change if needed
-    setReceiptDate(nowLocalDatetime());
+    setReceiptDate(formatRiyadhDateTimeForInput());
     setReceiptItemId(varianceItemId || selectedItemId || "");
     setReceiptQty("");
     setReceiptNote("");
@@ -235,12 +204,7 @@ export function usePurchaseReceipt(
       if (dateStr) {
         const d = new Date(dateStr);
         if (!Number.isNaN(d.getTime())) {
-          const yyyy = d.getFullYear();
-          const mm = String(d.getMonth() + 1).padStart(2, "0");
-          const dd = String(d.getDate()).padStart(2, "0");
-          const hh = String(d.getHours()).padStart(2, "0");
-          const min = String(d.getMinutes()).padStart(2, "0");
-          setReceiptDate(`${yyyy}-${mm}-${dd}T${hh}:${min}`);
+          setReceiptDate(formatRiyadhDateTimeForInput(d));
         } else {
           setReceiptDate("");
         }

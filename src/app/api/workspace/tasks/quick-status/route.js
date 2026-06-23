@@ -21,7 +21,7 @@ export async function PATCH(request) {
     const taskId = toInt(body.taskId);
     const newStatus = body.status;
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { RefreshCw } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { useHREmployeeLogs } from "@/hooks/useHREmployeeLogs";
+import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 // Reusable activity-log renderer for a single employee. Used both
 // by the standalone HREmployeeLogsModal (opened from the table) and
@@ -36,10 +37,10 @@ function formatDateTime(value) {
     let hh = get("hour");
     if (hh === "24") hh = "00"; // some engines emit 24 for midnight
     const mi = get("minute");
-    if (!y || !mo || !da) return d.toISOString().slice(0, 16).replace("T", " ");
+    if (!y || !mo || !da) return `${formatRiyadhDateForInput(d)} ${hh}:${mi}`;
     return `${y}/${mo}/${da} ${hh}:${mi}`;
   } catch {
-    return d.toISOString().slice(0, 16).replace("T", " ");
+    return formatRiyadhDateForInput(d);
   }
 }
 
@@ -58,7 +59,7 @@ function formatDateOnly(value) {
       timeZone: "Asia/Riyadh",
     });
   } catch {
-    return d.toISOString().slice(0, 10);
+    return formatRiyadhDateForInput(d);
   }
 }
 

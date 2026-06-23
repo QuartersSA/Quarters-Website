@@ -1,10 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { invalidateExpenseQueries, queryKeys } from "../utils/queryKeys.js";
 
 export function useExpensesData(month, employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_expenses", month],
+    queryKey: queryKeys.accountingExpenses(month),
     enabled: !!employeeId && isAdmin && !!month,
     queryFn: async () => {
       const qs = new URLSearchParams({ month: String(month) });
@@ -23,7 +24,7 @@ export function useExpensesData(month, employeeId, isAdmin) {
 
 export function useExpenseTypes(employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_expense_types"],
+    queryKey: queryKeys.accountingExpenseTypes(),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/expense-types");
@@ -64,9 +65,7 @@ export function useCreateExpense(month) {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"],
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم إضافة المصروف بنجاح");
     },
     onError: (error) => {
@@ -93,9 +92,7 @@ export function useUpdateExpense(month) {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"],
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم تعديل المصروف بنجاح");
     },
     onError: (error) => {
@@ -131,9 +128,7 @@ export function useConfirmExpense(month) {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"],
-      });
+      await invalidateExpenseQueries(queryClient);
     },
     onError: (error) => {
       console.error(error);
@@ -157,9 +152,7 @@ export function useDeleteExpense(month) {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"],
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم حذف المصروف");
     },
     onError: (error) => {
@@ -187,7 +180,7 @@ export function useCreateExpenseType() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_expense_types"],
+        queryKey: queryKeys.accountingExpenseTypes(),
       });
       toast.success("تم إضافة نوع المصروف بنجاح");
     },

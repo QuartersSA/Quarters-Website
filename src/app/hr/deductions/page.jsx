@@ -13,6 +13,7 @@ import { HRDeductionsTable } from "@/components/HR/HRDeductionsTable";
 import { HRDeductionModal } from "@/components/HR/HRDeductionModal";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
+import { riyadhMonthKeyFromOffset } from "@/utils/dateUtils";
 import { toast } from "sonner";
 
 function toInputDate(value) {
@@ -50,16 +51,10 @@ function monthLabel(month) {
 }
 
 function buildRecentMonthOptions(count = 24) {
-  const now = new Date();
   const options = [{ value: "", label: "— بدون فلترة —" }];
 
   for (let i = 0; i < count; i += 1) {
-    const d = new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1),
-    );
-    const y = d.getUTCFullYear();
-    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-    const value = `${y}-${m}`;
+    const value = riyadhMonthKeyFromOffset(-i);
     options.push({ value, label: monthLabel(value) });
   }
 

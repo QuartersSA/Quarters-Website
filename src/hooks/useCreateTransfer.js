@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { invalidateInventoryQueries } from "@/utils/queryKeys";
 
 /**
  * Mutation for creating an inventory transfer between branches.
@@ -53,17 +54,7 @@ export function useCreateTransfer({ onSuccess, onError } = {}) {
       // over-stock / dashboard-analytics were stale until manual
       // refresh, which made the post-transfer numbers look wrong on
       // those screens.
-      queryClient.invalidateQueries({ queryKey: ["inventory-operations"] });
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      queryClient.invalidateQueries({ queryKey: ["items-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["low-stock-items"] });
-      queryClient.invalidateQueries({ queryKey: ["over-stock"] });
-      queryClient.invalidateQueries({ queryKey: ["stock-value"] });
-      queryClient.invalidateQueries({ queryKey: ["variance"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-analytics"] });
-      queryClient.invalidateQueries({ queryKey: ["operation-details"] });
-      queryClient.invalidateQueries({ queryKey: ["item-timeline"] });
+      invalidateInventoryQueries(queryClient);
       onSuccess?.(data);
     },
     onError: (err) => {

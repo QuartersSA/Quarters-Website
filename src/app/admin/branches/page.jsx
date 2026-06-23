@@ -18,6 +18,7 @@ import {
   Search,
 } from "lucide-react";
 import { Breadcrumb } from "@/components/Dashboard/Breadcrumb";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 export default function BranchesPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -37,7 +38,7 @@ export default function BranchesPage() {
   const queryClient = useQueryClient();
 
   const { data: branches = [], isLoading } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");
@@ -60,7 +61,7 @@ export default function BranchesPage() {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.branches() });
       setIsModalOpen(false);
       resetForm();
     },
@@ -80,7 +81,7 @@ export default function BranchesPage() {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.branches() });
       setIsModalOpen(false);
       resetForm();
     },
@@ -100,7 +101,7 @@ export default function BranchesPage() {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.branches() });
       setDeleteConfirm(null);
     },
   });

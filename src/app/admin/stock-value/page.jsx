@@ -10,6 +10,7 @@ import { StockValueStats } from "@/components/StockValue/StockValueStats";
 import { StockValueFilters } from "@/components/StockValue/StockValueFilters";
 import { StockValueTable } from "@/components/StockValue/StockValueTable";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 export default function StockValuePage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -22,7 +23,16 @@ export default function StockValuePage() {
   // "" = جميع الفروع (default). Numeric string = single-branch slice.
   const [selectedBranch, setSelectedBranch] = useState("");
 
-  const { filteredItems, stats, branches, isLoading, refetch } =
+  const {
+    filteredItems,
+    stats,
+    branches,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } =
     useStockValueData({
       isAuthenticated,
       searchQuery,
@@ -80,7 +90,7 @@ export default function StockValuePage() {
   ];
 
   const handleExportExcel = () => {
-    const dateSlug = new Date().toISOString().split("T")[0];
+    const dateSlug = todayRiyadhDateKey();
     const scope = branchLabel ? `_${branchLabel}` : "";
     const titleSuffix = branchLabel
       ? ` — فرع "${branchLabel}"`
@@ -94,7 +104,7 @@ export default function StockValuePage() {
   };
 
   const handleExportPDF = () => {
-    const dateSlug = new Date().toISOString().split("T")[0];
+    const dateSlug = todayRiyadhDateKey();
     const scope = branchLabel ? `_${branchLabel}` : "";
     const titleSuffix = branchLabel
       ? ` — فرع "${branchLabel}"`
@@ -137,6 +147,9 @@ export default function StockValuePage() {
           items={filteredItems}
           totalValue={stats.totalValue}
           isLoading={isLoading}
+          isFetching={isFetching}
+          error={isError ? error : null}
+          onRetry={refetch}
           onExportExcel={handleExportExcel}
           onExportPDF={handleExportPDF}
         />

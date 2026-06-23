@@ -16,6 +16,7 @@ import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney, monthLabel } from "@/utils/payrollFormatters";
 import { toast } from "sonner";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 /**
  * Variable-expense grid.
@@ -38,7 +39,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
   const queryClient = useQueryClient();
 
   const templatesQuery = useQuery({
-    queryKey: ["accounting_variable_templates"],
+    queryKey: queryKeys.accountingVariableTemplates(),
     queryFn: async () => {
       const r = await adminFetch("/api/accounting/variable-templates");
       const d = await r.json().catch(() => ({}));
@@ -102,7 +103,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     },
     onSuccess: () => {
       onMutate?.();
-      queryClient.invalidateQueries({ queryKey: ["accounting_expenses"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountingExpenses() });
     },
     onError: (e) => toast.error(e.message || "فشل الحفظ"),
   });
@@ -125,7 +126,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     onSuccess: () => {
       onMutate?.();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_variable_templates"],
+        queryKey: queryKeys.accountingVariableTemplates(),
       });
       toast.success("تم إضافة القالب");
       setShowAdd(false);
@@ -147,7 +148,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     onSuccess: () => {
       onMutate?.();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_variable_templates"],
+        queryKey: queryKeys.accountingVariableTemplates(),
       });
       toast.success("تم التعديل");
       setEditTarget(null);
@@ -167,7 +168,7 @@ export default function VariableGrid({ types, monthExpenses, month, onMutate }) 
     onSuccess: () => {
       onMutate?.();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_variable_templates"],
+        queryKey: queryKeys.accountingVariableTemplates(),
       });
       toast.success("تم إيقاف القالب");
     },

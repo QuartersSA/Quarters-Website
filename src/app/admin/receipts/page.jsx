@@ -11,20 +11,18 @@ import { ReceiptsFilters } from "@/components/Receipts/ReceiptsFilters";
 import { ReceiptsList } from "@/components/Receipts/ReceiptsList";
 import { useReceiptsData } from "@/hooks/useReceiptsData";
 import { ws } from "@/components/Workspace/ui";
-import { formatDateForInput } from "@/utils/dateUtils";
+import {
+  riyadhDateKeyFromMonthOffset,
+  todayRiyadhDateKey,
+} from "@/utils/dateUtils";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
-// `toISOString()` previously was used here, but it treats the Date as UTC,
-// so at local time ~02:00 in +03:00 the result is *yesterday* in UTC and
-// the date filter loads the wrong day. `formatDateForInput` reads
-// getFullYear / getMonth / getDate from local wall-clock and is TZ-stable.
 function defaultFromDate() {
-  const d = new Date();
-  d.setMonth(d.getMonth() - 1);
-  return formatDateForInput(d);
+  return riyadhDateKeyFromMonthOffset(-1);
 }
 
 function defaultToDate() {
-  return formatDateForInput(new Date());
+  return todayRiyadhDateKey();
 }
 
 export default function ReceiptsPage() {
@@ -38,7 +36,7 @@ export default function ReceiptsPage() {
   const [dateTo, setDateTo] = useState(defaultToDate());
 
   const { data: branches = [] } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
       if (!res.ok) throw new Error("Failed to fetch branches");
@@ -48,7 +46,7 @@ export default function ReceiptsPage() {
   });
 
   const { data: items = [] } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");

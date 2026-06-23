@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureUploadTables } from "../../_utils";
@@ -40,14 +41,16 @@ export async function GET(request, { params: { sessionId } }) {
     // Path 2: query token.
     const url = new URL(request.url);
     const queryToken = url.searchParams.get("t");
+    const expectedToken = Buffer.from(String(session.access_token || ""));
+    const suppliedToken = Buffer.from(String(queryToken || ""));
     const tokenOK =
-      session.access_token &&
-      queryToken &&
-      String(queryToken) === String(session.access_token);
+      expectedToken.length > 0 &&
+      expectedToken.length === suppliedToken.length &&
+      crypto.timingSafeEqual(expectedToken, suppliedToken);
 
     // Path 1: Authorization header, optionally + ownership.
     if (!tokenOK) {
-      const auth = requireAuth(request);
+      const auth = requireAuth(request, { role: "Admin" });
       if (!auth.ok) {
         return Response.json({ error: auth.error }, { status: auth.status });
       }
@@ -84,6 +87,7 @@ export async function GET(request, { params: { sessionId } }) {
 
     const mimeType = session.mime_type || "application/octet-stream";
     const fileName = session.file_name || "file";
+    const inlineSafe = /^image\/(png|jpeg|gif|webp)$/i.test(mimeType);
 
     // Stream the chunks out in order to avoid creating a huge Buffer in memory.
     const stream = new ReadableStream({
@@ -109,8 +113,10 @@ export async function GET(request, { params: { sessionId } }) {
       status: 200,
       headers: {
         "Content-Type": mimeType,
-        "Content-Disposition": `inline; filename="${escaped}"`,
+        "Content-Disposition": `${inlineSafe ? "inline" : "attachment"}; filename="${escaped}"`,
         "Cache-Control": "private, max-age=31536000, immutable",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "sandbox; default-src 'none'",
         // Don't leak the access token through Referer.
         "Referrer-Policy": "no-referrer",
       },

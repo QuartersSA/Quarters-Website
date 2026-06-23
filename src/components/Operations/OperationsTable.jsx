@@ -25,6 +25,7 @@ import {
   formatInventoryType,
   formatDateTime,
 } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 import { ws } from "@/components/Workspace/ui";
 import GlassPopover from "@/components/Workspace/GlassPopover";
 
@@ -190,7 +191,7 @@ export function OperationsTable({
 
     exportToExcelHTML(
       filteredOperations,
-      `عمليات_المخزون_${new Date().toISOString().split("T")[0]}`,
+      `عمليات_المخزون_${todayRiyadhDateKey()}`,
       columns,
       "تقرير عمليات المخزون",
     );
@@ -224,7 +225,7 @@ export function OperationsTable({
 
     exportToPDF(
       filteredOperations,
-      `عمليات_المخزون_${new Date().toISOString().split("T")[0]}`,
+      `عمليات_المخزون_${todayRiyadhDateKey()}`,
       columns,
       "تقرير عمليات المخزون",
     );
@@ -569,6 +570,8 @@ export function OperationsTable({
                           type="button"
                           onClick={() => onDeleteOperation(operation)}
                           className={`${ws.btnDanger} px-3 py-1.5 text-sm justify-center`}
+                          aria-label="حذف العملية"
+                          title="حذف العملية"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

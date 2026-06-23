@@ -13,6 +13,7 @@ import {
   Banknote,
 } from "lucide-react";
 import { SidebarShell } from "@/components/Sidebar/SidebarShell";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 const PALETTE_ROUTES = [
   { href: "/admin", label: "لوحة التحكم", sub: "Dashboard", icon: LayoutDashboard, keywords: "dashboard home" },
@@ -29,7 +30,7 @@ const PALETTE_ROUTES = [
 
 const PALETTE_DATA_SOURCES = [
   {
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     url: "/api/branches",
     staleTime: 30 * 60 * 1000,
     kind: "branch",
@@ -38,7 +39,7 @@ const PALETTE_DATA_SOURCES = [
     hrefBase: "/admin/branches",
   },
   {
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     url: "/api/items",
     staleTime: 5 * 60 * 1000,
     kind: "item",

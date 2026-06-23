@@ -228,8 +228,8 @@ export async function GET(request) {
         AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
         AND io.branch_id = $1
         AND ii.item_id = $2
-        AND COALESCE(io.operation_date, io.created_at)::date >= $3::date
-        AND COALESCE(io.operation_date, io.created_at)::date <= $4::date
+        AND (COALESCE(io.operation_date, io.created_at) AT TIME ZONE 'Asia/Riyadh')::date >= $3::date
+        AND (COALESCE(io.operation_date, io.created_at) AT TIME ZONE 'Asia/Riyadh')::date <= $4::date
       ORDER BY COALESCE(io.operation_date, io.created_at) ASC
     `;
 

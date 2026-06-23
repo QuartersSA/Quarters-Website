@@ -11,6 +11,7 @@ import { buildRecentMonthOptions, monthLabel } from "@/utils/payrollFormatters";
 import { usePayrollData } from "@/hooks/usePayrollData";
 import { usePayrollRebuild } from "@/hooks/usePayrollMutations";
 import { HRPayrollTable } from "@/components/HR/HRPayrollTable";
+import { currentRiyadhMonthKey } from "@/utils/dateUtils";
 
 function HRPayrollMobileHeader() {
   return (
@@ -75,12 +76,7 @@ export default function HRPayrollPage() {
   const { ready, employeeId, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
 
-  const [month, setMonth] = useState(() => {
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
-  });
+  const [month, setMonth] = useState(currentRiyadhMonthKey);
 
   const monthOptions = useMemo(() => buildRecentMonthOptions(30), []);
   const monthHint = month ? monthLabel(month) : "";

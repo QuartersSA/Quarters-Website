@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { hashPassword } from "@/utils/passwordHash";
+import { constantTimeEqual } from "@/app/api/utils/cronAuth";
 
 /**
  * One-shot bootstrap endpoint for the first Admin account.
@@ -26,7 +27,7 @@ export async function POST(request) {
     const body = await request.json();
     const { username, password, name, secretKey } = body || {};
 
-    if (secretKey !== SETUP_SECRET_KEY) {
+    if (!constantTimeEqual(SETUP_SECRET_KEY, secretKey)) {
       return Response.json({ error: "رمز الإعداد غير صحيح" }, { status: 403 });
     }
 

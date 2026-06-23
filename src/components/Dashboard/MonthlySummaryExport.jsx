@@ -22,6 +22,7 @@ export function MonthlySummaryExport({ analytics, stats }) {
   const currentMonth = new Date().toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
     month: "long",
     year: "numeric",
+    timeZone: "Asia/Riyadh",
   });
 
   const handleExport = () => {
@@ -80,6 +81,7 @@ export function MonthlySummaryExport({ analytics, stats }) {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      timeZone: "Asia/Riyadh",
     });
 
     const healthScore = analytics.healthScore ?? 0;

@@ -10,6 +10,7 @@ import {
   formatMoney,
   monthLabel,
 } from "@/utils/payrollFormatters";
+import { riyadhMonthKeyFromOffset } from "@/utils/dateUtils";
 
 /**
  * Modal for creating / editing an employee loan.
@@ -55,14 +56,8 @@ export default function LoanModal({
     const opts = buildRecentMonthOptions(36).filter((o) => o.value !== "");
     // Add a few future months too so admins can schedule deductions to
     // start later than the current calendar month.
-    const now = new Date();
     for (let i = 1; i <= 6; i += 1) {
-      const d = new Date(
-        Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1),
-      );
-      const y = d.getUTCFullYear();
-      const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-      const value = `${y}-${m}`;
+      const value = riyadhMonthKeyFromOffset(i);
       if (!opts.find((o) => o.value === value)) {
         opts.unshift({ value, label: monthLabel(value) });
       }

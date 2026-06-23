@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useOperationDetails() {
   const [selectedOperation, setSelectedOperation] = useState(null);
 
   const { data: operationDetails } = useQuery({
-    queryKey: ["operation-details", selectedOperation?.id],
+    queryKey: queryKeys.operationDetails(selectedOperation?.id),
     queryFn: async () => {
       const response = await adminFetch(
         `/api/inventory-operations?id=${selectedOperation.id}`,

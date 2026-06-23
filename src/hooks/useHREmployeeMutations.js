@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { adminFetch } from "@/utils/apiAuth";
+import { invalidateEmployeeDirectoryQueries } from "../utils/queryKeys.js";
 
 export function useHREmployeeMutations() {
   const queryClient = useQueryClient();
@@ -20,8 +21,8 @@ export function useHREmployeeMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hr-employees"] });
+    onSuccess: async () => {
+      await invalidateEmployeeDirectoryQueries(queryClient);
       toast.success("تم إضافة الموظف بنجاح");
     },
     onError: (error) => {
@@ -45,8 +46,8 @@ export function useHREmployeeMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hr-employees"] });
+    onSuccess: async () => {
+      await invalidateEmployeeDirectoryQueries(queryClient);
       toast.success("تم تحديث الموظف بنجاح");
     },
     onError: (error) => {
@@ -66,8 +67,8 @@ export function useHREmployeeMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["hr-employees"] });
+    onSuccess: async () => {
+      await invalidateEmployeeDirectoryQueries(queryClient);
       toast.success("تم حذف الموظف بنجاح");
     },
     onError: (error) => {

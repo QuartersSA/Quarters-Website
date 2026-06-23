@@ -17,6 +17,7 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { adminFetch } from "@/utils/apiAuth";
 import PurchaseItemModal from "@/components/Accounting/PurchaseItemModal";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 function unitLabel(unit) {
   return unit || "حبة";
@@ -46,7 +47,7 @@ export default function PurchasesItemsPanel() {
   const [editing, setEditing] = useState(null);
 
   const itemsQuery = useQuery({
-    queryKey: ["purchases_items"],
+    queryKey: queryKeys.purchaseItems(),
     queryFn: async () => {
       const r = await adminFetch("/api/items");
       if (!r.ok) throw new Error("Failed to load items");
@@ -55,7 +56,7 @@ export default function PurchasesItemsPanel() {
   });
 
   const categoriesQuery = useQuery({
-    queryKey: ["purchases_item_categories"],
+    queryKey: queryKeys.purchaseItemCategories(),
     queryFn: async () => {
       const r = await adminFetch("/api/item-categories");
       if (!r.ok) throw new Error("Failed to load categories");
@@ -64,10 +65,10 @@ export default function PurchasesItemsPanel() {
   });
 
   const invalidate = () => {
-    queryClient.invalidateQueries({ queryKey: ["purchases_items"] });
+    queryClient.invalidateQueries({ queryKey: queryKeys.purchaseItems() });
     // Cross-invalidate the admin items page caches so /admin/items
     // also picks up changes immediately.
-    queryClient.invalidateQueries({ queryKey: ["items"] });
+    queryClient.invalidateQueries({ queryKey: queryKeys.items() });
   };
 
   const createMut = useMutation({

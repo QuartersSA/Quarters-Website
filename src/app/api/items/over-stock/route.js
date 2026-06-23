@@ -3,7 +3,7 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 
 async function ensureSchema() {
   try {
-    await sql`ALTER TABLE items ADD COLUMN IF NOT EXISTS max_stock_threshold INTEGER`;
+    await sql`ALTER TABLE items ADD COLUMN IF NOT EXISTS max_stock_threshold NUMERIC(12, 3)`;
   } catch (e) {
     console.error("ensureSchema items.max_stock_threshold:", e?.message);
   }

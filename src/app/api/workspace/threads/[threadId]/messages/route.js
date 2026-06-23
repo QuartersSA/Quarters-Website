@@ -26,7 +26,7 @@ export async function GET(request, { params }) {
     const searchParams = getSearchParams(request);
     const employeeId = searchParams.get("employeeId");
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
@@ -86,7 +86,7 @@ export async function POST(request, { params }) {
     const employeeId = toInt(payload.employeeId);
     const bodyText = (payload.body || "").trim();
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }

@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
+import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 function toInt(value) {
   if (value === null || value === undefined || value === "") return null;
@@ -40,7 +41,7 @@ function formatDateOnly(value) {
       const s = String(value);
       return s.length >= 10 ? s.slice(0, 10) : s;
     }
-    return d.toISOString().slice(0, 10);
+    return formatRiyadhDateForInput(d);
   } catch (e) {
     const s = String(value);
     return s.length >= 10 ? s.slice(0, 10) : s;

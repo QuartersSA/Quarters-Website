@@ -9,6 +9,7 @@
 
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { currentRiyadhMonthKey } from "@/utils/dateUtils";
 
 export async function GET(request) {
   const auth = requireAuth(request, {
@@ -29,10 +30,7 @@ export async function GET(request) {
     if (currentMonthRaw && /^\d{4}-\d{2}$/.test(currentMonthRaw)) {
       pivotMonth = `${currentMonthRaw}-01`;
     } else {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      pivotMonth = `${y}-${m}-01`;
+      pivotMonth = `${currentRiyadhMonthKey()}-01`;
     }
 
     // Trend: last N months ending at pivotMonth. Use generate_series so

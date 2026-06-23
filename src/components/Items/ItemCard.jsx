@@ -9,6 +9,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { sumStockQuantities } from "@/utils/inventoryMath";
 
 export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
   // Resolve the display unit from the multi-unit "default inventory"
@@ -20,11 +21,7 @@ export function ItemCard({ item, onEdit, onDelete, onViewStock }) {
     itemUnits.find((u) => u.is_base) ||
     null;
   const displayUnit = defaultInvUnit?.name_ar || item?.unit || "";
-  const totalStock =
-    item.branch_stock?.reduce(
-      (sum, stock) => sum + parseInt(stock.quantity || 0),
-      0,
-    ) || 0;
+  const totalStock = sumStockQuantities(item.branch_stock);
 
   const threshold = Number(item.min_stock_threshold || 0);
 

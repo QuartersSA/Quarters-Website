@@ -9,6 +9,7 @@ import {
   exportToPDF,
   formatDateTime,
 } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 const COUNTRY_LABELS = {
   SA: "السعودية",
@@ -88,7 +89,7 @@ export default function ContactsExportMenu({ contacts }) {
   const handleExportExcel = () => {
     exportToExcelHTML(
       contacts || [],
-      `جهات_الاتصال_${new Date().toISOString().split("T")[0]}`,
+      `جهات_الاتصال_${todayRiyadhDateKey()}`,
       excelColumns,
       "جهات الاتصال - قسم المشتريات",
     );
@@ -98,7 +99,7 @@ export default function ContactsExportMenu({ contacts }) {
   const handleExportPDF = () => {
     exportToPDF(
       contacts || [],
-      `جهات_الاتصال_${new Date().toISOString().split("T")[0]}`,
+      `جهات_الاتصال_${todayRiyadhDateKey()}`,
       pdfColumns,
       "جهات الاتصال - قسم المشتريات",
     );

@@ -39,7 +39,7 @@ export async function GET(request, { params }) {
     const url = new URL(request.url);
     const employeeIdRaw = url.searchParams.get("employeeId");
 
-    const auth = await requireWorkspaceEmployee(employeeIdRaw);
+    const auth = await requireWorkspaceEmployee(request, employeeIdRaw);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
@@ -80,7 +80,7 @@ export async function POST(request, { params }) {
     const assigneeEmployeeId = toInt(body.assignee_employee_id);
     const dueDate = body.due_date || null;
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
@@ -128,7 +128,7 @@ export async function PATCH(request, { params }) {
     const employeeId = toInt(body.employeeId);
     const itemId = toInt(body.itemId);
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
@@ -224,7 +224,7 @@ export async function DELETE(request, { params }) {
     const employeeId = toInt(body.employeeId);
     const itemId = toInt(body.itemId);
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }

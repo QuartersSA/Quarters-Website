@@ -20,8 +20,10 @@ import {
   exportToPDF,
   formatDateTime,
 } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 import { ws } from "@/components/Workspace/ui";
 import { Breadcrumb } from "@/components/Dashboard/Breadcrumb";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 function getItemTotalStock(item) {
   const list = Array.isArray(item?.branch_stock) ? item.branch_stock : [];
@@ -64,7 +66,7 @@ export default function ItemsPage() {
 
   // Fetch green beans for linking
   const { data: greenBeansData } = useQuery({
-    queryKey: ["green-beans"],
+    queryKey: queryKeys.greenBeans(),
     queryFn: async () => {
       const { adminFetch } = await import("@/utils/apiAuth");
       const response = await adminFetch("/api/accounting/green-beans");
@@ -266,7 +268,7 @@ export default function ItemsPage() {
 
     exportToExcelHTML(
       filteredItems,
-      `قائمة_الأصناف_${new Date().toISOString().split("T")[0]}`,
+      `قائمة_الأصناف_${todayRiyadhDateKey()}`,
       columns,
       "قائمة الأصناف - نظام إدارة المخزون",
     );
@@ -308,7 +310,7 @@ export default function ItemsPage() {
 
     exportToPDF(
       filteredItems,
-      `قائمة_الأصناف_${new Date().toISOString().split("T")[0]}`,
+      `قائمة_الأصناف_${todayRiyadhDateKey()}`,
       columns,
       "قائمة الأصناف - نظام إدارة المخزون",
     );

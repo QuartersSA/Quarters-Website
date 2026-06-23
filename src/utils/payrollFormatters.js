@@ -1,3 +1,5 @@
+import { riyadhMonthKeyFromOffset } from "./dateUtils.js";
+
 export function formatMoney(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
@@ -35,16 +37,10 @@ export function monthLabel(month) {
 }
 
 export function buildRecentMonthOptions(count = 24) {
-  const now = new Date();
-  const options = [{ value: "", label: "اختر الشهر" }];
+  const options = [{ value: "", label: "اختار الشهر" }];
 
   for (let i = 0; i < count; i += 1) {
-    const d = new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1),
-    );
-    const y = d.getUTCFullYear();
-    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-    const value = `${y}-${m}`;
+    const value = riyadhMonthKeyFromOffset(-i);
     options.push({ value, label: monthLabel(value) });
   }
 

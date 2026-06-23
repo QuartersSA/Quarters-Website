@@ -128,7 +128,7 @@ export async function GET(request) {
     const q = (params.get("q") || "").trim();
     const spaceId = params.get("spaceId");
 
-    const auth = await requireWorkspaceEmployee(employeeIdRaw);
+    const auth = await requireWorkspaceEmployee(request, employeeIdRaw);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
@@ -306,7 +306,7 @@ export async function POST(request) {
     const body = await request.json();
     const employeeId = toInt(body.employeeId);
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }

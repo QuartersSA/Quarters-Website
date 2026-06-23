@@ -14,6 +14,8 @@ import { Plus, Send, ChevronLeft, MessageSquare, Search } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { formatTime as formatTimeRiyadh } from "@/utils/dateUtils";
+import { workspaceFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 // Wrapper: dateUtils.formatTime returns "—" for empty/invalid; the
 // inbox UI prefers an empty string in those slots.
@@ -54,11 +56,11 @@ export default function WorkspaceInboxPage() {
   const messagesEndRef = useRef(null);
 
   const threadsQuery = useQuery({
-    queryKey: ["workspaceThreads", myId],
+    queryKey: queryKeys.workspaceThreads(myId),
     enabled: !!myId,
     refetchInterval: 15000,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/threads?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/threads?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(
           `When fetching /api/workspace/threads, the response was [${res.status}] ${res.statusText}`,
@@ -123,11 +125,11 @@ export default function WorkspaceInboxPage() {
   }, [otherMemberName]);
 
   const messagesQuery = useQuery({
-    queryKey: ["workspaceMessages", selectedThreadId, myId],
+    queryKey: queryKeys.workspaceMessages(selectedThreadId,myId),
     enabled: !!myId && !!selectedThreadId,
     refetchInterval: 5000,
     queryFn: async () => {
-      const res = await fetch(
+      const res = await workspaceFetch(
         `/api/workspace/threads/${selectedThreadId}/messages?employeeId=${myId}`,
       );
       if (!res.ok) {
@@ -149,10 +151,10 @@ export default function WorkspaceInboxPage() {
   }, [messages.length]);
 
   const usersQuery = useQuery({
-    queryKey: ["workspaceUsers", myId],
+    queryKey: queryKeys.workspaceUsers(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/users?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/users?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(
           `When fetching /api/workspace/users, the response was [${res.status}] ${res.statusText}`,
@@ -166,7 +168,7 @@ export default function WorkspaceInboxPage() {
 
   const createThreadMutation = useMutation({
     mutationFn: async (toEmployeeId) => {
-      const res = await fetch("/api/workspace/threads", {
+      const res = await workspaceFetch("/api/workspace/threads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -182,7 +184,7 @@ export default function WorkspaceInboxPage() {
     },
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
-        queryKey: ["workspaceThreads", myId],
+        queryKey: queryKeys.workspaceThreads(myId),
       });
       setShowNewModal(false);
       setNewToUserId("");
@@ -192,7 +194,7 @@ export default function WorkspaceInboxPage() {
 
   const sendMutation = useMutation({
     mutationFn: async (text) => {
-      const res = await fetch(
+      const res = await workspaceFetch(
         `/api/workspace/threads/${selectedThreadId}/messages`,
         {
           method: "POST",
@@ -207,18 +209,14 @@ export default function WorkspaceInboxPage() {
       return data;
     },
     onMutate: async (text) => {
-      await queryClient.cancelQueries({
-        queryKey: ["workspaceMessages", selectedThreadId, myId],
-      });
+      const queryKey = ["workspaceMessages", selectedThreadId, myId];
+      await queryClient.cancelQueries({ queryKey });
 
-      const prev = queryClient.getQueryData([
-        "workspaceMessages",
-        selectedThreadId,
-        myId,
-      ]);
-
+      const optimisticId = `optimistic-${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2)}`;
       const optimistic = {
-        id: `optimistic-${Date.now()}`,
+        id: optimisticId,
         thread_id: selectedThreadId,
         sender_employee_id: myId,
         sender_name: user?.name || "أنا",
@@ -226,30 +224,30 @@ export default function WorkspaceInboxPage() {
         created_at: new Date().toISOString(),
       };
 
-      queryClient.setQueryData(
-        ["workspaceMessages", selectedThreadId, myId],
-        (old) => {
-          const oldMessages = old?.messages || [];
-          return { ...old, messages: [...oldMessages, optimistic] };
-        },
-      );
+      queryClient.setQueryData(queryKey, (old) => {
+        const oldMessages = old?.messages || [];
+        return { ...old, messages: [...oldMessages, optimistic] };
+      });
 
-      return { prev };
+      return { optimisticId, queryKey };
     },
     onError: (err, _text, ctx) => {
       console.error(err);
-      if (ctx?.prev) {
-        queryClient.setQueryData(
-          ["workspaceMessages", selectedThreadId, myId],
-          ctx.prev,
-        );
+      if (ctx?.queryKey && ctx?.optimisticId) {
+        queryClient.setQueryData(ctx.queryKey, (old) => {
+          if (!old?.messages) return old;
+          return {
+            ...old,
+            messages: old.messages.filter((m) => m.id !== ctx.optimisticId),
+          };
+        });
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaceMessages", selectedThreadId, myId],
+        queryKey: queryKeys.workspaceMessages(selectedThreadId,myId),
       });
-      queryClient.invalidateQueries({ queryKey: ["workspaceThreads", myId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceThreads(myId) });
     },
   });
 

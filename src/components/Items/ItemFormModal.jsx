@@ -10,6 +10,7 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import ItemUnitsPanel from "@/components/Items/ItemUnitsPanel";
+import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 export function ItemFormModal({
   isOpen,
@@ -107,7 +108,7 @@ export function ItemFormModal({
       ? {
           price: Number(editingItem.last_order_price_per_kg).toFixed(2),
           date: editingItem.last_order_date
-            ? new Date(editingItem.last_order_date).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn")
+            ? formatRiyadhDateForInput(editingItem.last_order_date)
             : null,
           beanName: editingItem.linked_green_bean_name || "",
         }
@@ -291,11 +292,12 @@ export function ItemFormModal({
               type="number"
               required
               min="0"
+              step="0.001"
               value={formData.min_stock_threshold}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  min_stock_threshold: parseInt(e.target.value) || 0,
+                  min_stock_threshold: Number(e.target.value) || 0,
                 })
               }
               className={`${ws.input} px-4 py-3`}
@@ -315,6 +317,7 @@ export function ItemFormModal({
             <input
               type="number"
               min="0"
+              step="0.001"
               value={
                 formData.max_stock_threshold === null ||
                 formData.max_stock_threshold === undefined
@@ -326,7 +329,7 @@ export function ItemFormModal({
                 setFormData({
                   ...formData,
                   max_stock_threshold:
-                    val === "" ? null : parseInt(val) || null,
+                    val === "" ? null : Number(val),
                 });
               }}
               className={`${ws.input} px-4 py-3`}
@@ -360,6 +363,7 @@ export function ItemFormModal({
                 type="button"
                 role="switch"
                 aria-checked={formData.show_in_inventory}
+                aria-label="تفعيل الصنف في الجرد"
                 onClick={() =>
                   setFormData({
                     ...formData,

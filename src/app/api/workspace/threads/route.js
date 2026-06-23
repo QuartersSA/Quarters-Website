@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import {
+  getWorkspaceEmployee,
   getSearchParams,
   requireWorkspaceEmployee,
 } from "@/app/api/workspace/_utils";
@@ -15,7 +16,7 @@ export async function GET(request) {
     const params = getSearchParams(request);
     const employeeId = params.get("employeeId");
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
@@ -87,7 +88,7 @@ export async function POST(request) {
     const otherEmployeeId = toInt(body.otherEmployeeId);
     const title = body.title || null;
 
-    const auth = await requireWorkspaceEmployee(employeeId);
+    const auth = await requireWorkspaceEmployee(request, employeeId);
     if (!auth.ok) {
       return Response.json({ error: auth.error }, { status: auth.status });
     }
@@ -100,7 +101,7 @@ export async function POST(request) {
     }
 
     // Make sure the other user can access workspace too
-    const other = await requireWorkspaceEmployee(otherEmployeeId);
+    const other = await getWorkspaceEmployee(otherEmployeeId);
     if (!other.ok) {
       return Response.json(
         { error: "المستخدم الآخر لا يملك صلاحية Workspace" },

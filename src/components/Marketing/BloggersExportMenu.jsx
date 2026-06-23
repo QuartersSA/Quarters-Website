@@ -11,6 +11,7 @@ import {
   exportInvitationImage,
   exportInvitationsZip,
 } from "@/utils/marketingExport";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 /**
  * Three-way export menu for the bloggers list:
@@ -35,7 +36,7 @@ export default function BloggersExportMenu({ bloggers, disabled = false }) {
 
   // Settings are needed for image exports (accent / cream / wordmark).
   const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
+    queryKey: queryKeys.marketingSettings(),
     enabled: open,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/settings");

@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useHRBonusesEmployeesData(isAuthenticated) {
   const employeesQuery = useQuery({
-    queryKey: ["hr-bonuses-employees"],
+    queryKey: queryKeys.hrBonusEmployees(),
     queryFn: async () => {
       const response = await adminFetch("/api/hr/bonuses/employees");
       if (!response.ok) {

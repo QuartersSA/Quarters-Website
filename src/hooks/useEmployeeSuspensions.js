@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { invalidatePayrollQueries, queryKeys } from "../utils/queryKeys.js";
 
 // Best-effort: after a suspension mutation, rebuild every unclosed
 // payroll run so the suspension takes effect immediately on the
@@ -37,7 +38,7 @@ async function rebuildUnclosedPayrollRuns() {
 
 export function useEmployeeSuspensions(employeeId, { enabled = true } = {}) {
   return useQuery({
-    queryKey: ["hr_employee_suspensions", Number(employeeId) || null],
+    queryKey: queryKeys.hrEmployeeSuspensions(Number(employeeId)||null),
     enabled: !!employeeId && enabled,
     queryFn: async () => {
       const res = await adminFetch(
@@ -72,14 +73,7 @@ export function useCreateSuspension(employeeId) {
     },
     onSuccess: async () => {
       const rebuilt = await rebuildUnclosedPayrollRuns();
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["hr_employee_suspensions", Number(employeeId)],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ["accounting_payroll"],
-        }),
-      ]);
+      await invalidatePayrollQueries(queryClient);
       toast.success(
         rebuilt.length > 0
           ? `تم الإيقاف وتحديث مسير الرواتب (${rebuilt.length} شهر)`
@@ -109,14 +103,7 @@ export function useCancelSuspension(employeeId) {
     },
     onSuccess: async () => {
       const rebuilt = await rebuildUnclosedPayrollRuns();
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ["hr_employee_suspensions", Number(employeeId)],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ["accounting_payroll"],
-        }),
-      ]);
+      await invalidatePayrollQueries(queryClient);
       toast.success(
         rebuilt.length > 0
           ? `تم إلغاء الإيقاف وتحديث مسير الرواتب (${rebuilt.length} شهر)`

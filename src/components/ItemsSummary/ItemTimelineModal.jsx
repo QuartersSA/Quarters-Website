@@ -26,9 +26,10 @@ import {
 } from "recharts";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
-import { formatDateTime } from "@/utils/dateUtils";
+import { formatDateTime, todayRiyadhDateKey } from "@/utils/dateUtils";
 import { exportToExcelHTML } from "@/utils/exportUtils";
 import useAdminTheme from "@/hooks/useAdminTheme";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 const TYPE_LABEL = {
   Daily: "جرد يومي",
@@ -77,7 +78,7 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
   const enabled = Number.isFinite(itemId) && itemId > 0 && Number.isFinite(branchId) && branchId > 0;
 
   const timelineQuery = useQuery({
-    queryKey: ["item-timeline", itemId, branchId],
+    queryKey: queryKeys.itemTimeline(itemId,branchId),
     enabled,
     queryFn: async () => {
       const r = await adminFetch(
@@ -124,7 +125,7 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
       { header: "ملاحظة", accessor: (e) => e.note || "" },
     ];
     const filename = `timeline-${item?.name || "item"}-${branch?.name || "branch"}-${
-      new Date().toISOString().slice(0, 10)
+      todayRiyadhDateKey()
     }`;
     exportToExcelHTML(events, filename, columns, `تقرير زمني: ${item?.name} — ${branch?.name}`);
   };
@@ -207,7 +208,11 @@ export default function ItemTimelineModal({ itemId, branchId, onClose }) {
                     domain={["dataMin", "dataMax"]}
                     tickFormatter={(t) => {
                       const d = new Date(t);
-                      return `${d.getDate()}/${d.getMonth() + 1}`;
+                      return d.toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        timeZone: "Asia/Riyadh",
+                      });
                     }}
                     stroke={axisStroke}
                     tick={{ fontSize: 11, fill: axisStroke }}

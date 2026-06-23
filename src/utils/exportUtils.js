@@ -58,7 +58,9 @@ export function exportToExcelHTML(data, filename, columns, title) {
     )
     .join("");
 
-  const now = new Date().toLocaleDateString(LOCALE);
+  const now = new Date().toLocaleDateString(LOCALE, {
+    timeZone: "Asia/Riyadh",
+  });
 
   const htmlContent = `
     <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
@@ -158,6 +160,7 @@ export function exportToPDF(data, filename, columns, title) {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Riyadh",
   });
 
   const htmlContent = `
@@ -345,7 +348,7 @@ export function exportToPDF(data, filename, columns, title) {
         
         <div class="footer">
           <p>تم الإنشاء بواسطة نظام إدارة المخزون</p>
-          <p>© ${new Date().getFullYear()} - جميع الحقوق محفوظة</p>
+          <p>© ${new Date().toLocaleDateString("en-US", { year: "numeric", timeZone: "Asia/Riyadh" })} - جميع الحقوق محفوظة</p>
         </div>
       </body>
     </html>

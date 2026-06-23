@@ -4,6 +4,7 @@ import { ScrollText, X, RefreshCw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ws } from "@/components/Workspace/ui";
 import { HREmployeeLogPanel } from "@/components/HR/HREmployeeLogPanel";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 // Standalone log modal opened from the employees table row. The
 // actual log rendering lives in HREmployeeLogPanel so it can be
@@ -45,7 +46,7 @@ export function HREmployeeLogsModal({ isOpen, employee, onClose }) {
               type="button"
               onClick={() =>
                 queryClient.invalidateQueries({
-                  queryKey: ["hr-employee-logs", Number(employeeId)],
+                  queryKey: queryKeys.hrEmployeeLogs(Number(employeeId)),
                 })
               }
               className={`${ws.iconButton} text-slate-700 dark:text-white/70`}

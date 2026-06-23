@@ -10,7 +10,11 @@ import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import { arSA, enUS } from "date-fns/locale";
 import { ws } from "@/components/Workspace/ui";
 import GlassPopover from "@/components/Workspace/GlassPopover";
-import { formatDateForInput, formatRiyadhDateForInput } from "@/utils/dateUtils";
+import {
+  currentRiyadhHour,
+  formatDateForInput,
+  formatRiyadhDateForInput,
+} from "@/utils/dateUtils";
 
 function safeParseISODate(value) {
   if (!value) return null;
@@ -95,7 +99,7 @@ export default function GlassDatePicker({
       if (showTime) {
         // Keep the existing time or default to current hour
         const h =
-          currentTime.hour !== "" ? currentTime.hour : new Date().getHours();
+          currentTime.hour !== "" ? currentTime.hour : currentRiyadhHour();
         const m = currentTime.minute !== "" ? currentTime.minute : "0";
         setValue(buildDateTimeValue(dateStr, h, m));
         // Don't close — let user pick time
@@ -260,7 +264,7 @@ export default function GlassDatePicker({
                     const h =
                       currentTime.hour !== ""
                         ? currentTime.hour
-                        : new Date().getHours();
+                        : currentRiyadhHour();
                     const m =
                       currentTime.minute !== "" ? currentTime.minute : "0";
                     setValue(buildDateTimeValue(today, h, m));

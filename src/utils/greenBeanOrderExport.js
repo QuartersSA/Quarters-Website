@@ -3,7 +3,7 @@ import {
   formatQty,
   groupOrderItems,
 } from "@/utils/greenBeanOrderUtils";
-import { LOCALE } from "@/utils/dateUtils";
+import { formatRiyadhDateForInput, LOCALE } from "@/utils/dateUtils";
 
 const VAT_MULTIPLIER = 1.15;
 
@@ -115,10 +115,12 @@ export function exportGreenBeanOrderExcel(order, items, totals) {
   const note = order.note || "";
   const createdBy = order.created_by_employee_name || "—";
   const createdAt = order.created_at
-    ? String(order.created_at).slice(0, 10)
+    ? formatRiyadhDateForInput(order.created_at)
     : "—";
 
-  const now = new Date().toLocaleDateString(LOCALE);
+  const now = new Date().toLocaleDateString(LOCALE, {
+    timeZone: "Asia/Riyadh",
+  });
 
   const summaryRows = totals
     ? `
@@ -226,6 +228,7 @@ export function exportGreenBeanOrderPDF(order, items, totals) {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Asia/Riyadh",
   });
 
   const summaryBlock = totals

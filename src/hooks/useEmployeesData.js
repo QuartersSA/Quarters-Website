@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useEmployeesData(isAuthenticated) {
   const employeesQuery = useQuery({
-    queryKey: ["employees"],
+    queryKey: queryKeys.employees(),
     queryFn: async () => {
       const response = await adminFetch("/api/employees");
       if (!response.ok) {
@@ -17,7 +18,7 @@ export function useEmployeesData(isAuthenticated) {
   });
 
   const branchesQuery = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) {

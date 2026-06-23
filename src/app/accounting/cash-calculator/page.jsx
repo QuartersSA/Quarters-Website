@@ -21,7 +21,13 @@ import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
+import {
+  currentRiyadhMonthKey,
+  formatDateTime as formatRiyadhDateTime,
+  riyadhMonthKeyFromOffset,
+} from "@/utils/dateUtils";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 /* ─── helpers ─── */
 
@@ -46,20 +52,17 @@ function formatMoney(value) {
 }
 
 function currentMonth() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  return `${y}-${m}`;
+  return currentRiyadhMonthKey();
 }
 
 function monthLabel(m) {
   if (!m) return "—";
   try {
-    const [y, mo] = m.split("-");
-    const d = new Date(Number(y), Number(mo) - 1, 1);
+    const d = new Date(`${m}-01T00:00:00+03:00`);
     return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
       month: "long",
+      timeZone: "Asia/Riyadh",
     });
   } catch {
     return m;
@@ -68,39 +71,15 @@ function monthLabel(m) {
 
 function generateMonthOptions() {
   const opts = [];
-  const now = new Date();
   for (let i = 0; i < 24; i++) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const val = `${y}-${m}`;
+    const val = riyadhMonthKeyFromOffset(-i);
     opts.push({ value: val, label: monthLabel(val) });
   }
   return opts;
 }
 
 function formatDateTime(dt) {
-  if (!dt) return "—";
-  try {
-    return new Date(dt).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "Asia/Riyadh",
-    });
-  } catch {
-    // Last-resort fallback — convert through Date so the slice is at
-    // least in the user's local zone, not raw UTC.
-    try {
-      const d = new Date(dt);
-      const pad = (n) => String(n).padStart(2, "0");
-      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-    } catch {
-      return String(dt).replace("T", " ").slice(0, 16);
-    }
-  }
+  return formatRiyadhDateTime(dt);
 }
 
 /* ─── component ─── */
@@ -112,7 +91,7 @@ export default function CashCalculatorPage() {
 
   // Always fetch branches from cash-counts API (doesn't require can_manage_inventory)
   const allBranchesQuery = useQuery({
-    queryKey: ["cashCalcBranches"],
+    queryKey: queryKeys.cashCalculatorBranches(),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/cash-counts?branchId=list");
@@ -165,7 +144,7 @@ export default function CashCalculatorPage() {
 
   // Fetch existing record for selected branch + month
   const recordQuery = useQuery({
-    queryKey: ["cashCount", branchId, month],
+    queryKey: queryKeys.cashCount(branchId,month),
     enabled: !!branchId && !!month,
     queryFn: async () => {
       const qs = new URLSearchParams({ branchId, month });
@@ -265,7 +244,7 @@ export default function CashCalculatorPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["cashCount", branchId, month],
+        queryKey: queryKeys.cashCount(branchId,month),
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);

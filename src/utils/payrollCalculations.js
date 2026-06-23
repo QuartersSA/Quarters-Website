@@ -66,8 +66,7 @@ export function formatRunCreatedAt(createdAt) {
     const get = (t) => parts.find((p) => p.type === t)?.value || "";
     return `${get("year")}-${get("month")}-${get("day")} ${get("hour")}:${get("minute")}`;
   } catch {
-    const pad = (n) => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    return formatRiyadhDateTimeForInput(d).replace("T", " ");
   }
 }
 
@@ -218,3 +217,4 @@ export function getPayrollExportColumns() {
     },
   ];
 }
+import { formatRiyadhDateTimeForInput } from "./dateUtils.js";

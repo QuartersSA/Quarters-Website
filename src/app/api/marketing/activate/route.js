@@ -12,6 +12,7 @@
 
 import sql from "@/app/api/utils/sql";
 import { ensureMarketingSchema } from "../_schema.js";
+import { constantTimeEqual } from "@/app/api/utils/cronAuth";
 
 // Hardcoded PIN per requirement. Move to env later if needed.
 const CASHIER_PIN = "335595";
@@ -29,7 +30,7 @@ export async function POST(request) {
 
   // Constant-time compare on equal length is overkill for a 6-char PIN,
   // but a quick length-then-equality keeps timing roughly uniform.
-  if (pin.length !== CASHIER_PIN.length || pin !== CASHIER_PIN) {
+  if (!constantTimeEqual(CASHIER_PIN, pin)) {
     return Response.json(
       { error: "رقم التفعيل غير صحيح" },
       { status: 401 },

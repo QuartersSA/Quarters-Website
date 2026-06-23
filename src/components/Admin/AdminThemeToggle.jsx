@@ -3,6 +3,7 @@
 import { Sun, Moon } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import useAdminTheme from "@/hooks/useAdminTheme";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 /**
  * Floating theme toggle — mobile only.
@@ -19,6 +20,10 @@ import useAdminTheme from "@/hooks/useAdminTheme";
  */
 export default function AdminThemeToggle() {
   const { isDark, toggleTheme } = useAdminTheme();
+  const isMobile = useMediaQuery("(max-width: 1023px)");
+
+  if (!isMobile) return null;
+
   return (
     <button
       type="button"

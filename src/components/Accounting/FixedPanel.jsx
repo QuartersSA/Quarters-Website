@@ -20,6 +20,7 @@ import {
   buildRecentMonthOptions,
 } from "@/utils/payrollFormatters";
 import { toast } from "sonner";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 /**
  * Active fixed-expense templates, one row each. For the selected month:
@@ -77,7 +78,7 @@ export default function FixedPanel({
     },
     onSuccess: () => {
       onMutate?.();
-      queryClient.invalidateQueries({ queryKey: ["accounting_expenses"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountingExpenses() });
     },
     onError: (e) => toast.error(e.message || "فشل التحديث"),
   });

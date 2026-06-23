@@ -1,0 +1,24 @@
+name: Quality checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [Codex]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      AUTH_SECRET: ci-only-secret-not-used-in-production
+      AUTH_URL: http://localhost:4000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - run: bun run test
+      - run: bun run typecheck
+      - run: bun run build

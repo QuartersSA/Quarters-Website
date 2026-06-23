@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { Coffee, Lock, Sparkles, AlertCircle } from "lucide-react";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 // Public page — no auth, no admin chrome. Single column, mobile-first.
 //
@@ -27,7 +28,7 @@ export default function PublicWelcomePage() {
   const isPreview = slug === "preview";
 
   const welcomeQuery = useQuery({
-    queryKey: ["public-welcome", slug],
+    queryKey: queryKeys.publicWelcome(slug),
     enabled: !!slug && !isPreview,
     queryFn: async () => {
       const r = await fetch(
@@ -46,7 +47,7 @@ export default function PublicWelcomePage() {
 
   // Preview pulls settings + menu only (no blogger).
   const previewQuery = useQuery({
-    queryKey: ["public-welcome-preview"],
+    queryKey: queryKeys.publicWelcomePreview(),
     enabled: isPreview,
     queryFn: async () => {
       const [sRes, mRes] = await Promise.all([
@@ -106,7 +107,7 @@ export default function PublicWelcomePage() {
     onSuccess: () => {
       setActivateError(null);
       setPin("");
-      queryClient.invalidateQueries({ queryKey: ["public-welcome", slug] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.publicWelcome(slug) });
     },
     onError: (e) => setActivateError(e.message || "خطأ"),
   });

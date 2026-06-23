@@ -1,13 +1,24 @@
 import sql from "@/app/api/utils/sql";
-import { ensureUploadTables } from "../_utils";
+import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureUploadTables, getOwnedSession } from "../_utils";
 
-export async function DELETE(_request, { params: { sessionId } }) {
+export async function DELETE(request, { params: { sessionId } }) {
+  const auth = requireAuth(request, { role: "Admin" });
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
+
   try {
     await ensureUploadTables();
 
     const id = Number(sessionId);
     if (!Number.isFinite(id)) {
       return Response.json({ error: "معرّف الرفع غير صحيح" }, { status: 400 });
+    }
+
+    const owned = await getOwnedSession(id, Number(auth.user?.id));
+    if (owned.error) {
+      return Response.json({ error: owned.error }, { status: owned.status });
     }
 
     await sql`DELETE FROM upload_sessions WHERE id = ${id}`;

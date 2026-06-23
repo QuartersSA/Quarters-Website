@@ -8,6 +8,7 @@ import {
   formatRole,
   formatDateTime,
 } from "@/utils/exportUtils";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 
 export function EmployeeExportMenu({ employees }) {
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -46,7 +47,7 @@ export function EmployeeExportMenu({ employees }) {
 
     exportToExcelHTML(
       employees,
-      `قائمة_الموظفين_${new Date().toISOString().split("T")[0]}`,
+      `قائمة_الموظفين_${todayRiyadhDateKey()}`,
       columns,
       "قائمة الموظفين - نظام إدارة المخزون",
     );
@@ -81,7 +82,7 @@ export function EmployeeExportMenu({ employees }) {
 
     exportToPDF(
       employees,
-      `قائمة_الموظفين_${new Date().toISOString().split("T")[0]}`,
+      `قائمة_الموظفين_${todayRiyadhDateKey()}`,
       columns,
       "قائمة الموظفين - نظام إدارة المخزون",
     );

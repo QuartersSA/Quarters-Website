@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useAccountingBeneficiaries({
   employeeId,
@@ -10,12 +11,7 @@ export function useAccountingBeneficiaries({
   includeInactive,
 } = {}) {
   return useQuery({
-    queryKey: [
-      "accounting_beneficiaries",
-      q || "",
-      contactId || null,
-      !!includeInactive,
-    ],
+    queryKey: queryKeys.accountingBeneficiaries(q||"",contactId||null,!!includeInactive),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -52,7 +48,7 @@ export function useCreateAccountingBeneficiary() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_beneficiaries"],
+        queryKey: queryKeys.accountingBeneficiaries(),
       });
       toast.success("تم إضافة المستفيد");
     },
@@ -80,7 +76,7 @@ export function useUpdateAccountingBeneficiary() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_beneficiaries"],
+        queryKey: queryKeys.accountingBeneficiaries(),
       });
       toast.success("تم حفظ التعديلات");
     },
@@ -107,7 +103,7 @@ export function useDeleteAccountingBeneficiary() {
     },
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_beneficiaries"],
+        queryKey: queryKeys.accountingBeneficiaries(),
       });
       toast.success(data?.hard ? "تم الحذف نهائياً" : "تم إيقاف المستفيد");
     },

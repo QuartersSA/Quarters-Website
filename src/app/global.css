@@ -3,7 +3,12 @@
 @tailwind utilities;
 
 @layer base {
-  input, textarea, select, button {
-    @apply outline-none focus:outline-none;
+  :where(a, button, input, textarea, select, [role="button"]):focus-visible {
+    outline: 2px solid rgb(16 185 129 / 0.85);
+    outline-offset: 2px;
+  }
+
+  :where(button, [role="button"]):disabled {
+    cursor: not-allowed;
   }
 }

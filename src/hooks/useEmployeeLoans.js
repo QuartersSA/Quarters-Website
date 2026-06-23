@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 import { toast } from "sonner";
+import {
+  invalidatePayrollQueries,
+  queryKeys,
+} from "../utils/queryKeys.js";
 
 // Helper: make sure the loan's deduction is reflected in every open
 // payroll month in its installment window, including PAST months that
@@ -41,8 +46,11 @@ async function rebuildAffectedPayrollRuns(loan) {
     const startStr = String(loan.start_month).slice(0, 7); // YYYY-MM
     const [sy, sm] = startStr.split("-").map(Number);
     if (Number.isFinite(sy) && Number.isFinite(sm)) {
-      const now = new Date();
-      const nowKey = now.getUTCFullYear() * 12 + now.getUTCMonth();
+      const [nowYear, nowMonth] = todayRiyadhDateKey()
+        .slice(0, 7)
+        .split("-")
+        .map(Number);
+      const nowKey = nowYear * 12 + (nowMonth - 1);
       const startKey = sy * 12 + (sm - 1);
       const installments = Number(loan.installments_count);
       const endKey = Math.min(startKey + installments - 1, nowKey);
@@ -76,12 +84,7 @@ async function rebuildAffectedPayrollRuns(loan) {
 }
 
 async function invalidateLoansAndPayroll(queryClient) {
-  await Promise.all([
-    queryClient.invalidateQueries({
-      queryKey: ["accounting_employee_loans"],
-    }),
-    queryClient.invalidateQueries({ queryKey: ["accounting_payroll"] }),
-  ]);
+  await invalidatePayrollQueries(queryClient);
 }
 
 export function useEmployeeLoans({
@@ -92,12 +95,7 @@ export function useEmployeeLoans({
   includeInactive,
 } = {}) {
   return useQuery({
-    queryKey: [
-      "accounting_employee_loans",
-      filterEmployeeId || null,
-      month || null,
-      !!includeInactive,
-    ],
+    queryKey: queryKeys.employeeLoans(filterEmployeeId||null,month||null,!!includeInactive),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -119,7 +117,7 @@ export function useEmployeeLoans({
 
 export function useLoanEmployees(employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_loan_employees"],
+    queryKey: queryKeys.accountingLoanEmployees(),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/hr/bonuses/employees");

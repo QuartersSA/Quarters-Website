@@ -9,6 +9,7 @@ import {
   Warehouse,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { todayRiyadhDateKey } from "@/utils/dateUtils";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 
@@ -216,9 +217,7 @@ export function PurchaseReceiptModal({
   // pattern as OpeningSession/Inventory — keeps audit trail honest.
   const isFutureDate = (() => {
     if (!receiptDate) return false;
-    const today = new Date();
-    today.setHours(23, 59, 59, 999);
-    return new Date(receiptDate) > today;
+    return String(receiptDate).slice(0, 10) > todayRiyadhDateKey();
   })();
   const canSubmit =
     itemsList.length > 0 && receiptBranchId && receiptDate && !isFutureDate;

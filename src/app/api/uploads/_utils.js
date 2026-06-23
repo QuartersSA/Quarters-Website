@@ -1,6 +1,8 @@
 import sql from "@/app/api/utils/sql";
 
 export const MAX_UPLOAD_BYTES = 90 * 1024 * 1024; // 90MB
+export const MAX_UPLOAD_CHUNKS = 1_000;
+export const MAX_CHUNK_BYTES = 256 * 1024;
 
 export async function ensureUploadTables() {
   // sessions

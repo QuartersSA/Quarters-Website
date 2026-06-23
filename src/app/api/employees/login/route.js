@@ -1,6 +1,10 @@
 import sql from "@/app/api/utils/sql";
 import { verify } from "argon2";
 import { signSessionToken } from "@/app/api/utils/sessionToken";
+import {
+  clearRateLimit,
+  consumeRateLimit,
+} from "@/app/api/utils/rateLimit";
 
 // POST - Employee login
 export async function POST(request) {
@@ -19,6 +23,21 @@ export async function POST(request) {
       return Response.json(
         { error: "اسم المستخدم وكلمة المرور مطلوبان" },
         { status: 400 },
+      );
+    }
+
+    const loginLimit = consumeRateLimit(request, "employee-login", {
+      limit: 8,
+      windowMs: 15 * 60_000,
+      identity: String(username).trim(),
+    });
+    if (!loginLimit.ok) {
+      return Response.json(
+        { error: "محاولات كثيرة. حاول مرة أخرى لاحقاً." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(loginLimit.retryAfterSeconds) },
+        },
       );
     }
 
@@ -222,6 +241,8 @@ export async function POST(request) {
         { status: 500 },
       );
     }
+
+    clearRateLimit(request, "employee-login", String(username).trim());
 
     return Response.json({
       success: true,

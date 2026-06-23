@@ -6,6 +6,8 @@ import WorkspaceSidebar from "@/components/Workspace/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { Plus, Users, FolderKanban } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import { workspaceFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 export default function WorkspaceTeamPage() {
   const { employeeId } = useWorkspaceUser();
@@ -18,10 +20,10 @@ export default function WorkspaceTeamPage() {
   const myId = employeeId;
 
   const spacesQuery = useQuery({
-    queryKey: ["workspaceSpaces", myId],
+    queryKey: queryKeys.workspaceSpaces(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/spaces?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/spaces?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(
           `When fetching /api/workspace/spaces, the response was [${res.status}] ${res.statusText}`,
@@ -35,7 +37,7 @@ export default function WorkspaceTeamPage() {
 
   const createMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/workspace/spaces", {
+      const res = await workspaceFetch("/api/workspace/spaces", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -51,7 +53,7 @@ export default function WorkspaceTeamPage() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workspaceSpaces", myId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.workspaceSpaces(myId) });
       setShowCreate(false);
       setName("");
       setDescription("");

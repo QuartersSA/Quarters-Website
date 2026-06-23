@@ -1,11 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../utils/queryKeys.js";
 
 export function useItemsData(isAuthenticated) {
   const queryClient = useQueryClient();
 
   const { data: items = [], isLoading } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await adminFetch("/api/items");
       if (!response.ok) throw new Error("Failed to fetch items");
@@ -15,7 +16,7 @@ export function useItemsData(isAuthenticated) {
   });
 
   const { data: branches = [] } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");
@@ -40,7 +41,7 @@ export function useItemsData(isAuthenticated) {
     },
     onSuccess: (data) => {
       console.log("Item created successfully:", data);
-      queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
     },
     onError: (error) => {
       console.error("Failed to create item:", error);
@@ -63,7 +64,7 @@ export function useItemsData(isAuthenticated) {
     },
     onSuccess: (data) => {
       console.log("Item updated successfully:", data);
-      queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
     },
     onError: (error) => {
       console.error("Failed to update item:", error);
@@ -84,7 +85,7 @@ export function useItemsData(isAuthenticated) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
     },
   });
 
@@ -102,7 +103,7 @@ export function useItemsData(isAuthenticated) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
     },
     onError: (error) => {
       console.error("Failed to batch update items:", error);

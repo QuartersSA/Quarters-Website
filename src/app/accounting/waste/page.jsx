@@ -24,6 +24,7 @@ import GlassSelect from "@/components/Workspace/GlassSelect";
 import GlassDatePicker from "@/components/Workspace/GlassDatePicker";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatMoney } from "@/utils/payrollFormatters";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 /* Map a picked Riyadh calendar date (YYYY-MM-DD) to the UTC instant
  * bounds of that day. Riyadh is a fixed UTC+03:00 (no DST), so the
@@ -374,7 +375,7 @@ export default function WastePage() {
   };
 
   const branchesQuery = useQuery({
-    queryKey: ["accounting-waste-branches"],
+    queryKey: queryKeys.accountingWasteBranches(),
     enabled: !!employeeId && canManage,
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
@@ -388,13 +389,7 @@ export default function WastePage() {
   const branches = branchesQuery.data || [];
 
   const wasteQuery = useQuery({
-    queryKey: [
-      "accounting-waste",
-      branchFilter || null,
-      reasonFilter || null,
-      from || null,
-      to || null,
-    ],
+    queryKey: queryKeys.accountingWaste(branchFilter||null,reasonFilter||null,from||null,to||null),
     enabled: !!employeeId && canManage,
     queryFn: async () => {
       const qs = new URLSearchParams();

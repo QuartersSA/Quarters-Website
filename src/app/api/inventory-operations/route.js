@@ -3,6 +3,7 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 import { assertItemsEnabledAtBranch } from "@/app/api/utils/branchVisibility";
+import { parseBusinessTimestamp } from "@/utils/dateUtils";
 
 /**
  * Parse user-supplied operation_date.
@@ -14,27 +15,7 @@ import { assertItemsEnabledAtBranch } from "@/app/api/utils/branchVisibility";
  *   - before 2020 (catches typos like 1925)
  */
 function parseOperationDate(value) {
-  if (!value) return null;
-  const str = String(value).trim();
-  if (!str) return null;
-
-  let d;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-    d = new Date(`${str}T00:00:00`);
-  } else {
-    d = new Date(str);
-  }
-  if (isNaN(d.getTime())) return null;
-  if (d.getFullYear() < 2020) return null;
-  if (d > new Date(Date.now() + 24 * 60 * 60 * 1000)) return null;
-
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const mn = String(d.getMinutes()).padStart(2, "0");
-  const ss = String(d.getSeconds()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd} ${hh}:${mn}:${ss}`;
+  return parseBusinessTimestamp(value, { allowFuture: 1, minYear: 2020 });
 }
 
 // Idempotent schema migrations applied on every request.
@@ -1056,7 +1037,7 @@ export async function DELETE(request) {
     if (operation.inventory_type === "Opening") {
       // Find the branch and date from the operation
       const [opFull] = await sql`
-        SELECT branch_id, COALESCE(operation_date, created_at)::date as op_date
+        SELECT branch_id, (COALESCE(operation_date, created_at) AT TIME ZONE 'Asia/Riyadh')::date as op_date
         FROM inventory_operations WHERE id = ${opId}
       `;
 

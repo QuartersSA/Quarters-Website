@@ -5,9 +5,11 @@ import { Lock, User, Shield, AlertCircle, Sun, Moon } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import { ADMIN_TOKEN_KEY, clearEmployeeSessions } from "@/utils/apiAuth";
 import useAdminTheme from "@/hooks/useAdminTheme";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 export default function AdminLoginPage() {
   const { isDark, toggleTheme } = useAdminTheme();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -95,19 +97,21 @@ export default function AdminLoginPage() {
     >
       {/* Floating theme toggle — accessible BEFORE login so the
           admin can land on the page in their preferred theme. */}
-      <button
-        type="button"
-        onClick={toggleTheme}
-        className={`${ws.iconButton} fixed top-4 left-4 z-50`}
-        title={isDark ? "الوضع الفاتح" : "الوضع الداكن"}
-        aria-label={isDark ? "Light mode" : "Dark mode"}
-      >
-        {isDark ? (
-          <Sun className="w-4 h-4" />
-        ) : (
-          <Moon className="w-4 h-4" />
-        )}
-      </button>
+      {isDesktop ? (
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className={`${ws.iconButton} fixed top-4 left-4 z-50`}
+          title={isDark ? "الوضع الفاتح" : "الوضع الداكن"}
+          aria-label={isDark ? "Light mode" : "Dark mode"}
+        >
+          {isDark ? (
+            <Sun className="w-4 h-4" />
+          ) : (
+            <Moon className="w-4 h-4" />
+          )}
+        </button>
+      ) : null}
 
       <div className="w-full max-w-md">
         <div className="text-center mb-6">

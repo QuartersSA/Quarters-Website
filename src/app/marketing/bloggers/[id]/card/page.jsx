@@ -9,6 +9,7 @@ import { BloggerInvitationCard } from "@/components/Marketing/BloggerInvitationC
 import { ws } from "@/components/Workspace/ui";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../../../../utils/queryKeys.js";
 
 export default function BloggerCardPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -18,7 +19,7 @@ export default function BloggerCardPage() {
   const bloggerId = Number(params?.id);
 
   const bloggerQuery = useQuery({
-    queryKey: ["marketing-blogger", bloggerId],
+    queryKey: queryKeys.marketingBlogger(bloggerId),
     enabled: isAuthenticated && Number.isFinite(bloggerId),
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/bloggers");
@@ -31,7 +32,7 @@ export default function BloggerCardPage() {
   });
 
   const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
+    queryKey: queryKeys.marketingSettings(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/settings");

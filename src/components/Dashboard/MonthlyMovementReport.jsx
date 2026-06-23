@@ -72,6 +72,7 @@ export function MonthlyMovementReport({ monthlyMovement, branches }) {
   const currentMonth = new Date().toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
     month: "long",
     year: "numeric",
+    timeZone: "Asia/Riyadh",
   });
 
   const handleExportExcel = () => {

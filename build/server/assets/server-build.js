@@ -1,21 +1,22 @@
 import { jsx, Fragment, jsxs } from 'react/jsx-runtime';
 import { PassThrough } from 'node:stream';
 import { createReadableStreamFromReadable } from '@react-router/node';
-import { ServerRouter, UNSAFE_withComponentProps, Outlet, useNavigate, useLocation, Meta, Links, ScrollRestoration, Scripts, useRouteError, useAsyncError, useParams } from 'react-router';
+import { ServerRouter, UNSAFE_withComponentProps, Outlet, useNavigate, useLocation, Meta, Links, ScrollRestoration, Scripts, useRouteError, useAsyncError, useParams, Link as Link$1 } from 'react-router';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 import { useButton } from '@react-aria/button';
 import * as React from 'react';
 import React__default, { useState, useEffect, Component, useRef, useCallback, useMemo, useLayoutEffect } from 'react';
-import { f as fetchWithHeaders } from './index-DoZEICLW.js';
+import { f as fetchWithHeaders } from './index-DkCBHYig.js';
 import { SessionProvider } from '@hono/auth-js/react';
 import { toPng, getFontEmbedCSS } from 'html-to-image';
 import { serializeError } from 'serialize-error';
 import { Toaster, toast } from 'sonner';
 import { useIdleTimer } from 'react-idle-timer';
 import { QueryClientProvider, QueryClient, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { Shield, ClipboardList, Calculator, Trash2, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, Receipt, ShoppingCart, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, Tag, Anchor, MessageSquare, Pencil, PieChart, BarChart3, Filter, ArrowDownWideNarrow, RotateCcw, Download, FileText, ArrowDownRight, ArrowUpRight, Minus, Layers, Trophy, CheckCircle2, Circle, ListChecks, Power, Clock, ClipboardCheck, Info, Copy, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, User, DollarSign, Percent, Lock, Ban, Send, Unlock, Gift, Wand2, Building, Contact, Unlink, Link, MapPin, Hash, Ruler, CornerDownLeft, Star, Boxes, EyeOff, Construction, ChevronRight, Coins, StickyNote, Briefcase, Truck, TrendingDown, Sparkles, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, Bell, ClipboardX, MinusSquare, LineChart as LineChart$1, CalendarCheck, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, Loader2, CreditCard, HeartPulse, FileWarning, ScrollText, BadgeCheck, CalendarOff, Infinity, AlertOctagon, Settings, FileSpreadsheet, Upload, MailCheck, QrCode, ArrowRight, ExternalLink, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Flag, Tags, User2, Paperclip, Link2, SlidersHorizontal, List, FolderKanban } from 'lucide-react';
+import { WifiOff, Shield, ClipboardList, Calculator, Trash2, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, Receipt, ShoppingCart, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, Tag, Anchor, MessageSquare, Pencil, PieChart, BarChart3, Filter, ArrowDownWideNarrow, RotateCcw, Download, FileText, ArrowDownRight, ArrowUpRight, Minus, Layers, Trophy, CheckCircle2, Circle, ListChecks, Power, Clock, ClipboardCheck, Info, Copy, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, User, DollarSign, Percent, Lock, Ban, Send, Unlock, Gift, Wand2, Building, Contact, Unlink, Link, MapPin, Hash, Ruler, CornerDownLeft, Star, Boxes, EyeOff, Construction, ChevronRight, Coins, StickyNote, Briefcase, Truck, TrendingDown, Sparkles, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, Bell, ClipboardX, MinusSquare, LineChart as LineChart$1, CalendarCheck, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, Loader2, CreditCard, HeartPulse, FileWarning, ScrollText, BadgeCheck, CalendarOff, Infinity, AlertOctagon, Settings, FileSpreadsheet, Upload, MailCheck, QrCode, ArrowRight, ExternalLink, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Flag, Tags, User2, Paperclip, Link2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
 import { createPortal } from 'react-dom';
+import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, c as currentRiyadhMonthKey, b as riyadhMonthKeyFromOffset, d as formatDateTime$4, L as LOCALE, t as todayRiyadhDateKey, f as formatRiyadhDateForInput, e as formatDateForInput, g as currentRiyadhHour, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$2 } from './dateUtils-FqivhP-u.js';
 import _JSXStyle from 'styled-jsx/style.js';
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, PieChart as PieChart$1, Pie, Cell, BarChart, Bar, ReferenceDot } from 'recharts';
 import { getDefaultClassNames, DayPicker } from 'react-day-picker';
@@ -25,7 +26,6 @@ import JSZip from 'jszip';
 import { QRCodeSVG } from 'qrcode.react';
 import Papa from 'papaparse';
 import { useParams as useParams$1 } from 'react-router-dom';
-import fg from 'fast-glob';
 import 'node:async_hooks';
 import 'node:console';
 import '@auth/core';
@@ -120,6 +120,20 @@ function useDevServerHeartbeat() {
   });
 }
 
+function useMediaQuery(query, defaultValue = false) {
+  // The first client render must match SSR. Reading matchMedia in the state
+  // initializer caused mobile-only controls to appear before hydration.
+  const [matches, setMatches] = useState(defaultValue);
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, [query]);
+  return matches;
+}
+
 const links = () => [];
 async function action() {
   return new Response("Method Not Allowed", {
@@ -140,7 +154,7 @@ function InternalErrorBoundary({
   const asyncError = useAsyncError();
   const error = errorArg ?? asyncError ?? routeError;
   const [isOpen, setIsOpen] = useState(false);
-  const shouldScale = typeof window !== "undefined" ? window.innerWidth < 768 : false;
+  const shouldScale = useMediaQuery("(max-width: 767px)");
   const scaleFactor = shouldScale ? 1.02 : 1;
   const copyButtonTextClass = shouldScale ? "text-sm" : "text-xs";
   const copyButtonPaddingClass = shouldScale ? "px-[10px] py-[5px]" : "px-[6px] py-[3px]";
@@ -418,7 +432,7 @@ function Layout({
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location?.pathname;
-  const isMobile = typeof window !== "undefined" ? window.innerWidth < 768 : false;
+  const isMobile = useMediaQuery("(max-width: 767px)");
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.data.type === "sandbox:navigation") {
@@ -489,6 +503,25 @@ const route0 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   useHandleScreenshotRequest,
   useHmrConnection
 }, Symbol.toStringTag, { value: 'Module' }));
+
+function ConnectionStatus() {
+  const [online, setOnline] = useState(() => typeof navigator === "undefined" ? true : navigator.onLine);
+  useEffect(() => {
+    const markOnline = () => setOnline(true);
+    const markOffline = () => setOnline(false);
+    window.addEventListener("online", markOnline);
+    window.addEventListener("offline", markOffline);
+    return () => {
+      window.removeEventListener("online", markOnline);
+      window.removeEventListener("offline", markOffline);
+    };
+  }, []);
+  if (online) return null;
+  return /* @__PURE__ */ jsxs("div", { className: "fixed top-3 left-1/2 z-[1000] -translate-x-1/2 flex items-center gap-2 rounded-md border border-amber-400/40 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-900 shadow-lg dark:bg-amber-950 dark:text-amber-100", role: "status", dir: "rtl", children: [
+    /* @__PURE__ */ jsx(WifiOff, { className: "h-4 w-4", "aria-hidden": "true" }),
+    "لا يوجد اتصال بالإنترنت. ستُحدّث البيانات عند عودة الاتصال."
+  ] });
+}
 
 // Workspace UI theme tokens (used across Workspace + Admin + HR pages)
 //
@@ -568,7 +601,7 @@ const ws = {
   // version has a subtle vertical gradient + tighter border so the
   // icon sits on a real surface, not a flat fill.
   iconBox: "w-11 h-11 rounded-2xl " + "bg-gradient-to-b from-white to-slate-100 border border-slate-200 " + "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_1px_2px_rgba(15,23,42,0.04)] " + "flex items-center justify-center " + "dark:bg-white/[0.05] dark:bg-none dark:border-white/10 " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
-  iconButton: "inline-flex items-center justify-center w-10 h-10 rounded-2xl " + "bg-white text-slate-700 border border-slate-200 " + "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_1px_2px_rgba(15,23,42,0.04)] " + "transition-colors " + "hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 " + "dark:bg-white/[0.03] dark:text-white dark:border-white/10 dark:shadow-none " + "dark:hover:bg-white/[0.06] dark:hover:border-white/10",
+  iconButton: "inline-flex items-center justify-center w-11 h-11 rounded-2xl touch-manipulation " + "bg-white text-slate-700 border border-slate-200 " + "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_1px_2px_rgba(15,23,42,0.04)] " + "transition-colors " + "hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 " + "dark:bg-white/[0.03] dark:text-white dark:border-white/10 dark:shadow-none " + "dark:hover:bg-white/[0.06] dark:hover:border-white/10",
   chip: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full " + "bg-white border border-slate-200 text-xs font-semibold text-slate-700 " + "shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] " + "dark:bg-white/[0.04] dark:border-white/10 dark:text-white/70 dark:shadow-none",
   // Segmented controls — light uses a soft slate well + an elevated
   // white "thumb" on the active segment for a real depth read.
@@ -636,8 +669,16 @@ const queryClient = new QueryClient({
       // 30 sec – avoid redundant refetches on quick navigations
       gcTime: 5 * 6e4,
       // 5 min garbage-collection window
-      retry: 1,
-      refetchOnWindowFocus: false
+      retry: (failureCount, error) => {
+        const status = Number(error?.status || error?.response?.status);
+        if ([400, 401, 403, 404].includes(status)) return false;
+        return failureCount < 1;
+      },
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: true
+    },
+    mutations: {
+      retry: 0
     }
   }
 });
@@ -657,6 +698,7 @@ function RootLayout({
   children
 }) {
   return /* @__PURE__ */ jsxs(QueryClientProvider, { client: queryClient, children: [
+    /* @__PURE__ */ jsx(ConnectionStatus, {}),
     /* @__PURE__ */ jsx(GlobalDarkEnforcer, {}),
     /* @__PURE__ */ jsx(FaviconSetter, {}),
     /* @__PURE__ */ jsx(Toaster, { position: "top-center", richColors: true, dir: "rtl" }),
@@ -814,6 +856,122 @@ const route1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: page$K
 }, Symbol.toStringTag, { value: 'Module' }));
 
+const ADMIN_TOKEN_KEY = "adminToken";
+const EMPLOYEE_INVENTORY_TOKEN_KEY = "employeeInventoryToken";
+const SHIFT_CLOSE_TOKEN_KEY = "shiftCloseToken";
+const EMPLOYEE_WASTE_TOKEN_KEY = "employeeWasteToken";
+function safeGetItem(key) {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+function getAdminToken() {
+  return safeGetItem(ADMIN_TOKEN_KEY);
+}
+function getEmployeeInventoryToken() {
+  return safeGetItem(EMPLOYEE_INVENTORY_TOKEN_KEY);
+}
+function getShiftCloseToken() {
+  return safeGetItem(SHIFT_CLOSE_TOKEN_KEY);
+}
+function getEmployeeWasteToken() {
+  return safeGetItem(EMPLOYEE_WASTE_TOKEN_KEY);
+}
+function withBearer(token, init = {}) {
+  const headers = new Headers(init.headers || {});
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+  return {
+    ...init,
+    headers
+  };
+}
+function adminFetch(url, init = {}) {
+  const token = getAdminToken();
+  return fetch(url, withBearer(token, init));
+}
+function workspaceFetch(url, init = {}) {
+  const token = getAdminToken();
+  return fetch(url, withBearer(token, init));
+}
+function employeeInventoryFetch(url, init = {}) {
+  const token = getEmployeeInventoryToken();
+  return fetch(url, withBearer(token, init));
+}
+function shiftCloseFetch(url, init = {}) {
+  const token = getShiftCloseToken();
+  return fetch(url, withBearer(token, init));
+}
+function employeeWasteFetch(url, init = {}) {
+  const token = getEmployeeWasteToken();
+  return fetch(url, withBearer(token, init));
+}
+
+/**
+ * `fetch` that attaches whichever session token the user currently has,
+ * preferring stronger sessions (admin) first. Used by features whose API
+ * accepts any authenticated employee — primarily `/api/uploads/*`, which
+ * is consumed by admin pages, workspace pages, and field-staff pages.
+ *
+ * Returns the response unmodified if no token is present so the server
+ * still has a chance to reject with 401.
+ */
+function authedFetch(url, init = {}) {
+  const token = getAdminToken() || getEmployeeInventoryToken() || getShiftCloseToken() || getEmployeeWasteToken() || null;
+  return fetch(url, withBearer(token, init));
+}
+function clearAdminSession() {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem("adminAuth");
+    localStorage.removeItem("adminUser");
+    localStorage.removeItem("adminMode");
+    localStorage.removeItem("workspaceUser");
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
+  } catch {
+    // ignore
+  }
+}
+function clearEmployeeSessions() {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem("employee"); // legacy key
+    localStorage.removeItem("employeeInventorySession");
+    localStorage.removeItem(EMPLOYEE_INVENTORY_TOKEN_KEY);
+    localStorage.removeItem("shiftCloseUser");
+    localStorage.removeItem(SHIFT_CLOSE_TOKEN_KEY);
+    localStorage.removeItem("employeeWasteSession");
+    localStorage.removeItem(EMPLOYEE_WASTE_TOKEN_KEY);
+  } catch {
+    // ignore
+  }
+}
+
+const apiAuth = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  ADMIN_TOKEN_KEY,
+  EMPLOYEE_INVENTORY_TOKEN_KEY,
+  EMPLOYEE_WASTE_TOKEN_KEY,
+  SHIFT_CLOSE_TOKEN_KEY,
+  adminFetch,
+  authedFetch,
+  clearAdminSession,
+  clearEmployeeSessions,
+  employeeInventoryFetch,
+  employeeWasteFetch,
+  getAdminToken,
+  getEmployeeInventoryToken,
+  getEmployeeWasteToken,
+  getShiftCloseToken,
+  shiftCloseFetch,
+  withBearer,
+  workspaceFetch
+}, Symbol.toStringTag, { value: 'Module' }));
+
 function readInitialUser() {
   if (typeof window === "undefined") return null;
   try {
@@ -843,11 +1001,12 @@ function useWorkspaceUser() {
     if (Number.isFinite(maybe)) return maybe;
     return null;
   }, [user]);
+  const hasSessionToken = !!getAdminToken();
   return {
     ready,
     user,
     employeeId,
-    isAuthenticated: !!employeeId
+    isAuthenticated: !!employeeId && hasSessionToken
   };
 }
 
@@ -1159,115 +1318,6 @@ function useAdminTheme() {
     toggleTheme
   };
 }
-
-const ADMIN_TOKEN_KEY = "adminToken";
-const EMPLOYEE_INVENTORY_TOKEN_KEY = "employeeInventoryToken";
-const SHIFT_CLOSE_TOKEN_KEY = "shiftCloseToken";
-const EMPLOYEE_WASTE_TOKEN_KEY = "employeeWasteToken";
-function safeGetItem(key) {
-  if (typeof window === "undefined") return null;
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-function getAdminToken() {
-  return safeGetItem(ADMIN_TOKEN_KEY);
-}
-function getEmployeeInventoryToken() {
-  return safeGetItem(EMPLOYEE_INVENTORY_TOKEN_KEY);
-}
-function getShiftCloseToken() {
-  return safeGetItem(SHIFT_CLOSE_TOKEN_KEY);
-}
-function getEmployeeWasteToken() {
-  return safeGetItem(EMPLOYEE_WASTE_TOKEN_KEY);
-}
-function withBearer(token, init = {}) {
-  const headers = new Headers(init.headers || {});
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
-  }
-  return {
-    ...init,
-    headers
-  };
-}
-function adminFetch(url, init = {}) {
-  const token = getAdminToken();
-  return fetch(url, withBearer(token, init));
-}
-function employeeInventoryFetch(url, init = {}) {
-  const token = getEmployeeInventoryToken();
-  return fetch(url, withBearer(token, init));
-}
-function shiftCloseFetch(url, init = {}) {
-  const token = getShiftCloseToken();
-  return fetch(url, withBearer(token, init));
-}
-function employeeWasteFetch(url, init = {}) {
-  const token = getEmployeeWasteToken();
-  return fetch(url, withBearer(token, init));
-}
-
-/**
- * `fetch` that attaches whichever session token the user currently has,
- * preferring stronger sessions (admin) first. Used by features whose API
- * accepts any authenticated employee — primarily `/api/uploads/*`, which
- * is consumed by admin pages, workspace pages, and field-staff pages.
- *
- * Returns the response unmodified if no token is present so the server
- * still has a chance to reject with 401.
- */
-function authedFetch(url, init = {}) {
-  const token = getAdminToken() || getEmployeeInventoryToken() || getShiftCloseToken() || getEmployeeWasteToken() || null;
-  return fetch(url, withBearer(token, init));
-}
-function clearAdminSession() {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.removeItem("adminAuth");
-    localStorage.removeItem("adminUser");
-    localStorage.removeItem("adminMode");
-    localStorage.removeItem("workspaceUser");
-    localStorage.removeItem(ADMIN_TOKEN_KEY);
-  } catch {
-    // ignore
-  }
-}
-function clearEmployeeSessions() {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.removeItem("employee"); // legacy key
-    localStorage.removeItem("employeeInventorySession");
-    localStorage.removeItem(EMPLOYEE_INVENTORY_TOKEN_KEY);
-    localStorage.removeItem("shiftCloseUser");
-    localStorage.removeItem(SHIFT_CLOSE_TOKEN_KEY);
-  } catch {
-    // ignore
-  }
-}
-
-const apiAuth = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  ADMIN_TOKEN_KEY,
-  EMPLOYEE_INVENTORY_TOKEN_KEY,
-  EMPLOYEE_WASTE_TOKEN_KEY,
-  SHIFT_CLOSE_TOKEN_KEY,
-  adminFetch,
-  authedFetch,
-  clearAdminSession,
-  clearEmployeeSessions,
-  employeeInventoryFetch,
-  employeeWasteFetch,
-  getAdminToken,
-  getEmployeeInventoryToken,
-  getEmployeeWasteToken,
-  getShiftCloseToken,
-  shiftCloseFetch,
-  withBearer
-}, Symbol.toStringTag, { value: 'Module' }));
 
 function matches(query, candidate) {
   if (!query) return true;
@@ -1894,8 +1944,7 @@ function formatRunCreatedAt(createdAt) {
     const get = t => parts.find(p => p.type === t)?.value || "";
     return `${get("year")}-${get("month")}-${get("day")} ${get("hour")}:${get("minute")}`;
   } catch {
-    const pad = n => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    return formatRiyadhDateTimeForInput(d).replace("T", " ");
   }
 }
 function getPayrollExportColumns() {
@@ -2030,6 +2079,107 @@ function getPayrollExportColumns() {
   }];
 }
 
+const createKey = (...prefix) => (...parts) => [...prefix, ...parts];
+const queryKeys = Object.freeze({
+  accountingBeneficiaries: createKey("accounting_beneficiaries"),
+  accountingContacts: createKey("accounting_contacts"),
+  accountingDashboardPayrollRuns: createKey("accountingDashboard", "payrollRuns"),
+  accountingDashboardShiftClosings: createKey("accountingDashboard", "shiftClosings"),
+  accountingExpenses: createKey("accounting_expenses"),
+  accountingExpenseTrend: createKey("accounting-expenses-trend"),
+  accountingExpenseTypes: createKey("accounting_expense_types"),
+  accountingExpenseTypesFull: createKey("accounting_expense_types_full"),
+  accountingFixedExpenses: createKey("accounting_fixed_expenses"),
+  accountingGreenBeanOrders: createKey("accounting", "greenBeanOrders"),
+  accountingGreenBeans: createKey("accounting", "greenBeans"),
+  accountingLoanEmployees: createKey("accounting_loan_employees"),
+  accountingPayroll: createKey("accounting_payroll"),
+  accountingPayrollBonusEmployees: createKey("accounting_payroll_bonus_employees"),
+  accountingPayrollBonuses: createKey("accounting_payroll_bonuses"),
+  accountingVariableTemplates: createKey("accounting_variable_templates"),
+  accountingWaste: createKey("accounting-waste"),
+  accountingWasteBranches: createKey("accounting-waste-branches"),
+  branchStockAt: createKey("branch-stock-at"),
+  branches: createKey("branches"),
+  branchesForDeposit: createKey("branches-for-deposit"),
+  cashCalculatorBranches: createKey("cashCalcBranches"),
+  cashCount: createKey("cashCount"),
+  dashboardAnalytics: createKey("dashboard-analytics"),
+  employeeLoans: createKey("accounting_employee_loans"),
+  employees: createKey("employees"),
+  greenBeans: createKey("green-beans"),
+  hrBonusEmployees: createKey("hr-bonuses-employees"),
+  hrBonuses: createKey("hr-bonuses"),
+  hrDeductionEmployees: createKey("hr-deductions-employees"),
+  hrDeductions: createKey("hr-deductions"),
+  hrEmployeeLogs: createKey("hr-employee-logs"),
+  hrEmployees: createKey("hr-employees"),
+  hrEmployeeSuspensions: createKey("hr_employee_suspensions"),
+  hrOvertime: createKey("hr_overtime"),
+  inventoryOperations: createKey("inventory-operations"),
+  itemAnalysis: createKey("item-analysis"),
+  itemCategories: createKey("item-categories"),
+  itemHistory: createKey("item-history"),
+  itemTimeline: createKey("item-timeline"),
+  items: createKey("items"),
+  itemsSummary: createKey("items-summary"),
+  lowStock: createKey("low-stock-items"),
+  marketingBlogger: createKey("marketing-blogger"),
+  marketingBloggers: createKey("marketing-bloggers"),
+  marketingMenu: createKey("marketing-menu"),
+  marketingSettings: createKey("marketing-settings"),
+  measurementUnits: createKey("measurement-units"),
+  openingSessions: createKey("opening-sessions"),
+  operationDetails: createKey("operation-details"),
+  overStock: createKey("over-stock"),
+  publicWelcome: createKey("public-welcome"),
+  publicWelcomePreview: createKey("public-welcome-preview"),
+  purchaseItemCategories: createKey("purchases_item_categories"),
+  purchaseItems: createKey("purchases_items"),
+  purchaseReceipts: createKey("purchase-receipts"),
+  shiftCloseBranches: createKey("allBranchesForShiftClose"),
+  shiftClosings: createKey("shiftClosings_admin"),
+  stockValue: createKey("stock-value"),
+  variance: createKey("variance"),
+  wasteItems: createKey("waste-items"),
+  workspaceMessages: createKey("workspaceMessages"),
+  workspaceOverdueTasks: createKey("workspaceOverdueTasks"),
+  workspaceSpaces: createKey("workspaceSpaces"),
+  workspaceSubtasks: createKey("workspaceSubtasks"),
+  workspaceSummary: createKey("workspaceSummary"),
+  workspaceTaskAttachments: createKey("workspaceTaskAttachments"),
+  workspaceTaskChecklist: createKey("workspaceTaskChecklist"),
+  workspaceTaskHistory: createKey("workspaceTaskHistory"),
+  workspaceTaskUpdates: createKey("workspaceTaskUpdates"),
+  workspaceTasks: createKey("workspaceTasks"),
+  workspaceTemplates: createKey("workspaceTemplates"),
+  workspaceThreads: createKey("workspaceThreads"),
+  workspaceUsers: createKey("workspaceUsers")
+});
+function invalidateGroup(queryClient, keys) {
+  return Promise.all(keys.map(queryKey => queryClient.invalidateQueries({
+    queryKey
+  })));
+}
+const inventoryInvalidationKeys = [queryKeys.inventoryOperations(), queryKeys.items(), queryKeys.itemsSummary(), queryKeys.lowStock(), ["low-stock"],
+// Compatibility with the legacy dashboard cache prefix.
+queryKeys.overStock(), queryKeys.stockValue(), queryKeys.variance(), queryKeys.dashboardAnalytics(), queryKeys.operationDetails(), queryKeys.itemTimeline(), queryKeys.purchaseReceipts(), queryKeys.openingSessions()];
+function invalidateInventoryQueries(queryClient) {
+  return invalidateGroup(queryClient, inventoryInvalidationKeys);
+}
+function invalidateEmployeeDirectoryQueries(queryClient) {
+  return invalidateGroup(queryClient, [queryKeys.employees(), queryKeys.hrEmployees(), queryKeys.hrEmployeeLogs(), queryKeys.accountingPayroll(), queryKeys.accountingPayrollBonusEmployees(), queryKeys.accountingLoanEmployees(), queryKeys.hrBonusEmployees(), queryKeys.hrDeductionEmployees()]);
+}
+function invalidatePayrollQueries(queryClient) {
+  return invalidateGroup(queryClient, [queryKeys.accountingPayroll(), queryKeys.employeeLoans(), queryKeys.accountingPayrollBonuses(), queryKeys.hrOvertime(), queryKeys.hrEmployeeSuspensions()]);
+}
+function invalidateExpenseQueries(queryClient) {
+  return invalidateGroup(queryClient, [queryKeys.accountingExpenses(), queryKeys.accountingExpenseTrend(), queryKeys.accountingFixedExpenses()]);
+}
+function invalidateWorkspaceTaskQueries(queryClient) {
+  return invalidateGroup(queryClient, [queryKeys.workspaceTasks(), queryKeys.workspaceSummary(), queryKeys.workspaceOverdueTasks(), queryKeys.workspaceTaskUpdates(), queryKeys.workspaceTaskHistory(), queryKeys.workspaceTaskAttachments(), queryKeys.workspaceTaskChecklist(), queryKeys.workspaceSubtasks()]);
+}
+
 function formatMoney$a(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
@@ -2062,13 +2212,6 @@ function pillClassForTone$2(tone) {
   }
   return `${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`;
 }
-function toISODate(d) {
-  try {
-    return new Date(d).toISOString().slice(0, 10);
-  } catch {
-    return "";
-  }
-}
 function AccountingDashboardPage() {
   const {
     ready,
@@ -2076,13 +2219,9 @@ function AccountingDashboardPage() {
     user
   } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
-  const from7Days = (() => {
-    const d = /* @__PURE__ */ new Date();
-    d.setDate(d.getDate() - 7);
-    return toISODate(d);
-  })();
+  const from7Days = riyadhDateKeyFromOffset(-7);
   const shiftClosingsQuery = useQuery({
-    queryKey: ["accountingDashboard", "shiftClosings", from7Days],
+    queryKey: queryKeys.accountingDashboardShiftClosings(from7Days),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -2096,7 +2235,7 @@ function AccountingDashboardPage() {
     }
   });
   const payrollRunsQuery = useQuery({
-    queryKey: ["accountingDashboard", "payrollRuns"],
+    queryKey: queryKeys.accountingDashboardPayrollRuns(),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/payroll");
@@ -2523,19 +2662,16 @@ function formatMoney$9(value) {
   });
 }
 function currentMonth() {
-  const d = /* @__PURE__ */ new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  return `${y}-${m}`;
+  return currentRiyadhMonthKey();
 }
 function monthLabel$2(m) {
   if (!m) return "—";
   try {
-    const [y, mo] = m.split("-");
-    const d = new Date(Number(y), Number(mo) - 1, 1);
+    const d = /* @__PURE__ */ new Date(`${m}-01T00:00:00+03:00`);
     return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       year: "numeric",
-      month: "long"
+      month: "long",
+      timeZone: "Asia/Riyadh"
     });
   } catch {
     return m;
@@ -2543,12 +2679,8 @@ function monthLabel$2(m) {
 }
 function generateMonthOptions() {
   const opts = [];
-  const now = /* @__PURE__ */ new Date();
   for (let i = 0; i < 24; i++) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const val = `${y}-${m}`;
+    const val = riyadhMonthKeyFromOffset(-i);
     opts.push({
       value: val,
       label: monthLabel$2(val)
@@ -2556,26 +2688,8 @@ function generateMonthOptions() {
   }
   return opts;
 }
-function formatDateTime$4(dt) {
-  if (!dt) return "—";
-  try {
-    return new Date(dt).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "Asia/Riyadh"
-    });
-  } catch {
-    try {
-      const d = new Date(dt);
-      const pad = (n) => String(n).padStart(2, "0");
-      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-    } catch {
-      return String(dt).replace("T", " ").slice(0, 16);
-    }
-  }
+function formatDateTime$3(dt) {
+  return formatDateTime$4(dt);
 }
 function CashCalculatorPage() {
   const {
@@ -2587,7 +2701,7 @@ function CashCalculatorPage() {
   const isAdmin = user?.role === "Admin";
   const queryClient = useQueryClient();
   const allBranchesQuery = useQuery({
-    queryKey: ["cashCalcBranches"],
+    queryKey: queryKeys.cashCalculatorBranches(),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/cash-counts?branchId=list");
@@ -2628,7 +2742,7 @@ function CashCalculatorPage() {
     }
   }, [branchId, defaultBranchId]);
   const recordQuery = useQuery({
-    queryKey: ["cashCount", branchId, month],
+    queryKey: queryKeys.cashCount(branchId, month),
     enabled: !!branchId && !!month,
     queryFn: async () => {
       const qs = new URLSearchParams({
@@ -2718,7 +2832,7 @@ function CashCalculatorPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["cashCount", branchId, month]
+        queryKey: queryKeys.cashCount(branchId, month)
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
@@ -2917,7 +3031,7 @@ function CashCalculatorPage() {
                     /* @__PURE__ */ jsx("span", { className: actionPill, children: actionText }),
                     /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 font-semibold text-sm", children: log.actor_name || "—" })
                   ] }),
-                  /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50 text-xs", children: formatDateTime$4(log.created_at) })
+                  /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50 text-xs", children: formatDateTime$3(log.created_at) })
                 ] }),
                 log.summary ? /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60 text-sm mb-2", children: log.summary }) : null,
                 /* @__PURE__ */ jsx("div", { className: "grid grid-cols-4 sm:grid-cols-8 gap-2", children: DENOMINATIONS.map((d) => {
@@ -2987,16 +3101,12 @@ function monthLabel$1(month) {
   return `${name} ${year}`;
 }
 function buildRecentMonthOptions$1(count = 24) {
-  const now = new Date();
   const options = [{
     value: "",
-    label: "اختر الشهر"
+    label: "اختار الشهر"
   }];
   for (let i = 0; i < count; i += 1) {
-    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
-    const y = d.getUTCFullYear();
-    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-    const value = `${y}-${m}`;
+    const value = riyadhMonthKeyFromOffset(-i);
     options.push({
       value,
       label: monthLabel$1(value)
@@ -3030,10 +3140,7 @@ function ExpenseForm({
       setFormMonth(defaultMonth);
       return;
     }
-    const now = /* @__PURE__ */ new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    setFormMonth(`${y}-${m}`);
+    setFormMonth(currentRiyadhMonthKey());
   }, []);
   useEffect(() => {
     if (editingExpense) {
@@ -3276,7 +3383,7 @@ function ExpenseRow({
       }, children: expenseName }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm", dir: "ltr", children: formattedAmount }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: isConfirmed ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$8(confirmedAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => handleAmountChange(e.target.value), className: `${ws.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleToggleConfirmed, disabled: isLocked, className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isConfirmed ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isConfirmed ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleToggleConfirmed, disabled: isLocked, "aria-label": isConfirmed ? "إلغاء تأكيد المصروف" : "تأكيد المصروف", title: isConfirmed ? "إلغاء التأكيد" : "تأكيد المصروف", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isConfirmed ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isConfirmed ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
         isConfirmed && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${confirmedNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
         !savedConfirmed && onEdit && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(expense), className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-sky-500/10 border border-sky-500/25 text-sky-700 dark:text-sky-300 hover:bg-sky-500/20", title: "تعديل المصروف", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
@@ -3597,7 +3704,7 @@ function ExpensesCharts({
   const axisStroke = isDark ? "rgba(255,255,255,0.55)" : "rgba(15,23,42,0.55)";
   const legendColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
   const trendQuery = useQuery({
-    queryKey: ["accounting-expenses-trend", month, 12],
+    queryKey: queryKeys.accountingExpenseTrend(month, 12),
     enabled: !!month,
     queryFn: async () => {
       const params = new URLSearchParams({
@@ -3808,136 +3915,6 @@ function ExpenseFilters({
 }
 
 /**
- * Unified date utilities for Quarters Website.
- *
- * Project policy (Quarters Coffee Bar):
- *   - **Gregorian calendar ONLY** — never Hijri.
- *   - Display dates in Arabic month names but with Latin (Western) digits.
- *   - Use `LOCALE` constant everywhere instead of "ar-SA" / "ar-SA-u-nu-latn",
- *     since plain "ar-SA" defaults to the Umm al-Qura (Hijri) calendar in JS Intl.
- */
-
-// Gregorian + Arabic month names + Latin digits
-const LOCALE = "ar-SA-u-ca-gregory-nu-latn";
-
-/**
- * Format an ISO date string / Date as `YYYY-MM-DD` (input fields, query params, DB keys).
- */
-function formatDateForInput$1(d) {
-  if (!d) return "";
-  const date = d instanceof Date ? d : new Date(d);
-  if (Number.isNaN(date.getTime())) return "";
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-/**
- * Like `formatDateForInput` but ALWAYS interprets the Date in Riyadh
- * (Asia/Riyadh) wall-clock, regardless of the runtime's local TZ.
- *
- * Use this when capturing "today" for business records — `new Date()`
- * + `getFullYear/Date` returned the runtime's TZ date, which on a UTC
- * SSR server (Railway) or a mis-configured browser produced
- * yesterday's date for users near midnight Riyadh time and tripped
- * backdate guards.
- */
-function formatRiyadhDateForInput(d) {
-  if (!d) return "";
-  const date = d instanceof Date ? d : new Date(d);
-  if (Number.isNaN(date.getTime())) return "";
-  try {
-    const fmt = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Riyadh",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    });
-    const parts = fmt.formatToParts(date);
-    const get = t => parts.find(p => p.type === t)?.value;
-    const y = get("year");
-    const m = get("month");
-    const dd = get("day");
-    if (!y || !m || !dd) return formatDateForInput$1(date);
-    return `${y}-${m}-${dd}`;
-  } catch {
-    return formatDateForInput$1(date);
-  }
-}
-
-/**
- * Display format helpers (date / date-time / time only).
- *
- * Storage convention (post-fix): the DB stores the **real moment** in
- * UTC. Neon serializes it with a trailing "Z" — that "Z" is correct
- * here, not a quirk to be stripped. To render in Riyadh wall-clock we
- * just parse the ISO normally and pin `timeZone: "Asia/Riyadh"` on the
- * Intl formatter. This produces the local Riyadh time the user expects
- * regardless of the runtime (SSR on Railway UTC, client in any browser
- * TZ, etc.).
- *
- * The earlier `stripTZ` + LOCAL approach treated the stored moment as
- * if it were already a wall-clock string, which silently showed the
- * UTC wall-clock literal in the UI — 3 hours behind real Riyadh time.
- */
-function formatDate$2(value, options = {}) {
-  if (!value) return "—";
-  try {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
-    return d.toLocaleDateString(LOCALE, {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      timeZone: "Asia/Riyadh",
-      ...options
-    });
-  } catch {
-    return String(value).slice(0, 10);
-  }
-}
-
-/**
- * Format with date + time. Example: "11 مايو 2026، 14:30"
- */
-function formatDateTime$3(value) {
-  if (!value) return "—";
-  try {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return String(value);
-    return d.toLocaleString(LOCALE, {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "Asia/Riyadh"
-    });
-  } catch {
-    return String(value);
-  }
-}
-
-/**
- * Format time only. Example: "14:30"
- */
-function formatTime$2(value) {
-  if (!value) return "—";
-  try {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return "—";
-    return d.toLocaleTimeString(LOCALE, {
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "Asia/Riyadh"
-    });
-  } catch {
-    return "—";
-  }
-}
-
-/**
  * Export utilities for Excel and PDF generation
  * Supports Arabic RTL content
  */
@@ -3954,7 +3931,9 @@ function exportToExcelHTML(data, filename, columns, title) {
     const formatted = col.format ? col.format(value, item) : value;
     return `<td>${formatted ?? ""}</td>`;
   }).join("")}</tr>`).join("");
-  const now = new Date().toLocaleDateString(LOCALE);
+  const now = new Date().toLocaleDateString(LOCALE, {
+    timeZone: "Asia/Riyadh"
+  });
   const htmlContent = `
     <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
       <head>
@@ -4040,7 +4019,8 @@ function exportToPDF(data, filename, columns, title) {
     month: "long",
     day: "numeric",
     hour: "2-digit",
-    minute: "2-digit"
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh"
   });
   const htmlContent = `
     <!DOCTYPE html>
@@ -4227,7 +4207,10 @@ function exportToPDF(data, filename, columns, title) {
         
         <div class="footer">
           <p>تم الإنشاء بواسطة نظام إدارة المخزون</p>
-          <p>© ${new Date().getFullYear()} - جميع الحقوق محفوظة</p>
+          <p>© ${new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    timeZone: "Asia/Riyadh"
+  })} - جميع الحقوق محفوظة</p>
         </div>
       </body>
     </html>
@@ -4408,7 +4391,7 @@ function ExpensesAnalytics({
     isDark
   } = useAdminTheme();
   const trendQuery = useQuery({
-    queryKey: ["accounting-expenses-trend", month, 12],
+    queryKey: queryKeys.accountingExpenseTrend(month, 12),
     enabled: !!month,
     queryFn: async () => {
       const params = new URLSearchParams({
@@ -4589,7 +4572,7 @@ function FixedPanel({
     onSuccess: () => {
       onMutate?.();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
+        queryKey: queryKeys.accountingExpenses()
       });
     },
     onError: (e) => toast.error(e.message || "فشل التحديث")
@@ -4960,7 +4943,7 @@ function VariableGrid({
 }) {
   const queryClient = useQueryClient();
   const templatesQuery = useQuery({
-    queryKey: ["accounting_variable_templates"],
+    queryKey: queryKeys.accountingVariableTemplates(),
     queryFn: async () => {
       const r = await adminFetch("/api/accounting/variable-templates");
       const d = await r.json().catch(() => ({}));
@@ -5013,7 +4996,7 @@ function VariableGrid({
     onSuccess: () => {
       onMutate?.();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
+        queryKey: queryKeys.accountingExpenses()
       });
     },
     onError: (e) => toast.error(e.message || "فشل الحفظ")
@@ -5036,7 +5019,7 @@ function VariableGrid({
     onSuccess: () => {
       onMutate?.();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_variable_templates"]
+        queryKey: queryKeys.accountingVariableTemplates()
       });
       toast.success("تم إضافة القالب");
       setShowAdd(false);
@@ -5062,7 +5045,7 @@ function VariableGrid({
     onSuccess: () => {
       onMutate?.();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_variable_templates"]
+        queryKey: queryKeys.accountingVariableTemplates()
       });
       toast.success("تم التعديل");
       setEditTarget(null);
@@ -5081,7 +5064,7 @@ function VariableGrid({
     onSuccess: () => {
       onMutate?.();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_variable_templates"]
+        queryKey: queryKeys.accountingVariableTemplates()
       });
       toast.success("تم إيقاف القالب");
     },
@@ -5361,7 +5344,7 @@ const SCOPE_BADGE = {
 function CategoriesManager() {
   const queryClient = useQueryClient();
   const typesQuery = useQuery({
-    queryKey: ["accounting_expense_types_full"],
+    queryKey: queryKeys.accountingExpenseTypesFull(),
     queryFn: async () => {
       const r = await adminFetch("/api/accounting/expense-types?includeInactive=1");
       const d = await r.json().catch(() => ({}));
@@ -5371,10 +5354,10 @@ function CategoriesManager() {
   });
   const invalidate = () => {
     queryClient.invalidateQueries({
-      queryKey: ["accounting_expense_types"]
+      queryKey: queryKeys.accountingExpenseTypes()
     });
     queryClient.invalidateQueries({
-      queryKey: ["accounting_expense_types_full"]
+      queryKey: queryKeys.accountingExpenseTypesFull()
     });
   };
   const createMut = useMutation({
@@ -5441,10 +5424,10 @@ function CategoriesManager() {
     onSuccess: () => {
       invalidate();
       queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
+        queryKey: queryKeys.accountingExpenses()
       });
       queryClient.invalidateQueries({
-        queryKey: ["accounting_fixed_expenses"]
+        queryKey: queryKeys.accountingFixedExpenses()
       });
       toast.success("تم الحذف");
     },
@@ -5609,7 +5592,7 @@ function ReviewTabContent({
   onConfirmFixed
 }) {
   const trendQuery = useQuery({
-    queryKey: ["accounting-expenses-trend", month, 12],
+    queryKey: queryKeys.accountingExpenseTrend(month, 12),
     enabled: !!month,
     queryFn: async () => {
       const params = new URLSearchParams({
@@ -5951,7 +5934,7 @@ function getMissingPresetCategories(types) {
 
 function useExpensesData(month, employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_expenses", month],
+    queryKey: queryKeys.accountingExpenses(month),
     enabled: !!employeeId && isAdmin && !!month,
     queryFn: async () => {
       const qs = new URLSearchParams({
@@ -5968,7 +5951,7 @@ function useExpensesData(month, employeeId, isAdmin) {
 }
 function useExpenseTypes(employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_expense_types"],
+    queryKey: queryKeys.accountingExpenseTypes(),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/expense-types");
@@ -6009,9 +5992,7 @@ function useCreateExpense(month) {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم إضافة المصروف بنجاح");
     },
     onError: error => {
@@ -6047,9 +6028,7 @@ function useUpdateExpense(month) {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم تعديل المصروف بنجاح");
     },
     onError: error => {
@@ -6085,9 +6064,7 @@ function useConfirmExpense(month) {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
-      });
+      await invalidateExpenseQueries(queryClient);
     },
     onError: error => {
       console.error(error);
@@ -6109,9 +6086,7 @@ function useDeleteExpense(month) {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم حذف المصروف");
     },
     onError: error => {
@@ -6143,7 +6118,7 @@ function useCreateExpenseType() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_expense_types"]
+        queryKey: queryKeys.accountingExpenseTypes()
       });
       toast.success("تم إضافة نوع المصروف بنجاح");
     },
@@ -6157,9 +6132,9 @@ function useCreateExpenseType() {
 // List active fixed-expense templates
 function useFixedExpenses(employeeId, isAdmin, includeInactive = false) {
   return useQuery({
-    queryKey: ["accounting_fixed_expenses", {
+    queryKey: queryKeys.accountingFixedExpenses({
       includeInactive
-    }],
+    }),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const qs = includeInactive ? "?includeInactive=1" : "";
@@ -6200,13 +6175,7 @@ function useCreateFixedExpense() {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_fixed_expenses"]
-      });
-      // Also refresh expenses list since pending_fixed will change
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم إضافة المصروف الثابت بنجاح");
     },
     onError: error => {
@@ -6236,12 +6205,7 @@ function useUpdateFixedExpense() {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_fixed_expenses"]
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم تعديل المصروف الثابت");
     },
     onError: error => {
@@ -6264,12 +6228,7 @@ function useDeleteFixedExpense() {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_fixed_expenses"]
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم إلغاء تنشيط المصروف الثابت");
     },
     onError: error => {
@@ -6308,9 +6267,7 @@ function useConfirmFixedExpense() {
       return data;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["accounting_expenses"]
-      });
+      await invalidateExpenseQueries(queryClient);
       toast.success("تم تأكيد الدفع");
     },
     onError: error => {
@@ -6354,12 +6311,7 @@ function ExpensesPage() {
     user
   } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
-  const [month, setMonth] = useState(() => {
-    const now = /* @__PURE__ */ new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
-  });
+  const [month, setMonth] = useState(currentRiyadhMonthKey);
   const monthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
   const monthHint = month ? monthLabel$1(month) : "";
   const [activeTab, setActiveTab] = useState("fixed");
@@ -6675,15 +6627,7 @@ function clamp(n, min, max) {
   return Math.min(max, Math.max(min, x));
 }
 function todayISO$2() {
-  try {
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
-  } catch {
-    return "";
-  }
+  return todayRiyadhDateKey();
 }
 function computeGreenBeanMetrics(draft) {
   const price = toNumberOrNullFromInput$1(draft.priceKgExclTax);
@@ -6758,7 +6702,7 @@ function useGreenBeanCalculator({
   }, [getEmptyDraft, selectedId]);
   const calculatorMode = calculatorModeInternal;
   const beansQuery = useQuery({
-    queryKey: ["accounting", "greenBeans"],
+    queryKey: queryKeys.accountingGreenBeans(),
     enabled: !!ready && !!isAuthenticated && !!isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/green-beans");
@@ -6833,7 +6777,7 @@ function useGreenBeanCalculator({
     },
     onSuccess: async data => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeans"]
+        queryKey: queryKeys.accountingGreenBeans()
       });
 
       // After adding a bean, we want to continue in "register" mode and clear the form.
@@ -6874,7 +6818,7 @@ function useGreenBeanCalculator({
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeans"]
+        queryKey: queryKeys.accountingGreenBeans()
       });
     }
   });
@@ -6897,7 +6841,7 @@ function useGreenBeanCalculator({
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"]
+        queryKey: queryKeys.accountingGreenBeanOrders()
       });
     }
   });
@@ -7622,15 +7566,7 @@ function groupOrderItems(items) {
   return Array.from(groups.values());
 }
 function todayISO$1() {
-  try {
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
-  } catch {
-    return "";
-  }
+  return todayRiyadhDateKey();
 }
 
 function computeMonthRange(monthValue) {
@@ -7659,14 +7595,7 @@ function computeMonthRange(monthValue) {
   };
 }
 function defaultMonthValue() {
-  try {
-    const d = /* @__PURE__ */ new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    return `${yyyy}-${mm}`;
-  } catch {
-    return "";
-  }
+  return currentRiyadhMonthKey();
 }
 function OrdersList({
   orders,
@@ -8088,8 +8017,10 @@ function exportGreenBeanOrderExcel(order, items, totals) {
   const supplierName = order.supplier_name || "—";
   const note = order.note || "";
   const createdBy = order.created_by_employee_name || "—";
-  const createdAt = order.created_at ? String(order.created_at).slice(0, 10) : "—";
-  const now = new Date().toLocaleDateString(LOCALE);
+  const createdAt = order.created_at ? formatRiyadhDateForInput(order.created_at) : "—";
+  const now = new Date().toLocaleDateString(LOCALE, {
+    timeZone: "Asia/Riyadh"
+  });
   const summaryRows = totals ? `
     <tr><td colspan="${colCount}" style="height:15px;border:none;"></td></tr>
     <tr><td colspan="${colCount}" style="font-weight:bold;font-size:14px;background:#1e293b;color:white;padding:10px;border:1px solid #94a3b8;">ملخص الطلب</td></tr>
@@ -8176,7 +8107,8 @@ function exportGreenBeanOrderPDF(order, items, totals) {
     month: "long",
     day: "numeric",
     hour: "2-digit",
-    minute: "2-digit"
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh"
   });
   const summaryBlock = totals ? `
     <div class="summary-container">
@@ -8682,7 +8614,7 @@ function DepositModal({
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onCloseDepositModal, className: "text-slate-400 dark:text-white/40 hover:text-slate-800 dark:text-white/80 transition-colors", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onCloseDepositModal, "aria-label": "إغلاق", title: "إغلاق", className: "text-slate-400 dark:text-white/40 hover:text-slate-800 dark:text-white/80 transition-colors", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
     ] }),
     depositResult ? /* @__PURE__ */ jsx(DepositSuccess, { depositResult, onCloseDepositModal }) : /* @__PURE__ */ jsx(DepositForm, { depositPreviewItems, depositBranchId, setDepositBranchId, branchOptions, depositNote, setDepositNote, onConfirmDeposit, onCloseDepositModal, depositMutation })
   ] }) });
@@ -8694,7 +8626,7 @@ function useDepositModal() {
   const [depositNote, setDepositNote] = useState("");
   const [depositResult, setDepositResult] = useState(null);
   const branchesQuery = useQuery({
-    queryKey: ["branches-for-deposit"],
+    queryKey: queryKeys.branchesForDeposit(),
     enabled: showDepositModal,
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
@@ -8796,7 +8728,7 @@ function useDepositModal() {
 
 function useGreenBeans(ready, isAuthenticated, isAdmin) {
   return useQuery({
-    queryKey: ["accounting", "greenBeans"],
+    queryKey: queryKeys.accountingGreenBeans(),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/green-beans");
@@ -8833,7 +8765,7 @@ function monthToRange(monthValue) {
 }
 function useOrders(ready, isAuthenticated, isAdmin, month = "") {
   return useQuery({
-    queryKey: ["accounting", "greenBeanOrders", month || "all"],
+    queryKey: queryKeys.accountingGreenBeanOrders(month || "all"),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -8856,7 +8788,7 @@ function useOrders(ready, isAuthenticated, isAdmin, month = "") {
 }
 function useOrderDetails(ready, isAuthenticated, isAdmin, selectedOrderId) {
   return useQuery({
-    queryKey: ["accounting", "greenBeanOrders", selectedOrderId],
+    queryKey: queryKeys.accountingGreenBeanOrders(selectedOrderId),
     enabled: ready && isAuthenticated && isAdmin && !!selectedOrderId && Number(selectedOrderId) > 0,
     queryFn: async () => {
       const res = await adminFetch(`/api/accounting/green-bean-orders/${selectedOrderId}`);
@@ -8887,7 +8819,7 @@ function useCreateOrder(onSuccess, onError) {
     },
     onSuccess: async data => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"]
+        queryKey: queryKeys.accountingGreenBeanOrders()
       });
       onSuccess(data);
     },
@@ -8909,7 +8841,7 @@ function useDeleteOrder(onSuccess, onError) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"]
+        queryKey: queryKeys.accountingGreenBeanOrders()
       });
       onSuccess();
     },
@@ -8948,11 +8880,11 @@ function useUpdateOrderItemReceived(onSuccess, onError) {
     }) => {
       if (orderId) {
         await queryClient.invalidateQueries({
-          queryKey: ["accounting", "greenBeanOrders", String(orderId)]
+          queryKey: queryKeys.accountingGreenBeanOrders(String(orderId))
         });
       }
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"]
+        queryKey: queryKeys.accountingGreenBeanOrders()
       });
       onSuccess?.(data);
     },
@@ -8988,11 +8920,11 @@ function useUpdateOrder(onSuccess, onError) {
     }) => {
       if (orderId) {
         await queryClient.invalidateQueries({
-          queryKey: ["accounting", "greenBeanOrders", String(orderId)]
+          queryKey: queryKeys.accountingGreenBeanOrders(String(orderId))
         });
       }
       await queryClient.invalidateQueries({
-        queryKey: ["accounting", "greenBeanOrders"]
+        queryKey: queryKeys.accountingGreenBeanOrders()
       });
       onSuccess?.(data, orderId);
     },
@@ -10127,12 +10059,8 @@ function LoanModal({
   }, [loan]);
   const monthOptions = useMemo(() => {
     const opts = buildRecentMonthOptions$1(36).filter((o) => o.value !== "");
-    const now = /* @__PURE__ */ new Date();
     for (let i = 1; i <= 6; i += 1) {
-      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1));
-      const y = d.getUTCFullYear();
-      const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-      const value = `${y}-${m}`;
+      const value = riyadhMonthKeyFromOffset(i);
       if (!opts.find((o) => o.value === value)) {
         opts.unshift({
           value,
@@ -10375,8 +10303,8 @@ async function rebuildAffectedPayrollRuns(loan) {
     const startStr = String(loan.start_month).slice(0, 7); // YYYY-MM
     const [sy, sm] = startStr.split("-").map(Number);
     if (Number.isFinite(sy) && Number.isFinite(sm)) {
-      const now = new Date();
-      const nowKey = now.getUTCFullYear() * 12 + now.getUTCMonth();
+      const [nowYear, nowMonth] = todayRiyadhDateKey().slice(0, 7).split("-").map(Number);
+      const nowKey = nowYear * 12 + (nowMonth - 1);
       const startKey = sy * 12 + (sm - 1);
       const installments = Number(loan.installments_count);
       const endKey = Math.min(startKey + installments - 1, nowKey);
@@ -10409,11 +10337,7 @@ async function rebuildAffectedPayrollRuns(loan) {
   return rebuilt;
 }
 async function invalidateLoansAndPayroll(queryClient) {
-  await Promise.all([queryClient.invalidateQueries({
-    queryKey: ["accounting_employee_loans"]
-  }), queryClient.invalidateQueries({
-    queryKey: ["accounting_payroll"]
-  })]);
+  await invalidatePayrollQueries(queryClient);
 }
 function useEmployeeLoans({
   employeeId,
@@ -10423,7 +10347,7 @@ function useEmployeeLoans({
   includeInactive
 } = {}) {
   return useQuery({
-    queryKey: ["accounting_employee_loans", filterEmployeeId || null, month || null, !!includeInactive],
+    queryKey: queryKeys.employeeLoans(filterEmployeeId || null, month || null, !!includeInactive),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -10442,7 +10366,7 @@ function useEmployeeLoans({
 }
 function useLoanEmployees(employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_loan_employees"],
+    queryKey: queryKeys.accountingLoanEmployees(),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/hr/bonuses/employees");
@@ -11035,7 +10959,7 @@ function HRBonusModal({
 
 function usePayrollData(month, employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_payroll", month],
+    queryKey: queryKeys.accountingPayroll(month),
     enabled: !!employeeId && isAdmin && !!month,
     queryFn: async () => {
       const qs = new URLSearchParams({
@@ -11074,7 +10998,7 @@ function usePayrollRebuild() {
     },
     onSuccess: async (_data, vars) => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll", String(vars.month)]
+        queryKey: queryKeys.accountingPayroll(String(vars.month))
       });
       toast.success("تم تحديث مسير الرواتب");
     },
@@ -11115,12 +11039,12 @@ function usePayrollPayment(month) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll", String(month)]
+        queryKey: queryKeys.accountingPayroll(String(month))
       });
       // Marking an entry paid (or un-paid) inside a closed month
       // changes the loans page's paid_months_to_date counter.
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_employee_loans"]
+        queryKey: queryKeys.employeeLoans()
       });
     },
     onError: error => {
@@ -11150,14 +11074,14 @@ function usePayrollClose(month) {
     },
     onSuccess: async data => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll", String(month)]
+        queryKey: queryKeys.accountingPayroll(String(month))
       });
       // Closing / reopening the month flips which entries the loans
       // page counts as paid installments — refresh the loans cache so
       // the "x / N شهر" column reflects reality without a manual
       // page reload.
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_employee_loans"]
+        queryKey: queryKeys.employeeLoans()
       });
       const msg = data?.run?.is_closed ? "تم تقفيل الشهر بنجاح" : "تم فتح الشهر بنجاح";
       toast.success(msg);
@@ -11171,7 +11095,7 @@ function usePayrollClose(month) {
 
 function useBonusesEmployees(employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_payroll_bonus_employees"],
+    queryKey: queryKeys.accountingPayrollBonusEmployees(),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/hr/bonuses/employees");
@@ -11185,7 +11109,7 @@ function useBonusesEmployees(employeeId, isAdmin) {
 }
 function useBonuses(month, employeeId, isAdmin) {
   return useQuery({
-    queryKey: ["accounting_payroll_bonuses", month],
+    queryKey: queryKeys.accountingPayrollBonuses(month),
     enabled: !!employeeId && isAdmin && !!month,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -11218,13 +11142,14 @@ function useCreateBonus(month, payrollRebuildMutation) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll_bonuses", month]
+        queryKey: queryKeys.accountingPayrollBonuses(month)
       });
       if (month) {
         await payrollRebuildMutation.mutateAsync({
           month
         });
       }
+      await invalidatePayrollQueries(queryClient);
       toast.success("تم إضافة البونص");
     },
     onError: error => {
@@ -11255,13 +11180,14 @@ function useUpdateBonus(month, payrollRebuildMutation) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll_bonuses", month]
+        queryKey: queryKeys.accountingPayrollBonuses(month)
       });
       if (month) {
         await payrollRebuildMutation.mutateAsync({
           month
         });
       }
+      await invalidatePayrollQueries(queryClient);
       toast.success("تم تحديث البونص");
     },
     onError: error => {
@@ -11285,13 +11211,14 @@ function useDeleteBonus(month, payrollRebuildMutation) {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll_bonuses", month]
+        queryKey: queryKeys.accountingPayrollBonuses(month)
       });
       if (month) {
         await payrollRebuildMutation.mutateAsync({
           month
         });
       }
+      await invalidatePayrollQueries(queryClient);
       toast.success("تم حذف البونص");
     },
     onError: error => {
@@ -11703,7 +11630,7 @@ function PaymentRow({
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formattedNet }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", children: METHOD_LABELS[paymentMethod] || "—" }) : /* @__PURE__ */ jsx(GlassSelect, { value: paymentMethod, onChange: handleMethodChange, options: PAYMENT_METHOD_OPTIONS, placeholder: "اختر", disabled: isClosed, buttonClassName: "text-xs py-1 px-2 !rounded-lg" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$8(paidAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (e) => handleAmountChange(e.target.value), disabled: isClosed, className: `${ws.input} text-xs py-1 px-1 rounded-lg w-[50px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(netSalary), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleTogglePaid, disabled: isClosed || isLocked, className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isPaid ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isClosed || isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isPaid ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleTogglePaid, disabled: isClosed || isLocked, "aria-label": isPaid ? "إلغاء حالة الدفع" : "تحديد الراتب كمدفوع", title: isPaid ? "إلغاء حالة الدفع" : "تم الدفع", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isPaid ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isClosed || isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isPaid ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
         isPaid && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), disabled: isClosed, className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${paymentNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
         isLocked && !isClosed && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleEdit, className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-white/70", title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
@@ -12071,12 +11998,7 @@ function PayrollPage() {
     user
   } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
-  const [month, setMonth] = useState(() => {
-    const now = /* @__PURE__ */ new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
-  });
+  const [month, setMonth] = useState(currentRiyadhMonthKey);
   const monthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
   const monthHint = month ? monthLabel$1(month) : "";
   const currentAdminName = useCurrentAdminName();
@@ -12194,7 +12116,7 @@ function useAccountingBeneficiaries({
   includeInactive
 } = {}) {
   return useQuery({
-    queryKey: ["accounting_beneficiaries", q || "", contactId || null, !!includeInactive],
+    queryKey: queryKeys.accountingBeneficiaries(q || "", contactId || null, !!includeInactive),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -12230,7 +12152,7 @@ function useCreateAccountingBeneficiary() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_beneficiaries"]
+        queryKey: queryKeys.accountingBeneficiaries()
       });
       toast.success("تم إضافة المستفيد");
     },
@@ -12262,7 +12184,7 @@ function useUpdateAccountingBeneficiary() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_beneficiaries"]
+        queryKey: queryKeys.accountingBeneficiaries()
       });
       toast.success("تم حفظ التعديلات");
     },
@@ -12291,7 +12213,7 @@ function useDeleteAccountingBeneficiary() {
     },
     onSuccess: async data => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_beneficiaries"]
+        queryKey: queryKeys.accountingBeneficiaries()
       });
       toast.success(data?.hard ? "تم الحذف نهائياً" : "تم إيقاف المستفيد");
     },
@@ -13013,11 +12935,11 @@ function ContactsExportMenu({
     accessor: (c) => activeLabel$1(c.is_active)
   }];
   const handleExportExcel = () => {
-    exportToExcelHTML(contacts || [], `جهات_الاتصال_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, excelColumns, "جهات الاتصال - قسم المشتريات");
+    exportToExcelHTML(contacts || [], `جهات_الاتصال_${todayRiyadhDateKey()}`, excelColumns, "جهات الاتصال - قسم المشتريات");
     setShowExportMenu(false);
   };
   const handleExportPDF = () => {
-    exportToPDF(contacts || [], `جهات_الاتصال_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, pdfColumns, "جهات الاتصال - قسم المشتريات");
+    exportToPDF(contacts || [], `جهات_الاتصال_${todayRiyadhDateKey()}`, pdfColumns, "جهات الاتصال - قسم المشتريات");
     setShowExportMenu(false);
   };
   return /* @__PURE__ */ jsxs("div", { children: [
@@ -13174,11 +13096,11 @@ function BeneficiariesExportMenu({
     accessor: (b) => activeLabel(b.is_active)
   }];
   const handleExportExcel = () => {
-    exportToExcelHTML(beneficiaries || [], `المستفيدون_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, excelColumns, "المستفيدون - قسم المشتريات");
+    exportToExcelHTML(beneficiaries || [], `المستفيدون_${todayRiyadhDateKey()}`, excelColumns, "المستفيدون - قسم المشتريات");
     setShowExportMenu(false);
   };
   const handleExportPDF = () => {
-    exportToPDF(beneficiaries || [], `المستفيدون_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, pdfColumns, "المستفيدون - قسم المشتريات");
+    exportToPDF(beneficiaries || [], `المستفيدون_${todayRiyadhDateKey()}`, pdfColumns, "المستفيدون - قسم المشتريات");
     setShowExportMenu(false);
   };
   return /* @__PURE__ */ jsxs("div", { children: [
@@ -13316,7 +13238,7 @@ function ItemUnitsPanel({
   const [showCreateUnit, setShowCreateUnit] = useState(false);
   const [pendingRowIndex, setPendingRowIndex] = useState(null);
   const catalogQuery = useQuery({
-    queryKey: ["measurement-units"],
+    queryKey: queryKeys.measurementUnits(),
     queryFn: async () => {
       const res = await adminFetch("/api/measurement-units");
       if (!res.ok) throw new Error("failed to load units");
@@ -13441,7 +13363,7 @@ function ItemUnitsPanel({
   };
   const handleUnitCreated = (row) => {
     queryClient.invalidateQueries({
-      queryKey: ["measurement-units"]
+      queryKey: queryKeys.measurementUnits()
     });
     const idx = pendingRowIndex;
     setPendingRowIndex(null);
@@ -13762,7 +13684,7 @@ function PurchasesItemsPanel() {
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState(null);
   const itemsQuery = useQuery({
-    queryKey: ["purchases_items"],
+    queryKey: queryKeys.purchaseItems(),
     queryFn: async () => {
       const r = await adminFetch("/api/items");
       if (!r.ok) throw new Error("Failed to load items");
@@ -13770,7 +13692,7 @@ function PurchasesItemsPanel() {
     }
   });
   const categoriesQuery = useQuery({
-    queryKey: ["purchases_item_categories"],
+    queryKey: queryKeys.purchaseItemCategories(),
     queryFn: async () => {
       const r = await adminFetch("/api/item-categories");
       if (!r.ok) throw new Error("Failed to load categories");
@@ -13779,10 +13701,10 @@ function PurchasesItemsPanel() {
   });
   const invalidate = () => {
     queryClient.invalidateQueries({
-      queryKey: ["purchases_items"]
+      queryKey: queryKeys.purchaseItems()
     });
     queryClient.invalidateQueries({
-      queryKey: ["items"]
+      queryKey: queryKeys.items()
     });
   };
   const createMut = useMutation({
@@ -13964,7 +13886,7 @@ function useAccountingContacts({
   includeInactive
 } = {}) {
   return useQuery({
-    queryKey: ["accounting_contacts", q || "", !!includeInactive],
+    queryKey: queryKeys.accountingContacts(q || "", !!includeInactive),
     enabled: !!employeeId && isAdmin,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -13999,7 +13921,7 @@ function useCreateAccountingContact() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_contacts"]
+        queryKey: queryKeys.accountingContacts()
       });
       toast.success("تم إضافة جهة الاتصال");
     },
@@ -14031,7 +13953,7 @@ function useUpdateAccountingContact() {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_contacts"]
+        queryKey: queryKeys.accountingContacts()
       });
       toast.success("تم حفظ التعديلات");
     },
@@ -14060,7 +13982,7 @@ function useDeleteAccountingContact() {
     },
     onSuccess: async data => {
       await queryClient.invalidateQueries({
-        queryKey: ["accounting_contacts"]
+        queryKey: queryKeys.accountingContacts()
       });
       toast.success(data?.hard ? "تم الحذف نهائياً" : "تم إيقاف الجهة");
     },
@@ -14429,9 +14351,9 @@ function GlassDatePicker({
       if (!showTime) setOpen(false);
       return;
     }
-    const dateStr = formatDateForInput$1(day);
+    const dateStr = formatDateForInput(day);
     if (showTime) {
-      const h = currentTime.hour !== "" ? currentTime.hour : (/* @__PURE__ */ new Date()).getHours();
+      const h = currentTime.hour !== "" ? currentTime.hour : currentRiyadhHour();
       const m = currentTime.minute !== "" ? currentTime.minute : "0";
       setValue(buildDateTimeValue(dateStr, h, m));
     } else {
@@ -14514,7 +14436,7 @@ function GlassDatePicker({
           /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
             const today = formatRiyadhDateForInput(/* @__PURE__ */ new Date());
             if (showTime) {
-              const h = currentTime.hour !== "" ? currentTime.hour : (/* @__PURE__ */ new Date()).getHours();
+              const h = currentTime.hour !== "" ? currentTime.hour : currentRiyadhHour();
               const m = currentTime.minute !== "" ? currentTime.minute : "0";
               setValue(buildDateTimeValue(today, h, m));
             } else {
@@ -14658,7 +14580,7 @@ function ShiftClosePage() {
   const isAdmin = user?.role === "Admin";
   const branchesFromUser = Array.isArray(user?.branches) ? user.branches : [];
   const allBranchesQuery = useQuery({
-    queryKey: ["allBranchesForShiftClose"],
+    queryKey: queryKeys.shiftCloseBranches(),
     enabled: isAdmin && branchesFromUser.length === 0,
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
@@ -14693,7 +14615,7 @@ function ShiftClosePage() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const closingsQuery = useQuery({
-    queryKey: ["shiftClosings_admin", employeeId, branchId, from, to],
+    queryKey: queryKeys.shiftClosings(employeeId, branchId, from, to),
     enabled: !!employeeId && isAdmin && (!!branchId || branchId === "all"),
     queryFn: async () => {
       const qs = new URLSearchParams({
@@ -15109,7 +15031,7 @@ function WastePage$1() {
     setTo("");
   };
   const branchesQuery = useQuery({
-    queryKey: ["accounting-waste-branches"],
+    queryKey: queryKeys.accountingWasteBranches(),
     enabled: !!employeeId && canManage,
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
@@ -15122,7 +15044,7 @@ function WastePage$1() {
   });
   const branches = branchesQuery.data || [];
   const wasteQuery = useQuery({
-    queryKey: ["accounting-waste", branchFilter || null, reasonFilter || null, from || null, to || null],
+    queryKey: queryKeys.accountingWaste(branchFilter || null, reasonFilter || null, from || null, to || null),
     enabled: !!employeeId && canManage,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -15287,6 +15209,8 @@ function AdminThemeToggle() {
     isDark,
     toggleTheme
   } = useAdminTheme();
+  const isMobile = useMediaQuery("(max-width: 1023px)");
+  if (!isMobile) return null;
   return /* @__PURE__ */ jsx("button", { type: "button", onClick: toggleTheme, className: `${ws.iconButton} fixed top-4 left-4 z-[60] w-10 h-10 shadow-lg lg:hidden`, title: isDark ? "الوضع الفاتح" : "الوضع الداكن", "aria-label": isDark ? "Light mode" : "Dark mode", children: isDark ? /* @__PURE__ */ jsx(Sun, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Moon, { className: "w-4 h-4" }) });
 }
 
@@ -15557,7 +15481,7 @@ const PALETTE_ROUTES = [{
   keywords: "employees staff"
 }];
 const PALETTE_DATA_SOURCES = [{
-  queryKey: ["branches"],
+  queryKey: queryKeys.branches(),
   url: "/api/branches",
   staleTime: 30 * 60 * 1e3,
   kind: "branch",
@@ -15565,7 +15489,7 @@ const PALETTE_DATA_SOURCES = [{
   icon: Building2,
   hrefBase: "/admin/branches"
 }, {
-  queryKey: ["items"],
+  queryKey: queryKeys.items(),
   url: "/api/items",
   staleTime: 5 * 60 * 1e3,
   kind: "item",
@@ -15735,7 +15659,7 @@ function StatisticsCards({
 }
 
 function getGreeting() {
-  const h = (/* @__PURE__ */ new Date()).getHours();
+  const h = currentRiyadhHour();
   if (h < 6) return "مساء الخير";
   if (h < 12) return "صباح الخير";
   if (h < 18) return "مساء الخير";
@@ -15838,16 +15762,16 @@ function SmartAlerts({
       /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
           /* @__PURE__ */ jsx("p", { className: "font-semibold text-sm", children: alert.message }),
-          hasItems && /* @__PURE__ */ jsx("button", { onClick: () => {
+          hasItems && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
             const next = new Set(expanded);
             if (isExpanded) next.delete(i);
             else next.add(i);
             setExpanded(next);
-          }, className: "opacity-70 hover:opacity-100 transition-opacity", children: isExpanded ? /* @__PURE__ */ jsx(ChevronUp, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(ChevronDown, { className: "w-4 h-4" }) })
+          }, "aria-label": isExpanded ? "إخفاء التفاصيل" : "عرض التفاصيل", title: isExpanded ? "إخفاء التفاصيل" : "عرض التفاصيل", className: "opacity-70 hover:opacity-100 transition-opacity", children: isExpanded ? /* @__PURE__ */ jsx(ChevronUp, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(ChevronDown, { className: "w-4 h-4" }) })
         ] }),
         hasItems && isExpanded && /* @__PURE__ */ jsx("div", { className: "mt-2 flex flex-wrap gap-1.5", children: alert.items.map((item, j) => /* @__PURE__ */ jsx("span", { className: `inline-block px-2 py-0.5 rounded-lg text-xs font-medium border ${style.bg}`, children: item }, j)) })
       ] }),
-      /* @__PURE__ */ jsx("button", { onClick: () => setDismissed((prev) => /* @__PURE__ */ new Set([...prev, i])), className: "opacity-50 hover:opacity-100 transition-opacity flex-shrink-0", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setDismissed((prev) => /* @__PURE__ */ new Set([...prev, i])), "aria-label": "إخفاء التنبيه", title: "إخفاء التنبيه", className: "opacity-50 hover:opacity-100 transition-opacity flex-shrink-0", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
     ] }, i);
   }) });
 }
@@ -16319,7 +16243,8 @@ function MonthlyMovementReport({
   const displayData = isExpanded ? aggregated : aggregated.slice(0, 10);
   const currentMonth = (/* @__PURE__ */ new Date()).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
     month: "long",
-    year: "numeric"
+    year: "numeric",
+    timeZone: "Asia/Riyadh"
   });
   const handleExportExcel = () => {
     const cols = [{
@@ -16451,7 +16376,8 @@ function MonthlySummaryExport({
   if (!analytics || !stats) return null;
   const currentMonth = (/* @__PURE__ */ new Date()).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
     month: "long",
-    year: "numeric"
+    year: "numeric",
+    timeZone: "Asia/Riyadh"
   });
   const handleExport = () => {
     const printWindow = window.open("", "_blank");
@@ -16491,7 +16417,8 @@ function MonthlySummaryExport({
       month: "long",
       day: "numeric",
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
+      timeZone: "Asia/Riyadh"
     });
     const healthScore = analytics.healthScore ?? 0;
     const healthColor = healthScore >= 80 ? "#22c55e" : healthScore >= 60 ? "#f59e0b" : "#ef4444";
@@ -17185,7 +17112,7 @@ function useAdminDashboardData(isAuthenticated) {
   const {
     data: operations
   } = useQuery({
-    queryKey: ["inventory-operations"],
+    queryKey: queryKeys.inventoryOperations(),
     queryFn: async () => {
       const response = await adminFetch("/api/inventory-operations");
       if (!response.ok) {
@@ -17199,7 +17126,7 @@ function useAdminDashboardData(isAuthenticated) {
   const {
     data: branches
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) {
@@ -17214,7 +17141,7 @@ function useAdminDashboardData(isAuthenticated) {
   const {
     data: items
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await adminFetch("/api/items");
       if (!response.ok) {
@@ -17229,7 +17156,7 @@ function useAdminDashboardData(isAuthenticated) {
   const {
     data: employees
   } = useQuery({
-    queryKey: ["employees"],
+    queryKey: queryKeys.employees(),
     queryFn: async () => {
       const response = await adminFetch("/api/employees");
       if (!response.ok) {
@@ -17254,7 +17181,7 @@ function useDashboardAnalytics(isAuthenticated) {
     isLoading,
     error
   } = useQuery({
-    queryKey: ["dashboard-analytics"],
+    queryKey: queryKeys.dashboardAnalytics(),
     queryFn: async () => {
       const response = await adminFetch("/api/dashboard/analytics");
       if (!response.ok) {
@@ -17280,7 +17207,7 @@ function useItemHistory(isAuthenticated, selectedItemId, selectedBranchId, dateF
     isLoading: isHistoryLoading,
     error: historyError
   } = useQuery({
-    queryKey: ["item-history", selectedItemId, selectedBranchId, dateFrom, dateTo],
+    queryKey: queryKeys.itemHistory(selectedItemId, selectedBranchId, dateFrom, dateTo),
     queryFn: async () => {
       const branchQuery = selectedBranchId ? `&branchId=${encodeURIComponent(selectedBranchId)}` : "";
       const fromQuery = dateFrom ? `from=${encodeURIComponent(dateFrom)}` : "";
@@ -17306,7 +17233,7 @@ function useItemAnalysis(isAuthenticated, itemId, branchIds, dateFrom, dateTo) {
     isLoading: isAnalysisLoading,
     error: analysisError
   } = useQuery({
-    queryKey: ["item-analysis", itemId, branchIds, dateFrom, dateTo],
+    queryKey: queryKeys.itemAnalysis(itemId, branchIds, dateFrom, dateTo),
     queryFn: async () => {
       const qs = new URLSearchParams({
         branchIds: branchIds.join(","),
@@ -17334,7 +17261,7 @@ function useVarianceData(isAuthenticated, varianceBranchId, varianceItemId, vari
     isLoading: varianceLoading,
     error: varianceError
   } = useQuery({
-    queryKey: ["variance", varianceBranchId, varianceItemId, varianceFrom, varianceTo],
+    queryKey: queryKeys.variance(varianceBranchId, varianceItemId, varianceFrom, varianceTo),
     queryFn: async () => {
       const params = new URLSearchParams();
       params.set("branchId", String(varianceBranchId));
@@ -17365,10 +17292,8 @@ function calculateDashboardStats(operations, branches, items, employees) {
   const totalEmployees = employees?.length || 0;
   const adminCount = employees?.filter(emp => emp.role === "Admin").length || 0;
   const completionRate = totalOperations > 0 ? Math.round(completedOperations / totalOperations * 100) : 0;
-  const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const startOfLast7 = new Date(startOfToday);
-  startOfLast7.setDate(startOfLast7.getDate() - 6);
+  const startOfToday = new Date(`${todayRiyadhDateKey()}T00:00:00+03:00`);
+  const startOfLast7 = new Date(`${riyadhDateKeyFromOffset(-6)}T00:00:00+03:00`);
   const operationsToday = operations?.filter(op => new Date(op.created_at) >= startOfToday).length || 0;
   const operationsLast7 = operations?.filter(op => new Date(op.created_at) >= startOfLast7).length || 0;
   return {
@@ -17415,15 +17340,19 @@ function processItemHistoryChartData(rows) {
     const day = dt.toLocaleDateString(LOCALE, {
       year: "2-digit",
       month: "short",
-      day: "2-digit"
+      day: "2-digit",
+      timeZone: "Asia/Riyadh"
     });
     const time = dt.toLocaleTimeString(LOCALE, {
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
+      timeZone: "Asia/Riyadh"
     });
     const tsKey = dt.toISOString();
     const shortLabel = `${day} ${time}`;
-    const fullLabel = dt.toLocaleString(LOCALE);
+    const fullLabel = dt.toLocaleString(LOCALE, {
+      timeZone: "Asia/Riyadh"
+    });
     const existing = byTs.get(tsKey) || {
       ts: dt.getTime(),
       tsKey,
@@ -17457,16 +17386,20 @@ function processVarianceChartData(varianceRows) {
     const day = dt.toLocaleDateString(LOCALE, {
       year: "2-digit",
       month: "short",
-      day: "2-digit"
+      day: "2-digit",
+      timeZone: "Asia/Riyadh"
     });
     const time = dt.toLocaleTimeString(LOCALE, {
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
+      timeZone: "Asia/Riyadh"
     });
     data.push({
       ts: dt.getTime(),
       label: `${day} ${time}`,
-      fullLabel: dt.toLocaleString(LOCALE),
+      fullLabel: dt.toLocaleString(LOCALE, {
+        timeZone: "Asia/Riyadh"
+      }),
       expected: Number(r.expected_quantity) || 0,
       actual: Number(r.actual_quantity) || 0,
       delta: Number(r.delta_quantity) || 0,
@@ -17555,11 +17488,13 @@ function processItemAnalysisChartData(analysisData) {
       const day = dt.toLocaleDateString(LOCALE, {
         year: "2-digit",
         month: "short",
-        day: "2-digit"
+        day: "2-digit",
+        timeZone: "Asia/Riyadh"
       });
       const time = dt.toLocaleTimeString(LOCALE, {
         hour: "2-digit",
-        minute: "2-digit"
+        minute: "2-digit",
+        timeZone: "Asia/Riyadh"
       });
       const label = `${day} ${time}`;
       const fullLabel = dt.toLocaleString(LOCALE, {
@@ -17568,7 +17503,8 @@ function processItemAnalysisChartData(analysisData) {
         day: "numeric",
         weekday: "long",
         hour: "2-digit",
-        minute: "2-digit"
+        minute: "2-digit",
+        timeZone: "Asia/Riyadh"
       });
       byTimestamp.set(tsKey, {
         ts: dt.getTime(),
@@ -17876,7 +17812,7 @@ function BranchesPage() {
     data: branches = [],
     isLoading
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");
@@ -17901,7 +17837,7 @@ function BranchesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["branches"]
+        queryKey: queryKeys.branches()
       });
       setIsModalOpen(false);
       resetForm();
@@ -17924,7 +17860,7 @@ function BranchesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["branches"]
+        queryKey: queryKeys.branches()
       });
       setIsModalOpen(false);
       resetForm();
@@ -17949,7 +17885,7 @@ function BranchesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["branches"]
+        queryKey: queryKeys.branches()
       });
       setDeleteConfirm(null);
     }
@@ -18196,7 +18132,7 @@ function useEmployeesAuth() {
 
 function useEmployeesData(isAuthenticated) {
   const employeesQuery = useQuery({
-    queryKey: ["employees"],
+    queryKey: queryKeys.employees(),
     queryFn: async () => {
       const response = await adminFetch("/api/employees");
       if (!response.ok) {
@@ -18207,7 +18143,7 @@ function useEmployeesData(isAuthenticated) {
     enabled: isAuthenticated
   });
   const branchesQuery = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) {
@@ -18245,7 +18181,7 @@ function useEmployeeMutations() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["employees"]
+        queryKey: queryKeys.employees()
       });
       toast.success("تم إضافة الموظف بنجاح");
     },
@@ -18274,7 +18210,7 @@ function useEmployeeMutations() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["employees"]
+        queryKey: queryKeys.employees()
       });
       toast.success("تم تحديث الموظف بنجاح");
     },
@@ -18293,7 +18229,7 @@ function useEmployeeMutations() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["employees"]
+        queryKey: queryKeys.employees()
       });
       toast.success("تم حذف الموظف بنجاح");
     },
@@ -18469,7 +18405,7 @@ function EmployeeExportMenu({
       accessor: (item) => item.created_at,
       format: (value) => formatDateTime$2(value)
     }];
-    exportToExcelHTML(employees, `قائمة_الموظفين_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, columns, "قائمة الموظفين - نظام إدارة المخزون");
+    exportToExcelHTML(employees, `قائمة_الموظفين_${todayRiyadhDateKey()}`, columns, "قائمة الموظفين - نظام إدارة المخزون");
     setShowExportMenu(false);
   };
   const handleExportPDF = () => {
@@ -18493,7 +18429,7 @@ function EmployeeExportMenu({
       header: "الفروع",
       accessor: (item) => item.branches && item.branches.length > 0 ? item.branches.map((b) => b.name).join(", ") : "لا يوجد"
     }];
-    exportToPDF(employees, `قائمة_الموظفين_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, columns, "قائمة الموظفين - نظام إدارة المخزون");
+    exportToPDF(employees, `قائمة_الموظفين_${todayRiyadhDateKey()}`, columns, "قائمة الموظفين - نظام إدارة المخزون");
     setShowExportMenu(false);
   };
   return /* @__PURE__ */ jsxs("div", { children: [
@@ -19089,7 +19025,7 @@ function useItemsData(isAuthenticated) {
     data: items = [],
     isLoading
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await adminFetch("/api/items");
       if (!response.ok) throw new Error("Failed to fetch items");
@@ -19100,7 +19036,7 @@ function useItemsData(isAuthenticated) {
   const {
     data: branches = []
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");
@@ -19127,7 +19063,7 @@ function useItemsData(isAuthenticated) {
     onSuccess: data => {
       console.log("Item created successfully:", data);
       queryClient.invalidateQueries({
-        queryKey: ["items"]
+        queryKey: queryKeys.items()
       });
     },
     onError: error => {
@@ -19153,7 +19089,7 @@ function useItemsData(isAuthenticated) {
     onSuccess: data => {
       console.log("Item updated successfully:", data);
       queryClient.invalidateQueries({
-        queryKey: ["items"]
+        queryKey: queryKeys.items()
       });
     },
     onError: error => {
@@ -19179,7 +19115,7 @@ function useItemsData(isAuthenticated) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["items"]
+        queryKey: queryKeys.items()
       });
     }
   });
@@ -19206,7 +19142,7 @@ function useItemsData(isAuthenticated) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["items"]
+        queryKey: queryKeys.items()
       });
     },
     onError: error => {
@@ -19313,7 +19249,7 @@ function useItemCategories(enabled = true) {
     isLoading,
     error
   } = useQuery({
-    queryKey: ["item-categories"],
+    queryKey: queryKeys.itemCategories(),
     queryFn: async () => {
       const response = await adminFetch("/api/item-categories");
       if (!response.ok) {
@@ -19352,7 +19288,7 @@ function useItemCategories(enabled = true) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["item-categories"]
+        queryKey: queryKeys.itemCategories()
       });
     }
   });
@@ -19387,7 +19323,7 @@ function useItemCategories(enabled = true) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["item-categories"]
+        queryKey: queryKeys.itemCategories()
       });
     }
   });
@@ -19712,6 +19648,19 @@ function SearchBar({
   ] });
 }
 
+const STOCK_PRECISION = 3;
+function finiteNumber(value, fallback = 0) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+function roundStockQuantity(value) {
+  const factor = 10 ** STOCK_PRECISION;
+  return Math.round(finiteNumber(value) * factor) / factor;
+}
+function sumStockQuantities(rows) {
+  return roundStockQuantity((Array.isArray(rows) ? rows : []).reduce((sum, row) => sum + finiteNumber(row?.quantity), 0));
+}
+
 function getUnitIcon$1(unit) {
   const icons = {
     حبة: "📦",
@@ -19725,20 +19674,13 @@ function getUnitIcon$1(unit) {
   return icons[unit] || "📦";
 }
 function computeTotalStock(item) {
-  const list = Array.isArray(item?.branch_stock) ? item.branch_stock : [];
-  return list.reduce((sum, stock) => {
-    const qty = Number(stock?.quantity || 0);
-    return sum + (Number.isFinite(qty) ? qty : 0);
-  }, 0);
+  return sumStockQuantities(item?.branch_stock);
 }
 function computeStockStatus(item) {
   const list = Array.isArray(item?.branch_stock) ? item.branch_stock : [];
   const threshold = Number(item?.min_stock_threshold || 0);
   if (list.length === 0) return "available";
-  const totalStock = list.reduce((sum, s) => {
-    const qty = Number(s?.quantity || 0);
-    return sum + (Number.isFinite(qty) ? qty : 0);
-  }, 0);
+  const totalStock = sumStockQuantities(list);
   if (totalStock === 0) return "out_of_stock";
   if (totalStock < threshold) return "low_stock";
   return "available";
@@ -19859,7 +19801,7 @@ function ItemsTable({
           const rowCheckIcon = isChecked ? /* @__PURE__ */ jsx(CheckSquare, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Square, { className: "w-4 h-4" });
           const rowBg = isChecked ? "bg-emerald-400/[0.04]" : "hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.05]";
           return /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-100 dark:border-slate-100 dark:border-slate-100 dark:border-white/5 transition-colors ${rowBg}`, children: [
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-4", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: () => toggleOne(item.id), className: `${checkboxBase} ${rowCheckClass}`, children: rowCheckIcon }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-4", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: () => toggleOne(item.id), "aria-label": `تحديد ${item.name}`, title: `تحديد ${item.name}`, className: `${checkboxBase} ${rowCheckClass}`, children: rowCheckIcon }) }),
             /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 min-w-[240px]", children: [
               /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/80`, children: /* @__PURE__ */ jsx(Package, { className: "w-5 h-5" }) }),
               /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
@@ -19886,7 +19828,7 @@ function ItemsTable({
                   item.linked_green_bean_name,
                   item.last_order_date ? /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-slate-400 dark:text-slate-400 dark:text-white/30 mr-1", children: [
                     "(",
-                    new Date(item.last_order_date).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn"),
+                    formatRiyadhDateForInput(item.last_order_date),
                     ")"
                   ] }) : null
                 ] })
@@ -19988,7 +19930,7 @@ function ItemFormModal({
   const linkedBeanValue = formData.linked_green_bean_id ? String(formData.linked_green_bean_id) : "";
   const lastOrderInfo = editingItem?.linked_green_bean_id && editingItem?.last_order_price_per_kg ? {
     price: Number(editingItem.last_order_price_per_kg).toFixed(2),
-    date: editingItem.last_order_date ? new Date(editingItem.last_order_date).toLocaleDateString("ar-SA-u-ca-gregory-nu-latn") : null,
+    date: editingItem.last_order_date ? formatRiyadhDateForInput(editingItem.last_order_date) : null,
     beanName: editingItem.linked_green_bean_name || ""
   } : null;
   return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 p-4 overflow-y-auto", dir: "rtl", children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full max-w-2xl shadow-2xl my-8 flex flex-col`, style: {
@@ -20078,9 +20020,9 @@ function ItemFormModal({
           "الحد الأدنى للتنبيه ",
           /* @__PURE__ */ jsx("span", { className: "text-red-700 dark:text-red-700 dark:text-red-300", children: "*" })
         ] }),
-        /* @__PURE__ */ jsx("input", { type: "number", required: true, min: "0", value: formData.min_stock_threshold, onChange: (e) => setFormData({
+        /* @__PURE__ */ jsx("input", { type: "number", required: true, min: "0", step: "0.001", value: formData.min_stock_threshold, onChange: (e) => setFormData({
           ...formData,
-          min_stock_threshold: parseInt(e.target.value) || 0
+          min_stock_threshold: Number(e.target.value) || 0
         }), className: `${ws.input} px-4 py-3`, placeholder: "10" }),
         /* @__PURE__ */ jsx("p", { className: helpClass, children: "سيتم التنبيه عند وصول الكمية لهذا العدد أو أقل" })
       ] }),
@@ -20090,11 +20032,11 @@ function ItemFormModal({
           " ",
           /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/40 text-xs", children: "(اختياري)" })
         ] }),
-        /* @__PURE__ */ jsx("input", { type: "number", min: "0", value: formData.max_stock_threshold === null || formData.max_stock_threshold === void 0 ? "" : formData.max_stock_threshold, onChange: (e) => {
+        /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.001", value: formData.max_stock_threshold === null || formData.max_stock_threshold === void 0 ? "" : formData.max_stock_threshold, onChange: (e) => {
           const val = e.target.value;
           setFormData({
             ...formData,
-            max_stock_threshold: val === "" ? null : parseInt(val) || null
+            max_stock_threshold: val === "" ? null : Number(val)
           });
         }, className: `${ws.input} px-4 py-3`, placeholder: "بدون حد" }),
         /* @__PURE__ */ jsx("p", { className: helpClass, children: "سيتم التنبيه عند تجاوز الكمية هذا العدد (لكشف المخزون الفائض)" })
@@ -20107,7 +20049,7 @@ function ItemFormModal({
             /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/40 text-xs mt-0.5", children: "الصنف يظهر للموظفين عند تسجيل الجرد ويُحسب في التقارير" })
           ] })
         ] }),
-        /* @__PURE__ */ jsx("button", { type: "button", role: "switch", "aria-checked": formData.show_in_inventory, onClick: () => setFormData({
+        /* @__PURE__ */ jsx("button", { type: "button", role: "switch", "aria-checked": formData.show_in_inventory, "aria-label": "تفعيل الصنف في الجرد", onClick: () => setFormData({
           ...formData,
           show_in_inventory: !formData.show_in_inventory
         }), className: "relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/30", style: {
@@ -20306,27 +20248,7 @@ function ItemBranchVisibilityModal({
     },
     onSettled: () => {
       setPendingBranchId(null);
-      queryClient.invalidateQueries({
-        queryKey: ["items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items-summary"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock-items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["over-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["stock-value"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["dashboard-analytics"]
-      });
+      invalidateInventoryQueries(queryClient);
     }
   });
   if (!item) return null;
@@ -20441,7 +20363,7 @@ function ItemsPage() {
   const {
     data: greenBeansData
   } = useQuery({
-    queryKey: ["green-beans"],
+    queryKey: queryKeys.greenBeans(),
     queryFn: async () => {
       const {
         adminFetch
@@ -20598,7 +20520,7 @@ function ItemsPage() {
       accessor: (item) => item.created_at,
       format: (value) => formatDateTime$2(value)
     }];
-    exportToExcelHTML(filteredItems, `قائمة_الأصناف_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, columns, "قائمة الأصناف - نظام إدارة المخزون");
+    exportToExcelHTML(filteredItems, `قائمة_الأصناف_${todayRiyadhDateKey()}`, columns, "قائمة الأصناف - نظام إدارة المخزون");
   };
   const handleExportPDF = () => {
     const columns = [{
@@ -20633,7 +20555,7 @@ function ItemsPage() {
         return "متوفر";
       }
     }];
-    exportToPDF(filteredItems, `قائمة_الأصناف_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, columns, "قائمة الأصناف - نظام إدارة المخزون");
+    exportToPDF(filteredItems, `قائمة_الأصناف_${todayRiyadhDateKey()}`, columns, "قائمة الأصناف - نظام إدارة المخزون");
   };
   if (!isAuthenticated) {
     return null;
@@ -20698,7 +20620,7 @@ function useItemsSummary(isAuthenticated) {
     isLoading,
     refetch
   } = useQuery({
-    queryKey: ["items-summary"],
+    queryKey: queryKeys.itemsSummary(),
     queryFn: async () => {
       const response = await adminFetch("/api/items/summary");
       if (!response.ok) throw new Error("Failed to fetch items summary");
@@ -20709,7 +20631,7 @@ function useItemsSummary(isAuthenticated) {
   const {
     data: branches = []
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");
@@ -20927,7 +20849,7 @@ function exportItemsSummaryToExcel(filteredItems) {
     header: "عدد العمليات",
     accessor: item => item.total_operations
   }];
-  exportToExcelHTML(exportData, `ملخص_الأصناف_الشامل_${new Date().toISOString().split("T")[0]}`, columns, "ملخص الأصناف الشامل - نظام إدارة المخزون");
+  exportToExcelHTML(exportData, `ملخص_الأصناف_الشامل_${todayRiyadhDateKey()}`, columns, "ملخص الأصناف الشامل - نظام إدارة المخزون");
 }
 function exportItemsSummaryToPDF(filteredItems) {
   // Simplified version for PDF
@@ -20972,7 +20894,7 @@ function exportItemsSummaryToPDF(filteredItems) {
     header: "آخر جرد",
     accessor: item => item.last_inventory
   }];
-  exportToPDF(exportData, `ملخص_الأصناف_${new Date().toISOString().split("T")[0]}`, columns, "ملخص الأصناف الشامل");
+  exportToPDF(exportData, `ملخص_الأصناف_${todayRiyadhDateKey()}`, columns, "ملخص الأصناف الشامل");
 }
 
 function ItemsSummaryHeader() {
@@ -21281,7 +21203,7 @@ function ItemTimelineModal({
   const tooltipText = isDark ? "#fff" : "rgb(15, 23, 42)";
   const enabled = Number.isFinite(itemId) && itemId > 0 && Number.isFinite(branchId) && branchId > 0;
   const timelineQuery = useQuery({
-    queryKey: ["item-timeline", itemId, branchId],
+    queryKey: queryKeys.itemTimeline(itemId, branchId),
     enabled,
     queryFn: async () => {
       const r = await adminFetch(`/api/items/${itemId}/timeline?branchId=${branchId}`);
@@ -21308,7 +21230,7 @@ function ItemTimelineModal({
     if (!events.length) return;
     const columns = [{
       header: "التاريخ",
-      accessor: (e) => formatDateTime$3(e.event_at)
+      accessor: (e) => formatDateTime$4(e.event_at)
     }, {
       header: "النوع",
       accessor: (e) => TYPE_LABEL[e.inventory_type] || e.inventory_type
@@ -21328,7 +21250,7 @@ function ItemTimelineModal({
       header: "ملاحظة",
       accessor: (e) => e.note || ""
     }];
-    const filename = `timeline-${item?.name || "item"}-${branch?.name || "branch"}-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10)}`;
+    const filename = `timeline-${item?.name || "item"}-${branch?.name || "branch"}-${todayRiyadhDateKey()}`;
     exportToExcelHTML(events, filename, columns, `تقرير زمني: ${item?.name} — ${branch?.name}`);
   };
   return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 overflow-y-auto", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("div", { className: `w-full max-w-5xl ${ws.glass} ${ws.card} my-4 max-h-[calc(100vh-2rem)] overflow-hidden flex flex-col`, onClick: (e) => e.stopPropagation(), children: [
@@ -21371,7 +21293,11 @@ function ItemTimelineModal({
           /* @__PURE__ */ jsx(CartesianGrid, { stroke: gridStroke }),
           /* @__PURE__ */ jsx(XAxis, { dataKey: "ts", type: "number", scale: "time", domain: ["dataMin", "dataMax"], tickFormatter: (t) => {
             const d = new Date(t);
-            return `${d.getDate()}/${d.getMonth() + 1}`;
+            return d.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              timeZone: "Asia/Riyadh"
+            });
           }, stroke: axisStroke, tick: {
             fontSize: 11,
             fill: axisStroke
@@ -21385,7 +21311,7 @@ function ItemTimelineModal({
             border: `1px solid ${tooltipBorder}`,
             borderRadius: 12,
             color: tooltipText
-          }, labelFormatter: (t) => formatDateTime$3(new Date(t).toISOString()), formatter: (value) => [`${value}`, "الرصيد"] }),
+          }, labelFormatter: (t) => formatDateTime$4(new Date(t).toISOString()), formatter: (value) => [`${value}`, "الرصيد"] }),
           /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "balance", stroke: "#34d399", strokeWidth: 2, dot: false, isAnimationActive: false }),
           chartData.map((p) => /* @__PURE__ */ jsx(ReferenceDot, { x: p.ts, y: p.balance, r: 4, fill: TYPE_COLOR[p.type] || "#34d399", stroke: "rgba(0,0,0,0.4)", strokeWidth: 1, isFront: true }, `${p.idx}`))
         ] }) }),
@@ -21422,7 +21348,7 @@ function ItemTimelineModal({
                 ] }) : null
               ] }),
               /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-0.5 flex items-center gap-2 flex-wrap", children: [
-                /* @__PURE__ */ jsx("span", { children: formatDateTime$3(ev.event_at) }),
+                /* @__PURE__ */ jsx("span", { children: formatDateTime$4(ev.event_at) }),
                 ev.employee_name ? /* @__PURE__ */ jsxs("span", { children: [
                   "• ",
                   ev.employee_name
@@ -21610,6 +21536,7 @@ function AdminLoginPage() {
     isDark,
     toggleTheme
   } = useAdminTheme();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21672,7 +21599,7 @@ function AdminLoginPage() {
     }
   };
   return /* @__PURE__ */ jsxs("div", { className: `min-h-[100svh] flex items-center justify-center px-4 ${ws.appBg}`, dir: "rtl", children: [
-    /* @__PURE__ */ jsx("button", { type: "button", onClick: toggleTheme, className: `${ws.iconButton} fixed top-4 left-4 z-50`, title: isDark ? "الوضع الفاتح" : "الوضع الداكن", "aria-label": isDark ? "Light mode" : "Dark mode", children: isDark ? /* @__PURE__ */ jsx(Sun, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Moon, { className: "w-4 h-4" }) }),
+    isDesktop ? /* @__PURE__ */ jsx("button", { type: "button", onClick: toggleTheme, className: `${ws.iconButton} fixed top-4 left-4 z-50`, title: isDark ? "الوضع الفاتح" : "الوضع الداكن", "aria-label": isDark ? "Light mode" : "Dark mode", children: isDark ? /* @__PURE__ */ jsx(Sun, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Moon, { className: "w-4 h-4" }) }) : null,
     /* @__PURE__ */ jsxs("div", { className: "w-full max-w-md", children: [
       /* @__PURE__ */ jsx("div", { className: "text-center mb-6", children: /* @__PURE__ */ jsx("img", { src: "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/", alt: "Quarters Coffee Bar", className: "h-24 sm:h-28 w-auto mx-auto" }) }),
       /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-8`, children: [
@@ -21743,7 +21670,7 @@ function useLowStockData({
     isLoading,
     refetch
   } = useQuery({
-    queryKey: ["low-stock-items"],
+    queryKey: queryKeys.lowStock(),
     queryFn: async () => {
       const response = await adminFetch("/api/items/low-stock");
       if (!response.ok) throw new Error("Failed to fetch low stock items");
@@ -21754,7 +21681,7 @@ function useLowStockData({
   const {
     data: branches = []
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");
@@ -22066,7 +21993,7 @@ function LowStockPage() {
         return "منخفض";
       }
     }];
-    exportToExcelHTML(filteredItems, `الأصناف_منخفضة_الكمية_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, columns, "تقرير الأصناف منخفضة الكمية");
+    exportToExcelHTML(filteredItems, `الأصناف_منخفضة_الكمية_${todayRiyadhDateKey()}`, columns, "تقرير الأصناف منخفضة الكمية");
   };
   const handleExportPDF = () => {
     const columns = [{
@@ -22094,7 +22021,7 @@ function LowStockPage() {
         return "منخفض";
       }
     }];
-    exportToPDF(filteredItems, `الأصناف_منخفضة_الكمية_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, columns, "تقرير الأصناف منخفضة الكمية");
+    exportToPDF(filteredItems, `الأصناف_منخفضة_الكمية_${todayRiyadhDateKey()}`, columns, "تقرير الأصناف منخفضة الكمية");
   };
   if (!isAuthenticated) {
     return null;
@@ -22132,7 +22059,7 @@ function useOperationsData(isAuthenticated) {
     data: operations,
     isLoading
   } = useQuery({
-    queryKey: ["inventory-operations"],
+    queryKey: queryKeys.inventoryOperations(),
     queryFn: async () => {
       const response = await adminFetch("/api/inventory-operations");
       if (!response.ok) throw new Error("Failed to fetch operations");
@@ -22143,7 +22070,7 @@ function useOperationsData(isAuthenticated) {
   const {
     data: branches
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const response = await adminFetch("/api/branches");
       if (!response.ok) throw new Error("Failed to fetch branches");
@@ -22163,28 +22090,7 @@ function useOperationsData(isAuthenticated) {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["inventory-operations"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items-summary"]
-      });
-      // `useLowStockData` keys its query as ["low-stock-items"]; the
-      // bare ["low-stock"] key invalidated nothing.
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock-items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["purchase-receipts"]
-      });
-      // Timeline report walks the same chain; stale cache would show
-      // pre-delete events / balances after a transfer is removed.
-      queryClient.invalidateQueries({
-        queryKey: ["item-timeline"]
-      });
+      invalidateInventoryQueries(queryClient);
     }
   });
   return {
@@ -22268,7 +22174,7 @@ function useOperationDetails() {
   const {
     data: operationDetails
   } = useQuery({
-    queryKey: ["operation-details", selectedOperation?.id],
+    queryKey: queryKeys.operationDetails(selectedOperation?.id),
     queryFn: async () => {
       const response = await adminFetch(`/api/inventory-operations?id=${selectedOperation.id}`);
       if (!response.ok) throw new Error("Failed to fetch operation details");
@@ -22283,15 +22189,6 @@ function useOperationDetails() {
   };
 }
 
-function nowLocalDatetime$2() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const min = String(d.getMinutes()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-}
 function useOpeningSession(activeItems, selectedBranchId, varianceBranchId) {
   const queryClient = useQueryClient();
   const [openingModalOpen, setOpeningModalOpen] = useState(false);
@@ -22338,21 +22235,7 @@ function useOpeningSession(activeItems, selectedBranchId, varianceBranchId) {
       console.log("Opening session saved successfully!");
       setOpeningError(null);
       setOpeningSuccess("تم حفظ المخزون الافتتاحي بنجاح ✅");
-      queryClient.invalidateQueries({
-        queryKey: ["variance"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["opening-sessions"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["operations"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["item-timeline"]
-      });
+      invalidateInventoryQueries(queryClient);
       // Close modal after a brief success message
       setTimeout(() => {
         setOpeningModalOpen(false);
@@ -22388,7 +22271,7 @@ function useOpeningSession(activeItems, selectedBranchId, varianceBranchId) {
     setOpeningSuccess(null);
     setOpeningModalOpen(true);
     // Default to current date/time — user can change if needed
-    setOpeningOpenedAt(nowLocalDatetime$2());
+    setOpeningOpenedAt(formatRiyadhDateTimeForInput());
     setOpeningNote("");
     setOpeningSearch("");
     const defaultBranch = "";
@@ -22455,15 +22338,6 @@ function useOpeningSession(activeItems, selectedBranchId, varianceBranchId) {
   };
 }
 
-function nowLocalDatetime$1() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const hh = String(d.getHours()).padStart(2, "0");
-  const min = String(d.getMinutes()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-}
 function usePurchaseReceipt(selectedBranchId, selectedItemId, varianceBranchId, varianceItemId) {
   const queryClient = useQueryClient();
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
@@ -22484,7 +22358,7 @@ function usePurchaseReceipt(selectedBranchId, selectedItemId, varianceBranchId, 
   const {
     data: allItemsRaw = []
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");
@@ -22496,7 +22370,7 @@ function usePurchaseReceipt(selectedBranchId, selectedItemId, varianceBranchId, 
   const {
     data: itemsSummaryRaw = []
   } = useQuery({
-    queryKey: ["items-summary"],
+    queryKey: queryKeys.itemsSummary(),
     queryFn: async () => {
       const res = await adminFetch("/api/items/summary");
       if (!res.ok) throw new Error("Failed to fetch items summary");
@@ -22593,38 +22467,7 @@ function usePurchaseReceipt(selectedBranchId, selectedItemId, varianceBranchId, 
       setReceiptNote("");
       setReceiptItemId("");
       setEditingOperation(null);
-      queryClient.invalidateQueries({
-        queryKey: ["variance"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["inventory-operations"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items-summary"]
-      });
-      // `useLowStockData` keys its query as ["low-stock-items"]; the
-      // bare ["low-stock"] key invalidated nothing.
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock-items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["over-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["stock-value"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["dashboard-analytics"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["item-timeline"]
-      });
+      invalidateInventoryQueries(queryClient);
     },
     onError: err => {
       console.error(err);
@@ -22668,41 +22511,7 @@ function usePurchaseReceipt(selectedBranchId, selectedItemId, varianceBranchId, 
       setReceiptNote("");
       setReceiptItemId("");
       setEditingOperation(null);
-      queryClient.invalidateQueries({
-        queryKey: ["variance"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["inventory-operations"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items-summary"]
-      });
-      // `useLowStockData` keys its query as ["low-stock-items"]; the
-      // bare ["low-stock"] key invalidated nothing.
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock-items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["over-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["stock-value"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["dashboard-analytics"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["operation-details"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["item-timeline"]
-      });
+      invalidateInventoryQueries(queryClient);
     },
     onError: err => {
       console.error(err);
@@ -22716,7 +22525,7 @@ function usePurchaseReceipt(selectedBranchId, selectedItemId, varianceBranchId, 
     const defaultBranch = "";
     setReceiptBranchId(defaultBranch);
     // Default to current date/time — user can change if needed
-    setReceiptDate(nowLocalDatetime$1());
+    setReceiptDate(formatRiyadhDateTimeForInput());
     setReceiptItemId("");
     setReceiptQty("");
     setReceiptNote("");
@@ -22734,12 +22543,7 @@ function usePurchaseReceipt(selectedBranchId, selectedItemId, varianceBranchId, 
     if (dateStr) {
       const d = new Date(dateStr);
       if (!Number.isNaN(d.getTime())) {
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, "0");
-        const dd = String(d.getDate()).padStart(2, "0");
-        const hh = String(d.getHours()).padStart(2, "0");
-        const min = String(d.getMinutes()).padStart(2, "0");
-        setReceiptDate(`${yyyy}-${mm}-${dd}T${hh}:${min}`);
+        setReceiptDate(formatRiyadhDateTimeForInput(d));
       } else {
         setReceiptDate("");
       }
@@ -22843,13 +22647,13 @@ function usePurchaseReceipt(selectedBranchId, selectedItemId, varianceBranchId, 
 
 function calculateOperationStats(filteredOperations) {
   const ops = filteredOperations || [];
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = todayRiyadhDateKey();
   return {
     total: ops.length,
     receipts: ops.filter(op => op.inventory_type === "Receipt").length,
     daily: ops.filter(op => op.inventory_type === "Daily").length,
     transfers: ops.filter(op => op.inventory_type === "Transfer").length,
-    today: ops.filter(op => (op.operation_date || op.created_at || "").slice(0, 10) === todayStr).length
+    today: ops.filter(op => formatRiyadhDateForInput(op.operation_date || op.created_at) === todayStr).length
   };
 }
 function getOperationItemStats(details) {
@@ -23139,7 +22943,7 @@ function OperationsTable({
       accessor: (item) => item.created_at,
       format: (value) => formatDateTime$2(value)
     }];
-    exportToExcelHTML(filteredOperations, `عمليات_المخزون_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, columns, "تقرير عمليات المخزون");
+    exportToExcelHTML(filteredOperations, `عمليات_المخزون_${todayRiyadhDateKey()}`, columns, "تقرير عمليات المخزون");
     setShowExportMenu(false);
   };
   const handleExportPDF = () => {
@@ -23165,7 +22969,7 @@ function OperationsTable({
       accessor: (item) => item.created_at,
       format: (value) => formatDateTime$2(value)
     }];
-    exportToPDF(filteredOperations, `عمليات_المخزون_${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}`, columns, "تقرير عمليات المخزون");
+    exportToPDF(filteredOperations, `عمليات_المخزون_${todayRiyadhDateKey()}`, columns, "تقرير عمليات المخزون");
     setShowExportMenu(false);
   };
   const cardClass = `${ws.glass} ${ws.card} overflow-hidden`;
@@ -23307,7 +23111,7 @@ function OperationsTable({
               /* @__PURE__ */ jsx("span", { children: "عرض" })
             ] }),
             onEditOperation ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEditOperation(operation), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل العملية", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4 text-sky-700 dark:text-sky-700 dark:text-sky-200" }) }) : null,
-            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDeleteOperation(operation), className: `${ws.btnDanger} px-3 py-1.5 text-sm justify-center`, children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDeleteOperation(operation), className: `${ws.btnDanger} px-3 py-1.5 text-sm justify-center`, "aria-label": "حذف العملية", title: "حذف العملية", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
           ] }) })
         ] }, operation.id);
       }) : /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsxs("td", { colSpan: selectionEnabled ? "8" : "7", className: "px-6 py-12 text-center text-slate-500 dark:text-slate-500 dark:text-white/45", children: [
@@ -23575,7 +23379,8 @@ function buildPrintHTML(selectedOperation, operationDetails, opStats) {
     month: "long",
     day: "numeric",
     hour: "2-digit",
-    minute: "2-digit"
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh"
   });
   const operationDateValue = selectedOperation.operation_date || selectedOperation.created_at;
   const operationDate = formatDateTime$2(operationDateValue);
@@ -24036,39 +23841,7 @@ function useCreateTransfer({
       // over-stock / dashboard-analytics were stale until manual
       // refresh, which made the post-transfer numbers look wrong on
       // those screens.
-      queryClient.invalidateQueries({
-        queryKey: ["inventory-operations"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items-summary"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock-items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["over-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["stock-value"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["variance"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["dashboard-analytics"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["operation-details"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["item-timeline"]
-      });
+      invalidateInventoryQueries(queryClient);
       onSuccess?.(data);
     },
     onError: err => {
@@ -24084,31 +23857,6 @@ function toNumberOrNull(value) {
     return null;
   }
   return n;
-}
-function nowLocalDatetime() {
-  try {
-    const fmt = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Riyadh",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false
-    });
-    const parts = fmt.formatToParts(/* @__PURE__ */ new Date());
-    const get = (t) => parts.find((p) => p.type === t)?.value || "00";
-    const hh = get("hour") === "24" ? "00" : get("hour");
-    return `${get("year")}-${get("month")}-${get("day")}T${hh}:${get("minute")}`;
-  } catch {
-    const d = /* @__PURE__ */ new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-  }
 }
 function getItemUnits$3(item) {
   return Array.isArray(item?.units) ? item.units : [];
@@ -24129,7 +23877,7 @@ function TransferModal({
 }) {
   const [fromBranchId, setFromBranchId] = useState("");
   const [toBranchId, setToBranchId] = useState("");
-  const [operationDate, setOperationDate] = useState(nowLocalDatetime());
+  const [operationDate, setOperationDate] = useState(formatRiyadhDateTimeForInput());
   const [selectedItemId, setSelectedItemId] = useState("");
   const [quantity, setQuantity] = useState("");
   const [note, setNote] = useState("");
@@ -24141,14 +23889,14 @@ function TransferModal({
   const queryClient = useQueryClient();
   useEffect(() => {
     queryClient.invalidateQueries({
-      queryKey: ["items"]
+      queryKey: queryKeys.items()
     });
   }, []);
   const {
     data: allItems = [],
     isLoading: itemsLoading
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await adminFetch("/api/items");
       if (!response.ok) {
@@ -24206,7 +23954,7 @@ function TransferModal({
     return found ? Number(found.quantity) || 0 : 0;
   };
   const stockAtQuery = useQuery({
-    queryKey: ["branch-stock-at", fromIdNum, toIdNum, selectedItem?.id, operationDate],
+    queryKey: queryKeys.branchStockAt(fromIdNum, toIdNum, selectedItem?.id, operationDate),
     enabled: !!(selectedItem?.id && (fromIdNum || toIdNum)),
     queryFn: async () => {
       const out = {
@@ -24873,9 +24621,7 @@ function PurchaseReceiptModal({
   const isPending = activeMutation?.isPending;
   const isFutureDate = (() => {
     if (!receiptDate) return false;
-    const today = /* @__PURE__ */ new Date();
-    today.setHours(23, 59, 59, 999);
-    return new Date(receiptDate) > today;
+    return String(receiptDate).slice(0, 10) > todayRiyadhDateKey();
   })();
   const canSubmit = itemsList.length > 0 && receiptBranchId && receiptDate && !isFutureDate;
   const handleSubmit = isEditMode ? submitEditReceipt : submitReceipt;
@@ -25008,28 +24754,6 @@ const TYPE_ICONS = {
   Transfer: ArrowLeftRight,
   Opening: FolderOpen
 };
-function formatDateForInput(dateStr) {
-  if (!dateStr) return "";
-  try {
-    const d = new Date(dateStr);
-    if (Number.isNaN(d.getTime())) return "";
-    const fmt = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Riyadh",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false
-    });
-    const parts = fmt.formatToParts(d);
-    const get = (t) => parts.find((p) => p.type === t)?.value || "00";
-    const hh = get("hour") === "24" ? "00" : get("hour");
-    return `${get("year")}-${get("month")}-${get("day")}T${hh}:${get("minute")}`;
-  } catch {
-    return "";
-  }
-}
 function EditOperationModal({
   operation,
   operationDetails,
@@ -25040,7 +24764,7 @@ function EditOperationModal({
   const TitleIcon = TYPE_ICONS[invType] || ClipboardList;
   const initialDate = operationDetails?.operation_date || operation?.operation_date || operation?.created_at;
   const [note, setNote] = useState(operationDetails?.note ?? operation?.note ?? "");
-  const [opDate, setOpDate] = useState(formatDateForInput(initialDate));
+  const [opDate, setOpDate] = useState(formatRiyadhDateTimeForInput(initialDate));
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
   const isTransfer = operation?.inventory_type === "Transfer";
@@ -25061,7 +24785,7 @@ function EditOperationModal({
   const {
     data: allItemsRaw = []
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");
@@ -25118,33 +24842,7 @@ function EditOperationModal({
     },
     onSuccess: () => {
       setError(null);
-      queryClient.invalidateQueries({
-        queryKey: ["inventory-operations"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["items-summary"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["variance"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["low-stock-items"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["operation-details"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["opening-sessions"]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["item-timeline"]
-      });
+      invalidateInventoryQueries(queryClient);
       onClose();
     },
     onError: (err) => {
@@ -25325,7 +25023,7 @@ function OperationsPage() {
   const {
     data: items
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await adminFetch("/api/items");
       if (!response.ok) throw new Error("Failed to fetch items");
@@ -25612,19 +25310,7 @@ function ReceiptsFilters({
 
 const sectionCard$2 = `${ws.glass} ${ws.card} overflow-hidden`;
 function formatDate$1(value) {
-  if (!value) return "—";
-  try {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const mn = String(d.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd} ${hh}:${mn}`;
-  } catch {
-    return String(value).slice(0, 16);
-  }
+  return formatDateTime$4(value);
 }
 function formatNumber$2(n) {
   const num = Number(n);
@@ -25743,7 +25429,7 @@ function useReceiptsData({
   dateTo
 }) {
   const query = useQuery({
-    queryKey: ["purchase-receipts", branchId, itemId, dateFrom, dateTo],
+    queryKey: queryKeys.purchaseReceipts(branchId, itemId, dateFrom, dateTo),
     enabled: isAuthenticated,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -25827,12 +25513,10 @@ function useReceiptsData({
 }
 
 function defaultFromDate$1() {
-  const d = /* @__PURE__ */ new Date();
-  d.setMonth(d.getMonth() - 1);
-  return formatDateForInput$1(d);
+  return riyadhDateKeyFromMonthOffset(-1);
 }
 function defaultToDate$1() {
-  return formatDateForInput$1(/* @__PURE__ */ new Date());
+  return todayRiyadhDateKey();
 }
 function ReceiptsPage() {
   const {
@@ -25848,7 +25532,7 @@ function ReceiptsPage() {
   const {
     data: branches = []
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
       if (!res.ok) throw new Error("Failed to fetch branches");
@@ -25859,7 +25543,7 @@ function ReceiptsPage() {
   const {
     data: items = []
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");
@@ -25946,12 +25630,15 @@ function useStockValueData({
   const {
     data: rows = [],
     isLoading,
+    isFetching,
+    isError,
+    error,
     refetch
   } = useQuery({
     // Include branch in the cache key so each branch slice is cached
     // independently. Switching between branches feels instant once
     // each has been viewed once.
-    queryKey: ["stock-value", branchFilter || "all"],
+    queryKey: queryKeys.stockValue(branchFilter || "all"),
     queryFn: async () => {
       const qs = branchFilter ? `?branchId=${encodeURIComponent(branchFilter)}` : "";
       const res = await adminFetch(`/api/items/stock-value${qs}`);
@@ -25963,7 +25650,7 @@ function useStockValueData({
   const {
     data: branches = []
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
       if (!res.ok) throw new Error("Failed to fetch branches");
@@ -26048,6 +25735,9 @@ function useStockValueData({
     branches,
     stats,
     isLoading,
+    isFetching,
+    isError,
+    error,
     refetch
   };
 }
@@ -26245,6 +25935,9 @@ function StockValueTable({
   items,
   totalValue,
   isLoading,
+  isFetching,
+  error,
+  onRetry,
   onExportExcel,
   onExportPDF
 }) {
@@ -26256,7 +25949,15 @@ function StockValueTable({
       ] }),
       /* @__PURE__ */ jsx(StockValueExportMenu, { onExportExcel, onExportPDF })
     ] }),
-    isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-slate-600 dark:text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
+    error ? /* @__PURE__ */ jsxs("div", { className: "p-10 text-center", role: "alert", children: [
+      /* @__PURE__ */ jsx(AlertCircle, { className: "mx-auto mb-3 h-10 w-10 text-red-600 dark:text-red-300" }),
+      /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "تعذر تحميل قيمة المخزون" }),
+      /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm text-slate-600 dark:text-white/60", children: "تحقق من الاتصال ثم أعد المحاولة." }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: onRetry, className: `${ws.btnSecondary} mt-4`, children: [
+        /* @__PURE__ */ jsx(RefreshCw, { className: `h-4 w-4 ${isFetching ? "animate-spin" : ""}` }),
+        "إعادة المحاولة"
+      ] })
+    ] }) : isLoading ? /* @__PURE__ */ jsx("div", { className: "p-12 text-center text-slate-600 dark:text-slate-600 dark:text-white/55", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-3", children: [
       /* @__PURE__ */ jsx("div", { className: "w-6 h-6 border-2 border-emerald-400/60 border-t-transparent rounded-full animate-spin" }),
       /* @__PURE__ */ jsx("span", { children: "جاري التحميل…" })
     ] }) }) : !Array.isArray(items) || items.length === 0 ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-slate-500 dark:text-slate-500 dark:text-white/50", children: [
@@ -26341,6 +26042,9 @@ function StockValuePage() {
     stats,
     branches,
     isLoading,
+    isFetching,
+    isError,
+    error,
     refetch
   } = useStockValueData({
     isAuthenticated,
@@ -26387,13 +26091,13 @@ function StockValuePage() {
     accessor: (r) => r.total_value == null ? "—" : Number(r.total_value) || 0
   }];
   const handleExportExcel = () => {
-    const dateSlug = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+    const dateSlug = todayRiyadhDateKey();
     const scope = branchLabel ? `_${branchLabel}` : "";
     const titleSuffix = branchLabel ? ` — فرع "${branchLabel}"` : "";
     exportToExcelHTML(filteredItems, `قيمة_المخزون${scope}_${dateSlug}`, exportColumns, `تقرير قيمة المخزون${titleSuffix} — إجمالي ${stats.totalValue.toFixed(2)} ر.س`);
   };
   const handleExportPDF = () => {
-    const dateSlug = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+    const dateSlug = todayRiyadhDateKey();
     const scope = branchLabel ? `_${branchLabel}` : "";
     const titleSuffix = branchLabel ? ` — فرع "${branchLabel}"` : "";
     exportToPDF(filteredItems, `قيمة_المخزون${scope}_${dateSlug}`, exportColumns, `تقرير قيمة المخزون${titleSuffix} — إجمالي ${stats.totalValue.toFixed(2)} ر.س`);
@@ -26406,7 +26110,7 @@ function StockValuePage() {
       /* @__PURE__ */ jsx(StockValueHeader, { branchLabel }),
       /* @__PURE__ */ jsx(StockValueStats, { stats }),
       /* @__PURE__ */ jsx(StockValueFilters, { searchQuery, onSearchChange: setSearchQuery, sortBy, onSortChange: setSortBy, hideMissingCost, onHideMissingCostChange: setHideMissingCost, onRefresh: refetch, branchOptions, selectedBranch, onBranchChange: setSelectedBranch }),
-      /* @__PURE__ */ jsx(StockValueTable, { items: filteredItems, totalValue: stats.totalValue, isLoading, onExportExcel: handleExportExcel, onExportPDF: handleExportPDF })
+      /* @__PURE__ */ jsx(StockValueTable, { items: filteredItems, totalValue: stats.totalValue, isLoading, isFetching, error: isError ? error : null, onRetry: refetch, onExportExcel: handleExportExcel, onExportPDF: handleExportPDF })
     ] })
   ] });
 }
@@ -26596,13 +26300,9 @@ function formatNumber(n) {
 }
 function formatDate(value) {
   if (!value) return "—";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(value))) return String(value);
   try {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
+    return formatRiyadhDateForInput(value) || String(value).slice(0, 10);
   } catch {
     return String(value).slice(0, 10);
   }
@@ -26631,6 +26331,7 @@ function VarianceTable({
   onExportPDF
 }) {
   const f = filterStatus || {};
+  const rangeInvalid = !!f.rangeInvalid;
   return /* @__PURE__ */ jsxs("div", { className: sectionCard, children: [
     /* @__PURE__ */ jsxs("div", { className: `p-5 sm:p-6 border-b ${ws.divider} flex items-center justify-between gap-3`, children: [
       /* @__PURE__ */ jsxs("h2", { className: "text-xl font-bold text-slate-900 dark:text-slate-900 dark:text-white flex items-center gap-3 tracking-tight", children: [
@@ -26641,7 +26342,7 @@ function VarianceTable({
     ] }),
     !hasFilters ? /* @__PURE__ */ jsxs("div", { className: "p-12 text-center text-slate-500 dark:text-slate-500 dark:text-white/50", children: [
       /* @__PURE__ */ jsx(Calendar, { className: "w-16 h-16 mx-auto mb-4 opacity-50" }),
-      /* @__PURE__ */ jsx("p", { className: "text-lg mb-2", children: "اختر الفرع والصنف والفترة لعرض الانحرافات" }),
+      /* @__PURE__ */ jsx("p", { className: `text-lg mb-2 ${rangeInvalid ? "text-red-700 dark:text-red-200" : ""}`, children: rangeInvalid ? "الفترة غير صحيحة: تاريخ البداية أحدث من تاريخ النهاية" : "اختر الفرع والصنف والفترة لعرض الانحرافات" }),
       /* @__PURE__ */ jsxs("div", { className: "mt-4 inline-flex flex-col gap-1.5 items-start text-sm", children: [
         /* @__PURE__ */ jsxs("span", { className: f.branch ? "text-emerald-700 dark:text-emerald-700 dark:text-emerald-300" : "text-slate-600 dark:text-slate-600 dark:text-white/55", children: [
           f.branch ? "✓" : "○",
@@ -26700,12 +26401,10 @@ function VarianceTable({
 }
 
 function defaultFromDate() {
-  const d = /* @__PURE__ */ new Date();
-  d.setMonth(d.getMonth() - 1);
-  return formatDateForInput$1(d);
+  return riyadhDateKeyFromMonthOffset(-1);
 }
 function defaultToDate() {
-  return formatDateForInput$1(/* @__PURE__ */ new Date());
+  return todayRiyadhDateKey();
 }
 function VariancePage() {
   const {
@@ -26722,7 +26421,7 @@ function VariancePage() {
   const {
     data: branches = []
   } = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => {
       const res = await adminFetch("/api/branches");
       if (!res.ok) throw new Error("Failed to fetch branches");
@@ -26733,7 +26432,7 @@ function VariancePage() {
   const {
     data: items = []
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const res = await adminFetch("/api/items");
       if (!res.ok) throw new Error("Failed to fetch items");
@@ -26771,7 +26470,7 @@ function VariancePage() {
   const dateRangeInvalid = !!(dateFrom && dateTo && dateFrom > dateTo);
   const hasFilters = !!(selectedBranch && selectedItem && dateFrom && dateTo) && !dateRangeInvalid;
   const varianceQuery = useQuery({
-    queryKey: ["variance", selectedBranch, selectedItem, dateFrom, dateTo],
+    queryKey: queryKeys.variance(selectedBranch, selectedItem, dateFrom, dateTo),
     enabled: isAuthenticated && hasFilters,
     queryFn: async () => {
       const qs = new URLSearchParams({
@@ -26858,7 +26557,8 @@ function VariancePage() {
         branch: !!selectedBranch,
         item: !!selectedItem,
         from: !!dateFrom,
-        to: !!dateTo
+        to: !!dateTo,
+        rangeInvalid: dateRangeInvalid
       }, onExportExcel: handleExportExcel, onExportPDF: handleExportPDF })
     ] })
   ] });
@@ -26880,7 +26580,7 @@ const route22 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function inventoryDraftKey(employeeId) {
-  return `inventory_${employeeId}_${formatDateForInput$1(/* @__PURE__ */ new Date())}`;
+  return `inventory_${employeeId}_${todayRiyadhDateKey()}`;
 }
 const EMPLOYEE_LOGIN_PATH = "/employee/login";
 function getItemUnits(item) {
@@ -26994,7 +26694,7 @@ function EmployeeInventoryPage() {
   const {
     data: categories = []
   } = useQuery({
-    queryKey: ["item-categories"],
+    queryKey: queryKeys.itemCategories(),
     queryFn: async () => {
       const response = await employeeInventoryFetch("/api/item-categories");
       if (!response.ok) {
@@ -27007,7 +26707,7 @@ function EmployeeInventoryPage() {
   const {
     data: items
   } = useQuery({
-    queryKey: ["items"],
+    queryKey: queryKeys.items(),
     queryFn: async () => {
       const response = await employeeInventoryFetch("/api/items");
       if (!response.ok) {
@@ -27746,7 +27446,7 @@ const route24 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function wasteDraftKey(employeeId) {
-  return `waste_${employeeId}_${formatDateForInput$1(/* @__PURE__ */ new Date())}`;
+  return `waste_${employeeId}_${todayRiyadhDateKey()}`;
 }
 const WASTE_LOGIN_PATH = "/employee/waste/login";
 function WastePage() {
@@ -27836,7 +27536,7 @@ function WastePage() {
   const {
     data: items
   } = useQuery({
-    queryKey: ["waste-items"],
+    queryKey: queryKeys.wasteItems(),
     queryFn: async () => {
       const response = await employeeWasteFetch("/api/waste/items");
       if (!response.ok) {
@@ -28916,7 +28616,7 @@ const route28 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 
 function useHRDeductionsEmployeesData(isAuthenticated) {
   const employeesQuery = useQuery({
-    queryKey: ["hr-deductions-employees"],
+    queryKey: queryKeys.hrDeductionEmployees(),
     queryFn: async () => {
       const response = await adminFetch("/api/hr/deductions/employees");
       if (!response.ok) {
@@ -28937,7 +28637,7 @@ function useHRDeductionsData(isAuthenticated, employeeId, month) {
   const employeeKey = employeeId ? Number(employeeId) : null;
   const monthKey = month ? String(month) : "";
   const deductionsQuery = useQuery({
-    queryKey: ["hr-deductions", employeeKey || "all", monthKey || "all"],
+    queryKey: queryKeys.hrDeductions(employeeKey || "all", monthKey || "all"),
     queryFn: async () => {
       const params = new URLSearchParams();
       if (employeeKey) {
@@ -28975,6 +28675,9 @@ function getCreatedCount(result) {
 }
 function useHRDeductionMutations() {
   const queryClient = useQueryClient();
+  const invalidateAffectedQueries = () => Promise.all([queryClient.invalidateQueries({
+    queryKey: queryKeys.hrDeductions()
+  }), invalidatePayrollQueries(queryClient)]);
   const createMutation = useMutation({
     mutationFn: async data => {
       const response = await adminFetch("/api/hr/deductions", {
@@ -28990,10 +28693,8 @@ function useHRDeductionMutations() {
       }
       return result;
     },
-    onSuccess: result => {
-      queryClient.invalidateQueries({
-        queryKey: ["hr-deductions"]
-      });
+    onSuccess: async result => {
+      await invalidateAffectedQueries();
       const count = getCreatedCount(result);
       if (count > 1) {
         toast.success(`تم إضافة الخصمية لـ ${count} موظفين`);
@@ -29024,10 +28725,8 @@ function useHRDeductionMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["hr-deductions"]
-      });
+    onSuccess: async () => {
+      await invalidateAffectedQueries();
       toast.success("تم تحديث الخصمية");
     },
     onError: error => {
@@ -29046,10 +28745,8 @@ function useHRDeductionMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["hr-deductions"]
-      });
+    onSuccess: async () => {
+      await invalidateAffectedQueries();
       toast.success("تم حذف الخصمية");
     },
     onError: error => {
@@ -29790,16 +29487,12 @@ function monthLabel(month) {
   return `${name} ${year}`;
 }
 function buildRecentMonthOptions(count = 24) {
-  const now = /* @__PURE__ */ new Date();
   const options = [{
     value: "",
     label: "— بدون فلترة —"
   }];
   for (let i = 0; i < count; i += 1) {
-    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
-    const y = d.getUTCFullYear();
-    const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-    const value = `${y}-${m}`;
+    const value = riyadhMonthKeyFromOffset(-i);
     options.push({
       value,
       label: monthLabel(value)
@@ -30151,12 +29844,12 @@ async function checkedAdminFetch(url) {
 }
 function useHREmployeesData(isAuthenticated) {
   const employeesQuery = useQuery({
-    queryKey: ["hr-employees"],
+    queryKey: queryKeys.hrEmployees(),
     queryFn: async () => checkedAdminFetch("/api/hr/employees"),
     enabled: isAuthenticated
   });
   const branchesQuery = useQuery({
-    queryKey: ["branches"],
+    queryKey: queryKeys.branches(),
     queryFn: async () => checkedAdminFetch("/api/branches"),
     enabled: isAuthenticated
   });
@@ -30188,10 +29881,8 @@ function useHREmployeeMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["hr-employees"]
-      });
+    onSuccess: async () => {
+      await invalidateEmployeeDirectoryQueries(queryClient);
       toast.success("تم إضافة الموظف بنجاح");
     },
     onError: error => {
@@ -30217,10 +29908,8 @@ function useHREmployeeMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["hr-employees"]
-      });
+    onSuccess: async () => {
+      await invalidateEmployeeDirectoryQueries(queryClient);
       toast.success("تم تحديث الموظف بنجاح");
     },
     onError: error => {
@@ -30239,10 +29928,8 @@ function useHREmployeeMutations() {
       }
       return result;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["hr-employees"]
-      });
+    onSuccess: async () => {
+      await invalidateEmployeeDirectoryQueries(queryClient);
       toast.success("تم حذف الموظف بنجاح");
     },
     onError: error => {
@@ -30635,11 +30322,10 @@ function HREmployeeExportMenu({
   ] });
 }
 
-// Hijri (Umm al-Qura) ⇄ Gregorian conversion built on the platform
-// Intl calendar (islamic-umalqura). Both Node 18+ and modern browsers
-// ship this calendar, so no external dependency is needed.
+// Hijri/Gregorian conversion for HR employee expiry fields only.
+// Built on platform Intl calendars, so no external dependency is needed.
 //
-// Storage contract used across the app:
+// Storage contract for HR employee fields:
 //   - the canonical value is always the GREGORIAN ISO date "YYYY-MM-DD"
 //     (so expiry alerts / sorting / DATE columns keep working);
 //   - alongside it we persist which calendar the operator entered
@@ -31177,7 +30863,7 @@ function useHREmployeeLogs({
   const employeeIdNumber = Number(employeeId);
   const safeEmployeeId = Number.isFinite(employeeIdNumber) ? employeeIdNumber : null;
   const logsQuery = useQuery({
-    queryKey: ["hr-employee-logs", safeEmployeeId],
+    queryKey: queryKeys.hrEmployeeLogs(safeEmployeeId),
     queryFn: async () => {
       const response = await adminFetch(`/api/hr/employees/${safeEmployeeId}/logs`);
       if (!response.ok) {
@@ -31216,10 +30902,10 @@ function formatDateTime$1(value) {
     let hh = get("hour");
     if (hh === "24") hh = "00";
     const mi = get("minute");
-    if (!y || !mo || !da) return d.toISOString().slice(0, 16).replace("T", " ");
+    if (!y || !mo || !da) return `${formatRiyadhDateForInput(d)} ${hh}:${mi}`;
     return `${y}/${mo}/${da} ${hh}:${mi}`;
   } catch {
-    return d.toISOString().slice(0, 16).replace("T", " ");
+    return formatRiyadhDateForInput(d);
   }
 }
 function formatDateOnly$2(value) {
@@ -31237,7 +30923,7 @@ function formatDateOnly$2(value) {
       timeZone: "Asia/Riyadh"
     });
   } catch {
-    return d.toISOString().slice(0, 10);
+    return formatRiyadhDateForInput(d);
   }
 }
 function actionToLabel(action) {
@@ -31649,13 +31335,9 @@ function HREmployeeModal({
                 start_date: ""
               });
             } else {
-              const now = /* @__PURE__ */ new Date();
-              const y = now.getFullYear();
-              const m = String(now.getMonth() + 1).padStart(2, "0");
-              const d = String(now.getDate()).padStart(2, "0");
               setFormData({
                 ...formData,
-                start_date: `${y}-${m}-${d}`
+                start_date: todayLocalISO()
               });
             }
           }, className: formData.start_date ? `${ws.btnPrimary} px-4 py-2` : `${ws.btnNeutral} px-4 py-2`, children: [
@@ -31729,7 +31411,7 @@ function HREmployeeLogsModal({
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
         /* @__PURE__ */ jsx("button", { type: "button", onClick: () => queryClient.invalidateQueries({
-          queryKey: ["hr-employee-logs", Number(employeeId)]
+          queryKey: queryKeys.hrEmployeeLogs(Number(employeeId))
         }), className: `${ws.iconButton} text-slate-700 dark:text-white/70`, "aria-label": "تحديث", children: /* @__PURE__ */ jsx(RefreshCw, { className: "w-4 h-4" }) }),
         /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.iconButton} text-slate-700 dark:text-white/70`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
       ] })
@@ -31778,7 +31460,7 @@ function useEmployeeSuspensions(employeeId, {
   enabled = true
 } = {}) {
   return useQuery({
-    queryKey: ["hr_employee_suspensions", Number(employeeId) || null],
+    queryKey: queryKeys.hrEmployeeSuspensions(Number(employeeId) || null),
     enabled: !!employeeId && enabled,
     queryFn: async () => {
       const res = await adminFetch(`/api/hr/employees/${employeeId}/suspensions`);
@@ -31809,11 +31491,7 @@ function useCreateSuspension(employeeId) {
     },
     onSuccess: async () => {
       const rebuilt = await rebuildUnclosedPayrollRuns$1();
-      await Promise.all([queryClient.invalidateQueries({
-        queryKey: ["hr_employee_suspensions", Number(employeeId)]
-      }), queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll"]
-      })]);
+      await invalidatePayrollQueries(queryClient);
       toast.success(rebuilt.length > 0 ? `تم الإيقاف وتحديث مسير الرواتب (${rebuilt.length} شهر)` : "تم الإيقاف");
     },
     onError: error => {
@@ -31841,11 +31519,7 @@ function useCancelSuspension(employeeId) {
     },
     onSuccess: async () => {
       const rebuilt = await rebuildUnclosedPayrollRuns$1();
-      await Promise.all([queryClient.invalidateQueries({
-        queryKey: ["hr_employee_suspensions", Number(employeeId)]
-      }), queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll"]
-      })]);
+      await invalidatePayrollQueries(queryClient);
       toast.success(rebuilt.length > 0 ? `تم إلغاء الإيقاف وتحديث مسير الرواتب (${rebuilt.length} شهر)` : "تم إلغاء الإيقاف");
     },
     onError: error => {
@@ -31880,12 +31554,8 @@ function SuspensionModal({
   const [reason, setReason] = useState("");
   const monthOptions = useMemo(() => {
     const opts = buildRecentMonthOptions$1(36).filter((o) => o.value !== "");
-    const now = /* @__PURE__ */ new Date();
     for (let i = 1; i <= 6; i += 1) {
-      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1));
-      const y = d.getUTCFullYear();
-      const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-      const value = `${y}-${m}`;
+      const value = riyadhMonthKeyFromOffset(i);
       if (!opts.find((o) => o.value === value)) {
         opts.unshift({
           value,
@@ -32381,7 +32051,7 @@ function useOvertime({
   employeeId: filterId
 } = {}) {
   return useQuery({
-    queryKey: ["hr_overtime", month || null, filterId || null],
+    queryKey: queryKeys.hrOvertime(month || null, filterId || null),
     queryFn: async () => {
       const qs = new URLSearchParams();
       if (month) qs.set("month", String(month));
@@ -32415,11 +32085,7 @@ function useCreateOvertime() {
     },
     onSuccess: async () => {
       const rebuilt = await rebuildUnclosedPayrollRuns();
-      await Promise.all([queryClient.invalidateQueries({
-        queryKey: ["hr_overtime"]
-      }), queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll"]
-      })]);
+      await invalidatePayrollQueries(queryClient);
       toast.success(rebuilt.length > 0 ? `تم تسجيل الأوفر تايم وتحديث مسير الرواتب (${rebuilt.length} شهر)` : "تم تسجيل الأوفر تايم");
     },
     onError: error => {
@@ -32443,11 +32109,7 @@ function useDeleteOvertime() {
     },
     onSuccess: async () => {
       const rebuilt = await rebuildUnclosedPayrollRuns();
-      await Promise.all([queryClient.invalidateQueries({
-        queryKey: ["hr_overtime"]
-      }), queryClient.invalidateQueries({
-        queryKey: ["accounting_payroll"]
-      })]);
+      await invalidatePayrollQueries(queryClient);
       toast.success(rebuilt.length > 0 ? `تم الحذف وتحديث مسير الرواتب (${rebuilt.length} شهر)` : "تم الحذف");
     },
     onError: error => {
@@ -32494,12 +32156,7 @@ function HROvertimePage() {
     user
   } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
-  const [filterMonth, setFilterMonth] = useState(() => {
-    const now = /* @__PURE__ */ new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
-  });
+  const [filterMonth, setFilterMonth] = useState(currentRiyadhMonthKey);
   const [filterEmployee, setFilterEmployee] = useState("");
   const [formEmployees, setFormEmployees] = useState([]);
   const [formMonth, setFormMonth] = useState(filterMonth);
@@ -32508,12 +32165,8 @@ function HROvertimePage() {
   const monthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
   const monthOptionsForm = useMemo(() => {
     const base = buildRecentMonthOptions$1(30).filter((o) => o.value !== "");
-    const now = /* @__PURE__ */ new Date();
     for (let i = 1; i <= 3; i += 1) {
-      const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1));
-      const y = d.getUTCFullYear();
-      const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-      const value = `${y}-${m}`;
+      const value = riyadhMonthKeyFromOffset(i);
       if (!base.find((o) => o.value === value)) {
         base.unshift({
           value,
@@ -32797,12 +32450,7 @@ function HRPayrollPage() {
     user
   } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
-  const [month, setMonth] = useState(() => {
-    const now = /* @__PURE__ */ new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    return `${y}-${m}`;
-  });
+  const [month, setMonth] = useState(currentRiyadhMonthKey);
   const monthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
   const monthHint = month ? monthLabel$1(month) : "";
   const payrollQuery = usePayrollData(month, employeeId, isAdmin);
@@ -33547,7 +33195,7 @@ async function exportInvitationsZip(bloggers, settings, baseURL, onProgress) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  const stamp = new Date().toISOString().slice(0, 10);
+  const stamp = todayRiyadhDateKey();
   a.download = `quarters-bloggers-invitations-${stamp}.zip`;
   document.body.appendChild(a);
   a.click();
@@ -33583,18 +33231,18 @@ function exportBloggersData(bloggers) {
     accessor: b => STATE_AR[b.state] || b.state || ""
   }, {
     header: "وقت التفعيل",
-    accessor: b => b.state === "active" && b.activated_at ? formatDateTime$3(b.activated_at) : ""
+    accessor: b => b.state === "active" && b.activated_at ? formatDateTime$4(b.activated_at) : ""
   }, {
     header: "فُعِّلت بواسطة",
     accessor: b => b.state === "active" ? b.activated_by_employee_name || "" : ""
   }, {
     header: "تاريخ الإنشاء",
-    accessor: b => b.created_at ? formatDateTime$3(b.created_at) : ""
+    accessor: b => b.created_at ? formatDateTime$4(b.created_at) : ""
   }, {
     header: "ملاحظة",
     accessor: b => b.note || ""
   }];
-  const stamp = new Date().toISOString().slice(0, 10);
+  const stamp = todayRiyadhDateKey();
   exportToExcelHTML(bloggers || [], `quarters-bloggers-${stamp}`, columns, "بيانات البلوقرز");
 }
 
@@ -33611,7 +33259,7 @@ function BloggersExportMenu({
   const buttonRef = useRef(null);
   const panelRef = useRef(null);
   const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
+    queryKey: queryKeys.marketingSettings(),
     enabled: open,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/settings");
@@ -33834,7 +33482,7 @@ function BloggersBulkImport({
     onSuccess: (data) => {
       setResult(data);
       queryClient.invalidateQueries({
-        queryKey: ["marketing-bloggers"]
+        queryKey: queryKeys.marketingBloggers()
       });
     }
   });
@@ -33948,7 +33596,7 @@ function BloggersBulkImport({
       ] }),
       parsedRows && parsedRows.length > 0 && !result ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-3xl overflow-hidden`, children: [
         /* @__PURE__ */ jsx("div", { className: "px-4 py-3 border-b border-slate-200 dark:border-white/10 text-slate-800 dark:text-white/80 text-sm font-semibold", children: "معاينة أول 10 صفوف" }),
-        /* @__PURE__ */ jsx("div", { className: "max-h-[260px] overflow-y-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full text-sm", children: [
+        /* @__PURE__ */ jsx("div", { className: "max-h-[260px] overflow-auto", children: /* @__PURE__ */ jsxs("table", { className: "min-w-[640px] w-full text-sm", children: [
           /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-50 dark:bg-white/[0.04] sticky top-0", children: [
             /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-slate-600 dark:text-white/65 font-semibold", children: "الاسم" }),
             /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-slate-600 dark:text-white/65 font-semibold", children: "الرابط" }),
@@ -34037,7 +33685,7 @@ function BloggersPage() {
   });
   const [error, setError] = useState(null);
   const bloggersQuery = useQuery({
-    queryKey: ["marketing-bloggers"],
+    queryKey: queryKeys.marketingBloggers(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/bloggers");
@@ -34046,7 +33694,7 @@ function BloggersPage() {
     }
   });
   const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
+    queryKey: queryKeys.marketingSettings(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/settings");
@@ -34083,7 +33731,7 @@ function BloggersPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["marketing-bloggers"]
+        queryKey: queryKeys.marketingBloggers()
       });
       resetForm();
     },
@@ -34110,7 +33758,7 @@ function BloggersPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["marketing-bloggers"]
+        queryKey: queryKeys.marketingBloggers()
       });
       resetForm();
     },
@@ -34126,7 +33774,7 @@ function BloggersPage() {
       return d;
     },
     onSuccess: () => queryClient.invalidateQueries({
-      queryKey: ["marketing-bloggers"]
+      queryKey: queryKeys.marketingBloggers()
     })
   });
   const markInvitedMut = useMutation({
@@ -34139,7 +33787,7 @@ function BloggersPage() {
       return d;
     },
     onSuccess: () => queryClient.invalidateQueries({
-      queryKey: ["marketing-bloggers"]
+      queryKey: queryKeys.marketingBloggers()
     }),
     onError: (e) => setError(e.message || "تعذّر تحديث الحالة")
   });
@@ -34305,16 +33953,16 @@ function BloggersPage() {
                 /* @__PURE__ */ jsx(MailCheck, { className: "w-3 h-3" }),
                 "تمت"
               ] }),
-              b.invited_at ? /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35 text-[10px] mt-0.5", children: formatDateTime$3(b.invited_at) }) : null
+              b.invited_at ? /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35 text-[10px] mt-0.5", children: formatDateTime$4(b.invited_at) }) : null
             ] }) : /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => markInvitedMut.mutate(b.id), disabled: markInvitedMut.isPending && markInvitedMut.variables === b.id, className: `${ws.btnNeutral} px-3 py-1.5 text-xs justify-center disabled:opacity-50`, children: [
               markInvitedMut.isPending && markInvitedMut.variables === b.id ? /* @__PURE__ */ jsx("div", { className: "w-3 h-3 border-2 border-slate-400 dark:border-white/40 border-t-transparent rounded-full animate-spin" }) : /* @__PURE__ */ jsx(Send, { className: "w-3 h-3" }),
               /* @__PURE__ */ jsx("span", { children: "تمت الدعوة" })
             ] }) }),
             /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-xs", children: b.activated_at ? /* @__PURE__ */ jsxs(Fragment, { children: [
-              /* @__PURE__ */ jsx("div", { children: formatDateTime$3(b.activated_at) }),
+              /* @__PURE__ */ jsx("div", { children: formatDateTime$4(b.activated_at) }),
               b.activated_by_employee_name ? /* @__PURE__ */ jsx("div", { className: "text-slate-400 dark:text-white/35 mt-0.5", children: b.activated_by_employee_name }) : null
             ] }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "—" }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-xs", children: formatDateTime$3(b.created_at) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-xs", children: formatDateTime$4(b.created_at) }),
             /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
               /* @__PURE__ */ jsx("a", { href: `/marketing/bloggers/${b.id}/card`, className: `${ws.btnPrimary} px-3 py-1.5 text-sm justify-center`, title: "عرض بطاقة الدعوة", children: /* @__PURE__ */ jsx(QrCode, { className: "w-4 h-4" }) }),
               /* @__PURE__ */ jsx("button", { onClick: () => openEdit(b), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
@@ -34353,7 +34001,7 @@ function BloggerCardPage() {
   const params = useParams();
   const bloggerId = Number(params?.id);
   const bloggerQuery = useQuery({
-    queryKey: ["marketing-blogger", bloggerId],
+    queryKey: queryKeys.marketingBlogger(bloggerId),
     enabled: isAuthenticated && Number.isFinite(bloggerId),
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/bloggers");
@@ -34365,7 +34013,7 @@ function BloggerCardPage() {
     }
   });
   const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
+    queryKey: queryKeys.marketingSettings(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/settings");
@@ -34457,7 +34105,7 @@ function MarketingMenuPage() {
     };
   }
   const itemsQuery = useQuery({
-    queryKey: ["marketing-menu"],
+    queryKey: queryKeys.marketingMenu(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/menu");
@@ -34489,7 +34137,7 @@ function MarketingMenuPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["marketing-menu"]
+        queryKey: queryKeys.marketingMenu()
       });
       resetForm();
     },
@@ -34516,7 +34164,7 @@ function MarketingMenuPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["marketing-menu"]
+        queryKey: queryKeys.marketingMenu()
       });
       resetForm();
     },
@@ -34530,7 +34178,7 @@ function MarketingMenuPage() {
       if (!r.ok) throw new Error("فشل الحذف");
     },
     onSuccess: () => queryClient.invalidateQueries({
-      queryKey: ["marketing-menu"]
+      queryKey: queryKeys.marketingMenu()
     })
   });
   const toggleMut = useMutation({
@@ -34548,7 +34196,7 @@ function MarketingMenuPage() {
       if (!r.ok) throw new Error("فشل التحديث");
     },
     onSuccess: () => queryClient.invalidateQueries({
-      queryKey: ["marketing-menu"]
+      queryKey: queryKeys.marketingMenu()
     })
   });
   const resetForm = () => {
@@ -34687,7 +34335,7 @@ function MarketingMenuPage() {
         /* @__PURE__ */ jsx("p", { children: "لا توجد أصناف. ابدأ بإضافة منيو الضيافة." })
       ] }) : Object.entries(grouped).map(([category, list]) => /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: [
         /* @__PURE__ */ jsx("div", { className: "px-5 py-3 border-b border-white/[0.06] bg-slate-50 dark:bg-white/[0.03]", children: /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold", children: category }) }),
-        /* @__PURE__ */ jsx("table", { className: "w-full", children: /* @__PURE__ */ jsx("tbody", { children: list.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/[0.04] hover:bg-slate-50/50 dark:bg-white/[0.02]", children: [
+        /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsx("table", { className: "min-w-[640px] w-full", children: /* @__PURE__ */ jsx("tbody", { children: list.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-t border-white/[0.04] hover:bg-slate-50/50 dark:bg-white/[0.02]", children: [
           /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
             /* @__PURE__ */ jsxs("div", { className: "text-slate-900 dark:text-white font-medium", children: [
               it.name_ar,
@@ -34702,7 +34350,7 @@ function MarketingMenuPage() {
             /* @__PURE__ */ jsx("button", { onClick: () => openEdit(it), className: `${ws.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
             /* @__PURE__ */ jsx("button", { onClick: () => onDelete(it), className: `${ws.btnDanger} px-3 py-1.5 text-sm justify-center`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
           ] }) })
-        ] }, it.id)) }) })
+        ] }, it.id)) }) }) })
       ] }, category)) })
     ] })
   ] });
@@ -34735,7 +34383,7 @@ function MarketingSettingsPage() {
   const [error, setError] = useState(null);
   const [saved, setSaved] = useState(false);
   const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
+    queryKey: queryKeys.marketingSettings(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/settings");
@@ -34763,7 +34411,7 @@ function MarketingSettingsPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["marketing-settings"]
+        queryKey: queryKeys.marketingSettings()
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
@@ -34950,7 +34598,8 @@ function PrivacyPolicyPage() {
         (/* @__PURE__ */ new Date()).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
-          day: "numeric"
+          day: "numeric",
+          timeZone: "Asia/Riyadh"
         })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2 mt-4", children: [
@@ -35051,7 +34700,10 @@ function PrivacyPolicyPage() {
       /* @__PURE__ */ jsx("p", { className: "text-white/40 text-sm", children: "We reserve the right to update this Privacy Policy at any time. You will be notified of any material changes." }),
       /* @__PURE__ */ jsxs("p", { className: "text-white/30 text-xs", children: [
         "© ",
-        (/* @__PURE__ */ new Date()).getFullYear(),
+        (/* @__PURE__ */ new Date()).toLocaleDateString("en-US", {
+          year: "numeric",
+          timeZone: "Asia/Riyadh"
+        }),
         " Quarters · quarters.sa"
       ] })
     ] })
@@ -35731,7 +35383,10 @@ function SupportPage() {
       /* @__PURE__ */ jsx("p", { className: "text-white/40 text-sm", children: "We are always striving to improve our services. Thank you for using our app." }),
       /* @__PURE__ */ jsxs("p", { className: "text-white/30 text-xs", children: [
         "© ",
-        (/* @__PURE__ */ new Date()).getFullYear(),
+        (/* @__PURE__ */ new Date()).toLocaleDateString("en-US", {
+          year: "numeric",
+          timeZone: "Asia/Riyadh"
+        }),
         " Quarters · quarters.sa"
       ] })
     ] })
@@ -35766,7 +35421,7 @@ function PublicWelcomePage() {
   const queryClient = useQueryClient();
   const isPreview = slug === "preview";
   const welcomeQuery = useQuery({
-    queryKey: ["public-welcome", slug],
+    queryKey: queryKeys.publicWelcome(slug),
     enabled: !!slug && !isPreview,
     queryFn: async () => {
       const r = await fetch(`/api/marketing/welcome/${encodeURIComponent(slug)}`);
@@ -35781,7 +35436,7 @@ function PublicWelcomePage() {
     retry: false
   });
   const previewQuery = useQuery({
-    queryKey: ["public-welcome-preview"],
+    queryKey: queryKeys.publicWelcomePreview(),
     enabled: isPreview,
     queryFn: async () => {
       const [sRes, mRes] = await Promise.all([
@@ -35850,7 +35505,7 @@ function PublicWelcomePage() {
       setActivateError(null);
       setPin("");
       queryClient.invalidateQueries({
-        queryKey: ["public-welcome", slug]
+        queryKey: queryKeys.publicWelcome(slug)
       });
     },
     onError: (e) => setActivateError(e.message || "خطأ")
@@ -36566,7 +36221,7 @@ function formatTimeAgo(dateStr) {
   }
 }
 function greetingText() {
-  const hr = (/* @__PURE__ */ new Date()).getHours();
+  const hr = currentRiyadhHour();
   if (hr < 12) return "صباح الخير";
   if (hr < 17) return "مساء الخير";
   return "مساء الخير";
@@ -36680,11 +36335,11 @@ function WorkspaceSummaryPage() {
   const queryClient = useQueryClient();
   const myId = employeeId;
   const summaryQuery = useQuery({
-    queryKey: ["workspaceSummary", myId],
+    queryKey: queryKeys.workspaceSummary(myId),
     enabled: !!myId,
     refetchInterval: 3e4,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/summary?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/summary?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`[${res.status}] ${res.statusText}`);
       }
@@ -36713,7 +36368,7 @@ function WorkspaceSummaryPage() {
       taskId,
       status
     }) => {
-      const res = await fetch("/api/workspace/tasks/quick-status", {
+      const res = await workspaceFetch("/api/workspace/tasks/quick-status", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -36736,10 +36391,10 @@ function WorkspaceSummaryPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaceSummary"]
+        queryKey: queryKeys.workspaceSummary()
       });
       queryClient.invalidateQueries({
-        queryKey: ["workspaceTasks"]
+        queryKey: queryKeys.workspaceTasks()
       });
     },
     onSettled: () => {
@@ -36948,11 +36603,11 @@ function WorkspaceInboxPage() {
   const myId = employeeId;
   const messagesEndRef = useRef(null);
   const threadsQuery = useQuery({
-    queryKey: ["workspaceThreads", myId],
+    queryKey: queryKeys.workspaceThreads(myId),
     enabled: !!myId,
     refetchInterval: 15e3,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/threads?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/threads?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`When fetching /api/workspace/threads, the response was [${res.status}] ${res.statusText}`);
       }
@@ -36998,11 +36653,11 @@ function WorkspaceInboxPage() {
     return initials$1(otherMemberName);
   }, [otherMemberName]);
   const messagesQuery = useQuery({
-    queryKey: ["workspaceMessages", selectedThreadId, myId],
+    queryKey: queryKeys.workspaceMessages(selectedThreadId, myId),
     enabled: !!myId && !!selectedThreadId,
     refetchInterval: 5e3,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/threads/${selectedThreadId}/messages?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/threads/${selectedThreadId}/messages?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`When fetching messages, the response was [${res.status}] ${res.statusText}`);
       }
@@ -37018,10 +36673,10 @@ function WorkspaceInboxPage() {
     }
   }, [messages.length]);
   const usersQuery = useQuery({
-    queryKey: ["workspaceUsers", myId],
+    queryKey: queryKeys.workspaceUsers(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/users?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/users?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`When fetching /api/workspace/users, the response was [${res.status}] ${res.statusText}`);
       }
@@ -37031,7 +36686,7 @@ function WorkspaceInboxPage() {
   const users = usersQuery.data?.users || [];
   const createThreadMutation = useMutation({
     mutationFn: async (toEmployeeId) => {
-      const res = await fetch("/api/workspace/threads", {
+      const res = await workspaceFetch("/api/workspace/threads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -37049,7 +36704,7 @@ function WorkspaceInboxPage() {
     },
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
-        queryKey: ["workspaceThreads", myId]
+        queryKey: queryKeys.workspaceThreads(myId)
       });
       setShowNewModal(false);
       setNewToUserId("");
@@ -37058,7 +36713,7 @@ function WorkspaceInboxPage() {
   });
   const sendMutation = useMutation({
     mutationFn: async (text) => {
-      const res = await fetch(`/api/workspace/threads/${selectedThreadId}/messages`, {
+      const res = await workspaceFetch(`/api/workspace/threads/${selectedThreadId}/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -37075,19 +36730,20 @@ function WorkspaceInboxPage() {
       return data;
     },
     onMutate: async (text) => {
+      const queryKey = ["workspaceMessages", selectedThreadId, myId];
       await queryClient.cancelQueries({
-        queryKey: ["workspaceMessages", selectedThreadId, myId]
+        queryKey
       });
-      const prev = queryClient.getQueryData(["workspaceMessages", selectedThreadId, myId]);
+      const optimisticId = `optimistic-${Date.now()}-${Math.random().toString(36).slice(2)}`;
       const optimistic = {
-        id: `optimistic-${Date.now()}`,
+        id: optimisticId,
         thread_id: selectedThreadId,
         sender_employee_id: myId,
         sender_name: user?.name || "أنا",
         body: text,
         created_at: (/* @__PURE__ */ new Date()).toISOString()
       };
-      queryClient.setQueryData(["workspaceMessages", selectedThreadId, myId], (old) => {
+      queryClient.setQueryData(queryKey, (old) => {
         const oldMessages = old?.messages || [];
         return {
           ...old,
@@ -37095,21 +36751,28 @@ function WorkspaceInboxPage() {
         };
       });
       return {
-        prev
+        optimisticId,
+        queryKey
       };
     },
     onError: (err, _text, ctx) => {
       console.error(err);
-      if (ctx?.prev) {
-        queryClient.setQueryData(["workspaceMessages", selectedThreadId, myId], ctx.prev);
+      if (ctx?.queryKey && ctx?.optimisticId) {
+        queryClient.setQueryData(ctx.queryKey, (old) => {
+          if (!old?.messages) return old;
+          return {
+            ...old,
+            messages: old.messages.filter((m) => m.id !== ctx.optimisticId)
+          };
+        });
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaceMessages", selectedThreadId, myId]
+        queryKey: queryKeys.workspaceMessages(selectedThreadId, myId)
       });
       queryClient.invalidateQueries({
-        queryKey: ["workspaceThreads", myId]
+        queryKey: queryKeys.workspaceThreads(myId)
       });
     }
   });
@@ -37281,11 +36944,7 @@ const route44 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 }, Symbol.toStringTag, { value: 'Module' }));
 
 function todayISO() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
+  return todayRiyadhDateKey();
 }
 function normalizeDate(value) {
   if (!value) return "";
@@ -37325,7 +36984,7 @@ function parseTags(value) {
 
 function useTasksData(myId, scope, statusFilter, spaceFilter, q) {
   return useQuery({
-    queryKey: ["workspaceTasks", myId, scope, statusFilter, spaceFilter, q],
+    queryKey: queryKeys.workspaceTasks(myId, scope, statusFilter, spaceFilter, q),
     enabled: !!myId,
     queryFn: async () => {
       const sp = new URLSearchParams();
@@ -37334,7 +36993,7 @@ function useTasksData(myId, scope, statusFilter, spaceFilter, q) {
       sp.set("status", statusFilter);
       if (spaceFilter) sp.set("spaceId", spaceFilter);
       if (q.trim()) sp.set("q", q.trim());
-      const res = await fetch(`/api/workspace/tasks?${sp.toString()}`);
+      const res = await workspaceFetch(`/api/workspace/tasks?${sp.toString()}`);
       if (!res.ok) {
         throw new Error(`When fetching /api/workspace/tasks, the response was [${res.status}] ${res.statusText}`);
       }
@@ -37344,10 +37003,10 @@ function useTasksData(myId, scope, statusFilter, spaceFilter, q) {
 }
 function useUsersData(myId) {
   return useQuery({
-    queryKey: ["workspaceUsers", myId],
+    queryKey: queryKeys.workspaceUsers(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/users?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/users?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`When fetching /api/workspace/users, the response was [${res.status}] ${res.statusText}`);
       }
@@ -37357,10 +37016,10 @@ function useUsersData(myId) {
 }
 function useSpacesData(myId) {
   return useQuery({
-    queryKey: ["workspaceSpaces", myId],
+    queryKey: queryKeys.workspaceSpaces(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/spaces?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/spaces?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`When fetching /api/workspace/spaces, the response was [${res.status}] ${res.statusText}`);
       }
@@ -37371,31 +37030,7 @@ function useSpacesData(myId) {
 
 function useTaskMutations(myId, closeModal) {
   const queryClient = useQueryClient();
-  const invalidateAll = () => {
-    queryClient.invalidateQueries({
-      queryKey: ["workspaceTasks"]
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["workspaceOverdueTasks", myId]
-    });
-
-    // NEW: task modal also shows history + updates, so refresh those too
-    queryClient.invalidateQueries({
-      queryKey: ["workspaceTaskUpdates"]
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["workspaceTaskHistory"]
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["workspaceTaskAttachments"]
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["workspaceTaskChecklist"]
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["workspaceSubtasks"]
-    });
-  };
+  const invalidateAll = () => invalidateWorkspaceTaskQueries(queryClient);
   const createMutation = useMutation({
     mutationFn: async payload => {
       // ignore any draft update on create
@@ -37404,7 +37039,7 @@ function useTaskMutations(myId, closeModal) {
         taskUpdate,
         ...taskPayload
       } = safePayload;
-      const res = await fetch("/api/workspace/tasks", {
+      const res = await workspaceFetch("/api/workspace/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -37420,8 +37055,8 @@ function useTaskMutations(myId, closeModal) {
       }
       return data;
     },
-    onSuccess: () => {
-      invalidateAll();
+    onSuccess: async () => {
+      await invalidateAll();
       closeModal();
     }
   });
@@ -37437,7 +37072,7 @@ function useTaskMutations(myId, closeModal) {
       } = safePayload;
 
       // 1) Update the task itself
-      const res = await fetch(`/api/workspace/tasks/${id}`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -37460,7 +37095,7 @@ function useTaskMutations(myId, closeModal) {
       if (shouldCreateUpdate) {
         // The updates endpoint requires text, so if user attached files only, send a short default note.
         const finalText = bodyText.length > 0 ? bodyText : "تم إضافة مرفقات";
-        const res2 = await fetch(`/api/workspace/tasks/${id}/updates`, {
+        const res2 = await workspaceFetch(`/api/workspace/tasks/${id}/updates`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -37483,14 +37118,14 @@ function useTaskMutations(myId, closeModal) {
       }
       return data;
     },
-    onSuccess: () => {
-      invalidateAll();
+    onSuccess: async () => {
+      await invalidateAll();
       closeModal();
     }
   });
   const deleteMutation = useMutation({
     mutationFn: async id => {
-      const res = await fetch(`/api/workspace/tasks/${id}`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -37505,8 +37140,8 @@ function useTaskMutations(myId, closeModal) {
       }
       return data;
     },
-    onSuccess: () => {
-      invalidateAll();
+    onSuccess: async () => {
+      await invalidateAll();
       closeModal();
     }
   });
@@ -37633,10 +37268,10 @@ function useTaskFormState(initialTask) {
 
 function useTaskHistory(taskId, viewerEmployeeId, enabled = true) {
   return useQuery({
-    queryKey: ["workspaceTaskHistory", viewerEmployeeId, taskId],
+    queryKey: queryKeys.workspaceTaskHistory(viewerEmployeeId, taskId),
     enabled: enabled && !!taskId && !!viewerEmployeeId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/history?employeeId=${viewerEmployeeId}`);
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/history?employeeId=${viewerEmployeeId}`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "فشل تحميل سجل المهمة");
@@ -37649,10 +37284,10 @@ function useTaskHistory(taskId, viewerEmployeeId, enabled = true) {
 function useTaskUpdates(taskId, viewerEmployeeId, enabled = true) {
   const queryClient = useQueryClient();
   const updatesQuery = useQuery({
-    queryKey: ["workspaceTaskUpdates", viewerEmployeeId, taskId],
+    queryKey: queryKeys.workspaceTaskUpdates(viewerEmployeeId, taskId),
     enabled: enabled && !!taskId && !!viewerEmployeeId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/updates?employeeId=${viewerEmployeeId}`);
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/updates?employeeId=${viewerEmployeeId}`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "فشل تحميل تحديثات المهمة");
@@ -37667,7 +37302,7 @@ function useTaskUpdates(taskId, viewerEmployeeId, enabled = true) {
     }) => {
       const bodyText = String(body || "").trim();
       const list = Array.isArray(attachments) ? attachments : [];
-      const res = await fetch(`/api/workspace/tasks/${taskId}/updates`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/updates`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -37689,13 +37324,8 @@ function useTaskUpdates(taskId, viewerEmployeeId, enabled = true) {
       }
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["workspaceTaskUpdates", viewerEmployeeId, taskId]
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["workspaceTaskHistory", viewerEmployeeId, taskId]
-      });
+    onSuccess: async () => {
+      await invalidateWorkspaceTaskQueries(queryClient);
     }
   });
   return {
@@ -37709,10 +37339,10 @@ function useTaskUpdates(taskId, viewerEmployeeId, enabled = true) {
 
 function useTaskAttachments(taskId, viewerEmployeeId, enabled = true) {
   return useQuery({
-    queryKey: ["workspaceTaskAttachments", viewerEmployeeId, taskId],
+    queryKey: queryKeys.workspaceTaskAttachments(viewerEmployeeId, taskId),
     enabled: enabled && !!taskId && !!viewerEmployeeId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/attachments?employeeId=${viewerEmployeeId}`);
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/attachments?employeeId=${viewerEmployeeId}`);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "فشل تحميل المرفقات");
@@ -38158,7 +37788,8 @@ const formatDateTime = dateString => {
       month: "short",
       day: "numeric",
       hour: "2-digit",
-      minute: "2-digit"
+      minute: "2-digit",
+      timeZone: "Asia/Riyadh"
     });
   } catch {
     return String(dateString);
@@ -38170,7 +37801,8 @@ const formatDateOnly = dateString => {
     return new Date(dateString).toLocaleDateString(LOCALE, {
       year: "numeric",
       month: "short",
-      day: "numeric"
+      day: "numeric",
+      timeZone: "Asia/Riyadh"
     });
   } catch {
     return String(dateString);
@@ -38425,11 +38057,12 @@ function nextStatus$1(current) {
 function formatShortDate(dateStr) {
   if (!dateStr) return null;
   try {
-    const d = new Date(dateStr);
+    const d = /* @__PURE__ */ new Date(`${String(dateStr).slice(0, 10)}T00:00:00+03:00`);
     if (Number.isNaN(d.getTime())) return null;
     return d.toLocaleDateString("ar-SA-u-ca-gregory-nu-latn", {
       month: "short",
-      day: "numeric"
+      day: "numeric",
+      timeZone: "Asia/Riyadh"
     });
   } catch {
     return null;
@@ -38437,16 +38070,7 @@ function formatShortDate(dateStr) {
 }
 function isDateOverdue(dateStr) {
   if (!dateStr) return false;
-  try {
-    const d = new Date(dateStr);
-    if (Number.isNaN(d.getTime())) return false;
-    const today = /* @__PURE__ */ new Date();
-    today.setHours(0, 0, 0, 0);
-    d.setHours(0, 0, 0, 0);
-    return d < today;
-  } catch {
-    return false;
-  }
+  return String(dateStr).slice(0, 10) < todayRiyadhDateKey();
 }
 function SubtaskRow({
   subtask,
@@ -38510,10 +38134,10 @@ function SubtasksSection({
   const [changingId, setChangingId] = useState(null);
   const safeUsers = Array.isArray(users) ? users : [];
   const subtasksQuery = useQuery({
-    queryKey: ["workspaceSubtasks", taskId, viewerEmployeeId],
+    queryKey: queryKeys.workspaceSubtasks(taskId, viewerEmployeeId),
     enabled: !!taskId && !!viewerEmployeeId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/subtasks?employeeId=${viewerEmployeeId}`);
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/subtasks?employeeId=${viewerEmployeeId}`);
       if (!res.ok) throw new Error("فشل تحميل المهام الفرعية");
       return res.json();
     }
@@ -38524,10 +38148,10 @@ function SubtasksSection({
   const progressPercent = totalCount > 0 ? Math.round(completedCount / totalCount * 100) : 0;
   const invalidateAll = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: ["workspaceSubtasks", taskId]
+      queryKey: queryKeys.workspaceSubtasks(taskId)
     });
     queryClient.invalidateQueries({
-      queryKey: ["workspaceTasks"]
+      queryKey: queryKeys.workspaceTasks()
     });
   }, [queryClient, taskId]);
   const createMutation = useMutation({
@@ -38536,7 +38160,7 @@ function SubtasksSection({
       dueDate,
       assigneeEmployeeIds
     }) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/subtasks`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/subtasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -38561,7 +38185,7 @@ function SubtasksSection({
   });
   const linkMutation = useMutation({
     mutationFn: async (childTaskId) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/subtasks`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/subtasks`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -38585,7 +38209,7 @@ function SubtasksSection({
   });
   const unlinkMutation = useMutation({
     mutationFn: async (childTaskId) => {
-      const res = await fetch(`/api/workspace/tasks/${taskId}/subtasks`, {
+      const res = await workspaceFetch(`/api/workspace/tasks/${taskId}/subtasks`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -38605,7 +38229,7 @@ function SubtasksSection({
       subtaskId,
       status
     }) => {
-      const res = await fetch("/api/workspace/tasks/quick-status", {
+      const res = await workspaceFetch("/api/workspace/tasks/quick-status", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -39388,10 +39012,10 @@ function WorkspaceTasksPage() {
   const grouped = useTaskGrouping(tasks);
   const overdueEnabled = !!myId && scope === "team";
   const overdueQuery = useQuery({
-    queryKey: ["workspaceOverdueTasks", myId],
+    queryKey: queryKeys.workspaceOverdueTasks(myId),
     enabled: overdueEnabled,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/overdue?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/overdue?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`When fetching /api/workspace/overdue, the response was [${res.status}] ${res.statusText}`);
       }
@@ -39450,7 +39074,7 @@ function WorkspaceTasksPage() {
       taskId,
       status
     }) => {
-      const res = await fetch("/api/workspace/tasks/quick-status", {
+      const res = await workspaceFetch("/api/workspace/tasks/quick-status", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -39473,13 +39097,13 @@ function WorkspaceTasksPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaceTasks"]
+        queryKey: queryKeys.workspaceTasks()
       });
       queryClient.invalidateQueries({
-        queryKey: ["workspaceSummary"]
+        queryKey: queryKeys.workspaceSummary()
       });
       queryClient.invalidateQueries({
-        queryKey: ["workspaceOverdueTasks"]
+        queryKey: queryKeys.workspaceOverdueTasks()
       });
     },
     onSettled: () => {
@@ -39513,7 +39137,7 @@ function WorkspaceTasksPage() {
     const rows = overdueTasks.map((t) => {
       const title = t.title || "—";
       const due = t.due_date ? formatDate$2(t.due_date) : "—";
-      const completed = t.completed_at ? formatDateTime$3(t.completed_at) : "—";
+      const completed = t.completed_at ? formatDateTime$4(t.completed_at) : "—";
       const assignees = safeArray(t.assignees).map((a) => a?.name).filter(Boolean);
       const assigneesText = assignees.length ? assignees.join("، ") : "—";
       const isCurrentlyOverdue = !!t.is_currently_overdue;
@@ -39632,10 +39256,10 @@ function WorkspaceTeamPage() {
   const [description, setDescription] = useState("");
   const myId = employeeId;
   const spacesQuery = useQuery({
-    queryKey: ["workspaceSpaces", myId],
+    queryKey: queryKeys.workspaceSpaces(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/spaces?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/spaces?employeeId=${myId}`);
       if (!res.ok) {
         throw new Error(`When fetching /api/workspace/spaces, the response was [${res.status}] ${res.statusText}`);
       }
@@ -39645,7 +39269,7 @@ function WorkspaceTeamPage() {
   const spaces = spacesQuery.data?.spaces || [];
   const createMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/workspace/spaces", {
+      const res = await workspaceFetch("/api/workspace/spaces", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -39664,7 +39288,7 @@ function WorkspaceTeamPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaceSpaces", myId]
+        queryKey: queryKeys.workspaceSpaces(myId)
       });
       setShowCreate(false);
       setName("");
@@ -39794,19 +39418,19 @@ function WorkspaceTemplatesPage() {
   const [formSpaceId, setFormSpaceId] = useState("");
   const [formChecklistText, setFormChecklistText] = useState("");
   const templatesQuery = useQuery({
-    queryKey: ["workspaceTemplates", myId],
+    queryKey: queryKeys.workspaceTemplates(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/templates?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/templates?employeeId=${myId}`);
       if (!res.ok) throw new Error("فشل تحميل القوالب");
       return res.json();
     }
   });
   const spacesQuery = useQuery({
-    queryKey: ["workspaceSpaces", myId],
+    queryKey: queryKeys.workspaceSpaces(myId),
     enabled: !!myId,
     queryFn: async () => {
-      const res = await fetch(`/api/workspace/spaces?employeeId=${myId}`);
+      const res = await workspaceFetch(`/api/workspace/spaces?employeeId=${myId}`);
       if (!res.ok) throw new Error("فشل تحميل المساحات");
       return res.json();
     }
@@ -39818,7 +39442,7 @@ function WorkspaceTemplatesPage() {
       const checklistItems = formChecklistText.split("\n").map((line) => line.trim()).filter(Boolean).map((title) => ({
         title
       }));
-      const res = await fetch("/api/workspace/templates", {
+      const res = await workspaceFetch("/api/workspace/templates", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -39841,7 +39465,7 @@ function WorkspaceTemplatesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaceTemplates"]
+        queryKey: queryKeys.workspaceTemplates()
       });
       setShowCreate(false);
       setFormName("");
@@ -39854,7 +39478,7 @@ function WorkspaceTemplatesPage() {
   });
   const deleteMutation = useMutation({
     mutationFn: async (templateId) => {
-      const res = await fetch("/api/workspace/templates", {
+      const res = await workspaceFetch("/api/workspace/templates", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -39869,16 +39493,14 @@ function WorkspaceTemplatesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaceTemplates"]
+        queryKey: queryKeys.workspaceTemplates()
       });
     }
   });
   const useTemplateMutation = useMutation({
     mutationFn: async (template) => {
-      const today = /* @__PURE__ */ new Date();
-      today.setDate(today.getDate() + 3);
-      const dueDate = today.toISOString().split("T")[0];
-      const res = await fetch("/api/workspace/tasks", {
+      const dueDate = riyadhDateKeyFromOffset(3);
+      const res = await workspaceFetch("/api/workspace/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -39906,7 +39528,7 @@ function WorkspaceTemplatesPage() {
         for (const item of checklistItems) {
           const itemTitle = item?.title || "";
           if (!itemTitle) continue;
-          await fetch(`/api/workspace/tasks/${taskId}/checklist`, {
+          await workspaceFetch(`/api/workspace/tasks/${taskId}/checklist`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -39922,10 +39544,10 @@ function WorkspaceTemplatesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workspaceTasks"]
+        queryKey: queryKeys.workspaceTasks()
       });
       queryClient.invalidateQueries({
-        queryKey: ["workspaceSummary"]
+        queryKey: queryKeys.workspaceSummary()
       });
     }
   });
@@ -40096,210 +39718,57 @@ const route47 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: page
 }, Symbol.toStringTag, { value: 'Module' }));
 
-async function loader({
-  params
-}) {
-  const matches = await fg("src/**/page.{js,jsx,ts,tsx}");
-  return {
-    path: `/${params["*"]}`,
-    pages: matches.sort((a, b) => a.length - b.length).map(match => {
-      const url = match.replace("src/app", "").replace(/\/page\.(js|jsx|ts|tsx)$/, "") || "/";
-      const path = url.replaceAll("[", "").replaceAll("]", "");
-      const displayPath = path === "/" ? "Homepage" : path;
-      return {
-        url,
-        path: displayPath
-      };
-    })
-  };
-}
-const notFound = UNSAFE_withComponentProps(function CreateDefaultNotFoundPage({
-  loaderData
-}) {
-  const [siteMap, setSitemap] = useState(null);
+const notFound = UNSAFE_withComponentProps(function NotFoundPage() {
   const navigate = useNavigate();
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.parent && window.parent !== window) {
-      const handler = event => {
-        if (event.data.type === "sandbox:sitemap") {
-          window.removeEventListener("message", handler);
-          setSitemap(event.data.sitemap);
-        }
-      };
-      window.parent.postMessage({
-        type: "sandbox:sitemap"
-      }, "*");
-      window.addEventListener("message", handler);
-      return () => {
-        window.removeEventListener("message", handler);
-      };
-    }
-  }, []);
-  const missingPath = loaderData.path.replace(/^\//, "");
-  const existingRoutes = loaderData.pages.map(page => ({
-    path: page.path,
-    url: page.url
-  }));
-  const handleBack = () => {
-    navigate("/");
-  };
-  const handleSearch = value => {
-    if (!siteMap) {
-      const path = `/${value}`;
-      navigate(path);
-    } else {
-      navigate(value);
-    }
-  };
-  const handleCreatePage = useCallback(() => {
-    window.parent.postMessage({
-      type: "sandbox:web:create",
-      path: missingPath,
-      view: "web"
-    }, "*");
-  }, [missingPath]);
-  return /* @__PURE__ */jsxs("div", {
-    className: "flex sm:w-full w-screen sm:min-w-[850px] flex-col",
-    children: [/* @__PURE__ */jsxs("div", {
-      className: "flex w-full items-center gap-2 p-5",
-      children: [/* @__PURE__ */jsx("button", {
-        type: "button",
-        onClick: handleBack,
-        className: "flex items-center justify-center w-10 h-10 rounded-md",
-        children: /* @__PURE__ */jsxs("svg", {
-          width: "18",
-          height: "18",
-          viewBox: "0 0 18 18",
-          fill: "none",
-          xmlns: "http://www.w3.org/2000/svg",
-          "aria-label": "Back",
-          role: "img",
-          children: [/* @__PURE__ */jsx("path", {
-            d: "M8.5957 2.65435L2.25005 9L8.5957 15.3457",
-            stroke: "currentColor",
-            strokeWidth: "1.5",
-            strokeLinecap: "round",
-            strokeLinejoin: "round"
-          }), /* @__PURE__ */jsx("path", {
-            d: "M2.25007 9L15.75 9",
-            stroke: "currentColor",
-            strokeWidth: "1.5",
-            strokeLinecap: "round",
-            strokeLinejoin: "round"
-          })]
+  return /* @__PURE__ */jsx("div", {
+    className: `min-h-[100svh] px-4 py-10 flex items-center justify-center ${ws.appBg}`,
+    dir: "rtl",
+    children: /* @__PURE__ */jsxs("main", {
+      className: "w-full max-w-lg text-center",
+      children: [/* @__PURE__ */jsx("div", {
+        className: `${ws.iconBox} w-16 h-16 mx-auto mb-5 text-amber-700 dark:text-amber-200`,
+        children: /* @__PURE__ */jsx(MapPinOff, {
+          className: "w-8 h-8",
+          "aria-hidden": "true"
         })
+      }), /* @__PURE__ */jsx("p", {
+        className: "text-sm font-bold text-emerald-700 dark:text-emerald-300 mb-2",
+        children: "404"
+      }), /* @__PURE__ */jsx("h1", {
+        className: `text-2xl sm:text-3xl ${ws.title} mb-3`,
+        children: "الصفحة غير موجودة"
+      }), /* @__PURE__ */jsx("p", {
+        className: `${ws.muted} leading-7 mb-7`,
+        children: "قد يكون الرابط غير صحيح أو تم نقل الصفحة إلى مكان آخر."
       }), /* @__PURE__ */jsxs("div", {
-        className: "flex flex-row divide-x divide-gray-200 rounded-[8px] h-8 w-[300px] border border-gray-200 bg-gray-50 text-gray-500",
-        children: [/* @__PURE__ */jsx("div", {
-          className: "flex items-center px-[14px] py-[5px]",
-          children: /* @__PURE__ */jsx("span", {
-            children: "/"
-          })
-        }), /* @__PURE__ */jsx("div", {
-          className: "flex items-center min-w-0",
-          children: /* @__PURE__ */jsx("p", {
-            className: "border-0 bg-transparent px-3 py-2 focus:outline-none truncate max-w-[300px]",
-            style: {
-              minWidth: 0
-            },
-            title: missingPath,
-            children: missingPath
-          })
+        className: "flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-center gap-3",
+        children: [/* @__PURE__ */jsxs("button", {
+          type: "button",
+          onClick: () => navigate(-1),
+          className: `${ws.btnNeutral} min-h-11 px-5 py-2.5 justify-center`,
+          children: [/* @__PURE__ */jsx(ArrowRight, {
+            className: "w-4 h-4",
+            "aria-hidden": "true"
+          }), "رجوع"]
+        }), /* @__PURE__ */jsxs(Link$1, {
+          to: "/",
+          className: `${ws.btnPrimary} min-h-11 px-5 py-2.5 justify-center`,
+          children: [/* @__PURE__ */jsx(Home, {
+            className: "w-4 h-4",
+            "aria-hidden": "true"
+          }), "الصفحة الرئيسية"]
         })]
       })]
-    }), /* @__PURE__ */jsxs("div", {
-      className: "flex flex-grow flex-col items-center justify-center pt-[100px] text-center gap-[20px]",
-      children: [/* @__PURE__ */jsx("h1", {
-        className: "text-4xl font-medium text-gray-900 px-2",
-        children: "Uh-oh! This page doesn't exist (yet)."
-      }), /* @__PURE__ */jsxs("p", {
-        className: "pt-4 pb-12 px-2 text-gray-500",
-        children: ['Looks like "', /* @__PURE__ */jsxs("span", {
-          className: "font-bold",
-          children: ["/", missingPath]
-        }), `" isn't part of your project. But no worries, you've got options!`]
-      }), /* @__PURE__ */jsx("div", {
-        className: "px-[20px] w-full",
-        children: /* @__PURE__ */jsxs("div", {
-          className: "flex flex-row justify-center items-center w-full max-w-[800px] mx-auto border border-gray-200 rounded-lg p-[20px] mb-[40px] gap-[20px]",
-          children: [/* @__PURE__ */jsxs("div", {
-            className: "flex flex-col gap-[5px] items-start self-start w-1/2",
-            children: [/* @__PURE__ */jsx("p", {
-              className: "text-sm text-black text-left",
-              children: "Build it from scratch"
-            }), /* @__PURE__ */jsxs("p", {
-              className: "text-sm text-gray-500 text-left",
-              children: ['Create a new page to live at "', /* @__PURE__ */jsxs("span", {
-                children: ["/", missingPath]
-              }), '"']
-            })]
-          }), /* @__PURE__ */jsx("div", {
-            className: "flex flex-row items-center justify-end w-1/2",
-            children: /* @__PURE__ */jsx("button", {
-              type: "button",
-              className: "bg-black text-white px-[10px] py-[5px] rounded-md",
-              onClick: () => handleCreatePage(),
-              children: "Create Page"
-            })
-          })]
-        })
-      }), /* @__PURE__ */jsx("div", {
-        className: "pb-20 lg:pb-[80px]",
-        children: /* @__PURE__ */jsx("p", {
-          className: "flex items-center text-gray-500",
-          children: "Check out all your project's routes here ↓"
-        })
-      }), siteMap ? /* @__PURE__ */jsx("div", {
-        className: "flex flex-col justify-center items-center w-full px-[50px]",
-        children: /* @__PURE__ */jsxs("div", {
-          className: "flex flex-col justify-between items-center w-full max-w-[600px] gap-[10px]",
-          children: [/* @__PURE__ */jsx("p", {
-            className: "text-sm text-gray-300 pb-[10px] self-start p-4",
-            children: "PAGES"
-          }), siteMap.webPages?.map(route => /* @__PURE__ */jsxs("button", {
-            type: "button",
-            onClick: () => handleSearch(route.cleanRoute || ""),
-            className: "flex flex-row justify-between text-center items-center p-4 rounded-lg bg-white shadow-sm w-full hover:bg-gray-50",
-            children: [/* @__PURE__ */jsx("h3", {
-              className: "font-medium text-gray-900",
-              children: route.name
-            }), /* @__PURE__ */jsx("p", {
-              className: "text-sm text-gray-400",
-              children: route.cleanRoute
-            })]
-          }, route.id))]
-        })
-      }) : /* @__PURE__ */jsx("div", {
-        className: "flex flex-wrap gap-3 w-full max-w-[80rem] mx-auto pb-5 px-2",
-        children: existingRoutes.map(route => /* @__PURE__ */jsx("div", {
-          className: "flex flex-col flex-grow basis-full sm:basis-[calc(50%-0.375rem)] xl:basis-[calc(33.333%-0.5rem)]",
-          children: /* @__PURE__ */jsxs("div", {
-            className: "w-full flex-1 flex flex-col items-center ",
-            children: [/* @__PURE__ */jsx("div", {
-              className: "relative w-full max-w-[350px] h-48 sm:h-56 lg:h-64 overflow-hidden rounded-[8px] border border-comeback-gray-75 transition-all group-hover:shadow-md",
-              children: /* @__PURE__ */jsx("button", {
-                type: "button",
-                onClick: () => handleSearch(route.url.replace(/^\//, "")),
-                className: "h-full w-full rounded-[8px] bg-gray-50 bg-cover"
-              })
-            }), /* @__PURE__ */jsx("p", {
-              className: "pt-3 text-left text-gray-500 w-full max-w-[350px]",
-              children: route.path
-            })]
-          })
-        }, route.path))
-      })]
-    })]
+    })
   });
 });
 
 const route48 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: notFound,
-  loader
+  default: notFound
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-DzroxtTg.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-DAMkxqX6.js','imports':['/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/client-CINQ5WCN.js','/assets/index-5tUDjkqx.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-zXLzfrN-.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-C5LTdwYn.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-9gtWKpnb.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/shield-CCvWcLx-.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/trash-2-CUHqd1bM.js','/assets/languages-But0n9zp.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page--Vz74-fN.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DdvVaNQX.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-CwvFUpUJ.js','/assets/layout-dashboard-t_ubicMG.js','/assets/calculator-D3gGV-xi.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/arrow-left-1JW0wBZ5.js','/assets/trending-up-BgqdTk4e.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/shopping-cart-i80Zbf4o.js','/assets/trash-2-CUHqd1bM.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CIwfpCWJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DdvVaNQX.js','/assets/GlassSelect-CQnW8uT3.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/refresh-cw-Da2g6MOO.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/shopping-cart-i80Zbf4o.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-OaK24tqB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/payrollFormatters-DGy10whX.js','/assets/GlassSelect-CQnW8uT3.js','/assets/save-BOlG9ZED.js','/assets/plus-COitwNGf.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/style-DMXtuZsn.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/apiAuth-DdvVaNQX.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/useQuery-CwvFUpUJ.js','/assets/trending-up-BgqdTk4e.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/filter-DWyuYmH_.js','/assets/search-D9t_ZA8c.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/GlassPopover-BQwHv_B7.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/arrow-up-right-CWObQWyh.js','/assets/minus-CWNYa3a9.js','/assets/layers-DDXVxWRY.js','/assets/trophy-BOp0Rb90.js','/assets/index-zXLzfrN-.js','/assets/useMutation-C1laxLes.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-DhkqOS2v.js','/assets/index-5tUDjkqx.js','/assets/banknote-Dm0fgxyg.js','/assets/clock-qJJNJxIj.js','/assets/clipboard-check-C3cY-jb5.js','/assets/info-DLQ0cRfG.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/wallet-D2SvD8wt.js','/assets/shopping-cart-i80Zbf4o.js','/assets/clsx-DPoTaEZk.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BgFEz8i5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DdvVaNQX.js','/assets/payrollCalculations-seahiZpF.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/arrow-left-1JW0wBZ5.js','/assets/GlassSelect-CQnW8uT3.js','/assets/refresh-cw-Da2g6MOO.js','/assets/plus-COitwNGf.js','/assets/save-BOlG9ZED.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/shopping-cart-i80Zbf4o.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-HRw2ISy_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/arrow-left-1JW0wBZ5.js','/assets/refresh-cw-Da2g6MOO.js','/assets/index-zXLzfrN-.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassPopover-BQwHv_B7.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/exportUtils-Cbb5Err4.js','/assets/apiAuth-DdvVaNQX.js','/assets/payrollFormatters-DGy10whX.js','/assets/useMutation-C1laxLes.js','/assets/trash-2-CUHqd1bM.js','/assets/dateUtils-BnEiOKPy.js','/assets/package-B5TyyjiQ.js','/assets/pencil-Qtcayjw8.js','/assets/eye-DzINopbe.js','/assets/save-BOlG9ZED.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-C065pfaU.js','/assets/useQuery-CwvFUpUJ.js','/assets/square-check-big-CIEQCGu_.js','/assets/square-BaqbmdHp.js','/assets/minus-CWNYa3a9.js','/assets/plus-COitwNGf.js','/assets/SidebarShell-Cog9-XQC.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-D9t_ZA8c.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/shopping-cart-i80Zbf4o.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DTxE2icy.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-CQnW8uT3.js','/assets/payrollFormatters-DGy10whX.js','/assets/index-5tUDjkqx.js','/assets/wallet-D2SvD8wt.js','/assets/x-C065pfaU.js','/assets/save-BOlG9ZED.js','/assets/pencil-Qtcayjw8.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/trash-2-CUHqd1bM.js','/assets/useEmployeeLoans-DkGh4CCp.js','/assets/filter-DWyuYmH_.js','/assets/plus-COitwNGf.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/SidebarShell-Cog9-XQC.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DdvVaNQX.js','/assets/search-D9t_ZA8c.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/useQuery-CwvFUpUJ.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/shopping-cart-i80Zbf4o.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js','/assets/useMutation-C1laxLes.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DTKTODkK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassMultiSelect-Ca5tdECj.js','/assets/x-C065pfaU.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/dollar-sign-B71BmmJE.js','/assets/percent-rKk3IsAD.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-DWEHNtBw.js','/assets/apiAuth-DdvVaNQX.js','/assets/index-zXLzfrN-.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/payrollCalculations-seahiZpF.js','/assets/info-DLQ0cRfG.js','/assets/lock-DlMx-7b2.js','/assets/circle-check-C2wUUs9F.js','/assets/clock-qJJNJxIj.js','/assets/style-DMXtuZsn.js','/assets/ban-Clrhs1az.js','/assets/message-square-D9Pxhv53.js','/assets/pencil-Qtcayjw8.js','/assets/GlassPopover-BQwHv_B7.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/send-XB6sbGea.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/gift-CoWOgAjZ.js','/assets/trash-2-CUHqd1bM.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/wallet-D2SvD8wt.js','/assets/SidebarShell-Cog9-XQC.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-D9t_ZA8c.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/shopping-cart-i80Zbf4o.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CW0HaXh2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/index-5tUDjkqx.js','/assets/GlassSelect-CQnW8uT3.js','/assets/apiAuth-DdvVaNQX.js','/assets/index-zXLzfrN-.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/percent-rKk3IsAD.js','/assets/pencil-Qtcayjw8.js','/assets/unlink-Dqrq7WdR.js','/assets/ItemUnitsPanel-Cpc4N286.js','/assets/plus-COitwNGf.js','/assets/map-pin-D8YZz9SK.js','/assets/circle-check-C2wUUs9F.js','/assets/hash-Crm7gKZz.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassPopover-BQwHv_B7.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/package-B5TyyjiQ.js','/assets/search-D9t_ZA8c.js','/assets/shopping-cart-i80Zbf4o.js','/assets/eye-DzINopbe.js','/assets/eye-off-CW9dHDyi.js','/assets/users-ypX0sR4t.js','/assets/layers-DDXVxWRY.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/boxes-Bz7EI0hz.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DlFmL-Mm.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/apiAuth-DdvVaNQX.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassDatePicker-C5udvfPz.js','/assets/useQuery-CwvFUpUJ.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/info-DLQ0cRfG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/shopping-cart-i80Zbf4o.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CAOUzv3E.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-BEdoNSf1.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassDatePicker-C5udvfPz.js','/assets/apiAuth-DdvVaNQX.js','/assets/payrollFormatters-DGy10whX.js','/assets/useQuery-CwvFUpUJ.js','/assets/filter-DWyuYmH_.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/layers-DDXVxWRY.js','/assets/boxes-Bz7EI0hz.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/trophy-BOp0Rb90.js','/assets/trash-2-CUHqd1bM.js','/assets/building-2-Bi2MKt0x.js','/assets/user-DfagCML7.js','/assets/clock-qJJNJxIj.js','/assets/chevron-down-B3DRT4S3.js','/assets/sticky-note-Bp9w5G1-.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/wallet-D2SvD8wt.js','/assets/shopping-cart-i80Zbf4o.js','/assets/GlassPopover-BQwHv_B7.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DmE0exbq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/Sidebar-82wPlzwU.js','/assets/trending-up-BgqdTk4e.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-check-big-YytesfJ2.js','/assets/clock-qJJNJxIj.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-days-DtTAo565.js','/assets/sparkles-C1YLt276.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/x-C065pfaU.js','/assets/info-DLQ0cRfG.js','/assets/circle-alert-Wpb6PjST.js','/assets/triangle-alert-uVw7TkFw.js','/assets/package-plus-BtHolXRP.js','/assets/calendar-CLjHW5lb.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/LineChart-A-xmoYM-.js','/assets/PieChart-R7CI_lJX.js','/assets/activity-Db60x8DP.js','/assets/dollar-sign-B71BmmJE.js','/assets/package-B5TyyjiQ.js','/assets/exportUtils-Cbb5Err4.js','/assets/file-text-BbAMQB_x.js','/assets/search-D9t_ZA8c.js','/assets/download-BpfCRhOm.js','/assets/printer-DuxBl8tu.js','/assets/users-ypX0sR4t.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassDatePicker-C5udvfPz.js','/assets/GlassMultiSelect-Ca5tdECj.js','/assets/layers-DDXVxWRY.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/dateUtils-BnEiOKPy.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/briefcase-CGkzVZ7S.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/calculator-D3gGV-xi.js','/assets/SidebarShell-Cog9-XQC.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-BQwHv_B7.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C4uz4Sak.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/Sidebar-82wPlzwU.js','/assets/exportUtils-Cbb5Err4.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/building-2-Bi2MKt0x.js','/assets/map-pin-D8YZz9SK.js','/assets/clipboard-list-CAvNJvX_.js','/assets/search-D9t_ZA8c.js','/assets/plus-COitwNGf.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/x-C065pfaU.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/triangle-alert-uVw7TkFw.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-Cog9-XQC.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B45RSLKF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/Sidebar-82wPlzwU.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/index-zXLzfrN-.js','/assets/useMutation-C1laxLes.js','/assets/employeeUtils-D69VYUwT.js','/assets/users-ypX0sR4t.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/search-D9t_ZA8c.js','/assets/GlassPopover-BQwHv_B7.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/circle-check-C2wUUs9F.js','/assets/circle-x-QgQZbgzI.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/briefcase-CGkzVZ7S.js','/assets/dollar-sign-B71BmmJE.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/x-C065pfaU.js','/assets/mail-Cq7bg44q.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/plus-COitwNGf.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/triangle-alert-uVw7TkFw.js','/assets/SidebarShell-Cog9-XQC.js','/assets/index-5tUDjkqx.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-8zNBnbZb.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/layers-DDXVxWRY.js','/assets/x-C065pfaU.js','/assets/languages-But0n9zp.js','/assets/plus-COitwNGf.js','/assets/pencil-Qtcayjw8.js','/assets/GlassSelect-CQnW8uT3.js','/assets/ban-Clrhs1az.js','/assets/Sidebar-82wPlzwU.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassPopover-BQwHv_B7.js','/assets/search-D9t_ZA8c.js','/assets/filter-DWyuYmH_.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/ItemUnitsPanel-Cpc4N286.js','/assets/eye-DzINopbe.js','/assets/building-2-Bi2MKt0x.js','/assets/trash-2-CUHqd1bM.js','/assets/square-check-big-CIEQCGu_.js','/assets/clipboard-check-C3cY-jb5.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/square-BaqbmdHp.js','/assets/eye-off-CW9dHDyi.js','/assets/clipboard-list-CAvNJvX_.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-Cog9-XQC.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/shopping-cart-i80Zbf4o.js','/assets/boxes-Bz7EI0hz.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DkF5m-s4.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/Sidebar-82wPlzwU.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/exportUtils-Cbb5Err4.js','/assets/arrow-left-1JW0wBZ5.js','/assets/package-B5TyyjiQ.js','/assets/building-2-Bi2MKt0x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/circle-x-QgQZbgzI.js','/assets/GlassSelect-CQnW8uT3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/hash-Crm7gKZz.js','/assets/calendar-CLjHW5lb.js','/assets/user-DfagCML7.js','/assets/file-text-BbAMQB_x.js','/assets/triangle-alert-uVw7TkFw.js','/assets/circle-check-big-YytesfJ2.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/GlassPopover-BQwHv_B7.js','/assets/download-BpfCRhOm.js','/assets/dateUtils-BnEiOKPy.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/trending-up-BgqdTk4e.js','/assets/x-C065pfaU.js','/assets/LineChart-A-xmoYM-.js','/assets/package-plus-BtHolXRP.js','/assets/clipboard-list-CAvNJvX_.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-Cog9-XQC.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DEX7bVEF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/apiAuth-DdvVaNQX.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/shield-CCvWcLx-.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/circle-alert-Wpb6PjST.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/triangle-alert-uVw7TkFw.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BzSBER-4.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/Sidebar-82wPlzwU.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/arrow-left-1JW0wBZ5.js','/assets/circle-x-QgQZbgzI.js','/assets/triangle-alert-uVw7TkFw.js','/assets/building-2-Bi2MKt0x.js','/assets/GlassSelect-CQnW8uT3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-BQwHv_B7.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/package-B5TyyjiQ.js','/assets/circle-check-big-YytesfJ2.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-Cog9-XQC.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CglN6z4R.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/Sidebar-82wPlzwU.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calendar-check-CPdF76fv.js','/assets/package-plus-BtHolXRP.js','/assets/clock-qJJNJxIj.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassDatePicker-C5udvfPz.js','/assets/filter-DWyuYmH_.js','/assets/x-C065pfaU.js','/assets/search-D9t_ZA8c.js','/assets/exportUtils-Cbb5Err4.js','/assets/GlassPopover-BQwHv_B7.js','/assets/printer-DuxBl8tu.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/square-check-big-CIEQCGu_.js','/assets/trash-2-CUHqd1bM.js','/assets/square-BaqbmdHp.js','/assets/building-2-Bi2MKt0x.js','/assets/eye-DzINopbe.js','/assets/pencil-Qtcayjw8.js','/assets/calendar-CLjHW5lb.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/arrow-up-right-CWObQWyh.js','/assets/user-DfagCML7.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/sticky-note-Bp9w5G1-.js','/assets/hash-Crm7gKZz.js','/assets/circle-check-big-YytesfJ2.js','/assets/percent-rKk3IsAD.js','/assets/package-B5TyyjiQ.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/triangle-alert-uVw7TkFw.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-Cog9-XQC.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DoXoEjHW.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/Sidebar-82wPlzwU.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/GlassSelect-CQnW8uT3.js','/assets/refresh-cw-Da2g6MOO.js','/assets/calendar-CLjHW5lb.js','/assets/chevron-up-BATf2qEs.js','/assets/chevron-down-B3DRT4S3.js','/assets/package-B5TyyjiQ.js','/assets/useQuery-CwvFUpUJ.js','/assets/dateUtils-BnEiOKPy.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/triangle-alert-uVw7TkFw.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-Cog9-XQC.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/building-2-Bi2MKt0x.js','/assets/layout-dashboard-t_ubicMG.js','/assets/file-text-BbAMQB_x.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/banknote-Dm0fgxyg.js','/assets/GlassPopover-BQwHv_B7.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-qC6apKIp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/Sidebar-82wPlzwU.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/banknote-Dm0fgxyg.js','/assets/building-2-Bi2MKt0x.js','/assets/package-B5TyyjiQ.js','/assets/triangle-alert-uVw7TkFw.js','/assets/trending-up-BgqdTk4e.js','/assets/GlassSelect-CQnW8uT3.js','/assets/search-D9t_ZA8c.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/refresh-cw-Da2g6MOO.js','/assets/GlassPopover-BQwHv_B7.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/layers-DDXVxWRY.js','/assets/circle-alert-Wpb6PjST.js','/assets/exportUtils-Cbb5Err4.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-Cog9-XQC.js','/assets/x-C065pfaU.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/dateUtils-BnEiOKPy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BbYM2Dke.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-CRwus_w_.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/Sidebar-82wPlzwU.js','/assets/Breadcrumb-BdCaKKcl.js','/assets/arrow-left-1JW0wBZ5.js','/assets/bar-chart-3-_HK4EKAK.js','/assets/GlassSelect-CQnW8uT3.js','/assets/search-D9t_ZA8c.js','/assets/refresh-cw-Da2g6MOO.js','/assets/trending-up-BgqdTk4e.js','/assets/triangle-alert-uVw7TkFw.js','/assets/GlassPopover-BQwHv_B7.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/calendar-CLjHW5lb.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CwvFUpUJ.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/clipboard-list-CAvNJvX_.js','/assets/briefcase-CGkzVZ7S.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/SidebarShell-Cog9-XQC.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/building-2-Bi2MKt0x.js','/assets/layout-dashboard-t_ubicMG.js','/assets/banknote-Dm0fgxyg.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D2O8xUeD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/GlassSelect-CQnW8uT3.js','/assets/apiAuth-DdvVaNQX.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/circle-check-big-YytesfJ2.js','/assets/package-B5TyyjiQ.js','/assets/log-out-Bi9xsGKs.js','/assets/save-BOlG9ZED.js','/assets/trending-up-BgqdTk4e.js','/assets/search-D9t_ZA8c.js','/assets/arrow-left-1JW0wBZ5.js','/assets/layers-DDXVxWRY.js','/assets/filter-DWyuYmH_.js','/assets/circle-alert-Wpb6PjST.js','/assets/zap-CAqMjvyG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-wZ7FSAFy.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/apiAuth-DdvVaNQX.js','/assets/globe-DKoGPur3.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/circle-check-C2wUUs9F.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DTSJzmO-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/GlassSelect-CQnW8uT3.js','/assets/apiAuth-DdvVaNQX.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/circle-check-big-YytesfJ2.js','/assets/trash-2-CUHqd1bM.js','/assets/log-out-Bi9xsGKs.js','/assets/save-BOlG9ZED.js','/assets/trending-up-BgqdTk4e.js','/assets/search-D9t_ZA8c.js','/assets/arrow-left-1JW0wBZ5.js','/assets/layers-DDXVxWRY.js','/assets/filter-DWyuYmH_.js','/assets/circle-alert-Wpb6PjST.js','/assets/zap-CAqMjvyG.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BJ52wPk6.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/apiAuth-DdvVaNQX.js','/assets/globe-DKoGPur3.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/building-2-Bi2MKt0x.js','/assets/circle-check-C2wUUs9F.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C33nYuv3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-D36g9KtH.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/Sidebar-CMszx3Mo.js','/assets/users-ypX0sR4t.js','/assets/arrow-left-1JW0wBZ5.js','/assets/dollar-sign-B71BmmJE.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/apiAuth-DdvVaNQX.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/useQuery-CwvFUpUJ.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BLzYonlj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-D36g9KtH.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/gift-CoWOgAjZ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/apiAuth-DdvVaNQX.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bnsgdv03.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-D36g9KtH.js','/assets/Sidebar-CMszx3Mo.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/index-zXLzfrN-.js','/assets/useMutation-C1laxLes.js','/assets/users-ypX0sR4t.js','/assets/dollar-sign-B71BmmJE.js','/assets/image-Bggefa6I.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassMultiSelect-Ca5tdECj.js','/assets/GlassDatePicker-C5udvfPz.js','/assets/useUpload-CYLS4Xxt.js','/assets/x-C065pfaU.js','/assets/user-DfagCML7.js','/assets/calendar-CLjHW5lb.js','/assets/file-text-BbAMQB_x.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/send-XB6sbGea.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/SidebarShell-Cog9-XQC.js','/assets/index-5tUDjkqx.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/search-D9t_ZA8c.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-xYgzgmb5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-D36g9KtH.js','/assets/Sidebar-CMszx3Mo.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/index-zXLzfrN-.js','/assets/useMutation-C1laxLes.js','/assets/employeeUtils-D69VYUwT.js','/assets/search-D9t_ZA8c.js','/assets/users-ypX0sR4t.js','/assets/wallet-D2SvD8wt.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/heart-pulse-COZjcC8x.js','/assets/GlassSelect-CQnW8uT3.js','/assets/filter-DWyuYmH_.js','/assets/rotate-ccw-XcFyxHR3.js','/assets/GlassPopover-BQwHv_B7.js','/assets/exportUtils-Cbb5Err4.js','/assets/download-BpfCRhOm.js','/assets/chevron-down-B3DRT4S3.js','/assets/file-text-BbAMQB_x.js','/assets/user-DfagCML7.js','/assets/ban-Clrhs1az.js','/assets/pencil-Qtcayjw8.js','/assets/trash-2-CUHqd1bM.js','/assets/x-C065pfaU.js','/assets/GlassMultiSelect-Ca5tdECj.js','/assets/GlassDatePicker-C5udvfPz.js','/assets/refresh-cw-Da2g6MOO.js','/assets/calendar-CLjHW5lb.js','/assets/circle-check-C2wUUs9F.js','/assets/briefcase-CGkzVZ7S.js','/assets/building-2-Bi2MKt0x.js','/assets/calendar-check-CPdF76fv.js','/assets/circle-x-QgQZbgzI.js','/assets/dollar-sign-B71BmmJE.js','/assets/index-5tUDjkqx.js','/assets/payrollFormatters-DGy10whX.js','/assets/save-BOlG9ZED.js','/assets/plus-COitwNGf.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/clock-qJJNJxIj.js','/assets/dateUtils-BnEiOKPy.js','/assets/calendar-days-DtTAo565.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BRKaOoLO.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-D36g9KtH.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-CMszx3Mo.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassMultiSelect-Ca5tdECj.js','/assets/payrollFormatters-DGy10whX.js','/assets/useEmployeeLoans-DkGh4CCp.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/trash-2-CUHqd1bM.js','/assets/info-DLQ0cRfG.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/wallet-D2SvD8wt.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-jWdL_fVi.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/layout-D36g9KtH.js','/assets/index-zXLzfrN-.js','/assets/Sidebar-CMszx3Mo.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-CQnW8uT3.js','/assets/payrollFormatters-DGy10whX.js','/assets/usePayrollMutations-DWEHNtBw.js','/assets/users-ypX0sR4t.js','/assets/ban-Clrhs1az.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/lock-DlMx-7b2.js','/assets/refresh-cw-Da2g6MOO.js','/assets/send-XB6sbGea.js','/assets/info-DLQ0cRfG.js','/assets/wallet-D2SvD8wt.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/apiAuth-DdvVaNQX.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/useQuery-CwvFUpUJ.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/layout-dashboard-t_ubicMG.js','/assets/dollar-sign-B71BmmJE.js','/assets/clock-qJJNJxIj.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js','/assets/useMutation-C1laxLes.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DAjMUGSi.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-8DvHqIcV.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-e1tB1_2f.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-CBWzm0rk.js','/assets/index-5tUDjkqx.js','/assets/apiAuth-DdvVaNQX.js','/assets/client-CINQ5WCN.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/exportUtils-Cbb5Err4.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CwvFUpUJ.js','/assets/image-Bggefa6I.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/download-BpfCRhOm.js','/assets/useMutation-C1laxLes.js','/assets/upload-Bh8z_qYt.js','/assets/x-C065pfaU.js','/assets/circle-alert-Wpb6PjST.js','/assets/circle-check-C2wUUs9F.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/clock-qJJNJxIj.js','/assets/send-XB6sbGea.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/search-D9t_ZA8c.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CVorPdbK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-CBWzm0rk.js','/assets/BloggerInvitationCard-esd9iJpd.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/arrow-right-WBdEsbVb.js','/assets/external-link-DQg3IH_A.js','/assets/printer-DuxBl8tu.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cv3L3vWf.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-CBWzm0rk.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/coffee-Csx1FV89.js','/assets/plus-COitwNGf.js','/assets/x-C065pfaU.js','/assets/eye-off-CW9dHDyi.js','/assets/eye-DzINopbe.js','/assets/square-pen-Da75lyci.js','/assets/trash-2-CUHqd1bM.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/search-D9t_ZA8c.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DrnugNdc.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-CBWzm0rk.js','/assets/useAdminAuth-yQkM-X8u.js','/assets/apiAuth-DdvVaNQX.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/save-BOlG9ZED.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/AdminThemeToggle-u4GdY999.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BRWWmAsI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/shield-CCvWcLx-.js','/assets/globe-DKoGPur3.js','/assets/eye-DzINopbe.js','/assets/lock-DlMx-7b2.js','/assets/trash-2-CUHqd1bM.js','/assets/mail-Cq7bg44q.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C2VVSMKK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassDatePicker-C5udvfPz.js','/assets/apiAuth-DdvVaNQX.js','/assets/languages-But0n9zp.js','/assets/useMutation-C1laxLes.js','/assets/calculator-D3gGV-xi.js','/assets/building-2-Bi2MKt0x.js','/assets/user-DfagCML7.js','/assets/lock-DlMx-7b2.js','/assets/info-DLQ0cRfG.js','/assets/log-out-Bi9xsGKs.js','/assets/send-XB6sbGea.js','/assets/arrow-left-1JW0wBZ5.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/calendar-days-DtTAo565.js','/assets/x-C065pfaU.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DDeTjCk1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/globe-DKoGPur3.js','/assets/mail-Cq7bg44q.js','/assets/external-link-DQg3IH_A.js','/assets/shield-CCvWcLx-.js','/assets/file-text-BbAMQB_x.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Wm9tw4NP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/circle-alert-Wpb6PjST.js','/assets/lock-DlMx-7b2.js','/assets/sparkles-C1YLt276.js','/assets/coffee-Csx1FV89.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/createLucideIcon-kT1gL1p0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-mAovTiA1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-Bi0_yQ8n.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/PriorityPill-DmmW0Pfb.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/calendar-days-DtTAo565.js','/assets/loader-circle-F04ReFHa.js','/assets/circle-check-C2wUUs9F.js','/assets/message-square-D9Pxhv53.js','/assets/triangle-alert-uVw7TkFw.js','/assets/x-C065pfaU.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/activity-Db60x8DP.js','/assets/circle-DhkqOS2v.js','/assets/heart-pulse-COZjcC8x.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DdvVaNQX.js','/assets/search-D9t_ZA8c.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BdieFxS_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-Bi0_yQ8n.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-CQnW8uT3.js','/assets/dateUtils-BnEiOKPy.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/message-square-D9Pxhv53.js','/assets/plus-COitwNGf.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/send-XB6sbGea.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DdvVaNQX.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CX6lnA5h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-Bi0_yQ8n.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/useUpload-CYLS4Xxt.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/circle-DhkqOS2v.js','/assets/x-C065pfaU.js','/assets/arrow-right-WBdEsbVb.js','/assets/GlassSelect-CQnW8uT3.js','/assets/GlassDatePicker-C5udvfPz.js','/assets/flag-B3Z7tId9.js','/assets/calendar-days-DtTAo565.js','/assets/upload-Bh8z_qYt.js','/assets/trash-2-CUHqd1bM.js','/assets/file-text-BbAMQB_x.js','/assets/dateUtils-BnEiOKPy.js','/assets/clock-qJJNJxIj.js','/assets/PriorityPill-DmmW0Pfb.js','/assets/loader-circle-F04ReFHa.js','/assets/plus-COitwNGf.js','/assets/unlink-Dqrq7WdR.js','/assets/circle-check-C2wUUs9F.js','/assets/search-D9t_ZA8c.js','/assets/SidebarShell-Cog9-XQC.js','/assets/triangle-alert-uVw7TkFw.js','/assets/activity-Db60x8DP.js','/assets/arrow-up-down-cDRsT3LM.js','/assets/square-check-big-CIEQCGu_.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/users-ypX0sR4t.js','/assets/apiAuth-DdvVaNQX.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-xzXbKytG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-Bi0_yQ8n.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/users-ypX0sR4t.js','/assets/plus-COitwNGf.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DdvVaNQX.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/square-check-big-CIEQCGu_.js','/assets/file-text-BbAMQB_x.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CqUUjR0Y.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js','/assets/layout-CcmeneUt.js','/assets/Sidebar-Bi0_yQ8n.js','/assets/useWorkspaceUser-BFmwU0E1.js','/assets/GlassSelect-CQnW8uT3.js','/assets/useQuery-CwvFUpUJ.js','/assets/useMutation-C1laxLes.js','/assets/file-text-BbAMQB_x.js','/assets/plus-COitwNGf.js','/assets/trash-2-CUHqd1bM.js','/assets/flag-B3Z7tId9.js','/assets/square-check-big-CIEQCGu_.js','/assets/loader-circle-F04ReFHa.js','/assets/copy-CV54jq9n.js','/assets/index-zXLzfrN-.js','/assets/index-5tUDjkqx.js','/assets/SidebarShell-Cog9-XQC.js','/assets/createLucideIcon-kT1gL1p0.js','/assets/clipboard-list-CAvNJvX_.js','/assets/calculator-D3gGV-xi.js','/assets/users-ypX0sR4t.js','/assets/useAdminTheme-BR2nnzOx.js','/assets/apiAuth-DdvVaNQX.js','/assets/search-D9t_ZA8c.js','/assets/x-C065pfaU.js','/assets/package-B5TyyjiQ.js','/assets/arrow-left-1JW0wBZ5.js','/assets/globe-DKoGPur3.js','/assets/log-out-Bi9xsGKs.js','/assets/GlassPopover-BQwHv_B7.js','/assets/chevron-down-B3DRT4S3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':true,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-DTH4b2r5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-C8iXPy4t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-c30c9669.js','version':'c30c9669','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-DmAfsqha.js','imports':['/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/client-D2oREjLw.js','/assets/index-ClqngR03.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-BPeNhdyD.js','imports':['/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/client-D2oREjLw.js','/assets/index-ClqngR03.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-CFrWnSac.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-C2DABb3b.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DdG4qt5w.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/shield-Dup-1304.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/trash-2-CSydKIgC.js','/assets/languages-D9OFD3MG.js','/assets/arrow-left-Dc-nxrjU.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-qy6bz9K1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/payrollCalculations-DszFSuBE.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/layout-dashboard-CpfSMZND.js','/assets/calculator-CYHNxgHE.js','/assets/banknote-ByefcVmp.js','/assets/wallet-CEIwv638.js','/assets/arrow-left-Dc-nxrjU.js','/assets/trending-up-DUPF-t2O.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/shopping-cart-BjPRkPYq.js','/assets/trash-2-CSydKIgC.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cj3bRcWc.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/dateUtils-B35lzzJe.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/banknote-ByefcVmp.js','/assets/building-2-9RGcZc_C.js','/assets/calendar-days-CoqSMrFB.js','/assets/refresh-cw-BfH5xVLL.js','/assets/save-yHQY5m6l.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/wallet-CEIwv638.js','/assets/shopping-cart-BjPRkPYq.js','/assets/trash-2-CSydKIgC.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DYPSHOaG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/useWorkspaceUser-njvINekt.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/dateUtils-B35lzzJe.js','/assets/save-yHQY5m6l.js','/assets/plus-C7wNJaYY.js','/assets/x-BqzKH8b5.js','/assets/style-CTwHt0_J.js','/assets/message-square-2Iv0luj0.js','/assets/pencil-DQNM-i6l.js','/assets/trash-2-CSydKIgC.js','/assets/apiAuth-BwKiUWLI.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/trending-up-DUPF-t2O.js','/assets/LineChart-w4wA35HW.js','/assets/PieChart-B-C795Un.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/filter-CanJO0Ft.js','/assets/search-CmlT9azu.js','/assets/rotate-ccw-BCdlLUHJ.js','/assets/GlassPopover-D5yfYLx5.js','/assets/exportUtils-B52DYAkn.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/arrow-up-right-5OzsJ6F-.js','/assets/minus-CCc5HigP.js','/assets/layers-Bke9n-tX.js','/assets/trophy-CR8wi3IS.js','/assets/index-CFrWnSac.js','/assets/useMutation-zVGY4mKO.js','/assets/circle-check-D-s0PrsR.js','/assets/circle-CxTV6ikd.js','/assets/index-ClqngR03.js','/assets/banknote-ByefcVmp.js','/assets/clock-BJ4ewJxv.js','/assets/clipboard-check-DkerU3e7.js','/assets/info-D-ouVjEf.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/wallet-CEIwv638.js','/assets/shopping-cart-BjPRkPYq.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dh0P-yDy.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/ui-CGxEAera.js','/assets/useWorkspaceUser-njvINekt.js','/assets/apiAuth-BwKiUWLI.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollCalculations-DszFSuBE.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/arrow-left-Dc-nxrjU.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/refresh-cw-BfH5xVLL.js','/assets/plus-C7wNJaYY.js','/assets/save-yHQY5m6l.js','/assets/copy-D6Frz49g.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/wallet-CEIwv638.js','/assets/shopping-cart-BjPRkPYq.js','/assets/trash-2-CSydKIgC.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CdowBxeN.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/ui-CGxEAera.js','/assets/useWorkspaceUser-njvINekt.js','/assets/arrow-left-Dc-nxrjU.js','/assets/refresh-cw-BfH5xVLL.js','/assets/index-CFrWnSac.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassPopover-D5yfYLx5.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/exportUtils-B52DYAkn.js','/assets/apiAuth-BwKiUWLI.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/useMutation-zVGY4mKO.js','/assets/trash-2-CSydKIgC.js','/assets/package-DMm9W_a4.js','/assets/pencil-DQNM-i6l.js','/assets/eye-aKoJyMpk.js','/assets/save-yHQY5m6l.js','/assets/circle-check-big-Ce6nRHst.js','/assets/triangle-alert-K0k848fh.js','/assets/x-BqzKH8b5.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/square-check-big-BhfyQdn5.js','/assets/square-_TbfNUk_.js','/assets/minus-CCc5HigP.js','/assets/plus-C7wNJaYY.js','/assets/SidebarShell-Di8K0aM9.js','/assets/index-ClqngR03.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/wallet-CEIwv638.js','/assets/shopping-cart-BjPRkPYq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CaKOok6Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/index-ClqngR03.js','/assets/dateUtils-B35lzzJe.js','/assets/wallet-CEIwv638.js','/assets/x-BqzKH8b5.js','/assets/save-yHQY5m6l.js','/assets/pencil-DQNM-i6l.js','/assets/rotate-ccw-BCdlLUHJ.js','/assets/trash-2-CSydKIgC.js','/assets/useEmployeeLoans-DcSY5jHF.js','/assets/filter-CanJO0Ft.js','/assets/plus-C7wNJaYY.js','/assets/info-D-ouVjEf.js','/assets/index-CFrWnSac.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/apiAuth-BwKiUWLI.js','/assets/search-CmlT9azu.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/useQuery-B4XNvHME.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/shopping-cart-BjPRkPYq.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js','/assets/queryKeys-CiUDBYna.js','/assets/useMutation-zVGY4mKO.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CvRTG1Us.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassMultiSelect-D8oi0uSD.js','/assets/x-BqzKH8b5.js','/assets/user-BcBerBM3.js','/assets/file-text-CeCkd5B9.js','/assets/dollar-sign-D6AJYnqC.js','/assets/percent-DcbbA2lJ.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-Coh2qsJE.js','/assets/apiAuth-BwKiUWLI.js','/assets/index-CFrWnSac.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/payrollCalculations-DszFSuBE.js','/assets/info-D-ouVjEf.js','/assets/lock-CKsuguPM.js','/assets/circle-check-D-s0PrsR.js','/assets/clock-BJ4ewJxv.js','/assets/style-CTwHt0_J.js','/assets/ban-Byt5KaiK.js','/assets/message-square-2Iv0luj0.js','/assets/pencil-DQNM-i6l.js','/assets/GlassPopover-D5yfYLx5.js','/assets/exportUtils-B52DYAkn.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/send-DmExXB_w.js','/assets/gift-CBgYq6Z2.js','/assets/trash-2-CSydKIgC.js','/assets/users-_8vdrI7L.js','/assets/plus-C7wNJaYY.js','/assets/wallet-CEIwv638.js','/assets/dateUtils-B35lzzJe.js','/assets/SidebarShell-Di8K0aM9.js','/assets/index-ClqngR03.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/shopping-cart-BjPRkPYq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CNfz0yVw.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/index-ClqngR03.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/apiAuth-BwKiUWLI.js','/assets/index-CFrWnSac.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/x-BqzKH8b5.js','/assets/save-yHQY5m6l.js','/assets/percent-DcbbA2lJ.js','/assets/pencil-DQNM-i6l.js','/assets/unlink-BTi1essh.js','/assets/ItemUnitsPanel-BzcttHUI.js','/assets/plus-C7wNJaYY.js','/assets/map-pin-BcM3pP-C.js','/assets/circle-check-D-s0PrsR.js','/assets/hash-DXlyAaHY.js','/assets/trash-2-CSydKIgC.js','/assets/GlassPopover-D5yfYLx5.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/package-DMm9W_a4.js','/assets/search-CmlT9azu.js','/assets/shopping-cart-BjPRkPYq.js','/assets/eye-aKoJyMpk.js','/assets/eye-off-Cyhf6Drb.js','/assets/users-_8vdrI7L.js','/assets/layers-Bke9n-tX.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/wallet-CEIwv638.js','/assets/boxes-Rcyz3d_O.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-bQmOwr_F.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassDatePicker-BiFw00RK.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/calculator-CYHNxgHE.js','/assets/building-2-9RGcZc_C.js','/assets/info-D-ouVjEf.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/wallet-CEIwv638.js','/assets/shopping-cart-BjPRkPYq.js','/assets/trash-2-CSydKIgC.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BJ4ewJxv.js','/assets/calendar-days-CoqSMrFB.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-GJUFW8wP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-CdyEzTUp.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassDatePicker-BiFw00RK.js','/assets/apiAuth-BwKiUWLI.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/filter-CanJO0Ft.js','/assets/rotate-ccw-BCdlLUHJ.js','/assets/layers-Bke9n-tX.js','/assets/boxes-Rcyz3d_O.js','/assets/trophy-CR8wi3IS.js','/assets/trash-2-CSydKIgC.js','/assets/building-2-9RGcZc_C.js','/assets/user-BcBerBM3.js','/assets/clock-BJ4ewJxv.js','/assets/chevron-down-CarF6wvM.js','/assets/sticky-note-Dd2za4_4.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/wallet-CEIwv638.js','/assets/shopping-cart-BjPRkPYq.js','/assets/GlassPopover-D5yfYLx5.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-days-CoqSMrFB.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-_CQLeBJ3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/Sidebar-DW5J1im5.js','/assets/ui-CGxEAera.js','/assets/trending-up-DUPF-t2O.js','/assets/clipboard-list-BgE6C-8N.js','/assets/circle-check-big-Ce6nRHst.js','/assets/clock-BJ4ewJxv.js','/assets/building-2-9RGcZc_C.js','/assets/calendar-days-CoqSMrFB.js','/assets/dateUtils-B35lzzJe.js','/assets/sparkles-DICxVI2k.js','/assets/chevron-up---MuLXWM.js','/assets/chevron-down-CarF6wvM.js','/assets/x-BqzKH8b5.js','/assets/info-D-ouVjEf.js','/assets/circle-alert-BslaCj9S.js','/assets/triangle-alert-K0k848fh.js','/assets/package-plus-ZvvZuFov.js','/assets/calendar-aBCAaGyK.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/LineChart-w4wA35HW.js','/assets/PieChart-B-C795Un.js','/assets/activity-BjzsoSRS.js','/assets/dollar-sign-D6AJYnqC.js','/assets/package-DMm9W_a4.js','/assets/exportUtils-B52DYAkn.js','/assets/file-text-CeCkd5B9.js','/assets/search-CmlT9azu.js','/assets/download-KuqcxGft.js','/assets/printer-BPtGPVFk.js','/assets/users-_8vdrI7L.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassDatePicker-BiFw00RK.js','/assets/GlassMultiSelect-D8oi0uSD.js','/assets/layers-Bke9n-tX.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/SidebarShell-Di8K0aM9.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-D5yfYLx5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C30IXBso.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/Sidebar-DW5J1im5.js','/assets/ui-CGxEAera.js','/assets/exportUtils-B52DYAkn.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/Breadcrumb-DVzfubh3.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/building-2-9RGcZc_C.js','/assets/map-pin-BcM3pP-C.js','/assets/clipboard-list-BgE6C-8N.js','/assets/search-CmlT9azu.js','/assets/plus-C7wNJaYY.js','/assets/square-pen-t4S2kzRZ.js','/assets/trash-2-CSydKIgC.js','/assets/x-BqzKH8b5.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/triangle-alert-K0k848fh.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/SidebarShell-Di8K0aM9.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/file-text-CeCkd5B9.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/banknote-ByefcVmp.js','/assets/dateUtils-B35lzzJe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C1i0kcC7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/Sidebar-DW5J1im5.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/index-CFrWnSac.js','/assets/useMutation-zVGY4mKO.js','/assets/employeeUtils-CJrp0g9-.js','/assets/users-_8vdrI7L.js','/assets/shield-Dup-1304.js','/assets/user-BcBerBM3.js','/assets/search-CmlT9azu.js','/assets/GlassPopover-D5yfYLx5.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/circle-check-D-s0PrsR.js','/assets/circle-x-CiEUDlqG.js','/assets/pencil-DQNM-i6l.js','/assets/trash-2-CSydKIgC.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/briefcase-DA-pILuF.js','/assets/dollar-sign-D6AJYnqC.js','/assets/x-BqzKH8b5.js','/assets/mail-FU_IVnTl.js','/assets/lock-CKsuguPM.js','/assets/building-2-9RGcZc_C.js','/assets/Breadcrumb-DVzfubh3.js','/assets/plus-C7wNJaYY.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/triangle-alert-K0k848fh.js','/assets/SidebarShell-Di8K0aM9.js','/assets/index-ClqngR03.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/banknote-ByefcVmp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-rW8UxLZY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/ui-CGxEAera.js','/assets/layers-Bke9n-tX.js','/assets/x-BqzKH8b5.js','/assets/languages-D9OFD3MG.js','/assets/plus-C7wNJaYY.js','/assets/pencil-DQNM-i6l.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/ban-Byt5KaiK.js','/assets/Sidebar-DW5J1im5.js','/assets/package-DMm9W_a4.js','/assets/circle-check-big-Ce6nRHst.js','/assets/triangle-alert-K0k848fh.js','/assets/circle-x-CiEUDlqG.js','/assets/GlassPopover-D5yfYLx5.js','/assets/search-CmlT9azu.js','/assets/filter-CanJO0Ft.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/dateUtils-B35lzzJe.js','/assets/ItemUnitsPanel-BzcttHUI.js','/assets/eye-aKoJyMpk.js','/assets/building-2-9RGcZc_C.js','/assets/trash-2-CSydKIgC.js','/assets/square-check-big-BhfyQdn5.js','/assets/clipboard-check-DkerU3e7.js','/assets/square-_TbfNUk_.js','/assets/eye-off-Cyhf6Drb.js','/assets/clipboard-list-BgE6C-8N.js','/assets/circle-alert-BslaCj9S.js','/assets/exportUtils-B52DYAkn.js','/assets/Breadcrumb-DVzfubh3.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/SidebarShell-Di8K0aM9.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/banknote-ByefcVmp.js','/assets/shopping-cart-BjPRkPYq.js','/assets/boxes-Rcyz3d_O.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DQtiEGWA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/Sidebar-DW5J1im5.js','/assets/Breadcrumb-DVzfubh3.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/ui-CGxEAera.js','/assets/arrow-left-Dc-nxrjU.js','/assets/package-DMm9W_a4.js','/assets/building-2-9RGcZc_C.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/circle-x-CiEUDlqG.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/search-CmlT9azu.js','/assets/refresh-cw-BfH5xVLL.js','/assets/hash-DXlyAaHY.js','/assets/calendar-aBCAaGyK.js','/assets/user-BcBerBM3.js','/assets/file-text-CeCkd5B9.js','/assets/triangle-alert-K0k848fh.js','/assets/circle-check-big-Ce6nRHst.js','/assets/chevron-up---MuLXWM.js','/assets/chevron-down-CarF6wvM.js','/assets/GlassPopover-D5yfYLx5.js','/assets/download-KuqcxGft.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/trending-up-DUPF-t2O.js','/assets/x-BqzKH8b5.js','/assets/LineChart-w4wA35HW.js','/assets/package-plus-ZvvZuFov.js','/assets/clipboard-list-BgE6C-8N.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/SidebarShell-Di8K0aM9.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BSsR5xNF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/shield-Dup-1304.js','/assets/user-BcBerBM3.js','/assets/lock-CKsuguPM.js','/assets/circle-alert-BslaCj9S.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/triangle-alert-K0k848fh.js','/assets/clipboard-list-BgE6C-8N.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C0kJGh2_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/Sidebar-DW5J1im5.js','/assets/Breadcrumb-DVzfubh3.js','/assets/ui-CGxEAera.js','/assets/arrow-left-Dc-nxrjU.js','/assets/circle-x-CiEUDlqG.js','/assets/triangle-alert-K0k848fh.js','/assets/building-2-9RGcZc_C.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/search-CmlT9azu.js','/assets/refresh-cw-BfH5xVLL.js','/assets/GlassPopover-D5yfYLx5.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/package-DMm9W_a4.js','/assets/circle-check-big-Ce6nRHst.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/clipboard-list-BgE6C-8N.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/SidebarShell-Di8K0aM9.js','/assets/x-BqzKH8b5.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/banknote-ByefcVmp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DccjzmWR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/dateUtils-B35lzzJe.js','/assets/Sidebar-DW5J1im5.js','/assets/ui-CGxEAera.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calendar-check-CHqYkknG.js','/assets/package-plus-ZvvZuFov.js','/assets/clock-BJ4ewJxv.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassDatePicker-BiFw00RK.js','/assets/filter-CanJO0Ft.js','/assets/x-BqzKH8b5.js','/assets/search-CmlT9azu.js','/assets/exportUtils-B52DYAkn.js','/assets/GlassPopover-D5yfYLx5.js','/assets/printer-BPtGPVFk.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/square-check-big-BhfyQdn5.js','/assets/trash-2-CSydKIgC.js','/assets/square-_TbfNUk_.js','/assets/building-2-9RGcZc_C.js','/assets/eye-aKoJyMpk.js','/assets/pencil-DQNM-i6l.js','/assets/calendar-aBCAaGyK.js','/assets/arrow-up-right-5OzsJ6F-.js','/assets/user-BcBerBM3.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/sticky-note-Dd2za4_4.js','/assets/hash-DXlyAaHY.js','/assets/circle-check-big-Ce6nRHst.js','/assets/percent-DcbbA2lJ.js','/assets/package-DMm9W_a4.js','/assets/circle-alert-BslaCj9S.js','/assets/circle-check-D-s0PrsR.js','/assets/plus-C7wNJaYY.js','/assets/send-DmExXB_w.js','/assets/triangle-alert-K0k848fh.js','/assets/Breadcrumb-DVzfubh3.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/SidebarShell-Di8K0aM9.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js','/assets/calendar-days-CoqSMrFB.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Yr1SFsz-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/Sidebar-DW5J1im5.js','/assets/Breadcrumb-DVzfubh3.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/refresh-cw-BfH5xVLL.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-aBCAaGyK.js','/assets/chevron-up---MuLXWM.js','/assets/chevron-down-CarF6wvM.js','/assets/package-DMm9W_a4.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/arrow-left-Dc-nxrjU.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/triangle-alert-K0k848fh.js','/assets/clipboard-list-BgE6C-8N.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/SidebarShell-Di8K0aM9.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/building-2-9RGcZc_C.js','/assets/layout-dashboard-CpfSMZND.js','/assets/file-text-CeCkd5B9.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/banknote-ByefcVmp.js','/assets/GlassPopover-D5yfYLx5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DSqHCZKj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/Sidebar-DW5J1im5.js','/assets/Breadcrumb-DVzfubh3.js','/assets/ui-CGxEAera.js','/assets/banknote-ByefcVmp.js','/assets/building-2-9RGcZc_C.js','/assets/package-DMm9W_a4.js','/assets/triangle-alert-K0k848fh.js','/assets/trending-up-DUPF-t2O.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/search-CmlT9azu.js','/assets/arrow-up-down-B3xkx9rS.js','/assets/refresh-cw-BfH5xVLL.js','/assets/GlassPopover-D5yfYLx5.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/circle-alert-BslaCj9S.js','/assets/layers-Bke9n-tX.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/clipboard-list-BgE6C-8N.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/SidebarShell-Di8K0aM9.js','/assets/x-BqzKH8b5.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/bar-chart-3-TWBi5EeE.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DSep3s6W.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-BGSRyGYV.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/Sidebar-DW5J1im5.js','/assets/Breadcrumb-DVzfubh3.js','/assets/ui-CGxEAera.js','/assets/arrow-left-Dc-nxrjU.js','/assets/bar-chart-3-TWBi5EeE.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/search-CmlT9azu.js','/assets/refresh-cw-BfH5xVLL.js','/assets/trending-up-DUPF-t2O.js','/assets/triangle-alert-K0k848fh.js','/assets/GlassPopover-D5yfYLx5.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-aBCAaGyK.js','/assets/exportUtils-B52DYAkn.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/clipboard-list-BgE6C-8N.js','/assets/briefcase-DA-pILuF.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/SidebarShell-Di8K0aM9.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/building-2-9RGcZc_C.js','/assets/layout-dashboard-CpfSMZND.js','/assets/banknote-ByefcVmp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-7OHNNnQp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/apiAuth-BwKiUWLI.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/circle-check-big-Ce6nRHst.js','/assets/package-DMm9W_a4.js','/assets/log-out-Cgh-uV67.js','/assets/save-yHQY5m6l.js','/assets/trending-up-DUPF-t2O.js','/assets/search-CmlT9azu.js','/assets/arrow-left-Dc-nxrjU.js','/assets/layers-Bke9n-tX.js','/assets/filter-CanJO0Ft.js','/assets/circle-alert-BslaCj9S.js','/assets/zap-DRgrNYbe.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DHxcAg1o.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/globe-hgUwYNqj.js','/assets/user-BcBerBM3.js','/assets/lock-CKsuguPM.js','/assets/building-2-9RGcZc_C.js','/assets/circle-check-D-s0PrsR.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DqUQxZFu.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/apiAuth-BwKiUWLI.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/circle-check-big-Ce6nRHst.js','/assets/trash-2-CSydKIgC.js','/assets/log-out-Cgh-uV67.js','/assets/save-yHQY5m6l.js','/assets/trending-up-DUPF-t2O.js','/assets/search-CmlT9azu.js','/assets/arrow-left-Dc-nxrjU.js','/assets/layers-Bke9n-tX.js','/assets/filter-CanJO0Ft.js','/assets/circle-alert-BslaCj9S.js','/assets/zap-DRgrNYbe.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CmBufOTJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/globe-hgUwYNqj.js','/assets/user-BcBerBM3.js','/assets/lock-CKsuguPM.js','/assets/building-2-9RGcZc_C.js','/assets/circle-check-D-s0PrsR.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DIAdEhDv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-DpVo-7Ei.js','/assets/ui-CGxEAera.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/Sidebar-CCuAwzck.js','/assets/users-_8vdrI7L.js','/assets/arrow-left-Dc-nxrjU.js','/assets/dollar-sign-D6AJYnqC.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/apiAuth-BwKiUWLI.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/useQuery-B4XNvHME.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/clock-BJ4ewJxv.js','/assets/wallet-CEIwv638.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BjqklQ77.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-DpVo-7Ei.js','/assets/ui-CGxEAera.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/gift-CBgYq6Z2.js','/assets/arrow-left-Dc-nxrjU.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/apiAuth-BwKiUWLI.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C19oQigH.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-DpVo-7Ei.js','/assets/ui-CGxEAera.js','/assets/Sidebar-CCuAwzck.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/index-CFrWnSac.js','/assets/useMutation-zVGY4mKO.js','/assets/users-_8vdrI7L.js','/assets/dollar-sign-D6AJYnqC.js','/assets/image-KLOEpUcu.js','/assets/pencil-DQNM-i6l.js','/assets/trash-2-CSydKIgC.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassMultiSelect-D8oi0uSD.js','/assets/GlassDatePicker-BiFw00RK.js','/assets/useUpload-DU68iYfy.js','/assets/x-BqzKH8b5.js','/assets/user-BcBerBM3.js','/assets/calendar-aBCAaGyK.js','/assets/file-text-CeCkd5B9.js','/assets/loader-circle-DIuXuf8q.js','/assets/dateUtils-B35lzzJe.js','/assets/plus-C7wNJaYY.js','/assets/send-DmExXB_w.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/SidebarShell-Di8K0aM9.js','/assets/index-ClqngR03.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/search-CmlT9azu.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/clock-BJ4ewJxv.js','/assets/wallet-CEIwv638.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js','/assets/calendar-days-CoqSMrFB.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cat9fGT7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-DpVo-7Ei.js','/assets/ui-CGxEAera.js','/assets/Sidebar-CCuAwzck.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/index-CFrWnSac.js','/assets/useMutation-zVGY4mKO.js','/assets/employeeUtils-CJrp0g9-.js','/assets/search-CmlT9azu.js','/assets/users-_8vdrI7L.js','/assets/wallet-CEIwv638.js','/assets/heart-pulse-BItb2jGz.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/filter-CanJO0Ft.js','/assets/rotate-ccw-BCdlLUHJ.js','/assets/GlassPopover-D5yfYLx5.js','/assets/exportUtils-B52DYAkn.js','/assets/download-KuqcxGft.js','/assets/chevron-down-CarF6wvM.js','/assets/file-text-CeCkd5B9.js','/assets/user-BcBerBM3.js','/assets/ban-Byt5KaiK.js','/assets/pencil-DQNM-i6l.js','/assets/trash-2-CSydKIgC.js','/assets/x-BqzKH8b5.js','/assets/GlassMultiSelect-D8oi0uSD.js','/assets/GlassDatePicker-BiFw00RK.js','/assets/dateUtils-B35lzzJe.js','/assets/refresh-cw-BfH5xVLL.js','/assets/calendar-aBCAaGyK.js','/assets/circle-check-D-s0PrsR.js','/assets/briefcase-DA-pILuF.js','/assets/building-2-9RGcZc_C.js','/assets/calendar-check-CHqYkknG.js','/assets/circle-x-CiEUDlqG.js','/assets/dollar-sign-D6AJYnqC.js','/assets/index-ClqngR03.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/save-yHQY5m6l.js','/assets/plus-C7wNJaYY.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/clock-BJ4ewJxv.js','/assets/calendar-days-CoqSMrFB.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ngHRkQoI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-DpVo-7Ei.js','/assets/index-CFrWnSac.js','/assets/Sidebar-CCuAwzck.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassMultiSelect-D8oi0uSD.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/dateUtils-B35lzzJe.js','/assets/useEmployeeLoans-DcSY5jHF.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/plus-C7wNJaYY.js','/assets/clock-BJ4ewJxv.js','/assets/trash-2-CSydKIgC.js','/assets/info-D-ouVjEf.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/dollar-sign-D6AJYnqC.js','/assets/wallet-CEIwv638.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DNo24I5a.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/layout-DpVo-7Ei.js','/assets/index-CFrWnSac.js','/assets/Sidebar-CCuAwzck.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-Coh2qsJE.js','/assets/users-_8vdrI7L.js','/assets/ban-Byt5KaiK.js','/assets/dateUtils-B35lzzJe.js','/assets/lock-CKsuguPM.js','/assets/refresh-cw-BfH5xVLL.js','/assets/send-DmExXB_w.js','/assets/info-D-ouVjEf.js','/assets/wallet-CEIwv638.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/apiAuth-BwKiUWLI.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/useQuery-B4XNvHME.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/layout-dashboard-CpfSMZND.js','/assets/dollar-sign-D6AJYnqC.js','/assets/clock-BJ4ewJxv.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js','/assets/queryKeys-CiUDBYna.js','/assets/useMutation-zVGY4mKO.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BYXtwDkX.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CR2p8x9g.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D-gcdoNK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DoImvd1q.js','/assets/index-ClqngR03.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/client-D2oREjLw.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-Dc3fRIoz.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/image-KLOEpUcu.js','/assets/chevron-down-CarF6wvM.js','/assets/download-KuqcxGft.js','/assets/useMutation-zVGY4mKO.js','/assets/upload-CanODHlJ.js','/assets/x-BqzKH8b5.js','/assets/circle-alert-BslaCj9S.js','/assets/circle-check-D-s0PrsR.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/users-_8vdrI7L.js','/assets/plus-C7wNJaYY.js','/assets/clock-BJ4ewJxv.js','/assets/send-DmExXB_w.js','/assets/square-pen-t4S2kzRZ.js','/assets/trash-2-CSydKIgC.js','/assets/index-CFrWnSac.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/search-CmlT9azu.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CHKFo5HJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DoImvd1q.js','/assets/BloggerInvitationCard-Dc3fRIoz.js','/assets/ui-CGxEAera.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/arrow-right-CTMiSlf5.js','/assets/external-link-B0kLbMt3.js','/assets/printer-BPtGPVFk.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DrKAx8p2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DoImvd1q.js','/assets/ui-CGxEAera.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/coffee-DaX6tDHS.js','/assets/plus-C7wNJaYY.js','/assets/x-BqzKH8b5.js','/assets/eye-off-Cyhf6Drb.js','/assets/eye-aKoJyMpk.js','/assets/square-pen-t4S2kzRZ.js','/assets/trash-2-CSydKIgC.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/search-CmlT9azu.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D7kk5pBs.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DoImvd1q.js','/assets/ui-CGxEAera.js','/assets/useAdminAuth-D2XFkCNc.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/save-yHQY5m6l.js','/assets/coffee-DaX6tDHS.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/AdminThemeToggle-CxwXsrM5.js','/assets/useMediaQuery-DWZ9vgy_.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CUqSXent.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/shield-Dup-1304.js','/assets/globe-hgUwYNqj.js','/assets/eye-aKoJyMpk.js','/assets/lock-CKsuguPM.js','/assets/trash-2-CSydKIgC.js','/assets/mail-FU_IVnTl.js','/assets/ui-CGxEAera.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DiDCQR00.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassDatePicker-BiFw00RK.js','/assets/apiAuth-BwKiUWLI.js','/assets/languages-D9OFD3MG.js','/assets/useMutation-zVGY4mKO.js','/assets/calculator-CYHNxgHE.js','/assets/building-2-9RGcZc_C.js','/assets/user-BcBerBM3.js','/assets/lock-CKsuguPM.js','/assets/info-D-ouVjEf.js','/assets/log-out-Cgh-uV67.js','/assets/send-DmExXB_w.js','/assets/arrow-left-Dc-nxrjU.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BJ4ewJxv.js','/assets/calendar-days-CoqSMrFB.js','/assets/x-BqzKH8b5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-i9VVodZw.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/ui-CGxEAera.js','/assets/globe-hgUwYNqj.js','/assets/mail-FU_IVnTl.js','/assets/external-link-B0kLbMt3.js','/assets/shield-Dup-1304.js','/assets/file-text-CeCkd5B9.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-TNkTTF7X.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/circle-alert-BslaCj9S.js','/assets/lock-CKsuguPM.js','/assets/sparkles-DICxVI2k.js','/assets/coffee-DaX6tDHS.js','/assets/ui-CGxEAera.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CvVUz-KO.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DUuM1J6-.js','/assets/useWorkspaceUser-njvINekt.js','/assets/apiAuth-BwKiUWLI.js','/assets/ui-CGxEAera.js','/assets/PriorityPill-Dm4lNWjP.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/calendar-days-CoqSMrFB.js','/assets/loader-circle-DIuXuf8q.js','/assets/circle-check-D-s0PrsR.js','/assets/message-square-2Iv0luj0.js','/assets/triangle-alert-K0k848fh.js','/assets/x-BqzKH8b5.js','/assets/activity-BjzsoSRS.js','/assets/circle-CxTV6ikd.js','/assets/heart-pulse-BItb2jGz.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/home-DPrlv9Yh.js','/assets/square-check-big-BhfyQdn5.js','/assets/file-text-CeCkd5B9.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CUbEydji.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DUuM1J6-.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/message-square-2Iv0luj0.js','/assets/plus-C7wNJaYY.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/send-DmExXB_w.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/home-DPrlv9Yh.js','/assets/square-check-big-BhfyQdn5.js','/assets/file-text-CeCkd5B9.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-fTedQyvl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DUuM1J6-.js','/assets/useWorkspaceUser-njvINekt.js','/assets/apiAuth-BwKiUWLI.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/useUpload-DU68iYfy.js','/assets/ui-CGxEAera.js','/assets/circle-CxTV6ikd.js','/assets/x-BqzKH8b5.js','/assets/arrow-right-CTMiSlf5.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/GlassDatePicker-BiFw00RK.js','/assets/flag-GEOd6tGm.js','/assets/calendar-days-CoqSMrFB.js','/assets/upload-CanODHlJ.js','/assets/trash-2-CSydKIgC.js','/assets/file-text-CeCkd5B9.js','/assets/clock-BJ4ewJxv.js','/assets/PriorityPill-Dm4lNWjP.js','/assets/loader-circle-DIuXuf8q.js','/assets/plus-C7wNJaYY.js','/assets/unlink-BTi1essh.js','/assets/circle-check-D-s0PrsR.js','/assets/search-CmlT9azu.js','/assets/SidebarShell-Di8K0aM9.js','/assets/triangle-alert-K0k848fh.js','/assets/activity-BjzsoSRS.js','/assets/arrow-up-down-B3xkx9rS.js','/assets/square-check-big-BhfyQdn5.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/home-DPrlv9Yh.js','/assets/users-_8vdrI7L.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-cNvTNOLm.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DUuM1J6-.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/users-_8vdrI7L.js','/assets/plus-C7wNJaYY.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/home-DPrlv9Yh.js','/assets/square-check-big-BhfyQdn5.js','/assets/file-text-CeCkd5B9.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BpKPWAY1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/layout-CJrXeTfj.js','/assets/Sidebar-DUuM1J6-.js','/assets/useWorkspaceUser-njvINekt.js','/assets/ui-CGxEAera.js','/assets/GlassSelect-D1ZaMOPC.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-BwKiUWLI.js','/assets/queryKeys-CiUDBYna.js','/assets/useQuery-B4XNvHME.js','/assets/useMutation-zVGY4mKO.js','/assets/file-text-CeCkd5B9.js','/assets/plus-C7wNJaYY.js','/assets/trash-2-CSydKIgC.js','/assets/flag-GEOd6tGm.js','/assets/square-check-big-BhfyQdn5.js','/assets/loader-circle-DIuXuf8q.js','/assets/copy-D6Frz49g.js','/assets/index-CFrWnSac.js','/assets/index-ClqngR03.js','/assets/SidebarShell-Di8K0aM9.js','/assets/clipboard-list-BgE6C-8N.js','/assets/calculator-CYHNxgHE.js','/assets/users-_8vdrI7L.js','/assets/useAdminTheme-4c3vvbZL.js','/assets/search-CmlT9azu.js','/assets/x-BqzKH8b5.js','/assets/package-DMm9W_a4.js','/assets/arrow-left-Dc-nxrjU.js','/assets/globe-hgUwYNqj.js','/assets/log-out-Cgh-uV67.js','/assets/home-DPrlv9Yh.js','/assets/GlassPopover-D5yfYLx5.js','/assets/chevron-down-CarF6wvM.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-DOFFfAdF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-N-o0AKiz.js','/assets/ui-CGxEAera.js','/assets/arrow-right-CTMiSlf5.js','/assets/home-DPrlv9Yh.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-de47bb00.js','version':'de47bb00','sri':undefined};
 
 const assetsBuildDirectory = "build\\client";
       const basename = "/";

@@ -16,6 +16,8 @@ import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { ws } from "@/components/Workspace/ui";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatRunCreatedAt } from "@/utils/payrollCalculations";
+import { riyadhDateKeyFromOffset } from "@/utils/dateUtils";
+import { queryKeys } from "../../utils/queryKeys.js";
 
 function formatMoney(value) {
   const n = Number(value);
@@ -44,26 +46,14 @@ function pillClassForTone(tone) {
   return `${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/10`;
 }
 
-function toISODate(d) {
-  try {
-    return new Date(d).toISOString().slice(0, 10);
-  } catch {
-    return "";
-  }
-}
-
 export default function AccountingDashboardPage() {
   const { ready, isAuthenticated, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
 
-  const from7Days = (() => {
-    const d = new Date();
-    d.setDate(d.getDate() - 7);
-    return toISODate(d);
-  })();
+  const from7Days = riyadhDateKeyFromOffset(-7);
 
   const shiftClosingsQuery = useQuery({
-    queryKey: ["accountingDashboard", "shiftClosings", from7Days],
+    queryKey: queryKeys.accountingDashboardShiftClosings(from7Days),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const qs = new URLSearchParams();
@@ -84,7 +74,7 @@ export default function AccountingDashboardPage() {
   });
 
   const payrollRunsQuery = useQuery({
-    queryKey: ["accountingDashboard", "payrollRuns"],
+    queryKey: queryKeys.accountingDashboardPayrollRuns(),
     enabled: ready && isAuthenticated && isAdmin,
     queryFn: async () => {
       const res = await adminFetch("/api/accounting/payroll");

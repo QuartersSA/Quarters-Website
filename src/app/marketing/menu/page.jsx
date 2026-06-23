@@ -7,6 +7,7 @@ import MarketingSidebar from "@/components/Marketing/Sidebar";
 import { ws } from "@/components/Workspace/ui";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 export default function MarketingMenuPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -32,7 +33,7 @@ export default function MarketingMenuPage() {
   }
 
   const itemsQuery = useQuery({
-    queryKey: ["marketing-menu"],
+    queryKey: queryKeys.marketingMenu(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/menu");
@@ -64,7 +65,7 @@ export default function MarketingMenuPage() {
       return d;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["marketing-menu"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingMenu() });
       resetForm();
     },
     onError: (e) => setError(e.message || "خطأ"),
@@ -82,7 +83,7 @@ export default function MarketingMenuPage() {
       return d;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["marketing-menu"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingMenu() });
       resetForm();
     },
     onError: (e) => setError(e.message || "خطأ"),
@@ -97,7 +98,7 @@ export default function MarketingMenuPage() {
       if (!r.ok) throw new Error("فشل الحذف");
     },
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["marketing-menu"] }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingMenu() }),
   });
 
   const toggleMut = useMutation({
@@ -110,7 +111,7 @@ export default function MarketingMenuPage() {
       if (!r.ok) throw new Error("فشل التحديث");
     },
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["marketing-menu"] }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingMenu() }),
   });
 
   const resetForm = () => {
@@ -345,9 +346,10 @@ export default function MarketingMenuPage() {
                 <div className="px-5 py-3 border-b border-white/[0.06] bg-slate-50 dark:bg-white/[0.03]">
                   <h3 className="text-slate-900 dark:text-white font-bold">{category}</h3>
                 </div>
-                <table className="w-full">
-                  <tbody>
-                    {list.map((it) => (
+                <div className="overflow-x-auto">
+                  <table className="min-w-[640px] w-full">
+                    <tbody>
+                      {list.map((it) => (
                       <tr
                         key={it.id}
                         className="border-t border-white/[0.04] hover:bg-slate-50/50 dark:bg-white/[0.02]"
@@ -407,9 +409,10 @@ export default function MarketingMenuPage() {
                           </div>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             ))
           )}

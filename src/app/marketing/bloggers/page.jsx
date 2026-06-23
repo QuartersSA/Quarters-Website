@@ -24,6 +24,7 @@ import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { adminFetch } from "@/utils/apiAuth";
 import { formatDateTime } from "@/utils/dateUtils";
 import { exportInvitationImage } from "@/utils/marketingExport";
+import { queryKeys } from "../../../utils/queryKeys.js";
 
 export default function BloggersPage() {
   const { isAuthenticated, logout } = useAdminAuth({
@@ -38,7 +39,7 @@ export default function BloggersPage() {
   const [error, setError] = useState(null);
 
   const bloggersQuery = useQuery({
-    queryKey: ["marketing-bloggers"],
+    queryKey: queryKeys.marketingBloggers(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/bloggers");
@@ -51,7 +52,7 @@ export default function BloggersPage() {
   // wordmark, …). Fetched once for the page so the per-row "download"
   // button doesn't have to wait on a separate request each time.
   const settingsQuery = useQuery({
-    queryKey: ["marketing-settings"],
+    queryKey: queryKeys.marketingSettings(),
     enabled: isAuthenticated,
     queryFn: async () => {
       const r = await adminFetch("/api/marketing/settings");
@@ -91,7 +92,7 @@ export default function BloggersPage() {
       return d;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["marketing-bloggers"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingBloggers() });
       resetForm();
     },
     onError: (e) => setError(e.message || "خطأ"),
@@ -109,7 +110,7 @@ export default function BloggersPage() {
       return d;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["marketing-bloggers"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingBloggers() });
       resetForm();
     },
     onError: (e) => setError(e.message || "خطأ"),
@@ -126,7 +127,7 @@ export default function BloggersPage() {
       return d;
     },
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["marketing-bloggers"] }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingBloggers() }),
   });
 
   // Single-shot "تمت الدعوة" toggle. Flips pending → invited and
@@ -143,7 +144,7 @@ export default function BloggersPage() {
       return d;
     },
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["marketing-bloggers"] }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.marketingBloggers() }),
     onError: (e) => setError(e.message || "تعذّر تحديث الحالة"),
   });
 

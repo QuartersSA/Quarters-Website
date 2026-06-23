@@ -1,1 +1,0 @@
-import{c as n}from"./createLucideIcon-kT1gL1p0.js";if(typeof window<"u"){const s={};globalThis.process??={};const r=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},s,r),{get(e,c){return c in e?e[c]:void 0},has(){return!0}})}const i=n("Circle",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}]]);export{i as C};

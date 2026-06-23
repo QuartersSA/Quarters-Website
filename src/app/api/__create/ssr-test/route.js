@@ -1,10 +1,10 @@
-import { getToken } from '@auth/core/jwt';
 import React from 'react';
 import path from 'node:path';
 import { renderToString } from 'react-dom/server';
 import routes from '../../../routes';
 import { serializeError } from 'serialize-error';
 import cleanStack from 'clean-stack';
+import { requireAuth } from '@/app/api/utils/sessionToken';
 
 function serializeClean(err) {
 	// if we want to clean this more, maybe we should look at the file where it
@@ -31,6 +31,11 @@ const getHTMLOrError = (component) => {
 	}
 };
 export async function GET(request) {
+	const auth = requireAuth(request, { role: 'Admin' });
+	if (!auth.ok) {
+		return Response.json({ error: auth.error }, { status: auth.status });
+	}
+
 	const results = await Promise.allSettled(
 		routes.map(async (route) => {
 			let component = null;
