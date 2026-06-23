@@ -38,7 +38,7 @@ async function GET(request) {
         i.id,
         i.name,
         i.name_en,
-        i.unit,
+        COALESCE(inv_unit.name_ar, i.unit) AS unit,
         i.description,
         i.image_url,
         i.min_stock_threshold,
@@ -71,6 +71,13 @@ async function GET(request) {
       -- Hide (item, branch) pairs the admin has disabled per-branch.
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
+      LEFT JOIN LATERAL (
+        SELECT mu.name_ar
+        FROM item_units iu
+        JOIN measurement_units mu ON mu.id = iu.unit_id
+        WHERE iu.id = i.default_inventory_unit_id
+        LIMIT 1
+      ) inv_unit ON true
 
       -- 1) Last reset = most recent Daily / Weekly / Opening physical count.
       --    Transfers do NOT reset the absolute — they're a delta on top.
@@ -131,6 +138,7 @@ async function GET(request) {
       ) transfers_after ON true
 
       WHERE i.is_active = true
+        AND i.show_in_inventory = true
         AND ibd.item_id IS NULL
       ORDER BY i.name, b.name
     `;

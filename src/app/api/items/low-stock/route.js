@@ -26,7 +26,7 @@ export async function GET(request) {
         i.description,
         i.image_url,
         i.min_stock_threshold,
-        i.unit,
+        COALESCE(inv_unit.name_ar, i.unit) AS unit,
         b.id as branch_id,
         b.name as branch_name,
         b.location as branch_location,
@@ -37,6 +37,13 @@ export async function GET(request) {
       CROSS JOIN branches b
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
+      LEFT JOIN LATERAL (
+        SELECT mu.name_ar
+        FROM item_units iu
+        JOIN measurement_units mu ON mu.id = iu.unit_id
+        WHERE iu.id = i.default_inventory_unit_id
+        LIMIT 1
+      ) inv_unit ON true
 
       LEFT JOIN LATERAL (
         SELECT ii.quantity AS inv_quantity,

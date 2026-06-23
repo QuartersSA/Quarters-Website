@@ -36,9 +36,10 @@ async function ensureSchema() {
 
   // ─── Multi-unit support ──────────────────────────────────────────
   // measurement_units = catalog عام (reusable عبر كل الأصناف).
-  // item_units = ربط بالصنف + معدّل التحويل.
+  // item_units = ربط بالصنف + عدد الوحدة نسبةً للوحدة الأساسية.
   // أرقام الكميات في inventory_items / opening_session_items / إلخ
-  // كلها تبقى محفوظة بالـ "الوحدة الأساسية" — التحويل يحصل عند الإدخال.
+  // تحفظ كما أُدخلت بوحدة المخزون الافتراضية. التقارير المالية فقط
+  // تستخدم conversion_factor لتحويل التكلفة إلى تكلفة تلك الوحدة.
   try {
     await sql`
       CREATE TABLE IF NOT EXISTS measurement_units (
@@ -436,12 +437,12 @@ async function resolveMeasurementUnitId({
   return Number(rows[0].id);
 }
 
-// Replace every item_units row for `itemId` from the supplied
-// `units` array, then point the two default_* columns at whichever
-// row carried the matching flag. Returns nothing — caller re-reads
-// the item.
-async function writeItemUnits(itemId, units) {
-  if (!Array.isArray(units) || units.length === 0) return;
+// Build the statements that replace every item_units row for `itemId`
+// from the supplied `units` array, then point the two default_* columns
+// at whichever row carried the matching flag. The caller decides whether
+// to run these statements alone or together with an item UPDATE.
+async function buildItemUnitStatements(itemId, units) {
+  if (!Array.isArray(units) || units.length === 0) return [];
 
   // Validation: exactly one base, every factor > 0.
   const baseCount = units.filter(u => u.is_base).length;
@@ -457,10 +458,10 @@ async function writeItemUnits(itemId, units) {
   for (const u of units) {
     const f = Number(u.conversion_factor);
     if (!Number.isFinite(f) || f <= 0) {
-      throw new Error("معدّل التحويل يجب أن يكون رقم موجب");
+      throw new Error("عدد الوحدات داخل الوحدة الأعلى يجب أن يكون رقم موجب");
     }
     if (u.is_base && Math.abs(f - 1) > 1e-6) {
-      throw new Error("معدّل التحويل للوحدة الأساسية يجب أن يكون 1");
+      throw new Error("عدد الوحدة الأساسية يجب أن يكون 1");
     }
   }
   const resolvedUnits = [];
@@ -496,7 +497,7 @@ async function writeItemUnits(itemId, units) {
   }));
   const defaultPurchaseId = rowsWithIds.find(unitRow => unitRow.default_purchase).id;
   const defaultInventoryId = rowsWithIds.find(unitRow => unitRow.default_inventory).id;
-  const statements = [sql`
+  return [sql`
       UPDATE items
       SET default_purchase_unit_id = NULL,
           default_inventory_unit_id = NULL
@@ -515,8 +516,13 @@ async function writeItemUnits(itemId, units) {
           default_inventory_unit_id = ${defaultInventoryId}
       WHERE id = ${itemId}
     `];
+}
 
-  // The Neon transaction keeps the item valid if any insert fails.
+// Replace units only. Used by create rollback flow; update path runs
+// these statements together with the item UPDATE in one transaction.
+async function writeItemUnits(itemId, units) {
+  const statements = await buildItemUnitStatements(itemId, units);
+  if (statements.length === 0) return;
   await sql.transaction(statements);
 }
 async function POST(request) {
@@ -686,7 +692,27 @@ async function PUT(request) {
     const parsedMinThreshold = Number(min_stock_threshold ?? 10);
     const safeMinThreshold = Number.isFinite(parsedMinThreshold) && parsedMinThreshold >= 0 ? parsedMinThreshold : 10;
     await ensureSchema();
-    const result = await sql`
+    const [existingItem] = await sql`SELECT id FROM items WHERE id = ${id}`;
+    if (!existingItem) {
+      return Response.json({
+        error: "الصنف غير موجود"
+      }, {
+        status: 404
+      });
+    }
+    let unitStatements = [];
+    if (Array.isArray(units) && units.length > 0) {
+      try {
+        unitStatements = await buildItemUnitStatements(id, units);
+      } catch (e) {
+        return Response.json({
+          error: e.message
+        }, {
+          status: 400
+        });
+      }
+    }
+    const updateStatement = sql`
       UPDATE items
       SET
         name = ${name.trim()},
@@ -705,26 +731,10 @@ async function PUT(request) {
       WHERE id = ${id}
       RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id, created_at
     `;
-    if (result.length === 0) {
-      return Response.json({
-        error: "الصنف غير موجود"
-      }, {
-        status: 404
-      });
-    }
-
-    // Replace per-item units if the caller supplied any. Omitted →
-    // existing units stay untouched (partial-update semantics).
-    if (Array.isArray(units) && units.length > 0) {
-      try {
-        await writeItemUnits(id, units);
-      } catch (e) {
-        return Response.json({
-          error: e.message
-        }, {
-          status: 400
-        });
-      }
+    if (unitStatements.length > 0) {
+      await sql.transaction([updateStatement, ...unitStatements]);
+    } else {
+      await updateStatement;
     }
     const withCategory = await sql`
       SELECT i.*, c.name as category_name, c.name_en as category_name_en, gb.name as linked_green_bean_name

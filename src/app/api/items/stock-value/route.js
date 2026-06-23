@@ -3,10 +3,10 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 
 // GET /api/items/stock-value?branchId=<id>
 // One row per item with:
-//   - total_quantity   = sum across ALL branches of (last inventory + receipts after)
-//                        OR — if `branchId` is supplied — that branch's qty only
-//   - effective_cost   = COALESCE(i.cost, last green-bean order price)
-//   - total_value      = total_quantity * effective_cost
+//   - total_quantity   = the same current quantity shown in إدارة الأصناف
+//                        (last inventory + receipts/transfers after reset)
+//   - effective_cost   = cost per default inventory unit
+//   - total_value      = quantity × cost per default inventory unit
 //
 // Math mirrors `/api/items` byte-for-byte (same last_inv + receipts_after
 // CTEs). When `branchId` is omitted (or 0), the sum is across every
@@ -145,12 +145,11 @@ export async function GET(request) {
         )::numeric(14, 4) AS effective_cost,
         last_bean_price.final_price AS fallback_cost,
         c.name AS category_name,
-        -- Display quantity = the raw summed base-unit stock, so
+        -- Display quantity = the raw summed current stock, so
         -- this column matches "إجمالي المخزون" on the items table
         -- (which the operator confirmed is the canonical reference).
-        -- effective_cost is still per-inventory-unit, so qty × cost
-        -- intentionally does NOT equal total_value when inv_factor
-        -- ≠ 1; total_value below stays correct monetarily.
+        -- effective_cost is per default inventory unit, so the table
+        -- can display a direct qty × cost value.
         COALESCE(it.total_quantity, 0)::numeric(12, 3) AS total_quantity,
         -- Total value = stored_qty × base_cost × inv_factor.
         --
@@ -163,7 +162,8 @@ export async function GET(request) {
         -- qty × (base_cost × factor) = displayed_qty × displayed
         -- per-unit cost. Factor-1 items (incl. all pre-multi-unit
         -- rows whose default unit auto-seeded at factor 1) are
-        -- unaffected.
+        -- unaffected. This is the same as displayed_qty × displayed
+        -- cost per inventory unit.
         CASE
           WHEN COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price) IS NULL
             THEN NULL

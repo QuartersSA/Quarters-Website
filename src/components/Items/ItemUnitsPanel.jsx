@@ -283,7 +283,7 @@ export default function ItemUnitsPanel({
             "كم من هذه الوحدة في الوحدة الأعلى". السعر يتقسّم تلقائياً:
             <br />
             <span className="text-slate-700 dark:text-white/70 font-medium">
-              سعر الوحدة = سعر الوحدة الأعلى ÷ معدّل التحويل
+            سعر الوحدة الأصغر = سعر الوحدة الأعلى ÷ عدد الوحدات داخلها
             </span>
           </p>
         </div>
@@ -337,7 +337,7 @@ export default function ItemUnitsPanel({
               ) : null}
 
               <div
-                className={`grid grid-cols-1 sm:grid-cols-[1fr,140px,1fr,auto] items-start gap-2 p-3 rounded-xl border ${
+                className={`grid grid-cols-1 sm:grid-cols-[1fr,170px,1fr,auto] items-start gap-2 p-3 rounded-xl border ${
                   i === 0
                     ? "bg-emerald-50/40 dark:bg-emerald-500/[0.04] border-emerald-300/50 dark:border-emerald-400/20"
                     : "bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/10"
@@ -359,7 +359,7 @@ export default function ItemUnitsPanel({
                 {/* Parent count input (factor in chain) */}
                 <div>
                   <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
-                    معدّل التحويل
+                    العدد داخل الأعلى
                   </div>
                   <input
                     type="number"

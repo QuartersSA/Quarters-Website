@@ -93,7 +93,69 @@ export function StockValueTable({
           <p className="text-sm">جرّب تعديل البحث أو الفلاتر</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <>
+        <div className="md:hidden divide-y divide-slate-200 dark:divide-white/10">
+          {items.map((it, idx) => {
+            const qty = Number(it.total_quantity) || 0;
+            const effCost =
+              it.effective_cost == null ? null : Number(it.effective_cost);
+            const value = it.total_value == null ? null : Number(it.total_value);
+            const missingCost = effCost == null || !Number.isFinite(effCost);
+            const pctText = fmtPct(value, totalValue);
+
+            return (
+              <div key={it.id} className="p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 flex items-center justify-center shrink-0">
+                      <Package className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-slate-900 dark:text-white font-semibold truncate">
+                        {idx + 1}. {it.name}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-white/45 truncate">
+                        {it.category_name || "بدون فئة"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-left shrink-0">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">القيمة</p>
+                    <p className="font-extrabold text-emerald-700 dark:text-emerald-200" dir="ltr">
+                      {missingCost ? "—" : `${fmtMoney(value)} ر.س`}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-3 grid grid-cols-3 gap-2 text-sm">
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">الكمية</p>
+                    <p className="font-semibold text-slate-900 dark:text-white" dir="ltr">
+                      {fmtQty(qty)}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">الوحدة</p>
+                    <p className="font-semibold text-slate-900 dark:text-white truncate">
+                      {it.unit || "—"}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">التكلفة</p>
+                    <p className="font-semibold text-slate-900 dark:text-white" dir="ltr">
+                      {missingCost ? "—" : fmtMoney(effCost)}
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-2 text-xs text-slate-500 dark:text-white/45" dir="ltr">
+                  {missingCost || !pctText ? "—" : pctText}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-slate-100 dark:bg-slate-100 dark:bg-white/[0.04]">
@@ -252,6 +314,7 @@ export function StockValueTable({
             </tfoot>
           </table>
         </div>
+        </>
       )}
     </div>
   );

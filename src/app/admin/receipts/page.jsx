@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Truck } from "lucide-react";
+import { Truck } from "lucide-react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { adminFetch } from "@/utils/apiAuth";
 import { Sidebar } from "@/components/Admin/Sidebar";
@@ -100,12 +100,6 @@ export default function ReceiptsPage() {
 
         <div className="mb-8 mt-6 lg:mt-0">
           <div className="flex items-center gap-3 mb-4">
-            <a
-              href="/admin"
-              className="text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/55 hover:text-slate-900 dark:hover:text-slate-900 dark:hover:text-slate-900 dark:hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </a>
             <div className={`${ws.iconBox} text-emerald-700 dark:text-emerald-700 dark:text-emerald-200`}>
               <Truck className="w-6 h-6" />
             </div>
