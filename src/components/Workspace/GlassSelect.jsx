@@ -1,5 +1,5 @@
-import React, { useMemo, useRef, useState } from "react";
-import { Check, ChevronDown } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Check, ChevronDown, Search } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassPopover from "@/components/Workspace/GlassPopover";
 
@@ -19,9 +19,14 @@ export default function GlassSelect({
   buttonClassName = "",
   menuClassName = "",
   dir = "rtl", // rtl | ltr (needed in a few bilingual screens)
+  searchable = false,
+  searchPlaceholder = "ابحث…",
+  noResultsLabel = "لا توجد نتائج",
 }) {
   const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const btnRef = useRef(null);
+  const searchRef = useRef(null);
 
   const normalizedOptions = useMemo(() => {
     const list = Array.isArray(options) ? options : [];
@@ -44,6 +49,35 @@ export default function GlassSelect({
   }, [normalizedOptions, value]);
 
   const label = selected?.label || placeholder;
+
+  const filteredOptions = useMemo(() => {
+    if (!searchable) return normalizedOptions;
+
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return normalizedOptions;
+
+    return normalizedOptions.filter((o) => {
+      if (o.isGroupLabel) return false;
+      return (
+        o.label.toLowerCase().includes(q) ||
+        o.value.toLowerCase().includes(q)
+      );
+    });
+  }, [normalizedOptions, searchable, searchTerm]);
+
+  useEffect(() => {
+    if (!open) {
+      setSearchTerm("");
+      return;
+    }
+
+    if (searchable) {
+      const timer = window.setTimeout(() => {
+        searchRef.current?.focus?.();
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
+  }, [open, searchable]);
 
   const selectValue = (v) => {
     if (disabled) {
@@ -94,7 +128,30 @@ export default function GlassSelect({
         className={`border border-slate-200 dark:border-slate-200 dark:border-white/15 ${menuClassName}`}
       >
         <div className="max-h-[50vh] overflow-auto">
-          {normalizedOptions.map((o) => {
+          {searchable ? (
+            <div className="sticky top-0 z-10 p-2 bg-white/95 dark:bg-slate-950/95 border-b border-slate-200 dark:border-white/10 backdrop-blur">
+              <div className="relative">
+                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-white/45 pointer-events-none" />
+                <input
+                  ref={searchRef}
+                  type="search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={searchPlaceholder}
+                  className={`${ws.input} w-full pr-9 pl-3 py-2 text-sm`}
+                  dir={dir}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          {filteredOptions.length === 0 ? (
+            <div className="px-4 py-6 text-center text-sm text-slate-500 dark:text-white/45">
+              {noResultsLabel}
+            </div>
+          ) : null}
+
+          {filteredOptions.map((o) => {
             if (o.isGroupLabel) {
               return (
                 <div

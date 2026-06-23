@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 export function useOperationsFilters(operations) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,22 +28,16 @@ export function useOperationsFilters(operations) {
         return false;
       }
 
-      const filterDate = op.operation_date || op.created_at;
+      const filterDate = formatRiyadhDateForInput(
+        op.operation_date || op.created_at,
+      );
 
-      if (dateFrom) {
-        const fromDate = new Date(dateFrom);
-        fromDate.setHours(0, 0, 0, 0);
-        if (new Date(filterDate) < fromDate) {
-          return false;
-        }
+      if (dateFrom && (!filterDate || filterDate < dateFrom)) {
+        return false;
       }
 
-      if (dateTo) {
-        const toDate = new Date(dateTo);
-        toDate.setHours(23, 59, 59, 999);
-        if (new Date(filterDate) > toDate) {
-          return false;
-        }
+      if (dateTo && (!filterDate || filterDate > dateTo)) {
+        return false;
       }
 
       return true;

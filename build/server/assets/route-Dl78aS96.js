@@ -1,5 +1,7 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 // Idempotent schema additions; runs cheaply on every request.
 async function ensureSchema() {
@@ -50,7 +52,6 @@ async function ensureSchema() {
   } catch (e) {
     console.error("ensureSchema measurement_units:", e?.message);
   }
-
   try {
     await sql`
       CREATE TABLE IF NOT EXISTS item_units (
@@ -146,22 +147,26 @@ async function ensureSchema() {
     console.error("ensureSchema auto-seed item_units:", e?.message);
   }
 }
-
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
-    anyOf: [
-      { role: "Admin", permission: "can_manage_inventory" },
-      { role: "Employee", permission: "can_do_inventory" },
-    ],
+    anyOf: [{
+      role: "Admin",
+      permission: "can_manage_inventory"
+    }, {
+      role: "Employee",
+      permission: "can_do_inventory"
+    }]
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     console.log("Fetching items...");
-
     const items = await sql`
       SELECT
         i.id,
@@ -189,19 +194,14 @@ export async function GET(request) {
       LEFT JOIN accounting_green_beans gb ON gb.id = i.linked_green_bean_id
       ORDER BY i.created_at DESC
     `;
-
     console.log("Found items:", items.length);
 
     // For items linked to green beans, fetch last order price info
-    const linkedBeanIds = items
-      .filter((it) => it.linked_green_bean_id)
-      .map((it) => it.linked_green_bean_id);
-
+    const linkedBeanIds = items.filter(it => it.linked_green_bean_id).map(it => it.linked_green_bean_id);
     let lastOrderPriceMap = {};
     if (linkedBeanIds.length > 0) {
       const uniqueIds = [...new Set(linkedBeanIds)];
-      const lastPrices = await sql(
-        `
+      const lastPrices = await sql(`
           SELECT DISTINCT ON (oi.bean_id)
             oi.bean_id,
             oi.computed_final_price_per_kg,
@@ -211,13 +211,11 @@ export async function GET(request) {
           WHERE oi.bean_id = ANY($1::bigint[])
             AND oi.computed_final_price_per_kg IS NOT NULL
           ORDER BY oi.bean_id, o.order_date DESC, oi.id DESC
-        `,
-        [uniqueIds],
-      );
+        `, [uniqueIds]);
       for (const row of lastPrices) {
         lastOrderPriceMap[row.bean_id] = {
           last_order_price_per_kg: row.computed_final_price_per_kg,
-          last_order_date: row.order_date,
+          last_order_date: row.order_date
         };
       }
     }
@@ -225,16 +223,14 @@ export async function GET(request) {
     // Batch per-branch stock for ALL items in a single query.
     // Previously this was Promise.all over items × one query per item
     // (N+1) — at ~30 items × 5 branches that's 30 round-trips. Now: one.
-    const itemIds = items.map((it) => it.id);
+    const itemIds = items.map(it => it.id);
     const stockRowsByItem = new Map();
-
     if (itemIds.length > 0) {
       // current quantity = last RESET (Daily/Weekly/Opening) +
       // receipts after that reset + signed transfer deltas after that
       // reset. Same formula as /api/items/summary and the timeline
       // report so the numbers stay consistent across endpoints.
-      const stockRows = await sql(
-        `
+      const stockRows = await sql(`
           WITH last_reset AS (
             SELECT DISTINCT ON (ii.item_id, io.branch_id)
               ii.item_id,
@@ -311,10 +307,7 @@ export async function GET(request) {
             ON ibd.item_id = ix.id AND ibd.branch_id = b.id
           WHERE ibd.item_id IS NULL
           ORDER BY ix.id, b.name
-        `,
-        [itemIds],
-      );
-
+        `, [itemIds]);
       for (const row of stockRows) {
         // Key as String so the lookup below tolerates the postgres
         // driver returning the unnested bigint as a string while
@@ -327,7 +320,7 @@ export async function GET(request) {
         arr.push({
           branch_id: row.branch_id,
           branch_name: row.branch_name,
-          quantity: row.quantity,
+          quantity: row.quantity
         });
         stockRowsByItem.set(key, arr);
       }
@@ -338,11 +331,8 @@ export async function GET(request) {
     // extra round-trip per item.
     const disabledByItem = new Map();
     if (itemIds.length > 0) {
-      const disabledRows = await sql(
-        `SELECT item_id, branch_id FROM item_branch_disabled
-         WHERE item_id = ANY($1::bigint[])`,
-        [itemIds],
-      );
+      const disabledRows = await sql(`SELECT item_id, branch_id FROM item_branch_disabled
+         WHERE item_id = ANY($1::bigint[])`, [itemIds]);
       for (const row of disabledRows) {
         const key = String(row.item_id);
         const arr = disabledByItem.get(key) || [];
@@ -358,8 +348,7 @@ export async function GET(request) {
     // the canonical reference.
     const unitsByItem = new Map();
     if (itemIds.length > 0) {
-      const unitRows = await sql(
-        `
+      const unitRows = await sql(`
           SELECT
             iu.id,
             iu.item_id,
@@ -373,9 +362,7 @@ export async function GET(request) {
           JOIN measurement_units mu ON mu.id = iu.unit_id
           WHERE iu.item_id = ANY($1::bigint[])
           ORDER BY iu.item_id, iu.is_base DESC, iu.sort_order, iu.id
-        `,
-        [itemIds],
-      );
+        `, [itemIds]);
       for (const row of unitRows) {
         const key = String(row.item_id);
         const arr = unitsByItem.get(key) || [];
@@ -386,48 +373,48 @@ export async function GET(request) {
           name_en: row.name_en,
           conversion_factor: Number(row.conversion_factor),
           is_base: !!row.is_base,
-          sort_order: Number(row.sort_order),
+          sort_order: Number(row.sort_order)
         });
         unitsByItem.set(key, arr);
       }
     }
-
-    const itemsWithStock = items.map((item) => {
+    const itemsWithStock = items.map(item => {
       const branchStock = stockRowsByItem.get(String(item.id)) || [];
-      const greenBeanInfo = item.linked_green_bean_id
-        ? lastOrderPriceMap[item.linked_green_bean_id] || null
-        : null;
-      const disabledBranches =
-        disabledByItem.get(String(item.id)) || [];
+      const greenBeanInfo = item.linked_green_bean_id ? lastOrderPriceMap[item.linked_green_bean_id] || null : null;
+      const disabledBranches = disabledByItem.get(String(item.id)) || [];
       const units = unitsByItem.get(String(item.id)) || [];
-      const baseUnit = units.find((u) => u.is_base) || units[0] || null;
+      const baseUnit = units.find(u => u.is_base) || units[0] || null;
       return {
         ...item,
         branch_stock: branchStock.length > 0 ? branchStock : null,
         disabled_branches: disabledBranches,
         units,
         base_unit: baseUnit,
-        last_order_price_per_kg:
-          greenBeanInfo?.last_order_price_per_kg || null,
-        last_order_date: greenBeanInfo?.last_order_date || null,
+        last_order_price_per_kg: greenBeanInfo?.last_order_price_per_kg || null,
+        last_order_date: greenBeanInfo?.last_order_date || null
       };
     });
-
     console.log("Returning items with stock:", itemsWithStock.length);
     return Response.json(itemsWithStock);
   } catch (error) {
     console.error("Error fetching items:", error);
-    return Response.json(
-      { error: "Failed to fetch items", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch items",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
 
 // Resolve a measurement_units.id for a unit-row payload. Inserts a
 // catalog row if `unit_id` wasn't provided and `name_ar` doesn't
 // already exist. Returns the catalog id.
-async function resolveMeasurementUnitId({ unit_id, name_ar, name_en }) {
+async function resolveMeasurementUnitId({
+  unit_id,
+  name_ar,
+  name_en
+}) {
   if (unit_id) {
     const n = parseInt(unit_id);
     if (Number.isFinite(n) && n > 0) return n;
@@ -458,14 +445,14 @@ async function buildItemUnitStatements(itemId, units) {
   if (!Array.isArray(units) || units.length === 0) return [];
 
   // Validation: exactly one base, every factor > 0.
-  const baseCount = units.filter((u) => u.is_base).length;
+  const baseCount = units.filter(u => u.is_base).length;
   if (baseCount !== 1) {
     throw new Error("يجب اختيار وحدة أساسية واحدة بالضبط");
   }
-  if (units.filter((u) => u.default_purchase).length !== 1) {
+  if (units.filter(u => u.default_purchase).length !== 1) {
     throw new Error("يجب اختيار وحدة مشتريات افتراضية واحدة");
   }
-  if (units.filter((u) => u.default_inventory).length !== 1) {
+  if (units.filter(u => u.default_inventory).length !== 1) {
     throw new Error("يجب اختيار وحدة مخزون افتراضية واحدة");
   }
   for (const u of units) {
@@ -477,14 +464,13 @@ async function buildItemUnitStatements(itemId, units) {
       throw new Error("عدد الوحدة الأساسية يجب أن يكون 1");
     }
   }
-
   const resolvedUnits = [];
   for (let i = 0; i < units.length; i++) {
     const u = units[i];
     const unitId = await resolveMeasurementUnitId({
       unit_id: u.unit_id,
       name_ar: u.name_ar,
-      name_en: u.name_en,
+      name_en: u.name_en
     });
     resolvedUnits.push({
       unit_id: unitId,
@@ -492,14 +478,12 @@ async function buildItemUnitStatements(itemId, units) {
       is_base: !!u.is_base,
       sort_order: i,
       default_purchase: !!u.default_purchase,
-      default_inventory: !!u.default_inventory,
+      default_inventory: !!u.default_inventory
     });
   }
-
-  if (new Set(resolvedUnits.map((unitRow) => unitRow.unit_id)).size !== resolvedUnits.length) {
+  if (new Set(resolvedUnits.map(unitRow => unitRow.unit_id)).size !== resolvedUnits.length) {
     throw new Error("لا يمكن إضافة وحدة القياس نفسها مرتين");
   }
-
   const generatedIds = await sql`
     SELECT nextval(pg_get_serial_sequence('item_units', 'id'))::integer AS id
     FROM generate_series(1, ${resolvedUnits.length}::integer)
@@ -507,28 +491,18 @@ async function buildItemUnitStatements(itemId, units) {
   if (generatedIds.length !== resolvedUnits.length) {
     throw new Error("Failed to reserve unit identifiers");
   }
-
   const rowsWithIds = resolvedUnits.map((unitRow, index) => ({
     ...unitRow,
-    id: Number(generatedIds[index].id),
+    id: Number(generatedIds[index].id)
   }));
-  const defaultPurchaseId = rowsWithIds.find(
-    (unitRow) => unitRow.default_purchase,
-  ).id;
-  const defaultInventoryId = rowsWithIds.find(
-    (unitRow) => unitRow.default_inventory,
-  ).id;
-
-  return [
-    sql`
+  const defaultPurchaseId = rowsWithIds.find(unitRow => unitRow.default_purchase).id;
+  const defaultInventoryId = rowsWithIds.find(unitRow => unitRow.default_inventory).id;
+  return [sql`
       UPDATE items
       SET default_purchase_unit_id = NULL,
           default_inventory_unit_id = NULL
       WHERE id = ${itemId}
-    `,
-    sql`DELETE FROM item_units WHERE item_id = ${itemId}`,
-    ...rowsWithIds.map(
-      (unitRow) => sql`
+    `, sql`DELETE FROM item_units WHERE item_id = ${itemId}`, ...rowsWithIds.map(unitRow => sql`
         INSERT INTO item_units
           (id, item_id, unit_id, conversion_factor, is_base, sort_order)
         VALUES (
@@ -536,16 +510,12 @@ async function buildItemUnitStatements(itemId, units) {
           ${unitRow.conversion_factor}, ${unitRow.is_base},
           ${unitRow.sort_order}
         )
-      `,
-    ),
-    sql`
+      `), sql`
       UPDATE items
       SET default_purchase_unit_id = ${defaultPurchaseId},
           default_inventory_unit_id = ${defaultInventoryId}
       WHERE id = ${itemId}
-    `,
-  ];
-
+    `];
 }
 
 // Replace units only. Used by create rollback flow; update path runs
@@ -555,20 +525,21 @@ async function writeItemUnits(itemId, units) {
   if (statements.length === 0) return;
   await sql.transaction(statements);
 }
-
-export async function POST(request) {
+async function POST(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     const body = await request.json();
     console.log("Creating item with data:", body);
-
     const {
       name,
       name_en,
@@ -584,79 +555,41 @@ export async function POST(request) {
       base_purchase_cost,
       show_in_inventory,
       linked_green_bean_id,
-      units,
+      units
     } = body;
-
     if (!name || !name.trim()) {
-      return Response.json({ error: "اسم الصنف مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "اسم الصنف مطلوب"
+      }, {
+        status: 400
+      });
     }
-
     const parsedThreshold = Number(min_stock_threshold ?? 10);
-    const threshold =
-      Number.isFinite(parsedThreshold) && parsedThreshold >= 0
-        ? parsedThreshold
-        : 10;
-    const maxThreshold =
-      max_stock_threshold !== undefined &&
-      max_stock_threshold !== null &&
-      max_stock_threshold !== ""
-        ? Number(max_stock_threshold)
-        : null;
-    const safeMaxThreshold =
-      maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold >= 0
-        ? maxThreshold
-        : null;
-    const showInInventory =
-      show_in_inventory !== undefined ? show_in_inventory : true;
+    const threshold = Number.isFinite(parsedThreshold) && parsedThreshold >= 0 ? parsedThreshold : 10;
+    const maxThreshold = max_stock_threshold !== undefined && max_stock_threshold !== null && max_stock_threshold !== "" ? Number(max_stock_threshold) : null;
+    const safeMaxThreshold = maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold >= 0 ? maxThreshold : null;
+    const showInInventory = show_in_inventory !== undefined ? show_in_inventory : true;
     // is_active is independent from show_in_inventory. The two used
     // to be coupled (active = showInInventory) which made any
     // purchases-only item (show_in_inventory=false) silently get
     // is_active=false and disappear from EVERY listing including
     // the purchases panel. Now: respect is_active if the caller
     // passes it; otherwise default to true.
-    const active =
-      is_active !== undefined ? !!is_active : true;
-    const parsedCost =
-      cost !== undefined && cost !== null && cost !== ""
-        ? parseFloat(cost)
-        : null;
+    const active = is_active !== undefined ? !!is_active : true;
+    const parsedCost = cost !== undefined && cost !== null && cost !== "" ? parseFloat(cost) : null;
 
     // base_purchase_cost = canonical cost per ONE base unit. Falls
     // back to `cost` so older callers keep working.
-    const parsedBaseCost =
-      base_purchase_cost !== undefined &&
-      base_purchase_cost !== null &&
-      base_purchase_cost !== ""
-        ? parseFloat(base_purchase_cost)
-        : parsedCost;
-
-    const resolvedCategoryId =
-      category_id !== undefined && category_id !== null && category_id !== ""
-        ? parseInt(category_id)
-        : categoryId !== undefined && categoryId !== null && categoryId !== ""
-          ? parseInt(categoryId)
-          : null;
-
-    const safeCategoryId =
-      resolvedCategoryId && !Number.isNaN(resolvedCategoryId)
-        ? resolvedCategoryId
-        : null;
-
-    const safeLinkedBeanId =
-      linked_green_bean_id !== undefined &&
-      linked_green_bean_id !== null &&
-      linked_green_bean_id !== ""
-        ? parseInt(linked_green_bean_id)
-        : null;
-
+    const parsedBaseCost = base_purchase_cost !== undefined && base_purchase_cost !== null && base_purchase_cost !== "" ? parseFloat(base_purchase_cost) : parsedCost;
+    const resolvedCategoryId = category_id !== undefined && category_id !== null && category_id !== "" ? parseInt(category_id) : categoryId !== undefined && categoryId !== null && categoryId !== "" ? parseInt(categoryId) : null;
+    const safeCategoryId = resolvedCategoryId && !Number.isNaN(resolvedCategoryId) ? resolvedCategoryId : null;
+    const safeLinkedBeanId = linked_green_bean_id !== undefined && linked_green_bean_id !== null && linked_green_bean_id !== "" ? parseInt(linked_green_bean_id) : null;
     await ensureSchema();
-
     const result = await sql`
       INSERT INTO items (name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id)
       VALUES (${name.trim()}, ${name_en || null}, ${description || null}, ${image_url || null}, ${unit || null}, ${threshold}, ${safeMaxThreshold}, ${active}, ${safeCategoryId}, ${parsedCost}, ${parsedBaseCost}, ${showInInventory}, ${safeLinkedBeanId})
       RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id, created_at
     `;
-
     const newItemId = result[0].id;
 
     // Write units (multi-unit panel). Empty/missing units array →
@@ -669,10 +602,13 @@ export async function POST(request) {
         // Roll back the items row so we never leave an orphaned
         // item with no units when the units payload was bad.
         await sql`DELETE FROM items WHERE id = ${newItemId}`;
-        return Response.json({ error: e.message }, { status: 400 });
+        return Response.json({
+          error: e.message
+        }, {
+          status: 400
+        });
       }
     }
-
     const withCategory = await sql`
       SELECT i.*, c.name as category_name, c.name_en as category_name_en, gb.name as linked_green_bean_name
       FROM items i
@@ -680,31 +616,35 @@ export async function POST(request) {
       LEFT JOIN accounting_green_beans gb ON gb.id = i.linked_green_bean_id
       WHERE i.id = ${newItemId}
     `;
-
     console.log("Item created successfully:", withCategory[0]);
-    return Response.json(withCategory[0], { status: 201 });
+    return Response.json(withCategory[0], {
+      status: 201
+    });
   } catch (error) {
     console.error("Error creating item:", error);
-    return Response.json(
-      { error: "Failed to create item", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to create item",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function PUT(request) {
+async function PUT(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     const body = await request.json();
     console.log("Updating item with data:", body);
-
     const {
       id,
       name,
@@ -721,86 +661,57 @@ export async function PUT(request) {
       base_purchase_cost,
       show_in_inventory,
       linked_green_bean_id,
-      units,
+      units
     } = body;
-
     if (!id) {
-      return Response.json({ error: "معرّف الصنف مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "معرّف الصنف مطلوب"
+      }, {
+        status: 400
+      });
     }
-
     if (!name || !name.trim()) {
-      return Response.json({ error: "اسم الصنف مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "اسم الصنف مطلوب"
+      }, {
+        status: 400
+      });
     }
-
-    const resolvedCategoryId =
-      category_id !== undefined && category_id !== null && category_id !== ""
-        ? parseInt(category_id)
-        : categoryId !== undefined && categoryId !== null && categoryId !== ""
-          ? parseInt(categoryId)
-          : null;
-
-    const safeCategoryId =
-      resolvedCategoryId && !Number.isNaN(resolvedCategoryId)
-        ? resolvedCategoryId
-        : null;
-
-    const showInInventory =
-      show_in_inventory !== undefined ? show_in_inventory : true;
+    const resolvedCategoryId = category_id !== undefined && category_id !== null && category_id !== "" ? parseInt(category_id) : categoryId !== undefined && categoryId !== null && categoryId !== "" ? parseInt(categoryId) : null;
+    const safeCategoryId = resolvedCategoryId && !Number.isNaN(resolvedCategoryId) ? resolvedCategoryId : null;
+    const showInInventory = show_in_inventory !== undefined ? show_in_inventory : true;
     // Same decoupling on UPDATE — respect explicit is_active so a
     // purchases-only item stays active even though it doesn't show
     // up in inventory.
-    const active =
-      is_active !== undefined ? !!is_active : true;
-    const parsedCost =
-      cost !== undefined && cost !== null && cost !== ""
-        ? parseFloat(cost)
-        : null;
-    const parsedBaseCost =
-      base_purchase_cost !== undefined &&
-      base_purchase_cost !== null &&
-      base_purchase_cost !== ""
-        ? parseFloat(base_purchase_cost)
-        : parsedCost;
-
-    const safeLinkedBeanId =
-      linked_green_bean_id !== undefined &&
-      linked_green_bean_id !== null &&
-      linked_green_bean_id !== ""
-        ? parseInt(linked_green_bean_id)
-        : null;
-
-    const maxThreshold =
-      max_stock_threshold !== undefined &&
-      max_stock_threshold !== null &&
-      max_stock_threshold !== ""
-        ? Number(max_stock_threshold)
-        : null;
-    const safeMaxThreshold =
-      maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold >= 0
-        ? maxThreshold
-        : null;
+    const active = is_active !== undefined ? !!is_active : true;
+    const parsedCost = cost !== undefined && cost !== null && cost !== "" ? parseFloat(cost) : null;
+    const parsedBaseCost = base_purchase_cost !== undefined && base_purchase_cost !== null && base_purchase_cost !== "" ? parseFloat(base_purchase_cost) : parsedCost;
+    const safeLinkedBeanId = linked_green_bean_id !== undefined && linked_green_bean_id !== null && linked_green_bean_id !== "" ? parseInt(linked_green_bean_id) : null;
+    const maxThreshold = max_stock_threshold !== undefined && max_stock_threshold !== null && max_stock_threshold !== "" ? Number(max_stock_threshold) : null;
+    const safeMaxThreshold = maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold >= 0 ? maxThreshold : null;
     const parsedMinThreshold = Number(min_stock_threshold ?? 10);
-    const safeMinThreshold =
-      Number.isFinite(parsedMinThreshold) && parsedMinThreshold >= 0
-        ? parsedMinThreshold
-        : 10;
-
+    const safeMinThreshold = Number.isFinite(parsedMinThreshold) && parsedMinThreshold >= 0 ? parsedMinThreshold : 10;
     await ensureSchema();
-
     const [existingItem] = await sql`SELECT id FROM items WHERE id = ${id}`;
     if (!existingItem) {
-      return Response.json({ error: "الصنف غير موجود" }, { status: 404 });
+      return Response.json({
+        error: "الصنف غير موجود"
+      }, {
+        status: 404
+      });
     }
-
     let unitStatements = [];
     if (Array.isArray(units) && units.length > 0) {
       try {
         unitStatements = await buildItemUnitStatements(id, units);
       } catch (e) {
-        return Response.json({ error: e.message }, { status: 400 });
+        return Response.json({
+          error: e.message
+        }, {
+          status: 400
+        });
       }
     }
-
     const updateStatement = sql`
       UPDATE items
       SET
@@ -820,13 +731,11 @@ export async function PUT(request) {
       WHERE id = ${id}
       RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id, created_at
     `;
-
     if (unitStatements.length > 0) {
       await sql.transaction([updateStatement, ...unitStatements]);
     } else {
       await updateStatement;
     }
-
     const withCategory = await sql`
       SELECT i.*, c.name as category_name, c.name_en as category_name_en, gb.name as linked_green_bean_name
       FROM items i
@@ -834,65 +743,79 @@ export async function PUT(request) {
       LEFT JOIN accounting_green_beans gb ON gb.id = i.linked_green_bean_id
       WHERE i.id = ${id}
     `;
-
     console.log("Item updated successfully:", withCategory[0]);
     return Response.json(withCategory[0]);
   } catch (error) {
     console.error("Error updating item:", error);
-    return Response.json(
-      { error: "Failed to update item", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to update item",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function DELETE(request) {
+async function DELETE(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
-    const { id } = await request.json();
+    const {
+      id
+    } = await request.json();
     console.log("Deleting item with id:", id);
-
     if (!id) {
-      return Response.json({ error: "معرّف الصنف مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "معرّف الصنف مطلوب"
+      }, {
+        status: 400
+      });
     }
-
     const inventoryCheck = await sql`
       SELECT COUNT(*) as count
       FROM inventory_items
       WHERE item_id = ${id}
     `;
-
     if (parseInt(inventoryCheck[0].count) > 0) {
-      return Response.json(
-        { error: "لا يمكن حذف الصنف لأنه مرتبط بعمليات جرد" },
-        { status: 400 },
-      );
+      return Response.json({
+        error: "لا يمكن حذف الصنف لأنه مرتبط بعمليات جرد"
+      }, {
+        status: 400
+      });
     }
-
     const result = await sql`
       DELETE FROM items
       WHERE id = ${id}
       RETURNING id
     `;
-
     if (result.length === 0) {
-      return Response.json({ error: "الصنف غير موجود" }, { status: 404 });
+      return Response.json({
+        error: "الصنف غير موجود"
+      }, {
+        status: 404
+      });
     }
-
     console.log("Item deleted successfully");
-    return Response.json({ message: "تم حذف الصنف بنجاح" });
+    return Response.json({
+      message: "تم حذف الصنف بنجاح"
+    });
   } catch (error) {
     console.error("Error deleting item:", error);
-    return Response.json(
-      { error: "Failed to delete item", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to delete item",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { DELETE, GET, POST, PUT };

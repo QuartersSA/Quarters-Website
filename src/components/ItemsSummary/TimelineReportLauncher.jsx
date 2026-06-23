@@ -60,6 +60,9 @@ export default function TimelineReportLauncher({ groupedItems, branches }) {
               onChange={setItemId}
               options={itemOptions}
               buttonClassName="px-4 py-3"
+              searchable
+              searchPlaceholder="ابحث عن صنف…"
+              noResultsLabel="لا يوجد صنف مطابق"
             />
           </div>
           <div className="sm:col-span-1">

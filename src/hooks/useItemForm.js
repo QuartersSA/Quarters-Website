@@ -55,7 +55,7 @@ export function useItemForm() {
         item.max_stock_threshold !== null
           ? item.max_stock_threshold
           : null,
-      is_active: showInInventory,
+      is_active: item.is_active !== false,
       unit: item.unit || "حبة",
       category_id: item.category_id || null,
       cost: item.cost != null ? item.cost : "",
@@ -71,24 +71,9 @@ export function useItemForm() {
     });
   };
 
-  // Wrap setFormData to keep is_active in sync with show_in_inventory
-  const setFormDataSynced = (valueOrUpdater) => {
-    setFormData((prev) => {
-      const next =
-        typeof valueOrUpdater === "function"
-          ? valueOrUpdater(prev)
-          : valueOrUpdater;
-      // Sync is_active to match show_in_inventory
-      if (next.show_in_inventory !== undefined) {
-        return { ...next, is_active: next.show_in_inventory };
-      }
-      return next;
-    });
-  };
-
   return {
     formData,
-    setFormData: setFormDataSynced,
+    setFormData,
     editingItem,
     resetForm,
     loadItem,

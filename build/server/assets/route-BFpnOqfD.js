@@ -1,15 +1,20 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     // current_quantity = last RESET (Daily/Weekly/Opening physical count)
     //                  + receipts since that reset
@@ -99,18 +104,16 @@ export async function GET(request) {
         )
       ORDER BY i.name, b.name
     `;
-
-    const filteredItems = rows.filter(
-      (item) =>
-        Number(item.current_quantity) < Number(item.min_stock_threshold),
-    );
-
+    const filteredItems = rows.filter(item => Number(item.current_quantity) < Number(item.min_stock_threshold));
     return Response.json(filteredItems);
   } catch (error) {
     console.error("Error fetching low stock items:", error);
-    return Response.json(
-      { error: "Failed to fetch low stock items" },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch low stock items"
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET };

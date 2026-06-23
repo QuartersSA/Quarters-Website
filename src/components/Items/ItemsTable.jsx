@@ -215,7 +215,212 @@ export function ItemsTable({
   return (
     <>
       <div className={sectionCard}>
-        <div className="overflow-x-auto">
+        <div className="md:hidden divide-y divide-slate-200 dark:divide-white/10">
+          <div className="p-4 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={toggleSelectAll}
+              className={`${ws.btnNeutral} px-3 py-2 text-sm justify-center`}
+            >
+              {selectAllIcon}
+              <span>
+                {allSelected || someSelected ? "إلغاء التحديد" : "تحديد الكل"}
+              </span>
+            </button>
+            <span className="text-xs text-slate-500 dark:text-white/45">
+              {items.length} صنف
+            </span>
+          </div>
+
+          {items.map((item) => {
+            const isChecked = selectedIds.has(item.id);
+            const categoryName = item?.category_name || "-";
+            const itemUnits = Array.isArray(item?.units) ? item.units : [];
+            const defaultInvUnit =
+              itemUnits.find((u) => u.id === item?.default_inventory_unit_id) ||
+              itemUnits.find((u) => u.is_base) ||
+              null;
+            const unit = defaultInvUnit?.name_ar || item?.unit || "حبة";
+            const baseCost = Number(item?.base_purchase_cost);
+            const fallbackCost = Number(item?.cost);
+            const rawBaseCost = Number.isFinite(baseCost)
+              ? baseCost
+              : Number.isFinite(fallbackCost)
+                ? fallbackCost
+                : null;
+            const displayCost =
+              rawBaseCost != null && defaultInvUnit
+                ? rawBaseCost *
+                  (Number(defaultInvUnit.conversion_factor) || 1)
+                : rawBaseCost;
+            const totalStock = computeTotalStock(item);
+            const stockStatus = computeStockStatus(item);
+            const hasBranchStock = Array.isArray(item?.branch_stock);
+            const showInInventory = item?.show_in_inventory !== false;
+            const minThresholdValue = Number(item?.min_stock_threshold || 0);
+            const minThresholdText = `${minThresholdValue.toLocaleString()} ${unit}`;
+            const stockText = hasBranchStock
+              ? `${totalStock.toLocaleString()} ${unit}`
+              : "-";
+            const viewStockTitle = hasBranchStock
+              ? "عرض المخزون في الفروع"
+              : "لا يوجد مخزون مسجل";
+            const rowCheckClass = isChecked ? checkboxActive : checkboxInactive;
+            const rowCheckIcon = isChecked ? (
+              <CheckSquare className="w-4 h-4" />
+            ) : (
+              <Square className="w-4 h-4" />
+            );
+
+            const statusPillClass = !showInInventory
+              ? `${ws.pill} bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25`
+              : stockStatus === "out_of_stock"
+                ? `${ws.pill} bg-red-500/15 text-red-700 dark:text-red-200 border-red-500/25`
+                : stockStatus === "low_stock"
+                  ? `${ws.pill} bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25`
+                  : `${ws.pill} bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25`;
+
+            const statusIcon = !showInInventory ? (
+              <EyeOff className="w-4 h-4" />
+            ) : stockStatus === "out_of_stock" ? (
+              <XCircle className="w-4 h-4" />
+            ) : stockStatus === "low_stock" ? (
+              <AlertTriangle className="w-4 h-4" />
+            ) : (
+              <ClipboardCheck className="w-4 h-4" />
+            );
+
+            const statusText = !showInInventory
+              ? "معطّل"
+              : stockStatus === "out_of_stock"
+                ? "نفد"
+                : stockStatus === "low_stock"
+                  ? "منخفض"
+                  : "متوفر";
+
+            return (
+              <div
+                key={`mobile-${item.id}`}
+                className={`p-4 ${isChecked ? "bg-emerald-400/[0.04]" : ""}`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <button
+                      type="button"
+                      onClick={() => toggleOne(item.id)}
+                      aria-label={`تحديد ${item.name}`}
+                      title={`تحديد ${item.name}`}
+                      className={`${checkboxBase} ${rowCheckClass} shrink-0`}
+                    >
+                      {rowCheckIcon}
+                    </button>
+                    <div
+                      className={`${ws.iconBox} w-10 h-10 text-slate-800 dark:text-white/80 shrink-0`}
+                    >
+                      <Package className="w-5 h-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-slate-900 dark:text-white font-semibold truncate">
+                        {item?.name || "-"}
+                      </p>
+                      {item?.name_en ? (
+                        <p className="text-slate-500 dark:text-white/45 text-xs truncate" dir="ltr">
+                          {item.name_en}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                  <span
+                    className={`${statusPillClass} inline-flex items-center gap-1.5 shrink-0`}
+                  >
+                    {statusIcon}
+                    <span>{statusText}</span>
+                  </span>
+                </div>
+
+                <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">الفئة</p>
+                    <p className="font-semibold text-slate-900 dark:text-white truncate">
+                      {categoryName}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">الوحدة</p>
+                    <p className="font-semibold text-slate-900 dark:text-white truncate">
+                      {getUnitIcon(unit)} {unit}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">التكلفة</p>
+                    <p className="font-semibold text-slate-900 dark:text-white" dir="ltr">
+                      {formatCost(displayCost)}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">الحد الأدنى</p>
+                    <p className="font-semibold text-slate-900 dark:text-white" dir="ltr">
+                      {minThresholdText}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-2 rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2 flex items-center justify-between gap-3">
+                  <span className="text-xs text-slate-500 dark:text-white/45">
+                    إجمالي المخزون
+                  </span>
+                  <span className="text-slate-900 dark:text-white font-bold" dir="ltr">
+                    {stockText}
+                  </span>
+                </div>
+
+                <div className="mt-3 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => onViewStock(item)}
+                    disabled={!hasBranchStock}
+                    className={`${ws.iconButton} text-slate-800 dark:text-white/80 disabled:opacity-40 disabled:cursor-not-allowed`}
+                    aria-label="عرض المخزون"
+                    title={viewStockTitle}
+                  >
+                    <Eye className="w-4 h-4" />
+                  </button>
+                  {typeof onManageBranches === "function" ? (
+                    <button
+                      type="button"
+                      onClick={() => onManageBranches(item)}
+                      className={`${ws.iconButton} text-purple-700 dark:text-purple-200`}
+                      aria-label="إدارة الفروع"
+                      title="إدارة الفروع (تفعيل/إلغاء حسب الفرع)"
+                    >
+                      <Building2 className="w-4 h-4" />
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={() => onEdit(item)}
+                    className={`${ws.iconButton} text-sky-700 dark:text-sky-200`}
+                    aria-label="تعديل"
+                    title="تعديل"
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(item)}
+                    className={`${ws.iconButton} text-red-700 dark:text-red-200`}
+                    aria-label="حذف"
+                    title="حذف"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>{headers}</thead>
             <tbody>
@@ -484,9 +689,9 @@ export function ItemsTable({
         </div>
 
         <div
-          className={`px-6 py-3 border-t ${ws.divider} text-xs text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45`}
+          className={`hidden md:block px-6 py-3 border-t ${ws.divider} text-xs text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45`}
         >
-          تلميح: على الجوال تقدر تسحب يمين/يسار لعرض كل الأعمدة.
+          تلميح: استخدم التحديد المتعدد لتفعيل أو إخفاء عدة أصناف من الجرد دفعة واحدة.
         </div>
       </div>
 

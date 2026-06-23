@@ -1,5 +1,7 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 // GET /api/items/stock-value?branchId=<id>
 // One row per item with:
@@ -16,23 +18,25 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 // Cost source mirrors `/api/dashboard/analytics` so a bean-linked item
 // with NULL `items.cost` falls back to the latest green-bean order
 // price. Inactive / hidden items are excluded.
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
-    const { searchParams } = new URL(request.url);
+    const {
+      searchParams
+    } = new URL(request.url);
     const branchIdRaw = searchParams.get("branchId");
     const parsedBranchId = branchIdRaw ? Number(branchIdRaw) : null;
-    const branchFilter =
-      Number.isFinite(parsedBranchId) && parsedBranchId > 0
-        ? parsedBranchId
-        : null;
+    const branchFilter = Number.isFinite(parsedBranchId) && parsedBranchId > 0 ? parsedBranchId : null;
 
     // Explicit-params form (`sql(query, params)`) rather than tagged
     // template — tagged template with conditional interpolation inside
@@ -196,15 +200,17 @@ export async function GET(request) {
         AND i.show_in_inventory = true
       ORDER BY i.name ASC
     `;
-
     const rows = await sql(query, [branchFilter]);
-
     return Response.json(rows);
   } catch (error) {
     console.error("Error fetching stock value:", error);
-    return Response.json(
-      { error: "Failed to fetch stock value", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch stock value",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET };

@@ -49,7 +49,71 @@ export function LowStockTable({
           </div>
         </div>
       ) : items.length > 0 ? (
-        <div className="overflow-x-auto">
+        <>
+        <div className="md:hidden divide-y divide-slate-200 dark:divide-white/10">
+          {items.map((item, index) => {
+            const status = getLowStockStatus(item);
+            const qty = Number(item.current_quantity) || 0;
+            const threshold = Number(item.min_stock_threshold) || 0;
+            const shortage = Math.max(0, threshold - qty);
+            const unit = item.unit || "حبة";
+            const qtyClass =
+              qty === 0
+                ? "text-red-700 dark:text-red-200"
+                : qty < threshold * 0.5
+                  ? "text-orange-700 dark:text-orange-200"
+                  : "text-amber-700 dark:text-amber-200";
+
+            return (
+              <div key={`${item.id}-${item.branch_id}-mobile-${index}`} className="p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-11 h-11 bg-slate-100 dark:bg-white/[0.04] rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 shrink-0">
+                      <Package className="w-5 h-5 text-amber-700 dark:text-amber-200" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-slate-900 dark:text-white font-semibold truncate">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-white/45 truncate">
+                        {item.branch_name || "غير محدد"}
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    className={`${ws.pill} inline-flex items-center gap-1.5 text-xs font-semibold border ${status.color} shrink-0`}
+                  >
+                    <StatusIcon severity={status.severity} />
+                    {status.label}
+                  </span>
+                </div>
+
+                <div className="mt-3 grid grid-cols-3 gap-2 text-sm">
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">الحالي</p>
+                    <p className={`font-bold ${qtyClass}`} dir="ltr">
+                      {qty} {unit}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">الحد</p>
+                    <p className="font-semibold text-slate-900 dark:text-white" dir="ltr">
+                      {threshold} {unit}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">النقص</p>
+                    <p className="font-bold text-red-700 dark:text-red-200" dir="ltr">
+                      -{shortage} {unit}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-slate-100 dark:bg-slate-100 dark:bg-white/[0.04]">
@@ -161,6 +225,7 @@ export function LowStockTable({
             </tbody>
           </table>
         </div>
+        </>
       ) : (
         <div className="p-12 text-center text-slate-500 dark:text-slate-500 dark:text-white/50">
           <CheckCircle className="w-16 h-16 mx-auto mb-4 opacity-50 text-emerald-700 dark:text-emerald-700 dark:text-emerald-200" />

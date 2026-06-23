@@ -57,6 +57,7 @@ export default function AdminInventoryCountModal({
   const [operationDate, setOperationDate] = useState("");
   const [search, setSearch] = useState("");
   const [qtyByItem, setQtyByItem] = useState({});
+  const [countMode, setCountMode] = useState("partial");
   const [showEnteredOnly, setShowEnteredOnly] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
@@ -66,6 +67,7 @@ export default function AdminInventoryCountModal({
     setOperationDate(formatRiyadhDateTimeForInput());
     setSearch("");
     setQtyByItem({});
+    setCountMode("partial");
     setShowEnteredOnly(false);
     setSuccess("");
     setError("");
@@ -148,6 +150,14 @@ export default function AdminInventoryCountModal({
         if (qty == null || qty < 0) continue;
         availableItems[itemId] = qty;
       }
+      const enteredIds = new Set(Object.keys(availableItems).map(String));
+      const unavailableItems =
+        countMode === "full"
+          ? countItems
+              .filter((item) => !enteredIds.has(String(item.id)))
+              .map((item) => Number(item.id))
+              .filter((id) => Number.isFinite(id) && id > 0)
+          : [];
 
       const response = await adminFetch("/api/inventory-operations", {
         method: "POST",
@@ -156,7 +166,7 @@ export default function AdminInventoryCountModal({
           branchId,
           inventoryType: "Daily",
           availableItems,
-          unavailableItems: [],
+          unavailableItems,
           operationDate,
         }),
       });
@@ -210,8 +220,24 @@ export default function AdminInventoryCountModal({
   const canSubmit =
     Number.isFinite(selectedBranchNumber) &&
     selectedBranchNumber > 0 &&
-    enteredItems.length > 0 &&
+    (countMode === "full" ? countItems.length > 0 : enteredItems.length > 0) &&
     !createInventoryMutation.isPending;
+  const missingCount = Math.max(0, countItems.length - enteredItems.length);
+
+  const submitCount = () => {
+    if (!canSubmit) return;
+    if (
+      countMode === "full" &&
+      missingCount > 0 &&
+      typeof window !== "undefined"
+    ) {
+      const ok = window.confirm(
+        `سيتم حفظ ${missingCount} صنف غير مدخل بكمية صفر. هل تريد المتابعة؟`,
+      );
+      if (!ok) return;
+    }
+    createInventoryMutation.mutate();
+  };
 
   return (
     <div
@@ -341,6 +367,36 @@ export default function AdminInventoryCountModal({
               <RotateCcw className="w-4 h-4" />
               <span>مسح المسودة</span>
             </button>
+          </div>
+
+          <div
+            className={`mb-4 rounded-2xl border ${ws.divider} bg-slate-50 dark:bg-white/[0.03] p-3`}
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setCountMode("partial")}
+                className={`${countMode === "partial" ? ws.btnPrimary : ws.btnNeutral} px-4 py-3 justify-center`}
+              >
+                <span>جرد جزئي</span>
+                <span className="text-xs opacity-80">يحفظ المدخل فقط</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setCountMode("full")}
+                className={`${countMode === "full" ? ws.btnPrimary : ws.btnNeutral} px-4 py-3 justify-center`}
+              >
+                <span>جرد كامل</span>
+                <span className="text-xs opacity-80">غير المدخل = صفر</span>
+              </button>
+            </div>
+
+            <p className="mt-2 text-xs text-slate-600 dark:text-white/55">
+              {countMode === "full"
+                ? `الجرد الكامل سيحفظ ${missingCount} صنف غير مدخل بكمية صفر بعد التأكيد.`
+                : "الجرد الجزئي لا يغير الأصناف التي لم تدخل لها كمية."}
+            </p>
           </div>
 
           {!branchId ? (
@@ -474,13 +530,15 @@ export default function AdminInventoryCountModal({
 
             <button
               type="button"
-              onClick={() => createInventoryMutation.mutate()}
+              onClick={submitCount}
               disabled={!canSubmit}
               className={`${ws.btnPrimary} px-6 py-3 justify-center disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {createInventoryMutation.isPending
                 ? "جاري حفظ الجرد..."
-                : "حفظ الجرد الجديد"}
+                : countMode === "full"
+                  ? "حفظ الجرد الكامل"
+                  : "حفظ الجرد الجزئي"}
             </button>
           </div>
         </div>
