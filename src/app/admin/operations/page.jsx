@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftRight, PlusCircle, Truck } from "lucide-react";
+import { ArrowLeftRight, ClipboardCheck, PlusCircle, Truck } from "lucide-react";
 import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
@@ -18,6 +18,7 @@ import { OperationsTable } from "@/components/Operations/OperationsTable";
 import { OperationDetailsModal } from "@/components/Operations/OperationDetailsModal/OperationDetailsModal";
 import TransferModal from "@/components/Operations/TransferModal";
 import DeleteOperationModal from "@/components/Operations/DeleteOperationModal";
+import AdminInventoryCountModal from "@/components/Operations/AdminInventoryCountModal";
 import { OpeningSessionModal } from "@/components/Dashboard/OpeningSessionModal";
 import { PurchaseReceiptModal } from "@/components/Dashboard/PurchaseReceiptModal";
 import EditOperationModal from "@/components/Operations/EditOperationModal";
@@ -72,6 +73,7 @@ export default function OperationsPage() {
     useOperationDetails();
 
   const [showTransferModal, setShowTransferModal] = useState(false);
+  const [showInventoryCountModal, setShowInventoryCountModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   /* ── Edit operation state (for non-receipt types) ── */
@@ -304,6 +306,15 @@ export default function OperationsPage() {
             <div className="flex flex-col sm:flex-row gap-2">
               <button
                 type="button"
+                onClick={() => setShowInventoryCountModal(true)}
+                className={`${ws.btnNeutral} px-4 py-2 justify-center`}
+              >
+                <ClipboardCheck className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
+                <span>جرد جديد</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={openingSession.openOpeningModal}
                 className={`${ws.btnNeutral} px-4 py-2 justify-center`}
               >
@@ -380,6 +391,15 @@ export default function OperationsPage() {
           onClose={() => setSelectedOperation(null)}
           onDelete={setDeleteTarget}
           onEdit={handleEditOperation}
+        />
+      ) : null}
+
+      {showInventoryCountModal ? (
+        <AdminInventoryCountModal
+          open={showInventoryCountModal}
+          onClose={() => setShowInventoryCountModal(false)}
+          branches={branches}
+          items={activeItems}
         />
       ) : null}
 
