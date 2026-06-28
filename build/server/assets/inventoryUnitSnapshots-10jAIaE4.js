@@ -1,8 +1,19 @@
 import { s as sql } from './sql-BfhTxwII.js';
 
 let ensured = false;
+let ensuring = null;
 async function ensureInventoryUnitSnapshotSchema() {
   if (ensured) return;
+  if (ensuring) return ensuring;
+  ensuring = doEnsureInventoryUnitSnapshotSchema();
+  try {
+    await ensuring;
+    ensured = true;
+  } finally {
+    ensuring = null;
+  }
+}
+async function doEnsureInventoryUnitSnapshotSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS measurement_units (
       id          SERIAL PRIMARY KEY,
@@ -22,6 +33,7 @@ async function ensureInventoryUnitSnapshotSchema() {
       UNIQUE(item_id, unit_id)
     )
   `;
+  await sql`DROP VIEW IF EXISTS inventory_current_stock_v`;
   await sql`
     ALTER TABLE item_units
     ALTER COLUMN conversion_factor TYPE NUMERIC(20, 8)
@@ -236,7 +248,6 @@ async function ensureInventoryUnitSnapshotSchema() {
     LEFT JOIN transfers_after
       ON transfers_after.item_id = i.id AND transfers_after.branch_id = b.id
   `;
-  ensured = true;
 }
 async function getDefaultInventoryUnitSnapshots(itemIds) {
   const ids = Array.from(new Set((Array.isArray(itemIds) ? itemIds : []).map(id => Number(id)).filter(id => Number.isFinite(id) && id > 0)));
