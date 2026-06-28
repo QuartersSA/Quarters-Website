@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
 
 export async function GET(request, { params }) {
   const auth = requireAuth(request, {
@@ -11,6 +12,8 @@ export async function GET(request, { params }) {
   }
 
   try {
+    await ensureInventoryUnitSnapshotSchema();
+
     const itemId = parseInt(params.id);
     if (!itemId || Number.isNaN(itemId)) {
       return Response.json({ error: "معرّف الصنف غير صحيح" }, { status: 400 });
@@ -65,9 +68,14 @@ export async function GET(request, { params }) {
         COALESCE(io.operation_date, io.created_at) as created_at,
         io.branch_id,
         b.name as branch_name,
-        ii.quantity
+        (
+          ii.quantity::numeric
+            * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+        ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity
       FROM inventory_items ii
       JOIN inventory_operations io ON io.id = ii.operation_id
+      JOIN items i ON i.id = ii.item_id
+      LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
       LEFT JOIN branches b ON b.id = io.branch_id
       ${where}
       ORDER BY COALESCE(io.operation_date, io.created_at) ASC

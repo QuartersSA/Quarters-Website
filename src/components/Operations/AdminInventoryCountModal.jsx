@@ -59,6 +59,7 @@ export default function AdminInventoryCountModal({
   const [qtyByItem, setQtyByItem] = useState({});
   const [countMode, setCountMode] = useState("partial");
   const [showEnteredOnly, setShowEnteredOnly] = useState(false);
+  const [fullConfirmOpen, setFullConfirmOpen] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
@@ -69,6 +70,7 @@ export default function AdminInventoryCountModal({
     setQtyByItem({});
     setCountMode("partial");
     setShowEnteredOnly(false);
+    setFullConfirmOpen(false);
     setSuccess("");
     setError("");
   }, [open]);
@@ -213,6 +215,7 @@ export default function AdminInventoryCountModal({
     setQtyByItem({});
     setSearch("");
     setShowEnteredOnly(false);
+    setFullConfirmOpen(false);
     setError("");
     setSuccess("");
   };
@@ -226,15 +229,9 @@ export default function AdminInventoryCountModal({
 
   const submitCount = () => {
     if (!canSubmit) return;
-    if (
-      countMode === "full" &&
-      missingCount > 0 &&
-      typeof window !== "undefined"
-    ) {
-      const ok = window.confirm(
-        `سيتم حفظ ${missingCount} صنف غير مدخل بكمية صفر. هل تريد المتابعة؟`,
-      );
-      if (!ok) return;
+    if (countMode === "full" && missingCount > 0) {
+      setFullConfirmOpen(true);
+      return;
     }
     createInventoryMutation.mutate();
   };
@@ -516,6 +513,37 @@ export default function AdminInventoryCountModal({
           {error ? (
             <div className="mt-4 p-3 bg-red-500/10 border border-red-400/30 rounded-2xl text-red-700 dark:text-red-200">
               {error}
+            </div>
+          ) : null}
+
+          {fullConfirmOpen ? (
+            <div className="mt-4 rounded-2xl border border-amber-300/60 bg-amber-50 p-4 dark:border-amber-300/30 dark:bg-amber-500/10">
+              <div className="font-bold text-amber-900 dark:text-amber-100">
+                تأكيد الجرد الكامل
+              </div>
+              <p className="mt-1 text-sm text-amber-800 dark:text-amber-100/80">
+                سيتم حفظ {missingCount} صنف غير مدخل بكمية صفر. هذا يؤثر على
+                رصيد الفرع مباشرة.
+              </p>
+              <div className="mt-3 flex flex-col sm:flex-row gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setFullConfirmOpen(false)}
+                  className={`${ws.btnNeutral} px-4 py-2.5 justify-center`}
+                >
+                  رجوع
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFullConfirmOpen(false);
+                    createInventoryMutation.mutate();
+                  }}
+                  className={`${ws.btnPrimary} px-4 py-2.5 justify-center`}
+                >
+                  تأكيد الحفظ بالصفر
+                </button>
+              </div>
             </div>
           ) : null}
 

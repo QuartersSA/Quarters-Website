@@ -476,6 +476,9 @@ export default function TransferModal({ branches, onClose }) {
                   }}
                   options={itemOptions}
                   buttonClassName="px-4 py-3"
+                  searchable
+                  searchPlaceholder="ابحث عن صنف..."
+                  noResultsLabel="لا يوجد صنف مطابق"
                 />
               </div>
 

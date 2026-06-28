@@ -2,6 +2,11 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 import { findDisabledItemsAtBranch } from "@/app/api/utils/branchVisibility";
+import {
+  ensureInventoryUnitSnapshotSchema,
+  getDefaultInventoryUnitSnapshots,
+  snapshotForItem,
+} from "@/app/api/utils/inventoryUnitSnapshots";
 import { parseBusinessTimestamp } from "@/utils/dateUtils";
 
 async function notifyAdminsWhatsAppInventoryTransfer({
@@ -118,13 +123,20 @@ async function getQuantitiesAtTime({ txn, branchId, itemIds, atTime }) {
     `
       SELECT
         i.id AS item_id,
-        COALESCE(last_reset.inv_quantity, 0)
-          + COALESCE(receipts_after.total_received, 0)
-          + COALESCE(transfers_after.net_transfer, 0) AS quantity_at_t
+        (
+          COALESCE(last_reset.inv_base_quantity, 0)
+            + COALESCE(receipts_after.total_received_base, 0)
+            + COALESCE(transfers_after.net_transfer_base, 0)
+        ) / NULLIF(COALESCE(current_unit.conversion_factor, 1), 0) AS quantity_at_t
       FROM items i
+      LEFT JOIN item_units current_unit
+        ON current_unit.id = i.default_inventory_unit_id
 
       LEFT JOIN LATERAL (
-        SELECT ii.quantity AS inv_quantity,
+        SELECT
+               ii.quantity::numeric
+                 * COALESCE(ii.unit_factor, current_unit.conversion_factor, 1)::numeric
+                 AS inv_base_quantity,
                COALESCE(io.operation_date, io.created_at) AS op_date
         FROM inventory_items ii
         JOIN inventory_operations io ON io.id = ii.operation_id
@@ -141,7 +153,10 @@ async function getQuantitiesAtTime({ txn, branchId, itemIds, atTime }) {
       ) last_reset ON true
 
       LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
+        SELECT COALESCE(SUM(
+          pr.quantity::numeric
+            * COALESCE(pr.unit_factor, current_unit.conversion_factor, 1)::numeric
+        ), 0) AS total_received_base
         FROM purchase_receipts pr
         WHERE pr.item_id = i.id
           AND pr.branch_id = $1
@@ -158,11 +173,12 @@ async function getQuantitiesAtTime({ txn, branchId, itemIds, atTime }) {
       LEFT JOIN LATERAL (
         SELECT COALESCE(SUM(
           CASE io.transfer_direction
-            WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
-            WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
+            WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)::numeric
+            WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)::numeric
             ELSE 0
           END
-        ), 0) AS net_transfer
+          * COALESCE(ii.unit_factor, current_unit.conversion_factor, 1)::numeric
+        ), 0) AS net_transfer_base
         FROM inventory_items ii
         JOIN inventory_operations io ON io.id = ii.operation_id
         WHERE ii.item_id   = i.id
@@ -230,8 +246,9 @@ export async function POST(request) {
       ALTER TABLE inventory_items
         ADD COLUMN IF NOT EXISTS transfer_quantity NUMERIC(12, 3)
     `;
+    await ensureInventoryUnitSnapshotSchema();
   } catch (e) {
-    console.error("ensureSchema inventory_items.transfer_quantity:", e?.message);
+    console.error("ensureSchema inventory transfer snapshots:", e?.message);
   }
 
   try {
@@ -358,10 +375,6 @@ export async function POST(request) {
     const itemNameById = new Map(
       itemRows.map((r) => [Number(r.id), String(r.name)]),
     );
-    const itemUnitById = new Map(
-      itemRows.map((r) => [Number(r.id), String(r.unit || "")]),
-    );
-
     for (const it of cleanedItems) {
       if (!itemNameById.has(it.itemId)) {
         return Response.json(
@@ -370,6 +383,11 @@ export async function POST(request) {
         );
       }
     }
+
+    const unitSnapshots = await getDefaultInventoryUnitSnapshots(itemIds);
+    const itemUnitById = new Map(
+      itemIds.map((id) => [id, snapshotForItem(unitSnapshots, id).unitName]),
+    );
 
     // Branch-visibility guard: refuse the transfer if any item is
     // disabled at either the source OR the destination. Running the
@@ -464,12 +482,19 @@ export async function POST(request) {
     const perItemIds = [];
     const fromNewArr = [];
     const toNewArr = [];
+    const unitIdArr = [];
+    const unitNameArr = [];
+    const unitFactorArr = [];
     for (const it of cleanedItems) {
       const fromAtT = Number(fromQtyMap.get(it.itemId) || 0);
       const toAtT = Number(toQtyMap.get(it.itemId) || 0);
+      const unitSnap = snapshotForItem(unitSnapshots, it.itemId);
       perItemIds.push(it.itemId);
       fromNewArr.push(Math.round((fromAtT - it.quantity) * 1000) / 1000);
       toNewArr.push(Math.round((toAtT + it.quantity) * 1000) / 1000);
+      unitIdArr.push(unitSnap.unitId);
+      unitNameArr.push(unitSnap.unitName);
+      unitFactorArr.push(unitSnap.unitFactor);
     }
 
     // Atomic write: a single SQL statement with CTEs that inserts both
@@ -516,17 +541,32 @@ export async function POST(request) {
           unnest($7::int[])     AS item_id,
           unnest($8::numeric[]) AS from_new,
           unnest($9::numeric[]) AS to_new,
-          unnest($10::numeric[]) AS moved
+          unnest($10::numeric[]) AS moved,
+          unnest($11::int[]) AS unit_id,
+          unnest($12::text[]) AS unit_name,
+          unnest($13::numeric[]) AS unit_factor
       ),
       ins_out AS (
-        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id, transfer_quantity)
-        SELECT op_out.id, items_data.item_id, items_data.from_new, op_out.branch_id, items_data.moved
+        INSERT INTO inventory_items (
+          operation_id, item_id, quantity, branch_id, transfer_quantity,
+          unit_id, unit_name, unit_factor
+        )
+        SELECT
+          op_out.id, items_data.item_id, items_data.from_new, op_out.branch_id,
+          items_data.moved, items_data.unit_id, items_data.unit_name,
+          items_data.unit_factor
         FROM op_out, items_data
         RETURNING 1
       ),
       ins_in AS (
-        INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id, transfer_quantity)
-        SELECT op_in.id, items_data.item_id, items_data.to_new, op_in.branch_id, items_data.moved
+        INSERT INTO inventory_items (
+          operation_id, item_id, quantity, branch_id, transfer_quantity,
+          unit_id, unit_name, unit_factor
+        )
+        SELECT
+          op_in.id, items_data.item_id, items_data.to_new, op_in.branch_id,
+          items_data.moved, items_data.unit_id, items_data.unit_name,
+          items_data.unit_factor
         FROM op_in, items_data
         RETURNING 1
       )
@@ -551,6 +591,9 @@ export async function POST(request) {
         fromNewArr,
         toNewArr,
         cleanedItems.map((it) => Number(it.quantity) || 0),
+        unitIdArr,
+        unitNameArr,
+        unitFactorArr,
       ],
     );
 

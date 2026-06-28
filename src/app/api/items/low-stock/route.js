@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
 
 export async function GET(request) {
   const auth = requireAuth(request, {
@@ -11,6 +12,7 @@ export async function GET(request) {
   }
 
   try {
+    await ensureInventoryUnitSnapshotSchema();
     // current_quantity = last RESET (Daily/Weekly/Opening physical count)
     //                  + receipts since that reset
     //                  + signed transfer deltas since that reset
@@ -30,11 +32,11 @@ export async function GET(request) {
         b.id as branch_id,
         b.name as branch_name,
         b.location as branch_location,
-        COALESCE(last_reset.inv_quantity, 0)
-          + COALESCE(receipts_after.total_received, 0)
-          + COALESCE(transfers_after.net_transfer, 0) AS current_quantity
+        COALESCE(cs.current_quantity, 0) AS current_quantity
       FROM items i
       CROSS JOIN branches b
+      LEFT JOIN inventory_current_stock_v cs
+        ON cs.item_id = i.id AND cs.branch_id = b.id
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
       LEFT JOIN LATERAL (
@@ -45,57 +47,11 @@ export async function GET(request) {
         LIMIT 1
       ) inv_unit ON true
 
-      LEFT JOIN LATERAL (
-        SELECT ii.quantity AS inv_quantity,
-               COALESCE(io.operation_date, io.created_at) AS op_date
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id  = i.id
-          AND io.branch_id = b.id
-          AND io.status    = 'Completed'
-          AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
-        LIMIT 1
-      ) last_reset ON true
-
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(pr.quantity), 0) AS total_received
-        FROM purchase_receipts pr
-        WHERE pr.item_id   = i.id
-          AND pr.branch_id = b.id
-          AND (
-            last_reset.op_date IS NULL
-            OR GREATEST(pr.received_at, pr.created_at) > last_reset.op_date
-          )
-      ) receipts_after ON true
-
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(
-          CASE io.transfer_direction
-            WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)
-            WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)
-            ELSE 0
-          END
-        ), 0) AS net_transfer
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id   = i.id
-          AND ii.branch_id = b.id
-          AND io.status    = 'Completed'
-          AND io.inventory_type = 'Transfer'
-          AND (
-            last_reset.op_date IS NULL
-            OR COALESCE(io.operation_date, io.created_at) > last_reset.op_date
-          )
-      ) transfers_after ON true
-
       WHERE i.is_active = true
         AND i.show_in_inventory = true
         AND ibd.item_id IS NULL
         AND (
-          last_reset.op_date IS NOT NULL
-          OR receipts_after.total_received > 0
-          OR transfers_after.net_transfer <> 0
+          cs.has_signal = true
         )
       ORDER BY i.name, b.name
     `;

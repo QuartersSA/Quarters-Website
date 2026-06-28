@@ -41,10 +41,11 @@ async function PATCH(request) {
       });
     }
 
-    // Build a safe parameterised query — keep is_active in sync with show_in_inventory
+    // Build a safe parameterised query. Inventory visibility is
+    // independent from item activity.
     const placeholders = ids.map((_, i) => `$${i + 2}`).join(", ");
     const values = [show_in_inventory, ...ids.map(id => parseInt(id))];
-    const query = `UPDATE items SET show_in_inventory = $1, is_active = $1 WHERE id IN (${placeholders}) RETURNING id, show_in_inventory, is_active`;
+    const query = `UPDATE items SET show_in_inventory = $1 WHERE id IN (${placeholders}) RETURNING id, show_in_inventory, is_active`;
     const result = await sql(query, values);
     console.log(`Batch updated show_in_inventory=${show_in_inventory} for ${result.length} items`);
     return Response.json({

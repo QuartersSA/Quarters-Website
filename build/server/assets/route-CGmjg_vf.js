@@ -1,6 +1,7 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { a as assertItemsEnabledAtBranch } from './branchVisibility-CLODkXYw.js';
+import { e as ensureInventoryUnitSnapshotSchema, g as getDefaultInventoryUnitSnapshots, s as snapshotForItem } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import { v as validateBusinessDate } from './dateUtils-FqivhP-u.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -29,6 +30,7 @@ async function GET(request) {
     });
   }
   try {
+    await ensureInventoryUnitSnapshotSchema();
     const {
       searchParams
     } = new URL(request.url);
@@ -67,7 +69,7 @@ async function GET(request) {
         b.name as branch_name,
         pr.item_id,
         i.name as item_name,
-        i.unit as item_unit,
+        COALESCE(pr.unit_name, i.unit) as item_unit,
         pr.quantity,
         pr.received_at,
         pr.note,
@@ -108,6 +110,7 @@ async function POST(request) {
     });
   }
   try {
+    await ensureInventoryUnitSnapshotSchema();
     const body = await request.json();
 
     // ── Multi-item mode ──
@@ -181,19 +184,50 @@ async function POST(request) {
 
       // Generate a single batch id for all items in this receipt
       const batchId = `RB-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+      const snapshots = await getDefaultInventoryUnitSnapshots(cleanedItems.map(it => it.itemId));
+      const itemIds = [];
+      const quantities = [];
+      const unitIds = [];
+      const unitNames = [];
+      const unitFactors = [];
+      for (const it of cleanedItems) {
+        const snap = snapshotForItem(snapshots, it.itemId);
+        itemIds.push(it.itemId);
+        quantities.push(Math.round(it.quantity * 1000) / 1000);
+        unitIds.push(snap.unitId);
+        unitNames.push(snap.unitName);
+        unitFactors.push(snap.unitFactor);
+      }
 
       // Storage = real moment. `receivedAt` is a Riyadh wall-clock
       // string from the picker; pin the cast to Asia/Riyadh so the
       // recorded moment matches the user's intent regardless of the
       // PG session TZ. `created_at` records the actual insertion
       // moment.
-      const receipts = [];
-      for (const it of cleanedItems) {
-        const [row] = await sql(`INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, receipt_batch_id, created_at)
-           VALUES ($1, $2, $3, $4::timestamp AT TIME ZONE 'Asia/Riyadh', $5, $6, $7, $8, NOW())
-           RETURNING id, branch_id, item_id, quantity, received_at, note, created_at, created_by_employee_id, created_by_employee_name, receipt_batch_id`, [branchIdNum, it.itemId, it.quantity, receivedAt, note || null, actingEmployeeId, actingEmployeeName, batchId]);
-        receipts.push(row);
-      }
+      const receipts = await sql(`
+          WITH rows AS (
+            SELECT
+              unnest($7::int[]) AS item_id,
+              unnest($8::numeric[]) AS quantity,
+              unnest($9::int[]) AS unit_id,
+              unnest($10::text[]) AS unit_name,
+              unnest($11::numeric[]) AS unit_factor
+          )
+          INSERT INTO purchase_receipts (
+            branch_id, item_id, quantity, received_at, note,
+            created_by_employee_id, created_by_employee_name, receipt_batch_id,
+            created_at, unit_id, unit_name, unit_factor
+          )
+          SELECT
+            $1, rows.item_id, rows.quantity,
+            $2::timestamp AT TIME ZONE 'Asia/Riyadh',
+            $3, $4, $5, $6, NOW(),
+            rows.unit_id, rows.unit_name, rows.unit_factor
+          FROM rows
+          RETURNING id, branch_id, item_id, quantity, received_at, note,
+                    created_at, created_by_employee_id, created_by_employee_name,
+                    receipt_batch_id, unit_id, unit_name, unit_factor
+        `, [branchIdNum, receivedAt, note || null, actingEmployeeId, actingEmployeeName, batchId, itemIds, quantities, unitIds, unitNames, unitFactors]);
       return Response.json({
         receipts,
         count: receipts.length,
@@ -259,16 +293,27 @@ async function POST(request) {
     }
     const actingEmployeeId = auth.user?.id || null;
     const actingEmployeeName = auth.user?.name || null;
+    const snapshots = await getDefaultInventoryUnitSnapshots([itemIdNum]);
+    const unitSnap = snapshotForItem(snapshots, itemIdNum);
 
     // Storage = real moment (single-item legacy path). `received_at`
     // is a Riyadh wall-clock string from the picker, pinned to
     // Asia/Riyadh on the cast so the moment is correct independent of
     // the PG session TZ.
     const [row] = await sql(`
-        INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, created_at)
-        VALUES ($1, $2, $3, $4::timestamp AT TIME ZONE 'Asia/Riyadh', $5, $6, $7, NOW())
-        RETURNING id, branch_id, item_id, quantity, received_at, note, created_at, created_by_employee_id, created_by_employee_name
-      `, [branchIdNum, itemIdNum, qtyNum, receivedAt, note || null, actingEmployeeId, actingEmployeeName]);
+        INSERT INTO purchase_receipts (
+          branch_id, item_id, quantity, received_at, note,
+          created_by_employee_id, created_by_employee_name, created_at,
+          unit_id, unit_name, unit_factor
+        )
+        VALUES (
+          $1, $2, $3, $4::timestamp AT TIME ZONE 'Asia/Riyadh', $5,
+          $6, $7, NOW(), $8, $9, $10
+        )
+        RETURNING id, branch_id, item_id, quantity, received_at, note,
+                  created_at, created_by_employee_id, created_by_employee_name,
+                  unit_id, unit_name, unit_factor
+      `, [branchIdNum, itemIdNum, qtyNum, receivedAt, note || null, actingEmployeeId, actingEmployeeName, unitSnap.unitId, unitSnap.unitName, unitSnap.unitFactor]);
     return Response.json({
       receipt: row
     }, {
@@ -296,6 +341,7 @@ async function PUT(request) {
     });
   }
   try {
+    await ensureInventoryUnitSnapshotSchema();
     const body = await request.json();
     const {
       operationId,
@@ -377,6 +423,20 @@ async function PUT(request) {
     }
     const actingEmployeeId = auth.user?.id || null;
     const actingEmployeeName = auth.user?.name || null;
+    const snapshots = await getDefaultInventoryUnitSnapshots(cleanedItems.map(it => it.itemId));
+    const itemIds = [];
+    const quantities = [];
+    const unitIds = [];
+    const unitNames = [];
+    const unitFactors = [];
+    for (const it of cleanedItems) {
+      const snap = snapshotForItem(snapshots, it.itemId);
+      itemIds.push(it.itemId);
+      quantities.push(Math.round(it.quantity * 1000) / 1000);
+      unitIds.push(snap.unitId);
+      unitNames.push(snap.unitName);
+      unitFactors.push(snap.unitFactor);
+    }
 
     // ── Edit a batched receipt ──
     if (String(operationId).startsWith("batch-")) {
@@ -390,18 +450,36 @@ async function PUT(request) {
         });
       }
 
-      // Delete old items
-      await sql(`DELETE FROM purchase_receipts WHERE receipt_batch_id = $1`, [batchId]);
-
       // Re-insert with updated data — storage = real moment, pin the
       // picker-supplied `received_at` to Asia/Riyadh on the cast.
-      const receipts = [];
-      for (const it of cleanedItems) {
-        const [row] = await sql(`INSERT INTO purchase_receipts (branch_id, item_id, quantity, received_at, note, created_by_employee_id, created_by_employee_name, receipt_batch_id, created_at)
-           VALUES ($1, $2, $3, $4::timestamp AT TIME ZONE 'Asia/Riyadh', $5, $6, $7, $8, NOW())
-           RETURNING id, branch_id, item_id, quantity, received_at, note, created_at, created_by_employee_id, created_by_employee_name, receipt_batch_id`, [branchIdNum, it.itemId, it.quantity, receivedAt, note || null, actingEmployeeId, actingEmployeeName, batchId]);
-        receipts.push(row);
-      }
+      const receipts = await sql(`
+          WITH deleted AS (
+            DELETE FROM purchase_receipts WHERE receipt_batch_id = $1
+            RETURNING 1
+          ),
+          rows AS (
+            SELECT
+              unnest($7::int[]) AS item_id,
+              unnest($8::numeric[]) AS quantity,
+              unnest($9::int[]) AS unit_id,
+              unnest($10::text[]) AS unit_name,
+              unnest($11::numeric[]) AS unit_factor
+          )
+          INSERT INTO purchase_receipts (
+            branch_id, item_id, quantity, received_at, note,
+            created_by_employee_id, created_by_employee_name, receipt_batch_id,
+            created_at, unit_id, unit_name, unit_factor
+          )
+          SELECT
+            $2, rows.item_id, rows.quantity,
+            $3::timestamp AT TIME ZONE 'Asia/Riyadh',
+            $4, $5, $6, $1, NOW(),
+            rows.unit_id, rows.unit_name, rows.unit_factor
+          FROM rows
+          RETURNING id, branch_id, item_id, quantity, received_at, note,
+                    created_at, created_by_employee_id, created_by_employee_name,
+                    receipt_batch_id, unit_id, unit_name, unit_factor
+        `, [batchId, branchIdNum, receivedAt, note || null, actingEmployeeId, actingEmployeeName, itemIds, quantities, unitIds, unitNames, unitFactors]);
       return Response.json({
         receipts,
         count: receipts.length,
@@ -432,13 +510,15 @@ async function PUT(request) {
 
       // For single receipt, just update the first item
       const firstItem = cleanedItems[0];
+      const firstSnap = snapshotForItem(snapshots, firstItem.itemId);
       const [row] = await sql(`UPDATE purchase_receipts
          SET branch_id = $1, item_id = $2, quantity = $3,
              received_at = $4::timestamp AT TIME ZONE 'Asia/Riyadh',
              note = $5,
-             created_by_employee_id = $6, created_by_employee_name = $7
-         WHERE id = $8
-         RETURNING *`, [branchIdNum, firstItem.itemId, firstItem.quantity, receivedAt, note || null, actingEmployeeId, actingEmployeeName, receiptId]);
+             created_by_employee_id = $6, created_by_employee_name = $7,
+             unit_id = $8, unit_name = $9, unit_factor = $10
+         WHERE id = $11
+         RETURNING *`, [branchIdNum, firstItem.itemId, firstItem.quantity, receivedAt, note || null, actingEmployeeId, actingEmployeeName, firstSnap.unitId, firstSnap.unitName, firstSnap.unitFactor, receiptId]);
       return Response.json({
         receipt: row
       });

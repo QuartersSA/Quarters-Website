@@ -1,6 +1,7 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { a as assertItemsEnabledAtBranch } from './branchVisibility-CLODkXYw.js';
+import { e as ensureInventoryUnitSnapshotSchema, g as getDefaultInventoryUnitSnapshots, s as snapshotForItem } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import { v as validateBusinessDate } from './dateUtils-FqivhP-u.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -29,6 +30,7 @@ async function GET(request) {
     });
   }
   try {
+    await ensureInventoryUnitSnapshotSchema();
     const {
       searchParams
     } = new URL(request.url);
@@ -46,10 +48,10 @@ async function GET(request) {
     }
     const hasFromTo = !!fromRaw && !!toRaw;
     if (hasFromTo) {
-      where += ` AND os.opened_at::date >= $${idx}::date`;
+      where += ` AND (os.opened_at AT TIME ZONE 'Asia/Riyadh')::date >= $${idx}::date`;
       values.push(fromRaw);
       idx += 1;
-      where += ` AND os.opened_at::date <= $${idx}::date`;
+      where += ` AND (os.opened_at AT TIME ZONE 'Asia/Riyadh')::date <= $${idx}::date`;
       values.push(toRaw);
       idx += 1;
     }
@@ -93,6 +95,7 @@ async function POST(request) {
     });
   }
   try {
+    await ensureInventoryUnitSnapshotSchema();
     const body = await request.json();
     const {
       branchId,
@@ -164,6 +167,20 @@ async function POST(request) {
       });
     }
     const actingEmployeeId = auth.user?.id || null;
+    const snapshots = await getDefaultInventoryUnitSnapshots(cleaned.map(it => it.itemId));
+    const itemIds = [];
+    const quantities = [];
+    const unitIds = [];
+    const unitNames = [];
+    const unitFactors = [];
+    for (const it of cleaned) {
+      const snap = snapshotForItem(snapshots, it.itemId);
+      itemIds.push(it.itemId);
+      quantities.push(Math.round(it.quantity * 1000) / 1000);
+      unitIds.push(snap.unitId);
+      unitNames.push(snap.unitName);
+      unitFactors.push(snap.unitFactor);
+    }
 
     // Build the full timestamp for opened_at (store time precision)
     const openedAtTimestamp = openedAt.includes("T") ? openedAt : `${openedAt}T00:00:00`;
@@ -173,7 +190,8 @@ async function POST(request) {
 
     // 1) Check if a session already exists for this branch+date
     const existingSessions = await sql(`SELECT id FROM opening_sessions 
-       WHERE branch_id = $1 AND opened_at::date = $2::date`, [branchIdNum, openedAtDateOnly]);
+       WHERE branch_id = $1
+         AND (opened_at AT TIME ZONE 'Asia/Riyadh')::date = $2::date`, [branchIdNum, openedAtDateOnly]);
     let session;
     if (existingSessions.length > 0) {
       // Update existing session with new timestamp + note
@@ -190,21 +208,29 @@ async function POST(request) {
       session = inserted;
     }
 
-    // Replace old items for this session
-    await sql("DELETE FROM opening_session_items WHERE session_id = $1", [session.id]);
-    for (const it of cleaned) {
-      await sql(`INSERT INTO opening_session_items (session_id, item_id, quantity) VALUES ($1, $2, $3)`, [session.id, it.itemId, it.quantity]);
-    }
+    // Replace old items for this session.
+    await sql(`
+        WITH deleted AS (
+          DELETE FROM opening_session_items WHERE session_id = $1
+          RETURNING 1
+        ),
+        rows AS (
+          SELECT
+            unnest($2::int[]) AS item_id,
+            unnest($3::numeric[]) AS quantity,
+            unnest($4::int[]) AS unit_id,
+            unnest($5::text[]) AS unit_name,
+            unnest($6::numeric[]) AS unit_factor
+        )
+        INSERT INTO opening_session_items (
+          session_id, item_id, quantity, unit_id, unit_name, unit_factor
+        )
+        SELECT $1, item_id, quantity, unit_id, unit_name, unit_factor
+        FROM rows
+      `, [session.id, itemIds, quantities, unitIds, unitNames, unitFactors]);
 
     // 2) Create an inventory_operations record so it appears as a regular operation
     //    Remove any old "Opening" operation for same branch+date first
-    const existingOps = await sql(`SELECT id FROM inventory_operations
-       WHERE branch_id = $1
-         AND inventory_type = 'Opening'
-         AND (COALESCE(operation_date, created_at) AT TIME ZONE 'Asia/Riyadh')::date = $2::date`, [branchIdNum, openedAtDateOnly]);
-    for (const op of existingOps) {
-      await sql(`DELETE FROM inventory_operations WHERE id = $1`, [op.id]);
-    }
     const inventoryNumber = `OPN-${branchIdNum}-${openedAtDateOnly.replace(/-/g, "")}`;
 
     // Use the full datetime (with time) for operation_date
@@ -213,20 +239,44 @@ async function POST(request) {
     // Storage = real moment. $5 (operationTimestamp) is a Riyadh
     // wall-clock string from the form; pin it to Asia/Riyadh on the
     // cast so PG records the correct moment.
-    const [operation] = await sql(`INSERT INTO inventory_operations
-         (inventory_number, branch_id, employee_id, inventory_type, status, note, operation_date, created_at)
-       VALUES (
-         $1, $2, $3, 'Opening', 'Completed', $4,
-         $5::timestamp AT TIME ZONE 'Asia/Riyadh',
-         NOW()
+    const [operation] = await sql(`WITH deleted_ops AS (
+         DELETE FROM inventory_operations
+          WHERE branch_id = $2
+            AND inventory_type = 'Opening'
+            AND (COALESCE(operation_date, created_at) AT TIME ZONE 'Asia/Riyadh')::date = $6::date
+          RETURNING 1
+       ),
+       op AS (
+         INSERT INTO inventory_operations
+           (inventory_number, branch_id, employee_id, inventory_type, status, note, operation_date, created_at)
+         VALUES (
+           $1, $2, $3, 'Opening', 'Completed', $4,
+           $5::timestamp AT TIME ZONE 'Asia/Riyadh',
+           NOW()
+         )
+         RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, operation_date
+       ),
+       rows AS (
+         SELECT
+           unnest($7::int[]) AS item_id,
+           unnest($8::numeric[]) AS quantity,
+           unnest($9::int[]) AS unit_id,
+           unnest($10::text[]) AS unit_name,
+           unnest($11::numeric[]) AS unit_factor
+       ),
+       inserted AS (
+         INSERT INTO inventory_items (
+           operation_id, item_id, quantity, branch_id,
+           unit_id, unit_name, unit_factor
+         )
+         SELECT
+           op.id, rows.item_id, rows.quantity, op.branch_id,
+           rows.unit_id, rows.unit_name, rows.unit_factor
+         FROM op, rows
+         RETURNING 1
        )
-       RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, operation_date`, [inventoryNumber, branchIdNum, actingEmployeeId, note || "مخزون افتتاحي", operationTimestamp]);
-
-    // Insert items into inventory_items for this operation
-    for (const it of cleaned) {
-      await sql(`INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
-         VALUES ($1, $2, $3, $4)`, [operation.id, it.itemId, it.quantity, branchIdNum]);
-    }
+       SELECT op.*, (SELECT COUNT(*) FROM inserted) AS inserted_count
+       FROM op`, [inventoryNumber, branchIdNum, actingEmployeeId, note || "مخزون افتتاحي", operationTimestamp, openedAtDateOnly, itemIds, quantities, unitIds, unitNames, unitFactors]);
     console.log("Opening session + inventory operation created:", {
       sessionId: session.id,
       operationId: operation.id,

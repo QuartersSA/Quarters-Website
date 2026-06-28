@@ -2,6 +2,7 @@ import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { s as sendWhatsAppViaWasender } from './wasender-D2lmIJ7B.js';
 import { a as assertItemsEnabledAtBranch } from './branchVisibility-CLODkXYw.js';
+import { g as getDefaultInventoryUnitSnapshots, s as snapshotForItem, e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BLyTzYPB.js';
 import { p as parseBusinessTimestamp } from './dateUtils-FqivhP-u.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -151,6 +152,11 @@ async function ensureSchema() {
     }
   } catch (e) {
     console.error("ensureSchema backfill transfer_quantity:", e?.message);
+  }
+  try {
+    await ensureInventoryUnitSnapshotSchema();
+  } catch (e) {
+    console.error("ensureSchema inventory unit snapshots:", e?.message);
   }
 }
 
@@ -626,6 +632,7 @@ async function POST(request) {
     });
   }
   try {
+    await ensureSchema();
     const body = await request.json();
     const {
       branchId,
@@ -691,6 +698,47 @@ async function POST(request) {
         status: fail.status
       });
     }
+    if (requestedItemIds.length === 0) {
+      return Response.json({
+        error: "يجب إدخال صنف واحد على الأقل"
+      }, {
+        status: 400
+      });
+    }
+    const unitSnapshots = await getDefaultInventoryUnitSnapshots(requestedItemIds);
+    const insertItemIds = [];
+    const insertQuantities = [];
+    const insertUnitIds = [];
+    const insertUnitNames = [];
+    const insertUnitFactors = [];
+    for (const [itemIdRaw, qtyRaw] of Object.entries(availableItems || {})) {
+      const itemId = Number(itemIdRaw);
+      const qty = Number(qtyRaw);
+      if (!Number.isFinite(itemId) || itemId <= 0) continue;
+      if (!Number.isFinite(qty) || qty < 0) {
+        return Response.json({
+          error: `كمية غير صحيحة للصنف #${itemId}`
+        }, {
+          status: 400
+        });
+      }
+      const snap = snapshotForItem(unitSnapshots, itemId);
+      insertItemIds.push(itemId);
+      insertQuantities.push(Math.round(qty * 1000) / 1000);
+      insertUnitIds.push(snap.unitId);
+      insertUnitNames.push(snap.unitName);
+      insertUnitFactors.push(snap.unitFactor);
+    }
+    for (const itemIdRaw of unavailableItems || []) {
+      const itemId = Number(itemIdRaw);
+      if (!Number.isFinite(itemId) || itemId <= 0) continue;
+      const snap = snapshotForItem(unitSnapshots, itemId);
+      insertItemIds.push(itemId);
+      insertQuantities.push(0);
+      insertUnitIds.push(snap.unitId);
+      insertUnitNames.push(snap.unitName);
+      insertUnitFactors.push(snap.unitFactor);
+    }
     const inventoryNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     // Storage = real moment (NOW()).
@@ -700,29 +748,36 @@ async function POST(request) {
     // moment, not whatever the session TZ happens to be. Display
     // (`formatDateTime`) reads the stored moment back in
     // `Asia/Riyadh` so the cell shows the user's wall-clock.
-    const [operation] = await sql(`INSERT INTO inventory_operations (inventory_number, branch_id, employee_id, inventory_type, status, operation_date, created_at)
-       VALUES (
-         $1, $2, $3, $4, 'Completed',
-         COALESCE($5::timestamp AT TIME ZONE 'Asia/Riyadh', NOW()),
-         NOW()
+    const [operation] = await sql(`WITH op AS (
+         INSERT INTO inventory_operations (inventory_number, branch_id, employee_id, inventory_type, status, operation_date, created_at)
+         VALUES (
+           $1, $2, $3, $4, 'Completed',
+           COALESCE($5::timestamp AT TIME ZONE 'Asia/Riyadh', NOW()),
+           NOW()
+         )
+         RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, operation_date
+       ),
+       rows AS (
+         SELECT
+           unnest($6::int[]) AS item_id,
+           unnest($7::numeric[]) AS quantity,
+           unnest($8::int[]) AS unit_id,
+           unnest($9::text[]) AS unit_name,
+           unnest($10::numeric[]) AS unit_factor
+       ),
+       inserted AS (
+         INSERT INTO inventory_items (
+           operation_id, item_id, quantity, branch_id,
+           unit_id, unit_name, unit_factor
+         )
+         SELECT
+           op.id, rows.item_id, rows.quantity, op.branch_id,
+           rows.unit_id, rows.unit_name, rows.unit_factor
+         FROM op, rows
+         RETURNING 1
        )
-       RETURNING id, inventory_number, branch_id, employee_id, inventory_type, status, created_at, operation_date`, [inventoryNumber, branchId, actingEmployeeId || null, inventoryType, opDateValue]);
-    if (availableItems && Object.keys(availableItems).length > 0) {
-      for (const [itemId, qty] of Object.entries(availableItems)) {
-        await sql`
-          INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
-          VALUES (${operation.id}, ${parseInt(itemId)}, ${qty}, ${branchId})
-        `;
-      }
-    }
-    if (unavailableItems && unavailableItems.length > 0) {
-      for (const itemId of unavailableItems) {
-        await sql`
-          INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
-          VALUES (${operation.id}, ${itemId}, 0, ${branchId})
-        `;
-      }
-    }
+       SELECT op.*, (SELECT COUNT(*) FROM inserted) AS inserted_count
+       FROM op`, [inventoryNumber, branchId, actingEmployeeId || null, inventoryType, opDateValue, insertItemIds, insertQuantities, insertUnitIds, insertUnitNames, insertUnitFactors]);
     console.log("Inventory operation created successfully:", operation);
     const [branch] = await sql`SELECT id, name FROM branches WHERE id = ${Number(operation.branch_id)}`;
     const actingId = Number(operation.employee_id);
@@ -893,9 +948,14 @@ async function DELETE(request) {
             SELECT
               ii.item_id,
               i.name AS item_name,
-              ii.transfer_quantity AS moved
+              (
+                ii.transfer_quantity::numeric
+                  * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+              ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS moved,
+              COALESCE(iu.conversion_factor, 1)::numeric AS current_factor
             FROM inventory_items ii
             LEFT JOIN items i ON i.id = ii.item_id
+            LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
             WHERE ii.operation_id = ${outLeg.id}
           ` : [];
 
@@ -923,6 +983,8 @@ async function DELETE(request) {
         const conflicts = [];
         for (const row of movedRows) {
           const moved = Number(row.moved);
+          const currentFactor = Number(row.current_factor) || 1;
+          const movedBase = moved * currentFactor;
           const dependents = await sql`
             SELECT io.inventory_number, io.id, ii.quantity
               FROM inventory_items ii
@@ -932,7 +994,10 @@ async function DELETE(request) {
                AND ii.branch_id = ${destBranchId}
                AND io.id <> ALL(${pairedIds})
                AND COALESCE(io.operation_date, io.created_at) > ${opDate}
-               AND ii.quantity < ${moved}
+               AND ii.quantity < (
+                 ${movedBase}::numeric
+                   / NULLIF(COALESCE(ii.unit_factor, ${currentFactor})::numeric, 0)
+               )
              ORDER BY COALESCE(io.operation_date, io.created_at) ASC
           `;
           for (const d of dependents) {
@@ -958,10 +1023,15 @@ async function DELETE(request) {
       const txStatements = [];
       for (const row of movedRows) {
         const moved = Number(row.moved);
+        const currentFactor = Number(row.current_factor) || 1;
+        const movedBase = moved * currentFactor;
         if (sourceBranchId) {
           txStatements.push(sql`
             UPDATE inventory_items ii
-               SET quantity = quantity + ${moved}
+               SET quantity = quantity + (
+                 ${movedBase}::numeric
+                   / NULLIF(COALESCE(ii.unit_factor, ${currentFactor})::numeric, 0)
+               )
               FROM inventory_operations io
              WHERE ii.operation_id = io.id
                AND io.inventory_type = 'Transfer'
@@ -974,7 +1044,10 @@ async function DELETE(request) {
         if (destBranchId) {
           txStatements.push(sql`
             UPDATE inventory_items ii
-               SET quantity = quantity - ${moved}
+               SET quantity = quantity - (
+                 ${movedBase}::numeric
+                   / NULLIF(COALESCE(ii.unit_factor, ${currentFactor})::numeric, 0)
+               )
               FROM inventory_operations io
              WHERE ii.operation_id = io.id
                AND io.inventory_type = 'Transfer'
@@ -1166,11 +1239,22 @@ async function PUT(request) {
 
     // Helper: replace inventory_items for a given operation
     async function replaceInventoryItems(opRowId, branchId, itemsList) {
-      await sql(`DELETE FROM inventory_items WHERE operation_id = $1`, [opRowId]);
+      const snapshots = await getDefaultInventoryUnitSnapshots(itemsList.map(it => it.itemId));
+      const statements = [sql`DELETE FROM inventory_items WHERE operation_id = ${opRowId}`];
       for (const it of itemsList) {
-        await sql(`INSERT INTO inventory_items (operation_id, item_id, quantity, branch_id)
-           VALUES ($1, $2, $3, $4)`, [opRowId, it.itemId, it.quantity, branchId]);
+        const snap = snapshotForItem(snapshots, it.itemId);
+        statements.push(sql`
+          INSERT INTO inventory_items (
+            operation_id, item_id, quantity, branch_id,
+            unit_id, unit_name, unit_factor
+          )
+          VALUES (
+            ${opRowId}, ${it.itemId}, ${it.quantity}, ${branchId},
+            ${snap.unitId}, ${snap.unitName}, ${snap.unitFactor}
+          )
+        `);
       }
+      await sql.transaction(statements);
     }
 
     // ── Handle Transfer operations ──
@@ -1217,18 +1301,38 @@ async function PUT(request) {
       const itemsProvided = Array.isArray(cleanedItems) && cleanedItems.length > 0;
       if (itemsProvided) {
         const outItems = await sql`
-          SELECT item_id, quantity, transfer_quantity
-            FROM inventory_items
-           WHERE operation_id = ${outLeg.id}
+          SELECT
+            ii.item_id,
+            (
+              ii.quantity::numeric
+                * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+            ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity,
+            (
+              ii.transfer_quantity::numeric
+                * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+            ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS transfer_quantity,
+            COALESCE(iu.conversion_factor, 1)::numeric AS current_factor
+          FROM inventory_items ii
+          JOIN items i ON i.id = ii.item_id
+          LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
+          WHERE ii.operation_id = ${outLeg.id}
         `;
         const inItems = await sql`
-          SELECT item_id, quantity
-            FROM inventory_items
-           WHERE operation_id = ${inLeg.id}
+          SELECT
+            ii.item_id,
+            (
+              ii.quantity::numeric
+                * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
+            ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity
+          FROM inventory_items ii
+          JOIN items i ON i.id = ii.item_id
+          LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
+          WHERE ii.operation_id = ${inLeg.id}
         `;
         const outMap = new Map(outItems.map(r => [Number(r.item_id), {
           qty: Number(r.quantity) || 0,
-          moved: r.transfer_quantity === null || r.transfer_quantity === undefined ? null : Number(r.transfer_quantity)
+          moved: r.transfer_quantity === null || r.transfer_quantity === undefined ? null : Number(r.transfer_quantity),
+          currentFactor: Number(r.current_factor) || 1
         }]));
         const inMap = new Map(inItems.map(r => [Number(r.item_id), Number(r.quantity) || 0]));
 
@@ -1266,8 +1370,11 @@ async function PUT(request) {
               item_id: it.itemId,
               newMoved: it.quantity,
               delta,
+              currentFactor: out.currentFactor || 1,
               outQty: out.qty,
-              inQty: inMap.get(it.itemId) || 0
+              inQty: inMap.get(it.itemId) || 0,
+              outNewQty: out.qty - delta,
+              inNewQty: (inMap.get(it.itemId) || 0) + delta
             });
           }
         }
@@ -1307,6 +1414,8 @@ async function PUT(request) {
           // any would go negative — user must shrink/delete those
           // later transfers first.
           if (delta > 0) {
+            const currentFactor = Number(adj.currentFactor) || 1;
+            const deltaBase = delta * currentFactor;
             const conflicts = await sql`
               SELECT io.inventory_number
                 FROM inventory_items ii
@@ -1316,7 +1425,10 @@ async function PUT(request) {
                  AND ii.branch_id = ${sourceBranchId}
                  AND io.id <> ALL(${pairedIds})
                  AND COALESCE(io.operation_date, io.created_at) > ${opDate}
-                 AND ii.quantity < ${delta}
+                 AND ii.quantity < (
+                   ${deltaBase}::numeric
+                     / NULLIF(COALESCE(ii.unit_factor, ${currentFactor})::numeric, 0)
+                 )
             `;
             if (conflicts.length > 0) {
               return Response.json({
@@ -1332,6 +1444,8 @@ async function PUT(request) {
           // from every subsequent Transfer row at the destination.
           if (delta < 0) {
             const need = -delta;
+            const currentFactor = Number(adj.currentFactor) || 1;
+            const needBase = need * currentFactor;
             const conflicts = await sql`
               SELECT io.inventory_number
                 FROM inventory_items ii
@@ -1341,7 +1455,10 @@ async function PUT(request) {
                  AND ii.branch_id = ${destBranchId}
                  AND io.id <> ALL(${pairedIds})
                  AND COALESCE(io.operation_date, io.created_at) > ${opDate}
-                 AND ii.quantity < ${need}
+                 AND ii.quantity < (
+                   ${needBase}::numeric
+                     / NULLIF(COALESCE(ii.unit_factor, ${currentFactor})::numeric, 0)
+                 )
             `;
             if (conflicts.length > 0) {
               return Response.json({
@@ -1356,30 +1473,45 @@ async function PUT(request) {
 
         // Apply atomically: legs + cascade + transfer_quantity.
         if (adjustments.length > 0) {
+          const snapshots = await getDefaultInventoryUnitSnapshots(adjustments.map(adj => adj.item_id));
           const stmts = [];
           for (const adj of adjustments) {
             const {
               item_id,
               newMoved,
-              delta
+              delta,
+              outNewQty,
+              inNewQty
             } = adj;
+            const snap = snapshotForItem(snapshots, item_id);
+            const currentFactor = Number(snap.unitFactor) || 1;
+            const deltaBase = delta * currentFactor;
             stmts.push(sql`
               UPDATE inventory_items
-                 SET quantity = quantity - ${delta},
-                     transfer_quantity = ${newMoved}
+                 SET quantity = ${outNewQty},
+                     transfer_quantity = ${newMoved},
+                     unit_id = ${snap.unitId},
+                     unit_name = ${snap.unitName},
+                     unit_factor = ${snap.unitFactor}
                WHERE operation_id = ${outLeg.id}
                  AND item_id = ${item_id}
             `);
             stmts.push(sql`
               UPDATE inventory_items
-                 SET quantity = quantity + ${delta},
-                     transfer_quantity = ${newMoved}
+                 SET quantity = ${inNewQty},
+                     transfer_quantity = ${newMoved},
+                     unit_id = ${snap.unitId},
+                     unit_name = ${snap.unitName},
+                     unit_factor = ${snap.unitFactor}
                WHERE operation_id = ${inLeg.id}
                  AND item_id = ${item_id}
             `);
             stmts.push(sql`
               UPDATE inventory_items ii
-                 SET quantity = quantity - ${delta}
+                 SET quantity = quantity - (
+                   ${deltaBase}::numeric
+                     / NULLIF(COALESCE(ii.unit_factor, ${currentFactor})::numeric, 0)
+                 )
                 FROM inventory_operations io
                WHERE ii.operation_id = io.id
                  AND io.inventory_type = 'Transfer'
@@ -1390,7 +1522,10 @@ async function PUT(request) {
             `);
             stmts.push(sql`
               UPDATE inventory_items ii
-                 SET quantity = quantity + ${delta}
+                 SET quantity = quantity + (
+                   ${deltaBase}::numeric
+                     / NULLIF(COALESCE(ii.unit_factor, ${currentFactor})::numeric, 0)
+                 )
                 FROM inventory_operations io
                WHERE ii.operation_id = io.id
                  AND io.inventory_type = 'Transfer'
@@ -1431,7 +1566,7 @@ async function PUT(request) {
         let sIdx = 1;
         if (operationDate) {
           sessionSetClauses.push(`opened_at = $${sIdx}::timestamp`);
-          sessionValues.push(operationDate);
+          sessionValues.push(validatedOpDate || operationDate);
           sIdx++;
         }
         if (note !== undefined) {
@@ -1445,11 +1580,23 @@ async function PUT(request) {
           await sql(sessionQuery, sessionValues);
         }
 
-        // Replace session items
-        await sql(`DELETE FROM opening_session_items WHERE session_id = $1`, [sessionId]);
+        // Replace session items with the same unit snapshots as the
+        // inventory operation rows.
+        const snapshots = await getDefaultInventoryUnitSnapshots(cleanedItems.map(it => it.itemId));
+        const stmts = [sql`DELETE FROM opening_session_items WHERE session_id = ${sessionId}`];
         for (const it of cleanedItems) {
-          await sql(`INSERT INTO opening_session_items (session_id, item_id, quantity) VALUES ($1, $2, $3)`, [sessionId, it.itemId, it.quantity]);
+          const snap = snapshotForItem(snapshots, it.itemId);
+          stmts.push(sql`
+            INSERT INTO opening_session_items (
+              session_id, item_id, quantity, unit_id, unit_name, unit_factor
+            )
+            VALUES (
+              ${sessionId}, ${it.itemId}, ${it.quantity},
+              ${snap.unitId}, ${snap.unitName}, ${snap.unitFactor}
+            )
+          `);
         }
+        await sql.transaction(stmts);
       }
       return Response.json({
         ok: true,
