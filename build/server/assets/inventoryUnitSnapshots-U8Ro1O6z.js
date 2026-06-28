@@ -34,6 +34,16 @@ async function ensureInventoryUnitSnapshotSchema() {
       ADD COLUMN IF NOT EXISTS base_purchase_cost        NUMERIC(14, 2)
   `;
   await sql`
+    CREATE TABLE IF NOT EXISTS item_branch_disabled (
+      item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+      branch_id INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+      disabled_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      disabled_by_employee_id INTEGER,
+      disabled_by_employee_name TEXT,
+      PRIMARY KEY (item_id, branch_id)
+    )
+  `;
+  await sql`
     ALTER TABLE inventory_items
       ADD COLUMN IF NOT EXISTS unit_id INTEGER REFERENCES measurement_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS unit_name TEXT,

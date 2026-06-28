@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BLyTzYPB.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-U8Ro1O6z.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -40,7 +40,7 @@ async function GET(request) {
     const parsedBranchId = branchIdRaw ? Number(branchIdRaw) : null;
     const branchFilter = Number.isFinite(parsedBranchId) && parsedBranchId > 0 ? parsedBranchId : null;
     const query = `
-      item_totals AS (
+      WITH item_totals AS (
         SELECT
           cs.item_id,
           SUM(COALESCE(cs.current_quantity, 0))::numeric(12, 3) AS total_quantity

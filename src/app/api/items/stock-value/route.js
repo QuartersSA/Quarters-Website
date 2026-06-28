@@ -37,7 +37,7 @@ export async function GET(request) {
         : null;
 
     const query = `
-      item_totals AS (
+      WITH item_totals AS (
         SELECT
           cs.item_id,
           SUM(COALESCE(cs.current_quantity, 0))::numeric(12, 3) AS total_quantity

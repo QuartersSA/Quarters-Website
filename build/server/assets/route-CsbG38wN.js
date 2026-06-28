@@ -1,7 +1,7 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { a as assertItemsEnabledAtBranch } from './branchVisibility-CLODkXYw.js';
-import { e as ensureInventoryUnitSnapshotSchema, g as getDefaultInventoryUnitSnapshots, s as snapshotForItem } from './inventoryUnitSnapshots-BLyTzYPB.js';
+import { e as ensureInventoryUnitSnapshotSchema, g as getDefaultInventoryUnitSnapshots, s as snapshotForItem } from './inventoryUnitSnapshots-U8Ro1O6z.js';
 import { v as validateBusinessDate } from './dateUtils-FqivhP-u.js';
 import '@neondatabase/serverless';
 import 'crypto';
