@@ -42,7 +42,7 @@ export async function GET(request, { params }) {
         COALESCE(s.name, '') as space_name,
         COALESCE(
           json_agg(
-            DISTINCT jsonb_build_object('id', a.id, 'name', a.name)
+            DISTINCT jsonb_build_object('id', a.id, 'name', COALESCE(NULLIF(a.display_name, ''), a.name))
           ) FILTER (WHERE a.id IS NOT NULL),
           '[]'::json
         ) as assignees

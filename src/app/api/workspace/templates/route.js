@@ -30,7 +30,7 @@ export async function GET(request) {
         t.space_id, COALESCE(s.name, '') as space_name,
         t.tags, t.checklist_items,
         t.created_by_employee_id,
-        emp.name as created_by_name,
+        COALESCE(NULLIF(emp.display_name, ''), emp.name) as created_by_name,
         t.created_at
       FROM workspace_task_templates t
       LEFT JOIN workspace_spaces s ON s.id = t.space_id

@@ -1,4 +1,5 @@
 import sql from "@/app/api/utils/sql";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 let ensured = false;
 let ensuring = null;
@@ -17,6 +18,7 @@ export async function ensureInventoryUnitSnapshotSchema() {
 }
 
 async function doEnsureInventoryUnitSnapshotSchema() {
+  await ensureEmployeeDisplayNameSchema();
   await sql`
     CREATE TABLE IF NOT EXISTS measurement_units (
       id          SERIAL PRIMARY KEY,
@@ -230,7 +232,7 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       COALESCE(ii.unit_name, current_unit.current_unit_name) AS unit_name,
       COALESCE(ii.unit_factor, current_unit.current_factor, 1)::numeric AS unit_factor,
       io.employee_id::integer AS employee_id,
-      e.name::text AS employee_name,
+      COALESCE(NULLIF(e.display_name, ''), e.name)::text AS employee_name,
       io.status::text AS status,
       io.note::text AS note
     FROM inventory_items ii
@@ -259,11 +261,12 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       COALESCE(pr.unit_name, current_unit.current_unit_name) AS unit_name,
       COALESCE(pr.unit_factor, current_unit.current_factor, 1)::numeric AS unit_factor,
       pr.created_by_employee_id::integer AS employee_id,
-      pr.created_by_employee_name::text AS employee_name,
+      COALESCE(NULLIF(pe.display_name, ''), pr.created_by_employee_name, pe.name)::text AS employee_name,
       'Completed'::text AS status,
       pr.note::text AS note
     FROM purchase_receipts pr
     JOIN current_unit ON current_unit.item_id = pr.item_id
+    LEFT JOIN employees pe ON pe.id = pr.created_by_employee_id
 
     UNION ALL
 
@@ -284,12 +287,13 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       current_unit.current_unit_name AS unit_name,
       current_unit.current_factor::numeric AS unit_factor,
       wo.employee_id::integer AS employee_id,
-      wo.employee_name::text AS employee_name,
+      COALESCE(NULLIF(we.display_name, ''), wo.employee_name, we.name)::text AS employee_name,
       'Completed'::text AS status,
       COALESCE(wi.note, wo.note)::text AS note
     FROM waste_items wi
     JOIN waste_operations wo ON wo.id = wi.operation_id
     JOIN current_unit ON current_unit.item_id = wi.item_id
+    LEFT JOIN employees we ON we.id = wo.employee_id
   `;
 
   await sql`

@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 
 function toInt(value) {
@@ -68,8 +69,15 @@ async function getEmployeesByIds(employeeIds) {
     i += 1;
   }
 
+  await ensureEmployeeDisplayNameSchema();
+
   return sql(
-    `SELECT id, name, phone FROM employees WHERE id IN (${placeholders.join(",")})`,
+    `SELECT
+       id,
+       COALESCE(NULLIF(display_name, ''), name) AS name,
+       phone
+     FROM employees
+     WHERE id IN (${placeholders.join(",")})`,
     vals,
   );
 }
@@ -128,9 +136,14 @@ async function getPhonesForEmployees(employeeIds) {
     i += 1;
   }
 
+  await ensureEmployeeDisplayNameSchema();
+
   // IMPORTANT: trim/validate phone at the DB layer so we don't attempt to send to blank strings.
   const rows = await sql(
-    `SELECT id, name, phone
+    `SELECT
+       id,
+       COALESCE(NULLIF(display_name, ''), name) AS name,
+       phone
      FROM employees
      WHERE id IN (${placeholders.join(",")})
        AND phone IS NOT NULL

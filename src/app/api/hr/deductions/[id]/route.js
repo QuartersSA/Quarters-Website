@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 function safeNumber(value) {
   const n = Number(value);
@@ -95,6 +96,7 @@ export async function PUT(request, { params: { id } }) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const body = await request.json();
 
     const employeeId = body.employee_id ?? body.employeeId;
@@ -226,7 +228,7 @@ export async function PUT(request, { params: { id } }) {
       SELECT
         d.id,
         d.employee_id,
-        e.name as employee_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name) as employee_name,
         d.violation_date,
         d.violation_category,
         d.reason,

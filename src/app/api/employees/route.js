@@ -1,12 +1,14 @@
 import sql from "@/app/api/utils/sql";
 import { hash } from "argon2";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 // Idempotent: ensure the waste-logging permission column exists.
 // Cheap (IF NOT EXISTS) and lets the employee form persist the flag
 // without a manual migration.
 async function ensureWasteColumn() {
   try {
+    await ensureEmployeeDisplayNameSchema();
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_log_waste BOOLEAN DEFAULT false`;
   } catch (e) {
     console.error("ensureWasteColumn:", e?.message);
@@ -29,6 +31,7 @@ export async function GET(request) {
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.email,
         e.phone,
         e.username,
@@ -106,6 +109,7 @@ export async function POST(request) {
     const body = await request.json();
     const {
       name,
+      display_name,
       email,
       phone,
       username,
@@ -224,6 +228,7 @@ export async function POST(request) {
       sql`
         INSERT INTO employees (
           name,
+          display_name,
           email,
           phone,
           username,
@@ -255,6 +260,7 @@ export async function POST(request) {
         )
         VALUES (
           ${name},
+          ${display_name || null},
           ${email || null},
           ${phone || null},
           ${username || null},
@@ -302,6 +308,7 @@ export async function POST(request) {
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.email,
         e.phone,
         e.username,

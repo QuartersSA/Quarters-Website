@@ -119,6 +119,10 @@ function branchLabelFor(employee) {
   return extra > 0 ? `${firstBranchName} +${extra}` : firstBranchName;
 }
 
+function displayNameFor(employee) {
+  return employee.display_name || employee.name || "-";
+}
+
 /* ── Mobile stacked card ── */
 function EmployeeCard({
   employee,
@@ -147,7 +151,7 @@ function EmployeeCard({
           </div>
           <div className="min-w-0">
             <div className="text-slate-900 dark:text-white font-semibold truncate">
-              {employee.name}
+              {displayNameFor(employee)}
             </div>
             <div className="text-xs text-slate-500 dark:text-white/50 truncate">
               {[employee.position || null, branchLabelFor(employee)]
@@ -255,7 +259,8 @@ export function HREmployeeTable({
   const { todayRiyadh, soonRiyadh } = riyadhWindows();
 
   const headerCells = [
-    "الاسم",
+    "الاسم الرسمي",
+    "الاسم الدارج",
     "الجوال",
     "رقم الإقامة",
     "انتهاء الإقامة",
@@ -404,9 +409,13 @@ export function HREmployeeTable({
                           <User className="w-5 h-5" />
                         </div>
                         <span className="text-slate-900 dark:text-white font-medium truncate">
-                          {employee.name}
+                          {employee.name || "-"}
                         </span>
                       </div>
+                    </td>
+
+                    <td className="px-5 py-4 text-slate-700 dark:text-white/75 whitespace-nowrap">
+                      {displayNameFor(employee)}
                     </td>
 
                     <td

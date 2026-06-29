@@ -29,6 +29,9 @@ export function EmployeeTable({
     return "موظف";
   };
 
+  const displayNameFor = (employee) =>
+    employee.display_name || employee.name || "-";
+
   const renderTasks = (employee) => {
     if (employee.role === "Admin") {
       const tasks = [];
@@ -160,7 +163,10 @@ export function EmployeeTable({
           <thead>
             <tr className="bg-slate-100 dark:bg-slate-100 dark:bg-slate-100 dark:bg-white/[0.04]">
               <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/55">
-                الاسم
+                الاسم الرسمي
+              </th>
+              <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/55">
+                الاسم الدارج
               </th>
               <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-slate-600 dark:text-white/55">
                 اسم المستخدم
@@ -211,10 +217,13 @@ export function EmployeeTable({
                       <div className={`${ws.iconBox} w-10 h-10 text-slate-800 dark:text-slate-800 dark:text-slate-800 dark:text-white/85`}>
                         <User className="w-5 h-5" />
                       </div>
-                      <span className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-medium">
-                        {employee.name}
+                      <span className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-medium truncate">
+                        {employee.name || "-"}
                       </span>
                     </div>
+                  </td>
+                  <td className="px-6 py-4 text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/75">
+                    {displayNameFor(employee)}
                   </td>
                   <td className="px-6 py-4 text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/75">
                     {employee.username || "-"}

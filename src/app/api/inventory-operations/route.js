@@ -8,6 +8,7 @@ import {
   getDefaultInventoryUnitSnapshots,
   snapshotForItem,
 } from "@/app/api/utils/inventoryUnitSnapshots";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 import { parseBusinessTimestamp } from "@/utils/dateUtils";
 
 /**
@@ -27,6 +28,7 @@ function parseOperationDate(value) {
 // Postgres ALTER COLUMN to widen INTEGER → NUMERIC is non-blocking and preserves
 // all existing data. Wrapped in try/catch so concurrent requests don't error.
 async function ensureSchema() {
+  await ensureEmployeeDisplayNameSchema();
   try {
     await sql`
       DO $$
@@ -170,7 +172,7 @@ async function notifyAdminsWhatsAppInventoryOperation({
 }) {
   try {
     const admins = await sql`
-      SELECT id, name, phone
+      SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name, phone
       FROM employees
       WHERE role = 'Admin'
         AND COALESCE(can_manage_inventory, false) = true
@@ -341,7 +343,7 @@ export async function GET(request) {
           pr.note,
           pr.created_at,
           pr.created_by_employee_id,
-          COALESCE(pr.created_by_employee_name, e.name) AS created_by_employee_name,
+          COALESCE(NULLIF(e.display_name, ''), pr.created_by_employee_name, e.name) AS created_by_employee_name,
           pr.receipt_batch_id
         FROM purchase_receipts pr
         LEFT JOIN branches b ON b.id = pr.branch_id
@@ -408,7 +410,7 @@ export async function GET(request) {
           pr.note,
           pr.created_at,
           pr.created_by_employee_id,
-          COALESCE(pr.created_by_employee_name, e.name) AS created_by_employee_name
+          COALESCE(NULLIF(e.display_name, ''), pr.created_by_employee_name, e.name) AS created_by_employee_name
         FROM purchase_receipts pr
         LEFT JOIN branches b ON b.id = pr.branch_id
         LEFT JOIN items    i ON i.id = pr.item_id
@@ -470,7 +472,7 @@ export async function GET(request) {
           b.name as branch_name,
           b.location as branch_location,
           io.employee_id,
-          e.name as employee_name,
+          COALESCE(NULLIF(e.display_name, ''), e.name) as employee_name,
           e.email as employee_email,
           io.transfer_branch_id,
           tb.name as transfer_branch_name,
@@ -531,7 +533,7 @@ export async function GET(request) {
           b.name as branch_name,
           b.location as branch_location,
           io.employee_id,
-          e.name as employee_name,
+          COALESCE(NULLIF(e.display_name, ''), e.name) as employee_name,
           e.email as employee_email,
           io.transfer_branch_id,
           tb.name as transfer_branch_name,
@@ -557,7 +559,7 @@ export async function GET(request) {
           b.name as branch_name,
           b.location as branch_location,
           io.employee_id,
-          e.name as employee_name,
+          COALESCE(NULLIF(e.display_name, ''), e.name) as employee_name,
           e.email as employee_email,
           io.transfer_branch_id,
           tb.name as transfer_branch_name,
@@ -581,7 +583,7 @@ export async function GET(request) {
           pr.item_id, i.name AS item_name,
           pr.quantity, pr.received_at, pr.note, pr.created_at,
           pr.created_by_employee_id,
-          COALESCE(pr.created_by_employee_name, e.name) AS created_by_employee_name,
+          COALESCE(NULLIF(e.display_name, ''), pr.created_by_employee_name, e.name) AS created_by_employee_name,
           pr.receipt_batch_id
         FROM purchase_receipts pr
         LEFT JOIN branches b ON b.id = pr.branch_id
@@ -598,7 +600,7 @@ export async function GET(request) {
           pr.item_id, i.name AS item_name,
           pr.quantity, pr.received_at, pr.note, pr.created_at,
           pr.created_by_employee_id,
-          COALESCE(pr.created_by_employee_name, e.name) AS created_by_employee_name,
+          COALESCE(NULLIF(e.display_name, ''), pr.created_by_employee_name, e.name) AS created_by_employee_name,
           pr.receipt_batch_id
         FROM purchase_receipts pr
         LEFT JOIN branches b ON b.id = pr.branch_id
@@ -812,8 +814,11 @@ export async function POST(request) {
     const actingId = Number(operation.employee_id);
     let employeeName = "";
     if (Number.isFinite(actingId) && actingId > 0) {
-      const [emp] =
-        await sql`SELECT id, name FROM employees WHERE id = ${actingId}`;
+      const [emp] = await sql`
+        SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name
+        FROM employees
+        WHERE id = ${actingId}
+      `;
       employeeName = emp?.name || "";
     }
 

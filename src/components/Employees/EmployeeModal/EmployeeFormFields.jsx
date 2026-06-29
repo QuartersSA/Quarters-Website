@@ -92,7 +92,7 @@ export function EmployeeFormFields({
       <div>
         <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
           <User className="w-4 h-4 inline ml-2" />
-          الاسم الكامل *
+          الاسم الرسمي *
         </label>
         <input
           type="text"
@@ -100,8 +100,27 @@ export function EmployeeFormFields({
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           className={`${ws.input} px-4 py-3`}
-          placeholder="أدخل اسم الموظف"
+          placeholder="أدخل الاسم الرسمي للموظف"
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/70 mb-2">
+          <User className="w-4 h-4 inline ml-2" />
+          الاسم الدارج
+        </label>
+        <input
+          type="text"
+          value={formData.display_name || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, display_name: e.target.value })
+          }
+          className={`${ws.input} px-4 py-3`}
+          placeholder="الاسم الذي يظهر داخل النظام"
+        />
+        <p className="text-xs text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45 mt-2">
+          إذا تركته فارغًا سيظهر الاسم الرسمي في النظام.
+        </p>
       </div>
 
       {/* Phone */}

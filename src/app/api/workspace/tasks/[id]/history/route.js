@@ -34,7 +34,7 @@ export async function GET(request, { params }) {
         e.meta,
         e.created_at,
         e.actor_employee_id,
-        COALESCE(emp.name, '—') as actor_name
+        COALESCE(NULLIF(emp.display_name, ''), emp.name, '—') as actor_name
       FROM workspace_task_events e
       LEFT JOIN employees emp ON emp.id = e.actor_employee_id
       WHERE e.task_id = ${taskId}

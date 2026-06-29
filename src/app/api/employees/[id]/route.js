@@ -1,11 +1,13 @@
 import sql from "@/app/api/utils/sql";
 import { hash } from "argon2";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 // Idempotent: ensure the waste-logging permission column exists so
 // PUT can persist the flag without a manual migration.
 async function ensureWasteColumn() {
   try {
+    await ensureEmployeeDisplayNameSchema();
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_log_waste BOOLEAN DEFAULT false`;
   } catch (e) {
     console.error("ensureWasteColumn:", e?.message);
@@ -23,12 +25,14 @@ export async function GET(request, { params }) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const { id } = params;
 
     const [employee] = await sql`
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.email,
         e.phone,
         e.username,
@@ -112,6 +116,7 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     const {
       name,
+      display_name,
       email,
       phone,
       username,
@@ -250,6 +255,11 @@ export async function PUT(request, { params }) {
     if (name !== undefined) {
       updates.push(`name = $${paramCount}`);
       values.push(name);
+      paramCount++;
+    }
+    if (display_name !== undefined) {
+      updates.push(`display_name = $${paramCount}`);
+      values.push(display_name || null);
       paramCount++;
     }
     if (email !== undefined) {
@@ -467,6 +477,7 @@ export async function PUT(request, { params }) {
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.email,
         e.phone,
         e.username,

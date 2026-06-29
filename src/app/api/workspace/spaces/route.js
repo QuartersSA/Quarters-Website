@@ -26,7 +26,7 @@ export async function GET(request) {
         s.name,
         s.description,
         s.created_by_employee_id,
-        COALESCE(e.name, '—') as created_by_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name, '—') as created_by_name,
         s.created_at,
         (SELECT COUNT(*) FROM workspace_tasks t WHERE t.space_id = s.id)::int as tasks_count
       FROM workspace_spaces s

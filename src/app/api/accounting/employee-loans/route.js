@@ -5,6 +5,7 @@
 
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 async function ensureSchema() {
   await sql`
@@ -45,6 +46,7 @@ export async function GET(request) {
   }
   try {
     await ensureSchema();
+    await ensureEmployeeDisplayNameSchema();
     const url = new URL(request.url);
     const employeeIdRaw = url.searchParams.get("employee_id");
     const monthRaw = url.searchParams.get("month");
@@ -86,7 +88,7 @@ export async function GET(request) {
       SELECT
         l.id,
         l.employee_id,
-        e.name AS employee_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name) AS employee_name,
         l.total_amount,
         l.installments_count,
         -- IMPORTANT: cast to text so the DATE doesn't go through

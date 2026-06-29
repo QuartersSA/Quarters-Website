@@ -56,6 +56,7 @@ export default function HREmployeesPage() {
   const emptyForm = useMemo(
     () => ({
       name: "",
+      display_name: "",
       phone: "",
       iqama_number: "",
       iqama_expiry_date: "",
@@ -113,6 +114,7 @@ export default function HREmployeesPage() {
       setEditingEmployee(employee);
       setFormData({
         name: employee.name || "",
+        display_name: employee.display_name || "",
         phone: employee.phone || "",
         iqama_number: employee.iqama_number || "",
         iqama_expiry_date: toInputDate(employee.iqama_expiry_date),
@@ -203,6 +205,9 @@ export default function HREmployeesPage() {
 
     const payload = {
       name: nameValue,
+      display_name: formData.display_name
+        ? String(formData.display_name).trim()
+        : null,
       phone: formData.phone ? String(formData.phone) : null,
       iqama_number: formData.iqama_number
         ? String(formData.iqama_number)
@@ -368,7 +373,10 @@ export default function HREmployeesPage() {
       case "name_asc":
       default:
         sorted.sort((a, b) =>
-          String(a.name || "").localeCompare(String(b.name || ""), "ar"),
+          String(a.display_name || a.name || "").localeCompare(
+            String(b.display_name || b.name || ""),
+            "ar",
+          ),
         );
         break;
     }

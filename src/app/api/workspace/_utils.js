@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 export async function getWorkspaceEmployee(employeeId) {
   if (!employeeId) {
@@ -11,8 +12,16 @@ export async function getWorkspaceEmployee(employeeId) {
     };
   }
 
+  await ensureEmployeeDisplayNameSchema();
+
   const [employee] = await sql`
-    SELECT id, name, role, COALESCE(can_access_workspace, false) as can_access_workspace
+    SELECT
+      id,
+      name AS official_name,
+      display_name,
+      COALESCE(NULLIF(display_name, ''), name) AS name,
+      role,
+      COALESCE(can_access_workspace, false) as can_access_workspace
     FROM employees
     WHERE id = ${employeeId}
   `;

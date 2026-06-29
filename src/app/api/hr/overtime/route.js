@@ -14,10 +14,12 @@
 
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 const REQUIRE_HR = { role: "Admin", permission: "can_access_hr" };
 
 async function ensureSchema() {
+  await ensureEmployeeDisplayNameSchema();
   await sql`
     CREATE TABLE IF NOT EXISTS hr_employee_overtime (
       id SERIAL PRIMARY KEY,
@@ -72,7 +74,7 @@ export async function GET(request) {
       SELECT
         o.id,
         o.employee_id,
-        e.name AS employee_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name) AS employee_name,
         TO_CHAR(o.month, 'YYYY-MM-DD') AS month,
         o.days,
         o.reason,

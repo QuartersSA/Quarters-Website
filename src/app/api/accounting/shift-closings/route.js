@@ -2,6 +2,7 @@ import sql from "@/app/api/utils/sql";
 import { getSearchParams } from "@/app/api/workspace/_utils";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 /**
  * Idempotent guard: ensure the (branch_id, shift_date, shift_label) combo
@@ -77,7 +78,7 @@ async function notifyAdminsWhatsApp({
 }) {
   try {
     const admins = await sql`
-      SELECT id, name, phone
+      SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name, phone
       FROM employees
       WHERE role = 'Admin'
         AND COALESCE(can_manage_accounting, false) = true
@@ -146,6 +147,7 @@ export async function GET(request) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const params = getSearchParams(request);
     const branchIdRaw = params.get("branchId");
     const from = params.get("from");
@@ -181,7 +183,7 @@ export async function GET(request) {
         sc.branch_id,
         b.name AS branch_name,
         sc.employee_id,
-        COALESCE(e.name, '') AS employee_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name, '') AS employee_name,
         sc.shift_date,
         sc.shift_label,
         sc.actual_cash,
@@ -234,6 +236,7 @@ export async function POST(request) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const body = await request.json().catch(() => ({}));
 
     const employeeId = toInt(auth.user?.id);

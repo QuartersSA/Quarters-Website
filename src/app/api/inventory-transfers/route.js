@@ -19,7 +19,7 @@ async function notifyAdminsWhatsAppInventoryTransfer({
 }) {
   try {
     const admins = await sql`
-      SELECT id, name, phone
+      SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name, phone
       FROM employees
       WHERE role = 'Admin'
         AND COALESCE(can_manage_inventory, false) = true
@@ -644,8 +644,11 @@ export async function POST(request) {
     const actingId = Number(auth.user?.id);
     let employeeName = "";
     if (Number.isFinite(actingId) && actingId > 0) {
-      const [emp] =
-        await sql`SELECT id, name FROM employees WHERE id = ${actingId}`;
+      const [emp] = await sql`
+        SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name
+        FROM employees
+        WHERE id = ${actingId}
+      `;
       employeeName = emp?.name || "";
     }
 

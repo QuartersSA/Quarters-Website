@@ -5,6 +5,7 @@
 
 import sql from "@/app/api/utils/sql";
 import { requireCronSecret } from "@/app/api/utils/cronAuth";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 import {
   buildTaskLinkLine,
   formatDateOnly,
@@ -40,8 +41,10 @@ async function fetchEmployeeNameMap(employeeIds) {
     i += 1;
   }
 
+  await ensureEmployeeDisplayNameSchema();
+
   const rows = await sql(
-    `SELECT id, name FROM employees WHERE id IN (${placeholders.join(",")})`,
+    `SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name FROM employees WHERE id IN (${placeholders.join(",")})`,
     vals,
   );
 

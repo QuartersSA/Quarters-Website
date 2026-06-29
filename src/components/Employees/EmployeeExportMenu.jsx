@@ -16,7 +16,11 @@ export function EmployeeExportMenu({ employees }) {
 
   const handleExportExcel = () => {
     const columns = [
-      { header: "الاسم", accessor: (item) => item.name },
+      { header: "الاسم الرسمي", accessor: (item) => item.name },
+      {
+        header: "الاسم الدارج",
+        accessor: (item) => item.display_name || item.name || "-",
+      },
       { header: "اسم المستخدم", accessor: (item) => item.username || "-" },
       {
         header: "رقم الجوال",
@@ -56,7 +60,11 @@ export function EmployeeExportMenu({ employees }) {
 
   const handleExportPDF = () => {
     const columns = [
-      { header: "الاسم", accessor: (item) => item.name },
+      { header: "الاسم الرسمي", accessor: (item) => item.name },
+      {
+        header: "الاسم الدارج",
+        accessor: (item) => item.display_name || item.name || "-",
+      },
       { header: "اسم المستخدم", accessor: (item) => item.username || "-" },
       {
         header: "الجوال",

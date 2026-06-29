@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 function safeNumber(value) {
   const n = Number(value);
@@ -154,7 +155,7 @@ async function buildDeductionRowSelectSql(whereClause, params) {
       SELECT
         d.id,
         d.employee_id,
-        e.name as employee_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name) as employee_name,
         d.violation_date,
         d.violation_category,
         d.reason,
@@ -203,7 +204,7 @@ async function notifyDeductionWhatsApp({ createdRows, actorUser }) {
 
     // HR recipients = everyone with HR permission
     const hrRecipients = await sql`
-      SELECT id, name, phone
+      SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name, phone
       FROM employees
       WHERE role = 'Admin'
         AND COALESCE(can_access_hr, false) = true
@@ -216,7 +217,7 @@ async function notifyDeductionWhatsApp({ createdRows, actorUser }) {
     const affectedRecipients = affectedIds.length
       ? await sql(
           `
-            SELECT id, name, phone
+            SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name, phone
             FROM employees
             WHERE id = ANY($1::int[])
               AND phone IS NOT NULL
@@ -328,6 +329,7 @@ export async function GET(request) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const url = new URL(request.url);
     const employeeIdRaw = url.searchParams.get("employeeId");
     const employeeId = employeeIdRaw ? safeNumber(employeeIdRaw) : null;
@@ -379,6 +381,7 @@ export async function POST(request) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const body = await request.json();
 
     const employeeIds = normalizeEmployeeIds(body);

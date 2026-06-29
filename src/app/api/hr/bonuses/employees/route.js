@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 // Minimal employees list for the bonuses entry UI
 export async function GET(request) {
@@ -15,6 +16,7 @@ export async function GET(request) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     // Pull employee + first associated branch name. We surface the
     // branch on bonus / overtime / loan selectors so the operator can
     // disambiguate employees with the same first name across branches.
@@ -25,7 +27,8 @@ export async function GET(request) {
     const rows = await sql`
       SELECT
         e.id,
-        e.name,
+        e.name AS official_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name) AS name,
         br.name AS branch_name
       FROM employees e
       LEFT JOIN LATERAL (
@@ -43,7 +46,7 @@ export async function GET(request) {
         )
         LIMIT 1
       ) br ON true
-      ORDER BY e.name ASC, e.id ASC
+      ORDER BY COALESCE(NULLIF(e.display_name, ''), e.name) ASC, e.id ASC
     `;
 
     return Response.json(rows);

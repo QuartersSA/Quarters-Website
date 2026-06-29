@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 async function safeInsertHrEmployeeLog({
   employeeId,
@@ -60,6 +61,7 @@ function toSortedBranches(branches) {
 // schemas keep working without a manual migration. Cheap because of
 // IF NOT EXISTS.
 async function ensureHrSchema() {
+  await ensureEmployeeDisplayNameSchema();
   await sql`
     ALTER TABLE employees
     ADD COLUMN IF NOT EXISTS start_date DATE
@@ -110,6 +112,7 @@ export async function GET(request) {
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.phone,
         e.created_at,
         e.iqama_number,
@@ -178,6 +181,7 @@ export async function POST(request) {
 
     const {
       name,
+      display_name,
       phone,
       iqama_number,
       iqama_expiry_date,
@@ -208,6 +212,7 @@ export async function POST(request) {
     const [inserted] = await sql`
       INSERT INTO employees (
         name,
+        display_name,
         phone,
         iqama_number,
         iqama_expiry_date,
@@ -227,6 +232,7 @@ export async function POST(request) {
       )
       VALUES (
         ${name},
+        ${display_name || null},
         ${phone || null},
         ${iqama_number || null},
         ${iqama_expiry_date || null},
@@ -270,6 +276,7 @@ export async function POST(request) {
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.phone,
         e.created_at,
         e.iqama_number,
@@ -323,6 +330,7 @@ export async function POST(request) {
       changes: {
         fields: {
           name: { from: null, to: name },
+          display_name: { from: null, to: display_name || null },
           phone: { from: null, to: phone || null },
           iqama_number: { from: null, to: iqama_number || null },
           iqama_expiry_date: {
