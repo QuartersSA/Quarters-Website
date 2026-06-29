@@ -237,6 +237,28 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       last_reset.unit_name AS last_inventory_entered_unit,
       COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
         AS last_inventory_unit_factor,
+      COALESCE(last_reset.unit_name, NULL) AS current_display_unit,
+      COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+        AS current_display_unit_factor,
+      (
+        (
+          COALESCE(last_reset.inv_quantity, 0)
+            * COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+        )
+        + COALESCE(receipts_after.total_received_base, 0)
+        + COALESCE(transfers_after.net_transfer_base, 0)
+      ) AS current_base_quantity,
+      (
+        (
+          COALESCE(last_reset.inv_quantity, 0)
+            * COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+        )
+        + COALESCE(receipts_after.total_received_base, 0)
+        + COALESCE(transfers_after.net_transfer_base, 0)
+      ) / NULLIF(
+        COALESCE(last_reset.unit_factor, item_factor.current_factor, 1),
+        0
+      ) AS current_display_quantity,
       (
         (
           COALESCE(last_reset.inv_quantity, 0)

@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-q4ac2Sc7.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BuK6EXRX.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -261,16 +261,16 @@ async function GET(request) {
       });
     }
 
-    // 5. Inventory cost per branch. Use the exact quantity entered in
-    //    the latest physical inventory count so this reconciles with
-    //    /api/items/stock-value after default-unit changes.
+    // 5. Inventory cost per branch. Current stock starts from the latest
+    //    physical inventory count, then adds receipts and signed transfers.
+    //    The view exposes that balance as base units so later default-unit
+    //    edits do not reinterpret old movements.
     const inventoryCost = await sql`
       SELECT
         b.id as branch_id,
         b.name as branch_name,
         SUM(
-          COALESCE(cs.last_inventory_entered_quantity, 0)
-          * COALESCE(cs.last_inventory_unit_factor, inv_unit.factor, 1)
+          COALESCE(cs.current_base_quantity, 0)
           * COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price, 0)
         ) as total_cost,
         COUNT(*) FILTER (
