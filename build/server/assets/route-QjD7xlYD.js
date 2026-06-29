@@ -1,6 +1,8 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
-import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BuK6EXRX.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 // GET /api/items/stock-value?branchId=<id>
 //
@@ -9,26 +11,26 @@ import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnit
 //   current quantity = latest physical count + later receipts + later transfers
 //   display unit     = the item's current default inventory unit
 //   total value      = displayed quantity * displayed unit cost
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_inventory",
+    permission: "can_manage_inventory"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureInventoryUnitSnapshotSchema();
-
-    const { searchParams } = new URL(request.url);
+    const {
+      searchParams
+    } = new URL(request.url);
     const branchIdRaw = searchParams.get("branchId");
     const parsedBranchId = branchIdRaw ? Number(branchIdRaw) : null;
-    const branchFilter =
-      Number.isFinite(parsedBranchId) && parsedBranchId > 0
-        ? parsedBranchId
-        : null;
-
+    const branchFilter = Number.isFinite(parsedBranchId) && parsedBranchId > 0 ? parsedBranchId : null;
     const query = `
       WITH item_totals AS (
         SELECT
@@ -88,15 +90,17 @@ export async function GET(request) {
         AND i.show_in_inventory = true
       ORDER BY i.name ASC
     `;
-
     const rows = await sql(query, [branchFilter]);
-
     return Response.json(rows);
   } catch (error) {
     console.error("Error fetching stock value:", error);
-    return Response.json(
-      { error: "Failed to fetch stock value", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch stock value",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET };
