@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-10jAIaE4.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-q4ac2Sc7.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -43,7 +43,26 @@ async function GET(request) {
       WITH item_totals AS (
         SELECT
           cs.item_id,
-          SUM(COALESCE(cs.current_quantity, 0))::numeric(12, 3) AS total_quantity
+          SUM(COALESCE(cs.last_inventory_entered_quantity, 0))::numeric(12, 3)
+            AS total_quantity,
+          CASE
+            WHEN COUNT(DISTINCT NULLIF(cs.last_inventory_entered_unit, '')) = 1
+              THEN MAX(NULLIF(cs.last_inventory_entered_unit, ''))
+            WHEN COUNT(DISTINCT NULLIF(cs.last_inventory_entered_unit, '')) > 1
+              THEN 'وحدات متعددة'
+            ELSE NULL
+          END AS entered_unit,
+          CASE
+            WHEN SUM(COALESCE(cs.last_inventory_entered_quantity, 0)) <> 0
+              THEN (
+                SUM(
+                  COALESCE(cs.last_inventory_entered_quantity, 0)
+                    * COALESCE(cs.last_inventory_unit_factor, 1)
+                )
+                / NULLIF(SUM(COALESCE(cs.last_inventory_entered_quantity, 0)), 0)
+              )::numeric(20, 8)
+            ELSE MAX(COALESCE(cs.last_inventory_unit_factor, 1))::numeric(20, 8)
+          END AS weighted_unit_factor
         FROM inventory_current_stock_v cs
         LEFT JOIN item_branch_disabled ibd
           ON ibd.item_id = cs.item_id AND ibd.branch_id = cs.branch_id
@@ -58,7 +77,7 @@ async function GET(request) {
         -- Display unit pill shows whichever unit the operator picked
         -- as "وحدة المخزون الافتراضية" on the item. Falls back to
         -- the legacy flat i.unit text when no multi-unit row exists.
-        COALESCE(inv_unit.name_ar, i.unit) AS unit,
+        COALESCE(it.entered_unit, inv_unit.name_ar, i.unit) AS unit,
         i.image_url,
         i.cost,
         -- effective_cost = cost PER INVENTORY UNIT, derived from the
@@ -67,7 +86,7 @@ async function GET(request) {
         -- from green-bean orders.
         (
           COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price)
-            * COALESCE(inv_unit.factor, 1)
+            * COALESCE(it.weighted_unit_factor, inv_unit.factor, 1)
         )::numeric(14, 4) AS effective_cost,
         last_bean_price.final_price AS fallback_cost,
         c.name AS category_name,
@@ -96,7 +115,7 @@ async function GET(request) {
           ELSE (
             COALESCE(it.total_quantity, 0)
               * COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price)
-              * COALESCE(inv_unit.factor, 1)
+              * COALESCE(it.weighted_unit_factor, inv_unit.factor, 1)
           )::numeric(14, 2)
         END AS total_value
       FROM items i

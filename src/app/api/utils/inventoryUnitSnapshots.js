@@ -167,6 +167,7 @@ async function doEnsureInventoryUnitSnapshotSchema() {
         COALESCE(io.operation_date, io.created_at) AS operation_date,
         e.name AS employee_name,
         ii.quantity::numeric AS inv_quantity,
+        ii.unit_name,
         COALESCE(ii.unit_factor, item_factor.current_factor, 1)::numeric AS unit_factor
       FROM inventory_items ii
       JOIN inventory_operations io ON io.id = ii.operation_id
@@ -232,6 +233,10 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       last_reset.operation_status,
       last_reset.operation_date,
       last_reset.employee_name,
+      COALESCE(last_reset.inv_quantity, 0) AS last_inventory_entered_quantity,
+      last_reset.unit_name AS last_inventory_entered_unit,
+      COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+        AS last_inventory_unit_factor,
       (
         (
           COALESCE(last_reset.inv_quantity, 0)
