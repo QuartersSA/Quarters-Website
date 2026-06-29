@@ -44,6 +44,12 @@ function getItemStockStatus(item) {
   return "available";
 }
 
+function roundMoney(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return null;
+  return Math.round(number * 100) / 100;
+}
+
 export default function ItemsPage() {
   const { isAuthenticated, logout } = useAdminAuth({
     requiredPermission: "can_manage_inventory",
@@ -219,10 +225,11 @@ export default function ItemsPage() {
       : Number.isFinite(legacyCost)
         ? legacyCost
         : null;
-    const cost =
+    const rawCost =
       raw != null && def
         ? raw * (Number(def.conversion_factor) || 1)
         : raw;
+    const cost = rawCost == null ? null : roundMoney(rawCost);
     return { unit, cost };
   };
 
