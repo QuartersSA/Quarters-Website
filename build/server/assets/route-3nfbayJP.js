@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-BuK6EXRX.js';
+import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-T_VBWOHv.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -238,10 +238,9 @@ async function GET(request) {
     const itemIds = items.map(it => it.id);
     const stockRowsByItem = new Map();
     if (itemIds.length > 0) {
-      // Current quantity comes from the shared DB view. The view
-      // normalizes each historical row from its saved unit snapshot
-      // into the item's current default inventory unit, so changing an
-      // item's default unit no longer reinterprets old quantities.
+      // Current quantity comes from the shared DB ledger view:
+      // latest count + later receipts/transfers/waste in the inventory
+      // unit operators actually entered.
       const stockRows = await sql(`
           SELECT
             cs.item_id,

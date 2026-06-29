@@ -1,12 +1,10 @@
-import sql from "@/app/api/utils/sql";
+import { s as sql } from './sql-BfhTxwII.js';
 
 let ensured = false;
 let ensuring = null;
-
-export async function ensureInventoryUnitSnapshotSchema() {
+async function ensureInventoryUnitSnapshotSchema() {
   if (ensured) return;
   if (ensuring) return ensuring;
-
   ensuring = doEnsureInventoryUnitSnapshotSchema();
   try {
     await ensuring;
@@ -15,7 +13,6 @@ export async function ensureInventoryUnitSnapshotSchema() {
     ensuring = null;
   }
 }
-
 async function doEnsureInventoryUnitSnapshotSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS measurement_units (
@@ -25,7 +22,6 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
-
   await sql`
     CREATE TABLE IF NOT EXISTS item_units (
       id                SERIAL PRIMARY KEY,
@@ -37,23 +33,19 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       UNIQUE(item_id, unit_id)
     )
   `;
-
   await sql`DROP VIEW IF EXISTS inventory_current_stock_v`;
   await sql`DROP VIEW IF EXISTS inventory_ledger_entries_v`;
-
   await sql`
     ALTER TABLE item_units
     ALTER COLUMN conversion_factor TYPE NUMERIC(20, 8)
     USING conversion_factor::numeric
   `;
-
   await sql`
     ALTER TABLE items
       ADD COLUMN IF NOT EXISTS default_purchase_unit_id  INTEGER REFERENCES item_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS default_inventory_unit_id INTEGER REFERENCES item_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS base_purchase_cost        NUMERIC(14, 2)
   `;
-
   await sql`
     CREATE TABLE IF NOT EXISTS item_branch_disabled (
       item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
@@ -64,28 +56,24 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       PRIMARY KEY (item_id, branch_id)
     )
   `;
-
   await sql`
     ALTER TABLE inventory_items
       ADD COLUMN IF NOT EXISTS unit_id INTEGER REFERENCES measurement_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS unit_name TEXT,
       ADD COLUMN IF NOT EXISTS unit_factor NUMERIC(20, 8)
   `;
-
   await sql`
     ALTER TABLE purchase_receipts
       ADD COLUMN IF NOT EXISTS unit_id INTEGER REFERENCES measurement_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS unit_name TEXT,
       ADD COLUMN IF NOT EXISTS unit_factor NUMERIC(20, 8)
   `;
-
   await sql`
     ALTER TABLE opening_session_items
       ADD COLUMN IF NOT EXISTS unit_id INTEGER REFERENCES measurement_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS unit_name TEXT,
       ADD COLUMN IF NOT EXISTS unit_factor NUMERIC(20, 8)
   `;
-
   await sql`
     CREATE TABLE IF NOT EXISTS waste_operations (
       id              SERIAL PRIMARY KEY,
@@ -97,7 +85,6 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `;
-
   await sql`
     CREATE TABLE IF NOT EXISTS waste_items (
       id            SERIAL PRIMARY KEY,
@@ -110,12 +97,10 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       note          TEXT
     )
   `;
-
   await sql`
     ALTER TABLE waste_operations
       ADD COLUMN IF NOT EXISTS note TEXT
   `;
-
   await sql`
     ALTER TABLE waste_items
       ADD COLUMN IF NOT EXISTS reason TEXT,
@@ -136,7 +121,6 @@ async function doEnsureInventoryUnitSnapshotSchema() {
      WHERE ii.item_id = i.id
        AND (ii.unit_factor IS NULL OR ii.unit_name IS NULL)
   `;
-
   await sql`
     UPDATE purchase_receipts pr
        SET unit_id = COALESCE(pr.unit_id, mu.id),
@@ -148,7 +132,6 @@ async function doEnsureInventoryUnitSnapshotSchema() {
      WHERE pr.item_id = i.id
        AND (pr.unit_factor IS NULL OR pr.unit_name IS NULL)
   `;
-
   await sql`
     UPDATE opening_session_items osi
        SET unit_id = COALESCE(osi.unit_id, mu.id),
@@ -160,7 +143,6 @@ async function doEnsureInventoryUnitSnapshotSchema() {
      WHERE osi.item_id = i.id
        AND (osi.unit_factor IS NULL OR osi.unit_name IS NULL)
   `;
-
   await sql`
     CREATE INDEX IF NOT EXISTS inventory_items_item_branch_op_idx
       ON inventory_items (item_id, branch_id, operation_id)
@@ -183,7 +165,6 @@ async function doEnsureInventoryUnitSnapshotSchema() {
         (GREATEST(received_at, created_at))
       )
   `;
-
   await sql`
     CREATE OR REPLACE VIEW inventory_ledger_entries_v AS
     WITH current_unit AS (
@@ -291,7 +272,6 @@ async function doEnsureInventoryUnitSnapshotSchema() {
     JOIN waste_operations wo ON wo.id = wi.operation_id
     JOIN current_unit ON current_unit.item_id = wi.item_id
   `;
-
   await sql`
     CREATE OR REPLACE VIEW inventory_current_stock_v AS
     WITH current_unit AS (
@@ -392,20 +372,10 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       ON movement_after.item_id = i.id AND movement_after.branch_id = b.id
   `;
 }
-
-export async function getDefaultInventoryUnitSnapshots(itemIds) {
-  const ids = Array.from(
-    new Set(
-      (Array.isArray(itemIds) ? itemIds : [])
-        .map((id) => Number(id))
-        .filter((id) => Number.isFinite(id) && id > 0),
-    ),
-  );
-
+async function getDefaultInventoryUnitSnapshots(itemIds) {
+  const ids = Array.from(new Set((Array.isArray(itemIds) ? itemIds : []).map(id => Number(id)).filter(id => Number.isFinite(id) && id > 0)));
   if (ids.length === 0) return new Map();
-
-  const rows = await sql(
-    `
+  const rows = await sql(`
       SELECT
         i.id AS item_id,
         mu.id AS unit_id,
@@ -415,26 +385,19 @@ export async function getDefaultInventoryUnitSnapshots(itemIds) {
       LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
       LEFT JOIN measurement_units mu ON mu.id = iu.unit_id
       WHERE i.id = ANY($1::int[])
-    `,
-    [ids],
-  );
-
-  return new Map(
-    rows.map((row) => [
-      Number(row.item_id),
-      {
-        unitId: row.unit_id == null ? null : Number(row.unit_id),
-        unitName: row.unit_name || "حبة",
-        unitFactor: Number(row.unit_factor) || 1,
-      },
-    ]),
-  );
+    `, [ids]);
+  return new Map(rows.map(row => [Number(row.item_id), {
+    unitId: row.unit_id == null ? null : Number(row.unit_id),
+    unitName: row.unit_name || "حبة",
+    unitFactor: Number(row.unit_factor) || 1
+  }]));
 }
-
-export function snapshotForItem(snapshots, itemId) {
+function snapshotForItem(snapshots, itemId) {
   return snapshots.get(Number(itemId)) || {
     unitId: null,
     unitName: "حبة",
-    unitFactor: 1,
+    unitFactor: 1
   };
 }
+
+export { ensureInventoryUnitSnapshotSchema as e, getDefaultInventoryUnitSnapshots as g, snapshotForItem as s };
