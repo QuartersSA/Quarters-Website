@@ -30,17 +30,88 @@ export async function GET(request) {
         : null;
 
     const query = `
-      WITH item_totals AS (
+      WITH last_reset AS (
+        SELECT DISTINCT ON (ii.item_id, io.branch_id)
+          ii.item_id,
+          io.branch_id,
+          ii.quantity::numeric AS inv_quantity,
+          COALESCE(io.operation_date, io.created_at) AS op_date
+        FROM inventory_items ii
+        JOIN inventory_operations io ON io.id = ii.operation_id
+        WHERE io.status = 'Completed'
+          AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
+          AND ($1::int IS NULL OR io.branch_id = $1::int)
+        ORDER BY
+          ii.item_id,
+          io.branch_id,
+          COALESCE(io.operation_date, io.created_at) DESC,
+          io.id DESC
+      ),
+      receipts_after AS (
         SELECT
-          cs.item_id,
-          SUM(COALESCE(cs.current_quantity, 0))::numeric(12, 3)
-            AS total_quantity
-        FROM inventory_current_stock_v cs
+          pr.item_id,
+          pr.branch_id,
+          SUM(pr.quantity::numeric) AS total_received
+        FROM purchase_receipts pr
+        LEFT JOIN last_reset li
+          ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
+        WHERE ($1::int IS NULL OR pr.branch_id = $1::int)
+          AND (
+            li.op_date IS NULL
+            OR GREATEST(pr.received_at, pr.created_at) > li.op_date
+          )
+        GROUP BY pr.item_id, pr.branch_id
+      ),
+      transfers_after AS (
+        SELECT
+          ii.item_id,
+          ii.branch_id,
+          SUM(
+            CASE io.transfer_direction
+              WHEN 'in' THEN COALESCE(ii.transfer_quantity, 0)::numeric
+              WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)::numeric
+              ELSE 0::numeric
+            END
+          ) AS net_transfer
+        FROM inventory_items ii
+        JOIN inventory_operations io ON io.id = ii.operation_id
+        LEFT JOIN last_reset li
+          ON li.item_id = ii.item_id AND li.branch_id = ii.branch_id
+        WHERE io.status = 'Completed'
+          AND io.inventory_type = 'Transfer'
+          AND ($1::int IS NULL OR ii.branch_id = $1::int)
+          AND (
+            li.op_date IS NULL
+            OR COALESCE(io.operation_date, io.created_at) > li.op_date
+          )
+        GROUP BY ii.item_id, ii.branch_id
+      ),
+      stock_keys AS (
+        SELECT item_id, branch_id FROM last_reset
+        UNION
+        SELECT item_id, branch_id FROM receipts_after
+        UNION
+        SELECT item_id, branch_id FROM transfers_after
+      ),
+      item_totals AS (
+        SELECT
+          sk.item_id,
+          SUM(
+            COALESCE(li.inv_quantity, 0)
+              + COALESCE(ra.total_received, 0)
+              + COALESCE(ta.net_transfer, 0)
+          )::numeric(12, 3) AS total_quantity
+        FROM stock_keys sk
+        LEFT JOIN last_reset li
+          ON li.item_id = sk.item_id AND li.branch_id = sk.branch_id
+        LEFT JOIN receipts_after ra
+          ON ra.item_id = sk.item_id AND ra.branch_id = sk.branch_id
+        LEFT JOIN transfers_after ta
+          ON ta.item_id = sk.item_id AND ta.branch_id = sk.branch_id
         LEFT JOIN item_branch_disabled ibd
-          ON ibd.item_id = cs.item_id AND ibd.branch_id = cs.branch_id
-        WHERE ($1::int IS NULL OR cs.branch_id = $1::int)
-          AND ibd.item_id IS NULL
-        GROUP BY cs.item_id
+          ON ibd.item_id = sk.item_id AND ibd.branch_id = sk.branch_id
+        WHERE ibd.item_id IS NULL
+        GROUP BY sk.item_id
       )
       SELECT
         i.id,
