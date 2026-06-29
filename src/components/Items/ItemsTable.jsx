@@ -59,6 +59,12 @@ function formatCost(cost) {
   return `${num.toFixed(2)} ر.س`;
 }
 
+function roundMoney(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return null;
+  return Math.round(number * 100) / 100;
+}
+
 export function ItemsTable({
   items,
   isLoading,
@@ -248,11 +254,13 @@ export function ItemsTable({
               : Number.isFinite(fallbackCost)
                 ? fallbackCost
                 : null;
-            const displayCost =
+            const rawDisplayCost =
               rawBaseCost != null && defaultInvUnit
                 ? rawBaseCost *
                   (Number(defaultInvUnit.conversion_factor) || 1)
                 : rawBaseCost;
+            const displayCost =
+              rawDisplayCost == null ? null : roundMoney(rawDisplayCost);
             const totalStock = computeTotalStock(item);
             const stockStatus = computeStockStatus(item);
             const hasBranchStock = Array.isArray(item?.branch_stock);
@@ -450,11 +458,13 @@ export function ItemsTable({
                   : Number.isFinite(fallbackCost)
                     ? fallbackCost
                     : null;
-                const displayCost =
+                const rawDisplayCost =
                   rawBaseCost != null && defaultInvUnit
                     ? rawBaseCost *
                       (Number(defaultInvUnit.conversion_factor) || 1)
                     : rawBaseCost;
+                const displayCost =
+                  rawDisplayCost == null ? null : roundMoney(rawDisplayCost);
                 const totalStock = computeTotalStock(item);
                 const stockStatus = computeStockStatus(item);
                 const hasBranchStock = Array.isArray(item?.branch_stock);

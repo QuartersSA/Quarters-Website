@@ -20,6 +20,13 @@ const EMPTY_FORM = {
   linked_green_bean_id: null,
 };
 
+function moneyInput(value) {
+  if (value === null || value === undefined || value === "") return "";
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "";
+  return (Math.round(number * 100) / 100).toFixed(2);
+}
+
 export function useItemForm() {
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [editingItem, setEditingItem] = useState(null);
@@ -58,12 +65,12 @@ export function useItemForm() {
       is_active: item.is_active !== false,
       unit: item.unit || "حبة",
       category_id: item.category_id || null,
-      cost: item.cost != null ? item.cost : "",
+      cost: moneyInput(item.cost),
       base_purchase_cost:
         item.base_purchase_cost != null
-          ? item.base_purchase_cost
+          ? moneyInput(item.base_purchase_cost)
           : item.cost != null
-            ? item.cost
+            ? moneyInput(item.cost)
             : "",
       units: mappedUnits,
       show_in_inventory: showInInventory,

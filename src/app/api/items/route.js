@@ -154,6 +154,13 @@ async function ensureSchema() {
   }
 }
 
+function parseMoney(value) {
+  if (value === undefined || value === null || value === "") return null;
+  const number = Number(value);
+  if (!Number.isFinite(number)) return null;
+  return Math.round(number * 100) / 100;
+}
+
 export async function GET(request) {
   const auth = requireAuth(request, {
     anyOf: [
@@ -559,10 +566,7 @@ export async function POST(request) {
     // passes it; otherwise default to true.
     const active =
       is_active !== undefined ? !!is_active : true;
-    const parsedCost =
-      cost !== undefined && cost !== null && cost !== ""
-        ? parseFloat(cost)
-        : null;
+    const parsedCost = parseMoney(cost);
 
     // base_purchase_cost = canonical cost per ONE base unit. Falls
     // back to `cost` so older callers keep working.
@@ -570,7 +574,7 @@ export async function POST(request) {
       base_purchase_cost !== undefined &&
       base_purchase_cost !== null &&
       base_purchase_cost !== ""
-        ? parseFloat(base_purchase_cost)
+        ? parseMoney(base_purchase_cost)
         : parsedCost;
 
     const resolvedCategoryId =
@@ -694,15 +698,12 @@ export async function PUT(request) {
     // up in inventory.
     const active =
       is_active !== undefined ? !!is_active : true;
-    const parsedCost =
-      cost !== undefined && cost !== null && cost !== ""
-        ? parseFloat(cost)
-        : null;
+    const parsedCost = parseMoney(cost);
     const parsedBaseCost =
       base_purchase_cost !== undefined &&
       base_purchase_cost !== null &&
       base_purchase_cost !== ""
-        ? parseFloat(base_purchase_cost)
+        ? parseMoney(base_purchase_cost)
         : parsedCost;
 
     const safeLinkedBeanId =

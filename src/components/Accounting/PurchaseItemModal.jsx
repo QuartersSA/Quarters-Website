@@ -7,6 +7,13 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import ItemUnitsPanel from "@/components/Items/ItemUnitsPanel";
 
+function moneyInput(value) {
+  if (value === null || value === undefined || value === "") return "";
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "";
+  return (Math.round(number * 100) / 100).toFixed(2);
+}
+
 /**
  * Modal used by the Purchases items panel to create / edit items.
  *
@@ -49,7 +56,7 @@ export default function PurchaseItemModal({
           : item.cost != null
             ? item.cost
             : "";
-      setBasePurchaseCost(baseCost === null ? "" : String(baseCost));
+      setBasePurchaseCost(moneyInput(baseCost));
       const serverUnits = Array.isArray(item.units) ? item.units : [];
       setUnits(
         serverUnits.map((u) => ({
@@ -105,8 +112,12 @@ export default function PurchaseItemModal({
     // unit the operator chose — not whatever happens to be base.
     const baseUnitText =
       defaultInvRow?.name_ar || baseRow?.name_ar || "حبة";
-    const baseCostNum =
+    const baseCostRaw =
       basePurchaseCost === "" ? null : Number(basePurchaseCost);
+    const baseCostNum =
+      baseCostRaw === null || !Number.isFinite(baseCostRaw)
+        ? null
+        : Math.round(baseCostRaw * 100) / 100;
     const payload = {
       name: name.trim(),
       name_en: nameEn.trim() || null,

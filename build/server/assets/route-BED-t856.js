@@ -153,6 +153,12 @@ async function ensureSchema() {
     console.error("ensureSchema inventory unit snapshots:", e?.message);
   }
 }
+function parseMoney(value) {
+  if (value === undefined || value === null || value === "") return null;
+  const number = Number(value);
+  if (!Number.isFinite(number)) return null;
+  return Math.round(number * 100) / 100;
+}
 async function GET(request) {
   const auth = requireAuth(request, {
     anyOf: [{
@@ -518,11 +524,11 @@ async function POST(request) {
     // the purchases panel. Now: respect is_active if the caller
     // passes it; otherwise default to true.
     const active = is_active !== undefined ? !!is_active : true;
-    const parsedCost = cost !== undefined && cost !== null && cost !== "" ? parseFloat(cost) : null;
+    const parsedCost = parseMoney(cost);
 
     // base_purchase_cost = canonical cost per ONE base unit. Falls
     // back to `cost` so older callers keep working.
-    const parsedBaseCost = base_purchase_cost !== undefined && base_purchase_cost !== null && base_purchase_cost !== "" ? parseFloat(base_purchase_cost) : parsedCost;
+    const parsedBaseCost = base_purchase_cost !== undefined && base_purchase_cost !== null && base_purchase_cost !== "" ? parseMoney(base_purchase_cost) : parsedCost;
     const resolvedCategoryId = category_id !== undefined && category_id !== null && category_id !== "" ? parseInt(category_id) : categoryId !== undefined && categoryId !== null && categoryId !== "" ? parseInt(categoryId) : null;
     const safeCategoryId = resolvedCategoryId && !Number.isNaN(resolvedCategoryId) ? resolvedCategoryId : null;
     const safeLinkedBeanId = linked_green_bean_id !== undefined && linked_green_bean_id !== null && linked_green_bean_id !== "" ? parseInt(linked_green_bean_id) : null;
@@ -626,8 +632,8 @@ async function PUT(request) {
     // purchases-only item stays active even though it doesn't show
     // up in inventory.
     const active = is_active !== undefined ? !!is_active : true;
-    const parsedCost = cost !== undefined && cost !== null && cost !== "" ? parseFloat(cost) : null;
-    const parsedBaseCost = base_purchase_cost !== undefined && base_purchase_cost !== null && base_purchase_cost !== "" ? parseFloat(base_purchase_cost) : parsedCost;
+    const parsedCost = parseMoney(cost);
+    const parsedBaseCost = base_purchase_cost !== undefined && base_purchase_cost !== null && base_purchase_cost !== "" ? parseMoney(base_purchase_cost) : parsedCost;
     const safeLinkedBeanId = linked_green_bean_id !== undefined && linked_green_bean_id !== null && linked_green_bean_id !== "" ? parseInt(linked_green_bean_id) : null;
     const maxThreshold = max_stock_threshold !== undefined && max_stock_threshold !== null && max_stock_threshold !== "" ? Number(max_stock_threshold) : null;
     const safeMaxThreshold = maxThreshold !== null && Number.isFinite(maxThreshold) && maxThreshold >= 0 ? maxThreshold : null;
