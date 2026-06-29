@@ -1,10 +1,22 @@
 import sql from "@/app/api/utils/sql";
 
 let ensured = false;
+let ensuring = null;
 
 export async function ensureInventoryUnitSnapshotSchema() {
   if (ensured) return;
+  if (ensuring) return ensuring;
 
+  ensuring = doEnsureInventoryUnitSnapshotSchema();
+  try {
+    await ensuring;
+    ensured = true;
+  } finally {
+    ensuring = null;
+  }
+}
+
+async function doEnsureInventoryUnitSnapshotSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS measurement_units (
       id          SERIAL PRIMARY KEY,
@@ -26,6 +38,8 @@ export async function ensureInventoryUnitSnapshotSchema() {
     )
   `;
 
+  await sql`DROP VIEW IF EXISTS inventory_current_stock_v`;
+
   await sql`
     ALTER TABLE item_units
     ALTER COLUMN conversion_factor TYPE NUMERIC(20, 8)
@@ -37,6 +51,17 @@ export async function ensureInventoryUnitSnapshotSchema() {
       ADD COLUMN IF NOT EXISTS default_purchase_unit_id  INTEGER REFERENCES item_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS default_inventory_unit_id INTEGER REFERENCES item_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS base_purchase_cost        NUMERIC(14, 2)
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS item_branch_disabled (
+      item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+      branch_id INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+      disabled_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      disabled_by_employee_id INTEGER,
+      disabled_by_employee_name TEXT,
+      PRIMARY KEY (item_id, branch_id)
+    )
   `;
 
   await sql`
@@ -142,6 +167,7 @@ export async function ensureInventoryUnitSnapshotSchema() {
         COALESCE(io.operation_date, io.created_at) AS operation_date,
         e.name AS employee_name,
         ii.quantity::numeric AS inv_quantity,
+        ii.unit_name,
         COALESCE(ii.unit_factor, item_factor.current_factor, 1)::numeric AS unit_factor
       FROM inventory_items ii
       JOIN inventory_operations io ON io.id = ii.operation_id
@@ -207,6 +233,32 @@ export async function ensureInventoryUnitSnapshotSchema() {
       last_reset.operation_status,
       last_reset.operation_date,
       last_reset.employee_name,
+      COALESCE(last_reset.inv_quantity, 0) AS last_inventory_entered_quantity,
+      last_reset.unit_name AS last_inventory_entered_unit,
+      COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+        AS last_inventory_unit_factor,
+      COALESCE(last_reset.unit_name, NULL) AS current_display_unit,
+      COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+        AS current_display_unit_factor,
+      (
+        (
+          COALESCE(last_reset.inv_quantity, 0)
+            * COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+        )
+        + COALESCE(receipts_after.total_received_base, 0)
+        + COALESCE(transfers_after.net_transfer_base, 0)
+      ) AS current_base_quantity,
+      (
+        (
+          COALESCE(last_reset.inv_quantity, 0)
+            * COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+        )
+        + COALESCE(receipts_after.total_received_base, 0)
+        + COALESCE(transfers_after.net_transfer_base, 0)
+      ) / NULLIF(
+        COALESCE(last_reset.unit_factor, item_factor.current_factor, 1),
+        0
+      ) AS current_display_quantity,
       (
         (
           COALESCE(last_reset.inv_quantity, 0)
@@ -238,8 +290,6 @@ export async function ensureInventoryUnitSnapshotSchema() {
     LEFT JOIN transfers_after
       ON transfers_after.item_id = i.id AND transfers_after.branch_id = b.id
   `;
-
-  ensured = true;
 }
 
 export async function getDefaultInventoryUnitSnapshots(itemIds) {

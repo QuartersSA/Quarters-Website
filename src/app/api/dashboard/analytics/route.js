@@ -274,25 +274,16 @@ export async function GET(request) {
       });
     }
 
-    // 5. Inventory cost per branch — quantity uses the timeline
-    //    formula (reset + receipts + signed transfers) for consistency
-    //    with /api/items/stock-value.
+    // 5. Inventory cost per branch. Current stock starts from the latest
+    //    physical inventory count, then adds receipts and signed transfers.
+    //    The view exposes that balance as base units so later default-unit
+    //    edits do not reinterpret old movements.
     const inventoryCost = await sql`
       SELECT
         b.id as branch_id,
         b.name as branch_name,
         SUM(
-          cs.current_quantity
-          -- inventory quantities are recorded in the item's DEFAULT
-          -- INVENTORY UNIT (e.g. حبة) while the cost below is the
-          -- price of ONE BASE unit. Multiply by the unit's
-          -- conversion_factor ("base units per inventory unit") to
-          -- turn the counted qty into base units before pricing —
-          -- otherwise a حبة-count gets priced as if it were
-          -- base-unit-count, inflating the total by ~1/factor.
-          -- Matches /api/items/stock-value exactly. Factor defaults
-          -- to 1 for items with no configured inventory unit.
-          * COALESCE(inv_unit.factor, 1)
+          COALESCE(cs.current_base_quantity, 0)
           * COALESCE(i.base_purchase_cost, i.cost, last_bean_price.final_price, 0)
         ) as total_cost,
         COUNT(*) FILTER (
