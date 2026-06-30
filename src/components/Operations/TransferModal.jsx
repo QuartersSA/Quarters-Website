@@ -250,7 +250,8 @@ export default function TransferModal({ branches, onClose }) {
       return;
     }
 
-    // Check stock availability in sender branch — both numbers in base units.
+    // Check stock availability in sender branch — both numbers are in the
+    // item's locked default inventory/counting unit.
     const availableStock = fromBranchStock ?? 0;
     const existingEntry = items.find((x) => x.itemId === itemIdNum);
     const alreadyAdded = existingEntry ? existingEntry.quantity : 0;
