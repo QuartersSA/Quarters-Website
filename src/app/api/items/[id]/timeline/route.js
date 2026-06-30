@@ -17,6 +17,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 export async function GET(request, { params }) {
   const auth = requireAuth(request, {
@@ -29,6 +30,7 @@ export async function GET(request, { params }) {
 
   try {
     await ensureInventoryUnitSnapshotSchema();
+    await ensureEmployeeDisplayNameSchema();
 
     const itemId = parseInt(params.id);
     if (!Number.isFinite(itemId) || itemId <= 0) {
@@ -80,7 +82,7 @@ export async function GET(request, { params }) {
         tb.name            AS transfer_branch_name,
         io.note,
         COALESCE(io.operation_date, io.created_at) AS event_at,
-        e.name             AS employee_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name) AS employee_name,
         (
           ii.quantity::numeric
             * COALESCE(ii.unit_factor, iu.conversion_factor, 1)::numeric
@@ -112,7 +114,7 @@ export async function GET(request, { params }) {
         ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS delta,
         pr.note,
         GREATEST(pr.received_at, pr.created_at)      AS event_at,
-        COALESCE(pr.created_by_employee_name, e.name) AS employee_name
+        COALESCE(NULLIF(e.display_name, ''), pr.created_by_employee_name, e.name) AS employee_name
       FROM purchase_receipts pr
       JOIN items i ON i.id = pr.item_id
       LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id

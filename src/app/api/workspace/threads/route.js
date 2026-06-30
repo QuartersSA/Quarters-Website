@@ -56,7 +56,7 @@ export async function GET(request) {
             json_agg(
               json_build_object(
                 'id', e.id,
-                'name', e.name,
+                'name', COALESCE(NULLIF(e.display_name, ''), e.name),
                 'role', e.role
               )
             ) FILTER (WHERE e.id IS NOT NULL),

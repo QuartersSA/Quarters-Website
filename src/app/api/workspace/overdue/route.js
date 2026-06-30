@@ -72,7 +72,7 @@ export async function GET(request) {
         t.image_name,
         COALESCE(s.name, '') as space_name,
         t.created_by_employee_id,
-        COALESCE(t.created_by_employee_name, cb.name, '—') as created_by_name,
+        COALESCE(NULLIF(cb.display_name, ''), t.created_by_employee_name, cb.name, '—') as created_by_name,
         t.created_at,
         t.was_overdue,
         t.first_overdue_at,
@@ -89,7 +89,7 @@ export async function GET(request) {
           json_agg(
             DISTINCT jsonb_build_object(
               'id', a.id,
-              'name', a.name,
+              'name', COALESCE(NULLIF(a.display_name, ''), a.name),
               'role', a.role
             )
           ) FILTER (WHERE a.id IS NOT NULL),
@@ -111,6 +111,7 @@ export async function GET(request) {
         t.id,
         s.name,
         cb.name,
+        cb.display_name,
         t.created_by_employee_name
       ORDER BY
         COALESCE(t.first_overdue_at, t.created_at) DESC,

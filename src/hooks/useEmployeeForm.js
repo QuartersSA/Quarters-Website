@@ -2,6 +2,7 @@ import { useState } from "react";
 
 const initialFormState = {
   name: "",
+  display_name: "",
   email: "",
   phone: "",
   username: "",
@@ -38,6 +39,7 @@ export function useEmployeeForm() {
     setEditingEmployee(employee);
     setFormData({
       name: employee.name || "",
+      display_name: employee.display_name || "",
       email: employee.email || "",
       phone: employee.phone || "",
       username: employee.username || "",

@@ -243,10 +243,9 @@ export async function GET(request) {
     const stockRowsByItem = new Map();
 
     if (itemIds.length > 0) {
-      // Current quantity comes from the shared DB view. The view
-      // normalizes each historical row from its saved unit snapshot
-      // into the item's current default inventory unit, so changing an
-      // item's default unit no longer reinterprets old quantities.
+      // Current quantity comes from the shared DB ledger view:
+      // latest count + later receipts/transfers/waste in the inventory
+      // unit operators actually entered.
       const stockRows = await sql(
         `
           SELECT

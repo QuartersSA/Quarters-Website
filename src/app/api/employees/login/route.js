@@ -5,6 +5,7 @@ import {
   clearRateLimit,
   consumeRateLimit,
 } from "@/app/api/utils/rateLimit";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 // POST - Employee login
 export async function POST(request) {
@@ -17,6 +18,7 @@ export async function POST(request) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const { username, password } = body || {};
 
     if (!username || !password) {
@@ -83,7 +85,9 @@ export async function POST(request) {
       const query = `
         SELECT
           e.id,
-          e.name,
+          e.name AS official_name,
+          e.display_name,
+          COALESCE(NULLIF(e.display_name, ''), e.name) AS name,
           e.username,
           e.password,
           e.role,

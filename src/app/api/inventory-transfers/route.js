@@ -19,7 +19,7 @@ async function notifyAdminsWhatsAppInventoryTransfer({
 }) {
   try {
     const admins = await sql`
-      SELECT id, name, phone
+      SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name, phone
       FROM employees
       WHERE role = 'Admin'
         AND COALESCE(can_manage_inventory, false) = true
@@ -115,87 +115,61 @@ async function getQuantitiesAtTime({ txn, branchId, itemIds, atTime }) {
     return new Map();
   }
 
-  // Same formula as /api/branch-stock-at and the timeline report:
-  //   last RESET (Daily/Weekly/Opening) + receipts since + signed
-  //   transfer deltas since. Keeps the transfer route's
-  //   pre-flight stock check aligned with what the reports show.
+  // Same formula as /api/branch-stock-at and /api/items/summary:
+  // latest physical reset + all later ledger movement quantities
+  // (receipts, transfers, waste), in the default inventory/counting unit.
   const rows = await txn(
     `
-      SELECT
-        i.id AS item_id,
-        (
-          COALESCE(last_reset.inv_base_quantity, 0)
-            + COALESCE(receipts_after.total_received_base, 0)
-            + COALESCE(transfers_after.net_transfer_base, 0)
-        ) / NULLIF(COALESCE(current_unit.conversion_factor, 1), 0) AS quantity_at_t
-      FROM items i
-      LEFT JOIN item_units current_unit
-        ON current_unit.id = i.default_inventory_unit_id
-
-      LEFT JOIN LATERAL (
+      WITH requested_items AS (
+        SELECT unnest($2::int[])::int AS item_id
+      ),
+      last_reset AS (
+        SELECT DISTINCT ON (le.item_id)
+          le.item_id,
+          le.entered_quantity::numeric AS inv_quantity,
+          le.occurred_at,
+          le.operation_id,
+          le.source_id
+        FROM inventory_ledger_entries_v le
+        WHERE le.branch_id = $1
+          AND le.item_id = ANY($2::int[])
+          AND le.resets_stock = true
+          AND (
+            $3::timestamp IS NULL
+            OR le.occurred_at <= $3::timestamp
+          )
+        ORDER BY
+          le.item_id,
+          le.occurred_at DESC,
+          le.operation_id DESC NULLS LAST,
+          le.source_id DESC
+      ),
+      movement_after AS (
         SELECT
-               ii.quantity::numeric
-                 * COALESCE(ii.unit_factor, current_unit.conversion_factor, 1)::numeric
-                 AS inv_base_quantity,
-               COALESCE(io.operation_date, io.created_at) AS op_date
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id = i.id
-          AND io.branch_id = $1
-          AND io.status = 'Completed'
-          AND io.inventory_type IN ('Daily','Weekly','Opening')
+          le.item_id,
+          COALESCE(SUM(le.delta_quantity), 0)::numeric AS net_movement_quantity
+        FROM inventory_ledger_entries_v le
+        LEFT JOIN last_reset lr ON lr.item_id = le.item_id
+        WHERE le.branch_id = $1
+          AND le.item_id = ANY($2::int[])
+          AND le.resets_stock = false
           AND (
-            $3::timestamp IS NULL
-            OR COALESCE(io.operation_date, io.created_at) <= $3::timestamp
-          )
-        ORDER BY COALESCE(io.operation_date, io.created_at) DESC, io.id DESC
-        LIMIT 1
-      ) last_reset ON true
-
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(
-          pr.quantity::numeric
-            * COALESCE(pr.unit_factor, current_unit.conversion_factor, 1)::numeric
-        ), 0) AS total_received_base
-        FROM purchase_receipts pr
-        WHERE pr.item_id = i.id
-          AND pr.branch_id = $1
-          AND (
-            last_reset.op_date IS NULL
-            OR GREATEST(pr.received_at, pr.created_at) > last_reset.op_date
+            lr.occurred_at IS NULL
+            OR le.occurred_at > lr.occurred_at
           )
           AND (
             $3::timestamp IS NULL
-            OR GREATEST(pr.received_at, pr.created_at) <= $3::timestamp
+            OR le.occurred_at <= $3::timestamp
           )
-      ) receipts_after ON true
-
-      LEFT JOIN LATERAL (
-        SELECT COALESCE(SUM(
-          CASE io.transfer_direction
-            WHEN 'in'  THEN  COALESCE(ii.transfer_quantity, 0)::numeric
-            WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)::numeric
-            ELSE 0
-          END
-          * COALESCE(ii.unit_factor, current_unit.conversion_factor, 1)::numeric
-        ), 0) AS net_transfer_base
-        FROM inventory_items ii
-        JOIN inventory_operations io ON io.id = ii.operation_id
-        WHERE ii.item_id   = i.id
-          AND ii.branch_id = $1
-          AND io.status    = 'Completed'
-          AND io.inventory_type = 'Transfer'
-          AND (
-            last_reset.op_date IS NULL
-            OR COALESCE(io.operation_date, io.created_at) > last_reset.op_date
-          )
-          AND (
-            $3::timestamp IS NULL
-            OR COALESCE(io.operation_date, io.created_at) <= $3::timestamp
-          )
-      ) transfers_after ON true
-
-      WHERE i.id = ANY($2::int[])
+        GROUP BY le.item_id
+      )
+      SELECT
+        ri.item_id,
+        COALESCE(last_reset.inv_quantity, 0)
+          + COALESCE(movement_after.net_movement_quantity, 0) AS quantity_at_t
+      FROM requested_items ri
+      LEFT JOIN last_reset ON last_reset.item_id = ri.item_id
+      LEFT JOIN movement_after ON movement_after.item_id = ri.item_id
     `,
     [safeBranchId, uniqueIds, atTime],
   );
@@ -644,8 +618,11 @@ export async function POST(request) {
     const actingId = Number(auth.user?.id);
     let employeeName = "";
     if (Number.isFinite(actingId) && actingId > 0) {
-      const [emp] =
-        await sql`SELECT id, name FROM employees WHERE id = ${actingId}`;
+      const [emp] = await sql`
+        SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name
+        FROM employees
+        WHERE id = ${actingId}
+      `;
       employeeName = emp?.name || "";
     }
 

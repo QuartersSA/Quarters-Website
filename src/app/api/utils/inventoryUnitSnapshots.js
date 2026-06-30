@@ -1,4 +1,5 @@
 import sql from "@/app/api/utils/sql";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 let ensured = false;
 let ensuring = null;
@@ -17,6 +18,7 @@ export async function ensureInventoryUnitSnapshotSchema() {
 }
 
 async function doEnsureInventoryUnitSnapshotSchema() {
+  await ensureEmployeeDisplayNameSchema();
   await sql`
     CREATE TABLE IF NOT EXISTS measurement_units (
       id          SERIAL PRIMARY KEY,
@@ -39,6 +41,7 @@ async function doEnsureInventoryUnitSnapshotSchema() {
   `;
 
   await sql`DROP VIEW IF EXISTS inventory_current_stock_v`;
+  await sql`DROP VIEW IF EXISTS inventory_ledger_entries_v`;
 
   await sql`
     ALTER TABLE item_units
@@ -83,6 +86,42 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       ADD COLUMN IF NOT EXISTS unit_id INTEGER REFERENCES measurement_units(id) ON DELETE SET NULL,
       ADD COLUMN IF NOT EXISTS unit_name TEXT,
       ADD COLUMN IF NOT EXISTS unit_factor NUMERIC(20, 8)
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS waste_operations (
+      id              SERIAL PRIMARY KEY,
+      branch_id       INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+      branch_name     TEXT,
+      employee_id     INTEGER,
+      employee_name   TEXT,
+      note            TEXT,
+      created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS waste_items (
+      id            SERIAL PRIMARY KEY,
+      operation_id  INTEGER NOT NULL REFERENCES waste_operations(id) ON DELETE CASCADE,
+      item_id       INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+      item_name     TEXT,
+      quantity      NUMERIC(12, 3) NOT NULL,
+      unit_cost     NUMERIC(14, 4),
+      reason        TEXT,
+      note          TEXT
+    )
+  `;
+
+  await sql`
+    ALTER TABLE waste_operations
+      ADD COLUMN IF NOT EXISTS note TEXT
+  `;
+
+  await sql`
+    ALTER TABLE waste_items
+      ADD COLUMN IF NOT EXISTS reason TEXT,
+      ADD COLUMN IF NOT EXISTS note TEXT
   `;
 
   // Legacy rows had no explicit unit. Backfill with the item's current
@@ -148,81 +187,170 @@ async function doEnsureInventoryUnitSnapshotSchema() {
   `;
 
   await sql`
-    CREATE OR REPLACE VIEW inventory_current_stock_v AS
-    WITH item_factor AS (
+    CREATE OR REPLACE VIEW inventory_ledger_entries_v AS
+    WITH current_unit AS (
       SELECT
         i.id AS item_id,
+        mu.id AS current_unit_id,
+        COALESCE(mu.name_ar, i.unit, 'حبة') AS current_unit_name,
         COALESCE(iu.conversion_factor, 1)::numeric AS current_factor
       FROM items i
       LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
+      LEFT JOIN measurement_units mu ON mu.id = iu.unit_id
+    )
+    SELECT
+      ('inventory:' || ii.id)::text AS ledger_id,
+      'inventory_items'::text AS source_table,
+      ii.id::integer AS source_id,
+      io.id::integer AS operation_id,
+      ii.item_id::integer AS item_id,
+      io.branch_id::integer AS branch_id,
+      COALESCE(io.operation_date, io.created_at) AS occurred_at,
+      io.inventory_number::text AS reference_number,
+      io.inventory_type::text AS movement_type,
+      CASE
+        WHEN io.inventory_type IN ('Daily', 'Weekly', 'Opening') THEN true
+        ELSE false
+      END AS resets_stock,
+      CASE
+        WHEN io.inventory_type IN ('Daily', 'Weekly', 'Opening')
+          THEN ii.quantity::numeric
+        WHEN io.inventory_type = 'Transfer' AND io.transfer_direction = 'in'
+          THEN COALESCE(ii.transfer_quantity, 0)::numeric
+        WHEN io.inventory_type = 'Transfer' AND io.transfer_direction = 'out'
+          THEN -COALESCE(ii.transfer_quantity, 0)::numeric
+        ELSE 0::numeric
+      END AS delta_quantity,
+      CASE
+        WHEN io.inventory_type IN ('Daily', 'Weekly', 'Opening')
+          THEN ii.quantity::numeric
+        WHEN io.inventory_type = 'Transfer'
+          THEN COALESCE(ii.transfer_quantity, 0)::numeric
+        ELSE ii.quantity::numeric
+      END AS entered_quantity,
+      ii.unit_id::integer AS unit_id,
+      COALESCE(ii.unit_name, current_unit.current_unit_name) AS unit_name,
+      COALESCE(ii.unit_factor, current_unit.current_factor, 1)::numeric AS unit_factor,
+      io.employee_id::integer AS employee_id,
+      COALESCE(NULLIF(e.display_name, ''), e.name)::text AS employee_name,
+      io.status::text AS status,
+      io.note::text AS note
+    FROM inventory_items ii
+    JOIN inventory_operations io ON io.id = ii.operation_id
+    JOIN current_unit ON current_unit.item_id = ii.item_id
+    LEFT JOIN employees e ON e.id = io.employee_id
+    WHERE io.status = 'Completed'
+      AND io.inventory_type IN ('Daily', 'Weekly', 'Opening', 'Transfer')
+
+    UNION ALL
+
+    SELECT
+      ('receipt:' || pr.id)::text AS ledger_id,
+      'purchase_receipts'::text AS source_table,
+      pr.id::integer AS source_id,
+      NULL::integer AS operation_id,
+      pr.item_id::integer AS item_id,
+      pr.branch_id::integer AS branch_id,
+      GREATEST(pr.received_at, pr.created_at) AS occurred_at,
+      pr.receipt_batch_id::text AS reference_number,
+      'Receipt'::text AS movement_type,
+      false AS resets_stock,
+      pr.quantity::numeric AS delta_quantity,
+      pr.quantity::numeric AS entered_quantity,
+      pr.unit_id::integer AS unit_id,
+      COALESCE(pr.unit_name, current_unit.current_unit_name) AS unit_name,
+      COALESCE(pr.unit_factor, current_unit.current_factor, 1)::numeric AS unit_factor,
+      pr.created_by_employee_id::integer AS employee_id,
+      COALESCE(NULLIF(pe.display_name, ''), pr.created_by_employee_name, pe.name)::text AS employee_name,
+      'Completed'::text AS status,
+      pr.note::text AS note
+    FROM purchase_receipts pr
+    JOIN current_unit ON current_unit.item_id = pr.item_id
+    LEFT JOIN employees pe ON pe.id = pr.created_by_employee_id
+
+    UNION ALL
+
+    SELECT
+      ('waste:' || wi.id)::text AS ledger_id,
+      'waste_items'::text AS source_table,
+      wi.id::integer AS source_id,
+      wo.id::integer AS operation_id,
+      wi.item_id::integer AS item_id,
+      wo.branch_id::integer AS branch_id,
+      wo.created_at AS occurred_at,
+      wo.id::text AS reference_number,
+      'Waste'::text AS movement_type,
+      false AS resets_stock,
+      -wi.quantity::numeric AS delta_quantity,
+      wi.quantity::numeric AS entered_quantity,
+      NULL::integer AS unit_id,
+      current_unit.current_unit_name AS unit_name,
+      current_unit.current_factor::numeric AS unit_factor,
+      wo.employee_id::integer AS employee_id,
+      COALESCE(NULLIF(we.display_name, ''), wo.employee_name, we.name)::text AS employee_name,
+      'Completed'::text AS status,
+      COALESCE(wi.note, wo.note)::text AS note
+    FROM waste_items wi
+    JOIN waste_operations wo ON wo.id = wi.operation_id
+    JOIN current_unit ON current_unit.item_id = wi.item_id
+    LEFT JOIN employees we ON we.id = wo.employee_id
+  `;
+
+  await sql`
+    CREATE OR REPLACE VIEW inventory_current_stock_v AS
+    WITH current_unit AS (
+      SELECT
+        i.id AS item_id,
+        COALESCE(mu.name_ar, i.unit, 'حبة') AS current_unit_name,
+        COALESCE(iu.conversion_factor, 1)::numeric AS current_factor
+      FROM items i
+      LEFT JOIN item_units iu ON iu.id = i.default_inventory_unit_id
+      LEFT JOIN measurement_units mu ON mu.id = iu.unit_id
     ),
     last_reset AS (
-      SELECT DISTINCT ON (ii.item_id, io.branch_id)
-        ii.item_id,
-        io.branch_id,
-        io.id AS operation_id,
-        io.inventory_number,
-        io.inventory_type,
-        io.status AS operation_status,
-        COALESCE(io.operation_date, io.created_at) AS operation_date,
-        e.name AS employee_name,
-        ii.quantity::numeric AS inv_quantity,
-        ii.unit_name,
-        COALESCE(ii.unit_factor, item_factor.current_factor, 1)::numeric AS unit_factor
-      FROM inventory_items ii
-      JOIN inventory_operations io ON io.id = ii.operation_id
-      JOIN item_factor ON item_factor.item_id = ii.item_id
-      LEFT JOIN employees e ON e.id = io.employee_id
-      WHERE io.status = 'Completed'
-        AND io.inventory_type IN ('Daily', 'Weekly', 'Opening')
+      SELECT DISTINCT ON (le.item_id, le.branch_id)
+        le.item_id,
+        le.branch_id,
+        le.operation_id,
+        le.reference_number AS inventory_number,
+        le.movement_type AS inventory_type,
+        le.status AS operation_status,
+        le.occurred_at AS operation_date,
+        le.employee_name,
+        le.entered_quantity AS inv_quantity,
+        le.unit_name,
+        le.unit_factor,
+        le.source_id
+      FROM inventory_ledger_entries_v le
+      WHERE le.resets_stock = true
       ORDER BY
-        ii.item_id,
-        io.branch_id,
-        COALESCE(io.operation_date, io.created_at) DESC,
-        io.id DESC
+        le.item_id,
+        le.branch_id,
+        le.occurred_at DESC,
+        le.operation_id DESC NULLS LAST,
+        le.source_id DESC
     ),
-    receipts_after AS (
+    movement_after AS (
       SELECT
-        pr.item_id,
-        pr.branch_id,
-        SUM(
-          pr.quantity::numeric
-            * COALESCE(pr.unit_factor, item_factor.current_factor, 1)::numeric
-        ) AS total_received_base
-      FROM purchase_receipts pr
-      JOIN item_factor ON item_factor.item_id = pr.item_id
-      LEFT JOIN last_reset li
-        ON li.item_id = pr.item_id AND li.branch_id = pr.branch_id
-      WHERE (
-        li.operation_date IS NULL
-        OR GREATEST(pr.received_at, pr.created_at) > li.operation_date
-      )
-      GROUP BY pr.item_id, pr.branch_id
-    ),
-    transfers_after AS (
-      SELECT
-        ii.item_id,
-        ii.branch_id,
-        SUM(
-          CASE io.transfer_direction
-            WHEN 'in' THEN COALESCE(ii.transfer_quantity, 0)::numeric
-            WHEN 'out' THEN -COALESCE(ii.transfer_quantity, 0)::numeric
-            ELSE 0::numeric
-          END
-          * COALESCE(ii.unit_factor, item_factor.current_factor, 1)::numeric
-        ) AS net_transfer_base
-      FROM inventory_items ii
-      JOIN inventory_operations io ON io.id = ii.operation_id
-      JOIN item_factor ON item_factor.item_id = ii.item_id
-      LEFT JOIN last_reset li
-        ON li.item_id = ii.item_id AND li.branch_id = ii.branch_id
-      WHERE io.status = 'Completed'
-        AND io.inventory_type = 'Transfer'
+        le.item_id,
+        le.branch_id,
+        SUM(CASE WHEN le.movement_type = 'Receipt' THEN le.delta_quantity ELSE 0::numeric END)
+          AS receipts_quantity,
+        SUM(CASE WHEN le.movement_type = 'Transfer' THEN le.delta_quantity ELSE 0::numeric END)
+          AS net_transfer_quantity,
+        SUM(CASE WHEN le.movement_type = 'Waste' THEN le.delta_quantity ELSE 0::numeric END)
+          AS waste_quantity,
+        SUM(CASE WHEN le.resets_stock = false THEN le.delta_quantity ELSE 0::numeric END)
+          AS net_movement_quantity
+      FROM inventory_ledger_entries_v le
+      LEFT JOIN last_reset lr
+        ON lr.item_id = le.item_id AND lr.branch_id = le.branch_id
+      WHERE le.resets_stock = false
         AND (
-          li.operation_date IS NULL
-          OR COALESCE(io.operation_date, io.created_at) > li.operation_date
+          lr.operation_date IS NULL
+          OR le.occurred_at > lr.operation_date
         )
-      GROUP BY ii.item_id, ii.branch_id
+      GROUP BY le.item_id, le.branch_id
     )
     SELECT
       i.id AS item_id,
@@ -235,60 +363,37 @@ async function doEnsureInventoryUnitSnapshotSchema() {
       last_reset.employee_name,
       COALESCE(last_reset.inv_quantity, 0) AS last_inventory_entered_quantity,
       last_reset.unit_name AS last_inventory_entered_unit,
-      COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
+      COALESCE(last_reset.unit_factor, current_unit.current_factor, 1)
         AS last_inventory_unit_factor,
-      COALESCE(last_reset.unit_name, NULL) AS current_display_unit,
-      COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
-        AS current_display_unit_factor,
-      (
-        (
-          COALESCE(last_reset.inv_quantity, 0)
-            * COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
-        )
-        + COALESCE(receipts_after.total_received_base, 0)
-        + COALESCE(transfers_after.net_transfer_base, 0)
-      ) AS current_base_quantity,
-      (
-        (
-          COALESCE(last_reset.inv_quantity, 0)
-            * COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
-        )
-        + COALESCE(receipts_after.total_received_base, 0)
-        + COALESCE(transfers_after.net_transfer_base, 0)
-      ) / NULLIF(
-        COALESCE(last_reset.unit_factor, item_factor.current_factor, 1),
-        0
-      ) AS current_display_quantity,
-      (
-        (
-          COALESCE(last_reset.inv_quantity, 0)
-            * COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
-        )
-        + COALESCE(receipts_after.total_received_base, 0)
-        + COALESCE(transfers_after.net_transfer_base, 0)
-      ) / NULLIF(item_factor.current_factor, 0) AS current_quantity,
+      current_unit.current_unit_name AS current_display_unit,
+      COALESCE(current_unit.current_factor, 1) AS current_display_unit_factor,
       (
         COALESCE(last_reset.inv_quantity, 0)
-          * COALESCE(last_reset.unit_factor, item_factor.current_factor, 1)
-      ) / NULLIF(item_factor.current_factor, 0) AS last_inventory_quantity,
-      COALESCE(receipts_after.total_received_base, 0)
-        / NULLIF(item_factor.current_factor, 0) AS receipts_since_last_inventory,
-      COALESCE(transfers_after.net_transfer_base, 0)
-        / NULLIF(item_factor.current_factor, 0) AS net_transfer_since_last_inventory,
+          + COALESCE(movement_after.net_movement_quantity, 0)
+      ) * COALESCE(current_unit.current_factor, 1) AS current_base_quantity,
+      (
+        COALESCE(last_reset.inv_quantity, 0)
+          + COALESCE(movement_after.net_movement_quantity, 0)
+      ) AS current_display_quantity,
+      (
+        COALESCE(last_reset.inv_quantity, 0)
+          + COALESCE(movement_after.net_movement_quantity, 0)
+      ) AS current_quantity,
+      COALESCE(last_reset.inv_quantity, 0) AS last_inventory_quantity,
+      COALESCE(movement_after.receipts_quantity, 0) AS receipts_since_last_inventory,
+      COALESCE(movement_after.net_transfer_quantity, 0) AS net_transfer_since_last_inventory,
+      COALESCE(movement_after.waste_quantity, 0) AS waste_since_last_inventory,
       (
         last_reset.operation_date IS NOT NULL
-        OR COALESCE(receipts_after.total_received_base, 0) <> 0
-        OR COALESCE(transfers_after.net_transfer_base, 0) <> 0
+        OR COALESCE(movement_after.net_movement_quantity, 0) <> 0
       ) AS has_signal
     FROM items i
     CROSS JOIN branches b
-    JOIN item_factor ON item_factor.item_id = i.id
+    JOIN current_unit ON current_unit.item_id = i.id
     LEFT JOIN last_reset
       ON last_reset.item_id = i.id AND last_reset.branch_id = b.id
-    LEFT JOIN receipts_after
-      ON receipts_after.item_id = i.id AND receipts_after.branch_id = b.id
-    LEFT JOIN transfers_after
-      ON transfers_after.item_id = i.id AND transfers_after.branch_id = b.id
+    LEFT JOIN movement_after
+      ON movement_after.item_id = i.id AND movement_after.branch_id = b.id
   `;
 }
 

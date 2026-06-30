@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 async function safeInsertHrEmployeeLog({
   employeeId,
@@ -75,12 +76,14 @@ export async function GET(request, { params }) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const { id } = params;
 
     const [employee] = await sql`
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.phone,
         e.created_at,
         e.iqama_number,
@@ -147,6 +150,7 @@ export async function PUT(request, { params }) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const { id } = params;
     const employeeId = Number.parseInt(String(id), 10);
     if (!Number.isFinite(employeeId)) {
@@ -157,6 +161,7 @@ export async function PUT(request, { params }) {
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.phone,
         e.iqama_number,
         e.iqama_expiry_date,
@@ -205,6 +210,7 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     const {
       name,
+      display_name,
       phone,
       iqama_number,
       iqama_expiry_date,
@@ -231,6 +237,12 @@ export async function PUT(request, { params }) {
     if (name !== undefined) {
       updates.push(`name = $${paramCount}`);
       values.push(name);
+      paramCount++;
+    }
+
+    if (display_name !== undefined) {
+      updates.push(`display_name = $${paramCount}`);
+      values.push(display_name || null);
       paramCount++;
     }
 
@@ -389,6 +401,7 @@ export async function PUT(request, { params }) {
       SELECT
         e.id,
         e.name,
+        e.display_name,
         e.phone,
         e.created_at,
         e.iqama_number,
@@ -434,6 +447,7 @@ export async function PUT(request, { params }) {
     const changedFields = {};
     const keys = [
       "name",
+      "display_name",
       "phone",
       "iqama_number",
       "iqama_expiry_date",

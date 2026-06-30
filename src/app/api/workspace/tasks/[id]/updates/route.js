@@ -120,7 +120,7 @@ export async function GET(request, { params }) {
         u.id,
         u.task_id,
         u.author_employee_id,
-        COALESCE(emp.name, '—') as author_name,
+        COALESCE(NULLIF(emp.display_name, ''), emp.name, '—') as author_name,
         u.body,
         u.image_url,
         u.image_mime_type,

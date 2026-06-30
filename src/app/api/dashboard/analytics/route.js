@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 // Riyadh wall-clock Y/M/D + weekday for an instant. Riyadh is a
 // fixed UTC+03:00 (no DST). Used to compute day/week/month window
@@ -42,6 +43,7 @@ export async function GET(request) {
 
   try {
     await ensureInventoryUnitSnapshotSchema();
+    await ensureEmployeeDisplayNameSchema();
 
     const now = new Date();
     const rp = riyadhParts(now);
@@ -575,7 +577,7 @@ export async function GET(request) {
         io.status,
         COALESCE(io.operation_date, io.created_at) as op_date,
         b.name as branch_name,
-        e.name as employee_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name) as employee_name,
         io.note
       FROM inventory_operations io
       LEFT JOIN branches b ON io.branch_id = b.id
@@ -596,7 +598,7 @@ export async function GET(request) {
             * COALESCE(pr.unit_factor, iu.conversion_factor, 1)::numeric
         ) / NULLIF(COALESCE(iu.conversion_factor, 1)::numeric, 0) AS quantity,
         pr.received_at as op_date,
-        COALESCE(pr.created_by_employee_name, e.name) as employee_name,
+        COALESCE(NULLIF(e.display_name, ''), pr.created_by_employee_name, e.name) as employee_name,
         pr.note
       FROM purchase_receipts pr
       LEFT JOIN branches b ON b.id = pr.branch_id

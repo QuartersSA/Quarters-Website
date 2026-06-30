@@ -17,10 +17,16 @@ export async function GET(request) {
     }
 
     const users = await sql`
-      SELECT id, name, role, COALESCE(can_access_workspace, false) as can_access_workspace
+      SELECT
+        id,
+        name AS official_name,
+        display_name,
+        COALESCE(NULLIF(display_name, ''), name) AS name,
+        role,
+        COALESCE(can_access_workspace, false) as can_access_workspace
       FROM employees
       WHERE role = 'Admin' OR COALESCE(can_access_workspace, false) = true
-      ORDER BY role DESC, name ASC
+      ORDER BY role DESC, COALESCE(NULLIF(display_name, ''), name) ASC
     `;
 
     return Response.json({ users });

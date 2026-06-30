@@ -48,7 +48,7 @@ export async function GET(request, { params }) {
         m.id,
         m.thread_id,
         m.sender_employee_id,
-        COALESCE(e.name, '—') as sender_name,
+        COALESCE(NULLIF(e.display_name, ''), e.name, '—') as sender_name,
         m.body,
         m.created_at
       FROM workspace_messages m

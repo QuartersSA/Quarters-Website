@@ -38,7 +38,7 @@ export async function GET(request) {
         COALESCE(s.name, '') as space_name,
         COALESCE(
           json_agg(
-            DISTINCT jsonb_build_object('id', a.id, 'name', a.name)
+            DISTINCT jsonb_build_object('id', a.id, 'name', COALESCE(NULLIF(a.display_name, ''), a.name))
           ) FILTER (WHERE a.id IS NOT NULL),
           '[]'::json
         ) as assignees
@@ -143,7 +143,7 @@ export async function GET(request) {
       `SELECT
         e.id, e.event_type, e.summary, e.created_at,
         t.title as task_title, t.id as task_id,
-        emp.name as actor_name
+        COALESCE(NULLIF(emp.display_name, ''), emp.name) as actor_name
       FROM workspace_task_events e
       LEFT JOIN workspace_tasks t ON t.id = e.task_id
       LEFT JOIN employees emp ON emp.id = e.actor_employee_id

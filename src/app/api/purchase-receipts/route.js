@@ -78,7 +78,7 @@ export async function GET(request) {
         pr.receipt_batch_id,
         pr.created_at,
         pr.created_by_employee_id,
-        COALESCE(pr.created_by_employee_name, e.name) as created_by_employee_name
+        COALESCE(NULLIF(e.display_name, ''), pr.created_by_employee_name, e.name) as created_by_employee_name
       FROM purchase_receipts pr
       LEFT JOIN branches b ON b.id = pr.branch_id
       LEFT JOIN items i ON i.id = pr.item_id

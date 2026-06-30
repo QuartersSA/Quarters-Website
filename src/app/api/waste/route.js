@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 // Waste / spoilage logging (تسجيل الهدر).
 //
@@ -14,6 +15,8 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 // the default inventory unit cost snapshot, so cost = quantity × unit_cost.
 
 async function ensureSchema() {
+  await ensureEmployeeDisplayNameSchema();
+
   try {
     await sql`
       CREATE TABLE IF NOT EXISTS waste_operations (
@@ -243,7 +246,7 @@ export async function GET(request) {
           o.branch_id,
           o.branch_name,
           o.employee_id,
-          o.employee_name,
+          COALESCE(NULLIF(e.display_name, ''), o.employee_name, e.name) AS employee_name,
           o.note,
           o.created_at,
           COALESCE(
@@ -265,6 +268,7 @@ export async function GET(request) {
           COUNT(wi.id)::int AS items_count,
           ROUND(SUM(COALESCE(wi.quantity, 0) * COALESCE(wi.unit_cost, 0)), 2) AS total_cost
         FROM waste_operations o
+        LEFT JOIN employees e ON e.id = o.employee_id
         LEFT JOIN waste_items wi ON wi.operation_id = o.id
           AND ($4::text IS NULL OR wi.reason = $4::text)
         WHERE ($1::int IS NULL OR o.branch_id = $1::int)
@@ -275,7 +279,7 @@ export async function GET(request) {
             SELECT 1 FROM waste_items x
             WHERE x.operation_id = o.id AND x.reason = $4::text
           ))
-        GROUP BY o.id
+        GROUP BY o.id, e.display_name, e.name
         ORDER BY o.created_at DESC
         LIMIT 500
       `,

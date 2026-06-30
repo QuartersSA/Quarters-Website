@@ -31,7 +31,11 @@ function branchNames(item) {
  * Used for both Excel and PDF so the two exports never drift. */
 function buildColumns() {
   return [
-    { header: "الاسم", accessor: (i) => i.name || "-" },
+    { header: "الاسم الرسمي", accessor: (i) => i.name || "-" },
+    {
+      header: "الاسم الدارج",
+      accessor: (i) => i.display_name || i.name || "-",
+    },
     { header: "الجوال", accessor: (i) => i.phone || "-" },
     { header: "رقم الإقامة", accessor: (i) => i.iqama_number || "-" },
     { header: "انتهاء الإقامة", accessor: (i) => isoDate(i.iqama_expiry_date) },

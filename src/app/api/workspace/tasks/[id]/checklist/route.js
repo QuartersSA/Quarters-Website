@@ -53,8 +53,8 @@ export async function GET(request, { params }) {
         ci.id, ci.title, ci.is_completed, ci.sort_order,
         ci.completed_by_employee_id, ci.completed_at, ci.created_at,
         ci.assignee_employee_id, ci.due_date,
-        emp.name as completed_by_name,
-        assignee.name as assignee_name
+        COALESCE(NULLIF(emp.display_name, ''), emp.name) as completed_by_name,
+        COALESCE(NULLIF(assignee.display_name, ''), assignee.name) as assignee_name
       FROM workspace_task_checklist_items ci
       LEFT JOIN employees emp ON emp.id = ci.completed_by_employee_id
       LEFT JOIN employees assignee ON assignee.id = ci.assignee_employee_id

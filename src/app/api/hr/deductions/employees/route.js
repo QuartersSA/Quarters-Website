@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 // Minimal employees list for the deductions page
 export async function GET(request) {
@@ -15,8 +16,11 @@ export async function GET(request) {
   }
 
   try {
+    await ensureEmployeeDisplayNameSchema();
     const rows = await sql`
-      SELECT e.id, e.name,
+      SELECT e.id,
+             e.name AS official_name,
+             COALESCE(NULLIF(e.display_name, ''), e.name) AS name,
              COALESCE(b.name, eb_b.branch_name) AS branch_name
       FROM employees e
       LEFT JOIN branches b ON b.id = e.branch_id
@@ -27,7 +31,7 @@ export async function GET(request) {
         WHERE eb.employee_id = e.id
         LIMIT 1
       ) eb_b ON true
-      ORDER BY e.name ASC, e.id ASC
+      ORDER BY COALESCE(NULLIF(e.display_name, ''), e.name) ASC, e.id ASC
     `;
 
     return Response.json(rows);

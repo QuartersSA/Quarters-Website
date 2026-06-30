@@ -7,6 +7,7 @@ export function filterEmployees(employees, searchTerm) {
   return employees.filter(
     (emp) =>
       emp.name?.toLowerCase().includes(term) ||
+      emp.display_name?.toLowerCase().includes(term) ||
       emp.username?.toLowerCase().includes(term) ||
       emp.email?.toLowerCase().includes(term) ||
       emp.phone?.toLowerCase().includes(term) ||

@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 function parsePayrollMonth(raw) {
   const value = raw ? String(raw).trim() : "";
@@ -145,6 +146,7 @@ export async function POST(request) {
 
     // Make sure the start_date column exists. Idempotent — first POST
     // after deploying this migration adds it; later calls no-op.
+    await ensureEmployeeDisplayNameSchema();
     await sql`
       ALTER TABLE employees
       ADD COLUMN IF NOT EXISTS start_date DATE
@@ -218,7 +220,7 @@ export async function POST(request) {
       `
         SELECT
           e.id AS employee_id,
-          e.name AS employee_name,
+          COALESCE(NULLIF(e.display_name, ''), e.name) AS employee_name,
           br.branch_id AS branch_id,
           br.branch_name AS branch_name,
           TO_CHAR(e.start_date, 'YYYY-MM-DD') AS start_date,
@@ -442,7 +444,7 @@ export async function POST(request) {
           LIMIT 1
         ) br ON true
 
-        ORDER BY br.branch_name ASC NULLS LAST, e.name ASC, e.id ASC
+        ORDER BY br.branch_name ASC NULLS LAST, COALESCE(NULLIF(e.display_name, ''), e.name) ASC, e.id ASC
       `,
       [parsed.monthStart, parsed.nextMonthStart],
     );
