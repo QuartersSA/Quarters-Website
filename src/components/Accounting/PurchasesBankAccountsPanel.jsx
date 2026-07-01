@@ -7,6 +7,7 @@ import {
   Building2,
   CreditCard,
   FileUp,
+  Info,
   MoreVertical,
   Pencil,
   Plus,
@@ -118,6 +119,9 @@ function StatementBalanceModal({ account, isSubmitting, onClose, onSubmit }) {
             step="0.01"
             dir="ltr"
           />
+          <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+            أدخل هنا الرصيد الموجود في كشف البنك أو البطاقة، ثم يقارنه النظام مع رصيد الدفتر.
+          </div>
         </div>
 
         <div className={`flex items-center gap-2 pt-4 mt-4 border-t ${ws.divider}`}>
@@ -247,6 +251,39 @@ export default function PurchasesBankAccountsPanel({ employeeId, isAdmin }) {
             <Plus className="w-4 h-4" />
             أضف حساب بنك
           </button>
+        </div>
+      </div>
+
+      <div className={`${ws.glassSoft} ${ws.card} p-4`}>
+        <div className="flex items-start gap-3">
+          <div className={`${ws.iconBox} w-10 h-10 shrink-0 text-sky-700 dark:text-sky-200`}>
+            <Info className="w-5 h-5" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-sm font-bold text-slate-900 dark:text-white">
+              توضيح سريع للحسابات البنكية
+            </div>
+            <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-2 text-xs leading-6 text-slate-600 dark:text-white/60">
+              <div>
+                <span className="font-semibold text-slate-800 dark:text-white/85">
+                  مصروفات نثرية:
+                </span>{" "}
+                صندوق أو كاش صغير للمصاريف البسيطة اليومية.
+              </div>
+              <div>
+                <span className="font-semibold text-slate-800 dark:text-white/85">
+                  رصيد الدفتر:
+                </span>{" "}
+                الرصيد المسجل داخل النظام من العمليات والمدفوعات.
+              </div>
+              <div>
+                <span className="font-semibold text-slate-800 dark:text-white/85">
+                  رصيد كشف الحساب:
+                </span>{" "}
+                الرصيد الظاهر في كشف البنك أو البطاقة عند المطابقة.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

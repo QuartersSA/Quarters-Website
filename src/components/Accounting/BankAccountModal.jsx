@@ -66,7 +66,7 @@ export default function BankAccountModal({
       return "استخدمه لحسابات البطاقات البنكية أو بطاقات الأعمال.";
     }
     if (accountType === "petty_cash") {
-      return "استخدمه للصندوق أو المصروفات النثرية المرتبطة بالمشتريات.";
+      return "مصروفات نثرية تعني صندوق أو كاش صغير للمصاريف البسيطة اليومية.";
     }
     return "استخدمه للحسابات البنكية الجارية أو حسابات التشغيل.";
   }, [accountType]);
@@ -226,6 +226,9 @@ export default function BankAccountModal({
                 step="0.01"
                 dir="ltr"
               />
+              <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                الرصيد المسجل داخل النظام من العمليات والمدفوعات.
+              </div>
             </div>
 
             <div>
@@ -240,6 +243,9 @@ export default function BankAccountModal({
                 step="0.01"
                 dir="ltr"
               />
+              <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                الرصيد الظاهر في كشف البنك أو البطاقة عند المطابقة.
+              </div>
             </div>
           </div>
 
