@@ -24,6 +24,7 @@ import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
 import BeneficiariesList from "@/components/Accounting/BeneficiariesList";
 import BeneficiariesExportMenu from "@/components/Accounting/BeneficiariesExportMenu";
 import PurchasesItemsPanel from "@/components/Accounting/PurchasesItemsPanel";
+import PurchasesCategoriesPanel from "@/components/Accounting/PurchasesCategoriesPanel";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -488,6 +489,8 @@ export default function PurchasesPage() {
         ) : activeTab === "vendors" &&
           activeSub?.key === "beneficiaries" ? (
           <BeneficiariesPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTab === "catalog" && activeSub?.key === "categories" ? (
+          <PurchasesCategoriesPanel />
         ) : activeTab === "catalog" && activeSub?.key === "items" ? (
           <PurchasesItemsPanel />
         ) : (

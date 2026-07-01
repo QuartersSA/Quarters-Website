@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Save, X, Package } from "lucide-react";
+import { toast } from "sonner";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import ItemUnitsPanel from "@/components/Items/ItemUnitsPanel";
@@ -93,7 +94,10 @@ export default function PurchaseItemModal({
       { value: "", label: "بدون فئة" },
       ...(categories || []).map((c) => ({
         value: String(c.id),
-        label: c.name,
+        label:
+          c.show_in_inventory === false
+            ? `${c.name} - مشتريات فقط`
+            : c.name,
       })),
     ],
     [categories],
@@ -104,6 +108,13 @@ export default function PurchaseItemModal({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!canSubmit) return;
+    const selectedCategory = (Array.isArray(categories) ? categories : []).find(
+      (category) => String(category.id) === String(categoryId),
+    );
+    if (showInInventory && selectedCategory?.show_in_inventory === false) {
+      toast.error("اختر تصنيف مخزون أو عطّل خيار إضافة الصنف للمخزون");
+      return;
+    }
     const baseRow = (units || []).find((u) => u.is_base);
     const defaultInvRow = (units || []).find((u) => u.default_inventory);
     // Mirror the OPERATOR-PICKED default inventory unit into the
