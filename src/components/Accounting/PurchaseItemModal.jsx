@@ -112,7 +112,7 @@ export default function PurchaseItemModal({
       (category) => String(category.id) === String(categoryId),
     );
     if (showInInventory && selectedCategory?.show_in_inventory === false) {
-      toast.error("اختر تصنيف مخزون أو عطّل خيار إضافة الصنف للمخزون");
+      toast.error("اختر فئة مخزون أو عطّل خيار إضافة الصنف للمخزون");
       return;
     }
     const baseRow = (units || []).find((u) => u.is_base);

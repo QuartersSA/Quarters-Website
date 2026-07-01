@@ -46,7 +46,7 @@ import {
  *
  *   - فواتير المشتريات     — purchase invoices ledger
  *   - الموردين والمستفيدين  — two-pane (suppliers + beneficiaries)
- *   - التصنيفات والأصناف   — purchase-side categories + items
+ *   - الفئات والأصناف      — purchase-side item categories + items
  *   - الحسابات البنكية      — bank accounts master list
  *   - الضريبة              — VAT settings + reports
  */
@@ -71,9 +71,9 @@ const VENDOR_SUBTABS = [
 const CATALOG_SUBTABS = [
   {
     key: "categories",
-    label: "التصنيفات",
+    label: "الفئات",
     Icon: Layers,
-    description: "تصنيفات المشتريات المرتبطة بالأصناف.",
+    description: "فئات المشتريات المرتبطة بفئات الأصناف في المخزون.",
   },
   {
     key: "items",
@@ -99,9 +99,9 @@ const TABS = [
   },
   {
     key: "catalog",
-    label: "التصنيفات والأصناف",
+    label: "الفئات والأصناف",
     Icon: Layers,
-    description: "تصنيفات وأصناف المشتريات المرتبطة بالفواتير.",
+    description: "فئات وأصناف المشتريات المرتبطة بالفواتير.",
     subTabs: CATALOG_SUBTABS,
   },
   {
@@ -149,7 +149,7 @@ function PurchasesDesktopHeader() {
           المشتريات
         </h1>
         <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
-          فواتير المشتريات، الموردين والمستفيدين، التصنيفات والأصناف،
+          فواتير المشتريات، الموردين والمستفيدين، الفئات والأصناف،
           الحسابات البنكية، والضريبة.
         </p>
       </div>

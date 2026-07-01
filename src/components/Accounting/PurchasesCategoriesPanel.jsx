@@ -141,7 +141,7 @@ export default function PurchasesCategoriesPanel() {
     const trimmedName = name.trim();
     const trimmedNameEn = nameEn.trim();
     if (!trimmedName || !trimmedNameEn) {
-      toast.error("اسم التصنيف بالعربي والإنجليزي مطلوب");
+      toast.error("اسم الفئة بالعربي والإنجليزي مطلوب");
       return;
     }
 
@@ -151,10 +151,10 @@ export default function PurchasesCategoriesPanel() {
         name_en: trimmedNameEn,
         show_in_inventory: addToInventory,
       });
-      toast.success("تمت إضافة التصنيف");
+      toast.success("تمت إضافة الفئة");
       resetCreate();
     } catch (err) {
-      toast.error(err?.message || "فشل إضافة التصنيف");
+      toast.error(err?.message || "فشل إضافة الفئة");
     }
   };
 
@@ -162,7 +162,7 @@ export default function PurchasesCategoriesPanel() {
     const trimmedName = editName.trim();
     const trimmedNameEn = editNameEn.trim();
     if (!trimmedName || !trimmedNameEn) {
-      toast.error("اسم التصنيف بالعربي والإنجليزي مطلوب");
+      toast.error("اسم الفئة بالعربي والإنجليزي مطلوب");
       return;
     }
 
@@ -173,10 +173,10 @@ export default function PurchasesCategoriesPanel() {
         name_en: trimmedNameEn,
         show_in_inventory: editShowInInventory,
       });
-      toast.success("تم حفظ التصنيف");
+      toast.success("تم حفظ الفئة");
       cancelEdit();
     } catch (err) {
-      toast.error(err?.message || "فشل تعديل التصنيف");
+      toast.error(err?.message || "فشل تعديل الفئة");
     }
   };
 
@@ -186,7 +186,7 @@ export default function PurchasesCategoriesPanel() {
   if (isLoading) {
     return (
       <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60 text-sm`}>
-        جاري تحميل التصنيفات…
+        جاري تحميل الفئات…
       </div>
     );
   }
@@ -194,7 +194,7 @@ export default function PurchasesCategoriesPanel() {
   if (error) {
     return (
       <div className={`${ws.glass} ${ws.card} p-6 text-red-700 dark:text-red-300 text-sm`}>
-        فشل تحميل التصنيفات. حاول مرة أخرى.
+        فشل تحميل الفئات. حاول مرة أخرى.
       </div>
     );
   }
@@ -209,12 +209,12 @@ export default function PurchasesCategoriesPanel() {
               type="text"
               value={q}
               onChange={(event) => setQ(event.target.value)}
-              placeholder="ابحث باسم التصنيف أو نطاقه"
+              placeholder="ابحث باسم الفئة أو نطاقها"
               className={`${ws.input} px-3 py-2 pr-9`}
             />
           </div>
           <div className="text-xs text-slate-500 dark:text-white/45">
-            التصنيفات:{" "}
+            الفئات:{" "}
             <span className="font-bold text-slate-900 dark:text-white">
               {filtered.length}
             </span>{" "}
@@ -226,12 +226,12 @@ export default function PurchasesCategoriesPanel() {
       <form onSubmit={handleCreate} className={`${ws.glass} ${ws.card} p-4`}>
         <div className="flex items-center gap-2 mb-3 text-slate-900 dark:text-white font-bold">
           <Plus className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
-          إضافة تصنيف للمشتريات
+          إضافة فئة للمشتريات
         </div>
         <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3 items-end">
           <div>
             <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
-              اسم التصنيف بالعربي
+              اسم الفئة بالعربي
             </div>
             <input
               value={name}
@@ -243,7 +243,7 @@ export default function PurchasesCategoriesPanel() {
           </div>
           <div>
             <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
-              اسم التصنيف بالإنجليزي
+              اسم الفئة بالإنجليزي
             </div>
             <input
               value={nameEn}
@@ -273,9 +273,9 @@ export default function PurchasesCategoriesPanel() {
             disabled={saving}
           />
           <span>
-            إضافة التصنيف لقسم المخزون أيضاً
+            إضافة الفئة لقسم المخزون أيضاً
             <span className="block text-xs text-slate-500 dark:text-white/45 mt-0.5">
-              غير مفعّل: يظهر التصنيف في المشتريات فقط ولا يظهر في صفحة المخزون.
+              غير مفعّل: تظهر الفئة في المشتريات فقط ولا تظهر في صفحة المخزون.
             </span>
           </span>
         </label>
@@ -285,10 +285,10 @@ export default function PurchasesCategoriesPanel() {
         <div className={`px-4 py-3 border-b ${ws.divider} flex items-center justify-between gap-3`}>
           <div>
             <div className="text-slate-900 dark:text-white font-bold">
-              التصنيفات المرتبطة
+              الفئات المرتبطة
             </div>
             <div className="text-xs text-slate-500 dark:text-white/45 mt-0.5">
-              التصنيفات المشتركة تأتي من المخزون، وتصنيفات المشتريات فقط لا تظهر هناك.
+              الفئات المشتركة تأتي من المخزون، وفئات المشتريات فقط لا تظهر هناك.
             </div>
           </div>
           <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
@@ -302,7 +302,7 @@ export default function PurchasesCategoriesPanel() {
               <Layers className="w-6 h-6 text-slate-500 dark:text-white/50" />
             </div>
             <div className="text-sm font-semibold text-slate-700 dark:text-white/75">
-              لا توجد تصنيفات تطابق البحث
+              لا توجد فئات تطابق البحث
             </div>
           </div>
         ) : (
@@ -366,7 +366,7 @@ export default function PurchasesCategoriesPanel() {
                           value={editName}
                           onChange={(event) => setEditName(event.target.value)}
                           className={`${ws.input} px-3 py-2`}
-                          placeholder="اسم التصنيف بالعربي"
+                          placeholder="اسم الفئة بالعربي"
                           disabled={updating}
                         />
                         <input
@@ -397,7 +397,7 @@ export default function PurchasesCategoriesPanel() {
                             </span>
                           ) : (
                             <span className="block text-xs text-slate-500 dark:text-white/45 mt-0.5">
-                              عند إلغاء التفعيل سيبقى التصنيف ظاهراً في المشتريات فقط.
+                              عند إلغاء التفعيل ستبقى الفئة ظاهرة في المشتريات فقط.
                             </span>
                           )}
                         </span>

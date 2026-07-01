@@ -176,7 +176,7 @@ async function PUT(request) {
       `;
       if (Number(usedByInventoryItems[0]?.count || 0) > 0) {
         return Response.json({
-          error: "لا يمكن تحويل التصنيف إلى مشتريات فقط لأنه مرتبط بأصناف تظهر في المخزون"
+          error: "لا يمكن تحويل الفئة إلى مشتريات فقط لأنها مرتبطة بأصناف تظهر في المخزون"
         }, {
           status: 400
         });
