@@ -1,0 +1,463 @@
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
+
+const REQUIRE_ACCOUNTING = {
+  role: "Admin",
+  permission: "can_manage_accounting"
+};
+const WORKFLOW_STATUSES = new Set(["new", "pending_payment"]);
+const DISPLAY_STATUSES = new Set(["new", "pending_payment", "partial_paid", "paid", "overdue"]);
+function todayRiyadh() {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Riyadh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(new Date());
+  const get = type => parts.find(part => part.type === type)?.value || "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+async function ensureSchema() {
+  await sql`
+    CREATE TABLE IF NOT EXISTS accounting_contacts (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      country TEXT,
+      vat_registered BOOLEAN NOT NULL DEFAULT FALSE,
+      vat_number TEXT,
+      default_tax_rate NUMERIC(5, 2) NOT NULL DEFAULT 0,
+      notes TEXT,
+      is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      created_by_employee_id INTEGER,
+      created_by_employee_name TEXT
+    )
+  `;
+  await sql`
+    ALTER TABLE accounting_contacts
+      ADD COLUMN IF NOT EXISTS country TEXT,
+      ADD COLUMN IF NOT EXISTS vat_registered BOOLEAN NOT NULL DEFAULT FALSE,
+      ADD COLUMN IF NOT EXISTS vat_number TEXT,
+      ADD COLUMN IF NOT EXISTS default_tax_rate NUMERIC(5, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS notes TEXT,
+      ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      ADD COLUMN IF NOT EXISTS created_by_employee_id INTEGER,
+      ADD COLUMN IF NOT EXISTS created_by_employee_name TEXT
+  `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS accounting_purchase_invoices (
+      id SERIAL PRIMARY KEY,
+      invoice_number TEXT NOT NULL,
+      contact_id INTEGER REFERENCES accounting_contacts(id) ON DELETE SET NULL,
+      supplier_name TEXT,
+      invoice_date DATE NOT NULL DEFAULT ((NOW() AT TIME ZONE 'Asia/Riyadh')::DATE),
+      due_date DATE,
+      currency TEXT NOT NULL DEFAULT 'SAR',
+      subtotal_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      tax_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      workflow_status TEXT NOT NULL DEFAULT 'new',
+      notes TEXT,
+      attachment_url TEXT,
+      is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      created_by_employee_id INTEGER,
+      created_by_employee_name TEXT
+    )
+  `;
+  await sql`
+    ALTER TABLE accounting_purchase_invoices
+      ADD COLUMN IF NOT EXISTS invoice_number TEXT,
+      ADD COLUMN IF NOT EXISTS contact_id INTEGER,
+      ADD COLUMN IF NOT EXISTS supplier_name TEXT,
+      ADD COLUMN IF NOT EXISTS invoice_date DATE NOT NULL DEFAULT ((NOW() AT TIME ZONE 'Asia/Riyadh')::DATE),
+      ADD COLUMN IF NOT EXISTS due_date DATE,
+      ADD COLUMN IF NOT EXISTS currency TEXT NOT NULL DEFAULT 'SAR',
+      ADD COLUMN IF NOT EXISTS subtotal_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS tax_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS workflow_status TEXT NOT NULL DEFAULT 'new',
+      ADD COLUMN IF NOT EXISTS notes TEXT,
+      ADD COLUMN IF NOT EXISTS attachment_url TEXT,
+      ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      ADD COLUMN IF NOT EXISTS created_by_employee_id INTEGER,
+      ADD COLUMN IF NOT EXISTS created_by_employee_name TEXT
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoices_invoice_date
+      ON accounting_purchase_invoices (invoice_date DESC)
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoices_due_date
+      ON accounting_purchase_invoices (due_date)
+  `;
+}
+function parseMoney(value, fallback = 0) {
+  if (value === undefined || value === null || value === "") return fallback;
+  const number = Number(value);
+  if (!Number.isFinite(number)) return fallback;
+  return Math.round(number * 100) / 100;
+}
+function parseDate(value) {
+  if (!value) return null;
+  const text = String(value).trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(text) ? text : null;
+}
+function generateInvoiceNumber() {
+  const stamp = todayRiyadh().replaceAll("-", "");
+  const suffix = Math.random().toString(36).slice(2, 7).toUpperCase();
+  return `PINV-${stamp}-${suffix}`;
+}
+function parsePayload(body = {}) {
+  const contactId = body.contact_id === undefined || body.contact_id === null || body.contact_id === "" ? null : Number(body.contact_id);
+  const supplierName = body.supplier_name ? String(body.supplier_name).trim() : null;
+  const subtotalAmount = parseMoney(body.subtotal_amount, 0);
+  const taxAmount = parseMoney(body.tax_amount, 0);
+  const totalRaw = parseMoney(body.total_amount, 0);
+  const totalAmount = totalRaw > 0 ? totalRaw : Math.round((subtotalAmount + taxAmount) * 100) / 100;
+  const paidAmount = parseMoney(body.paid_amount, 0);
+  const workflowRaw = body.workflow_status ? String(body.workflow_status).trim() : "new";
+  return {
+    invoiceNumber: body.invoice_number ? String(body.invoice_number).trim() : generateInvoiceNumber(),
+    contactId: Number.isFinite(contactId) ? contactId : null,
+    supplierName,
+    invoiceDate: parseDate(body.invoice_date) || todayRiyadh(),
+    dueDate: parseDate(body.due_date),
+    currency: body.currency ? String(body.currency).trim().toUpperCase() : "SAR",
+    subtotalAmount,
+    taxAmount,
+    totalAmount,
+    paidAmount,
+    workflowStatus: WORKFLOW_STATUSES.has(workflowRaw) ? workflowRaw : "new",
+    notes: body.notes ? String(body.notes).trim() : null,
+    attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null
+  };
+}
+function validatePayload(payload) {
+  if (!payload.invoiceNumber) return "رقم الفاتورة مطلوب";
+  if (!payload.supplierName && !payload.contactId) return "المورد مطلوب";
+  if (!payload.currency) return "العملة مطلوبة";
+  if (payload.totalAmount <= 0) return "مبلغ الفاتورة مطلوب";
+  if (payload.paidAmount < 0) return "المبلغ المدفوع غير صحيح";
+  if (payload.paidAmount > payload.totalAmount) {
+    return "المبلغ المدفوع لا يمكن أن يتجاوز مبلغ الفاتورة";
+  }
+  return null;
+}
+function selectInvoicesQuery(where, statusFilter) {
+  const statusWhere = statusFilter ? "WHERE computed_status = $" + (where.values.length + 2) : "";
+  return `
+    WITH invoice_rows AS (
+      SELECT
+        inv.id,
+        inv.invoice_number,
+        inv.contact_id,
+        COALESCE(NULLIF(inv.supplier_name, ''), c.name) AS supplier_name,
+        c.name AS contact_name,
+        TO_CHAR(inv.invoice_date, 'YYYY-MM-DD') AS invoice_date,
+        TO_CHAR(inv.due_date, 'YYYY-MM-DD') AS due_date,
+        inv.currency,
+        inv.subtotal_amount,
+        inv.tax_amount,
+        inv.total_amount,
+        inv.paid_amount,
+        GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance_due,
+        inv.workflow_status,
+        CASE
+          WHEN inv.is_active = FALSE THEN 'inactive'
+          WHEN inv.total_amount > 0 AND inv.paid_amount >= inv.total_amount THEN 'paid'
+          WHEN inv.due_date IS NOT NULL
+            AND inv.due_date < $${where.values.length + 1}::date
+            AND inv.paid_amount < inv.total_amount THEN 'overdue'
+          WHEN inv.paid_amount > 0 THEN 'partial_paid'
+          WHEN inv.workflow_status = 'new' THEN 'new'
+          ELSE 'pending_payment'
+        END AS computed_status,
+        inv.notes,
+        inv.attachment_url,
+        inv.is_active,
+        inv.created_at,
+        inv.updated_at,
+        inv.created_by_employee_id,
+        inv.created_by_employee_name
+      FROM accounting_purchase_invoices inv
+      LEFT JOIN accounting_contacts c ON c.id = inv.contact_id
+      ${where.sql}
+    )
+    SELECT *
+    FROM invoice_rows
+    ${statusWhere}
+    ORDER BY is_active DESC, invoice_date DESC, id DESC
+  `;
+}
+async function GET(request) {
+  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  if (!auth.ok) {
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
+  }
+  try {
+    await ensureSchema();
+    const url = new URL(request.url);
+    const includeInactive = url.searchParams.get("includeInactive") === "1";
+    const q = (url.searchParams.get("q") || "").trim();
+    const rawStatus = (url.searchParams.get("status") || "").trim();
+    const status = DISPLAY_STATUSES.has(rawStatus) ? rawStatus : "";
+    const conditions = [];
+    const values = [];
+    let idx = 1;
+    if (!includeInactive) {
+      conditions.push("inv.is_active = TRUE");
+    }
+    if (q) {
+      conditions.push(`(LOWER(inv.invoice_number) LIKE $${idx} OR LOWER(COALESCE(inv.supplier_name,'')) LIKE $${idx} OR LOWER(COALESCE(c.name,'')) LIKE $${idx})`);
+      values.push(`%${q.toLowerCase()}%`);
+      idx += 1;
+    }
+    const where = {
+      sql: conditions.length ? `WHERE ${conditions.join(" AND ")}` : "",
+      values
+    };
+    const today = todayRiyadh();
+    const query = selectInvoicesQuery(where, status);
+    const rows = await sql(query, status ? [...values, today, status] : [...values, today]);
+    return Response.json({
+      invoices: rows
+    });
+  } catch (error) {
+    console.error("purchase invoices GET error", error);
+    return Response.json({
+      error: "فشل تحميل فواتير المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
+  }
+}
+async function POST(request) {
+  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  if (!auth.ok) {
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
+  }
+  try {
+    await ensureSchema();
+    const body = await request.json().catch(() => ({}));
+    const payload = parsePayload(body);
+    const validationError = validatePayload(payload);
+    if (validationError) {
+      return Response.json({
+        error: validationError
+      }, {
+        status: 400
+      });
+    }
+    const createdById = auth.user?.id ? Number(auth.user.id) : null;
+    const createdByName = auth.user?.name ? String(auth.user.name) : null;
+    const [created] = await sql`
+      INSERT INTO accounting_purchase_invoices (
+        invoice_number,
+        contact_id,
+        supplier_name,
+        invoice_date,
+        due_date,
+        currency,
+        subtotal_amount,
+        tax_amount,
+        total_amount,
+        paid_amount,
+        workflow_status,
+        notes,
+        attachment_url,
+        created_by_employee_id,
+        created_by_employee_name
+      )
+      VALUES (
+        ${payload.invoiceNumber},
+        ${payload.contactId},
+        ${payload.supplierName},
+        ${payload.invoiceDate},
+        ${payload.dueDate},
+        ${payload.currency},
+        ${payload.subtotalAmount},
+        ${payload.taxAmount},
+        ${payload.totalAmount},
+        ${payload.paidAmount},
+        ${payload.workflowStatus},
+        ${payload.notes},
+        ${payload.attachmentUrl},
+        ${createdById},
+        ${createdByName}
+      )
+      RETURNING *
+    `;
+    return Response.json({
+      ok: true,
+      invoice: created
+    }, {
+      status: 201
+    });
+  } catch (error) {
+    console.error("purchase invoices POST error", error);
+    return Response.json({
+      error: "فشل إضافة فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
+  }
+}
+async function PUT(request) {
+  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  if (!auth.ok) {
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
+  }
+  try {
+    await ensureSchema();
+    const body = await request.json().catch(() => ({}));
+    const id = body.id ? Number(body.id) : null;
+    if (!Number.isInteger(id) || id <= 0) {
+      return Response.json({
+        error: "معرف الفاتورة غير صحيح"
+      }, {
+        status: 400
+      });
+    }
+    const payload = parsePayload(body);
+    const validationError = validatePayload(payload);
+    if (validationError) {
+      return Response.json({
+        error: validationError
+      }, {
+        status: 400
+      });
+    }
+    const [updated] = await sql`
+      UPDATE accounting_purchase_invoices
+      SET
+        invoice_number = ${payload.invoiceNumber},
+        contact_id = ${payload.contactId},
+        supplier_name = ${payload.supplierName},
+        invoice_date = ${payload.invoiceDate},
+        due_date = ${payload.dueDate},
+        currency = ${payload.currency},
+        subtotal_amount = ${payload.subtotalAmount},
+        tax_amount = ${payload.taxAmount},
+        total_amount = ${payload.totalAmount},
+        paid_amount = ${payload.paidAmount},
+        workflow_status = ${payload.workflowStatus},
+        notes = ${payload.notes},
+        attachment_url = ${payload.attachmentUrl},
+        updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+      WHERE id = ${id}
+      RETURNING *
+    `;
+    if (!updated) {
+      return Response.json({
+        error: "الفاتورة غير موجودة"
+      }, {
+        status: 404
+      });
+    }
+    return Response.json({
+      ok: true,
+      invoice: updated
+    });
+  } catch (error) {
+    console.error("purchase invoices PUT error", error);
+    return Response.json({
+      error: "فشل تعديل فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
+  }
+}
+async function DELETE(request) {
+  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  if (!auth.ok) {
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
+  }
+  try {
+    await ensureSchema();
+    const url = new URL(request.url);
+    const id = Number(url.searchParams.get("id"));
+    const force = url.searchParams.get("force") === "1";
+    if (!Number.isInteger(id) || id <= 0) {
+      return Response.json({
+        error: "معرف الفاتورة غير صحيح"
+      }, {
+        status: 400
+      });
+    }
+    if (force) {
+      const [deleted] = await sql`
+        DELETE FROM accounting_purchase_invoices
+        WHERE id = ${id}
+        RETURNING id
+      `;
+      if (!deleted) {
+        return Response.json({
+          error: "الفاتورة غير موجودة"
+        }, {
+          status: 404
+        });
+      }
+      return Response.json({
+        ok: true,
+        hard: true
+      });
+    }
+    const [updated] = await sql`
+      UPDATE accounting_purchase_invoices
+      SET
+        is_active = FALSE,
+        updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+      WHERE id = ${id}
+      RETURNING id
+    `;
+    if (!updated) {
+      return Response.json({
+        error: "الفاتورة غير موجودة"
+      }, {
+        status: 404
+      });
+    }
+    return Response.json({
+      ok: true,
+      hard: false
+    });
+  } catch (error) {
+    console.error("purchase invoices DELETE error", error);
+    return Response.json({
+      error: "فشل إيقاف فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
+  }
+}
+
+export { DELETE, GET, POST, PUT };

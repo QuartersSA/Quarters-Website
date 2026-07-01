@@ -24,6 +24,9 @@ import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
 import BeneficiariesList from "@/components/Accounting/BeneficiariesList";
 import BeneficiariesExportMenu from "@/components/Accounting/BeneficiariesExportMenu";
 import PurchasesItemsPanel from "@/components/Accounting/PurchasesItemsPanel";
+import PurchasesCategoriesPanel from "@/components/Accounting/PurchasesCategoriesPanel";
+import PurchasesBankAccountsPanel from "@/components/Accounting/PurchasesBankAccountsPanel";
+import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPanel";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -45,7 +48,7 @@ import {
  *
  *   - فواتير المشتريات     — purchase invoices ledger
  *   - الموردين والمستفيدين  — two-pane (suppliers + beneficiaries)
- *   - التصنيفات والأصناف   — purchase-side categories + items
+ *   - الفئات والأصناف      — purchase-side item categories + items
  *   - الحسابات البنكية      — bank accounts master list
  *   - الضريبة              — VAT settings + reports
  */
@@ -70,9 +73,9 @@ const VENDOR_SUBTABS = [
 const CATALOG_SUBTABS = [
   {
     key: "categories",
-    label: "التصنيفات",
+    label: "الفئات",
     Icon: Layers,
-    description: "تصنيفات المشتريات المرتبطة بالأصناف.",
+    description: "فئات المشتريات المرتبطة بفئات الأصناف في المخزون.",
   },
   {
     key: "items",
@@ -98,9 +101,9 @@ const TABS = [
   },
   {
     key: "catalog",
-    label: "التصنيفات والأصناف",
+    label: "الفئات والأصناف",
     Icon: Layers,
-    description: "تصنيفات وأصناف المشتريات المرتبطة بالفواتير.",
+    description: "فئات وأصناف المشتريات المرتبطة بالفواتير.",
     subTabs: CATALOG_SUBTABS,
   },
   {
@@ -148,7 +151,7 @@ function PurchasesDesktopHeader() {
           المشتريات
         </h1>
         <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
-          فواتير المشتريات، الموردين والمستفيدين، التصنيفات والأصناف،
+          فواتير المشتريات، الموردين والمستفيدين، الفئات والأصناف،
           الحسابات البنكية، والضريبة.
         </p>
       </div>
@@ -485,11 +488,17 @@ export default function PurchasesPage() {
 
         {activeTab === "vendors" && activeSub?.key === "contacts" ? (
           <ContactsPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTab === "invoices" ? (
+          <PurchasesInvoicesPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : activeTab === "vendors" &&
           activeSub?.key === "beneficiaries" ? (
           <BeneficiariesPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTab === "catalog" && activeSub?.key === "categories" ? (
+          <PurchasesCategoriesPanel />
         ) : activeTab === "catalog" && activeSub?.key === "items" ? (
           <PurchasesItemsPanel />
+        ) : activeTab === "banks" ? (
+          <PurchasesBankAccountsPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : (
           <ComingSoonCard tab={activeSub || tab} />
         )}

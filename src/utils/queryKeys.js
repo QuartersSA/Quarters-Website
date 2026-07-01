@@ -18,6 +18,8 @@ export const queryKeys = Object.freeze({
   accountingFixedExpenses: createKey("accounting_fixed_expenses"),
   accountingGreenBeanOrders: createKey("accounting", "greenBeanOrders"),
   accountingGreenBeans: createKey("accounting", "greenBeans"),
+  accountingBankAccounts: createKey("accounting_bank_accounts"),
+  accountingPurchaseInvoices: createKey("accounting_purchase_invoices"),
   accountingLoanEmployees: createKey("accounting_loan_employees"),
   accountingPayroll: createKey("accounting_payroll"),
   accountingPayrollBonusEmployees: createKey(

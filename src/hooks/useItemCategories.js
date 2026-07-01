@@ -2,20 +2,24 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminFetch } from "@/utils/apiAuth";
 import { queryKeys } from "../utils/queryKeys.js";
 
-export default function useItemCategories(enabled = true) {
+export default function useItemCategories(enabled = true, { scope = "inventory" } = {}) {
   const queryClient = useQueryClient();
+  const categoriesUrl =
+    scope === "purchases"
+      ? "/api/item-categories?scope=purchases"
+      : "/api/item-categories";
 
   const {
     data: categories = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: queryKeys.itemCategories(),
+    queryKey: queryKeys.itemCategories(scope),
     queryFn: async () => {
-      const response = await adminFetch("/api/item-categories");
+      const response = await adminFetch(categoriesUrl);
       if (!response.ok) {
         throw new Error(
-          `When fetching /api/item-categories, the response was [${response.status}] ${response.statusText}`,
+          `When fetching ${categoriesUrl}, the response was [${response.status}] ${response.statusText}`,
         );
       }
       return response.json();
@@ -24,11 +28,11 @@ export default function useItemCategories(enabled = true) {
   });
 
   const createMutation = useMutation({
-    mutationFn: async ({ name, name_en }) => {
+    mutationFn: async ({ name, name_en, show_in_inventory }) => {
       const response = await adminFetch("/api/item-categories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, name_en }),
+        body: JSON.stringify({ name, name_en, show_in_inventory }),
       });
 
       if (!response.ok) {
@@ -46,15 +50,20 @@ export default function useItemCategories(enabled = true) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.itemCategories() });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.purchaseItemCategories(),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseItems() });
     },
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, name, name_en }) => {
+    mutationFn: async ({ id, name, name_en, show_in_inventory }) => {
       const response = await adminFetch("/api/item-categories", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, name, name_en }),
+        body: JSON.stringify({ id, name, name_en, show_in_inventory }),
       });
 
       if (!response.ok) {
@@ -72,6 +81,11 @@ export default function useItemCategories(enabled = true) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.itemCategories() });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.purchaseItemCategories(),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseItems() });
     },
   });
 

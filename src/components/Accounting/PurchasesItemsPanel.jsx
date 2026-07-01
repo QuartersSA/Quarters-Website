@@ -58,7 +58,7 @@ export default function PurchasesItemsPanel() {
   const categoriesQuery = useQuery({
     queryKey: queryKeys.purchaseItemCategories(),
     queryFn: async () => {
-      const r = await adminFetch("/api/item-categories");
+      const r = await adminFetch("/api/item-categories?scope=purchases");
       if (!r.ok) throw new Error("Failed to load categories");
       return r.json();
     },
@@ -66,6 +66,9 @@ export default function PurchasesItemsPanel() {
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: queryKeys.purchaseItems() });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.purchaseItemCategories(),
+    });
     // Cross-invalidate the admin items page caches so /admin/items
     // also picks up changes immediately.
     queryClient.invalidateQueries({ queryKey: queryKeys.items() });
@@ -131,20 +134,19 @@ export default function PurchasesItemsPanel() {
   }, [itemsQuery.data]);
 
   const categoryOptions = useMemo(() => {
-    const seen = new Map();
-    for (const i of items) {
-      if (!i.category_id) continue;
-      const key = String(i.category_id);
-      if (seen.has(key)) continue;
-      seen.set(key, i.category_name || "بدون فئة");
-    }
-    const arr = Array.from(seen.entries()).map(([value, label]) => ({
-      value,
-      label,
+    const categories = Array.isArray(categoriesQuery.data)
+      ? categoriesQuery.data
+      : [];
+    const arr = categories.map((category) => ({
+      value: String(category.id),
+      label:
+        category.show_in_inventory === false
+          ? `${category.name} - مشتريات فقط`
+          : category.name,
     }));
     arr.sort((a, b) => a.label.localeCompare(b.label, "ar"));
     return [{ value: "", label: "كل الفئات" }, ...arr];
-  }, [items]);
+  }, [categoriesQuery.data]);
 
   const filtered = useMemo(() => {
     const lower = q.trim().toLowerCase();
