@@ -26,6 +26,7 @@ import BeneficiariesExportMenu from "@/components/Accounting/BeneficiariesExport
 import PurchasesItemsPanel from "@/components/Accounting/PurchasesItemsPanel";
 import PurchasesCategoriesPanel from "@/components/Accounting/PurchasesCategoriesPanel";
 import PurchasesBankAccountsPanel from "@/components/Accounting/PurchasesBankAccountsPanel";
+import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPanel";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -487,6 +488,8 @@ export default function PurchasesPage() {
 
         {activeTab === "vendors" && activeSub?.key === "contacts" ? (
           <ContactsPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTab === "invoices" ? (
+          <PurchasesInvoicesPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : activeTab === "vendors" &&
           activeSub?.key === "beneficiaries" ? (
           <BeneficiariesPanel employeeId={employeeId} isAdmin={isAdmin} />
