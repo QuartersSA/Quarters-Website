@@ -1,6 +1,7 @@
 const createKey = (...prefix) => (...parts) => [...prefix, ...parts];
 
 export const queryKeys = Object.freeze({
+  accountingAccounts: createKey("accounting_accounts"),
   accountingBeneficiaries: createKey("accounting_beneficiaries"),
   accountingContacts: createKey("accounting_contacts"),
   accountingDashboardPayrollRuns: createKey(

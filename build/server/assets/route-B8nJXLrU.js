@@ -1,32 +1,25 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
-import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureAccountsSchema } from './accountsTree-D8TS0rGA.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 const REQUIRE_ACCOUNTING = {
   role: "Admin",
-  permission: "can_manage_accounting",
+  permission: "can_manage_accounting"
 };
-
 const WORKFLOW_STATUSES = new Set(["new", "pending_payment"]);
-const DISPLAY_STATUSES = new Set([
-  "new",
-  "pending_payment",
-  "partial_paid",
-  "paid",
-  "overdue",
-]);
-
+const DISPLAY_STATUSES = new Set(["new", "pending_payment", "partial_paid", "paid", "overdue"]);
 function todayRiyadh() {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Riyadh",
     year: "numeric",
     month: "2-digit",
-    day: "2-digit",
+    day: "2-digit"
   }).formatToParts(new Date());
-  const get = (type) => parts.find((part) => part.type === type)?.value || "";
+  const get = type => parts.find(part => part.type === type)?.value || "";
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
-
 async function ensureSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_contacts (
@@ -56,7 +49,6 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS created_by_employee_id INTEGER,
       ADD COLUMN IF NOT EXISTS created_by_employee_name TEXT
   `;
-
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_purchase_invoices (
       id SERIAL PRIMARY KEY,
@@ -112,57 +104,35 @@ async function ensureSchema() {
       ON accounting_purchase_invoices (due_date)
   `;
 }
-
 function parseMoney(value, fallback = 0) {
   if (value === undefined || value === null || value === "") return fallback;
   const number = Number(value);
   if (!Number.isFinite(number)) return fallback;
   return Math.round(number * 100) / 100;
 }
-
 function parseDate(value) {
   if (!value) return null;
   const text = String(value).trim();
   return /^\d{4}-\d{2}-\d{2}$/.test(text) ? text : null;
 }
-
 function generateInvoiceNumber() {
   const stamp = todayRiyadh().replaceAll("-", "");
   const suffix = Math.random().toString(36).slice(2, 7).toUpperCase();
   return `PINV-${stamp}-${suffix}`;
 }
-
 function parsePayload(body = {}) {
-  const contactId =
-    body.contact_id === undefined || body.contact_id === null || body.contact_id === ""
-      ? null
-      : Number(body.contact_id);
-  const supplierName = body.supplier_name
-    ? String(body.supplier_name).trim()
-    : null;
+  const contactId = body.contact_id === undefined || body.contact_id === null || body.contact_id === "" ? null : Number(body.contact_id);
+  const supplierName = body.supplier_name ? String(body.supplier_name).trim() : null;
   const subtotalAmount = parseMoney(body.subtotal_amount, 0);
   const taxAmount = parseMoney(body.tax_amount, 0);
   const totalRaw = parseMoney(body.total_amount, 0);
-  const totalAmount =
-    totalRaw > 0 ? totalRaw : Math.round((subtotalAmount + taxAmount) * 100) / 100;
+  const totalAmount = totalRaw > 0 ? totalRaw : Math.round((subtotalAmount + taxAmount) * 100) / 100;
   const paidAmount = parseMoney(body.paid_amount, 0);
-  const workflowRaw = body.workflow_status
-    ? String(body.workflow_status).trim()
-    : "new";
-  const expenseAccountId =
-    body.expense_account_id === undefined ||
-    body.expense_account_id === null ||
-    body.expense_account_id === ""
-      ? null
-      : Number(body.expense_account_id);
-
+  const workflowRaw = body.workflow_status ? String(body.workflow_status).trim() : "new";
+  const expenseAccountId = body.expense_account_id === undefined || body.expense_account_id === null || body.expense_account_id === "" ? null : Number(body.expense_account_id);
   return {
-    expenseAccountId: Number.isInteger(expenseAccountId)
-      ? expenseAccountId
-      : null,
-    invoiceNumber: body.invoice_number
-      ? String(body.invoice_number).trim()
-      : generateInvoiceNumber(),
+    expenseAccountId: Number.isInteger(expenseAccountId) ? expenseAccountId : null,
+    invoiceNumber: body.invoice_number ? String(body.invoice_number).trim() : generateInvoiceNumber(),
     contactId: Number.isFinite(contactId) ? contactId : null,
     supplierName,
     invoiceDate: parseDate(body.invoice_date) || todayRiyadh(),
@@ -174,7 +144,7 @@ function parsePayload(body = {}) {
     paidAmount,
     workflowStatus: WORKFLOW_STATUSES.has(workflowRaw) ? workflowRaw : "new",
     notes: body.notes ? String(body.notes).trim() : null,
-    attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null,
+    attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null
   };
 }
 
@@ -191,7 +161,6 @@ async function validateExpenseAccount(expenseAccountId) {
   `;
   return account ? null : "حساب المصروف المحدد غير صالح";
 }
-
 function validatePayload(payload) {
   if (!payload.invoiceNumber) return "رقم الفاتورة مطلوب";
   if (!payload.supplierName && !payload.contactId) return "المورد مطلوب";
@@ -203,11 +172,8 @@ function validatePayload(payload) {
   }
   return null;
 }
-
 function selectInvoicesQuery(where, statusFilter) {
-  const statusWhere = statusFilter
-    ? "WHERE computed_status = $" + (where.values.length + 2)
-    : "";
+  const statusWhere = statusFilter ? "WHERE computed_status = $" + (where.values.length + 2) : "";
   return `
     WITH invoice_rows AS (
       SELECT
@@ -256,13 +222,15 @@ function selectInvoicesQuery(where, statusFilter) {
     ORDER BY is_active DESC, invoice_date DESC, id DESC
   `;
 }
-
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const url = new URL(request.url);
@@ -270,62 +238,68 @@ export async function GET(request) {
     const q = (url.searchParams.get("q") || "").trim();
     const rawStatus = (url.searchParams.get("status") || "").trim();
     const status = DISPLAY_STATUSES.has(rawStatus) ? rawStatus : "";
-
     const conditions = [];
     const values = [];
     let idx = 1;
-
     if (!includeInactive) {
       conditions.push("inv.is_active = TRUE");
     }
     if (q) {
-      conditions.push(
-        `(LOWER(inv.invoice_number) LIKE $${idx} OR LOWER(COALESCE(inv.supplier_name,'')) LIKE $${idx} OR LOWER(COALESCE(c.name,'')) LIKE $${idx})`,
-      );
+      conditions.push(`(LOWER(inv.invoice_number) LIKE $${idx} OR LOWER(COALESCE(inv.supplier_name,'')) LIKE $${idx} OR LOWER(COALESCE(c.name,'')) LIKE $${idx})`);
       values.push(`%${q.toLowerCase()}%`);
       idx += 1;
     }
-
     const where = {
       sql: conditions.length ? `WHERE ${conditions.join(" AND ")}` : "",
-      values,
+      values
     };
     const today = todayRiyadh();
     const query = selectInvoicesQuery(where, status);
     const rows = await sql(query, status ? [...values, today, status] : [...values, today]);
-
-    return Response.json({ invoices: rows });
+    return Response.json({
+      invoices: rows
+    });
   } catch (error) {
     console.error("purchase invoices GET error", error);
-    return Response.json(
-      { error: "فشل تحميل فواتير المشتريات", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل تحميل فواتير المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function POST(request) {
+async function POST(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const body = await request.json().catch(() => ({}));
     const payload = parsePayload(body);
     const validationError = validatePayload(payload);
     if (validationError) {
-      return Response.json({ error: validationError }, { status: 400 });
+      return Response.json({
+        error: validationError
+      }, {
+        status: 400
+      });
     }
     const accountError = await validateExpenseAccount(payload.expenseAccountId);
     if (accountError) {
-      return Response.json({ error: accountError }, { status: 400 });
+      return Response.json({
+        error: accountError
+      }, {
+        status: 400
+      });
     }
-
     const createdById = auth.user?.id ? Number(auth.user.id) : null;
     const createdByName = auth.user?.name ? String(auth.user.name) : null;
-
     const [created] = await sql`
       INSERT INTO accounting_purchase_invoices (
         invoice_number,
@@ -365,41 +339,59 @@ export async function POST(request) {
       )
       RETURNING *
     `;
-
-    return Response.json({ ok: true, invoice: created }, { status: 201 });
+    return Response.json({
+      ok: true,
+      invoice: created
+    }, {
+      status: 201
+    });
   } catch (error) {
     console.error("purchase invoices POST error", error);
-    return Response.json(
-      { error: "فشل إضافة فاتورة المشتريات", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل إضافة فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function PUT(request) {
+async function PUT(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const body = await request.json().catch(() => ({}));
     const id = body.id ? Number(body.id) : null;
     if (!Number.isInteger(id) || id <= 0) {
-      return Response.json({ error: "معرف الفاتورة غير صحيح" }, { status: 400 });
+      return Response.json({
+        error: "معرف الفاتورة غير صحيح"
+      }, {
+        status: 400
+      });
     }
-
     const payload = parsePayload(body);
     const validationError = validatePayload(payload);
     if (validationError) {
-      return Response.json({ error: validationError }, { status: 400 });
+      return Response.json({
+        error: validationError
+      }, {
+        status: 400
+      });
     }
     const accountError = await validateExpenseAccount(payload.expenseAccountId);
     if (accountError) {
-      return Response.json({ error: accountError }, { status: 400 });
+      return Response.json({
+        error: accountError
+      }, {
+        status: 400
+      });
     }
-
     const [updated] = await sql`
       UPDATE accounting_purchase_invoices
       SET
@@ -421,36 +413,48 @@ export async function PUT(request) {
       WHERE id = ${id}
       RETURNING *
     `;
-
     if (!updated) {
-      return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
+      return Response.json({
+        error: "الفاتورة غير موجودة"
+      }, {
+        status: 404
+      });
     }
-
-    return Response.json({ ok: true, invoice: updated });
+    return Response.json({
+      ok: true,
+      invoice: updated
+    });
   } catch (error) {
     console.error("purchase invoices PUT error", error);
-    return Response.json(
-      { error: "فشل تعديل فاتورة المشتريات", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل تعديل فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function DELETE(request) {
+async function DELETE(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const url = new URL(request.url);
     const id = Number(url.searchParams.get("id"));
     const force = url.searchParams.get("force") === "1";
     if (!Number.isInteger(id) || id <= 0) {
-      return Response.json({ error: "معرف الفاتورة غير صحيح" }, { status: 400 });
+      return Response.json({
+        error: "معرف الفاتورة غير صحيح"
+      }, {
+        status: 400
+      });
     }
-
     if (force) {
       const [deleted] = await sql`
         DELETE FROM accounting_purchase_invoices
@@ -458,11 +462,17 @@ export async function DELETE(request) {
         RETURNING id
       `;
       if (!deleted) {
-        return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
+        return Response.json({
+          error: "الفاتورة غير موجودة"
+        }, {
+          status: 404
+        });
       }
-      return Response.json({ ok: true, hard: true });
+      return Response.json({
+        ok: true,
+        hard: true
+      });
     }
-
     const [updated] = await sql`
       UPDATE accounting_purchase_invoices
       SET
@@ -472,15 +482,25 @@ export async function DELETE(request) {
       RETURNING id
     `;
     if (!updated) {
-      return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
+      return Response.json({
+        error: "الفاتورة غير موجودة"
+      }, {
+        status: 404
+      });
     }
-
-    return Response.json({ ok: true, hard: false });
+    return Response.json({
+      ok: true,
+      hard: false
+    });
   } catch (error) {
     console.error("purchase invoices DELETE error", error);
-    return Response.json(
-      { error: "فشل إيقاف فاتورة المشتريات", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل إيقاف فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { DELETE, GET, POST, PUT };

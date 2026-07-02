@@ -71,6 +71,52 @@ export function purchaseInvoiceStatusLabel(value) {
   );
 }
 
+// Postable expense accounts from شجرة الحسابات, grouped under their
+// parent node so the dropdown mirrors the tree structure.
+export function buildExpenseAccountOptions(accounts = []) {
+  const active = accounts.filter(
+    (account) =>
+      account.account_type === "expense" &&
+      account.is_postable !== false &&
+      account.is_active !== false,
+  );
+  const byId = new Map(accounts.map((account) => [account.id, account]));
+  const groups = new Map();
+  for (const account of active) {
+    const parent = account.parent_id ? byId.get(account.parent_id) : null;
+    const key = parent ? String(parent.id) : "orphan";
+    if (!groups.has(key)) {
+      groups.set(key, {
+        code: parent ? String(parent.code) : "",
+        label: parent ? `${parent.code} ${parent.name}` : "أخرى",
+        children: [],
+      });
+    }
+    groups.get(key).children.push(account);
+  }
+  const sortedGroups = [...groups.values()].sort((a, b) =>
+    a.code.localeCompare(b.code, "en", { numeric: true }),
+  );
+  const options = [{ value: "", label: "غير مصنّفة" }];
+  for (const group of sortedGroups) {
+    group.children.sort((a, b) =>
+      String(a.code).localeCompare(String(b.code), "en", { numeric: true }),
+    );
+    options.push({
+      value: `group-${group.code || group.label}`,
+      label: group.label,
+      isGroupLabel: true,
+    });
+    for (const account of group.children) {
+      options.push({
+        value: String(account.id),
+        label: `${account.code} — ${account.name}`,
+      });
+    }
+  }
+  return options;
+}
+
 export function purchaseInvoiceStatusClass(value) {
   if (value === "paid") {
     return "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-500/25";
@@ -91,6 +137,7 @@ export default function PurchaseInvoiceModal({
   open,
   invoice,
   contacts = [],
+  accounts = [],
   isSubmitting,
   onClose,
   onSubmit,
@@ -98,6 +145,7 @@ export default function PurchaseInvoiceModal({
   const isEditing = !!invoice;
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [contactId, setContactId] = useState("");
+  const [expenseAccountId, setExpenseAccountId] = useState("");
   const [supplierName, setSupplierName] = useState("");
   const [invoiceDate, setInvoiceDate] = useState(todayRiyadh());
   const [dueDate, setDueDate] = useState("");
@@ -111,6 +159,9 @@ export default function PurchaseInvoiceModal({
     if (!open) return;
     setInvoiceNumber(invoice?.invoice_number || "");
     setContactId(invoice?.contact_id ? String(invoice.contact_id) : "");
+    setExpenseAccountId(
+      invoice?.expense_account_id ? String(invoice.expense_account_id) : "",
+    );
     setSupplierName(invoice?.supplier_name || "");
     setInvoiceDate(invoice?.invoice_date || todayRiyadh());
     setDueDate(invoice?.due_date || "");
@@ -132,6 +183,11 @@ export default function PurchaseInvoiceModal({
     return [{ value: "", label: "بدون جهة اتصال / مورد يدوي" }, ...activeContacts];
   }, [contacts]);
 
+  const accountOptions = useMemo(
+    () => buildExpenseAccountOptions(accounts),
+    [accounts],
+  );
+
   const status = computedStatus({
     workflowStatus,
     totalAmount,
@@ -151,6 +207,7 @@ export default function PurchaseInvoiceModal({
     const payload = {
       invoice_number: invoiceNumber.trim() || undefined,
       contact_id: contactId || null,
+      expense_account_id: expenseAccountId || null,
       supplier_name: supplierName.trim() || null,
       invoice_date: invoiceDate,
       due_date: dueDate || null,
@@ -276,6 +333,22 @@ export default function PurchaseInvoiceModal({
                 className={`${ws.input} px-3 py-2.5`}
                 placeholder="مثال: Baking up"
               />
+            </div>
+
+            <div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+                حساب المصروف — شجرة الحسابات
+              </div>
+              <GlassSelect
+                value={expenseAccountId}
+                onChange={setExpenseAccountId}
+                options={accountOptions}
+                placeholder="غير مصنّفة"
+                buttonClassName="text-sm py-2.5 px-3"
+              />
+              <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                تصنيف الفاتورة على حساب مصروفات من شجرة الحسابات.
+              </div>
             </div>
 
             <div>

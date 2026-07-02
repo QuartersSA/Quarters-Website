@@ -18,6 +18,7 @@ import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import PurchaseInvoiceModal, {
   PURCHASE_INVOICE_STATUS_OPTIONS,
+  buildExpenseAccountOptions,
   purchaseInvoiceStatusClass,
   purchaseInvoiceStatusLabel,
 } from "@/components/Accounting/PurchaseInvoiceModal";
@@ -28,6 +29,7 @@ import {
   useUpdateAccountingPurchaseInvoice,
 } from "@/hooks/useAccountingPurchaseInvoices";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
+import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 
 const STATUS_FILTER_OPTIONS = [
   { value: "", label: "كل الحالات" },
@@ -111,6 +113,7 @@ function StatusPill({ status }) {
 export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
+  const [accountFilter, setAccountFilter] = useState("");
   const [includeInactive, setIncludeInactive] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -122,9 +125,20 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
     includeInactive,
   });
   const contactsQuery = useAccountingContacts({ employeeId, isAdmin });
+  const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
 
   const invoices = invoicesQuery.data || [];
   const contacts = contactsQuery.data || [];
+  const accounts = accountsQuery.data || [];
+
+  const accountFilterOptions = useMemo(() => {
+    const options = buildExpenseAccountOptions(accounts);
+    return [
+      { value: "", label: "كل الحسابات" },
+      { value: "none", label: "غير مصنّفة" },
+      ...options.filter((option) => option.value !== ""),
+    ];
+  }, [accounts]);
 
   const createMut = useCreateAccountingPurchaseInvoice();
   const updateMut = useUpdateAccountingPurchaseInvoice();
@@ -148,9 +162,19 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
   }, [invoices]);
 
   const filtered = useMemo(() => {
-    if (!status) return invoices;
-    return invoices.filter((invoice) => invoice.computed_status === status);
-  }, [invoices, status]);
+    let list = invoices;
+    if (status) {
+      list = list.filter((invoice) => invoice.computed_status === status);
+    }
+    if (accountFilter === "none") {
+      list = list.filter((invoice) => !invoice.expense_account_id);
+    } else if (accountFilter) {
+      list = list.filter(
+        (invoice) => String(invoice.expense_account_id || "") === accountFilter,
+      );
+    }
+    return list;
+  }, [invoices, status, accountFilter]);
 
   const totals = useMemo(() => {
     return filtered.reduce(
@@ -207,6 +231,15 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
               onChange={setStatus}
               options={STATUS_FILTER_OPTIONS}
               placeholder="كل الحالات"
+              buttonClassName="text-sm py-2 px-3"
+            />
+          </div>
+          <div className="min-w-[210px]">
+            <GlassSelect
+              value={accountFilter}
+              onChange={setAccountFilter}
+              options={accountFilterOptions}
+              placeholder="كل الحسابات"
               buttonClassName="text-sm py-2 px-3"
             />
           </div>
@@ -329,6 +362,7 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
                   <tr className="text-slate-500 dark:text-white/50">
                     <th className="text-right font-semibold px-4 py-3">رقم</th>
                     <th className="text-right font-semibold px-4 py-3">المورد</th>
+                    <th className="text-right font-semibold px-4 py-3">الحساب</th>
                     <th className="text-right font-semibold px-4 py-3">التاريخ</th>
                     <th className="text-right font-semibold px-4 py-3">الاستحقاق</th>
                     <th className="text-right font-semibold px-4 py-3">الحالة</th>
@@ -346,6 +380,20 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
                       </td>
                       <td className="px-4 py-3 text-slate-700 dark:text-white/70">
                         {invoice.supplier_name || "—"}
+                      </td>
+                      <td className="px-4 py-3">
+                        {invoice.expense_account_id ? (
+                          <span
+                            className={`${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25 whitespace-nowrap`}
+                            title={invoice.expense_account_code}
+                          >
+                            {invoice.expense_account_name}
+                          </span>
+                        ) : (
+                          <span className="text-slate-400 dark:text-white/35 text-xs">
+                            غير مصنّفة
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-slate-700 dark:text-white/65" dir="ltr">
                         {formatDate(invoice.invoice_date)}
@@ -403,6 +451,13 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
                     <div className="text-sm text-slate-600 dark:text-white/60 mt-1 truncate">
                       {invoice.supplier_name || "—"}
                     </div>
+                    {invoice.expense_account_id ? (
+                      <span
+                        className={`${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25 mt-2 inline-flex`}
+                      >
+                        {invoice.expense_account_name}
+                      </span>
+                    ) : null}
                   </div>
                   <StatusPill status={invoice.computed_status} />
                 </div>
@@ -462,6 +517,7 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
         open={showAdd || !!editing}
         invoice={editing}
         contacts={contacts}
+        accounts={accounts}
         isSubmitting={createMut.isPending || updateMut.isPending}
         onClose={() => {
           setShowAdd(false);

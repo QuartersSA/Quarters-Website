@@ -1,13 +1,13 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 const REQUIRE_ACCOUNTING = {
   role: "Admin",
-  permission: "can_manage_accounting",
+  permission: "can_manage_accounting"
 };
-
 const ACCOUNT_TYPES = new Set(["bank", "credit_card", "petty_cash"]);
-
 async function ensureSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_bank_accounts (
@@ -29,53 +29,51 @@ async function ensureSchema() {
     )
   `;
 }
-
 function parseMoney(value, fallback = 0) {
   if (value === undefined || value === null || value === "") return fallback;
   const number = Number(value);
   if (!Number.isFinite(number)) return fallback;
   return Math.round(number * 100) / 100;
 }
-
-export async function PUT(request, { params }) {
+async function PUT(request, {
+  params
+}) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const id = Number(params?.id);
     if (!Number.isFinite(id) || id <= 0) {
-      return Response.json({ error: "معرّف الحساب مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "معرّف الحساب مطلوب"
+      }, {
+        status: 400
+      });
     }
-
     const body = await request.json().catch(() => ({}));
     const name = body?.name ? String(body.name).trim() : "";
     if (!name) {
-      return Response.json({ error: "اسم الحساب مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "اسم الحساب مطلوب"
+      }, {
+        status: 400
+      });
     }
-
-    const accountTypeRaw = body?.account_type
-      ? String(body.account_type).trim()
-      : "bank";
-    const accountType = ACCOUNT_TYPES.has(accountTypeRaw)
-      ? accountTypeRaw
-      : "bank";
-    const currency = body?.currency
-      ? String(body.currency).trim().toUpperCase()
-      : "SAR";
+    const accountTypeRaw = body?.account_type ? String(body.account_type).trim() : "bank";
+    const accountType = ACCOUNT_TYPES.has(accountTypeRaw) ? accountTypeRaw : "bank";
+    const currency = body?.currency ? String(body.currency).trim().toUpperCase() : "SAR";
     const bankName = body?.bank_name ? String(body.bank_name).trim() : null;
-    const iban = body?.iban
-      ? String(body.iban).replace(/\s+/g, "").toUpperCase()
-      : null;
-    const accountNumber = body?.account_number
-      ? String(body.account_number).trim()
-      : null;
+    const iban = body?.iban ? String(body.iban).replace(/\s+/g, "").toUpperCase() : null;
+    const accountNumber = body?.account_number ? String(body.account_number).trim() : null;
     const bookBalance = parseMoney(body?.book_balance, 0);
     const statementBalance = parseMoney(body?.statement_balance, 0);
     const notes = body?.notes ? String(body.notes).trim() : null;
-
     const updated = await sql`
       UPDATE accounting_bank_accounts
       SET
@@ -92,9 +90,12 @@ export async function PUT(request, { params }) {
       WHERE id = ${id}
       RETURNING *
     `;
-
     if (updated.length === 0) {
-      return Response.json({ error: "الحساب غير موجود" }, { status: 404 });
+      return Response.json({
+        error: "الحساب غير موجود"
+      }, {
+        status: 404
+      });
     }
 
     // Keep the linked شجرة الحسابات node in sync with the bank name.
@@ -110,30 +111,41 @@ export async function PUT(request, { params }) {
     } catch {
       // tree table not created yet — nothing to sync
     }
-
-    return Response.json({ ok: true, account: updated[0] });
+    return Response.json({
+      ok: true,
+      account: updated[0]
+    });
   } catch (error) {
     console.error("bank accounts PUT error", error);
-    return Response.json(
-      { error: "فشل تعديل الحساب البنكي", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل تعديل الحساب البنكي",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function DELETE(request, { params }) {
+async function DELETE(request, {
+  params
+}) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const id = Number(params?.id);
     if (!Number.isFinite(id) || id <= 0) {
-      return Response.json({ error: "معرّف الحساب مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "معرّف الحساب مطلوب"
+      }, {
+        status: 400
+      });
     }
-
     const url = new URL(request.url);
     const force = url.searchParams.get("force") === "1";
 
@@ -150,7 +162,6 @@ export async function DELETE(request, { params }) {
         // tree table not created yet
       }
     };
-
     if (force) {
       const deleted = await sql`
         DELETE FROM accounting_bank_accounts
@@ -158,12 +169,18 @@ export async function DELETE(request, { params }) {
         RETURNING id
       `;
       if (deleted.length === 0) {
-        return Response.json({ error: "الحساب غير موجود" }, { status: 404 });
+        return Response.json({
+          error: "الحساب غير موجود"
+        }, {
+          status: 404
+        });
       }
       await retireTreeNode();
-      return Response.json({ ok: true, hard: true });
+      return Response.json({
+        ok: true,
+        hard: true
+      });
     }
-
     const updated = await sql`
       UPDATE accounting_bank_accounts
       SET is_active = FALSE, updated_at = CURRENT_TIMESTAMP
@@ -171,16 +188,26 @@ export async function DELETE(request, { params }) {
       RETURNING id
     `;
     if (updated.length === 0) {
-      return Response.json({ error: "الحساب غير موجود" }, { status: 404 });
+      return Response.json({
+        error: "الحساب غير موجود"
+      }, {
+        status: 404
+      });
     }
     await retireTreeNode();
-
-    return Response.json({ ok: true, hard: false });
+    return Response.json({
+      ok: true,
+      hard: false
+    });
   } catch (error) {
     console.error("bank accounts DELETE error", error);
-    return Response.json(
-      { error: "فشل إيقاف الحساب البنكي", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل إيقاف الحساب البنكي",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { DELETE, PUT };

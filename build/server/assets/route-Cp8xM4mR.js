@@ -1,15 +1,13 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
-import {
-  ensureAccountsSchema,
-  nextChildCode,
-} from "@/app/api/utils/accountsTree";
+import { s as sql } from './sql-BfhTxwII.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureAccountsSchema, n as nextChildCode } from './accountsTree-D8TS0rGA.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 const REQUIRE_ACCOUNTING = {
   role: "Admin",
-  permission: "can_manage_accounting",
+  permission: "can_manage_accounting"
 };
-
 const ACCOUNT_TYPES = new Set(["bank", "credit_card", "petty_cash"]);
 
 // Mirror every bank account as an asset account under «1102 البنوك»
@@ -23,14 +21,12 @@ async function linkBankAccountToTree(bankAccount) {
       WHERE source_bank_account_id = ${bankAccount.id}
     `;
     if (existing) return existing.id;
-
     const [parent] = await sql`
       SELECT id, code FROM accounting_accounts
       WHERE code = '1102' AND is_system AND is_active
       LIMIT 1
     `;
     if (!parent) return null;
-
     const code = await nextChildCode(parent.id, parent.code);
     const [created] = await sql`
       INSERT INTO accounting_accounts (
@@ -55,7 +51,6 @@ async function linkBankAccountToTree(bankAccount) {
     return null;
   }
 }
-
 async function ensureSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_bank_accounts (
@@ -93,36 +88,23 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS account_id INTEGER
   `;
 }
-
 function parseMoney(value, fallback = 0) {
   if (value === undefined || value === null || value === "") return fallback;
   const number = Number(value);
   if (!Number.isFinite(number)) return fallback;
   return Math.round(number * 100) / 100;
 }
-
 function parsePayload(body) {
   const name = body?.name ? String(body.name).trim() : "";
-  const accountTypeRaw = body?.account_type
-    ? String(body.account_type).trim()
-    : "bank";
-  const accountType = ACCOUNT_TYPES.has(accountTypeRaw)
-    ? accountTypeRaw
-    : "bank";
-  const currency = body?.currency
-    ? String(body.currency).trim().toUpperCase()
-    : "SAR";
+  const accountTypeRaw = body?.account_type ? String(body.account_type).trim() : "bank";
+  const accountType = ACCOUNT_TYPES.has(accountTypeRaw) ? accountTypeRaw : "bank";
+  const currency = body?.currency ? String(body.currency).trim().toUpperCase() : "SAR";
   const bankName = body?.bank_name ? String(body.bank_name).trim() : null;
-  const iban = body?.iban
-    ? String(body.iban).replace(/\s+/g, "").toUpperCase()
-    : null;
-  const accountNumber = body?.account_number
-    ? String(body.account_number).trim()
-    : null;
+  const iban = body?.iban ? String(body.iban).replace(/\s+/g, "").toUpperCase() : null;
+  const accountNumber = body?.account_number ? String(body.account_number).trim() : null;
   const bookBalance = parseMoney(body?.book_balance, 0);
   const statementBalance = parseMoney(body?.statement_balance, 0);
   const notes = body?.notes ? String(body.notes).trim() : null;
-
   return {
     name,
     accountType,
@@ -132,16 +114,18 @@ function parsePayload(body) {
     accountNumber,
     bookBalance,
     statementBalance,
-    notes,
+    notes
   };
 }
-
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
 
@@ -154,29 +138,22 @@ export async function GET(request) {
     for (const account of unlinked) {
       await linkBankAccountToTree(account);
     }
-
     const url = new URL(request.url);
     const includeInactive = url.searchParams.get("includeInactive") === "1";
     const q = (url.searchParams.get("q") || "").trim();
-
     const conditions = [];
     const values = [];
     let idx = 1;
-
     if (!includeInactive) {
       conditions.push("is_active = TRUE");
     }
     if (q) {
-      conditions.push(
-        `(LOWER(name) LIKE $${idx} OR LOWER(COALESCE(bank_name,'')) LIKE $${idx} OR LOWER(COALESCE(iban,'')) LIKE $${idx} OR LOWER(COALESCE(account_number,'')) LIKE $${idx})`,
-      );
+      conditions.push(`(LOWER(name) LIKE $${idx} OR LOWER(COALESCE(bank_name,'')) LIKE $${idx} OR LOWER(COALESCE(iban,'')) LIKE $${idx} OR LOWER(COALESCE(account_number,'')) LIKE $${idx})`);
       values.push(`%${q.toLowerCase()}%`);
       idx += 1;
     }
-
     const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
-    const rows = await sql(
-      `
+    const rows = await sql(`
         SELECT
           id,
           name,
@@ -198,41 +175,49 @@ export async function GET(request) {
         FROM accounting_bank_accounts
         ${where}
         ORDER BY is_active DESC, name ASC, id DESC
-      `,
-      values,
-    );
-
-    return Response.json({ accounts: rows });
+      `, values);
+    return Response.json({
+      accounts: rows
+    });
   } catch (error) {
     console.error("bank accounts GET error", error);
-    return Response.json(
-      { error: "فشل تحميل الحسابات البنكية", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل تحميل الحسابات البنكية",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function POST(request) {
+async function POST(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const body = await request.json().catch(() => ({}));
     const payload = parsePayload(body);
-
     if (!payload.name) {
-      return Response.json({ error: "اسم الحساب مطلوب" }, { status: 400 });
+      return Response.json({
+        error: "اسم الحساب مطلوب"
+      }, {
+        status: 400
+      });
     }
     if (!payload.currency) {
-      return Response.json({ error: "العملة مطلوبة" }, { status: 400 });
+      return Response.json({
+        error: "العملة مطلوبة"
+      }, {
+        status: 400
+      });
     }
-
     const createdById = auth.user?.id ? Number(auth.user.id) : null;
     const createdByName = auth.user?.name ? String(auth.user.name) : null;
-
     const [created] = await sql`
       INSERT INTO accounting_bank_accounts (
         name,
@@ -262,15 +247,22 @@ export async function POST(request) {
       )
       RETURNING *
     `;
-
     await linkBankAccountToTree(created);
-
-    return Response.json({ ok: true, account: created }, { status: 201 });
+    return Response.json({
+      ok: true,
+      account: created
+    }, {
+      status: 201
+    });
   } catch (error) {
     console.error("bank accounts POST error", error);
-    return Response.json(
-      { error: "فشل إضافة الحساب البنكي", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل إضافة الحساب البنكي",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET, POST };

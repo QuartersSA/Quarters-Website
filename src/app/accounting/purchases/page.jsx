@@ -5,7 +5,7 @@ import {
   ShoppingCart,
   FileText,
   Users,
-  Layers,
+  ListTree,
   Building,
   Percent,
   Construction,
@@ -23,8 +23,7 @@ import ContactsExportMenu from "@/components/Accounting/ContactsExportMenu";
 import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
 import BeneficiariesList from "@/components/Accounting/BeneficiariesList";
 import BeneficiariesExportMenu from "@/components/Accounting/BeneficiariesExportMenu";
-import PurchasesItemsPanel from "@/components/Accounting/PurchasesItemsPanel";
-import PurchasesCategoriesPanel from "@/components/Accounting/PurchasesCategoriesPanel";
+import PurchasesAccountsTreePanel from "@/components/Accounting/PurchasesAccountsTreePanel";
 import PurchasesBankAccountsPanel from "@/components/Accounting/PurchasesBankAccountsPanel";
 import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPanel";
 import {
@@ -41,14 +40,16 @@ import {
 } from "@/hooks/useAccountingBeneficiaries";
 
 /**
- * Purchases section — scaffold.
+ * Purchases section.
  *
- * Five top-level tabs, each a placeholder right now. Content lands
- * in follow-up commits as we flesh out each area:
+ * The section is built on top of شجرة الحسابات (chart of accounts):
+ * purchase invoices classify against expense accounts, bank accounts
+ * auto-link as asset accounts under «1102 البنوك», and the VAT
+ * accounts (1104 / 2102) back the tax tab.
  *
  *   - فواتير المشتريات     — purchase invoices ledger
  *   - الموردين والمستفيدين  — two-pane (suppliers + beneficiaries)
- *   - الفئات والأصناف      — purchase-side item categories + items
+ *   - شجرة الحسابات         — hierarchical chart of accounts
  *   - الحسابات البنكية      — bank accounts master list
  *   - الضريبة              — VAT settings + reports
  */
@@ -70,21 +71,6 @@ const VENDOR_SUBTABS = [
   },
 ];
 
-const CATALOG_SUBTABS = [
-  {
-    key: "categories",
-    label: "الفئات",
-    Icon: Layers,
-    description: "فئات المشتريات المرتبطة بفئات الأصناف في المخزون.",
-  },
-  {
-    key: "items",
-    label: "أصناف",
-    Icon: ShoppingCart,
-    description: "كامل أصناف المخزون بصيغة موحّدة لقسم المشتريات.",
-  },
-];
-
 const TABS = [
   {
     key: "invoices",
@@ -100,11 +86,11 @@ const TABS = [
     subTabs: VENDOR_SUBTABS,
   },
   {
-    key: "catalog",
-    label: "الفئات والأصناف",
-    Icon: Layers,
-    description: "فئات وأصناف المشتريات المرتبطة بالفواتير.",
-    subTabs: CATALOG_SUBTABS,
+    key: "accounts",
+    label: "شجرة الحسابات",
+    Icon: ListTree,
+    description:
+      "شجرة الحسابات المحاسبية — أساس تصنيف الفواتير والبنوك والضريبة.",
   },
   {
     key: "banks",
@@ -133,7 +119,7 @@ function PurchasesMobileHeader() {
           المشتريات
         </div>
         <div className="text-xs text-slate-500 dark:text-white/50">
-          فواتير، موردين، أصناف، بنوك، وضريبة
+          فواتير، موردين، شجرة حسابات، بنوك، وضريبة
         </div>
       </div>
     </div>
@@ -151,7 +137,7 @@ function PurchasesDesktopHeader() {
           المشتريات
         </h1>
         <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
-          فواتير المشتريات، الموردين والمستفيدين، الفئات والأصناف،
+          فواتير المشتريات، الموردين والمستفيدين، شجرة الحسابات،
           الحسابات البنكية، والضريبة.
         </p>
       </div>
@@ -493,10 +479,8 @@ export default function PurchasesPage() {
         ) : activeTab === "vendors" &&
           activeSub?.key === "beneficiaries" ? (
           <BeneficiariesPanel employeeId={employeeId} isAdmin={isAdmin} />
-        ) : activeTab === "catalog" && activeSub?.key === "categories" ? (
-          <PurchasesCategoriesPanel />
-        ) : activeTab === "catalog" && activeSub?.key === "items" ? (
-          <PurchasesItemsPanel />
+        ) : activeTab === "accounts" ? (
+          <PurchasesAccountsTreePanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : activeTab === "banks" ? (
           <PurchasesBankAccountsPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : (
