@@ -467,6 +467,12 @@ export default function PurchaseInvoiceModal({
   const fileInputRef = useRef(null);
   const [upload, { loading: uploading }] = useUpload();
 
+  // Fields owned by the LAST scan (not touched by the user since).
+  // Attaching a new invoice re-fills these with the new document's
+  // values; anything the user typed manually stays protected. Manual
+  // edits remove the field from this set.
+  const autoFilledRef = useRef(new Set());
+
   useEffect(() => {
     if (!open) return;
     setInvoiceNumber(invoice?.invoice_number || "");
@@ -490,7 +496,10 @@ export default function PurchaseInvoiceModal({
     setScanBusy(false);
     setScanSummary(null);
     setMobilePane("form");
-  }, [open, invoice]);
+    // Fresh editor: nothing is scan-owned yet. The default "today"
+    // date on a NEW invoice is not user input, so scans may replace it.
+    autoFilledRef.current = new Set(isEditing ? [] : ["date"]);
+  }, [open, invoice, isEditing]);
 
   // Lock page scroll while the editor is open.
   useEffect(() => {
@@ -555,14 +564,20 @@ export default function PurchaseInvoiceModal({
     moneyValue(paidAmount) <= totals.total;
 
   const updateLine = (key, patch) => {
+    autoFilledRef.current.delete("lines");
     setLines((prev) =>
       prev.map((line) => (line.key === key ? { ...line, ...patch } : line)),
     );
   };
   const removeLine = (key) => {
+    autoFilledRef.current.delete("lines");
     setLines((prev) =>
       prev.length <= 1 ? prev : prev.filter((line) => line.key !== key),
     );
+  };
+  const addLine = () => {
+    autoFilledRef.current.delete("lines");
+    setLines((prev) => [...prev, newLine()]);
   };
 
   const handleSubmit = (event) => {
@@ -598,6 +613,7 @@ export default function PurchaseInvoiceModal({
   };
 
   const handleContactChange = (nextContactId) => {
+    autoFilledRef.current.delete("contact");
     setContactId(nextContactId);
     setVatMatched(false);
     if (!nextContactId) return;
@@ -653,30 +669,36 @@ export default function PurchaseInvoiceModal({
 
       const parsed = parseInvoiceText(text, contacts);
       const filled = [];
+      // A field is fillable when it's still empty/default OR the last
+      // scan owns it (replacing the attachment refreshes those values).
+      const owned = autoFilledRef.current;
+      const canFill = (field, isEmpty) => isEmpty || owned.has(field);
 
-      if (parsed.invoiceNumber && !invoiceNumber.trim()) {
+      if (parsed.invoiceNumber && canFill("number", !invoiceNumber.trim())) {
         setInvoiceNumber(parsed.invoiceNumber);
+        owned.add("number");
         filled.push("رقم الفاتورة");
       }
       const contactLabel =
         parsed.contactMatchedBy === "vat"
           ? "جهة الاتصال (تطابق الرقم الضريبي)"
           : "جهة الاتصال (تطابق الاسم)";
-      if (parsed.contact && !contactId) {
+      if (parsed.contact && canFill("contact", !contactId)) {
         setContactId(String(parsed.contact.id));
-        if (!supplierName.trim()) setSupplierName(parsed.contact.name);
+        setSupplierName(parsed.contact.name);
         setVatMatched(parsed.contactMatchedBy === "vat");
+        owned.add("contact");
         filled.push(contactLabel);
       } else if (parsed.contact && !supplierName.trim()) {
         setSupplierName(parsed.contact.name);
         filled.push("اسم المورد");
       }
 
-      // Seed the first empty line with the detected totals: gross
-      // amount (شامل الضريبة) + the effective rate from the detected
-      // tax so the split reproduces the invoice's own numbers.
+      // Seed one line with the detected totals: gross amount (شامل
+      // الضريبة) + the effective rate from the detected tax so the
+      // split reproduces the invoice's own numbers.
       const hasAmounts = lines.some((line) => moneyValue(line.amount) > 0);
-      if (parsed.total !== null && !hasAmounts) {
+      if (parsed.total !== null && canFill("lines", !hasAmounts)) {
         const tax = parsed.tax ?? null;
         const subtotal = tax !== null ? parsed.total - tax : null;
         const rate =
@@ -691,11 +713,13 @@ export default function PurchaseInvoiceModal({
             amount_includes_tax: true,
           }),
         ]);
+        owned.add("lines");
         filled.push("مبلغ الفاتورة");
         if (tax !== null) filled.push("الضريبة");
       }
-      if (parsed.invoiceDate && (!invoice || !invoice.invoice_date)) {
+      if (parsed.invoiceDate && canFill("date", false)) {
         setInvoiceDate(parsed.invoiceDate);
+        owned.add("date");
         filled.push("تاريخ الفاتورة");
       }
 
@@ -942,7 +966,10 @@ export default function PurchaseInvoiceModal({
                   <input
                     type="text"
                     value={invoiceNumber}
-                    onChange={(event) => setInvoiceNumber(event.target.value)}
+                    onChange={(event) => {
+                      autoFilledRef.current.delete("number");
+                      setInvoiceNumber(event.target.value);
+                    }}
                     className={`${ws.input} px-3 py-2.5`}
                     placeholder="فارغ = رقم تلقائي"
                     dir="ltr"
@@ -988,7 +1015,10 @@ export default function PurchaseInvoiceModal({
                   <input
                     type="text"
                     value={supplierName}
-                    onChange={(event) => setSupplierName(event.target.value)}
+                    onChange={(event) => {
+                      autoFilledRef.current.delete("contact");
+                      setSupplierName(event.target.value);
+                    }}
                     className={`${ws.input} px-3 py-2.5`}
                     placeholder="مثال: مؤسسة عمق المذاق"
                   />
@@ -998,7 +1028,10 @@ export default function PurchaseInvoiceModal({
                   <input
                     type="date"
                     value={invoiceDate}
-                    onChange={(event) => setInvoiceDate(event.target.value)}
+                    onChange={(event) => {
+                      autoFilledRef.current.delete("date");
+                      setInvoiceDate(event.target.value);
+                    }}
                     className={`${ws.input} px-3 py-2.5`}
                   />
                 </div>
@@ -1034,7 +1067,7 @@ export default function PurchaseInvoiceModal({
                 <SectionTitle>بنود الفاتورة</SectionTitle>
                 <button
                   type="button"
-                  onClick={() => setLines((prev) => [...prev, newLine()])}
+                  onClick={addLine}
                   className={`${ws.btnNeutral} px-3 py-1.5 text-xs`}
                 >
                   <Plus className="w-3.5 h-3.5" />
