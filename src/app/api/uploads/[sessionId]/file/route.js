@@ -87,7 +87,8 @@ export async function GET(request, { params: { sessionId } }) {
 
     const mimeType = session.mime_type || "application/octet-stream";
     const fileName = session.file_name || "file";
-    const inlineSafe = /^image\/(png|jpeg|gif|webp)$/i.test(mimeType);
+    const isPdf = /^application\/pdf$/i.test(mimeType);
+    const inlineSafe = /^image\/(png|jpeg|gif|webp)$/i.test(mimeType) || isPdf;
 
     // Stream the chunks out in order to avoid creating a huge Buffer in memory.
     const stream = new ReadableStream({
@@ -105,18 +106,33 @@ export async function GET(request, { params: { sessionId } }) {
       },
     });
 
-    // Basic content-disposition so the browser opens images inline but downloads
-    // other files nicely when opened in a new tab.
-    const escaped = String(fileName).replace(/"/g, "'");
+    // Content-Disposition so the browser opens images/PDFs inline but
+    // downloads other files when opened in a new tab.
+    // HTTP header values must be Latin-1 (ByteString) — an Arabic file
+    // name in `filename="…"` makes `new Response` throw. RFC 5987:
+    // ASCII fallback in `filename` + UTF-8 percent-encoded `filename*`.
+    const asciiName =
+      String(fileName)
+        .replace(/"/g, "'")
+        .replace(/[^\x20-\x7E]/g, "_") || "file";
+    const utf8Name = encodeURIComponent(String(fileName)).replace(
+      /['()*]/g,
+      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
+    );
 
     return new Response(stream, {
       status: 200,
       headers: {
         "Content-Type": mimeType,
-        "Content-Disposition": `${inlineSafe ? "inline" : "attachment"}; filename="${escaped}"`,
+        "Content-Disposition": `${inlineSafe ? "inline" : "attachment"}; filename="${asciiName}"; filename*=UTF-8''${utf8Name}`,
         "Cache-Control": "private, max-age=31536000, immutable",
         "X-Content-Type-Options": "nosniff",
-        "Content-Security-Policy": "sandbox; default-src 'none'",
+        // `sandbox` blocks Chrome's built-in PDF viewer — PDFs get the
+        // no-external-resources policy without it; everything else
+        // keeps the full sandbox.
+        "Content-Security-Policy": isPdf
+          ? "default-src 'none'"
+          : "sandbox; default-src 'none'",
         // Don't leak the access token through Referer.
         "Referrer-Policy": "no-referrer",
       },
