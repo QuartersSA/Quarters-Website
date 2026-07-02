@@ -308,6 +308,18 @@ export default function PurchasesInvoicesPanel({
     ];
   }, [accounts]);
 
+  // Prior-transaction count per contact, shown under the supplier
+  // select inside the editor ("N معاملة سابقة").
+  const contactStats = useMemo(() => {
+    const counts = {};
+    for (const invoice of invoices) {
+      if (!invoice.contact_id) continue;
+      const key = String(invoice.contact_id);
+      counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, [invoices]);
+
   const createMut = useCreateAccountingPurchaseInvoice();
   const updateMut = useUpdateAccountingPurchaseInvoice();
   const deleteMut = useDeleteAccountingPurchaseInvoice();
@@ -823,6 +835,7 @@ export default function PurchasesInvoicesPanel({
         invoice={editing}
         contacts={contacts}
         accounts={accounts}
+        contactStats={contactStats}
         isSubmitting={createMut.isPending || updateMut.isPending}
         onClose={() => {
           setShowAdd(false);

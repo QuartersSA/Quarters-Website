@@ -95,6 +95,30 @@ async function ensureSchema() {
   `;
   // Invoices classify against expense accounts from شجرة الحسابات.
   await ensureAccountsSchema();
+
+  // Line items (بنود الفاتورة): each carries its own tree account and
+  // tax math. Header subtotal/tax/total are recomputed from the lines
+  // whenever a payload includes them; legacy header-only invoices keep
+  // working (no rows here).
+  await sql`
+    CREATE TABLE IF NOT EXISTS accounting_purchase_invoice_items (
+      id SERIAL PRIMARY KEY,
+      invoice_id INTEGER NOT NULL REFERENCES accounting_purchase_invoices(id) ON DELETE CASCADE,
+      position INTEGER NOT NULL DEFAULT 0,
+      description TEXT,
+      account_id INTEGER,
+      amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      tax_rate NUMERIC(5, 2) NOT NULL DEFAULT 15,
+      amount_includes_tax BOOLEAN NOT NULL DEFAULT FALSE,
+      line_subtotal NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      line_tax NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      line_total NUMERIC(14, 2) NOT NULL DEFAULT 0
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_items_invoice
+      ON accounting_purchase_invoice_items (invoice_id, position)
+  `;
   await sql`
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoices_invoice_date
       ON accounting_purchase_invoices (invoice_date DESC)
@@ -146,6 +170,108 @@ function parsePayload(body = {}) {
     notes: body.notes ? String(body.notes).trim() : null,
     attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null
   };
+}
+function round2(value) {
+  return Math.round(value * 100) / 100;
+}
+
+// Line items from the payload. Returns null when the payload carries
+// no `items` key (legacy callers like the quick-payment modal) — the
+// stored lines must then be left untouched. Tax math per line:
+//   exclusive: subtotal = amount, tax = amount × rate
+//   inclusive: total = amount, subtotal = amount ÷ (1 + rate)
+function parseItems(body) {
+  if (!Array.isArray(body?.items)) return null;
+  const items = [];
+  for (const raw of body.items) {
+    const amount = parseMoney(raw?.amount, 0);
+    if (amount <= 0) continue;
+    const rateRaw = Number(raw?.tax_rate);
+    const taxRate = Number.isFinite(rateRaw) ? Math.min(Math.max(rateRaw, 0), 100) : 15;
+    const includesTax = !!raw?.amount_includes_tax;
+    const accountId = raw?.account_id === undefined || raw?.account_id === null || raw?.account_id === "" ? null : Number(raw.account_id);
+    const subtotal = includesTax ? amount / (1 + taxRate / 100) : amount;
+    const tax = includesTax ? amount - subtotal : amount * taxRate / 100;
+    items.push({
+      position: items.length,
+      description: raw?.description ? String(raw.description).trim() : null,
+      accountId: Number.isInteger(accountId) ? accountId : null,
+      amount,
+      taxRate,
+      includesTax,
+      subtotal: round2(subtotal),
+      tax: round2(tax),
+      total: round2(subtotal + tax)
+    });
+  }
+  return items;
+}
+async function replaceInvoiceItems(invoiceId, items) {
+  await sql`
+    DELETE FROM accounting_purchase_invoice_items
+    WHERE invoice_id = ${invoiceId}
+  `;
+  for (const item of items) {
+    await sql`
+      INSERT INTO accounting_purchase_invoice_items (
+        invoice_id, position, description, account_id,
+        amount, tax_rate, amount_includes_tax,
+        line_subtotal, line_tax, line_total
+      )
+      VALUES (
+        ${invoiceId}, ${item.position}, ${item.description}, ${item.accountId},
+        ${item.amount}, ${item.taxRate}, ${item.includesTax},
+        ${item.subtotal}, ${item.tax}, ${item.total}
+      )
+    `;
+  }
+}
+
+// When lines are present they are the source of truth for the header
+// money columns + the header account (first line's account keeps the
+// account filter/report working).
+function applyItemsToPayload(payload, items) {
+  if (!items || items.length === 0) return payload;
+  const subtotal = round2(items.reduce((sum, item) => sum + item.subtotal, 0));
+  const tax = round2(items.reduce((sum, item) => sum + item.tax, 0));
+  const total = round2(items.reduce((sum, item) => sum + item.total, 0));
+  return {
+    ...payload,
+    subtotalAmount: subtotal,
+    taxAmount: tax,
+    totalAmount: total,
+    expenseAccountId: items.find(item => item.accountId)?.accountId ?? payload.expenseAccountId
+  };
+}
+async function attachItems(rows) {
+  const ids = rows.map(row => row.id);
+  if (ids.length === 0) return rows;
+  try {
+    const items = await sql`
+      SELECT id, invoice_id, position, description, account_id,
+             amount, tax_rate, amount_includes_tax,
+             line_subtotal, line_tax, line_total
+      FROM accounting_purchase_invoice_items
+      WHERE invoice_id = ANY(${ids})
+      ORDER BY invoice_id, position
+    `;
+    const byInvoice = new Map();
+    for (const item of items) {
+      const key = Number(item.invoice_id);
+      if (!byInvoice.has(key)) byInvoice.set(key, []);
+      byInvoice.get(key).push(item);
+    }
+    return rows.map(row => ({
+      ...row,
+      items: byInvoice.get(Number(row.id)) || []
+    }));
+  } catch (error) {
+    console.error("attach invoice items failed", error);
+    return rows.map(row => ({
+      ...row,
+      items: []
+    }));
+  }
 }
 
 // Classification target must be a live postable expense account —
@@ -256,8 +382,9 @@ async function GET(request) {
     const today = todayRiyadh();
     const query = selectInvoicesQuery(where, status);
     const rows = await sql(query, status ? [...values, today, status] : [...values, today]);
+    const withItems = await attachItems(rows);
     return Response.json({
-      invoices: rows
+      invoices: withItems
     });
   } catch (error) {
     console.error("purchase invoices GET error", error);
@@ -281,7 +408,9 @@ async function POST(request) {
   try {
     await ensureSchema();
     const body = await request.json().catch(() => ({}));
-    const payload = parsePayload(body);
+    const items = parseItems(body);
+    let payload = parsePayload(body);
+    payload = applyItemsToPayload(payload, items);
     const validationError = validatePayload(payload);
     if (validationError) {
       return Response.json({
@@ -339,6 +468,9 @@ async function POST(request) {
       )
       RETURNING *
     `;
+    if (items && items.length > 0) {
+      await replaceInvoiceItems(created.id, items);
+    }
     return Response.json({
       ok: true,
       invoice: created
@@ -375,7 +507,9 @@ async function PUT(request) {
         status: 400
       });
     }
-    const payload = parsePayload(body);
+    const items = parseItems(body);
+    let payload = parsePayload(body);
+    payload = applyItemsToPayload(payload, items);
     const validationError = validatePayload(payload);
     if (validationError) {
       return Response.json({
@@ -419,6 +553,12 @@ async function PUT(request) {
       }, {
         status: 404
       });
+    }
+
+    // `items` missing from the payload (quick-payment modal) → leave
+    // the stored lines untouched; an array (even empty) replaces them.
+    if (items !== null) {
+      await replaceInvoiceItems(id, items);
     }
     return Response.json({
       ok: true,
