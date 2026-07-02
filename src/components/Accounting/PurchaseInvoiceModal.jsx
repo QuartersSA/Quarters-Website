@@ -171,8 +171,45 @@ function detectInvoiceDate(text) {
   return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
-// Longest active contact whose (ar/en) name appears in the text.
+function normalizeVat(value) {
+  return String(value || "").replace(/[^0-9]/g, "");
+}
+
+// All VAT-registration candidates in the text: numbers following the
+// VAT keywords, plus any bare Saudi-format number (15 digits starting
+// and ending with 3). Invoices usually carry TWO VAT numbers (seller +
+// buyer) — matching against the contacts list naturally picks the
+// supplier's.
+function extractVatNumbers(text) {
+  const found = new Set();
+  const keywordRe =
+    /(?:الرقم\s*الضريبي|رقم\s*(?:التسجيل\s*)?الضريبي|السجل\s*الضريبي|vat\s*(?:reg(?:istration)?)?\s*(?:no|number|num|#)?|tax\s*(?:reg(?:istration)?)?\s*(?:no|number|num|#)|trn)\s*[.:#]?\s*([0-9][0-9\s\-]{5,25})/gi;
+  for (const match of text.matchAll(keywordRe)) {
+    const digits = normalizeVat(match[1]);
+    if (digits.length >= 7) found.add(digits);
+  }
+  for (const match of text.matchAll(/\b3\d{13}3\b/g)) {
+    found.add(match[0]);
+  }
+  return [...found];
+}
+
+// Contact resolution, most reliable first:
+//   1. VAT number on the contact (الموردين والمستفيدين) appears in the
+//      invoice — exact digit match.
+//   2. Fallback: longest active contact whose name appears in the text.
 function detectContact(text, contacts) {
+  const vatNumbers = extractVatNumbers(text);
+  if (vatNumbers.length > 0) {
+    for (const contact of contacts) {
+      if (contact.is_active === false) continue;
+      const contactVat = normalizeVat(contact.vat_number);
+      if (contactVat.length >= 7 && vatNumbers.includes(contactVat)) {
+        return { contact, matchedBy: "vat" };
+      }
+    }
+  }
+
   const lower = text.toLowerCase();
   let best = null;
   for (const contact of contacts) {
@@ -182,20 +219,21 @@ function detectContact(text, contacts) {
       if (!best || name.length > String(best.name).length) best = contact;
     }
   }
-  return best;
+  return best ? { contact: best, matchedBy: "name" } : null;
 }
 
 export function parseInvoiceText(rawText, contacts = []) {
   const text = normalizeDigits(rawText).replace(/\s+/g, " ");
   const total = detectTotal(text);
   const tax = detectTax(text);
-  const contact = detectContact(text, contacts);
+  const contactMatch = detectContact(text, contacts);
   return {
     invoiceNumber: detectInvoiceNumber(text),
     total,
     tax: tax !== null && total !== null && tax >= total ? null : tax,
     invoiceDate: detectInvoiceDate(text),
-    contact,
+    contact: contactMatch?.contact || null,
+    contactMatchedBy: contactMatch?.matchedBy || null,
   };
 }
 // ---------- /PDF auto-fill ----------
@@ -391,10 +429,14 @@ export default function PurchaseInvoiceModal({
         setInvoiceNumber(parsed.invoiceNumber);
         filled.push("رقم الفاتورة");
       }
+      const contactLabel =
+        parsed.contactMatchedBy === "vat"
+          ? "جهة الاتصال (تطابق الرقم الضريبي)"
+          : "جهة الاتصال (تطابق الاسم)";
       if (parsed.contact && !contactId) {
         setContactId(String(parsed.contact.id));
         if (!supplierName.trim()) setSupplierName(parsed.contact.name);
-        filled.push("جهة الاتصال");
+        filled.push(contactLabel);
       } else if (parsed.contact && !supplierName.trim()) {
         setSupplierName(parsed.contact.name);
         filled.push("اسم المورد");
@@ -418,7 +460,7 @@ export default function PurchaseInvoiceModal({
           filled.length === 0
             ? "قرأت الملف لكن ما تعرفت على الحقول — تأكد منها يدوياً."
             : !parsed.contact
-              ? "ما لقيت مورداً مطابقاً في جهات الاتصال — اختر الجهة أو اكتب اسم المورد."
+              ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو اكتب اسم المورد."
               : null,
       });
     } catch (error) {
