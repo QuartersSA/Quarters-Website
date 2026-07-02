@@ -242,6 +242,97 @@ function detectContact(text, contacts) {
   return best ? { contact: best, matchedBy: "name" } : null;
 }
 
+// ---------- line-item extraction ----------
+// Detect product rows in the invoice table. A row qualifies when its
+// numbers contain a triplet a + b ≈ c (net + VAT = line total) — the
+// arithmetic survives any RTL column scrambling. Summary rows
+// (المجموع/الإجمالي/total…) are excluded by keyword.
+const SUMMARY_LINE_RE =
+  /(المجموع|الإجمالي|الاجمالي|إجمالي|اجمالي|المبلغ\s*المستحق|المستحق|sub\s*-?\s*total|grand\s*total|total\s*(?:due|amount|before)|amount\s*due|balance)/i;
+
+function lineNumbers(line) {
+  const values = [];
+  for (const match of line.matchAll(new RegExp(MONEY_RE.source, "g"))) {
+    // Bare long digit runs are barcodes / ids, not money.
+    const token = match[1];
+    if (!token.includes(".") && !token.includes(",") && token.length > 6) {
+      continue;
+    }
+    const value = Number(String(token).replace(/,/g, ""));
+    if (Number.isFinite(value)) values.push(value);
+  }
+  return values;
+}
+
+function findLineTriplet(values) {
+  let best = null;
+  for (let i = 0; i < values.length; i += 1) {
+    for (let j = 0; j < values.length; j += 1) {
+      if (i === j) continue;
+      const net = values[i];
+      const tax = values[j];
+      // net ≥ tax rules out (tax, net) swaps: VAT is at most 100%.
+      if (net <= 0 || tax <= 0 || net < tax) continue;
+      const total = net + tax;
+      const hit = values.find(
+        (candidate) => Math.abs(candidate - total) <= 0.03,
+      );
+      if (hit === undefined) continue;
+      if (!best || hit > best.total) {
+        best = { net: round2(net), tax: round2(tax), total: round2(hit) };
+      }
+    }
+  }
+  return best;
+}
+
+function cleanItemDescription(line) {
+  return line
+    .replace(/\b\d{7,}\b/g, " ") // barcodes / ids
+    .replace(new RegExp(MONEY_RE.source, "g"), " ")
+    .replace(/\d+(?:\.\d+)?\s*%/g, " ")
+    .replace(/[%#|]/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .replace(/^\s*\d+\s+/, "") // leading row index
+    .trim();
+}
+
+// rows: visual lines from the PDF. grandTotal: detected invoice total
+// (used to sanity-check the sum). Returns [{description, total, rate}]
+// or null when the table can't be recovered confidently.
+export function parseInvoiceLineItems(rows, grandTotal) {
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+  const items = [];
+  for (const rawLine of rows) {
+    const line = normalizeDigits(rawLine);
+    if (SUMMARY_LINE_RE.test(line)) continue;
+    const values = lineNumbers(line);
+    if (values.length < 3) continue;
+    const triplet = findLineTriplet(values);
+    if (!triplet) continue;
+    const rate = triplet.net > 0 ? round2((triplet.tax / triplet.net) * 100) : 15;
+    // Implausible VAT rate → probably a coincidence, not a product row.
+    if (rate <= 0 || rate > 50) continue;
+    items.push({
+      description: cleanItemDescription(line),
+      total: triplet.total,
+      rate,
+    });
+  }
+
+  if (items.length < 2) return null;
+  // The rows must reproduce the invoice total, otherwise we misread
+  // the table and one aggregate line is safer.
+  if (grandTotal !== null && grandTotal !== undefined) {
+    const sum = round2(items.reduce((acc, item) => acc + item.total, 0));
+    if (Math.abs(sum - grandTotal) > Math.max(1, grandTotal * 0.01)) {
+      return null;
+    }
+  }
+  return items;
+}
+// ---------- /line-item extraction ----------
+
 export function parseInvoiceText(rawText, contacts = []) {
   const text = normalizeDigits(rawText).replace(/\s+/g, " ");
   const total = detectTotal(text);
@@ -666,10 +757,11 @@ export default function PurchaseInvoiceModal({
 
     setScanBusy(true);
     try {
-      const { extractTextFromPDF } = await import(
+      const { extractPdfDetails } = await import(
         "@/client-integrations/pdfjs"
       );
-      const text = await extractTextFromPDF(file);
+      const details = await extractPdfDetails(file);
+      const text = details?.text;
       if (!text || text.trim().length < 10) {
         setScanSummary({
           filled: [],
@@ -706,28 +798,47 @@ export default function PurchaseInvoiceModal({
         filled.push("اسم المورد");
       }
 
-      // Seed one line with the detected totals: gross amount (شامل
-      // الضريبة) + the effective rate from the detected tax so the
-      // split reproduces the invoice's own numbers.
+      // Line items: recover the product table when possible — each
+      // row becomes its own بند (gross amount + its effective rate).
+      // Otherwise seed ONE aggregate line from the detected totals.
       const hasAmounts = lines.some((line) => moneyValue(line.amount) > 0);
-      if (parsed.total !== null && canFill("lines", !hasAmounts)) {
-        const tax = parsed.tax ?? null;
-        const subtotal = tax !== null ? parsed.total - tax : null;
-        const rate =
-          tax !== null && subtotal > 0
-            ? round2((tax / subtotal) * 100)
-            : 15;
-        setLines([
-          newLine({
-            description: "",
-            amount: parsed.total.toFixed(2),
-            tax_rate: String(rate),
-            amount_includes_tax: true,
-          }),
-        ]);
-        owned.add("lines");
-        filled.push("مبلغ الفاتورة");
-        if (tax !== null) filled.push("الضريبة");
+      if (canFill("lines", !hasAmounts)) {
+        const tableItems = parseInvoiceLineItems(
+          details?.lines,
+          parsed.total,
+        );
+        if (tableItems) {
+          setLines(
+            tableItems.map((item) =>
+              newLine({
+                description: item.description,
+                amount: item.total.toFixed(2),
+                tax_rate: String(item.rate),
+                amount_includes_tax: true,
+              }),
+            ),
+          );
+          owned.add("lines");
+          filled.push(`بنود الفاتورة (${tableItems.length})`);
+        } else if (parsed.total !== null) {
+          const tax = parsed.tax ?? null;
+          const subtotal = tax !== null ? parsed.total - tax : null;
+          const rate =
+            tax !== null && subtotal > 0
+              ? round2((tax / subtotal) * 100)
+              : 15;
+          setLines([
+            newLine({
+              description: "",
+              amount: parsed.total.toFixed(2),
+              tax_rate: String(rate),
+              amount_includes_tax: true,
+            }),
+          ]);
+          owned.add("lines");
+          filled.push("مبلغ الفاتورة");
+          if (tax !== null) filled.push("الضريبة");
+        }
       }
       if (parsed.invoiceDate && canFill("date", false)) {
         setInvoiceDate(parsed.invoiceDate);
