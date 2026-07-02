@@ -75,19 +75,29 @@ function parseMoneyToken(token) {
   return Number.isFinite(number) && number > 0 ? number : null;
 }
 
-// First money value appearing within `window` chars after a keyword.
-function moneyAfterKeyword(text, keywords, window = 60) {
+// Money value near a keyword. RTL PDFs often extract the VALUE before
+// its LABEL ("630.00 :المبلغ المستحق"), so after failing the forward
+// window we also look just before the keyword and take the money token
+// closest to it.
+function moneyAfterKeyword(text, keywords, windowAfter = 60, windowBefore = 30) {
   for (const keyword of keywords) {
     const re = new RegExp(keyword, "gi");
     let match;
     while ((match = re.exec(text)) !== null) {
-      const slice = text.slice(
-        match.index + match[0].length,
-        match.index + match[0].length + window,
+      const start = match.index + match[0].length;
+      const after = text.slice(start, start + windowAfter);
+      const forward = after.match(MONEY_RE);
+      if (forward) {
+        const value = parseMoneyToken(forward[1]);
+        if (value !== null) return value;
+      }
+      const before = text.slice(
+        Math.max(0, match.index - windowBefore),
+        match.index,
       );
-      const money = slice.match(MONEY_RE);
-      if (money) {
-        const value = parseMoneyToken(money[1]);
+      const backwardAll = [...before.matchAll(new RegExp(MONEY_RE.source, "g"))];
+      if (backwardAll.length > 0) {
+        const value = parseMoneyToken(backwardAll[backwardAll.length - 1][1]);
         if (value !== null) return value;
       }
     }
@@ -135,15 +145,17 @@ function detectTotal(text) {
       "total",
     ]) ?? null;
   if (value !== null) return value;
-  // Fallback: biggest money-looking figure in the document.
+  // Fallback: biggest FORMATTED money figure (decimal point or
+  // thousands separator required). Plain integers are too risky —
+  // postal codes, street numbers, and VAT ids all look like amounts
+  // (e.g. a zip code 34436 outranking the real 630.00 total).
   let max = null;
   const re = new RegExp(MONEY_RE.source, "g");
   let match;
   while ((match = re.exec(text)) !== null) {
+    if (!match[1].includes(".") && !match[1].includes(",")) continue;
     const parsed = parseMoneyToken(match[1]);
-    // Skip huge integers that are clearly ids (VAT numbers, phones).
     if (parsed === null || parsed > 10000000) continue;
-    if (!match[1].includes(".") && !match[1].includes(",") && match[1].length > 6) continue;
     if (max === null || parsed > max) max = parsed;
   }
   return max;
