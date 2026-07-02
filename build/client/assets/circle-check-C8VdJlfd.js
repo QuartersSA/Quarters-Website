@@ -1,1 +1,0 @@
-import{c as n}from"./ui-rEmrIT-4.js";if(typeof window<"u"){const s={};globalThis.process??={};const r=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},s,r),{get(e,c){return c in e?e[c]:void 0},has(){return!0}})}const i=n("CircleCheck",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["path",{d:"m9 12 2 2 4-4",key:"dzmm74"}]]);export{i as C};

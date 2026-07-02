@@ -1,33 +1,37 @@
-"use client";
+import * as pdfjs from 'pdfjs-dist';
 
-import * as pdfjs from "pdfjs-dist";
-// Vite's `?worker` import returns a Worker CONSTRUCTOR, not a URL —
-// so it must be wired through workerPort (GlobalWorkerOptions.workerSrc
-// expects a string URL and fails silently when given a constructor).
-import PdfWorker from "pdfjs-dist/build/pdf.worker.entry?worker";
+function WorkerWrapper(options) {
+            return new Worker(
+              "/assets/pdf.worker.entry-BfshONyD.js",
+              {
+          
+          name: options?.name
+        }
+            );
+          }
 
 let workerReady = false;
 function ensureWorker() {
   if (workerReady) return;
-  pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker();
+  pdfjs.GlobalWorkerOptions.workerPort = new WorkerWrapper();
   workerReady = true;
 }
 
 // Returns the PDF's text layer as one string (pages separated by
 // newlines) or undefined when the file has no readable text (e.g. a
 // scanned image) or fails to parse.
-export const extractTextFromPDF = async (file) => {
+const extractTextFromPDF = async file => {
   try {
     ensureWorker();
     const data = await file.arrayBuffer();
-    const pdf = await pdfjs.getDocument({ data }).promise;
+    const pdf = await pdfjs.getDocument({
+      data
+    }).promise;
     let extractedText = "";
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       const page = await pdf.getPage(pageNumber);
       const textContent = await page.getTextContent();
-      const pageText = textContent.items
-        .map((item) => ("str" in item ? item.str : ""))
-        .join(" ");
+      const pageText = textContent.items.map(item => "str" in item ? item.str : "").join(" ");
       extractedText += pageText + "\n";
     }
     const trimmed = extractedText.trim();
@@ -37,3 +41,5 @@ export const extractTextFromPDF = async (file) => {
     return undefined;
   }
 };
+
+export { extractTextFromPDF };

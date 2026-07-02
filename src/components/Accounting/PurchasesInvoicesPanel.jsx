@@ -12,6 +12,7 @@ import {
   FileSpreadsheet,
   FileText,
   HandCoins,
+  Paperclip,
   Pencil,
   Plus,
   RefreshCw,
@@ -643,8 +644,22 @@ export default function PurchasesInvoicesPanel({
                 <tbody className="divide-y divide-slate-200 dark:divide-white/10">
                   {filtered.map((invoice) => (
                     <tr key={invoice.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.03]">
-                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white" dir="ltr">
-                        {invoice.invoice_number}
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">
+                        <div className="flex items-center gap-1.5" dir="ltr">
+                          <span>{invoice.invoice_number}</span>
+                          {invoice.attachment_url ? (
+                            <a
+                              href={invoice.attachment_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-slate-400 hover:text-emerald-600 dark:text-white/40 dark:hover:text-emerald-300"
+                              title="عرض الفاتورة المرفقة"
+                              onClick={(event) => event.stopPropagation()}
+                            >
+                              <Paperclip className="w-3.5 h-3.5" />
+                            </a>
+                          ) : null}
+                        </div>
                       </td>
                       <td className="px-4 py-3 text-slate-700 dark:text-white/70">
                         {invoice.supplier_name || "—"}

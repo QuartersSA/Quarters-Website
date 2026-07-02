@@ -1,10 +1,21 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { CalendarDays, FileText, Save, X } from "lucide-react";
+import {
+  CalendarDays,
+  ExternalLink,
+  FileText,
+  Loader2,
+  Paperclip,
+  ScanLine,
+  Save,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import useUpload from "@/utils/useUpload";
 
 export const PURCHASE_INVOICE_STATUS_OPTIONS = [
   { value: "new", label: "جديد" },
@@ -40,6 +51,154 @@ function todayRiyadh() {
   const get = (type) => parts.find((part) => part.type === type)?.value || "";
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
+
+// ---------- PDF auto-fill ----------
+// Extracts invoice fields from the attached PDF's text layer.
+// Heuristic (regex) based — works for digital invoices in Arabic or
+// English; scanned-image PDFs have no text layer and are skipped.
+
+// Arabic-Indic digits + separators → Latin so one money regex works.
+function normalizeDigits(text) {
+  return String(text || "")
+    .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+    .replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+    .replace(/٫/g, ".") // arabic decimal separator
+    .replace(/٬/g, ","); // arabic thousands separator
+}
+
+const MONEY_RE = /(\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?|\d+\.\d{1,2}|\d{2,})/;
+
+function parseMoneyToken(token) {
+  const number = Number(String(token).replace(/,/g, ""));
+  return Number.isFinite(number) && number > 0 ? number : null;
+}
+
+// First money value appearing within `window` chars after a keyword.
+function moneyAfterKeyword(text, keywords, window = 60) {
+  for (const keyword of keywords) {
+    const re = new RegExp(keyword, "gi");
+    let match;
+    while ((match = re.exec(text)) !== null) {
+      const slice = text.slice(match.index + match[0].length, match.index + match[0].length + window);
+      const money = slice.match(MONEY_RE);
+      if (money) {
+        const value = parseMoneyToken(money[1]);
+        if (value !== null) return value;
+      }
+    }
+  }
+  return null;
+}
+
+function detectInvoiceNumber(text) {
+  const patterns = [
+    /(?:رقم\s*الفاتورة|الفاتورة\s*رقم|فاتورة\s*(?:ضريبية\s*)?(?:رقم|#))\s*[:#]?\s*([A-Za-z0-9\-\/_.]{2,30})/gi,
+    /invoice\s*(?:no|number|num|#)?\.?\s*[:#]?\s*([A-Za-z0-9\-\/_.]{2,30})/gi,
+    /\b(INV[-\/]?[A-Za-z0-9][A-Za-z0-9\-]{2,24})\b/g,
+  ];
+  // Every occurrence is a candidate — the first "invoice" mention is
+  // often the "TAX INVOICE" title, so single-match scanning misses the
+  // real number further down.
+  for (const re of patterns) {
+    for (const match of text.matchAll(re)) {
+      const token = match[1].replace(/[.:،,]+$/, "");
+      // "Invoice Date" style false positives
+      if (/^(date|no|number|تاريخ)$/i.test(token)) continue;
+      if (!/\d/.test(token)) continue;
+      return token;
+    }
+  }
+  return null;
+}
+
+function detectTotal(text) {
+  // Priority: explicit grand-total phrasing first, plain "total" last.
+  const value =
+    moneyAfterKeyword(text, [
+      "الإجمالي\\s*المستحق",
+      "الاجمالي\\s*المستحق",
+      "المجموع\\s*الكلي",
+      "الإجمالي\\s*(?:شامل|مع)\\s*الضريبة",
+      "الاجمالي\\s*(?:شامل|مع)\\s*الضريبة",
+      "grand\\s*total",
+      "total\\s*(?:due|amount)",
+      "amount\\s*due",
+      "الإجمالي",
+      "الاجمالي",
+      "المجموع",
+      "total",
+    ]) ?? null;
+  if (value !== null) return value;
+  // Fallback: biggest money-looking figure in the document.
+  let max = null;
+  const re = new RegExp(MONEY_RE.source, "g");
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    const parsed = parseMoneyToken(match[1]);
+    // Skip huge integers that are clearly ids (VAT numbers, phones).
+    if (parsed === null || parsed > 10000000) continue;
+    if (!match[1].includes(".") && !match[1].includes(",") && match[1].length > 6) continue;
+    if (max === null || parsed > max) max = parsed;
+  }
+  return max;
+}
+
+function detectTax(text) {
+  return moneyAfterKeyword(text, [
+    "ضريبة\\s*القيمة\\s*المضافة\\s*(?:\\(?\\s*15\\s*%?\\s*\\)?)?",
+    "قيمة\\s*الضريبة",
+    "vat\\s*(?:\\(?\\s*15\\s*%?\\s*\\)?)?\\s*(?:amount)?",
+    "tax\\s*amount",
+  ]);
+}
+
+function detectInvoiceDate(text) {
+  const match = text.match(
+    /(?:تاريخ\s*الفاتورة|invoice\s*date|التاريخ|date)\s*[:#]?\s*(\d{4}-\d{2}-\d{2}|\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/i,
+  );
+  if (!match) return null;
+  const raw = match[1];
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+  const parts = raw.split(/[\/\-.]/).map(Number);
+  if (parts.length !== 3) return null;
+  let [day, month, year] = parts;
+  // yyyy/mm/dd came in first position
+  if (parts[0] > 1900) {
+    [year, month, day] = parts;
+  }
+  if (year < 100) year += 2000;
+  if (!day || !month || !year || month > 12 || day > 31) return null;
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+// Longest active contact whose (ar/en) name appears in the text.
+function detectContact(text, contacts) {
+  const lower = text.toLowerCase();
+  let best = null;
+  for (const contact of contacts) {
+    if (contact.is_active === false) continue;
+    const name = String(contact.name || "").trim();
+    if (name.length >= 3 && lower.includes(name.toLowerCase())) {
+      if (!best || name.length > String(best.name).length) best = contact;
+    }
+  }
+  return best;
+}
+
+export function parseInvoiceText(rawText, contacts = []) {
+  const text = normalizeDigits(rawText).replace(/\s+/g, " ");
+  const total = detectTotal(text);
+  const tax = detectTax(text);
+  const contact = detectContact(text, contacts);
+  return {
+    invoiceNumber: detectInvoiceNumber(text),
+    total,
+    tax: tax !== null && total !== null && tax >= total ? null : tax,
+    invoiceDate: detectInvoiceDate(text),
+    contact,
+  };
+}
+// ---------- /PDF auto-fill ----------
 
 function moneyInput(value) {
   if (value === null || value === undefined || value === "") return "";
@@ -152,8 +311,15 @@ export default function PurchaseInvoiceModal({
   const [currency, setCurrency] = useState("SAR");
   const [totalAmount, setTotalAmount] = useState("0.00");
   const [paidAmount, setPaidAmount] = useState("0.00");
+  const [taxAmount, setTaxAmount] = useState(0);
   const [workflowStatus, setWorkflowStatus] = useState("new");
   const [notes, setNotes] = useState("");
+  const [attachmentUrl, setAttachmentUrl] = useState("");
+  const [attachmentName, setAttachmentName] = useState("");
+  const [scanBusy, setScanBusy] = useState(false);
+  const [scanSummary, setScanSummary] = useState(null); // {filled:[], warning?}
+  const fileInputRef = useRef(null);
+  const [upload, { loading: uploading }] = useUpload();
 
   useEffect(() => {
     if (!open) return;
@@ -168,9 +334,104 @@ export default function PurchaseInvoiceModal({
     setCurrency(invoice?.currency || "SAR");
     setTotalAmount(moneyInput(invoice?.total_amount) || "0.00");
     setPaidAmount(moneyInput(invoice?.paid_amount) || "0.00");
+    setTaxAmount(moneyValue(invoice?.tax_amount));
     setWorkflowStatus(invoice?.workflow_status || "new");
     setNotes(invoice?.notes || "");
+    setAttachmentUrl(invoice?.attachment_url || "");
+    setAttachmentName("");
+    setScanBusy(false);
+    setScanSummary(null);
   }, [open, invoice]);
+
+  // Upload the picked file, then (for PDFs) read its text layer and
+  // auto-fill whatever fields it can find. User-entered values are
+  // never overwritten — only empty/default fields get filled.
+  const handleFilePicked = async (event) => {
+    const file = event?.target?.files?.[0];
+    if (!file) return;
+    setScanSummary(null);
+
+    const result = await upload({ file });
+    if (result?.error) {
+      setScanSummary({ filled: [], warning: `فشل رفع الملف: ${result.error}` });
+      return;
+    }
+    setAttachmentUrl(result.url || "");
+    setAttachmentName(file.name || "");
+
+    const isPdf =
+      file.type === "application/pdf" || /\.pdf$/i.test(file.name || "");
+    if (!isPdf) {
+      setScanSummary({
+        filled: [],
+        warning: "تم إرفاق الملف. الفحص التلقائي يعمل مع ملفات PDF فقط.",
+      });
+      return;
+    }
+
+    setScanBusy(true);
+    try {
+      const { extractTextFromPDF } = await import(
+        "@/client-integrations/pdfjs"
+      );
+      const text = await extractTextFromPDF(file);
+      if (!text || text.trim().length < 10) {
+        setScanSummary({
+          filled: [],
+          warning:
+            "تم إرفاق الفاتورة لكن ما قدرت أقرأ نصها — غالباً صورة ممسوحة. عبّي الحقول يدوياً.",
+        });
+        return;
+      }
+
+      const parsed = parseInvoiceText(text, contacts);
+      const filled = [];
+
+      if (parsed.invoiceNumber && !invoiceNumber.trim()) {
+        setInvoiceNumber(parsed.invoiceNumber);
+        filled.push("رقم الفاتورة");
+      }
+      if (parsed.contact && !contactId) {
+        setContactId(String(parsed.contact.id));
+        if (!supplierName.trim()) setSupplierName(parsed.contact.name);
+        filled.push("جهة الاتصال");
+      } else if (parsed.contact && !supplierName.trim()) {
+        setSupplierName(parsed.contact.name);
+        filled.push("اسم المورد");
+      }
+      if (parsed.total !== null && moneyValue(totalAmount) <= 0) {
+        setTotalAmount(parsed.total.toFixed(2));
+        filled.push("مبلغ الفاتورة");
+      }
+      if (parsed.tax !== null) {
+        setTaxAmount(parsed.tax);
+        filled.push("الضريبة");
+      }
+      if (parsed.invoiceDate && (!invoice || !invoice.invoice_date)) {
+        setInvoiceDate(parsed.invoiceDate);
+        filled.push("تاريخ الفاتورة");
+      }
+
+      setScanSummary({
+        filled,
+        warning:
+          filled.length === 0
+            ? "قرأت الملف لكن ما تعرفت على الحقول — تأكد منها يدوياً."
+            : !parsed.contact
+              ? "ما لقيت مورداً مطابقاً في جهات الاتصال — اختر الجهة أو اكتب اسم المورد."
+              : null,
+      });
+    } catch (error) {
+      console.error("invoice scan failed", error);
+      setScanSummary({
+        filled: [],
+        warning: "تعذّر فحص الملف — تم إرفاقه فقط.",
+      });
+    } finally {
+      setScanBusy(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   const contactOptions = useMemo(() => {
     const activeContacts = contacts
@@ -204,6 +465,8 @@ export default function PurchaseInvoiceModal({
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!canSubmit) return;
+    const total = moneyValue(totalAmount);
+    const tax = Math.min(Math.max(moneyValue(taxAmount), 0), total);
     const payload = {
       invoice_number: invoiceNumber.trim() || undefined,
       contact_id: contactId || null,
@@ -212,10 +475,13 @@ export default function PurchaseInvoiceModal({
       invoice_date: invoiceDate,
       due_date: dueDate || null,
       currency,
-      total_amount: moneyValue(totalAmount),
+      subtotal_amount: Math.max(total - tax, 0),
+      tax_amount: tax,
+      total_amount: total,
       paid_amount: moneyValue(paidAmount),
       workflow_status: workflowStatus,
       notes: notes.trim() || null,
+      attachment_url: attachmentUrl || null,
     };
     if (isEditing) payload.id = invoice.id;
     onSubmit(payload);
@@ -270,6 +536,108 @@ export default function PurchaseInvoiceModal({
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          {/* Attach + auto-fill from PDF */}
+          <div className={`${ws.glassSoft} ${ws.card} p-4`}>
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className={`${ws.iconBox} w-10 h-10 shrink-0 text-emerald-700 dark:text-emerald-200`}>
+                  <ScanLine className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-bold text-sm text-slate-900 dark:text-white">
+                    إرفاق الفاتورة (PDF)
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-white/45 mt-0.5">
+                    عند الإرفاق يُفحص الملف وتُعبّأ الحقول تلقائياً — راجعها قبل الحفظ.
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                {attachmentUrl ? (
+                  <>
+                    <a
+                      href={attachmentUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`${ws.btnNeutral} px-3 py-2 text-xs`}
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      عرض المرفق
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAttachmentUrl("");
+                        setAttachmentName("");
+                        setScanSummary(null);
+                      }}
+                      className={`${ws.iconButton} w-9 h-9 hover:text-red-700 dark:hover:text-red-200`}
+                      title="إزالة المرفق"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading || scanBusy}
+                  className={`${ws.btnPrimary} px-3 py-2 text-xs disabled:opacity-50`}
+                >
+                  {uploading || scanBusy ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Paperclip className="w-4 h-4" />
+                  )}
+                  {uploading
+                    ? "جاري الرفع…"
+                    : scanBusy
+                      ? "جاري الفحص…"
+                      : attachmentUrl
+                        ? "استبدال الملف"
+                        : "اختيار ملف"}
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="application/pdf,image/*"
+                  onChange={handleFilePicked}
+                  className="hidden"
+                />
+              </div>
+            </div>
+
+            {attachmentName ? (
+              <div className="text-[11px] text-slate-500 dark:text-white/45 mt-2" dir="ltr">
+                {attachmentName}
+              </div>
+            ) : null}
+
+            {scanSummary ? (
+              <div className="mt-3 space-y-1.5">
+                {scanSummary.filled.length > 0 ? (
+                  <div className="flex items-center gap-2 flex-wrap text-xs text-emerald-800 dark:text-emerald-200">
+                    <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                    <span>تمت تعبئة:</span>
+                    {scanSummary.filled.map((label) => (
+                      <span
+                        key={label}
+                        className={`${ws.pill} bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25`}
+                      >
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+                {scanSummary.warning ? (
+                  <div className="text-xs text-amber-700 dark:text-amber-200">
+                    {scanSummary.warning}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+
           <div className={`${ws.glassSoft} ${ws.card} p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
             <div className="flex items-center gap-3">
               <div className={`${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`}>
@@ -417,6 +785,22 @@ export default function PurchaseInvoiceModal({
                 min="0"
                 dir="ltr"
               />
+              {moneyValue(taxAmount) > 0 ? (
+                <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                  منها ضريبة قيمة مضافة:{" "}
+                  <span dir="ltr" className="font-bold">
+                    {moneyValue(taxAmount).toFixed(2)}
+                  </span>{" "}
+                  — تظهر في تقرير الضريبة.
+                  <button
+                    type="button"
+                    onClick={() => setTaxAmount(0)}
+                    className="mr-1 text-rose-700 dark:text-rose-300 hover:underline"
+                  >
+                    إزالة
+                  </button>
+                </div>
+              ) : null}
             </div>
 
             <div>
