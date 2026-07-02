@@ -1,18 +1,24 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   AlertTriangle,
   Banknote,
   CalendarDays,
   CheckCircle2,
   Clock3,
+  Download,
+  FileSpreadsheet,
   FileText,
+  HandCoins,
   Pencil,
   Plus,
   RefreshCw,
+  Save,
   Search,
   Trash2,
+  X,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
@@ -30,6 +36,7 @@ import {
 } from "@/hooks/useAccountingPurchaseInvoices";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
+import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
 
 const STATUS_FILTER_OPTIONS = [
   { value: "", label: "كل الحالات" },
@@ -110,13 +117,173 @@ function StatusPill({ status }) {
   );
 }
 
-export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
+// Quick payment: bump paid_amount without opening the full edit form.
+// PUT requires the complete invoice payload, so the modal replays the
+// row's fields and only changes the paid amount.
+function RecordPaymentModal({ invoice, isSubmitting, onClose, onSubmit }) {
+  const balance = Math.max(
+    moneyValue(invoice?.total_amount) - moneyValue(invoice?.paid_amount),
+    0,
+  );
+  const [amount, setAmount] = useState("");
+
+  useEffect(() => {
+    if (!invoice) return;
+    setAmount(balance.toFixed(2));
+    // Seed with the outstanding balance each time a new invoice opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [invoice?.id]);
+
+  if (!invoice || typeof document === "undefined") return null;
+
+  const paymentValue = moneyValue(amount);
+  const valid = paymentValue > 0 && paymentValue <= balance + 0.005;
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!valid || isSubmitting) return;
+    const newPaid =
+      Math.round((moneyValue(invoice.paid_amount) + paymentValue) * 100) / 100;
+    onSubmit({
+      id: invoice.id,
+      invoice_number: invoice.invoice_number,
+      contact_id: invoice.contact_id || null,
+      expense_account_id: invoice.expense_account_id || null,
+      supplier_name: invoice.supplier_name || null,
+      invoice_date: invoice.invoice_date,
+      due_date: invoice.due_date || null,
+      currency: invoice.currency || "SAR",
+      subtotal_amount: invoice.subtotal_amount,
+      tax_amount: invoice.tax_amount,
+      total_amount: moneyValue(invoice.total_amount),
+      paid_amount: Math.min(newPaid, moneyValue(invoice.total_amount)),
+      workflow_status: invoice.workflow_status || "pending_payment",
+      notes: invoice.notes || null,
+    });
+  };
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[1000] flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-sm p-0 sm:p-4"
+      dir="rtl"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <div className={`${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5`}>
+        <div className="flex items-start justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+              <HandCoins className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="font-bold text-slate-900 dark:text-white">
+                تسجيل دفعة
+              </div>
+              <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5" dir="ltr">
+                {invoice.invoice_number}
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className={`${ws.iconButton} w-9 h-9`}
+            aria-label="إغلاق"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className={`${ws.glassSoft} ${ws.card} p-3 mb-4 grid grid-cols-3 gap-2 text-center`}>
+          <div>
+            <div className="text-[11px] text-slate-500 dark:text-white/45">المبلغ</div>
+            <div className="text-sm font-bold text-slate-900 dark:text-white mt-0.5" dir="ltr">
+              {formatMoney(invoice.total_amount, invoice.currency)}
+            </div>
+          </div>
+          <div>
+            <div className="text-[11px] text-slate-500 dark:text-white/45">المدفوع</div>
+            <div className="text-sm font-bold text-emerald-700 dark:text-emerald-200 mt-0.5" dir="ltr">
+              {formatMoney(invoice.paid_amount, invoice.currency)}
+            </div>
+          </div>
+          <div>
+            <div className="text-[11px] text-slate-500 dark:text-white/45">المتبقي</div>
+            <div className="text-sm font-bold text-amber-700 dark:text-amber-200 mt-0.5" dir="ltr">
+              {formatMoney(balance, invoice.currency)}
+            </div>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+            مبلغ الدفعة <span className="text-rose-700 dark:text-rose-300">*</span>
+          </div>
+          <input
+            type="number"
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+            className={`${ws.input} px-3 py-2.5 text-right`}
+            step="0.01"
+            min="0"
+            max={balance}
+            dir="ltr"
+            autoFocus
+          />
+          {paymentValue > balance + 0.005 ? (
+            <div className="text-[11px] text-rose-700 dark:text-rose-300 mt-1">
+              الدفعة أكبر من الرصيد المتبقي.
+            </div>
+          ) : null}
+
+          <div className="flex items-center gap-2 mt-4">
+            <button
+              type="submit"
+              disabled={!valid || isSubmitting}
+              className={`${ws.btnPrimary} px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              <Save className="w-4 h-4" />
+              تسجيل الدفعة
+            </button>
+            <button
+              type="button"
+              onClick={() => setAmount(balance.toFixed(2))}
+              className={`${ws.btnNeutral} px-3 py-2 text-xs`}
+            >
+              سداد كامل المتبقي
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+export default function PurchasesInvoicesPanel({
+  employeeId,
+  isAdmin,
+  autoOpenAdd = false,
+  onIntentConsumed,
+}) {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
   const [accountFilter, setAccountFilter] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [includeInactive, setIncludeInactive] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [paying, setPaying] = useState(null);
+
+  // Quick-action deep link (?intent=add) opens the create modal once.
+  useEffect(() => {
+    if (!autoOpenAdd) return;
+    setShowAdd(true);
+    onIntentConsumed?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoOpenAdd]);
 
   const invoicesQuery = useAccountingPurchaseInvoices({
     employeeId,
@@ -173,8 +340,55 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
         (invoice) => String(invoice.expense_account_id || "") === accountFilter,
       );
     }
+    if (dateFrom) {
+      list = list.filter(
+        (invoice) => (invoice.invoice_date || "") >= dateFrom,
+      );
+    }
+    if (dateTo) {
+      list = list.filter((invoice) => (invoice.invoice_date || "") <= dateTo);
+    }
     return list;
-  }, [invoices, status, accountFilter]);
+  }, [invoices, status, accountFilter, dateFrom, dateTo]);
+
+  const handleExport = (kind) => {
+    const columns = [
+      { header: "رقم الفاتورة", accessor: (row) => row.invoice_number },
+      { header: "المورد", accessor: (row) => row.supplier_name || "" },
+      {
+        header: "الحساب",
+        accessor: (row) =>
+          row.expense_account_name
+            ? `${row.expense_account_code || ""} ${row.expense_account_name}`.trim()
+            : "غير مصنّفة",
+      },
+      { header: "التاريخ", accessor: (row) => row.invoice_date || "" },
+      { header: "الاستحقاق", accessor: (row) => row.due_date || "" },
+      {
+        header: "الحالة",
+        accessor: (row) => purchaseInvoiceStatusLabel(row.computed_status),
+      },
+      { header: "العملة", accessor: (row) => row.currency || "SAR" },
+      {
+        header: "المبلغ",
+        accessor: (row) => moneyValue(row.total_amount).toFixed(2),
+      },
+      {
+        header: "المدفوع",
+        accessor: (row) => moneyValue(row.paid_amount).toFixed(2),
+      },
+      {
+        header: "الرصيد",
+        accessor: (row) => moneyValue(row.balance_due).toFixed(2),
+      },
+    ];
+    const title = "فواتير المشتريات";
+    if (kind === "excel") {
+      exportToExcelHTML(filtered, "purchase-invoices", columns, title);
+    } else {
+      exportToPDF(filtered, "purchase-invoices", columns, title);
+    }
+  };
 
   const totals = useMemo(() => {
     return filtered.reduce(
@@ -268,6 +482,60 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
           >
             <Plus className="w-4 h-4" />
             إنشاء فاتورة مشتريات
+          </button>
+        </div>
+
+        {/* Second toolbar row: date range + export */}
+        <div className={`flex items-center gap-3 flex-wrap mt-3 pt-3 border-t ${ws.divider}`}>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-600 dark:text-white/55">من</span>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(event) => setDateFrom(event.target.value)}
+              className={`${ws.input} px-3 py-1.5 text-sm w-auto`}
+            />
+            <span className="text-xs text-slate-600 dark:text-white/55">إلى</span>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(event) => setDateTo(event.target.value)}
+              className={`${ws.input} px-3 py-1.5 text-sm w-auto`}
+            />
+            {dateFrom || dateTo ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setDateFrom("");
+                  setDateTo("");
+                }}
+                className="text-xs text-slate-500 hover:text-red-600 dark:text-white/45 dark:hover:text-red-300"
+              >
+                مسح
+              </button>
+            ) : null}
+          </div>
+          <div className="flex-1" />
+          <div className="text-xs text-slate-500 dark:text-white/45">
+            {filtered.length} فاتورة معروضة
+          </div>
+          <button
+            type="button"
+            onClick={() => handleExport("excel")}
+            className={`${ws.btnNeutral} px-3 py-1.5 text-xs`}
+            disabled={filtered.length === 0}
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            Excel
+          </button>
+          <button
+            type="button"
+            onClick={() => handleExport("pdf")}
+            className={`${ws.btnNeutral} px-3 py-1.5 text-xs`}
+            disabled={filtered.length === 0}
+          >
+            <Download className="w-4 h-4" />
+            PDF
           </button>
         </div>
       </div>
@@ -415,6 +683,17 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-center gap-2">
+                          {moneyValue(invoice.balance_due) > 0 &&
+                          invoice.is_active !== false ? (
+                            <button
+                              type="button"
+                              onClick={() => setPaying(invoice)}
+                              className={`${ws.iconButton} w-9 h-9 hover:bg-emerald-50 dark:hover:bg-emerald-500/15 hover:border-emerald-200 dark:hover:border-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-200`}
+                              title="تسجيل دفعة"
+                            >
+                              <HandCoins className="w-4 h-4" />
+                            </button>
+                          ) : null}
                           <button
                             type="button"
                             onClick={() => setEditing(invoice)}
@@ -490,6 +769,17 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
                 </div>
 
                 <div className={`flex items-center gap-2 mt-4 pt-3 border-t ${ws.divider}`}>
+                  {moneyValue(invoice.balance_due) > 0 &&
+                  invoice.is_active !== false ? (
+                    <button
+                      type="button"
+                      onClick={() => setPaying(invoice)}
+                      className={`${ws.btnPrimary} px-3 py-2 text-xs`}
+                    >
+                      <HandCoins className="w-4 h-4" />
+                      تسجيل دفعة
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     onClick={() => setEditing(invoice)}
@@ -525,6 +815,17 @@ export default function PurchasesInvoicesPanel({ employeeId, isAdmin }) {
         }}
         onSubmit={handleSubmit}
       />
+
+      {paying ? (
+        <RecordPaymentModal
+          invoice={paying}
+          isSubmitting={updateMut.isPending}
+          onClose={() => setPaying(null)}
+          onSubmit={(payload) =>
+            updateMut.mutate(payload, { onSuccess: () => setPaying(null) })
+          }
+        />
+      ) : null}
     </>
   );
 }

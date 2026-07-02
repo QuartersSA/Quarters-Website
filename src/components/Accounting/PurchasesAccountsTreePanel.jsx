@@ -5,6 +5,8 @@ import { createPortal } from "react-dom";
 import {
   ChevronDown,
   ChevronLeft,
+  ChevronsDownUp,
+  ChevronsUpDown,
   FileText,
   Landmark,
   ListTree,
@@ -311,6 +313,7 @@ function AccountModal({
 
 export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
   const [q, setQ] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
   const [includeInactive, setIncludeInactive] = useState(false);
   const [expanded, setExpanded] = useState(() => new Set());
   const [expandedSeeded, setExpandedSeeded] = useState(false);
@@ -398,6 +401,13 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
       else next.add(id);
       return next;
     });
+  };
+
+  const expandAll = () => {
+    setExpanded(new Set(accounts.map((account) => account.id)));
+  };
+  const collapseAll = () => {
+    setExpanded(new Set());
   };
 
   const handleSubmit = (payload) => {
@@ -576,7 +586,9 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
     );
   };
 
-  const roots = childrenByParent.get("root") || [];
+  const roots = (childrenByParent.get("root") || []).filter(
+    (root) => !typeFilter || root.account_type === typeFilter,
+  );
 
   if (accountsQuery.isLoading) {
     return (
@@ -619,6 +631,24 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
           <div className="flex-1" />
           <button
             type="button"
+            onClick={expandAll}
+            className={`${ws.btnNeutral} px-3 py-2 text-xs`}
+            title="توسيع الكل"
+          >
+            <ChevronsUpDown className="w-4 h-4" />
+            <span className="hidden sm:inline">توسيع الكل</span>
+          </button>
+          <button
+            type="button"
+            onClick={collapseAll}
+            className={`${ws.btnNeutral} px-3 py-2 text-xs`}
+            title="طي الكل"
+          >
+            <ChevronsDownUp className="w-4 h-4" />
+            <span className="hidden sm:inline">طي الكل</span>
+          </button>
+          <button
+            type="button"
             onClick={() => {
               setAddParent(null);
               setShowAdd(true);
@@ -631,17 +661,31 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
         </div>
       </div>
 
+      {/* Clickable type cards — tap to focus the tree on one root. */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        {Object.entries(TYPE_META).map(([type, meta]) => (
-          <div key={type} className={`${ws.glass} ${ws.card} p-3`}>
-            <div className="flex items-center justify-between gap-2">
-              <span className={`${ws.pill} ${meta.pill}`}>{meta.label}</span>
-              <span className="text-lg font-bold text-slate-900 dark:text-white">
-                {typeCounts[type] || 0}
-              </span>
-            </div>
-          </div>
-        ))}
+        {Object.entries(TYPE_META).map(([type, meta]) => {
+          const isActive = typeFilter === type;
+          return (
+            <button
+              key={type}
+              type="button"
+              onClick={() => setTypeFilter(isActive ? "" : type)}
+              className={`${ws.glass} ${ws.card} p-3 text-right transition-colors ${
+                isActive
+                  ? "ring-2 ring-emerald-500/60"
+                  : "hover:bg-slate-100 dark:hover:bg-white/[0.05]"
+              }`}
+              title={isActive ? "عرض كل الأنواع" : `عرض ${meta.label} فقط`}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className={`${ws.pill} ${meta.pill}`}>{meta.label}</span>
+                <span className="text-lg font-bold text-slate-900 dark:text-white">
+                  {typeCounts[type] || 0}
+                </span>
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       <div className={`${ws.glass} ${ws.card} overflow-hidden`}>

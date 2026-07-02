@@ -1,0 +1,1 @@
+import{c as n}from"./ui-rEmrIT-4.js";if(typeof window<"u"){const o={};globalThis.process??={};const r=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},o,r),{get(e,s){return s in e?e[s]:void 0},has(){return!0}})}const i=n("ArrowRight",[["path",{d:"M5 12h14",key:"1ays0h"}],["path",{d:"m12 5 7 7-7 7",key:"xquz4c"}]]);export{i as A};

@@ -1,0 +1,1 @@
+import{c as i}from"./ui-rEmrIT-4.js";if(typeof window<"u"){const n={};globalThis.process??={};const o=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},n,o),{get(e,s){return s in e?e[s]:void 0},has(){return!0}})}const c=i("Minus",[["path",{d:"M5 12h14",key:"1ays0h"}]]);export{c as M};
