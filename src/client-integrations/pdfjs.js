@@ -1,35 +1,159 @@
-'use client';
+"use client";
 
-import * as pdfjs from 'pdfjs-dist';
+import * as pdfjs from "pdfjs-dist";
+// Vite's `?worker` import returns a Worker CONSTRUCTOR, not a URL —
+// so it must be wired through workerPort (GlobalWorkerOptions.workerSrc
+// expects a string URL and fails silently when given a constructor).
+import PdfWorker from "pdfjs-dist/build/pdf.worker.entry?worker";
 
-import workerSrc from 'pdfjs-dist/build/pdf.worker.entry?worker';
+let workerReady = false;
+function ensureWorker() {
+  if (workerReady) return;
+  pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker();
+  workerReady = true;
+}
 
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+// Full text + VISUAL LINES. Table extraction needs rows: text items
+// sharing (roughly) one Y coordinate form a visual line, ordered by X.
+// Returns { text, lines } or undefined when the file has no readable
+// text (e.g. a scanned image) or fails to parse.
+export const extractPdfDetails = async (file) => {
+  try {
+    ensureWorker();
+    const data = await file.arrayBuffer();
+    const pdf = await pdfjs.getDocument({ data }).promise;
+    let extractedText = "";
+    const lines = [];
+    const pageLines = [];
 
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      const page = await pdf.getPage(pageNumber);
+      const textContent = await page.getTextContent();
+      const items = textContent.items.filter(
+        (item) => "str" in item && String(item.str).trim().length > 0,
+      );
+
+      extractedText += items.map((item) => item.str).join(" ") + "\n";
+
+      // Group by Y (3.5-unit tolerance covers sub/superscripts and
+      // slight baseline jitter), top to bottom, then order each row's
+      // runs by X.
+      const rows = [];
+      for (const item of items) {
+        const y = item.transform?.[5] ?? 0;
+        const x = item.transform?.[4] ?? 0;
+        let row = rows.find((r) => Math.abs(r.y - y) <= 3.5);
+        if (!row) {
+          row = { y, parts: [] };
+          rows.push(row);
+        }
+        row.parts.push({ x, str: item.str });
+      }
+      rows.sort((a, b) => b.y - a.y);
+      const current = [];
+      for (const row of rows) {
+        row.parts.sort((a, b) => a.x - b.x);
+        // Join runs by their real horizontal gap: Arabic PDFs often
+        // emit ONE GLYPH per run, and a blind " " join spells words
+        // like "و ح د ة". Runs that touch get concatenated directly.
+        let line = "";
+        let prevEnd = null;
+        for (const part of row.parts) {
+          const gap = prevEnd === null ? 0 : part.x - prevEnd;
+          if (line && gap > 1.5) line += " ";
+          line += part.str;
+          prevEnd = part.x + (part.width || 0);
+        }
+        // NFKC folds Arabic presentation forms (ﻮ→و); strip replacement
+        // and private-use glyphs (fonts without a ToUnicode map).
+        line = line
+          .normalize("NFKC")
+          .replace(/[�-]/g, "")
+          .replace(/\s{2,}/g, " ")
+          .trim();
+        if (line) {
+          lines.push(line);
+          current.push(line);
+        }
+      }
+      pageLines.push(current);
+    }
+
+    const trimmed = extractedText.trim();
+    if (trimmed.length === 0) return undefined;
+    return { text: trimmed, lines, pageLines };
+  } catch (error) {
+    console.error("PDF text extraction failed:", error);
+    return undefined;
+  }
+};
+
+// Back-compat: plain text only.
 export const extractTextFromPDF = async (file) => {
-	const blobUrl = URL.createObjectURL(file);
-	try {
-		const loadingTask = pdfjs.getDocument(blobUrl);
+  const details = await extractPdfDetails(file);
+  return details?.text;
+};
 
-		const pdf = await loadingTask.promise;
-		const { numPages } = pdf;
-		let extractedText = '';
+// OCR fallback for scanned/photographed PDFs (no text layer): render
+// each page to a canvas and run tesseract (Arabic + English). Slow —
+// expect 15-60s per page on first use while the language data
+// downloads — so callers should surface progress via onProgress
+// (0..1 or null). Returns the same { text, lines, pageLines } shape
+// as extractPdfDetails, or undefined when nothing was recognized.
+export const ocrPdfDetails = async (file, onProgress) => {
+  try {
+    ensureWorker();
+    const data = await file.arrayBuffer();
+    const pdf = await pdfjs.getDocument({ data }).promise;
 
-		for (let pageNumber = 1; pageNumber <= numPages; pageNumber++) {
-			const page = await pdf.getPage(pageNumber);
+    const { createWorker } = await import("tesseract.js");
+    const worker = await createWorker(["ara", "eng"], 1, {
+      logger: (m) => {
+        if (m.status === "recognizing text" && typeof m.progress === "number") {
+          onProgress?.(m.progress);
+        }
+      },
+    });
 
-			const textContent = await page.getTextContent();
-			const pageText = textContent.items
-				.map((item) => ('str' in item ? item.str : ''))
-				.join(' ');
-			extractedText += pageText;
-		}
-		if (extractedText.length > 0) {
-			return extractedText;
-		}
-		return undefined;
-	} catch (_error) {
-		URL.revokeObjectURL(blobUrl);
-		return undefined;
-	}
+    let text = "";
+    const pageLines = [];
+    try {
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+        const page = await pdf.getPage(pageNumber);
+        // High scale sharpens small invoice print for the recognizer.
+        const viewport = page.getViewport({ scale: 2.5 });
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.ceil(viewport.width);
+        canvas.height = Math.ceil(viewport.height);
+        await page.render({
+          canvasContext: canvas.getContext("2d"),
+          viewport,
+        }).promise;
+
+        const { data: result } = await worker.recognize(canvas);
+        text += (result.text || "") + "\n";
+        const lines = (result.lines || [])
+          .map((line) => String(line.text || "").replace(/\s+/g, " ").trim())
+          .filter(Boolean);
+        // Older tesseract builds may omit .lines — fall back to text rows.
+        pageLines.push(
+          lines.length > 0
+            ? lines
+            : String(result.text || "")
+                .split("\n")
+                .map((line) => line.trim())
+                .filter(Boolean),
+        );
+      }
+    } finally {
+      await worker.terminate();
+    }
+
+    const trimmed = text.trim();
+    if (trimmed.length === 0) return undefined;
+    return { text: trimmed, lines: pageLines.flat(), pageLines, viaOcr: true };
+  } catch (error) {
+    console.error("PDF OCR failed:", error);
+    return undefined;
+  }
 };

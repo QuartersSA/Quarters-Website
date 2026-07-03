@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router";
 import {
-  ShoppingCart,
-  FileText,
-  Users,
-  Layers,
   Building,
-  Percent,
-  Construction,
   Contact,
+  FileText,
   HandCoins,
+  LayoutDashboard,
+  ListTree,
+  Percent,
   Plus,
   Search,
+  ShoppingCart,
+  Users,
 } from "lucide-react";
 import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
@@ -23,7 +24,11 @@ import ContactsExportMenu from "@/components/Accounting/ContactsExportMenu";
 import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
 import BeneficiariesList from "@/components/Accounting/BeneficiariesList";
 import BeneficiariesExportMenu from "@/components/Accounting/BeneficiariesExportMenu";
-import PurchasesItemsPanel from "@/components/Accounting/PurchasesItemsPanel";
+import PurchasesOverviewPanel from "@/components/Accounting/PurchasesOverviewPanel";
+import PurchasesAccountsTreePanel from "@/components/Accounting/PurchasesAccountsTreePanel";
+import PurchasesBankAccountsPanel from "@/components/Accounting/PurchasesBankAccountsPanel";
+import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPanel";
+import PurchasesTaxPanel from "@/components/Accounting/PurchasesTaxPanel";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -36,18 +41,25 @@ import {
   useUpdateAccountingBeneficiary,
   useDeleteAccountingBeneficiary,
 } from "@/hooks/useAccountingBeneficiaries";
+import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 
 /**
- * Purchases section — scaffold.
+ * Purchases section.
  *
- * Five top-level tabs, each a placeholder right now. Content lands
- * in follow-up commits as we flesh out each area:
+ * Built on شجرة الحسابات (chart of accounts): purchase invoices
+ * classify against expense accounts, bank accounts auto-link as asset
+ * accounts under «1102 البنوك», and the VAT report reads the invoices'
+ * tax amounts (backed by tree accounts 1104 / 2102).
  *
- *   - فواتير المشتريات     — purchase invoices ledger
+ *   - نظرة عامة            — KPIs, alerts, recent invoices, top accounts
+ *   - فواتير المشتريات     — ledger + quick payment + export
  *   - الموردين والمستفيدين  — two-pane (suppliers + beneficiaries)
- *   - التصنيفات والأصناف   — purchase-side categories + items
+ *   - شجرة الحسابات         — hierarchical chart of accounts
  *   - الحسابات البنكية      — bank accounts master list
- *   - الضريبة              — VAT settings + reports
+ *   - الضريبة              — VAT report aggregated from invoices
+ *
+ * The active tab (and vendor sub-tab) live in the URL query string so
+ * refresh / back / deep links land on the same view.
  */
 
 const VENDOR_SUBTABS = [
@@ -55,69 +67,66 @@ const VENDOR_SUBTABS = [
     key: "contacts",
     label: "جهات الاتصال",
     Icon: Contact,
-    description:
-      "قائمة جهات الاتصال التجارية — موردين، مكاتب، شركاء، إلخ.",
+    description: "قائمة جهات الاتصال التجارية — موردين، مكاتب، شركاء، إلخ.",
   },
   {
     key: "beneficiaries",
     label: "المستفيدون",
     Icon: HandCoins,
-    description:
-      "قائمة المستفيدين الذين تُحوَّل لهم المدفوعات من حسابات البنك.",
-  },
-];
-
-const CATALOG_SUBTABS = [
-  {
-    key: "categories",
-    label: "التصنيفات",
-    Icon: Layers,
-    description: "تصنيفات المشتريات المرتبطة بالأصناف.",
-  },
-  {
-    key: "items",
-    label: "أصناف",
-    Icon: ShoppingCart,
-    description: "كامل أصناف المخزون بصيغة موحّدة لقسم المشتريات.",
+    description: "قائمة المستفيدين الذين تُحوَّل لهم المدفوعات من حسابات البنك.",
   },
 ];
 
 const TABS = [
   {
+    key: "overview",
+    label: "نظرة عامة",
+    shortLabel: "عامة",
+    Icon: LayoutDashboard,
+    description: "ملخص سريع: التزامات، متأخرات، أحدث الفواتير، وأعلى الحسابات.",
+  },
+  {
     key: "invoices",
     label: "فواتير المشتريات",
+    shortLabel: "فواتير",
     Icon: FileText,
-    description: "إدخال ومتابعة فواتير المشتريات لكل مورد.",
+    description: "إدخال ومتابعة فواتير المشتريات وتسجيل الدفعات.",
   },
   {
     key: "vendors",
     label: "الموردين والمستفيدين",
+    shortLabel: "موردين",
     Icon: Users,
     description: "إدارة جهات الاتصال والمستفيدين في قائمتين منفصلتين.",
     subTabs: VENDOR_SUBTABS,
   },
   {
-    key: "catalog",
-    label: "التصنيفات والأصناف",
-    Icon: Layers,
-    description: "تصنيفات وأصناف المشتريات المرتبطة بالفواتير.",
-    subTabs: CATALOG_SUBTABS,
+    key: "accounts",
+    label: "شجرة الحسابات",
+    shortLabel: "شجرة",
+    Icon: ListTree,
+    description: "شجرة الحسابات المحاسبية — أساس تصنيف الفواتير والبنوك والضريبة.",
   },
   {
     key: "banks",
     label: "الحسابات البنكية",
+    shortLabel: "بنوك",
     Icon: Building,
     description: "حسابات البنك المستخدمة في عمليات الدفع.",
   },
   {
     key: "tax",
     label: "الضريبة",
+    shortLabel: "ضريبة",
     Icon: Percent,
-    description: "إعدادات ضريبة القيمة المضافة + تقارير الضريبة.",
+    description: "تقرير ضريبة القيمة المضافة من فواتير المشتريات.",
   },
 ];
 
-function PurchasesMobileHeader() {
+const TAB_KEYS = new Set(TABS.map((tab) => tab.key));
+const VENDOR_KEYS = new Set(VENDOR_SUBTABS.map((sub) => sub.key));
+
+function PurchasesMobileHeader({ activeTab }) {
   return (
     <div
       className={`lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`}
@@ -125,19 +134,19 @@ function PurchasesMobileHeader() {
       <div className="w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center">
         <ShoppingCart className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
       </div>
-      <div>
+      <div className="min-w-0">
         <div className="font-bold text-slate-900 dark:text-white tracking-tight">
           المشتريات
         </div>
-        <div className="text-xs text-slate-500 dark:text-white/50">
-          فواتير، موردين، أصناف، بنوك، وضريبة
+        <div className="text-xs text-slate-500 dark:text-white/50 truncate">
+          {activeTab?.label || ""}
         </div>
       </div>
     </div>
   );
 }
 
-function PurchasesDesktopHeader() {
+function PurchasesDesktopHeader({ activeTab }) {
   return (
     <div className="hidden lg:flex items-center gap-4">
       <div className={ws.iconBox}>
@@ -148,8 +157,8 @@ function PurchasesDesktopHeader() {
           المشتريات
         </h1>
         <p className="text-slate-500 dark:text-white/50 text-sm mt-0.5">
-          فواتير المشتريات، الموردين والمستفيدين، التصنيفات والأصناف،
-          الحسابات البنكية، والضريبة.
+          {activeTab?.description ||
+            "فواتير المشتريات، الموردين والمستفيدين، شجرة الحسابات، الحسابات البنكية، والضريبة."}
         </p>
       </div>
     </div>
@@ -169,6 +178,9 @@ function ContactsPanel({ employeeId, isAdmin }) {
     includeInactive,
   });
   const contacts = contactsQuery.data || [];
+  // شجرة الحسابات — feeds the supplier's default-account picker.
+  const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
+  const accounts = accountsQuery.data || [];
 
   const createMut = useCreateAccountingContact();
   const updateMut = useUpdateAccountingContact();
@@ -196,7 +208,6 @@ function ContactsPanel({ employeeId, isAdmin }) {
 
   return (
     <>
-      {/* Toolbar */}
       <div className={`${ws.glass} ${ws.card} p-4`}>
         <div className="flex items-center gap-3 flex-wrap">
           <div className="relative flex-1 min-w-[220px]">
@@ -242,6 +253,7 @@ function ContactsPanel({ employeeId, isAdmin }) {
       <ContactModal
         open={showAdd || !!editing}
         contact={editing}
+        accounts={accounts}
         isSubmitting={createMut.isPending || updateMut.isPending}
         onClose={() => {
           setShowAdd(false);
@@ -355,46 +367,50 @@ function BeneficiariesPanel({ employeeId, isAdmin }) {
   );
 }
 
-function ComingSoonCard({ tab }) {
-  const Icon = tab?.Icon || Construction;
-  return (
-    <div className={`${ws.glass} ${ws.card} p-10 text-center`}>
-      <div
-        className={`${ws.iconBox} w-14 h-14 mx-auto mb-4 text-emerald-700 dark:text-emerald-200`}
-      >
-        <Icon className="w-7 h-7" />
-      </div>
-      <div className="text-lg font-bold text-slate-900 dark:text-white tracking-tight mb-1">
-        {tab?.label}
-      </div>
-      <div className="text-sm text-slate-600 dark:text-white/60 max-w-md mx-auto leading-relaxed">
-        {tab?.description}
-      </div>
-      <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 text-amber-700 dark:text-amber-200 text-xs font-semibold">
-        <Construction className="w-3.5 h-3.5" />
-        قيد التطوير
-      </div>
-    </div>
-  );
-}
-
 export default function PurchasesPage() {
   const { ready, employeeId, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
 
-  const [activeTab, setActiveTab] = useState(TABS[0].key);
-  // Per top-level tab, remember which sub-tab the operator last
-  // picked. Keyed by parent tab.key so switching away and back
-  // returns to the same inner view.
-  const [activeSubTab, setActiveSubTab] = useState(() => {
-    const init = {};
-    for (const t of TABS) {
-      if (Array.isArray(t.subTabs) && t.subTabs.length > 0) {
-        init[t.key] = t.subTabs[0].key;
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const rawTab = searchParams.get("tab") || "overview";
+  const activeTabKey = TAB_KEYS.has(rawTab) ? rawTab : "overview";
+  const rawSub = searchParams.get("sub") || "contacts";
+  const vendorSubKey = VENDOR_KEYS.has(rawSub) ? rawSub : "contacts";
+
+  // "invoices:add" style intents let the overview's quick actions land
+  // on a tab with its create modal already open.
+  const intent = searchParams.get("intent") || "";
+
+  const setTab = useCallback(
+    (tabKey, extras = {}) => {
+      const next = new URLSearchParams();
+      next.set("tab", tabKey);
+      if (tabKey === "vendors") {
+        next.set("sub", extras.sub || vendorSubKey);
       }
-    }
-    return init;
-  });
+      if (extras.intent) next.set("intent", extras.intent);
+      setSearchParams(next, { replace: false });
+    },
+    [setSearchParams, vendorSubKey],
+  );
+
+  const clearIntent = useCallback(() => {
+    if (!intent) return;
+    const next = new URLSearchParams(searchParams);
+    next.delete("intent");
+    setSearchParams(next, { replace: true });
+  }, [intent, searchParams, setSearchParams]);
+
+  const activeTab = TABS.find((tab) => tab.key === activeTabKey) || TABS[0];
+  const activeVendorSub =
+    VENDOR_SUBTABS.find((sub) => sub.key === vendorSubKey) || VENDOR_SUBTABS[0];
+
+  // Restore scroll to the top when switching tabs — long tables
+  // otherwise leave the next tab starting mid-page.
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [activeTabKey]);
 
   let body = null;
   if (!ready) {
@@ -416,66 +432,51 @@ export default function PurchasesPage() {
       </div>
     );
   } else {
-    const tab = TABS.find((t) => t.key === activeTab) || TABS[0];
-    const subTabs = Array.isArray(tab.subTabs) ? tab.subTabs : null;
-    const subKey = subTabs ? activeSubTab[tab.key] : null;
-    const activeSub = subTabs
-      ? subTabs.find((s) => s.key === subKey) || subTabs[0]
-      : null;
-
     body = (
       <>
-        {/* Tabs row — horizontally scrollable on mobile so the
-            5-tab set never gets squeezed. */}
+        {/* Tab rail — icons + labels, horizontally scrollable on
+            mobile. Short labels keep the rail compact under 420px. */}
         <div className={`${ws.glass} ${ws.card} p-2 overflow-x-auto`}>
           <div className="flex items-center gap-1 min-w-max">
-            {TABS.map((t) => {
-              const isActive = t.key === activeTab;
-              const Icon = t.Icon;
-              const cls = `${ws.segBtn} ${
-                isActive ? ws.segActive : ws.segInactive
-              } flex items-center gap-2 whitespace-nowrap`;
+            {TABS.map((tab) => {
+              const isActive = tab.key === activeTabKey;
+              const Icon = tab.Icon;
               return (
                 <button
-                  key={t.key}
+                  key={tab.key}
                   type="button"
-                  onClick={() => setActiveTab(t.key)}
-                  className={cls}
+                  onClick={() => setTab(tab.key)}
+                  className={`${ws.segBtn} ${
+                    isActive ? ws.segActive : ws.segInactive
+                  } flex items-center gap-2 whitespace-nowrap`}
+                  title={tab.description}
                 >
                   <Icon className="w-4 h-4" />
-                  <span>{t.label}</span>
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden">{tab.shortLabel}</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Sub-tabs row — only renders when the active top tab has
-            nested sections (e.g. الموردين والمستفيدين). Same segWrap
-            styling but smaller, scoped to this tab's children. */}
-        {subTabs ? (
+        {activeTabKey === "vendors" ? (
           <div className={`${ws.glassSoft} ${ws.card} p-2 overflow-x-auto`}>
             <div className="flex items-center gap-1 min-w-max">
-              {subTabs.map((s) => {
-                const isActive = s.key === activeSub.key;
-                const Icon = s.Icon;
-                const cls = `${ws.segBtn} ${
-                  isActive ? ws.segActive : ws.segInactive
-                } flex items-center gap-2 whitespace-nowrap text-sm`;
+              {VENDOR_SUBTABS.map((sub) => {
+                const isActive = sub.key === activeVendorSub.key;
+                const Icon = sub.Icon;
                 return (
                   <button
-                    key={s.key}
+                    key={sub.key}
                     type="button"
-                    onClick={() =>
-                      setActiveSubTab((prev) => ({
-                        ...prev,
-                        [tab.key]: s.key,
-                      }))
-                    }
-                    className={cls}
+                    onClick={() => setTab("vendors", { sub: sub.key })}
+                    className={`${ws.segBtn} ${
+                      isActive ? ws.segActive : ws.segInactive
+                    } flex items-center gap-2 whitespace-nowrap text-sm`}
                   >
                     <Icon className="w-4 h-4" />
-                    <span>{s.label}</span>
+                    <span>{sub.label}</span>
                   </button>
                 );
               })}
@@ -483,15 +484,29 @@ export default function PurchasesPage() {
           </div>
         ) : null}
 
-        {activeTab === "vendors" && activeSub?.key === "contacts" ? (
+        {activeTabKey === "overview" ? (
+          <PurchasesOverviewPanel
+            employeeId={employeeId}
+            isAdmin={isAdmin}
+            onNavigate={setTab}
+          />
+        ) : activeTabKey === "invoices" ? (
+          <PurchasesInvoicesPanel
+            employeeId={employeeId}
+            isAdmin={isAdmin}
+            autoOpenAdd={intent === "add"}
+            onIntentConsumed={clearIntent}
+          />
+        ) : activeTabKey === "vendors" && activeVendorSub.key === "contacts" ? (
           <ContactsPanel employeeId={employeeId} isAdmin={isAdmin} />
-        ) : activeTab === "vendors" &&
-          activeSub?.key === "beneficiaries" ? (
+        ) : activeTabKey === "vendors" ? (
           <BeneficiariesPanel employeeId={employeeId} isAdmin={isAdmin} />
-        ) : activeTab === "catalog" && activeSub?.key === "items" ? (
-          <PurchasesItemsPanel />
+        ) : activeTabKey === "accounts" ? (
+          <PurchasesAccountsTreePanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTabKey === "banks" ? (
+          <PurchasesBankAccountsPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : (
-          <ComingSoonCard tab={activeSub || tab} />
+          <PurchasesTaxPanel employeeId={employeeId} isAdmin={isAdmin} />
         )}
       </>
     );
@@ -500,10 +515,10 @@ export default function PurchasesPage() {
   return (
     <div className="min-h-[100svh] pb-24 lg:pb-0" dir="rtl">
       <AccountingSidebar active="purchases" />
-      <PurchasesMobileHeader />
+      <PurchasesMobileHeader activeTab={activeTab} />
       <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto w-full space-y-5">
-          <PurchasesDesktopHeader />
+          <PurchasesDesktopHeader activeTab={activeTab} />
           {body}
         </div>
       </main>

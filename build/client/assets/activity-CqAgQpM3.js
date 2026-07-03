@@ -1,0 +1,1 @@
+import{c as o}from"./ui-XzU3Q-_h.js";if(typeof window<"u"){const n={};globalThis.process??={};const i=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},n,i),{get(e,s){return s in e?e[s]:void 0},has(){return!0}})}const c=o("Activity",[["path",{d:"M22 12h-4l-3 9L9 3l-3 9H2",key:"d5dnw9"}]]);export{c as A};
