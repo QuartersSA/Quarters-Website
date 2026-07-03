@@ -156,7 +156,8 @@ const ocrPdfDetails = async (file, onProgress) => {
     return {
       text: trimmed,
       lines: pageLines.flat(),
-      pageLines
+      pageLines,
+      viaOcr: true
     };
   } catch (error) {
     console.error("PDF OCR failed:", error);

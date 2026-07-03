@@ -232,7 +232,7 @@ function dateNearKeyword(text, keywords) {
 // in visual-order PDFs.
 function detectInvoiceDate(text) {
   const compact = compactArabic(text);
-  return dateNearKeyword(compact, [
+  const keyworded = dateNearKeyword(compact, [
     "تاريخ\\s*الفاتورة",
     "تاريخ\\s*الإصدار",
     "تاريخ\\s*الاصدار",
@@ -244,6 +244,18 @@ function detectInvoiceDate(text) {
     "التاريخ",
     "date",
   ]);
+  if (keyworded) return keyworded;
+  // Receipts often print the date with no label at all — take the
+  // first plausible date anywhere in the document.
+  for (const match of compact.matchAll(
+    new RegExp(DATE_TOKEN_RE.source, "g"),
+  )) {
+    const value = normalizeDateToken(match[1]);
+    if (value && value >= "2015-01-01" && value <= "2035-12-31") {
+      return value;
+    }
+  }
+  return null;
 }
 
 function detectDueDate(text) {
@@ -696,6 +708,56 @@ function itemsSumMatches(items, grandTotal) {
   return Math.abs(sum - grandTotal) <= Math.max(1, grandTotal * 0.015);
 }
 
+// Receipt-style rows (supermarket / POS prints, usually via OCR):
+// barcode + quantity + line amount with NO per-line net/VAT columns.
+// Weaker evidence than the triplet rule, so the caller still requires
+// the rows to reproduce the grand total before trusting them.
+function receiptItemsFromRows(rows) {
+  const items = [];
+  const consumed = new Set();
+  const normalized = rows.map((row) => normalizeDigits(row));
+  for (let i = 0; i < normalized.length; i += 1) {
+    const line = normalized[i];
+    if (isSummaryLine(line)) continue;
+    if (!/\d{8,}/.test(line)) continue; // barcode anchors a product row
+    const values = lineNumbers(line);
+    // quantity: small count-like number; amount: decimal-formatted
+    const quantities = values.filter(
+      (value) => value > 0 && value <= 999 && decimalsOf(value) <= 1,
+    );
+    const amounts = values.filter(
+      (value) => value > 0 && decimalsOf(value) === 2,
+    );
+    if (quantities.length === 0 || amounts.length === 0) continue;
+    const total = Math.max(...amounts);
+    const quantity = quantities[0];
+    if (total <= 0 || quantity <= 0) continue;
+
+    // Description: this line minus numbers, or an adjacent name line.
+    let description = cleanItemDescription(line);
+    for (const neighbor of [i + 1, i - 1]) {
+      if (description.length >= 4) break;
+      if (neighbor < 0 || neighbor >= normalized.length) continue;
+      if (consumed.has(neighbor)) continue;
+      if (!isDescriptionLine(normalized[neighbor])) continue;
+      description = cleanItemDescription(normalized[neighbor]);
+      consumed.add(neighbor);
+    }
+
+    consumed.add(i);
+    items.push({
+      description,
+      net: round2(total / 1.15),
+      total: round2(total),
+      rate: 15,
+      quantity,
+      unitPrice: round2((total / quantity) * 10000) / 10000,
+      priceIncludesTax: true,
+    });
+  }
+  return items;
+}
+
 // rowGroups: candidate line sets (per page first, then all pages
 // merged — multi-page invoices often duplicate the items table on a
 // copy page, which doubles the sum when pages are mixed together).
@@ -709,6 +771,14 @@ export function parseInvoiceLineItems(rowGroups, grandTotal) {
 
   for (const rows of groups) {
     const items = itemsFromRows(rows);
+    if (itemsSumMatches(items, grandTotal)) {
+      return items;
+    }
+  }
+  // Weaker receipt-row pass (barcode + qty + amount) — only trusted
+  // when the recovered rows reproduce the invoice total.
+  for (const rows of groups) {
+    const items = receiptItemsFromRows(rows);
     if (itemsSumMatches(items, grandTotal)) {
       return items;
     }
@@ -1360,6 +1430,10 @@ export default function PurchaseInvoiceModal({
         filled.push("تاريخ الاستحقاق");
       }
 
+      const ocrLimitNote =
+        details?.viaOcr && !filled.some((f) => f.startsWith("بنود"))
+          ? "المسح الضوئي التقط الإجماليات لكن جدول الأصناف غير واضح بما يكفي — للبنود التفصيلية اطلب PDF رقمياً من المورد أو صوّر بإضاءة أوضح."
+          : null;
       setScanSummary({
         filled,
         warning:
@@ -1367,7 +1441,7 @@ export default function PurchaseInvoiceModal({
             ? "قرأت الملف لكن ما تعرفت على الحقول — تأكد منها يدوياً."
             : !parsed.contact
               ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو اكتب اسم المورد."
-              : null,
+              : ocrLimitNote,
       });
       setMobilePane("form");
     } catch (error) {
