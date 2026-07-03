@@ -11,6 +11,7 @@
     "check": "bun run test && bun run typecheck && bun run build"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.110.0",
     "@auth/core": "^0.37.2",
     "@babel/generator": "^7.27.1",
     "@chakra-ui/react": "2.8.2",

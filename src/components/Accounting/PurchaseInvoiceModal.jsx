@@ -18,6 +18,7 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import useUpload from "@/utils/useUpload";
+import { adminFetch } from "@/utils/apiAuth";
 
 export const PURCHASE_INVOICE_STATUS_OPTIONS = [
   { value: "new", label: "جديد" },
@@ -825,6 +826,36 @@ function round2(value) {
   return Math.round(value * 100) / 100;
 }
 
+// Smart pass: the server sends the raw extracted text to Claude, which
+// reconstructs the invoice (repairs garbled Arabic, verifies the math,
+// matches the supplier by VAT and classifies each line on شجرة
+// الحسابات). Returns the analysis object, or null on ANY failure —
+// missing ANTHROPIC_API_KEY (503), network error, refusal — so the
+// caller can fall back to the local heuristic parser.
+async function analyzeInvoiceRemotely(text) {
+  try {
+    const response = await adminFetch(
+      "/api/accounting/purchase-invoices/analyze",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      },
+    );
+    if (!response.ok) {
+      console.info("[invoice-scan] smart analysis unavailable:", response.status);
+      return null;
+    }
+    const data = await response.json().catch(() => null);
+    return data?.ok && data.analysis ? data.analysis : null;
+  } catch (error) {
+    console.error("smart invoice analysis failed", error);
+    return null;
+  }
+}
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
 function formatMoney(value, currency = "SAR") {
   return `${moneyValue(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
@@ -1312,12 +1343,140 @@ export default function PurchaseInvoiceModal({
       const linesText = (details?.pageLines || [])
         .flat()
         .join("\n");
-      const parsed = parseInvoiceText(linesText || text, contacts);
       const filled = [];
       // A field is fillable when it's still empty/default OR the last
       // scan owns it (replacing the attachment refreshes those values).
       const owned = autoFilledRef.current;
       const canFill = (field, isEmpty) => isEmpty || owned.has(field);
+
+      // Smart pass first — Claude reconstructs the whole invoice.
+      setScanSummary({
+        filled: [],
+        warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة.",
+      });
+      const analysis = await analyzeInvoiceRemotely(linesText || text);
+      if (analysis) {
+        if (
+          analysis.invoice_number &&
+          canFill("number", !invoiceNumber.trim())
+        ) {
+          setInvoiceNumber(String(analysis.invoice_number));
+          owned.add("number");
+          filled.push("رقم الفاتورة");
+        }
+        const matchedContact = analysis.contact_id
+          ? contacts.find((contact) => contact.id === analysis.contact_id)
+          : null;
+        if (matchedContact && canFill("contact", !contactId)) {
+          setContactId(String(matchedContact.id));
+          setSupplierName(matchedContact.name);
+          setVatMatched(analysis.contact_matched_by === "vat");
+          owned.add("contact");
+          filled.push(
+            analysis.contact_matched_by === "vat"
+              ? "جهة الاتصال (تطابق الرقم الضريبي)"
+              : "جهة الاتصال (تطابق الاسم)",
+          );
+        } else if (
+          !matchedContact &&
+          analysis.supplier_name &&
+          !supplierName.trim()
+        ) {
+          setSupplierName(String(analysis.supplier_name));
+          filled.push("اسم المورد");
+        }
+
+        const fallbackAccount = matchedContact?.default_account_id
+          ? String(matchedContact.default_account_id)
+          : contactDefaultAccountId;
+        const items = (Array.isArray(analysis.items) ? analysis.items : [])
+          .filter(
+            (item) =>
+              Number(item?.quantity) > 0 && Number(item?.unit_price) > 0,
+          );
+        const hasAmounts = lines.some((line) => lineAmount(line) > 0);
+        if (items.length > 0 && canFill("lines", !hasAmounts)) {
+          setLines(
+            items.map((item) =>
+              newLine({
+                description: String(item.description || ""),
+                account_id: item.account_id
+                  ? String(item.account_id)
+                  : fallbackAccount,
+                quantity: String(Number(item.quantity)),
+                unit_price: priceInput(Number(item.unit_price)),
+                tax_rate: String(
+                  Number.isFinite(Number(item.tax_rate))
+                    ? Number(item.tax_rate)
+                    : 15,
+                ),
+                amount_includes_tax: !!item.amount_includes_tax,
+              }),
+            ),
+          );
+          owned.add("lines");
+          filled.push(`بنود الفاتورة (${items.length})`);
+          if (items.some((item) => item.account_id)) {
+            filled.push("تصنيف البنود على شجرة الحسابات");
+          }
+        } else if (
+          items.length === 0 &&
+          Number(analysis.total) > 0 &&
+          canFill("lines", !hasAmounts)
+        ) {
+          // No reliable rows — one aggregate line from the totals.
+          const total = Number(analysis.total);
+          const tax = Number(analysis.tax);
+          const subtotal =
+            Number.isFinite(tax) && tax >= 0 ? total - tax : null;
+          const rate =
+            subtotal !== null && subtotal > 0
+              ? round2((tax / subtotal) * 100)
+              : 15;
+          setLines([
+            newLine({
+              description: "",
+              account_id: fallbackAccount,
+              quantity: "1",
+              unit_price: total.toFixed(2),
+              tax_rate: String(rate),
+              amount_includes_tax: true,
+            }),
+          ]);
+          owned.add("lines");
+          filled.push("مبلغ الفاتورة");
+          if (Number.isFinite(tax)) filled.push("الضريبة");
+        }
+
+        if (
+          ISO_DATE.test(analysis.invoice_date || "") &&
+          canFill("date", false)
+        ) {
+          setInvoiceDate(analysis.invoice_date);
+          owned.add("date");
+          filled.push("تاريخ الفاتورة");
+        }
+        if (ISO_DATE.test(analysis.due_date || "") && canFill("dueDate", !dueDate)) {
+          setDueDate(analysis.due_date);
+          owned.add("dueDate");
+          filled.push("تاريخ الاستحقاق");
+        }
+
+        setScanSummary({
+          filled,
+          smart: true,
+          warning:
+            analysis.operator_note ||
+            (!matchedContact
+              ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو أضف المورد."
+              : null),
+        });
+        setMobilePane("form");
+        return;
+      }
+
+      // Local heuristics — smart pass unavailable or failed.
+      const parsed = parseInvoiceText(linesText || text, contacts);
 
       if (parsed.invoiceNumber && canFill("number", !invoiceNumber.trim())) {
         setInvoiceNumber(parsed.invoiceNumber);
@@ -1652,7 +1811,9 @@ export default function PurchaseInvoiceModal({
                 {scanSummary.filled.length > 0 ? (
                   <div className="flex items-center gap-2 flex-wrap text-xs text-emerald-800 dark:text-emerald-200">
                     <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                    <span>تمت تعبئة:</span>
+                    <span>
+                      {scanSummary.smart ? "تحليل ذكي — تمت تعبئة:" : "تمت تعبئة:"}
+                    </span>
                     {scanSummary.filled.map((label) => (
                       <span
                         key={label}
