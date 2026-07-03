@@ -93,3 +93,67 @@ export const extractTextFromPDF = async (file) => {
   const details = await extractPdfDetails(file);
   return details?.text;
 };
+
+// OCR fallback for scanned/photographed PDFs (no text layer): render
+// each page to a canvas and run tesseract (Arabic + English). Slow —
+// expect 15-60s per page on first use while the language data
+// downloads — so callers should surface progress via onProgress
+// (0..1 or null). Returns the same { text, lines, pageLines } shape
+// as extractPdfDetails, or undefined when nothing was recognized.
+export const ocrPdfDetails = async (file, onProgress) => {
+  try {
+    ensureWorker();
+    const data = await file.arrayBuffer();
+    const pdf = await pdfjs.getDocument({ data }).promise;
+
+    const { createWorker } = await import("tesseract.js");
+    const worker = await createWorker(["ara", "eng"], 1, {
+      logger: (m) => {
+        if (m.status === "recognizing text" && typeof m.progress === "number") {
+          onProgress?.(m.progress);
+        }
+      },
+    });
+
+    let text = "";
+    const pageLines = [];
+    try {
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+        const page = await pdf.getPage(pageNumber);
+        // High scale sharpens small invoice print for the recognizer.
+        const viewport = page.getViewport({ scale: 2.5 });
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.ceil(viewport.width);
+        canvas.height = Math.ceil(viewport.height);
+        await page.render({
+          canvasContext: canvas.getContext("2d"),
+          viewport,
+        }).promise;
+
+        const { data: result } = await worker.recognize(canvas);
+        text += (result.text || "") + "\n";
+        const lines = (result.lines || [])
+          .map((line) => String(line.text || "").replace(/\s+/g, " ").trim())
+          .filter(Boolean);
+        // Older tesseract builds may omit .lines — fall back to text rows.
+        pageLines.push(
+          lines.length > 0
+            ? lines
+            : String(result.text || "")
+                .split("\n")
+                .map((line) => line.trim())
+                .filter(Boolean),
+        );
+      }
+    } finally {
+      await worker.terminate();
+    }
+
+    const trimmed = text.trim();
+    if (trimmed.length === 0) return undefined;
+    return { text: trimmed, lines: pageLines.flat(), pageLines };
+  } catch (error) {
+    console.error("PDF OCR failed:", error);
+    return undefined;
+  }
+};

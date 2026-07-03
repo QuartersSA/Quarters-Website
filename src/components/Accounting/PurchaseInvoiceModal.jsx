@@ -988,6 +988,7 @@ export default function PurchaseInvoiceModal({
   const [attachmentMime, setAttachmentMime] = useState("");
   const [vatMatched, setVatMatched] = useState(false);
   const [scanBusy, setScanBusy] = useState(false);
+  const [ocrProgress, setOcrProgress] = useState(null); // 0..1 while OCR runs
   const [scanSummary, setScanSummary] = useState(null); // {filled:[], warning?}
   const [mobilePane, setMobilePane] = useState("form"); // form | preview
   const fileInputRef = useRef(null);
@@ -1208,16 +1209,30 @@ export default function PurchaseInvoiceModal({
 
     setScanBusy(true);
     try {
-      const { extractPdfDetails } = await import(
+      const { extractPdfDetails, ocrPdfDetails } = await import(
         "@/client-integrations/pdfjs"
       );
-      const details = await extractPdfDetails(file);
+      let details = await extractPdfDetails(file);
+      // Scanned/photographed PDFs have no text layer — fall back to
+      // OCR (slow: language data downloads on first use).
+      if (!details || details.text.trim().length < 10) {
+        setScanSummary({
+          filled: [],
+          warning:
+            "الفاتورة صورة ممسوحة — جاري التعرف الضوئي (OCR)، قد يستغرق دقيقة…",
+        });
+        setOcrProgress(0);
+        details = await ocrPdfDetails(file, (progress) =>
+          setOcrProgress(progress),
+        );
+        setOcrProgress(null);
+      }
       const text = details?.text;
       if (!text || text.trim().length < 10) {
         setScanSummary({
           filled: [],
           warning:
-            "تم إرفاق الفاتورة لكن ما قدرت أقرأ نصها — غالباً صورة ممسوحة. عبّي الحقول يدوياً.",
+            "تم إرفاق الفاتورة لكن ما قدرت أقرأ نصها حتى بالتعرف الضوئي. عبّي الحقول يدوياً.",
         });
         return;
       }
@@ -1363,6 +1378,7 @@ export default function PurchaseInvoiceModal({
       });
     } finally {
       setScanBusy(false);
+      setOcrProgress(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
@@ -1456,9 +1472,11 @@ export default function PurchaseInvoiceModal({
           <div className="text-sm font-bold text-slate-800 dark:text-white/85">
             {uploading
               ? "جاري الرفع…"
-              : scanBusy
-                ? "جاري فحص الفاتورة…"
-                : "أرفق الفاتورة (PDF)"}
+              : ocrProgress !== null
+                ? `تعرف ضوئي (OCR)… ${Math.round(ocrProgress * 100)}%`
+                : scanBusy
+                  ? "جاري فحص الفاتورة…"
+                  : "أرفق الفاتورة (PDF)"}
           </div>
           <div className="text-xs text-slate-500 dark:text-white/45 max-w-[260px] leading-relaxed">
             تُعرض هنا جنب النموذج، وتُفحص وتُعبّأ الحقول تلقائياً — رقم
