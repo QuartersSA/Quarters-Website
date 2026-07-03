@@ -297,39 +297,94 @@ function cleanItemDescription(line) {
     .trim();
 }
 
-// rows: visual lines from the PDF. grandTotal: detected invoice total
-// (used to sanity-check the sum). Returns [{description, total, rate}]
-// or null when the table can't be recovered confidently.
-export function parseInvoiceLineItems(rows, grandTotal) {
-  if (!Array.isArray(rows) || rows.length === 0) return null;
-  const items = [];
-  for (const rawLine of rows) {
-    const line = normalizeDigits(rawLine);
-    if (SUMMARY_LINE_RE.test(line)) continue;
-    const values = lineNumbers(line);
-    if (values.length < 3) continue;
-    const triplet = findLineTriplet(values);
-    if (!triplet) continue;
-    const rate = triplet.net > 0 ? round2((triplet.tax / triplet.net) * 100) : 15;
-    // Implausible VAT rate → probably a coincidence, not a product row.
-    if (rate <= 0 || rate > 50) continue;
-    items.push({
-      description: cleanItemDescription(line),
-      total: triplet.total,
-      rate,
-    });
-  }
+function itemFromLine(line) {
+  if (SUMMARY_LINE_RE.test(line)) return null;
+  const values = lineNumbers(line);
+  if (values.length < 3) return null;
+  const triplet = findLineTriplet(values);
+  if (!triplet) return null;
+  const rate = triplet.net > 0 ? round2((triplet.tax / triplet.net) * 100) : 15;
+  // Implausible VAT rate → probably a coincidence, not a product row.
+  if (rate <= 0 || rate > 50) return null;
+  return {
+    description: cleanItemDescription(line),
+    total: triplet.total,
+    rate,
+  };
+}
 
-  if (items.length < 2) return null;
-  // The rows must reproduce the invoice total, otherwise we misread
-  // the table and one aggregate line is safer.
-  if (grandTotal !== null && grandTotal !== undefined) {
-    const sum = round2(items.reduce((acc, item) => acc + item.total, 0));
-    if (Math.abs(sum - grandTotal) > Math.max(1, grandTotal * 0.01)) {
-      return null;
+function itemsFromRows(rows, { mergeAdjacent = false } = {}) {
+  const normalized = rows.map((row) => normalizeDigits(row));
+  const items = [];
+  const consumed = new Set();
+  for (let i = 0; i < normalized.length; i += 1) {
+    const item = itemFromLine(normalized[i]);
+    if (!item) continue;
+    // Numbers-only row (wrapped cell): the product name usually sits
+    // on the preceding text-only line — adopt it as the description.
+    if (item.description.length < 3 && i > 0 && !consumed.has(i - 1)) {
+      const prev = normalized[i - 1];
+      if (
+        !SUMMARY_LINE_RE.test(prev) &&
+        lineNumbers(prev).length === 0 &&
+        cleanItemDescription(prev).length >= 3
+      ) {
+        item.description = cleanItemDescription(prev);
+        consumed.add(i - 1);
+      }
+    }
+    items.push(item);
+    consumed.add(i);
+  }
+  if (mergeAdjacent) {
+    // Wrapped cells / baseline jitter can split one product row into
+    // two visual lines (name on one, numbers on the other) — retry on
+    // concatenations of untouched neighbours.
+    for (let i = 0; i + 1 < normalized.length; i += 1) {
+      if (consumed.has(i) || consumed.has(i + 1)) continue;
+      const merged = `${normalized[i]} ${normalized[i + 1]}`;
+      const item = itemFromLine(merged);
+      if (item) {
+        items.push(item);
+        consumed.add(i);
+        consumed.add(i + 1);
+      }
     }
   }
   return items;
+}
+
+function itemsSumMatches(items, grandTotal) {
+  if (items.length === 0) return false;
+  if (grandTotal === null || grandTotal === undefined) return items.length >= 2;
+  const sum = round2(items.reduce((acc, item) => acc + item.total, 0));
+  return Math.abs(sum - grandTotal) <= Math.max(1, grandTotal * 0.015);
+}
+
+// rowGroups: candidate line sets (per page first, then all pages
+// merged — multi-page invoices often duplicate the items table on a
+// copy page, which doubles the sum when pages are mixed together).
+// grandTotal: detected invoice total (validates each candidate).
+// Returns [{description, total, rate}] or null when no candidate
+// reproduces the invoice total.
+export function parseInvoiceLineItems(rowGroups, grandTotal) {
+  const groups = (Array.isArray(rowGroups) ? rowGroups : [])
+    .filter((rows) => Array.isArray(rows) && rows.length > 0);
+  if (groups.length === 0) return null;
+
+  const attempts = [];
+  for (const rows of groups) {
+    attempts.push(() => itemsFromRows(rows));
+    attempts.push(() => itemsFromRows(rows, { mergeAdjacent: true }));
+  }
+
+  for (const attempt of attempts) {
+    const items = attempt();
+    if (itemsSumMatches(items, grandTotal)) {
+      return items;
+    }
+  }
+  return null;
 }
 // ---------- /line-item extraction ----------
 
@@ -803,9 +858,22 @@ export default function PurchaseInvoiceModal({
       // Otherwise seed ONE aggregate line from the detected totals.
       const hasAmounts = lines.some((line) => moneyValue(line.amount) > 0);
       if (canFill("lines", !hasAmounts)) {
-        const tableItems = parseInvoiceLineItems(
+        // Per-page groups first (copy pages duplicate the table), then
+        // everything merged as a last resort.
+        const rowGroups = [
+          ...(Array.isArray(details?.pageLines) ? details.pageLines : []),
           details?.lines,
+        ];
+        const tableItems = parseInvoiceLineItems(rowGroups, parsed.total);
+        // Diagnostics for real-world invoices that fail extraction —
+        // open DevTools console and share this output.
+        console.info(
+          "[invoice-scan] total:",
           parsed.total,
+          "items:",
+          tableItems,
+          "visual lines:",
+          details?.pageLines,
         );
         if (tableItems) {
           setLines(

@@ -30,19 +30,21 @@ const extractPdfDetails = async file => {
     }).promise;
     let extractedText = "";
     const lines = [];
+    const pageLines = [];
     for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
       const page = await pdf.getPage(pageNumber);
       const textContent = await page.getTextContent();
       const items = textContent.items.filter(item => "str" in item && String(item.str).trim().length > 0);
       extractedText += items.map(item => item.str).join(" ") + "\n";
 
-      // Group by Y (2.5-unit tolerance covers sub/superscripts), top
-      // to bottom, then order each row's runs by X.
+      // Group by Y (3.5-unit tolerance covers sub/superscripts and
+      // slight baseline jitter), top to bottom, then order each row's
+      // runs by X.
       const rows = [];
       for (const item of items) {
         const y = item.transform?.[5] ?? 0;
         const x = item.transform?.[4] ?? 0;
-        let row = rows.find(r => Math.abs(r.y - y) <= 2.5);
+        let row = rows.find(r => Math.abs(r.y - y) <= 3.5);
         if (!row) {
           row = {
             y,
@@ -56,17 +58,23 @@ const extractPdfDetails = async file => {
         });
       }
       rows.sort((a, b) => b.y - a.y);
+      const current = [];
       for (const row of rows) {
         row.parts.sort((a, b) => a.x - b.x);
         const line = row.parts.map(part => part.str).join(" ").trim();
-        if (line) lines.push(line);
+        if (line) {
+          lines.push(line);
+          current.push(line);
+        }
       }
+      pageLines.push(current);
     }
     const trimmed = extractedText.trim();
     if (trimmed.length === 0) return undefined;
     return {
       text: trimmed,
-      lines
+      lines,
+      pageLines
     };
   } catch (error) {
     console.error("PDF text extraction failed:", error);
