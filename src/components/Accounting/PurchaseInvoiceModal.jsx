@@ -255,6 +255,19 @@ function detectContact(text, contacts) {
 const SUMMARY_LINE_RE =
   /(المجموع|الإجمالي|الاجمالي|إجمالي|اجمالي|المبلغ\s*المستحق|المستحق|عومجملا|يلامجلإا|يلامجلاا|يلامجا|قحتسملا|غلبملا|sub\s*-?\s*total|grand\s*total|total\s*(?:due|amount|before)|amount\s*due|balance)/i;
 
+// Some PDFs emit each Arabic glyph as its own run with real gaps, so
+// summary labels arrive letter-spaced ("يل ا م ج لا ا") and slip past
+// the keyword regex — test a compacted copy (all spaces between
+// Arabic characters removed) too.
+function isSummaryLine(line) {
+  if (SUMMARY_LINE_RE.test(line)) return true;
+  const compact = String(line).replace(
+    /(?<=[؀-ۿ])\s+(?=[؀-ۿ])/g,
+    "",
+  );
+  return SUMMARY_LINE_RE.test(compact);
+}
+
 // Wider than MONEY_RE on purpose: quantities are often single digits
 // ("2") and unit prices can carry 3–4 decimals ("16.499"). Order of
 // appearance is preserved — column order matters for qty/price.
@@ -438,7 +451,7 @@ function findQtyPrice(values, net, total) {
 }
 
 function itemFromLine(line) {
-  if (SUMMARY_LINE_RE.test(line)) return null;
+  if (isSummaryLine(line)) return null;
   const values = lineNumbers(line);
   if (values.length < 3) return null;
   const triplet = findLineTriplet(values);
@@ -466,7 +479,7 @@ const HEADER_WORD_RE =
 // A "name line": mostly text, at most a couple of small numbers (the
 // row index) — used to adopt product names printed above the numbers.
 function isDescriptionLine(line) {
-  if (SUMMARY_LINE_RE.test(line)) return false;
+  if (isSummaryLine(line)) return false;
   const numbers = lineNumbers(line);
   if (numbers.length > 2) return false;
   if (numbers.some((value) => value >= 1000)) return false;
@@ -511,7 +524,7 @@ function itemsFromRows(rows) {
   const consumed = new Set();
   let i = 0;
   while (i < normalized.length) {
-    if (SUMMARY_LINE_RE.test(normalized[i])) {
+    if (isSummaryLine(normalized[i])) {
       i += 1;
       continue;
     }
@@ -520,7 +533,7 @@ function itemsFromRows(rows) {
     for (let k = 1; k <= 4 && i + k <= normalized.length; k += 1) {
       const next = normalized[i + k - 1];
       // never merge across a summary row
-      if (k > 1 && SUMMARY_LINE_RE.test(next)) break;
+      if (k > 1 && isSummaryLine(next)) break;
       merged = merged ? `${merged} ${next}` : next;
       const item = itemFromLine(merged);
       if (!item) continue;
@@ -1092,9 +1105,9 @@ export default function PurchaseInvoiceModal({
           "[invoice-scan] total:",
           parsed.total,
           "items:",
-          tableItems,
-          "visual lines:",
-          details?.pageLines,
+          JSON.stringify(tableItems),
+          "lines:",
+          JSON.stringify(details?.pageLines?.[0]?.slice(0, 40) || []),
         );
         if (tableItems) {
           setLines(
