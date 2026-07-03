@@ -10,12 +10,22 @@ const REQUIRE_ACCOUNTING = {
   permission: "can_manage_accounting",
 };
 
+// PUT can be the first contacts endpoint a session hits — make sure
+// the newer columns exist before updating.
+async function ensureSchema() {
+  await sql`
+    ALTER TABLE accounting_contacts
+      ADD COLUMN IF NOT EXISTS default_account_id INTEGER
+  `;
+}
+
 export async function PUT(request, { params }) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }
   try {
+    await ensureSchema();
     const resolved = await params;
     const id = Number(resolved?.id);
     if (!Number.isFinite(id) || id <= 0) {
@@ -68,6 +78,12 @@ export async function PUT(request, { params }) {
     if (body.notes !== undefined) {
       sets.push(`notes = $${idx}`);
       values.push(body.notes ? String(body.notes).trim() : null);
+      idx += 1;
+    }
+    if (body.default_account_id !== undefined) {
+      const v = Number(body.default_account_id);
+      sets.push(`default_account_id = $${idx}`);
+      values.push(Number.isInteger(v) && v > 0 ? v : null);
       idx += 1;
     }
     if (body.is_active !== undefined) {

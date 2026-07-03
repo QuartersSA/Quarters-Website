@@ -1076,6 +1076,26 @@ export default function PurchaseInvoiceModal({
     return Number.isFinite(count) ? count : null;
   }, [contactId, contactStats]);
 
+  // Supplier's default شجرة الحسابات account — lines without an
+  // account inherit it (never overwrites a manually picked one).
+  const contactDefaultAccountId = useMemo(() => {
+    const selected = contacts.find(
+      (contact) => String(contact.id) === contactId,
+    );
+    return selected?.default_account_id
+      ? String(selected.default_account_id)
+      : "";
+  }, [contacts, contactId]);
+
+  const applyDefaultAccount = (accountId) => {
+    if (!accountId) return;
+    setLines((prev) =>
+      prev.map((line) =>
+        line.account_id ? line : { ...line, account_id: accountId },
+      ),
+    );
+  };
+
   const status = computedStatus({
     workflowStatus,
     totalAmount: totals.total,
@@ -1103,7 +1123,10 @@ export default function PurchaseInvoiceModal({
   };
   const addLine = () => {
     autoFilledRef.current.delete("lines");
-    setLines((prev) => [...prev, newLine()]);
+    setLines((prev) => [
+      ...prev,
+      newLine({ account_id: contactDefaultAccountId || "" }),
+    ]);
   };
 
   const handleSubmit = (event) => {
@@ -1150,6 +1173,9 @@ export default function PurchaseInvoiceModal({
     );
     if (selected?.name) {
       setSupplierName(selected.name);
+    }
+    if (selected?.default_account_id) {
+      applyDefaultAccount(String(selected.default_account_id));
     }
   };
 
@@ -1228,6 +1254,12 @@ export default function PurchaseInvoiceModal({
         filled.push("اسم المورد");
       }
 
+      // Matched supplier's default شجرة الحسابات account — scanned
+      // lines classify on it automatically.
+      const scanDefaultAccount = parsed.contact?.default_account_id
+        ? String(parsed.contact.default_account_id)
+        : contactDefaultAccountId;
+
       // Line items: recover the product table when possible — each
       // row becomes its own بند (gross amount + its effective rate).
       // Otherwise seed ONE aggregate line from the detected totals.
@@ -1259,6 +1291,7 @@ export default function PurchaseInvoiceModal({
                   // tax-inclusive unit prices both supported).
                   newLine({
                     description: item.description,
+                    account_id: scanDefaultAccount,
                     quantity: String(item.quantity),
                     unit_price: priceInput(item.unitPrice),
                     tax_rate: String(item.rate),
@@ -1266,6 +1299,7 @@ export default function PurchaseInvoiceModal({
                   })
                 : newLine({
                     description: item.description,
+                    account_id: scanDefaultAccount,
                     quantity: "1",
                     unit_price: item.total.toFixed(2),
                     tax_rate: String(item.rate),
@@ -1275,6 +1309,9 @@ export default function PurchaseInvoiceModal({
           );
           owned.add("lines");
           filled.push(`بنود الفاتورة (${tableItems.length})`);
+          if (scanDefaultAccount) {
+            filled.push("حساب المورد الافتراضي");
+          }
         } else if (parsed.total !== null) {
           const tax = parsed.tax ?? null;
           const subtotal = tax !== null ? parsed.total - tax : null;
@@ -1285,6 +1322,7 @@ export default function PurchaseInvoiceModal({
           setLines([
             newLine({
               description: "",
+              account_id: scanDefaultAccount,
               quantity: "1",
               unit_price: parsed.total.toFixed(2),
               tax_rate: String(rate),

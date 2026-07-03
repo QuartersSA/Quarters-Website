@@ -6,6 +6,7 @@ import {
   Save,
   X,
   Contact,
+  ListTree,
   Percent,
   HandCoins,
   Plus,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import { buildExpenseAccountOptions } from "@/components/Accounting/PurchaseInvoiceModal";
 import {
   useAccountingBeneficiaries,
   useCreateAccountingBeneficiary,
@@ -248,6 +250,7 @@ function BeneficiariesPanel({ contactId }) {
 export default function ContactModal({
   open,
   contact,
+  accounts = [],
   isSubmitting,
   onClose,
   onSubmit,
@@ -259,8 +262,14 @@ export default function ContactModal({
   const [vatRegistered, setVatRegistered] = useState(false);
   const [vatNumber, setVatNumber] = useState("");
   const [defaultTaxRate, setDefaultTaxRate] = useState("0");
+  const [defaultAccountId, setDefaultAccountId] = useState("");
   const [notes, setNotes] = useState("");
   const [isActive, setIsActive] = useState(true);
+
+  const accountOptions = useMemo(
+    () => buildExpenseAccountOptions(accounts),
+    [accounts],
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -275,6 +284,9 @@ export default function ContactModal({
           ? String(contact.default_tax_rate)
           : "0",
       );
+      setDefaultAccountId(
+        contact.default_account_id ? String(contact.default_account_id) : "",
+      );
       setNotes(contact.notes || "");
       setIsActive(contact.is_active !== false);
     } else {
@@ -283,6 +295,7 @@ export default function ContactModal({
       setVatRegistered(false);
       setVatNumber("");
       setDefaultTaxRate("0");
+      setDefaultAccountId("");
       setNotes("");
       setIsActive(true);
     }
@@ -304,6 +317,7 @@ export default function ContactModal({
       vat_registered: vatRegistered,
       vat_number: vatRegistered && vatNumber.trim() ? vatNumber.trim() : null,
       default_tax_rate: Number(defaultTaxRate) || 0,
+      default_account_id: defaultAccountId || null,
       notes: notes.trim() || null,
     };
     if (isEditing) {
@@ -470,6 +484,25 @@ export default function ContactModal({
                 placeholder="اختر"
                 buttonClassName="text-sm py-2.5 px-3"
               />
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-white/55 mb-1">
+                <ListTree className="w-3 h-3" />
+                الحساب الافتراضي — شجرة الحسابات
+              </div>
+              <GlassSelect
+                value={defaultAccountId}
+                onChange={setDefaultAccountId}
+                options={accountOptions}
+                placeholder="غير مصنّفة"
+                buttonClassName="text-sm py-2.5 px-3"
+                disabled={accountOptions.length <= 1}
+              />
+              <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                بنود فواتير المشتريات لهذا المورد تُصنَّف على هذا الحساب
+                تلقائياً.
+              </div>
             </div>
           </section>
 

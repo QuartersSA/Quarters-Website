@@ -29,6 +29,12 @@ async function ensureSchema() {
       created_by_employee_name TEXT
     )
   `;
+  // Default شجرة الحسابات expense account for this supplier —
+  // purchase-invoice lines inherit it when the contact is picked.
+  await sql`
+    ALTER TABLE accounting_contacts
+      ADD COLUMN IF NOT EXISTS default_account_id INTEGER
+  `;
 }
 
 // GET /api/accounting/contacts
@@ -61,7 +67,7 @@ export async function GET(request) {
     const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
     const query = `
       SELECT id, name, country, vat_registered, vat_number,
-             default_tax_rate, notes, is_active,
+             default_tax_rate, default_account_id, notes, is_active,
              created_at, updated_at,
              created_by_employee_id, created_by_employee_name
       FROM accounting_contacts
@@ -127,16 +133,23 @@ export async function POST(request) {
       );
     }
     const notes = body.notes ? String(body.notes).trim() : null;
+    const defaultAccountRaw = Number(body.default_account_id);
+    const defaultAccountId =
+      Number.isInteger(defaultAccountRaw) && defaultAccountRaw > 0
+        ? defaultAccountRaw
+        : null;
     const createdById = auth.user?.id ? Number(auth.user.id) : null;
     const createdByName = auth.user?.name ? String(auth.user.name) : null;
 
     const [created] = await sql`
       INSERT INTO accounting_contacts (
-        name, country, vat_registered, vat_number, default_tax_rate, notes,
+        name, country, vat_registered, vat_number, default_tax_rate,
+        default_account_id, notes,
         created_by_employee_id, created_by_employee_name
       )
       VALUES (
-        ${name}, ${country}, ${vatRegistered}, ${vatNumber}, ${defaultTaxRate}, ${notes},
+        ${name}, ${country}, ${vatRegistered}, ${vatNumber}, ${defaultTaxRate},
+        ${defaultAccountId}, ${notes},
         ${createdById}, ${createdByName}
       )
       RETURNING *

@@ -41,6 +41,7 @@ import {
   useUpdateAccountingBeneficiary,
   useDeleteAccountingBeneficiary,
 } from "@/hooks/useAccountingBeneficiaries";
+import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 
 /**
  * Purchases section.
@@ -177,6 +178,9 @@ function ContactsPanel({ employeeId, isAdmin }) {
     includeInactive,
   });
   const contacts = contactsQuery.data || [];
+  // شجرة الحسابات — feeds the supplier's default-account picker.
+  const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
+  const accounts = accountsQuery.data || [];
 
   const createMut = useCreateAccountingContact();
   const updateMut = useUpdateAccountingContact();
@@ -249,6 +253,7 @@ function ContactsPanel({ employeeId, isAdmin }) {
       <ContactModal
         open={showAdd || !!editing}
         contact={editing}
+        accounts={accounts}
         isSubmitting={createMut.isPending || updateMut.isPending}
         onClose={() => {
           setShowAdd(false);
