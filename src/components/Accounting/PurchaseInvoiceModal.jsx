@@ -312,8 +312,34 @@ function arabicDirectionScore(text) {
   return score;
 }
 
+// Some PDFs emit each Arabic GLYPH as its own text run with real
+// gaps, so geometry-based joining can't help — "وحدة" arrives as the
+// tokens "ة د ح و". Two or more consecutive single-letter Arabic
+// tokens are letters of one word: glue them (a lone letter like و
+// "and" stays a word).
+function mergeSingleLetterRuns(text) {
+  const tokens = String(text).split(/\s+/).filter(Boolean);
+  const out = [];
+  let buffer = [];
+  const flush = () => {
+    if (buffer.length >= 2) out.push(buffer.join(""));
+    else out.push(...buffer);
+    buffer = [];
+  };
+  for (const token of tokens) {
+    if (/^[؀-ۿ]$/.test(token)) {
+      buffer.push(token);
+    } else {
+      flush();
+      out.push(token);
+    }
+  }
+  flush();
+  return out.join(" ");
+}
+
 function fixArabicText(text) {
-  return String(text).replace(
+  return mergeSingleLetterRuns(text).replace(
     /[؀-ۿ][؀-ۿ\s]*[؀-ۿ]/g,
     (run) => {
       const reversed = [...run].reverse().join("");
