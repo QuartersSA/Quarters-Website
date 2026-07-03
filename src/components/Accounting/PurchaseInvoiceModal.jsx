@@ -133,6 +133,8 @@ function detectTotal(text) {
       "المبلغ\\s*المستحق",
       "الإجمالي\\s*المستحق",
       "الاجمالي\\s*المستحق",
+      "قحتسملا\\s*غلبملا",
+      "عومجملا",
       "المجموع\\s*الكلي",
       "الإجمالي\\s*(?:شامل|مع)\\s*الضريبة",
       "الاجمالي\\s*(?:شامل|مع)\\s*الضريبة",
@@ -247,8 +249,11 @@ function detectContact(text, contacts) {
 // numbers contain a triplet a + b ≈ c (net + VAT = line total) — the
 // arithmetic survives any RTL column scrambling. Summary rows
 // (المجموع/الإجمالي/total…) are excluded by keyword.
+// Includes the MIRRORED spellings (يلامجلاا = الاجمالي backwards…) —
+// visual-order Arabic PDFs emit summary labels reversed, and a summary
+// row that slips through gets mistaken for a product row.
 const SUMMARY_LINE_RE =
-  /(المجموع|الإجمالي|الاجمالي|إجمالي|اجمالي|المبلغ\s*المستحق|المستحق|sub\s*-?\s*total|grand\s*total|total\s*(?:due|amount|before)|amount\s*due|balance)/i;
+  /(المجموع|الإجمالي|الاجمالي|إجمالي|اجمالي|المبلغ\s*المستحق|المستحق|عومجملا|يلامجلإا|يلامجلاا|يلامجا|قحتسملا|غلبملا|sub\s*-?\s*total|grand\s*total|total\s*(?:due|amount|before)|amount\s*due|balance)/i;
 
 // Wider than MONEY_RE on purpose: quantities are often single digits
 // ("2") and unit prices can carry 3–4 decimals ("16.499"). Order of
@@ -297,7 +302,7 @@ function findLineTriplet(values) {
 // Small lexicon of words common on food/packaging invoices — a direct
 // hit is the strongest direction signal available.
 const AR_INVOICE_WORDS = new Set(
-  "كيك وحدة قطعة صينية علبة كرتون حبة شدة كوب أكواب اكواب حليب قهوة بن سكر شاي ماء مياه عصير شوكولاته شوكولاتة كراميل فانيلا توت فراولة مانجو ليمون جبن جبنة زبدة كريمة عسل تمر كعك خبز مخبوزات حلويات بسكويت دونات كرواسون معمول تراميسو تشيز لوز فستق بندق جوز كاجو مندي كوكيز مافن براونيز".split(
+  "كيك وحدة قطعة صينية صينة علبة كرتون حبة شدة كوب أكواب اكواب حليب قهوة بن سكر شاي ماء مياه عصير شوكولاته شوكولاتة شكلاته كراميل فانيلا فانيليا توت فراولة مانجو ليمون جبن جبنة زبدة كريمة عسل تمر كعك خبز مخبوزات حلويات بسكويت دونات كرواسون معمول تراميسو تشيز لوز فستق بندق جوز كاجو مندي كوكيز مافن براونيز كوكونت بيري راز كرانشي لاتيه موكا كابتشينو اسبريسو سموذي ميلك شيك وافل بانكيك سينابون".split(
     " ",
   ),
 );
@@ -345,7 +350,15 @@ function fixArabicText(text) {
   return mergeSingleLetterRuns(text).replace(
     /[؀-ۿ][؀-ۿ\s]*[؀-ۿ]/g,
     (run) => {
-      const reversed = [...run].reverse().join("");
+      // The لا ligature decomposes (NFKC) to lam+alef in VISUAL order —
+      // reversing it letter-by-letter would corrupt it to "ال". Treat
+      // it as one unit across the flip.
+      const LAM_ALEF_MARK = "";
+      const reversed = [...run.split("لا").join(LAM_ALEF_MARK)]
+        .reverse()
+        .join("")
+        .split(LAM_ALEF_MARK)
+        .join("لا");
       return arabicDirectionScore(reversed) > arabicDirectionScore(run)
         ? reversed
         : run;
@@ -445,43 +458,99 @@ function itemFromLine(line) {
   };
 }
 
-function itemsFromRows(rows, { mergeAdjacent = false } = {}) {
+// Table-header vocabulary — a line made only of these is column
+// headers, not a product name.
+const HEADER_WORD_RE =
+  /^(vat|qty|unit|price|amount|total|discount|before|tax|products?|#|الوصف|المنتج|الكمية|السعر|الخصم|الضريبة)$/i;
+
+// A "name line": mostly text, at most a couple of small numbers (the
+// row index) — used to adopt product names printed above the numbers.
+function isDescriptionLine(line) {
+  if (SUMMARY_LINE_RE.test(line)) return false;
+  const numbers = lineNumbers(line);
+  if (numbers.length > 2) return false;
+  if (numbers.some((value) => value >= 1000)) return false;
+  const cleaned = cleanItemDescription(line);
+  if (cleaned.length < 3) return false;
+  const words = cleaned.split(/\s+/);
+  if (words.every((word) => HEADER_WORD_RE.test(word))) return false;
+  return true;
+}
+
+// Bilingual invoices print the product name twice — drop duplicated
+// "-"-separated segments while keeping their order.
+function dedupeDescription(description) {
+  const segments = description
+    .split(/\s+-\s+|^-\s+|\s+-$/)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+  const seen = new Set();
+  const unique = [];
+  for (const segment of segments) {
+    const key = segment.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(segment);
+  }
+  let result = unique.join(" - ") || description.trim();
+  // Same phrase repeated back-to-back (bilingual layouts print the
+  // name twice) — collapse it, twice for triple repeats.
+  for (let pass = 0; pass < 2; pass += 1) {
+    result = result.replace(/(.{4,}?)\s*[-–]?\s*\1/gu, "$1");
+  }
+  return result.replace(/\s{2,}/g, " ").trim();
+}
+
+// Product rows span 1–4 visual lines in real PDFs (name / qty+discount
+// / price+VAT / net+unit). Slide a growing window over the lines: the
+// smallest window that yields a triplet is a candidate, and the window
+// keeps growing (max 4) until the qty×price pair is found too.
+function itemsFromRows(rows) {
   const normalized = rows.map((row) => normalizeDigits(row));
   const items = [];
   const consumed = new Set();
-  for (let i = 0; i < normalized.length; i += 1) {
-    const item = itemFromLine(normalized[i]);
-    if (!item) continue;
-    // Numbers-only row (wrapped cell): the product name usually sits
-    // on the preceding text-only line — adopt it as the description.
-    if (item.description.length < 3 && i > 0 && !consumed.has(i - 1)) {
-      const prev = normalized[i - 1];
-      if (
-        !SUMMARY_LINE_RE.test(prev) &&
-        lineNumbers(prev).length === 0 &&
-        cleanItemDescription(prev).length >= 3
-      ) {
-        item.description = cleanItemDescription(prev);
-        consumed.add(i - 1);
-      }
+  let i = 0;
+  while (i < normalized.length) {
+    if (SUMMARY_LINE_RE.test(normalized[i])) {
+      i += 1;
+      continue;
     }
-    items.push(item);
-    consumed.add(i);
-  }
-  if (mergeAdjacent) {
-    // Wrapped cells / baseline jitter can split one product row into
-    // two visual lines (name on one, numbers on the other) — retry on
-    // concatenations of untouched neighbours.
-    for (let i = 0; i + 1 < normalized.length; i += 1) {
-      if (consumed.has(i) || consumed.has(i + 1)) continue;
-      const merged = `${normalized[i]} ${normalized[i + 1]}`;
+    let best = null;
+    let merged = "";
+    for (let k = 1; k <= 4 && i + k <= normalized.length; k += 1) {
+      const next = normalized[i + k - 1];
+      // never merge across a summary row
+      if (k > 1 && SUMMARY_LINE_RE.test(next)) break;
+      merged = merged ? `${merged} ${next}` : next;
       const item = itemFromLine(merged);
-      if (item) {
-        items.push(item);
-        consumed.add(i);
-        consumed.add(i + 1);
+      if (!item) continue;
+      if (!best) best = { item, k };
+      if (item.quantity !== null) {
+        best = { item, k };
+        break;
       }
     }
+    if (!best) {
+      i += 1;
+      continue;
+    }
+    // Adopt up to two preceding name lines as the description.
+    const descParts = [];
+    for (let back = i - 1; back >= 0 && back >= i - 2; back -= 1) {
+      if (consumed.has(back)) break;
+      if (!isDescriptionLine(normalized[back])) break;
+      descParts.unshift(cleanItemDescription(normalized[back]));
+      consumed.add(back);
+    }
+    const description = dedupeDescription(
+      [...descParts, best.item.description]
+        .join(" ")
+        .replace(/\s{2,}/g, " ")
+        .trim(),
+    );
+    items.push({ ...best.item, description });
+    for (let c = 0; c < best.k; c += 1) consumed.add(i + c);
+    i += best.k;
   }
   return items;
 }
@@ -504,14 +573,8 @@ export function parseInvoiceLineItems(rowGroups, grandTotal) {
     .filter((rows) => Array.isArray(rows) && rows.length > 0);
   if (groups.length === 0) return null;
 
-  const attempts = [];
   for (const rows of groups) {
-    attempts.push(() => itemsFromRows(rows));
-    attempts.push(() => itemsFromRows(rows, { mergeAdjacent: true }));
-  }
-
-  for (const attempt of attempts) {
-    const items = attempt();
+    const items = itemsFromRows(rows);
     if (itemsSumMatches(items, grandTotal)) {
       return items;
     }
