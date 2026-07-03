@@ -174,12 +174,10 @@ function detectTax(text) {
   ]);
 }
 
-function detectInvoiceDate(text) {
-  const match = text.match(
-    /(?:تاريخ\s*الفاتورة|تاريخ\s*الإصدار|تاريخ\s*الاصدار|invoice\s*date|التاريخ|date)\s*[:#]?\s*(\d{4}-\d{2}-\d{2}|\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/i,
-  );
-  if (!match) return null;
-  const raw = match[1];
+const DATE_TOKEN_RE = /(\d{4}-\d{2}-\d{2}|\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/;
+
+function normalizeDateToken(raw) {
+  if (!raw) return null;
   if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
   const parts = raw.split(/[\/\-.]/).map(Number);
   if (parts.length !== 3) return null;
@@ -191,6 +189,73 @@ function detectInvoiceDate(text) {
   if (year < 100) year += 2000;
   if (!day || !month || !year || month > 12 || day > 31) return null;
   return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+// Spaces between Arabic characters removed — letter-spaced extraction
+// ("خ ي ر ا ت") compacts back into searchable words. NFKC first so
+// presentation-form glyphs (U+FB50…U+FEFF) fold into the base range.
+function compactArabic(text) {
+  return String(text)
+    .normalize("NFKC")
+    .replace(/(?<=[؀-ۿ])\s+(?=[؀-ۿ])/g, "");
+}
+
+// Date next to a keyword: forward first, then just before it (RTL
+// extraction usually puts the value BEFORE its label).
+function dateNearKeyword(text, keywords) {
+  for (const keyword of keywords) {
+    const re = new RegExp(keyword, "gi");
+    let match;
+    while ((match = re.exec(text)) !== null) {
+      const start = match.index + match[0].length;
+      const after = text.slice(start, start + 40).match(DATE_TOKEN_RE);
+      if (after) {
+        const value = normalizeDateToken(after[1]);
+        if (value) return value;
+      }
+      const before = text.slice(Math.max(0, match.index - 40), match.index);
+      const backwardAll = [
+        ...before.matchAll(new RegExp(DATE_TOKEN_RE.source, "g")),
+      ];
+      if (backwardAll.length > 0) {
+        const value = normalizeDateToken(
+          backwardAll[backwardAll.length - 1][1],
+        );
+        if (value) return value;
+      }
+    }
+  }
+  return null;
+}
+
+// Mirrored spellings included: تاريخ الإصدار arrives as رادصلإا خيرات
+// in visual-order PDFs.
+function detectInvoiceDate(text) {
+  const compact = compactArabic(text);
+  return dateNearKeyword(compact, [
+    "تاريخ\\s*الفاتورة",
+    "تاريخ\\s*الإصدار",
+    "تاريخ\\s*الاصدار",
+    "رادصلإا\\s*خيرات",
+    "رادصالا\\s*خيرات",
+    "ةروتافلا\\s*خيرات",
+    "invoice\\s*date",
+    "issue\\s*date",
+    "التاريخ",
+    "date",
+  ]);
+}
+
+function detectDueDate(text) {
+  const compact = compactArabic(text);
+  return dateNearKeyword(compact, [
+    "تاريخ\\s*الاستحقاق",
+    "تاريخ\\s*الإستحقاق",
+    "قاقحتسلاا\\s*خيرات",
+    "قاقحتسالا\\s*خيرات",
+    "due\\s*date",
+    "payment\\s*due",
+  ]);
 }
 
 function normalizeVat(value) {
@@ -597,7 +662,12 @@ export function parseInvoiceLineItems(rowGroups, grandTotal) {
 // ---------- /line-item extraction ----------
 
 export function parseInvoiceText(rawText, contacts = []) {
-  const text = normalizeDigits(rawText).replace(/\s+/g, " ");
+  // NFKC folds Arabic presentation forms so every keyword search
+  // (dates, totals, VAT, summaries) sees plain letters.
+  const text = normalizeDigits(String(rawText).normalize("NFKC")).replace(
+    /\s+/g,
+    " ",
+  );
   const total = detectTotal(text);
   const tax = detectTax(text);
   const contactMatch = detectContact(text, contacts);
@@ -606,6 +676,7 @@ export function parseInvoiceText(rawText, contacts = []) {
     total,
     tax: tax !== null && total !== null && tax >= total ? null : tax,
     invoiceDate: detectInvoiceDate(text),
+    dueDate: detectDueDate(text),
     contact: contactMatch?.contact || null,
     contactMatchedBy: contactMatch?.matchedBy || null,
   };
@@ -1060,7 +1131,12 @@ export default function PurchaseInvoiceModal({
         return;
       }
 
-      const parsed = parseInvoiceText(text, contacts);
+      // Prefer the visually-ordered lines: raw stream order can put a
+      // value far from its label, breaking keyword-window searches.
+      const linesText = (details?.pageLines || [])
+        .flat()
+        .join("\n");
+      const parsed = parseInvoiceText(linesText || text, contacts);
       const filled = [];
       // A field is fillable when it's still empty/default OR the last
       // scan owns it (replacing the attachment refreshes those values).
@@ -1159,6 +1235,11 @@ export default function PurchaseInvoiceModal({
         setInvoiceDate(parsed.invoiceDate);
         owned.add("date");
         filled.push("تاريخ الفاتورة");
+      }
+      if (parsed.dueDate && canFill("dueDate", !dueDate)) {
+        setDueDate(parsed.dueDate);
+        owned.add("dueDate");
+        filled.push("تاريخ الاستحقاق");
       }
 
       setScanSummary({
@@ -1478,7 +1559,10 @@ export default function PurchaseInvoiceModal({
                   <input
                     type="date"
                     value={dueDate}
-                    onChange={(event) => setDueDate(event.target.value)}
+                    onChange={(event) => {
+                      autoFilledRef.current.delete("dueDate");
+                      setDueDate(event.target.value);
+                    }}
                     className={`${ws.input} px-3 py-2.5`}
                   />
                 </div>
