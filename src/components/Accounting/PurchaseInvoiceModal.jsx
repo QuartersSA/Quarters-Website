@@ -1320,7 +1320,10 @@ export default function PurchaseInvoiceModal({
     if (!file) return;
     setScanSummary(null);
 
-    const result = await upload({ file });
+    // Store the ORIGINAL document untouched — the attachment is the
+    // legal record the user reviews. Compression happens only on the
+    // internal copy shipped to the smart scan (below).
+    const result = await upload({ file, unoptimized: true });
     if (result?.error) {
       setScanSummary({ filled: [], warning: `فشل رفع الملف: ${result.error}` });
       return;
