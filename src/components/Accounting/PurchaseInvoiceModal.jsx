@@ -796,47 +796,56 @@ export function purchaseInvoiceStatusClass(value) {
   return "bg-sky-100 dark:bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-500/25";
 }
 
-// Postable expense accounts from شجرة الحسابات, grouped under their
-// parent node so the dropdown mirrors the tree structure.
+// Expense accounts from شجرة الحسابات as a REAL hierarchy: the
+// dropdown walks the tree depth-first, so a child account (e.g.
+// تراميسو under 5101 بن قهوة محمصة) renders indented directly under
+// its parent. Non-postable nodes become group labels; postable nodes
+// are selectable at any depth.
 export function buildExpenseAccountOptions(accounts = []) {
-  const active = accounts.filter(
-    (account) =>
-      account.account_type === "expense" &&
-      account.is_postable !== false &&
-      account.is_active !== false,
-  );
-  const byId = new Map(accounts.map((account) => [account.id, account]));
-  const groups = new Map();
-  for (const account of active) {
-    const parent = account.parent_id ? byId.get(account.parent_id) : null;
-    const key = parent ? String(parent.id) : "orphan";
-    if (!groups.has(key)) {
-      groups.set(key, {
-        code: parent ? String(parent.code) : "",
-        label: parent ? `${parent.code} ${parent.name}` : "أخرى",
-        children: [],
+  const active = accounts.filter((account) => account.is_active !== false);
+  const byId = new Map(active.map((account) => [account.id, account]));
+  const byCode = (a, b) =>
+    String(a.code).localeCompare(String(b.code), "en", { numeric: true });
+  const childrenOf = (id) =>
+    active.filter((account) => account.parent_id === id).sort(byCode);
+
+  const options = [{ value: "", label: "غير مصنّفة" }];
+  const INDENT = " "; // em-space keeps depth visible in the menu
+
+  const walk = (node, depth) => {
+    if (node.account_type !== "expense") return;
+    const prefix = INDENT.repeat(depth);
+    if (node.is_postable !== false) {
+      options.push({
+        value: String(node.id),
+        label: `${prefix}${node.code} — ${node.name}`,
+      });
+    } else {
+      options.push({
+        value: `group-${node.id}`,
+        label: `${prefix}${node.code} ${node.name}`,
+        isGroupLabel: true,
       });
     }
-    groups.get(key).children.push(account);
-  }
-  const sortedGroups = [...groups.values()].sort((a, b) =>
-    a.code.localeCompare(b.code, "en", { numeric: true }),
-  );
-  const options = [{ value: "", label: "غير مصنّفة" }];
-  for (const group of sortedGroups) {
-    group.children.sort((a, b) =>
-      String(a.code).localeCompare(String(b.code), "en", { numeric: true }),
-    );
-    options.push({
-      value: `group-${group.code || group.label}`,
-      label: group.label,
-      isGroupLabel: true,
-    });
-    for (const account of group.children) {
-      options.push({
-        value: String(account.id),
-        label: `${account.code} — ${account.name}`,
-      });
+    for (const child of childrenOf(node.id)) {
+      walk(child, depth + 1);
+    }
+  };
+
+  // Start below the "5 المصروفات" umbrella root; expense accounts
+  // whose parent is missing from the list still get walked.
+  const roots = active
+    .filter(
+      (account) =>
+        account.account_type === "expense" &&
+        (account.parent_id == null || !byId.has(account.parent_id)),
+    )
+    .sort(byCode);
+  for (const root of roots) {
+    if (root.parent_id == null) {
+      for (const child of childrenOf(root.id)) walk(child, 0);
+    } else {
+      walk(root, 0);
     }
   }
   return options;
