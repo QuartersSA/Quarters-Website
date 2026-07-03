@@ -18,7 +18,9 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import useUpload from "@/utils/useUpload";
-import { adminFetch } from "@/utils/apiAuth";
+// authedFetch prefers the admin token but falls back to field-flow
+// tokens — the modal is also used by /employee/purchase-invoice.
+import { authedFetch } from "@/utils/apiAuth";
 
 export const PURCHASE_INVOICE_STATUS_OPTIONS = [
   { value: "new", label: "جديد" },
@@ -863,7 +865,7 @@ async function analyzeInvoiceRemotely({ file, text } = {}) {
       }
     }
     if (!payload.file_base64 && !(payload.text || "").trim()) return null;
-    const response = await adminFetch(
+    const response = await authedFetch(
       "/api/accounting/purchase-invoices/analyze",
       {
         method: "POST",

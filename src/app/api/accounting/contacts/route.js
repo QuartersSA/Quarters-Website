@@ -12,6 +12,16 @@ const REQUIRE_ACCOUNTING = {
   permission: "can_manage_accounting",
 };
 
+// Reading contacts is also allowed for the field purchase-invoice
+// entry flow (رفع فاتورة مشتريات) — employees with the dedicated
+// permission need the supplier list to file an invoice.
+const REQUIRE_PURCHASES_READ = {
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { permission: "can_add_purchase_invoices" },
+  ],
+};
+
 async function ensureSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_contacts (
@@ -41,7 +51,7 @@ async function ensureSchema() {
 //   ?includeInactive=1   include archived contacts
 //   ?q=...               case-insensitive name search
 export async function GET(request) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_PURCHASES_READ);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

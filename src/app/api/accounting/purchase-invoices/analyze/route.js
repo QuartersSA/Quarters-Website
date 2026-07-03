@@ -3,9 +3,13 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
 
+// Admin accounting OR the dedicated field entry permission
+// (رفع فاتورة مشتريات) — the entry flow scans invoices too.
 const REQUIRE_ACCOUNTING = {
-  role: "Admin",
-  permission: "can_manage_accounting",
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { permission: "can_add_purchase_invoices" },
+  ],
 };
 
 // AI invoice analysis (تحليل ذكي للفاتورة).

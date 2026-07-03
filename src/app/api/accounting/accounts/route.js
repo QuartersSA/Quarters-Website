@@ -10,6 +10,15 @@ const REQUIRE_ACCOUNTING = {
   permission: "can_manage_accounting",
 };
 
+// Reading the tree is also allowed for the field purchase-invoice
+// entry flow (رفع فاتورة مشتريات) — lines classify on expense accounts.
+const REQUIRE_PURCHASES_READ = {
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { permission: "can_add_purchase_invoices" },
+  ],
+};
+
 // Usage counts come from tables owned by other routes, so they may not
 // exist yet on a fresh database. Query each defensively and merge in
 // JS instead of joining (a missing table would fail the whole SELECT).
@@ -42,7 +51,7 @@ async function fetchUsageCounts() {
 }
 
 export async function GET(request) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_PURCHASES_READ);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

@@ -2,6 +2,7 @@ export const ADMIN_TOKEN_KEY = "adminToken";
 export const EMPLOYEE_INVENTORY_TOKEN_KEY = "employeeInventoryToken";
 export const SHIFT_CLOSE_TOKEN_KEY = "shiftCloseToken";
 export const EMPLOYEE_WASTE_TOKEN_KEY = "employeeWasteToken";
+export const PURCHASE_INVOICE_TOKEN_KEY = "purchaseInvoiceToken";
 
 function safeGetItem(key) {
   if (typeof window === "undefined") return null;
@@ -26,6 +27,10 @@ export function getShiftCloseToken() {
 
 export function getEmployeeWasteToken() {
   return safeGetItem(EMPLOYEE_WASTE_TOKEN_KEY);
+}
+
+export function getPurchaseInvoiceToken() {
+  return safeGetItem(PURCHASE_INVOICE_TOKEN_KEY);
 }
 
 export function withBearer(token, init = {}) {
@@ -64,6 +69,11 @@ export function employeeWasteFetch(url, init = {}) {
   return fetch(url, withBearer(token, init));
 }
 
+export function purchaseInvoiceFetch(url, init = {}) {
+  const token = getPurchaseInvoiceToken();
+  return fetch(url, withBearer(token, init));
+}
+
 /**
  * `fetch` that attaches whichever session token the user currently has,
  * preferring stronger sessions (admin) first. Used by features whose API
@@ -79,6 +89,7 @@ export function authedFetch(url, init = {}) {
     getEmployeeInventoryToken() ||
     getShiftCloseToken() ||
     getEmployeeWasteToken() ||
+    getPurchaseInvoiceToken() ||
     null;
   return fetch(url, withBearer(token, init));
 }
@@ -108,6 +119,9 @@ export function clearEmployeeSessions() {
 
     localStorage.removeItem("employeeWasteSession");
     localStorage.removeItem(EMPLOYEE_WASTE_TOKEN_KEY);
+
+    localStorage.removeItem("purchaseInvoiceSession");
+    localStorage.removeItem(PURCHASE_INVOICE_TOKEN_KEY);
   } catch {
     // ignore
   }

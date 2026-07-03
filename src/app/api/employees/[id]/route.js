@@ -9,6 +9,7 @@ async function ensureWasteColumn() {
   try {
     await ensureEmployeeDisplayNameSchema();
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_log_waste BOOLEAN DEFAULT false`;
+    await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_add_purchase_invoices BOOLEAN DEFAULT false`;
   } catch (e) {
     console.error("ensureWasteColumn:", e?.message);
   }
@@ -57,6 +58,7 @@ export async function GET(request, { params }) {
         COALESCE(e.can_do_inventory, false) as can_do_inventory,
         COALESCE(e.can_close_shift, false) as can_close_shift,
         COALESCE(e.can_log_waste, false) as can_log_waste,
+        COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,
         COALESCE(e.notify_shift_close_push, false) as notify_shift_close_push,
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,
@@ -145,6 +147,7 @@ export async function PUT(request, { params }) {
       can_do_inventory,
       can_close_shift,
       can_log_waste,
+      can_add_purchase_invoices,
       // Admin notification preferences (push)
       notify_shift_close_push,
       notify_inventory_operation_push,
@@ -406,6 +409,12 @@ export async function PUT(request, { params }) {
       paramCount++;
     }
 
+    if (can_add_purchase_invoices !== undefined) {
+      updates.push(`can_add_purchase_invoices = $${paramCount}`);
+      values.push(!!can_add_purchase_invoices);
+      paramCount++;
+    }
+
     if (can_close_shift !== undefined) {
       updates.push(`can_close_shift = $${paramCount}`);
       values.push(!!can_close_shift);
@@ -502,6 +511,7 @@ export async function PUT(request, { params }) {
         COALESCE(e.can_do_inventory, false) as can_do_inventory,
         COALESCE(e.can_close_shift, false) as can_close_shift,
         COALESCE(e.can_log_waste, false) as can_log_waste,
+        COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,
         COALESCE(e.notify_shift_close_push, false) as notify_shift_close_push,
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,

@@ -3,7 +3,10 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureUploadTables, getOwnedSession } from "../_utils";
 
 export async function DELETE(request, { params: { sessionId } }) {
-  const auth = requireAuth(request, { role: "Admin" });
+  // Admins, plus field flows that attach files (رفع فاتورة مشتريات).
+  const auth = requireAuth(request, {
+    anyOf: [{ role: "Admin" }, { permission: "can_add_purchase_invoices" }],
+  });
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

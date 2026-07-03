@@ -16,6 +16,7 @@ import {
   DollarSign,
   Megaphone,
   Trash2,
+  ReceiptText,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -46,6 +47,10 @@ export function EmployeeFormFields({
     : `${ws.btnNeutral} px-4 py-2`;
 
   const employeeWasteBtnClass = formData.can_log_waste
+    ? `${ws.btnPrimary} px-4 py-2`
+    : `${ws.btnNeutral} px-4 py-2`;
+
+  const employeePurchaseInvoiceBtnClass = formData.can_add_purchase_invoices
     ? `${ws.btnPrimary} px-4 py-2`
     : `${ws.btnNeutral} px-4 py-2`;
 
@@ -215,6 +220,7 @@ export function EmployeeFormFields({
                 can_do_inventory: false,
                 can_close_shift: false,
                 can_log_waste: false,
+                can_add_purchase_invoices: false,
                 // صلاحيات أقسام الإدارة (افتراضيًا: مفعلة)
                 can_access_workspace: true,
                 can_manage_inventory: true,
@@ -557,6 +563,25 @@ export function EmployeeFormFields({
                 )}
                 <Trash2 className="w-4 h-4" />
                 تسجيل الهدر
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    can_add_purchase_invoices: !p.can_add_purchase_invoices,
+                  }))
+                }
+                className={employeePurchaseInvoiceBtnClass}
+              >
+                {formData.can_add_purchase_invoices ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                <ReceiptText className="w-4 h-4" />
+                رفع فاتورة مشتريات
               </button>
             </div>
           </div>

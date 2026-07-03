@@ -10,6 +10,7 @@ async function ensureWasteColumn() {
   try {
     await ensureEmployeeDisplayNameSchema();
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_log_waste BOOLEAN DEFAULT false`;
+    await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_add_purchase_invoices BOOLEAN DEFAULT false`;
   } catch (e) {
     console.error("ensureWasteColumn:", e?.message);
   }
@@ -56,6 +57,7 @@ export async function GET(request) {
         COALESCE(e.can_do_inventory, false) as can_do_inventory,
         COALESCE(e.can_close_shift, false) as can_close_shift,
         COALESCE(e.can_log_waste, false) as can_log_waste,
+        COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,
         COALESCE(e.notify_shift_close_push, false) as notify_shift_close_push,
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,
@@ -144,6 +146,7 @@ export async function POST(request) {
       can_do_inventory,
       can_close_shift,
       can_log_waste,
+      can_add_purchase_invoices,
     } = body;
 
     if (!name) {
@@ -194,6 +197,9 @@ export async function POST(request) {
     const canDoInventoryBool = !isAdmin ? !!can_do_inventory : false;
     const canCloseShiftBool = !isAdmin ? !!can_close_shift : false;
     const canLogWasteBool = !isAdmin ? !!can_log_waste : false;
+    const canAddPurchaseInvoicesBool = !isAdmin
+      ? !!can_add_purchase_invoices
+      : false;
 
     const notifyShiftClosePushBool = isAdmin
       ? !!notify_shift_close_push
@@ -253,6 +259,7 @@ export async function POST(request) {
           can_do_inventory,
           can_close_shift,
           can_log_waste,
+          can_add_purchase_invoices,
           notify_shift_close_push,
           notify_inventory_operation_push,
           notify_shift_close_wa,
@@ -285,6 +292,7 @@ export async function POST(request) {
           ${canDoInventoryBool},
           ${canCloseShiftBool},
           ${canLogWasteBool},
+          ${canAddPurchaseInvoicesBool},
           ${notifyShiftClosePushBool},
           ${notifyInventoryOperationPushBool},
           ${notifyShiftCloseWaBool},
@@ -333,6 +341,7 @@ export async function POST(request) {
         COALESCE(e.can_do_inventory, false) as can_do_inventory,
         COALESCE(e.can_close_shift, false) as can_close_shift,
         COALESCE(e.can_log_waste, false) as can_log_waste,
+        COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,
         COALESCE(e.notify_shift_close_push, false) as notify_shift_close_push,
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,
