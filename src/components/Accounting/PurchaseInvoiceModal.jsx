@@ -18,7 +18,9 @@ import {
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import useUpload from "@/utils/useUpload";
-import { adminFetch } from "@/utils/apiAuth";
+// authedFetch prefers the admin token but falls back to field-flow
+// tokens — the modal is also used by /employee/purchase-invoice.
+import { authedFetch } from "@/utils/apiAuth";
 
 export const PURCHASE_INVOICE_STATUS_OPTIONS = [
   { value: "new", label: "جديد" },
@@ -863,7 +865,7 @@ async function analyzeInvoiceRemotely({ file, text } = {}) {
       }
     }
     if (!payload.file_base64 && !(payload.text || "").trim()) return null;
-    const response = await adminFetch(
+    const response = await authedFetch(
       "/api/accounting/purchase-invoices/analyze",
       {
         method: "POST",
@@ -1318,7 +1320,10 @@ export default function PurchaseInvoiceModal({
     if (!file) return;
     setScanSummary(null);
 
-    const result = await upload({ file });
+    // Store the ORIGINAL document untouched — the attachment is the
+    // legal record the user reviews. Compression happens only on the
+    // internal copy shipped to the smart scan (below).
+    const result = await upload({ file, unoptimized: true });
     if (result?.error) {
       setScanSummary({ filled: [], warning: `فشل رفع الملف: ${result.error}` });
       return;
@@ -1353,9 +1358,20 @@ export default function PurchaseInvoiceModal({
         filled: [],
         warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة.",
       });
-      const fileEligible = file.size <= MAX_SMART_FILE_BYTES;
+      // Phone photos routinely exceed the 3MB ride-along cap — shrink
+      // them first (receipt text survives compression fine).
+      let scanFile = file;
+      if (isImage && file.size > MAX_SMART_FILE_BYTES) {
+        try {
+          const { compressImage } = await import("@/utils/compressImage");
+          scanFile = await compressImage(file);
+        } catch {
+          // keep the original; the size gate below decides
+        }
+      }
+      const fileEligible = scanFile.size <= MAX_SMART_FILE_BYTES;
       let analysis = fileEligible
-        ? await analyzeInvoiceRemotely({ file })
+        ? await analyzeInvoiceRemotely({ file: scanFile })
         : null;
 
       if (!analysis && isImage) {

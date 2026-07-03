@@ -7,6 +7,16 @@ const REQUIRE_ACCOUNTING = {
   permission: "can_manage_accounting",
 };
 
+// Creating an invoice is also allowed for the field entry flow
+// (رفع فاتورة مشتريات): employees with the dedicated permission can
+// ADD invoices only — reading the ledger and editing stay admin-only.
+const REQUIRE_PURCHASES_CREATE = {
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { permission: "can_add_purchase_invoices" },
+  ],
+};
+
 const WORKFLOW_STATUSES = new Set(["new", "pending_payment"]);
 const DISPLAY_STATUSES = new Set([
   "new",
@@ -464,7 +474,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_PURCHASES_CREATE);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

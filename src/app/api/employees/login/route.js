@@ -48,6 +48,7 @@ export async function POST(request) {
       includeAccessHr = true,
       includeManageDeductions = true,
       includeLogWaste = true,
+      includeAddPurchaseInvoices = true,
       includeEmployeeBranches = true,
     } = {}) => {
       const selectManageEmployees = includeManageEmployees
@@ -65,6 +66,10 @@ export async function POST(request) {
       const selectLogWaste = includeLogWaste
         ? "COALESCE(e.can_log_waste, false) as can_log_waste,"
         : "false as can_log_waste,";
+
+      const selectAddPurchaseInvoices = includeAddPurchaseInvoices
+        ? "COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,"
+        : "false as can_add_purchase_invoices,";
 
       const branchesJoin = includeEmployeeBranches
         ? `LEFT JOIN LATERAL (
@@ -101,6 +106,7 @@ export async function POST(request) {
           ${selectAccessHr}
           ${selectManageDeductions}
           ${selectLogWaste}
+          ${selectAddPurchaseInvoices}
           COALESCE(e.can_do_inventory, false) as can_do_inventory,
           COALESCE(e.can_close_shift, false) as can_close_shift,
           COALESCE(
@@ -169,6 +175,14 @@ export async function POST(request) {
           includeLogWaste: false,
           includeEmployeeBranches: true,
         });
+      } else if (code === "42703" && msg.includes("can_add_purchase_invoices")) {
+        employee = await findEmployee({
+          includeManageEmployees: true,
+          includeAccessHr: true,
+          includeManageDeductions: true,
+          includeAddPurchaseInvoices: false,
+          includeEmployeeBranches: true,
+        });
       } else if (code === "42P01" && msg.includes("employee_branches")) {
         // employee_branches table missing -> rerun without the join
         employee = await findEmployee({
@@ -233,6 +247,7 @@ export async function POST(request) {
         can_do_inventory: !!employeeData.can_do_inventory,
         can_close_shift: !!employeeData.can_close_shift,
         can_log_waste: !!employeeData.can_log_waste,
+        can_add_purchase_invoices: !!employeeData.can_add_purchase_invoices,
         branchIds,
       });
     } catch (e) {

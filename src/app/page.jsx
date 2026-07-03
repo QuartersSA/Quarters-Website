@@ -8,6 +8,7 @@ import {
   Calculator,
   Languages,
   Trash2,
+  ReceiptText,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -53,6 +54,10 @@ export default function HomePage() {
           wasteTitle: "تسجيل دخول الهدر",
           wasteDesc: "للموظفين: تسجيل هدر المخبوزات والحلويات حسب الفرع.",
           wasteBtn: "دخول الهدر",
+          purchaseTitle: "رفع فاتورة مشتريات",
+          purchaseDesc:
+            "للموظفين المخوّلين: إرفاق فاتورة المورد ومسحها ذكياً وتسجيلها.",
+          purchaseBtn: "دخول رفع الفواتير",
           hint: "إذا كنت موظف وتحتاج تغيير اللغة أو اختيار الفرع، بتظهر لك الخيارات بعد تسجيل الدخول.",
           language: "اللغة",
           arabic: "عربي",
@@ -76,6 +81,10 @@ export default function HomePage() {
           wasteTitle: "Waste Logging Login",
           wasteDesc: "For employees: log bakery & sweets waste by branch.",
           wasteBtn: "Enter Waste",
+          purchaseTitle: "Purchase Invoice Entry",
+          purchaseDesc:
+            "For authorized employees: attach, smart-scan and file supplier invoices.",
+          purchaseBtn: "Enter Invoice Entry",
           hint: "If you're an employee and need to change language or branch, you'll see those options after login.",
           language: "Language",
           arabic: "Arabic",
@@ -132,6 +141,14 @@ export default function HomePage() {
         icon: Trash2,
         accent: "text-amber-200",
         buttonLabel: t("wasteBtn"),
+      },
+      {
+        title: t("purchaseTitle"),
+        description: t("purchaseDesc"),
+        href: "/employee/purchase-invoice/login",
+        icon: ReceiptText,
+        accent: "text-teal-200",
+        buttonLabel: t("purchaseBtn"),
       },
     ];
   }, [t]);
