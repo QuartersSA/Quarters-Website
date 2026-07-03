@@ -1355,9 +1355,20 @@ export default function PurchaseInvoiceModal({
         filled: [],
         warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة.",
       });
-      const fileEligible = file.size <= MAX_SMART_FILE_BYTES;
+      // Phone photos routinely exceed the 3MB ride-along cap — shrink
+      // them first (receipt text survives compression fine).
+      let scanFile = file;
+      if (isImage && file.size > MAX_SMART_FILE_BYTES) {
+        try {
+          const { compressImage } = await import("@/utils/compressImage");
+          scanFile = await compressImage(file);
+        } catch {
+          // keep the original; the size gate below decides
+        }
+      }
+      const fileEligible = scanFile.size <= MAX_SMART_FILE_BYTES;
       let analysis = fileEligible
-        ? await analyzeInvoiceRemotely({ file })
+        ? await analyzeInvoiceRemotely({ file: scanFile })
         : null;
 
       if (!analysis && isImage) {
