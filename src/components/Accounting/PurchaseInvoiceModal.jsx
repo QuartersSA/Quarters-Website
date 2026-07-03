@@ -256,8 +256,11 @@ const SUMMARY_LINE_RE =
 const LINE_NUM_RE = /(\d{1,3}(?:,\d{3})+(?:\.\d{1,4})?|\d+\.\d{1,4}|\d{1,6})/g;
 
 function lineNumbers(line) {
+  // Kill barcodes/ids FIRST — a 12-digit barcode would otherwise
+  // shatter into 6-digit chunks that pollute every numeric search.
+  const scrubbed = String(line).replace(/\d{7,}/g, " ");
   const values = [];
-  for (const match of line.matchAll(LINE_NUM_RE)) {
+  for (const match of scrubbed.matchAll(LINE_NUM_RE)) {
     const value = Number(String(match[1]).replace(/,/g, ""));
     if (Number.isFinite(value)) values.push(value);
   }
@@ -362,28 +365,59 @@ function cleanItemDescription(line) {
   return fixArabicText(cleaned);
 }
 
-// Quantity × unit price: find the pair among the row's numbers whose
-// product reproduces the net amount. The EARLIER number in the row is
-// the quantity (Qty columns precede Unit Price in invoice tables).
-// Pairs involving 1 rank last: 1 × net is trivially true (the row
-// index is usually a bare small digit), so a real qty×price pair wins.
-function findQtyPrice(values, net) {
+// Quantity × unit price. Division-based so it survives any column
+// order (RTL extraction often reverses it): every value is tried as
+// the quantity, the implied price = base ÷ qty must then appear in the
+// row. Both bases are checked — net (unit prices quoted before tax)
+// and gross (unit prices quoted tax-inclusive). Ranking: non-trivial
+// pairs first (1 × amount is trivially true of the bare row index),
+// then integer-ish quantities, then the tightest match.
+function decimalsOf(value) {
+  return (String(value).split(".")[1] || "").length;
+}
+
+function findQtyPrice(values, net, total) {
+  const clean = values.filter((value) => value > 0 && value <= 1000000);
   let best = null;
-  for (let i = 0; i < values.length; i += 1) {
-    for (let j = i + 1; j < values.length; j += 1) {
-      const a = values[i];
-      const b = values[j];
-      if (a <= 0 || b <= 0) continue;
-      const tolerance = Math.max(0.05, Math.min(a, b) * 0.006);
-      const diff = Math.abs(a * b - net);
-      if (diff > tolerance) continue;
-      const trivial = a === 1 || b === 1 ? 1 : 0;
-      if (
-        !best ||
-        trivial < best.trivial ||
-        (trivial === best.trivial && diff < best.diff)
-      ) {
-        best = { diff, trivial, quantity: a, unitPrice: b };
+  for (const [basis, base] of [
+    ["net", net],
+    ["gross", total],
+  ]) {
+    if (!base || base <= 0) continue;
+    for (const q of clean) {
+      if (q > 100000) continue;
+      const impliedPrice = base / q;
+      if (!Number.isFinite(impliedPrice) || impliedPrice <= 0) continue;
+      for (const p of clean) {
+        if (p === q && clean.filter((v) => v === q).length < 2) {
+          // a single occurrence can't be both qty and price
+          if (Math.abs(q * q - base) > 0.02) continue;
+        }
+        const diff = Math.abs(p - impliedPrice);
+        if (diff > Math.max(0.02, impliedPrice * 0.003)) continue;
+        const trivial = q === 1 || p === 1 ? 1 : 0;
+        const qtyIsCountLike = decimalsOf(q) <= 1 ? 1 : 0;
+        const candidate = {
+          diff,
+          trivial,
+          qtyIsCountLike,
+          basisIsNet: basis === "net" ? 1 : 0,
+          quantity: q,
+          unitPrice: p,
+          basis,
+        };
+        if (
+          !best ||
+          candidate.trivial < best.trivial ||
+          (candidate.trivial === best.trivial &&
+            (candidate.qtyIsCountLike > best.qtyIsCountLike ||
+              (candidate.qtyIsCountLike === best.qtyIsCountLike &&
+                (candidate.basisIsNet > best.basisIsNet ||
+                  (candidate.basisIsNet === best.basisIsNet &&
+                    candidate.diff < best.diff)))))
+        ) {
+          best = candidate;
+        }
       }
     }
   }
@@ -399,7 +433,7 @@ function itemFromLine(line) {
   const rate = triplet.net > 0 ? round2((triplet.tax / triplet.net) * 100) : 15;
   // Implausible VAT rate → probably a coincidence, not a product row.
   if (rate <= 0 || rate > 50) return null;
-  const qtyPrice = findQtyPrice(values, triplet.net);
+  const qtyPrice = findQtyPrice(values, triplet.net, triplet.total);
   return {
     description: cleanItemDescription(line),
     net: triplet.net,
@@ -407,6 +441,7 @@ function itemFromLine(line) {
     rate,
     quantity: qtyPrice?.quantity ?? null,
     unitPrice: qtyPrice?.unitPrice ?? null,
+    priceIncludesTax: qtyPrice?.basis === "gross",
   };
 }
 
@@ -1002,14 +1037,15 @@ export default function PurchaseInvoiceModal({
           setLines(
             tableItems.map((item) =>
               item.quantity !== null && item.unitPrice !== null
-                ? // Quantity × net unit price recovered from the row —
-                  // enter it exactly like the invoice does (خالي).
+                ? // Quantity × unit price recovered from the row —
+                  // entered exactly like the invoice quotes it (net or
+                  // tax-inclusive unit prices both supported).
                   newLine({
                     description: item.description,
                     quantity: String(item.quantity),
                     unit_price: priceInput(item.unitPrice),
                     tax_rate: String(item.rate),
-                    amount_includes_tax: false,
+                    amount_includes_tax: !!item.priceIncludesTax,
                   })
                 : newLine({
                     description: item.description,
