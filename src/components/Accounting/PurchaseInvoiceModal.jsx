@@ -826,20 +826,49 @@ function round2(value) {
   return Math.round(value * 100) / 100;
 }
 
-// Smart pass: the server sends the raw extracted text to Claude, which
-// reconstructs the invoice (repairs garbled Arabic, verifies the math,
-// matches the supplier by VAT and classifies each line on شجرة
-// الحسابات). Returns the analysis object, or null on ANY failure —
+// Server-wide body limit is 4.5MB and base64 inflates ×1.33 — files
+// beyond this can't ride along; the smart pass then runs on text only.
+const MAX_SMART_FILE_BYTES = 3 * 1024 * 1024;
+
+async function fileToBase64(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+// Smart pass: ships the invoice FILE itself (base64, when ≤3MB) so
+// Claude reads the document visually — scanned receipts and photos
+// included — plus any extracted text as a secondary aid. The server
+// reconstructs the invoice, repairs garbled Arabic, verifies the
+// math, matches the supplier by VAT and classifies each line on شجرة
+// الحسابات. Returns the analysis object, or null on ANY failure —
 // missing ANTHROPIC_API_KEY (503), network error, refusal — so the
 // caller can fall back to the local heuristic parser.
-async function analyzeInvoiceRemotely(text) {
+async function analyzeInvoiceRemotely({ file, text } = {}) {
   try {
+    const payload = { text: text || "" };
+    if (file && file.size > 0 && file.size <= MAX_SMART_FILE_BYTES) {
+      const mediaType =
+        file.type ||
+        (/\.pdf$/i.test(file.name || "") ? "application/pdf" : "");
+      if (
+        /^(application\/pdf|image\/(jpeg|png|webp|gif))$/.test(mediaType)
+      ) {
+        payload.file_base64 = await fileToBase64(file);
+        payload.media_type = mediaType;
+      }
+    }
+    if (!payload.file_base64 && !(payload.text || "").trim()) return null;
     const response = await adminFetch(
       "/api/accounting/purchase-invoices/analyze",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify(payload),
       },
     );
     if (!response.ok) {
@@ -1300,61 +1329,87 @@ export default function PurchaseInvoiceModal({
 
     const isPdf =
       file.type === "application/pdf" || /\.pdf$/i.test(file.name || "");
-    if (!isPdf) {
+    const isImage = /^image\/(jpeg|png|webp|gif)$/i.test(file.type || "");
+    if (!isPdf && !isImage) {
       setScanSummary({
         filled: [],
-        warning: "تم إرفاق الملف. الفحص التلقائي يعمل مع ملفات PDF فقط.",
+        warning: "تم إرفاق الملف. الفحص التلقائي يدعم PDF والصور فقط.",
       });
       return;
     }
 
     setScanBusy(true);
     try {
-      const { extractPdfDetails, ocrPdfDetails } = await import(
-        "@/client-integrations/pdfjs"
-      );
-      let details = await extractPdfDetails(file);
-      // Scanned/photographed PDFs have no text layer — fall back to
-      // OCR (slow: language data downloads on first use).
-      if (!details || details.text.trim().length < 10) {
-        setScanSummary({
-          filled: [],
-          warning:
-            "الفاتورة صورة ممسوحة — جاري التعرف الضوئي (OCR)، قد يستغرق دقيقة…",
-        });
-        setOcrProgress(0);
-        details = await ocrPdfDetails(file, (progress) =>
-          setOcrProgress(progress),
-        );
-        setOcrProgress(null);
-      }
-      const text = details?.text;
-      if (!text || text.trim().length < 10) {
-        setScanSummary({
-          filled: [],
-          warning:
-            "تم إرفاق الفاتورة لكن ما قدرت أقرأ نصها حتى بالتعرف الضوئي. عبّي الحقول يدوياً.",
-        });
-        return;
-      }
-
-      // Prefer the visually-ordered lines: raw stream order can put a
-      // value far from its label, breaking keyword-window searches.
-      const linesText = (details?.pageLines || [])
-        .flat()
-        .join("\n");
       const filled = [];
       // A field is fillable when it's still empty/default OR the last
       // scan owns it (replacing the attachment refreshes those values).
       const owned = autoFilledRef.current;
       const canFill = (field, isEmpty) => isEmpty || owned.has(field);
 
-      // Smart pass first — Claude reconstructs the whole invoice.
+      // Smart pass FIRST with the document itself — Claude reads the
+      // PDF/image visually, so scanned receipts don't depend on the
+      // (much weaker) client-side OCR at all.
       setScanSummary({
         filled: [],
         warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة.",
       });
-      const analysis = await analyzeInvoiceRemotely(linesText || text);
+      const fileEligible = file.size <= MAX_SMART_FILE_BYTES;
+      let analysis = fileEligible
+        ? await analyzeInvoiceRemotely({ file })
+        : null;
+
+      if (!analysis && isImage) {
+        // Images have no local fallback parser.
+        setScanSummary({
+          filled: [],
+          warning:
+            "ما قدرت أحلل الصورة تلقائياً — تم إرفاقها، عبّي الحقول يدوياً.",
+        });
+        return;
+      }
+
+      let details = null;
+      if (!analysis) {
+        // PDF fallback: extract locally (OCR for scans), then one
+        // text-only smart attempt for files too large to ship raw.
+        const { extractPdfDetails, ocrPdfDetails } = await import(
+          "@/client-integrations/pdfjs"
+        );
+        details = await extractPdfDetails(file);
+        // Scanned/photographed PDFs have no text layer — fall back to
+        // OCR (slow: language data downloads on first use).
+        if (!details || details.text.trim().length < 10) {
+          setScanSummary({
+            filled: [],
+            warning:
+              "الفاتورة صورة ممسوحة — جاري التعرف الضوئي (OCR)، قد يستغرق دقيقة…",
+          });
+          setOcrProgress(0);
+          details = await ocrPdfDetails(file, (progress) =>
+            setOcrProgress(progress),
+          );
+          setOcrProgress(null);
+        }
+        if (!details?.text || details.text.trim().length < 10) {
+          setScanSummary({
+            filled: [],
+            warning:
+              "تم إرفاق الفاتورة لكن ما قدرت أقرأ نصها حتى بالتعرف الضوئي. عبّي الحقول يدوياً.",
+          });
+          return;
+        }
+        if (!fileEligible) {
+          setScanSummary({
+            filled: [],
+            warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة.",
+          });
+          analysis = await analyzeInvoiceRemotely({
+            text:
+              (details?.pageLines || []).flat().join("\n") || details.text,
+          });
+        }
+      }
+
       if (analysis) {
         if (
           analysis.invoice_number &&
@@ -1475,7 +1530,12 @@ export default function PurchaseInvoiceModal({
         return;
       }
 
-      // Local heuristics — smart pass unavailable or failed.
+      // Local heuristics — smart pass unavailable or failed. Only
+      // reachable for PDFs, with `details` extracted above.
+      const text = details.text;
+      // Prefer the visually-ordered lines: raw stream order can put a
+      // value far from its label, breaking keyword-window searches.
+      const linesText = (details?.pageLines || []).flat().join("\n");
       const parsed = parseInvoiceText(linesText || text, contacts);
 
       if (parsed.invoiceNumber && canFill("number", !invoiceNumber.trim())) {
