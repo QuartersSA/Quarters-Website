@@ -400,20 +400,25 @@ function arabicDirectionScore(text) {
 
 // Some PDFs emit each Arabic GLYPH as its own text run with real
 // gaps, so geometry-based joining can't help — "وحدة" arrives as the
-// tokens "ة د ح و". Two or more consecutive single-letter Arabic
-// tokens are letters of one word: glue them (a lone letter like و
-// "and" stays a word).
+// tokens "ة د ح و" (and ligature glyphs as pairs like "لا"). Glue a
+// stretch of tiny Arabic tokens back into one block: 2+ consecutive
+// single letters, or 3+ tokens of at most two letters. A lone word
+// like و ("and") between full words stays separate.
 function mergeSingleLetterRuns(text) {
   const tokens = String(text).split(/\s+/).filter(Boolean);
   const out = [];
   let buffer = [];
   const flush = () => {
-    if (buffer.length >= 2) out.push(buffer.join(""));
-    else out.push(...buffer);
+    const singles = buffer.filter((token) => token.length === 1).length;
+    if (buffer.length >= 3 || (buffer.length === 2 && singles === 2)) {
+      out.push(buffer.join(""));
+    } else {
+      out.push(...buffer);
+    }
     buffer = [];
   };
   for (const token of tokens) {
-    if (/^[؀-ۿ]$/.test(token)) {
+    if (/^[؀-ۿ]{1,2}$/.test(token)) {
       buffer.push(token);
     } else {
       flush();
@@ -424,22 +429,73 @@ function mergeSingleLetterRuns(text) {
   return out.join(" ");
 }
 
+// The لا ligature decomposes (NFKC) to lam+alef in VISUAL order —
+// reversing letter-by-letter would corrupt it to "ال". Treat it as
+// one unit across the flip.
+function mirrorArabic(run) {
+  const LAM_ALEF_MARK = "";
+  return [...run.split("لا").join(LAM_ALEF_MARK)]
+    .reverse()
+    .join("")
+    .split(LAM_ALEF_MARK)
+    .join("لا");
+}
+
+// Split a glued Arabic block ("صينةكيكتراميسو") into lexicon words —
+// greedy longest-match; unknown stretches stay glued.
+const AR_WORDS_BY_LENGTH = [...AR_INVOICE_WORDS].sort(
+  (a, b) => b.length - a.length,
+);
+
+function segmentByLexicon(block) {
+  const out = [];
+  let unknown = "";
+  let i = 0;
+  while (i < block.length) {
+    let hit = null;
+    for (const word of AR_WORDS_BY_LENGTH) {
+      if (block.startsWith(word, i)) {
+        hit = word;
+        break;
+      }
+    }
+    if (hit) {
+      if (unknown) {
+        out.push(unknown);
+        unknown = "";
+      }
+      out.push(hit);
+      i += hit.length;
+    } else {
+      unknown += block[i];
+      i += 1;
+    }
+  }
+  if (unknown) out.push(unknown);
+  return out;
+}
+
+function expandGluedWords(text) {
+  return text
+    .split(/\s+/)
+    .flatMap((word) =>
+      /^[؀-ۿ]{6,}$/.test(word) ? segmentByLexicon(word) : [word],
+    )
+    .join(" ");
+}
+
 function fixArabicText(text) {
   return mergeSingleLetterRuns(text).replace(
-    /[؀-ۿ][؀-ۿ\s]*[؀-ۿ]/g,
+    /[؀-ۿ][؀-ۿs]*[؀-ۿ]/g,
     (run) => {
-      // The لا ligature decomposes (NFKC) to lam+alef in VISUAL order —
-      // reversing it letter-by-letter would corrupt it to "ال". Treat
-      // it as one unit across the flip.
-      const LAM_ALEF_MARK = "";
-      const reversed = [...run.split("لا").join(LAM_ALEF_MARK)]
-        .reverse()
-        .join("")
-        .split(LAM_ALEF_MARK)
-        .join("لا");
-      return arabicDirectionScore(reversed) > arabicDirectionScore(run)
-        ? reversed
-        : run;
+      // Both directions get lexicon-expanded, then the one reading as
+      // real Arabic (morphology + known invoice words) wins.
+      const forward = expandGluedWords(run);
+      const backward = expandGluedWords(mirrorArabic(run));
+      const lexiconHits = (s) =>
+        s.split(/\s+/).filter((w) => AR_INVOICE_WORDS.has(w)).length;
+      const score = (s) => arabicDirectionScore(s) + lexiconHits(s) * 2;
+      return score(backward) > score(forward) ? backward : forward;
     },
   );
 }
