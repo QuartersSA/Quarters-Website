@@ -116,6 +116,11 @@ async function ensureSchema() {
     )
   `;
   await sql`
+    ALTER TABLE accounting_purchase_invoice_items
+      ADD COLUMN IF NOT EXISTS quantity NUMERIC(14, 3) NOT NULL DEFAULT 1,
+      ADD COLUMN IF NOT EXISTS unit_price NUMERIC(14, 4) NOT NULL DEFAULT 0
+  `;
+  await sql`
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_items_invoice
       ON accounting_purchase_invoice_items (invoice_id, position)
   `;
@@ -184,7 +189,13 @@ function parseItems(body) {
   if (!Array.isArray(body?.items)) return null;
   const items = [];
   for (const raw of body.items) {
-    const amount = parseMoney(raw?.amount, 0);
+    // Quantity × unit price is the base amount; legacy payloads that
+    // send only `amount` become 1 × amount.
+    const qtyRaw = Number(raw?.quantity);
+    const quantity = Number.isFinite(qtyRaw) && qtyRaw > 0 ? Math.round(qtyRaw * 1000) / 1000 : null;
+    const priceRaw = Number(raw?.unit_price);
+    const unitPrice = Number.isFinite(priceRaw) && priceRaw > 0 ? Math.round(priceRaw * 10000) / 10000 : null;
+    const amount = quantity !== null && unitPrice !== null ? round2(quantity * unitPrice) : parseMoney(raw?.amount, 0);
     if (amount <= 0) continue;
     const rateRaw = Number(raw?.tax_rate);
     const taxRate = Number.isFinite(rateRaw) ? Math.min(Math.max(rateRaw, 0), 100) : 15;
@@ -196,6 +207,8 @@ function parseItems(body) {
       position: items.length,
       description: raw?.description ? String(raw.description).trim() : null,
       accountId: Number.isInteger(accountId) ? accountId : null,
+      quantity: quantity ?? 1,
+      unitPrice: unitPrice ?? amount,
       amount,
       taxRate,
       includesTax,
@@ -215,11 +228,13 @@ async function replaceInvoiceItems(invoiceId, items) {
     await sql`
       INSERT INTO accounting_purchase_invoice_items (
         invoice_id, position, description, account_id,
+        quantity, unit_price,
         amount, tax_rate, amount_includes_tax,
         line_subtotal, line_tax, line_total
       )
       VALUES (
         ${invoiceId}, ${item.position}, ${item.description}, ${item.accountId},
+        ${item.quantity}, ${item.unitPrice},
         ${item.amount}, ${item.taxRate}, ${item.includesTax},
         ${item.subtotal}, ${item.tax}, ${item.total}
       )
@@ -249,6 +264,7 @@ async function attachItems(rows) {
   try {
     const items = await sql`
       SELECT id, invoice_id, position, description, account_id,
+             quantity, unit_price,
              amount, tax_rate, amount_includes_tax,
              line_subtotal, line_tax, line_total
       FROM accounting_purchase_invoice_items

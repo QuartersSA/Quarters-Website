@@ -250,15 +250,15 @@ function detectContact(text, contacts) {
 const SUMMARY_LINE_RE =
   /(المجموع|الإجمالي|الاجمالي|إجمالي|اجمالي|المبلغ\s*المستحق|المستحق|sub\s*-?\s*total|grand\s*total|total\s*(?:due|amount|before)|amount\s*due|balance)/i;
 
+// Wider than MONEY_RE on purpose: quantities are often single digits
+// ("2") and unit prices can carry 3–4 decimals ("16.499"). Order of
+// appearance is preserved — column order matters for qty/price.
+const LINE_NUM_RE = /(\d{1,3}(?:,\d{3})+(?:\.\d{1,4})?|\d+\.\d{1,4}|\d{1,6})/g;
+
 function lineNumbers(line) {
   const values = [];
-  for (const match of line.matchAll(new RegExp(MONEY_RE.source, "g"))) {
-    // Bare long digit runs are barcodes / ids, not money.
-    const token = match[1];
-    if (!token.includes(".") && !token.includes(",") && token.length > 6) {
-      continue;
-    }
-    const value = Number(String(token).replace(/,/g, ""));
+  for (const match of line.matchAll(LINE_NUM_RE)) {
+    const value = Number(String(match[1]).replace(/,/g, ""));
     if (Number.isFinite(value)) values.push(value);
   }
   return values;
@@ -362,6 +362,34 @@ function cleanItemDescription(line) {
   return fixArabicText(cleaned);
 }
 
+// Quantity × unit price: find the pair among the row's numbers whose
+// product reproduces the net amount. The EARLIER number in the row is
+// the quantity (Qty columns precede Unit Price in invoice tables).
+// Pairs involving 1 rank last: 1 × net is trivially true (the row
+// index is usually a bare small digit), so a real qty×price pair wins.
+function findQtyPrice(values, net) {
+  let best = null;
+  for (let i = 0; i < values.length; i += 1) {
+    for (let j = i + 1; j < values.length; j += 1) {
+      const a = values[i];
+      const b = values[j];
+      if (a <= 0 || b <= 0) continue;
+      const tolerance = Math.max(0.05, Math.min(a, b) * 0.006);
+      const diff = Math.abs(a * b - net);
+      if (diff > tolerance) continue;
+      const trivial = a === 1 || b === 1 ? 1 : 0;
+      if (
+        !best ||
+        trivial < best.trivial ||
+        (trivial === best.trivial && diff < best.diff)
+      ) {
+        best = { diff, trivial, quantity: a, unitPrice: b };
+      }
+    }
+  }
+  return best;
+}
+
 function itemFromLine(line) {
   if (SUMMARY_LINE_RE.test(line)) return null;
   const values = lineNumbers(line);
@@ -371,10 +399,14 @@ function itemFromLine(line) {
   const rate = triplet.net > 0 ? round2((triplet.tax / triplet.net) * 100) : 15;
   // Implausible VAT rate → probably a coincidence, not a product row.
   if (rate <= 0 || rate > 50) return null;
+  const qtyPrice = findQtyPrice(values, triplet.net);
   return {
     description: cleanItemDescription(line),
+    net: triplet.net,
     total: triplet.total,
     rate,
+    quantity: qtyPrice?.quantity ?? null,
+    unitPrice: qtyPrice?.unitPrice ?? null,
   };
 }
 
@@ -572,7 +604,9 @@ export function buildExpenseAccountOptions(accounts = []) {
   return options;
 }
 
-// One editable line (بند) of the invoice.
+// One editable line (بند) of the invoice: quantity × unit price is
+// the base amount; the tax toggle decides whether that base is net or
+// gross.
 let lineKeyCounter = 0;
 function newLine(overrides = {}) {
   lineKeyCounter += 1;
@@ -580,20 +614,29 @@ function newLine(overrides = {}) {
     key: `line-${lineKeyCounter}`,
     description: "",
     account_id: "",
-    amount: "",
+    quantity: "1",
+    unit_price: "",
     tax_rate: "15",
     amount_includes_tax: false,
     ...overrides,
   };
 }
 
+function lineAmount(line) {
+  const quantity = moneyValue(line.quantity);
+  const price = moneyValue(line.unit_price);
+  if (quantity <= 0 || price <= 0) return 0;
+  return round2(quantity * price);
+}
+
 function lineMath(line) {
-  const amount = moneyValue(line.amount);
+  const amount = lineAmount(line);
   const rate = Math.min(Math.max(moneyValue(line.tax_rate), 0), 100);
-  if (amount <= 0) return { subtotal: 0, tax: 0, total: 0 };
+  if (amount <= 0) return { amount: 0, subtotal: 0, tax: 0, total: 0 };
   if (line.amount_includes_tax) {
     const subtotal = amount / (1 + rate / 100);
     return {
+      amount,
       subtotal: round2(subtotal),
       tax: round2(amount - subtotal),
       total: round2(amount),
@@ -601,24 +644,36 @@ function lineMath(line) {
   }
   const tax = (amount * rate) / 100;
   return {
+    amount,
     subtotal: round2(amount),
     tax: round2(tax),
     total: round2(amount + tax),
   };
 }
 
+function priceInput(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number) || number <= 0) return "";
+  // Unit prices keep up to 4 decimals (e.g. 16.499) without noise.
+  return String(Math.round(number * 10000) / 10000);
+}
+
 function linesFromInvoice(invoice) {
   const stored = Array.isArray(invoice?.items) ? invoice.items : [];
   if (stored.length > 0) {
-    return stored.map((item) =>
-      newLine({
+    return stored.map((item) => {
+      const quantity = moneyValue(item.quantity);
+      const price = moneyValue(item.unit_price);
+      return newLine({
         description: item.description || "",
         account_id: item.account_id ? String(item.account_id) : "",
-        amount: moneyInput(item.amount),
+        quantity: quantity > 0 ? String(quantity) : "1",
+        unit_price:
+          price > 0 ? priceInput(price) : moneyInput(item.amount) || "",
         tax_rate: String(moneyValue(item.tax_rate)),
         amount_includes_tax: !!item.amount_includes_tax,
-      }),
-    );
+      });
+    });
   }
   // Legacy header-only invoice → seed one line from its totals so the
   // numbers survive editing.
@@ -633,7 +688,8 @@ function linesFromInvoice(invoice) {
         account_id: invoice?.expense_account_id
           ? String(invoice.expense_account_id)
           : "",
-        amount: moneyInput(total),
+        quantity: "1",
+        unit_price: moneyInput(total),
         tax_rate: String(rate || 0),
         amount_includes_tax: true,
       }),
@@ -807,11 +863,13 @@ export default function PurchaseInvoiceModal({
     event?.preventDefault?.();
     if (!canSubmit) return;
     const items = lines
-      .filter((line) => moneyValue(line.amount) > 0)
+      .filter((line) => lineAmount(line) > 0)
       .map((line) => ({
         description: line.description.trim() || null,
         account_id: line.account_id || null,
-        amount: moneyValue(line.amount),
+        quantity: moneyValue(line.quantity),
+        unit_price: moneyValue(line.unit_price),
+        amount: lineAmount(line),
         tax_rate: moneyValue(line.tax_rate),
         amount_includes_tax: !!line.amount_includes_tax,
       }));
@@ -921,7 +979,7 @@ export default function PurchaseInvoiceModal({
       // Line items: recover the product table when possible — each
       // row becomes its own بند (gross amount + its effective rate).
       // Otherwise seed ONE aggregate line from the detected totals.
-      const hasAmounts = lines.some((line) => moneyValue(line.amount) > 0);
+      const hasAmounts = lines.some((line) => lineAmount(line) > 0);
       if (canFill("lines", !hasAmounts)) {
         // Per-page groups first (copy pages duplicate the table), then
         // everything merged as a last resort.
@@ -943,12 +1001,23 @@ export default function PurchaseInvoiceModal({
         if (tableItems) {
           setLines(
             tableItems.map((item) =>
-              newLine({
-                description: item.description,
-                amount: item.total.toFixed(2),
-                tax_rate: String(item.rate),
-                amount_includes_tax: true,
-              }),
+              item.quantity !== null && item.unitPrice !== null
+                ? // Quantity × net unit price recovered from the row —
+                  // enter it exactly like the invoice does (خالي).
+                  newLine({
+                    description: item.description,
+                    quantity: String(item.quantity),
+                    unit_price: priceInput(item.unitPrice),
+                    tax_rate: String(item.rate),
+                    amount_includes_tax: false,
+                  })
+                : newLine({
+                    description: item.description,
+                    quantity: "1",
+                    unit_price: item.total.toFixed(2),
+                    tax_rate: String(item.rate),
+                    amount_includes_tax: true,
+                  }),
             ),
           );
           owned.add("lines");
@@ -963,7 +1032,8 @@ export default function PurchaseInvoiceModal({
           setLines([
             newLine({
               description: "",
-              amount: parsed.total.toFixed(2),
+              quantity: "1",
+              unit_price: parsed.total.toFixed(2),
               tax_rate: String(rate),
               amount_includes_tax: true,
             }),
@@ -1382,22 +1452,41 @@ export default function PurchaseInvoiceModal({
                             buttonClassName="text-sm py-2 px-3"
                           />
                         </div>
-                        <div>
-                          <FieldLabel required>المبلغ</FieldLabel>
-                          <input
-                            type="number"
-                            value={line.amount}
-                            onChange={(event) =>
-                              updateLine(line.key, {
-                                amount: event.target.value,
-                              })
-                            }
-                            className={`${ws.input} px-3 py-2 text-right`}
-                            step="0.01"
-                            min="0"
-                            dir="ltr"
-                            placeholder="0.00"
-                          />
+                        <div className="grid grid-cols-2 gap-2.5">
+                          <div>
+                            <FieldLabel required>الكمية</FieldLabel>
+                            <input
+                              type="number"
+                              value={line.quantity}
+                              onChange={(event) =>
+                                updateLine(line.key, {
+                                  quantity: event.target.value,
+                                })
+                              }
+                              className={`${ws.input} px-3 py-2 text-right`}
+                              step="any"
+                              min="0"
+                              dir="ltr"
+                              placeholder="1"
+                            />
+                          </div>
+                          <div>
+                            <FieldLabel required>سعر الوحدة</FieldLabel>
+                            <input
+                              type="number"
+                              value={line.unit_price}
+                              onChange={(event) =>
+                                updateLine(line.key, {
+                                  unit_price: event.target.value,
+                                })
+                              }
+                              className={`${ws.input} px-3 py-2 text-right`}
+                              step="any"
+                              min="0"
+                              dir="ltr"
+                              placeholder="0.00"
+                            />
+                          </div>
                         </div>
                         <div>
                           <FieldLabel>معدل الضريبة %</FieldLabel>
@@ -1446,6 +1535,12 @@ export default function PurchaseInvoiceModal({
 
                       {math.total > 0 ? (
                         <div className="text-[11px] text-slate-500 dark:text-white/45 flex items-center gap-3 flex-wrap pt-1">
+                          <span>
+                            المبلغ:{" "}
+                            <span dir="ltr" className="font-bold">
+                              {math.amount.toFixed(2)}
+                            </span>
+                          </span>
                           <span>
                             الصافي:{" "}
                             <span dir="ltr" className="font-bold">
