@@ -51,7 +51,7 @@ const OUTPUT_SCHEMA = {
     },
     contact_matched_by: {
       type: ["string", "null"],
-      enum: ["vat", "name", null]
+      description: "\"vat\" or \"name\", null when no match"
     },
     currency: {
       type: "string",
