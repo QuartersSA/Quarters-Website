@@ -197,9 +197,8 @@ export async function POST(request) {
     const canDoInventoryBool = !isAdmin ? !!can_do_inventory : false;
     const canCloseShiftBool = !isAdmin ? !!can_close_shift : false;
     const canLogWasteBool = !isAdmin ? !!can_log_waste : false;
-    const canAddPurchaseInvoicesBool = !isAdmin
-      ? !!can_add_purchase_invoices
-      : false;
+    // Available to BOTH roles: admins may also use the field entry flow.
+    const canAddPurchaseInvoicesBool = !!can_add_purchase_invoices;
 
     const notifyShiftClosePushBool = isAdmin
       ? !!notify_shift_close_push

@@ -220,7 +220,7 @@ export function EmployeeFormFields({
                 can_do_inventory: false,
                 can_close_shift: false,
                 can_log_waste: false,
-                can_add_purchase_invoices: false,
+                // رفع فاتورة مشتريات متاح للدورين — الـspread يبقيه كما هو
                 // صلاحيات أقسام الإدارة (افتراضيًا: مفعلة)
                 can_access_workspace: true,
                 can_manage_inventory: true,
@@ -425,6 +425,25 @@ export function EmployeeFormFields({
                 )}
                 <Megaphone className="w-4 h-4" />
                 التسويق
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    can_add_purchase_invoices: !p.can_add_purchase_invoices,
+                  }))
+                }
+                className={employeePurchaseInvoiceBtnClass}
+              >
+                {formData.can_add_purchase_invoices ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                <ReceiptText className="w-4 h-4" />
+                رفع فاتورة مشتريات
               </button>
             </div>
           </div>
