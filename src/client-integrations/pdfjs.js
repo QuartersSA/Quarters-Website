@@ -53,7 +53,24 @@ export const extractPdfDetails = async (file) => {
       const current = [];
       for (const row of rows) {
         row.parts.sort((a, b) => a.x - b.x);
-        const line = row.parts.map((part) => part.str).join(" ").trim();
+        // Join runs by their real horizontal gap: Arabic PDFs often
+        // emit ONE GLYPH per run, and a blind " " join spells words
+        // like "و ح د ة". Runs that touch get concatenated directly.
+        let line = "";
+        let prevEnd = null;
+        for (const part of row.parts) {
+          const gap = prevEnd === null ? 0 : part.x - prevEnd;
+          if (line && gap > 1.5) line += " ";
+          line += part.str;
+          prevEnd = part.x + (part.width || 0);
+        }
+        // NFKC folds Arabic presentation forms (ﻮ→و); strip replacement
+        // and private-use glyphs (fonts without a ToUnicode map).
+        line = line
+          .normalize("NFKC")
+          .replace(/[�-]/g, "")
+          .replace(/\s{2,}/g, " ")
+          .trim();
         if (line) {
           lines.push(line);
           current.push(line);

@@ -286,8 +286,46 @@ function findLineTriplet(values) {
   return best;
 }
 
+// Arabic runs extracted from visual-order PDFs come out mirrored
+// ("ةدحو" for "وحدة"). Score both directions with cheap morphology
+// (definite article must lead, taa marbuta must trail) and keep the
+// likelier one — correctly-encoded PDFs score higher as-is and are
+// left untouched.
+// Small lexicon of words common on food/packaging invoices — a direct
+// hit is the strongest direction signal available.
+const AR_INVOICE_WORDS = new Set(
+  "كيك وحدة قطعة صينية علبة كرتون حبة شدة كوب أكواب اكواب حليب قهوة بن سكر شاي ماء مياه عصير شوكولاته شوكولاتة كراميل فانيلا توت فراولة مانجو ليمون جبن جبنة زبدة كريمة عسل تمر كعك خبز مخبوزات حلويات بسكويت دونات كرواسون معمول تراميسو تشيز لوز فستق بندق جوز كاجو مندي كوكيز مافن براونيز".split(
+    " ",
+  ),
+);
+
+function arabicDirectionScore(text) {
+  let score = 0;
+  for (const word of text.split(/\s+/)) {
+    if (!/[؀-ۿ]/.test(word)) continue;
+    if (AR_INVOICE_WORDS.has(word)) score += 3;
+    if (/^ال./.test(word)) score += 2;
+    if (/.[ةى]$/.test(word)) score += 2;
+    if (/^[ةى]/.test(word)) score -= 3;
+    if (/.ال$/.test(word)) score -= 2;
+  }
+  return score;
+}
+
+function fixArabicText(text) {
+  return String(text).replace(
+    /[؀-ۿ][؀-ۿ\s]*[؀-ۿ]/g,
+    (run) => {
+      const reversed = [...run].reverse().join("");
+      return arabicDirectionScore(reversed) > arabicDirectionScore(run)
+        ? reversed
+        : run;
+    },
+  );
+}
+
 function cleanItemDescription(line) {
-  return line
+  const cleaned = line
     .replace(/\b\d{7,}\b/g, " ") // barcodes / ids
     .replace(new RegExp(MONEY_RE.source, "g"), " ")
     .replace(/\d+(?:\.\d+)?\s*%/g, " ")
@@ -295,6 +333,7 @@ function cleanItemDescription(line) {
     .replace(/\s{2,}/g, " ")
     .replace(/^\s*\d+\s+/, "") // leading row index
     .trim();
+  return fixArabicText(cleaned);
 }
 
 function itemFromLine(line) {
