@@ -1112,6 +1112,7 @@ export default function PurchaseInvoiceModal({
   const [dueDate, setDueDate] = useState("");
   const [currency, setCurrency] = useState("SAR");
   const [lines, setLines] = useState(() => [newLine()]);
+  const [discount, setDiscount] = useState("0.00"); // خصم قبل الضريبة
   const [paidAmount, setPaidAmount] = useState("0.00");
   const [workflowStatus, setWorkflowStatus] = useState("new");
   const [notes, setNotes] = useState("");
@@ -1141,6 +1142,7 @@ export default function PurchaseInvoiceModal({
     setDueDate(invoice?.due_date || "");
     setCurrency(invoice?.currency || "SAR");
     setLines(linesFromInvoice(invoice));
+    setDiscount(moneyInput(invoice?.discount_amount) || "0.00");
     setPaidAmount(moneyInput(invoice?.paid_amount) || "0.00");
     setWorkflowStatus(invoice?.workflow_status || "new");
     setNotes(invoice?.notes || "");
@@ -1186,22 +1188,29 @@ export default function PurchaseInvoiceModal({
     [accounts],
   );
 
+  // Invoice-level discount applies to the PRE-TAX sum: the taxable
+  // base shrinks by the discount and the tax shrinks proportionally.
+  // Line prices stay as printed on the invoice.
   const totals = useMemo(() => {
-    let subtotal = 0;
-    let tax = 0;
-    let total = 0;
+    let rawSubtotal = 0;
+    let rawTax = 0;
     for (const line of lines) {
       const math = lineMath(line);
-      subtotal += math.subtotal;
-      tax += math.tax;
-      total += math.total;
+      rawSubtotal += math.subtotal;
+      rawTax += math.tax;
     }
+    const applied = Math.min(Math.max(moneyValue(discount), 0), rawSubtotal);
+    const factor = rawSubtotal > 0 ? (rawSubtotal - applied) / rawSubtotal : 1;
+    const subtotal = rawSubtotal - applied;
+    const tax = rawTax * factor;
     return {
+      rawSubtotal: round2(rawSubtotal),
+      discount: round2(applied),
       subtotal: round2(subtotal),
       tax: round2(tax),
-      total: round2(total),
+      total: round2(subtotal + tax),
     };
-  }, [lines]);
+  }, [lines, discount]);
 
   const contactTransactionCount = useMemo(() => {
     if (!contactId || !contactStats) return null;
@@ -1285,6 +1294,7 @@ export default function PurchaseInvoiceModal({
       currency,
       items,
       subtotal_amount: totals.subtotal,
+      discount_amount: totals.discount,
       tax_amount: totals.tax,
       total_amount: totals.total,
       paid_amount: moneyValue(paidAmount),
@@ -1517,6 +1527,19 @@ export default function PurchaseInvoiceModal({
           owned.add("lines");
           filled.push("مبلغ الفاتورة");
           if (Number.isFinite(tax)) filled.push("الضريبة");
+        }
+
+        // Invoice-level discount — deducted from the pre-tax subtotal
+        // by the totals math; line prices stay as printed.
+        const scanDiscount = Number(analysis.discount);
+        if (
+          Number.isFinite(scanDiscount) &&
+          scanDiscount > 0 &&
+          canFill("discount", moneyValue(discount) === 0)
+        ) {
+          setDiscount(scanDiscount.toFixed(2));
+          owned.add("discount");
+          filled.push("الخصم");
         }
 
         if (
@@ -2200,9 +2223,34 @@ export default function PurchaseInvoiceModal({
               <SectionTitle>الإجماليات والدفع</SectionTitle>
               <div className="space-y-1.5 text-sm">
                 <div className="flex items-center justify-between text-slate-600 dark:text-white/60">
-                  <span>المجموع الفرعي (قبل الضريبة)</span>
-                  <span dir="ltr">{formatMoney(totals.subtotal, currency)}</span>
+                  <span>مجموع البنود (قبل الضريبة)</span>
+                  <span dir="ltr">
+                    {formatMoney(totals.rawSubtotal, currency)}
+                  </span>
                 </div>
+                <div className="flex items-center justify-between gap-3 text-slate-600 dark:text-white/60">
+                  <span>الخصم (قبل الضريبة)</span>
+                  <input
+                    type="number"
+                    value={discount}
+                    onChange={(event) => {
+                      autoFilledRef.current.delete("discount");
+                      setDiscount(event.target.value);
+                    }}
+                    className={`${ws.input} w-32 px-2.5 py-1.5 text-sm text-left`}
+                    step="0.01"
+                    min="0"
+                    dir="ltr"
+                  />
+                </div>
+                {totals.discount > 0 ? (
+                  <div className="flex items-center justify-between text-slate-600 dark:text-white/60">
+                    <span>الصافي بعد الخصم</span>
+                    <span dir="ltr">
+                      {formatMoney(totals.subtotal, currency)}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex items-center justify-between text-slate-600 dark:text-white/60">
                   <span>إجمالي ضريبة القيمة المضافة</span>
                   <span dir="ltr">{formatMoney(totals.tax, currency)}</span>

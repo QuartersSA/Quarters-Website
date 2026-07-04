@@ -77,6 +77,7 @@ async function ensureSchema() {
       due_date DATE,
       currency TEXT NOT NULL DEFAULT 'SAR',
       subtotal_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      discount_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       tax_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
@@ -99,6 +100,7 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS due_date DATE,
       ADD COLUMN IF NOT EXISTS currency TEXT NOT NULL DEFAULT 'SAR',
       ADD COLUMN IF NOT EXISTS subtotal_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS discount_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS tax_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
@@ -180,6 +182,7 @@ function parsePayload(body = {}) {
     ? String(body.supplier_name).trim()
     : null;
   const subtotalAmount = parseMoney(body.subtotal_amount, 0);
+  const discountAmount = parseMoney(body.discount_amount, 0);
   const taxAmount = parseMoney(body.tax_amount, 0);
   const totalRaw = parseMoney(body.total_amount, 0);
   const totalAmount =
@@ -208,6 +211,7 @@ function parsePayload(body = {}) {
     dueDate: parseDate(body.due_date),
     currency: body.currency ? String(body.currency).trim().toUpperCase() : "SAR",
     subtotalAmount,
+    discountAmount,
     taxAmount,
     totalAmount,
     paidAmount,
@@ -300,17 +304,28 @@ async function replaceInvoiceItems(invoiceId, items) {
 
 // When lines are present they are the source of truth for the header
 // money columns + the header account (first line's account keeps the
-// account filter/report working).
+// account filter/report working). An invoice-level discount applies
+// to the PRE-TAX sum: the taxable base shrinks by the discount and
+// the tax shrinks proportionally — line prices stay as printed.
 function applyItemsToPayload(payload, items) {
   if (!items || items.length === 0) return payload;
-  const subtotal = round2(items.reduce((sum, item) => sum + item.subtotal, 0));
-  const tax = round2(items.reduce((sum, item) => sum + item.tax, 0));
-  const total = round2(items.reduce((sum, item) => sum + item.total, 0));
+  const rawSubtotal = round2(
+    items.reduce((sum, item) => sum + item.subtotal, 0),
+  );
+  const rawTax = round2(items.reduce((sum, item) => sum + item.tax, 0));
+  const discount = Math.min(
+    Math.max(payload.discountAmount || 0, 0),
+    rawSubtotal,
+  );
+  const factor = rawSubtotal > 0 ? (rawSubtotal - discount) / rawSubtotal : 1;
+  const subtotal = round2(rawSubtotal - discount);
+  const tax = round2(rawTax * factor);
   return {
     ...payload,
+    discountAmount: round2(discount),
     subtotalAmount: subtotal,
     taxAmount: tax,
-    totalAmount: total,
+    totalAmount: round2(subtotal + tax),
     expenseAccountId:
       items.find((item) => item.accountId)?.accountId ??
       payload.expenseAccountId,
@@ -391,6 +406,7 @@ function selectInvoicesQuery(where, statusFilter) {
         TO_CHAR(inv.due_date, 'YYYY-MM-DD') AS due_date,
         inv.currency,
         inv.subtotal_amount,
+        inv.discount_amount,
         inv.tax_amount,
         inv.total_amount,
         inv.paid_amount,
@@ -507,6 +523,7 @@ export async function POST(request) {
         due_date,
         currency,
         subtotal_amount,
+        discount_amount,
         tax_amount,
         total_amount,
         paid_amount,
@@ -525,6 +542,7 @@ export async function POST(request) {
         ${payload.dueDate},
         ${payload.currency},
         ${payload.subtotalAmount},
+        ${payload.discountAmount},
         ${payload.taxAmount},
         ${payload.totalAmount},
         ${payload.paidAmount},
@@ -588,6 +606,7 @@ export async function PUT(request) {
         due_date = ${payload.dueDate},
         currency = ${payload.currency},
         subtotal_amount = ${payload.subtotalAmount},
+        discount_amount = ${payload.discountAmount},
         tax_amount = ${payload.taxAmount},
         total_amount = ${payload.totalAmount},
         paid_amount = ${payload.paidAmount},
