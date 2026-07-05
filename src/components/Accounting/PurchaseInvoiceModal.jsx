@@ -1209,6 +1209,34 @@ export default function PurchaseInvoiceModal({
     autoFilledRef.current = new Set(isEditing ? [] : ["date"]);
   }, [open, invoice, isEditing]);
 
+  // Stored attachment URLs (/api/uploads/…/file?t=…) carry no file
+  // extension, so a reopened invoice can't infer the preview type —
+  // sniff the Content-Type from the response headers instead. Also
+  // covers freshly picked files whose browser reports an empty type.
+  useEffect(() => {
+    if (!open || !attachmentUrl || attachmentMime) return undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch(attachmentUrl);
+        const type = (response.headers.get("content-type") || "")
+          .split(";")[0]
+          .trim();
+        try {
+          response.body?.cancel?.();
+        } catch {
+          // ignore
+        }
+        if (!cancelled && type) setAttachmentMime(type);
+      } catch {
+        // leave unknown — the «فتح» button still works
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open, attachmentUrl, attachmentMime]);
+
   // Lock page scroll while the editor is open.
   useEffect(() => {
     if (!open || typeof document === "undefined") return undefined;
