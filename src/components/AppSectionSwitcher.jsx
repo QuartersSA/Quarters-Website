@@ -44,6 +44,7 @@ function readAdminPermissions() {
       can_access_hr: hrRaw === undefined || hrRaw === null ? true : !!hrRaw,
       can_manage_deductions: !!deductionsFlag,
       can_manage_marketing: !!marketingFlag,
+      can_manage_purchases: !!adminUser?.can_manage_purchases,
     };
   } catch {
     return null;
@@ -101,7 +102,8 @@ export default function AppSectionSwitcher({
       href: "/accounting",
       label: "المحاسبة",
       Icon: Calculator,
-      gate: (p) => (p ? p.can_manage_accounting : true),
+      gate: (p) =>
+        p ? p.can_manage_accounting || p.can_manage_purchases : true,
       onClick: () => {
         try {
           localStorage.setItem("adminMode", "accounting");

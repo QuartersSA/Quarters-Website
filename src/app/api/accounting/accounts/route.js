@@ -5,9 +5,13 @@ import {
   nextChildCode,
 } from "@/app/api/utils/accountsTree";
 
+// Full accounting admins OR admins limited to قسم المشتريات only
+// (شجرة الحسابات is a tab inside the purchases section).
 const REQUIRE_ACCOUNTING = {
-  role: "Admin",
-  permission: "can_manage_accounting",
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
+  ],
 };
 
 // Reading the tree is also allowed for the field purchase-invoice
@@ -15,6 +19,7 @@ const REQUIRE_ACCOUNTING = {
 const REQUIRE_PURCHASES_READ = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
     { permission: "can_add_purchase_invoices" },
     { permission: "can_manage_suppliers" },
   ],

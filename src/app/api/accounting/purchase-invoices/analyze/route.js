@@ -3,11 +3,12 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
 
-// Admin accounting OR the dedicated field entry permission
-// (رفع فاتورة مشتريات) — the entry flow scans invoices too.
+// Admin accounting, قسم المشتريات admins, or the dedicated field
+// entry permission (رفع فاتورة مشتريات) — the entry flow scans too.
 const REQUIRE_ACCOUNTING = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
     { permission: "can_add_purchase_invoices" },
   ],
 };
