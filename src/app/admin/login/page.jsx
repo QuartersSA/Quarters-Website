@@ -71,6 +71,8 @@ export default function AdminLoginPage() {
           can_manage_deductions: !!data.employee.can_manage_deductions,
           // Marketing — separate section, gates /marketing/*
           can_manage_marketing: !!data.employee.can_manage_marketing,
+          // قسم المشتريات فقط (بدون بقية المحاسبة)
+          can_manage_purchases: !!data.employee.can_manage_purchases,
         }),
       );
 

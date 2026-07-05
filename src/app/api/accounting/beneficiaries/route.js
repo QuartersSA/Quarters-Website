@@ -6,9 +6,12 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+// Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
-  role: "Admin",
-  permission: "can_manage_accounting",
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
+  ],
 };
 
 // The field supplier flow (إضافة مورد) also creates beneficiaries and
@@ -16,6 +19,7 @@ const REQUIRE_ACCOUNTING = {
 const REQUIRE_SUPPLIERS_WRITE = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
     { permission: "can_manage_suppliers" },
   ],
 };

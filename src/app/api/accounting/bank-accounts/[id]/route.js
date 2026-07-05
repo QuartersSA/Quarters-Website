@@ -1,9 +1,12 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+// Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
-  role: "Admin",
-  permission: "can_manage_accounting",
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
+  ],
 };
 
 const ACCOUNT_TYPES = new Set(["bank", "credit_card", "petty_cash"]);

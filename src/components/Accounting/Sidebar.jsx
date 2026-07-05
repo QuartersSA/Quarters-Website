@@ -14,6 +14,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { SidebarShell } from "@/components/Sidebar/SidebarShell";
+import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 
 const PAGE_TITLES = {
   dashboard: "لوحة المحاسبة",
@@ -57,22 +58,35 @@ function defaultLogout() {
 }
 
 export default function AccountingSidebar({ active = "dashboard" }) {
+  const { user } = useWorkspaceUser();
+
+  // قسم المشتريات فقط: بدون can_manage_accounting الشريط يعرض
+  // المشتريات وحدها — بقية الصفحات محجوبة أصلاً في طبقة المحاسبة.
+  const navConfig = useMemo(() => {
+    const purchasesOnly =
+      user?.role === "Admin" &&
+      user?.can_manage_accounting === false &&
+      !!user?.can_manage_purchases;
+    if (!purchasesOnly) return NAV_CONFIG;
+    return NAV_CONFIG.filter((entry) => entry.key === "purchases");
+  }, [user]);
+
   const paletteRoutes = useMemo(
     () =>
-      NAV_CONFIG.filter((e) => e.kind === "row").map((e) => ({
+      navConfig.filter((e) => e.kind === "row").map((e) => ({
         href: e.href,
         label: e.label,
         icon: e.icon,
         keywords: e.label,
       })),
-    [],
+    [navConfig],
   );
 
   return (
     <SidebarShell
       section="accounting"
       brand={{ title: "المحاسبة", subtitle: "أنظمة Quarters" }}
-      navConfig={NAV_CONFIG}
+      navConfig={navConfig}
       activeKey={active}
       pageTitleMap={PAGE_TITLES}
       paletteRoutes={paletteRoutes}

@@ -19,9 +19,17 @@ export default function AccountingLayout({ children }) {
       return;
     }
 
-    // NEW: permission gate for admin accounts
+    // Permission gate for admin accounts. can_manage_purchases grants
+    // قسم المشتريات ONLY: its holder lands on /accounting/purchases
+    // and every other accounting page bounces there.
     if (user?.role === "Admin" && user?.can_manage_accounting === false) {
-      window.location.href = "/admin";
+      const purchasesOnly = !!user?.can_manage_purchases;
+      const path = window.location.pathname;
+      if (!purchasesOnly) {
+        window.location.href = "/admin";
+      } else if (!path.startsWith("/accounting/purchases")) {
+        window.location.href = "/accounting/purchases";
+      }
     }
   }, [ready, isAuthenticated, user]);
 

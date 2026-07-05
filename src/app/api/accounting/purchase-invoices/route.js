@@ -2,9 +2,12 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
 
+// Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
-  role: "Admin",
-  permission: "can_manage_accounting",
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
+  ],
 };
 
 // Creating an invoice is also allowed for the field entry flow
@@ -13,6 +16,7 @@ const REQUIRE_ACCOUNTING = {
 const REQUIRE_PURCHASES_CREATE = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
     { permission: "can_add_purchase_invoices" },
   ],
 };

@@ -5,9 +5,13 @@ import {
   nextChildCode,
 } from "@/app/api/utils/accountsTree";
 
+// Full accounting admins OR admins limited to قسم المشتريات only
+// (البنوك is a tab inside the purchases section).
 const REQUIRE_ACCOUNTING = {
-  role: "Admin",
-  permission: "can_manage_accounting",
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_purchases" },
+  ],
 };
 
 const ACCOUNT_TYPES = new Set(["bank", "credit_card", "petty_cash"]);
@@ -142,6 +146,7 @@ export async function GET(request) {
   const auth = requireAuth(request, {
     anyOf: [
       { role: "Admin", permission: "can_manage_accounting" },
+      { role: "Admin", permission: "can_manage_purchases" },
       { permission: "can_add_purchase_invoices" },
     ],
   });

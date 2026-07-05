@@ -17,6 +17,7 @@ import {
   Megaphone,
   Trash2,
   ReceiptText,
+  ShoppingCart,
   Truck,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
@@ -84,6 +85,10 @@ export function EmployeeFormFields({
     : `${ws.btnNeutral} px-4 py-2`;
 
   const adminMarketingBtnClass = formData.can_manage_marketing
+    ? `${ws.btnPrimary} px-4 py-2`
+    : `${ws.btnNeutral} px-4 py-2`;
+
+  const adminPurchasesBtnClass = formData.can_manage_purchases
     ? `${ws.btnPrimary} px-4 py-2`
     : `${ws.btnNeutral} px-4 py-2`;
 
@@ -229,6 +234,9 @@ export function EmployeeFormFields({
                 // صلاحيات أقسام الإدارة (افتراضيًا: مفعلة)
                 can_access_workspace: true,
                 can_manage_inventory: true,
+                // قسم المشتريات فقط — افتراضياً غير مفعّل (المحاسبة
+                // الكاملة تغنيه)
+                can_manage_purchases: false,
                 can_manage_accounting: true,
                 can_manage_employees: true,
                 can_access_hr: true,
@@ -261,6 +269,7 @@ export function EmployeeFormFields({
                 // صلاحيات أقسام الإدارة
                 can_access_workspace: false,
                 can_manage_inventory: false,
+                can_manage_purchases: false,
                 can_manage_accounting: false,
                 can_manage_employees: false,
                 can_access_hr: false,
@@ -430,6 +439,26 @@ export function EmployeeFormFields({
                 )}
                 <Megaphone className="w-4 h-4" />
                 التسويق
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    can_manage_purchases: !p.can_manage_purchases,
+                  }))
+                }
+                className={adminPurchasesBtnClass}
+                title="وصول لقسم المشتريات فقط بدون بقية المحاسبة"
+              >
+                {formData.can_manage_purchases ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                <ShoppingCart className="w-4 h-4" />
+                قسم المشتريات
               </button>
 
               <button
