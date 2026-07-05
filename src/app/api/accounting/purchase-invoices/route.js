@@ -82,6 +82,7 @@ async function ensureSchema() {
       total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       paid_bank_account_id INTEGER,
+      payment_receipt_url TEXT,
       workflow_status TEXT NOT NULL DEFAULT 'new',
       notes TEXT,
       attachment_url TEXT,
@@ -106,6 +107,7 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS paid_bank_account_id INTEGER,
+      ADD COLUMN IF NOT EXISTS payment_receipt_url TEXT,
       ADD COLUMN IF NOT EXISTS workflow_status TEXT NOT NULL DEFAULT 'new',
       ADD COLUMN IF NOT EXISTS notes TEXT,
       ADD COLUMN IF NOT EXISTS attachment_url TEXT,
@@ -257,6 +259,11 @@ function parsePayload(body = {}) {
     workflowStatus: WORKFLOW_STATUSES.has(workflowRaw) ? workflowRaw : "new",
     notes: body.notes ? String(body.notes).trim() : null,
     attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null,
+    // Optional proof-of-payment attachment — only meaningful when paid.
+    paymentReceiptUrl:
+      paidAmount > 0 && body.payment_receipt_url
+        ? String(body.payment_receipt_url).trim()
+        : null,
   };
 }
 
@@ -451,6 +458,7 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.paid_amount,
         inv.paid_bank_account_id,
         bank.name AS paid_bank_name,
+        inv.payment_receipt_url,
         GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance_due,
         inv.workflow_status,
         CASE
@@ -570,6 +578,7 @@ export async function POST(request) {
         total_amount,
         paid_amount,
         paid_bank_account_id,
+        payment_receipt_url,
         workflow_status,
         notes,
         attachment_url,
@@ -590,6 +599,7 @@ export async function POST(request) {
         ${payload.totalAmount},
         ${payload.paidAmount},
         ${payload.paidBankAccountId},
+        ${payload.paymentReceiptUrl},
         ${payload.workflowStatus},
         ${payload.notes},
         ${payload.attachmentUrl},
@@ -655,6 +665,7 @@ export async function PUT(request) {
         total_amount = ${payload.totalAmount},
         paid_amount = ${payload.paidAmount},
         paid_bank_account_id = ${payload.paidBankAccountId},
+        payment_receipt_url = ${payload.paymentReceiptUrl},
         workflow_status = ${payload.workflowStatus},
         notes = ${payload.notes},
         attachment_url = ${payload.attachmentUrl},

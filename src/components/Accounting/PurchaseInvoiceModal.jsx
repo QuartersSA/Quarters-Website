@@ -1130,6 +1130,10 @@ export default function PurchaseInvoiceModal({
   const [discount, setDiscount] = useState("0.00"); // خصم قبل الضريبة
   const [paidAmount, setPaidAmount] = useState("0.00");
   const [paidBankAccountId, setPaidBankAccountId] = useState("");
+  // إيصال الدفع — اختياري، يظهر مع وجود مبلغ مدفوع.
+  const [paymentReceiptUrl, setPaymentReceiptUrl] = useState("");
+  const [paymentReceiptName, setPaymentReceiptName] = useState("");
+  const [receiptUploading, setReceiptUploading] = useState(false);
   const [workflowStatus, setWorkflowStatus] = useState("new");
   const [notes, setNotes] = useState("");
   const [attachmentUrl, setAttachmentUrl] = useState("");
@@ -1141,7 +1145,26 @@ export default function PurchaseInvoiceModal({
   const [scanSummary, setScanSummary] = useState(null); // {filled:[], warning?}
   const [mobilePane, setMobilePane] = useState("form"); // form | preview
   const fileInputRef = useRef(null);
+  const receiptInputRef = useRef(null);
   const [upload, { loading: uploading }] = useUpload();
+
+  // إيصال الدفع: plain upload, no scanning — stored as-is.
+  const handleReceiptPicked = async (fileArg) => {
+    if (!fileArg) return;
+    setReceiptUploading(true);
+    try {
+      const result = await upload({ file: fileArg, unoptimized: true });
+      if (result?.error) {
+        alert(`فشل رفع الإيصال: ${result.error}`);
+        return;
+      }
+      setPaymentReceiptUrl(result.url || "");
+      setPaymentReceiptName(fileArg.name || "");
+    } finally {
+      setReceiptUploading(false);
+      if (receiptInputRef.current) receiptInputRef.current.value = "";
+    }
+  };
 
   // Fields owned by the LAST scan (not touched by the user since).
   // Attaching a new invoice re-fills these with the new document's
@@ -1165,6 +1188,9 @@ export default function PurchaseInvoiceModal({
         ? String(invoice.paid_bank_account_id)
         : "",
     );
+    setPaymentReceiptUrl(invoice?.payment_receipt_url || "");
+    setPaymentReceiptName("");
+    setReceiptUploading(false);
     setWorkflowStatus(invoice?.workflow_status || "new");
     setNotes(invoice?.notes || "");
     setAttachmentUrl(invoice?.attachment_url || "");
@@ -1336,6 +1362,8 @@ export default function PurchaseInvoiceModal({
       paid_amount: moneyValue(paidAmount),
       paid_bank_account_id:
         moneyValue(paidAmount) > 0 ? paidBankAccountId || null : null,
+      payment_receipt_url:
+        moneyValue(paidAmount) > 0 ? paymentReceiptUrl || null : null,
       workflow_status: workflowStatus,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
@@ -2344,6 +2372,75 @@ export default function PurchaseInvoiceModal({
                     options={bankAccountOptions}
                     placeholder="بدون تحديد حساب"
                     buttonClassName="text-sm py-2.5 px-3"
+                  />
+                </div>
+              ) : null}
+
+              {/* إيصال الدفع — optional proof of payment. */}
+              {moneyValue(paidAmount) > 0 ? (
+                <div>
+                  <FieldLabel>
+                    إيصال الدفع{" "}
+                    <span className="text-slate-400 dark:text-white/35">
+                      (اختياري)
+                    </span>
+                  </FieldLabel>
+                  {paymentReceiptUrl ? (
+                    <div
+                      className={`${ws.glassSoft} ${ws.card} px-3 py-2 flex items-center justify-between gap-2`}
+                    >
+                      <div className="flex items-center gap-2 min-w-0 text-xs text-slate-700 dark:text-white/70">
+                        <Paperclip className="w-3.5 h-3.5 shrink-0" />
+                        <span className="truncate" dir="ltr">
+                          {paymentReceiptName || "إيصال مرفق"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <a
+                          href={paymentReceiptUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={`${ws.btnNeutral} px-2.5 py-1.5 text-[11px]`}
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          فتح
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPaymentReceiptUrl("");
+                            setPaymentReceiptName("");
+                          }}
+                          className={`${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`}
+                          title="إزالة الإيصال"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={receiptUploading}
+                      onClick={() => receiptInputRef.current?.click()}
+                      className={`${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`}
+                    >
+                      {receiptUploading ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Paperclip className="w-3.5 h-3.5" />
+                      )}
+                      {receiptUploading ? "جاري الرفع…" : "إرفاق إيصال الدفع"}
+                    </button>
+                  )}
+                  <input
+                    ref={receiptInputRef}
+                    type="file"
+                    accept="application/pdf,image/*"
+                    onChange={(event) =>
+                      handleReceiptPicked(event?.target?.files?.[0])
+                    }
+                    className="hidden"
                   />
                 </div>
               ) : null}

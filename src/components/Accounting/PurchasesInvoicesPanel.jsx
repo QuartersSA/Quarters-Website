@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   AlertTriangle,
@@ -9,9 +9,11 @@ import {
   CheckCircle2,
   Clock3,
   Download,
+  ExternalLink,
   FileSpreadsheet,
   FileText,
   HandCoins,
+  Loader2,
   Paperclip,
   Pencil,
   Plus,
@@ -21,6 +23,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import useUpload from "@/utils/useUpload";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import PurchaseInvoiceModal, {
@@ -135,6 +138,12 @@ function RecordPaymentModal({
   );
   const [amount, setAmount] = useState("");
   const [bankAccountId, setBankAccountId] = useState("");
+  // إيصال الدفع — اختياري.
+  const [receiptUrl, setReceiptUrl] = useState("");
+  const [receiptName, setReceiptName] = useState("");
+  const [receiptUploading, setReceiptUploading] = useState(false);
+  const receiptInputRef = useRef(null);
+  const [upload] = useUpload();
 
   useEffect(() => {
     if (!invoice) return;
@@ -142,9 +151,29 @@ function RecordPaymentModal({
     setBankAccountId(
       invoice.paid_bank_account_id ? String(invoice.paid_bank_account_id) : "",
     );
+    setReceiptUrl(invoice.payment_receipt_url || "");
+    setReceiptName("");
+    setReceiptUploading(false);
     // Seed with the outstanding balance each time a new invoice opens.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invoice?.id]);
+
+  const handleReceiptPicked = async (fileArg) => {
+    if (!fileArg) return;
+    setReceiptUploading(true);
+    try {
+      const result = await upload({ file: fileArg, unoptimized: true });
+      if (result?.error) {
+        alert(`فشل رفع الإيصال: ${result.error}`);
+        return;
+      }
+      setReceiptUrl(result.url || "");
+      setReceiptName(fileArg.name || "");
+    } finally {
+      setReceiptUploading(false);
+      if (receiptInputRef.current) receiptInputRef.current.value = "";
+    }
+  };
 
   const bankOptions = useMemo(
     () => [
@@ -185,6 +214,7 @@ function RecordPaymentModal({
       total_amount: moneyValue(invoice.total_amount),
       paid_amount: Math.min(newPaid, moneyValue(invoice.total_amount)),
       paid_bank_account_id: bankAccountId || null,
+      payment_receipt_url: receiptUrl || null,
       workflow_status: invoice.workflow_status || "pending_payment",
       notes: invoice.notes || null,
     });
@@ -274,6 +304,68 @@ function RecordPaymentModal({
             options={bankOptions}
             placeholder="بدون تحديد حساب"
             buttonClassName="text-sm py-2.5 px-3"
+          />
+
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1 mt-3">
+            إيصال الدفع{" "}
+            <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
+          </div>
+          {receiptUrl ? (
+            <div
+              className={`${ws.glassSoft} ${ws.card} px-3 py-2 flex items-center justify-between gap-2`}
+            >
+              <div className="flex items-center gap-2 min-w-0 text-xs text-slate-700 dark:text-white/70">
+                <Paperclip className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate" dir="ltr">
+                  {receiptName || "إيصال مرفق"}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <a
+                  href={receiptUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`${ws.btnNeutral} px-2.5 py-1.5 text-[11px]`}
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  فتح
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReceiptUrl("");
+                    setReceiptName("");
+                  }}
+                  className={`${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`}
+                  title="إزالة الإيصال"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              disabled={receiptUploading}
+              onClick={() => receiptInputRef.current?.click()}
+              className={`${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`}
+            >
+              {receiptUploading ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Paperclip className="w-3.5 h-3.5" />
+              )}
+              {receiptUploading ? "جاري الرفع…" : "إرفاق إيصال الدفع"}
+            </button>
+          )}
+          <input
+            ref={receiptInputRef}
+            type="file"
+            accept="application/pdf,image/*"
+            onChange={(event) =>
+              handleReceiptPicked(event?.target?.files?.[0])
+            }
+            className="hidden"
           />
 
           <div className="flex items-center gap-2 mt-4">
