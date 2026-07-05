@@ -847,9 +847,10 @@ async function fileToBase64(file) {
 // included — plus any extracted text as a secondary aid. The server
 // reconstructs the invoice, repairs garbled Arabic, verifies the
 // math, matches the supplier by VAT and classifies each line on شجرة
-// الحسابات. Returns the analysis object, or null on ANY failure —
-// missing ANTHROPIC_API_KEY (503), network error, refusal — so the
-// caller can fall back to the local heuristic parser.
+// الحسابات. Returns { analysis, note }: analysis is null on ANY
+// failure so the caller falls back to the local heuristic parser, and
+// note explains WHY the smart pass didn't run (surfaced to the
+// operator — a silent downgrade looks like a broken feature).
 async function analyzeInvoiceRemotely({ file, text } = {}) {
   try {
     const payload = { text: text || "" };
@@ -864,7 +865,9 @@ async function analyzeInvoiceRemotely({ file, text } = {}) {
         payload.media_type = mediaType;
       }
     }
-    if (!payload.file_base64 && !(payload.text || "").trim()) return null;
+    if (!payload.file_base64 && !(payload.text || "").trim()) {
+      return { analysis: null, note: null };
+    }
     const response = await authedFetch(
       "/api/accounting/purchase-invoices/analyze",
       {
@@ -875,13 +878,24 @@ async function analyzeInvoiceRemotely({ file, text } = {}) {
     );
     if (!response.ok) {
       console.info("[invoice-scan] smart analysis unavailable:", response.status);
-      return null;
+      const data = await response.json().catch(() => ({}));
+      const note =
+        response.status === 503
+          ? "التحليل الذكي غير مفعّل على الخادم (ANTHROPIC_API_KEY) — استخدمت القراءة المحلية."
+          : `التحليل الذكي فشل (${response.status}${data?.error ? `: ${data.error}` : ""}) — استخدمت القراءة المحلية.`;
+      return { analysis: null, note };
     }
     const data = await response.json().catch(() => null);
-    return data?.ok && data.analysis ? data.analysis : null;
+    return {
+      analysis: data?.ok && data.analysis ? data.analysis : null,
+      note: null,
+    };
   } catch (error) {
     console.error("smart invoice analysis failed", error);
-    return null;
+    return {
+      analysis: null,
+      note: "تعذر الاتصال بالتحليل الذكي — استخدمت القراءة المحلية.",
+    };
   }
 }
 
@@ -1404,15 +1418,22 @@ export default function PurchaseInvoiceModal({
         }
       }
       const fileEligible = scanFile.size <= MAX_SMART_FILE_BYTES;
-      let analysis = fileEligible
-        ? await analyzeInvoiceRemotely({ file: scanFile })
-        : null;
+      let analysis = null;
+      // Why the smart pass didn't run — shown to the operator so a
+      // server-side problem (missing key, 500) isn't a silent downgrade.
+      let smartNote = null;
+      if (fileEligible) {
+        const smart = await analyzeInvoiceRemotely({ file: scanFile });
+        analysis = smart.analysis;
+        smartNote = smart.note;
+      }
 
       if (!analysis && isImage) {
         // Images have no local fallback parser.
         setScanSummary({
           filled: [],
           warning:
+            smartNote ||
             "ما قدرت أحلل الصورة تلقائياً — تم إرفاقها، عبّي الحقول يدوياً.",
         });
         return;
@@ -1453,10 +1474,12 @@ export default function PurchaseInvoiceModal({
             filled: [],
             warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة.",
           });
-          analysis = await analyzeInvoiceRemotely({
+          const smart = await analyzeInvoiceRemotely({
             text:
               (details?.pageLines || []).flat().join("\n") || details.text,
           });
+          analysis = smart.analysis;
+          smartNote = smart.note;
         }
       }
 
@@ -1716,14 +1739,17 @@ export default function PurchaseInvoiceModal({
         details?.viaOcr && !filled.some((f) => f.startsWith("بنود"))
           ? "المسح الضوئي التقط الإجماليات لكن جدول الأصناف غير واضح بما يكفي — للبنود التفصيلية اطلب PDF رقمياً من المورد أو صوّر بإضاءة أوضح."
           : null;
+      const heuristicsNote =
+        filled.length === 0
+          ? "قرأت الملف لكن ما تعرفت على الحقول — تأكد منها يدوياً."
+          : !parsed.contact
+            ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو اكتب اسم المورد."
+            : ocrLimitNote;
       setScanSummary({
         filled,
-        warning:
-          filled.length === 0
-            ? "قرأت الملف لكن ما تعرفت على الحقول — تأكد منها يدوياً."
-            : !parsed.contact
-              ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو اكتب اسم المورد."
-              : ocrLimitNote,
+        // smartNote explains why the AI pass was skipped — without it
+        // the operator can't tell a server problem from a weak scan.
+        warning: [smartNote, heuristicsNote].filter(Boolean).join(" "),
       });
       setMobilePane("form");
     } catch (error) {
