@@ -22,6 +22,10 @@ export default function GlassSelect({
   searchable = false,
   searchPlaceholder = "ابحث…",
   noResultsLabel = "لا توجد نتائج",
+  // Menu width in px. By default the menu matches the button width,
+  // which truncates long labels when the button sits in a tight table
+  // cell — pass a number to give the menu room of its own.
+  menuWidth = null,
 }) {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -125,6 +129,7 @@ export default function GlassSelect({
         open={open}
         anchorRef={btnRef}
         onClose={() => setOpen(false)}
+        style={typeof menuWidth === "number" ? { width: menuWidth } : null}
         className={`border border-slate-200 dark:border-slate-200 dark:border-white/15 ${menuClassName}`}
       >
         <div className="max-h-[50vh] overflow-auto">

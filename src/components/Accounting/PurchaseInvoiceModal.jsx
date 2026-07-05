@@ -2103,6 +2103,9 @@ export default function PurchaseInvoiceModal({
                             options={accountOptions}
                             placeholder="غير مصنّفة"
                             buttonClassName="text-xs py-1.5 px-2"
+                            menuWidth={340}
+                            searchable
+                            searchPlaceholder="ابحث في شجرة الحسابات…"
                           />
                           <input
                             type="number"
