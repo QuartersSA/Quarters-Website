@@ -1728,9 +1728,18 @@ export default function PurchaseInvoiceModal({
       setMobilePane("form");
     } catch (error) {
       console.error("invoice scan failed", error);
+      // A failed dynamic import means the site was redeployed while
+      // this tab was open — the old chunk URLs no longer exist. A
+      // hard refresh loads the new bundle and fixes it.
+      const staleDeploy =
+        /dynamically imported module|module script failed|ChunkLoadError|Loading chunk/i.test(
+          String(error?.message || error),
+        );
       setScanSummary({
         filled: [],
-        warning: "تعذّر فحص الملف — تم إرفاقه فقط.",
+        warning: staleDeploy
+          ? "تم تحديث النظام أثناء فتح الصفحة — حدّث الصفحة (Ctrl+F5) ثم أعد إرفاق الفاتورة."
+          : `تعذّر فحص الملف — تم إرفاقه فقط. (${String(error?.message || error).slice(0, 100)})`,
       });
     } finally {
       setScanBusy(false);
