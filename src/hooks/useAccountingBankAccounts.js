@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { adminFetch } from "@/utils/apiAuth";
+import { adminFetch, authedFetch } from "@/utils/apiAuth";
 import { queryKeys } from "@/utils/queryKeys";
 
 export function useAccountingBankAccounts({
@@ -19,7 +19,9 @@ export function useAccountingBankAccounts({
       const url = qs.toString()
         ? `/api/accounting/bank-accounts?${qs.toString()}`
         : "/api/accounting/bank-accounts";
-      const res = await adminFetch(url);
+      // authedFetch: the field entry flow reads the banks list with
+      // its own session token (writes stay admin-only).
+      const res = await authedFetch(url);
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         throw new Error(data?.error || "فشل تحميل الحسابات البنكية");

@@ -29,6 +29,7 @@ export default function PurchaseInvoiceEntryPage() {
   const [session, setSession] = useState(null);
   const [contacts, setContacts] = useState([]);
   const [accounts, setAccounts] = useState([]);
+  const [bankAccounts, setBankAccounts] = useState([]);
   const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(true);
   // Landing first — the invoice editor opens on demand only.
@@ -86,15 +87,20 @@ export default function PurchaseInvoiceEntryPage() {
 
     const load = async () => {
       try {
-        const [contactsList, accountsRes] = await Promise.all([
+        const [contactsList, accountsRes, banksRes] = await Promise.all([
           loadContacts(),
           purchaseInvoiceFetch("/api/accounting/accounts"),
+          purchaseInvoiceFetch("/api/accounting/bank-accounts"),
         ]);
         if (cancelled || contactsList === null) return;
         const accountsData = await accountsRes.json().catch(() => ({}));
+        const banksData = await banksRes.json().catch(() => ({}));
         if (cancelled) return;
         setAccounts(
           Array.isArray(accountsData?.accounts) ? accountsData.accounts : [],
+        );
+        setBankAccounts(
+          Array.isArray(banksData?.accounts) ? banksData.accounts : [],
         );
         setLoading(false);
       } catch (error) {
@@ -384,6 +390,7 @@ export default function PurchaseInvoiceEntryPage() {
           invoice={null}
           contacts={contacts}
           accounts={accounts}
+          bankAccounts={bankAccounts}
           isSubmitting={submitting}
           onClose={() => setEditorOpen(false)}
           onSubmit={handleSubmit}

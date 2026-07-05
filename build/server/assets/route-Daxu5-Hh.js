@@ -118,7 +118,16 @@ function parsePayload(body) {
   };
 }
 async function GET(request) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  // Reading the banks list is also allowed for the field entry flow —
+  // payments recorded there pick which bank account paid.
+  const auth = requireAuth(request, {
+    anyOf: [{
+      role: "Admin",
+      permission: "can_manage_accounting"
+    }, {
+      permission: "can_add_purchase_invoices"
+    }]
+  });
   if (!auth.ok) {
     return Response.json({
       error: auth.error

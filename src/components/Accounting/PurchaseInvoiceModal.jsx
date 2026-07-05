@@ -1099,6 +1099,7 @@ export default function PurchaseInvoiceModal({
   invoice,
   contacts = [],
   accounts = [],
+  bankAccounts = [],
   contactStats = null,
   isSubmitting,
   onClose,
@@ -1114,6 +1115,7 @@ export default function PurchaseInvoiceModal({
   const [lines, setLines] = useState(() => [newLine()]);
   const [discount, setDiscount] = useState("0.00"); // خصم قبل الضريبة
   const [paidAmount, setPaidAmount] = useState("0.00");
+  const [paidBankAccountId, setPaidBankAccountId] = useState("");
   const [workflowStatus, setWorkflowStatus] = useState("new");
   const [notes, setNotes] = useState("");
   const [attachmentUrl, setAttachmentUrl] = useState("");
@@ -1144,6 +1146,11 @@ export default function PurchaseInvoiceModal({
     setLines(linesFromInvoice(invoice));
     setDiscount(moneyInput(invoice?.discount_amount) || "0.00");
     setPaidAmount(moneyInput(invoice?.paid_amount) || "0.00");
+    setPaidBankAccountId(
+      invoice?.paid_bank_account_id
+        ? String(invoice.paid_bank_account_id)
+        : "",
+    );
     setWorkflowStatus(invoice?.workflow_status || "new");
     setNotes(invoice?.notes || "");
     setAttachmentUrl(invoice?.attachment_url || "");
@@ -1186,6 +1193,21 @@ export default function PurchaseInvoiceModal({
   const accountOptions = useMemo(
     () => buildExpenseAccountOptions(accounts),
     [accounts],
+  );
+
+  const bankAccountOptions = useMemo(
+    () => [
+      { value: "", label: "بدون تحديد حساب" },
+      ...bankAccounts
+        .filter((account) => account.is_active !== false)
+        .map((account) => ({
+          value: String(account.id),
+          label: account.bank_name
+            ? `${account.name} — ${account.bank_name}`
+            : account.name,
+        })),
+    ],
+    [bankAccounts],
   );
 
   // Invoice-level discount applies to the PRE-TAX sum: the taxable
@@ -1298,6 +1320,8 @@ export default function PurchaseInvoiceModal({
       tax_amount: totals.tax,
       total_amount: totals.total,
       paid_amount: moneyValue(paidAmount),
+      paid_bank_account_id:
+        moneyValue(paidAmount) > 0 ? paidBankAccountId || null : null,
       workflow_status: workflowStatus,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
@@ -2273,6 +2297,21 @@ export default function PurchaseInvoiceModal({
                   </span>
                 </div>
               </div>
+
+              {/* Bank account the payment left from — appears once a
+                  paid amount is entered. */}
+              {moneyValue(paidAmount) > 0 && bankAccountOptions.length > 1 ? (
+                <div>
+                  <FieldLabel>الحساب البنكي المدفوع منه</FieldLabel>
+                  <GlassSelect
+                    value={paidBankAccountId}
+                    onChange={setPaidBankAccountId}
+                    options={bankAccountOptions}
+                    placeholder="بدون تحديد حساب"
+                    buttonClassName="text-sm py-2.5 px-3"
+                  />
+                </div>
+              ) : null}
             </div>
 
             {/* ملاحظات */}
