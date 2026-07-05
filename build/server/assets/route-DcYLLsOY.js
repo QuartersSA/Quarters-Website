@@ -10,10 +10,21 @@ const REQUIRE_ACCOUNTING = {
   role: "Admin",
   permission: "can_manage_accounting"
 };
+
+// The field supplier flow (إضافة مورد) edits/links beneficiaries too.
+// Deletion stays admin-only.
+const REQUIRE_SUPPLIERS_WRITE = {
+  anyOf: [{
+    role: "Admin",
+    permission: "can_manage_accounting"
+  }, {
+    permission: "can_manage_suppliers"
+  }]
+};
 async function PUT(request, {
   params
 }) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_SUPPLIERS_WRITE);
   if (!auth.ok) {
     return Response.json({
       error: auth.error

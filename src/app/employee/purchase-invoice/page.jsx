@@ -23,8 +23,8 @@ import {
 // Field entry for رفع فاتورة مشتريات: a landing screen first (the
 // editor opens only when the user asks for a new invoice), plus —
 // for employees holding can_manage_suppliers — a supplier manager
-// (add/edit contacts) reusing the SAME modal the accounting section
-// uses, minus the admin-only beneficiaries panel.
+// (add/edit contacts, link/create bank beneficiaries) reusing the
+// SAME modal the accounting section uses.
 export default function PurchaseInvoiceEntryPage() {
   const [session, setSession] = useState(null);
   const [contacts, setContacts] = useState([]);
@@ -395,7 +395,6 @@ export default function PurchaseInvoiceEntryPage() {
         contact={editingContact}
         accounts={accounts}
         isSubmitting={savingContact}
-        showBeneficiaries={false}
         onClose={() => {
           setContactModalOpen(false);
           setEditingContact(null);

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { adminFetch } from "@/utils/apiAuth";
+import { authedFetch } from "@/utils/apiAuth";
 import { toast } from "sonner";
 import { queryKeys } from "../utils/queryKeys.js";
 
@@ -21,7 +21,7 @@ export function useAccountingBeneficiaries({
       const url = qs.toString()
         ? `/api/accounting/beneficiaries?${qs.toString()}`
         : "/api/accounting/beneficiaries";
-      const res = await adminFetch(url);
+      const res = await authedFetch(url);
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         throw new Error(data?.error || "فشل تحميل المستفيدين");
@@ -35,7 +35,7 @@ export function useCreateAccountingBeneficiary() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload) => {
-      const res = await adminFetch("/api/accounting/beneficiaries", {
+      const res = await authedFetch("/api/accounting/beneficiaries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -63,7 +63,7 @@ export function useUpdateAccountingBeneficiary() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...payload }) => {
-      const res = await adminFetch(`/api/accounting/beneficiaries/${id}`, {
+      const res = await authedFetch(`/api/accounting/beneficiaries/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -94,7 +94,7 @@ export function useDeleteAccountingBeneficiary() {
       const url = force
         ? `/api/accounting/beneficiaries/${id}?force=1`
         : `/api/accounting/beneficiaries/${id}`;
-      const res = await adminFetch(url, { method: "DELETE" });
+      const res = await authedFetch(url, { method: "DELETE" });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         throw new Error(data?.error || "فشل الحذف");
