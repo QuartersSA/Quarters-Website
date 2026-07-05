@@ -25,6 +25,7 @@ const initialFormState = {
   can_close_shift: false,
   can_log_waste: false,
   can_add_purchase_invoices: false,
+  can_manage_suppliers: false,
 };
 
 export function useEmployeeForm() {
@@ -63,6 +64,7 @@ export function useEmployeeForm() {
       can_close_shift: !!employee.can_close_shift,
       can_log_waste: !!employee.can_log_waste,
       can_add_purchase_invoices: !!employee.can_add_purchase_invoices,
+      can_manage_suppliers: !!employee.can_manage_suppliers,
     });
   };
 

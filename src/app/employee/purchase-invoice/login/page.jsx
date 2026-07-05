@@ -82,7 +82,15 @@ export default function PurchaseInvoiceLoginPage() {
       clearAdminSession();
       localStorage.setItem(
         "purchaseInvoiceSession",
-        JSON.stringify({ id: employee.id, username: employee.name }),
+        JSON.stringify({
+          id: employee.id,
+          username: employee.name,
+          // Supplier management (إضافة مورد) is a separate permission —
+          // admins with accounting access get it implicitly.
+          canManageSuppliers:
+            !!employee.can_manage_suppliers ||
+            (employee.role === "Admin" && !!employee.can_manage_accounting),
+        }),
       );
       if (token) {
         localStorage.setItem(PURCHASE_INVOICE_TOKEN_KEY, token);

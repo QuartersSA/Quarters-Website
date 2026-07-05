@@ -1,48 +1,91 @@
-import sql from "@/app/api/utils/sql";
-import { verify } from "argon2";
-import { signSessionToken } from "@/app/api/utils/sessionToken";
-import {
-  clearRateLimit,
-  consumeRateLimit,
-} from "@/app/api/utils/rateLimit";
-import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
+import { s as sql } from './sql-BfhTxwII.js';
+import { verify } from 'argon2';
+import { s as signSessionToken } from './sessionToken-DDNn6nuk.js';
+import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-Ba9mYj5Z.js';
+import '@neondatabase/serverless';
+import 'crypto';
+
+const buckets = new Map();
+const MAX_BUCKETS = 10_000;
+function clientAddress(request) {
+  const forwarded = request.headers.get("x-forwarded-for");
+  return request.headers.get("cf-connecting-ip") || forwarded?.split(",")[0]?.trim() || "unknown";
+}
+function prune(now) {
+  if (buckets.size < MAX_BUCKETS) return;
+  for (const [key, bucket] of buckets) {
+    if (bucket.resetAt <= now) buckets.delete(key);
+  }
+  while (buckets.size >= MAX_BUCKETS) {
+    buckets.delete(buckets.keys().next().value);
+  }
+}
+function consumeRateLimit(request, scope, {
+  limit = 10,
+  windowMs = 15 * 60_000,
+  identity = ""
+} = {}) {
+  const now = Date.now();
+  prune(now);
+  const key = `${scope}:${clientAddress(request)}:${String(identity).toLowerCase()}`;
+  const previous = buckets.get(key);
+  const bucket = !previous || previous.resetAt <= now ? {
+    count: 0,
+    resetAt: now + windowMs
+  } : previous;
+  bucket.count += 1;
+  buckets.set(key, bucket);
+  return {
+    ok: bucket.count <= limit,
+    remaining: Math.max(0, limit - bucket.count),
+    retryAfterSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1000))
+  };
+}
+function clearRateLimit(request, scope, identity = "") {
+  buckets.delete(`${scope}:${clientAddress(request)}:${String(identity).toLowerCase()}`);
+}
 
 // POST - Employee login
-export async function POST(request) {
+async function POST(request) {
   // Parse JSON safely (bad JSON should be 400 not 500)
   let body;
   try {
     body = await request.json();
   } catch (e) {
-    return Response.json({ error: "صيغة البيانات غير صحيحة" }, { status: 400 });
+    return Response.json({
+      error: "صيغة البيانات غير صحيحة"
+    }, {
+      status: 400
+    });
   }
-
   try {
     await ensureEmployeeDisplayNameSchema();
-    const { username, password } = body || {};
-
+    const {
+      username,
+      password
+    } = body || {};
     if (!username || !password) {
-      return Response.json(
-        { error: "اسم المستخدم وكلمة المرور مطلوبان" },
-        { status: 400 },
-      );
+      return Response.json({
+        error: "اسم المستخدم وكلمة المرور مطلوبان"
+      }, {
+        status: 400
+      });
     }
-
     const loginLimit = consumeRateLimit(request, "employee-login", {
       limit: 8,
       windowMs: 15 * 60_000,
-      identity: String(username).trim(),
+      identity: String(username).trim()
     });
     if (!loginLimit.ok) {
-      return Response.json(
-        { error: "محاولات كثيرة. حاول مرة أخرى لاحقاً." },
-        {
-          status: 429,
-          headers: { "Retry-After": String(loginLimit.retryAfterSeconds) },
-        },
-      );
+      return Response.json({
+        error: "محاولات كثيرة. حاول مرة أخرى لاحقاً."
+      }, {
+        status: 429,
+        headers: {
+          "Retry-After": String(loginLimit.retryAfterSeconds)
+        }
+      });
     }
-
     const findEmployee = async ({
       includeManageEmployees = true,
       includeAccessHr = true,
@@ -50,34 +93,15 @@ export async function POST(request) {
       includeLogWaste = true,
       includeAddPurchaseInvoices = true,
       includeManageSuppliers = true,
-      includeEmployeeBranches = true,
+      includeEmployeeBranches = true
     } = {}) => {
-      const selectManageEmployees = includeManageEmployees
-        ? "COALESCE(e.can_manage_employees, false) as can_manage_employees,"
-        : "false as can_manage_employees,";
-
-      const selectAccessHr = includeAccessHr
-        ? "COALESCE(e.can_access_hr, false) as can_access_hr,"
-        : "false as can_access_hr,";
-
-      const selectManageDeductions = includeManageDeductions
-        ? "COALESCE(e.can_manage_deductions, false) as can_manage_deductions,"
-        : "false as can_manage_deductions,";
-
-      const selectLogWaste = includeLogWaste
-        ? "COALESCE(e.can_log_waste, false) as can_log_waste,"
-        : "false as can_log_waste,";
-
-      const selectAddPurchaseInvoices = includeAddPurchaseInvoices
-        ? "COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,"
-        : "false as can_add_purchase_invoices,";
-
-      const selectManageSuppliers = includeManageSuppliers
-        ? "COALESCE(e.can_manage_suppliers, false) as can_manage_suppliers,"
-        : "false as can_manage_suppliers,";
-
-      const branchesJoin = includeEmployeeBranches
-        ? `LEFT JOIN LATERAL (
+      const selectManageEmployees = includeManageEmployees ? "COALESCE(e.can_manage_employees, false) as can_manage_employees," : "false as can_manage_employees,";
+      const selectAccessHr = includeAccessHr ? "COALESCE(e.can_access_hr, false) as can_access_hr," : "false as can_access_hr,";
+      const selectManageDeductions = includeManageDeductions ? "COALESCE(e.can_manage_deductions, false) as can_manage_deductions," : "false as can_manage_deductions,";
+      const selectLogWaste = includeLogWaste ? "COALESCE(e.can_log_waste, false) as can_log_waste," : "false as can_log_waste,";
+      const selectAddPurchaseInvoices = includeAddPurchaseInvoices ? "COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices," : "false as can_add_purchase_invoices,";
+      const selectManageSuppliers = includeManageSuppliers ? "COALESCE(e.can_manage_suppliers, false) as can_manage_suppliers," : "false as can_manage_suppliers,";
+      const branchesJoin = includeEmployeeBranches ? `LEFT JOIN LATERAL (
             SELECT branch_id
             FROM employees
             WHERE id = e.id AND branch_id IS NOT NULL
@@ -85,13 +109,11 @@ export async function POST(request) {
             SELECT branch_id
             FROM employee_branches
             WHERE employee_id = e.id
-          ) br ON true`
-        : `LEFT JOIN LATERAL (
+          ) br ON true` : `LEFT JOIN LATERAL (
             SELECT branch_id
             FROM employees
             WHERE id = e.id AND branch_id IS NOT NULL
           ) br ON true`;
-
       const query = `
         SELECT
           e.id,
@@ -131,7 +153,6 @@ export async function POST(request) {
         WHERE LOWER(e.username) = LOWER($1)
         GROUP BY e.id
       `;
-
       const rows = await sql(query, [username]);
       return rows?.[0] || null;
     };
@@ -145,7 +166,7 @@ export async function POST(request) {
         includeManageEmployees: true,
         includeAccessHr: true,
         includeManageDeductions: true,
-        includeEmployeeBranches: true,
+        includeEmployeeBranches: true
       });
     } catch (e) {
       const code = String(e?.code || "");
@@ -157,21 +178,21 @@ export async function POST(request) {
           includeManageEmployees: false,
           includeAccessHr: true,
           includeManageDeductions: true,
-          includeEmployeeBranches: true,
+          includeEmployeeBranches: true
         });
       } else if (code === "42703" && msg.includes("can_access_hr")) {
         employee = await findEmployee({
           includeManageEmployees: true,
           includeAccessHr: false,
           includeManageDeductions: true,
-          includeEmployeeBranches: true,
+          includeEmployeeBranches: true
         });
       } else if (code === "42703" && msg.includes("can_manage_deductions")) {
         employee = await findEmployee({
           includeManageEmployees: true,
           includeAccessHr: true,
           includeManageDeductions: false,
-          includeEmployeeBranches: true,
+          includeEmployeeBranches: true
         });
       } else if (code === "42703" && msg.includes("can_log_waste")) {
         employee = await findEmployee({
@@ -179,7 +200,7 @@ export async function POST(request) {
           includeAccessHr: true,
           includeManageDeductions: true,
           includeLogWaste: false,
-          includeEmployeeBranches: true,
+          includeEmployeeBranches: true
         });
       } else if (code === "42703" && msg.includes("can_add_purchase_invoices")) {
         employee = await findEmployee({
@@ -187,7 +208,7 @@ export async function POST(request) {
           includeAccessHr: true,
           includeManageDeductions: true,
           includeAddPurchaseInvoices: false,
-          includeEmployeeBranches: true,
+          includeEmployeeBranches: true
         });
       } else if (code === "42703" && msg.includes("can_manage_suppliers")) {
         employee = await findEmployee({
@@ -195,7 +216,7 @@ export async function POST(request) {
           includeAccessHr: true,
           includeManageDeductions: true,
           includeManageSuppliers: false,
-          includeEmployeeBranches: true,
+          includeEmployeeBranches: true
         });
       } else if (code === "42P01" && msg.includes("employee_branches")) {
         // employee_branches table missing -> rerun without the join
@@ -203,18 +224,18 @@ export async function POST(request) {
           includeManageEmployees: true,
           includeAccessHr: true,
           includeManageDeductions: true,
-          includeEmployeeBranches: false,
+          includeEmployeeBranches: false
         });
       } else {
         throw e;
       }
     }
-
     if (!employee) {
-      return Response.json(
-        { error: "اسم المستخدم أو كلمة المرور غير صحيحة" },
-        { status: 401 },
-      );
+      return Response.json({
+        error: "اسم المستخدم أو كلمة المرور غير صحيحة"
+      }, {
+        status: 401
+      });
     }
 
     // Verify password (case-sensitive)
@@ -226,22 +247,20 @@ export async function POST(request) {
       console.error("Password verify error:", e);
       isPasswordValid = false;
     }
-
     if (!isPasswordValid) {
-      return Response.json(
-        { error: "اسم المستخدم أو كلمة المرور غير صحيحة" },
-        { status: 401 },
-      );
+      return Response.json({
+        error: "اسم المستخدم أو كلمة المرور غير صحيحة"
+      }, {
+        status: 401
+      });
     }
 
     // Remove password from response
-    const { password: _pw, ...employeeData } = employee;
-
-    const branchIds = Array.isArray(employeeData.branches)
-      ? employeeData.branches
-          .map((b) => Number(b?.id))
-          .filter((n) => Number.isFinite(n))
-      : [];
+    const {
+      password: _pw,
+      ...employeeData
+    } = employee;
+    const branchIds = Array.isArray(employeeData.branches) ? employeeData.branches.map(b => Number(b?.id)).filter(n => Number.isFinite(n)) : [];
 
     // Signed session token used for API authorization (server-side)
     let token;
@@ -263,38 +282,34 @@ export async function POST(request) {
         can_log_waste: !!employeeData.can_log_waste,
         can_add_purchase_invoices: !!employeeData.can_add_purchase_invoices,
         can_manage_suppliers: !!employeeData.can_manage_suppliers,
-        branchIds,
+        branchIds
       });
     } catch (e) {
       console.error("Token sign error:", e);
-      return Response.json(
-        {
-          error: "حدث خطأ أثناء تسجيل الدخول",
-          debug_code: "token_sign_failed",
-        },
-        { status: 500 },
-      );
+      return Response.json({
+        error: "حدث خطأ أثناء تسجيل الدخول",
+        debug_code: "token_sign_failed"
+      }, {
+        status: 500
+      });
     }
-
     clearRateLimit(request, "employee-login", String(username).trim());
-
     return Response.json({
       success: true,
       token,
-      employee: employeeData,
+      employee: employeeData
     });
   } catch (error) {
     console.error("Login error:", error);
-
     const maybePgCode = error?.code ? String(error.code) : null;
     const debug_code = maybePgCode ? `db_${maybePgCode}` : "server_error";
-
-    return Response.json(
-      {
-        error: "حدث خطأ أثناء تسجيل الدخول",
-        debug_code,
-      },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "حدث خطأ أثناء تسجيل الدخول",
+      debug_code
+    }, {
+      status: 500
+    });
   }
 }
+
+export { POST };

@@ -1,7 +1,9 @@
-import sql from "@/app/api/utils/sql";
-import { hash } from "argon2";
-import { requireAuth } from "@/app/api/utils/sessionToken";
-import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
+import { s as sql } from './sql-BfhTxwII.js';
+import { hash } from 'argon2';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-Ba9mYj5Z.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 // Idempotent: ensure the waste-logging permission column exists.
 // Cheap (IF NOT EXISTS) and lets the employee form persist the flag
@@ -18,15 +20,18 @@ async function ensureWasteColumn() {
 }
 
 // GET all employees with their branches
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_employees",
+    permission: "can_manage_employees"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureWasteColumn();
     const employees = await sql`
@@ -88,27 +93,30 @@ export async function GET(request) {
       GROUP BY e.id
       ORDER BY e.created_at DESC
     `;
-
     return Response.json(employees);
   } catch (error) {
     console.error("Error fetching employees:", error);
-    return Response.json(
-      { error: "Failed to fetch employees" },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to fetch employees"
+    }, {
+      status: 500
+    });
   }
 }
 
 // CREATE new employee
-export async function POST(request) {
+async function POST(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_employees",
+    permission: "can_manage_employees"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     const body = await request.json();
     const {
@@ -149,83 +157,53 @@ export async function POST(request) {
       can_close_shift,
       can_log_waste,
       can_add_purchase_invoices,
-      can_manage_suppliers,
+      can_manage_suppliers
     } = body;
-
     if (!name) {
-      return Response.json({ error: "Name is required" }, { status: 400 });
+      return Response.json({
+        error: "Name is required"
+      }, {
+        status: 400
+      });
     }
-
     await ensureWasteColumn();
-
     const effectiveRole = role || "Employee";
 
     // If we are creating an Admin account, require login credentials.
     if (effectiveRole === "Admin" && (!username || !password)) {
-      return Response.json(
-        { error: "اسم المستخدم وكلمة المرور والصلاحية مطلوبة للمدير" },
-        { status: 400 },
-      );
+      return Response.json({
+        error: "اسم المستخدم وكلمة المرور والصلاحية مطلوبة للمدير"
+      }, {
+        status: 400
+      });
     }
-
-    const normalizedBranchIds = Array.isArray(branchIds)
-      ? branchIds.filter((id) => id !== null && id !== undefined)
-      : [];
-
+    const normalizedBranchIds = Array.isArray(branchIds) ? branchIds.filter(id => id !== null && id !== undefined) : [];
     const isAdmin = effectiveRole === "Admin";
-
-    const canAccessWorkspaceBool = isAdmin
-      ? (can_access_workspace ?? true)
-      : false;
-
-    const canManageInventoryBool = isAdmin
-      ? (can_manage_inventory ?? true)
-      : false;
-
-    const canManageAccountingBool = isAdmin
-      ? (can_manage_accounting ?? true)
-      : false;
-
-    const canManageMarketingBool = isAdmin
-      ? !!can_manage_marketing
-      : false;
-
-    const canManageEmployeesBool = isAdmin
-      ? (can_manage_employees ?? true)
-      : false;
-
-    const canAccessHrBool = isAdmin ? (can_access_hr ?? true) : false;
+    const canAccessWorkspaceBool = isAdmin ? can_access_workspace ?? true : false;
+    const canManageInventoryBool = isAdmin ? can_manage_inventory ?? true : false;
+    const canManageAccountingBool = isAdmin ? can_manage_accounting ?? true : false;
+    const canManageMarketingBool = isAdmin ? !!can_manage_marketing : false;
+    const canManageEmployeesBool = isAdmin ? can_manage_employees ?? true : false;
+    const canAccessHrBool = isAdmin ? can_access_hr ?? true : false;
     const canManageDeductionsBool = isAdmin ? !!can_manage_deductions : false;
-
     const canDoInventoryBool = !isAdmin ? !!can_do_inventory : false;
     const canCloseShiftBool = !isAdmin ? !!can_close_shift : false;
     const canLogWasteBool = !isAdmin ? !!can_log_waste : false;
     // Available to BOTH roles: admins may also use the field entry flow.
     const canAddPurchaseInvoicesBool = !!can_add_purchase_invoices;
     const canManageSuppliersBool = !!can_manage_suppliers;
-
-    const notifyShiftClosePushBool = isAdmin
-      ? !!notify_shift_close_push
-      : false;
-    const notifyInventoryOperationPushBool = isAdmin
-      ? !!notify_inventory_operation_push
-      : false;
-
+    const notifyShiftClosePushBool = isAdmin ? !!notify_shift_close_push : false;
+    const notifyInventoryOperationPushBool = isAdmin ? !!notify_inventory_operation_push : false;
     const notifyShiftCloseWaBool = isAdmin ? !!notify_shift_close_wa : false;
-    const notifyInventoryOperationWaBool = isAdmin
-      ? !!notify_inventory_operation_wa
-      : false;
+    const notifyInventoryOperationWaBool = isAdmin ? !!notify_inventory_operation_wa : false;
 
     // If employee can do inventory and/or shift close, they must be linked to at least one branch.
-    if (
-      !isAdmin &&
-      (canDoInventoryBool || canCloseShiftBool || canLogWasteBool) &&
-      normalizedBranchIds.length === 0
-    ) {
-      return Response.json(
-        { error: "لا يمكن إضافة الموظف بدون تحديد فرع واحد على الأقل" },
-        { status: 400 },
-      );
+    if (!isAdmin && (canDoInventoryBool || canCloseShiftBool || canLogWasteBool) && normalizedBranchIds.length === 0) {
+      return Response.json({
+        error: "لا يمكن إضافة الموظف بدون تحديد فرع واحد على الأقل"
+      }, {
+        status: 400
+      });
     }
 
     // Hash password only if provided (HR may create employees without login)
@@ -233,8 +211,8 @@ export async function POST(request) {
 
     // Start transaction
     const result = await sql.transaction([
-      // Insert employee
-      sql`
+    // Insert employee
+    sql`
         INSERT INTO employees (
           name,
           display_name,
@@ -304,9 +282,7 @@ export async function POST(request) {
           ${notifyInventoryOperationWaBool}
         )
         RETURNING *
-      `,
-    ]);
-
+      `]);
     const [employee] = result[0];
 
     // Insert branch associations if provided
@@ -376,13 +352,16 @@ export async function POST(request) {
       WHERE e.id = ${employee.id}
       GROUP BY e.id
     `;
-
     return Response.json(employeeWithBranches);
   } catch (error) {
     console.error("Error creating employee:", error);
-    return Response.json(
-      { error: "Failed to create employee", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "Failed to create employee",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { GET, POST };

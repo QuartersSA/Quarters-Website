@@ -17,6 +17,7 @@ import {
   Megaphone,
   Trash2,
   ReceiptText,
+  Truck,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
@@ -51,6 +52,10 @@ export function EmployeeFormFields({
     : `${ws.btnNeutral} px-4 py-2`;
 
   const employeePurchaseInvoiceBtnClass = formData.can_add_purchase_invoices
+    ? `${ws.btnPrimary} px-4 py-2`
+    : `${ws.btnNeutral} px-4 py-2`;
+
+  const employeeSuppliersBtnClass = formData.can_manage_suppliers
     ? `${ws.btnPrimary} px-4 py-2`
     : `${ws.btnNeutral} px-4 py-2`;
 
@@ -445,6 +450,25 @@ export function EmployeeFormFields({
                 <ReceiptText className="w-4 h-4" />
                 رفع فاتورة مشتريات
               </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    can_manage_suppliers: !p.can_manage_suppliers,
+                  }))
+                }
+                className={employeeSuppliersBtnClass}
+              >
+                {formData.can_manage_suppliers ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                <Truck className="w-4 h-4" />
+                إضافة / تعديل مورد
+              </button>
             </div>
           </div>
         </div>
@@ -601,6 +625,25 @@ export function EmployeeFormFields({
                 )}
                 <ReceiptText className="w-4 h-4" />
                 رفع فاتورة مشتريات
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    can_manage_suppliers: !p.can_manage_suppliers,
+                  }))
+                }
+                className={employeeSuppliersBtnClass}
+              >
+                {formData.can_manage_suppliers ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                <Truck className="w-4 h-4" />
+                إضافة / تعديل مورد
               </button>
             </div>
           </div>
