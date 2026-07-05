@@ -254,6 +254,9 @@ export default function ContactModal({
   isSubmitting,
   onClose,
   onSubmit,
+  // The beneficiaries panel calls admin-only endpoints — the field
+  // supplier flow (إضافة مورد) hides it.
+  showBeneficiaries = true,
 }) {
   const isEditing = !!contact;
 
@@ -520,7 +523,7 @@ export default function ContactModal({
           </section>
 
           {/* ── المستفيدون البنكيون لهذه الجهة ── */}
-          {isEditing ? (
+          {!showBeneficiaries ? null : isEditing ? (
             <BeneficiariesPanel contactId={contact.id} />
           ) : (
             <div

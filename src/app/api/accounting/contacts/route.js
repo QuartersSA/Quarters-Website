@@ -19,6 +19,16 @@ const REQUIRE_PURCHASES_READ = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
     { permission: "can_add_purchase_invoices" },
+    { permission: "can_manage_suppliers" },
+  ],
+};
+
+// Creating/editing suppliers from the field flow needs its own
+// permission (إضافة مورد) — separate from filing invoices.
+const REQUIRE_SUPPLIERS_WRITE = {
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { permission: "can_manage_suppliers" },
   ],
 };
 
@@ -102,7 +112,7 @@ export async function GET(request) {
 //   default_tax_rate?, notes?
 // }
 export async function POST(request) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_SUPPLIERS_WRITE);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

@@ -8,6 +8,29 @@ function normalizeStringArray(value) {
   return value.map((v) => (v == null ? "" : String(v))).filter((v) => v !== "");
 }
 
+// Menu widens to fit the longest label instead of truncating it when
+// the anchor button sits in a tight cell (same logic as GlassSelect).
+let measureCtx = null;
+function longestLabelWidth(labels) {
+  try {
+    if (typeof document === "undefined") return 0;
+    if (!measureCtx) {
+      measureCtx = document.createElement("canvas").getContext("2d");
+    }
+    if (!measureCtx) return 0;
+    measureCtx.font =
+      "15px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Arabic', sans-serif";
+    let widest = 0;
+    for (const label of labels) {
+      const width = measureCtx.measureText(String(label || "")).width;
+      if (width > widest) widest = width;
+    }
+    return widest;
+  } catch {
+    return 0;
+  }
+}
+
 /**
  * GlassMultiSelect
  * - Same glass theme as GlassSelect
@@ -66,6 +89,14 @@ export default function GlassMultiSelect({
     }
     return summary;
   }, [maxLabelItems, placeholder, selectedLabels]);
+
+  const menuStyle = useMemo(() => {
+    const widest = longestLabelWidth(
+      normalizedOptions.map((o) => o.label),
+    );
+    if (!widest) return null;
+    return { minWidth: Math.min(Math.ceil(widest) + 72, 420) };
+  }, [normalizedOptions]);
 
   const setValues = (next) => {
     onChange?.(next);
@@ -154,6 +185,8 @@ export default function GlassMultiSelect({
         open={open}
         anchorRef={btnRef}
         onClose={() => setOpen(false)}
+        style={menuStyle}
+        dir={dir}
         className={`border border-slate-200 dark:border-slate-200 dark:border-white/15 ${menuClassName}`}
       >
         <div className="max-h-[50vh] overflow-auto">

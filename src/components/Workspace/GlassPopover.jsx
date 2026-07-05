@@ -41,12 +41,23 @@ export default function GlassPopover({
     const viewportH = window.innerHeight;
     const pad = 12;
 
-    const preferredWidth =
-      style && typeof style.width === "number" ? style.width : rect.width;
+    // Width: explicit style.width wins; otherwise match the anchor but
+    // never go below style.minWidth (menus widen to fit long labels
+    // instead of truncating). Always clamp into the viewport.
+    const styleWidth =
+      style && typeof style.width === "number" ? style.width : null;
+    const styleMinWidth =
+      style && typeof style.minWidth === "number" ? style.minWidth : null;
+    let width = styleWidth ?? rect.width;
+    if (styleMinWidth !== null && width < styleMinWidth) {
+      width = styleMinWidth;
+    }
+    width = Math.min(width, window.innerWidth - pad * 2);
 
-    // Horizontal: align to anchor left, then clamp into viewport.
-    let left = rect.left;
-    const width = preferredWidth;
+    // Horizontal: keep the anchor-side edge aligned (right edge in
+    // RTL, left edge in LTR) so a widened menu grows toward the free
+    // side, then clamp into the viewport.
+    let left = dir === "rtl" ? rect.right - width : rect.left;
     const maxLeft = window.innerWidth - width - pad;
     if (left > maxLeft) {
       left = Math.max(pad, maxLeft);
@@ -83,7 +94,7 @@ export default function GlassPopover({
     }
 
     setPos({ top, left, width, maxHeight });
-  }, [anchorRef, style]);
+  }, [anchorRef, style, dir]);
 
   useEffect(() => {
     if (!open || !mounted) {

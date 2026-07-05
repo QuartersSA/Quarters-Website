@@ -37,6 +37,7 @@ import {
 } from "@/hooks/useAccountingPurchaseInvoices";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
+import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
 
 const STATUS_FILTER_OPTIONS = [
@@ -121,19 +122,44 @@ function StatusPill({ status }) {
 // Quick payment: bump paid_amount without opening the full edit form.
 // PUT requires the complete invoice payload, so the modal replays the
 // row's fields and only changes the paid amount.
-function RecordPaymentModal({ invoice, isSubmitting, onClose, onSubmit }) {
+function RecordPaymentModal({
+  invoice,
+  bankAccounts = [],
+  isSubmitting,
+  onClose,
+  onSubmit,
+}) {
   const balance = Math.max(
     moneyValue(invoice?.total_amount) - moneyValue(invoice?.paid_amount),
     0,
   );
   const [amount, setAmount] = useState("");
+  const [bankAccountId, setBankAccountId] = useState("");
 
   useEffect(() => {
     if (!invoice) return;
     setAmount(balance.toFixed(2));
+    setBankAccountId(
+      invoice.paid_bank_account_id ? String(invoice.paid_bank_account_id) : "",
+    );
     // Seed with the outstanding balance each time a new invoice opens.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [invoice?.id]);
+
+  const bankOptions = useMemo(
+    () => [
+      { value: "", label: "بدون تحديد حساب" },
+      ...bankAccounts
+        .filter((account) => account.is_active !== false)
+        .map((account) => ({
+          value: String(account.id),
+          label: account.bank_name
+            ? `${account.name} — ${account.bank_name}`
+            : account.name,
+        })),
+    ],
+    [bankAccounts],
+  );
 
   if (!invoice || typeof document === "undefined") return null;
 
@@ -158,6 +184,7 @@ function RecordPaymentModal({ invoice, isSubmitting, onClose, onSubmit }) {
       tax_amount: invoice.tax_amount,
       total_amount: moneyValue(invoice.total_amount),
       paid_amount: Math.min(newPaid, moneyValue(invoice.total_amount)),
+      paid_bank_account_id: bankAccountId || null,
       workflow_status: invoice.workflow_status || "pending_payment",
       notes: invoice.notes || null,
     });
@@ -238,6 +265,17 @@ function RecordPaymentModal({ invoice, isSubmitting, onClose, onSubmit }) {
             </div>
           ) : null}
 
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1 mt-3">
+            الحساب البنكي المدفوع منه
+          </div>
+          <GlassSelect
+            value={bankAccountId}
+            onChange={setBankAccountId}
+            options={bankOptions}
+            placeholder="بدون تحديد حساب"
+            buttonClassName="text-sm py-2.5 px-3"
+          />
+
           <div className="flex items-center gap-2 mt-4">
             <button
               type="submit"
@@ -294,10 +332,12 @@ export default function PurchasesInvoicesPanel({
   });
   const contactsQuery = useAccountingContacts({ employeeId, isAdmin });
   const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
+  const bankAccountsQuery = useAccountingBankAccounts({ employeeId, isAdmin });
 
   const invoices = invoicesQuery.data || [];
   const contacts = contactsQuery.data || [];
   const accounts = accountsQuery.data || [];
+  const bankAccounts = bankAccountsQuery.data || [];
 
   const accountFilterOptions = useMemo(() => {
     const options = buildExpenseAccountOptions(accounts);
@@ -835,6 +875,7 @@ export default function PurchasesInvoicesPanel({
         invoice={editing}
         contacts={contacts}
         accounts={accounts}
+        bankAccounts={bankAccounts}
         contactStats={contactStats}
         isSubmitting={createMut.isPending || updateMut.isPending}
         onClose={() => {
@@ -847,6 +888,7 @@ export default function PurchasesInvoicesPanel({
       {paying ? (
         <RecordPaymentModal
           invoice={paying}
+          bankAccounts={bankAccounts}
           isSubmitting={updateMut.isPending}
           onClose={() => setPaying(null)}
           onSubmit={(payload) =>

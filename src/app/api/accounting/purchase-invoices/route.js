@@ -81,6 +81,7 @@ async function ensureSchema() {
       tax_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      paid_bank_account_id INTEGER,
       workflow_status TEXT NOT NULL DEFAULT 'new',
       notes TEXT,
       attachment_url TEXT,
@@ -104,6 +105,7 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS tax_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS paid_bank_account_id INTEGER,
       ADD COLUMN IF NOT EXISTS workflow_status TEXT NOT NULL DEFAULT 'new',
       ADD COLUMN IF NOT EXISTS notes TEXT,
       ADD COLUMN IF NOT EXISTS attachment_url TEXT,
@@ -115,6 +117,29 @@ async function ensureSchema() {
   `;
   // Invoices classify against expense accounts from شجرة الحسابات.
   await ensureAccountsSchema();
+
+  // The invoices SELECT joins the banks table (paid_bank_account_id →
+  // bank name); make sure it exists even if the banks tab was never
+  // opened. Mirrors the CREATE in /api/accounting/bank-accounts.
+  await sql`
+    CREATE TABLE IF NOT EXISTS accounting_bank_accounts (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      account_type TEXT NOT NULL DEFAULT 'bank',
+      currency TEXT NOT NULL DEFAULT 'SAR',
+      bank_name TEXT,
+      iban TEXT,
+      account_number TEXT,
+      book_balance NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      statement_balance NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      notes TEXT,
+      is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      created_by_employee_id INTEGER,
+      created_by_employee_name TEXT
+    )
+  `;
 
   // Line items (بنود الفاتورة): each carries its own tree account and
   // tax math. Header subtotal/tax/total are recomputed from the lines
@@ -188,6 +213,12 @@ function parsePayload(body = {}) {
   const totalAmount =
     totalRaw > 0 ? totalRaw : Math.round((subtotalAmount + taxAmount) * 100) / 100;
   const paidAmount = parseMoney(body.paid_amount, 0);
+  const paidBankAccountIdRaw =
+    body.paid_bank_account_id === undefined ||
+    body.paid_bank_account_id === null ||
+    body.paid_bank_account_id === ""
+      ? null
+      : Number(body.paid_bank_account_id);
   const workflowRaw = body.workflow_status
     ? String(body.workflow_status).trim()
     : "new";
@@ -215,6 +246,14 @@ function parsePayload(body = {}) {
     taxAmount,
     totalAmount,
     paidAmount,
+    // Which bank account the payment left from — only meaningful when
+    // something was actually paid.
+    paidBankAccountId:
+      Number.isInteger(paidBankAccountIdRaw) &&
+      paidBankAccountIdRaw > 0 &&
+      paidAmount > 0
+        ? paidBankAccountIdRaw
+        : null,
     workflowStatus: WORKFLOW_STATUSES.has(workflowRaw) ? workflowRaw : "new",
     notes: body.notes ? String(body.notes).trim() : null,
     attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null,
@@ -410,6 +449,8 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.tax_amount,
         inv.total_amount,
         inv.paid_amount,
+        inv.paid_bank_account_id,
+        bank.name AS paid_bank_name,
         GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance_due,
         inv.workflow_status,
         CASE
@@ -432,6 +473,7 @@ function selectInvoicesQuery(where, statusFilter) {
       FROM accounting_purchase_invoices inv
       LEFT JOIN accounting_contacts c ON c.id = inv.contact_id
       LEFT JOIN accounting_accounts acc ON acc.id = inv.expense_account_id
+      LEFT JOIN accounting_bank_accounts bank ON bank.id = inv.paid_bank_account_id
       ${where.sql}
     )
     SELECT *
@@ -527,6 +569,7 @@ export async function POST(request) {
         tax_amount,
         total_amount,
         paid_amount,
+        paid_bank_account_id,
         workflow_status,
         notes,
         attachment_url,
@@ -546,6 +589,7 @@ export async function POST(request) {
         ${payload.taxAmount},
         ${payload.totalAmount},
         ${payload.paidAmount},
+        ${payload.paidBankAccountId},
         ${payload.workflowStatus},
         ${payload.notes},
         ${payload.attachmentUrl},
@@ -610,6 +654,7 @@ export async function PUT(request) {
         tax_amount = ${payload.taxAmount},
         total_amount = ${payload.totalAmount},
         paid_amount = ${payload.paidAmount},
+        paid_bank_account_id = ${payload.paidBankAccountId},
         workflow_status = ${payload.workflowStatus},
         notes = ${payload.notes},
         attachment_url = ${payload.attachmentUrl},

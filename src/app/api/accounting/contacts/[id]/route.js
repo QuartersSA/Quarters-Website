@@ -10,6 +10,15 @@ const REQUIRE_ACCOUNTING = {
   permission: "can_manage_accounting",
 };
 
+// Editing suppliers is also allowed for the field flow permission
+// (إضافة مورد). Deletion stays admin-only.
+const REQUIRE_SUPPLIERS_WRITE = {
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { permission: "can_manage_suppliers" },
+  ],
+};
+
 // PUT can be the first contacts endpoint a session hits — make sure
 // the newer columns exist before updating.
 async function ensureSchema() {
@@ -20,7 +29,7 @@ async function ensureSchema() {
 }
 
 export async function PUT(request, { params }) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_SUPPLIERS_WRITE);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

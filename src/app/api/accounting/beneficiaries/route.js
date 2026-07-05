@@ -11,6 +11,15 @@ const REQUIRE_ACCOUNTING = {
   permission: "can_manage_accounting",
 };
 
+// The field supplier flow (إضافة مورد) also creates beneficiaries and
+// links them to its suppliers.
+const REQUIRE_SUPPLIERS_WRITE = {
+  anyOf: [
+    { role: "Admin", permission: "can_manage_accounting" },
+    { permission: "can_manage_suppliers" },
+  ],
+};
+
 async function ensureSchema() {
   // accounting_contacts is created by /api/accounting/contacts on
   // first call; bootstrap the FK target here too so the
@@ -55,7 +64,7 @@ async function ensureSchema() {
 //   ?contact_id=N     only beneficiaries linked to a contact
 //   ?includeInactive=1
 export async function GET(request) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_SUPPLIERS_WRITE);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }
@@ -122,7 +131,7 @@ export async function GET(request) {
 //   currency?, bank_name?, swift?, contact_id?, notes?
 // }
 export async function POST(request) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_SUPPLIERS_WRITE);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

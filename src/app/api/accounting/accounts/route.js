@@ -16,6 +16,7 @@ const REQUIRE_PURCHASES_READ = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
     { permission: "can_add_purchase_invoices" },
+    { permission: "can_manage_suppliers" },
   ],
 };
 
