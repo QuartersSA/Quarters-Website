@@ -1902,7 +1902,7 @@ export default function PurchaseInvoiceModal({
         >
           <form
             onSubmit={handleSubmit}
-            className="max-w-2xl mx-auto space-y-4 pb-16"
+            className="max-w-4xl mx-auto space-y-4 pb-16"
           >
             {/* Scan feedback */}
             {scanSummary ? (
@@ -2052,33 +2052,38 @@ export default function PurchaseInvoiceModal({
                 </button>
               </div>
 
-              <div className="space-y-3">
-                {lines.map((line, index) => {
-                  const math = lineMath(line);
-                  return (
-                    <div
-                      key={line.key}
-                      className={`${ws.glassSoft} ${ws.card} p-3 space-y-2.5`}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="text-[11px] font-bold text-slate-500 dark:text-white/45">
-                          بند {index + 1}
-                        </div>
-                        {lines.length > 1 ? (
-                          <button
-                            type="button"
-                            onClick={() => removeLine(line.key)}
-                            className={`${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`}
-                            title="حذف البند"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        ) : null}
-                      </div>
+              {/* Table layout like professional accounting systems:
+                  one row per بند, columns aligned under a header.
+                  Narrow screens scroll horizontally. */}
+              <div className="overflow-x-auto -mx-1 px-1">
+                <div className="min-w-[840px]">
+                  <div className="grid grid-cols-[minmax(190px,1.5fr)_minmax(160px,1fr)_72px_100px_64px_76px_92px_32px] gap-2 items-center px-2 py-2 rounded-xl bg-slate-100/80 dark:bg-white/[0.05] text-[11px] font-bold text-slate-600 dark:text-white/55">
+                    <div>
+                      الوصف <span className="text-rose-600 dark:text-rose-300">*</span>
+                    </div>
+                    <div>
+                      الحساب <span className="text-rose-600 dark:text-rose-300">*</span>
+                    </div>
+                    <div className="text-center">
+                      الكمية <span className="text-rose-600 dark:text-rose-300">*</span>
+                    </div>
+                    <div className="text-center">
+                      السعر <span className="text-rose-600 dark:text-rose-300">*</span>
+                    </div>
+                    <div className="text-center">ضريبة %</div>
+                    <div className="text-center">نوع السعر</div>
+                    <div className="text-left">الإجمالي</div>
+                    <div />
+                  </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        <div>
-                          <FieldLabel>الوصف</FieldLabel>
+                  <div className={`divide-y ${ws.divider}`}>
+                    {lines.map((line) => {
+                      const math = lineMath(line);
+                      return (
+                        <div
+                          key={line.key}
+                          className="grid grid-cols-[minmax(190px,1.5fr)_minmax(160px,1fr)_72px_100px_64px_76px_92px_32px] gap-2 items-center px-2 py-2"
+                        >
                           <input
                             type="text"
                             value={line.description}
@@ -2087,12 +2092,9 @@ export default function PurchaseInvoiceModal({
                                 description: event.target.value,
                               })
                             }
-                            className={`${ws.input} px-3 py-2`}
-                            placeholder="مثال: صينية كيك تراميسو"
+                            className={`${ws.input} px-2.5 py-1.5 text-sm`}
+                            placeholder="الوصف أو اسم الصنف…"
                           />
-                        </div>
-                        <div>
-                          <FieldLabel>الحساب — شجرة الحسابات</FieldLabel>
                           <GlassSelect
                             value={line.account_id}
                             onChange={(value) =>
@@ -2100,121 +2102,92 @@ export default function PurchaseInvoiceModal({
                             }
                             options={accountOptions}
                             placeholder="غير مصنّفة"
-                            buttonClassName="text-sm py-2 px-3"
+                            buttonClassName="text-xs py-1.5 px-2"
                           />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2.5">
-                          <div>
-                            <FieldLabel required>الكمية</FieldLabel>
-                            <input
-                              type="number"
-                              value={line.quantity}
-                              onChange={(event) =>
-                                updateLine(line.key, {
-                                  quantity: event.target.value,
-                                })
-                              }
-                              className={`${ws.input} px-3 py-2 text-right`}
-                              step="any"
-                              min="0"
-                              dir="ltr"
-                              placeholder="1"
-                            />
+                          <input
+                            type="number"
+                            value={line.quantity}
+                            onChange={(event) =>
+                              updateLine(line.key, {
+                                quantity: event.target.value,
+                              })
+                            }
+                            className={`${ws.input} px-2 py-1.5 text-sm text-center`}
+                            step="any"
+                            min="0"
+                            dir="ltr"
+                            placeholder="1"
+                          />
+                          <input
+                            type="number"
+                            value={line.unit_price}
+                            onChange={(event) =>
+                              updateLine(line.key, {
+                                unit_price: event.target.value,
+                              })
+                            }
+                            className={`${ws.input} px-2 py-1.5 text-sm text-center`}
+                            step="any"
+                            min="0"
+                            dir="ltr"
+                            placeholder="0.00"
+                          />
+                          <input
+                            type="number"
+                            value={line.tax_rate}
+                            onChange={(event) =>
+                              updateLine(line.key, {
+                                tax_rate: event.target.value,
+                              })
+                            }
+                            className={`${ws.input} px-2 py-1.5 text-sm text-center`}
+                            step="0.1"
+                            min="0"
+                            max="100"
+                            dir="ltr"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateLine(line.key, {
+                                amount_includes_tax:
+                                  !line.amount_includes_tax,
+                              })
+                            }
+                            className={`${ws.pill} justify-center text-[10px] py-1 cursor-pointer select-none ${
+                              line.amount_includes_tax
+                                ? "bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25"
+                                : "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10"
+                            }`}
+                            title="بدّل بين سعر شامل الضريبة وسعر خالٍ منها"
+                          >
+                            {line.amount_includes_tax
+                              ? "شامل الضريبة"
+                              : "خالي الضريبة"}
+                          </button>
+                          <div
+                            className="text-left text-sm font-bold text-slate-800 dark:text-white/85"
+                            dir="ltr"
+                          >
+                            {math.total > 0 ? math.total.toFixed(2) : "—"}
                           </div>
-                          <div>
-                            <FieldLabel required>سعر الوحدة</FieldLabel>
-                            <input
-                              type="number"
-                              value={line.unit_price}
-                              onChange={(event) =>
-                                updateLine(line.key, {
-                                  unit_price: event.target.value,
-                                })
-                              }
-                              className={`${ws.input} px-3 py-2 text-right`}
-                              step="any"
-                              min="0"
-                              dir="ltr"
-                              placeholder="0.00"
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <FieldLabel>معدل الضريبة %</FieldLabel>
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="number"
-                              value={line.tax_rate}
-                              onChange={(event) =>
-                                updateLine(line.key, {
-                                  tax_rate: event.target.value,
-                                })
-                              }
-                              className={`${ws.input} px-3 py-2 text-right w-24`}
-                              step="0.1"
-                              min="0"
-                              max="100"
-                              dir="ltr"
-                            />
-                            <div className={`${ws.segWrap} flex-1`}>
+                          <div className="flex justify-center">
+                            {lines.length > 1 ? (
                               <button
                                 type="button"
-                                onClick={() =>
-                                  updateLine(line.key, {
-                                    amount_includes_tax: false,
-                                  })
-                                }
-                                className={`${ws.segBtn} text-[11px] flex-1 ${!line.amount_includes_tax ? ws.segActive : ws.segInactive}`}
+                                onClick={() => removeLine(line.key)}
+                                className={`${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`}
+                                title="حذف البند"
                               >
-                                خالي من الضريبة
+                                <Trash2 className="w-3.5 h-3.5" />
                               </button>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  updateLine(line.key, {
-                                    amount_includes_tax: true,
-                                  })
-                                }
-                                className={`${ws.segBtn} text-[11px] flex-1 ${line.amount_includes_tax ? ws.segActive : ws.segInactive}`}
-                              >
-                                شامل الضريبة
-                              </button>
-                            </div>
+                            ) : null}
                           </div>
                         </div>
-                      </div>
-
-                      {math.total > 0 ? (
-                        <div className="text-[11px] text-slate-500 dark:text-white/45 flex items-center gap-3 flex-wrap pt-1">
-                          <span>
-                            المبلغ:{" "}
-                            <span dir="ltr" className="font-bold">
-                              {math.amount.toFixed(2)}
-                            </span>
-                          </span>
-                          <span>
-                            الصافي:{" "}
-                            <span dir="ltr" className="font-bold">
-                              {math.subtotal.toFixed(2)}
-                            </span>
-                          </span>
-                          <span>
-                            الضريبة:{" "}
-                            <span dir="ltr" className="font-bold">
-                              {math.tax.toFixed(2)}
-                            </span>
-                          </span>
-                          <span className="text-slate-700 dark:text-white/70">
-                            إجمالي البند:{" "}
-                            <span dir="ltr" className="font-bold">
-                              {math.total.toFixed(2)}
-                            </span>
-                          </span>
-                        </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
 
