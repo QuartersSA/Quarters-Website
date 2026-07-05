@@ -9,6 +9,30 @@ import GlassPopover from "@/components/Workspace/GlassPopover";
  * - Uses a portal popover so the menu isn't clipped by overflow containers (tables/cards)
  * - Keeps data behavior the same: value is a string, onChange(newValue) is called
  */
+// Shared canvas context for measuring option labels — the menu widens
+// to fit the longest label instead of truncating it when the anchor
+// button sits in a tight cell.
+let measureCtx = null;
+function longestLabelWidth(labels) {
+  try {
+    if (typeof document === "undefined") return 0;
+    if (!measureCtx) {
+      measureCtx = document.createElement("canvas").getContext("2d");
+    }
+    if (!measureCtx) return 0;
+    measureCtx.font =
+      "15px system-ui, -apple-system, 'Segoe UI', 'Noto Sans Arabic', sans-serif";
+    let widest = 0;
+    for (const label of labels) {
+      const width = measureCtx.measureText(String(label || "")).width;
+      if (width > widest) widest = width;
+    }
+    return widest;
+  } catch {
+    return 0;
+  }
+}
+
 export default function GlassSelect({
   value,
   onChange,
@@ -98,6 +122,24 @@ export default function GlassSelect({
     }
   };
 
+  // Auto min-width: fit the longest option label (row padding 32 +
+  // gap 12 + check icon 16 + scrollbar ≈ 72px of chrome), capped so a
+  // single huge label can't blow the menu up. Explicit menuWidth wins.
+  const contentMinWidth = useMemo(() => {
+    if (typeof menuWidth === "number") return null;
+    const widest = longestLabelWidth(
+      normalizedOptions.map((o) => o.label),
+    );
+    if (!widest) return null;
+    return Math.min(Math.ceil(widest) + 72, 420);
+  }, [menuWidth, normalizedOptions]);
+
+  const menuStyle = useMemo(() => {
+    if (typeof menuWidth === "number") return { width: menuWidth };
+    if (contentMinWidth) return { minWidth: contentMinWidth };
+    return null;
+  }, [menuWidth, contentMinWidth]);
+
   const textAlignClass = dir === "ltr" ? "text-left" : "text-right";
 
   const btnBase = `${ws.select} px-4 py-3 flex items-center justify-between gap-3 ${textAlignClass}`;
@@ -129,7 +171,8 @@ export default function GlassSelect({
         open={open}
         anchorRef={btnRef}
         onClose={() => setOpen(false)}
-        style={typeof menuWidth === "number" ? { width: menuWidth } : null}
+        style={menuStyle}
+        dir={dir}
         className={`border border-slate-200 dark:border-slate-200 dark:border-white/15 ${menuClassName}`}
       >
         <div className="max-h-[50vh] overflow-auto">
