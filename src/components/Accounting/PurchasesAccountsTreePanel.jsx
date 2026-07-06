@@ -419,20 +419,27 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
     return totals;
   }, [childrenByParent]);
 
-  // Flatten depth-first for export — the indentation keeps the
-  // hierarchy readable in Excel/PDF.
+  // Flatten depth-first for export. Hierarchy is carried three ways so
+  // it survives Excel/PDF: an indented name with a branch marker, a
+  // level column, the direct parent, and the full path from the root.
   const exportRows = useMemo(() => {
     const rows = [];
-    const walk = (account, depth) => {
-      rows.push({ account, depth, total: rolledTotals.get(account.id) || 0 });
+    const walk = (account, depth, ancestors) => {
+      rows.push({
+        account,
+        depth,
+        total: rolledTotals.get(account.id) || 0,
+        parent: ancestors.length ? ancestors[ancestors.length - 1] : null,
+        path: [...ancestors.map((a) => a.name), account.name].join(" ← "),
+      });
       for (const child of childrenByParent.get(String(account.id)) || []) {
-        walk(child, depth + 1);
+        walk(child, depth + 1, [...ancestors, account]);
       }
     };
     const roots = (childrenByParent.get("root") || []).filter(
       (root) => !typeFilter || root.account_type === typeFilter,
     );
-    for (const root of roots) walk(root, 0);
+    for (const root of roots) walk(root, 0, []);
     return rows;
   }, [childrenByParent, rolledTotals, typeFilter]);
 
@@ -442,10 +449,25 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
       accessor: (row) => row.account.code,
     },
     {
+      header: "المستوى",
+      accessor: (row) => row.depth + 1,
+    },
+    {
       header: "اسم الحساب",
-      // Non-breaking spaces survive Excel/HTML rendering.
+      // NBSP indentation + a branch marker survive Excel/HTML.
       accessor: (row) =>
-        `${" ".repeat(row.depth * 4)}${row.account.name}`,
+        row.depth === 0
+          ? row.account.name
+          : `${"   ".repeat(row.depth)}↳ ${row.account.name}`,
+    },
+    {
+      header: "الحساب الأب",
+      accessor: (row) =>
+        row.parent ? `${row.parent.code} — ${row.parent.name}` : "— (رئيسي)",
+    },
+    {
+      header: "المسار الكامل",
+      accessor: (row) => row.path,
     },
     {
       header: "الاسم الإنجليزي",
