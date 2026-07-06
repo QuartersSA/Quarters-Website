@@ -78,6 +78,33 @@ async function fetchUsageCounts() {
   return { invoiceCounts, bankCounts, spendTotals };
 }
 
+// وحدة الشراء الافتراضية for accounts mirrored from inventory items:
+// the item's default purchase unit, falling back to its base unit,
+// then the legacy free-text unit. Defensive — items tables may not
+// exist on a fresh database.
+async function fetchPurchaseUnits() {
+  const units = new Map();
+  try {
+    const rows = await sql`
+      SELECT a.id,
+             COALESCE(dmu.name_ar, bmu.name_ar, NULLIF(TRIM(i.unit), '')) AS unit
+      FROM accounting_accounts a
+      JOIN items i ON i.id = a.source_item_id
+      LEFT JOIN item_units diu ON diu.id = i.default_purchase_unit_id
+      LEFT JOIN measurement_units dmu ON dmu.id = diu.unit_id
+      LEFT JOIN item_units bu ON bu.item_id = i.id AND bu.is_base
+      LEFT JOIN measurement_units bmu ON bmu.id = bu.unit_id
+      WHERE a.source_item_id IS NOT NULL
+    `;
+    for (const row of rows) {
+      if (row.unit) units.set(Number(row.id), row.unit);
+    }
+  } catch {
+    // items tables not created yet
+  }
+  return units;
+}
+
 export async function GET(request) {
   const auth = requireAuth(request, REQUIRE_PURCHASES_READ);
   if (!auth.ok) {
@@ -94,7 +121,7 @@ export async function GET(request) {
           SELECT
             id, code, name, name_en, account_type, parent_id,
             is_postable, is_system, source_category_id,
-            source_bank_account_id, notes, is_active
+            source_item_id, source_bank_account_id, notes, is_active
           FROM accounting_accounts
           ORDER BY code ASC, id ASC
         `
@@ -102,7 +129,7 @@ export async function GET(request) {
           SELECT
             id, code, name, name_en, account_type, parent_id,
             is_postable, is_system, source_category_id,
-            source_bank_account_id, notes, is_active
+            source_item_id, source_bank_account_id, notes, is_active
           FROM accounting_accounts
           WHERE is_active
           ORDER BY code ASC, id ASC
@@ -110,11 +137,13 @@ export async function GET(request) {
 
     const { invoiceCounts, bankCounts, spendTotals } =
       await fetchUsageCounts();
+    const purchaseUnits = await fetchPurchaseUnits();
     const accounts = rows.map((row) => ({
       ...row,
       invoice_count: invoiceCounts.get(Number(row.id)) || 0,
       bank_count: bankCounts.get(Number(row.id)) || 0,
       purchases_total: spendTotals.get(Number(row.id)) || 0,
+      purchase_unit: purchaseUnits.get(Number(row.id)) || null,
     }));
 
     return Response.json({ accounts });

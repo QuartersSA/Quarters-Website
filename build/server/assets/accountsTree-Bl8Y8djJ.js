@@ -95,6 +95,74 @@ async function ensureAccountsSchema() {
   } catch (error) {
     console.error("accounts tree: category migration skipped:", error?.message);
   }
+
+  // Mirror inventory ITEMS as postable accounts under their category's
+  // account (إدارة الأصناف → شجرة الحسابات). Runs on every call so a
+  // freshly created category/item shows up in the tree immediately.
+  // Idempotent via source_item_id; the code appends the item id as a
+  // 3-digit block under the category code (5101 + 007 → 5101007), so
+  // it never collides with manually added 2-digit children (510101).
+  await sql`
+    ALTER TABLE accounting_accounts
+      ADD COLUMN IF NOT EXISTS source_item_id INTEGER
+  `;
+  try {
+    await sql`
+      INSERT INTO accounting_accounts (
+        code, name, name_en, account_type, parent_id,
+        is_postable, is_system, source_item_id
+      )
+      SELECT
+        parent.code || LPAD(i.id::text, 3, '0'),
+        i.name,
+        i.name_en,
+        'expense',
+        parent.id,
+        TRUE,
+        FALSE,
+        i.id
+      FROM items i
+      JOIN accounting_accounts parent
+        ON parent.source_category_id = i.category_id AND parent.is_active
+      WHERE i.category_id IS NOT NULL
+        AND COALESCE(i.is_active, TRUE)
+        AND NOT EXISTS (
+          SELECT 1 FROM accounting_accounts a
+          WHERE a.source_item_id = i.id
+        )
+        AND NOT EXISTS (
+          SELECT 1 FROM accounting_accounts a2
+          WHERE a2.code = parent.code || LPAD(i.id::text, 3, '0')
+            AND a2.is_active
+        )
+    `;
+
+    // Renames in إدارة الأصناف flow into the mirrored accounts.
+    await sql`
+      UPDATE accounting_accounts a
+      SET name = i.name,
+          name_en = i.name_en,
+          updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+      FROM items i
+      WHERE a.source_item_id = i.id
+        AND a.is_active
+        AND (a.name IS DISTINCT FROM i.name
+          OR a.name_en IS DISTINCT FROM i.name_en)
+    `;
+    await sql`
+      UPDATE accounting_accounts a
+      SET name = ic.name,
+          name_en = ic.name_en,
+          updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+      FROM item_categories ic
+      WHERE a.source_category_id = ic.id
+        AND a.is_active
+        AND (a.name IS DISTINCT FROM ic.name
+          OR a.name_en IS DISTINCT FROM ic.name_en)
+    `;
+  } catch (error) {
+    console.error("accounts tree: item migration skipped:", error?.message);
+  }
 }
 
 // Next free child code under a parent: parentCode + 2-digit sequence

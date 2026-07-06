@@ -483,6 +483,10 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
         row.account.is_postable === false ? "تجميعي" : "قابل للترحيل",
     },
     {
+      header: "وحدة الشراء الافتراضية",
+      accessor: (row) => row.account.purchase_unit || "",
+    },
+    {
       header: "عدد الفواتير",
       accessor: (row) => row.account.invoice_count || 0,
     },
@@ -640,6 +644,14 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
               >
                 <FileText className="w-3 h-3" />
                 {account.invoice_count}
+              </span>
+            ) : null}
+            {account.purchase_unit ? (
+              <span
+                className={`${ws.pill} bg-violet-100 dark:bg-violet-400/10 text-violet-700 dark:text-violet-200 border-violet-200 dark:border-violet-400/25 hidden sm:inline-flex`}
+                title="وحدة الشراء الافتراضية للصنف"
+              >
+                وحدة: {account.purchase_unit}
               </span>
             ) : null}
             {account.source_bank_account_id ? (
