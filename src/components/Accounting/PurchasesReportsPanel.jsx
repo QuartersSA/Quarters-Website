@@ -297,6 +297,12 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
 
   // ── Aggregations ────────────────────────────────────────────────
 
+  // أساس الإقرار: «الاستحقاق» (افتراضي هيئة الزكاة — كل فواتير
+  // الفترة باستلام الفاتورة الضريبية) أو «النقدي» (يحتاج موافقة
+  // الهيئة — الفواتير المسددة بالكامل فقط، تقريب لغياب سجل تواريخ
+  // الدفعات).
+  const [vatBasis, setVatBasis] = useState("accrual");
+
   // نموذج الإقرار الضريبي (ZATCA): خانة 7 = المشتريات الخاضعة للنسبة
   // الأساسية، خانة 10 = مشتريات بالنسبة الصفرية — من بنود الفواتير،
   // مع توزيع خصم الفاتورة تناسبياً حتى تطابق المجاميع رؤوس الفواتير.
@@ -304,7 +310,16 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     let standardBase = 0;
     let standardVat = 0;
     let zeroBase = 0;
-    for (const invoice of periodInvoices) {
+    const vatInvoices =
+      vatBasis === "cash"
+        ? periodInvoices.filter(
+            (invoice) =>
+              moneyValue(invoice.total_amount) > 0 &&
+              moneyValue(invoice.paid_amount) + 0.005 >=
+                moneyValue(invoice.total_amount),
+          )
+        : periodInvoices;
+    for (const invoice of vatInvoices) {
       const items = Array.isArray(invoice.items) ? invoice.items : [];
       if (items.length === 0) {
         const base = moneyValue(invoice.subtotal_amount);
@@ -341,7 +356,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
       purchasesBase: round2(standardBase + zeroBase),
       purchasesVat: round2(standardVat),
     };
-  }, [periodInvoices]);
+  }, [periodInvoices, vatBasis]);
 
   // المبيعات تُدخل يدوياً (النظام لا يتتبعها) وتُحفظ لكل فترة على
   // هذا الجهاز. خانة 1 وحدها خاضعة للضريبة — مع مفتاح شامل/غير شامل
@@ -977,6 +992,34 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         <div className="p-4 space-y-4">
           {reportKey === "vat" ? (
             <>
+              {/* أساس الإقرار */}
+              <div className={`${ws.glassSoft} ${ws.card} p-3 flex items-center gap-3 flex-wrap`}>
+                <div className="text-sm font-bold text-slate-900 dark:text-white shrink-0">
+                  أساس الإقرار
+                </div>
+                <div className={ws.segWrap}>
+                  <button
+                    type="button"
+                    onClick={() => setVatBasis("accrual")}
+                    className={`${ws.segBtn} text-[11px] ${vatBasis === "accrual" ? ws.segActive : ws.segInactive}`}
+                  >
+                    الاستحقاق — كل فواتير الفترة
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVatBasis("cash")}
+                    className={`${ws.segBtn} text-[11px] ${vatBasis === "cash" ? ws.segActive : ws.segInactive}`}
+                  >
+                    النقدي — المسددة بالكامل فقط
+                  </button>
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-white/45">
+                  {vatBasis === "accrual"
+                    ? "الافتراضي نظاماً: ضريبة المدخلات تُخصم باستلام الفاتورة الضريبية ولو لم تُسدد."
+                    : "يتطلب موافقة الهيئة (إيرادات أقل من 5م ريال). تُحتسب الفواتير المسددة بالكامل فقط."}
+                </div>
+              </div>
+
               {/* إدخال المبيعات — تُحسب الضريبة فوراً وتُحفظ للفترة */}
               <div className={`${ws.glassSoft} ${ws.card} p-4 space-y-3`}>
                 <div className="flex items-center justify-between gap-2 flex-wrap">
