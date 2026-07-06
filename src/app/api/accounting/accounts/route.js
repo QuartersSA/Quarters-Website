@@ -31,6 +31,7 @@ const REQUIRE_PURCHASES_READ = {
 async function fetchUsageCounts() {
   const invoiceCounts = new Map();
   const bankCounts = new Map();
+  const spendTotals = new Map();
   try {
     const rows = await sql`
       SELECT expense_account_id AS id, COUNT(*)::int AS count
@@ -43,6 +44,27 @@ async function fetchUsageCounts() {
     // table not created yet — no invoices, no counts
   }
   try {
+    // Real spend per account comes from the invoice LINES (each line
+    // carries its own tree account) on active invoices.
+    const rows = await sql`
+      SELECT item.account_id AS id,
+             COUNT(DISTINCT item.invoice_id)::int AS invoices,
+             COALESCE(SUM(item.line_total), 0)::float AS total
+      FROM accounting_purchase_invoice_items item
+      JOIN accounting_purchase_invoices inv ON inv.id = item.invoice_id
+      WHERE item.account_id IS NOT NULL AND inv.is_active
+      GROUP BY item.account_id
+    `;
+    for (const row of rows) {
+      const id = Number(row.id);
+      spendTotals.set(id, row.total);
+      // Lines are more precise than the header column — prefer them.
+      invoiceCounts.set(id, Math.max(invoiceCounts.get(id) || 0, row.invoices));
+    }
+  } catch {
+    // items table not created yet
+  }
+  try {
     const rows = await sql`
       SELECT account_id AS id, COUNT(*)::int AS count
       FROM accounting_bank_accounts
@@ -53,7 +75,34 @@ async function fetchUsageCounts() {
   } catch {
     // table not created yet
   }
-  return { invoiceCounts, bankCounts };
+  return { invoiceCounts, bankCounts, spendTotals };
+}
+
+// وحدة الشراء الافتراضية for accounts mirrored from inventory items:
+// the item's default purchase unit, falling back to its base unit,
+// then the legacy free-text unit. Defensive — items tables may not
+// exist on a fresh database.
+async function fetchPurchaseUnits() {
+  const units = new Map();
+  try {
+    const rows = await sql`
+      SELECT a.id,
+             COALESCE(dmu.name_ar, bmu.name_ar, NULLIF(TRIM(i.unit), '')) AS unit
+      FROM accounting_accounts a
+      JOIN items i ON i.id = a.source_item_id
+      LEFT JOIN item_units diu ON diu.id = i.default_purchase_unit_id
+      LEFT JOIN measurement_units dmu ON dmu.id = diu.unit_id
+      LEFT JOIN item_units bu ON bu.item_id = i.id AND bu.is_base
+      LEFT JOIN measurement_units bmu ON bmu.id = bu.unit_id
+      WHERE a.source_item_id IS NOT NULL
+    `;
+    for (const row of rows) {
+      if (row.unit) units.set(Number(row.id), row.unit);
+    }
+  } catch {
+    // items tables not created yet
+  }
+  return units;
 }
 
 export async function GET(request) {
@@ -72,7 +121,7 @@ export async function GET(request) {
           SELECT
             id, code, name, name_en, account_type, parent_id,
             is_postable, is_system, source_category_id,
-            source_bank_account_id, notes, is_active
+            source_item_id, source_bank_account_id, notes, is_active
           FROM accounting_accounts
           ORDER BY code ASC, id ASC
         `
@@ -80,17 +129,21 @@ export async function GET(request) {
           SELECT
             id, code, name, name_en, account_type, parent_id,
             is_postable, is_system, source_category_id,
-            source_bank_account_id, notes, is_active
+            source_item_id, source_bank_account_id, notes, is_active
           FROM accounting_accounts
           WHERE is_active
           ORDER BY code ASC, id ASC
         `;
 
-    const { invoiceCounts, bankCounts } = await fetchUsageCounts();
+    const { invoiceCounts, bankCounts, spendTotals } =
+      await fetchUsageCounts();
+    const purchaseUnits = await fetchPurchaseUnits();
     const accounts = rows.map((row) => ({
       ...row,
       invoice_count: invoiceCounts.get(Number(row.id)) || 0,
       bank_count: bankCounts.get(Number(row.id)) || 0,
+      purchases_total: spendTotals.get(Number(row.id)) || 0,
+      purchase_unit: purchaseUnits.get(Number(row.id)) || null,
     }));
 
     return Response.json({ accounts });

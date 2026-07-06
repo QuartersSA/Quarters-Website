@@ -3,13 +3,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router";
 import {
+  BarChart3,
   Building,
   Contact,
   FileText,
   HandCoins,
   LayoutDashboard,
   ListTree,
-  Percent,
   Plus,
   Search,
   ShoppingCart,
@@ -28,7 +28,7 @@ import PurchasesOverviewPanel from "@/components/Accounting/PurchasesOverviewPan
 import PurchasesAccountsTreePanel from "@/components/Accounting/PurchasesAccountsTreePanel";
 import PurchasesBankAccountsPanel from "@/components/Accounting/PurchasesBankAccountsPanel";
 import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPanel";
-import PurchasesTaxPanel from "@/components/Accounting/PurchasesTaxPanel";
+import PurchasesReportsPanel from "@/components/Accounting/PurchasesReportsPanel";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -115,11 +115,12 @@ const TABS = [
     description: "حسابات البنك المستخدمة في عمليات الدفع.",
   },
   {
-    key: "tax",
-    label: "الضريبة",
-    shortLabel: "ضريبة",
-    Icon: Percent,
-    description: "تقرير ضريبة القيمة المضافة من فواتير المشتريات.",
+    key: "reports",
+    label: "التقارير",
+    shortLabel: "تقارير",
+    Icon: BarChart3,
+    description:
+      "مركز التقارير: الضريبة، المشتريات حسب الحساب والمورد، كشوف الحسابات، أعمار الديون، والمدفوعات حسب البنك.",
   },
 ];
 
@@ -373,7 +374,9 @@ export default function PurchasesPage() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const rawTab = searchParams.get("tab") || "overview";
+  const rawTabParam = searchParams.get("tab") || "overview";
+  // Legacy deep links: the old الضريبة tab lives inside التقارير now.
+  const rawTab = rawTabParam === "tax" ? "reports" : rawTabParam;
   const activeTabKey = TAB_KEYS.has(rawTab) ? rawTab : "overview";
   const rawSub = searchParams.get("sub") || "contacts";
   const vendorSubKey = VENDOR_KEYS.has(rawSub) ? rawSub : "contacts";
@@ -506,7 +509,7 @@ export default function PurchasesPage() {
         ) : activeTabKey === "banks" ? (
           <PurchasesBankAccountsPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : (
-          <PurchasesTaxPanel employeeId={employeeId} isAdmin={isAdmin} />
+          <PurchasesReportsPanel employeeId={employeeId} isAdmin={isAdmin} />
         )}
       </>
     );

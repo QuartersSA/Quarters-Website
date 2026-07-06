@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureAccountsSchema, n as nextChildCode } from './accountsTree-D8TS0rGA.js';
+import { e as ensureAccountsSchema, n as nextChildCode } from './accountsTree-Bl8Y8djJ.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
