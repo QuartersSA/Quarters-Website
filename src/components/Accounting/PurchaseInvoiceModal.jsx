@@ -1166,6 +1166,42 @@ export default function PurchaseInvoiceModal({
     }
   };
 
+  // تحذير التكرار: نفس رقم الفاتورة لنفس المورد. فحص مؤجل نصف ثانية
+  // بعد آخر تغيير (كتابةً أو من الفحص الذكي) — تحذير فقط، لا يمنع
+  // الحفظ (قد يكون التكرار مقصوداً عبر سنوات مختلفة).
+  const [duplicateInvoice, setDuplicateInvoice] = useState(null);
+  useEffect(() => {
+    if (!open) return undefined;
+    const number = invoiceNumber.trim();
+    if (!number || !contactId) {
+      setDuplicateInvoice(null);
+      return undefined;
+    }
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      try {
+        const params = new URLSearchParams({
+          number,
+          contact_id: contactId,
+        });
+        if (invoice?.id) params.set("exclude_id", String(invoice.id));
+        const response = await authedFetch(
+          `/api/accounting/purchase-invoices/check-number?${params}`,
+        );
+        const data = await response.json().catch(() => null);
+        if (!cancelled) {
+          setDuplicateInvoice(data?.duplicate ? data.invoice : null);
+        }
+      } catch {
+        if (!cancelled) setDuplicateInvoice(null);
+      }
+    }, 500);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [open, invoiceNumber, contactId, invoice?.id]);
+
   // Fields owned by the LAST scan (not touched by the user since).
   // Attaching a new invoice re-fills these with the new document's
   // values; anything the user typed manually stays protected. Manual
@@ -2059,10 +2095,25 @@ export default function PurchaseInvoiceModal({
                       autoFilledRef.current.delete("number");
                       setInvoiceNumber(event.target.value);
                     }}
-                    className={`${ws.input} px-3 py-2.5`}
+                    className={`${ws.input} px-3 py-2.5 ${duplicateInvoice ? "border-amber-400 dark:border-amber-400/60" : ""}`}
                     placeholder="فارغ = رقم تلقائي"
                     dir="ltr"
                   />
+                  {duplicateInvoice ? (
+                    <div className="text-[11px] text-amber-700 dark:text-amber-300 mt-1 flex items-start gap-1">
+                      <span className="shrink-0">⚠️</span>
+                      <span>
+                        رقم الفاتورة مسجّل سابقاً لنفس المورد — فاتورة
+                        بتاريخ{" "}
+                        <span dir="ltr">{duplicateInvoice.invoice_date}</span>{" "}
+                        بمبلغ{" "}
+                        <span dir="ltr">
+                          {moneyValue(duplicateInvoice.total_amount).toFixed(2)}
+                        </span>{" "}
+                        SAR. تأكد أنها ليست فاتورة مكررة.
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <div>
                   <FieldLabel>العملة</FieldLabel>
