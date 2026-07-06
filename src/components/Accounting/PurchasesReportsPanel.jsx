@@ -297,30 +297,190 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
 
   // ── Aggregations ────────────────────────────────────────────────
 
-  const vatReport = useMemo(() => {
-    const byMonth = new Map();
-    let net = 0;
-    let tax = 0;
-    let total = 0;
+  // نموذج الإقرار الضريبي (ZATCA): خانة 7 = المشتريات الخاضعة للنسبة
+  // الأساسية، خانة 10 = مشتريات بالنسبة الصفرية — من بنود الفواتير،
+  // مع توزيع خصم الفاتورة تناسبياً حتى تطابق المجاميع رؤوس الفواتير.
+  const vatReturn = useMemo(() => {
+    let standardBase = 0;
+    let standardVat = 0;
+    let zeroBase = 0;
     for (const invoice of periodInvoices) {
-      const key = (invoice.invoice_date || "").slice(0, 7);
-      if (!byMonth.has(key)) {
-        byMonth.set(key, { month: key, net: 0, tax: 0, total: 0, count: 0 });
+      const items = Array.isArray(invoice.items) ? invoice.items : [];
+      if (items.length === 0) {
+        const base = moneyValue(invoice.subtotal_amount);
+        const vat = moneyValue(invoice.tax_amount);
+        if (vat > 0) {
+          standardBase += base;
+          standardVat += vat;
+        } else {
+          zeroBase += base;
+        }
+        continue;
       }
-      const bucket = byMonth.get(key);
-      bucket.net += moneyValue(invoice.subtotal_amount);
-      bucket.tax += moneyValue(invoice.tax_amount);
-      bucket.total += moneyValue(invoice.total_amount);
-      bucket.count += 1;
-      net += moneyValue(invoice.subtotal_amount);
-      tax += moneyValue(invoice.tax_amount);
-      total += moneyValue(invoice.total_amount);
+      const linesBase = items.reduce(
+        (acc, item) => acc + moneyValue(item.line_subtotal),
+        0,
+      );
+      const headerBase = moneyValue(invoice.subtotal_amount);
+      const factor = linesBase > 0 && headerBase > 0 ? headerBase / linesBase : 1;
+      for (const item of items) {
+        const base = moneyValue(item.line_subtotal) * factor;
+        const vat = moneyValue(item.line_tax) * factor;
+        if (moneyValue(item.tax_rate) > 0) {
+          standardBase += base;
+          standardVat += vat;
+        } else {
+          zeroBase += base;
+        }
+      }
     }
-    const rows = [...byMonth.values()].sort((a, b) =>
-      a.month.localeCompare(b.month),
-    );
-    return { rows, net: round2(net), tax: round2(tax), total: round2(total) };
+    return {
+      standardBase: round2(standardBase),
+      standardVat: round2(standardVat),
+      zeroBase: round2(zeroBase),
+      purchasesBase: round2(standardBase + zeroBase),
+      purchasesVat: round2(standardVat),
+    };
   }, [periodInvoices]);
+
+  // المبيعات تُدخل يدوياً (النظام لا يتتبعها) وتُحفظ لكل فترة على
+  // هذا الجهاز. خانة 1 وحدها خاضعة للضريبة — مع مفتاح شامل/غير شامل
+  // يعيد الحساب فوراً.
+  const salesStorageKey = `vatReturnSales:${from || "all"}:${to || "all"}`;
+  const [sales, setSales] = useState({
+    r1: "",
+    r1IncludesTax: false,
+    r2: "",
+    r3: "",
+    r4: "",
+    r5: "",
+  });
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem(salesStorageKey);
+      setSales(
+        raw
+          ? { r1: "", r1IncludesTax: false, r2: "", r3: "", r4: "", r5: "", ...JSON.parse(raw) }
+          : { r1: "", r1IncludesTax: false, r2: "", r3: "", r4: "", r5: "" },
+      );
+    } catch {
+      // ignore
+    }
+  }, [salesStorageKey]);
+  const updateSales = (patch) => {
+    setSales((prev) => {
+      const next = { ...prev, ...patch };
+      try {
+        localStorage.setItem(salesStorageKey, JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  const salesComputed = useMemo(() => {
+    const entered = moneyValue(sales.r1);
+    const r1Base = sales.r1IncludesTax ? entered / 1.15 : entered;
+    const r1Vat = sales.r1IncludesTax ? entered - r1Base : entered * 0.15;
+    const r2 = moneyValue(sales.r2);
+    const r3 = moneyValue(sales.r3);
+    const r4 = moneyValue(sales.r4);
+    const r5 = moneyValue(sales.r5);
+    return {
+      r1Base: round2(r1Base),
+      r1Vat: round2(r1Vat),
+      r2,
+      r3,
+      r4,
+      r5,
+      salesBase: round2(r1Base + r2 + r3 + r4 + r5),
+      salesVat: round2(r1Vat),
+    };
+  }, [sales]);
+
+  // خانة 13: صافي الضريبة المستحقة = ضريبة المبيعات − ضريبة المشتريات.
+  const netVatDue = round2(salesComputed.salesVat - vatReturn.purchasesVat);
+  const netBaseDue = round2(salesComputed.salesBase - vatReturn.purchasesBase);
+
+  // صفوف نموذج الإقرار — تُعرض وتُصدَّر بنفس ترتيب نموذج الهيئة.
+  const vatReturnRows = useMemo(
+    () => [
+      { section: "ضريبة القيمة المضافة على الإيرادات" },
+      {
+        no: 1,
+        label: "المبيعات الخاضعة للنسبة الأساسية",
+        base: salesComputed.r1Base,
+        vat: salesComputed.r1Vat,
+      },
+      {
+        no: 2,
+        label:
+          "المبيعات للمواطنين (الخدمات الصحية الخاصة / التعليم الأهلي الخاص)",
+        base: salesComputed.r2,
+        vat: 0,
+      },
+      {
+        no: 3,
+        label: "المبيعات المحلية الخاضعة للنسبة الصفرية",
+        base: salesComputed.r3,
+        vat: 0,
+      },
+      { no: 4, label: "صادرات", base: salesComputed.r4, vat: 0 },
+      { no: 5, label: "مبيعات معفاة", base: salesComputed.r5, vat: 0 },
+      {
+        no: 6,
+        label: "إجمالي المبيعات",
+        base: salesComputed.salesBase,
+        vat: salesComputed.salesVat,
+        isTotal: true,
+      },
+      { section: "ضريبة القيمة المضافة على مشتريات" },
+      {
+        no: 7,
+        label: "المشتريات الخاضعة للنسبة الأساسية",
+        base: vatReturn.standardBase,
+        vat: vatReturn.standardVat,
+      },
+      {
+        no: 8,
+        label:
+          "الاستيرادات الخاضعة لضريبة القيمة المضافة بالنسبة الأساسية والتي تدفع في الجمارك",
+        base: 0,
+        vat: 0,
+      },
+      {
+        no: 9,
+        label:
+          "الاستيرادات الخاضعة لضريبة القيمة المضافة التي تطبق عليها آلية الاحتساب العكسي",
+        base: 0,
+        vat: 0,
+      },
+      {
+        no: 10,
+        label: "مشتريات بالنسبة الصفرية",
+        base: vatReturn.zeroBase,
+        vat: 0,
+      },
+      { no: 11, label: "مشتريات معفاة", base: 0, vat: 0 },
+      {
+        no: 12,
+        label: "إجمالي المشتريات",
+        base: vatReturn.purchasesBase,
+        vat: vatReturn.purchasesVat,
+        isTotal: true,
+      },
+      {
+        no: 13,
+        label: "إجمالي ضريبة القيمة المضافة المستحقة عن الفترة الضريبية الحالية",
+        base: netBaseDue,
+        vat: netVatDue,
+        isTotal: true,
+        isNet: true,
+      },
+    ],
+    [salesComputed, vatReturn, netBaseDue, netVatDue],
+  );
 
   const byAccountReport = useMemo(() => {
     const map = new Map();
@@ -530,25 +690,29 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     switch (reportKey) {
       case "vat":
         return {
-          filename: "vat-report",
-          title: `التقرير الضريبي — المشتريات (${label})`,
+          filename: "vat-return",
+          title: `الإقرار الضريبي — ضريبة القيمة المضافة (${label})`,
           columns: [
+            { header: "رقم الخانة", accessor: (row) => row.no ?? "" },
             {
-              header: "الشهر",
-              accessor: (row) => {
-                const [yy, mm] = row.month.split("-").map(Number);
-                return `${MONTH_LABELS[mm - 1]} ${yy}`;
-              },
+              header: "البيان",
+              accessor: (row) => row.section || row.label || "",
             },
-            { header: "عدد الفواتير", accessor: (row) => row.count },
             {
-              header: "صافي المشتريات (SAR)",
-              accessor: (row) => money(row.net),
+              header: "المبلغ الخاضع للضريبة (SAR)",
+              accessor: (row) =>
+                row.section ? "" : money(row.base),
             },
-            { header: "الضريبة (SAR)", accessor: (row) => money(row.tax) },
-            { header: "الإجمالي (SAR)", accessor: (row) => money(row.total) },
+            {
+              header: "مبلغ الضريبة (SAR)",
+              accessor: (row) => (row.section ? "" : money(row.vat)),
+            },
+            {
+              header: "تعديلات",
+              accessor: (row) => (row.section ? "" : "0.00"),
+            },
           ],
-          rows: vatReport.rows,
+          rows: vatReturnRows,
         };
       case "by-account":
         return {
@@ -632,7 +796,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     preset,
     from,
     to,
-    vatReport,
+    vatReturnRows,
     byAccountReport,
     bySupplierReport,
     statementReport,
@@ -813,49 +977,145 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         <div className="p-4 space-y-4">
           {reportKey === "vat" ? (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <KpiCard
-                  label="صافي المشتريات"
-                  value={`${money(vatReport.net)} SAR`}
-                />
-                <KpiCard
-                  label="ضريبة القيمة المضافة (مدخلات)"
-                  value={`${money(vatReport.tax)} SAR`}
-                  sub="قابلة للخصم في الإقرار الضريبي"
-                />
-                <KpiCard
-                  label="إجمالي المشتريات"
-                  value={`${money(vatReport.total)} SAR`}
-                />
-              </div>
-              {vatReport.rows.length === 0 ? (
-                <div className="text-center text-sm text-slate-500 dark:text-white/50 py-8">
-                  لا توجد فواتير في الفترة المحددة.
+              {/* إدخال المبيعات — تُحسب الضريبة فوراً وتُحفظ للفترة */}
+              <div className={`${ws.glassSoft} ${ws.card} p-4 space-y-3`}>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="text-sm font-bold text-slate-900 dark:text-white">
+                    إدخال المبيعات للفترة
+                  </div>
+                  <div className={ws.segWrap}>
+                    <button
+                      type="button"
+                      onClick={() => updateSales({ r1IncludesTax: false })}
+                      className={`${ws.segBtn} text-[11px] ${!sales.r1IncludesTax ? ws.segActive : ws.segInactive}`}
+                    >
+                      المبلغ غير شامل الضريبة
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateSales({ r1IncludesTax: true })}
+                      className={`${ws.segBtn} text-[11px] ${sales.r1IncludesTax ? ws.segActive : ws.segInactive}`}
+                    >
+                      المبلغ شامل الضريبة
+                    </button>
+                  </div>
                 </div>
-              ) : (
-                <ReportTable
-                  columns={[
-                    {
-                      header: "الشهر",
-                      accessor: (row) => {
-                        const [yy, mm] = row.month.split("-").map(Number);
-                        return `${MONTH_LABELS[mm - 1]} ${yy}`;
-                      },
-                    },
-                    { header: "الفواتير", accessor: (row) => row.count, numeric: true },
-                    { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
-                    { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
-                    { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
-                  ]}
-                  rows={vatReport.rows}
-                  footer={{
-                    الشهر: "الإجمالي",
-                    الصافي: money(vatReport.net),
-                    الضريبة: money(vatReport.tax),
-                    الإجمالي: money(vatReport.total),
-                  }}
-                />
-              )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3">
+                  {[
+                    { key: "r1", label: "مبيعات النسبة الأساسية (15%)" },
+                    { key: "r2", label: "مبيعات للمواطنين (صحة/تعليم)" },
+                    { key: "r3", label: "مبيعات بالنسبة الصفرية" },
+                    { key: "r4", label: "صادرات" },
+                    { key: "r5", label: "مبيعات معفاة" },
+                  ].map((field) => (
+                    <div key={field.key}>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
+                        {field.label}
+                      </div>
+                      <input
+                        type="number"
+                        value={sales[field.key]}
+                        onChange={(event) =>
+                          updateSales({ [field.key]: event.target.value })
+                        }
+                        className={`${ws.input} px-2.5 py-2 text-sm text-left`}
+                        step="0.01"
+                        min="0"
+                        dir="ltr"
+                        placeholder="0.00"
+                      />
+                      {field.key === "r1" && moneyValue(sales.r1) > 0 ? (
+                        <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1" dir="ltr">
+                          الخاضع {money(salesComputed.r1Base)} + ضريبة {money(salesComputed.r1Vat)}
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+                <div className="text-[11px] text-slate-400 dark:text-white/35">
+                  تُحفظ القيم لهذه الفترة على هذا الجهاز. خانات المشتريات
+                  (7 و10) تتعبأ تلقائياً من فواتير الفترة.
+                </div>
+              </div>
+
+              {/* نموذج الإقرار الضريبي */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm min-w-[700px]">
+                  <thead>
+                    <tr className="text-right text-[11px] text-slate-500 dark:text-white/45 border-b border-slate-200 dark:border-white/10">
+                      <th className="px-3 py-2 font-bold w-20">رقم الخانة</th>
+                      <th className="px-3 py-2 font-bold">البيان</th>
+                      <th className="px-3 py-2 font-bold text-left w-44">
+                        المبلغ الخاضع للضريبة
+                      </th>
+                      <th className="px-3 py-2 font-bold text-left w-36">
+                        مبلغ الضريبة
+                      </th>
+                      <th className="px-3 py-2 font-bold text-left w-24">
+                        تعديلات
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {vatReturnRows.map((row, index) => {
+                      if (row.section) {
+                        return (
+                          <tr key={`s${index}`}>
+                            <td
+                              colSpan={5}
+                              className="px-3 pt-5 pb-2 font-bold text-slate-900 dark:text-white"
+                            >
+                              {row.section}
+                            </td>
+                          </tr>
+                        );
+                      }
+                      const dash = (value) =>
+                        value === 0 && !row.isTotal ? (
+                          <span className="text-slate-400 dark:text-white/30">—</span>
+                        ) : (
+                          money(value)
+                        );
+                      return (
+                        <tr
+                          key={row.no}
+                          className={
+                            row.isTotal
+                              ? "border-t-2 border-b-4 border-double border-slate-300 dark:border-white/25 font-bold text-slate-900 dark:text-white"
+                              : "border-t border-slate-100 dark:border-white/5 text-slate-800 dark:text-white/80"
+                          }
+                        >
+                          <td className="px-3 py-2.5 font-mono" dir="ltr">
+                            {row.no}
+                          </td>
+                          <td className="px-3 py-2.5">{row.label}</td>
+                          <td
+                            className={`px-3 py-2.5 text-left font-mono tabular-nums ${row.isNet && row.base < 0 ? "text-rose-700 dark:text-rose-300" : row.base > 0 && !row.isTotal ? "text-sky-700 dark:text-sky-300" : ""}`}
+                            dir="ltr"
+                          >
+                            {dash(row.base)}
+                          </td>
+                          <td
+                            className={`px-3 py-2.5 text-left font-mono tabular-nums ${row.isNet && row.vat < 0 ? "text-rose-700 dark:text-rose-300" : row.vat > 0 && !row.isTotal ? "text-sky-700 dark:text-sky-300" : ""}`}
+                            dir="ltr"
+                          >
+                            {dash(row.vat)}
+                          </td>
+                          <td className="px-3 py-2.5 text-left font-mono tabular-nums" dir="ltr">
+                            0.00
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              {netVatDue < 0 ? (
+                <div className="text-[11px] text-slate-500 dark:text-white/45">
+                  القيمة السالبة في خانة 13 تعني ضريبة مدخلات قابلة
+                  للاسترداد/الترحيل — المشتريات أعلى من المبيعات في الفترة.
+                </div>
+              ) : null}
             </>
           ) : null}
 
