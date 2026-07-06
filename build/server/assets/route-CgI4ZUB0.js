@@ -38,6 +38,7 @@ const REQUIRE_PURCHASES_READ = {
 async function fetchUsageCounts() {
   const invoiceCounts = new Map();
   const bankCounts = new Map();
+  const spendTotals = new Map();
   try {
     const rows = await sql`
       SELECT expense_account_id AS id, COUNT(*)::int AS count
@@ -48,6 +49,27 @@ async function fetchUsageCounts() {
     for (const row of rows) invoiceCounts.set(Number(row.id), row.count);
   } catch {
     // table not created yet — no invoices, no counts
+  }
+  try {
+    // Real spend per account comes from the invoice LINES (each line
+    // carries its own tree account) on active invoices.
+    const rows = await sql`
+      SELECT item.account_id AS id,
+             COUNT(DISTINCT item.invoice_id)::int AS invoices,
+             COALESCE(SUM(item.line_total), 0)::float AS total
+      FROM accounting_purchase_invoice_items item
+      JOIN accounting_purchase_invoices inv ON inv.id = item.invoice_id
+      WHERE item.account_id IS NOT NULL AND inv.is_active
+      GROUP BY item.account_id
+    `;
+    for (const row of rows) {
+      const id = Number(row.id);
+      spendTotals.set(id, row.total);
+      // Lines are more precise than the header column — prefer them.
+      invoiceCounts.set(id, Math.max(invoiceCounts.get(id) || 0, row.invoices));
+    }
+  } catch {
+    // items table not created yet
   }
   try {
     const rows = await sql`
@@ -62,7 +84,8 @@ async function fetchUsageCounts() {
   }
   return {
     invoiceCounts,
-    bankCounts
+    bankCounts,
+    spendTotals
   };
 }
 async function GET(request) {
@@ -96,12 +119,14 @@ async function GET(request) {
         `;
     const {
       invoiceCounts,
-      bankCounts
+      bankCounts,
+      spendTotals
     } = await fetchUsageCounts();
     const accounts = rows.map(row => ({
       ...row,
       invoice_count: invoiceCounts.get(Number(row.id)) || 0,
-      bank_count: bankCounts.get(Number(row.id)) || 0
+      bank_count: bankCounts.get(Number(row.id)) || 0,
+      purchases_total: spendTotals.get(Number(row.id)) || 0
     }));
     return Response.json({
       accounts

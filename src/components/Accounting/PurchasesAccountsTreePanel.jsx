@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronsDownUp,
   ChevronsUpDown,
+  FileSpreadsheet,
   FileText,
   Landmark,
   ListTree,
@@ -20,6 +21,7 @@ import {
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
 import {
   useAccountingAccounts,
   useCreateAccountingAccount,
@@ -56,6 +58,13 @@ function typeMeta(type) {
 
 function normalize(value) {
   return String(value || "").trim().toLowerCase();
+}
+
+function formatMoney(value) {
+  return Number(value || 0).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 // Suggest the next child code from the loaded sibling list (mirrors
@@ -394,6 +403,86 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
     return counts;
   }, [accounts]);
 
+  // Roll purchases spend up the tree (accounting-ledger style): every
+  // account shows its own lines' total plus all its descendants'.
+  const rolledTotals = useMemo(() => {
+    const totals = new Map();
+    const walk = (account) => {
+      let sum = Number(account.purchases_total) || 0;
+      for (const child of childrenByParent.get(String(account.id)) || []) {
+        sum += walk(child);
+      }
+      totals.set(account.id, Math.round(sum * 100) / 100);
+      return sum;
+    };
+    for (const root of childrenByParent.get("root") || []) walk(root);
+    return totals;
+  }, [childrenByParent]);
+
+  // Flatten depth-first for export — the indentation keeps the
+  // hierarchy readable in Excel/PDF.
+  const exportRows = useMemo(() => {
+    const rows = [];
+    const walk = (account, depth) => {
+      rows.push({ account, depth, total: rolledTotals.get(account.id) || 0 });
+      for (const child of childrenByParent.get(String(account.id)) || []) {
+        walk(child, depth + 1);
+      }
+    };
+    const roots = (childrenByParent.get("root") || []).filter(
+      (root) => !typeFilter || root.account_type === typeFilter,
+    );
+    for (const root of roots) walk(root, 0);
+    return rows;
+  }, [childrenByParent, rolledTotals, typeFilter]);
+
+  const EXPORT_COLUMNS = [
+    {
+      header: "رقم الحساب",
+      accessor: (row) => row.account.code,
+    },
+    {
+      header: "اسم الحساب",
+      // Non-breaking spaces survive Excel/HTML rendering.
+      accessor: (row) =>
+        `${" ".repeat(row.depth * 4)}${row.account.name}`,
+    },
+    {
+      header: "الاسم الإنجليزي",
+      accessor: (row) => row.account.name_en || "",
+    },
+    {
+      header: "النوع",
+      accessor: (row) => typeMeta(row.account.account_type).label,
+    },
+    {
+      header: "التصنيف",
+      accessor: (row) =>
+        row.account.is_postable === false ? "تجميعي" : "قابل للترحيل",
+    },
+    {
+      header: "عدد الفواتير",
+      accessor: (row) => row.account.invoice_count || 0,
+    },
+    {
+      header: "إجمالي المشتريات (SAR)",
+      accessor: (row) => (row.total > 0 ? formatMoney(row.total) : ""),
+    },
+    {
+      header: "الحالة",
+      accessor: (row) =>
+        row.account.is_active === false ? "موقوف" : "نشط",
+    },
+  ];
+
+  const exportTitle = `شجرة الحسابات${
+    typeFilter ? ` — ${typeMeta(typeFilter).label}` : ""
+  }`;
+  const handleExportExcel = () =>
+    exportToExcelHTML(exportRows, "chart-of-accounts", EXPORT_COLUMNS, exportTitle);
+  const handleExportPdf = () =>
+    exportToPDF(exportRows, "chart-of-accounts", EXPORT_COLUMNS, exportTitle);
+
   const toggleExpand = (id) => {
     setExpanded((prev) => {
       const next = new Set(prev);
@@ -492,6 +581,15 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
+            {rolledTotals.get(account.id) > 0 ? (
+              <span
+                className="hidden md:inline text-xs font-bold text-slate-700 dark:text-white/70 tabular-nums"
+                dir="ltr"
+                title="إجمالي المشتريات المصنّفة على الحساب وفروعه"
+              >
+                {formatMoney(rolledTotals.get(account.id))}
+              </span>
+            ) : null}
             {depth === 0 ? (
               <span className={`${ws.pill} ${meta.pill} hidden sm:inline-flex`}>
                 {meta.label}
@@ -629,6 +727,24 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
             عرض الموقوفة
           </label>
           <div className="flex-1" />
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className={`${ws.btnNeutral} px-3 py-2 text-xs`}
+            title="تصدير الشجرة إلى Excel"
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            Excel
+          </button>
+          <button
+            type="button"
+            onClick={handleExportPdf}
+            className={`${ws.btnNeutral} px-3 py-2 text-xs`}
+            title="تصدير الشجرة إلى PDF"
+          >
+            <FileText className="w-4 h-4" />
+            PDF
+          </button>
           <button
             type="button"
             onClick={expandAll}
