@@ -182,6 +182,29 @@ async function ensureSchema() {
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_items_invoice
       ON accounting_purchase_invoice_items (invoice_id, position)
   `;
+
+  // سجل الدفعات: كل دفعة سطر مستقل بتاريخها وبنكها وإيصالها ومن
+  // سجّلها. paid_amount في رأس الفاتورة يبقى المجموع (مصدر حساب
+  // الحالة)، وهذا الجدول هو التفصيل — أساس التدفق النقدي والأساس
+  // النقدي في الإقرار وكشف المورد بمستوى الدفعة.
+  await sql`
+    CREATE TABLE IF NOT EXISTS accounting_purchase_invoice_payments (
+      id SERIAL PRIMARY KEY,
+      invoice_id INTEGER NOT NULL REFERENCES accounting_purchase_invoices(id) ON DELETE CASCADE,
+      amount NUMERIC(14, 2) NOT NULL,
+      payment_date DATE NOT NULL DEFAULT ((NOW() AT TIME ZONE 'Asia/Riyadh')::DATE),
+      bank_account_id INTEGER,
+      receipt_url TEXT,
+      notes TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      created_by_employee_id INTEGER,
+      created_by_employee_name TEXT
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_payments_invoice
+      ON accounting_purchase_invoice_payments (invoice_id, payment_date, id)
+  `;
   await sql`
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoices_invoice_date
       ON accounting_purchase_invoices (invoice_date DESC)
@@ -364,6 +387,42 @@ async function attachItems(rows) {
   }
 }
 
+// سجل الدفعات يُرفق مع كل صف حتى تقرأه المعاينة الجانبية وتقارير
+// البنوك والأساس النقدي دون طلبات إضافية.
+async function attachPayments(rows) {
+  const ids = rows.map(row => row.id);
+  if (ids.length === 0) return rows;
+  try {
+    const payments = await sql`
+      SELECT p.id, p.invoice_id, p.amount,
+             TO_CHAR(p.payment_date, 'YYYY-MM-DD') AS payment_date,
+             p.bank_account_id, bank.name AS bank_name,
+             p.receipt_url, p.notes,
+             p.created_by_employee_name
+      FROM accounting_purchase_invoice_payments p
+      LEFT JOIN accounting_bank_accounts bank ON bank.id = p.bank_account_id
+      WHERE p.invoice_id = ANY(${ids})
+      ORDER BY p.invoice_id, p.payment_date, p.id
+    `;
+    const byInvoice = new Map();
+    for (const payment of payments) {
+      const key = Number(payment.invoice_id);
+      if (!byInvoice.has(key)) byInvoice.set(key, []);
+      byInvoice.get(key).push(payment);
+    }
+    return rows.map(row => ({
+      ...row,
+      payments: byInvoice.get(Number(row.id)) || []
+    }));
+  } catch (error) {
+    console.error("attach invoice payments failed", error);
+    return rows.map(row => ({
+      ...row,
+      payments: []
+    }));
+  }
+}
+
 // Classification target must be a live postable expense account —
 // otherwise reports built on the tree would silently mis-bucket.
 async function validateExpenseAccount(expenseAccountId) {
@@ -483,8 +542,9 @@ async function GET(request) {
     const query = selectInvoicesQuery(where, status);
     const rows = await sql(query, status ? [...values, today, status] : [...values, today]);
     const withItems = await attachItems(rows);
+    const withPayments = await attachPayments(withItems);
     return Response.json({
-      invoices: withItems
+      invoices: withPayments
     });
   } catch (error) {
     console.error("purchase invoices GET error", error);
@@ -578,6 +638,23 @@ async function POST(request) {
     `;
     if (items && items.length > 0) {
       await replaceInvoiceItems(created.id, items);
+    }
+
+    // ما دُفع عند الإنشاء يدخل سجل الدفعات كسطر أول بتاريخ الفاتورة.
+    if (payload.paidAmount > 0) {
+      await sql`
+        INSERT INTO accounting_purchase_invoice_payments (
+          invoice_id, amount, payment_date, bank_account_id,
+          receipt_url, notes,
+          created_by_employee_id, created_by_employee_name
+        )
+        VALUES (
+          ${created.id}, ${payload.paidAmount}, ${payload.invoiceDate},
+          ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl},
+          'دفعة عند إنشاء الفاتورة',
+          ${createdById}, ${createdByName}
+        )
+      `;
     }
     await logPurchaseAudit({
       entityType: "invoice",
@@ -688,6 +765,24 @@ async function PUT(request) {
     }
     const previousPaid = Number(existing?.paid_amount || 0);
     const paidDelta = Math.round((payload.paidAmount - previousPaid) * 100) / 100;
+    // أي تغيير للمدفوع من المحرر الكامل يدخل سجل الدفعات — موجباً
+    // كدفعة أو سالباً كتصحيح، فيبقى مجموع السجل = رأس الفاتورة.
+    if (Math.abs(paidDelta) > 0.004) {
+      await sql`
+        INSERT INTO accounting_purchase_invoice_payments (
+          invoice_id, amount, payment_date, bank_account_id,
+          receipt_url, notes,
+          created_by_employee_id, created_by_employee_name
+        )
+        VALUES (
+          ${id}, ${paidDelta}, ${todayRiyadh()},
+          ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl},
+          ${paidDelta > 0 ? "دفعة من محرر الفاتورة" : "تصحيح يدوي من محرر الفاتورة"},
+          ${auth.user?.id ? Number(auth.user.id) : null},
+          ${auth.user?.name ? String(auth.user.name) : null}
+        )
+      `;
+    }
     if (paidDelta > 0.004) {
       await logPurchaseAudit({
         entityType: "invoice",

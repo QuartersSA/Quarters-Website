@@ -91,6 +91,63 @@ export function useUpdateAccountingPurchaseInvoice() {
   });
 }
 
+// سجل الدفعات المتعدد: كل دفعة سطر مستقل، والخادم يحدّث رأس
+// الفاتورة في نفس العملية — إبطال كاش الفواتير يكفي للتحديث.
+export function useAddPurchaseInvoicePayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload) => {
+      const res = await adminFetch("/api/accounting/purchase-invoice-payments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تسجيل الدفعة");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
+      });
+      toast.success("تم تسجيل الدفعة");
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(`فشل تسجيل الدفعة: ${error.message}`);
+    },
+  });
+}
+
+export function useDeletePurchaseInvoicePayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }) => {
+      const res = await adminFetch(
+        `/api/accounting/purchase-invoice-payments?id=${id}`,
+        { method: "DELETE" },
+      );
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل حذف الدفعة");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
+      });
+      toast.success("تم حذف الدفعة وتحديث الفاتورة");
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(`فشل حذف الدفعة: ${error.message}`);
+    },
+  });
+}
+
 export function useDeleteAccountingPurchaseInvoice() {
   const queryClient = useQueryClient();
   return useMutation({

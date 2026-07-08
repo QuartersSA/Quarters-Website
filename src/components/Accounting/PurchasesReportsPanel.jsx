@@ -90,7 +90,7 @@ const REPORTS = [
     label: "المدفوعات حسب البنك",
     Icon: Landmark,
     description:
-      "مدفوعات فواتير الفترة موزعة على الحسابات البنكية المسجلة عليها.",
+      "دفعات الفترة من سجل الدفعات — كل دفعة بتاريخها الفعلي على بنكها.",
   },
   {
     key: "audit",
@@ -165,6 +165,7 @@ const AUDIT_ACTION_LABELS = {
   created: "إنشاء",
   updated: "تعديل",
   payment: "دفعة",
+  payment_removed: "حذف دفعة",
   deactivated: "إيقاف",
   deleted: "حذف",
   recurring: "توليد متكرر",
@@ -512,31 +513,60 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
 
   // أساس الإقرار: «الاستحقاق» (افتراضي هيئة الزكاة — كل فواتير
   // الفترة باستلام الفاتورة الضريبية) أو «النقدي» (يحتاج موافقة
-  // الهيئة — الفواتير المسددة بالكامل فقط، تقريب لغياب سجل تواريخ
-  // الدفعات).
+  // الهيئة — حصة كل فاتورة بقدر ما سُدّد منها فعلياً خلال الفترة
+  // حسب تواريخ سجل الدفعات).
   const [vatBasis, setVatBasis] = useState("accrual");
+
+  // حصص الأساس النقدي من سجل الدفعات: نسبة ما دُفع من كل فاتورة
+  // داخل [from, to] — تشمل دفعات الفترة على فواتير أقدم منها. ما
+  // سُدّد قبل تفعيل السجل (رصيد بلا أسطر) يُنسب لتاريخ الفاتورة.
+  const cashEntries = useMemo(() => {
+    if (vatBasis !== "cash") return [];
+    const inRange = (date) =>
+      !!date && (!from || date >= from) && (!to || date <= to);
+    const entries = [];
+    for (const invoice of invoices) {
+      if (invoice.is_active === false) continue;
+      if (!matchesBranch(invoice)) continue;
+      const total = moneyValue(invoice.total_amount);
+      if (total <= 0) continue;
+      const payments = Array.isArray(invoice.payments) ? invoice.payments : [];
+      let recorded = 0;
+      let inPeriod = 0;
+      for (const payment of payments) {
+        const amount = moneyValue(payment.amount);
+        recorded += amount;
+        if (inRange(payment.payment_date || "")) inPeriod += amount;
+      }
+      const legacy =
+        Math.round((moneyValue(invoice.paid_amount) - recorded) * 100) / 100;
+      if (legacy > 0.004 && inRange(invoice.invoice_date || "")) {
+        inPeriod += legacy;
+      }
+      if (inPeriod > 0.004) {
+        entries.push({ invoice, ratio: Math.min(inPeriod / total, 1) });
+      }
+    }
+    return entries;
+  }, [vatBasis, invoices, matchesBranch, from, to]);
 
   // نموذج الإقرار الضريبي (ZATCA): خانة 7 = المشتريات الخاضعة للنسبة
   // الأساسية، خانة 10 = مشتريات بالنسبة الصفرية — من بنود الفواتير،
   // مع توزيع خصم الفاتورة تناسبياً حتى تطابق المجاميع رؤوس الفواتير.
+  // في الأساس النقدي تُضرب حصة كل فاتورة بنسبة المسدد خلال الفترة.
   const vatReturn = useMemo(() => {
     let standardBase = 0;
     let standardVat = 0;
     let zeroBase = 0;
-    const vatInvoices =
+    const vatEntries =
       vatBasis === "cash"
-        ? periodInvoices.filter(
-            (invoice) =>
-              moneyValue(invoice.total_amount) > 0 &&
-              moneyValue(invoice.paid_amount) + 0.005 >=
-                moneyValue(invoice.total_amount),
-          )
-        : periodInvoices;
-    for (const invoice of vatInvoices) {
+        ? cashEntries
+        : periodInvoices.map((invoice) => ({ invoice, ratio: 1 }));
+    for (const { invoice, ratio } of vatEntries) {
       const items = Array.isArray(invoice.items) ? invoice.items : [];
       if (items.length === 0) {
-        const base = moneyValue(invoice.subtotal_amount);
-        const vat = moneyValue(invoice.tax_amount);
+        const base = moneyValue(invoice.subtotal_amount) * ratio;
+        const vat = moneyValue(invoice.tax_amount) * ratio;
         if (vat > 0) {
           standardBase += base;
           standardVat += vat;
@@ -550,7 +580,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         0,
       );
       const headerBase = moneyValue(invoice.subtotal_amount);
-      const factor = linesBase > 0 && headerBase > 0 ? headerBase / linesBase : 1;
+      const factor =
+        (linesBase > 0 && headerBase > 0 ? headerBase / linesBase : 1) * ratio;
       for (const item of items) {
         const base = moneyValue(item.line_subtotal) * factor;
         const vat = moneyValue(item.line_tax) * factor;
@@ -569,7 +600,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
       purchasesBase: round2(standardBase + zeroBase),
       purchasesVat: round2(standardVat),
     };
-  }, [periodInvoices, vatBasis]);
+  }, [periodInvoices, vatBasis, cashEntries]);
 
   // المبيعات تُدخل يدوياً (النظام لا يتتبعها) وتُحفظ لكل فترة على
   // هذا الجهاز. خانة 1 وحدها خاضعة للضريبة — مع مفتاح شامل/غير شامل
@@ -884,33 +915,60 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     return { rows, totals };
   }, [invoices]);
 
+  // من سجل الدفعات: كل دفعة تُنسب لبنكها بتاريخها الفعلي — فاتورة
+  // واحدة قد توزع على أكثر من بنك. ما سُدّد قبل تفعيل السجل يُنسب
+  // لبنك رأس الفاتورة بتاريخ الفاتورة.
   const byBankReport = useMemo(() => {
     const map = new Map();
-    for (const invoice of periodInvoices) {
-      const paid = moneyValue(invoice.paid_amount);
-      if (paid <= 0) continue;
-      const id = invoice.paid_bank_account_id
-        ? Number(invoice.paid_bank_account_id)
-        : null;
+    const inRange = (date) =>
+      !!date && (!from || date >= from) && (!to || date <= to);
+    const add = (id, fallbackName, amount) => {
       const key = id ?? "none";
       if (!map.has(key)) {
         const bank = id ? bankById.get(id) : null;
         map.set(key, {
           name: bank
             ? `${bank.name}${bank.bank_name ? ` — ${bank.bank_name}` : ""}`
-            : invoice.paid_bank_name || "بدون تحديد حساب",
+            : fallbackName || "بدون تحديد حساب",
           count: 0,
           paid: 0,
         });
       }
       const bucket = map.get(key);
       bucket.count += 1;
-      bucket.paid += paid;
+      bucket.paid += amount;
+    };
+    for (const invoice of invoices) {
+      if (invoice.is_active === false) continue;
+      if (!matchesBranch(invoice)) continue;
+      const payments = Array.isArray(invoice.payments) ? invoice.payments : [];
+      let recorded = 0;
+      for (const payment of payments) {
+        const amount = moneyValue(payment.amount);
+        recorded += amount;
+        if (!inRange(payment.payment_date || "")) continue;
+        add(
+          payment.bank_account_id ? Number(payment.bank_account_id) : null,
+          payment.bank_name,
+          amount,
+        );
+      }
+      const legacy =
+        Math.round((moneyValue(invoice.paid_amount) - recorded) * 100) / 100;
+      if (legacy > 0.004 && inRange(invoice.invoice_date || "")) {
+        add(
+          invoice.paid_bank_account_id
+            ? Number(invoice.paid_bank_account_id)
+            : null,
+          invoice.paid_bank_name,
+          legacy,
+        );
+      }
     }
     const rows = [...map.values()].sort((a, b) => b.paid - a.paid);
     const total = rows.reduce((acc, row) => acc + row.paid, 0);
     return { rows, total };
-  }, [periodInvoices, bankById]);
+  }, [invoices, matchesBranch, from, to, bankById]);
 
   // ── Export ──────────────────────────────────────────────────────
 
@@ -1012,7 +1070,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
           title: `المدفوعات حسب الحساب البنكي (${label})`,
           columns: [
             { header: "الحساب البنكي", accessor: (row) => row.name },
-            { header: "عدد الفواتير", accessor: (row) => row.count },
+            { header: "عدد الدفعات", accessor: (row) => row.count },
             { header: "المدفوع (SAR)", accessor: (row) => money(row.paid) },
           ],
           rows: byBankReport.rows,
@@ -1293,13 +1351,13 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                     onClick={() => setVatBasis("cash")}
                     className={`${ws.segBtn} text-[11px] ${vatBasis === "cash" ? ws.segActive : ws.segInactive}`}
                   >
-                    النقدي — المسددة بالكامل فقط
+                    النقدي — حسب تواريخ الدفعات
                   </button>
                 </div>
                 <div className="text-[11px] text-slate-500 dark:text-white/45">
                   {vatBasis === "accrual"
                     ? "الافتراضي نظاماً: ضريبة المدخلات تُخصم باستلام الفاتورة الضريبية ولو لم تُسدد."
-                    : "يتطلب موافقة الهيئة (إيرادات أقل من 5م ريال). تُحتسب الفواتير المسددة بالكامل فقط."}
+                    : "يتطلب موافقة الهيئة (إيرادات أقل من 5م ريال). تُحتسب حصة كل فاتورة بقدر ما سُدّد منها فعلياً خلال الفترة — من سجل الدفعات."}
                 </div>
               </div>
 
@@ -1646,7 +1704,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
               <ReportTable
                 columns={[
                   { header: "الحساب البنكي", accessor: (row) => row.name },
-                  { header: "الفواتير", accessor: (row) => row.count, numeric: true },
+                  { header: "الدفعات", accessor: (row) => row.count, numeric: true },
                   { header: "المدفوع", accessor: (row) => money(row.paid), numeric: true },
                 ]}
                 rows={byBankReport.rows}

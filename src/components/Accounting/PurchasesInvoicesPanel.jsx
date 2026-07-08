@@ -36,8 +36,10 @@ import PurchaseInvoiceModal, {
 } from "@/components/Accounting/PurchaseInvoiceModal";
 import {
   useAccountingPurchaseInvoices,
+  useAddPurchaseInvoicePayment,
   useCreateAccountingPurchaseInvoice,
   useDeleteAccountingPurchaseInvoice,
+  useDeletePurchaseInvoicePayment,
   useUpdateAccountingPurchaseInvoice,
 } from "@/hooks/useAccountingPurchaseInvoices";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
@@ -129,9 +131,8 @@ function StatusPill({ status }) {
   );
 }
 
-// Quick payment: bump paid_amount without opening the full edit form.
-// PUT requires the complete invoice payload, so the modal replays the
-// row's fields and only changes the paid amount.
+// تسجيل دفعة — سطر جديد في سجل دفعات الفاتورة: مبلغ + تاريخ + بنك
+// + إيصال + ملاحظة. الخادم يحدّث رأس الفاتورة (paid_amount) ذرّياً.
 function RecordPaymentModal({
   invoice,
   bankAccounts = [],
@@ -144,6 +145,8 @@ function RecordPaymentModal({
     0,
   );
   const [amount, setAmount] = useState("");
+  const [paymentDate, setPaymentDate] = useState("");
+  const [notes, setNotes] = useState("");
   const [bankAccountId, setBankAccountId] = useState("");
   // إيصال الدفع — اختياري.
   const [receiptUrl, setReceiptUrl] = useState("");
@@ -155,10 +158,14 @@ function RecordPaymentModal({
   useEffect(() => {
     if (!invoice) return;
     setAmount(balance.toFixed(2));
+    setPaymentDate(
+      new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Riyadh" }),
+    );
+    setNotes("");
     setBankAccountId(
       invoice.paid_bank_account_id ? String(invoice.paid_bank_account_id) : "",
     );
-    setReceiptUrl(invoice.payment_receipt_url || "");
+    setReceiptUrl("");
     setReceiptName("");
     setReceiptUploading(false);
     // Seed with the outstanding balance each time a new invoice opens.
@@ -205,25 +212,13 @@ function RecordPaymentModal({
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!valid || isSubmitting) return;
-    const newPaid =
-      Math.round((moneyValue(invoice.paid_amount) + paymentValue) * 100) / 100;
     onSubmit({
-      id: invoice.id,
-      invoice_number: invoice.invoice_number,
-      contact_id: invoice.contact_id || null,
-      expense_account_id: invoice.expense_account_id || null,
-      supplier_name: invoice.supplier_name || null,
-      invoice_date: invoice.invoice_date,
-      due_date: invoice.due_date || null,
-      currency: invoice.currency || "SAR",
-      subtotal_amount: invoice.subtotal_amount,
-      tax_amount: invoice.tax_amount,
-      total_amount: moneyValue(invoice.total_amount),
-      paid_amount: Math.min(newPaid, moneyValue(invoice.total_amount)),
-      paid_bank_account_id: bankAccountId || null,
-      payment_receipt_url: receiptUrl || null,
-      workflow_status: invoice.workflow_status || "pending_payment",
-      notes: invoice.notes || null,
+      invoice_id: invoice.id,
+      amount: paymentValue,
+      payment_date: paymentDate || null,
+      bank_account_id: bankAccountId || null,
+      receipt_url: receiptUrl || null,
+      notes: notes.trim() || null,
     });
   };
 
@@ -303,6 +298,17 @@ function RecordPaymentModal({
           ) : null}
 
           <div className="text-xs text-slate-600 dark:text-white/55 mb-1 mt-3">
+            تاريخ الدفعة
+          </div>
+          <input
+            type="date"
+            value={paymentDate}
+            onChange={(event) => setPaymentDate(event.target.value)}
+            className={`${ws.input} px-3 py-2.5`}
+            dir="ltr"
+          />
+
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1 mt-3">
             الحساب البنكي المدفوع منه
           </div>
           <GlassSelect
@@ -373,6 +379,18 @@ function RecordPaymentModal({
               handleReceiptPicked(event?.target?.files?.[0])
             }
             className="hidden"
+          />
+
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1 mt-3">
+            ملاحظة{" "}
+            <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
+          </div>
+          <input
+            type="text"
+            value={notes}
+            onChange={(event) => setNotes(event.target.value)}
+            placeholder="مثال: تحويل بنكي — دفعة أولى"
+            className={`${ws.input} px-3 py-2`}
           />
 
           <div className="flex items-center gap-2 mt-4">
@@ -531,6 +549,12 @@ export default function PurchasesInvoicesPanel({
   });
   const previewLog = previewLogQuery.data || [];
 
+  // صف الدرج يُقرأ من أحدث بيانات القائمة — فيتحدّث فوراً بعد تسجيل
+  // أو حذف دفعة دون إغلاق المعاينة.
+  const drawerRow = preview
+    ? invoices.find((invoice) => invoice.id === preview.id) || preview
+    : null;
+
   const accountFilterOptions = useMemo(() => {
     const options = buildExpenseAccountOptions(accounts);
     return [
@@ -555,6 +579,8 @@ export default function PurchasesInvoicesPanel({
   const createMut = useCreateAccountingPurchaseInvoice();
   const updateMut = useUpdateAccountingPurchaseInvoice();
   const deleteMut = useDeleteAccountingPurchaseInvoice();
+  const addPaymentMut = useAddPurchaseInvoicePayment();
+  const deletePaymentMut = useDeletePurchaseInvoicePayment();
 
   const counts = useMemo(() => {
     const initial = {
@@ -1249,10 +1275,10 @@ export default function PurchasesInvoicesPanel({
         <RecordPaymentModal
           invoice={paying}
           bankAccounts={bankAccounts}
-          isSubmitting={updateMut.isPending}
+          isSubmitting={addPaymentMut.isPending}
           onClose={() => setPaying(null)}
           onSubmit={(payload) =>
-            updateMut.mutate(payload, { onSuccess: () => setPaying(null) })
+            addPaymentMut.mutate(payload, { onSuccess: () => setPaying(null) })
           }
         />
       ) : null}
@@ -1296,7 +1322,7 @@ export default function PurchasesInvoicesPanel({
         : null}
 
       {/* المعاينة الجانبية — مراجعة سريعة دون مغادرة الجدول */}
-      {preview && typeof document !== "undefined"
+      {drawerRow && typeof document !== "undefined"
         ? createPortal(
             <div
               className="fixed inset-0 z-[950]"
@@ -1314,14 +1340,14 @@ export default function PurchasesInvoicesPanel({
                 <div className={`sticky top-0 bg-white dark:bg-slate-950 px-5 py-4 border-b ${ws.divider} flex items-center justify-between gap-3`}>
                   <div className="min-w-0">
                     <div className="font-bold text-slate-900 dark:text-white font-mono" dir="ltr">
-                      {preview.invoice_number}
+                      {drawerRow.invoice_number}
                     </div>
-                    {preview.contact_id ? (
+                    {drawerRow.contact_id ? (
                       <button
                         type="button"
                         onClick={() => {
                           const contact = contacts.find(
-                            (c) => Number(c.id) === Number(preview.contact_id),
+                            (c) => Number(c.id) === Number(drawerRow.contact_id),
                           );
                           if (contact) setSupplier360(contact);
                         }}
@@ -1329,16 +1355,16 @@ export default function PurchasesInvoicesPanel({
                         title="بطاقة المورد 360°"
                       >
                         <ScanEye className="w-3 h-3 shrink-0" />
-                        {preview.contact_name || preview.supplier_name}
+                        {drawerRow.contact_name || drawerRow.supplier_name}
                       </button>
                     ) : (
                       <div className="text-xs text-slate-500 dark:text-white/50 truncate mt-0.5">
-                        {preview.supplier_name || "بدون مورد"}
+                        {drawerRow.supplier_name || "بدون مورد"}
                       </div>
                     )}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <StatusPill status={preview.computed_status} />
+                    <StatusPill status={drawerRow.computed_status} />
                     <button
                       type="button"
                       onClick={() => setPreview(null)}
@@ -1354,19 +1380,19 @@ export default function PurchasesInvoicesPanel({
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">التاريخ</div>
-                      <div className="font-semibold" dir="ltr">{preview.invoice_date || "—"}</div>
+                      <div className="font-semibold" dir="ltr">{drawerRow.invoice_date || "—"}</div>
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">الاستحقاق</div>
-                      <div className="font-semibold" dir="ltr">{preview.due_date || "—"}</div>
+                      <div className="font-semibold" dir="ltr">{drawerRow.due_date || "—"}</div>
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">الفرع</div>
-                      <div className="font-semibold">{preview.branch_name || "—"}</div>
+                      <div className="font-semibold">{drawerRow.branch_name || "—"}</div>
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">بنك السداد</div>
-                      <div className="font-semibold">{preview.paid_bank_name || "—"}</div>
+                      <div className="font-semibold">{drawerRow.paid_bank_name || "—"}</div>
                     </div>
                   </div>
 
@@ -1374,30 +1400,30 @@ export default function PurchasesInvoicesPanel({
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">المبلغ</div>
                       <div className="text-sm font-bold tabular-nums" dir="ltr">
-                        {formatMoney(preview.total_amount, preview.currency)}
+                        {formatMoney(drawerRow.total_amount, drawerRow.currency)}
                       </div>
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">المدفوع</div>
                       <div className="text-sm font-bold tabular-nums text-[#0e7a5f] dark:text-emerald-200" dir="ltr">
-                        {formatMoney(preview.paid_amount, preview.currency)}
+                        {formatMoney(drawerRow.paid_amount, drawerRow.currency)}
                       </div>
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">المتبقي</div>
                       <div className="text-sm font-bold tabular-nums text-amber-700 dark:text-amber-200" dir="ltr">
-                        {formatMoney(preview.balance_due, preview.currency)}
+                        {formatMoney(drawerRow.balance_due, drawerRow.currency)}
                       </div>
                     </div>
                   </div>
 
-                  {Array.isArray(preview.items) && preview.items.length > 0 ? (
+                  {Array.isArray(drawerRow.items) && drawerRow.items.length > 0 ? (
                     <div>
                       <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
-                        البنود ({preview.items.length})
+                        البنود ({drawerRow.items.length})
                       </div>
                       <div className="space-y-1.5">
-                        {preview.items.map((item) => (
+                        {drawerRow.items.map((item) => (
                           <div
                             key={item.id}
                             className="flex items-center justify-between gap-2 text-xs border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
@@ -1416,6 +1442,97 @@ export default function PurchasesInvoicesPanel({
                       </div>
                     </div>
                   ) : null}
+
+                  {/* سجل الدفعات — كل دفعة بتاريخها وبنكها وإيصالها */}
+                  {(() => {
+                    const payments = Array.isArray(drawerRow.payments)
+                      ? drawerRow.payments
+                      : [];
+                    const recorded = payments.reduce(
+                      (acc, payment) => acc + moneyValue(payment.amount),
+                      0,
+                    );
+                    // ما دُفع قبل تفعيل السجل يظهر سطراً افتراضياً
+                    // حتى يبقى المجموع مطابقاً لرأس الفاتورة.
+                    const legacy =
+                      Math.round(
+                        (moneyValue(drawerRow.paid_amount) - recorded) * 100,
+                      ) / 100;
+                    if (payments.length === 0 && legacy <= 0) return null;
+                    return (
+                      <div>
+                        <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
+                          سجل الدفعات ({payments.length + (legacy > 0 ? 1 : 0)})
+                        </div>
+                        <div className="space-y-1.5">
+                          {legacy > 0 ? (
+                            <div className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5">
+                              <span className="flex-1 text-slate-500 dark:text-white/45">
+                                رصيد مدفوع سابق (قبل تفعيل سجل الدفعات)
+                              </span>
+                              <span className="font-bold tabular-nums shrink-0" dir="ltr">
+                                {legacy.toFixed(2)}
+                              </span>
+                            </div>
+                          ) : null}
+                          {payments.map((payment) => (
+                            <div
+                              key={payment.id}
+                              className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
+                            >
+                              <span
+                                className="text-slate-400 dark:text-white/35 font-mono shrink-0"
+                                dir="ltr"
+                              >
+                                {payment.payment_date}
+                              </span>
+                              <span className="flex-1 min-w-0 truncate text-slate-700 dark:text-white/70">
+                                {payment.bank_name || "بدون بنك"}
+                                {payment.notes ? ` — ${payment.notes}` : ""}
+                                {payment.created_by_employee_name
+                                  ? ` (${payment.created_by_employee_name})`
+                                  : ""}
+                              </span>
+                              {payment.receipt_url ? (
+                                <a
+                                  href={payment.receipt_url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-slate-400 hover:text-[#0e7a5f] dark:text-white/40 dark:hover:text-emerald-300 shrink-0"
+                                  title="إيصال الدفعة"
+                                >
+                                  <Paperclip className="w-3 h-3" />
+                                </a>
+                              ) : null}
+                              <span
+                                className={`font-bold tabular-nums shrink-0 ${moneyValue(payment.amount) < 0 ? "text-rose-700 dark:text-rose-300" : ""}`}
+                                dir="ltr"
+                              >
+                                {moneyValue(payment.amount).toFixed(2)}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (
+                                    window.confirm(
+                                      `حذف الدفعة ${moneyValue(payment.amount).toFixed(2)} بتاريخ ${payment.payment_date}؟ سيُخصم من مدفوع الفاتورة.`,
+                                    )
+                                  ) {
+                                    deletePaymentMut.mutate({ id: payment.id });
+                                  }
+                                }}
+                                className="text-slate-300 hover:text-red-600 dark:text-white/25 dark:hover:text-red-300 shrink-0"
+                                title="حذف الدفعة"
+                                aria-label="حذف الدفعة"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
 
                   {previewLog.length > 0 ? (
                     <div>
@@ -1450,11 +1567,11 @@ export default function PurchasesInvoicesPanel({
                   ) : null}
 
                   <div className="flex items-center gap-2 flex-wrap pt-2">
-                    {moneyValue(preview.balance_due) > 0 ? (
+                    {moneyValue(drawerRow.balance_due) > 0 ? (
                       <button
                         type="button"
                         onClick={() => {
-                          setPaying(preview);
+                          setPaying(drawerRow);
                           setPreview(null);
                         }}
                         className={`${ws.btnPrimary} px-4 py-2 text-sm`}
@@ -1466,7 +1583,7 @@ export default function PurchasesInvoicesPanel({
                     <button
                       type="button"
                       onClick={() => {
-                        setEditing(preview);
+                        setEditing(drawerRow);
                         setPreview(null);
                       }}
                       className={`${ws.btnNeutral} px-4 py-2 text-sm`}
@@ -1474,9 +1591,9 @@ export default function PurchasesInvoicesPanel({
                       <Pencil className="w-4 h-4" />
                       تعديل كامل
                     </button>
-                    {preview.attachment_url ? (
+                    {drawerRow.attachment_url ? (
                       <a
-                        href={preview.attachment_url}
+                        href={drawerRow.attachment_url}
                         target="_blank"
                         rel="noreferrer"
                         className={`${ws.btnNeutral} px-4 py-2 text-sm`}
@@ -1485,9 +1602,9 @@ export default function PurchasesInvoicesPanel({
                         المرفق
                       </a>
                     ) : null}
-                    {preview.payment_receipt_url ? (
+                    {drawerRow.payment_receipt_url ? (
                       <a
-                        href={preview.payment_receipt_url}
+                        href={drawerRow.payment_receipt_url}
                         target="_blank"
                         rel="noreferrer"
                         className={`${ws.btnNeutral} px-4 py-2 text-sm`}
