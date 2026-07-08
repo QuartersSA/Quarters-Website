@@ -1,8 +1,16 @@
 "use client";
 
 import React from "react";
-import { Pencil, Trash2, Contact, Hash, MapPin, CheckCircle2 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import {
+  Pencil,
+  Trash2,
+  Contact,
+  Hash,
+  MapPin,
+  CheckCircle2,
+  ScanEye,
+} from "lucide-react";
+import { ws } from "@/components/Workspace/uiPurchases";
 
 const COUNTRY_LABELS = {
   SA: "السعودية",
@@ -24,6 +32,7 @@ export default function ContactsList({
   onEdit,
   onDelete,
   onAdd,
+  onView = null,
 }) {
   if (isLoading) {
     return (
@@ -110,7 +119,7 @@ export default function ContactsList({
                   <td className="py-3 px-3 whitespace-nowrap">
                     {c.vat_registered ? (
                       <span
-                        className={`${ws.pill} bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25`}
+                        className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`}
                       >
                         <CheckCircle2 className="w-3 h-3" />
                         مسجلة
@@ -146,7 +155,7 @@ export default function ContactsList({
                     <span
                       className={`${ws.pill} ${
                         isActive
-                          ? "bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25"
+                          ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
                           : "bg-slate-100 dark:bg-white/[0.04] text-slate-500 dark:text-white/50 border-slate-200 dark:border-white/10"
                       }`}
                     >
@@ -155,6 +164,16 @@ export default function ContactsList({
                   </td>
                   <td className="py-3 px-3">
                     <div className="flex items-center justify-end gap-1">
+                      {onView ? (
+                        <button
+                          type="button"
+                          onClick={() => onView(c)}
+                          className={`${ws.iconButton} w-8 h-8 hover:bg-[#e7f2ee] dark:hover:bg-emerald-500/15 hover:border-[#c9e2d8] dark:hover:border-emerald-500/30 hover:text-[#0e7a5f] dark:hover:text-emerald-200`}
+                          title="بطاقة المورد 360°"
+                        >
+                          <ScanEye className="w-3.5 h-3.5" />
+                        </button>
+                      ) : null}
                       <button
                         type="button"
                         onClick={() => onEdit(c)}

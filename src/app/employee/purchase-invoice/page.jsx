@@ -12,7 +12,7 @@ import {
   Search,
   Truck,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import PurchaseInvoiceModal from "@/components/Accounting/PurchaseInvoiceModal";
 import ContactModal from "@/components/Accounting/ContactModal";
 import {
@@ -30,6 +30,7 @@ export default function PurchaseInvoiceEntryPage() {
   const [contacts, setContacts] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
+  const [branches, setBranches] = useState([]);
   const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(true);
   // Landing first — the invoice editor opens on demand only.
@@ -87,20 +88,26 @@ export default function PurchaseInvoiceEntryPage() {
 
     const load = async () => {
       try {
-        const [contactsList, accountsRes, banksRes] = await Promise.all([
-          loadContacts(),
-          purchaseInvoiceFetch("/api/accounting/accounts"),
-          purchaseInvoiceFetch("/api/accounting/bank-accounts"),
-        ]);
+        const [contactsList, accountsRes, banksRes, branchesRes] =
+          await Promise.all([
+            loadContacts(),
+            purchaseInvoiceFetch("/api/accounting/accounts"),
+            purchaseInvoiceFetch("/api/accounting/bank-accounts"),
+            purchaseInvoiceFetch("/api/branches"),
+          ]);
         if (cancelled || contactsList === null) return;
         const accountsData = await accountsRes.json().catch(() => ({}));
         const banksData = await banksRes.json().catch(() => ({}));
+        const branchesData = await branchesRes.json().catch(() => ({}));
         if (cancelled) return;
         setAccounts(
           Array.isArray(accountsData?.accounts) ? accountsData.accounts : [],
         );
         setBankAccounts(
           Array.isArray(banksData?.accounts) ? banksData.accounts : [],
+        );
+        setBranches(
+          Array.isArray(branchesData?.branches) ? branchesData.branches : [],
         );
         setLoading(false);
       } catch (error) {
@@ -237,7 +244,7 @@ export default function PurchaseInvoiceEntryPage() {
             ) : (
               <>
                 {lastSaved ? (
-                  <div className="bg-emerald-500/10 border border-emerald-400/25 rounded-2xl p-3 text-emerald-200 text-sm flex items-center justify-center gap-2">
+                  <div className="bg-[#0e7a5f]/10 border border-[#0e7a5f]/25 rounded-2xl p-3 text-emerald-200 text-sm flex items-center justify-center gap-2">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
                     تم حفظ الفاتورة
                     {typeof lastSaved === "string"
@@ -305,7 +312,7 @@ export default function PurchaseInvoiceEntryPage() {
             </div>
 
             {supplierNotice ? (
-              <div className="bg-emerald-500/10 border border-emerald-400/25 rounded-2xl p-2.5 text-emerald-200 text-xs flex items-center justify-center gap-2">
+              <div className="bg-[#0e7a5f]/10 border border-[#0e7a5f]/25 rounded-2xl p-2.5 text-emerald-200 text-xs flex items-center justify-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                 {supplierNotice}
               </div>
@@ -391,6 +398,7 @@ export default function PurchaseInvoiceEntryPage() {
           contacts={contacts}
           accounts={accounts}
           bankAccounts={bankAccounts}
+          branches={branches}
           isSubmitting={submitting}
           onClose={() => setEditorOpen(false)}
           onSubmit={handleSubmit}

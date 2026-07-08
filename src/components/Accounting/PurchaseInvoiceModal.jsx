@@ -15,24 +15,23 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import useUpload from "@/utils/useUpload";
 // authedFetch prefers the admin token but falls back to field-flow
 // tokens — the modal is also used by /employee/purchase-invoice.
 import { authedFetch } from "@/utils/apiAuth";
 
+// نموذج الحالات المبسّط (حسب مستند التصميم): أربع حالات كلها محسوبة
+// من المبالغ والاستحقاق — لا «مسودة» ولا «معتمدة» ولا اختيار يدوي.
+// غير المدفوعة «بانتظار الاعتماد» والمحاسب يسددها كلياً أو جزئياً.
+// قيمة pending_payment تبقى في قاعدة البيانات للتوافق مع الصفوف
+// القديمة — العرض فقط تغيّر، و«new» القديمة تُعرض بنفس التسمية.
 export const PURCHASE_INVOICE_STATUS_OPTIONS = [
-  { value: "new", label: "جديد" },
-  { value: "pending_payment", label: "بانتظار الدفع" },
-  { value: "partial_paid", label: "مدفوع جزئي" },
-  { value: "paid", label: "مدفوع" },
-  { value: "overdue", label: "متأخر" },
-];
-
-const WORKFLOW_OPTIONS = [
-  { value: "new", label: "جديد" },
-  { value: "pending_payment", label: "بانتظار الدفع" },
+  { value: "pending_payment", label: "بانتظار الاعتماد" },
+  { value: "partial_paid", label: "مدفوعة جزئياً" },
+  { value: "paid", label: "مدفوعة" },
+  { value: "overdue", label: "متأخرة" },
 ];
 
 const CURRENCY_OPTIONS = [
@@ -908,38 +907,41 @@ function formatMoney(value, currency = "SAR") {
   })} ${currency}`;
 }
 
-function computedStatus({ workflowStatus, totalAmount, paidAmount, dueDate }) {
+function computedStatus({ totalAmount, paidAmount, dueDate }) {
   const total = moneyValue(totalAmount);
   const paid = moneyValue(paidAmount);
   const balance = Math.max(total - paid, 0);
   if (total > 0 && paid >= total) return "paid";
   if (dueDate && dueDate < todayRiyadh() && balance > 0) return "overdue";
   if (paid > 0) return "partial_paid";
-  if (workflowStatus === "new") return "new";
   return "pending_payment";
 }
 
 export function purchaseInvoiceStatusLabel(value) {
+  // Legacy rows may still carry the retired "new" status.
+  if (value === "new") return "بانتظار الاعتماد";
   return (
     PURCHASE_INVOICE_STATUS_OPTIONS.find((option) => option.value === value)
-      ?.label || "جديد"
+      ?.label || "بانتظار الاعتماد"
   );
 }
 
+// ألوان الحالات حرفياً من لوحة مستند المفهوم — مدفوعة ‎#178A5B،
+// جزئية ‎#0E7490، متأخرة ‎#B5443C، بانتظار الاعتماد ‎#B7791F —
+// معزولة عن أخضر الهوية حتى لا يختلط «زر رئيسي» بـ«مدفوع».
+// الوضع الداكن على تدرجاته السابقة.
 export function purchaseInvoiceStatusClass(value) {
   if (value === "paid") {
-    return "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-500/25";
+    return "bg-[#e6f4ec] dark:bg-emerald-500/15 text-[#178a5b] dark:text-emerald-200 border-[#b7ddc7] dark:border-emerald-500/25";
   }
   if (value === "partial_paid") {
-    return "bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-200 border-indigo-200 dark:border-indigo-500/25";
+    return "bg-[#e4f2f5] dark:bg-indigo-500/15 text-[#0e7490] dark:text-indigo-200 border-[#b4dde5] dark:border-indigo-500/25";
   }
   if (value === "overdue") {
-    return "bg-rose-100 dark:bg-rose-500/15 text-rose-700 dark:text-rose-200 border-rose-200 dark:border-rose-500/25";
+    return "bg-[#f9ebe9] dark:bg-rose-500/15 text-[#b5443c] dark:text-rose-200 border-[#e8c4bf] dark:border-rose-500/25";
   }
-  if (value === "pending_payment") {
-    return "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-500/25";
-  }
-  return "bg-sky-100 dark:bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-500/25";
+  // pending_payment + legacy "new" both read بانتظار الاعتماد.
+  return "bg-[#faf3e3] dark:bg-amber-500/15 text-[#b7791f] dark:text-amber-200 border-[#ecd9ab] dark:border-amber-500/25";
 }
 
 // Expense accounts from شجرة الحسابات as a REAL hierarchy: the
@@ -1114,6 +1116,7 @@ export default function PurchaseInvoiceModal({
   contacts = [],
   accounts = [],
   bankAccounts = [],
+  branches = [],
   contactStats = null,
   isSubmitting,
   onClose,
@@ -1130,11 +1133,15 @@ export default function PurchaseInvoiceModal({
   const [discount, setDiscount] = useState("0.00"); // خصم قبل الضريبة
   const [paidAmount, setPaidAmount] = useState("0.00");
   const [paidBankAccountId, setPaidBankAccountId] = useState("");
+  // «إرسال إلى الاعتماد»: تُنشأ الفاتورة غير مدفوعة إجبارياً —
+  // حقول الدفع تختفي وتخرج بحالة «بانتظار الاعتماد» ليسددها
+  // المحاسب لاحقاً من سجل الدفعات. للإنشاء فقط، لا للتعديل.
+  const [sendToApproval, setSendToApproval] = useState(false);
   // إيصال الدفع — اختياري، يظهر مع وجود مبلغ مدفوع.
   const [paymentReceiptUrl, setPaymentReceiptUrl] = useState("");
   const [paymentReceiptName, setPaymentReceiptName] = useState("");
   const [receiptUploading, setReceiptUploading] = useState(false);
-  const [workflowStatus, setWorkflowStatus] = useState("new");
+  const [branchId, setBranchId] = useState("");
   const [notes, setNotes] = useState("");
   const [attachmentUrl, setAttachmentUrl] = useState("");
   const [attachmentName, setAttachmentName] = useState("");
@@ -1224,10 +1231,11 @@ export default function PurchaseInvoiceModal({
         ? String(invoice.paid_bank_account_id)
         : "",
     );
+    setSendToApproval(false);
     setPaymentReceiptUrl(invoice?.payment_receipt_url || "");
     setPaymentReceiptName("");
     setReceiptUploading(false);
-    setWorkflowStatus(invoice?.workflow_status || "new");
+    setBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
     setNotes(invoice?.notes || "");
     setAttachmentUrl(invoice?.attachment_url || "");
     setAttachmentName("");
@@ -1365,7 +1373,6 @@ export default function PurchaseInvoiceModal({
   };
 
   const status = computedStatus({
-    workflowStatus,
     totalAmount: totals.total,
     paidAmount,
     dueDate,
@@ -1411,6 +1418,10 @@ export default function PurchaseInvoiceModal({
         tax_rate: moneyValue(line.tax_rate),
         amount_includes_tax: !!line.amount_includes_tax,
       }));
+    // «إرسال إلى الاعتماد» يجبر الفاتورة غير مدفوعة مهما كانت
+    // الحقول — والخادم يعيد فرض ذلك من العلم نفسه.
+    const forApproval = sendToApproval && !isEditing;
+    const effectivePaid = forApproval ? 0 : moneyValue(paidAmount);
     const payload = {
       invoice_number: invoiceNumber.trim() || undefined,
       contact_id: contactId || null,
@@ -1423,12 +1434,15 @@ export default function PurchaseInvoiceModal({
       discount_amount: totals.discount,
       tax_amount: totals.tax,
       total_amount: totals.total,
-      paid_amount: moneyValue(paidAmount),
+      paid_amount: effectivePaid,
       paid_bank_account_id:
-        moneyValue(paidAmount) > 0 ? paidBankAccountId || null : null,
+        effectivePaid > 0 ? paidBankAccountId || null : null,
       payment_receipt_url:
-        moneyValue(paidAmount) > 0 ? paymentReceiptUrl || null : null,
-      workflow_status: workflowStatus,
+        effectivePaid > 0 ? paymentReceiptUrl || null : null,
+      submit_for_approval: forApproval,
+      // القيمة الثابتة المتبقية — الحالة الفعلية تُحسب من المبالغ.
+      workflow_status: "pending_payment",
+      branch_id: branchId || null,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
     };
@@ -1945,10 +1959,10 @@ export default function PurchaseInvoiceModal({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading || scanBusy}
-          className="flex-1 m-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 hover:border-emerald-400 dark:hover:border-emerald-400/50 hover:bg-emerald-50/40 dark:hover:bg-emerald-500/[0.04] transition-colors flex flex-col items-center justify-center gap-3 p-8 text-center disabled:opacity-50"
+          className="flex-1 m-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 hover:border-[#0e7a5f] dark:hover:border-emerald-400/50 hover:bg-[#e7f2ee]/40 dark:hover:bg-emerald-500/[0.04] transition-colors flex flex-col items-center justify-center gap-3 p-8 text-center disabled:opacity-50"
         >
           {uploading || scanBusy ? (
-            <Loader2 className="w-10 h-10 text-emerald-600 dark:text-emerald-300 animate-spin" />
+            <Loader2 className="w-10 h-10 text-[#0e7a5f] dark:text-emerald-300 animate-spin" />
           ) : (
             <ScanLine className="w-10 h-10 text-slate-400 dark:text-white/35" />
           )}
@@ -1976,7 +1990,7 @@ export default function PurchaseInvoiceModal({
       <div
         className={`${ws.topBar} px-4 sm:px-6 py-3 flex items-center gap-3 border-b ${ws.divider} shrink-0`}
       >
-        <div className={`${ws.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200 shrink-0`}>
+        <div className={`${ws.iconBox} w-9 h-9 text-[#0e7a5f] dark:text-emerald-200 shrink-0`}>
           <FileText className="w-4.5 h-4.5" />
         </div>
         <div className="min-w-0 flex-1">
@@ -2059,7 +2073,7 @@ export default function PurchaseInvoiceModal({
             {scanSummary ? (
               <div className={`${ws.glassSoft} ${ws.card} p-3 space-y-1.5`}>
                 {scanSummary.filled.length > 0 ? (
-                  <div className="flex items-center gap-2 flex-wrap text-xs text-emerald-800 dark:text-emerald-200">
+                  <div className="flex items-center gap-2 flex-wrap text-xs text-[#0b3d31] dark:text-emerald-200">
                     <Sparkles className="w-3.5 h-3.5 shrink-0" />
                     <span>
                       {scanSummary.smart ? "تحليل ذكي — تمت تعبئة:" : "تمت تعبئة:"}
@@ -2067,7 +2081,7 @@ export default function PurchaseInvoiceModal({
                     {scanSummary.filled.map((label) => (
                       <span
                         key={label}
-                        className={`${ws.pill} bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25`}
+                        className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`}
                       >
                         {label}
                       </span>
@@ -2187,19 +2201,28 @@ export default function PurchaseInvoiceModal({
                     className={`${ws.input} px-3 py-2.5`}
                   />
                 </div>
-                <div className="sm:col-span-2">
-                  <FieldLabel>حالة الفاتورة الأساسية</FieldLabel>
-                  <GlassSelect
-                    value={workflowStatus}
-                    onChange={setWorkflowStatus}
-                    options={WORKFLOW_OPTIONS}
-                    placeholder="اختر الحالة"
-                    buttonClassName="text-sm py-2.5 px-3"
-                  />
-                  <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
-                    «مدفوع»، «مدفوع جزئياً»، و«متأخر» تُحسب تلقائياً من الأرقام
-                    وتاريخ الاستحقاق.
+                {branches.length > 0 ? (
+                  <div>
+                    <FieldLabel>الفرع</FieldLabel>
+                    <GlassSelect
+                      value={branchId}
+                      onChange={setBranchId}
+                      options={[
+                        { value: "", label: "بدون تحديد فرع" },
+                        ...branches.map((branch) => ({
+                          value: String(branch.id),
+                          label: branch.name,
+                        })),
+                      ]}
+                      placeholder="بدون تحديد فرع"
+                      buttonClassName="text-sm py-2.5 px-3"
+                    />
                   </div>
+                ) : null}
+                <div className="sm:col-span-2 text-[11px] text-slate-500 dark:text-white/45">
+                  الحالة تلقائية بالكامل: بدون دفع «بانتظار الاعتماد»، وبعد
+                  السداد «مدفوعة جزئياً» أو «مدفوعة»، و«متأخرة» عند تجاوز
+                  الاستحقاق.
                 </div>
               </div>
             </div>
@@ -2325,7 +2348,7 @@ export default function PurchaseInvoiceModal({
                             }
                             className={`${ws.pill} justify-center text-[10px] py-1 cursor-pointer select-none ${
                               line.amount_includes_tax
-                                ? "bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25"
+                                ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
                                 : "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10"
                             }`}
                             title="بدّل بين سعر شامل الضريبة وسعر خالٍ منها"
@@ -2405,18 +2428,77 @@ export default function PurchaseInvoiceModal({
                 </div>
               </div>
 
+              {/* طريقة الإنشاء: دفع الآن أو إرسال إلى الاعتماد
+                  (غير مدفوعة إجبارياً). للإنشاء فقط. */}
+              {!isEditing ? (
+                <div className={`${ws.segWrap} w-full`}>
+                  <button
+                    type="button"
+                    onClick={() => setSendToApproval(false)}
+                    className={`${ws.segBtn} flex-1 text-xs ${!sendToApproval ? ws.segActive : ws.segInactive}`}
+                  >
+                    تسجيل دفع الآن
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSendToApproval(true);
+                      setPaidAmount("0.00");
+                      setPaidBankAccountId("");
+                      setPaymentReceiptUrl("");
+                      setPaymentReceiptName("");
+                    }}
+                    className={`${ws.segBtn} flex-1 text-xs ${sendToApproval ? ws.segActive : ws.segInactive}`}
+                  >
+                    إرسال إلى الاعتماد — غير مدفوعة
+                  </button>
+                </div>
+              ) : null}
+
+              {sendToApproval && !isEditing ? (
+                <div className={`${ws.glassSoft} ${ws.card} p-3 flex items-center justify-between gap-3`}>
+                  <div className="text-xs text-slate-600 dark:text-white/60 leading-relaxed">
+                    ستُنشأ الفاتورة <b>غير مدفوعة</b> بحالة «بانتظار
+                    الاعتماد» — يسجل المحاسب دفعاتها لاحقاً (كلياً أو
+                    جزئياً) من سجل الدفعات.
+                  </div>
+                  <span
+                    className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold shrink-0 ${purchaseInvoiceStatusClass("pending_payment")}`}
+                  >
+                    {purchaseInvoiceStatusLabel("pending_payment")}
+                  </span>
+                </div>
+              ) : null}
+
+              {!(sendToApproval && !isEditing) ? (
+              <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div>
                   <FieldLabel>المبلغ المدفوع</FieldLabel>
-                  <input
-                    type="number"
-                    value={paidAmount}
-                    onChange={(event) => setPaidAmount(event.target.value)}
-                    className={`${ws.input} px-3 py-2.5 text-right`}
-                    step="0.01"
-                    min="0"
-                    dir="ltr"
-                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={paidAmount}
+                      onChange={(event) => setPaidAmount(event.target.value)}
+                      className={`${ws.input} px-3 py-2.5 text-right flex-1`}
+                      step="0.01"
+                      min="0"
+                      dir="ltr"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setPaidAmount(
+                          totals.total > 0 ? totals.total.toFixed(2) : "0.00",
+                        )
+                      }
+                      disabled={totals.total <= 0}
+                      className={`${ws.btnNeutral} px-3 py-2.5 text-xs shrink-0 whitespace-nowrap disabled:opacity-50`}
+                      title="تعبئة المدفوع بكامل مبلغ الفاتورة"
+                    >
+                      مدفوعة بالكامل
+                    </button>
+                  </div>
                   {moneyValue(paidAmount) > totals.total ? (
                     <div className="text-[11px] text-rose-700 dark:text-rose-300 mt-1">
                       المبلغ المدفوع لا يمكن أن يتجاوز مبلغ الفاتورة.
@@ -2523,6 +2605,8 @@ export default function PurchaseInvoiceModal({
                   />
                 </div>
               ) : null}
+              </>
+              ) : null}
             </div>
 
             {/* ملاحظات */}
@@ -2543,7 +2627,9 @@ export default function PurchaseInvoiceModal({
                 className={`${ws.btnPrimary} px-5 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 <Save className="w-4 h-4" />
-                حفظ الفاتورة
+                {sendToApproval && !isEditing
+                  ? "إرسال إلى الاعتماد"
+                  : "حفظ الفاتورة"}
               </button>
               <button
                 type="button"

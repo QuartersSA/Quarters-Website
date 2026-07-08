@@ -18,6 +18,9 @@ import NeonAdapter from "./adapter";
 import { getHTMLForErrorPage } from "./get-html-for-error-page";
 import { isAuthAction } from "./is-auth-action";
 import { API_BASENAME, api } from "./route-builder";
+// المجدول الداخلي للمشتريات (تقارير واتساب المجدولة + الفواتير
+// المتكررة) — يعمل داخل عملية الخادم نفسها فلا يحتاج cron خارجياً.
+import { startPurchaseAutomationTimer } from "../src/app/api/utils/purchaseAutomation";
 neonConfig.webSocketConstructor = ws;
 
 const als = new AsyncLocalStorage<{ requestId: string }>();
@@ -281,6 +284,8 @@ app.use("/api/auth/*", async (c, next) => {
   return next();
 });
 app.route(API_BASENAME, api);
+
+startPurchaseAutomationTimer();
 
 export default createHonoServer({
   app,

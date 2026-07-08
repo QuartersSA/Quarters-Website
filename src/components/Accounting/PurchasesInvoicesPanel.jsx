@@ -18,13 +18,15 @@ import {
   Pencil,
   Plus,
   RefreshCw,
+  Repeat,
   Save,
+  ScanEye,
   Search,
   Trash2,
   X,
 } from "lucide-react";
 import useUpload from "@/utils/useUpload";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import PurchaseInvoiceModal, {
   PURCHASE_INVOICE_STATUS_OPTIONS,
@@ -34,14 +36,21 @@ import PurchaseInvoiceModal, {
 } from "@/components/Accounting/PurchaseInvoiceModal";
 import {
   useAccountingPurchaseInvoices,
+  useAddPurchaseInvoicePayment,
   useCreateAccountingPurchaseInvoice,
   useDeleteAccountingPurchaseInvoice,
+  useDeletePurchaseInvoicePayment,
   useUpdateAccountingPurchaseInvoice,
 } from "@/hooks/useAccountingPurchaseInvoices";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
+import { useQuery } from "@tanstack/react-query";
+import { authedFetch } from "@/utils/apiAuth";
+import { queryKeys } from "@/utils/queryKeys";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
+import RecurringInvoicesModal from "@/components/Accounting/RecurringInvoicesModal";
+import Supplier360Modal from "@/components/Accounting/Supplier360Modal";
 
 const STATUS_FILTER_OPTIONS = [
   { value: "", label: "كل الحالات" },
@@ -82,7 +91,7 @@ function SummaryCard({ label, value, icon: Icon, tone = "slate", suffix }) {
     tone === "rose"
       ? "text-rose-700 dark:text-rose-200"
       : tone === "emerald"
-        ? "text-emerald-700 dark:text-emerald-200"
+        ? "text-[#0e7a5f] dark:text-emerald-200"
         : tone === "amber"
           ? "text-amber-700 dark:text-amber-200"
           : "text-slate-700 dark:text-white/80";
@@ -122,9 +131,8 @@ function StatusPill({ status }) {
   );
 }
 
-// Quick payment: bump paid_amount without opening the full edit form.
-// PUT requires the complete invoice payload, so the modal replays the
-// row's fields and only changes the paid amount.
+// تسجيل دفعة — سطر جديد في سجل دفعات الفاتورة: مبلغ + تاريخ + بنك
+// + إيصال + ملاحظة. الخادم يحدّث رأس الفاتورة (paid_amount) ذرّياً.
 function RecordPaymentModal({
   invoice,
   bankAccounts = [],
@@ -137,6 +145,8 @@ function RecordPaymentModal({
     0,
   );
   const [amount, setAmount] = useState("");
+  const [paymentDate, setPaymentDate] = useState("");
+  const [notes, setNotes] = useState("");
   const [bankAccountId, setBankAccountId] = useState("");
   // إيصال الدفع — اختياري.
   const [receiptUrl, setReceiptUrl] = useState("");
@@ -148,10 +158,14 @@ function RecordPaymentModal({
   useEffect(() => {
     if (!invoice) return;
     setAmount(balance.toFixed(2));
+    setPaymentDate(
+      new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Riyadh" }),
+    );
+    setNotes("");
     setBankAccountId(
       invoice.paid_bank_account_id ? String(invoice.paid_bank_account_id) : "",
     );
-    setReceiptUrl(invoice.payment_receipt_url || "");
+    setReceiptUrl("");
     setReceiptName("");
     setReceiptUploading(false);
     // Seed with the outstanding balance each time a new invoice opens.
@@ -198,25 +212,13 @@ function RecordPaymentModal({
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!valid || isSubmitting) return;
-    const newPaid =
-      Math.round((moneyValue(invoice.paid_amount) + paymentValue) * 100) / 100;
     onSubmit({
-      id: invoice.id,
-      invoice_number: invoice.invoice_number,
-      contact_id: invoice.contact_id || null,
-      expense_account_id: invoice.expense_account_id || null,
-      supplier_name: invoice.supplier_name || null,
-      invoice_date: invoice.invoice_date,
-      due_date: invoice.due_date || null,
-      currency: invoice.currency || "SAR",
-      subtotal_amount: invoice.subtotal_amount,
-      tax_amount: invoice.tax_amount,
-      total_amount: moneyValue(invoice.total_amount),
-      paid_amount: Math.min(newPaid, moneyValue(invoice.total_amount)),
-      paid_bank_account_id: bankAccountId || null,
-      payment_receipt_url: receiptUrl || null,
-      workflow_status: invoice.workflow_status || "pending_payment",
-      notes: invoice.notes || null,
+      invoice_id: invoice.id,
+      amount: paymentValue,
+      payment_date: paymentDate || null,
+      bank_account_id: bankAccountId || null,
+      receipt_url: receiptUrl || null,
+      notes: notes.trim() || null,
     });
   };
 
@@ -231,7 +233,7 @@ function RecordPaymentModal({
       <div className={`${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5`}>
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">
-            <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+            <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
               <HandCoins className="w-5 h-5" />
             </div>
             <div>
@@ -262,7 +264,7 @@ function RecordPaymentModal({
           </div>
           <div>
             <div className="text-[11px] text-slate-500 dark:text-white/45">المدفوع</div>
-            <div className="text-sm font-bold text-emerald-700 dark:text-emerald-200 mt-0.5" dir="ltr">
+            <div className="text-sm font-bold text-[#0e7a5f] dark:text-emerald-200 mt-0.5" dir="ltr">
               {formatMoney(invoice.paid_amount, invoice.currency)}
             </div>
           </div>
@@ -294,6 +296,17 @@ function RecordPaymentModal({
               الدفعة أكبر من الرصيد المتبقي.
             </div>
           ) : null}
+
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1 mt-3">
+            تاريخ الدفعة
+          </div>
+          <input
+            type="date"
+            value={paymentDate}
+            onChange={(event) => setPaymentDate(event.target.value)}
+            className={`${ws.input} px-3 py-2.5`}
+            dir="ltr"
+          />
 
           <div className="text-xs text-slate-600 dark:text-white/55 mb-1 mt-3">
             الحساب البنكي المدفوع منه
@@ -368,6 +381,18 @@ function RecordPaymentModal({
             className="hidden"
           />
 
+          <div className="text-xs text-slate-600 dark:text-white/55 mb-1 mt-3">
+            ملاحظة{" "}
+            <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
+          </div>
+          <input
+            type="text"
+            value={notes}
+            onChange={(event) => setNotes(event.target.value)}
+            placeholder="مثال: تحويل بنكي — دفعة أولى"
+            className={`${ws.input} px-3 py-2`}
+          />
+
           <div className="flex items-center gap-2 mt-4">
             <button
               type="submit"
@@ -396,17 +421,84 @@ export default function PurchasesInvoicesPanel({
   employeeId,
   isAdmin,
   autoOpenAdd = false,
+  initialStatus = "",
   onIntentConsumed,
 }) {
   const [q, setQ] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(initialStatus);
   const [accountFilter, setAccountFilter] = useState("");
+  const [branchFilter, setBranchFilter] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [includeInactive, setIncludeInactive] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState(null);
   const [paying, setPaying] = useState(null);
+  // المعاينة الجانبية: نقرة على الصف تفتح درجاً دون مغادرة الجدول.
+  const [preview, setPreview] = useState(null);
+  // تحديد جماعي: تصدير المحدد فقط.
+  const [selected, setSelected] = useState(() => new Set());
+  // صف نشط للتنقل بالأسهم (↑↓ ثم Enter للمعاينة).
+  const [activeIdx, setActiveIdx] = useState(-1);
+  // رقائق فلترة محفوظة على هذا الجهاز.
+  const [savedFilters, setSavedFilters] = useState([]);
+  // قوالب الفواتير المتكررة + بطاقة المورد 360°.
+  const [showRecurring, setShowRecurring] = useState(false);
+  const [supplier360, setSupplier360] = useState(null);
+  const searchRef = React.useRef(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("purchInvSavedFilters");
+      if (raw) setSavedFilters(JSON.parse(raw));
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const persistSavedFilters = (list) => {
+    setSavedFilters(list);
+    try {
+      localStorage.setItem("purchInvSavedFilters", JSON.stringify(list));
+    } catch {
+      // ignore
+    }
+  };
+
+  const hasActiveFilters =
+    !!q || !!status || !!accountFilter || !!branchFilter || !!dateFrom || !!dateTo;
+
+  const saveCurrentFilter = () => {
+    const name = window.prompt("اسم الفلتر المحفوظ:");
+    if (!name || !name.trim()) return;
+    const next = [
+      ...savedFilters.filter((f) => f.name !== name.trim()),
+      { name: name.trim(), q, status, accountFilter, branchFilter, dateFrom, dateTo },
+    ];
+    persistSavedFilters(next);
+  };
+
+  const applySavedFilter = (filter) => {
+    setQ(filter.q || "");
+    setStatus(filter.status || "");
+    setAccountFilter(filter.accountFilter || "");
+    setBranchFilter(filter.branchFilter || "");
+    setDateFrom(filter.dateFrom || "");
+    setDateTo(filter.dateTo || "");
+  };
+
+  const removeSavedFilter = (name) => {
+    persistSavedFilters(savedFilters.filter((f) => f.name !== name));
+  };
+
+  const toggleSelect = (id) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   // Quick-action deep link (?intent=add) opens the create modal once.
   useEffect(() => {
@@ -425,11 +517,43 @@ export default function PurchasesInvoicesPanel({
   const contactsQuery = useAccountingContacts({ employeeId, isAdmin });
   const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
   const bankAccountsQuery = useAccountingBankAccounts({ employeeId, isAdmin });
+  const branchesQuery = useQuery({
+    queryKey: queryKeys.branches(),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const response = await authedFetch("/api/branches");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل الفروع");
+      return Array.isArray(data?.branches) ? data.branches : [];
+    },
+  });
 
   const invoices = invoicesQuery.data || [];
   const contacts = contactsQuery.data || [];
   const accounts = accountsQuery.data || [];
   const bankAccounts = bankAccountsQuery.data || [];
+  const branches = branchesQuery.data || [];
+
+  // الخط الزمني للفاتورة المعروضة في الدرج — من سجل التدقيق.
+  const previewLogQuery = useQuery({
+    queryKey: queryKeys.purchaseAuditLog("invoice", preview?.id),
+    enabled: !!preview?.id,
+    queryFn: async () => {
+      const response = await authedFetch(
+        `/api/accounting/purchase-audit-log?entity_type=invoice&entity_id=${preview.id}&limit=20`,
+      );
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل السجل");
+      return Array.isArray(data?.entries) ? data.entries : [];
+    },
+  });
+  const previewLog = previewLogQuery.data || [];
+
+  // صف الدرج يُقرأ من أحدث بيانات القائمة — فيتحدّث فوراً بعد تسجيل
+  // أو حذف دفعة دون إغلاق المعاينة.
+  const drawerRow = preview
+    ? invoices.find((invoice) => invoice.id === preview.id) || preview
+    : null;
 
   const accountFilterOptions = useMemo(() => {
     const options = buildExpenseAccountOptions(accounts);
@@ -455,11 +579,12 @@ export default function PurchasesInvoicesPanel({
   const createMut = useCreateAccountingPurchaseInvoice();
   const updateMut = useUpdateAccountingPurchaseInvoice();
   const deleteMut = useDeleteAccountingPurchaseInvoice();
+  const addPaymentMut = useAddPurchaseInvoicePayment();
+  const deletePaymentMut = useDeletePurchaseInvoicePayment();
 
   const counts = useMemo(() => {
     const initial = {
       all: invoices.length,
-      new: 0,
       pending_payment: 0,
       partial_paid: 0,
       paid: 0,
@@ -485,6 +610,13 @@ export default function PurchasesInvoicesPanel({
         (invoice) => String(invoice.expense_account_id || "") === accountFilter,
       );
     }
+    if (branchFilter === "none") {
+      list = list.filter((invoice) => !invoice.branch_id);
+    } else if (branchFilter) {
+      list = list.filter(
+        (invoice) => String(invoice.branch_id || "") === branchFilter,
+      );
+    }
     if (dateFrom) {
       list = list.filter(
         (invoice) => (invoice.invoice_date || "") >= dateFrom,
@@ -494,9 +626,50 @@ export default function PurchasesInvoicesPanel({
       list = list.filter((invoice) => (invoice.invoice_date || "") <= dateTo);
     }
     return list;
-  }, [invoices, status, accountFilter, dateFrom, dateTo]);
+  }, [invoices, status, accountFilter, branchFilter, dateFrom, dateTo]);
 
-  const handleExport = (kind) => {
+  // اختصارات لوحة المفاتيح (حسب المستند): N فاتورة جديدة، / بحث،
+  // ↑↓ تنقل بين الصفوف، Enter معاينة، Esc يغلق المعاينة.
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      const target = event.target;
+      const typing =
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable);
+      if (event.key === "Escape") {
+        setPreview(null);
+        return;
+      }
+      if (typing || showAdd || editing || paying || showRecurring || supplier360)
+        return;
+      if (event.key === "/" ) {
+        event.preventDefault();
+        searchRef.current?.focus();
+      } else if (event.key === "n" || event.key === "N") {
+        event.preventDefault();
+        setShowAdd(true);
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setActiveIdx((prev) => Math.min(prev + 1, filtered.length - 1));
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setActiveIdx((prev) => Math.max(prev - 1, 0));
+      } else if (event.key === "Enter") {
+        if (activeIdx >= 0 && filtered[activeIdx]) {
+          event.preventDefault();
+          setPreview(filtered[activeIdx]);
+        }
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [filtered, activeIdx, showAdd, editing, paying, showRecurring, supplier360]);
+
+  const handleExport = (kind, rowsOverride = null) => {
+    const rows = rowsOverride || filtered;
     const columns = [
       { header: "رقم الفاتورة", accessor: (row) => row.invoice_number },
       { header: "المورد", accessor: (row) => row.supplier_name || "" },
@@ -507,6 +680,7 @@ export default function PurchasesInvoicesPanel({
             ? `${row.expense_account_code || ""} ${row.expense_account_name}`.trim()
             : "غير مصنّفة",
       },
+      { header: "الفرع", accessor: (row) => row.branch_name || "" },
       { header: "التاريخ", accessor: (row) => row.invoice_date || "" },
       { header: "الاستحقاق", accessor: (row) => row.due_date || "" },
       {
@@ -527,12 +701,20 @@ export default function PurchasesInvoicesPanel({
         accessor: (row) => moneyValue(row.balance_due).toFixed(2),
       },
     ];
-    const title = "فواتير المشتريات";
+    const title = rowsOverride
+      ? `فواتير المشتريات — المحدد (${rows.length})`
+      : "فواتير المشتريات";
     if (kind === "excel") {
-      exportToExcelHTML(filtered, "purchase-invoices", columns, title);
+      exportToExcelHTML(rows, "purchase-invoices", columns, title);
     } else {
-      exportToPDF(filtered, "purchase-invoices", columns, title);
+      exportToPDF(rows, "purchase-invoices", columns, title);
     }
+  };
+
+  const exportSelected = (kind) => {
+    const rows = filtered.filter((invoice) => selected.has(invoice.id));
+    if (rows.length === 0) return;
+    handleExport(kind, rows);
   };
 
   const totals = useMemo(() => {
@@ -577,10 +759,11 @@ export default function PurchasesInvoicesPanel({
           <div className="relative flex-1 min-w-[220px]">
             <Search className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/40 pointer-events-none" />
             <input
+              ref={searchRef}
               type="text"
               value={q}
               onChange={(event) => setQ(event.target.value)}
-              placeholder="ابحث برقم الفاتورة أو المورد"
+              placeholder="ابحث برقم الفاتورة أو المورد — اختصار /"
               className={`${ws.input} px-3 py-2 pr-9`}
             />
           </div>
@@ -602,12 +785,30 @@ export default function PurchasesInvoicesPanel({
               buttonClassName="text-sm py-2 px-3"
             />
           </div>
+          {branches.length > 0 ? (
+            <div className="w-40 shrink-0">
+              <GlassSelect
+                value={branchFilter}
+                onChange={setBranchFilter}
+                options={[
+                  { value: "", label: "كل الفروع" },
+                  { value: "none", label: "بدون فرع" },
+                  ...branches.map((branch) => ({
+                    value: String(branch.id),
+                    label: branch.name,
+                  })),
+                ]}
+                placeholder="كل الفروع"
+                buttonClassName="text-sm py-2 px-3"
+              />
+            </div>
+          ) : null}
           <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75 shrink-0">
             <input
               type="checkbox"
               checked={includeInactive}
               onChange={(event) => setIncludeInactive(event.target.checked)}
-              className="accent-emerald-500"
+              className="accent-[#0e7a5f]"
             />
             عرض الموقوفة
           </label>
@@ -619,6 +820,15 @@ export default function PurchasesInvoicesPanel({
           >
             <RefreshCw className="w-4 h-4" />
             تحديث
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowRecurring(true)}
+            className={`${ws.btnNeutral} px-4 py-2`}
+            title="قوالب تتحول تلقائياً لفواتير كل شهر"
+          >
+            <Repeat className="w-4 h-4" />
+            متكررة
           </button>
           <button
             type="button"
@@ -683,6 +893,49 @@ export default function PurchasesInvoicesPanel({
             PDF
           </button>
         </div>
+
+        {/* رقائق الفلاتر المحفوظة — أي تركيبة فلاتر تصبح نقرة واحدة */}
+        {savedFilters.length > 0 || hasActiveFilters ? (
+          <div className={`flex items-center gap-2 flex-wrap mt-3 pt-3 border-t ${ws.divider}`}>
+            <span className="text-[11px] text-slate-500 dark:text-white/45 shrink-0">
+              فلاتر محفوظة:
+            </span>
+            {savedFilters.map((filter) => (
+              <span
+                key={filter.name}
+                className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0b3d31] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25 inline-flex items-center gap-1.5`}
+              >
+                <button
+                  type="button"
+                  onClick={() => applySavedFilter(filter)}
+                  className="font-semibold"
+                  title="تطبيق الفلتر"
+                >
+                  {filter.name}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeSavedFilter(filter.name)}
+                  className="opacity-60 hover:opacity-100"
+                  title="حذف الفلتر المحفوظ"
+                  aria-label={`حذف فلتر ${filter.name}`}
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            ))}
+            {hasActiveFilters ? (
+              <button
+                type="button"
+                onClick={saveCurrentFilter}
+                className={`${ws.btnNeutral} px-2.5 py-1 text-[11px]`}
+              >
+                <Plus className="w-3 h-3" />
+                حفظ الفلتر الحالي
+              </button>
+            ) : null}
+          </div>
+        ) : null}
       </div>
 
       <div className={`${ws.glassSoft} ${ws.card} p-2 overflow-x-auto`}>
@@ -773,6 +1026,24 @@ export default function PurchasesInvoicesPanel({
               <table className="w-full text-sm">
                 <thead className="bg-slate-100/80 dark:bg-white/[0.04] border-b border-slate-200 dark:border-white/10">
                   <tr className="text-slate-500 dark:text-white/50">
+                    <th className="px-3 py-3 w-9">
+                      <input
+                        type="checkbox"
+                        aria-label="تحديد الكل"
+                        className="accent-[#0e7a5f]"
+                        checked={
+                          filtered.length > 0 &&
+                          filtered.every((invoice) => selected.has(invoice.id))
+                        }
+                        onChange={(event) => {
+                          setSelected(
+                            event.target.checked
+                              ? new Set(filtered.map((invoice) => invoice.id))
+                              : new Set(),
+                          );
+                        }}
+                      />
+                    </th>
                     <th className="text-right font-semibold px-4 py-3">رقم</th>
                     <th className="text-right font-semibold px-4 py-3">المورد</th>
                     <th className="text-right font-semibold px-4 py-3">الحساب</th>
@@ -786,8 +1057,30 @@ export default function PurchasesInvoicesPanel({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 dark:divide-white/10">
-                  {filtered.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.03]">
+                  {filtered.map((invoice, index) => (
+                    <tr
+                      key={invoice.id}
+                      onClick={(event) => {
+                        // الأزرار والروابط وخانات التحديد لا تفتح المعاينة.
+                        if (event.target.closest("button, a, input")) return;
+                        setActiveIdx(index);
+                        setPreview(invoice);
+                      }}
+                      className={`cursor-pointer hover:bg-slate-50 dark:hover:bg-white/[0.03] ${
+                        index === activeIdx
+                          ? "bg-[#e7f2ee]/70 dark:bg-emerald-400/[0.06]"
+                          : ""
+                      }`}
+                    >
+                      <td className="px-3 py-3">
+                        <input
+                          type="checkbox"
+                          aria-label="تحديد الفاتورة"
+                          className="accent-[#0e7a5f]"
+                          checked={selected.has(invoice.id)}
+                          onChange={() => toggleSelect(invoice.id)}
+                        />
+                      </td>
                       <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">
                         <div className="flex items-center gap-1.5" dir="ltr">
                           <span>{invoice.invoice_number}</span>
@@ -796,7 +1089,7 @@ export default function PurchasesInvoicesPanel({
                               href={invoice.attachment_url}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-slate-400 hover:text-emerald-600 dark:text-white/40 dark:hover:text-emerald-300"
+                              className="text-slate-400 hover:text-[#0e7a5f] dark:text-white/40 dark:hover:text-emerald-300"
                               title="عرض الفاتورة المرفقة"
                               onClick={(event) => event.stopPropagation()}
                             >
@@ -847,7 +1140,7 @@ export default function PurchasesInvoicesPanel({
                             <button
                               type="button"
                               onClick={() => setPaying(invoice)}
-                              className={`${ws.iconButton} w-9 h-9 hover:bg-emerald-50 dark:hover:bg-emerald-500/15 hover:border-emerald-200 dark:hover:border-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-200`}
+                              className={`${ws.iconButton} w-9 h-9 hover:bg-[#e7f2ee] dark:hover:bg-emerald-500/15 hover:border-[#c9e2d8] dark:hover:border-emerald-500/30 hover:text-[#0e7a5f] dark:hover:text-emerald-200`}
                               title="تسجيل دفعة"
                             >
                               <HandCoins className="w-4 h-4" />
@@ -968,6 +1261,7 @@ export default function PurchasesInvoicesPanel({
         contacts={contacts}
         accounts={accounts}
         bankAccounts={bankAccounts}
+        branches={branches}
         contactStats={contactStats}
         isSubmitting={createMut.isPending || updateMut.isPending}
         onClose={() => {
@@ -981,11 +1275,365 @@ export default function PurchasesInvoicesPanel({
         <RecordPaymentModal
           invoice={paying}
           bankAccounts={bankAccounts}
-          isSubmitting={updateMut.isPending}
+          isSubmitting={addPaymentMut.isPending}
           onClose={() => setPaying(null)}
           onSubmit={(payload) =>
-            updateMut.mutate(payload, { onSuccess: () => setPaying(null) })
+            addPaymentMut.mutate(payload, { onSuccess: () => setPaying(null) })
           }
+        />
+      ) : null}
+
+      {/* شريط التحديد الجماعي */}
+      {selected.size > 0 && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[900] flex items-center gap-3 rounded-2xl border border-slate-200 dark:border-white/15 bg-white dark:bg-slate-900 shadow-2xl px-4 py-2.5"
+              dir="rtl"
+            >
+              <span className="text-sm font-bold text-slate-900 dark:text-white">
+                {selected.size} فاتورة محددة
+              </span>
+              <button
+                type="button"
+                onClick={() => exportSelected("excel")}
+                className={`${ws.btnNeutral} px-3 py-1.5 text-xs`}
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5" />
+                تصدير Excel
+              </button>
+              <button
+                type="button"
+                onClick={() => exportSelected("pdf")}
+                className={`${ws.btnNeutral} px-3 py-1.5 text-xs`}
+              >
+                <Download className="w-3.5 h-3.5" />
+                تصدير PDF
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelected(new Set())}
+                className="text-xs text-slate-500 hover:text-red-600 dark:text-white/50 dark:hover:text-red-300"
+              >
+                إلغاء التحديد
+              </button>
+            </div>,
+            document.body,
+          )
+        : null}
+
+      {/* المعاينة الجانبية — مراجعة سريعة دون مغادرة الجدول */}
+      {drawerRow && typeof document !== "undefined"
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-[950]"
+              dir="rtl"
+              onMouseDown={(event) => {
+                if (event.target === event.currentTarget) setPreview(null);
+              }}
+            >
+              <div
+                className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
+                onMouseDown={() => setPreview(null)}
+                aria-hidden="true"
+              />
+              <aside className="absolute inset-y-0 left-0 w-full sm:w-[430px] bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-white/10 shadow-2xl overflow-y-auto">
+                <div className={`sticky top-0 bg-white dark:bg-slate-950 px-5 py-4 border-b ${ws.divider} flex items-center justify-between gap-3`}>
+                  <div className="min-w-0">
+                    <div className="font-bold text-slate-900 dark:text-white font-mono" dir="ltr">
+                      {drawerRow.invoice_number}
+                    </div>
+                    {drawerRow.contact_id ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const contact = contacts.find(
+                            (c) => Number(c.id) === Number(drawerRow.contact_id),
+                          );
+                          if (contact) setSupplier360(contact);
+                        }}
+                        className="text-xs text-[#0e7a5f] dark:text-emerald-300 hover:underline truncate mt-0.5 inline-flex items-center gap-1"
+                        title="بطاقة المورد 360°"
+                      >
+                        <ScanEye className="w-3 h-3 shrink-0" />
+                        {drawerRow.contact_name || drawerRow.supplier_name}
+                      </button>
+                    ) : (
+                      <div className="text-xs text-slate-500 dark:text-white/50 truncate mt-0.5">
+                        {drawerRow.supplier_name || "بدون مورد"}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <StatusPill status={drawerRow.computed_status} />
+                    <button
+                      type="button"
+                      onClick={() => setPreview(null)}
+                      className={`${ws.iconButton} w-9 h-9`}
+                      aria-label="إغلاق المعاينة"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-5 space-y-4">
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">التاريخ</div>
+                      <div className="font-semibold" dir="ltr">{drawerRow.invoice_date || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">الاستحقاق</div>
+                      <div className="font-semibold" dir="ltr">{drawerRow.due_date || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">الفرع</div>
+                      <div className="font-semibold">{drawerRow.branch_name || "—"}</div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">بنك السداد</div>
+                      <div className="font-semibold">{drawerRow.paid_bank_name || "—"}</div>
+                    </div>
+                  </div>
+
+                  <div className={`${ws.glassSoft} ${ws.card} p-3 grid grid-cols-3 gap-2 text-center`}>
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">المبلغ</div>
+                      <div className="text-sm font-bold tabular-nums" dir="ltr">
+                        {formatMoney(drawerRow.total_amount, drawerRow.currency)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">المدفوع</div>
+                      <div className="text-sm font-bold tabular-nums text-[#0e7a5f] dark:text-emerald-200" dir="ltr">
+                        {formatMoney(drawerRow.paid_amount, drawerRow.currency)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">المتبقي</div>
+                      <div className="text-sm font-bold tabular-nums text-amber-700 dark:text-amber-200" dir="ltr">
+                        {formatMoney(drawerRow.balance_due, drawerRow.currency)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {Array.isArray(drawerRow.items) && drawerRow.items.length > 0 ? (
+                    <div>
+                      <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
+                        البنود ({drawerRow.items.length})
+                      </div>
+                      <div className="space-y-1.5">
+                        {drawerRow.items.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center justify-between gap-2 text-xs border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
+                          >
+                            <span className="text-slate-700 dark:text-white/75 truncate">
+                              {item.description || "بند"}
+                            </span>
+                            <span className="text-slate-500 dark:text-white/45 shrink-0" dir="ltr">
+                              {moneyValue(item.quantity)} × {moneyValue(item.unit_price).toFixed(2)}
+                            </span>
+                            <span className="font-bold tabular-nums shrink-0" dir="ltr">
+                              {moneyValue(item.line_total).toFixed(2)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {/* سجل الدفعات — كل دفعة بتاريخها وبنكها وإيصالها */}
+                  {(() => {
+                    const payments = Array.isArray(drawerRow.payments)
+                      ? drawerRow.payments
+                      : [];
+                    const recorded = payments.reduce(
+                      (acc, payment) => acc + moneyValue(payment.amount),
+                      0,
+                    );
+                    // ما دُفع قبل تفعيل السجل يظهر سطراً افتراضياً
+                    // حتى يبقى المجموع مطابقاً لرأس الفاتورة.
+                    const legacy =
+                      Math.round(
+                        (moneyValue(drawerRow.paid_amount) - recorded) * 100,
+                      ) / 100;
+                    if (payments.length === 0 && legacy <= 0) return null;
+                    return (
+                      <div>
+                        <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
+                          سجل الدفعات ({payments.length + (legacy > 0 ? 1 : 0)})
+                        </div>
+                        <div className="space-y-1.5">
+                          {legacy > 0 ? (
+                            <div className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5">
+                              <span className="flex-1 text-slate-500 dark:text-white/45">
+                                رصيد مدفوع سابق (قبل تفعيل سجل الدفعات)
+                              </span>
+                              <span className="font-bold tabular-nums shrink-0" dir="ltr">
+                                {legacy.toFixed(2)}
+                              </span>
+                            </div>
+                          ) : null}
+                          {payments.map((payment) => (
+                            <div
+                              key={payment.id}
+                              className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
+                            >
+                              <span
+                                className="text-slate-400 dark:text-white/35 font-mono shrink-0"
+                                dir="ltr"
+                              >
+                                {payment.payment_date}
+                              </span>
+                              <span className="flex-1 min-w-0 truncate text-slate-700 dark:text-white/70">
+                                {payment.bank_name || "بدون بنك"}
+                                {payment.notes ? ` — ${payment.notes}` : ""}
+                                {payment.created_by_employee_name
+                                  ? ` (${payment.created_by_employee_name})`
+                                  : ""}
+                              </span>
+                              {payment.receipt_url ? (
+                                <a
+                                  href={payment.receipt_url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-slate-400 hover:text-[#0e7a5f] dark:text-white/40 dark:hover:text-emerald-300 shrink-0"
+                                  title="إيصال الدفعة"
+                                >
+                                  <Paperclip className="w-3 h-3" />
+                                </a>
+                              ) : null}
+                              <span
+                                className={`font-bold tabular-nums shrink-0 ${moneyValue(payment.amount) < 0 ? "text-rose-700 dark:text-rose-300" : ""}`}
+                                dir="ltr"
+                              >
+                                {moneyValue(payment.amount).toFixed(2)}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (
+                                    window.confirm(
+                                      `حذف الدفعة ${moneyValue(payment.amount).toFixed(2)} بتاريخ ${payment.payment_date}؟ سيُخصم من مدفوع الفاتورة.`,
+                                    )
+                                  ) {
+                                    deletePaymentMut.mutate({ id: payment.id });
+                                  }
+                                }}
+                                className="text-slate-300 hover:text-red-600 dark:text-white/25 dark:hover:text-red-300 shrink-0"
+                                title="حذف الدفعة"
+                                aria-label="حذف الدفعة"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {previewLog.length > 0 ? (
+                    <div>
+                      <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
+                        سجل الفاتورة
+                      </div>
+                      <div className="space-y-1.5">
+                        {previewLog.map((entry) => (
+                          <div
+                            key={entry.id}
+                            className="flex items-start gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
+                          >
+                            <span
+                              className="text-slate-400 dark:text-white/35 font-mono shrink-0"
+                              dir="ltr"
+                            >
+                              {entry.log_date} {entry.log_time}
+                            </span>
+                            <span className="flex-1 text-slate-700 dark:text-white/70">
+                              {entry.summary}
+                              {entry.actor_name ? (
+                                <span className="text-slate-500 dark:text-white/45">
+                                  {" "}
+                                  — {entry.actor_name}
+                                </span>
+                              ) : null}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  <div className="flex items-center gap-2 flex-wrap pt-2">
+                    {moneyValue(drawerRow.balance_due) > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPaying(drawerRow);
+                          setPreview(null);
+                        }}
+                        className={`${ws.btnPrimary} px-4 py-2 text-sm`}
+                      >
+                        <HandCoins className="w-4 h-4" />
+                        تسجيل دفعة
+                      </button>
+                    ) : null}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditing(drawerRow);
+                        setPreview(null);
+                      }}
+                      className={`${ws.btnNeutral} px-4 py-2 text-sm`}
+                    >
+                      <Pencil className="w-4 h-4" />
+                      تعديل كامل
+                    </button>
+                    {drawerRow.attachment_url ? (
+                      <a
+                        href={drawerRow.attachment_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`${ws.btnNeutral} px-4 py-2 text-sm`}
+                      >
+                        <Paperclip className="w-4 h-4" />
+                        المرفق
+                      </a>
+                    ) : null}
+                    {drawerRow.payment_receipt_url ? (
+                      <a
+                        href={drawerRow.payment_receipt_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`${ws.btnNeutral} px-4 py-2 text-sm`}
+                      >
+                        <Banknote className="w-4 h-4" />
+                        إيصال الدفع
+                      </a>
+                    ) : null}
+                  </div>
+                </div>
+              </aside>
+            </div>,
+            document.body,
+          )
+        : null}
+
+      <RecurringInvoicesModal
+        open={showRecurring}
+        contacts={contacts}
+        accounts={accounts}
+        branches={branches}
+        onClose={() => setShowRecurring(false)}
+      />
+
+      {supplier360 ? (
+        <Supplier360Modal
+          contact={supplier360}
+          invoices={invoices}
+          onClose={() => setSupplier360(null)}
         />
       ) : null}
     </>

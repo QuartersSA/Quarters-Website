@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { User, Lock, Globe, ReceiptText } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import { PURCHASE_INVOICE_TOKEN_KEY, clearAdminSession } from "@/utils/apiAuth";
 
 // Field login for رفع فاتورة مشتريات: employees with the dedicated

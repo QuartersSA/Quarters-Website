@@ -8,7 +8,7 @@ import {
   Info,
   Percent,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import { useAccountingPurchaseInvoices } from "@/hooks/useAccountingPurchaseInvoices";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
 
@@ -67,7 +67,7 @@ function quarterOf(monthKey) {
 function KpiCard({ label, value, sub, tone = "slate" }) {
   const toneClass =
     tone === "emerald"
-      ? "text-emerald-700 dark:text-emerald-200"
+      ? "text-[#0e7a5f] dark:text-emerald-200"
       : tone === "sky"
         ? "text-sky-700 dark:text-sky-200"
         : tone === "amber"
@@ -221,7 +221,7 @@ export default function PurchasesTaxPanel({ employeeId, isAdmin }) {
       <div className={`${ws.glass} ${ws.card} p-4`}>
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-white/85">
-            <CalendarRange className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
+            <CalendarRange className="w-4 h-4 text-[#0e7a5f] dark:text-emerald-200" />
             السنة:
           </div>
           <div className="flex items-center gap-1 flex-wrap">
@@ -298,7 +298,7 @@ export default function PurchasesTaxPanel({ employeeId, isAdmin }) {
                       {monthLabel(row.month)}
                       {row.month === currentMonth ? (
                         <span
-                          className={`${ws.pill} bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25 mr-2`}
+                          className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25 mr-2`}
                         >
                           الحالي
                         </span>
@@ -310,7 +310,7 @@ export default function PurchasesTaxPanel({ employeeId, isAdmin }) {
                     <td className="px-4 py-3 text-left text-slate-700 dark:text-white/70" dir="ltr">
                       {formatMoney(row.subtotal)}
                     </td>
-                    <td className="px-4 py-3 text-left font-bold text-emerald-700 dark:text-emerald-200" dir="ltr">
+                    <td className="px-4 py-3 text-left font-bold text-[#0e7a5f] dark:text-emerald-200" dir="ltr">
                       {formatMoney(row.tax)}
                     </td>
                     <td className="px-4 py-3 text-left font-bold text-slate-900 dark:text-white" dir="ltr">
@@ -328,7 +328,7 @@ export default function PurchasesTaxPanel({ employeeId, isAdmin }) {
                   <td className="px-4 py-3 text-left" dir="ltr">
                     {formatMoney(report.yearSubtotal)}
                   </td>
-                  <td className="px-4 py-3 text-left text-emerald-700 dark:text-emerald-200" dir="ltr">
+                  <td className="px-4 py-3 text-left text-[#0e7a5f] dark:text-emerald-200" dir="ltr">
                     {formatMoney(report.yearTax)}
                   </td>
                   <td className="px-4 py-3 text-left" dir="ltr">

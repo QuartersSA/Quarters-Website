@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Save, X, HandCoins, Building, Wand2 } from "lucide-react";
 import { toast } from "sonner";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 
 // Saudi Arabian Monetary Authority bank-code table.
@@ -168,7 +168,7 @@ export default function BeneficiaryModal({
         <div className="flex items-start justify-between gap-3 mb-5">
           <div className="flex items-center gap-3">
             <div
-              className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}
+              className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}
             >
               <HandCoins className="w-5 h-5" />
             </div>
@@ -340,7 +340,7 @@ export default function BeneficiaryModal({
                 type="checkbox"
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
-                className="accent-emerald-500"
+                className="accent-[#0e7a5f]"
               />
               <span className="text-sm text-slate-800 dark:text-white/80">
                 نشط

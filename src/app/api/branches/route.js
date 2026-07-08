@@ -6,6 +6,9 @@ export async function GET(request) {
     anyOf: [
       { role: "Admin", permission: "can_manage_inventory" },
       { role: "Admin", permission: "can_manage_accounting" },
+      // Purchases flows pick a branch on the invoice.
+      { role: "Admin", permission: "can_manage_purchases" },
+      { permission: "can_add_purchase_invoices" },
     ],
   });
   if (!auth.ok) {

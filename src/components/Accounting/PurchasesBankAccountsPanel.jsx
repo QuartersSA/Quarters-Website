@@ -16,7 +16,7 @@ import {
   Trash2,
   Wallet,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import BankAccountModal, {
   ACCOUNT_TYPE_OPTIONS,
 } from "@/components/Accounting/BankAccountModal";
@@ -230,7 +230,7 @@ export default function PurchasesBankAccountsPanel({ employeeId, isAdmin }) {
               type="checkbox"
               checked={includeInactive}
               onChange={(event) => setIncludeInactive(event.target.checked)}
-              className="accent-emerald-500"
+              className="accent-[#0e7a5f]"
             />
             عرض الموقوفين
           </label>
@@ -313,7 +313,7 @@ export default function PurchasesBankAccountsPanel({ employeeId, isAdmin }) {
                 {formatMoney(totals.statement, "SAR")}
               </div>
             </div>
-            <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+            <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
               <Banknote className="w-5 h-5" />
             </div>
           </div>

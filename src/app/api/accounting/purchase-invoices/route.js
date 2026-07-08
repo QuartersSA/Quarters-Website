@@ -1,6 +1,8 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
+import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { runPurchaseAutomation } from "@/app/api/utils/purchaseAutomation";
 
 // Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
@@ -21,9 +23,11 @@ const REQUIRE_PURCHASES_CREATE = {
   ],
 };
 
+// Simplified status model: everything is computed from amounts/due
+// date; unpaid invoices display بانتظار الاعتماد. "new" survives only
+// as a legacy stored value and maps to pending_payment on display.
 const WORKFLOW_STATUSES = new Set(["new", "pending_payment"]);
 const DISPLAY_STATUSES = new Set([
-  "new",
   "pending_payment",
   "partial_paid",
   "paid",
@@ -112,6 +116,7 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS paid_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS paid_bank_account_id INTEGER,
       ADD COLUMN IF NOT EXISTS payment_receipt_url TEXT,
+      ADD COLUMN IF NOT EXISTS branch_id INTEGER,
       ADD COLUMN IF NOT EXISTS workflow_status TEXT NOT NULL DEFAULT 'new',
       ADD COLUMN IF NOT EXISTS notes TEXT,
       ADD COLUMN IF NOT EXISTS attachment_url TEXT,
@@ -175,6 +180,29 @@ async function ensureSchema() {
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_items_invoice
       ON accounting_purchase_invoice_items (invoice_id, position)
   `;
+
+  // سجل الدفعات: كل دفعة سطر مستقل بتاريخها وبنكها وإيصالها ومن
+  // سجّلها. paid_amount في رأس الفاتورة يبقى المجموع (مصدر حساب
+  // الحالة)، وهذا الجدول هو التفصيل — أساس التدفق النقدي والأساس
+  // النقدي في الإقرار وكشف المورد بمستوى الدفعة.
+  await sql`
+    CREATE TABLE IF NOT EXISTS accounting_purchase_invoice_payments (
+      id SERIAL PRIMARY KEY,
+      invoice_id INTEGER NOT NULL REFERENCES accounting_purchase_invoices(id) ON DELETE CASCADE,
+      amount NUMERIC(14, 2) NOT NULL,
+      payment_date DATE NOT NULL DEFAULT ((NOW() AT TIME ZONE 'Asia/Riyadh')::DATE),
+      bank_account_id INTEGER,
+      receipt_url TEXT,
+      notes TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      created_by_employee_id INTEGER,
+      created_by_employee_name TEXT
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_payments_invoice
+      ON accounting_purchase_invoice_payments (invoice_id, payment_date, id)
+  `;
   await sql`
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoices_invoice_date
       ON accounting_purchase_invoices (invoice_date DESC)
@@ -218,7 +246,16 @@ function parsePayload(body = {}) {
   const totalRaw = parseMoney(body.total_amount, 0);
   const totalAmount =
     totalRaw > 0 ? totalRaw : Math.round((subtotalAmount + taxAmount) * 100) / 100;
-  const paidAmount = parseMoney(body.paid_amount, 0);
+  // «إرسال إلى الاعتماد» يفرض فاتورة غير مدفوعة مهما أرسل العميل —
+  // الصفر هنا يلغي أيضاً بنك السداد والإيصال أدناه.
+  const paidAmount =
+    body.submit_for_approval === true ? 0 : parseMoney(body.paid_amount, 0);
+  const branchIdRaw =
+    body.branch_id === undefined ||
+    body.branch_id === null ||
+    body.branch_id === ""
+      ? null
+      : Number(body.branch_id);
   const paidBankAccountIdRaw =
     body.paid_bank_account_id === undefined ||
     body.paid_bank_account_id === null ||
@@ -260,6 +297,8 @@ function parsePayload(body = {}) {
       paidAmount > 0
         ? paidBankAccountIdRaw
         : null,
+    branchId:
+      Number.isInteger(branchIdRaw) && branchIdRaw > 0 ? branchIdRaw : null,
     workflowStatus: WORKFLOW_STATUSES.has(workflowRaw) ? workflowRaw : "new",
     notes: body.notes ? String(body.notes).trim() : null,
     attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null,
@@ -411,6 +450,39 @@ async function attachItems(rows) {
   }
 }
 
+// سجل الدفعات يُرفق مع كل صف حتى تقرأه المعاينة الجانبية وتقارير
+// البنوك والأساس النقدي دون طلبات إضافية.
+async function attachPayments(rows) {
+  const ids = rows.map((row) => row.id);
+  if (ids.length === 0) return rows;
+  try {
+    const payments = await sql`
+      SELECT p.id, p.invoice_id, p.amount,
+             TO_CHAR(p.payment_date, 'YYYY-MM-DD') AS payment_date,
+             p.bank_account_id, bank.name AS bank_name,
+             p.receipt_url, p.notes,
+             p.created_by_employee_name
+      FROM accounting_purchase_invoice_payments p
+      LEFT JOIN accounting_bank_accounts bank ON bank.id = p.bank_account_id
+      WHERE p.invoice_id = ANY(${ids})
+      ORDER BY p.invoice_id, p.payment_date, p.id
+    `;
+    const byInvoice = new Map();
+    for (const payment of payments) {
+      const key = Number(payment.invoice_id);
+      if (!byInvoice.has(key)) byInvoice.set(key, []);
+      byInvoice.get(key).push(payment);
+    }
+    return rows.map((row) => ({
+      ...row,
+      payments: byInvoice.get(Number(row.id)) || [],
+    }));
+  } catch (error) {
+    console.error("attach invoice payments failed", error);
+    return rows.map((row) => ({ ...row, payments: [] }));
+  }
+}
+
 // Classification target must be a live postable expense account —
 // otherwise reports built on the tree would silently mis-bucket.
 async function validateExpenseAccount(expenseAccountId) {
@@ -463,6 +535,8 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.paid_bank_account_id,
         bank.name AS paid_bank_name,
         inv.payment_receipt_url,
+        inv.branch_id,
+        br.name AS branch_name,
         GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance_due,
         inv.workflow_status,
         CASE
@@ -472,7 +546,6 @@ function selectInvoicesQuery(where, statusFilter) {
             AND inv.due_date < $${where.values.length + 1}::date
             AND inv.paid_amount < inv.total_amount THEN 'overdue'
           WHEN inv.paid_amount > 0 THEN 'partial_paid'
-          WHEN inv.workflow_status = 'new' THEN 'new'
           ELSE 'pending_payment'
         END AS computed_status,
         inv.notes,
@@ -486,6 +559,7 @@ function selectInvoicesQuery(where, statusFilter) {
       LEFT JOIN accounting_contacts c ON c.id = inv.contact_id
       LEFT JOIN accounting_accounts acc ON acc.id = inv.expense_account_id
       LEFT JOIN accounting_bank_accounts bank ON bank.id = inv.paid_bank_account_id
+      LEFT JOIN branches br ON br.id = inv.branch_id
       ${where.sql}
     )
     SELECT *
@@ -503,6 +577,9 @@ export async function GET(request) {
 
   try {
     await ensureSchema();
+    // كسول بدل cron: توليد الفواتير المتكررة المستحقة وإرسال
+    // التقارير المجدولة عند أول تحميل بعد الموعد. أخطاؤها مبتلعة.
+    await runPurchaseAutomation();
     const url = new URL(request.url);
     const includeInactive = url.searchParams.get("includeInactive") === "1";
     const q = (url.searchParams.get("q") || "").trim();
@@ -532,8 +609,9 @@ export async function GET(request) {
     const query = selectInvoicesQuery(where, status);
     const rows = await sql(query, status ? [...values, today, status] : [...values, today]);
     const withItems = await attachItems(rows);
+    const withPayments = await attachPayments(withItems);
 
-    return Response.json({ invoices: withItems });
+    return Response.json({ invoices: withPayments });
   } catch (error) {
     console.error("purchase invoices GET error", error);
     return Response.json(
@@ -583,6 +661,7 @@ export async function POST(request) {
         paid_amount,
         paid_bank_account_id,
         payment_receipt_url,
+        branch_id,
         workflow_status,
         notes,
         attachment_url,
@@ -604,6 +683,7 @@ export async function POST(request) {
         ${payload.paidAmount},
         ${payload.paidBankAccountId},
         ${payload.paymentReceiptUrl},
+        ${payload.branchId},
         ${payload.workflowStatus},
         ${payload.notes},
         ${payload.attachmentUrl},
@@ -616,6 +696,31 @@ export async function POST(request) {
     if (items && items.length > 0) {
       await replaceInvoiceItems(created.id, items);
     }
+
+    // ما دُفع عند الإنشاء يدخل سجل الدفعات كسطر أول بتاريخ الفاتورة.
+    if (payload.paidAmount > 0) {
+      await sql`
+        INSERT INTO accounting_purchase_invoice_payments (
+          invoice_id, amount, payment_date, bank_account_id,
+          receipt_url, notes,
+          created_by_employee_id, created_by_employee_name
+        )
+        VALUES (
+          ${created.id}, ${payload.paidAmount}, ${payload.invoiceDate},
+          ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl},
+          'دفعة عند إنشاء الفاتورة',
+          ${createdById}, ${createdByName}
+        )
+      `;
+    }
+
+    await logPurchaseAudit({
+      entityType: "invoice",
+      entityId: created.id,
+      action: "created",
+      summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}${body.submit_for_approval === true ? " — أُرسلت إلى الاعتماد" : ""}`,
+      actor: auth.user,
+    });
 
     return Response.json({ ok: true, invoice: created }, { status: 201 });
   } catch (error) {
@@ -653,6 +758,13 @@ export async function PUT(request) {
       return Response.json({ error: accountError }, { status: 400 });
     }
 
+    // اللقطة السابقة تحدد نوع الحدث في سجل التدقيق: دفعة أم تعديل.
+    const [existing] = await sql`
+      SELECT invoice_number, paid_amount, total_amount, due_date
+      FROM accounting_purchase_invoices
+      WHERE id = ${id}
+    `;
+
     const [updated] = await sql`
       UPDATE accounting_purchase_invoices
       SET
@@ -670,6 +782,7 @@ export async function PUT(request) {
         paid_amount = ${payload.paidAmount},
         paid_bank_account_id = ${payload.paidBankAccountId},
         payment_receipt_url = ${payload.paymentReceiptUrl},
+        branch_id = ${payload.branchId},
         workflow_status = ${payload.workflowStatus},
         notes = ${payload.notes},
         attachment_url = ${payload.attachmentUrl},
@@ -686,6 +799,44 @@ export async function PUT(request) {
     // the stored lines untouched; an array (even empty) replaces them.
     if (items !== null) {
       await replaceInvoiceItems(id, items);
+    }
+
+    const previousPaid = Number(existing?.paid_amount || 0);
+    const paidDelta = Math.round((payload.paidAmount - previousPaid) * 100) / 100;
+    // أي تغيير للمدفوع من المحرر الكامل يدخل سجل الدفعات — موجباً
+    // كدفعة أو سالباً كتصحيح، فيبقى مجموع السجل = رأس الفاتورة.
+    if (Math.abs(paidDelta) > 0.004) {
+      await sql`
+        INSERT INTO accounting_purchase_invoice_payments (
+          invoice_id, amount, payment_date, bank_account_id,
+          receipt_url, notes,
+          created_by_employee_id, created_by_employee_name
+        )
+        VALUES (
+          ${id}, ${paidDelta}, ${todayRiyadh()},
+          ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl},
+          ${paidDelta > 0 ? "دفعة من محرر الفاتورة" : "تصحيح يدوي من محرر الفاتورة"},
+          ${auth.user?.id ? Number(auth.user.id) : null},
+          ${auth.user?.name ? String(auth.user.name) : null}
+        )
+      `;
+    }
+    if (paidDelta > 0.004) {
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "payment",
+        summary: `تسجيل دفعة ${paidDelta.toFixed(2)} ${payload.currency} على الفاتورة ${payload.invoiceNumber} — إجمالي المدفوع ${payload.paidAmount.toFixed(2)} من ${payload.totalAmount.toFixed(2)}`,
+        actor: auth.user,
+      });
+    } else {
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "updated",
+        summary: `تعديل الفاتورة ${payload.invoiceNumber} — الإجمالي ${payload.totalAmount.toFixed(2)} ${payload.currency}، المدفوع ${payload.paidAmount.toFixed(2)}`,
+        actor: auth.user,
+      });
     }
 
     return Response.json({ ok: true, invoice: updated });
@@ -717,11 +868,18 @@ export async function DELETE(request) {
       const [deleted] = await sql`
         DELETE FROM accounting_purchase_invoices
         WHERE id = ${id}
-        RETURNING id
+        RETURNING id, invoice_number
       `;
       if (!deleted) {
         return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
       }
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "deleted",
+        summary: `حذف نهائي للفاتورة ${deleted.invoice_number}`,
+        actor: auth.user,
+      });
       return Response.json({ ok: true, hard: true });
     }
 
@@ -731,11 +889,19 @@ export async function DELETE(request) {
         is_active = FALSE,
         updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
-      RETURNING id
+      RETURNING id, invoice_number
     `;
     if (!updated) {
       return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
     }
+
+    await logPurchaseAudit({
+      entityType: "invoice",
+      entityId: id,
+      action: "deactivated",
+      summary: `إيقاف الفاتورة ${updated.invoice_number}`,
+      actor: auth.user,
+    });
 
     return Response.json({ ok: true, hard: false });
   } catch (error) {

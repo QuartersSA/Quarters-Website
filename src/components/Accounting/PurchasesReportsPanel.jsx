@@ -3,22 +3,28 @@
 import React, { useMemo, useState } from "react";
 import {
   BarChart3,
+  CalendarClock,
   CalendarDays,
   Clock3,
   FileSpreadsheet,
   FileText,
+  History,
   Landmark,
   ListTree,
   Percent,
   Users,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import ScheduledReportsModal from "@/components/Accounting/ScheduledReportsModal";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
 import { useAccountingPurchaseInvoices } from "@/hooks/useAccountingPurchaseInvoices";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
+import { useQuery } from "@tanstack/react-query";
+import { authedFetch } from "@/utils/apiAuth";
+import { queryKeys } from "@/utils/queryKeys";
 
 /**
  * مركز التقارير — قسم المشتريات.
@@ -84,7 +90,14 @@ const REPORTS = [
     label: "المدفوعات حسب البنك",
     Icon: Landmark,
     description:
-      "مدفوعات فواتير الفترة موزعة على الحسابات البنكية المسجلة عليها.",
+      "دفعات الفترة من سجل الدفعات — كل دفعة بتاريخها الفعلي على بنكها.",
+  },
+  {
+    key: "audit",
+    label: "سجل النشاط",
+    Icon: History,
+    description:
+      "سجل تدقيق قسم المشتريات: من أنشأ أو عدّل أو سدد أو أوقف — ومتى.",
   },
 ];
 
@@ -147,12 +160,101 @@ const PERIOD_OPTIONS = [
   { value: "custom", label: "فترة مخصصة" },
 ];
 
+// وسوم أحداث سجل التدقيق.
+const AUDIT_ACTION_LABELS = {
+  created: "إنشاء",
+  updated: "تعديل",
+  payment: "دفعة",
+  payment_removed: "حذف دفعة",
+  deactivated: "إيقاف",
+  deleted: "حذف",
+  recurring: "توليد متكرر",
+  scheduled_report: "تقرير مجدول",
+  manual_send: "إرسال يدوي",
+  sent: "تذكير",
+};
+
+function auditActionLabel(action) {
+  return AUDIT_ACTION_LABELS[action] || action;
+}
+
+function auditActionClass(action) {
+  if (action === "payment")
+    return "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25";
+  if (action === "deleted" || action === "deactivated")
+    return "bg-rose-100 dark:bg-rose-400/10 text-rose-700 dark:text-rose-200 border-rose-200 dark:border-rose-400/25";
+  if (action === "created")
+    return "bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-400/25";
+  return "bg-slate-100 dark:bg-white/[0.05] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10";
+}
+
 function periodLabel(preset, from, to) {
   const opt = PERIOD_OPTIONS.find((o) => o.value === preset);
   if (preset === "custom") {
     return `${from || "البداية"} → ${to || "اليوم"}`;
   }
   return opt?.label || "";
+}
+
+// أعمدة أفقية بسيطة — «الرسم يجاوب: وش الصورة؟ والجدول: وش التفاصيل؟»
+function HBars({ rows, nameOf, valueOf, max = 8 }) {
+  const top = rows.slice(0, max);
+  const peak = Math.max(...top.map((row) => valueOf(row)), 1);
+  return (
+    <div className="space-y-1.5">
+      {top.map((row, index) => {
+        const value = valueOf(row);
+        const pct = Math.max(Math.round((value / peak) * 100), 2);
+        return (
+          <div key={index} className="flex items-center gap-2 text-xs">
+            <span className="w-40 truncate text-slate-700 dark:text-white/70 shrink-0">
+              {nameOf(row)}
+            </span>
+            <div className="flex-1 h-4 rounded bg-slate-100 dark:bg-white/[0.05] overflow-hidden">
+              <div
+                className="h-full rounded bg-[#0e7a5f]/80 dark:bg-emerald-400/70"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+            <span
+              className="w-24 text-left font-mono tabular-nums text-slate-600 dark:text-white/60 shrink-0"
+              dir="ltr"
+            >
+              {money(value)}
+            </span>
+          </div>
+        );
+      })}
+      {rows.length > max ? (
+        <div className="text-[11px] text-slate-400 dark:text-white/35">
+          + {rows.length - max} صفوف أخرى في الجدول أدناه
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+// خلية الدلتا في وضع المقارنة — الانحرافات فوق 20% تُظلَّل.
+function DeltaCell({ current, previous }) {
+  if (!previous || previous <= 0) {
+    return current > 0 ? (
+      <span className="text-[#0e7a5f] dark:text-emerald-300 text-[11px] font-bold">جديد</span>
+    ) : (
+      <span>—</span>
+    );
+  }
+  const pct = Math.round(((current - previous) / previous) * 100);
+  const big = Math.abs(pct) >= 20;
+  const up = pct >= 0;
+  return (
+    <span
+      className={`text-[11px] font-bold ${up ? "text-rose-700 dark:text-rose-300" : "text-[#0e7a5f] dark:text-emerald-300"} ${big ? "bg-amber-100 dark:bg-amber-400/15 px-1.5 py-0.5 rounded" : ""}`}
+      dir="ltr"
+      title={`الفترة السابقة: ${money(previous)}`}
+    >
+      {up ? "▲" : "▼"} {Math.abs(pct)}%
+    </span>
+  );
 }
 
 function KpiCard({ label, value, sub }) {
@@ -242,6 +344,10 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const [customFrom, setCustomFrom] = useState("");
   const [customTo, setCustomTo] = useState("");
   const [supplierId, setSupplierId] = useState("");
+  const [branchId, setBranchId] = useState("");
+  const [compare, setCompare] = useState(false);
+  const [showSchedules, setShowSchedules] = useState(false);
+  const [auditSearch, setAuditSearch] = useState("");
 
   const invoicesQuery = useAccountingPurchaseInvoices({
     employeeId,
@@ -250,27 +356,135 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const contactsQuery = useAccountingContacts({ employeeId, isAdmin });
   const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
   const banksQuery = useAccountingBankAccounts({ employeeId, isAdmin });
+  const branchesQuery = useQuery({
+    queryKey: queryKeys.branches(),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const response = await authedFetch("/api/branches");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل الفروع");
+      return Array.isArray(data?.branches) ? data.branches : [];
+    },
+  });
 
   const invoices = invoicesQuery.data || [];
   const contacts = contactsQuery.data || [];
   const accounts = accountsQuery.data || [];
   const banks = banksQuery.data || [];
+  const reportBranches = branchesQuery.data || [];
 
   const { from, to } = useMemo(
     () => resolvePeriod(preset, customFrom, customTo),
     [preset, customFrom, customTo],
   );
 
-  // Active invoices inside the period (inclusive, lexicographic ISO).
+  // سجل النشاط — يُقرأ من جدول التدقيق حسب الفترة، والبحث محلي.
+  const auditQuery = useQuery({
+    queryKey: queryKeys.purchaseAuditLog(from || "all", to || "all"),
+    enabled: reportKey === "audit",
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (from) params.set("from", from);
+      if (to) params.set("to", to);
+      params.set("limit", "500");
+      const response = await authedFetch(
+        `/api/accounting/purchase-audit-log?${params.toString()}`,
+      );
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل السجل");
+      return Array.isArray(data?.entries) ? data.entries : [];
+    },
+  });
+  const auditRows = useMemo(() => {
+    const rows = auditQuery.data || [];
+    const needle = auditSearch.trim().toLowerCase();
+    if (!needle) return rows;
+    return rows.filter(
+      (entry) =>
+        (entry.summary || "").toLowerCase().includes(needle) ||
+        (entry.actor_name || "").toLowerCase().includes(needle),
+    );
+  }, [auditQuery.data, auditSearch]);
+
+  // Active invoices inside the period (inclusive, lexicographic ISO)
+  // + optional branch scope.
+  const matchesBranch = useMemo(
+    () => (invoice) =>
+      !branchId ||
+      (branchId === "none"
+        ? !invoice.branch_id
+        : String(invoice.branch_id || "") === branchId),
+    [branchId],
+  );
   const periodInvoices = useMemo(() => {
     return invoices.filter((invoice) => {
       if (invoice.is_active === false) return false;
+      if (!matchesBranch(invoice)) return false;
       const date = invoice.invoice_date || "";
       if (from && date < from) return false;
       if (to && date > to) return false;
       return true;
     });
-  }, [invoices, from, to]);
+  }, [invoices, from, to, matchesBranch]);
+
+  // «قارن بالفترة السابقة»: فترة مساوية الطول تسبق from مباشرة.
+  const prevRange = useMemo(() => {
+    if (!compare || !from || !to) return null;
+    const start = new Date(`${from}T12:00:00Z`);
+    const end = new Date(`${to}T12:00:00Z`);
+    const days = Math.round((end - start) / 86400000) + 1;
+    const prevEnd = new Date(start);
+    prevEnd.setUTCDate(prevEnd.getUTCDate() - 1);
+    const prevStart = new Date(prevEnd);
+    prevStart.setUTCDate(prevStart.getUTCDate() - (days - 1));
+    return {
+      from: prevStart.toISOString().slice(0, 10),
+      to: prevEnd.toISOString().slice(0, 10),
+    };
+  }, [compare, from, to]);
+  const prevInvoices = useMemo(() => {
+    if (!prevRange) return [];
+    return invoices.filter((invoice) => {
+      if (invoice.is_active === false) return false;
+      if (!matchesBranch(invoice)) return false;
+      const date = invoice.invoice_date || "";
+      return date >= prevRange.from && date <= prevRange.to;
+    });
+  }, [invoices, prevRange, matchesBranch]);
+
+  // مجاميع الفترة السابقة حسب الحساب/المورد لخلية الدلتا.
+  const prevTotals = useMemo(() => {
+    const byAccount = new Map();
+    const bySupplier = new Map();
+    for (const invoice of prevInvoices) {
+      const supplierKey = invoice.contact_id
+        ? `c${invoice.contact_id}`
+        : `n:${invoice.supplier_name || "بدون مورد"}`;
+      bySupplier.set(
+        supplierKey,
+        (bySupplier.get(supplierKey) || 0) + moneyValue(invoice.total_amount),
+      );
+      const items = Array.isArray(invoice.items) ? invoice.items : [];
+      if (items.length === 0) {
+        const key = invoice.expense_account_id
+          ? Number(invoice.expense_account_id)
+          : "none";
+        byAccount.set(
+          key,
+          (byAccount.get(key) || 0) + moneyValue(invoice.total_amount),
+        );
+        continue;
+      }
+      for (const item of items) {
+        const key = item.account_id ? Number(item.account_id) : "none";
+        byAccount.set(
+          key,
+          (byAccount.get(key) || 0) + moneyValue(item.line_total),
+        );
+      }
+    }
+    return { byAccount, bySupplier };
+  }, [prevInvoices]);
 
   const accountById = useMemo(
     () => new Map(accounts.map((account) => [Number(account.id), account])),
@@ -299,31 +513,60 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
 
   // أساس الإقرار: «الاستحقاق» (افتراضي هيئة الزكاة — كل فواتير
   // الفترة باستلام الفاتورة الضريبية) أو «النقدي» (يحتاج موافقة
-  // الهيئة — الفواتير المسددة بالكامل فقط، تقريب لغياب سجل تواريخ
-  // الدفعات).
+  // الهيئة — حصة كل فاتورة بقدر ما سُدّد منها فعلياً خلال الفترة
+  // حسب تواريخ سجل الدفعات).
   const [vatBasis, setVatBasis] = useState("accrual");
+
+  // حصص الأساس النقدي من سجل الدفعات: نسبة ما دُفع من كل فاتورة
+  // داخل [from, to] — تشمل دفعات الفترة على فواتير أقدم منها. ما
+  // سُدّد قبل تفعيل السجل (رصيد بلا أسطر) يُنسب لتاريخ الفاتورة.
+  const cashEntries = useMemo(() => {
+    if (vatBasis !== "cash") return [];
+    const inRange = (date) =>
+      !!date && (!from || date >= from) && (!to || date <= to);
+    const entries = [];
+    for (const invoice of invoices) {
+      if (invoice.is_active === false) continue;
+      if (!matchesBranch(invoice)) continue;
+      const total = moneyValue(invoice.total_amount);
+      if (total <= 0) continue;
+      const payments = Array.isArray(invoice.payments) ? invoice.payments : [];
+      let recorded = 0;
+      let inPeriod = 0;
+      for (const payment of payments) {
+        const amount = moneyValue(payment.amount);
+        recorded += amount;
+        if (inRange(payment.payment_date || "")) inPeriod += amount;
+      }
+      const legacy =
+        Math.round((moneyValue(invoice.paid_amount) - recorded) * 100) / 100;
+      if (legacy > 0.004 && inRange(invoice.invoice_date || "")) {
+        inPeriod += legacy;
+      }
+      if (inPeriod > 0.004) {
+        entries.push({ invoice, ratio: Math.min(inPeriod / total, 1) });
+      }
+    }
+    return entries;
+  }, [vatBasis, invoices, matchesBranch, from, to]);
 
   // نموذج الإقرار الضريبي (ZATCA): خانة 7 = المشتريات الخاضعة للنسبة
   // الأساسية، خانة 10 = مشتريات بالنسبة الصفرية — من بنود الفواتير،
   // مع توزيع خصم الفاتورة تناسبياً حتى تطابق المجاميع رؤوس الفواتير.
+  // في الأساس النقدي تُضرب حصة كل فاتورة بنسبة المسدد خلال الفترة.
   const vatReturn = useMemo(() => {
     let standardBase = 0;
     let standardVat = 0;
     let zeroBase = 0;
-    const vatInvoices =
+    const vatEntries =
       vatBasis === "cash"
-        ? periodInvoices.filter(
-            (invoice) =>
-              moneyValue(invoice.total_amount) > 0 &&
-              moneyValue(invoice.paid_amount) + 0.005 >=
-                moneyValue(invoice.total_amount),
-          )
-        : periodInvoices;
-    for (const invoice of vatInvoices) {
+        ? cashEntries
+        : periodInvoices.map((invoice) => ({ invoice, ratio: 1 }));
+    for (const { invoice, ratio } of vatEntries) {
       const items = Array.isArray(invoice.items) ? invoice.items : [];
       if (items.length === 0) {
-        const base = moneyValue(invoice.subtotal_amount);
-        const vat = moneyValue(invoice.tax_amount);
+        const base = moneyValue(invoice.subtotal_amount) * ratio;
+        const vat = moneyValue(invoice.tax_amount) * ratio;
         if (vat > 0) {
           standardBase += base;
           standardVat += vat;
@@ -337,7 +580,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         0,
       );
       const headerBase = moneyValue(invoice.subtotal_amount);
-      const factor = linesBase > 0 && headerBase > 0 ? headerBase / linesBase : 1;
+      const factor =
+        (linesBase > 0 && headerBase > 0 ? headerBase / linesBase : 1) * ratio;
       for (const item of items) {
         const base = moneyValue(item.line_subtotal) * factor;
         const vat = moneyValue(item.line_tax) * factor;
@@ -356,7 +600,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
       purchasesBase: round2(standardBase + zeroBase),
       purchasesVat: round2(standardVat),
     };
-  }, [periodInvoices, vatBasis]);
+  }, [periodInvoices, vatBasis, cashEntries]);
 
   // المبيعات تُدخل يدوياً (النظام لا يتتبعها) وتُحفظ لكل فترة على
   // هذا الجهاز. خانة 1 وحدها خاضعة للضريبة — مع مفتاح شامل/غير شامل
@@ -564,6 +808,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         : `n:${invoice.supplier_name || "بدون مورد"}`;
       if (!map.has(key)) {
         map.set(key, {
+          key,
           name:
             invoice.contact_name ||
             invoice.supplier_name ||
@@ -670,33 +915,60 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     return { rows, totals };
   }, [invoices]);
 
+  // من سجل الدفعات: كل دفعة تُنسب لبنكها بتاريخها الفعلي — فاتورة
+  // واحدة قد توزع على أكثر من بنك. ما سُدّد قبل تفعيل السجل يُنسب
+  // لبنك رأس الفاتورة بتاريخ الفاتورة.
   const byBankReport = useMemo(() => {
     const map = new Map();
-    for (const invoice of periodInvoices) {
-      const paid = moneyValue(invoice.paid_amount);
-      if (paid <= 0) continue;
-      const id = invoice.paid_bank_account_id
-        ? Number(invoice.paid_bank_account_id)
-        : null;
+    const inRange = (date) =>
+      !!date && (!from || date >= from) && (!to || date <= to);
+    const add = (id, fallbackName, amount) => {
       const key = id ?? "none";
       if (!map.has(key)) {
         const bank = id ? bankById.get(id) : null;
         map.set(key, {
           name: bank
             ? `${bank.name}${bank.bank_name ? ` — ${bank.bank_name}` : ""}`
-            : invoice.paid_bank_name || "بدون تحديد حساب",
+            : fallbackName || "بدون تحديد حساب",
           count: 0,
           paid: 0,
         });
       }
       const bucket = map.get(key);
       bucket.count += 1;
-      bucket.paid += paid;
+      bucket.paid += amount;
+    };
+    for (const invoice of invoices) {
+      if (invoice.is_active === false) continue;
+      if (!matchesBranch(invoice)) continue;
+      const payments = Array.isArray(invoice.payments) ? invoice.payments : [];
+      let recorded = 0;
+      for (const payment of payments) {
+        const amount = moneyValue(payment.amount);
+        recorded += amount;
+        if (!inRange(payment.payment_date || "")) continue;
+        add(
+          payment.bank_account_id ? Number(payment.bank_account_id) : null,
+          payment.bank_name,
+          amount,
+        );
+      }
+      const legacy =
+        Math.round((moneyValue(invoice.paid_amount) - recorded) * 100) / 100;
+      if (legacy > 0.004 && inRange(invoice.invoice_date || "")) {
+        add(
+          invoice.paid_bank_account_id
+            ? Number(invoice.paid_bank_account_id)
+            : null,
+          invoice.paid_bank_name,
+          legacy,
+        );
+      }
     }
     const rows = [...map.values()].sort((a, b) => b.paid - a.paid);
     const total = rows.reduce((acc, row) => acc + row.paid, 0);
     return { rows, total };
-  }, [periodInvoices, bankById]);
+  }, [invoices, matchesBranch, from, to, bankById]);
 
   // ── Export ──────────────────────────────────────────────────────
 
@@ -798,10 +1070,25 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
           title: `المدفوعات حسب الحساب البنكي (${label})`,
           columns: [
             { header: "الحساب البنكي", accessor: (row) => row.name },
-            { header: "عدد الفواتير", accessor: (row) => row.count },
+            { header: "عدد الدفعات", accessor: (row) => row.count },
             { header: "المدفوع (SAR)", accessor: (row) => money(row.paid) },
           ],
           rows: byBankReport.rows,
+        };
+      case "audit":
+        return {
+          filename: "purchases-audit-log",
+          title: `سجل نشاط المشتريات (${label})`,
+          columns: [
+            {
+              header: "التاريخ",
+              accessor: (row) => `${row.log_date} ${row.log_time}`,
+            },
+            { header: "الموظف", accessor: (row) => row.actor_name || "النظام" },
+            { header: "الحدث", accessor: (row) => auditActionLabel(row.action) },
+            { header: "التفاصيل", accessor: (row) => row.summary || "" },
+          ],
+          rows: auditRows,
         };
       default:
         return null;
@@ -817,6 +1104,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     statementReport,
     agingReport,
     byBankReport,
+    auditRows,
     contacts,
     supplierId,
   ]);
@@ -858,7 +1146,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   return (
     <>
       {/* Report picker */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-3">
         {REPORTS.map((report) => {
           const Icon = report.Icon;
           const isActive = report.key === reportKey;
@@ -869,7 +1157,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
               onClick={() => setReportKey(report.key)}
               className={`${ws.glass} ${ws.card} p-3 text-right transition-colors ${
                 isActive
-                  ? "ring-2 ring-emerald-500/60"
+                  ? "ring-2 ring-[#0e7a5f]/60"
                   : "hover:bg-slate-100 dark:hover:bg-white/[0.05]"
               }`}
               title={report.description}
@@ -878,7 +1166,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 <div
                   className={`${ws.iconBox} w-8 h-8 shrink-0 ${
                     isActive
-                      ? "text-emerald-700 dark:text-emerald-200"
+                      ? "text-[#0e7a5f] dark:text-emerald-200"
                       : "text-slate-500 dark:text-white/50"
                   }`}
                 >
@@ -948,8 +1236,61 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
             </div>
           ) : null}
 
+          {reportKey === "audit" ? (
+            <input
+              type="text"
+              value={auditSearch}
+              onChange={(event) => setAuditSearch(event.target.value)}
+              placeholder="ابحث بالموظف أو التفاصيل…"
+              className={`${ws.input} px-3 py-2 text-sm w-56`}
+            />
+          ) : null}
+
+          {reportBranches.length > 0 &&
+          reportKey !== "aging" &&
+          reportKey !== "audit" ? (
+            <div className="w-40">
+              <GlassSelect
+                value={branchId}
+                onChange={setBranchId}
+                options={[
+                  { value: "", label: "كل الفروع" },
+                  { value: "none", label: "بدون فرع" },
+                  ...reportBranches.map((branch) => ({
+                    value: String(branch.id),
+                    label: branch.name,
+                  })),
+                ]}
+                placeholder="كل الفروع"
+                buttonClassName="text-sm py-2 px-3"
+              />
+            </div>
+          ) : null}
+
+          {(reportKey === "by-account" || reportKey === "by-supplier") &&
+          preset !== "all" ? (
+            <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-700 dark:text-white/70 shrink-0">
+              <input
+                type="checkbox"
+                checked={compare}
+                onChange={(event) => setCompare(event.target.checked)}
+                className="accent-[#0e7a5f]"
+              />
+              قارن بالفترة السابقة
+            </label>
+          ) : null}
+
           <div className="flex-1" />
 
+          <button
+            type="button"
+            onClick={() => setShowSchedules(true)}
+            className={`${ws.btnNeutral} px-3 py-2 text-xs`}
+            title="ملخص المشتريات يصل واتساب أسبوعياً أو شهرياً"
+          >
+            <CalendarClock className="w-4 h-4" />
+            جدولة واتساب
+          </button>
           <button
             type="button"
             onClick={handleExportExcel}
@@ -984,7 +1325,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
               {activeReport.description}
             </div>
           </div>
-          <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+          <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
             <BarChart3 className="w-5 h-5" />
           </div>
         </div>
@@ -1010,13 +1351,13 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                     onClick={() => setVatBasis("cash")}
                     className={`${ws.segBtn} text-[11px] ${vatBasis === "cash" ? ws.segActive : ws.segInactive}`}
                   >
-                    النقدي — المسددة بالكامل فقط
+                    النقدي — حسب تواريخ الدفعات
                   </button>
                 </div>
                 <div className="text-[11px] text-slate-500 dark:text-white/45">
                   {vatBasis === "accrual"
                     ? "الافتراضي نظاماً: ضريبة المدخلات تُخصم باستلام الفاتورة الضريبية ولو لم تُسدد."
-                    : "يتطلب موافقة الهيئة (إيرادات أقل من 5م ريال). تُحتسب الفواتير المسددة بالكامل فقط."}
+                    : "يتطلب موافقة الهيئة (إيرادات أقل من 5م ريال). تُحتسب حصة كل فاتورة بقدر ما سُدّد منها فعلياً خلال الفترة — من سجل الدفعات."}
                 </div>
               </div>
 
@@ -1168,23 +1509,54 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 لا توجد مشتريات في الفترة المحددة.
               </div>
             ) : (
-              <ReportTable
-                columns={[
-                  { header: "الرقم", accessor: (row) => row.code, numeric: true },
-                  { header: "الحساب", accessor: (row) => row.name },
-                  { header: "البنود", accessor: (row) => row.count, numeric: true },
-                  { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
-                  { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
-                  { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
-                ]}
-                rows={byAccountReport.rows}
-                footer={{
-                  الحساب: "الإجمالي",
-                  الصافي: money(byAccountReport.totals.net),
-                  الضريبة: money(byAccountReport.totals.tax),
-                  الإجمالي: money(byAccountReport.totals.total),
-                }}
-              />
+              <>
+                <HBars
+                  rows={byAccountReport.rows}
+                  nameOf={(row) => row.name}
+                  valueOf={(row) => row.total}
+                />
+                <ReportTable
+                  columns={[
+                    { header: "الرقم", accessor: (row) => row.code, numeric: true },
+                    { header: "الحساب", accessor: (row) => row.name },
+                    { header: "البنود", accessor: (row) => row.count, numeric: true },
+                    { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
+                    { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
+                    { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
+                    ...(compare && prevRange
+                      ? [
+                          {
+                            header: "مقارنة",
+                            accessor: (row) => row,
+                            format: (row) => (
+                              <DeltaCell
+                                current={row.total}
+                                previous={
+                                  prevTotals.byAccount.get(
+                                    row.accountId ?? "none",
+                                  ) || 0
+                                }
+                              />
+                            ),
+                          },
+                        ]
+                      : []),
+                  ]}
+                  rows={byAccountReport.rows}
+                  footer={{
+                    الحساب: "الإجمالي",
+                    الصافي: money(byAccountReport.totals.net),
+                    الضريبة: money(byAccountReport.totals.tax),
+                    الإجمالي: money(byAccountReport.totals.total),
+                  }}
+                />
+                {compare && prevRange ? (
+                  <div className="text-[11px] text-slate-500 dark:text-white/45">
+                    الفترة السابقة للمقارنة: {prevRange.from} ← {prevRange.to}.
+                    الانحرافات فوق 20% مظللة.
+                  </div>
+                ) : null}
+              </>
             )
           ) : null}
 
@@ -1194,22 +1566,50 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 لا توجد فواتير في الفترة المحددة.
               </div>
             ) : (
-              <ReportTable
-                columns={[
-                  { header: "المورد", accessor: (row) => row.name },
-                  { header: "الفواتير", accessor: (row) => row.count, numeric: true },
-                  { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
-                  { header: "المدفوع", accessor: (row) => money(row.paid), numeric: true },
-                  { header: "المتبقي", accessor: (row) => money(row.balance), numeric: true },
-                ]}
-                rows={bySupplierReport.rows}
-                footer={{
-                  المورد: "الإجمالي",
-                  الإجمالي: money(bySupplierReport.totals.total),
-                  المدفوع: money(bySupplierReport.totals.paid),
-                  المتبقي: money(bySupplierReport.totals.balance),
-                }}
-              />
+              <>
+                <HBars
+                  rows={bySupplierReport.rows}
+                  nameOf={(row) => row.name}
+                  valueOf={(row) => row.total}
+                />
+                <ReportTable
+                  columns={[
+                    { header: "المورد", accessor: (row) => row.name },
+                    { header: "الفواتير", accessor: (row) => row.count, numeric: true },
+                    { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
+                    { header: "المدفوع", accessor: (row) => money(row.paid), numeric: true },
+                    { header: "المتبقي", accessor: (row) => money(row.balance), numeric: true },
+                    ...(compare && prevRange
+                      ? [
+                          {
+                            header: "مقارنة",
+                            accessor: (row) => row,
+                            format: (row) => (
+                              <DeltaCell
+                                current={row.total}
+                                previous={
+                                  prevTotals.bySupplier.get(row.key) || 0
+                                }
+                              />
+                            ),
+                          },
+                        ]
+                      : []),
+                  ]}
+                  rows={bySupplierReport.rows}
+                  footer={{
+                    المورد: "الإجمالي",
+                    الإجمالي: money(bySupplierReport.totals.total),
+                    المدفوع: money(bySupplierReport.totals.paid),
+                    المتبقي: money(bySupplierReport.totals.balance),
+                  }}
+                />
+                {compare && prevRange ? (
+                  <div className="text-[11px] text-slate-500 dark:text-white/45">
+                    الفترة السابقة للمقارنة: {prevRange.from} ← {prevRange.to}.
+                  </div>
+                ) : null}
+              </>
             )
           ) : null}
 
@@ -1295,10 +1695,16 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 لا توجد مدفوعات في الفترة المحددة.
               </div>
             ) : (
+              <>
+              <HBars
+                rows={byBankReport.rows}
+                nameOf={(row) => row.name}
+                valueOf={(row) => row.paid}
+              />
               <ReportTable
                 columns={[
                   { header: "الحساب البنكي", accessor: (row) => row.name },
-                  { header: "الفواتير", accessor: (row) => row.count, numeric: true },
+                  { header: "الدفعات", accessor: (row) => row.count, numeric: true },
                   { header: "المدفوع", accessor: (row) => money(row.paid), numeric: true },
                 ]}
                 rows={byBankReport.rows}
@@ -1307,10 +1713,70 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                   المدفوع: money(byBankReport.total),
                 }}
               />
+              </>
+            )
+          ) : null}
+
+          {reportKey === "audit" ? (
+            auditQuery.isLoading ? (
+              <div className="text-center text-sm text-slate-500 dark:text-white/50 py-8">
+                جاري تحميل سجل النشاط…
+              </div>
+            ) : auditRows.length === 0 ? (
+              <div className="text-center text-sm text-slate-500 dark:text-white/50 py-8">
+                لا توجد أحداث مسجلة في الفترة المحددة — يبدأ السجل
+                بالتسجيل من الآن مع كل إنشاء وتعديل ودفعة.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm min-w-[640px]">
+                  <thead>
+                    <tr className="text-right text-[11px] text-slate-500 dark:text-white/45">
+                      <th className="px-3 py-2 font-bold w-36">التاريخ</th>
+                      <th className="px-3 py-2 font-bold w-32">الموظف</th>
+                      <th className="px-3 py-2 font-bold w-28">الحدث</th>
+                      <th className="px-3 py-2 font-bold">التفاصيل</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {auditRows.map((entry) => (
+                      <tr
+                        key={entry.id}
+                        className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]"
+                      >
+                        <td
+                          className="px-3 py-2 font-mono text-[11px] text-slate-500 dark:text-white/50 whitespace-nowrap"
+                          dir="ltr"
+                        >
+                          {entry.log_date} {entry.log_time}
+                        </td>
+                        <td className="px-3 py-2 text-slate-800 dark:text-white/80 whitespace-nowrap">
+                          {entry.actor_name || "النظام"}
+                        </td>
+                        <td className="px-3 py-2">
+                          <span
+                            className={`${ws.pill} whitespace-nowrap ${auditActionClass(entry.action)}`}
+                          >
+                            {auditActionLabel(entry.action)}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 text-slate-700 dark:text-white/70">
+                          {entry.summary || "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )
           ) : null}
         </div>
       </div>
+
+      <ScheduledReportsModal
+        open={showSchedules}
+        onClose={() => setShowSchedules(false)}
+      />
     </>
   );
 }
