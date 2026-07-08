@@ -380,7 +380,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
 
   // سجل النشاط — يُقرأ من جدول التدقيق حسب الفترة، والبحث محلي.
   const auditQuery = useQuery({
-    queryKey: ["purchase-audit-log", from || "all", to || "all"],
+    queryKey: queryKeys.purchaseAuditLog(from || "all", to || "all"),
     enabled: reportKey === "audit",
     queryFn: async () => {
       const params = new URLSearchParams();

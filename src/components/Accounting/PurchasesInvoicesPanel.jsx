@@ -536,7 +536,7 @@ export default function PurchasesInvoicesPanel({
 
   // الخط الزمني للفاتورة المعروضة في الدرج — من سجل التدقيق.
   const previewLogQuery = useQuery({
-    queryKey: ["purchase-audit-log", "invoice", preview?.id],
+    queryKey: queryKeys.purchaseAuditLog("invoice", preview?.id),
     enabled: !!preview?.id,
     queryFn: async () => {
       const response = await authedFetch(

@@ -15,6 +15,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { authedFetch } from "@/utils/apiAuth";
+import { queryKeys } from "@/utils/queryKeys";
 
 /**
  * التقارير المجدولة — ملخص مشتريات يصل واتساب تلقائياً:
@@ -24,7 +25,7 @@ import { authedFetch } from "@/utils/apiAuth";
  * النظام. «أرسل الآن» يرسل ملخص آخر 30 يوماً للاختبار.
  */
 
-const SCHEDULES_KEY = ["scheduled-purchase-reports"];
+const SCHEDULES_KEY = queryKeys.scheduledPurchaseReports();
 
 const FREQUENCY_OPTIONS = [
   { value: "monthly", label: "شهري — صباح أول الشهر عن الشهر الماضي" },

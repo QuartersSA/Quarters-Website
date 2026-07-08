@@ -17,15 +17,16 @@ import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { buildExpenseAccountOptions } from "@/components/Accounting/PurchaseInvoiceModal";
 import { authedFetch } from "@/utils/apiAuth";
+import { queryKeys } from "@/utils/queryKeys";
 
 /**
  * الفواتير المتكررة — قوالب (إيجار، اشتراكات، عقود شهرية) تتحول
  * تلقائياً إلى فاتورة «بانتظار الاعتماد» في اليوم المحدد من كل شهر.
- * التوليد يتم عند أول فتح للدفتر بعد حلول الموعد (لا يحتاج خادم
- * مجدول) — رقم الفاتورة REC-YYYYMM-القالب.
+ * التوليد يتم آلياً بمجدول الخادم الداخلي (أو عند أول فتح للدفتر
+ * بعد الموعد كاحتياط) — رقم الفاتورة REC-YYYYMM-القالب.
  */
 
-const RECURRING_KEY = ["recurring-purchase-invoices"];
+const RECURRING_KEY = queryKeys.recurringPurchaseInvoices();
 
 function moneyValue(value) {
   const number = Number(value || 0);
