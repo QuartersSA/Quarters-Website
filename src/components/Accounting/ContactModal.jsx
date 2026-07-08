@@ -14,7 +14,7 @@ import {
   Pencil,
   Unlink,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { buildExpenseAccountOptions } from "@/components/Accounting/PurchaseInvoiceModal";
 import {
@@ -346,7 +346,7 @@ export default function ContactModal({
         <div className="flex items-start justify-between gap-3 mb-5">
           <div className="flex items-center gap-3">
             <div
-              className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}
+              className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}
             >
               <Contact className="w-5 h-5" />
             </div>
@@ -421,7 +421,7 @@ export default function ContactModal({
                     name="vat_registered"
                     checked={!vatRegistered}
                     onChange={() => setVatRegistered(false)}
-                    className="accent-emerald-500"
+                    className="accent-[#0e7a5f]"
                   />
                   <span className="text-sm text-slate-800 dark:text-white/80">
                     غير مسجل في ضريبة القيمة المضافة
@@ -433,7 +433,7 @@ export default function ContactModal({
                     name="vat_registered"
                     checked={vatRegistered}
                     onChange={() => setVatRegistered(true)}
-                    className="accent-emerald-500"
+                    className="accent-[#0e7a5f]"
                   />
                   <span className="text-sm text-slate-800 dark:text-white/80">
                     جهة الاتصال مسجلة في ضريبة القيمة المضافة في السعودية
@@ -540,7 +540,7 @@ export default function ContactModal({
                 type="checkbox"
                 checked={isActive}
                 onChange={(e) => setIsActive(e.target.checked)}
-                className="accent-emerald-500"
+                className="accent-[#0e7a5f]"
               />
               <span className="text-sm text-slate-800 dark:text-white/80">
                 نشط

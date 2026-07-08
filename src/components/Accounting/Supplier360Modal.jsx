@@ -11,7 +11,7 @@ import {
   User,
   X,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import {
   purchaseInvoiceStatusClass,
   purchaseInvoiceStatusLabel,
@@ -152,7 +152,7 @@ export default function Supplier360Modal({ contact, invoices = [], onClose }) {
         {/* الرأس */}
         <div className={`sticky top-0 z-10 bg-white/95 dark:bg-slate-900/95 backdrop-blur px-5 py-4 border-b ${ws.divider} flex items-start justify-between gap-3`}>
           <div className="flex items-center gap-3 min-w-0">
-            <div className={`${ws.iconBox} w-11 h-11 text-emerald-700 dark:text-emerald-200 shrink-0`}>
+            <div className={`${ws.iconBox} w-11 h-11 text-[#0e7a5f] dark:text-emerald-200 shrink-0`}>
               <User className="w-5 h-5" />
             </div>
             <div className="min-w-0">
@@ -193,7 +193,7 @@ export default function Supplier360Modal({ contact, invoices = [], onClose }) {
             <Kpi
               label="المدفوع"
               value={`${money(stats.paid)} SAR`}
-              tone="text-emerald-700 dark:text-emerald-200"
+              tone="text-[#0e7a5f] dark:text-emerald-200"
             />
             <Kpi
               label="الرصيد المستحق"
@@ -237,7 +237,7 @@ export default function Supplier360Modal({ contact, invoices = [], onClose }) {
                   >
                     <div className="w-full h-20 flex items-end">
                       <div
-                        className="w-full rounded-t bg-emerald-500/75 dark:bg-emerald-400/60"
+                        className="w-full rounded-t bg-[#0e7a5f]/75 dark:bg-emerald-400/60"
                         style={{ height: `${pct}%` }}
                       />
                     </div>

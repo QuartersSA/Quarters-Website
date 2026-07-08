@@ -12,7 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { authedFetch } from "@/utils/apiAuth";
 
@@ -146,7 +146,7 @@ export default function ScheduledReportsModal({ open, onClose }) {
       <div className={`${ws.glass} ${ws.card} w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl max-h-[92svh] overflow-y-auto`}>
         <div className={`sticky top-0 z-10 bg-white/95 dark:bg-slate-900/95 backdrop-blur px-5 py-4 border-b ${ws.divider} flex items-center justify-between gap-3`}>
           <div className="flex items-center gap-3">
-            <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+            <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
               <CalendarClock className="w-5 h-5" />
             </div>
             <div>
@@ -228,7 +228,7 @@ export default function ScheduledReportsModal({ open, onClose }) {
                   onChange={(event) =>
                     setForm({ ...form, is_active: event.target.checked })
                   }
-                  className="accent-emerald-500"
+                  className="accent-[#0e7a5f]"
                 />
                 الجدولة فعّالة
               </label>
@@ -283,7 +283,7 @@ export default function ScheduledReportsModal({ open, onClose }) {
 
               {sendNote ? (
                 <div
-                  className={`text-xs ${sendNote.ok ? "text-emerald-700 dark:text-emerald-300" : "text-rose-700 dark:text-rose-300"}`}
+                  className={`text-xs ${sendNote.ok ? "text-[#0e7a5f] dark:text-emerald-300" : "text-rose-700 dark:text-rose-300"}`}
                 >
                   {sendNote.text}
                 </div>

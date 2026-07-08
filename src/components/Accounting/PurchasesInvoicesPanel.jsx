@@ -26,7 +26,7 @@ import {
   X,
 } from "lucide-react";
 import useUpload from "@/utils/useUpload";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import PurchaseInvoiceModal, {
   PURCHASE_INVOICE_STATUS_OPTIONS,
@@ -89,7 +89,7 @@ function SummaryCard({ label, value, icon: Icon, tone = "slate", suffix }) {
     tone === "rose"
       ? "text-rose-700 dark:text-rose-200"
       : tone === "emerald"
-        ? "text-emerald-700 dark:text-emerald-200"
+        ? "text-[#0e7a5f] dark:text-emerald-200"
         : tone === "amber"
           ? "text-amber-700 dark:text-amber-200"
           : "text-slate-700 dark:text-white/80";
@@ -238,7 +238,7 @@ function RecordPaymentModal({
       <div className={`${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5`}>
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">
-            <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+            <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
               <HandCoins className="w-5 h-5" />
             </div>
             <div>
@@ -269,7 +269,7 @@ function RecordPaymentModal({
           </div>
           <div>
             <div className="text-[11px] text-slate-500 dark:text-white/45">المدفوع</div>
-            <div className="text-sm font-bold text-emerald-700 dark:text-emerald-200 mt-0.5" dir="ltr">
+            <div className="text-sm font-bold text-[#0e7a5f] dark:text-emerald-200 mt-0.5" dir="ltr">
               {formatMoney(invoice.paid_amount, invoice.currency)}
             </div>
           </div>
@@ -782,7 +782,7 @@ export default function PurchasesInvoicesPanel({
               type="checkbox"
               checked={includeInactive}
               onChange={(event) => setIncludeInactive(event.target.checked)}
-              className="accent-emerald-500"
+              className="accent-[#0e7a5f]"
             />
             عرض الموقوفة
           </label>
@@ -877,7 +877,7 @@ export default function PurchasesInvoicesPanel({
             {savedFilters.map((filter) => (
               <span
                 key={filter.name}
-                className={`${ws.pill} bg-emerald-50 dark:bg-emerald-400/10 text-emerald-800 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25 inline-flex items-center gap-1.5`}
+                className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0b3d31] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25 inline-flex items-center gap-1.5`}
               >
                 <button
                   type="button"
@@ -1004,7 +1004,7 @@ export default function PurchasesInvoicesPanel({
                       <input
                         type="checkbox"
                         aria-label="تحديد الكل"
-                        className="accent-emerald-500"
+                        className="accent-[#0e7a5f]"
                         checked={
                           filtered.length > 0 &&
                           filtered.every((invoice) => selected.has(invoice.id))
@@ -1042,7 +1042,7 @@ export default function PurchasesInvoicesPanel({
                       }}
                       className={`cursor-pointer hover:bg-slate-50 dark:hover:bg-white/[0.03] ${
                         index === activeIdx
-                          ? "bg-emerald-50/60 dark:bg-emerald-400/[0.06]"
+                          ? "bg-[#e7f2ee]/70 dark:bg-emerald-400/[0.06]"
                           : ""
                       }`}
                     >
@@ -1050,7 +1050,7 @@ export default function PurchasesInvoicesPanel({
                         <input
                           type="checkbox"
                           aria-label="تحديد الفاتورة"
-                          className="accent-emerald-500"
+                          className="accent-[#0e7a5f]"
                           checked={selected.has(invoice.id)}
                           onChange={() => toggleSelect(invoice.id)}
                         />
@@ -1063,7 +1063,7 @@ export default function PurchasesInvoicesPanel({
                               href={invoice.attachment_url}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-slate-400 hover:text-emerald-600 dark:text-white/40 dark:hover:text-emerald-300"
+                              className="text-slate-400 hover:text-[#0e7a5f] dark:text-white/40 dark:hover:text-emerald-300"
                               title="عرض الفاتورة المرفقة"
                               onClick={(event) => event.stopPropagation()}
                             >
@@ -1114,7 +1114,7 @@ export default function PurchasesInvoicesPanel({
                             <button
                               type="button"
                               onClick={() => setPaying(invoice)}
-                              className={`${ws.iconButton} w-9 h-9 hover:bg-emerald-50 dark:hover:bg-emerald-500/15 hover:border-emerald-200 dark:hover:border-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-200`}
+                              className={`${ws.iconButton} w-9 h-9 hover:bg-[#e7f2ee] dark:hover:bg-emerald-500/15 hover:border-[#c9e2d8] dark:hover:border-emerald-500/30 hover:text-[#0e7a5f] dark:hover:text-emerald-200`}
                               title="تسجيل دفعة"
                             >
                               <HandCoins className="w-4 h-4" />
@@ -1325,7 +1325,7 @@ export default function PurchasesInvoicesPanel({
                           );
                           if (contact) setSupplier360(contact);
                         }}
-                        className="text-xs text-emerald-700 dark:text-emerald-300 hover:underline truncate mt-0.5 inline-flex items-center gap-1"
+                        className="text-xs text-[#0e7a5f] dark:text-emerald-300 hover:underline truncate mt-0.5 inline-flex items-center gap-1"
                         title="بطاقة المورد 360°"
                       >
                         <ScanEye className="w-3 h-3 shrink-0" />
@@ -1379,7 +1379,7 @@ export default function PurchasesInvoicesPanel({
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">المدفوع</div>
-                      <div className="text-sm font-bold tabular-nums text-emerald-700 dark:text-emerald-200" dir="ltr">
+                      <div className="text-sm font-bold tabular-nums text-[#0e7a5f] dark:text-emerald-200" dir="ltr">
                         {formatMoney(preview.paid_amount, preview.currency)}
                       </div>
                     </div>

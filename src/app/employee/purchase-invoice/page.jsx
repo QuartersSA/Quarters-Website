@@ -12,7 +12,7 @@ import {
   Search,
   Truck,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import PurchaseInvoiceModal from "@/components/Accounting/PurchaseInvoiceModal";
 import ContactModal from "@/components/Accounting/ContactModal";
 import {
@@ -244,7 +244,7 @@ export default function PurchaseInvoiceEntryPage() {
             ) : (
               <>
                 {lastSaved ? (
-                  <div className="bg-emerald-500/10 border border-emerald-400/25 rounded-2xl p-3 text-emerald-200 text-sm flex items-center justify-center gap-2">
+                  <div className="bg-[#0e7a5f]/10 border border-[#0e7a5f]/25 rounded-2xl p-3 text-emerald-200 text-sm flex items-center justify-center gap-2">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
                     تم حفظ الفاتورة
                     {typeof lastSaved === "string"
@@ -312,7 +312,7 @@ export default function PurchaseInvoiceEntryPage() {
             </div>
 
             {supplierNotice ? (
-              <div className="bg-emerald-500/10 border border-emerald-400/25 rounded-2xl p-2.5 text-emerald-200 text-xs flex items-center justify-center gap-2">
+              <div className="bg-[#0e7a5f]/10 border border-[#0e7a5f]/25 rounded-2xl p-2.5 text-emerald-200 text-xs flex items-center justify-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                 {supplierNotice}
               </div>

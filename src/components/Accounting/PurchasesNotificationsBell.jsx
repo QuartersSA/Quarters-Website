@@ -10,7 +10,7 @@ import {
   Loader2,
   Send,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import { useAccountingPurchaseInvoices } from "@/hooks/useAccountingPurchaseInvoices";
 import { authedFetch } from "@/utils/apiAuth";
 
@@ -298,7 +298,7 @@ export default function PurchasesNotificationsBell({
             </div>
             {sendResult ? (
               <div
-                className={`text-[11px] ${sendResult.ok ? "text-emerald-700 dark:text-emerald-300" : "text-rose-700 dark:text-rose-300"}`}
+                className={`text-[11px] ${sendResult.ok ? "text-[#0e7a5f] dark:text-emerald-300" : "text-rose-700 dark:text-rose-300"}`}
               >
                 {sendResult.text}
               </div>

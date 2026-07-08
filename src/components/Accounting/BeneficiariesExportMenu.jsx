@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Download, ChevronDown, FileText } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassPopover from "@/components/Workspace/GlassPopover";
 import {
   exportToExcelHTML,
@@ -100,7 +100,7 @@ export default function BeneficiariesExportMenu({ beneficiaries }) {
           onClick={handleExportExcel}
           className="w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors"
         >
-          <FileText className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
+          <FileText className="w-5 h-5 text-[#0e7a5f] dark:text-emerald-200" />
           <div>
             <p className="font-semibold text-slate-900 dark:text-white">
               Excel

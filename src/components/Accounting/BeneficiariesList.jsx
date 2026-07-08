@@ -9,7 +9,7 @@ import {
   Hash,
   Link as LinkIcon,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 
 function formatIban(iban) {
   if (!iban) return "—";
@@ -100,7 +100,7 @@ export default function BeneficiariesList({
                   <td className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap">
                     {b.contact_name ? (
                       <span className="inline-flex items-center gap-1">
-                        <LinkIcon className="w-3 h-3 text-emerald-700 dark:text-emerald-300" />
+                        <LinkIcon className="w-3 h-3 text-[#0e7a5f] dark:text-emerald-300" />
                         {b.contact_name}
                       </span>
                     ) : (
@@ -148,7 +148,7 @@ export default function BeneficiariesList({
                     <span
                       className={`${ws.pill} ${
                         isActive
-                          ? "bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25"
+                          ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
                           : "bg-slate-100 dark:bg-white/[0.04] text-slate-500 dark:text-white/50 border-slate-200 dark:border-white/10"
                       }`}
                     >

@@ -15,7 +15,7 @@ import {
   Users,
 } from "lucide-react";
 import ScheduledReportsModal from "@/components/Accounting/ScheduledReportsModal";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
 import { useAccountingPurchaseInvoices } from "@/hooks/useAccountingPurchaseInvoices";
@@ -179,7 +179,7 @@ function auditActionLabel(action) {
 
 function auditActionClass(action) {
   if (action === "payment")
-    return "bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25";
+    return "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25";
   if (action === "deleted" || action === "deactivated")
     return "bg-rose-100 dark:bg-rose-400/10 text-rose-700 dark:text-rose-200 border-rose-200 dark:border-rose-400/25";
   if (action === "created")
@@ -211,7 +211,7 @@ function HBars({ rows, nameOf, valueOf, max = 8 }) {
             </span>
             <div className="flex-1 h-4 rounded bg-slate-100 dark:bg-white/[0.05] overflow-hidden">
               <div
-                className="h-full rounded bg-emerald-500/80 dark:bg-emerald-400/70"
+                className="h-full rounded bg-[#0e7a5f]/80 dark:bg-emerald-400/70"
                 style={{ width: `${pct}%` }}
               />
             </div>
@@ -237,7 +237,7 @@ function HBars({ rows, nameOf, valueOf, max = 8 }) {
 function DeltaCell({ current, previous }) {
   if (!previous || previous <= 0) {
     return current > 0 ? (
-      <span className="text-emerald-700 dark:text-emerald-300 text-[11px] font-bold">جديد</span>
+      <span className="text-[#0e7a5f] dark:text-emerald-300 text-[11px] font-bold">جديد</span>
     ) : (
       <span>—</span>
     );
@@ -247,7 +247,7 @@ function DeltaCell({ current, previous }) {
   const up = pct >= 0;
   return (
     <span
-      className={`text-[11px] font-bold ${up ? "text-rose-700 dark:text-rose-300" : "text-emerald-700 dark:text-emerald-300"} ${big ? "bg-amber-100 dark:bg-amber-400/15 px-1.5 py-0.5 rounded" : ""}`}
+      className={`text-[11px] font-bold ${up ? "text-rose-700 dark:text-rose-300" : "text-[#0e7a5f] dark:text-emerald-300"} ${big ? "bg-amber-100 dark:bg-amber-400/15 px-1.5 py-0.5 rounded" : ""}`}
       dir="ltr"
       title={`الفترة السابقة: ${money(previous)}`}
     >
@@ -1099,7 +1099,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
               onClick={() => setReportKey(report.key)}
               className={`${ws.glass} ${ws.card} p-3 text-right transition-colors ${
                 isActive
-                  ? "ring-2 ring-emerald-500/60"
+                  ? "ring-2 ring-[#0e7a5f]/60"
                   : "hover:bg-slate-100 dark:hover:bg-white/[0.05]"
               }`}
               title={report.description}
@@ -1108,7 +1108,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 <div
                   className={`${ws.iconBox} w-8 h-8 shrink-0 ${
                     isActive
-                      ? "text-emerald-700 dark:text-emerald-200"
+                      ? "text-[#0e7a5f] dark:text-emerald-200"
                       : "text-slate-500 dark:text-white/50"
                   }`}
                 >
@@ -1216,7 +1216,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 type="checkbox"
                 checked={compare}
                 onChange={(event) => setCompare(event.target.checked)}
-                className="accent-emerald-500"
+                className="accent-[#0e7a5f]"
               />
               قارن بالفترة السابقة
             </label>
@@ -1267,7 +1267,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
               {activeReport.description}
             </div>
           </div>
-          <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+          <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
             <BarChart3 className="w-5 h-5" />
           </div>
         </div>

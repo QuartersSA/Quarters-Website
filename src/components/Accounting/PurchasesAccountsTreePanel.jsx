@@ -19,7 +19,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
 import {
@@ -44,7 +44,7 @@ const TYPE_META = {
   },
   revenue: {
     label: "إيرادات",
-    pill: "bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25",
+    pill: "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25",
   },
   expense: {
     label: "مصروفات",
@@ -175,7 +175,7 @@ function AccountModal({
         >
           <div className="flex items-center gap-3">
             <div
-              className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}
+              className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}
             >
               <ListTree className="w-5 h-5" />
             </div>
@@ -273,7 +273,7 @@ function AccountModal({
               type="checkbox"
               checked={isPostable}
               onChange={(event) => setIsPostable(event.target.checked)}
-              className="accent-emerald-500 mt-0.5"
+              className="accent-[#0e7a5f] mt-0.5"
             />
             <span>
               حساب قابل للترحيل
@@ -656,7 +656,7 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
             ) : null}
             {account.source_bank_account_id ? (
               <span
-                className={`${ws.pill} bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25 inline-flex items-center gap-1`}
+                className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25 inline-flex items-center gap-1`}
                 title="مرتبط بحساب بنكي"
               >
                 <Landmark className="w-3 h-3" />
@@ -756,7 +756,7 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
               type="checkbox"
               checked={includeInactive}
               onChange={(event) => setIncludeInactive(event.target.checked)}
-              className="accent-emerald-500"
+              className="accent-[#0e7a5f]"
             />
             عرض الموقوفة
           </label>
@@ -822,7 +822,7 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
               onClick={() => setTypeFilter(isActive ? "" : type)}
               className={`${ws.glass} ${ws.card} p-3 text-right transition-colors ${
                 isActive
-                  ? "ring-2 ring-emerald-500/60"
+                  ? "ring-2 ring-[#0e7a5f]/60"
                   : "hover:bg-slate-100 dark:hover:bg-white/[0.05]"
               }`}
               title={isActive ? "عرض كل الأنواع" : `عرض ${meta.label} فقط`}
@@ -851,7 +851,7 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
               البنكية تُربط تلقائياً تحت «1102 البنوك».
             </div>
           </div>
-          <div className={`${ws.iconBox} w-10 h-10 text-emerald-700 dark:text-emerald-200`}>
+          <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
             <ListTree className="w-5 h-5" />
           </div>
         </div>

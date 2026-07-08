@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import AccountingSidebar from "@/components/Accounting/Sidebar";
 import useWorkspaceUser from "@/hooks/useWorkspaceUser";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import ContactModal from "@/components/Accounting/ContactModal";
 import ContactsList from "@/components/Accounting/ContactsList";
 import ContactsExportMenu from "@/components/Accounting/ContactsExportMenu";
@@ -136,7 +136,7 @@ function PurchasesMobileHeader({ activeTab, actions = null }) {
       className={`lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`}
     >
       <div className="w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center">
-        <ShoppingCart className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
+        <ShoppingCart className="w-5 h-5 text-[#0e7a5f] dark:text-emerald-200" />
       </div>
       <div className="min-w-0 flex-1">
         <div className="font-bold text-slate-900 dark:text-white tracking-tight">
@@ -155,7 +155,7 @@ function PurchasesDesktopHeader({ activeTab, actions = null }) {
   return (
     <div className="hidden lg:flex items-center gap-4">
       <div className={ws.iconBox}>
-        <ShoppingCart className="w-6 h-6 text-emerald-700 dark:text-emerald-200" />
+        <ShoppingCart className="w-6 h-6 text-[#0e7a5f] dark:text-emerald-200" />
       </div>
       <div className="flex-1 min-w-0">
         <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
@@ -235,7 +235,7 @@ function ContactsPanel({ employeeId, isAdmin }) {
               type="checkbox"
               checked={includeInactive}
               onChange={(e) => setIncludeInactive(e.target.checked)}
-              className="accent-emerald-500"
+              className="accent-[#0e7a5f]"
             />
             عرض الموقوفين
           </label>
@@ -346,7 +346,7 @@ function BeneficiariesPanel({ employeeId, isAdmin }) {
               type="checkbox"
               checked={includeInactive}
               onChange={(e) => setIncludeInactive(e.target.checked)}
-              className="accent-emerald-500"
+              className="accent-[#0e7a5f]"
             />
             عرض الموقوفين
           </label>
@@ -546,7 +546,10 @@ export default function PurchasesPage() {
     ) : null;
 
   return (
-    <div className="min-h-[100svh] pb-24 lg:pb-0" dir="rtl">
+    <div
+      className="min-h-[100svh] pb-24 lg:pb-0 bg-[#f6f8f7] text-[#1a2332] dark:bg-transparent dark:text-white"
+      dir="rtl"
+    >
       <AccountingSidebar active="purchases" />
       <PurchasesMobileHeader activeTab={activeTab} actions={bell} />
       <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">

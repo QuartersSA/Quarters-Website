@@ -15,7 +15,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import useUpload from "@/utils/useUpload";
 // authedFetch prefers the admin token but falls back to field-flow
@@ -926,18 +926,22 @@ export function purchaseInvoiceStatusLabel(value) {
   );
 }
 
+// ألوان الحالات حرفياً من لوحة مستند المفهوم — مدفوعة ‎#178A5B،
+// جزئية ‎#0E7490، متأخرة ‎#B5443C، بانتظار الاعتماد ‎#B7791F —
+// معزولة عن أخضر الهوية حتى لا يختلط «زر رئيسي» بـ«مدفوع».
+// الوضع الداكن على تدرجاته السابقة.
 export function purchaseInvoiceStatusClass(value) {
   if (value === "paid") {
-    return "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-500/25";
+    return "bg-[#e6f4ec] dark:bg-emerald-500/15 text-[#178a5b] dark:text-emerald-200 border-[#b7ddc7] dark:border-emerald-500/25";
   }
   if (value === "partial_paid") {
-    return "bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-200 border-indigo-200 dark:border-indigo-500/25";
+    return "bg-[#e4f2f5] dark:bg-indigo-500/15 text-[#0e7490] dark:text-indigo-200 border-[#b4dde5] dark:border-indigo-500/25";
   }
   if (value === "overdue") {
-    return "bg-rose-100 dark:bg-rose-500/15 text-rose-700 dark:text-rose-200 border-rose-200 dark:border-rose-500/25";
+    return "bg-[#f9ebe9] dark:bg-rose-500/15 text-[#b5443c] dark:text-rose-200 border-[#e8c4bf] dark:border-rose-500/25";
   }
   // pending_payment + legacy "new" both read بانتظار الاعتماد.
-  return "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-500/25";
+  return "bg-[#faf3e3] dark:bg-amber-500/15 text-[#b7791f] dark:text-amber-200 border-[#ecd9ab] dark:border-amber-500/25";
 }
 
 // Expense accounts from شجرة الحسابات as a REAL hierarchy: the
@@ -1945,10 +1949,10 @@ export default function PurchaseInvoiceModal({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading || scanBusy}
-          className="flex-1 m-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 hover:border-emerald-400 dark:hover:border-emerald-400/50 hover:bg-emerald-50/40 dark:hover:bg-emerald-500/[0.04] transition-colors flex flex-col items-center justify-center gap-3 p-8 text-center disabled:opacity-50"
+          className="flex-1 m-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 hover:border-[#0e7a5f] dark:hover:border-emerald-400/50 hover:bg-[#e7f2ee]/40 dark:hover:bg-emerald-500/[0.04] transition-colors flex flex-col items-center justify-center gap-3 p-8 text-center disabled:opacity-50"
         >
           {uploading || scanBusy ? (
-            <Loader2 className="w-10 h-10 text-emerald-600 dark:text-emerald-300 animate-spin" />
+            <Loader2 className="w-10 h-10 text-[#0e7a5f] dark:text-emerald-300 animate-spin" />
           ) : (
             <ScanLine className="w-10 h-10 text-slate-400 dark:text-white/35" />
           )}
@@ -1976,7 +1980,7 @@ export default function PurchaseInvoiceModal({
       <div
         className={`${ws.topBar} px-4 sm:px-6 py-3 flex items-center gap-3 border-b ${ws.divider} shrink-0`}
       >
-        <div className={`${ws.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200 shrink-0`}>
+        <div className={`${ws.iconBox} w-9 h-9 text-[#0e7a5f] dark:text-emerald-200 shrink-0`}>
           <FileText className="w-4.5 h-4.5" />
         </div>
         <div className="min-w-0 flex-1">
@@ -2059,7 +2063,7 @@ export default function PurchaseInvoiceModal({
             {scanSummary ? (
               <div className={`${ws.glassSoft} ${ws.card} p-3 space-y-1.5`}>
                 {scanSummary.filled.length > 0 ? (
-                  <div className="flex items-center gap-2 flex-wrap text-xs text-emerald-800 dark:text-emerald-200">
+                  <div className="flex items-center gap-2 flex-wrap text-xs text-[#0b3d31] dark:text-emerald-200">
                     <Sparkles className="w-3.5 h-3.5 shrink-0" />
                     <span>
                       {scanSummary.smart ? "تحليل ذكي — تمت تعبئة:" : "تمت تعبئة:"}
@@ -2067,7 +2071,7 @@ export default function PurchaseInvoiceModal({
                     {scanSummary.filled.map((label) => (
                       <span
                         key={label}
-                        className={`${ws.pill} bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25`}
+                        className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`}
                       >
                         {label}
                       </span>
@@ -2334,7 +2338,7 @@ export default function PurchaseInvoiceModal({
                             }
                             className={`${ws.pill} justify-center text-[10px] py-1 cursor-pointer select-none ${
                               line.amount_includes_tax
-                                ? "bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25"
+                                ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
                                 : "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10"
                             }`}
                             title="بدّل بين سعر شامل الضريبة وسعر خالٍ منها"

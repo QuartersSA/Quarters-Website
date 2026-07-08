@@ -14,7 +14,7 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
-import { ws } from "@/components/Workspace/ui";
+import { ws } from "@/components/Workspace/uiPurchases";
 import {
   purchaseInvoiceStatusClass,
   purchaseInvoiceStatusLabel,
@@ -89,7 +89,7 @@ function KpiCard({ label, value, sub, delta, tone = "slate", onClick }) {
     tone === "rose"
       ? "text-rose-700 dark:text-rose-200"
       : tone === "emerald"
-        ? "text-emerald-700 dark:text-emerald-200"
+        ? "text-[#0e7a5f] dark:text-emerald-200"
         : tone === "amber"
           ? "text-amber-700 dark:text-amber-200"
           : "text-slate-900 dark:text-white";
@@ -115,7 +115,7 @@ function KpiCard({ label, value, sub, delta, tone = "slate", onClick }) {
         <div
           className={`text-[11px] font-bold mt-1 flex items-center gap-1 ${
             delta.direction === "up"
-              ? "text-emerald-700 dark:text-emerald-300"
+              ? "text-[#0e7a5f] dark:text-emerald-300"
               : "text-rose-700 dark:text-rose-300"
           }`}
         >
@@ -418,8 +418,8 @@ export default function PurchasesOverviewPanel({
                 <div
                   className={`rounded-t ${
                     bar.isCurrent
-                      ? "bg-emerald-600 dark:bg-emerald-400"
-                      : "bg-emerald-100 dark:bg-emerald-400/20"
+                      ? "bg-[#0e7a5f] dark:bg-emerald-400"
+                      : "bg-[#e7f2ee] dark:bg-emerald-400/20"
                   }`}
                   style={{ height: `${Math.max(bar.pct, bar.value > 0 ? 4 : 0)}%` }}
                 />
@@ -432,7 +432,7 @@ export default function PurchasesOverviewPanel({
                 key={bar.month}
                 className={`flex-1 text-center text-[10.5px] ${
                   bar.isCurrent
-                    ? "font-bold text-emerald-700 dark:text-emerald-300"
+                    ? "font-bold text-[#0e7a5f] dark:text-emerald-300"
                     : "text-slate-400 dark:text-white/35"
                 }`}
               >
@@ -494,7 +494,7 @@ export default function PurchasesOverviewPanel({
             <button
               type="button"
               onClick={() => goInvoices()}
-              className="text-xs text-emerald-700 dark:text-emerald-300 font-semibold inline-flex items-center gap-1"
+              className="text-xs text-[#0e7a5f] dark:text-emerald-300 font-semibold inline-flex items-center gap-1"
             >
               كل الفواتير
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -537,7 +537,7 @@ export default function PurchasesOverviewPanel({
             يحتاج تصرفك
           </div>
           {actionItems.length === 0 ? (
-            <div className="text-xs text-emerald-700 dark:text-emerald-300 py-6 text-center">
+            <div className="text-xs text-[#0e7a5f] dark:text-emerald-300 py-6 text-center">
               كل شيء تحت السيطرة — لا متأخرات ولا معلقات. ✅
             </div>
           ) : (
@@ -592,7 +592,7 @@ export default function PurchasesOverviewPanel({
             onClick={action.onClick}
             className={`${ws.glass} ${ws.card} p-4 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-white/[0.05] transition-colors text-right`}
           >
-            <div className={`${ws.iconBox} w-10 h-10 shrink-0 text-emerald-700 dark:text-emerald-200`}>
+            <div className={`${ws.iconBox} w-10 h-10 shrink-0 text-[#0e7a5f] dark:text-emerald-200`}>
               <action.icon className="w-5 h-5" />
             </div>
             <div className="font-semibold text-sm text-slate-900 dark:text-white">
