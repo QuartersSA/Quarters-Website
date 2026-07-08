@@ -1227,7 +1227,6 @@ export default function PurchaseInvoiceModal({
     setPaymentReceiptName("");
     setReceiptUploading(false);
     setBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
-    setWorkflowStatus(invoice?.workflow_status || "new");
     setNotes(invoice?.notes || "");
     setAttachmentUrl(invoice?.attachment_url || "");
     setAttachmentName("");
