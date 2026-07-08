@@ -393,6 +393,7 @@ export default function PurchasesPage() {
         next.set("sub", extras.sub || vendorSubKey);
       }
       if (extras.intent) next.set("intent", extras.intent);
+      if (extras.status) next.set("status", extras.status);
       setSearchParams(next, { replace: false });
     },
     [setSearchParams, vendorSubKey],
@@ -498,6 +499,7 @@ export default function PurchasesPage() {
             employeeId={employeeId}
             isAdmin={isAdmin}
             autoOpenAdd={intent === "add"}
+            initialStatus={searchParams.get("status") || ""}
             onIntentConsumed={clearIntent}
           />
         ) : activeTabKey === "vendors" && activeVendorSub.key === "contacts" ? (

@@ -19,6 +19,9 @@ import { useAccountingPurchaseInvoices } from "@/hooks/useAccountingPurchaseInvo
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
+import { useQuery } from "@tanstack/react-query";
+import { authedFetch } from "@/utils/apiAuth";
+import { queryKeys } from "@/utils/queryKeys";
 
 /**
  * مركز التقارير — قسم المشتريات.
@@ -155,6 +158,67 @@ function periodLabel(preset, from, to) {
   return opt?.label || "";
 }
 
+// أعمدة أفقية بسيطة — «الرسم يجاوب: وش الصورة؟ والجدول: وش التفاصيل؟»
+function HBars({ rows, nameOf, valueOf, max = 8 }) {
+  const top = rows.slice(0, max);
+  const peak = Math.max(...top.map((row) => valueOf(row)), 1);
+  return (
+    <div className="space-y-1.5">
+      {top.map((row, index) => {
+        const value = valueOf(row);
+        const pct = Math.max(Math.round((value / peak) * 100), 2);
+        return (
+          <div key={index} className="flex items-center gap-2 text-xs">
+            <span className="w-40 truncate text-slate-700 dark:text-white/70 shrink-0">
+              {nameOf(row)}
+            </span>
+            <div className="flex-1 h-4 rounded bg-slate-100 dark:bg-white/[0.05] overflow-hidden">
+              <div
+                className="h-full rounded bg-emerald-500/80 dark:bg-emerald-400/70"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+            <span
+              className="w-24 text-left font-mono tabular-nums text-slate-600 dark:text-white/60 shrink-0"
+              dir="ltr"
+            >
+              {money(value)}
+            </span>
+          </div>
+        );
+      })}
+      {rows.length > max ? (
+        <div className="text-[11px] text-slate-400 dark:text-white/35">
+          + {rows.length - max} صفوف أخرى في الجدول أدناه
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+// خلية الدلتا في وضع المقارنة — الانحرافات فوق 20% تُظلَّل.
+function DeltaCell({ current, previous }) {
+  if (!previous || previous <= 0) {
+    return current > 0 ? (
+      <span className="text-emerald-700 dark:text-emerald-300 text-[11px] font-bold">جديد</span>
+    ) : (
+      <span>—</span>
+    );
+  }
+  const pct = Math.round(((current - previous) / previous) * 100);
+  const big = Math.abs(pct) >= 20;
+  const up = pct >= 0;
+  return (
+    <span
+      className={`text-[11px] font-bold ${up ? "text-rose-700 dark:text-rose-300" : "text-emerald-700 dark:text-emerald-300"} ${big ? "bg-amber-100 dark:bg-amber-400/15 px-1.5 py-0.5 rounded" : ""}`}
+      dir="ltr"
+      title={`الفترة السابقة: ${money(previous)}`}
+    >
+      {up ? "▲" : "▼"} {Math.abs(pct)}%
+    </span>
+  );
+}
+
 function KpiCard({ label, value, sub }) {
   return (
     <div className={`${ws.glassSoft} ${ws.card} p-3`}>
@@ -242,6 +306,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const [customFrom, setCustomFrom] = useState("");
   const [customTo, setCustomTo] = useState("");
   const [supplierId, setSupplierId] = useState("");
+  const [branchId, setBranchId] = useState("");
+  const [compare, setCompare] = useState(false);
 
   const invoicesQuery = useAccountingPurchaseInvoices({
     employeeId,
@@ -250,27 +316,107 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const contactsQuery = useAccountingContacts({ employeeId, isAdmin });
   const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
   const banksQuery = useAccountingBankAccounts({ employeeId, isAdmin });
+  const branchesQuery = useQuery({
+    queryKey: queryKeys.branches(),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const response = await authedFetch("/api/branches");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل الفروع");
+      return Array.isArray(data?.branches) ? data.branches : [];
+    },
+  });
 
   const invoices = invoicesQuery.data || [];
   const contacts = contactsQuery.data || [];
   const accounts = accountsQuery.data || [];
   const banks = banksQuery.data || [];
+  const reportBranches = branchesQuery.data || [];
 
   const { from, to } = useMemo(
     () => resolvePeriod(preset, customFrom, customTo),
     [preset, customFrom, customTo],
   );
 
-  // Active invoices inside the period (inclusive, lexicographic ISO).
+  // Active invoices inside the period (inclusive, lexicographic ISO)
+  // + optional branch scope.
+  const matchesBranch = useMemo(
+    () => (invoice) =>
+      !branchId ||
+      (branchId === "none"
+        ? !invoice.branch_id
+        : String(invoice.branch_id || "") === branchId),
+    [branchId],
+  );
   const periodInvoices = useMemo(() => {
     return invoices.filter((invoice) => {
       if (invoice.is_active === false) return false;
+      if (!matchesBranch(invoice)) return false;
       const date = invoice.invoice_date || "";
       if (from && date < from) return false;
       if (to && date > to) return false;
       return true;
     });
-  }, [invoices, from, to]);
+  }, [invoices, from, to, matchesBranch]);
+
+  // «قارن بالفترة السابقة»: فترة مساوية الطول تسبق from مباشرة.
+  const prevRange = useMemo(() => {
+    if (!compare || !from || !to) return null;
+    const start = new Date(`${from}T12:00:00Z`);
+    const end = new Date(`${to}T12:00:00Z`);
+    const days = Math.round((end - start) / 86400000) + 1;
+    const prevEnd = new Date(start);
+    prevEnd.setUTCDate(prevEnd.getUTCDate() - 1);
+    const prevStart = new Date(prevEnd);
+    prevStart.setUTCDate(prevStart.getUTCDate() - (days - 1));
+    return {
+      from: prevStart.toISOString().slice(0, 10),
+      to: prevEnd.toISOString().slice(0, 10),
+    };
+  }, [compare, from, to]);
+  const prevInvoices = useMemo(() => {
+    if (!prevRange) return [];
+    return invoices.filter((invoice) => {
+      if (invoice.is_active === false) return false;
+      if (!matchesBranch(invoice)) return false;
+      const date = invoice.invoice_date || "";
+      return date >= prevRange.from && date <= prevRange.to;
+    });
+  }, [invoices, prevRange, matchesBranch]);
+
+  // مجاميع الفترة السابقة حسب الحساب/المورد لخلية الدلتا.
+  const prevTotals = useMemo(() => {
+    const byAccount = new Map();
+    const bySupplier = new Map();
+    for (const invoice of prevInvoices) {
+      const supplierKey = invoice.contact_id
+        ? `c${invoice.contact_id}`
+        : `n:${invoice.supplier_name || "بدون مورد"}`;
+      bySupplier.set(
+        supplierKey,
+        (bySupplier.get(supplierKey) || 0) + moneyValue(invoice.total_amount),
+      );
+      const items = Array.isArray(invoice.items) ? invoice.items : [];
+      if (items.length === 0) {
+        const key = invoice.expense_account_id
+          ? Number(invoice.expense_account_id)
+          : "none";
+        byAccount.set(
+          key,
+          (byAccount.get(key) || 0) + moneyValue(invoice.total_amount),
+        );
+        continue;
+      }
+      for (const item of items) {
+        const key = item.account_id ? Number(item.account_id) : "none";
+        byAccount.set(
+          key,
+          (byAccount.get(key) || 0) + moneyValue(item.line_total),
+        );
+      }
+    }
+    return { byAccount, bySupplier };
+  }, [prevInvoices]);
 
   const accountById = useMemo(
     () => new Map(accounts.map((account) => [Number(account.id), account])),
@@ -564,6 +710,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         : `n:${invoice.supplier_name || "بدون مورد"}`;
       if (!map.has(key)) {
         map.set(key, {
+          key,
           name:
             invoice.contact_name ||
             invoice.supplier_name ||
@@ -948,6 +1095,38 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
             </div>
           ) : null}
 
+          {reportBranches.length > 0 && reportKey !== "aging" ? (
+            <div className="w-40">
+              <GlassSelect
+                value={branchId}
+                onChange={setBranchId}
+                options={[
+                  { value: "", label: "كل الفروع" },
+                  { value: "none", label: "بدون فرع" },
+                  ...reportBranches.map((branch) => ({
+                    value: String(branch.id),
+                    label: branch.name,
+                  })),
+                ]}
+                placeholder="كل الفروع"
+                buttonClassName="text-sm py-2 px-3"
+              />
+            </div>
+          ) : null}
+
+          {(reportKey === "by-account" || reportKey === "by-supplier") &&
+          preset !== "all" ? (
+            <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-700 dark:text-white/70 shrink-0">
+              <input
+                type="checkbox"
+                checked={compare}
+                onChange={(event) => setCompare(event.target.checked)}
+                className="accent-emerald-500"
+              />
+              قارن بالفترة السابقة
+            </label>
+          ) : null}
+
           <div className="flex-1" />
 
           <button
@@ -1168,23 +1347,54 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 لا توجد مشتريات في الفترة المحددة.
               </div>
             ) : (
-              <ReportTable
-                columns={[
-                  { header: "الرقم", accessor: (row) => row.code, numeric: true },
-                  { header: "الحساب", accessor: (row) => row.name },
-                  { header: "البنود", accessor: (row) => row.count, numeric: true },
-                  { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
-                  { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
-                  { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
-                ]}
-                rows={byAccountReport.rows}
-                footer={{
-                  الحساب: "الإجمالي",
-                  الصافي: money(byAccountReport.totals.net),
-                  الضريبة: money(byAccountReport.totals.tax),
-                  الإجمالي: money(byAccountReport.totals.total),
-                }}
-              />
+              <>
+                <HBars
+                  rows={byAccountReport.rows}
+                  nameOf={(row) => row.name}
+                  valueOf={(row) => row.total}
+                />
+                <ReportTable
+                  columns={[
+                    { header: "الرقم", accessor: (row) => row.code, numeric: true },
+                    { header: "الحساب", accessor: (row) => row.name },
+                    { header: "البنود", accessor: (row) => row.count, numeric: true },
+                    { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
+                    { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
+                    { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
+                    ...(compare && prevRange
+                      ? [
+                          {
+                            header: "مقارنة",
+                            accessor: (row) => row,
+                            format: (row) => (
+                              <DeltaCell
+                                current={row.total}
+                                previous={
+                                  prevTotals.byAccount.get(
+                                    row.accountId ?? "none",
+                                  ) || 0
+                                }
+                              />
+                            ),
+                          },
+                        ]
+                      : []),
+                  ]}
+                  rows={byAccountReport.rows}
+                  footer={{
+                    الحساب: "الإجمالي",
+                    الصافي: money(byAccountReport.totals.net),
+                    الضريبة: money(byAccountReport.totals.tax),
+                    الإجمالي: money(byAccountReport.totals.total),
+                  }}
+                />
+                {compare && prevRange ? (
+                  <div className="text-[11px] text-slate-500 dark:text-white/45">
+                    الفترة السابقة للمقارنة: {prevRange.from} ← {prevRange.to}.
+                    الانحرافات فوق 20% مظللة.
+                  </div>
+                ) : null}
+              </>
             )
           ) : null}
 
@@ -1194,22 +1404,50 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 لا توجد فواتير في الفترة المحددة.
               </div>
             ) : (
-              <ReportTable
-                columns={[
-                  { header: "المورد", accessor: (row) => row.name },
-                  { header: "الفواتير", accessor: (row) => row.count, numeric: true },
-                  { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
-                  { header: "المدفوع", accessor: (row) => money(row.paid), numeric: true },
-                  { header: "المتبقي", accessor: (row) => money(row.balance), numeric: true },
-                ]}
-                rows={bySupplierReport.rows}
-                footer={{
-                  المورد: "الإجمالي",
-                  الإجمالي: money(bySupplierReport.totals.total),
-                  المدفوع: money(bySupplierReport.totals.paid),
-                  المتبقي: money(bySupplierReport.totals.balance),
-                }}
-              />
+              <>
+                <HBars
+                  rows={bySupplierReport.rows}
+                  nameOf={(row) => row.name}
+                  valueOf={(row) => row.total}
+                />
+                <ReportTable
+                  columns={[
+                    { header: "المورد", accessor: (row) => row.name },
+                    { header: "الفواتير", accessor: (row) => row.count, numeric: true },
+                    { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
+                    { header: "المدفوع", accessor: (row) => money(row.paid), numeric: true },
+                    { header: "المتبقي", accessor: (row) => money(row.balance), numeric: true },
+                    ...(compare && prevRange
+                      ? [
+                          {
+                            header: "مقارنة",
+                            accessor: (row) => row,
+                            format: (row) => (
+                              <DeltaCell
+                                current={row.total}
+                                previous={
+                                  prevTotals.bySupplier.get(row.key) || 0
+                                }
+                              />
+                            ),
+                          },
+                        ]
+                      : []),
+                  ]}
+                  rows={bySupplierReport.rows}
+                  footer={{
+                    المورد: "الإجمالي",
+                    الإجمالي: money(bySupplierReport.totals.total),
+                    المدفوع: money(bySupplierReport.totals.paid),
+                    المتبقي: money(bySupplierReport.totals.balance),
+                  }}
+                />
+                {compare && prevRange ? (
+                  <div className="text-[11px] text-slate-500 dark:text-white/45">
+                    الفترة السابقة للمقارنة: {prevRange.from} ← {prevRange.to}.
+                  </div>
+                ) : null}
+              </>
             )
           ) : null}
 
@@ -1295,6 +1533,12 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 لا توجد مدفوعات في الفترة المحددة.
               </div>
             ) : (
+              <>
+              <HBars
+                rows={byBankReport.rows}
+                nameOf={(row) => row.name}
+                valueOf={(row) => row.paid}
+              />
               <ReportTable
                 columns={[
                   { header: "الحساب البنكي", accessor: (row) => row.name },
@@ -1307,6 +1551,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                   المدفوع: money(byBankReport.total),
                 }}
               />
+              </>
             )
           ) : null}
         </div>

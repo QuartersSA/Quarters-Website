@@ -22,17 +22,16 @@ import useUpload from "@/utils/useUpload";
 // tokens — the modal is also used by /employee/purchase-invoice.
 import { authedFetch } from "@/utils/apiAuth";
 
+// نموذج الحالات المبسّط (حسب مستند التصميم): أربع حالات كلها محسوبة
+// من المبالغ والاستحقاق — لا «مسودة» ولا «معتمدة» ولا اختيار يدوي.
+// غير المدفوعة «بانتظار الاعتماد» والمحاسب يسددها كلياً أو جزئياً.
+// قيمة pending_payment تبقى في قاعدة البيانات للتوافق مع الصفوف
+// القديمة — العرض فقط تغيّر، و«new» القديمة تُعرض بنفس التسمية.
 export const PURCHASE_INVOICE_STATUS_OPTIONS = [
-  { value: "new", label: "جديد" },
-  { value: "pending_payment", label: "بانتظار الدفع" },
-  { value: "partial_paid", label: "مدفوع جزئي" },
-  { value: "paid", label: "مدفوع" },
-  { value: "overdue", label: "متأخر" },
-];
-
-const WORKFLOW_OPTIONS = [
-  { value: "new", label: "جديد" },
-  { value: "pending_payment", label: "بانتظار الدفع" },
+  { value: "pending_payment", label: "بانتظار الاعتماد" },
+  { value: "partial_paid", label: "مدفوعة جزئياً" },
+  { value: "paid", label: "مدفوعة" },
+  { value: "overdue", label: "متأخرة" },
 ];
 
 const CURRENCY_OPTIONS = [
@@ -908,21 +907,22 @@ function formatMoney(value, currency = "SAR") {
   })} ${currency}`;
 }
 
-function computedStatus({ workflowStatus, totalAmount, paidAmount, dueDate }) {
+function computedStatus({ totalAmount, paidAmount, dueDate }) {
   const total = moneyValue(totalAmount);
   const paid = moneyValue(paidAmount);
   const balance = Math.max(total - paid, 0);
   if (total > 0 && paid >= total) return "paid";
   if (dueDate && dueDate < todayRiyadh() && balance > 0) return "overdue";
   if (paid > 0) return "partial_paid";
-  if (workflowStatus === "new") return "new";
   return "pending_payment";
 }
 
 export function purchaseInvoiceStatusLabel(value) {
+  // Legacy rows may still carry the retired "new" status.
+  if (value === "new") return "بانتظار الاعتماد";
   return (
     PURCHASE_INVOICE_STATUS_OPTIONS.find((option) => option.value === value)
-      ?.label || "جديد"
+      ?.label || "بانتظار الاعتماد"
   );
 }
 
@@ -936,10 +936,8 @@ export function purchaseInvoiceStatusClass(value) {
   if (value === "overdue") {
     return "bg-rose-100 dark:bg-rose-500/15 text-rose-700 dark:text-rose-200 border-rose-200 dark:border-rose-500/25";
   }
-  if (value === "pending_payment") {
-    return "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-500/25";
-  }
-  return "bg-sky-100 dark:bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-500/25";
+  // pending_payment + legacy "new" both read بانتظار الاعتماد.
+  return "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-500/25";
 }
 
 // Expense accounts from شجرة الحسابات as a REAL hierarchy: the
@@ -1114,6 +1112,7 @@ export default function PurchaseInvoiceModal({
   contacts = [],
   accounts = [],
   bankAccounts = [],
+  branches = [],
   contactStats = null,
   isSubmitting,
   onClose,
@@ -1134,7 +1133,7 @@ export default function PurchaseInvoiceModal({
   const [paymentReceiptUrl, setPaymentReceiptUrl] = useState("");
   const [paymentReceiptName, setPaymentReceiptName] = useState("");
   const [receiptUploading, setReceiptUploading] = useState(false);
-  const [workflowStatus, setWorkflowStatus] = useState("new");
+  const [branchId, setBranchId] = useState("");
   const [notes, setNotes] = useState("");
   const [attachmentUrl, setAttachmentUrl] = useState("");
   const [attachmentName, setAttachmentName] = useState("");
@@ -1227,6 +1226,7 @@ export default function PurchaseInvoiceModal({
     setPaymentReceiptUrl(invoice?.payment_receipt_url || "");
     setPaymentReceiptName("");
     setReceiptUploading(false);
+    setBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
     setWorkflowStatus(invoice?.workflow_status || "new");
     setNotes(invoice?.notes || "");
     setAttachmentUrl(invoice?.attachment_url || "");
@@ -1365,7 +1365,6 @@ export default function PurchaseInvoiceModal({
   };
 
   const status = computedStatus({
-    workflowStatus,
     totalAmount: totals.total,
     paidAmount,
     dueDate,
@@ -1428,7 +1427,9 @@ export default function PurchaseInvoiceModal({
         moneyValue(paidAmount) > 0 ? paidBankAccountId || null : null,
       payment_receipt_url:
         moneyValue(paidAmount) > 0 ? paymentReceiptUrl || null : null,
-      workflow_status: workflowStatus,
+      // القيمة الثابتة المتبقية — الحالة الفعلية تُحسب من المبالغ.
+      workflow_status: "pending_payment",
+      branch_id: branchId || null,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
     };
@@ -2187,19 +2188,28 @@ export default function PurchaseInvoiceModal({
                     className={`${ws.input} px-3 py-2.5`}
                   />
                 </div>
-                <div className="sm:col-span-2">
-                  <FieldLabel>حالة الفاتورة الأساسية</FieldLabel>
-                  <GlassSelect
-                    value={workflowStatus}
-                    onChange={setWorkflowStatus}
-                    options={WORKFLOW_OPTIONS}
-                    placeholder="اختر الحالة"
-                    buttonClassName="text-sm py-2.5 px-3"
-                  />
-                  <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
-                    «مدفوع»، «مدفوع جزئياً»، و«متأخر» تُحسب تلقائياً من الأرقام
-                    وتاريخ الاستحقاق.
+                {branches.length > 0 ? (
+                  <div>
+                    <FieldLabel>الفرع</FieldLabel>
+                    <GlassSelect
+                      value={branchId}
+                      onChange={setBranchId}
+                      options={[
+                        { value: "", label: "بدون تحديد فرع" },
+                        ...branches.map((branch) => ({
+                          value: String(branch.id),
+                          label: branch.name,
+                        })),
+                      ]}
+                      placeholder="بدون تحديد فرع"
+                      buttonClassName="text-sm py-2.5 px-3"
+                    />
                   </div>
+                ) : null}
+                <div className="sm:col-span-2 text-[11px] text-slate-500 dark:text-white/45">
+                  الحالة تلقائية بالكامل: بدون دفع «بانتظار الاعتماد»، وبعد
+                  السداد «مدفوعة جزئياً» أو «مدفوعة»، و«متأخرة» عند تجاوز
+                  الاستحقاق.
                 </div>
               </div>
             </div>

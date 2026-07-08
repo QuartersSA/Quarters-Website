@@ -30,6 +30,7 @@ export default function PurchaseInvoiceEntryPage() {
   const [contacts, setContacts] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
+  const [branches, setBranches] = useState([]);
   const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(true);
   // Landing first — the invoice editor opens on demand only.
@@ -87,20 +88,26 @@ export default function PurchaseInvoiceEntryPage() {
 
     const load = async () => {
       try {
-        const [contactsList, accountsRes, banksRes] = await Promise.all([
-          loadContacts(),
-          purchaseInvoiceFetch("/api/accounting/accounts"),
-          purchaseInvoiceFetch("/api/accounting/bank-accounts"),
-        ]);
+        const [contactsList, accountsRes, banksRes, branchesRes] =
+          await Promise.all([
+            loadContacts(),
+            purchaseInvoiceFetch("/api/accounting/accounts"),
+            purchaseInvoiceFetch("/api/accounting/bank-accounts"),
+            purchaseInvoiceFetch("/api/branches"),
+          ]);
         if (cancelled || contactsList === null) return;
         const accountsData = await accountsRes.json().catch(() => ({}));
         const banksData = await banksRes.json().catch(() => ({}));
+        const branchesData = await branchesRes.json().catch(() => ({}));
         if (cancelled) return;
         setAccounts(
           Array.isArray(accountsData?.accounts) ? accountsData.accounts : [],
         );
         setBankAccounts(
           Array.isArray(banksData?.accounts) ? banksData.accounts : [],
+        );
+        setBranches(
+          Array.isArray(branchesData?.branches) ? branchesData.branches : [],
         );
         setLoading(false);
       } catch (error) {
@@ -391,6 +398,7 @@ export default function PurchaseInvoiceEntryPage() {
           contacts={contacts}
           accounts={accounts}
           bankAccounts={bankAccounts}
+          branches={branches}
           isSubmitting={submitting}
           onClose={() => setEditorOpen(false)}
           onSubmit={handleSubmit}
