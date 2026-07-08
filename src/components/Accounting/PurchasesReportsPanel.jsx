@@ -3,15 +3,18 @@
 import React, { useMemo, useState } from "react";
 import {
   BarChart3,
+  CalendarClock,
   CalendarDays,
   Clock3,
   FileSpreadsheet,
   FileText,
+  History,
   Landmark,
   ListTree,
   Percent,
   Users,
 } from "lucide-react";
+import ScheduledReportsModal from "@/components/Accounting/ScheduledReportsModal";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
@@ -89,6 +92,13 @@ const REPORTS = [
     description:
       "مدفوعات فواتير الفترة موزعة على الحسابات البنكية المسجلة عليها.",
   },
+  {
+    key: "audit",
+    label: "سجل النشاط",
+    Icon: History,
+    description:
+      "سجل تدقيق قسم المشتريات: من أنشأ أو عدّل أو سدد أو أوقف — ومتى.",
+  },
 ];
 
 function todayRiyadh() {
@@ -149,6 +159,33 @@ const PERIOD_OPTIONS = [
   { value: "all", label: "كل الفترات" },
   { value: "custom", label: "فترة مخصصة" },
 ];
+
+// وسوم أحداث سجل التدقيق.
+const AUDIT_ACTION_LABELS = {
+  created: "إنشاء",
+  updated: "تعديل",
+  payment: "دفعة",
+  deactivated: "إيقاف",
+  deleted: "حذف",
+  recurring: "توليد متكرر",
+  scheduled_report: "تقرير مجدول",
+  manual_send: "إرسال يدوي",
+  sent: "تذكير",
+};
+
+function auditActionLabel(action) {
+  return AUDIT_ACTION_LABELS[action] || action;
+}
+
+function auditActionClass(action) {
+  if (action === "payment")
+    return "bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-200 border-emerald-200 dark:border-emerald-400/25";
+  if (action === "deleted" || action === "deactivated")
+    return "bg-rose-100 dark:bg-rose-400/10 text-rose-700 dark:text-rose-200 border-rose-200 dark:border-rose-400/25";
+  if (action === "created")
+    return "bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-400/25";
+  return "bg-slate-100 dark:bg-white/[0.05] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10";
+}
 
 function periodLabel(preset, from, to) {
   const opt = PERIOD_OPTIONS.find((o) => o.value === preset);
@@ -308,6 +345,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const [supplierId, setSupplierId] = useState("");
   const [branchId, setBranchId] = useState("");
   const [compare, setCompare] = useState(false);
+  const [showSchedules, setShowSchedules] = useState(false);
+  const [auditSearch, setAuditSearch] = useState("");
 
   const invoicesQuery = useAccountingPurchaseInvoices({
     employeeId,
@@ -337,6 +376,34 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     () => resolvePeriod(preset, customFrom, customTo),
     [preset, customFrom, customTo],
   );
+
+  // سجل النشاط — يُقرأ من جدول التدقيق حسب الفترة، والبحث محلي.
+  const auditQuery = useQuery({
+    queryKey: ["purchase-audit-log", from || "all", to || "all"],
+    enabled: reportKey === "audit",
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (from) params.set("from", from);
+      if (to) params.set("to", to);
+      params.set("limit", "500");
+      const response = await authedFetch(
+        `/api/accounting/purchase-audit-log?${params.toString()}`,
+      );
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل السجل");
+      return Array.isArray(data?.entries) ? data.entries : [];
+    },
+  });
+  const auditRows = useMemo(() => {
+    const rows = auditQuery.data || [];
+    const needle = auditSearch.trim().toLowerCase();
+    if (!needle) return rows;
+    return rows.filter(
+      (entry) =>
+        (entry.summary || "").toLowerCase().includes(needle) ||
+        (entry.actor_name || "").toLowerCase().includes(needle),
+    );
+  }, [auditQuery.data, auditSearch]);
 
   // Active invoices inside the period (inclusive, lexicographic ISO)
   // + optional branch scope.
@@ -950,6 +1017,21 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
           ],
           rows: byBankReport.rows,
         };
+      case "audit":
+        return {
+          filename: "purchases-audit-log",
+          title: `سجل نشاط المشتريات (${label})`,
+          columns: [
+            {
+              header: "التاريخ",
+              accessor: (row) => `${row.log_date} ${row.log_time}`,
+            },
+            { header: "الموظف", accessor: (row) => row.actor_name || "النظام" },
+            { header: "الحدث", accessor: (row) => auditActionLabel(row.action) },
+            { header: "التفاصيل", accessor: (row) => row.summary || "" },
+          ],
+          rows: auditRows,
+        };
       default:
         return null;
     }
@@ -964,6 +1046,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     statementReport,
     agingReport,
     byBankReport,
+    auditRows,
     contacts,
     supplierId,
   ]);
@@ -1005,7 +1088,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   return (
     <>
       {/* Report picker */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-3">
         {REPORTS.map((report) => {
           const Icon = report.Icon;
           const isActive = report.key === reportKey;
@@ -1095,7 +1178,19 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
             </div>
           ) : null}
 
-          {reportBranches.length > 0 && reportKey !== "aging" ? (
+          {reportKey === "audit" ? (
+            <input
+              type="text"
+              value={auditSearch}
+              onChange={(event) => setAuditSearch(event.target.value)}
+              placeholder="ابحث بالموظف أو التفاصيل…"
+              className={`${ws.input} px-3 py-2 text-sm w-56`}
+            />
+          ) : null}
+
+          {reportBranches.length > 0 &&
+          reportKey !== "aging" &&
+          reportKey !== "audit" ? (
             <div className="w-40">
               <GlassSelect
                 value={branchId}
@@ -1129,6 +1224,15 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
 
           <div className="flex-1" />
 
+          <button
+            type="button"
+            onClick={() => setShowSchedules(true)}
+            className={`${ws.btnNeutral} px-3 py-2 text-xs`}
+            title="ملخص المشتريات يصل واتساب أسبوعياً أو شهرياً"
+          >
+            <CalendarClock className="w-4 h-4" />
+            جدولة واتساب
+          </button>
           <button
             type="button"
             onClick={handleExportExcel}
@@ -1554,8 +1658,67 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
               </>
             )
           ) : null}
+
+          {reportKey === "audit" ? (
+            auditQuery.isLoading ? (
+              <div className="text-center text-sm text-slate-500 dark:text-white/50 py-8">
+                جاري تحميل سجل النشاط…
+              </div>
+            ) : auditRows.length === 0 ? (
+              <div className="text-center text-sm text-slate-500 dark:text-white/50 py-8">
+                لا توجد أحداث مسجلة في الفترة المحددة — يبدأ السجل
+                بالتسجيل من الآن مع كل إنشاء وتعديل ودفعة.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm min-w-[640px]">
+                  <thead>
+                    <tr className="text-right text-[11px] text-slate-500 dark:text-white/45">
+                      <th className="px-3 py-2 font-bold w-36">التاريخ</th>
+                      <th className="px-3 py-2 font-bold w-32">الموظف</th>
+                      <th className="px-3 py-2 font-bold w-28">الحدث</th>
+                      <th className="px-3 py-2 font-bold">التفاصيل</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {auditRows.map((entry) => (
+                      <tr
+                        key={entry.id}
+                        className="border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]"
+                      >
+                        <td
+                          className="px-3 py-2 font-mono text-[11px] text-slate-500 dark:text-white/50 whitespace-nowrap"
+                          dir="ltr"
+                        >
+                          {entry.log_date} {entry.log_time}
+                        </td>
+                        <td className="px-3 py-2 text-slate-800 dark:text-white/80 whitespace-nowrap">
+                          {entry.actor_name || "النظام"}
+                        </td>
+                        <td className="px-3 py-2">
+                          <span
+                            className={`${ws.pill} whitespace-nowrap ${auditActionClass(entry.action)}`}
+                          >
+                            {auditActionLabel(entry.action)}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 text-slate-700 dark:text-white/70">
+                          {entry.summary || "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+          ) : null}
         </div>
       </div>
+
+      <ScheduledReportsModal
+        open={showSchedules}
+        onClose={() => setShowSchedules(false)}
+      />
     </>
   );
 }

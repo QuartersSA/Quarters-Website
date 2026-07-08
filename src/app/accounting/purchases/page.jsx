@@ -25,6 +25,9 @@ import BeneficiaryModal from "@/components/Accounting/BeneficiaryModal";
 import BeneficiariesList from "@/components/Accounting/BeneficiariesList";
 import BeneficiariesExportMenu from "@/components/Accounting/BeneficiariesExportMenu";
 import PurchasesOverviewPanel from "@/components/Accounting/PurchasesOverviewPanel";
+import PurchasesNotificationsBell from "@/components/Accounting/PurchasesNotificationsBell";
+import Supplier360Modal from "@/components/Accounting/Supplier360Modal";
+import { useAccountingPurchaseInvoices } from "@/hooks/useAccountingPurchaseInvoices";
 import PurchasesAccountsTreePanel from "@/components/Accounting/PurchasesAccountsTreePanel";
 import PurchasesBankAccountsPanel from "@/components/Accounting/PurchasesBankAccountsPanel";
 import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPanel";
@@ -127,7 +130,7 @@ const TABS = [
 const TAB_KEYS = new Set(TABS.map((tab) => tab.key));
 const VENDOR_KEYS = new Set(VENDOR_SUBTABS.map((sub) => sub.key));
 
-function PurchasesMobileHeader({ activeTab }) {
+function PurchasesMobileHeader({ activeTab, actions = null }) {
   return (
     <div
       className={`lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`}
@@ -135,7 +138,7 @@ function PurchasesMobileHeader({ activeTab }) {
       <div className="w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center">
         <ShoppingCart className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
       </div>
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="font-bold text-slate-900 dark:text-white tracking-tight">
           المشتريات
         </div>
@@ -143,17 +146,18 @@ function PurchasesMobileHeader({ activeTab }) {
           {activeTab?.label || ""}
         </div>
       </div>
+      {actions}
     </div>
   );
 }
 
-function PurchasesDesktopHeader({ activeTab }) {
+function PurchasesDesktopHeader({ activeTab, actions = null }) {
   return (
     <div className="hidden lg:flex items-center gap-4">
       <div className={ws.iconBox}>
         <ShoppingCart className="w-6 h-6 text-emerald-700 dark:text-emerald-200" />
       </div>
-      <div>
+      <div className="flex-1 min-w-0">
         <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
           المشتريات
         </h1>
@@ -162,6 +166,7 @@ function PurchasesDesktopHeader({ activeTab }) {
             "فواتير المشتريات، الموردين والمستفيدين، شجرة الحسابات، الحسابات البنكية، والضريبة."}
         </p>
       </div>
+      {actions}
     </div>
   );
 }
@@ -171,6 +176,8 @@ function ContactsPanel({ employeeId, isAdmin }) {
   const [includeInactive, setIncludeInactive] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState(null);
+  // بطاقة المورد 360° — تُحسب من صفوف دفتر الفواتير في الكاش.
+  const [viewing360, setViewing360] = useState(null);
 
   const contactsQuery = useAccountingContacts({
     employeeId,
@@ -182,6 +189,8 @@ function ContactsPanel({ employeeId, isAdmin }) {
   // شجرة الحسابات — feeds the supplier's default-account picker.
   const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
   const accounts = accountsQuery.data || [];
+  const invoicesQuery = useAccountingPurchaseInvoices({ employeeId, isAdmin });
+  const allInvoices = invoicesQuery.data || [];
 
   const createMut = useCreateAccountingContact();
   const updateMut = useUpdateAccountingContact();
@@ -249,7 +258,16 @@ function ContactsPanel({ employeeId, isAdmin }) {
         onEdit={(c) => setEditing(c)}
         onDelete={handleDelete}
         onAdd={() => setShowAdd(true)}
+        onView={(c) => setViewing360(c)}
       />
+
+      {viewing360 ? (
+        <Supplier360Modal
+          contact={viewing360}
+          invoices={allInvoices}
+          onClose={() => setViewing360(null)}
+        />
+      ) : null}
 
       <ContactModal
         open={showAdd || !!editing}
@@ -517,13 +535,23 @@ export default function PurchasesPage() {
     );
   }
 
+  // جرس الإشعارات — يظهر في الرأسين معاً بعد اكتمال الصلاحيات.
+  const bell =
+    ready && employeeId && isAdmin ? (
+      <PurchasesNotificationsBell
+        employeeId={employeeId}
+        isAdmin={isAdmin}
+        onNavigate={setTab}
+      />
+    ) : null;
+
   return (
     <div className="min-h-[100svh] pb-24 lg:pb-0" dir="rtl">
       <AccountingSidebar active="purchases" />
-      <PurchasesMobileHeader activeTab={activeTab} />
+      <PurchasesMobileHeader activeTab={activeTab} actions={bell} />
       <main className="mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto w-full space-y-5">
-          <PurchasesDesktopHeader activeTab={activeTab} />
+          <PurchasesDesktopHeader activeTab={activeTab} actions={bell} />
           {body}
         </div>
       </main>

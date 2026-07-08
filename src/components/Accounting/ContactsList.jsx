@@ -1,7 +1,15 @@
 "use client";
 
 import React from "react";
-import { Pencil, Trash2, Contact, Hash, MapPin, CheckCircle2 } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  Contact,
+  Hash,
+  MapPin,
+  CheckCircle2,
+  ScanEye,
+} from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
 const COUNTRY_LABELS = {
@@ -24,6 +32,7 @@ export default function ContactsList({
   onEdit,
   onDelete,
   onAdd,
+  onView = null,
 }) {
   if (isLoading) {
     return (
@@ -155,6 +164,16 @@ export default function ContactsList({
                   </td>
                   <td className="py-3 px-3">
                     <div className="flex items-center justify-end gap-1">
+                      {onView ? (
+                        <button
+                          type="button"
+                          onClick={() => onView(c)}
+                          className={`${ws.iconButton} w-8 h-8 hover:bg-emerald-50 dark:hover:bg-emerald-500/15 hover:border-emerald-200 dark:hover:border-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-200`}
+                          title="بطاقة المورد 360°"
+                        >
+                          <ScanEye className="w-3.5 h-3.5" />
+                        </button>
+                      ) : null}
                       <button
                         type="button"
                         onClick={() => onEdit(c)}

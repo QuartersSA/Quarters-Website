@@ -1,6 +1,8 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
+import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { runPurchaseAutomation } from "@/app/api/utils/purchaseAutomation";
 
 // Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
@@ -516,6 +518,9 @@ export async function GET(request) {
 
   try {
     await ensureSchema();
+    // كسول بدل cron: توليد الفواتير المتكررة المستحقة وإرسال
+    // التقارير المجدولة عند أول تحميل بعد الموعد. أخطاؤها مبتلعة.
+    await runPurchaseAutomation();
     const url = new URL(request.url);
     const includeInactive = url.searchParams.get("includeInactive") === "1";
     const q = (url.searchParams.get("q") || "").trim();
@@ -632,6 +637,14 @@ export async function POST(request) {
       await replaceInvoiceItems(created.id, items);
     }
 
+    await logPurchaseAudit({
+      entityType: "invoice",
+      entityId: created.id,
+      action: "created",
+      summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}`,
+      actor: auth.user,
+    });
+
     return Response.json({ ok: true, invoice: created }, { status: 201 });
   } catch (error) {
     console.error("purchase invoices POST error", error);
@@ -667,6 +680,13 @@ export async function PUT(request) {
     if (accountError) {
       return Response.json({ error: accountError }, { status: 400 });
     }
+
+    // اللقطة السابقة تحدد نوع الحدث في سجل التدقيق: دفعة أم تعديل.
+    const [existing] = await sql`
+      SELECT invoice_number, paid_amount, total_amount, due_date
+      FROM accounting_purchase_invoices
+      WHERE id = ${id}
+    `;
 
     const [updated] = await sql`
       UPDATE accounting_purchase_invoices
@@ -704,6 +724,26 @@ export async function PUT(request) {
       await replaceInvoiceItems(id, items);
     }
 
+    const previousPaid = Number(existing?.paid_amount || 0);
+    const paidDelta = Math.round((payload.paidAmount - previousPaid) * 100) / 100;
+    if (paidDelta > 0.004) {
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "payment",
+        summary: `تسجيل دفعة ${paidDelta.toFixed(2)} ${payload.currency} على الفاتورة ${payload.invoiceNumber} — إجمالي المدفوع ${payload.paidAmount.toFixed(2)} من ${payload.totalAmount.toFixed(2)}`,
+        actor: auth.user,
+      });
+    } else {
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "updated",
+        summary: `تعديل الفاتورة ${payload.invoiceNumber} — الإجمالي ${payload.totalAmount.toFixed(2)} ${payload.currency}، المدفوع ${payload.paidAmount.toFixed(2)}`,
+        actor: auth.user,
+      });
+    }
+
     return Response.json({ ok: true, invoice: updated });
   } catch (error) {
     console.error("purchase invoices PUT error", error);
@@ -733,11 +773,18 @@ export async function DELETE(request) {
       const [deleted] = await sql`
         DELETE FROM accounting_purchase_invoices
         WHERE id = ${id}
-        RETURNING id
+        RETURNING id, invoice_number
       `;
       if (!deleted) {
         return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
       }
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "deleted",
+        summary: `حذف نهائي للفاتورة ${deleted.invoice_number}`,
+        actor: auth.user,
+      });
       return Response.json({ ok: true, hard: true });
     }
 
@@ -747,11 +794,19 @@ export async function DELETE(request) {
         is_active = FALSE,
         updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
-      RETURNING id
+      RETURNING id, invoice_number
     `;
     if (!updated) {
       return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
     }
+
+    await logPurchaseAudit({
+      entityType: "invoice",
+      entityId: id,
+      action: "deactivated",
+      summary: `إيقاف الفاتورة ${updated.invoice_number}`,
+      actor: auth.user,
+    });
 
     return Response.json({ ok: true, hard: false });
   } catch (error) {

@@ -18,7 +18,9 @@ import {
   Pencil,
   Plus,
   RefreshCw,
+  Repeat,
   Save,
+  ScanEye,
   Search,
   Trash2,
   X,
@@ -45,6 +47,8 @@ import { useQuery } from "@tanstack/react-query";
 import { authedFetch } from "@/utils/apiAuth";
 import { queryKeys } from "@/utils/queryKeys";
 import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
+import RecurringInvoicesModal from "@/components/Accounting/RecurringInvoicesModal";
+import Supplier360Modal from "@/components/Accounting/Supplier360Modal";
 
 const STATUS_FILTER_OPTIONS = [
   { value: "", label: "كل الحالات" },
@@ -420,6 +424,9 @@ export default function PurchasesInvoicesPanel({
   const [activeIdx, setActiveIdx] = useState(-1);
   // رقائق فلترة محفوظة على هذا الجهاز.
   const [savedFilters, setSavedFilters] = useState([]);
+  // قوالب الفواتير المتكررة + بطاقة المورد 360°.
+  const [showRecurring, setShowRecurring] = useState(false);
+  const [supplier360, setSupplier360] = useState(null);
   const searchRef = React.useRef(null);
 
   useEffect(() => {
@@ -509,6 +516,21 @@ export default function PurchasesInvoicesPanel({
   const bankAccounts = bankAccountsQuery.data || [];
   const branches = branchesQuery.data || [];
 
+  // الخط الزمني للفاتورة المعروضة في الدرج — من سجل التدقيق.
+  const previewLogQuery = useQuery({
+    queryKey: ["purchase-audit-log", "invoice", preview?.id],
+    enabled: !!preview?.id,
+    queryFn: async () => {
+      const response = await authedFetch(
+        `/api/accounting/purchase-audit-log?entity_type=invoice&entity_id=${preview.id}&limit=20`,
+      );
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل السجل");
+      return Array.isArray(data?.entries) ? data.entries : [];
+    },
+  });
+  const previewLog = previewLogQuery.data || [];
+
   const accountFilterOptions = useMemo(() => {
     const options = buildExpenseAccountOptions(accounts);
     return [
@@ -595,7 +617,8 @@ export default function PurchasesInvoicesPanel({
         setPreview(null);
         return;
       }
-      if (typing || showAdd || editing || paying) return;
+      if (typing || showAdd || editing || paying || showRecurring || supplier360)
+        return;
       if (event.key === "/" ) {
         event.preventDefault();
         searchRef.current?.focus();
@@ -617,7 +640,7 @@ export default function PurchasesInvoicesPanel({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [filtered, activeIdx, showAdd, editing, paying]);
+  }, [filtered, activeIdx, showAdd, editing, paying, showRecurring, supplier360]);
 
   const handleExport = (kind, rowsOverride = null) => {
     const rows = rowsOverride || filtered;
@@ -771,6 +794,15 @@ export default function PurchasesInvoicesPanel({
           >
             <RefreshCw className="w-4 h-4" />
             تحديث
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowRecurring(true)}
+            className={`${ws.btnNeutral} px-4 py-2`}
+            title="قوالب تتحول تلقائياً لفواتير كل شهر"
+          >
+            <Repeat className="w-4 h-4" />
+            متكررة
           </button>
           <button
             type="button"
@@ -1284,9 +1316,26 @@ export default function PurchasesInvoicesPanel({
                     <div className="font-bold text-slate-900 dark:text-white font-mono" dir="ltr">
                       {preview.invoice_number}
                     </div>
-                    <div className="text-xs text-slate-500 dark:text-white/50 truncate mt-0.5">
-                      {preview.contact_name || preview.supplier_name || "بدون مورد"}
-                    </div>
+                    {preview.contact_id ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const contact = contacts.find(
+                            (c) => Number(c.id) === Number(preview.contact_id),
+                          );
+                          if (contact) setSupplier360(contact);
+                        }}
+                        className="text-xs text-emerald-700 dark:text-emerald-300 hover:underline truncate mt-0.5 inline-flex items-center gap-1"
+                        title="بطاقة المورد 360°"
+                      >
+                        <ScanEye className="w-3 h-3 shrink-0" />
+                        {preview.contact_name || preview.supplier_name}
+                      </button>
+                    ) : (
+                      <div className="text-xs text-slate-500 dark:text-white/50 truncate mt-0.5">
+                        {preview.supplier_name || "بدون مورد"}
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <StatusPill status={preview.computed_status} />
@@ -1368,6 +1417,38 @@ export default function PurchasesInvoicesPanel({
                     </div>
                   ) : null}
 
+                  {previewLog.length > 0 ? (
+                    <div>
+                      <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
+                        سجل الفاتورة
+                      </div>
+                      <div className="space-y-1.5">
+                        {previewLog.map((entry) => (
+                          <div
+                            key={entry.id}
+                            className="flex items-start gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
+                          >
+                            <span
+                              className="text-slate-400 dark:text-white/35 font-mono shrink-0"
+                              dir="ltr"
+                            >
+                              {entry.log_date} {entry.log_time}
+                            </span>
+                            <span className="flex-1 text-slate-700 dark:text-white/70">
+                              {entry.summary}
+                              {entry.actor_name ? (
+                                <span className="text-slate-500 dark:text-white/45">
+                                  {" "}
+                                  — {entry.actor_name}
+                                </span>
+                              ) : null}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
                   <div className="flex items-center gap-2 flex-wrap pt-2">
                     {moneyValue(preview.balance_due) > 0 ? (
                       <button
@@ -1422,6 +1503,22 @@ export default function PurchasesInvoicesPanel({
             document.body,
           )
         : null}
+
+      <RecurringInvoicesModal
+        open={showRecurring}
+        contacts={contacts}
+        accounts={accounts}
+        branches={branches}
+        onClose={() => setShowRecurring(false)}
+      />
+
+      {supplier360 ? (
+        <Supplier360Modal
+          contact={supplier360}
+          invoices={invoices}
+          onClose={() => setSupplier360(null)}
+        />
+      ) : null}
     </>
   );
 }

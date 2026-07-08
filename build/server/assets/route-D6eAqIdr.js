@@ -1,11 +1,11 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireWorkspaceEmployee } from './_utils-CbLHH82L.js';
-import { g as getSpaceName, c as getEmployeeNames, f as formatTaskLine, b as buildTaskLinkLine, n as notifyAssigneesOnTaskWhatsApp, d as notifyTaskCreatorOnTaskWhatsApp, a as formatDateOnly } from './_notify-2pRP5009.js';
+import { g as getSpaceName, c as getEmployeeNames, f as formatTaskLine, b as buildTaskLinkLine, n as notifyAssigneesOnTaskWhatsApp, d as notifyTaskCreatorOnTaskWhatsApp, a as formatDateOnly } from './_notify-D_ADnkGZ.js';
 import '@neondatabase/serverless';
 import './sessionToken-DDNn6nuk.js';
 import 'crypto';
 import './employeeDisplayName-Ba9mYj5Z.js';
-import './wasender-D2lmIJ7B.js';
+import './wasender-DdfB6YgE.js';
 import './dateUtils-DCPDkvv9.js';
 
 // NEW: attachments limits

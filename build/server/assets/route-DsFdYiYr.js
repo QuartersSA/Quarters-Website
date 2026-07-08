@@ -1,8 +1,11 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-Bl8Y8djJ.js';
+import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
+import { r as runPurchaseAutomation } from './purchaseAutomation-Hvp4e_Lm.js';
 import '@neondatabase/serverless';
 import 'crypto';
+import './wasender-DdfB6YgE.js';
 
 // Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
@@ -453,6 +456,9 @@ async function GET(request) {
   }
   try {
     await ensureSchema();
+    // كسول بدل cron: توليد الفواتير المتكررة المستحقة وإرسال
+    // التقارير المجدولة عند أول تحميل بعد الموعد. أخطاؤها مبتلعة.
+    await runPurchaseAutomation();
     const url = new URL(request.url);
     const includeInactive = url.searchParams.get("includeInactive") === "1";
     const q = (url.searchParams.get("q") || "").trim();
@@ -573,6 +579,13 @@ async function POST(request) {
     if (items && items.length > 0) {
       await replaceInvoiceItems(created.id, items);
     }
+    await logPurchaseAudit({
+      entityType: "invoice",
+      entityId: created.id,
+      action: "created",
+      summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}`,
+      actor: auth.user
+    });
     return Response.json({
       ok: true,
       invoice: created
@@ -628,6 +641,13 @@ async function PUT(request) {
         status: 400
       });
     }
+
+    // اللقطة السابقة تحدد نوع الحدث في سجل التدقيق: دفعة أم تعديل.
+    const [existing] = await sql`
+      SELECT invoice_number, paid_amount, total_amount, due_date
+      FROM accounting_purchase_invoices
+      WHERE id = ${id}
+    `;
     const [updated] = await sql`
       UPDATE accounting_purchase_invoices
       SET
@@ -665,6 +685,25 @@ async function PUT(request) {
     // the stored lines untouched; an array (even empty) replaces them.
     if (items !== null) {
       await replaceInvoiceItems(id, items);
+    }
+    const previousPaid = Number(existing?.paid_amount || 0);
+    const paidDelta = Math.round((payload.paidAmount - previousPaid) * 100) / 100;
+    if (paidDelta > 0.004) {
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "payment",
+        summary: `تسجيل دفعة ${paidDelta.toFixed(2)} ${payload.currency} على الفاتورة ${payload.invoiceNumber} — إجمالي المدفوع ${payload.paidAmount.toFixed(2)} من ${payload.totalAmount.toFixed(2)}`,
+        actor: auth.user
+      });
+    } else {
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "updated",
+        summary: `تعديل الفاتورة ${payload.invoiceNumber} — الإجمالي ${payload.totalAmount.toFixed(2)} ${payload.currency}، المدفوع ${payload.paidAmount.toFixed(2)}`,
+        actor: auth.user
+      });
     }
     return Response.json({
       ok: true,
@@ -705,7 +744,7 @@ async function DELETE(request) {
       const [deleted] = await sql`
         DELETE FROM accounting_purchase_invoices
         WHERE id = ${id}
-        RETURNING id
+        RETURNING id, invoice_number
       `;
       if (!deleted) {
         return Response.json({
@@ -714,6 +753,13 @@ async function DELETE(request) {
           status: 404
         });
       }
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "deleted",
+        summary: `حذف نهائي للفاتورة ${deleted.invoice_number}`,
+        actor: auth.user
+      });
       return Response.json({
         ok: true,
         hard: true
@@ -725,7 +771,7 @@ async function DELETE(request) {
         is_active = FALSE,
         updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
-      RETURNING id
+      RETURNING id, invoice_number
     `;
     if (!updated) {
       return Response.json({
@@ -734,6 +780,13 @@ async function DELETE(request) {
         status: 404
       });
     }
+    await logPurchaseAudit({
+      entityType: "invoice",
+      entityId: id,
+      action: "deactivated",
+      summary: `إيقاف الفاتورة ${updated.invoice_number}`,
+      actor: auth.user
+    });
     return Response.json({
       ok: true,
       hard: false

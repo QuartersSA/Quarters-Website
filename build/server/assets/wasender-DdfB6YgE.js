@@ -150,4 +150,4 @@ async function sendWhatsAppViaWasender({
   });
 }
 
-export { sendWhatsAppViaWasender as s };
+export { normalizeWasenderPhone as n, sendWhatsAppViaWasender as s };
