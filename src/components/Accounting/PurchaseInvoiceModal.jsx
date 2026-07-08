@@ -2475,15 +2475,30 @@ export default function PurchaseInvoiceModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div>
                   <FieldLabel>المبلغ المدفوع</FieldLabel>
-                  <input
-                    type="number"
-                    value={paidAmount}
-                    onChange={(event) => setPaidAmount(event.target.value)}
-                    className={`${ws.input} px-3 py-2.5 text-right`}
-                    step="0.01"
-                    min="0"
-                    dir="ltr"
-                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={paidAmount}
+                      onChange={(event) => setPaidAmount(event.target.value)}
+                      className={`${ws.input} px-3 py-2.5 text-right flex-1`}
+                      step="0.01"
+                      min="0"
+                      dir="ltr"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setPaidAmount(
+                          totals.total > 0 ? totals.total.toFixed(2) : "0.00",
+                        )
+                      }
+                      disabled={totals.total <= 0}
+                      className={`${ws.btnNeutral} px-3 py-2.5 text-xs shrink-0 whitespace-nowrap disabled:opacity-50`}
+                      title="تعبئة المدفوع بكامل مبلغ الفاتورة"
+                    >
+                      مدفوعة بالكامل
+                    </button>
+                  </div>
                   {moneyValue(paidAmount) > totals.total ? (
                     <div className="text-[11px] text-rose-700 dark:text-rose-300 mt-1">
                       المبلغ المدفوع لا يمكن أن يتجاوز مبلغ الفاتورة.
