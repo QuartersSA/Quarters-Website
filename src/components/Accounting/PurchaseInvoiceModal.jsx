@@ -1133,6 +1133,10 @@ export default function PurchaseInvoiceModal({
   const [discount, setDiscount] = useState("0.00"); // خصم قبل الضريبة
   const [paidAmount, setPaidAmount] = useState("0.00");
   const [paidBankAccountId, setPaidBankAccountId] = useState("");
+  // «إرسال إلى الاعتماد»: تُنشأ الفاتورة غير مدفوعة إجبارياً —
+  // حقول الدفع تختفي وتخرج بحالة «بانتظار الاعتماد» ليسددها
+  // المحاسب لاحقاً من سجل الدفعات. للإنشاء فقط، لا للتعديل.
+  const [sendToApproval, setSendToApproval] = useState(false);
   // إيصال الدفع — اختياري، يظهر مع وجود مبلغ مدفوع.
   const [paymentReceiptUrl, setPaymentReceiptUrl] = useState("");
   const [paymentReceiptName, setPaymentReceiptName] = useState("");
@@ -1227,6 +1231,7 @@ export default function PurchaseInvoiceModal({
         ? String(invoice.paid_bank_account_id)
         : "",
     );
+    setSendToApproval(false);
     setPaymentReceiptUrl(invoice?.payment_receipt_url || "");
     setPaymentReceiptName("");
     setReceiptUploading(false);
@@ -1413,6 +1418,10 @@ export default function PurchaseInvoiceModal({
         tax_rate: moneyValue(line.tax_rate),
         amount_includes_tax: !!line.amount_includes_tax,
       }));
+    // «إرسال إلى الاعتماد» يجبر الفاتورة غير مدفوعة مهما كانت
+    // الحقول — والخادم يعيد فرض ذلك من العلم نفسه.
+    const forApproval = sendToApproval && !isEditing;
+    const effectivePaid = forApproval ? 0 : moneyValue(paidAmount);
     const payload = {
       invoice_number: invoiceNumber.trim() || undefined,
       contact_id: contactId || null,
@@ -1425,11 +1434,12 @@ export default function PurchaseInvoiceModal({
       discount_amount: totals.discount,
       tax_amount: totals.tax,
       total_amount: totals.total,
-      paid_amount: moneyValue(paidAmount),
+      paid_amount: effectivePaid,
       paid_bank_account_id:
-        moneyValue(paidAmount) > 0 ? paidBankAccountId || null : null,
+        effectivePaid > 0 ? paidBankAccountId || null : null,
       payment_receipt_url:
-        moneyValue(paidAmount) > 0 ? paymentReceiptUrl || null : null,
+        effectivePaid > 0 ? paymentReceiptUrl || null : null,
+      submit_for_approval: forApproval,
       // القيمة الثابتة المتبقية — الحالة الفعلية تُحسب من المبالغ.
       workflow_status: "pending_payment",
       branch_id: branchId || null,
@@ -2418,6 +2428,50 @@ export default function PurchaseInvoiceModal({
                 </div>
               </div>
 
+              {/* طريقة الإنشاء: دفع الآن أو إرسال إلى الاعتماد
+                  (غير مدفوعة إجبارياً). للإنشاء فقط. */}
+              {!isEditing ? (
+                <div className={`${ws.segWrap} w-full`}>
+                  <button
+                    type="button"
+                    onClick={() => setSendToApproval(false)}
+                    className={`${ws.segBtn} flex-1 text-xs ${!sendToApproval ? ws.segActive : ws.segInactive}`}
+                  >
+                    تسجيل دفع الآن
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSendToApproval(true);
+                      setPaidAmount("0.00");
+                      setPaidBankAccountId("");
+                      setPaymentReceiptUrl("");
+                      setPaymentReceiptName("");
+                    }}
+                    className={`${ws.segBtn} flex-1 text-xs ${sendToApproval ? ws.segActive : ws.segInactive}`}
+                  >
+                    إرسال إلى الاعتماد — غير مدفوعة
+                  </button>
+                </div>
+              ) : null}
+
+              {sendToApproval && !isEditing ? (
+                <div className={`${ws.glassSoft} ${ws.card} p-3 flex items-center justify-between gap-3`}>
+                  <div className="text-xs text-slate-600 dark:text-white/60 leading-relaxed">
+                    ستُنشأ الفاتورة <b>غير مدفوعة</b> بحالة «بانتظار
+                    الاعتماد» — يسجل المحاسب دفعاتها لاحقاً (كلياً أو
+                    جزئياً) من سجل الدفعات.
+                  </div>
+                  <span
+                    className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold shrink-0 ${purchaseInvoiceStatusClass("pending_payment")}`}
+                  >
+                    {purchaseInvoiceStatusLabel("pending_payment")}
+                  </span>
+                </div>
+              ) : null}
+
+              {!(sendToApproval && !isEditing) ? (
+              <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div>
                   <FieldLabel>المبلغ المدفوع</FieldLabel>
@@ -2536,6 +2590,8 @@ export default function PurchaseInvoiceModal({
                   />
                 </div>
               ) : null}
+              </>
+              ) : null}
             </div>
 
             {/* ملاحظات */}
@@ -2556,7 +2612,9 @@ export default function PurchaseInvoiceModal({
                 className={`${ws.btnPrimary} px-5 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 <Save className="w-4 h-4" />
-                حفظ الفاتورة
+                {sendToApproval && !isEditing
+                  ? "إرسال إلى الاعتماد"
+                  : "حفظ الفاتورة"}
               </button>
               <button
                 type="button"

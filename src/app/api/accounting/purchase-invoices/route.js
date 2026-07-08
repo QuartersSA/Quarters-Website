@@ -246,7 +246,10 @@ function parsePayload(body = {}) {
   const totalRaw = parseMoney(body.total_amount, 0);
   const totalAmount =
     totalRaw > 0 ? totalRaw : Math.round((subtotalAmount + taxAmount) * 100) / 100;
-  const paidAmount = parseMoney(body.paid_amount, 0);
+  // «إرسال إلى الاعتماد» يفرض فاتورة غير مدفوعة مهما أرسل العميل —
+  // الصفر هنا يلغي أيضاً بنك السداد والإيصال أدناه.
+  const paidAmount =
+    body.submit_for_approval === true ? 0 : parseMoney(body.paid_amount, 0);
   const branchIdRaw =
     body.branch_id === undefined ||
     body.branch_id === null ||
@@ -715,7 +718,7 @@ export async function POST(request) {
       entityType: "invoice",
       entityId: created.id,
       action: "created",
-      summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}`,
+      summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}${body.submit_for_approval === true ? " — أُرسلت إلى الاعتماد" : ""}`,
       actor: auth.user,
     });
 
