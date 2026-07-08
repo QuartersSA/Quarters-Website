@@ -2,11 +2,19 @@ import { s as sql } from './sql-BfhTxwII.js';
 import { s as sendWhatsAppViaWasender } from './wasender-DdfB6YgE.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
 
-// أتمتة قسم المشتريات بدون مجدول خارجي: لا يوجد cron في بيئة
-// Railway لهذا التطبيق، فالتوليد يتم «كسولاً» — أول تحميل لدفتر
-// الفواتير بعد حلول الموعد يولّد الفواتير المتكررة المستحقة ويرسل
-// التقارير المجدولة. runPurchaseAutomation تُستدعى من GET الفواتير
-// وتبتلع أخطاءها بالكامل حتى لا تعطل الدفتر نفسه.
+// أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
+//
+//   1. مؤقّت داخل عملية الخادم (startPurchaseAutomationTimer يُستدعى
+//      من نقطة الإقلاع): يفحص كل 5 دقائق، فالتقارير المجدولة تخرج
+//      في وقتها (بعد 8:00 صباحاً بتوقيت الرياض يوم الاستحقاق) حتى
+//      لو لم يفتح أحد النظام. الخادم على Railway عملية دائمة فلا
+//      حاجة لخدمة cron خارجية، وحالة «ما الذي أُرسل» في قاعدة
+//      البيانات (last_sent_key) فلا يضيع شيء عند إعادة النشر.
+//   2. تشغيل كسول احتياطي من GET الفواتير — يغطي فترة ما بعد إعادة
+//      تشغيل لم يعمل مؤقّتها بعد، وهو غير ضار لأن كل العمليات
+//      idempotent (أرقام حتمية + last_sent_key).
+//
+// runPurchaseAutomation تبتلع أخطاءها بالكامل حتى لا تعطل الدفتر.
 
 function todayRiyadh() {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -18,6 +26,17 @@ function todayRiyadh() {
   const get = type => parts.find(part => part.type === type)?.value || "";
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
+function hourRiyadh() {
+  const hour = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Riyadh",
+    hour: "2-digit",
+    hour12: false
+  }).format(new Date());
+  return Number(hour) % 24;
+}
+
+// موعد خروج التقارير المجدولة — صباح يوم الاستحقاق بتوقيت الرياض.
+const SEND_HOUR_RIYADH = 8;
 function round2(value) {
   return Math.round(value * 100) / 100;
 }
@@ -236,6 +255,9 @@ function scheduleState(frequency, today) {
 }
 async function sendDueScheduledReports() {
   if (!process.env.WASENDER_API_KEY) return;
+  // قبل الثامنة صباحاً لا يخرج شيء — الموعد المعلن للمستخدم، ويمنع
+  // وصول التقارير في منتصف الليل عند حلول مفتاح فترة جديد.
+  if (hourRiyadh() < SEND_HOUR_RIYADH) return;
   const today = todayRiyadh();
   const schedules = await sql`
     SELECT * FROM accounting_scheduled_purchase_reports
@@ -290,4 +312,22 @@ async function runPurchaseAutomation() {
   }
 }
 
-export { ensureScheduledReportsSchema as a, buildPurchasesSummaryText as b, ensureRecurringSchema as e, runPurchaseAutomation as r };
+// المجدول الداخلي — يُستدعى مرة واحدة من نقطة إقلاع الخادم.
+const TIMER_INTERVAL_MS = 5 * 60 * 1000;
+let timerStarted = false;
+function startPurchaseAutomationTimer() {
+  if (timerStarted) return;
+  timerStarted = true;
+  const tick = () => {
+    runPurchaseAutomation().catch(() => {});
+  };
+  // مهلة قصيرة بعد الإقلاع حتى لا تتزاحم مع تهيئة الخادم.
+  const first = setTimeout(tick, 45 * 1000);
+  const interval = setInterval(tick, TIMER_INTERVAL_MS);
+  // لا يمسكان العملية لو أُغلق الخادم — الويب سيرفر هو من يبقيها حية.
+  first.unref?.();
+  interval.unref?.();
+  console.log(`purchase automation timer started (every ${TIMER_INTERVAL_MS / 60000} min, sends after ${SEND_HOUR_RIYADH}:00 Riyadh)`);
+}
+
+export { ensureScheduledReportsSchema as a, buildPurchasesSummaryText as b, ensureRecurringSchema as e, runPurchaseAutomation as r, startPurchaseAutomationTimer as s };

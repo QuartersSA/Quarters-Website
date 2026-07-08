@@ -2,7 +2,7 @@ import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-Bl8Y8djJ.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
-import { r as runPurchaseAutomation } from './purchaseAutomation-Hvp4e_Lm.js';
+import { r as runPurchaseAutomation } from './purchaseAutomation-DWlMOJNe.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-DdfB6YgE.js';

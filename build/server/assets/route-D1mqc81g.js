@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureRecurringSchema } from './purchaseAutomation-Hvp4e_Lm.js';
+import { e as ensureRecurringSchema } from './purchaseAutomation-DWlMOJNe.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
 import '@neondatabase/serverless';
 import 'crypto';

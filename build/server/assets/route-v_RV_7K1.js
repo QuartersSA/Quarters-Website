@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { a as ensureScheduledReportsSchema, b as buildPurchasesSummaryText } from './purchaseAutomation-Hvp4e_Lm.js';
+import { a as ensureScheduledReportsSchema, b as buildPurchasesSummaryText } from './purchaseAutomation-DWlMOJNe.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
 import { s as sendWhatsAppViaWasender, n as normalizeWasenderPhone } from './wasender-DdfB6YgE.js';
 import '@neondatabase/serverless';
