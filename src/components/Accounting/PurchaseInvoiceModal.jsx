@@ -1147,6 +1147,13 @@ export default function PurchaseInvoiceModal({
   const [attachmentName, setAttachmentName] = useState("");
   const [attachmentMime, setAttachmentMime] = useState("");
   const [vatMatched, setVatMatched] = useState(false);
+  // مورد استخرجه السكان الذكي بلا تطابق في جهات الاتصال — يظهر زر
+  // إضافة سريعة باسمه ورقمه الضريبي ينشئه ويختاره بنقرة واحدة.
+  const [scanSupplier, setScanSupplier] = useState(null);
+  const [creatingSupplier, setCreatingSupplier] = useState(false);
+  // موردون أُنشئوا من داخل النافذة — يُدمجون في القائمة فوراً حتى
+  // يظهر الاختيار الجديد دون انتظار تحديث قائمة الصفحة الأم.
+  const [createdContacts, setCreatedContacts] = useState([]);
   const [scanBusy, setScanBusy] = useState(false);
   const [ocrProgress, setOcrProgress] = useState(null); // 0..1 while OCR runs
   const [scanSummary, setScanSummary] = useState(null); // {filled:[], warning?}
@@ -1232,6 +1239,9 @@ export default function PurchaseInvoiceModal({
         : "",
     );
     setSendToApproval(false);
+    setScanSupplier(null);
+    setCreatingSupplier(false);
+    setCreatedContacts([]);
     setPaymentReceiptUrl(invoice?.payment_receipt_url || "");
     setPaymentReceiptName("");
     setReceiptUploading(false);
@@ -1292,7 +1302,7 @@ export default function PurchaseInvoiceModal({
   }, [open]);
 
   const contactOptions = useMemo(() => {
-    const activeContacts = contacts
+    const activeContacts = [...contacts, ...createdContacts]
       .filter((contact) => contact.is_active !== false)
       .map((contact) => ({
         value: String(contact.id),
@@ -1300,7 +1310,7 @@ export default function PurchaseInvoiceModal({
       }));
     activeContacts.sort((a, b) => a.label.localeCompare(b.label, "ar"));
     return [{ value: "", label: "بدون جهة اتصال / مورد يدوي" }, ...activeContacts];
-  }, [contacts]);
+  }, [contacts, createdContacts]);
 
   const accountOptions = useMemo(
     () => buildExpenseAccountOptions(accounts),
@@ -1448,6 +1458,41 @@ export default function PurchaseInvoiceModal({
     };
     if (isEditing) payload.id = invoice.id;
     onSubmit(payload);
+  };
+
+  // إضافة المورد المستخرج من السكان كجهة اتصال بنقرة واحدة —
+  // بالاسم والرقم الضريبي من الفاتورة — ثم اختياره فوراً.
+  const quickAddScannedSupplier = async () => {
+    if (!scanSupplier || creatingSupplier) return;
+    setCreatingSupplier(true);
+    try {
+      const response = await authedFetch("/api/accounting/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: scanSupplier.name,
+          country: "SA",
+          vat_registered: !!scanSupplier.vat,
+          vat_number: scanSupplier.vat || null,
+          default_tax_rate: scanSupplier.vat ? 15 : 0,
+          notes: "أُنشئ تلقائياً من السكان الذكي لفاتورة مشتريات",
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.error || "فشل إضافة المورد");
+      }
+      const created = data.contact;
+      setCreatedContacts((prev) => [...prev, created]);
+      setContactId(String(created.id));
+      setSupplierName(created.name || scanSupplier.name);
+      setVatMatched(!!scanSupplier.vat);
+      setScanSupplier(null);
+    } catch (error) {
+      alert(error.message || "فشل إضافة المورد");
+    } finally {
+      setCreatingSupplier(false);
+    }
   };
 
   const handleContactChange = (nextContactId) => {
@@ -1605,19 +1650,26 @@ export default function PurchaseInvoiceModal({
           setContactId(String(matchedContact.id));
           setSupplierName(matchedContact.name);
           setVatMatched(analysis.contact_matched_by === "vat");
+          setScanSupplier(null);
           owned.add("contact");
           filled.push(
             analysis.contact_matched_by === "vat"
               ? "جهة الاتصال (تطابق الرقم الضريبي)"
               : "جهة الاتصال (تطابق الاسم)",
           );
-        } else if (
-          !matchedContact &&
-          analysis.supplier_name &&
-          !supplierName.trim()
-        ) {
-          setSupplierName(String(analysis.supplier_name));
-          filled.push("اسم المورد");
+        } else if (!matchedContact && analysis.supplier_name) {
+          if (!supplierName.trim()) {
+            setSupplierName(String(analysis.supplier_name));
+            filled.push("اسم المورد");
+          }
+          // مورد جديد على النظام — جهّز زر الإضافة السريعة باسمه
+          // ورقمه الضريبي المستخرج من الفاتورة.
+          setScanSupplier({
+            name: String(analysis.supplier_name).trim(),
+            vat: analysis.supplier_vat_number
+              ? String(analysis.supplier_vat_number).replace(/\D/g, "")
+              : "",
+          });
         }
 
         const fallbackAccount = matchedContact?.default_account_id
@@ -1715,7 +1767,7 @@ export default function PurchaseInvoiceModal({
           warning:
             analysis.operator_note ||
             (!matchedContact
-              ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو أضف المورد."
+              ? "ما لقيت مورداً مطابقاً في جهات الاتصال — اضغط زر الإضافة السريعة تحت حقل المورد لإنشائه بالاسم والرقم الضريبي من الفاتورة."
               : null),
         });
         setMobilePane("form");
@@ -2149,6 +2201,32 @@ export default function PurchaseInvoiceModal({
                     buttonClassName="text-sm py-2.5 px-3"
                   />
                   <div className="flex items-center gap-2 flex-wrap mt-1.5">
+                    {scanSupplier && !contactId ? (
+                      <button
+                        type="button"
+                        onClick={quickAddScannedSupplier}
+                        disabled={creatingSupplier}
+                        className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0b3d31] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25 inline-flex items-center gap-1.5 hover:bg-[#d8ebe2] dark:hover:bg-emerald-400/15 disabled:opacity-60`}
+                        title={
+                          scanSupplier.vat
+                            ? `إضافة المورد بالرقم الضريبي ${scanSupplier.vat}`
+                            : "إضافة المورد كجهة اتصال جديدة"
+                        }
+                      >
+                        {creatingSupplier ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Plus className="w-3 h-3" />
+                        )}
+                        {scanSupplier.name}
+                        <Sparkles className="w-3 h-3" />
+                      </button>
+                    ) : null}
+                    {scanSupplier && !contactId && scanSupplier.vat ? (
+                      <span className="text-[11px] text-slate-500 dark:text-white/45 font-mono" dir="ltr">
+                        VAT: {scanSupplier.vat}
+                      </span>
+                    ) : null}
                     {vatMatched ? (
                       <span
                         className={`${ws.pill} bg-fuchsia-100 dark:bg-fuchsia-400/10 text-fuchsia-700 dark:text-fuchsia-200 border-fuchsia-200 dark:border-fuchsia-400/25 inline-flex items-center gap-1`}
