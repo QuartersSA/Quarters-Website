@@ -1147,6 +1147,15 @@ export default function PurchaseInvoiceModal({
   const [attachmentName, setAttachmentName] = useState("");
   const [attachmentMime, setAttachmentMime] = useState("");
   const [vatMatched, setVatMatched] = useState(false);
+  // مورد استخرجه السكان الذكي بلا تطابق في جهات الاتصال — يظهر زر
+  // إضافة سريعة باسمه ورقمه الضريبي ينشئه ويختاره بنقرة واحدة.
+  const [scanSupplier, setScanSupplier] = useState(null);
+  // نافذة تأكيد الإضافة — نسخة قابلة للتعديل من بيانات السكان.
+  const [confirmSupplier, setConfirmSupplier] = useState(null);
+  const [creatingSupplier, setCreatingSupplier] = useState(false);
+  // موردون أُنشئوا من داخل النافذة — يُدمجون في القائمة فوراً حتى
+  // يظهر الاختيار الجديد دون انتظار تحديث قائمة الصفحة الأم.
+  const [createdContacts, setCreatedContacts] = useState([]);
   const [scanBusy, setScanBusy] = useState(false);
   const [ocrProgress, setOcrProgress] = useState(null); // 0..1 while OCR runs
   const [scanSummary, setScanSummary] = useState(null); // {filled:[], warning?}
@@ -1232,6 +1241,10 @@ export default function PurchaseInvoiceModal({
         : "",
     );
     setSendToApproval(false);
+    setScanSupplier(null);
+    setConfirmSupplier(null);
+    setCreatingSupplier(false);
+    setCreatedContacts([]);
     setPaymentReceiptUrl(invoice?.payment_receipt_url || "");
     setPaymentReceiptName("");
     setReceiptUploading(false);
@@ -1292,7 +1305,7 @@ export default function PurchaseInvoiceModal({
   }, [open]);
 
   const contactOptions = useMemo(() => {
-    const activeContacts = contacts
+    const activeContacts = [...contacts, ...createdContacts]
       .filter((contact) => contact.is_active !== false)
       .map((contact) => ({
         value: String(contact.id),
@@ -1300,7 +1313,7 @@ export default function PurchaseInvoiceModal({
       }));
     activeContacts.sort((a, b) => a.label.localeCompare(b.label, "ar"));
     return [{ value: "", label: "بدون جهة اتصال / مورد يدوي" }, ...activeContacts];
-  }, [contacts]);
+  }, [contacts, createdContacts]);
 
   const accountOptions = useMemo(
     () => buildExpenseAccountOptions(accounts),
@@ -1448,6 +1461,45 @@ export default function PurchaseInvoiceModal({
     };
     if (isEditing) payload.id = invoice.id;
     onSubmit(payload);
+  };
+
+  // إنشاء المورد بعد تأكيد المستخدم (وتعديلاته) في نافذة التأكيد،
+  // ثم اختياره فوراً في حقل المورد.
+  const quickAddScannedSupplier = async () => {
+    if (!confirmSupplier || creatingSupplier) return;
+    const name = confirmSupplier.name.trim();
+    const vat = confirmSupplier.vat.trim();
+    if (!name) return;
+    setCreatingSupplier(true);
+    try {
+      const response = await authedFetch("/api/accounting/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          country: "SA",
+          vat_registered: !!vat,
+          vat_number: vat || null,
+          default_tax_rate: vat ? 15 : 0,
+          notes: "أُنشئ تلقائياً من السكان الذكي لفاتورة مشتريات",
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.error || "فشل إضافة المورد");
+      }
+      const created = data.contact;
+      setCreatedContacts((prev) => [...prev, created]);
+      setContactId(String(created.id));
+      setSupplierName(created.name || name);
+      setVatMatched(!!vat);
+      setScanSupplier(null);
+      setConfirmSupplier(null);
+    } catch (error) {
+      alert(error.message || "فشل إضافة المورد");
+    } finally {
+      setCreatingSupplier(false);
+    }
   };
 
   const handleContactChange = (nextContactId) => {
@@ -1605,19 +1657,26 @@ export default function PurchaseInvoiceModal({
           setContactId(String(matchedContact.id));
           setSupplierName(matchedContact.name);
           setVatMatched(analysis.contact_matched_by === "vat");
+          setScanSupplier(null);
           owned.add("contact");
           filled.push(
             analysis.contact_matched_by === "vat"
               ? "جهة الاتصال (تطابق الرقم الضريبي)"
               : "جهة الاتصال (تطابق الاسم)",
           );
-        } else if (
-          !matchedContact &&
-          analysis.supplier_name &&
-          !supplierName.trim()
-        ) {
-          setSupplierName(String(analysis.supplier_name));
-          filled.push("اسم المورد");
+        } else if (!matchedContact && analysis.supplier_name) {
+          if (!supplierName.trim()) {
+            setSupplierName(String(analysis.supplier_name));
+            filled.push("اسم المورد");
+          }
+          // مورد جديد على النظام — جهّز زر الإضافة السريعة باسمه
+          // ورقمه الضريبي المستخرج من الفاتورة.
+          setScanSupplier({
+            name: String(analysis.supplier_name).trim(),
+            vat: analysis.supplier_vat_number
+              ? String(analysis.supplier_vat_number).replace(/\D/g, "")
+              : "",
+          });
         }
 
         const fallbackAccount = matchedContact?.default_account_id
@@ -1715,7 +1774,7 @@ export default function PurchaseInvoiceModal({
           warning:
             analysis.operator_note ||
             (!matchedContact
-              ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو أضف المورد."
+              ? "ما لقيت مورداً مطابقاً في جهات الاتصال — اضغط زر الإضافة السريعة تحت حقل المورد لإنشائه بالاسم والرقم الضريبي من الفاتورة."
               : null),
         });
         setMobilePane("form");
@@ -2149,6 +2208,32 @@ export default function PurchaseInvoiceModal({
                     buttonClassName="text-sm py-2.5 px-3"
                   />
                   <div className="flex items-center gap-2 flex-wrap mt-1.5">
+                    {scanSupplier && !contactId ? (
+                      <button
+                        type="button"
+                        onClick={() => setConfirmSupplier({ ...scanSupplier })}
+                        disabled={creatingSupplier}
+                        className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0b3d31] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25 inline-flex items-center gap-1.5 hover:bg-[#d8ebe2] dark:hover:bg-emerald-400/15 disabled:opacity-60`}
+                        title={
+                          scanSupplier.vat
+                            ? `إضافة المورد بالرقم الضريبي ${scanSupplier.vat}`
+                            : "إضافة المورد كجهة اتصال جديدة"
+                        }
+                      >
+                        {creatingSupplier ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <Plus className="w-3 h-3" />
+                        )}
+                        {scanSupplier.name}
+                        <Sparkles className="w-3 h-3" />
+                      </button>
+                    ) : null}
+                    {scanSupplier && !contactId && scanSupplier.vat ? (
+                      <span className="text-[11px] text-slate-500 dark:text-white/45 font-mono" dir="ltr">
+                        VAT: {scanSupplier.vat}
+                      </span>
+                    ) : null}
                     {vatMatched ? (
                       <span
                         className={`${ws.pill} bg-fuchsia-100 dark:bg-fuchsia-400/10 text-fuchsia-700 dark:text-fuchsia-200 border-fuchsia-200 dark:border-fuchsia-400/25 inline-flex items-center gap-1`}
@@ -2651,6 +2736,116 @@ export default function PurchaseInvoiceModal({
           {previewPane}
         </div>
       </div>
+
+      {/* تأكيد إضافة المورد المستخرج من السكان — البيانات قابلة
+          للتعديل قبل الحفظ. */}
+      {confirmSupplier ? (
+        <div
+          className="fixed inset-0 z-[1100] flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-sm p-0 sm:p-4"
+          dir="rtl"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget && !creatingSupplier) {
+              setConfirmSupplier(null);
+            }
+          }}
+        >
+          <div className={`${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5`}>
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="font-bold text-slate-900 dark:text-white">
+                    تأكيد إضافة مورد جديد
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-white/50 mt-0.5">
+                    البيانات مستخرجة من الفاتورة — راجعها وعدّلها قبل الحفظ.
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setConfirmSupplier(null)}
+                disabled={creatingSupplier}
+                className={`${ws.iconButton} w-9 h-9`}
+                aria-label="إغلاق"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <FieldLabel required>اسم المنشأة</FieldLabel>
+                <input
+                  type="text"
+                  value={confirmSupplier.name}
+                  onChange={(event) =>
+                    setConfirmSupplier({
+                      ...confirmSupplier,
+                      name: event.target.value,
+                    })
+                  }
+                  className={`${ws.input} px-3 py-2.5`}
+                  autoFocus
+                />
+              </div>
+              <div>
+                <FieldLabel>الرقم الضريبي</FieldLabel>
+                <input
+                  type="text"
+                  value={confirmSupplier.vat}
+                  onChange={(event) =>
+                    setConfirmSupplier({
+                      ...confirmSupplier,
+                      vat: event.target.value.replace(/\D/g, ""),
+                    })
+                  }
+                  className={`${ws.input} px-3 py-2.5 text-left font-mono`}
+                  dir="ltr"
+                  placeholder="3xxxxxxxxxxxxx"
+                  inputMode="numeric"
+                />
+                {confirmSupplier.vat && confirmSupplier.vat.length !== 15 ? (
+                  <div className="text-[11px] text-amber-700 dark:text-amber-300 mt-1">
+                    الأرقام الضريبية السعودية 15 خانة — تأكد من الرقم.
+                  </div>
+                ) : null}
+              </div>
+              <div className={`${ws.glassSoft} ${ws.card} px-3 py-2 text-[11px] text-slate-500 dark:text-white/45 leading-relaxed`}>
+                {confirmSupplier.vat
+                  ? "سيُسجل كمورد سعودي مسجل ضريبياً بنسبة افتراضية 15%."
+                  : "بدون رقم ضريبي — سيُسجل كمورد غير مسجل في الضريبة."}
+                {" "}يمكن تعديل بقية البيانات لاحقاً من صفحة الموردين.
+              </div>
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={quickAddScannedSupplier}
+                  disabled={creatingSupplier || !confirmSupplier.name.trim()}
+                  className={`${ws.btnPrimary} px-4 py-2 disabled:opacity-50`}
+                >
+                  {creatingSupplier ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Plus className="w-4 h-4" />
+                  )}
+                  تأكيد الإضافة
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmSupplier(null)}
+                  disabled={creatingSupplier}
+                  className={`${ws.btnNeutral} px-4 py-2`}
+                >
+                  إلغاء
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>,
     document.body,
   );
