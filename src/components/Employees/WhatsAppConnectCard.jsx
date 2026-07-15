@@ -37,7 +37,35 @@ export function WhatsAppConnectCard() {
   });
   const status = statusQuery.data || null;
 
-  if (!status || status.provider !== "baileys") return null;
+  // أثناء التحميل أو عند فشل القراءة لا نعرض شيئاً؛ أما مزود غير
+  // ذاتي فنعرض بطاقة إرشادية بدل الاختفاء الصامت.
+  if (!status) return null;
+
+  if (status.provider !== "baileys") {
+    return (
+      <div className={`${ws.glass} ${ws.card} p-4 mb-6`}>
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className={`${ws.iconBox} w-10 h-10 text-slate-500 dark:text-white/50 shrink-0`}>
+            <MessageCircle className="w-5 h-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="font-bold text-slate-900 dark:text-white">
+              إشعارات واتساب — الاستضافة الذاتية غير مفعّلة
+            </div>
+            <div className="text-xs text-slate-500 dark:text-white/50 mt-0.5 leading-relaxed">
+              الإرسال حالياً عبر المزود الخارجي (Wasender). للتحول للربط
+              الذاتي المجاني: أضف المتغير{" "}
+              <code className="font-mono text-[11px] bg-slate-100 dark:bg-white/10 px-1 py-0.5 rounded" dir="ltr">
+                WHATSAPP_PROVIDER=baileys
+              </code>{" "}
+              في متغيرات الخادم (Railway ← Variables) وأعد النشر — ثم
+              ارجع هنا لربط الرقم برمز الاقتران.
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const requestPairing = async () => {
     if (!pairPhone.trim() || pairing) return;

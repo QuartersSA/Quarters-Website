@@ -12,6 +12,11 @@ const REQUIRE_ADMIN = {
   }, {
     role: "Admin",
     permission: "can_manage_purchases"
+  },
+  // بطاقة الربط تعيش في صفحة إدارة الموظفين.
+  {
+    role: "Admin",
+    permission: "can_manage_employees"
   }]
 };
 
