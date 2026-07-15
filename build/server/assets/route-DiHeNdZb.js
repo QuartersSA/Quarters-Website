@@ -1,5 +1,5 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { requestWhatsAppPairingCode } from './whatsappBaileys-pct-j7VB.js';
+import { resetWhatsAppSession, requestWhatsAppPairingCode } from './whatsappBaileys-B5Dq3Rvf.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
 import 'crypto';
 import './sql-BfhTxwII.js';
@@ -41,6 +41,22 @@ async function POST(request) {
   }
   try {
     const body = await request.json().catch(() => ({}));
+
+    // إعادة تعيين يدوية: مسح الجلسة بالكامل (لعالق «مقترن لكن ميت»
+    // أو قبل نقل الربط لرقم آخر).
+    if (body.action === "reset") {
+      await resetWhatsAppSession();
+      await logPurchaseAudit({
+        entityType: "whatsapp",
+        action: "session_reset",
+        summary: "إعادة تعيين جلسة واتساب (الاستضافة الذاتية)",
+        actor: auth.user
+      });
+      return Response.json({
+        ok: true,
+        reset: true
+      });
+    }
     const code = await requestWhatsAppPairingCode(body.phone);
     await logPurchaseAudit({
       entityType: "whatsapp",

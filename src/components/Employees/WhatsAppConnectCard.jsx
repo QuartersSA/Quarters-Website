@@ -221,6 +221,36 @@ export function WhatsAppConnectCard() {
           {pairError}
         </div>
       ) : null}
+      {status.connected ? null : (
+        <div className="mt-2">
+          <button
+            type="button"
+            onClick={async () => {
+              if (
+                !window.confirm(
+                  "مسح جلسة الواتساب بالكامل والبدء من جديد؟ ستحتاج اقتراناً جديداً.",
+                )
+              )
+                return;
+              try {
+                await authedFetch("/api/whatsapp/pair", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ action: "reset" }),
+                });
+                setPairCode(null);
+                setPairError("");
+              } catch {
+                // تجاهل — الحالة ستنعكس في الاستعلام الدوري
+              }
+            }}
+            className="text-[11px] text-slate-400 hover:text-red-600 dark:text-white/35 dark:hover:text-red-300 underline"
+          >
+            إعادة تعيين الجلسة والبدء من جديد
+          </button>
+        </div>
+      )}
+
       {!status.connected && status.libError ? (
         <div className="text-[11px] text-rose-700 dark:text-rose-300 mt-2 font-mono break-all" dir="ltr">
           مكتبة واتساب غير متاحة على الخادم: {status.libError} (node {status.nodeVersion})
