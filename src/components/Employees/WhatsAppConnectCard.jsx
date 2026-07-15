@@ -221,6 +221,11 @@ export function WhatsAppConnectCard() {
           {pairError}
         </div>
       ) : null}
+      {!status.connected && !pairError && status.lastError ? (
+        <div className="text-[11px] text-slate-400 dark:text-white/35 mt-2" dir="ltr">
+          آخر خطأ اتصال: {status.lastError}
+        </div>
+      ) : null}
     </div>
   );
 }
