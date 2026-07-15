@@ -46,6 +46,50 @@ export default function ScheduledReportsModal({ open, onClose }) {
   const [error, setError] = useState("");
   const [sendingId, setSendingId] = useState(null);
   const [sendNote, setSendNote] = useState(null);
+  // اقتران واتساب المستضاف ذاتياً (Baileys).
+  const [pairPhone, setPairPhone] = useState("");
+  const [pairing, setPairing] = useState(false);
+  const [pairCode, setPairCode] = useState(null);
+  const [pairError, setPairError] = useState("");
+
+  const whatsappQuery = useQuery({
+    queryKey: queryKeys.whatsappStatus(),
+    enabled: open,
+    refetchInterval: (query) =>
+      // أثناء انتظار الاقتران حدّث الحالة كل 5 ثوانٍ حتى تنقلب «متصل».
+      query.state.data?.provider === "baileys" &&
+      !query.state.data?.connected
+        ? 5000
+        : false,
+    queryFn: async () => {
+      const response = await authedFetch("/api/whatsapp/status");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل قراءة الحالة");
+      return data;
+    },
+  });
+  const whatsapp = whatsappQuery.data || null;
+
+  const requestPairing = async () => {
+    if (!pairPhone.trim() || pairing) return;
+    setPairing(true);
+    setPairError("");
+    setPairCode(null);
+    try {
+      const response = await authedFetch("/api/whatsapp/pair", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: pairPhone.trim() }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل طلب الرمز");
+      setPairCode(data.code);
+    } catch (err) {
+      setPairError(err.message);
+    } finally {
+      setPairing(false);
+    }
+  };
 
   const schedulesQuery = useQuery({
     queryKey: SCHEDULES_KEY,
@@ -171,10 +215,83 @@ export default function ScheduledReportsModal({ open, onClose }) {
         </div>
 
         <div className="p-5 space-y-4">
-          {!whatsappConfigured ? (
+          {/* حالة اتصال واتساب — والاقتران للوضع المستضاف ذاتياً */}
+          {whatsapp?.provider === "baileys" ? (
+            whatsapp.connected ? (
+              <div className="rounded-xl border border-[#b7ddc7] dark:border-emerald-400/25 bg-[#e6f4ec] dark:bg-emerald-400/10 px-3 py-2 text-xs text-[#178a5b] dark:text-emerald-200 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#178a5b] dark:bg-emerald-300 shrink-0" />
+                واتساب متصل (استضافة ذاتية)
+                {whatsapp.phone ? (
+                  <span className="font-mono" dir="ltr">
+                    +{whatsapp.phone}
+                  </span>
+                ) : null}
+              </div>
+            ) : (
+              <div className={`${ws.glassSoft} ${ws.card} p-3 space-y-2`}>
+                <div className="text-xs font-bold text-slate-700 dark:text-white/70">
+                  ربط رقم واتساب (الاستضافة الذاتية)
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-white/45 leading-relaxed">
+                  أدخل رقم الواتساب المخصص للنظام بالصيغة الدولية، اطلب
+                  الرمز، ثم في جوال الرقم: الإعدادات ← الأجهزة المرتبطة ←
+                  ربط بجهاز ← «الربط برقم الهاتف بدلاً من ذلك».
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="tel"
+                    value={pairPhone}
+                    onChange={(event) => setPairPhone(event.target.value)}
+                    placeholder="9665xxxxxxxx"
+                    className={`${ws.input} px-2.5 py-1.5 text-sm flex-1 text-left`}
+                    dir="ltr"
+                  />
+                  <button
+                    type="button"
+                    onClick={requestPairing}
+                    disabled={!pairPhone.trim() || pairing}
+                    className={`${ws.btnPrimary} px-3 py-1.5 text-xs disabled:opacity-50 shrink-0`}
+                  >
+                    {pairing ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Send className="w-3.5 h-3.5" />
+                    )}
+                    اطلب رمز الاقتران
+                  </button>
+                </div>
+                {pairCode ? (
+                  <div className="text-center py-2">
+                    <div className="text-[11px] text-slate-500 dark:text-white/45 mb-1">
+                      أدخل هذا الرمز في جوال الرقم خلال دقيقة:
+                    </div>
+                    <div
+                      className="text-2xl font-bold font-mono tracking-widest text-[#0b3d31] dark:text-emerald-200"
+                      dir="ltr"
+                    >
+                      {pairCode}
+                    </div>
+                  </div>
+                ) : null}
+                {pairError ? (
+                  <div className="text-[11px] text-rose-700 dark:text-rose-300">
+                    {pairError}
+                  </div>
+                ) : null}
+                {whatsapp.lastError && !pairCode ? (
+                  <div className="text-[11px] text-slate-400 dark:text-white/35" dir="ltr">
+                    {whatsapp.lastError}
+                  </div>
+                ) : null}
+              </div>
+            )
+          ) : null}
+
+          {whatsapp && whatsapp.provider !== "baileys" && !whatsappConfigured ? (
             <div className="rounded-xl border border-amber-200 dark:border-amber-400/25 bg-amber-50 dark:bg-amber-400/10 px-3 py-2 text-xs text-amber-800 dark:text-amber-200">
               خدمة واتساب غير مفعلة على الخادم — الجدولة ستُحفظ لكن لن
-              تُرسل حتى ضبط WASENDER_API_KEY.
+              تُرسل حتى ضبط WASENDER_API_KEY (أو التحول للاستضافة
+              الذاتية بضبط WHATSAPP_PROVIDER=baileys).
             </div>
           ) : null}
 

@@ -287,6 +287,15 @@ app.route(API_BASENAME, api);
 
 startPurchaseAutomationTimer();
 
+// واتساب المستضاف ذاتياً (Baileys) — يتصل عند الإقلاع فقط عندما
+// WHATSAPP_PROVIDER=baileys؛ استيراد ديناميكي حتى لا تُحمَّل المكتبة
+// في الأوضاع الأخرى.
+if ((process.env.WHATSAPP_PROVIDER || "").toLowerCase() === "baileys") {
+  import("../src/app/api/utils/whatsappBaileys")
+    .then((mod) => mod.startWhatsApp())
+    .catch((error) => console.error("whatsapp (baileys) boot failed", error));
+}
+
 export default createHonoServer({
   app,
   defaultLogger: false,

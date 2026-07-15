@@ -24,6 +24,7 @@ export const queryKeys = Object.freeze({
   purchaseAuditLog: createKey("purchase_audit_log"),
   recurringPurchaseInvoices: createKey("recurring_purchase_invoices"),
   scheduledPurchaseReports: createKey("scheduled_purchase_reports"),
+  whatsappStatus: createKey("whatsapp_status"),
   accountingLoanEmployees: createKey("accounting_loan_employees"),
   accountingPayroll: createKey("accounting_payroll"),
   accountingPayrollBonusEmployees: createKey(

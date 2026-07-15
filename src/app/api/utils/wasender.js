@@ -77,11 +77,13 @@ export function normalizeWasenderPhone(raw) {
   return null;
 }
 
+// نقطة الإرسال الموحدة لكل النظام (تذكيرات المشتريات، التقارير
+// المجدولة، الرواتب، الجرد…). المزود يتحدد بمتغير البيئة:
+//   WHATSAPP_PROVIDER=baileys  → استضافة ذاتية داخل الخادم (مجاني)
+//   غير ذلك                    → WasenderAPI الخارجي (الوضع القديم)
+// كلا المسارين يمران بسلسلة التهدئة (رسالة كل 5.5 ثانية).
 export async function sendWhatsAppViaWasender({ to, text }) {
-  const apiKey = process.env.WASENDER_API_KEY;
-  if (!apiKey) {
-    return { ok: false, error: "Missing API key (WASENDER_API_KEY)" };
-  }
+  const provider = (process.env.WHATSAPP_PROVIDER || "wasender").toLowerCase();
 
   const normalizedTo = normalizeWasenderPhone(to);
   if (!normalizedTo) {
@@ -95,6 +97,20 @@ export async function sendWhatsAppViaWasender({ to, text }) {
 
   if (!payload.text) {
     return { ok: false, error: "Empty message" };
+  }
+
+  if (provider === "baileys") {
+    return paceSend(async () => {
+      const { sendViaBaileys } = await import(
+        "@/app/api/utils/whatsappBaileys"
+      );
+      return sendViaBaileys({ to: normalizedTo, text: payload.text });
+    });
+  }
+
+  const apiKey = process.env.WASENDER_API_KEY;
+  if (!apiKey) {
+    return { ok: false, error: "Missing API key (WASENDER_API_KEY)" };
   }
 
   return paceSend(async () => {

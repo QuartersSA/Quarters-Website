@@ -14,6 +14,7 @@ import { EmployeeSearchBar } from "@/components/Employees/EmployeeSearchBar";
 import { EmployeeExportMenu } from "@/components/Employees/EmployeeExportMenu";
 import { EmployeeTable } from "@/components/Employees/EmployeeTable";
 import { EmployeeModal } from "@/components/Employees/EmployeeModal/EmployeeModal";
+import { WhatsAppConnectCard } from "@/components/Employees/WhatsAppConnectCard";
 import { toast } from "sonner";
 import { Breadcrumb } from "@/components/Dashboard/Breadcrumb";
 
@@ -157,6 +158,9 @@ export default function EmployeesPage() {
             </div>
           </div>
         ) : null}
+
+        {/* ربط رقم واتساب النظام (الاستضافة الذاتية) */}
+        <WhatsAppConnectCard />
 
         {/* Statistics Cards */}
         <EmployeeStatistics

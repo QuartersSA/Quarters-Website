@@ -21,6 +21,8 @@ const initialFormState = {
   // Admin notification preferences (WhatsApp)
   notify_shift_close_wa: false,
   notify_inventory_operation_wa: false,
+  // تفضيلات إشعارات واتساب التفصيلية (محاسبة/جرد) — لكل الأدوار.
+  wa_prefs: [],
   // Employee permissions
   can_do_inventory: false,
   can_close_shift: false,
@@ -61,6 +63,7 @@ export function useEmployeeForm() {
       // Admin notification preferences (WhatsApp)
       notify_shift_close_wa: !!employee.notify_shift_close_wa,
       notify_inventory_operation_wa: !!employee.notify_inventory_operation_wa,
+      wa_prefs: Array.isArray(employee.wa_prefs) ? employee.wa_prefs : [],
       // Employee permissions
       can_do_inventory: !!employee.can_do_inventory,
       can_close_shift: !!employee.can_close_shift,

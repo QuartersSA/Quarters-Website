@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
+import { notifyByPref, notifyLowStockIfAny } from "@/app/api/utils/waNotify";
 import { findDisabledItemsAtBranch } from "@/app/api/utils/branchVisibility";
 import {
   ensureInventoryUnitSnapshotSchema,
@@ -634,6 +635,28 @@ export async function POST(request) {
       items: result.items,
       note: note || "",
     }).catch((e) => console.error("notify admins whatsapp error", e));
+
+    // إشعارات تفضيلات الموظفين + فحص الحد الأدنى في الفرع المصدر
+    // (التحويل يُنقص رصيده).
+    {
+      const text = [
+        "🔁 عملية تحويل جديدة",
+        `الرقم: ${result.transferNumber || ""}`,
+        `من: ${result?.fromBranch?.name || "—"} → إلى: ${result?.toBranch?.name || "—"}`,
+        employeeName ? `بواسطة: ${employeeName}` : null,
+        Array.isArray(result.items) ? `عدد الأصناف: ${result.items.length}` : null,
+      ]
+        .filter(Boolean)
+        .join("\n");
+      notifyByPref("inv_transfer", text).catch(() => {});
+      const transferItemIds = Array.isArray(result.items)
+        ? result.items.map((item) => Number(item.itemId)).filter(Boolean)
+        : [];
+      notifyLowStockIfAny({
+        branchId: result?.fromBranch?.id,
+        itemIds: transferItemIds,
+      }).catch(() => {});
+    }
 
     return Response.json(result, { status: 201 });
   } catch (error) {
