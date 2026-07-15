@@ -215,12 +215,43 @@ export async function whatsappStatus() {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// مسح الجلسة بالكامل والبدء بهوية جديدة — يُستدعى تلقائياً قبل كل
+// طلب رمز اقتران (بقايا محاولة سابقة غير مكتملة تفسد الربط برسالة
+// «Couldn't link device» على الجوال)، ويدوياً من زر إعادة التعيين.
+export async function resetWhatsAppSession() {
+  stopping = true;
+  try {
+    sock?.end?.(new Error("manual session reset"));
+  } catch {
+    // ignore
+  }
+  sock = null;
+  connected = false;
+  starting = null;
+  lastError = null;
+  await ensureAuthTable();
+  await sql`DELETE FROM whatsapp_auth_state`;
+  stopping = false;
+}
+
 // رمز الاقتران — يتطلب socket غير مقترن بعد. النتيجة 8 خانات تُدخل
 // في جوال الرقم المخصص خلال ~دقيقة.
 export async function requestWhatsAppPairingCode(phone) {
   const digits = String(phone || "").replace(/\D/g, "");
   if (digits.length < 9) {
     throw new Error("رقم غير صالح — أدخله بالصيغة الدولية مثل 9665xxxxxxxx");
+  }
+  // اقتران نظيف دائماً: ما دام الرقم غير مقترنٍ مكتملاً، أي بقايا
+  // جلسة (محاولات فاشلة، انقطاع نشر أثناء الربط) تُمسح ونبدأ بهوية
+  // تشفير جديدة — هذا يمنع «Couldn't link device» على الجوال.
+  if (!connected) {
+    const [row] = await sql`
+      SELECT value FROM whatsapp_auth_state WHERE key = 'creds'
+    `;
+    const registered = !!row && row.value.includes('"registered":true');
+    if (!registered) {
+      await resetWhatsAppSession();
+    }
   }
   // اتصال ميت (فشل إقلاع سابق / خروج من الجوال) → ابدأ من الصفر
   // بدل إعادة وعدٍ منتهٍ لا يفعل شيئاً.
