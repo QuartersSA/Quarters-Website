@@ -186,14 +186,34 @@ export async function whatsappStatus() {
   } catch {
     // ignore
   }
+  // فحص تشخيصي: هل مكتبة baileys قابلة للتحميل في بيئة التشغيل هذه؟
+  // (الاستيراد خارجي — يعتمد على node_modules الخادم؛ فشله هو أول
+  // مشتبه به عند تعطل الاقتران في بيئة دون أخرى.)
+  let libOk = false;
+  let libError = null;
+  if (provider === "baileys") {
+    try {
+      await loadBaileys();
+      libOk = true;
+    } catch (error) {
+      libError = `${error.code || ""} ${error.message || error}`.trim();
+      // أعد المحاولة في نداء لاحق بدل تعليق وعد فاشل للأبد.
+      baileysPromise = null;
+    }
+  }
   return {
     provider,
     connected,
     phone: connected && sock?.user?.id ? sock.user.id.split(":")[0] : null,
     hasSession,
     lastError,
+    libOk,
+    libError,
+    nodeVersion: process.version,
   };
 }
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // رمز الاقتران — يتطلب socket غير مقترن بعد. النتيجة 8 خانات تُدخل
 // في جوال الرقم المخصص خلال ~دقيقة.
@@ -202,10 +222,22 @@ export async function requestWhatsAppPairingCode(phone) {
   if (digits.length < 9) {
     throw new Error("رقم غير صالح — أدخله بالصيغة الدولية مثل 9665xxxxxxxx");
   }
+  // اتصال ميت (فشل إقلاع سابق / خروج من الجوال) → ابدأ من الصفر
+  // بدل إعادة وعدٍ منتهٍ لا يفعل شيئاً.
+  if (!sock) starting = null;
   await startWhatsApp();
-  // مهلة قصيرة حتى يفتح الـsocket قناته قبل طلب الرمز.
-  await new Promise((resolve) => setTimeout(resolve, 2500));
-  if (!sock) throw new Error("تعذر تشغيل اتصال واتساب — راجع سجلات الخادم");
+  // تهيئة الجلسة من القاعدة + جلب إصدار البروتوكول قد تستغرق ثوانيَ
+  // على الاستضافة — انتظر الجاهزية حتى 15 ثانية بدل مهلة ثابتة.
+  for (let attempt = 0; attempt < 30 && !sock; attempt += 1) {
+    await sleep(500);
+  }
+  if (!sock) {
+    throw new Error(
+      lastError
+        ? `تعذر تشغيل اتصال واتساب: ${lastError}`
+        : "تعذر تشغيل اتصال واتساب — راجع سجلات الخادم",
+    );
+  }
   if (connected) {
     throw new Error("الرقم مقترن ومتصل بالفعل — لا حاجة لاقتران جديد");
   }
