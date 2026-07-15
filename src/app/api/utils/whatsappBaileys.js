@@ -253,27 +253,39 @@ export async function requestWhatsAppPairingCode(phone) {
       await resetWhatsAppSession();
     }
   }
-  // اتصال ميت (فشل إقلاع سابق / خروج من الجوال) → ابدأ من الصفر
-  // بدل إعادة وعدٍ منتهٍ لا يفعل شيئاً.
-  if (!sock) starting = null;
-  await startWhatsApp();
-  // تهيئة الجلسة من القاعدة + جلب إصدار البروتوكول قد تستغرق ثوانيَ
-  // على الاستضافة — انتظر الجاهزية حتى 15 ثانية بدل مهلة ثابتة.
-  for (let attempt = 0; attempt < 30 && !sock; attempt += 1) {
-    await sleep(500);
+  // انقطاعات لحظية («Connection Closed/Failure») شائعة من مضيفي
+  // السحابة — حتى 3 محاولات عبر دورات إعادة الاتصال قبل الاستسلام.
+  let lastAttemptError = null;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (!sock) starting = null;
+    await startWhatsApp();
+    // تهيئة الجلسة + جلب إصدار البروتوكول قد تستغرق ثوانيَ — انتظر
+    // الجاهزية حتى 15 ثانية.
+    for (let poll = 0; poll < 30 && !sock; poll += 1) {
+      await sleep(500);
+    }
+    if (!sock) {
+      lastAttemptError = new Error(lastError || "تعذر فتح الاتصال");
+      await sleep(4000);
+      continue;
+    }
+    if (connected) {
+      throw new Error("الرقم مقترن ومتصل بالفعل — لا حاجة لاقتران جديد");
+    }
+    try {
+      // مهلة قصيرة حتى تستقر القناة الجديدة قبل طلب الرمز.
+      await sleep(1500);
+      const code = await sock.requestPairingCode(digits);
+      return code.length === 8 ? `${code.slice(0, 4)}-${code.slice(4)}` : code;
+    } catch (error) {
+      lastAttemptError = error;
+      // انقطع أثناء الطلب — امهل دورة إعادة الاتصال (5 ثوانٍ) وأعد.
+      await sleep(6500);
+    }
   }
-  if (!sock) {
-    throw new Error(
-      lastError
-        ? `تعذر تشغيل اتصال واتساب: ${lastError}`
-        : "تعذر تشغيل اتصال واتساب — راجع سجلات الخادم",
-    );
-  }
-  if (connected) {
-    throw new Error("الرقم مقترن ومتصل بالفعل — لا حاجة لاقتران جديد");
-  }
-  const code = await sock.requestPairingCode(digits);
-  return code.length === 8 ? `${code.slice(0, 4)}-${code.slice(4)}` : code;
+  throw new Error(
+    `تعذر توليد الرمز بعد عدة محاولات (${lastAttemptError?.message || "غير معروف"}) — الأرجح تقييد مؤقت من واتساب بسبب تكرار المحاولات: انتظر 30-60 دقيقة ثم جرّب مرة واحدة نظيفة`,
+  );
 }
 
 // الإرسال — نفس عقد Wasender: { ok, error? }.
