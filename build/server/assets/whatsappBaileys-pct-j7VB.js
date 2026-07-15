@@ -186,12 +186,30 @@ async function whatsappStatus() {
   } catch {
     // ignore
   }
+  // فحص تشخيصي: هل مكتبة baileys قابلة للتحميل في بيئة التشغيل هذه؟
+  // (الاستيراد خارجي — يعتمد على node_modules الخادم؛ فشله هو أول
+  // مشتبه به عند تعطل الاقتران في بيئة دون أخرى.)
+  let libOk = false;
+  let libError = null;
+  if (provider === "baileys") {
+    try {
+      await loadBaileys();
+      libOk = true;
+    } catch (error) {
+      libError = `${error.code || ""} ${error.message || error}`.trim();
+      // أعد المحاولة في نداء لاحق بدل تعليق وعد فاشل للأبد.
+      baileysPromise = null;
+    }
+  }
   return {
     provider,
     connected,
     phone: connected && sock?.user?.id ? sock.user.id.split(":")[0] : null,
     hasSession,
-    lastError
+    lastError,
+    libOk,
+    libError,
+    nodeVersion: process.version
   };
 }
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));

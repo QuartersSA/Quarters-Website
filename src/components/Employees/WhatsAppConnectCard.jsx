@@ -221,6 +221,11 @@ export function WhatsAppConnectCard() {
           {pairError}
         </div>
       ) : null}
+      {!status.connected && status.libError ? (
+        <div className="text-[11px] text-rose-700 dark:text-rose-300 mt-2 font-mono break-all" dir="ltr">
+          مكتبة واتساب غير متاحة على الخادم: {status.libError} (node {status.nodeVersion})
+        </div>
+      ) : null}
       {!status.connected && !pairError && status.lastError ? (
         <div className="text-[11px] text-slate-400 dark:text-white/35 mt-2" dir="ltr">
           آخر خطأ اتصال: {status.lastError}

@@ -1,6 +1,6 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { s as sendWhatsAppViaWasender } from './wasender-4ILI3THM.js';
+import { s as sendWhatsAppViaWasender } from './wasender-HaZ73gUD.js';
 import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-Ba9mYj5Z.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -10,20 +10,86 @@ function safeNumber(value) {
   if (!Number.isFinite(n)) return null;
   return n;
 }
-function safeNumericString(value) {
-  if (value === null || value === undefined) return null;
-  const s = String(value).trim();
-  if (s === "") return null;
-  // Accept simple decimal numbers only (keeps Postgres numeric math precise)
-  if (!/^-?\d+(\.\d+)?$/.test(s)) return null;
-  return s;
-}
 function safeInt(value) {
   const n = safeNumber(value);
   if (n === null) return null;
   const i = Math.trunc(n);
   if (!Number.isFinite(i)) return null;
   return i;
+}
+let deductionImagesColumnEnsured = false;
+async function ensureDeductionImagesColumn() {
+  if (deductionImagesColumnEnsured) return;
+  try {
+    await sql`ALTER TABLE hr_employee_deductions ADD COLUMN IF NOT EXISTS images JSONB`;
+    deductionImagesColumnEnsured = true;
+  } catch (e) {
+    console.error("ensureDeductionImagesColumn failed", e);
+  }
+}
+function normalizeImagesInput(body) {
+  // Accept either an `images` array (new) or single `image_*` fields (legacy).
+  const raw = body?.images ?? body?.imageList ?? null;
+  let arr = [];
+  if (Array.isArray(raw)) {
+    arr = raw.map(item => {
+      if (!item || typeof item !== "object") return null;
+      const url = item.url ?? item.image_url ?? null;
+      if (!url) return null;
+      const mimeType = item.mimeType ?? item.image_mime_type ?? null;
+      const name = item.name ?? item.image_name ?? null;
+      const sizeBytes = item.sizeBytes ?? item.size_bytes ?? item.image_size_bytes ?? null;
+      const sizeNum = sizeBytes === null || sizeBytes === undefined || sizeBytes === "" ? null : safeNumber(sizeBytes);
+      return {
+        url: String(url),
+        mimeType: mimeType ? String(mimeType) : null,
+        name: name ? String(name) : null,
+        sizeBytes: sizeNum
+      };
+    }).filter(Boolean);
+  } else {
+    const url = body?.image_url ?? body?.imageUrl ?? null;
+    if (url) {
+      const mimeType = body?.image_mime_type ?? body?.imageMimeType ?? null;
+      const name = body?.image_name ?? body?.imageName ?? null;
+      const sizeRaw = body?.image_size_bytes ?? body?.imageSizeBytes ?? body?.imageSize ?? null;
+      const sizeNum = sizeRaw === null || sizeRaw === undefined || sizeRaw === "" ? null : safeNumber(sizeRaw);
+      arr = [{
+        url: String(url),
+        mimeType: mimeType ? String(mimeType) : null,
+        name: name ? String(name) : null,
+        sizeBytes: sizeNum
+      }];
+    }
+  }
+  return arr;
+}
+
+// For GET responses: ensure rows expose `images` array even for legacy rows
+// that only have the flat image_* fields populated.
+function decorateRowImages(row) {
+  if (!row) return row;
+  let images = Array.isArray(row.images) ? row.images : null;
+  if (!images && row.images && typeof row.images === "string") {
+    try {
+      const parsed = JSON.parse(row.images);
+      if (Array.isArray(parsed)) images = parsed;
+    } catch {
+      // ignore
+    }
+  }
+  if ((!images || images.length === 0) && row.image_url) {
+    images = [{
+      url: row.image_url,
+      mimeType: row.image_mime_type || null,
+      name: row.image_name || null,
+      sizeBytes: row.image_size_bytes === null || row.image_size_bytes === undefined ? null : Number(row.image_size_bytes)
+    }];
+  }
+  return {
+    ...row,
+    images: images || []
+  };
 }
 function normalizeIsoDate(value) {
   if (!value) return null;
@@ -58,44 +124,34 @@ function normalizeEmployeeIds(body) {
   const single = safeInt(body?.employee_id ?? body?.employeeId);
   return single ? [single] : [];
 }
-function buildBonusRowSelectSql(whereClause, params) {
-  return sql(`
+async function buildDeductionRowSelectSql(whereClause, params) {
+  await ensureDeductionImagesColumn();
+  // Keep this in one place so GET/POST can stay in sync
+  const rows = await sql(`
       SELECT
-        b.id,
-        b.employee_id,
+        d.id,
+        d.employee_id,
         COALESCE(NULLIF(e.display_name, ''), e.name) as employee_name,
-        b.bonus_date,
-        b.bonus_category,
-        b.reason,
-
-        -- IMPORTANT: for percent bonuses, compute amount from employee total salary
-        -- so old rows (created before the fix) still display correctly.
-        CASE
-          WHEN b.amount_mode = 'percent' AND b.amount_percent IS NOT NULL THEN
-            ROUND(
-              (COALESCE(e.base_salary, 0) + COALESCE(e.other_allowances, 0))
-              * b.amount_percent::numeric / 100,
-              2
-            )
-          ELSE b.amount
-        END AS amount,
-
-        b.amount_mode,
-        b.amount_percent,
-        b.source,
-        b.created_by_employee_id,
-        b.created_by_employee_name,
-        b.created_at,
-        b.image_url,
-        b.image_mime_type,
-        b.image_name,
-        b.image_size_bytes
-      FROM hr_employee_bonuses b
-      JOIN employees e ON e.id = b.employee_id
+        d.violation_date,
+        d.violation_category,
+        d.reason,
+        d.amount,
+        d.source,
+        d.created_by_employee_id,
+        d.created_by_employee_name,
+        d.created_at,
+        d.image_url,
+        d.image_mime_type,
+        d.image_name,
+        d.image_size_bytes,
+        d.images
+      FROM hr_employee_deductions d
+      JOIN employees e ON e.id = d.employee_id
       ${whereClause}
     `, params);
+  return rows.map(decorateRowImages);
 }
-async function notifyBonusWhatsApp({
+async function notifyDeductionWhatsApp({
   createdRows,
   actorUser
 }) {
@@ -108,8 +164,8 @@ async function notifyBonusWhatsApp({
         reason: "no_rows"
       };
     }
-    const dateValue = rows[0]?.bonus_date ? String(rows[0].bonus_date).slice(0, 10) : null;
-    const categoryValue = rows[0]?.bonus_category || null;
+    const dateValue = rows[0]?.violation_date ? String(rows[0].violation_date).slice(0, 10) : null;
+    const categoryValue = rows[0]?.violation_category || null;
     const reasonValue = rows[0]?.reason || null;
     const createdByUsername = actorUser?.username ? String(actorUser.username) : null;
     const createdByName = actorUser?.name ? String(actorUser.name) : null;
@@ -165,7 +221,7 @@ async function notifyBonusWhatsApp({
     });
     const moreCount = rows.length - listLines.length;
     const moreLine = moreCount > 0 ? `… والمزيد (${moreCount})` : null;
-    const headerLines = ["بونص جديد", rows.length > 1 ? `عدد الموظفين: ${rows.length}` : null, dateValue ? `التاريخ: ${dateValue}` : null, categoryValue ? `النوع: ${categoryValue}` : null, source ? `المصدر: ${source}` : null].filter(Boolean);
+    const headerLines = ["خصم جديد", rows.length > 1 ? `عدد الموظفين: ${rows.length}` : null, dateValue ? `التاريخ: ${dateValue}` : null, categoryValue ? `التصنيف: ${categoryValue}` : null, source ? `المصدر: ${source}` : null].filter(Boolean);
     const hrText = [...headerLines, "الموظفين:", ...listLines, moreLine, reasonValue ? `السبب: ${reasonValue}` : null].filter(Boolean).join("\n").trim();
     const results = await Promise.all(recipients.map(async r => {
       const to = r.phone;
@@ -177,10 +233,11 @@ async function notifyBonusWhatsApp({
       const isHr = r.kind === "hr";
       let text = hrText;
       if (!isHr) {
+        // Employee-specific message (only for those who aren't HR)
         const row = rows.find(x => Number(x.employee_id) === Number(r.id));
         const amount = row?.amount;
         const amountText = amount === null || amount === undefined ? "-" : String(amount);
-        const lines = ["تم إضافة بونص لك", dateValue ? `التاريخ: ${dateValue}` : null, categoryValue ? `النوع: ${categoryValue}` : null, `المبلغ: ${amountText}`, reasonValue ? `السبب: ${reasonValue}` : null].filter(Boolean);
+        const lines = ["تم تسجيل خصم عليك", dateValue ? `التاريخ: ${dateValue}` : null, categoryValue ? `التصنيف: ${categoryValue}` : null, `المبلغ: ${amountText}`, reasonValue ? `السبب: ${reasonValue}` : null].filter(Boolean);
         text = lines.join("\n").trim();
       }
       const res = await sendWhatsAppViaWasender({
@@ -188,7 +245,7 @@ async function notifyBonusWhatsApp({
         text
       });
       if (!res.ok) {
-        console.error("Bonus WhatsApp notify failed", {
+        console.error("Deduction WhatsApp notify failed", {
           employeeId: r.id,
           error: res.error,
           details: res.details
@@ -204,7 +261,7 @@ async function notifyBonusWhatsApp({
       results
     };
   } catch (error) {
-    console.error("notifyBonusWhatsApp error", error);
+    console.error("notifyDeductionWhatsApp error", error);
     return {
       ok: false,
       error: "notify_failed"
@@ -218,7 +275,7 @@ async function GET(request) {
       permission: "can_access_hr"
     }, {
       role: "Admin",
-      permission: "can_manage_accounting"
+      permission: "can_manage_deductions"
     }]
   });
   if (!auth.ok) {
@@ -239,7 +296,7 @@ async function GET(request) {
     const params = [];
     if (employeeId) {
       params.push(employeeId);
-      where += ` AND b.employee_id = $${params.length}`;
+      where += ` AND d.employee_id = $${params.length}`;
     }
     if (monthRaw) {
       if (!monthRange) {
@@ -250,17 +307,17 @@ async function GET(request) {
         });
       }
       params.push(monthRange.monthStart);
-      where += ` AND b.bonus_date >= $${params.length}`;
+      where += ` AND d.violation_date >= $${params.length}`;
       params.push(monthRange.nextMonthStart);
-      where += ` AND b.bonus_date < $${params.length}`;
+      where += ` AND d.violation_date < $${params.length}`;
     }
-    where += " ORDER BY b.bonus_date DESC, b.created_at DESC, b.id DESC LIMIT 500";
-    const rows = await buildBonusRowSelectSql(where, params);
+    where += " ORDER BY d.violation_date DESC, d.created_at DESC, d.id DESC LIMIT 500";
+    const rows = await buildDeductionRowSelectSql(where, params);
     return Response.json(rows);
   } catch (error) {
-    console.error("HR: Error fetching bonuses:", error);
+    console.error("HR: Error fetching deductions:", error);
     return Response.json({
-      error: "Failed to fetch bonuses"
+      error: "Failed to fetch deductions"
     }, {
       status: 500
     });
@@ -270,10 +327,10 @@ async function POST(request) {
   const auth = requireAuth(request, {
     anyOf: [{
       role: "Admin",
-      permission: "can_manage_accounting"
+      permission: "can_access_hr"
     }, {
       role: "Admin",
-      permission: "can_access_hr"
+      permission: "can_manage_deductions"
     }]
   });
   if (!auth.ok) {
@@ -287,21 +344,15 @@ async function POST(request) {
     await ensureEmployeeDisplayNameSchema();
     const body = await request.json();
     const employeeIds = normalizeEmployeeIds(body);
-
-    // ✅ Month-based bonuses (Accounting -> Payroll)
-    const monthRaw = body?.month ?? body?.payroll_month ?? body?.payrollMonth;
-    const monthRange = monthRaw ? parseMonthRange(monthRaw) : null;
-    const bonusDate = normalizeIsoDate(body.bonus_date ?? body.bonusDate ?? (monthRange ? monthRange.monthStart : null));
-    const category = body.bonus_category ?? body.bonusCategory;
+    const violationDate = normalizeIsoDate(body.violation_date ?? body.violationDate);
+    const category = body.violation_category ?? body.violationCategory;
     const reason = body.reason;
-    const amountFixedStr = safeNumericString(body.amount);
-    const amountPercentStr = safeNumericString(body.amount_percent ?? body.amountPercent);
-    const amountModeRaw = body.amount_mode ?? body.amountMode;
-    const requestedMode = amountModeRaw ? String(amountModeRaw) : null;
-    const imageUrl = body.image_url ?? body.imageUrl;
-    const imageMimeType = body.image_mime_type ?? body.imageMimeType;
-    const imageName = body.image_name ?? body.imageName;
-    const imageSizeBytes = body.image_size_bytes ?? body.imageSizeBytes ?? body.imageSize;
+    const amount = safeNumber(body.amount);
+    const images = normalizeImagesInput(body);
+    const firstImage = images[0] || null;
+
+    // IMPORTANT: source is fixed automatically (ignore any client-provided value)
+
     if (!employeeIds || employeeIds.length === 0) {
       return Response.json({
         error: "employee_id(s) is required"
@@ -309,112 +360,79 @@ async function POST(request) {
         status: 400
       });
     }
-    if (!bonusDate) {
+    if (!violationDate) {
       return Response.json({
-        error: "month or bonus_date is required"
+        error: "violation_date is required"
       }, {
         status: 400
       });
     }
-    const usingPercent = requestedMode === "percent" || amountFixedStr === null && amountPercentStr !== null;
-    if (usingPercent) {
-      const p = amountPercentStr === null ? null : Number(amountPercentStr);
-      if (p === null || !Number.isFinite(p) || p < 0) {
-        return Response.json({
-          error: "amount_percent must be a valid number >= 0"
-        }, {
-          status: 400
-        });
-      }
-    } else {
-      const a = amountFixedStr === null ? null : Number(amountFixedStr);
-      if (a === null || !Number.isFinite(a) || a < 0) {
-        return Response.json({
-          error: "amount is required"
-        }, {
-          status: 400
-        });
-      }
+    if (amount === null || amount < 0) {
+      return Response.json({
+        error: "amount is required"
+      }, {
+        status: 400
+      });
     }
     const createdById = auth.user?.id ? Number(auth.user.id) : null;
     const createdByName = auth.user?.name ? String(auth.user.name) : null;
     const createdByUsername = auth.user?.username ? String(auth.user.username) : null;
+
+    // Prefer username (اسم المستخدم) then fallback to name
     const source = createdByUsername || createdByName || null;
     const categoryValue = category ? String(category) : null;
     const reasonValue = reason ? String(reason) : null;
-
-    // image fields are kept for backwards compatibility, but UI no longer uses them
-    const imageUrlValue = imageUrl ? String(imageUrl) : null;
-    const imageMimeTypeValue = imageMimeType ? String(imageMimeType) : null;
-    const imageNameValue = imageName ? String(imageName) : null;
-    const imageSizeValue = imageSizeBytes === null || imageSizeBytes === undefined || imageSizeBytes === "" ? null : safeNumber(imageSizeBytes);
+    const imageUrlValue = firstImage?.url ?? null;
+    const imageMimeTypeValue = firstImage?.mimeType ?? null;
+    const imageNameValue = firstImage?.name ?? null;
+    const imageSizeValue = firstImage?.sizeBytes === null || firstImage?.sizeBytes === undefined ? null : Number(firstImage.sizeBytes);
+    const imagesJson = images.length > 0 ? JSON.stringify(images) : null;
     const uniqueEmployeeIds = Array.from(new Set(employeeIds));
-
-    // If percent mode: compute per employee based on TOTAL salary (base + allowances)
-    // using Postgres numeric (accurate)
-    let computedAmounts = null;
-    if (usingPercent) {
-      const percent = amountPercentStr; // keep as string for numeric math
-      const rows = await sql(`
-          SELECT
-            id,
-            ROUND(
-              (COALESCE(base_salary, 0) + COALESCE(other_allowances, 0))
-              * $2::numeric / 100,
-              2
-            ) AS amount
-          FROM employees
-          WHERE id = ANY($1::int[])
-        `, [uniqueEmployeeIds, percent]);
-      computedAmounts = new Map((rows || []).map(r => [Number(r.id), r.amount ?? 0]));
-    }
-    const insertResults = await sql.transaction(txn => uniqueEmployeeIds.map(empId => {
-      const amountValue = usingPercent ? computedAmounts.get(Number(empId)) ?? 0 : amountFixedStr;
-      return txn`
-          INSERT INTO hr_employee_bonuses (
+    await ensureDeductionImagesColumn();
+    const insertResults = await sql.transaction(txn => uniqueEmployeeIds.map(empId => txn`
+          INSERT INTO hr_employee_deductions (
             employee_id,
-            bonus_date,
-            bonus_category,
+            violation_date,
+            violation_category,
             reason,
             amount,
-            amount_mode,
-            amount_percent,
             source,
             created_by_employee_id,
             created_by_employee_name,
             image_url,
             image_mime_type,
             image_name,
-            image_size_bytes
+            image_size_bytes,
+            images
           )
           VALUES (
             ${empId},
-            ${bonusDate},
+            ${violationDate},
             ${categoryValue},
             ${reasonValue},
-            ${amountValue},
-            ${usingPercent ? "percent" : "fixed"},
-            ${usingPercent ? amountPercentStr : null},
+            ${amount},
             ${source},
             ${createdById},
             ${createdByName},
             ${imageUrlValue},
             ${imageMimeTypeValue},
             ${imageNameValue},
-            ${imageSizeValue}
+            ${imageSizeValue},
+            ${imagesJson}::jsonb
           )
           RETURNING id
-        `;
-    }));
+        `));
     const newIds = insertResults.map(r => r?.[0]?.id).filter(v => safeInt(v));
-    const rows = newIds.length ? await buildBonusRowSelectSql(`WHERE b.id = ANY($1::int[]) ORDER BY b.bonus_date DESC, b.created_at DESC, b.id DESC`, [newIds]) : [];
+    const rows = newIds.length ? await buildDeductionRowSelectSql(`WHERE d.id = ANY($1::int[]) ORDER BY d.violation_date DESC, d.created_at DESC, d.id DESC`, [newIds]) : [];
+
+    // best-effort notifications (WhatsApp)
     try {
-      await notifyBonusWhatsApp({
+      await notifyDeductionWhatsApp({
         createdRows: rows,
         actorUser: auth.user
       });
     } catch (e) {
-      console.error("Bonus notify failed", e);
+      console.error("Deduction notify failed", e);
     }
     if (uniqueEmployeeIds.length > 1) {
       return Response.json({
@@ -425,9 +443,9 @@ async function POST(request) {
     }
     return Response.json(rows[0] || null);
   } catch (error) {
-    console.error("HR: Error creating bonus:", error);
+    console.error("HR: Error creating deduction:", error);
     return Response.json({
-      error: "Failed to create bonus",
+      error: "Failed to create deduction",
       details: error.message
     }, {
       status: 500
