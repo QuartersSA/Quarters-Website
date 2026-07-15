@@ -1,5 +1,5 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { resetWhatsAppSession, requestWhatsAppPairingCode } from './whatsappBaileys-B5Dq3Rvf.js';
+import { resetWhatsAppSession, requestWhatsAppPairingCode } from './whatsappBaileys-CRYlQjW8.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
 import 'crypto';
 import './sql-BfhTxwII.js';
