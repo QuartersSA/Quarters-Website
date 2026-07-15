@@ -1,10 +1,11 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { a as ensureScheduledReportsSchema, b as buildPurchasesSummaryText } from './purchaseAutomation-BzYVHvAw.js';
+import { a as ensureScheduledReportsSchema, b as buildPurchasesSummaryText } from './purchaseAutomation-BQKbiEg6.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
 import { s as sendWhatsAppViaWasender, n as normalizeWasenderPhone } from './wasender-CRPKPtD_.js';
 import '@neondatabase/serverless';
 import 'crypto';
+import './waNotify-B2Wcd2pm.js';
 
 const REQUIRE_ACCOUNTING = {
   anyOf: [{

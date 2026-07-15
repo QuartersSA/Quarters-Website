@@ -1,6 +1,7 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { s as sendWhatsAppViaWasender } from './wasender-CRPKPtD_.js';
+import { n as notifyByPref, a as notifyLowStockIfAny } from './waNotify-B2Wcd2pm.js';
 import { a as assertItemsEnabledAtBranch } from './branchVisibility-CLODkXYw.js';
 import { g as getDefaultInventoryUnitSnapshots, s as snapshotForItem, e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-Eh4y0Ete.js';
 import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-Ba9mYj5Z.js';
@@ -799,6 +800,20 @@ async function POST(request) {
       inventoryNumber: operation?.inventory_number,
       operationId: operation?.id
     }).catch(e => console.error("notify admins whatsapp error", e));
+
+    // إشعارات تفضيلات الموظفين: نوع العملية يحدد المفتاح، ثم فحص
+    // الحد الأدنى للأصناف المتأثرة في هذا الفرع.
+    {
+      const opType = String(operation?.inventory_type || "");
+      const prefKey = opType === "Receipt" ? "inv_receipt" : opType === "Transfer" ? "inv_transfer" : "inv_stocktake";
+      const title = opType === "Receipt" ? "📦 عملية وارد جديدة" : opType === "Transfer" ? "🔁 عملية تحويل جديدة" : "📋 عملية جرد جديدة";
+      const text = [title, `الفرع: ${branch?.name || "—"}`, `الرقم: ${operation?.inventory_number || ""}`, employeeName ? `الموظف: ${employeeName}` : null, `عدد الأصناف: ${insertItemIds.length}`].filter(Boolean).join("\n");
+      notifyByPref(prefKey, text).catch(() => {});
+      notifyLowStockIfAny({
+        branchId: operation?.branch_id,
+        itemIds: insertItemIds
+      }).catch(() => {});
+    }
     return Response.json(operation, {
       status: 201
     });

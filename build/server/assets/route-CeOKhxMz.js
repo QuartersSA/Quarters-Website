@@ -177,7 +177,9 @@ async function PUT(request, {
       notify_inventory_operation_push,
       // Admin notification preferences (WhatsApp)
       notify_shift_close_wa,
-      notify_inventory_operation_wa
+      notify_inventory_operation_wa,
+      // تفضيلات إشعارات واتساب التفصيلية (محاسبة/جرد) — لكل الأدوار.
+      wa_prefs
     } = body;
     const employeeId = parseInt(id);
     const [existing] = await sql`
@@ -433,6 +435,11 @@ async function PUT(request, {
     if (notify_inventory_operation_wa !== undefined) {
       updates.push(`notify_inventory_operation_wa = $${paramCount}`);
       values.push(isAdmin ? effectiveNotifyInventoryOperationWa : false);
+      paramCount++;
+    }
+    if (wa_prefs !== undefined) {
+      updates.push(`wa_prefs = $${paramCount}::jsonb`);
+      values.push(JSON.stringify(Array.isArray(wa_prefs) ? wa_prefs.filter(key => typeof key === "string").slice(0, 20) : []));
       paramCount++;
     }
 

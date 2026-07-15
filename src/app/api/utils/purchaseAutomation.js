@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { notifyByPref, onceDaily } from "@/app/api/utils/waNotify";
 
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
@@ -311,6 +312,42 @@ async function sendDueScheduledReports() {
   }
 }
 
+// ملخص المتأخرات اليومي (بعد 8 صباحاً) لمشتركي «فاتورة متأخرة» من
+// تفضيلات إشعارات الموظفين.
+async function sendOverdueDigest() {
+  if (hourRiyadh() < SEND_HOUR_RIYADH) return;
+  const today = todayRiyadh();
+  const rows = await sql`
+    SELECT inv.invoice_number,
+           COALESCE(NULLIF(inv.supplier_name, ''), c.name, 'بدون مورد') AS supplier,
+           TO_CHAR(inv.due_date, 'YYYY-MM-DD') AS due_date,
+           GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance
+    FROM accounting_purchase_invoices inv
+    LEFT JOIN accounting_contacts c ON c.id = inv.contact_id
+    WHERE inv.is_active = TRUE
+      AND inv.paid_amount < inv.total_amount
+      AND inv.due_date IS NOT NULL
+      AND inv.due_date < ${today}::date
+    ORDER BY inv.due_date ASC
+    LIMIT 15
+  `;
+  if (!rows.length) return;
+  // الحجز اليومي بعد التأكد من وجود متأخرات — يوم بلا متأخرات لا
+  // يستهلك الإرسال.
+  if (!(await onceDaily("acc_invoice_overdue"))) return;
+  const total = rows.reduce((acc, row) => acc + Number(row.balance || 0), 0);
+  const lines = [
+    `⏰ فواتير متأخرة (${rows.length})`,
+    ...rows.map(
+      (row) =>
+        `• ${row.invoice_number} — ${row.supplier}: ${Number(row.balance).toFixed(2)} SAR (استحقاق ${row.due_date})`,
+    ),
+    "",
+    `الإجمالي المتأخر: ${total.toFixed(2)} SAR`,
+  ];
+  await notifyByPref("acc_invoice_overdue", lines.join("\n"));
+}
+
 let automationRunning = false;
 
 export async function runPurchaseAutomation() {
@@ -321,6 +358,7 @@ export async function runPurchaseAutomation() {
     await ensureScheduledReportsSchema();
     await generateRecurringInvoices();
     await sendDueScheduledReports();
+    await sendOverdueDigest();
   } catch (error) {
     console.error("purchase automation failed", error);
   } finally {

@@ -15,6 +15,8 @@ async function ensureWasteColumn() {
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_add_purchase_invoices BOOLEAN DEFAULT false`;
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_manage_suppliers BOOLEAN DEFAULT false`;
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_manage_purchases BOOLEAN DEFAULT false`;
+    // تفضيلات إشعارات الواتساب لكل موظف (مفاتيح أحداث المحاسبة والجرد).
+    await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS wa_prefs JSONB DEFAULT '[]'::jsonb`;
   } catch (e) {
     console.error("ensureWasteColumn:", e?.message);
   }
@@ -71,6 +73,7 @@ async function GET(request) {
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,
         COALESCE(e.notify_inventory_operation_wa, false) as notify_inventory_operation_wa,
+        COALESCE(e.wa_prefs, '[]'::jsonb) as wa_prefs,
         COALESCE(
           jsonb_agg(
             DISTINCT jsonb_build_object(
@@ -154,6 +157,8 @@ async function POST(request) {
       // Admin notification preferences (WhatsApp)
       notify_shift_close_wa,
       notify_inventory_operation_wa,
+      // تفضيلات إشعارات واتساب التفصيلية (محاسبة/جرد) — لكل الأدوار.
+      wa_prefs,
       // Employee permissions
       can_do_inventory,
       can_close_shift,
@@ -202,6 +207,7 @@ async function POST(request) {
     const notifyInventoryOperationPushBool = isAdmin ? !!notify_inventory_operation_push : false;
     const notifyShiftCloseWaBool = isAdmin ? !!notify_shift_close_wa : false;
     const notifyInventoryOperationWaBool = isAdmin ? !!notify_inventory_operation_wa : false;
+    const waPrefsJson = JSON.stringify(Array.isArray(wa_prefs) ? wa_prefs.filter(key => typeof key === "string").slice(0, 20) : []);
 
     // If employee can do inventory and/or shift close, they must be linked to at least one branch.
     if (!isAdmin && (canDoInventoryBool || canCloseShiftBool || canLogWasteBool) && normalizedBranchIds.length === 0) {
@@ -252,7 +258,8 @@ async function POST(request) {
           notify_shift_close_push,
           notify_inventory_operation_push,
           notify_shift_close_wa,
-          notify_inventory_operation_wa
+          notify_inventory_operation_wa,
+          wa_prefs
         )
         VALUES (
           ${name},
@@ -287,7 +294,8 @@ async function POST(request) {
           ${notifyShiftClosePushBool},
           ${notifyInventoryOperationPushBool},
           ${notifyShiftCloseWaBool},
-          ${notifyInventoryOperationWaBool}
+          ${notifyInventoryOperationWaBool},
+          ${waPrefsJson}::jsonb
         )
         RETURNING *
       `]);
@@ -337,6 +345,7 @@ async function POST(request) {
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,
         COALESCE(e.notify_inventory_operation_wa, false) as notify_inventory_operation_wa,
+        COALESCE(e.wa_prefs, '[]'::jsonb) as wa_prefs,
         COALESCE(
           jsonb_agg(
             DISTINCT jsonb_build_object(

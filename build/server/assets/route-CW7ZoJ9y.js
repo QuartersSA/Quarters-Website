@@ -1,8 +1,10 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
+import { n as notifyByPref } from './waNotify-B2Wcd2pm.js';
 import '@neondatabase/serverless';
 import 'crypto';
+import './wasender-CRPKPtD_.js';
 
 const REQUIRE_ACCOUNTING = {
   anyOf: [{
@@ -103,9 +105,13 @@ async function POST(request) {
       });
     }
     const [invoice] = await sql`
-      SELECT id, invoice_number, currency, total_amount, paid_amount
-      FROM accounting_purchase_invoices
-      WHERE id = ${invoiceId} AND is_active = TRUE
+      SELECT inv.id, inv.invoice_number, inv.currency,
+             inv.total_amount, inv.paid_amount,
+             inv.created_by_employee_id,
+             COALESCE(NULLIF(inv.supplier_name, ''), c.name) AS supplier
+      FROM accounting_purchase_invoices inv
+      LEFT JOIN accounting_contacts c ON c.id = inv.contact_id
+      WHERE inv.id = ${invoiceId} AND inv.is_active = TRUE
     `;
     if (!invoice) {
       return Response.json({
@@ -160,6 +166,22 @@ async function POST(request) {
       summary: `تسجيل دفعة ${amount.toFixed(2)} ${invoice.currency || "SAR"} بتاريخ ${paymentDate} على الفاتورة ${invoice.invoice_number} — إجمالي المدفوع ${newPaid.toFixed(2)} من ${total.toFixed(2)}`,
       actor: auth.user
     });
+
+    // إشعار واتساب لمنشئ الفاتورة (إن اشترك في «إيصال التحويل»).
+    if (invoice.created_by_employee_id) {
+      let bankName = null;
+      if (bankAccountId) {
+        const [bank] = await sql`
+          SELECT name, bank_name FROM accounting_bank_accounts
+          WHERE id = ${bankAccountId}
+        `;
+        bankName = bank ? `${bank.name}${bank.bank_name ? ` — ${bank.bank_name}` : ""}` : null;
+      }
+      const lines = ["💳 تم تسجيل دفعة على فاتورتك", `الفاتورة: ${invoice.invoice_number}`, invoice.supplier ? `المورد: ${invoice.supplier}` : null, `الدفعة: ${amount.toFixed(2)} ${invoice.currency || "SAR"} بتاريخ ${paymentDate}`, bankName ? `البنك: ${bankName}` : null, `الإجمالي المدفوع: ${newPaid.toFixed(2)} من ${total.toFixed(2)}`, actorName ? `سجلها: ${actorName}` : null, receiptUrl ? `الإيصال: ${receiptUrl}` : null].filter(Boolean);
+      notifyByPref("acc_payment_receipt", lines.join("\n"), {
+        onlyEmployeeId: invoice.created_by_employee_id
+      });
+    }
     return Response.json({
       ok: true,
       payment_id: payment.id,

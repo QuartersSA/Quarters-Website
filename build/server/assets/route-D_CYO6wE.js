@@ -2,7 +2,8 @@ import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-Bl8Y8djJ.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
-import { r as runPurchaseAutomation } from './purchaseAutomation-BzYVHvAw.js';
+import { r as runPurchaseAutomation } from './purchaseAutomation-BQKbiEg6.js';
+import { n as notifyByPref } from './waNotify-B2Wcd2pm.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-CRPKPtD_.js';
@@ -718,6 +719,9 @@ async function POST(request) {
       summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}${body.submit_for_approval === true ? " — أُرسلت إلى الاعتماد" : ""}`,
       actor: auth.user
     });
+
+    // إشعار المشتركين في «فاتورة مشتريات جديدة».
+    notifyByPref("acc_invoice_created", ["🧾 فاتورة مشتريات جديدة", `الرقم: ${payload.invoiceNumber}`, `المورد: ${payload.supplierName || `#${payload.contactId}`}`, `المبلغ: ${payload.totalAmount.toFixed(2)} ${payload.currency}`, payload.paidAmount > 0 ? `المدفوع: ${payload.paidAmount.toFixed(2)}` : body.submit_for_approval === true ? "الحالة: بانتظار الاعتماد" : null, createdByName ? `بواسطة: ${createdByName}` : null].filter(Boolean).join("\n"));
     return Response.json({
       ok: true,
       invoice: created

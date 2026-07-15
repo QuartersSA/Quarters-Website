@@ -22,6 +22,60 @@ import {
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 
+// أنواع إشعارات الواتساب لكل موظف — مقسمة: المحاسبة والجرد. المفاتيح
+// تُخزن في employees.wa_prefs (JSONB) ويقرؤها محرك waNotify.
+const WA_PREF_GROUPS = [
+  {
+    key: "accounting",
+    label: "المحاسبة",
+    Icon: Calculator,
+    options: [
+      {
+        key: "acc_payment_receipt",
+        label: "إيصال التحويل",
+        hint: "عند تسجيل دفعة على فاتورة أنشأها هذا الموظف",
+      },
+      {
+        key: "acc_invoice_created",
+        label: "فاتورة مشتريات جديدة",
+        hint: "عند إنشاء أي فاتورة مشتريات",
+      },
+      {
+        key: "acc_invoice_overdue",
+        label: "الفواتير المتأخرة",
+        hint: "ملخص يومي بعد 8 صباحاً عند وجود متأخرات",
+      },
+    ],
+  },
+  {
+    key: "inventory",
+    label: "الجرد",
+    Icon: ClipboardList,
+    options: [
+      {
+        key: "inv_stocktake",
+        label: "عملية جرد",
+        hint: "عند إنشاء عملية جرد (يومي/أسبوعي/افتتاحي)",
+      },
+      {
+        key: "inv_transfer",
+        label: "عملية تحويل",
+        hint: "عند التحويل بين الفروع",
+      },
+      {
+        key: "inv_receipt",
+        label: "عملية وارد",
+        hint: "عند تسجيل وارد جديد للمخزون",
+      },
+      {
+        key: "inv_low_stock",
+        label: "بلوغ الحد الأدنى",
+        hint: "عندما يهبط صنف إلى حده الأدنى بعد أي عملية",
+      },
+    ],
+  },
+];
+
 export function EmployeeFormFields({
   formData,
   setFormData,
@@ -33,6 +87,19 @@ export function EmployeeFormFields({
   const showEmployeeOptions = formData.role === "Employee";
   const showAdminOptions = formData.role === "Admin";
   const showBranches = !isAdminRole;
+
+  const waPrefs = Array.isArray(formData.wa_prefs) ? formData.wa_prefs : [];
+  const toggleWaPref = (key) => {
+    setFormData((prev) => {
+      const current = Array.isArray(prev.wa_prefs) ? prev.wa_prefs : [];
+      return {
+        ...prev,
+        wa_prefs: current.includes(key)
+          ? current.filter((item) => item !== key)
+          : [...current, key],
+      };
+    });
+  };
 
   const needsBranch =
     formData.role === "Employee" &&
@@ -503,62 +570,125 @@ export function EmployeeFormFields({
         </div>
       ) : null}
 
-      {/* NEW: Admin WhatsApp notification preferences */}
-      {showAdminOptions ? (
-        <div
-          className={`${ws.glassSoft} border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 rounded-2xl p-4`}
-        >
-          <div className="flex items-start justify-between gap-4 flex-wrap">
-            <div className="min-w-0">
-              <p className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-semibold">إشعارات واتساب</p>
-              <p className="text-sm text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/50 mt-1">
-                تصل على رقم الجوال المسجل أعلاه.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2 flex-wrap">
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData((p) => ({
-                    ...p,
-                    notify_shift_close_wa: !p.notify_shift_close_wa,
-                  }))
-                }
-                className={notifyShiftCloseWaBtnClass}
-              >
-                {formData.notify_shift_close_wa ? (
-                  <CheckCircle2 className="w-5 h-5" />
-                ) : (
-                  <XCircle className="w-5 h-5" />
-                )}
-                <Bell className="w-4 h-4" />
-                تقفيلة الشفت
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData((p) => ({
-                    ...p,
-                    notify_inventory_operation_wa:
-                      !p.notify_inventory_operation_wa,
-                  }))
-                }
-                className={notifyInventoryWaBtnClass}
-              >
-                {formData.notify_inventory_operation_wa ? (
-                  <CheckCircle2 className="w-5 h-5" />
-                ) : (
-                  <XCircle className="w-5 h-5" />
-                )}
-                <Bell className="w-4 h-4" />
-                جرد جديد
-              </button>
-            </div>
-          </div>
+      {/* إشعارات واتساب — لكل الأدوار: مجموعتا المحاسبة والجرد
+          بأنواع تفصيلية تُحفظ في wa_prefs. */}
+      <div
+        className={`${ws.glassSoft} border border-slate-200 dark:border-white/10 rounded-2xl p-4`}
+      >
+        <div className="flex items-center gap-2">
+          <Bell className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
+          <p className="text-slate-900 dark:text-white font-semibold">
+            إشعارات واتساب
+          </p>
         </div>
-      ) : null}
+        <p className="text-sm text-slate-500 dark:text-white/50 mt-1">
+          تصل على رقم الجوال المسجل أعلاه — اختر القسم ثم نوع الإشعار.
+        </p>
+
+        <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+          {WA_PREF_GROUPS.map((group) => {
+            const GroupIcon = group.Icon;
+            const activeCount = group.options.filter((option) =>
+              waPrefs.includes(option.key),
+            ).length;
+            return (
+              <div
+                key={group.key}
+                className="rounded-xl border border-slate-200 dark:border-white/10 p-3"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <GroupIcon className="w-4 h-4 text-emerald-700 dark:text-emerald-200" />
+                  <span className="font-semibold text-slate-800 dark:text-white/85 text-sm">
+                    {group.label}
+                  </span>
+                  {activeCount > 0 ? (
+                    <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
+                      {activeCount} مفعّل
+                    </span>
+                  ) : null}
+                </div>
+                <div className="space-y-1.5">
+                  {group.options.map((option) => {
+                    const active = waPrefs.includes(option.key);
+                    return (
+                      <button
+                        key={option.key}
+                        type="button"
+                        onClick={() => toggleWaPref(option.key)}
+                        className={`w-full text-right rounded-lg border px-2.5 py-1.5 flex items-start gap-2 transition-colors ${
+                          active
+                            ? "border-emerald-300 dark:border-emerald-400/30 bg-emerald-50 dark:bg-emerald-400/10"
+                            : "border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/[0.04]"
+                        }`}
+                      >
+                        {active ? (
+                          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-700 dark:text-emerald-300" />
+                        ) : (
+                          <XCircle className="w-4 h-4 shrink-0 mt-0.5 text-slate-300 dark:text-white/25" />
+                        )}
+                        <span className="min-w-0">
+                          <span
+                            className={`block text-sm font-semibold ${active ? "text-emerald-900 dark:text-emerald-100" : "text-slate-700 dark:text-white/70"}`}
+                          >
+                            {option.label}
+                          </span>
+                          <span className="block text-[11px] text-slate-500 dark:text-white/40 leading-snug">
+                            {option.hint}
+                          </span>
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* إشعارات النظام القديمة (تقفيلة الشفت وجرد الإدارة) — للمدراء */}
+        {showAdminOptions ? (
+          <div className="flex items-center gap-2 flex-wrap mt-3 pt-3 border-t border-slate-200 dark:border-white/10">
+            <button
+              type="button"
+              onClick={() =>
+                setFormData((p) => ({
+                  ...p,
+                  notify_shift_close_wa: !p.notify_shift_close_wa,
+                }))
+              }
+              className={notifyShiftCloseWaBtnClass}
+            >
+              {formData.notify_shift_close_wa ? (
+                <CheckCircle2 className="w-5 h-5" />
+              ) : (
+                <XCircle className="w-5 h-5" />
+              )}
+              <Bell className="w-4 h-4" />
+              تقفيلة الشفت
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                setFormData((p) => ({
+                  ...p,
+                  notify_inventory_operation_wa:
+                    !p.notify_inventory_operation_wa,
+                }))
+              }
+              className={notifyInventoryWaBtnClass}
+            >
+              {formData.notify_inventory_operation_wa ? (
+                <CheckCircle2 className="w-5 h-5" />
+              ) : (
+                <XCircle className="w-5 h-5" />
+              )}
+              <Bell className="w-4 h-4" />
+              جرد جديد (إشعار الإدارة)
+            </button>
+          </div>
+        ) : null}
+      </div>
 
       {/* Employee options */}
       {showEmployeeOptions ? (

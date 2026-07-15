@@ -1,6 +1,7 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { s as sendWhatsAppViaWasender } from './wasender-CRPKPtD_.js';
+import { n as notifyByPref, a as notifyLowStockIfAny } from './waNotify-B2Wcd2pm.js';
 import { f as findDisabledItemsAtBranch } from './branchVisibility-CLODkXYw.js';
 import { e as ensureInventoryUnitSnapshotSchema, g as getDefaultInventoryUnitSnapshots, s as snapshotForItem } from './inventoryUnitSnapshots-Eh4y0Ete.js';
 import { p as parseBusinessTimestamp } from './dateUtils-DCPDkvv9.js';
@@ -602,6 +603,18 @@ async function POST(request) {
       items: result.items,
       note: note || ""
     }).catch(e => console.error("notify admins whatsapp error", e));
+
+    // إشعارات تفضيلات الموظفين + فحص الحد الأدنى في الفرع المصدر
+    // (التحويل يُنقص رصيده).
+    {
+      const text = ["🔁 عملية تحويل جديدة", `الرقم: ${result.transferNumber || ""}`, `من: ${result?.fromBranch?.name || "—"} → إلى: ${result?.toBranch?.name || "—"}`, employeeName ? `بواسطة: ${employeeName}` : null, Array.isArray(result.items) ? `عدد الأصناف: ${result.items.length}` : null].filter(Boolean).join("\n");
+      notifyByPref("inv_transfer", text).catch(() => {});
+      const transferItemIds = Array.isArray(result.items) ? result.items.map(item => Number(item.itemId)).filter(Boolean) : [];
+      notifyLowStockIfAny({
+        branchId: result?.fromBranch?.id,
+        itemIds: transferItemIds
+      }).catch(() => {});
+    }
     return Response.json(result, {
       status: 201
     });
