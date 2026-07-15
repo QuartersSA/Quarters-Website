@@ -36,9 +36,11 @@ import PurchaseInvoiceModal, {
 } from "@/components/Accounting/PurchaseInvoiceModal";
 import {
   useAccountingPurchaseInvoices,
+  useAddInvoiceAttachment,
   useAddPurchaseInvoicePayment,
   useCreateAccountingPurchaseInvoice,
   useDeleteAccountingPurchaseInvoice,
+  useDeleteInvoiceAttachment,
   useDeletePurchaseInvoicePayment,
   useUpdateAccountingPurchaseInvoice,
 } from "@/hooks/useAccountingPurchaseInvoices";
@@ -581,6 +583,34 @@ export default function PurchasesInvoicesPanel({
   const deleteMut = useDeleteAccountingPurchaseInvoice();
   const addPaymentMut = useAddPurchaseInvoicePayment();
   const deletePaymentMut = useDeletePurchaseInvoicePayment();
+  const addAttachmentMut = useAddInvoiceAttachment();
+  const deleteAttachmentMut = useDeleteInvoiceAttachment();
+
+  // إرفاق مستند إضافي من الدرج: مسمى + ملف → رفع ثم ربط بالفاتورة.
+  const [attachLabel, setAttachLabel] = useState("فاتورة ضريبية");
+  const [attachUploading, setAttachUploading] = useState(false);
+  const attachInputRef = useRef(null);
+  const [uploadFile] = useUpload();
+
+  const handleAttachmentPicked = async (fileArg) => {
+    if (!fileArg || !preview?.id) return;
+    setAttachUploading(true);
+    try {
+      const result = await uploadFile({ file: fileArg, unoptimized: true });
+      if (result?.error) {
+        alert(`فشل رفع الملف: ${result.error}`);
+        return;
+      }
+      addAttachmentMut.mutate({
+        invoice_id: preview.id,
+        url: result.url,
+        label: attachLabel.trim() || fileArg.name || "مستند",
+      });
+    } finally {
+      setAttachUploading(false);
+      if (attachInputRef.current) attachInputRef.current.value = "";
+    }
+  };
 
   const counts = useMemo(() => {
     const initial = {
@@ -1534,6 +1564,145 @@ export default function PurchasesInvoicesPanel({
                     );
                   })()}
 
+                  {/* المرفقات — أكثر من مستند على نفس الفاتورة:
+                      عرض السعر أولاً ثم الفاتورة الضريبية بعد السداد. */}
+                  <div>
+                    <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
+                      المرفقات
+                    </div>
+                    <div className="space-y-1.5">
+                      {drawerRow.attachment_url ? (
+                        <div className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5">
+                          <Paperclip className="w-3 h-3 shrink-0 text-slate-400 dark:text-white/35" />
+                          <span className="flex-1 truncate text-slate-700 dark:text-white/70">
+                            المستند الأصلي (من إنشاء الفاتورة)
+                          </span>
+                          <a
+                            href={drawerRow.attachment_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-[#0e7a5f] dark:text-emerald-300 font-bold shrink-0 hover:underline"
+                          >
+                            فتح
+                          </a>
+                        </div>
+                      ) : null}
+                      {drawerRow.payment_receipt_url ? (
+                        <div className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5">
+                          <Banknote className="w-3 h-3 shrink-0 text-slate-400 dark:text-white/35" />
+                          <span className="flex-1 truncate text-slate-700 dark:text-white/70">
+                            إيصال الدفع
+                          </span>
+                          <a
+                            href={drawerRow.payment_receipt_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-[#0e7a5f] dark:text-emerald-300 font-bold shrink-0 hover:underline"
+                          >
+                            فتح
+                          </a>
+                        </div>
+                      ) : null}
+                      {(Array.isArray(drawerRow.attachments)
+                        ? drawerRow.attachments
+                        : []
+                      ).map((attachment) => (
+                        <div
+                          key={attachment.id}
+                          className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
+                        >
+                          <Paperclip className="w-3 h-3 shrink-0 text-slate-400 dark:text-white/35" />
+                          <span className="flex-1 min-w-0 truncate text-slate-700 dark:text-white/70">
+                            {attachment.label || "مستند"}
+                            <span className="text-slate-400 dark:text-white/35">
+                              {" "}
+                              — {attachment.attached_date}
+                              {attachment.created_by_employee_name
+                                ? ` (${attachment.created_by_employee_name})`
+                                : ""}
+                            </span>
+                          </span>
+                          <a
+                            href={attachment.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-[#0e7a5f] dark:text-emerald-300 font-bold shrink-0 hover:underline"
+                          >
+                            فتح
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (
+                                window.confirm(
+                                  `حذف المرفق «${attachment.label || "مستند"}»؟`,
+                                )
+                              ) {
+                                deleteAttachmentMut.mutate({
+                                  id: attachment.id,
+                                });
+                              }
+                            }}
+                            className="text-slate-300 hover:text-red-600 dark:text-white/25 dark:hover:text-red-300 shrink-0"
+                            title="حذف المرفق"
+                            aria-label="حذف المرفق"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+
+                      {/* إضافة مرفق: مسمى سريع + ملف */}
+                      <div className="flex items-center gap-2 pt-1 flex-wrap">
+                        {["فاتورة ضريبية", "عرض سعر", "سند استلام"].map(
+                          (labelOption) => (
+                            <button
+                              key={labelOption}
+                              type="button"
+                              onClick={() => setAttachLabel(labelOption)}
+                              className={`${ws.pill} text-[10px] ${
+                                attachLabel === labelOption
+                                  ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0b3d31] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
+                                  : "bg-white dark:bg-white/[0.04] text-slate-500 dark:text-white/50 border-slate-200 dark:border-white/10"
+                              }`}
+                            >
+                              {labelOption}
+                            </button>
+                          ),
+                        )}
+                        <input
+                          type="text"
+                          value={attachLabel}
+                          onChange={(event) => setAttachLabel(event.target.value)}
+                          placeholder="مسمى المرفق"
+                          className={`${ws.input} px-2.5 py-1.5 text-[11px] w-32`}
+                        />
+                        <button
+                          type="button"
+                          disabled={attachUploading || addAttachmentMut.isPending}
+                          onClick={() => attachInputRef.current?.click()}
+                          className={`${ws.btnNeutral} px-2.5 py-1.5 text-[11px] disabled:opacity-50`}
+                        >
+                          {attachUploading || addAttachmentMut.isPending ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            <Plus className="w-3 h-3" />
+                          )}
+                          إرفاق ملف
+                        </button>
+                        <input
+                          ref={attachInputRef}
+                          type="file"
+                          accept="application/pdf,image/*"
+                          onChange={(event) =>
+                            handleAttachmentPicked(event?.target?.files?.[0])
+                          }
+                          className="hidden"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   {previewLog.length > 0 ? (
                     <div>
                       <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
@@ -1591,28 +1760,6 @@ export default function PurchasesInvoicesPanel({
                       <Pencil className="w-4 h-4" />
                       تعديل كامل
                     </button>
-                    {drawerRow.attachment_url ? (
-                      <a
-                        href={drawerRow.attachment_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={`${ws.btnNeutral} px-4 py-2 text-sm`}
-                      >
-                        <Paperclip className="w-4 h-4" />
-                        المرفق
-                      </a>
-                    ) : null}
-                    {drawerRow.payment_receipt_url ? (
-                      <a
-                        href={drawerRow.payment_receipt_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={`${ws.btnNeutral} px-4 py-2 text-sm`}
-                      >
-                        <Banknote className="w-4 h-4" />
-                        إيصال الدفع
-                      </a>
-                    ) : null}
                   </div>
                 </div>
               </aside>

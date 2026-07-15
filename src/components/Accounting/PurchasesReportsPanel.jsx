@@ -166,6 +166,8 @@ const AUDIT_ACTION_LABELS = {
   updated: "تعديل",
   payment: "دفعة",
   payment_removed: "حذف دفعة",
+  attachment: "إرفاق مستند",
+  attachment_removed: "حذف مرفق",
   deactivated: "إيقاف",
   deleted: "حذف",
   recurring: "توليد متكرر",

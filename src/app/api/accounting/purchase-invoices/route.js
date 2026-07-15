@@ -203,6 +203,26 @@ async function ensureSchema() {
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_payments_invoice
       ON accounting_purchase_invoice_payments (invoice_id, payment_date, id)
   `;
+
+  // مرفقات متعددة للفاتورة الواحدة بمسمياتها: عرض السعر أولاً ثم
+  // الفاتورة الضريبية بعد السداد — كلها على نفس فاتورة المشتريات.
+  // attachment_url و payment_receipt_url في الرأس باقيان للتوافق
+  // ويُعرضان كسطرين ضمن نفس القائمة.
+  await sql`
+    CREATE TABLE IF NOT EXISTS accounting_purchase_invoice_attachments (
+      id SERIAL PRIMARY KEY,
+      invoice_id INTEGER NOT NULL REFERENCES accounting_purchase_invoices(id) ON DELETE CASCADE,
+      url TEXT NOT NULL,
+      label TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      created_by_employee_id INTEGER,
+      created_by_employee_name TEXT
+    )
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_attachments_invoice
+      ON accounting_purchase_invoice_attachments (invoice_id, id)
+  `;
   await sql`
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoices_invoice_date
       ON accounting_purchase_invoices (invoice_date DESC)
@@ -483,6 +503,35 @@ async function attachPayments(rows) {
   }
 }
 
+// المرفقات الإضافية تُرفق مع كل صف لقائمة المرفقات في المعاينة.
+async function attachExtraAttachments(rows) {
+  const ids = rows.map((row) => row.id);
+  if (ids.length === 0) return rows;
+  try {
+    const attachments = await sql`
+      SELECT id, invoice_id, url, label,
+             TO_CHAR(created_at, 'YYYY-MM-DD') AS attached_date,
+             created_by_employee_name
+      FROM accounting_purchase_invoice_attachments
+      WHERE invoice_id = ANY(${ids})
+      ORDER BY invoice_id, id
+    `;
+    const byInvoice = new Map();
+    for (const attachment of attachments) {
+      const key = Number(attachment.invoice_id);
+      if (!byInvoice.has(key)) byInvoice.set(key, []);
+      byInvoice.get(key).push(attachment);
+    }
+    return rows.map((row) => ({
+      ...row,
+      attachments: byInvoice.get(Number(row.id)) || [],
+    }));
+  } catch (error) {
+    console.error("attach invoice attachments failed", error);
+    return rows.map((row) => ({ ...row, attachments: [] }));
+  }
+}
+
 // Classification target must be a live postable expense account —
 // otherwise reports built on the tree would silently mis-bucket.
 async function validateExpenseAccount(expenseAccountId) {
@@ -610,8 +659,9 @@ export async function GET(request) {
     const rows = await sql(query, status ? [...values, today, status] : [...values, today]);
     const withItems = await attachItems(rows);
     const withPayments = await attachPayments(withItems);
+    const withAttachments = await attachExtraAttachments(withPayments);
 
-    return Response.json({ invoices: withPayments });
+    return Response.json({ invoices: withAttachments });
   } catch (error) {
     console.error("purchase invoices GET error", error);
     return Response.json(

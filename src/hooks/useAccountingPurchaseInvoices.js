@@ -148,6 +148,65 @@ export function useDeletePurchaseInvoicePayment() {
   });
 }
 
+// مرفقات إضافية على الفاتورة (عرض سعر ثم فاتورة ضريبية…).
+export function useAddInvoiceAttachment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload) => {
+      const res = await adminFetch(
+        "/api/accounting/purchase-invoice-attachments",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إضافة المرفق");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
+      });
+      toast.success("تم إرفاق المستند");
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(`فشل الإرفاق: ${error.message}`);
+    },
+  });
+}
+
+export function useDeleteInvoiceAttachment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }) => {
+      const res = await adminFetch(
+        `/api/accounting/purchase-invoice-attachments?id=${id}`,
+        { method: "DELETE" },
+      );
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل حذف المرفق");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
+      });
+      toast.success("تم حذف المرفق");
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(`فشل حذف المرفق: ${error.message}`);
+    },
+  });
+}
+
 export function useDeleteAccountingPurchaseInvoice() {
   const queryClient = useQueryClient();
   return useMutation({
