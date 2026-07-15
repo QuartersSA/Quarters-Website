@@ -20,6 +20,10 @@ export function WhatsAppConnectCard() {
   const [pairing, setPairing] = useState(false);
   const [pairCode, setPairCode] = useState(null);
   const [pairError, setPairError] = useState("");
+  // رسالة تجريبية بعد الاقتران — لأي رقم غير الرقم المقترن.
+  const [testPhone, setTestPhone] = useState("");
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState(null);
 
   const statusQuery = useQuery({
     queryKey: queryKeys.whatsappStatus(),
@@ -66,6 +70,26 @@ export function WhatsAppConnectCard() {
       </div>
     );
   }
+
+  const sendTest = async () => {
+    if (!testPhone.trim() || testing) return;
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const response = await authedFetch("/api/whatsapp/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: testPhone.trim() }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل الإرسال");
+      setTestResult({ ok: true, text: "أُرسلت — تحقق من وصولها للرقم." });
+    } catch (error) {
+      setTestResult({ ok: false, text: error.message });
+    } finally {
+      setTesting(false);
+    }
+  };
 
   const requestPairing = async () => {
     if (!pairPhone.trim() || pairing) return;
@@ -141,6 +165,43 @@ export function WhatsAppConnectCard() {
           </div>
         )}
       </div>
+
+      {/* اختبار الإرسال — يظهر بعد الاقتران فقط */}
+      {status.connected ? (
+        <div className="flex items-center gap-2 flex-wrap mt-3 pt-3 border-t border-slate-200 dark:border-white/10">
+          <span className="text-[11px] font-bold text-slate-600 dark:text-white/55 shrink-0">
+            اختبار الإرسال:
+          </span>
+          <input
+            type="tel"
+            value={testPhone}
+            onChange={(event) => setTestPhone(event.target.value)}
+            placeholder="05xxxxxxxx — رقم المستلم"
+            className={`${ws.input} px-2.5 py-1.5 text-sm w-52 text-left`}
+            dir="ltr"
+          />
+          <button
+            type="button"
+            onClick={sendTest}
+            disabled={!testPhone.trim() || testing}
+            className={`${ws.btnNeutral} px-3 py-1.5 text-xs disabled:opacity-50`}
+          >
+            {testing ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <Send className="w-3.5 h-3.5" />
+            )}
+            أرسل رسالة تجريبية
+          </button>
+          {testResult ? (
+            <span
+              className={`text-[11px] font-semibold ${testResult.ok ? "text-emerald-700 dark:text-emerald-300" : "text-rose-700 dark:text-rose-300"}`}
+            >
+              {testResult.text}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
 
       {!status.connected && pairCode ? (
         <div className="text-center py-2 mt-2 border-t border-slate-200 dark:border-white/10">
