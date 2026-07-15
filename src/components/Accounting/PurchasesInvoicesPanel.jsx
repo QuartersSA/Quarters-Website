@@ -133,6 +133,31 @@ function StatusPill({ status }) {
   );
 }
 
+// «متأخرة» تبتلع الحالة الأصلية — هذا السطر يوضح مباشرة من الجدول:
+// هل كانت بانتظار الاعتماد (لم يُدفع شيء) أم مدفوعة جزئياً، وكم
+// يوماً مضى على الاستحقاق.
+function OverdueHint({ invoice }) {
+  if (invoice?.computed_status !== "overdue" || !invoice?.due_date) return null;
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Riyadh",
+  });
+  const days = Math.max(
+    Math.floor(
+      (new Date(`${today}T12:00:00Z`) -
+        new Date(`${invoice.due_date}T12:00:00Z`)) /
+        86400000,
+    ),
+    1,
+  );
+  const origin =
+    moneyValue(invoice.paid_amount) > 0 ? "مدفوعة جزئياً" : "بانتظار الاعتماد";
+  return (
+    <div className="text-[10px] text-rose-600 dark:text-rose-300/80 mt-1 whitespace-nowrap">
+      {origin} · تأخرت {days} {days === 1 ? "يوماً" : days === 2 ? "يومين" : days <= 10 ? "أيام" : "يوماً"}
+    </div>
+  );
+}
+
 // تسجيل دفعة — سطر جديد في سجل دفعات الفاتورة: مبلغ + تاريخ + بنك
 // + إيصال + ملاحظة. الخادم يحدّث رأس الفاتورة (paid_amount) ذرّياً.
 function RecordPaymentModal({
@@ -1153,6 +1178,7 @@ export default function PurchasesInvoicesPanel({
                       </td>
                       <td className="px-4 py-3">
                         <StatusPill status={invoice.computed_status} />
+                        <OverdueHint invoice={invoice} />
                       </td>
                       <td className="px-4 py-3 text-left font-bold text-slate-900 dark:text-white" dir="ltr">
                         {formatMoney(invoice.total_amount, invoice.currency)}
@@ -1220,7 +1246,10 @@ export default function PurchasesInvoicesPanel({
                       </span>
                     ) : null}
                   </div>
-                  <StatusPill status={invoice.computed_status} />
+                  <div className="text-left">
+                    <StatusPill status={invoice.computed_status} />
+                    <OverdueHint invoice={invoice} />
+                  </div>
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -1394,7 +1423,10 @@ export default function PurchasesInvoicesPanel({
                     )}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <StatusPill status={drawerRow.computed_status} />
+                    <div>
+                      <StatusPill status={drawerRow.computed_status} />
+                      <OverdueHint invoice={drawerRow} />
+                    </div>
                     <button
                       type="button"
                       onClick={() => setPreview(null)}
