@@ -91,18 +91,40 @@ export async function notifyLowStockIfAny({ branchId, itemIds }) {
   try {
     const ids = (itemIds || []).map(Number).filter((n) => Number.isInteger(n));
     if (!ids.length || !branchId) return;
+    // الحد الفعّال: حد الفرع الخاص إن وُجد وإلا الافتراضي للصنف.
+    await sql`
+      CREATE TABLE IF NOT EXISTS item_branch_min_stock (
+        item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+        branch_id INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+        min_stock NUMERIC(14, 3) NOT NULL,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_by_employee_name TEXT,
+        PRIMARY KEY (item_id, branch_id)
+      )
+    `;
     const rows = await sql`
       SELECT i.name,
-             i.min_stock_threshold,
+             COALESCE(inv_unit.name_ar, i.unit, '') AS unit,
+             COALESCE(ibm.min_stock, i.min_stock_threshold) AS min_stock_threshold,
+             (ibm.min_stock IS NOT NULL) AS branch_specific,
              COALESCE(cs.current_quantity, 0) AS current_quantity,
              b.name AS branch_name
       FROM items i
       JOIN branches b ON b.id = ${Number(branchId)}
       LEFT JOIN inventory_current_stock_v cs
         ON cs.item_id = i.id AND cs.branch_id = b.id
+      LEFT JOIN item_branch_min_stock ibm
+        ON ibm.item_id = i.id AND ibm.branch_id = b.id
+      LEFT JOIN LATERAL (
+        SELECT mu.name_ar
+        FROM item_units iu
+        JOIN measurement_units mu ON mu.id = iu.unit_id
+        WHERE iu.id = i.default_inventory_unit_id
+        LIMIT 1
+      ) inv_unit ON true
       WHERE i.id = ANY(${ids})
-        AND COALESCE(i.min_stock_threshold, 0) > 0
-        AND COALESCE(cs.current_quantity, 0) <= i.min_stock_threshold
+        AND COALESCE(COALESCE(ibm.min_stock, i.min_stock_threshold), 0) > 0
+        AND COALESCE(cs.current_quantity, 0) <= COALESCE(ibm.min_stock, i.min_stock_threshold)
       LIMIT 15
     `;
     if (!rows.length) return;
@@ -110,10 +132,11 @@ export async function notifyLowStockIfAny({ branchId, itemIds }) {
       "⚠️ أصناف بلغت الحد الأدنى",
       `الفرع: ${rows[0].branch_name}`,
       "",
-      ...rows.map(
-        (row) =>
-          `• ${row.name}: الرصيد ${Number(row.current_quantity)} (الحد ${Number(row.min_stock_threshold)})`,
-      ),
+      ...rows.map((row) => {
+        const unit = row.unit ? ` ${row.unit}` : "";
+        const badge = row.branch_specific ? " — حد خاص بالفرع" : "";
+        return `• ${row.name}: الرصيد ${Number(row.current_quantity)}${unit} (الحد ${Number(row.min_stock_threshold)}${unit}${badge})`;
+      }),
     ];
     await notifyByPref("inv_low_stock", lines.join("\n"));
   } catch (error) {

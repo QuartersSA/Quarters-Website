@@ -25,6 +25,18 @@ async function ensureTable() {
         PRIMARY KEY (item_id, branch_id)
       )
     `;
+    // حد أدنى للتنبيه لكل (صنف، فرع) — يتجاوز الحد الافتراضي في
+    // items.min_stock_threshold. نموذج متفرق: لا صف = استخدم الافتراضي.
+    await sql`
+      CREATE TABLE IF NOT EXISTS item_branch_min_stock (
+        item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+        branch_id INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+        min_stock NUMERIC(14, 3) NOT NULL,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_by_employee_name TEXT,
+        PRIMARY KEY (item_id, branch_id)
+      )
+    `;
   } catch (e) {
     console.error("ensureTable item_branch_disabled:", e?.message);
   }
@@ -53,10 +65,20 @@ export async function GET(request, { params }) {
       WHERE item_id = ${itemId}
       ORDER BY branch_id ASC
     `;
+    const minRows = await sql`
+      SELECT branch_id, min_stock
+      FROM item_branch_min_stock
+      WHERE item_id = ${itemId}
+      ORDER BY branch_id ASC
+    `;
 
     return Response.json({
       item_id: itemId,
       disabled_branches: rows.map((r) => Number(r.branch_id)),
+      branch_min_stock: minRows.map((r) => ({
+        branch_id: Number(r.branch_id),
+        min_stock: Number(r.min_stock),
+      })),
       details: rows,
     });
   } catch (error) {
@@ -102,6 +124,36 @@ export async function PATCH(request, { params }) {
     const [branch] = await sql`SELECT id FROM branches WHERE id = ${branchId}`;
     if (!branch) {
       return Response.json({ error: "الفرع غير موجود" }, { status: 404 });
+    }
+
+    // تحديث الحد الأدنى الخاص بالفرع: قيمة رقمية ≥ 0 تُثبَّت،
+    // وقيمة فارغة/null تحذف الصف فيرجع الفرع للحد الافتراضي للصنف.
+    if (Object.prototype.hasOwnProperty.call(body, "minStock")) {
+      const raw = body.minStock;
+      if (raw === null || raw === "" || raw === undefined) {
+        await sql`
+          DELETE FROM item_branch_min_stock
+          WHERE item_id = ${itemId} AND branch_id = ${branchId}
+        `;
+        return Response.json({ ok: true, itemId, branchId, minStock: null });
+      }
+      const minStock = Number(raw);
+      if (!Number.isFinite(minStock) || minStock < 0) {
+        return Response.json(
+          { error: "قيمة الحد الأدنى غير صالحة" },
+          { status: 400 },
+        );
+      }
+      await sql`
+        INSERT INTO item_branch_min_stock
+          (item_id, branch_id, min_stock, updated_by_employee_name)
+        VALUES (${itemId}, ${branchId}, ${minStock}, ${auth.user?.name || null})
+        ON CONFLICT (item_id, branch_id) DO UPDATE
+        SET min_stock = EXCLUDED.min_stock,
+            updated_at = CURRENT_TIMESTAMP,
+            updated_by_employee_name = EXCLUDED.updated_by_employee_name
+      `;
+      return Response.json({ ok: true, itemId, branchId, minStock });
     }
 
     if (enabled) {

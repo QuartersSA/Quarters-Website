@@ -300,6 +300,31 @@ export async function GET(request) {
       }
     }
 
+    // حدود التنبيه الخاصة بكل فرع (تتجاوز الحد الافتراضي للصنف) —
+    // تُغذي حقول نافذة إدارة الفروع بلا طلب إضافي. الجدول قد لا يكون
+    // موجوداً قبل أول فتح للنافذة، فنتجاهل فشله بهدوء.
+    const minStockByItem = new Map();
+    if (itemIds.length > 0) {
+      try {
+        const minRows = await sql(
+          `SELECT item_id, branch_id, min_stock FROM item_branch_min_stock
+           WHERE item_id = ANY($1::bigint[])`,
+          [itemIds],
+        );
+        for (const row of minRows) {
+          const key = String(row.item_id);
+          const arr = minStockByItem.get(key) || [];
+          arr.push({
+            branch_id: Number(row.branch_id),
+            min_stock: Number(row.min_stock),
+          });
+          minStockByItem.set(key, arr);
+        }
+      } catch {
+        // الجدول غير موجود بعد — الافتراضي للجميع.
+      }
+    }
+
     // Multi-unit attachment: every item gets a `units` array
     // [{ id, unit_id, name_ar, name_en, conversion_factor, is_base, sort_order }]
     // ordered by (is_base DESC, sort_order, id) so the base unit is
@@ -354,6 +379,7 @@ export async function GET(request) {
         ...item,
         branch_stock: branchStock.length > 0 ? branchStock : null,
         disabled_branches: disabledBranches,
+        branch_min_stock: minStockByItem.get(String(item.id)) || [],
         units,
         base_unit: baseUnit,
         last_order_price_per_kg:

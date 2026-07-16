@@ -21,12 +21,27 @@ export function ItemBranchVisibilityModal({
   );
   const [pendingBranchId, setPendingBranchId] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  // الحد الأدنى الخاص بكل فرع (نص الحقول) — فارغ = الحد الافتراضي
+  // للصنف. يُبذر من item.branch_min_stock الواصل مع /api/items.
+  const [minInputs, setMinInputs] = useState({});
+  const [savingMinBranchId, setSavingMinBranchId] = useState(null);
+  const [savedMinBranchId, setSavedMinBranchId] = useState(null);
+
+  const seedMinInputs = (source) => {
+    const map = {};
+    for (const row of Array.isArray(source) ? source : []) {
+      map[Number(row.branch_id)] = String(Number(row.min_stock));
+    }
+    return map;
+  };
 
   // Reset local state when caller swaps the item under us.
   useEffect(() => {
     setDisabled(new Set((item?.disabled_branches || []).map(Number)));
+    setMinInputs(seedMinInputs(item?.branch_min_stock));
     setErrorMsg(null);
-  }, [item?.id, item?.disabled_branches]);
+    setSavedMinBranchId(null);
+  }, [item?.id, item?.disabled_branches, item?.branch_min_stock]);
 
   const branchList = useMemo(
     () => (Array.isArray(branches) ? branches : []),
@@ -77,6 +92,36 @@ export function ItemBranchVisibilityModal({
       invalidateInventoryQueries(queryClient);
     },
   });
+
+  // حفظ الحد الأدنى الخاص بالفرع — قيمة فارغة تعيد الفرع للحد
+  // الافتراضي للصنف (تحذف صف التجاوز).
+  const saveMinStock = async (branchId) => {
+    const raw = (minInputs[branchId] ?? "").trim();
+    setSavingMinBranchId(branchId);
+    setErrorMsg(null);
+    try {
+      const res = await adminFetch(`/api/items/${item.id}/branch-visibility`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          branchId,
+          minStock: raw === "" ? null : Number(raw),
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "فشل حفظ الحد الأدنى");
+      setSavedMinBranchId(branchId);
+      setTimeout(
+        () => setSavedMinBranchId((prev) => (prev === branchId ? null : prev)),
+        2000,
+      );
+      invalidateInventoryQueries(queryClient);
+    } catch (err) {
+      setErrorMsg(err?.message || "فشل حفظ الحد الأدنى");
+    } finally {
+      setSavingMinBranchId(null);
+    }
+  };
 
   if (!item) return null;
 
@@ -177,51 +222,101 @@ export function ItemBranchVisibilityModal({
                   ? "bg-red-500/[0.04] border-red-500/15"
                   : "bg-emerald-500/[0.04] border-emerald-500/15";
 
+                const minValue = minInputs[branchId] ?? "";
+                const hasOverride = String(minValue).trim() !== "";
+                const isSavingMin = savingMinBranchId === branchId;
+
                 return (
                   <div
                     key={branch.id}
-                    className={`flex items-center justify-between p-4 rounded-3xl border transition-colors ${cardClass}`}
+                    className={`p-4 rounded-3xl border transition-colors ${cardClass}`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div
-                        className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-slate-200 dark:border-slate-200 dark:border-white/10 ${
-                          isDisabled ? "bg-red-500/10" : "bg-emerald-500/10"
-                        }`}
-                      >
-                        {isDisabled ? (
-                          <EyeOff className="w-5 h-5 text-red-700 dark:text-red-700 dark:text-red-200" />
-                        ) : (
-                          <Eye className="w-5 h-5 text-emerald-700 dark:text-emerald-700 dark:text-emerald-200" />
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-slate-900 dark:text-slate-900 dark:text-slate-900 dark:text-white font-medium truncate">
-                          {branch.name}
-                        </p>
-                        <p
-                          className={`text-xs ${
-                            isDisabled ? "text-red-700 dark:text-red-700 dark:text-red-200" : "text-emerald-700 dark:text-emerald-700 dark:text-emerald-200"
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 ${
+                            isDisabled ? "bg-red-500/10" : "bg-emerald-500/10"
                           }`}
                         >
-                          {isDisabled ? "معطّل في هذا الفرع" : "مفعّل"}
-                        </p>
+                          {isDisabled ? (
+                            <EyeOff className="w-5 h-5 text-red-700 dark:text-red-200" />
+                          ) : (
+                            <Eye className="w-5 h-5 text-emerald-700 dark:text-emerald-200" />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-slate-900 dark:text-white font-medium truncate">
+                            {branch.name}
+                          </p>
+                          <p
+                            className={`text-xs ${
+                              isDisabled
+                                ? "text-red-700 dark:text-red-200"
+                                : "text-emerald-700 dark:text-emerald-200"
+                            }`}
+                          >
+                            {isDisabled ? "معطّل في هذا الفرع" : "مفعّل"}
+                          </p>
+                        </div>
                       </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleToggle(branchId)}
+                        disabled={isPending}
+                        className={`${
+                          isDisabled ? ws.btnPrimary : ws.btnNeutral
+                        } px-4 py-2 text-sm justify-center disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        {isPending
+                          ? "جاري…"
+                          : isDisabled
+                            ? "تفعيل"
+                            : "إلغاء التفعيل"}
+                      </button>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleToggle(branchId)}
-                      disabled={isPending}
-                      className={`${
-                        isDisabled ? ws.btnPrimary : ws.btnNeutral
-                      } px-4 py-2 text-sm justify-center disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      {isPending
-                        ? "جاري…"
-                        : isDisabled
-                          ? "تفعيل"
-                          : "إلغاء التفعيل"}
-                    </button>
+                    {/* الحد الأدنى الخاص بهذا الفرع — يظهر للمفعّل فقط.
+                        فارغ = الحد الافتراضي للصنف. */}
+                    {!isDisabled ? (
+                      <div className="flex items-center gap-2 flex-wrap mt-3 pt-3 border-t border-slate-200/60 dark:border-white/10">
+                        <span className="text-xs text-slate-600 dark:text-white/55 shrink-0">
+                          الحد الأدنى للتنبيه:
+                        </span>
+                        <input
+                          type="number"
+                          value={minValue}
+                          onChange={(event) =>
+                            setMinInputs((prev) => ({
+                              ...prev,
+                              [branchId]: event.target.value,
+                            }))
+                          }
+                          placeholder={`الافتراضي: ${Number(item.min_stock_threshold || 0)}`}
+                          className={`${ws.input} px-2.5 py-1.5 text-sm w-36 text-left`}
+                          step="0.5"
+                          min="0"
+                          dir="ltr"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => saveMinStock(branchId)}
+                          disabled={isSavingMin}
+                          className={`${ws.btnNeutral} px-3 py-1.5 text-xs disabled:opacity-50`}
+                        >
+                          {isSavingMin
+                            ? "جاري…"
+                            : savedMinBranchId === branchId
+                              ? "✓ حُفظ"
+                              : "حفظ"}
+                        </button>
+                        <span className="text-[11px] text-slate-400 dark:text-white/35">
+                          {hasOverride
+                            ? "حد خاص بهذا الفرع"
+                            : `يتبع الافتراضي (${Number(item.min_stock_threshold || 0)} ${item.unit || ""})`}
+                        </span>
+                      </div>
+                    ) : null}
                   </div>
                 );
               })}

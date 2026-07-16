@@ -117,12 +117,23 @@ export async function GET(request) {
     // 3. Low-stock count per branch. Uses the same reset + receipts +
     //    signed transfer deltas formula as the items-summary / low-stock
     //    endpoints so the dashboard tile agrees with the dedicated pages.
+    //    Idempotent ensure: الحدود الخاصة بالفروع قد لا تكون أنشئت بعد.
+    await sql`
+      CREATE TABLE IF NOT EXISTS item_branch_min_stock (
+        item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+        branch_id INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+        min_stock NUMERIC(14, 3) NOT NULL,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_by_employee_name TEXT,
+        PRIMARY KEY (item_id, branch_id)
+      )
+    `;
     const lowStockData = await sql`
       SELECT
         b.id as branch_id,
         b.name as branch_name,
         COUNT(*) FILTER (
-          WHERE cs.current_quantity < i.min_stock_threshold
+          WHERE cs.current_quantity < COALESCE(ibm.min_stock, i.min_stock_threshold)
             AND cs.has_signal
         ) as low_stock_count,
         COUNT(*) FILTER (
@@ -137,6 +148,8 @@ export async function GET(request) {
       JOIN items i ON i.id = cs.item_id
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
+      LEFT JOIN item_branch_min_stock ibm
+        ON ibm.item_id = i.id AND ibm.branch_id = b.id
       WHERE i.is_active = true AND i.show_in_inventory = true
         AND ibd.item_id IS NULL
       GROUP BY b.id, b.name
@@ -472,7 +485,7 @@ export async function GET(request) {
         i.unit,
         b.id as branch_id,
         b.name as branch_name,
-        i.min_stock_threshold,
+        COALESCE(ibm.min_stock, i.min_stock_threshold) AS min_stock_threshold,
         latest.qty as current_qty,
         latest.op_date as latest_date,
         prev.qty as prev_qty,
@@ -488,6 +501,9 @@ export async function GET(request) {
 
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
+
+      LEFT JOIN item_branch_min_stock ibm
+        ON ibm.item_id = i.id AND ibm.branch_id = b.id
 
       LEFT JOIN LATERAL (
         SELECT

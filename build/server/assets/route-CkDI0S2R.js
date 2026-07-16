@@ -27,13 +27,26 @@ async function GET(request) {
     // absolutes can drift; the operation's intent (transfer_quantity
     // + direction) is the authoritative number, matching the timeline
     // report.
+    // الحد الفعّال لكل (صنف، فرع): حد الفرع الخاص إن وُجد في
+    // item_branch_min_stock وإلا الحد الافتراضي للصنف.
+    await sql`
+      CREATE TABLE IF NOT EXISTS item_branch_min_stock (
+        item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+        branch_id INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+        min_stock NUMERIC(14, 3) NOT NULL,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_by_employee_name TEXT,
+        PRIMARY KEY (item_id, branch_id)
+      )
+    `;
     const rows = await sql`
       SELECT
         i.id,
         i.name,
         i.description,
         i.image_url,
-        i.min_stock_threshold,
+        COALESCE(ibm.min_stock, i.min_stock_threshold) AS min_stock_threshold,
+        (ibm.min_stock IS NOT NULL) AS branch_specific_threshold,
         COALESCE(inv_unit.name_ar, i.unit) AS unit,
         b.id as branch_id,
         b.name as branch_name,
@@ -45,6 +58,8 @@ async function GET(request) {
         ON cs.item_id = i.id AND cs.branch_id = b.id
       LEFT JOIN item_branch_disabled ibd
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
+      LEFT JOIN item_branch_min_stock ibm
+        ON ibm.item_id = i.id AND ibm.branch_id = b.id
       LEFT JOIN LATERAL (
         SELECT mu.name_ar
         FROM item_units iu
