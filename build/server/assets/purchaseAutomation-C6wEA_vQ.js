@@ -1,7 +1,7 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { s as sendWhatsAppViaWasender } from './wasender-kTQXZFza.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DX8U_Szq.js';
-import { o as onceDaily, n as notifyByPref } from './waNotify-xh8pRsff.js';
+import { o as onceDaily, n as notifyByPref } from './waNotify-DBjkA_7u.js';
 
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
