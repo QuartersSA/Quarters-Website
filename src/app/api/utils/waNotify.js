@@ -91,18 +91,31 @@ export async function notifyLowStockIfAny({ branchId, itemIds }) {
   try {
     const ids = (itemIds || []).map(Number).filter((n) => Number.isInteger(n));
     if (!ids.length || !branchId) return;
+    // الحد الفعّال: حد الفرع الخاص إن وُجد وإلا الافتراضي للصنف.
+    await sql`
+      CREATE TABLE IF NOT EXISTS item_branch_min_stock (
+        item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+        branch_id INTEGER NOT NULL REFERENCES branches(id) ON DELETE CASCADE,
+        min_stock NUMERIC(14, 3) NOT NULL,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_by_employee_name TEXT,
+        PRIMARY KEY (item_id, branch_id)
+      )
+    `;
     const rows = await sql`
       SELECT i.name,
-             i.min_stock_threshold,
+             COALESCE(ibm.min_stock, i.min_stock_threshold) AS min_stock_threshold,
              COALESCE(cs.current_quantity, 0) AS current_quantity,
              b.name AS branch_name
       FROM items i
       JOIN branches b ON b.id = ${Number(branchId)}
       LEFT JOIN inventory_current_stock_v cs
         ON cs.item_id = i.id AND cs.branch_id = b.id
+      LEFT JOIN item_branch_min_stock ibm
+        ON ibm.item_id = i.id AND ibm.branch_id = b.id
       WHERE i.id = ANY(${ids})
-        AND COALESCE(i.min_stock_threshold, 0) > 0
-        AND COALESCE(cs.current_quantity, 0) <= i.min_stock_threshold
+        AND COALESCE(COALESCE(ibm.min_stock, i.min_stock_threshold), 0) > 0
+        AND COALESCE(cs.current_quantity, 0) <= COALESCE(ibm.min_stock, i.min_stock_threshold)
       LIMIT 15
     `;
     if (!rows.length) return;
