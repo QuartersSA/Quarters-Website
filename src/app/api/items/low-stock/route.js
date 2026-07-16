@@ -41,6 +41,8 @@ export async function GET(request) {
         i.image_url,
         COALESCE(ibm.min_stock, i.min_stock_threshold) AS min_stock_threshold,
         (ibm.min_stock IS NOT NULL) AS branch_specific_threshold,
+        i.category_id,
+        cat.name AS category_name,
         COALESCE(inv_unit.name_ar, i.unit) AS unit,
         b.id as branch_id,
         b.name as branch_name,
@@ -54,6 +56,7 @@ export async function GET(request) {
         ON ibd.item_id = i.id AND ibd.branch_id = b.id
       LEFT JOIN item_branch_min_stock ibm
         ON ibm.item_id = i.id AND ibm.branch_id = b.id
+      LEFT JOIN item_categories cat ON cat.id = i.category_id
       LEFT JOIN LATERAL (
         SELECT mu.name_ar
         FROM item_units iu

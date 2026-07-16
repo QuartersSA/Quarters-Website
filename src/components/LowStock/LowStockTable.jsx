@@ -17,6 +17,42 @@ function StatusIcon({ severity }) {
   return <TrendingDown className="w-4 h-4" />;
 }
 
+// شريط تعبئة: نسبة المتوفر من الحد الأدنى الفعّال للفرع — قراءة
+// بصرية فورية لمدى الخطورة (فارغ = نافد، ممتلئ = عند الحد).
+function StockBar({ qty, threshold, severity }) {
+  const pct =
+    threshold > 0 ? Math.min(Math.round((qty / threshold) * 100), 100) : 0;
+  const barColor =
+    severity === "out"
+      ? "bg-red-500"
+      : severity === "critical"
+        ? "bg-orange-500"
+        : "bg-amber-400";
+  return (
+    <div className="w-full max-w-[140px]">
+      <div className="h-2 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+        <div
+          className={`h-full rounded-full ${barColor}`}
+          style={{ width: `${Math.max(pct, qty > 0 ? 4 : 0)}%` }}
+        />
+      </div>
+      <div className="text-[10px] text-slate-500 dark:text-white/40 mt-0.5" dir="ltr">
+        {pct}%
+      </div>
+    </div>
+  );
+}
+
+// وسم مصدر الحد: خاص بالفرع أم افتراضي الصنف.
+function ThresholdBadge({ branchSpecific }) {
+  if (!branchSpecific) return null;
+  return (
+    <span className="inline-flex mr-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-sky-100 dark:bg-sky-400/15 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-400/25 whitespace-nowrap">
+      حد خاص بالفرع
+    </span>
+  );
+}
+
 export function LowStockTable({
   items,
   isLoading,
@@ -96,7 +132,9 @@ export function LowStockTable({
                     </p>
                   </div>
                   <div className="rounded-xl bg-slate-100 dark:bg-white/[0.04] px-3 py-2">
-                    <p className="text-[11px] text-slate-500 dark:text-white/45">الحد</p>
+                    <p className="text-[11px] text-slate-500 dark:text-white/45">
+                      الحد{item.branch_specific_threshold ? " (خاص)" : ""}
+                    </p>
                     <p className="font-semibold text-slate-900 dark:text-white" dir="ltr">
                       {threshold} {unit}
                     </p>
@@ -107,6 +145,13 @@ export function LowStockTable({
                       -{shortage} {unit}
                     </p>
                   </div>
+                </div>
+                <div className="mt-2">
+                  <StockBar
+                    qty={qty}
+                    threshold={threshold}
+                    severity={status.severity}
+                  />
                 </div>
               </div>
             );
@@ -127,10 +172,13 @@ export function LowStockTable({
                   الكمية الحالية
                 </th>
                 <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
-                  الحد الأدنى
+                  الحد الأدنى للفرع
                 </th>
                 <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
                   النقص
+                </th>
+                <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
+                  المستوى
                 </th>
                 <th className="text-right px-6 py-4 text-sm font-semibold text-slate-600 dark:text-slate-600 dark:text-white/55">
                   الحالة
@@ -167,7 +215,11 @@ export function LowStockTable({
                           <p className="text-slate-900 dark:text-slate-900 dark:text-white font-semibold">
                             {item.name}
                           </p>
-                          {item.description ? (
+                          {item.category_name ? (
+                            <p className="text-slate-500 dark:text-white/50 text-xs">
+                              {item.category_name}
+                            </p>
+                          ) : item.description ? (
                             <p className="text-slate-500 dark:text-slate-500 dark:text-white/50 text-sm">
                               {item.description}
                             </p>
@@ -202,6 +254,9 @@ export function LowStockTable({
                       <span className="text-slate-500 dark:text-slate-500 dark:text-white/40 text-sm mr-1">
                         {item.unit || "حبة"}
                       </span>
+                      <ThresholdBadge
+                        branchSpecific={!!item.branch_specific_threshold}
+                      />
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-red-700 dark:text-red-700 dark:text-red-200 font-bold">
@@ -210,6 +265,13 @@ export function LowStockTable({
                       <span className="text-slate-500 dark:text-slate-500 dark:text-white/40 text-sm mr-1">
                         {item.unit || "حبة"}
                       </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <StockBar
+                        qty={qty}
+                        threshold={threshold}
+                        severity={status.severity}
+                      />
                     </td>
                     <td className="px-6 py-4">
                       <span
