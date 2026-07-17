@@ -1,5 +1,4 @@
-const WASENDER_SEND_MESSAGE_URL =
-  "https://www.wasenderapi.com/api/send-message";
+const WASENDER_SEND_MESSAGE_URL = "https://www.wasenderapi.com/api/send-message";
 
 // Wasender accounts with "Account Protection" enabled cap sending at
 // 1 message every 5 seconds. Hitting that cap returns 429 with a
@@ -14,9 +13,8 @@ const WASENDER_SEND_MESSAGE_URL =
 const MIN_INTERVAL_MS = 5500;
 let chain = Promise.resolve();
 let lastSentAt = 0;
-
 function sleep(ms) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
 }
@@ -38,11 +36,8 @@ function paceSend(fn) {
   chain = next.catch(() => {});
   return next;
 }
-
 function digitsOnly(input) {
-  return String(input || "")
-    .replace(/\s+/g, "")
-    .replace(/[^0-9]/g, "");
+  return String(input || "").replace(/\s+/g, "").replace(/[^0-9]/g, "");
 }
 
 // WasenderAPI docs show numbers like: 212612345678 (no +)
@@ -50,10 +45,9 @@ function digitsOnly(input) {
 // - 05XXXXXXXX -> 9665XXXXXXXX
 // - +9665XXXXXXXX -> 9665XXXXXXXX
 // - 009665XXXXXXXX -> 9665XXXXXXXX
-export function normalizeWasenderPhone(raw) {
+function normalizeWasenderPhone(raw) {
   const d = digitsOnly(raw);
   if (!d) return null;
-
   if (d.startsWith("00")) {
     const without00 = d.slice(2);
     return normalizeWasenderPhone(without00);
@@ -73,14 +67,13 @@ export function normalizeWasenderPhone(raw) {
   if (d.length >= 9) {
     return d;
   }
-
   return null;
 }
 
 // صندوق صادر للرسائل الفاشلة بسبب انقطاع الاتصال — تُعاد تلقائياً
 // من مؤقّت الأتمتة (كل 5 دقائق) حتى النجاح أو استنفاد المحاولات.
 async function enqueueWaOutbox(to, text, lastError) {
-  const sql = (await import("@/app/api/utils/sql")).default;
+  const sql = (await import('./sql-CSDV1lSC.js')).default;
   await sql`
     CREATE TABLE IF NOT EXISTS wa_outbox (
       id SERIAL PRIMARY KEY,
@@ -100,9 +93,9 @@ async function enqueueWaOutbox(to, text, lastError) {
 
 // تفريغ الصندوق — يستدعيه مؤقّت الأتمتة. يتخطى بصمت إن لا رسائل،
 // ويحذف ما نجح أو تجاوز 10 محاولات (مع تسجيله).
-export async function flushWaOutbox() {
+async function flushWaOutbox() {
   try {
-    const sql = (await import("@/app/api/utils/sql")).default;
+    const sql = (await import('./sql-CSDV1lSC.js')).default;
     await sql`
       CREATE TABLE IF NOT EXISTS wa_outbox (
         id SERIAL PRIMARY KEY,
@@ -126,7 +119,7 @@ export async function flushWaOutbox() {
       }
       const result = await sendWhatsAppViaWasender({
         to: row.phone,
-        text: row.text,
+        text: row.text
       });
       // queued=true يعني ما زال غير متصل وأُعيد إدراجها — احذف
       // النسخة القديمة وحدّث عداد الجديدة لاحقاً... الأبسط: لو ما
@@ -160,58 +153,65 @@ export async function flushWaOutbox() {
 //   WHATSAPP_PROVIDER=baileys  → استضافة ذاتية داخل الخادم (مجاني)
 //   غير ذلك                    → WasenderAPI الخارجي (الوضع القديم)
 // كلا المسارين يمران بسلسلة التهدئة (رسالة كل 5.5 ثانية).
-export async function sendWhatsAppViaWasender({ to, text }) {
+async function sendWhatsAppViaWasender({
+  to,
+  text
+}) {
   const provider = (process.env.WHATSAPP_PROVIDER || "wasender").toLowerCase();
-
   const normalizedTo = normalizeWasenderPhone(to);
   if (!normalizedTo) {
-    return { ok: false, error: "Invalid recipient phone" };
+    return {
+      ok: false,
+      error: "Invalid recipient phone"
+    };
   }
-
   const payload = {
     to: normalizedTo,
-    text: String(text || "").trim(),
+    text: String(text || "").trim()
   };
-
   if (!payload.text) {
-    return { ok: false, error: "Empty message" };
+    return {
+      ok: false,
+      error: "Empty message"
+    };
   }
-
   if (provider === "baileys") {
     return paceSend(async () => {
-      const { sendViaBaileys } = await import(
-        "@/app/api/utils/whatsappBaileys"
-      );
+      const {
+        sendViaBaileys
+      } = await import('./whatsappBaileys-C7186LZR.js');
       const result = await sendViaBaileys({
         to: normalizedTo,
-        text: payload.text,
+        text: payload.text
       });
       // انقطاع الاتصال لا يُضيع الرسالة: تدخل صندوق الصادر ويعيد
       // المجدول إرسالها تلقائياً بعد عودة الاتصال.
       if (!result.ok && /غير متصل/.test(result.error || "")) {
-        enqueueWaOutbox(normalizedTo, payload.text, result.error).catch(
-          () => {},
-        );
-        return { ...result, queued: true };
+        enqueueWaOutbox(normalizedTo, payload.text, result.error).catch(() => {});
+        return {
+          ...result,
+          queued: true
+        };
       }
       return result;
     });
   }
-
   const apiKey = process.env.WASENDER_API_KEY;
   if (!apiKey) {
-    return { ok: false, error: "Missing API key (WASENDER_API_KEY)" };
+    return {
+      ok: false,
+      error: "Missing API key (WASENDER_API_KEY)"
+    };
   }
-
   return paceSend(async () => {
     const doFetch = async () => {
       const res = await fetch(WASENDER_SEND_MESSAGE_URL, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
       let json = null;
       try {
@@ -219,34 +219,41 @@ export async function sendWhatsAppViaWasender({ to, text }) {
       } catch (e) {
         // ignore
       }
-      return { res, json };
+      return {
+        res,
+        json
+      };
     };
-
-    let { res, json } = await doFetch();
+    let {
+      res,
+      json
+    } = await doFetch();
 
     // If the gate still tripped (e.g. another process is sharing the
     // same Wasender session), respect retry_after and try one more
     // time inside this slot. One retry only — keeps the chain moving.
     if (res.status === 429) {
       const retryAfter = Number(json?.retry_after);
-      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0
-        ? retryAfter * 1000 + 500
-        : MIN_INTERVAL_MS;
+      const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 + 500 : MIN_INTERVAL_MS;
       await sleep(waitMs);
-      ({ res, json } = await doFetch());
+      ({
+        res,
+        json
+      } = await doFetch());
     }
-
     if (!res.ok) {
-      const details = json
-        ? JSON.stringify(json)
-        : await res.text().catch(() => "");
+      const details = json ? JSON.stringify(json) : await res.text().catch(() => "");
       return {
         ok: false,
         error: `WasenderAPI error: [${res.status}] ${res.statusText}`,
-        details,
+        details
       };
     }
-
-    return { ok: true, data: json };
+    return {
+      ok: true,
+      data: json
+    };
   });
 }
+
+export { flushWaOutbox as f, normalizeWasenderPhone as n, sendWhatsAppViaWasender as s };
