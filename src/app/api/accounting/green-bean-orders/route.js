@@ -435,10 +435,24 @@ export async function POST(request) {
           const beanId = Number(item.bean_id);
           const finalPrice = item.computed_final_price_per_kg;
           if (beanId && finalPrice != null) {
+            // السعر النهائي لكل كيلو — يحدّث cost دائماً، ويحدّث
+            // base_purchase_cost أيضاً عندما وحدة أساس الصنف كيلو
+            // (جدول الأصناف يعرض base_purchase_cost أولاً؛ تركه
+            // فارغاً كان يُظهر 0.00 رغم تحدّث cost).
             const updated = await sql(
               `
                 UPDATE items
-                SET cost = $1
+                SET cost = $1,
+                    base_purchase_cost = CASE
+                      WHEN EXISTS (
+                        SELECT 1 FROM item_units iu
+                        JOIN measurement_units mu ON mu.id = iu.unit_id
+                        WHERE iu.item_id = items.id
+                          AND iu.is_base = true
+                          AND mu.name_ar = 'كيلو'
+                      ) THEN $1::numeric
+                      ELSE base_purchase_cost
+                    END
                 WHERE linked_green_bean_id = $2
                 RETURNING id, name
               `,

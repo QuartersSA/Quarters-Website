@@ -11,7 +11,7 @@ import 'hono/cors';
 import 'hono/proxy';
 import 'hono/body-limit';
 import 'hono/request-id';
-export { i as default } from './assets/index-CG688kQw.js';
+export { i as default } from './assets/index-BGhqRBB5.js';
 import 'serialize-error';
 import 'ws';
 import './assets/purchaseAutomation-xn45KqKx.js';
