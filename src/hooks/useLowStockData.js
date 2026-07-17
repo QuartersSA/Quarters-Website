@@ -14,7 +14,13 @@ import { queryKeys } from "../utils/queryKeys.js";
  *   isLoading         — query in flight
  *   refetch           — re-fetch the items
  */
-export function useLowStockData({ isAuthenticated, searchQuery, selectedBranch }) {
+export function useLowStockData({
+  isAuthenticated,
+  searchQuery,
+  selectedBranch,
+  selectedCategory = "",
+  selectedSeverity = "",
+}) {
   const {
     data: lowStockItems = [],
     isLoading,
@@ -39,6 +45,20 @@ export function useLowStockData({ isAuthenticated, searchQuery, selectedBranch }
     enabled: isAuthenticated,
   });
 
+  // خيارات فلتر الفئة تُشتق من الصفوف نفسها — فقط الفئات التي لديها
+  // نواقص فعلاً، فلا تظهر خيارات فارغة.
+  const categories = useMemo(() => {
+    const map = new Map();
+    for (const item of lowStockItems) {
+      if (item.category_id) {
+        map.set(Number(item.category_id), item.category_name || "فئة");
+      }
+    }
+    return [...map.entries()]
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name, "ar"));
+  }, [lowStockItems]);
+
   const filteredItems = useMemo(() => {
     const q = (searchQuery || "").toLowerCase();
     return lowStockItems.filter((item) => {
@@ -47,9 +67,23 @@ export function useLowStockData({ isAuthenticated, searchQuery, selectedBranch }
         (item.description && item.description.toLowerCase().includes(q));
       const matchesBranch =
         !selectedBranch || item.branch_id === parseInt(selectedBranch);
-      return matchesSearch && matchesBranch;
+      const matchesCategory =
+        !selectedCategory ||
+        String(item.category_id || "") === String(selectedCategory);
+      const matchesSeverity =
+        !selectedSeverity ||
+        getLowStockStatus(item).severity === selectedSeverity;
+      return (
+        matchesSearch && matchesBranch && matchesCategory && matchesSeverity
+      );
     });
-  }, [lowStockItems, searchQuery, selectedBranch]);
+  }, [
+    lowStockItems,
+    searchQuery,
+    selectedBranch,
+    selectedCategory,
+    selectedSeverity,
+  ]);
 
   const stats = useMemo(() => {
     // Derive every counter from the same `getLowStockStatus` classifier
@@ -79,6 +113,7 @@ export function useLowStockData({ isAuthenticated, searchQuery, selectedBranch }
   return {
     lowStockItems,
     branches,
+    categories,
     filteredItems,
     stats,
     isLoading,

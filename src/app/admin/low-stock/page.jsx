@@ -18,12 +18,16 @@ export default function LowStockPage() {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBranch, setSelectedBranch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSeverity, setSelectedSeverity] = useState("");
 
-  const { branches, filteredItems, stats, isLoading, refetch } =
+  const { branches, categories, filteredItems, stats, isLoading, refetch } =
     useLowStockData({
       isAuthenticated,
       searchQuery,
       selectedBranch,
+      selectedCategory,
+      selectedSeverity,
     });
 
   const branchOptions = useMemo(
@@ -34,10 +38,18 @@ export default function LowStockPage() {
     [branches],
   );
 
+  const categoryOptions = useMemo(
+    () => [
+      { value: "", label: "كل الفئات" },
+      ...categories.map((c) => ({ value: String(c.id), label: c.name })),
+    ],
+    [categories],
+  );
+
   const handleExportExcel = () => {
     const columns = [
       { header: "اسم الصنف", accessor: (item) => item.name },
-      { header: "الوصف", accessor: (item) => item.description || "-" },
+      { header: "الفئة", accessor: (item) => item.category_name || "-" },
       { header: "الفرع", accessor: (item) => item.branch_name },
       { header: "الموقع", accessor: (item) => item.branch_location || "-" },
       {
@@ -45,8 +57,13 @@ export default function LowStockPage() {
         accessor: (item) => Number(item.current_quantity) || 0,
       },
       {
-        header: "الحد الأدنى",
+        header: "الحد الأدنى للفرع",
         accessor: (item) => Number(item.min_stock_threshold) || 0,
+      },
+      {
+        header: "نوع الحد",
+        accessor: (item) =>
+          item.branch_specific_threshold ? "خاص بالفرع" : "افتراضي الصنف",
       },
       {
         header: "النقص",
@@ -133,6 +150,11 @@ export default function LowStockPage() {
           selectedBranch={selectedBranch}
           onBranchChange={setSelectedBranch}
           branchOptions={branchOptions}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          categoryOptions={categoryOptions}
+          selectedSeverity={selectedSeverity}
+          onSeverityChange={setSelectedSeverity}
           onRefresh={refetch}
         />
 
