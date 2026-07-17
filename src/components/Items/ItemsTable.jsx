@@ -65,6 +65,14 @@ function roundMoney(value) {
   return Math.round(number * 100) / 100;
 }
 
+// Number(null) === 0 في JS — قيمة مفقودة كانت تُقرأ سعراً صالحاً 0.00
+// وتمنع السقوط على cost. نعتبر null/"" مفقوداً قبل التحويل.
+function moneyOrNull(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
 export function ItemsTable({
   items,
   isLoading,
@@ -247,13 +255,9 @@ export function ItemsTable({
               itemUnits.find((u) => u.is_base) ||
               null;
             const unit = defaultInvUnit?.name_ar || item?.unit || "حبة";
-            const baseCost = Number(item?.base_purchase_cost);
-            const fallbackCost = Number(item?.cost);
-            const rawBaseCost = Number.isFinite(baseCost)
-              ? baseCost
-              : Number.isFinite(fallbackCost)
-                ? fallbackCost
-                : null;
+            const baseCost = moneyOrNull(item?.base_purchase_cost);
+            const fallbackCost = moneyOrNull(item?.cost);
+            const rawBaseCost = baseCost !== null ? baseCost : fallbackCost;
             const rawDisplayCost =
               rawBaseCost != null && defaultInvUnit
                 ? rawBaseCost *
@@ -451,13 +455,10 @@ export function ItemsTable({
                   null;
                 const unit =
                   defaultInvUnit?.name_ar || item?.unit || "حبة";
-                const baseCost = Number(item?.base_purchase_cost);
-                const fallbackCost = Number(item?.cost);
-                const rawBaseCost = Number.isFinite(baseCost)
-                  ? baseCost
-                  : Number.isFinite(fallbackCost)
-                    ? fallbackCost
-                    : null;
+                const baseCost = moneyOrNull(item?.base_purchase_cost);
+                const fallbackCost = moneyOrNull(item?.cost);
+                const rawBaseCost =
+                  baseCost !== null ? baseCost : fallbackCost;
                 const rawDisplayCost =
                   rawBaseCost != null && defaultInvUnit
                     ? rawBaseCost *
