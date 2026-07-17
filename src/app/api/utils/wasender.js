@@ -77,6 +77,30 @@ export function normalizeWasenderPhone(raw) {
   return null;
 }
 
+// سجل تسليم: كل محاولة إرسال تُدوَّن بنتيجتها (نجاح/فشل/سبب) —
+// أداة تشخيص حاسمة لحالات «الرسالة ما وصلت» بدل التخمين.
+async function logWaSend(to, ok, error, queued) {
+  try {
+    const sql = (await import("@/app/api/utils/sql")).default;
+    await sql`
+      CREATE TABLE IF NOT EXISTS wa_send_log (
+        id SERIAL PRIMARY KEY,
+        phone TEXT,
+        ok BOOLEAN NOT NULL,
+        error TEXT,
+        queued BOOLEAN NOT NULL DEFAULT FALSE,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `;
+    await sql`
+      INSERT INTO wa_send_log (phone, ok, error, queued)
+      VALUES (${to}, ${!!ok}, ${error || null}, ${!!queued})
+    `;
+  } catch {
+    // التشخيص لا يعطل الإرسال أبداً
+  }
+}
+
 // صندوق صادر للرسائل الفاشلة بسبب انقطاع الاتصال — تُعاد تلقائياً
 // من مؤقّت الأتمتة (كل 5 دقائق) حتى النجاح أو استنفاد المحاولات.
 async function enqueueWaOutbox(to, text, lastError) {
@@ -192,8 +216,10 @@ export async function sendWhatsAppViaWasender({ to, text }) {
         enqueueWaOutbox(normalizedTo, payload.text, result.error).catch(
           () => {},
         );
+        logWaSend(normalizedTo, false, result.error, true);
         return { ...result, queued: true };
       }
+      logWaSend(normalizedTo, result.ok, result.error, false);
       return result;
     });
   }
