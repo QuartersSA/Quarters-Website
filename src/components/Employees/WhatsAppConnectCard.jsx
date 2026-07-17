@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2, MessageCircle, Send } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { ws } from "@/components/Workspace/ui";
@@ -40,6 +40,15 @@ export function WhatsAppConnectCard() {
     },
   });
   const status = statusQuery.data || null;
+
+  // الرقم الثابت: آخر رقم مقترن محفوظ في القاعدة يعبّي الخانة
+  // تلقائياً — ما يضيع بإعادة تحميل الصفحة أو انقطاع الجلسة.
+  useEffect(() => {
+    if (status?.pairedPhone && !pairPhone) {
+      setPairPhone(String(status.pairedPhone));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status?.pairedPhone]);
 
   // أثناء التحميل أو عند فشل القراءة لا نعرض شيئاً؛ أما مزود غير
   // ذاتي فنعرض بطاقة إرشادية بدل الاختفاء الصامت.
@@ -140,6 +149,20 @@ export function WhatsAppConnectCard() {
             ) : null}
           </div>
         ) : (
+          <div className="flex items-center gap-2 text-sm font-bold text-rose-700 dark:text-rose-300 shrink-0">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+            غير متصل
+            {status.pairedPhone ? (
+              <span className="font-mono text-xs text-slate-500 dark:text-white/45" dir="ltr">
+                +{status.pairedPhone}
+              </span>
+            ) : null}
+          </div>
+        )}
+      </div>
+
+      <div className="flex items-center gap-3 flex-wrap mt-3">
+        {status.connected ? null : (
           <div className="flex items-center gap-2 shrink-0">
             <input
               type="tel"
@@ -166,8 +189,9 @@ export function WhatsAppConnectCard() {
         )}
       </div>
 
-      {/* اختبار الإرسال — يظهر بعد الاقتران فقط */}
-      {status.connected ? (
+      {/* اختبار الإرسال — متاح دائماً؛ عند عدم الاتصال يرجع الخطأ
+          الفعلي بدل النجاح الصامت. */}
+      {(
         <div className="flex items-center gap-2 flex-wrap mt-3 pt-3 border-t border-slate-200 dark:border-white/10">
           <span className="text-[11px] font-bold text-slate-600 dark:text-white/55 shrink-0">
             اختبار الإرسال:
@@ -201,7 +225,7 @@ export function WhatsAppConnectCard() {
             </span>
           ) : null}
         </div>
-      ) : null}
+      )}
 
       {!status.connected && pairCode ? (
         <div className="text-center py-2 mt-2 border-t border-slate-200 dark:border-white/10">

@@ -133,6 +133,8 @@ async function startSocket() {
     if (connection === "open") {
       connected = true;
       lastError = null;
+      const phone = sock?.user?.id ? sock.user.id.split(":")[0] : null;
+      if (phone) writePairedPhone(phone).catch(() => {});
       console.log(
         `whatsapp (baileys) connected as ${sock?.user?.id || "unknown"}`,
       );
@@ -142,28 +144,87 @@ async function startSocket() {
       const statusCode = lastDisconnect?.error?.output?.statusCode;
       lastError = lastDisconnect?.error?.message || null;
       if (statusCode === DisconnectReason.loggedOut) {
-        // خروج من الجوال — الجلسة انتهت نهائياً: امسحها ليبدأ
-        // اقتران جديد نظيف.
+        // خروج من الجوال — الجلسة انتهت نهائياً: امسحها (مع إبقاء
+        // الرقم المحفوظ) ليبدأ اقتران جديد نظيف.
         console.error("whatsapp (baileys) logged out — clearing session");
-        sql`DELETE FROM whatsapp_auth_state`.catch(() => {});
+        sql`DELETE FROM whatsapp_auth_state WHERE key <> 'paired_phone'`.catch(
+          () => {},
+        );
         sock = null;
         return;
       }
       if (!stopping) {
-        // انقطاع عادي (شبكة/إعادة تشغيل سيرفرات واتساب) — أعد الاتصال.
+        // «conflict/replaced» = نسخة خادم أخرى تستخدم الجلسة (تداخل
+        // نشر Railway: الحاوية الجديدة تعمل قبل موت القديمة) — أمهل
+        // 45 ثانية حتى تموت المنافسة ثم اخطف الجلسة بهدوء. غير ذلك
+        // انقطاع عادي: أعد خلال 5 ثوانٍ.
+        const isConflict =
+          statusCode === DisconnectReason.connectionReplaced ||
+          statusCode === 440 ||
+          /conflict|replaced/i.test(lastDisconnect?.error?.message || "");
+        const delay = isConflict ? 45000 : 5000;
+        if (isConflict) {
+          console.error(
+            "whatsapp (baileys) session conflict — another instance holds it; retrying in 45s",
+          );
+        }
         setTimeout(() => {
           starting = null;
           startWhatsApp().catch(() => {});
-        }, 5000);
+        }, delay);
       }
     }
   });
+}
+
+// الرقم المقترن يبقى محفوظاً في القاعدة — يظهر في البطاقة دائماً
+// حتى بعد الانقطاع أو إعادة النشر أو إعادة تعيين الجلسة.
+async function writePairedPhone(digits) {
+  await ensureAuthTable();
+  await sql`
+    INSERT INTO whatsapp_auth_state (key, value)
+    VALUES ('paired_phone', ${JSON.stringify(String(digits))})
+    ON CONFLICT (key) DO UPDATE
+    SET value = EXCLUDED.value,
+        updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+  `;
+}
+
+async function readPairedPhone() {
+  try {
+    const [row] = await sql`
+      SELECT value FROM whatsapp_auth_state WHERE key = 'paired_phone'
+    `;
+    return row ? JSON.parse(row.value) : null;
+  } catch {
+    return null;
+  }
+}
+
+// إيقاف Railway للحاوية القديمة عند النشر يرسل SIGTERM — نحرر جلسة
+// واتساب فوراً حتى لا تتصارع مع النسخة الجديدة (سبب Stream Errored
+// conflict الذي يفصل الرقم بعد كل نشر).
+let sigtermHooked = false;
+function hookGracefulRelease() {
+  if (sigtermHooked) return;
+  sigtermHooked = true;
+  const release = () => {
+    stopping = true;
+    try {
+      sock?.end?.(new Error("instance shutting down"));
+    } catch {
+      // ignore
+    }
+  };
+  process.once("SIGTERM", release);
+  process.once("SIGINT", release);
 }
 
 export async function startWhatsApp() {
   if ((process.env.WHATSAPP_PROVIDER || "").toLowerCase() !== "baileys") {
     return;
   }
+  hookGracefulRelease();
   if (!starting) {
     starting = startSocket().catch((error) => {
       console.error("whatsapp (baileys) start failed", error);
@@ -201,10 +262,15 @@ export async function whatsappStatus() {
       baileysPromise = null;
     }
   }
+  // الرقم الثابت: من الاتصال الحي إن وُجد، وإلا آخر رقم مقترن محفوظ.
+  const livePhone =
+    connected && sock?.user?.id ? sock.user.id.split(":")[0] : null;
+  const pairedPhone = livePhone || (await readPairedPhone());
   return {
     provider,
     connected,
-    phone: connected && sock?.user?.id ? sock.user.id.split(":")[0] : null,
+    phone: livePhone,
+    pairedPhone,
     hasSession,
     lastError,
     libOk,
@@ -230,7 +296,8 @@ export async function resetWhatsAppSession() {
   starting = null;
   lastError = null;
   await ensureAuthTable();
-  await sql`DELETE FROM whatsapp_auth_state`;
+  // الرقم المحفوظ يبقى — إعادة التعيين تخص جلسة التشفير فقط.
+  await sql`DELETE FROM whatsapp_auth_state WHERE key <> 'paired_phone'`;
   stopping = false;
 }
 
@@ -241,6 +308,8 @@ export async function requestWhatsAppPairingCode(phone) {
   if (digits.length < 9) {
     throw new Error("رقم غير صالح — أدخله بالصيغة الدولية مثل 9665xxxxxxxx");
   }
+  // احفظ الرقم فوراً — يبقى معبأً في البطاقة مهما حدث للجلسة.
+  await writePairedPhone(digits).catch(() => {});
   // اقتران نظيف دائماً: ما دام الرقم غير مقترنٍ مكتملاً، أي بقايا
   // جلسة (محاولات فاشلة، انقطاع نشر أثناء الربط) تُمسح ونبدأ بهوية
   // تشفير جديدة — هذا يمنع «Couldn't link device» على الجوال.
