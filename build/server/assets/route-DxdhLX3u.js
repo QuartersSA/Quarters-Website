@@ -1,9 +1,10 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { s as sendWhatsAppViaWasender } from './wasender-CtjKFWCW.js';
+import { n as notifyByPref } from './waNotify-B7OcatGW.js';
 import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-Ba9mYj5Z.js';
 import '@neondatabase/serverless';
 import 'crypto';
+import './wasender-CtjKFWCW.js';
 
 function safeNumber(value) {
   const n = Number(value);
@@ -151,123 +152,10 @@ async function buildDeductionRowSelectSql(whereClause, params) {
     `, params);
   return rows.map(decorateRowImages);
 }
-async function notifyDeductionWhatsApp({
-  createdRows,
-  actorUser
-}) {
-  try {
-    const rows = Array.isArray(createdRows) ? createdRows : [];
-    if (rows.length === 0) {
-      return {
-        ok: true,
-        skipped: true,
-        reason: "no_rows"
-      };
-    }
-    const dateValue = rows[0]?.violation_date ? String(rows[0].violation_date).slice(0, 10) : null;
-    const categoryValue = rows[0]?.violation_category || null;
-    const reasonValue = rows[0]?.reason || null;
-    const createdByUsername = actorUser?.username ? String(actorUser.username) : null;
-    const createdByName = actorUser?.name ? String(actorUser.name) : null;
-    const source = createdByUsername || createdByName || null;
-    const affectedIds = Array.from(new Set(rows.map(r => safeInt(r.employee_id)).filter(Boolean)));
 
-    // HR recipients = everyone with HR permission
-    const hrRecipients = await sql`
-      SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name, phone
-      FROM employees
-      WHERE role = 'Admin'
-        AND COALESCE(can_access_hr, false) = true
-        AND phone IS NOT NULL
-        AND TRIM(phone) <> ''
-      ORDER BY id ASC
-      LIMIT 25
-    `;
-    const affectedRecipients = affectedIds.length ? await sql(`
-            SELECT id, COALESCE(NULLIF(display_name, ''), name) AS name, phone
-            FROM employees
-            WHERE id = ANY($1::int[])
-              AND phone IS NOT NULL
-              AND TRIM(phone) <> ''
-            ORDER BY id ASC
-          `, [affectedIds]) : [];
-    const recipientsMap = new Map();
-    hrRecipients.forEach(r => recipientsMap.set(Number(r.id), {
-      ...r,
-      kind: "hr"
-    }));
-    affectedRecipients.forEach(r => {
-      const id = Number(r.id);
-      if (!recipientsMap.has(id)) {
-        recipientsMap.set(id, {
-          ...r,
-          kind: "employee"
-        });
-      }
-    });
-    const recipients = Array.from(recipientsMap.values());
-    if (recipients.length === 0) {
-      return {
-        ok: true,
-        skipped: true,
-        reason: "no_phones"
-      };
-    }
-    const listLines = rows.slice(0, 10).map(r => {
-      const empName = r.employee_name || `#${r.employee_id}`;
-      const amount = r.amount;
-      const amountText = amount === null || amount === undefined ? "" : ` (${amount})`;
-      return `- ${empName}${amountText}`;
-    });
-    const moreCount = rows.length - listLines.length;
-    const moreLine = moreCount > 0 ? `… والمزيد (${moreCount})` : null;
-    const headerLines = ["خصم جديد", rows.length > 1 ? `عدد الموظفين: ${rows.length}` : null, dateValue ? `التاريخ: ${dateValue}` : null, categoryValue ? `التصنيف: ${categoryValue}` : null, source ? `المصدر: ${source}` : null].filter(Boolean);
-    const hrText = [...headerLines, "الموظفين:", ...listLines, moreLine, reasonValue ? `السبب: ${reasonValue}` : null].filter(Boolean).join("\n").trim();
-    const results = await Promise.all(recipients.map(async r => {
-      const to = r.phone;
-      if (!to) return {
-        employeeId: r.id,
-        ok: true,
-        skipped: true
-      };
-      const isHr = r.kind === "hr";
-      let text = hrText;
-      if (!isHr) {
-        // Employee-specific message (only for those who aren't HR)
-        const row = rows.find(x => Number(x.employee_id) === Number(r.id));
-        const amount = row?.amount;
-        const amountText = amount === null || amount === undefined ? "-" : String(amount);
-        const lines = ["تم تسجيل خصم عليك", dateValue ? `التاريخ: ${dateValue}` : null, categoryValue ? `التصنيف: ${categoryValue}` : null, `المبلغ: ${amountText}`, reasonValue ? `السبب: ${reasonValue}` : null].filter(Boolean);
-        text = lines.join("\n").trim();
-      }
-      const res = await sendWhatsAppViaWasender({
-        to,
-        text
-      });
-      if (!res.ok) {
-        console.error("Deduction WhatsApp notify failed", {
-          employeeId: r.id,
-          error: res.error,
-          details: res.details
-        });
-      }
-      return {
-        employeeId: r.id,
-        ok: res.ok
-      };
-    }));
-    return {
-      ok: true,
-      results
-    };
-  } catch (error) {
-    console.error("notifyDeductionWhatsApp error", error);
-    return {
-      ok: false,
-      error: "notify_failed"
-    };
-  }
-}
+// (أُزيلت notifyDeductionWhatsApp: إشعارات الخصومات صارت عبر تفضيل
+// hr_deduction فقط — لا رسائل تلقائية للموظف المخصوم أو مدراء HR.)
+
 async function GET(request) {
   const auth = requireAuth(request, {
     anyOf: [{
@@ -425,14 +313,15 @@ async function POST(request) {
     const newIds = insertResults.map(r => r?.[0]?.id).filter(v => safeInt(v));
     const rows = newIds.length ? await buildDeductionRowSelectSql(`WHERE d.id = ANY($1::int[]) ORDER BY d.violation_date DESC, d.created_at DESC, d.id DESC`, [newIds]) : [];
 
-    // best-effort notifications (WhatsApp)
+    // إشعارات الواتساب للخصومات صارت بالاشتراك فقط: مشتركو تفضيل
+    // «خصومات الموظفين» (قسم الموارد البشرية بنافذة الموظف) هم وحدهم
+    // من يستلم — لا رسالة تلقائية للموظف المخصوم ولا لمدراء HR
+    // إلا إذا فعّلوا الخاصية بأنفسهم.
     try {
-      await notifyDeductionWhatsApp({
-        createdRows: rows,
-        actorUser: auth.user
-      });
+      const lines = ["➖ خصم جديد", ...rows.slice(0, 15).map(row => `• ${row.employee_name || `#${row.employee_id}`}: ${row.amount ?? "-"} ريال`), rows.length > 15 ? `… والمزيد (${rows.length - 15})` : null, rows[0]?.reason ? `السبب: ${rows[0].reason}` : null, rows[0]?.violation_date ? `التاريخ: ${rows[0].violation_date}` : null, auth.user?.name ? `سجله: ${auth.user.name}` : null].filter(Boolean);
+      notifyByPref("hr_deduction", lines.join("\n"));
     } catch (e) {
-      console.error("Deduction notify failed", e);
+      console.error("Deduction pref notify failed", e);
     }
     if (uniqueEmployeeIds.length > 1) {
       return Response.json({
