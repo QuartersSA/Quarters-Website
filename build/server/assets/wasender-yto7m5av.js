@@ -72,7 +72,7 @@ function normalizeWasenderPhone(raw) {
 
 // سجل تسليم: كل محاولة إرسال تُدوَّن بنتيجتها (نجاح/فشل/سبب) —
 // أداة تشخيص حاسمة لحالات «الرسالة ما وصلت» بدل التخمين.
-async function logWaSend(to, ok, error, queued) {
+async function logWaSend(to, ok, error, queued, jid = null) {
   try {
     const sql = (await import('./sql-CSDV1lSC.js')).default;
     await sql`
@@ -86,8 +86,11 @@ async function logWaSend(to, ok, error, queued) {
       )
     `;
     await sql`
-      INSERT INTO wa_send_log (phone, ok, error, queued)
-      VALUES (${to}, ${!!ok}, ${error || null}, ${!!queued})
+      ALTER TABLE wa_send_log ADD COLUMN IF NOT EXISTS jid TEXT
+    `;
+    await sql`
+      INSERT INTO wa_send_log (phone, ok, error, queued, jid)
+      VALUES (${to}, ${!!ok}, ${error || null}, ${!!queued}, ${jid})
     `;
   } catch {
     // التشخيص لا يعطل الإرسال أبداً
@@ -203,7 +206,7 @@ async function sendWhatsAppViaWasender({
     return paceSend(async () => {
       const {
         sendViaBaileys
-      } = await import('./whatsappBaileys-C7186LZR.js');
+      } = await import('./whatsappBaileys-D1A1kpP9.js');
       const result = await sendViaBaileys({
         to: normalizedTo,
         text: payload.text
@@ -212,13 +215,13 @@ async function sendWhatsAppViaWasender({
       // المجدول إرسالها تلقائياً بعد عودة الاتصال.
       if (!result.ok && /غير متصل/.test(result.error || "")) {
         enqueueWaOutbox(normalizedTo, payload.text, result.error).catch(() => {});
-        logWaSend(normalizedTo, false, result.error, true);
+        logWaSend(normalizedTo, false, result.error, true, result.jid || null);
         return {
           ...result,
           queued: true
         };
       }
-      logWaSend(normalizedTo, result.ok, result.error, false);
+      logWaSend(normalizedTo, result.ok, result.error, false, result.jid || null);
       return result;
     });
   }

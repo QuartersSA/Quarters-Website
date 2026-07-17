@@ -356,7 +356,13 @@ async function requestWhatsAppPairingCode(phone) {
   throw new Error(`تعذر توليد الرمز بعد عدة محاولات (${lastAttemptError?.message || "غير معروف"}) — الأرجح تقييد مؤقت من واتساب بسبب تكرار المحاولات: انتظر 30-60 دقيقة ثم جرّب مرة واحدة نظيفة`);
 }
 
-// الإرسال — نفس عقد Wasender: { ok, error? }.
+// الإرسال — نفس عقد Wasender: { ok, error?, jid? }.
+//
+// العنوان يُستبين عبر onWhatsApp قبل الإرسال: واتساب انتقل لنظام
+// معرفات LID، والإرسال بصيغة الرقم القديمة <رقم>@s.whatsapp.net
+// «يُقبل» من الخادم ثم لا يصل لبعض الحسابات المُرحّلة — بينما
+// العنوان المُرجع من onWhatsApp يوصَّل. (السبب الموثق لحالة: تأكيد
+// الخاصم يصل ورسائل المخصومين تتبخر رغم ok من sendMessage.)
 async function sendViaBaileys({
   to,
   text
@@ -368,11 +374,29 @@ async function sendViaBaileys({
     };
   }
   try {
-    await sock.sendMessage(`${to}@s.whatsapp.net`, {
+    let jid = `${to}@s.whatsapp.net`;
+    try {
+      const lookup = await sock.onWhatsApp(to);
+      const found = Array.isArray(lookup) ? lookup[0] : null;
+      if (found && found.exists === false) {
+        return {
+          ok: false,
+          error: "الرقم غير مسجل في واتساب",
+          jid
+        };
+      }
+      if (found?.jid) jid = found.jid;
+    } catch (lookupError) {
+      // استبانة العنوان فشلت — أرسل بالصيغة الافتراضية ولا تُسقط
+      // الرسالة بسببها.
+      console.error("whatsapp (baileys) jid lookup failed", lookupError);
+    }
+    await sock.sendMessage(jid, {
       text: String(text)
     });
     return {
-      ok: true
+      ok: true,
+      jid
     };
   } catch (error) {
     console.error("whatsapp (baileys) send failed", error);
