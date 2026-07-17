@@ -1,5 +1,5 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { whatsappStatus } from './whatsappBaileys--a_dOK1s.js';
+import { whatsappStatus } from './whatsappBaileys-BtCrqvwt.js';
 import 'crypto';
 import './sql-BfhTxwII.js';
 import '@neondatabase/serverless';

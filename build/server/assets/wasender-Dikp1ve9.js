@@ -101,7 +101,7 @@ async function sendWhatsAppViaWasender({
     return paceSend(async () => {
       const {
         sendViaBaileys
-      } = await import('./whatsappBaileys--a_dOK1s.js');
+      } = await import('./whatsappBaileys-BtCrqvwt.js');
       return sendViaBaileys({
         to: normalizedTo,
         text: payload.text

@@ -155,6 +155,13 @@ async function startSocket() {
         return;
       }
       if (!stopping) {
+        // انتهت محاولات QR بلا اقتران؟ لا تعد فتح قناة غير مقترنة
+        // للأبد (هدر + احتمال تقييد) — انتظر طلب رمز جديد من البطاقة.
+        if (/QR refs attempts ended/i.test(lastDisconnect?.error?.message || "")) {
+          sock = null;
+          starting = null;
+          return;
+        }
         // «conflict/replaced» = نسخة خادم أخرى تستخدم الجلسة (تداخل
         // نشر Railway: الحاوية الجديدة تعمل قبل موت القديمة) — أمهل
         // 45 ثانية حتى تموت المنافسة ثم اخطف الجلسة بهدوء. غير ذلك
