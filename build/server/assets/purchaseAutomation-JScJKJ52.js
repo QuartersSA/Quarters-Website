@@ -1,7 +1,7 @@
-import sql from "@/app/api/utils/sql";
-import { sendWhatsAppViaWasender, flushWaOutbox } from "@/app/api/utils/wasender";
-import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
-import { notifyByPref, onceDaily } from "@/app/api/utils/waNotify";
+import sql from './sql-CSDV1lSC.js';
+import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-DEtMgWCV.js';
+import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
+import { o as onceDaily, n as notifyByPref } from './waNotify-BypZ6oBy.js';
 
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
@@ -22,29 +22,26 @@ function todayRiyadh() {
     timeZone: "Asia/Riyadh",
     year: "numeric",
     month: "2-digit",
-    day: "2-digit",
+    day: "2-digit"
   }).formatToParts(new Date());
-  const get = (type) => parts.find((part) => part.type === type)?.value || "";
+  const get = type => parts.find(part => part.type === type)?.value || "";
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
-
 function hourRiyadh() {
   const hour = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Riyadh",
     hour: "2-digit",
-    hour12: false,
+    hour12: false
   }).format(new Date());
   return Number(hour) % 24;
 }
 
 // موعد خروج التقارير المجدولة — صباح يوم الاستحقاق بتوقيت الرياض.
 const SEND_HOUR_RIYADH = 8;
-
 function round2(value) {
   return Math.round(value * 100) / 100;
 }
-
-export async function ensureRecurringSchema() {
+async function ensureRecurringSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_recurring_purchase_invoices (
       id SERIAL PRIMARY KEY,
@@ -66,8 +63,7 @@ export async function ensureRecurringSchema() {
     )
   `;
 }
-
-export async function ensureScheduledReportsSchema() {
+async function ensureScheduledReportsSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_scheduled_purchase_reports (
       id SERIAL PRIMARY KEY,
@@ -91,14 +87,12 @@ async function generateRecurringInvoices() {
   const today = todayRiyadh();
   const period = today.slice(0, 7); // YYYY-MM
   const dayOfMonth = Number(today.slice(8, 10));
-
   const due = await sql`
     SELECT * FROM accounting_recurring_purchase_invoices
     WHERE is_active = TRUE
       AND day_of_month <= ${dayOfMonth}
       AND (last_generated_period IS NULL OR last_generated_period < ${period})
   `;
-
   for (const template of due) {
     const invoiceNumber = `REC-${period.replace("-", "")}-${template.id}`;
     const [exists] = await sql`
@@ -113,15 +107,13 @@ async function generateRecurringInvoices() {
       `;
       continue;
     }
-
     const amount = round2(Number(template.amount) || 0);
     if (amount <= 0) continue;
     const rate = Math.min(Math.max(Number(template.tax_rate) || 0, 0), 100);
     const includesTax = template.amount_includes_tax !== false;
     const subtotal = includesTax ? round2(amount / (1 + rate / 100)) : amount;
-    const tax = includesTax ? round2(amount - subtotal) : round2((amount * rate) / 100);
+    const tax = includesTax ? round2(amount - subtotal) : round2(amount * rate / 100);
     const total = round2(subtotal + tax);
-
     const [invoice] = await sql`
       INSERT INTO accounting_purchase_invoices (
         invoice_number, contact_id, supplier_name, expense_account_id,
@@ -169,13 +161,19 @@ async function generateRecurringInvoices() {
       entityId: invoice.id,
       action: "recurring",
       summary: `توليد تلقائي للفاتورة المتكررة «${template.name}» — ${invoiceNumber} بمبلغ ${total.toFixed(2)} SAR`,
-      actor: { name: "النظام" },
+      actor: {
+        name: "النظام"
+      }
     });
   }
 }
 
 // نص ملخص لفترة [from, to] يُرسل واتساب — يقرأ نفس أعمدة الدفتر.
-export async function buildPurchasesSummaryText({ title, from, to }) {
+async function buildPurchasesSummaryText({
+  title,
+  from,
+  to
+}) {
   const [totals] = await sql`
     SELECT COUNT(*)::int AS count,
            COALESCE(SUM(total_amount), 0) AS total,
@@ -207,24 +205,11 @@ export async function buildPurchasesSummaryText({ title, from, to }) {
     ORDER BY 2 DESC
     LIMIT 3
   `;
-
-  const money = (value) =>
-    Number(value || 0).toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-  const lines = [
-    `📊 ${title}`,
-    `الفترة: ${from} → ${to}`,
-    "",
-    `عدد الفواتير: ${totals.count}`,
-    `إجمالي المشتريات: ${money(totals.total)} SAR`,
-    `المدفوع: ${money(totals.paid)} SAR`,
-    `الرصيد المتبقي: ${money(totals.balance)} SAR`,
-    "",
-    `⚠️ المتأخرات حالياً (كل الفترات): ${overdue.count} فاتورة بمبلغ ${money(overdue.balance)} SAR`,
-  ];
+  const money = value => Number(value || 0).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  const lines = [`📊 ${title}`, `الفترة: ${from} → ${to}`, "", `عدد الفواتير: ${totals.count}`, `إجمالي المشتريات: ${money(totals.total)} SAR`, `المدفوع: ${money(totals.paid)} SAR`, `الرصيد المتبقي: ${money(totals.balance)} SAR`, "", `⚠️ المتأخرات حالياً (كل الفترات): ${overdue.count} فاتورة بمبلغ ${money(overdue.balance)} SAR`];
   if (topSuppliers.length > 0) {
     lines.push("", "أعلى الموردين في الفترة:");
     for (const supplier of topSuppliers) {
@@ -254,22 +239,21 @@ function scheduleState(frequency, today) {
       key: `w:${key}`,
       from: prevStart.toISOString().slice(0, 10),
       to: prevEnd.toISOString().slice(0, 10),
-      rangeLabel: "الأسبوع الماضي",
+      rangeLabel: "الأسبوع الماضي"
     };
   }
   // monthly: أرسل ملخص الشهر السابق مرة واحدة كل شهر جديد.
   const prevY = m === 1 ? y - 1 : y;
   const prevM = m === 1 ? 12 : m - 1;
-  const pad = (n) => String(n).padStart(2, "0");
+  const pad = n => String(n).padStart(2, "0");
   const lastDay = new Date(prevY, prevM, 0).getDate();
   return {
     key: `m:${y}-${pad(m)}`,
     from: `${prevY}-${pad(prevM)}-01`,
     to: `${prevY}-${pad(prevM)}-${pad(lastDay)}`,
-    rangeLabel: "الشهر الماضي",
+    rangeLabel: "الشهر الماضي"
   };
 }
-
 async function sendDueScheduledReports() {
   if (!process.env.WASENDER_API_KEY) return;
   // قبل الثامنة صباحاً لا يخرج شيء — الموعد المعلن للمستخدم، ويمنع
@@ -286,11 +270,11 @@ async function sendDueScheduledReports() {
     const text = await buildPurchasesSummaryText({
       title: `${schedule.title} — ملخص مشتريات ${state.rangeLabel}`,
       from: state.from,
-      to: state.to,
+      to: state.to
     });
     const result = await sendWhatsAppViaWasender({
       to: schedule.phone,
-      text,
+      text
     });
     if (!result.ok) {
       console.error("scheduled purchases report send failed", result);
@@ -307,7 +291,9 @@ async function sendDueScheduledReports() {
       entityId: schedule.id,
       action: "scheduled_report",
       summary: `إرسال تقرير مجدول «${schedule.title}» (${state.from} → ${state.to}) إلى واتساب`,
-      actor: { name: "النظام" },
+      actor: {
+        name: "النظام"
+      }
     });
   }
 }
@@ -336,21 +322,11 @@ async function sendOverdueDigest() {
   // يستهلك الإرسال.
   if (!(await onceDaily("acc_invoice_overdue"))) return;
   const total = rows.reduce((acc, row) => acc + Number(row.balance || 0), 0);
-  const lines = [
-    `⏰ فواتير متأخرة (${rows.length})`,
-    ...rows.map(
-      (row) =>
-        `• ${row.invoice_number} — ${row.supplier}: ${Number(row.balance).toFixed(2)} SAR (استحقاق ${row.due_date})`,
-    ),
-    "",
-    `الإجمالي المتأخر: ${total.toFixed(2)} SAR`,
-  ];
+  const lines = [`⏰ فواتير متأخرة (${rows.length})`, ...rows.map(row => `• ${row.invoice_number} — ${row.supplier}: ${Number(row.balance).toFixed(2)} SAR (استحقاق ${row.due_date})`), "", `الإجمالي المتأخر: ${total.toFixed(2)} SAR`];
   await notifyByPref("acc_invoice_overdue", lines.join("\n"));
 }
-
 let automationRunning = false;
-
-export async function runPurchaseAutomation() {
+async function runPurchaseAutomation() {
   if (automationRunning) return;
   automationRunning = true;
   try {
@@ -371,8 +347,7 @@ export async function runPurchaseAutomation() {
 // المجدول الداخلي — يُستدعى مرة واحدة من نقطة إقلاع الخادم.
 const TIMER_INTERVAL_MS = 5 * 60 * 1000;
 let timerStarted = false;
-
-export function startPurchaseAutomationTimer() {
+function startPurchaseAutomationTimer() {
   if (timerStarted) return;
   timerStarted = true;
   const tick = () => {
@@ -384,7 +359,7 @@ export function startPurchaseAutomationTimer() {
   // لا يمسكان العملية لو أُغلق الخادم — الويب سيرفر هو من يبقيها حية.
   first.unref?.();
   interval.unref?.();
-  console.log(
-    `purchase automation timer started (every ${TIMER_INTERVAL_MS / 60000} min, sends after ${SEND_HOUR_RIYADH}:00 Riyadh)`,
-  );
+  console.log(`purchase automation timer started (every ${TIMER_INTERVAL_MS / 60000} min, sends after ${SEND_HOUR_RIYADH}:00 Riyadh)`);
 }
+
+export { ensureScheduledReportsSchema as a, buildPurchasesSummaryText as b, ensureRecurringSchema as e, runPurchaseAutomation as r, startPurchaseAutomationTimer as s };

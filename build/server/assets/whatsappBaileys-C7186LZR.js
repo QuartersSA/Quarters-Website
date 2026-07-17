@@ -1,4 +1,5 @@
-import sql from "@/app/api/utils/sql";
+import sql from './sql-CSDV1lSC.js';
+import '@neondatabase/serverless';
 
 // واتساب مستضاف ذاتياً عبر Baileys — بلا وسيط ولا اشتراك:
 // الخادم نفسه «جهاز مرتبط» بحساب واتساب الرقم المخصص، متصل بسيرفرات
@@ -18,16 +19,14 @@ import sql from "@/app/api/utils/sql";
 
 let baileysPromise = null;
 function loadBaileys() {
-  if (!baileysPromise) baileysPromise = import("baileys");
+  if (!baileysPromise) baileysPromise = import('baileys');
   return baileysPromise;
 }
-
 let sock = null;
 let connected = false;
 let starting = null;
 let stopping = false;
 let lastError = null;
-
 async function ensureAuthTable() {
   await sql`
     CREATE TABLE IF NOT EXISTS whatsapp_auth_state (
@@ -42,10 +41,13 @@ async function ensureAuthTable() {
 // الملفّي (ملفات Railway تُمسح مع كل نشر). Buffers تُرمّز عبر
 // BufferJSON من المكتبة نفسها.
 async function usePostgresAuthState() {
-  const { initAuthCreds, BufferJSON, proto } = await loadBaileys();
+  const {
+    initAuthCreds,
+    BufferJSON,
+    proto
+  } = await loadBaileys();
   await ensureAuthTable();
-
-  const readData = async (key) => {
+  const readData = async key => {
     const [row] = await sql`
       SELECT value FROM whatsapp_auth_state WHERE key = ${key}
     `;
@@ -66,12 +68,10 @@ async function usePostgresAuthState() {
           updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
     `;
   };
-  const removeData = async (key) => {
+  const removeData = async key => {
     await sql`DELETE FROM whatsapp_auth_state WHERE key = ${key}`;
   };
-
   const creds = (await readData("creds")) || initAuthCreds();
-
   return {
     state: {
       creds,
@@ -87,57 +87,60 @@ async function usePostgresAuthState() {
           }
           return data;
         },
-        set: async (data) => {
+        set: async data => {
           for (const type of Object.keys(data)) {
             for (const id of Object.keys(data[type])) {
               const value = data[type][id];
               const key = `${type}-${id}`;
-              if (value) await writeData(key, value);
-              else await removeData(key);
+              if (value) await writeData(key, value);else await removeData(key);
             }
           }
-        },
-      },
+        }
+      }
     },
-    saveCreds: () => writeData("creds", creds),
+    saveCreds: () => writeData("creds", creds)
   };
 }
-
 async function startSocket() {
   const {
     default: makeWASocket,
     fetchLatestBaileysVersion,
     DisconnectReason,
-    Browsers,
+    Browsers
   } = await loadBaileys();
-  const pino = (await import("pino")).default;
-
-  const { state, saveCreds } = await usePostgresAuthState();
-  const { version } = await fetchLatestBaileysVersion().catch(() => ({
-    version: undefined,
+  const pino = (await import('pino')).default;
+  const {
+    state,
+    saveCreds
+  } = await usePostgresAuthState();
+  const {
+    version
+  } = await fetchLatestBaileysVersion().catch(() => ({
+    version: undefined
   }));
-
   sock = makeWASocket({
     version,
     auth: state,
     browser: Browsers.ubuntu("Chrome"),
-    logger: pino({ level: "warn" }),
+    logger: pino({
+      level: "warn"
+    }),
     printQRInTerminal: false,
     syncFullHistory: false,
-    markOnlineOnConnect: false,
+    markOnlineOnConnect: false
   });
-
   sock.ev.on("creds.update", saveCreds);
-  sock.ev.on("connection.update", (update) => {
-    const { connection, lastDisconnect } = update;
+  sock.ev.on("connection.update", update => {
+    const {
+      connection,
+      lastDisconnect
+    } = update;
     if (connection === "open") {
       connected = true;
       lastError = null;
       const phone = sock?.user?.id ? sock.user.id.split(":")[0] : null;
       if (phone) writePairedPhone(phone).catch(() => {});
-      console.log(
-        `whatsapp (baileys) connected as ${sock?.user?.id || "unknown"}`,
-      );
+      console.log(`whatsapp (baileys) connected as ${sock?.user?.id || "unknown"}`);
     }
     if (connection === "close") {
       connected = false;
@@ -147,9 +150,7 @@ async function startSocket() {
         // خروج من الجوال — الجلسة انتهت نهائياً: امسحها (مع إبقاء
         // الرقم المحفوظ) ليبدأ اقتران جديد نظيف.
         console.error("whatsapp (baileys) logged out — clearing session");
-        sql`DELETE FROM whatsapp_auth_state WHERE key <> 'paired_phone'`.catch(
-          () => {},
-        );
+        sql`DELETE FROM whatsapp_auth_state WHERE key <> 'paired_phone'`.catch(() => {});
         sock = null;
         return;
       }
@@ -165,21 +166,13 @@ async function startSocket() {
         // نشر Railway: الحاوية الجديدة تعمل قبل موت القديمة) — أمهل
         // 45 ثانية حتى تموت المنافسة ثم اخطف الجلسة بهدوء. غير ذلك
         // انقطاع عادي: أعد خلال 5 ثوانٍ.
-        const isConflict =
-          statusCode === DisconnectReason.connectionReplaced ||
-          statusCode === 440 ||
-          /conflict|replaced/i.test(lastDisconnect?.error?.message || "");
+        const isConflict = statusCode === DisconnectReason.connectionReplaced || statusCode === 440 || /conflict|replaced/i.test(lastDisconnect?.error?.message || "");
         // «restart required» (515) يأتي مباشرة بعد نجاح الاقتران —
         // أعد فوراً حتى يكتمل الربط بأسرع ما يمكن.
-        const isRestartRequired =
-          statusCode === DisconnectReason.restartRequired ||
-          statusCode === 515 ||
-          /restart required/i.test(lastDisconnect?.error?.message || "");
+        const isRestartRequired = statusCode === DisconnectReason.restartRequired || statusCode === 515 || /restart required/i.test(lastDisconnect?.error?.message || "");
         const delay = isConflict ? 45000 : isRestartRequired ? 1500 : 5000;
         if (isConflict) {
-          console.error(
-            "whatsapp (baileys) session conflict — another instance holds it; retrying in 45s",
-          );
+          console.error("whatsapp (baileys) session conflict — another instance holds it; retrying in 45s");
         }
         setTimeout(() => {
           starting = null;
@@ -202,7 +195,6 @@ async function writePairedPhone(digits) {
         updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
   `;
 }
-
 async function readPairedPhone() {
   try {
     const [row] = await sql`
@@ -232,14 +224,13 @@ function hookGracefulRelease() {
   process.once("SIGTERM", release);
   process.once("SIGINT", release);
 }
-
-export async function startWhatsApp() {
+async function startWhatsApp() {
   if ((process.env.WHATSAPP_PROVIDER || "").toLowerCase() !== "baileys") {
     return;
   }
   hookGracefulRelease();
   if (!starting) {
-    starting = startSocket().catch((error) => {
+    starting = startSocket().catch(error => {
       console.error("whatsapp (baileys) start failed", error);
       lastError = error.message;
       starting = null;
@@ -247,8 +238,7 @@ export async function startWhatsApp() {
   }
   return starting;
 }
-
-export async function whatsappStatus() {
+async function whatsappStatus() {
   const provider = (process.env.WHATSAPP_PROVIDER || "wasender").toLowerCase();
   let hasSession = false;
   try {
@@ -276,8 +266,7 @@ export async function whatsappStatus() {
     }
   }
   // الرقم الثابت: من الاتصال الحي إن وُجد، وإلا آخر رقم مقترن محفوظ.
-  const livePhone =
-    connected && sock?.user?.id ? sock.user.id.split(":")[0] : null;
+  const livePhone = connected && sock?.user?.id ? sock.user.id.split(":")[0] : null;
   const pairedPhone = livePhone || (await readPairedPhone());
   return {
     provider,
@@ -288,16 +277,15 @@ export async function whatsappStatus() {
     lastError,
     libOk,
     libError,
-    nodeVersion: process.version,
+    nodeVersion: process.version
   };
 }
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // مسح الجلسة بالكامل والبدء بهوية جديدة — يُستدعى تلقائياً قبل كل
 // طلب رمز اقتران (بقايا محاولة سابقة غير مكتملة تفسد الربط برسالة
 // «Couldn't link device» على الجوال)، ويدوياً من زر إعادة التعيين.
-export async function resetWhatsAppSession() {
+async function resetWhatsAppSession() {
   stopping = true;
   try {
     sock?.end?.(new Error("manual session reset"));
@@ -316,7 +304,7 @@ export async function resetWhatsAppSession() {
 
 // رمز الاقتران — يتطلب socket غير مقترن بعد. النتيجة 8 خانات تُدخل
 // في جوال الرقم المخصص خلال ~دقيقة.
-export async function requestWhatsAppPairingCode(phone) {
+async function requestWhatsAppPairingCode(phone) {
   const digits = String(phone || "").replace(/\D/g, "");
   if (digits.length < 9) {
     throw new Error("رقم غير صالح — أدخله بالصيغة الدولية مثل 9665xxxxxxxx");
@@ -365,25 +353,34 @@ export async function requestWhatsAppPairingCode(phone) {
       await sleep(6500);
     }
   }
-  throw new Error(
-    `تعذر توليد الرمز بعد عدة محاولات (${lastAttemptError?.message || "غير معروف"}) — الأرجح تقييد مؤقت من واتساب بسبب تكرار المحاولات: انتظر 30-60 دقيقة ثم جرّب مرة واحدة نظيفة`,
-  );
+  throw new Error(`تعذر توليد الرمز بعد عدة محاولات (${lastAttemptError?.message || "غير معروف"}) — الأرجح تقييد مؤقت من واتساب بسبب تكرار المحاولات: انتظر 30-60 دقيقة ثم جرّب مرة واحدة نظيفة`);
 }
 
 // الإرسال — نفس عقد Wasender: { ok, error? }.
-export async function sendViaBaileys({ to, text }) {
+async function sendViaBaileys({
+  to,
+  text
+}) {
   if (!sock || !connected) {
     return {
       ok: false,
-      error:
-        "واتساب غير متصل — اربط الرقم من «جدولة واتساب» في تقارير المشتريات",
+      error: "واتساب غير متصل — اربط الرقم من «جدولة واتساب» في تقارير المشتريات"
     };
   }
   try {
-    await sock.sendMessage(`${to}@s.whatsapp.net`, { text: String(text) });
-    return { ok: true };
+    await sock.sendMessage(`${to}@s.whatsapp.net`, {
+      text: String(text)
+    });
+    return {
+      ok: true
+    };
   } catch (error) {
     console.error("whatsapp (baileys) send failed", error);
-    return { ok: false, error: `فشل الإرسال: ${error.message}` };
+    return {
+      ok: false,
+      error: `فشل الإرسال: ${error.message}`
+    };
   }
 }
+
+export { requestWhatsAppPairingCode, resetWhatsAppSession, sendViaBaileys, startWhatsApp, whatsappStatus };

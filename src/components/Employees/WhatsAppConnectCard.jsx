@@ -27,11 +27,15 @@ export function WhatsAppConnectCard() {
 
   const statusQuery = useQuery({
     queryKey: queryKeys.whatsappStatus(),
+    // غير متصل: استطلاع سريع (3 ثوانٍ) لالتقاط اكتمال الاقتران؛
+    // متصل: استطلاع مريح (30 ثانية) حتى يظهر أي انقطاع تلقائياً
+    // بدل بقاء «متصل» قديمة على الشاشة حتى التحديث اليدوي.
     refetchInterval: (query) =>
-      query.state.data?.provider === "baileys" &&
-      !query.state.data?.connected
-        ? 5000
-        : false,
+      query.state.data?.provider !== "baileys"
+        ? false
+        : query.state.data?.connected
+          ? 30000
+          : 3000,
     queryFn: async () => {
       const response = await authedFetch("/api/whatsapp/status");
       const data = await response.json().catch(() => ({}));
