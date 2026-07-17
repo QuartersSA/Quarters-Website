@@ -1,11 +1,11 @@
 import sql from './sql-CSDV1lSC.js';
 import { g as getSearchParams, r as requireWorkspaceEmployee } from './_utils-B08qkxFa.js';
-import { g as getSpaceName, c as getEmployeeNames, f as formatTaskLine, a as formatDateOnly, b as buildTaskLinkLine, n as notifyAssigneesOnTaskWhatsApp } from './_notify-DSWa0TmI.js';
+import { g as getSpaceName, c as getEmployeeNames, f as formatTaskLine, a as formatDateOnly, b as buildTaskLinkLine, n as notifyAssigneesOnTaskWhatsApp } from './_notify-5kNk49my.js';
 import '@neondatabase/serverless';
 import './sessionToken-DDNn6nuk.js';
 import 'crypto';
 import './employeeDisplayName-CwZGtUC2.js';
-import './wasender-yto7m5av.js';
+import './wasender-UTCCNjQb.js';
 import './dateUtils-DCPDkvv9.js';
 
 const SYSTEM_CLOSED_TAG = "__closed_not_completed__";

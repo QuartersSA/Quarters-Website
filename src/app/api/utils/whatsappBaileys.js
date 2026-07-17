@@ -28,6 +28,40 @@ let starting = null;
 let stopping = false;
 let lastError = null;
 
+// مخزن الرسائل المرسلة — يخدم آلية «إعادة طلب الرسالة» في واتساب:
+// جوال المستلم الذي يعجز عن فك التشفير (جلسة جديدة/متجددة) يطلب
+// النسخة الأصلية عبر getMessage؛ بلا مخزن كانت أول رسالة لكل مستلم
+// جديد تضيع بصمت رغم قبول الخادم لها.
+const sentMessages = new Map();
+function rememberSentMessage(id, message) {
+  if (!id || !message) return;
+  sentMessages.set(id, message);
+  // سقف بسيط يمنع تضخم الذاكرة — الأقدم يُحذف أولاً.
+  if (sentMessages.size > 500) {
+    const oldest = sentMessages.keys().next().value;
+    sentMessages.delete(oldest);
+  }
+}
+
+// عدّاد محاولات إعادة الإرسال — واجهة NodeCache المصغرة التي
+// تتوقعها المكتبة.
+const retryCounterCache = {
+  data: new Map(),
+  get(key) {
+    return this.data.get(key);
+  },
+  set(key, value) {
+    this.data.set(key, value);
+    return true;
+  },
+  del(key) {
+    this.data.delete(key);
+  },
+  flushAll() {
+    this.data.clear();
+  },
+};
+
 async function ensureAuthTable() {
   await sql`
     CREATE TABLE IF NOT EXISTS whatsapp_auth_state (
@@ -125,6 +159,9 @@ async function startSocket() {
     printQRInTerminal: false,
     syncFullHistory: false,
     markOnlineOnConnect: false,
+    msgRetryCounterCache: retryCounterCache,
+    // إعادة تزويد الرسالة عند طلب المستلم — جوهر موثوقية التسليم.
+    getMessage: async (key) => sentMessages.get(key?.id) || undefined,
   });
 
   sock.ev.on("creds.update", saveCreds);
@@ -399,7 +436,11 @@ export async function sendViaBaileys({ to, text }) {
       // الرسالة بسببها.
       console.error("whatsapp (baileys) jid lookup failed", lookupError);
     }
-    await sock.sendMessage(jid, { text: String(text) });
+    const sent = await sock.sendMessage(jid, { text: String(text) });
+    // احفظ النسخة الأصلية لخدمة إعادة الطلب من جوال المستلم.
+    if (sent?.key?.id && sent?.message) {
+      rememberSentMessage(sent.key.id, sent.message);
+    }
     return { ok: true, jid };
   } catch (error) {
     console.error("whatsapp (baileys) send failed", error);
