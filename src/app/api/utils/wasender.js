@@ -79,7 +79,7 @@ export function normalizeWasenderPhone(raw) {
 
 // سجل تسليم: كل محاولة إرسال تُدوَّن بنتيجتها (نجاح/فشل/سبب) —
 // أداة تشخيص حاسمة لحالات «الرسالة ما وصلت» بدل التخمين.
-async function logWaSend(to, ok, error, queued, jid = null) {
+async function logWaSend(to, ok, error, queued, jid = null, messageId = null) {
   try {
     const sql = (await import("@/app/api/utils/sql")).default;
     await sql`
@@ -96,8 +96,11 @@ async function logWaSend(to, ok, error, queued, jid = null) {
       ALTER TABLE wa_send_log ADD COLUMN IF NOT EXISTS jid TEXT
     `;
     await sql`
-      INSERT INTO wa_send_log (phone, ok, error, queued, jid)
-      VALUES (${to}, ${!!ok}, ${error || null}, ${!!queued}, ${jid})
+      ALTER TABLE wa_send_log ADD COLUMN IF NOT EXISTS message_id TEXT
+    `;
+    await sql`
+      INSERT INTO wa_send_log (phone, ok, error, queued, jid, message_id)
+      VALUES (${to}, ${!!ok}, ${error || null}, ${!!queued}, ${jid}, ${messageId})
     `;
   } catch {
     // التشخيص لا يعطل الإرسال أبداً
@@ -222,7 +225,16 @@ export async function sendWhatsAppViaWasender({ to, text }) {
         logWaSend(normalizedTo, false, result.error, true, result.jid || null);
         return { ...result, queued: true };
       }
-      logWaSend(normalizedTo, result.ok, result.error, false, result.jid || null);
+      // message_id يُخزن ليُصحَّح السجل بأثر رجعي إن رفض الخادم
+      // الرسالة لاحقاً (مستمع messages.update في whatsappBaileys).
+      logWaSend(
+        normalizedTo,
+        result.ok,
+        result.error,
+        false,
+        result.jid || null,
+        result.messageId || null,
+      );
       return result;
     });
   }

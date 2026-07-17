@@ -193,6 +193,23 @@ export function WhatsAppConnectCard() {
         )}
       </div>
 
+      {/* تقييد واتساب على الحساب: قفل «المحادثات الجديدة» (رمز 463) —
+          الخادم يقبل الرسالة ثم يسقطها لكل مستلم لم يراسل الرقم من
+          قبل. الحل: كل مستلم جديد يرسل رسالة واحدة لرقم النظام. */}
+      {status.connected &&
+      (status.reachoutTimelock?.isActive ||
+        /capped|restricted|locked/i.test(
+          String(status.newChatCap?.capping_status || ""),
+        )) ? (
+        <div className="mt-3 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/25 text-[11px] leading-relaxed text-amber-800 dark:text-amber-200">
+          <span className="font-bold">تنبيه — الرقم مقيّد من فتح محادثات جديدة: </span>
+          واتساب يقبل الرسائل ثم لا يسلّمها لأي رقم لم يراسل هذا الحساب
+          من قبل (حماية الأرقام الحديثة). العلاج: اطلب من كل موظف جديد
+          إرسال رسالة واحدة (مثل «مرحبا») إلى رقم النظام — بعدها تصله
+          الإشعارات دائماً. تكرار المحاولات قبل ذلك يطيل مدة التقييد.
+        </div>
+      ) : null}
+
       {/* اختبار الإرسال — متاح دائماً؛ عند عدم الاتصال يرجع الخطأ
           الفعلي بدل النجاح الصامت. */}
       {(

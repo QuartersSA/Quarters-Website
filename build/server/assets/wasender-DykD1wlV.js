@@ -72,7 +72,7 @@ function normalizeWasenderPhone(raw) {
 
 // سجل تسليم: كل محاولة إرسال تُدوَّن بنتيجتها (نجاح/فشل/سبب) —
 // أداة تشخيص حاسمة لحالات «الرسالة ما وصلت» بدل التخمين.
-async function logWaSend(to, ok, error, queued, jid = null) {
+async function logWaSend(to, ok, error, queued, jid = null, messageId = null) {
   try {
     const sql = (await import('./sql-CSDV1lSC.js')).default;
     await sql`
@@ -89,8 +89,11 @@ async function logWaSend(to, ok, error, queued, jid = null) {
       ALTER TABLE wa_send_log ADD COLUMN IF NOT EXISTS jid TEXT
     `;
     await sql`
-      INSERT INTO wa_send_log (phone, ok, error, queued, jid)
-      VALUES (${to}, ${!!ok}, ${error || null}, ${!!queued}, ${jid})
+      ALTER TABLE wa_send_log ADD COLUMN IF NOT EXISTS message_id TEXT
+    `;
+    await sql`
+      INSERT INTO wa_send_log (phone, ok, error, queued, jid, message_id)
+      VALUES (${to}, ${!!ok}, ${error || null}, ${!!queued}, ${jid}, ${messageId})
     `;
   } catch {
     // التشخيص لا يعطل الإرسال أبداً
@@ -206,7 +209,7 @@ async function sendWhatsAppViaWasender({
     return paceSend(async () => {
       const {
         sendViaBaileys
-      } = await import('./whatsappBaileys-BfZhPZtN.js');
+      } = await import('./whatsappBaileys-D5_9aYSY.js');
       const result = await sendViaBaileys({
         to: normalizedTo,
         text: payload.text
@@ -221,7 +224,9 @@ async function sendWhatsAppViaWasender({
           queued: true
         };
       }
-      logWaSend(normalizedTo, result.ok, result.error, false, result.jid || null);
+      // message_id يُخزن ليُصحَّح السجل بأثر رجعي إن رفض الخادم
+      // الرسالة لاحقاً (مستمع messages.update في whatsappBaileys).
+      logWaSend(normalizedTo, result.ok, result.error, false, result.jid || null, result.messageId || null);
       return result;
     });
   }
