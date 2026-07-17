@@ -167,6 +167,23 @@ async function startSocket() {
     getMessage: async key => sentMessages.get(key?.id) || undefined
   });
   sock.ev.on("creds.update", saveCreds);
+  // حكم الخادم الحقيقي على التسليم يصل غير متزامن: نجاح sendMessage
+  // يعني فقط «كُتب الإطار للمقبس»، أما الرفض فيصل لاحقاً كـ
+  // <ack error=...> تحوله المكتبة إلى messages.update بحالة ERROR (=0).
+  // أهم رمز: 463 — قفل «فتح محادثات جديدة» على الأرقام الحديثة:
+  // الخادم يقبل الرسالة ثم يسقطها لأي مستلم لا يملك معه المرسل
+  // «رمز ثقة» (tctoken) — والرمز لا يصدر إلا حين يراسل المستلم
+  // الرقم أولاً. المحادثات القائمة لا تتأثر (لهذا كانت تصل رسائل
+  // الخاصم فقط). بدون هذا المستمع يبقى السجل يكذب بـ ok=true.
+  sock.ev.on("messages.update", updates => {
+    for (const u of updates || []) {
+      if (u?.update?.status === 0 /* WAMessageStatus.ERROR */) {
+        const code = u.update.messageStubParameters?.[0] || "unknown";
+        console.error(`whatsapp (baileys) server rejected msg id=${u.key?.id} to=${u.key?.remoteJid} code=${code}` + (String(code) === "463" ? " — reach-out timelock: new chats blocked; recipient must message us first" : ""));
+        markSendRejected(u.key?.id, code).catch(() => {});
+      }
+    }
+  });
   sock.ev.on("connection.update", update => {
     const {
       connection,
@@ -218,6 +235,21 @@ async function startSocket() {
       }
     }
   });
+}
+
+// تصحيح سجل الإرسال بأثر رجعي عند وصول رفض الخادم — يُطابق برقم
+// الرسالة الذي خزنه logWaSend لحظة الإرسال.
+async function markSendRejected(messageId, code) {
+  if (!messageId) return;
+  await sql`
+    ALTER TABLE wa_send_log ADD COLUMN IF NOT EXISTS message_id TEXT
+  `;
+  await sql`
+    UPDATE wa_send_log
+    SET ok = false,
+        error = ${`server nack ${code}${String(code) === "463" ? " — المستلم لم يراسل الرقم من قبل (قيد المحادثات الجديدة)" : ""}`}
+    WHERE message_id = ${messageId}
+  `;
 }
 
 // الرقم المقترن يبقى محفوظاً في القاعدة — يظهر في البطاقة دائماً
@@ -305,6 +337,15 @@ async function whatsappStatus() {
   // الرقم الثابت: من الاتصال الحي إن وُجد، وإلا آخر رقم مقترن محفوظ.
   const livePhone = connected && sock?.user?.id ? sock.user.id.split(":")[0] : null;
   const pairedPhone = livePhone || (await readPairedPhone());
+  // تشخيص قيود واتساب على الحساب: قفل «فتح محادثات جديدة» وسقف
+  // رسائل المحادثات الجديدة — واجهتان رسميتان في البروتوكول تكشفان
+  // فوراً حالة «الخادم يقبل ولا يسلّم» (رمز 463) بدل التخمين.
+  let reachoutTimelock = null;
+  let newChatCap = null;
+  if (connected && sock) {
+    reachoutTimelock = await sock.fetchAccountReachoutTimelock().catch(() => null);
+    newChatCap = await sock.fetchNewChatMessageCap().catch(() => null);
+  }
   return {
     provider,
     connected,
@@ -314,7 +355,9 @@ async function whatsappStatus() {
     lastError,
     libOk,
     libError,
-    nodeVersion: process.version
+    nodeVersion: process.version,
+    reachoutTimelock,
+    newChatCap
   };
 }
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -393,13 +436,10 @@ async function requestWhatsAppPairingCode(phone) {
   throw new Error(`تعذر توليد الرمز بعد عدة محاولات (${lastAttemptError?.message || "غير معروف"}) — الأرجح تقييد مؤقت من واتساب بسبب تكرار المحاولات: انتظر 30-60 دقيقة ثم جرّب مرة واحدة نظيفة`);
 }
 
-// الإرسال — نفس عقد Wasender: { ok, error?, jid? }.
+// الإرسال — نفس عقد Wasender: { ok, error?, jid?, messageId? }.
 //
-// العنوان يُستبين عبر onWhatsApp قبل الإرسال: واتساب انتقل لنظام
-// معرفات LID، والإرسال بصيغة الرقم القديمة <رقم>@s.whatsapp.net
-// «يُقبل» من الخادم ثم لا يصل لبعض الحسابات المُرحّلة — بينما
-// العنوان المُرجع من onWhatsApp يوصَّل. (السبب الموثق لحالة: تأكيد
-// الخاصم يصل ورسائل المخصومين تتبخر رغم ok من sendMessage.)
+// ok=true هنا يعني «قبِل الخادم الإطار» فقط لا التسليم — الرفض
+// الحقيقي يصل لاحقاً عبر مستمع messages.update أعلاه ويُصحح السجل.
 async function sendViaBaileys({
   to,
   text
@@ -413,6 +453,7 @@ async function sendViaBaileys({
   try {
     let jid = `${to}@s.whatsapp.net`;
     try {
+      // onWhatsApp = فحص وجود فقط (في v7 لا يعيد عناوين LID أبداً).
       const lookup = await sock.onWhatsApp(to);
       const found = Array.isArray(lookup) ? lookup[0] : null;
       if (found && found.exists === false) {
@@ -422,11 +463,19 @@ async function sendViaBaileys({
           jid
         };
       }
-      if (found?.jid) jid = found.jid;
     } catch (lookupError) {
       // استبانة العنوان فشلت — أرسل بالصيغة الافتراضية ولا تُسقط
       // الرسالة بسببها.
       console.error("whatsapp (baileys) jid lookup failed", lookupError);
+    }
+    try {
+      // خاطِب الحسابات المُرحّلة بعنوان LID نفسه الذي تُخزَّن به جلسات
+      // تشفيرها — يوحّد عنونة السلك مع عنونة التشفير كما تفعل تطبيقات
+      // واتساب الرسمية.
+      const lid = await sock.signalRepository.lidMapping.getLIDForPN(jid);
+      if (lid) jid = String(lid);
+    } catch {
+      // لا وجود للتحويل؟ الصيغة الرقمية تبقى صالحة.
     }
     const sent = await sock.sendMessage(jid, {
       text: String(text)
@@ -437,7 +486,8 @@ async function sendViaBaileys({
     }
     return {
       ok: true,
-      jid
+      jid,
+      messageId: sent?.key?.id || null
     };
   } catch (error) {
     console.error("whatsapp (baileys) send failed", error);
