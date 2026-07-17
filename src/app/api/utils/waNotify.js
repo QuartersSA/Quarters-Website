@@ -21,10 +21,19 @@ export async function ensureWaPrefsColumn() {
   `;
 }
 
-export async function notifyByPref(prefKey, text, { onlyEmployeeId = null } = {}) {
+export async function notifyByPref(
+  prefKey,
+  text,
+  { onlyEmployeeId = null, excludeEmployeeIds = [] } = {},
+) {
   try {
     await ensureWaPrefsColumn();
     const prefJson = JSON.stringify([prefKey]);
+    // استثناء من استلم رسالة مباشرة عن نفس الحدث (الخاصم/المخصوم)
+    // حتى لا تصله نسختان.
+    const excluded = (excludeEmployeeIds || [])
+      .map(Number)
+      .filter((n) => Number.isInteger(n) && n > 0);
     const rows = onlyEmployeeId
       ? await sql`
           SELECT id, phone FROM employees
@@ -36,6 +45,7 @@ export async function notifyByPref(prefKey, text, { onlyEmployeeId = null } = {}
           SELECT id, phone FROM employees
           WHERE COALESCE(wa_prefs, '[]'::jsonb) @> ${prefJson}::jsonb
             AND phone IS NOT NULL AND TRIM(phone) <> ''
+            AND NOT (id = ANY(${excluded.length ? excluded : [0]}))
           ORDER BY id ASC
           LIMIT 30
         `;

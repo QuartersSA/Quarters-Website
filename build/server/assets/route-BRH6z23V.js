@@ -1,10 +1,10 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { n as notifyByPref } from './waNotify-B7OcatGW.js';
+import { n as notifyByPref } from './waNotify-BIKyEfXk.js';
+import { s as sendWhatsAppViaWasender } from './wasender-CtjKFWCW.js';
 import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-Ba9mYj5Z.js';
 import '@neondatabase/serverless';
 import 'crypto';
-import './wasender-CtjKFWCW.js';
 
 function safeNumber(value) {
   const n = Number(value);
@@ -313,15 +313,54 @@ async function POST(request) {
     const newIds = insertResults.map(r => r?.[0]?.id).filter(v => safeInt(v));
     const rows = newIds.length ? await buildDeductionRowSelectSql(`WHERE d.id = ANY($1::int[]) ORDER BY d.violation_date DESC, d.created_at DESC, d.id DESC`, [newIds]) : [];
 
-    // إشعارات الواتساب للخصومات صارت بالاشتراك فقط: مشتركو تفضيل
-    // «خصومات الموظفين» (قسم الموارد البشرية بنافذة الموظف) هم وحدهم
-    // من يستلم — لا رسالة تلقائية للموظف المخصوم ولا لمدراء HR
-    // إلا إذا فعّلوا الخاصية بأنفسهم.
+    // إشعارات واتساب الخصم بثلاث قنوات:
+    //   1. الخاصم (مسجّل الخصم): رسالة تأكيد بما سجّله.
+    //   2. المخصوم (كل موظف شمله الخصم): «تم تسجيل خصم عليك».
+    //   3. مشتركو تفضيل «خصومات الموظفين»: ملخص إشرافي — مع استثناء
+    //      الخاصم والمخصومين حتى لا تصلهم نسختان.
+    // كلها «أطلق وانسَ» — لا تعطل حفظ الخصم.
     try {
-      const lines = ["➖ خصم جديد", ...rows.slice(0, 15).map(row => `• ${row.employee_name || `#${row.employee_id}`}: ${row.amount ?? "-"} ريال`), rows.length > 15 ? `… والمزيد (${rows.length - 15})` : null, rows[0]?.reason ? `السبب: ${rows[0].reason}` : null, rows[0]?.violation_date ? `التاريخ: ${rows[0].violation_date}` : null, auth.user?.name ? `سجله: ${auth.user.name}` : null].filter(Boolean);
-      notifyByPref("hr_deduction", lines.join("\n"));
+      const dateValue = rows[0]?.violation_date ? String(rows[0].violation_date).slice(0, 10) : null;
+      const reasonValue = rows[0]?.reason || null;
+      const actorId = safeInt(auth.user?.id);
+      const actorName = auth.user?.name ? String(auth.user.name) : null;
+      const summaryLines = ["➖ خصم جديد", ...rows.slice(0, 15).map(row => `• ${row.employee_name || `#${row.employee_id}`}: ${row.amount ?? "-"} ريال`), rows.length > 15 ? `… والمزيد (${rows.length - 15})` : null, reasonValue ? `السبب: ${reasonValue}` : null, dateValue ? `التاريخ: ${dateValue}` : null, actorName ? `سجله: ${actorName}` : null].filter(Boolean);
+
+      // أرقام الجوال للخاصم والمخصومين دفعة واحدة.
+      const directIds = [...new Set([actorId, ...rows.map(row => safeInt(row.employee_id))].filter(Boolean))];
+      const phoneRows = directIds.length ? await sql(`SELECT id, phone FROM employees
+             WHERE id = ANY($1::int[])
+               AND phone IS NOT NULL AND TRIM(phone) <> ''`, [directIds]) : [];
+      const phoneById = new Map(phoneRows.map(row => [Number(row.id), row.phone]));
+
+      // 1. الخاصم — تأكيد.
+      const actorPhone = actorId ? phoneById.get(actorId) : null;
+      if (actorPhone) {
+        sendWhatsAppViaWasender({
+          to: actorPhone,
+          text: ["✅ تم تسجيل الخصم بنجاح", ...summaryLines.slice(1)].join("\n")
+        }).catch(() => {});
+      }
+
+      // 2. المخصومون — رسالة شخصية لكل موظف شمله الخصم.
+      for (const row of rows) {
+        const empId = safeInt(row.employee_id);
+        if (!empId || empId === actorId) continue;
+        const phone = phoneById.get(empId);
+        if (!phone) continue;
+        const personal = ["➖ تم تسجيل خصم عليك", `المبلغ: ${row.amount ?? "-"} ريال`, reasonValue ? `السبب: ${reasonValue}` : null, dateValue ? `التاريخ: ${dateValue}` : null, actorName ? `سجله: ${actorName}` : null].filter(Boolean);
+        sendWhatsAppViaWasender({
+          to: phone,
+          text: personal.join("\n")
+        }).catch(() => {});
+      }
+
+      // 3. المشتركون — الملخص الإشرافي (باستثناء من استلم مباشرة).
+      notifyByPref("hr_deduction", summaryLines.join("\n"), {
+        excludeEmployeeIds: directIds
+      });
     } catch (e) {
-      console.error("Deduction pref notify failed", e);
+      console.error("Deduction notify failed", e);
     }
     if (uniqueEmployeeIds.length > 1) {
       return Response.json({
