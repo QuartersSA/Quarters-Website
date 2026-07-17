@@ -1,6 +1,7 @@
 import { s as sql } from './sql-BfhTxwII.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { s as sendWhatsAppViaWasender } from './wasender-CtjKFWCW.js';
+import { n as notifyByPref } from './waNotify-B7OcatGW.js';
 import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-Ba9mYj5Z.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -433,6 +434,15 @@ async function POST(request) {
       });
     } catch (e) {
       console.error("Deduction notify failed", e);
+    }
+
+    // مشتركو تفضيل «خصومات الموظفين» (قسم الموارد البشرية في إشعارات
+    // واتساب الموظف): ملخص أي خصم يُسجل على أي موظف.
+    try {
+      const lines = ["➖ خصم جديد", ...rows.slice(0, 15).map(row => `• ${row.employee_name || `#${row.employee_id}`}: ${row.amount ?? "-"} ريال`), rows.length > 15 ? `… والمزيد (${rows.length - 15})` : null, rows[0]?.reason ? `السبب: ${rows[0].reason}` : null, rows[0]?.violation_date ? `التاريخ: ${rows[0].violation_date}` : null, auth.user?.name ? `سجله: ${auth.user.name}` : null].filter(Boolean);
+      notifyByPref("hr_deduction", lines.join("\n"));
+    } catch (e) {
+      console.error("Deduction pref notify failed", e);
     }
     if (uniqueEmployeeIds.length > 1) {
       return Response.json({

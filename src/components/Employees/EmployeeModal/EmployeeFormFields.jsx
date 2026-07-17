@@ -48,6 +48,18 @@ const WA_PREF_GROUPS = [
     ],
   },
   {
+    key: "hr",
+    label: "الموارد البشرية",
+    Icon: Users,
+    options: [
+      {
+        key: "hr_deduction",
+        label: "خصومات الموظفين",
+        hint: "عند تسجيل أي خصم على أي موظف — الاسم والمبلغ والسبب",
+      },
+    ],
+  },
+  {
     key: "inventory",
     label: "الجرد",
     Icon: ClipboardList,
