@@ -1,5 +1,5 @@
 import sql from './sql-CSDV1lSC.js';
-import { s as sendWhatsAppViaWasender } from './wasender-DEtMgWCV.js';
+import { s as sendWhatsAppViaWasender } from './wasender-D4_drgkO.js';
 
 // إشعارات واتساب حسب تفضيلات الموظف — عمود wa_prefs (JSONB) على
 // جدول employees يحمل مفاتيح الأحداث التي اشترك فيها الموظف من
