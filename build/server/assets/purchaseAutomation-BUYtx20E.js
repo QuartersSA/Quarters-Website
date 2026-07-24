@@ -194,7 +194,7 @@ async function buildPurchasesSummaryText({
       AND paid_amount < total_amount
   `;
   const topSuppliers = await sql`
-    SELECT COALESCE(NULLIF(inv.supplier_name, ''), c.name, 'بدون مورد') AS name,
+    SELECT COALESCE(NULLIF(c.name, ''), NULLIF(inv.supplier_name, ''), 'بدون مورد') AS name,
            SUM(inv.total_amount) AS total
     FROM accounting_purchase_invoices inv
     LEFT JOIN accounting_contacts c ON c.id = inv.contact_id
@@ -305,7 +305,7 @@ async function sendOverdueDigest() {
   const today = todayRiyadh();
   const rows = await sql`
     SELECT inv.invoice_number,
-           COALESCE(NULLIF(inv.supplier_name, ''), c.name, 'بدون مورد') AS supplier,
+           COALESCE(NULLIF(c.name, ''), NULLIF(inv.supplier_name, ''), 'بدون مورد') AS supplier,
            TO_CHAR(inv.due_date, 'YYYY-MM-DD') AS due_date,
            GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance
     FROM accounting_purchase_invoices inv

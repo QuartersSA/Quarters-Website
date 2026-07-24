@@ -76,6 +76,11 @@ export function useUpdateAccountingContact() {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.accountingContacts(),
       });
+      // اسم المورد يظهر داخل صفوف فواتير المشتريات (اسم حي من سجل
+      // الموردين) — أبطل كاشها حتى ينعكس التعديل فوراً بلا تحديث يدوي.
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
+      });
       toast.success("تم حفظ التعديلات");
     },
     onError: (error) => {
@@ -102,6 +107,9 @@ export function useDeleteAccountingContact() {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.accountingContacts(),
+      });
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
       });
       toast.success(data?.hard ? "تم الحذف نهائياً" : "تم إيقاف الجهة");
     },

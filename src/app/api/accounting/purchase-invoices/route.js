@@ -569,7 +569,7 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.id,
         inv.invoice_number,
         inv.contact_id,
-        COALESCE(NULLIF(inv.supplier_name, ''), c.name) AS supplier_name,
+        COALESCE(NULLIF(c.name, ''), NULLIF(inv.supplier_name, '')) AS supplier_name,
         c.name AS contact_name,
         inv.expense_account_id,
         acc.code AS expense_account_code,

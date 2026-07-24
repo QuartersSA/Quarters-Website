@@ -108,7 +108,7 @@ async function POST(request) {
       SELECT inv.id, inv.invoice_number, inv.currency,
              inv.total_amount, inv.paid_amount,
              inv.created_by_employee_id,
-             COALESCE(NULLIF(inv.supplier_name, ''), c.name) AS supplier
+             COALESCE(NULLIF(c.name, ''), NULLIF(inv.supplier_name, '')) AS supplier
       FROM accounting_purchase_invoices inv
       LEFT JOIN accounting_contacts c ON c.id = inv.contact_id
       WHERE inv.id = ${invoiceId} AND inv.is_active = TRUE

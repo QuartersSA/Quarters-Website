@@ -2,7 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-BiYqjwch.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as runPurchaseAutomation } from './purchaseAutomation-DCZZGYka.js';
+import { r as runPurchaseAutomation } from './purchaseAutomation-BUYtx20E.js';
 import { n as notifyByPref } from './waNotify-CtLfIpXX.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -510,7 +510,7 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.id,
         inv.invoice_number,
         inv.contact_id,
-        COALESCE(NULLIF(inv.supplier_name, ''), c.name) AS supplier_name,
+        COALESCE(NULLIF(c.name, ''), NULLIF(inv.supplier_name, '')) AS supplier_name,
         c.name AS contact_name,
         inv.expense_account_id,
         acc.code AS expense_account_code,

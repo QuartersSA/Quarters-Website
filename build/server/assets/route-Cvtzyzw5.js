@@ -51,7 +51,7 @@ async function POST(request) {
     const today = todayRiyadh();
     const rows = await sql`
       SELECT inv.invoice_number,
-             COALESCE(NULLIF(inv.supplier_name, ''), c.name, 'بدون مورد') AS supplier,
+             COALESCE(NULLIF(c.name, ''), NULLIF(inv.supplier_name, ''), 'بدون مورد') AS supplier,
              TO_CHAR(inv.due_date, 'YYYY-MM-DD') AS due_date,
              GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance,
              (inv.due_date < ${today}::date) AS is_overdue
