@@ -233,6 +233,7 @@ export default function BulkInvoiceUploadPanel({ employeeId, isAdmin }) {
         files.map((file) => ({ name: file.name, status: "uploading" })),
       );
       const uploaded = [];
+      const failures = [];
       for (let index = 0; index < files.length; index += 1) {
         const original = files[index];
         try {
@@ -255,6 +256,8 @@ export default function BulkInvoiceUploadPanel({ employeeId, isAdmin }) {
             ),
           );
         } catch (error) {
+          console.error("bulk upload file failed", original.name, error);
+          failures.push(error.message || "خطأ غير معروف");
           setUploadingFiles((previous) =>
             previous.map((entry, entryIndex) =>
               entryIndex === index
@@ -265,8 +268,14 @@ export default function BulkInvoiceUploadPanel({ employeeId, isAdmin }) {
         }
       }
       if (!uploaded.length) {
-        toast.error("لم يُرفع أي ملف بنجاح");
-        setUploadingFiles([]);
+        // أبق قائمة الملفات الفاشلة ظاهرة بأسبابها — والسبب الأول في
+        // التنبيه. 401 هنا يعني جلسة منتهية: أعد تسجيل الدخول.
+        const firstError = failures[0] || "";
+        toast.error(
+          /unauthorized|401/i.test(firstError)
+            ? "انتهت صلاحية الجلسة — سجّل الخروج ثم الدخول من جديد وأعد المحاولة"
+            : `لم يُرفع أي ملف بنجاح${firstError ? ` — ${firstError}` : ""}`,
+        );
         return;
       }
       try {
