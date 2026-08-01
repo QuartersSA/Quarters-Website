@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router";
 import {
   BarChart3,
   Building,
+  CloudUpload,
   Contact,
   FileText,
   HandCoins,
@@ -31,6 +32,7 @@ import { useAccountingPurchaseInvoices } from "@/hooks/useAccountingPurchaseInvo
 import PurchasesAccountsTreePanel from "@/components/Accounting/PurchasesAccountsTreePanel";
 import PurchasesBankAccountsPanel from "@/components/Accounting/PurchasesBankAccountsPanel";
 import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPanel";
+import BulkInvoiceUploadPanel from "@/components/Accounting/BulkInvoiceUploadPanel";
 import PurchasesReportsPanel from "@/components/Accounting/PurchasesReportsPanel";
 import {
   useAccountingContacts,
@@ -94,6 +96,14 @@ const TABS = [
     shortLabel: "فواتير",
     Icon: FileText,
     description: "إدخال ومتابعة فواتير المشتريات وتسجيل الدفعات.",
+  },
+  {
+    key: "bulk",
+    label: "الرفع الجماعي",
+    shortLabel: "جماعي",
+    Icon: CloudUpload,
+    description:
+      "رفع حتى 50 فاتورة دفعة واحدة مع تحليل ذكي لكل فاتورة ومراجعة واعتماد وإرسال مستقل.",
   },
   {
     key: "vendors",
@@ -520,6 +530,8 @@ export default function PurchasesPage() {
             initialStatus={searchParams.get("status") || ""}
             onIntentConsumed={clearIntent}
           />
+        ) : activeTabKey === "bulk" ? (
+          <BulkInvoiceUploadPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : activeTabKey === "vendors" && activeVendorSub.key === "contacts" ? (
           <ContactsPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : activeTabKey === "vendors" ? (

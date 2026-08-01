@@ -747,11 +747,24 @@ export default function PurchasesInvoicesPanel({
     if (status) {
       list = list.filter((invoice) => invoice.computed_status === status);
     }
+    // فلتر الحساب يطابق أي بند من بنود الفاتورة، لا حساب الرأس فقط
+    // (حساب الرأس = حساب أول بند؛ فاتورة فيها «كوكيز» كبند ثانٍ يجب
+    // أن تظهر عند التصفية بحساب الكوكيز).
+    const invoiceAccountIds = (invoice) => {
+      const ids = new Set();
+      if (invoice.expense_account_id) {
+        ids.add(String(invoice.expense_account_id));
+      }
+      for (const item of Array.isArray(invoice.items) ? invoice.items : []) {
+        if (item.account_id) ids.add(String(item.account_id));
+      }
+      return ids;
+    };
     if (accountFilter === "none") {
-      list = list.filter((invoice) => !invoice.expense_account_id);
+      list = list.filter((invoice) => invoiceAccountIds(invoice).size === 0);
     } else if (accountFilter) {
-      list = list.filter(
-        (invoice) => String(invoice.expense_account_id || "") === accountFilter,
+      list = list.filter((invoice) =>
+        invoiceAccountIds(invoice).has(accountFilter),
       );
     }
     if (branchFilter === "none") {
