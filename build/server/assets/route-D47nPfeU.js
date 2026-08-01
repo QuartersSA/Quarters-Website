@@ -1,51 +1,54 @@
-import sql from "@/app/api/utils/sql";
-import { requireAuth } from "@/app/api/utils/sessionToken";
-import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
-import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
-import { runPurchaseAutomation } from "@/app/api/utils/purchaseAutomation";
-import { notifyByPref } from "@/app/api/utils/waNotify";
+import sql from './sql-CSDV1lSC.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { e as ensureAccountsSchema } from './accountsTree-BiYqjwch.js';
+import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
+import { r as runPurchaseAutomation } from './purchaseAutomation-BUYtx20E.js';
+import { n as notifyByPref } from './waNotify-CtLfIpXX.js';
+import '@neondatabase/serverless';
+import 'crypto';
+import './wasender-DykD1wlV.js';
 
 // Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
-  anyOf: [
-    { role: "Admin", permission: "can_manage_accounting" },
-    { role: "Admin", permission: "can_manage_purchases" },
-  ],
+  anyOf: [{
+    role: "Admin",
+    permission: "can_manage_accounting"
+  }, {
+    role: "Admin",
+    permission: "can_manage_purchases"
+  }]
 };
 
 // Creating an invoice is also allowed for the field entry flow
 // (رفع فاتورة مشتريات): employees with the dedicated permission can
 // ADD invoices only — reading the ledger and editing stay admin-only.
 const REQUIRE_PURCHASES_CREATE = {
-  anyOf: [
-    { role: "Admin", permission: "can_manage_accounting" },
-    { role: "Admin", permission: "can_manage_purchases" },
-    { permission: "can_add_purchase_invoices" },
-  ],
+  anyOf: [{
+    role: "Admin",
+    permission: "can_manage_accounting"
+  }, {
+    role: "Admin",
+    permission: "can_manage_purchases"
+  }, {
+    permission: "can_add_purchase_invoices"
+  }]
 };
 
 // Simplified status model: everything is computed from amounts/due
 // date; unpaid invoices display بانتظار الاعتماد. "new" survives only
 // as a legacy stored value and maps to pending_payment on display.
 const WORKFLOW_STATUSES = new Set(["new", "pending_payment"]);
-const DISPLAY_STATUSES = new Set([
-  "pending_payment",
-  "partial_paid",
-  "paid",
-  "overdue",
-]);
-
+const DISPLAY_STATUSES = new Set(["pending_payment", "partial_paid", "paid", "overdue"]);
 function todayRiyadh() {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Riyadh",
     year: "numeric",
     month: "2-digit",
-    day: "2-digit",
+    day: "2-digit"
   }).formatToParts(new Date());
-  const get = (type) => parts.find((part) => part.type === type)?.value || "";
+  const get = type => parts.find(part => part.type === type)?.value || "";
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
-
 async function ensureSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_contacts (
@@ -75,7 +78,6 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS created_by_employee_id INTEGER,
       ADD COLUMN IF NOT EXISTS created_by_employee_name TEXT
   `;
-
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_purchase_invoices (
       id SERIAL PRIMARY KEY,
@@ -233,73 +235,40 @@ async function ensureSchema() {
       ON accounting_purchase_invoices (due_date)
   `;
 }
-
 function parseMoney(value, fallback = 0) {
   if (value === undefined || value === null || value === "") return fallback;
   const number = Number(value);
   if (!Number.isFinite(number)) return fallback;
   return Math.round(number * 100) / 100;
 }
-
 function parseDate(value) {
   if (!value) return null;
   const text = String(value).trim();
   return /^\d{4}-\d{2}-\d{2}$/.test(text) ? text : null;
 }
-
 function generateInvoiceNumber() {
   const stamp = todayRiyadh().replaceAll("-", "");
   const suffix = Math.random().toString(36).slice(2, 7).toUpperCase();
   return `PINV-${stamp}-${suffix}`;
 }
-
 function parsePayload(body = {}) {
-  const contactId =
-    body.contact_id === undefined || body.contact_id === null || body.contact_id === ""
-      ? null
-      : Number(body.contact_id);
-  const supplierName = body.supplier_name
-    ? String(body.supplier_name).trim()
-    : null;
+  const contactId = body.contact_id === undefined || body.contact_id === null || body.contact_id === "" ? null : Number(body.contact_id);
+  const supplierName = body.supplier_name ? String(body.supplier_name).trim() : null;
   const subtotalAmount = parseMoney(body.subtotal_amount, 0);
   const discountAmount = parseMoney(body.discount_amount, 0);
   const taxAmount = parseMoney(body.tax_amount, 0);
   const totalRaw = parseMoney(body.total_amount, 0);
-  const totalAmount =
-    totalRaw > 0 ? totalRaw : Math.round((subtotalAmount + taxAmount) * 100) / 100;
+  const totalAmount = totalRaw > 0 ? totalRaw : Math.round((subtotalAmount + taxAmount) * 100) / 100;
   // «إرسال إلى الاعتماد» يفرض فاتورة غير مدفوعة مهما أرسل العميل —
   // الصفر هنا يلغي أيضاً بنك السداد والإيصال أدناه.
-  const paidAmount =
-    body.submit_for_approval === true ? 0 : parseMoney(body.paid_amount, 0);
-  const branchIdRaw =
-    body.branch_id === undefined ||
-    body.branch_id === null ||
-    body.branch_id === ""
-      ? null
-      : Number(body.branch_id);
-  const paidBankAccountIdRaw =
-    body.paid_bank_account_id === undefined ||
-    body.paid_bank_account_id === null ||
-    body.paid_bank_account_id === ""
-      ? null
-      : Number(body.paid_bank_account_id);
-  const workflowRaw = body.workflow_status
-    ? String(body.workflow_status).trim()
-    : "new";
-  const expenseAccountId =
-    body.expense_account_id === undefined ||
-    body.expense_account_id === null ||
-    body.expense_account_id === ""
-      ? null
-      : Number(body.expense_account_id);
-
+  const paidAmount = body.submit_for_approval === true ? 0 : parseMoney(body.paid_amount, 0);
+  const branchIdRaw = body.branch_id === undefined || body.branch_id === null || body.branch_id === "" ? null : Number(body.branch_id);
+  const paidBankAccountIdRaw = body.paid_bank_account_id === undefined || body.paid_bank_account_id === null || body.paid_bank_account_id === "" ? null : Number(body.paid_bank_account_id);
+  const workflowRaw = body.workflow_status ? String(body.workflow_status).trim() : "new";
+  const expenseAccountId = body.expense_account_id === undefined || body.expense_account_id === null || body.expense_account_id === "" ? null : Number(body.expense_account_id);
   return {
-    expenseAccountId: Number.isInteger(expenseAccountId)
-      ? expenseAccountId
-      : null,
-    invoiceNumber: body.invoice_number
-      ? String(body.invoice_number).trim()
-      : generateInvoiceNumber(),
+    expenseAccountId: Number.isInteger(expenseAccountId) ? expenseAccountId : null,
+    invoiceNumber: body.invoice_number ? String(body.invoice_number).trim() : generateInvoiceNumber(),
     contactId: Number.isFinite(contactId) ? contactId : null,
     supplierName,
     invoiceDate: parseDate(body.invoice_date) || todayRiyadh(),
@@ -312,25 +281,15 @@ function parsePayload(body = {}) {
     paidAmount,
     // Which bank account the payment left from — only meaningful when
     // something was actually paid.
-    paidBankAccountId:
-      Number.isInteger(paidBankAccountIdRaw) &&
-      paidBankAccountIdRaw > 0 &&
-      paidAmount > 0
-        ? paidBankAccountIdRaw
-        : null,
-    branchId:
-      Number.isInteger(branchIdRaw) && branchIdRaw > 0 ? branchIdRaw : null,
+    paidBankAccountId: Number.isInteger(paidBankAccountIdRaw) && paidBankAccountIdRaw > 0 && paidAmount > 0 ? paidBankAccountIdRaw : null,
+    branchId: Number.isInteger(branchIdRaw) && branchIdRaw > 0 ? branchIdRaw : null,
     workflowStatus: WORKFLOW_STATUSES.has(workflowRaw) ? workflowRaw : "new",
     notes: body.notes ? String(body.notes).trim() : null,
     attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null,
     // Optional proof-of-payment attachment — only meaningful when paid.
-    paymentReceiptUrl:
-      paidAmount > 0 && body.payment_receipt_url
-        ? String(body.payment_receipt_url).trim()
-        : null,
+    paymentReceiptUrl: paidAmount > 0 && body.payment_receipt_url ? String(body.payment_receipt_url).trim() : null
   };
 }
-
 function round2(value) {
   return Math.round(value * 100) / 100;
 }
@@ -347,31 +306,17 @@ function parseItems(body) {
     // Quantity × unit price is the base amount; legacy payloads that
     // send only `amount` become 1 × amount.
     const qtyRaw = Number(raw?.quantity);
-    const quantity =
-      Number.isFinite(qtyRaw) && qtyRaw > 0
-        ? Math.round(qtyRaw * 1000) / 1000
-        : null;
+    const quantity = Number.isFinite(qtyRaw) && qtyRaw > 0 ? Math.round(qtyRaw * 1000) / 1000 : null;
     const priceRaw = Number(raw?.unit_price);
-    const unitPrice =
-      Number.isFinite(priceRaw) && priceRaw > 0
-        ? Math.round(priceRaw * 10000) / 10000
-        : null;
-    const amount =
-      quantity !== null && unitPrice !== null
-        ? round2(quantity * unitPrice)
-        : parseMoney(raw?.amount, 0);
+    const unitPrice = Number.isFinite(priceRaw) && priceRaw > 0 ? Math.round(priceRaw * 10000) / 10000 : null;
+    const amount = quantity !== null && unitPrice !== null ? round2(quantity * unitPrice) : parseMoney(raw?.amount, 0);
     if (amount <= 0) continue;
     const rateRaw = Number(raw?.tax_rate);
-    const taxRate = Number.isFinite(rateRaw)
-      ? Math.min(Math.max(rateRaw, 0), 100)
-      : 15;
+    const taxRate = Number.isFinite(rateRaw) ? Math.min(Math.max(rateRaw, 0), 100) : 15;
     const includesTax = !!raw?.amount_includes_tax;
-    const accountId =
-      raw?.account_id === undefined || raw?.account_id === null || raw?.account_id === ""
-        ? null
-        : Number(raw.account_id);
+    const accountId = raw?.account_id === undefined || raw?.account_id === null || raw?.account_id === "" ? null : Number(raw.account_id);
     const subtotal = includesTax ? amount / (1 + taxRate / 100) : amount;
-    const tax = includesTax ? amount - subtotal : (amount * taxRate) / 100;
+    const tax = includesTax ? amount - subtotal : amount * taxRate / 100;
     items.push({
       position: items.length,
       description: raw?.description ? String(raw.description).trim() : null,
@@ -383,12 +328,11 @@ function parseItems(body) {
       includesTax,
       subtotal: round2(subtotal),
       tax: round2(tax),
-      total: round2(subtotal + tax),
+      total: round2(subtotal + tax)
     });
   }
   return items;
 }
-
 async function replaceInvoiceItems(invoiceId, items) {
   await sql`
     DELETE FROM accounting_purchase_invoice_items
@@ -419,14 +363,9 @@ async function replaceInvoiceItems(invoiceId, items) {
 // the tax shrinks proportionally — line prices stay as printed.
 function applyItemsToPayload(payload, items) {
   if (!items || items.length === 0) return payload;
-  const rawSubtotal = round2(
-    items.reduce((sum, item) => sum + item.subtotal, 0),
-  );
+  const rawSubtotal = round2(items.reduce((sum, item) => sum + item.subtotal, 0));
   const rawTax = round2(items.reduce((sum, item) => sum + item.tax, 0));
-  const discount = Math.min(
-    Math.max(payload.discountAmount || 0, 0),
-    rawSubtotal,
-  );
+  const discount = Math.min(Math.max(payload.discountAmount || 0, 0), rawSubtotal);
   const factor = rawSubtotal > 0 ? (rawSubtotal - discount) / rawSubtotal : 1;
   const subtotal = round2(rawSubtotal - discount);
   const tax = round2(rawTax * factor);
@@ -436,14 +375,11 @@ function applyItemsToPayload(payload, items) {
     subtotalAmount: subtotal,
     taxAmount: tax,
     totalAmount: round2(subtotal + tax),
-    expenseAccountId:
-      items.find((item) => item.accountId)?.accountId ??
-      payload.expenseAccountId,
+    expenseAccountId: items.find(item => item.accountId)?.accountId ?? payload.expenseAccountId
   };
 }
-
 async function attachItems(rows) {
-  const ids = rows.map((row) => row.id);
+  const ids = rows.map(row => row.id);
   if (ids.length === 0) return rows;
   try {
     const items = await sql`
@@ -461,20 +397,23 @@ async function attachItems(rows) {
       if (!byInvoice.has(key)) byInvoice.set(key, []);
       byInvoice.get(key).push(item);
     }
-    return rows.map((row) => ({
+    return rows.map(row => ({
       ...row,
-      items: byInvoice.get(Number(row.id)) || [],
+      items: byInvoice.get(Number(row.id)) || []
     }));
   } catch (error) {
     console.error("attach invoice items failed", error);
-    return rows.map((row) => ({ ...row, items: [] }));
+    return rows.map(row => ({
+      ...row,
+      items: []
+    }));
   }
 }
 
 // سجل الدفعات يُرفق مع كل صف حتى تقرأه المعاينة الجانبية وتقارير
 // البنوك والأساس النقدي دون طلبات إضافية.
 async function attachPayments(rows) {
-  const ids = rows.map((row) => row.id);
+  const ids = rows.map(row => row.id);
   if (ids.length === 0) return rows;
   try {
     const payments = await sql`
@@ -494,19 +433,22 @@ async function attachPayments(rows) {
       if (!byInvoice.has(key)) byInvoice.set(key, []);
       byInvoice.get(key).push(payment);
     }
-    return rows.map((row) => ({
+    return rows.map(row => ({
       ...row,
-      payments: byInvoice.get(Number(row.id)) || [],
+      payments: byInvoice.get(Number(row.id)) || []
     }));
   } catch (error) {
     console.error("attach invoice payments failed", error);
-    return rows.map((row) => ({ ...row, payments: [] }));
+    return rows.map(row => ({
+      ...row,
+      payments: []
+    }));
   }
 }
 
 // المرفقات الإضافية تُرفق مع كل صف لقائمة المرفقات في المعاينة.
 async function attachExtraAttachments(rows) {
-  const ids = rows.map((row) => row.id);
+  const ids = rows.map(row => row.id);
   if (ids.length === 0) return rows;
   try {
     const attachments = await sql`
@@ -523,13 +465,16 @@ async function attachExtraAttachments(rows) {
       if (!byInvoice.has(key)) byInvoice.set(key, []);
       byInvoice.get(key).push(attachment);
     }
-    return rows.map((row) => ({
+    return rows.map(row => ({
       ...row,
-      attachments: byInvoice.get(Number(row.id)) || [],
+      attachments: byInvoice.get(Number(row.id)) || []
     }));
   } catch (error) {
     console.error("attach invoice attachments failed", error);
-    return rows.map((row) => ({ ...row, attachments: [] }));
+    return rows.map(row => ({
+      ...row,
+      attachments: []
+    }));
   }
 }
 
@@ -546,7 +491,6 @@ async function validateExpenseAccount(expenseAccountId) {
   `;
   return account ? null : "حساب المصروف المحدد غير صالح";
 }
-
 function validatePayload(payload) {
   if (!payload.invoiceNumber) return "رقم الفاتورة مطلوب";
   if (!payload.supplierName && !payload.contactId) return "المورد مطلوب";
@@ -558,11 +502,8 @@ function validatePayload(payload) {
   }
   return null;
 }
-
 function selectInvoicesQuery(where, statusFilter) {
-  const statusWhere = statusFilter
-    ? "WHERE computed_status = $" + (where.values.length + 2)
-    : "";
+  const statusWhere = statusFilter ? "WHERE computed_status = $" + (where.values.length + 2) : "";
   return `
     WITH invoice_rows AS (
       SELECT
@@ -618,13 +559,15 @@ function selectInvoicesQuery(where, statusFilter) {
     ORDER BY is_active DESC, invoice_date DESC, id DESC
   `;
 }
-
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     // كسول بدل cron: توليد الفواتير المتكررة المستحقة وإرسال
@@ -635,25 +578,20 @@ export async function GET(request) {
     const q = (url.searchParams.get("q") || "").trim();
     const rawStatus = (url.searchParams.get("status") || "").trim();
     const status = DISPLAY_STATUSES.has(rawStatus) ? rawStatus : "";
-
     const conditions = [];
     const values = [];
     let idx = 1;
-
     if (!includeInactive) {
       conditions.push("inv.is_active = TRUE");
     }
     if (q) {
-      conditions.push(
-        `(LOWER(inv.invoice_number) LIKE $${idx} OR LOWER(COALESCE(inv.supplier_name,'')) LIKE $${idx} OR LOWER(COALESCE(c.name,'')) LIKE $${idx})`,
-      );
+      conditions.push(`(LOWER(inv.invoice_number) LIKE $${idx} OR LOWER(COALESCE(inv.supplier_name,'')) LIKE $${idx} OR LOWER(COALESCE(c.name,'')) LIKE $${idx})`);
       values.push(`%${q.toLowerCase()}%`);
       idx += 1;
     }
-
     const where = {
       sql: conditions.length ? `WHERE ${conditions.join(" AND ")}` : "",
-      values,
+      values
     };
     const today = todayRiyadh();
     const query = selectInvoicesQuery(where, status);
@@ -661,38 +599,47 @@ export async function GET(request) {
     const withItems = await attachItems(rows);
     const withPayments = await attachPayments(withItems);
     const withAttachments = await attachExtraAttachments(withPayments);
-
-    return Response.json({ invoices: withAttachments });
+    return Response.json({
+      invoices: withAttachments
+    });
   } catch (error) {
     console.error("purchase invoices GET error", error);
-    return Response.json(
-      { error: "فشل تحميل فواتير المشتريات", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل تحميل فواتير المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
 
 // نواة الإنشاء — يستدعيها POST أدناه ومسار الرفع الجماعي (إرسال بند
 // معتمد) حتى يمر الطريقان بنفس التحقق والترقيم والتدقيق والإشعارات.
 // ترجع { ok:true, invoice } أو { ok:false, status, error }.
-export async function createPurchaseInvoice(body, actor) {
+async function createPurchaseInvoice(body, actor) {
   await ensureSchema();
   const items = parseItems(body);
   let payload = parsePayload(body);
   payload = applyItemsToPayload(payload, items);
   const validationError = validatePayload(payload);
   if (validationError) {
-    return { ok: false, status: 400, error: validationError };
+    return {
+      ok: false,
+      status: 400,
+      error: validationError
+    };
   }
   const accountError = await validateExpenseAccount(payload.expenseAccountId);
   if (accountError) {
-    return { ok: false, status: 400, error: accountError };
+    return {
+      ok: false,
+      status: 400,
+      error: accountError
+    };
   }
-
   const createdById = actor?.id ? Number(actor.id) : null;
   const createdByName = actor?.name ? String(actor.name) : null;
-
-    const [created] = await sql`
+  const [created] = await sql`
       INSERT INTO accounting_purchase_invoices (
         invoice_number,
         contact_id,
@@ -739,14 +686,13 @@ export async function createPurchaseInvoice(body, actor) {
       )
       RETURNING *
     `;
+  if (items && items.length > 0) {
+    await replaceInvoiceItems(created.id, items);
+  }
 
-    if (items && items.length > 0) {
-      await replaceInvoiceItems(created.id, items);
-    }
-
-    // ما دُفع عند الإنشاء يدخل سجل الدفعات كسطر أول بتاريخ الفاتورة.
-    if (payload.paidAmount > 0) {
-      await sql`
+  // ما دُفع عند الإنشاء يدخل سجل الدفعات كسطر أول بتاريخ الفاتورة.
+  if (payload.paidAmount > 0) {
+    await sql`
         INSERT INTO accounting_purchase_invoice_payments (
           invoice_id, amount, payment_date, bank_account_id,
           receipt_url, notes,
@@ -759,86 +705,95 @@ export async function createPurchaseInvoice(body, actor) {
           ${createdById}, ${createdByName}
         )
       `;
-    }
-
-    await logPurchaseAudit({
-      entityType: "invoice",
-      entityId: created.id,
-      action: "created",
-      summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}${body.submit_for_approval === true ? " — أُرسلت إلى الاعتماد" : ""}`,
-      actor,
-    });
+  }
+  await logPurchaseAudit({
+    entityType: "invoice",
+    entityId: created.id,
+    action: "created",
+    summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}${body.submit_for_approval === true ? " — أُرسلت إلى الاعتماد" : ""}`,
+    actor
+  });
 
   // إشعار المشتركين في «فاتورة مشتريات جديدة».
-  notifyByPref(
-    "acc_invoice_created",
-    [
-      "🧾 فاتورة مشتريات جديدة",
-      `الرقم: ${payload.invoiceNumber}`,
-      `المورد: ${payload.supplierName || `#${payload.contactId}`}`,
-      `المبلغ: ${payload.totalAmount.toFixed(2)} ${payload.currency}`,
-      payload.paidAmount > 0
-        ? `المدفوع: ${payload.paidAmount.toFixed(2)}`
-        : body.submit_for_approval === true
-          ? "الحالة: بانتظار الاعتماد"
-          : null,
-      createdByName ? `بواسطة: ${createdByName}` : null,
-    ]
-      .filter(Boolean)
-      .join("\n"),
-  );
-
-  return { ok: true, invoice: created };
+  notifyByPref("acc_invoice_created", ["🧾 فاتورة مشتريات جديدة", `الرقم: ${payload.invoiceNumber}`, `المورد: ${payload.supplierName || `#${payload.contactId}`}`, `المبلغ: ${payload.totalAmount.toFixed(2)} ${payload.currency}`, payload.paidAmount > 0 ? `المدفوع: ${payload.paidAmount.toFixed(2)}` : body.submit_for_approval === true ? "الحالة: بانتظار الاعتماد" : null, createdByName ? `بواسطة: ${createdByName}` : null].filter(Boolean).join("\n"));
+  return {
+    ok: true,
+    invoice: created
+  };
 }
-
-export async function POST(request) {
+async function POST(request) {
   const auth = requireAuth(request, REQUIRE_PURCHASES_CREATE);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
   try {
     const body = await request.json().catch(() => ({}));
     const result = await createPurchaseInvoice(body, auth.user);
     if (!result.ok) {
-      return Response.json(
-        { error: result.error },
-        { status: result.status || 400 },
-      );
+      return Response.json({
+        error: result.error
+      }, {
+        status: result.status || 400
+      });
     }
-    return Response.json({ ok: true, invoice: result.invoice }, { status: 201 });
+    return Response.json({
+      ok: true,
+      invoice: result.invoice
+    }, {
+      status: 201
+    });
   } catch (error) {
     console.error("purchase invoices POST error", error);
-    return Response.json(
-      { error: "فشل إضافة فاتورة المشتريات", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل إضافة فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function PUT(request) {
+async function PUT(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const body = await request.json().catch(() => ({}));
     const id = body.id ? Number(body.id) : null;
     if (!Number.isInteger(id) || id <= 0) {
-      return Response.json({ error: "معرف الفاتورة غير صحيح" }, { status: 400 });
+      return Response.json({
+        error: "معرف الفاتورة غير صحيح"
+      }, {
+        status: 400
+      });
     }
-
     const items = parseItems(body);
     let payload = parsePayload(body);
     payload = applyItemsToPayload(payload, items);
     const validationError = validatePayload(payload);
     if (validationError) {
-      return Response.json({ error: validationError }, { status: 400 });
+      return Response.json({
+        error: validationError
+      }, {
+        status: 400
+      });
     }
     const accountError = await validateExpenseAccount(payload.expenseAccountId);
     if (accountError) {
-      return Response.json({ error: accountError }, { status: 400 });
+      return Response.json({
+        error: accountError
+      }, {
+        status: 400
+      });
     }
 
     // اللقطة السابقة تحدد نوع الحدث في سجل التدقيق: دفعة أم تعديل.
@@ -847,7 +802,6 @@ export async function PUT(request) {
       FROM accounting_purchase_invoices
       WHERE id = ${id}
     `;
-
     const [updated] = await sql`
       UPDATE accounting_purchase_invoices
       SET
@@ -873,9 +827,12 @@ export async function PUT(request) {
       WHERE id = ${id}
       RETURNING *
     `;
-
     if (!updated) {
-      return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
+      return Response.json({
+        error: "الفاتورة غير موجودة"
+      }, {
+        status: 404
+      });
     }
 
     // `items` missing from the payload (quick-payment modal) → leave
@@ -883,7 +840,6 @@ export async function PUT(request) {
     if (items !== null) {
       await replaceInvoiceItems(id, items);
     }
-
     const previousPaid = Number(existing?.paid_amount || 0);
     const paidDelta = Math.round((payload.paidAmount - previousPaid) * 100) / 100;
     // أي تغيير للمدفوع من المحرر الكامل يدخل سجل الدفعات — موجباً
@@ -910,7 +866,7 @@ export async function PUT(request) {
         entityId: id,
         action: "payment",
         summary: `تسجيل دفعة ${paidDelta.toFixed(2)} ${payload.currency} على الفاتورة ${payload.invoiceNumber} — إجمالي المدفوع ${payload.paidAmount.toFixed(2)} من ${payload.totalAmount.toFixed(2)}`,
-        actor: auth.user,
+        actor: auth.user
       });
     } else {
       await logPurchaseAudit({
@@ -918,35 +874,44 @@ export async function PUT(request) {
         entityId: id,
         action: "updated",
         summary: `تعديل الفاتورة ${payload.invoiceNumber} — الإجمالي ${payload.totalAmount.toFixed(2)} ${payload.currency}، المدفوع ${payload.paidAmount.toFixed(2)}`,
-        actor: auth.user,
+        actor: auth.user
       });
     }
-
-    return Response.json({ ok: true, invoice: updated });
+    return Response.json({
+      ok: true,
+      invoice: updated
+    });
   } catch (error) {
     console.error("purchase invoices PUT error", error);
-    return Response.json(
-      { error: "فشل تعديل فاتورة المشتريات", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل تعديل فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
-
-export async function DELETE(request) {
+async function DELETE(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
     await ensureSchema();
     const url = new URL(request.url);
     const id = Number(url.searchParams.get("id"));
     const force = url.searchParams.get("force") === "1";
     if (!Number.isInteger(id) || id <= 0) {
-      return Response.json({ error: "معرف الفاتورة غير صحيح" }, { status: 400 });
+      return Response.json({
+        error: "معرف الفاتورة غير صحيح"
+      }, {
+        status: 400
+      });
     }
-
     if (force) {
       const [deleted] = await sql`
         DELETE FROM accounting_purchase_invoices
@@ -954,18 +919,24 @@ export async function DELETE(request) {
         RETURNING id, invoice_number
       `;
       if (!deleted) {
-        return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
+        return Response.json({
+          error: "الفاتورة غير موجودة"
+        }, {
+          status: 404
+        });
       }
       await logPurchaseAudit({
         entityType: "invoice",
         entityId: id,
         action: "deleted",
         summary: `حذف نهائي للفاتورة ${deleted.invoice_number}`,
-        actor: auth.user,
+        actor: auth.user
       });
-      return Response.json({ ok: true, hard: true });
+      return Response.json({
+        ok: true,
+        hard: true
+      });
     }
-
     const [updated] = await sql`
       UPDATE accounting_purchase_invoices
       SET
@@ -975,23 +946,32 @@ export async function DELETE(request) {
       RETURNING id, invoice_number
     `;
     if (!updated) {
-      return Response.json({ error: "الفاتورة غير موجودة" }, { status: 404 });
+      return Response.json({
+        error: "الفاتورة غير موجودة"
+      }, {
+        status: 404
+      });
     }
-
     await logPurchaseAudit({
       entityType: "invoice",
       entityId: id,
       action: "deactivated",
       summary: `إيقاف الفاتورة ${updated.invoice_number}`,
-      actor: auth.user,
+      actor: auth.user
     });
-
-    return Response.json({ ok: true, hard: false });
+    return Response.json({
+      ok: true,
+      hard: false
+    });
   } catch (error) {
     console.error("purchase invoices DELETE error", error);
-    return Response.json(
-      { error: "فشل إيقاف فاتورة المشتريات", details: error.message },
-      { status: 500 },
-    );
+    return Response.json({
+      error: "فشل إيقاف فاتورة المشتريات",
+      details: error.message
+    }, {
+      status: 500
+    });
   }
 }
+
+export { DELETE, GET, POST, PUT, createPurchaseInvoice };

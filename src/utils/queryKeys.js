@@ -21,6 +21,8 @@ export const queryKeys = Object.freeze({
   accountingGreenBeans: createKey("accounting", "greenBeans"),
   accountingBankAccounts: createKey("accounting_bank_accounts"),
   accountingPurchaseInvoices: createKey("accounting_purchase_invoices"),
+  invoiceBatches: createKey("invoice_batches"),
+  invoiceBatchDetail: createKey("invoice_batch_detail"),
   purchaseAuditLog: createKey("purchase_audit_log"),
   recurringPurchaseInvoices: createKey("recurring_purchase_invoices"),
   scheduledPurchaseReports: createKey("scheduled_purchase_reports"),
