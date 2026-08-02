@@ -553,13 +553,16 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   }, [vatBasis, invoices, matchesBranch, from, to]);
 
   // نموذج الإقرار الضريبي (ZATCA): خانة 7 = المشتريات الخاضعة للنسبة
-  // الأساسية، خانة 10 = مشتريات بالنسبة الصفرية — من بنود الفواتير،
-  // مع توزيع خصم الفاتورة تناسبياً حتى تطابق المجاميع رؤوس الفواتير.
-  // في الأساس النقدي تُضرب حصة كل فاتورة بنسبة المسدد خلال الفترة.
+  // الأساسية فقط — من بنود الفواتير، مع توزيع خصم الفاتورة تناسبياً
+  // حتى تطابق المجاميع رؤوس الفواتير. في الأساس النقدي تُضرب حصة كل
+  // فاتورة بنسبة المسدد خلال الفترة.
+  //
+  // البنود بنسبة 0% لا تدخل الإقرار إطلاقاً (بقرار المستخدم): فواتير
+  // الموردين غير المسجلين بالضريبة «خارج نطاق الضريبة» لا «مشتريات
+  // بالنسبة الصفرية» — خانة 10 تبقى صفراً ولا تتضخم خانة 12 بها.
   const vatReturn = useMemo(() => {
     let standardBase = 0;
     let standardVat = 0;
-    let zeroBase = 0;
     const vatEntries =
       vatBasis === "cash"
         ? cashEntries
@@ -572,8 +575,6 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         if (vat > 0) {
           standardBase += base;
           standardVat += vat;
-        } else {
-          zeroBase += base;
         }
         continue;
       }
@@ -590,16 +591,14 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         if (moneyValue(item.tax_rate) > 0) {
           standardBase += base;
           standardVat += vat;
-        } else {
-          zeroBase += base;
         }
       }
     }
     return {
       standardBase: round2(standardBase),
       standardVat: round2(standardVat),
-      zeroBase: round2(zeroBase),
-      purchasesBase: round2(standardBase + zeroBase),
+      zeroBase: 0,
+      purchasesBase: round2(standardBase),
       purchasesVat: round2(standardVat),
     };
   }, [periodInvoices, vatBasis, cashEntries]);
