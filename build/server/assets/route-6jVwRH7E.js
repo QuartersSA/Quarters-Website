@@ -4,7 +4,7 @@ import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { e as ensureInvoiceBatchSchema, r as readUploadBase64 } from './invoiceBatches-BefXoxDb.js';
 import { F as FILE_MEDIA_TYPES, r as runInvoiceAnalysis } from './invoiceAnalysis-BhCAfXUC.js';
 import { c as computeDraftTotals, r as round2 } from './invoiceDraftMath-C8Db36NO.js';
-import { createPurchaseInvoice } from './route-D47nPfeU.js';
+import { createPurchaseInvoice } from './route-DP4du56b.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import '@anthropic-ai/sdk';

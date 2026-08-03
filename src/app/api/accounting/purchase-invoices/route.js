@@ -556,6 +556,17 @@ function validatePayload(payload) {
   if (payload.paidAmount > payload.totalAmount) {
     return "المبلغ المدفوع لا يمكن أن يتجاوز مبلغ الفاتورة";
   }
+  // تاريخ بعد أكثر من 30 يوماً في المستقبل = سنة مقروءة غلط شبه
+  // مؤكد (مسح ذكي قرأ 2028 بدل 2026 مثلاً) — فاتورة كهذه تعلق بقمة
+  // الجدول المرتب بالتاريخ وتشوه التقارير. ارفضها برسالة واضحة.
+  if (payload.invoiceDate) {
+    const limit = new Date();
+    limit.setDate(limit.getDate() + 30);
+    const limitStr = limit.toISOString().slice(0, 10);
+    if (String(payload.invoiceDate) > limitStr) {
+      return `تاريخ الفاتورة (${payload.invoiceDate}) في المستقبل البعيد — تحقق من السنة`;
+    }
+  }
   return null;
 }
 
