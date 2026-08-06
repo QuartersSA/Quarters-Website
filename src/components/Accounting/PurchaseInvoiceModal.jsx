@@ -1146,6 +1146,9 @@ export default function PurchaseInvoiceModal({
   const [attachmentUrl, setAttachmentUrl] = useState("");
   const [attachmentName, setAttachmentName] = useState("");
   const [attachmentMime, setAttachmentMime] = useState("");
+  // تصنيف المسح الذكي لنوع المستند: quote / tax_invoice /
+  // payment_receipt / other — يحدد قسم المستند في درج الفاتورة.
+  const [attachmentKind, setAttachmentKind] = useState("");
   const [vatMatched, setVatMatched] = useState(false);
   // مورد استخرجه السكان الذكي بلا تطابق في جهات الاتصال — يظهر زر
   // إضافة سريعة باسمه ورقمه الضريبي ينشئه ويختاره بنقرة واحدة.
@@ -1251,6 +1254,7 @@ export default function PurchaseInvoiceModal({
     setBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
     setNotes(invoice?.notes || "");
     setAttachmentUrl(invoice?.attachment_url || "");
+    setAttachmentKind(invoice?.attachment_kind || "");
     setAttachmentName("");
     setAttachmentMime(
       invoice?.attachment_url && /\.pdf(\?|$)/i.test(invoice.attachment_url)
@@ -1458,6 +1462,7 @@ export default function PurchaseInvoiceModal({
       branch_id: branchId || null,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
+      attachment_kind: attachmentUrl ? attachmentKind || null : null,
     };
     if (isEditing) payload.id = invoice.id;
     onSubmit(payload);
@@ -1642,6 +1647,17 @@ export default function PurchaseInvoiceModal({
       }
 
       if (analysis) {
+        // تصنيف المستند — يوضع في قسمه (عرض سعر/فاتورة ضريبية/سند
+        // سداد) تلقائياً من أول رفع.
+        if (analysis.document_type) {
+          setAttachmentKind(String(analysis.document_type));
+          const kindLabel = {
+            quote: "عرض سعر",
+            tax_invoice: "فاتورة ضريبية",
+            payment_receipt: "سند سداد",
+          }[analysis.document_type];
+          if (kindLabel) filled.push(`نوع المستند: ${kindLabel}`);
+        }
         if (
           analysis.invoice_number &&
           canFill("number", !invoiceNumber.trim())

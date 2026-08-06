@@ -24,6 +24,7 @@ const OUTPUT_SCHEMA = {
   type: "object",
   additionalProperties: false,
   required: [
+    "document_type",
     "invoice_number",
     "invoice_date",
     "due_date",
@@ -39,6 +40,12 @@ const OUTPUT_SCHEMA = {
     "operator_note",
   ],
   properties: {
+    document_type: {
+      type: "string",
+      enum: ["quote", "tax_invoice", "payment_receipt", "other"],
+      description:
+        "Document classification: quote = عرض سعر/Quotation; tax_invoice = فاتورة ضريبية (incl. simplified); payment_receipt = سند سداد/إيصال دفع/إشعار تحويل; other = anything else",
+    },
     invoice_number: { type: ["string", "null"] },
     invoice_date: {
       type: ["string", "null"],
@@ -132,6 +139,7 @@ const SYSTEM_PROMPT = `أنت خبير محاسبة سعودي متخصص في �
 9. **كل منتج في جدول الأصناف بند مستقل** — إيصالات نقاط البيع وفواتير الجملة تكتب كل منتج في سطر باسمه وكميته وسعره؛ استخرجها كلها واحداً واحداً ولا تدمج منتجات مختلفة في بند واحد أبداً. افحص المستند بعناية: عدد البنود التي تُرجعها يجب أن يساوي عدد أسطر المنتجات المطبوعة في الجدول.
 10. الخصم: لا توزّعه على البنود ولا تغيّر أسعارها المطبوعة أبداً. أرجع قيمة الخصم الإجمالي (قبل الضريبة) كما هي مطبوعة في حقل discount، واترك البنود بأسعارها الأصلية. النظام يخصمه من الإجمالي قبل الضريبة.
 11. مجموع البنود ناقص الخصم زائد الضريبة يجب أن يطابق الإجمالي النهائي. البند المجمّع الواحد بوصف "إجمالي الفاتورة" حل أخير فقط عندما يستحيل تمييز أسطر المنتجات إطلاقاً — واذكر السبب في operator_note.
+12. صنّف نوع المستند في document_type: "quote" إذا كان عرض سعر (عناوين مثل «عرض سعر/عرض أسعار/Quotation/Proforma»، غالباً بلا رمز QR ضريبي وقد يحمل مدة صلاحية العرض)؛ "tax_invoice" إذا كان فاتورة ضريبية أو فاتورة ضريبية مبسطة (تحمل «فاتورة ضريبية/Tax Invoice» ورقماً ضريبياً وغالباً رمز QR)؛ "payment_receipt" إذا كان سند سداد/سند قبض/إيصال دفع/إشعار تحويل بنكي؛ "other" لما سواها. العنوان المطبوع على المستند هو الفيصل عند التعارض.
 
 أرجع JSON فقط حسب المخطط.`;
 

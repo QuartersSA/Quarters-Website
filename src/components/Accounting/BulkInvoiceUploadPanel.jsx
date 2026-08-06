@@ -104,6 +104,8 @@ const FLAG_LABELS = {
   duplicate_invoice: "مكررة مع فاتورة قائمة",
   duplicate_in_batch: "مكررة داخل الدفعة",
   operator_note: "ملاحظة من المحلل",
+  quote_document: "مستند عرض سعر",
+  receipt_document: "مستند سند سداد",
 };
 
 const CURRENCIES = ["SAR", "USD", "EUR", "AED", "KWD", "BHD", "QAR", "OMR"];

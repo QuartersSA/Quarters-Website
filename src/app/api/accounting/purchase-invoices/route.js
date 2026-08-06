@@ -121,6 +121,7 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS workflow_status TEXT NOT NULL DEFAULT 'new',
       ADD COLUMN IF NOT EXISTS notes TEXT,
       ADD COLUMN IF NOT EXISTS attachment_url TEXT,
+      ADD COLUMN IF NOT EXISTS attachment_kind TEXT,
       ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE,
       ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
       ADD COLUMN IF NOT EXISTS created_by_employee_id INTEGER,
@@ -219,6 +220,10 @@ async function ensureSchema() {
       created_by_employee_id INTEGER,
       created_by_employee_name TEXT
     )
+  `;
+  await sql`
+    ALTER TABLE accounting_purchase_invoice_attachments
+      ADD COLUMN IF NOT EXISTS kind TEXT
   `;
   await sql`
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoice_attachments_invoice
@@ -323,6 +328,13 @@ function parsePayload(body = {}) {
     workflowStatus: WORKFLOW_STATUSES.has(workflowRaw) ? workflowRaw : "new",
     notes: body.notes ? String(body.notes).trim() : null,
     attachmentUrl: body.attachment_url ? String(body.attachment_url).trim() : null,
+    // تصنيف المستند الأساسي (من المسح الذكي أو المستخدم): عرض سعر /
+    // فاتورة ضريبية / سند سداد — يحدد قسم عرضه في درج الفاتورة.
+    attachmentKind: ["quote", "tax_invoice", "payment_receipt", "other"].includes(
+      body.attachment_kind,
+    )
+      ? body.attachment_kind
+      : null,
     // Optional proof-of-payment attachment — only meaningful when paid.
     paymentReceiptUrl:
       paidAmount > 0 && body.payment_receipt_url
@@ -510,7 +522,7 @@ async function attachExtraAttachments(rows) {
   if (ids.length === 0) return rows;
   try {
     const attachments = await sql`
-      SELECT id, invoice_id, url, label,
+      SELECT id, invoice_id, url, label, kind,
              TO_CHAR(created_at, 'YYYY-MM-DD') AS attached_date,
              created_by_employee_name
       FROM accounting_purchase_invoice_attachments
@@ -611,6 +623,7 @@ function selectInvoicesQuery(where, statusFilter) {
         END AS computed_status,
         inv.notes,
         inv.attachment_url,
+        inv.attachment_kind,
         inv.is_active,
         inv.created_at,
         inv.updated_at,
@@ -723,6 +736,7 @@ export async function createPurchaseInvoice(body, actor) {
         workflow_status,
         notes,
         attachment_url,
+        attachment_kind,
         created_by_employee_id,
         created_by_employee_name
       )
@@ -745,6 +759,7 @@ export async function createPurchaseInvoice(body, actor) {
         ${payload.workflowStatus},
         ${payload.notes},
         ${payload.attachmentUrl},
+        ${payload.attachmentKind},
         ${createdById},
         ${createdByName}
       )
@@ -880,6 +895,7 @@ export async function PUT(request) {
         workflow_status = ${payload.workflowStatus},
         notes = ${payload.notes},
         attachment_url = ${payload.attachmentUrl},
+        attachment_kind = ${payload.attachmentKind},
         updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
       RETURNING *

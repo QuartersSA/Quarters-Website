@@ -2,9 +2,9 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { e as ensureInvoiceBatchSchema, r as readUploadBase64 } from './invoiceBatches-BefXoxDb.js';
-import { F as FILE_MEDIA_TYPES, r as runInvoiceAnalysis } from './invoiceAnalysis-BhCAfXUC.js';
+import { F as FILE_MEDIA_TYPES, r as runInvoiceAnalysis } from './invoiceAnalysis-BSNIl_Cm.js';
 import { c as computeDraftTotals, r as round2 } from './invoiceDraftMath-C8Db36NO.js';
-import { createPurchaseInvoice } from './route-DP4du56b.js';
+import { createPurchaseInvoice } from './route-KaKy3TtC.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import '@anthropic-ai/sdk';
@@ -37,6 +37,7 @@ function buildDraft(analysis) {
     amount_includes_tax: !!item.amount_includes_tax
   })).filter(item => item.quantity > 0 || item.unit_price > 0);
   return {
+    document_type: analysis?.document_type || null,
     invoice_number: analysis?.invoice_number ? String(analysis.invoice_number) : "",
     contact_id: analysis?.contact_id ? Number(analysis.contact_id) : null,
     contact_matched_by: analysis?.contact_matched_by || null,
@@ -67,6 +68,7 @@ function sanitizeDraft(input) {
     amount_includes_tax: !!item?.amount_includes_tax
   }));
   return {
+    document_type: ["quote", "tax_invoice", "payment_receipt", "other"].includes(input.document_type) ? input.document_type : null,
     invoice_number: text(input.invoice_number, 120),
     contact_id: Number(input.contact_id) > 0 ? Number(input.contact_id) : null,
     contact_matched_by: input.contact_matched_by ? text(input.contact_matched_by, 20) : null,
@@ -99,6 +101,10 @@ function computeFlags(draft, {
   if (duplicateInvoice) flags.push("duplicate_invoice");
   if (duplicateItem) flags.push("duplicate_in_batch");
   if (note) flags.push("operator_note");
+  // المستند المصنف عرضَ سعر أو سند سداد ليس فاتورة ضريبية — نبّه
+  // المراجع (بلا حجب: قد يكون القصد تسجيله كذلك).
+  if (draft.document_type === "quote") flags.push("quote_document");
+  if (draft.document_type === "payment_receipt") flags.push("receipt_document");
   return flags;
 }
 const ATTENTION_FLAGS = new Set(["missing_supplier", "no_items", "zero_total", "duplicate_invoice", "duplicate_in_batch", "missing_number", "missing_date"]);
@@ -559,7 +565,8 @@ async function PATCH(request, {
         workflow_status: "pending_payment",
         branch_id: null,
         notes: String(draft?.notes || "").trim() || null,
-        attachment_url: claimed[0].file_url || null
+        attachment_url: claimed[0].file_url || null,
+        attachment_kind: draft?.document_type || null
       };
       let created;
       try {

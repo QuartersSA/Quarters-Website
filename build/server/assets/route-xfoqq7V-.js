@@ -45,6 +45,9 @@ async function POST(request) {
       });
     }
     const label = body.label ? String(body.label).trim() : null;
+    // قسم المستند: عرض سعر / فاتورة ضريبية / سند سداد — إن لم يحدد
+    // يُستنتج من المسمى حتى تصطف المرفقات القديمة والجديدة في أقسامها.
+    const kind = ["quote", "tax_invoice", "payment_receipt", "other"].includes(body.kind) ? body.kind : /عرض\s*سعر|quotation/i.test(label || "") ? "quote" : /سداد|دفع|إيصال|سند قبض|receipt|payment/i.test(label || "") ? "payment_receipt" : /فاتورة|invoice/i.test(label || "") ? "tax_invoice" : "other";
     const [invoice] = await sql`
       SELECT id, invoice_number FROM accounting_purchase_invoices
       WHERE id = ${invoiceId}
@@ -58,11 +61,11 @@ async function POST(request) {
     }
     const [created] = await sql`
       INSERT INTO accounting_purchase_invoice_attachments (
-        invoice_id, url, label,
+        invoice_id, url, label, kind,
         created_by_employee_id, created_by_employee_name
       )
       VALUES (
-        ${invoiceId}, ${url}, ${label},
+        ${invoiceId}, ${url}, ${label}, ${kind},
         ${auth.user?.id ? Number(auth.user.id) : null},
         ${auth.user?.name ? String(auth.user.name) : null}
       )
