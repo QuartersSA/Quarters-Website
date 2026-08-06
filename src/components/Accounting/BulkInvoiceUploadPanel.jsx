@@ -136,7 +136,18 @@ function uploadSessionIdFromUrl(url) {
   return match ? Number(match[1]) : null;
 }
 
-export default function BulkInvoiceUploadPanel({ employeeId, isAdmin }) {
+// standalone: وضع صفحة الإدخال الميداني (/employee/purchase-invoice) —
+// الصلاحية can_add_purchase_invoices بلا دور مشرف؛ الموردون والحسابات
+// يمرران جاهزين (الصفحة حملتهما عبر purchaseInvoiceFetch) بدل خطافات
+// الإدارة، والخادم يحصر الموظف في دفعاته هو.
+export default function BulkInvoiceUploadPanel({
+  employeeId,
+  isAdmin,
+  standalone = false,
+  contactsOverride = null,
+  accountsOverride = null,
+}) {
+  const canUse = standalone || (!!employeeId && isAdmin);
   const [activeBatchId, setActiveBatchId] = useState(null);
   const [statusFilter, setStatusFilter] = useState("");
   const [reviewItemId, setReviewItemId] = useState(null);
@@ -146,9 +157,9 @@ export default function BulkInvoiceUploadPanel({ employeeId, isAdmin }) {
   const fileInputRef = useRef(null);
   const [upload] = useUpload();
 
-  const batchesQuery = useInvoiceBatches({ enabled: !!employeeId && isAdmin });
+  const batchesQuery = useInvoiceBatches({ enabled: canUse });
   const detailQuery = useInvoiceBatchDetail(activeBatchId, {
-    enabled: !!employeeId && isAdmin,
+    enabled: canUse,
   });
   const createBatch = useCreateInvoiceBatch();
   // نسختان منفصلتان من الطفرة: واحدة للمضخة الخلفية وواحدة لإجراءات
@@ -159,10 +170,12 @@ export default function BulkInvoiceUploadPanel({ employeeId, isAdmin }) {
   const submitItem = useSubmitBatchItem(activeBatchId);
   const deleteItem = useDeleteBatchItem(activeBatchId);
 
+  // خطافا الإدارة معطلان تلقائياً في الوضع المستقل (isAdmin=false) —
+  // البيانات تصل جاهزة من الصفحة المضيفة.
   const contactsQuery = useAccountingContacts({ employeeId, isAdmin });
   const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
-  const contacts = contactsQuery.data || [];
-  const accounts = accountsQuery.data || [];
+  const contacts = contactsOverride || contactsQuery.data || [];
+  const accounts = accountsOverride || accountsQuery.data || [];
 
   const items = detailQuery.data?.items || [];
 
@@ -356,7 +369,7 @@ export default function BulkInvoiceUploadPanel({ employeeId, isAdmin }) {
     [reviewableIds, reviewItemId],
   );
 
-  if (!isAdmin) return null;
+  if (!canUse) return null;
 
   // ===== شاشة اختيار/إنشاء الدفعة =====
   if (!activeBatchId) {
