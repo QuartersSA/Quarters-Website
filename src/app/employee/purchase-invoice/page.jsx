@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   CheckCircle2,
+  CloudUpload,
   Loader2,
   LogOut,
   Pencil,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import { ws } from "@/components/Workspace/uiPurchases";
 import PurchaseInvoiceModal from "@/components/Accounting/PurchaseInvoiceModal";
+import BulkInvoiceUploadPanel from "@/components/Accounting/BulkInvoiceUploadPanel";
 import ContactModal from "@/components/Accounting/ContactModal";
 import {
   PURCHASE_INVOICE_TOKEN_KEY,
@@ -35,6 +37,8 @@ export default function PurchaseInvoiceEntryPage() {
   const [loading, setLoading] = useState(true);
   // Landing first — the invoice editor opens on demand only.
   const [editorOpen, setEditorOpen] = useState(false);
+  // الرفع الجماعي — حتى 50 فاتورة بتحليل ذكي، بنفس لوحة الإدارة.
+  const [bulkOpen, setBulkOpen] = useState(false);
   const [editorKey, setEditorKey] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [lastSaved, setLastSaved] = useState(null); // invoice_number | true
@@ -208,17 +212,53 @@ export default function PurchaseInvoiceEntryPage() {
 
   return (
     <div
-      className={`dark min-h-[100svh] flex items-center justify-center px-4 py-8 ${ws.appBg}`}
+      className={`dark min-h-[100svh] flex ${bulkOpen ? "items-start" : "items-center"} justify-center px-4 py-8 ${ws.appBg}`}
       dir="rtl"
     >
-      <div className="w-full max-w-md text-center">
+      <div
+        className={`w-full ${bulkOpen ? "max-w-6xl text-right" : "max-w-md text-center"}`}
+      >
         <img
           src="https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/"
           alt="Quarters Coffee Bar"
           className="h-20 w-auto mx-auto mb-6"
         />
 
-        {!suppliersOpen ? (
+        {bulkOpen ? (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                <div className={`${ws.iconBox} w-10 h-10 text-emerald-200`}>
+                  <CloudUpload className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="font-bold text-white">
+                    الرفع الجماعي للفواتير
+                  </div>
+                  <div className="text-[11px] text-white/50">
+                    حتى 50 فاتورة دفعة واحدة — تحليل ذكي ثم مراجعة واعتماد
+                    وإرسال لكل فاتورة على حدة
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setBulkOpen(false)}
+                className={`${ws.btnNeutral} px-3 py-1.5 text-xs`}
+              >
+                <ArrowRight className="w-3.5 h-3.5" />
+                رجوع
+              </button>
+            </div>
+            <BulkInvoiceUploadPanel
+              standalone
+              employeeId={null}
+              isAdmin={false}
+              contactsOverride={contacts}
+              accountsOverride={accounts}
+            />
+          </div>
+        ) : !suppliersOpen ? (
           <div className={`${ws.glass} ${ws.card} p-8 space-y-5`}>
             <div className={`${ws.iconBox} w-16 h-16 mx-auto text-emerald-200`}>
               <ReceiptText className="w-8 h-8" />
@@ -260,6 +300,14 @@ export default function PurchaseInvoiceEntryPage() {
                 >
                   <Plus className="w-4 h-4" />
                   فاتورة مشتريات جديدة
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBulkOpen(true)}
+                  className={`${ws.btnNeutral} w-full justify-center py-3`}
+                >
+                  <CloudUpload className="w-4 h-4" />
+                  الرفع الجماعي للفواتير
                 </button>
                 {canManageSuppliers ? (
                   <button
