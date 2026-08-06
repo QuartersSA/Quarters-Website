@@ -1699,97 +1699,169 @@ export default function PurchasesInvoicesPanel({
                     );
                   })()}
 
-                  {/* المرفقات — أكثر من مستند على نفس الفاتورة:
-                      عرض السعر أولاً ثم الفاتورة الضريبية بعد السداد. */}
+                  {/* المستندات في ثلاثة أقسام: عرض سعر / فاتورة ضريبية /
+                      فاتورة سداد. المسح الذكي يصنف المستند لقسمه من أول
+                      رفع، وإيصالات الدفعات تظهر في قسم السداد تلقائياً. */}
                   <div>
                     <div className="text-xs font-bold text-slate-700 dark:text-white/70 mb-2">
-                      المرفقات
+                      المستندات
                     </div>
-                    <div className="space-y-1.5">
-                      {drawerRow.attachment_url ? (
-                        <div className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5">
-                          <Paperclip className="w-3 h-3 shrink-0 text-slate-400 dark:text-white/35" />
-                          <span className="flex-1 truncate text-slate-700 dark:text-white/70">
-                            المستند الأصلي (من إنشاء الفاتورة)
-                          </span>
-                          <a
-                            href={drawerRow.attachment_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[#0e7a5f] dark:text-emerald-300 font-bold shrink-0 hover:underline"
-                          >
-                            فتح
-                          </a>
-                        </div>
-                      ) : null}
-                      {drawerRow.payment_receipt_url ? (
-                        <div className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5">
-                          <Banknote className="w-3 h-3 shrink-0 text-slate-400 dark:text-white/35" />
-                          <span className="flex-1 truncate text-slate-700 dark:text-white/70">
-                            إيصال الدفع
-                          </span>
-                          <a
-                            href={drawerRow.payment_receipt_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[#0e7a5f] dark:text-emerald-300 font-bold shrink-0 hover:underline"
-                          >
-                            فتح
-                          </a>
-                        </div>
-                      ) : null}
-                      {(Array.isArray(drawerRow.attachments)
+                    {(() => {
+                      // استنتاج قسم مرفق قديم بلا تصنيف من مسماه.
+                      const kindOf = (attachment) => {
+                        if (attachment.kind) return attachment.kind;
+                        const label = attachment.label || "";
+                        if (/عرض\s*سعر|quotation/i.test(label)) return "quote";
+                        if (/سداد|دفع|إيصال|سند قبض|receipt/i.test(label))
+                          return "payment_receipt";
+                        return "tax_invoice";
+                      };
+                      const extras = Array.isArray(drawerRow.attachments)
                         ? drawerRow.attachments
-                        : []
-                      ).map((attachment) => (
-                        <div
-                          key={attachment.id}
-                          className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
-                        >
-                          <Paperclip className="w-3 h-3 shrink-0 text-slate-400 dark:text-white/35" />
-                          <span className="flex-1 min-w-0 truncate text-slate-700 dark:text-white/70">
-                            {attachment.label || "مستند"}
-                            <span className="text-slate-400 dark:text-white/35">
-                              {" "}
-                              — {attachment.attached_date}
-                              {attachment.created_by_employee_name
-                                ? ` (${attachment.created_by_employee_name})`
-                                : ""}
-                            </span>
-                          </span>
-                          <a
-                            href={attachment.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[#0e7a5f] dark:text-emerald-300 font-bold shrink-0 hover:underline"
-                          >
-                            فتح
-                          </a>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (
-                                window.confirm(
-                                  `حذف المرفق «${attachment.label || "مستند"}»؟`,
-                                )
-                              ) {
-                                deleteAttachmentMut.mutate({
-                                  id: attachment.id,
-                                });
-                              }
-                            }}
-                            className="text-slate-300 hover:text-red-600 dark:text-white/25 dark:hover:text-red-300 shrink-0"
-                            title="حذف المرفق"
-                            aria-label="حذف المرفق"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        </div>
-                      ))}
+                        : [];
+                      const primaryKind =
+                        drawerRow.attachment_kind || "tax_invoice";
+                      const paymentReceipts = (
+                        Array.isArray(drawerRow.payments)
+                          ? drawerRow.payments
+                          : []
+                      ).filter((payment) => payment.receipt_url);
+                      const sections = [
+                        {
+                          key: "quote",
+                          title: "عرض السعر",
+                          Icon: FileText,
+                        },
+                        {
+                          key: "tax_invoice",
+                          title: "الفاتورة الضريبية",
+                          Icon: Paperclip,
+                        },
+                        {
+                          key: "payment_receipt",
+                          title: "فاتورة السداد",
+                          Icon: Banknote,
+                        },
+                      ];
+                      const rowsFor = (sectionKey) => {
+                        const rows = [];
+                        if (
+                          drawerRow.attachment_url &&
+                          (primaryKind === sectionKey ||
+                            (sectionKey === "tax_invoice" &&
+                              !["quote", "tax_invoice", "payment_receipt"].includes(
+                                primaryKind,
+                              )))
+                        ) {
+                          rows.push({
+                            id: "primary",
+                            url: drawerRow.attachment_url,
+                            label: "المستند الأصلي (من إنشاء الفاتورة)",
+                            primary: true,
+                          });
+                        }
+                        if (
+                          sectionKey === "payment_receipt" &&
+                          drawerRow.payment_receipt_url
+                        ) {
+                          rows.push({
+                            id: "header-receipt",
+                            url: drawerRow.payment_receipt_url,
+                            label: "إيصال الدفع (من إنشاء الفاتورة)",
+                            primary: true,
+                          });
+                        }
+                        if (sectionKey === "payment_receipt") {
+                          for (const payment of paymentReceipts) {
+                            rows.push({
+                              id: `pay-${payment.id}`,
+                              url: payment.receipt_url,
+                              label: `إيصال دفعة ${money(payment.amount)} — ${payment.payment_date || ""}`,
+                              primary: true,
+                            });
+                          }
+                        }
+                        for (const attachment of extras) {
+                          if (kindOf(attachment) === sectionKey) {
+                            rows.push(attachment);
+                          }
+                        }
+                        return rows;
+                      };
+                      return sections.map((section) => {
+                        const rows = rowsFor(section.key);
+                        return (
+                          <div key={section.key} className="mb-2.5">
+                            <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 dark:text-white/45 mb-1">
+                              <section.Icon className="w-3 h-3" />
+                              {section.title}
+                              <span className="font-mono">({rows.length})</span>
+                            </div>
+                            {rows.length === 0 ? (
+                              <div className="text-[10px] text-slate-400 dark:text-white/30 pr-4">
+                                لا مستندات
+                              </div>
+                            ) : (
+                              <div className="space-y-1.5 pr-1">
+                                {rows.map((attachment) => (
+                                  <div
+                                    key={attachment.id}
+                                    className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
+                                  >
+                                    <Paperclip className="w-3 h-3 shrink-0 text-slate-400 dark:text-white/35" />
+                                    <span className="flex-1 min-w-0 truncate text-slate-700 dark:text-white/70">
+                                      {attachment.label || "مستند"}
+                                      {attachment.attached_date ? (
+                                        <span className="text-slate-400 dark:text-white/35">
+                                          {" "}
+                                          — {attachment.attached_date}
+                                          {attachment.created_by_employee_name
+                                            ? ` (${attachment.created_by_employee_name})`
+                                            : ""}
+                                        </span>
+                                      ) : null}
+                                    </span>
+                                    <a
+                                      href={attachment.url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="text-[#0e7a5f] dark:text-emerald-300 font-bold shrink-0 hover:underline"
+                                    >
+                                      فتح
+                                    </a>
+                                    {!attachment.primary ? (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          if (
+                                            window.confirm(
+                                              `حذف المرفق «${attachment.label || "مستند"}»؟`,
+                                            )
+                                          ) {
+                                            deleteAttachmentMut.mutate({
+                                              id: attachment.id,
+                                            });
+                                          }
+                                        }}
+                                        className="text-slate-300 hover:text-red-600 dark:text-white/25 dark:hover:text-red-300 shrink-0"
+                                        title="حذف المرفق"
+                                        aria-label="حذف المرفق"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    ) : null}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      });
+                    })()}
 
                       {/* إضافة مرفق: مسمى سريع + ملف */}
                       <div className="flex items-center gap-2 pt-1 flex-wrap">
-                        {["فاتورة ضريبية", "عرض سعر", "سند استلام"].map(
+                        {["فاتورة ضريبية", "عرض سعر", "فاتورة سداد"].map(
                           (labelOption) => (
                             <button
                               key={labelOption}
@@ -1835,7 +1907,6 @@ export default function PurchasesInvoicesPanel({
                           className="hidden"
                         />
                       </div>
-                    </div>
                   </div>
 
                   {previewLog.length > 0 ? (

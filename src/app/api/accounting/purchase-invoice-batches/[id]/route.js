@@ -36,6 +36,7 @@ function buildDraft(analysis) {
     }))
     .filter((item) => item.quantity > 0 || item.unit_price > 0);
   return {
+    document_type: analysis?.document_type || null,
     invoice_number: analysis?.invoice_number
       ? String(analysis.invoice_number)
       : "",
@@ -77,6 +78,11 @@ function sanitizeDraft(input) {
       amount_includes_tax: !!item?.amount_includes_tax,
     }));
   return {
+    document_type: ["quote", "tax_invoice", "payment_receipt", "other"].includes(
+      input.document_type,
+    )
+      ? input.document_type
+      : null,
     invoice_number: text(input.invoice_number, 120),
     contact_id: Number(input.contact_id) > 0 ? Number(input.contact_id) : null,
     contact_matched_by: input.contact_matched_by
@@ -107,6 +113,11 @@ function computeFlags(draft, { duplicateInvoice, duplicateItem, note }) {
   if (duplicateInvoice) flags.push("duplicate_invoice");
   if (duplicateItem) flags.push("duplicate_in_batch");
   if (note) flags.push("operator_note");
+  // المستند المصنف عرضَ سعر أو سند سداد ليس فاتورة ضريبية — نبّه
+  // المراجع (بلا حجب: قد يكون القصد تسجيله كذلك).
+  if (draft.document_type === "quote") flags.push("quote_document");
+  if (draft.document_type === "payment_receipt")
+    flags.push("receipt_document");
   return flags;
 }
 
@@ -510,6 +521,7 @@ export async function PATCH(request, { params: { id } }) {
         branch_id: null,
         notes: String(draft?.notes || "").trim() || null,
         attachment_url: claimed[0].file_url || null,
+        attachment_kind: draft?.document_type || null,
       };
       let created;
       try {
