@@ -118,6 +118,13 @@ function moneyValue(value) {
   return Number.isFinite(number) ? number : 0;
 }
 
+// كميات البنود قد تكون كسرية (كيلو/لتر) — حدان عشريان بلا أصفار زائدة.
+function qty(value) {
+  return Number(value || 0).toLocaleString("en-US", {
+    maximumFractionDigits: 2,
+  });
+}
+
 function round2(value) {
   return Math.round(value * 100) / 100;
 }
@@ -864,7 +871,14 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
           : null;
         const key = id ?? "none";
         if (!map.has(key)) {
-          map.set(key, { accountId: id, net: 0, tax: 0, total: 0, count: 0 });
+          map.set(key, {
+            accountId: id,
+            net: 0,
+            tax: 0,
+            total: 0,
+            count: 0,
+            qty: 0,
+          });
         }
         const bucket = map.get(key);
         bucket.net += moneyValue(invoice.subtotal_amount);
@@ -877,13 +891,21 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         const id = item.account_id ? Number(item.account_id) : null;
         const key = id ?? "none";
         if (!map.has(key)) {
-          map.set(key, { accountId: id, net: 0, tax: 0, total: 0, count: 0 });
+          map.set(key, {
+            accountId: id,
+            net: 0,
+            tax: 0,
+            total: 0,
+            count: 0,
+            qty: 0,
+          });
         }
         const bucket = map.get(key);
         bucket.net += moneyValue(item.line_subtotal);
         bucket.tax += moneyValue(item.line_tax);
         bucket.total += moneyValue(item.line_total);
         bucket.count += 1;
+        bucket.qty += moneyValue(item.quantity);
       }
     }
     const rows = [...map.values()]
@@ -904,9 +926,10 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         acc.net += row.net;
         acc.tax += row.tax;
         acc.total += row.total;
+        acc.qty += row.qty;
         return acc;
       },
-      { net: 0, tax: 0, total: 0 },
+      { net: 0, tax: 0, total: 0, qty: 0 },
     );
     return { rows, totals, unclassified };
   }, [periodInvoices, accountById]);
@@ -1120,6 +1143,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
             { header: "رقم الحساب", accessor: (row) => row.code },
             { header: "الحساب", accessor: (row) => row.name },
             { header: "عدد البنود", accessor: (row) => row.count },
+            { header: "الكمية", accessor: (row) => qty(row.qty) },
             { header: "الصافي (SAR)", accessor: (row) => money(row.net) },
             { header: "الضريبة (SAR)", accessor: (row) => money(row.tax) },
             { header: "الإجمالي (SAR)", accessor: (row) => money(row.total) },
@@ -1776,6 +1800,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                     { header: "الرقم", accessor: (row) => row.code, numeric: true },
                     { header: "الحساب", accessor: (row) => row.name },
                     { header: "البنود", accessor: (row) => row.count, numeric: true },
+                    { header: "الكمية", accessor: (row) => qty(row.qty), numeric: true },
                     { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
                     { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
                     { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
@@ -1801,6 +1826,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                   rows={byAccountReport.rows}
                   footer={{
                     الحساب: "الإجمالي",
+                    الكمية: qty(byAccountReport.totals.qty),
                     الصافي: money(byAccountReport.totals.net),
                     الضريبة: money(byAccountReport.totals.tax),
                     الإجمالي: money(byAccountReport.totals.total),
