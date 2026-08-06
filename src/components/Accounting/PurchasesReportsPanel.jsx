@@ -22,7 +22,8 @@ import { useAccountingPurchaseInvoices } from "@/hooks/useAccountingPurchaseInvo
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { authedFetch } from "@/utils/apiAuth";
 import { queryKeys } from "@/utils/queryKeys";
 
@@ -351,6 +352,17 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const [showSchedules, setShowSchedules] = useState(false);
   const [auditSearch, setAuditSearch] = useState("");
 
+  // فترة التقرير الضريبي مستقلة عن فلتر بقية التقارير: إما شهر
+  // ميلادي محدد (مع إدخال مبيعات وحفظ)، أو ربع + سنة (عرض فقط —
+  // المبيعات تُجمع من الأشهر المحفوظة).
+  const currentMonthKey = todayRiyadh().slice(0, 7);
+  const [vatMode, setVatMode] = useState("month");
+  const [vatMonth, setVatMonth] = useState(currentMonthKey);
+  const [vatQuarter, setVatQuarter] = useState(
+    Math.ceil(Number(currentMonthKey.slice(5, 7)) / 3),
+  );
+  const [vatYear, setVatYear] = useState(Number(currentMonthKey.slice(0, 4)));
+
   const invoicesQuery = useAccountingPurchaseInvoices({
     employeeId,
     isAdmin,
@@ -375,10 +387,39 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const banks = banksQuery.data || [];
   const reportBranches = branchesQuery.data || [];
 
-  const { from, to } = useMemo(
+  const generalPeriod = useMemo(
     () => resolvePeriod(preset, customFrom, customTo),
     [preset, customFrom, customTo],
   );
+
+  // نطاق التقرير الضريبي من اختياراته الخاصة (شهر أو ربع).
+  const vatPeriod = useMemo(() => {
+    const pad = (n) => String(n).padStart(2, "0");
+    const monthEnd = (yy, mm) =>
+      `${yy}-${pad(mm)}-${pad(new Date(yy, mm, 0).getDate())}`;
+    if (vatMode === "quarter") {
+      const startMonth = (vatQuarter - 1) * 3 + 1;
+      return {
+        from: `${vatYear}-${pad(startMonth)}-01`,
+        to: monthEnd(vatYear, startMonth + 2),
+        monthKeys: [0, 1, 2].map(
+          (offset) => `${vatYear}-${pad(startMonth + offset)}`,
+        ),
+      };
+    }
+    const [yy, mm] = vatMonth.split("-").map(Number);
+    return {
+      from: `${vatMonth}-01`,
+      to: monthEnd(yy, mm),
+      monthKeys: [vatMonth],
+    };
+  }, [vatMode, vatMonth, vatQuarter, vatYear]);
+
+  // التقرير الضريبي يستخدم نطاقه الخاص؛ بقية التقارير على الفلتر العام.
+  const { from, to } =
+    reportKey === "vat"
+      ? { from: vatPeriod.from, to: vatPeriod.to }
+      : generalPeriod;
 
   // سجل النشاط — يُقرأ من جدول التدقيق حسب الفترة، والبحث محلي.
   const auditQuery = useQuery({
@@ -603,30 +644,73 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     };
   }, [periodInvoices, vatBasis, cashEntries]);
 
-  // المبيعات تُدخل يدوياً (النظام لا يتتبعها) وتُحفظ لكل فترة على
-  // هذا الجهاز. خانة 1 وحدها خاضعة للضريبة — مع مفتاح شامل/غير شامل
-  // يعيد الحساب فوراً.
-  const salesStorageKey = `vatReturnSales:${from || "all"}:${to || "all"}`;
-  const [sales, setSales] = useState({
-    r1: "",
-    r1IncludesTax: false,
-    r2: "",
-    r3: "",
-    r4: "",
-    r5: "",
-  });
-  React.useEffect(() => {
-    try {
-      const raw = localStorage.getItem(salesStorageKey);
-      setSales(
-        raw
-          ? { r1: "", r1IncludesTax: false, r2: "", r3: "", r4: "", r5: "", ...JSON.parse(raw) }
-          : { r1: "", r1IncludesTax: false, r2: "", r3: "", r4: "", r5: "" },
+  // التقارير الشهرية المحفوظة في القاعدة — للشهر المعروض (تعبئة
+  // مسبقة + حالة الحفظ) ولأشهر الربع (تجميع مبيعاتها المحفوظة).
+  const queryClient = useQueryClient();
+  const savedReportsQuery = useQuery({
+    queryKey: queryKeys.vatReports(vatPeriod.monthKeys.join(",")),
+    enabled: reportKey === "vat" && !!employeeId && isAdmin,
+    queryFn: async () => {
+      const response = await authedFetch(
+        `/api/accounting/vat-reports?keys=${vatPeriod.monthKeys.join(",")}`,
       );
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.error || "فشل تحميل التقارير المحفوظة");
+      }
+      return Array.isArray(data?.reports) ? data.reports : [];
+    },
+  });
+  const savedReports = savedReportsQuery.data || [];
+  const savedMonthReport =
+    vatMode === "month"
+      ? savedReports.find((report) => report.period_key === vatMonth) || null
+      : null;
+
+  const saveVatReport = useMutation({
+    mutationFn: async (payload) => {
+      const response = await authedFetch("/api/accounting/vat-reports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل الحفظ");
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.vatReports() });
+      toast.success("حُفظ التقرير الضريبي للشهر");
+    },
+    onError: (error) => toast.error(`فشل الحفظ: ${error.message}`),
+  });
+
+  // المبيعات تُدخل يدوياً (النظام لا يتتبعها). المسودة تُحفظ محلياً
+  // فوراً، والتقرير المحفوظ في القاعدة (زر الحفظ) له الأولوية عند
+  // فتح الشهر. خانة 1 وحدها خاضعة للضريبة — مع مفتاح شامل/غير شامل.
+  const salesStorageKey = `vatReturnSales:${from || "all"}:${to || "all"}`;
+  const EMPTY_SALES = { r1: "", r1IncludesTax: false, r2: "", r3: "", r4: "", r5: "" };
+  const [sales, setSales] = useState(EMPTY_SALES);
+  const savedSalesJson = savedMonthReport
+    ? JSON.stringify(savedMonthReport.sales || null)
+    : null;
+  React.useEffect(() => {
+    // الأولوية: المحفوظ في القاعدة ← مسودة الجهاز ← فارغ.
+    try {
+      if (savedSalesJson) {
+        const fromServer = JSON.parse(savedSalesJson);
+        if (fromServer && typeof fromServer === "object") {
+          setSales({ ...EMPTY_SALES, ...fromServer });
+          return;
+        }
+      }
+      const raw = localStorage.getItem(salesStorageKey);
+      setSales(raw ? { ...EMPTY_SALES, ...JSON.parse(raw) } : EMPTY_SALES);
     } catch {
       // ignore
     }
-  }, [salesStorageKey]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [salesStorageKey, savedSalesJson]);
   const updateSales = (patch) => {
     setSales((prev) => {
       const next = { ...prev, ...patch };
@@ -639,25 +723,51 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     });
   };
 
-  const salesComputed = useMemo(() => {
-    const entered = moneyValue(sales.r1);
-    const r1Base = sales.r1IncludesTax ? entered / 1.15 : entered;
-    const r1Vat = sales.r1IncludesTax ? entered - r1Base : entered * 0.15;
-    const r2 = moneyValue(sales.r2);
-    const r3 = moneyValue(sales.r3);
-    const r4 = moneyValue(sales.r4);
-    const r5 = moneyValue(sales.r5);
+  // حساب مبيعات مجموعة مدخلات واحدة (شهر) — خانة 1 فقط تحمل ضريبة.
+  const computeSalesEntry = (entry) => {
+    const entered = moneyValue(entry?.r1);
+    const r1Base = entry?.r1IncludesTax ? entered / 1.15 : entered;
+    const r1Vat = entry?.r1IncludesTax ? entered - r1Base : entered * 0.15;
     return {
-      r1Base: round2(r1Base),
-      r1Vat: round2(r1Vat),
-      r2,
-      r3,
-      r4,
-      r5,
-      salesBase: round2(r1Base + r2 + r3 + r4 + r5),
-      salesVat: round2(r1Vat),
+      r1Base,
+      r1Vat,
+      r2: moneyValue(entry?.r2),
+      r3: moneyValue(entry?.r3),
+      r4: moneyValue(entry?.r4),
+      r5: moneyValue(entry?.r5),
     };
-  }, [sales]);
+  };
+
+  const salesComputed = useMemo(() => {
+    // وضع الربع: المبيعات ليست مدخلات حية — تُجمع من تقارير الأشهر
+    // المحفوظة في القاعدة (الشهر غير المحفوظ لا مبيعات له هنا).
+    const entries =
+      vatMode === "quarter" && reportKey === "vat"
+        ? savedReports.map((report) => computeSalesEntry(report.sales))
+        : [computeSalesEntry(sales)];
+    const sum = entries.reduce(
+      (acc, entry) => ({
+        r1Base: acc.r1Base + entry.r1Base,
+        r1Vat: acc.r1Vat + entry.r1Vat,
+        r2: acc.r2 + entry.r2,
+        r3: acc.r3 + entry.r3,
+        r4: acc.r4 + entry.r4,
+        r5: acc.r5 + entry.r5,
+      }),
+      { r1Base: 0, r1Vat: 0, r2: 0, r3: 0, r4: 0, r5: 0 },
+    );
+    return {
+      r1Base: round2(sum.r1Base),
+      r1Vat: round2(sum.r1Vat),
+      r2: round2(sum.r2),
+      r3: round2(sum.r3),
+      r4: round2(sum.r4),
+      r5: round2(sum.r5),
+      salesBase: round2(sum.r1Base + sum.r2 + sum.r3 + sum.r4 + sum.r5),
+      salesVat: round2(sum.r1Vat),
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sales, vatMode, reportKey, savedReports]);
 
   // خانة 13: صافي الضريبة المستحقة = ضريبة المبيعات − ضريبة المشتريات.
   const netVatDue = round2(salesComputed.salesVat - vatReturn.purchasesVat);
@@ -1139,7 +1249,36 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     );
   }
 
-  const showPeriodFilter = reportKey !== "aging";
+  // التقرير الضريبي له اختيار فترة خاص (شهر ميلادي / ربع + سنة) —
+  // الفلتر العام يخص بقية التقارير.
+  const showPeriodFilter = reportKey !== "aging" && reportKey !== "vat";
+
+  // آخر 24 شهراً ميلادياً كخيارات + سنوات الربع.
+  const vatMonthOptions = useMemo(() => {
+    const [cy, cm] = currentMonthKey.split("-").map(Number);
+    const options = [];
+    for (let index = 0; index < 24; index += 1) {
+      const total = cy * 12 + (cm - 1) - index;
+      const yy = Math.floor(total / 12);
+      const mm = (total % 12) + 1;
+      const key = `${yy}-${String(mm).padStart(2, "0")}`;
+      options.push({ value: key, label: `${MONTH_LABELS[mm - 1]} ${yy}` });
+    }
+    return options;
+  }, [currentMonthKey]);
+  const vatYearOptions = useMemo(() => {
+    const cy = Number(currentMonthKey.slice(0, 4));
+    return [0, 1, 2, 3, 4].map((offset) => ({
+      value: String(cy - offset),
+      label: String(cy - offset),
+    }));
+  }, [currentMonthKey]);
+  const QUARTER_OPTIONS = [
+    { value: "1", label: "الربع الأول (يناير – مارس)" },
+    { value: "2", label: "الربع الثاني (أبريل – يونيو)" },
+    { value: "3", label: "الربع الثالث (يوليو – سبتمبر)" },
+    { value: "4", label: "الربع الرابع (أكتوبر – ديسمبر)" },
+  ];
   const canExport =
     (exportConfig?.rows?.length || 0) > 0 &&
     (reportKey !== "statement" || !!supplierId);
@@ -1185,9 +1324,58 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
       {/* Filters + export */}
       <div className={`${ws.glass} ${ws.card} p-4`}>
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <CalendarDays className="w-4 h-4 text-slate-500 dark:text-white/50 shrink-0" />
-            {showPeriodFilter ? (
+            {reportKey === "vat" ? (
+              <>
+                {/* فترة الإقرار: شهر ميلادي محدد أو ربع + سنة */}
+                <div className={ws.segWrap}>
+                  <button
+                    type="button"
+                    onClick={() => setVatMode("month")}
+                    className={`${ws.segBtn} text-[11px] ${vatMode === "month" ? ws.segActive : ws.segInactive}`}
+                  >
+                    شهر
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVatMode("quarter")}
+                    className={`${ws.segBtn} text-[11px] ${vatMode === "quarter" ? ws.segActive : ws.segInactive}`}
+                  >
+                    ربع سنوي
+                  </button>
+                </div>
+                {vatMode === "month" ? (
+                  <div className="w-44">
+                    <GlassSelect
+                      value={vatMonth}
+                      onChange={setVatMonth}
+                      options={vatMonthOptions}
+                      buttonClassName="text-sm py-2 px-3"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className="w-56">
+                      <GlassSelect
+                        value={String(vatQuarter)}
+                        onChange={(value) => setVatQuarter(Number(value))}
+                        options={QUARTER_OPTIONS}
+                        buttonClassName="text-sm py-2 px-3"
+                      />
+                    </div>
+                    <div className="w-24">
+                      <GlassSelect
+                        value={String(vatYear)}
+                        onChange={(value) => setVatYear(Number(value))}
+                        options={vatYearOptions}
+                        buttonClassName="text-sm py-2 px-3"
+                      />
+                    </div>
+                  </>
+                )}
+              </>
+            ) : showPeriodFilter ? (
               <div className="w-40">
                 <GlassSelect
                   value={preset}
@@ -1362,11 +1550,46 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 </div>
               </div>
 
-              {/* إدخال المبيعات — تُحسب الضريبة فوراً وتُحفظ للفترة */}
+              {/* وضع الربع: عرض فقط — المبيعات من تقارير الأشهر المحفوظة */}
+              {vatMode === "quarter" ? (
+                <div className={`${ws.glassSoft} ${ws.card} p-4`}>
+                  <div className="text-sm font-bold text-slate-900 dark:text-white mb-1">
+                    الربع {["الأول", "الثاني", "الثالث", "الرابع"][vatQuarter - 1]} {vatYear} — عرض تجميعي
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-white/45 leading-relaxed">
+                    المشتريات تُحسب من فواتير أشهر الربع الثلاثة مباشرة،
+                    والمبيعات تُجمع من التقارير الشهرية المحفوظة:
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap mt-2">
+                    {vatPeriod.monthKeys.map((key) => {
+                      const saved = savedReports.find(
+                        (report) => report.period_key === key,
+                      );
+                      const [yy, mm] = key.split("-").map(Number);
+                      return (
+                        <span
+                          key={key}
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border ${
+                            saved
+                              ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
+                              : "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-500/25"
+                          }`}
+                        >
+                          {MONTH_LABELS[mm - 1]} {yy}
+                          {saved ? " — محفوظ" : " — غير محفوظ (مبيعاته غير مدرجة)"}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+
+              {/* إدخال المبيعات — للشهر فقط؛ الحفظ يعتمد التقرير في القاعدة */}
+              {vatMode === "month" ? (
               <div className={`${ws.glassSoft} ${ws.card} p-4 space-y-3`}>
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="text-sm font-bold text-slate-900 dark:text-white">
-                    إدخال المبيعات للفترة
+                    إدخال المبيعات للشهر
                   </div>
                   <div className={ws.segWrap}>
                     <button
@@ -1417,11 +1640,43 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                     </div>
                   ))}
                 </div>
+                <div className="flex items-center gap-3 flex-wrap pt-1 border-t border-slate-200 dark:border-white/10">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      saveVatReport.mutate({
+                        period_key: vatMonth,
+                        basis: vatBasis,
+                        sales,
+                        purchases: {
+                          standardBase: vatReturn.standardBase,
+                          standardVat: vatReturn.standardVat,
+                        },
+                        totals: {
+                          salesBase: salesComputed.salesBase,
+                          salesVat: salesComputed.salesVat,
+                          netVatDue,
+                        },
+                      })
+                    }
+                    disabled={saveVatReport.isPending}
+                    className={`${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-50 mt-2`}
+                  >
+                    {saveVatReport.isPending
+                      ? "جاري الحفظ…"
+                      : "حفظ التقرير الضريبي للشهر"}
+                  </button>
+                  <div className="text-[11px] text-slate-500 dark:text-white/45 mt-2">
+                    {savedMonthReport
+                      ? `آخر حفظ: ${savedMonthReport.saved_at}${savedMonthReport.saved_by_employee_name ? ` — ${savedMonthReport.saved_by_employee_name}` : ""}`
+                      : "لم يُحفظ تقرير هذا الشهر بعد — الحفظ يعتمده ويدخله في العرض الربع سنوي."}
+                  </div>
+                </div>
                 <div className="text-[11px] text-slate-400 dark:text-white/35">
-                  تُحفظ القيم لهذه الفترة على هذا الجهاز. خانات المشتريات
-                  (7 و10) تتعبأ تلقائياً من فواتير الفترة.
+                  خانات المشتريات (7) تتعبأ تلقائياً من فواتير الشهر.
                 </div>
               </div>
+              ) : null}
 
               {/* نموذج الإقرار الضريبي */}
               <div className="overflow-x-auto">
