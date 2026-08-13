@@ -173,44 +173,73 @@ async function runInvoiceAnalysis({
     ORDER BY code
   `;
   const client = new Anthropic();
-  const response = await client.messages.create({
-    model: "claude-opus-4-8",
-    max_tokens: 16000,
-    thinking: {
-      type: "adaptive"
-    },
-    output_config: {
-      format: {
-        type: "json_schema",
-        schema: OUTPUT_SCHEMA
-      }
-    },
-    system: SYSTEM_PROMPT,
-    messages: [{
-      role: "user",
-      content: [
-      // The document itself first — Claude reads it visually,
-      // which beats any client-side OCR on scanned receipts.
-      ...(hasFile ? [mediaType === "application/pdf" ? {
-        type: "document",
-        source: {
-          type: "base64",
-          media_type: "application/pdf",
-          data: fileBase64
+  let response;
+  try {
+    response = await client.messages.create({
+      model: "claude-opus-4-8",
+      max_tokens: 16000,
+      thinking: {
+        type: "adaptive"
+      },
+      output_config: {
+        format: {
+          type: "json_schema",
+          schema: OUTPUT_SCHEMA
         }
-      } : {
-        type: "image",
-        source: {
-          type: "base64",
-          media_type: mediaType,
-          data: fileBase64
-        }
-      }] : []), {
-        type: "text",
-        text: ["## الموردون المسجلون", JSON.stringify(contacts), "", "## شجرة حسابات المصروفات (القابلة للترحيل)", JSON.stringify(accounts), ...(trimmedText.trim().length >= 10 ? ["", "## نص الفاتورة المستخرج آلياً (مساعد ثانوي)", trimmedText] : [])].join("\n")
+      },
+      system: SYSTEM_PROMPT,
+      messages: [{
+        role: "user",
+        content: [
+        // The document itself first — Claude reads it visually,
+        // which beats any client-side OCR on scanned receipts.
+        ...(hasFile ? [mediaType === "application/pdf" ? {
+          type: "document",
+          source: {
+            type: "base64",
+            media_type: "application/pdf",
+            data: fileBase64
+          }
+        } : {
+          type: "image",
+          source: {
+            type: "base64",
+            media_type: mediaType,
+            data: fileBase64
+          }
+        }] : []), {
+          type: "text",
+          text: ["## الموردون المسجلون", JSON.stringify(contacts), "", "## شجرة حسابات المصروفات (القابلة للترحيل)", JSON.stringify(accounts), ...(trimmedText.trim().length >= 10 ? ["", "## نص الفاتورة المستخرج آلياً (مساعد ثانوي)", trimmedText] : [])].join("\n")
+        }]
       }]
-    }]
-  });
+    });
+  } catch (error) {
+    // أخطاء واجهة Anthropic تُترجم لرسائل صريحة بدل «500» غامضة —
+    // أشيعها تشغيلياً: نفاد الرصيد، ومفتاح معطّل/مدوّر.
+    const apiMessage = String(error?.error?.error?.message || error?.message || "");
+    if (/credit balance/i.test(apiMessage)) {
+      return {
+        ok: false,
+        status: 402,
+        error: "رصيد التحليل الذكي منتهٍ — اشحن رصيد Anthropic من Plans & Billing ثم أعد المحاولة"
+      };
+    }
+    if (error?.status === 401 || /api.?key/i.test(apiMessage)) {
+      return {
+        ok: false,
+        status: 502,
+        error: "مفتاح التحليل الذكي مرفوض — تحقق من ANTHROPIC_API_KEY في متغيرات الخادم"
+      };
+    }
+    if (error?.status === 429 || error?.status === 529) {
+      return {
+        ok: false,
+        status: 503,
+        error: "خدمة التحليل الذكي مزدحمة مؤقتاً — أعد المحاولة بعد دقيقة"
+      };
+    }
+    throw error;
+  }
   if (response.stop_reason === "refusal") {
     return {
       ok: false,

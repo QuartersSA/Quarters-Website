@@ -186,7 +186,9 @@ export async function runInvoiceAnalysis({
   `;
 
   const client = new Anthropic();
-  const response = await client.messages.create({
+  let response;
+  try {
+    response = await client.messages.create({
     model: "claude-opus-4-8",
     max_tokens: 16000,
     thinking: { type: "adaptive" },
@@ -241,7 +243,36 @@ export async function runInvoiceAnalysis({
         ],
       },
     ],
-  });
+    });
+  } catch (error) {
+    // أخطاء واجهة Anthropic تُترجم لرسائل صريحة بدل «500» غامضة —
+    // أشيعها تشغيلياً: نفاد الرصيد، ومفتاح معطّل/مدوّر.
+    const apiMessage = String(error?.error?.error?.message || error?.message || "");
+    if (/credit balance/i.test(apiMessage)) {
+      return {
+        ok: false,
+        status: 402,
+        error:
+          "رصيد التحليل الذكي منتهٍ — اشحن رصيد Anthropic من Plans & Billing ثم أعد المحاولة",
+      };
+    }
+    if (error?.status === 401 || /api.?key/i.test(apiMessage)) {
+      return {
+        ok: false,
+        status: 502,
+        error:
+          "مفتاح التحليل الذكي مرفوض — تحقق من ANTHROPIC_API_KEY في متغيرات الخادم",
+      };
+    }
+    if (error?.status === 429 || error?.status === 529) {
+      return {
+        ok: false,
+        status: 503,
+        error: "خدمة التحليل الذكي مزدحمة مؤقتاً — أعد المحاولة بعد دقيقة",
+      };
+    }
+    throw error;
+  }
 
   if (response.stop_reason === "refusal") {
     return { ok: false, status: 422, error: "تعذر تحليل هذا المستند" };
