@@ -395,6 +395,78 @@ export function ItemFormModal({
             </div>
           </div>
 
+          {/* حالة الصنف: نشط/موقوف — الموقوف يختفي من الوارد والجرد
+              والتحويل كلها؛ هذا المفتاح هو طريق إعادة التفعيل الوحيد. */}
+          <div
+            className={`${ws.glassSoft} border rounded-2xl p-5 ${
+              formData.is_active === false
+                ? "border-red-300 dark:border-red-400/30"
+                : "border-slate-200 dark:border-white/10"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`${ws.iconBox} w-9 h-9 ${
+                    formData.is_active === false
+                      ? "text-red-600 dark:text-red-300"
+                      : "text-emerald-700 dark:text-emerald-200"
+                  }`}
+                >
+                  <Package className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-slate-900 dark:text-white/90 text-sm font-semibold">
+                    الصنف نشط
+                  </p>
+                  <p className="text-slate-500 dark:text-white/40 text-xs mt-0.5">
+                    {formData.is_active === false
+                      ? "موقوف — لا يظهر في الوارد ولا الجرد ولا التحويل حتى يُعاد تفعيله"
+                      : "إيقافه يخفيه من كل شاشات المخزون مع بقاء سجلاته"}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                role="switch"
+                aria-checked={formData.is_active !== false}
+                aria-label="الصنف نشط"
+                onClick={() =>
+                  setFormData({
+                    ...formData,
+                    is_active: formData.is_active === false,
+                  })
+                }
+                className="relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/30"
+                style={{
+                  backgroundColor:
+                    formData.is_active !== false
+                      ? "rgba(52, 211, 153, 0.35)"
+                      : "rgba(255, 255, 255, 0.08)",
+                  border:
+                    formData.is_active !== false
+                      ? "1px solid rgba(52, 211, 153, 0.4)"
+                      : "1px solid rgba(255, 255, 255, 0.12)",
+                }}
+              >
+                <span
+                  className="block w-5 h-5 rounded-full shadow-md transition-transform duration-200"
+                  style={{
+                    backgroundColor:
+                      formData.is_active !== false
+                        ? "#34d399"
+                        : "rgba(255, 255, 255, 0.4)",
+                    transform:
+                      formData.is_active !== false
+                        ? "translateX(-6px) translateY(1px)"
+                        : "translateX(-30px) translateY(1px)",
+                  }}
+                />
+              </button>
+            </div>
+          </div>
+
           {errorMessage ? (
             <div className="p-4 bg-red-500/10 border border-red-500/25 rounded-2xl">
               <p className="text-red-700 dark:text-red-700 dark:text-red-200 text-sm">{errorMessage}</p>
