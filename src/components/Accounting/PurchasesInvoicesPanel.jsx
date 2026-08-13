@@ -1776,7 +1776,7 @@ export default function PurchasesInvoicesPanel({
                             rows.push({
                               id: `pay-${payment.id}`,
                               url: payment.receipt_url,
-                              label: `إيصال دفعة ${money(payment.amount)} — ${payment.payment_date || ""}`,
+                              label: `إيصال دفعة ${formatMoney(payment.amount)} — ${payment.payment_date || ""}`,
                               primary: true,
                             });
                           }
