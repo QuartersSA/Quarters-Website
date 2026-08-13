@@ -84,8 +84,10 @@ export default function TransferModal({ branches, onClose }) {
   });
 
   const activeItems = useMemo(() => {
+    // نفس تصفية الوارد والجرد: الصنف الموقوف لا يُعرض هنا أيضاً —
+    // كان التحويل وحده يعرض الأصناف الموقوفة (ثغرة اتساق).
     return (Array.isArray(allItems) ? allItems : []).filter(
-      (i) => i.show_in_inventory !== false,
+      (i) => i.is_active !== false && i.show_in_inventory !== false,
     );
   }, [allItems]);
 
