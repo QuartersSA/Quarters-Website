@@ -8,7 +8,6 @@ import {
   Leaf,
   ClipboardList,
   Banknote,
-  Receipt,
   HandCoins,
   ShoppingCart,
   Trash2,
@@ -24,7 +23,6 @@ const PAGE_TITLES = {
   "cash-calculator": "حاسبة الكاش",
   payroll: "مسير الرواتب",
   loans: "السلف والقروض",
-  expenses: "المصروفات",
   purchases: "المشتريات",
   waste: "الهدر",
 };
@@ -37,7 +35,6 @@ const NAV_CONFIG = [
   { kind: "row", key: "cash-calculator", href: "/accounting/cash-calculator", icon: Banknote, label: "حاسبة الكاش" },
   { kind: "row", key: "payroll", href: "/accounting/payroll", icon: Wallet, label: "مسير الرواتب" },
   { kind: "row", key: "loans", href: "/accounting/loans", icon: HandCoins, label: "السلف والقروض" },
-  { kind: "row", key: "expenses", href: "/accounting/expenses", icon: Receipt, label: "المصروفات" },
   { kind: "row", key: "purchases", href: "/accounting/purchases", icon: ShoppingCart, label: "المشتريات" },
   { kind: "row", key: "waste", href: "/accounting/waste", icon: Trash2, label: "الهدر" },
 ];

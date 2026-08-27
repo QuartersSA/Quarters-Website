@@ -1,25 +1,25 @@
 import { jsx, Fragment, jsxs } from 'react/jsx-runtime';
 import { PassThrough } from 'node:stream';
 import { createReadableStreamFromReadable } from '@react-router/node';
-import { ServerRouter, UNSAFE_withComponentProps, Outlet, useNavigate, useLocation, Meta, Links, ScrollRestoration, Scripts, useRouteError, useAsyncError, useSearchParams, useParams, Link as Link$1 } from 'react-router';
+import { ServerRouter, UNSAFE_withComponentProps, Outlet, useNavigate, useLocation, Meta, Links, ScrollRestoration, Scripts, useRouteError, useAsyncError, Navigate, useSearchParams, useParams, Link as Link$1 } from 'react-router';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 import { useButton } from '@react-aria/button';
 import * as React from 'react';
 import React__default, { useState, useEffect, Component, useRef, useCallback, useMemo, useLayoutEffect } from 'react';
-import { f as fetchWithHeaders } from './index-Uy7oFBoU.js';
+import { f as fetchWithHeaders } from './index-AvCEpyAL.js';
 import { SessionProvider } from '@hono/auth-js/react';
 import { toPng, getFontEmbedCSS } from 'html-to-image';
 import { serializeError } from 'serialize-error';
 import { Toaster, toast } from 'sonner';
 import { useIdleTimer } from 'react-idle-timer';
 import { QueryClientProvider, QueryClient, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { WifiOff, Shield, ClipboardList, Calculator, Trash2, ReceiptText, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, Receipt, ShoppingCart, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, Tag, Anchor, MessageSquare, Pencil, PieChart, BarChart3, Filter, ArrowDownWideNarrow, RotateCcw, Download, FileText, ArrowDownRight, ArrowUpRight, Minus, Layers, Trophy, CheckCircle2, Circle, ListChecks, Power, Clock, ClipboardCheck, Info, Copy, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, User, DollarSign, Percent, Lock, Ban, Send, Unlock, Gift, Loader2, Sparkles, BadgeCheck, Paperclip, ExternalLink, ScanLine, Wand2, Building, Contact, ListTree, Unlink, Link, MapPin, Hash, ScanEye, TrendingDown, CalendarClock, Clock3, Bell, FileSpreadsheet, ChevronsUpDown, ChevronsDownUp, Landmark, BookOpen, CreditCard, FileUp, MoreVertical, Repeat, CloudUpload, ChevronRight, ArrowRight, Boxes, Coins, StickyNote, Briefcase, Truck, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, MessageCircle, ClipboardX, MinusSquare, EyeOff, Ruler, CornerDownLeft, Star, LineChart as LineChart$1, CalendarCheck, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, HeartPulse, FileWarning, ScrollText, CalendarOff, Infinity, AlertOctagon, Settings, Upload, MailCheck, QrCode, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Flag, Tags, User2, Link2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
+import { WifiOff, Shield, ClipboardList, Calculator, Trash2, ReceiptText, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, ShoppingCart, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, Copy, Download, FileText, Pencil, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, Minus, RotateCcw, Filter, Info, User, DollarSign, Percent, Lock, CheckCircle2, Clock, Ban, MessageSquare, Send, Unlock, Gift, Loader2, Sparkles, BadgeCheck, Paperclip, ExternalLink, ScanLine, Wand2, Building, Contact, ListTree, Unlink, Link, MapPin, Hash, ScanEye, TrendingDown, CalendarClock, Clock3, Bell, FileSpreadsheet, ChevronsUpDown, ChevronsDownUp, Landmark, BookOpen, CreditCard, FileUp, MoreVertical, Repeat, CloudUpload, ChevronRight, ArrowRight, BarChart3, Tag, Anchor, ArrowDownWideNarrow, ArrowDownRight, ArrowUpRight, Layers, Trophy, Circle, Receipt, ListChecks, Power, PieChart, ClipboardCheck, Boxes, Coins, StickyNote, Briefcase, Truck, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, MessageCircle, ClipboardX, MinusSquare, EyeOff, Ruler, CornerDownLeft, Star, LineChart as LineChart$1, CalendarCheck, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, HeartPulse, FileWarning, ScrollText, CalendarOff, Infinity, AlertOctagon, Settings, Upload, MailCheck, QrCode, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Flag, Tags, User2, Link2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, c as currentRiyadhMonthKey, b as riyadhMonthKeyFromOffset, d as formatDateTime$4, L as LOCALE, t as todayRiyadhDateKey, f as formatRiyadhDateForInput, e as formatDateForInput, g as currentRiyadhHour, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$3 } from './dateUtils-DCPDkvv9.js';
+import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, c as currentRiyadhMonthKey, b as riyadhMonthKeyFromOffset, d as formatDateTime$4, t as todayRiyadhDateKey, L as LOCALE, f as formatRiyadhDateForInput, e as formatDateForInput, g as currentRiyadhHour, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$3 } from './dateUtils-CVVwj6xk.js';
 import _JSXStyle from 'styled-jsx/style.js';
-import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, PieChart as PieChart$1, Pie, Cell, BarChart, Bar, ReferenceDot } from 'recharts';
 import { c as computeDraftTotals } from './invoiceDraftMath-C8Db36NO.js';
+import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, PieChart as PieChart$1, Pie, Cell, BarChart, Bar, ReferenceDot } from 'recharts';
 import { getDefaultClassNames, DayPicker } from 'react-day-picker';
 import { enUS, arSA } from 'date-fns/locale';
 import { createRoot } from 'react-dom/client';
@@ -1826,7 +1826,6 @@ const PAGE_TITLES$4 = {
   "cash-calculator": "حاسبة الكاش",
   payroll: "مسير الرواتب",
   loans: "السلف والقروض",
-  expenses: "المصروفات",
   purchases: "المشتريات",
   waste: "الهدر"
 };
@@ -1872,12 +1871,6 @@ const NAV_CONFIG$2 = [{
   href: "/accounting/loans",
   icon: HandCoins,
   label: "السلف والقروض"
-}, {
-  kind: "row",
-  key: "expenses",
-  href: "/accounting/expenses",
-  icon: Receipt,
-  label: "المصروفات"
 }, {
   kind: "row",
   key: "purchases",
@@ -3215,3493 +3208,8 @@ const route3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: page$K
 }, Symbol.toStringTag, { value: 'Module' }));
 
-function formatMoney$d(value) {
-  const n = Number(value);
-  if (!Number.isFinite(n)) return "—";
-  return n.toLocaleString("ar-SA-u-nu-latn", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
-function monthLabel$1(month) {
-  const value = month ? String(month) : "";
-  const m = value.match(/^(\d{4})-(\d{2})$/);
-  if (!m) return value;
-  const year = Number(m[1]);
-  const idx = Number(m[2]) - 1;
-  const monthsAr = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-  const name = monthsAr[idx] || value;
-  return `${name} ${year}`;
-}
-function buildRecentMonthOptions$1(count = 24) {
-  const options = [{
-    value: "",
-    label: "اختار الشهر"
-  }];
-  for (let i = 0; i < count; i += 1) {
-    const value = riyadhMonthKeyFromOffset(-i);
-    options.push({
-      value,
-      label: monthLabel$1(value)
-    });
-  }
-  return options;
-}
-
-function ExpenseForm({
-  types,
-  onSubmit,
-  isSubmitting,
-  onCreateType,
-  editingExpense,
-  onCancelEdit,
-  // Optional: prefill form's month (e.g. when opened from QuickAddSheet so
-  // the new expense lands in the same month the user is currently viewing).
-  // Falls back to current calendar month when omitted.
-  defaultMonth
-}) {
-  const [typeId, setTypeId] = useState("");
-  const [expenseName, setExpenseName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [formMonth, setFormMonth] = useState("");
-  const [showNewType, setShowNewType] = useState(false);
-  const [newTypeName, setNewTypeName] = useState("");
-  const monthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
-  useEffect(() => {
-    if (editingExpense) return;
-    if (defaultMonth) {
-      setFormMonth(defaultMonth);
-      return;
-    }
-    setFormMonth(currentRiyadhMonthKey());
-  }, []);
-  useEffect(() => {
-    if (editingExpense) {
-      setTypeId(String(editingExpense.expense_type_id || ""));
-      setExpenseName(editingExpense.expense_name || "");
-      setAmount(String(editingExpense.amount || ""));
-      const em = editingExpense.expense_month ? String(editingExpense.expense_month).slice(0, 7) : "";
-      setFormMonth(em);
-    }
-  }, [editingExpense]);
-  const typeOptions = [{
-    value: "",
-    label: "اختر نوع المصروف"
-  }, ...(types || []).map((t) => ({
-    value: String(t.id),
-    label: t.name
-  }))];
-  const isEditing = !!editingExpense;
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!typeId || !expenseName.trim() || !amount || !formMonth) return;
-    onSubmit({
-      ...isEditing ? {
-        id: editingExpense.id
-      } : {},
-      expense_type_id: Number(typeId),
-      expense_name: expenseName.trim(),
-      amount: Number(amount),
-      month: formMonth
-    });
-    if (!isEditing) {
-      setExpenseName("");
-      setAmount("");
-    }
-  };
-  const handleCancel = () => {
-    setTypeId("");
-    setExpenseName("");
-    setAmount("");
-    setShowNewType(false);
-    setNewTypeName("");
-    if (onCancelEdit) onCancelEdit();
-  };
-  const handleCreateType = (e) => {
-    e.preventDefault();
-    if (!newTypeName.trim()) return;
-    onCreateType({
-      name: newTypeName.trim()
-    });
-    setNewTypeName("");
-    setShowNewType(false);
-  };
-  const canSubmit = typeId && expenseName.trim() && amount && Number(amount) > 0 && formMonth;
-  return /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
-    isEditing && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-400/10 border border-amber-400/20", children: [
-      /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 text-xs font-semibold", children: "✏️ تعديل المصروف:" }),
-      /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white text-xs font-bold", children: editingExpense.expense_name })
-    ] }),
-    /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
-      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3", children: [
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "الشهر" }),
-          /* @__PURE__ */ jsx(GlassSelect, { value: formMonth, onChange: setFormMonth, options: monthOptions, placeholder: "اختر الشهر", buttonClassName: "text-sm py-2.5 px-3", disabled: isEditing })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "نوع المصروف" }),
-          /* @__PURE__ */ jsx(GlassSelect, { value: typeId, onChange: setTypeId, options: typeOptions, placeholder: "اختر نوع المصروف", buttonClassName: "text-sm py-2.5 px-3" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "اسم المصروف" }),
-          /* @__PURE__ */ jsx("input", { type: "text", value: expenseName, onChange: (e) => setExpenseName(e.target.value), placeholder: "مثال: كهرباء فرع الندى", className: `${ws$1.input} text-sm py-2.5 px-3 rounded-2xl` })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "المبلغ (ريال)" }),
-          /* @__PURE__ */ jsx("input", { type: "number", value: amount, onChange: (e) => setAmount(e.target.value), placeholder: "0.00", step: "0.01", min: "0", dir: "ltr", className: `${ws$1.input} text-sm py-2.5 px-3 rounded-2xl text-right` })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-        /* @__PURE__ */ jsxs("button", { type: "submit", disabled: !canSubmit || isSubmitting, className: `${isEditing ? ws$1.btnPrimary : ws$1.btnPrimary} px-5 py-2.5 rounded-2xl`, children: [
-          isEditing ? /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
-          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: isSubmitting ? isEditing ? "جاري الحفظ..." : "جاري الإضافة..." : isEditing ? "حفظ التعديل" : "إضافة مصروف" })
-        ] }),
-        isEditing && /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleCancel, className: `${ws$1.btnNeutral} px-4 py-2.5 rounded-2xl`, children: [
-          /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }),
-          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: "إلغاء" })
-        ] }),
-        !isEditing && /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowNewType(!showNewType), className: `${ws$1.btnNeutral} px-4 py-2.5 rounded-2xl`, children: [
-          /* @__PURE__ */ jsx(Tag, { className: "w-4 h-4" }),
-          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: "نوع جديد" })
-        ] })
-      ] })
-    ] }),
-    showNewType && !isEditing && /* @__PURE__ */ jsxs("form", { onSubmit: handleCreateType, className: "flex items-end gap-2", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "اسم النوع الجديد" }),
-        /* @__PURE__ */ jsx("input", { type: "text", value: newTypeName, onChange: (e) => setNewTypeName(e.target.value), placeholder: "مثال: تأمين", className: `${ws$1.input} text-sm py-2.5 px-3 rounded-2xl`, autoFocus: true })
-      ] }),
-      /* @__PURE__ */ jsxs("button", { type: "submit", disabled: !newTypeName.trim(), className: `${ws$1.btnPrimary} px-4 py-2.5 rounded-2xl`, children: [
-        /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
-        /* @__PURE__ */ jsx("span", { className: "font-semibold", children: "إضافة" })
-      ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-        setShowNewType(false);
-        setNewTypeName("");
-      }, className: `${ws$1.btnNeutral} px-4 py-2.5 rounded-2xl`, children: "إلغاء" })
-    ] })
-  ] });
-}
-
-function StatusBadge({
-  confirmed
-}) {
-  return confirmed ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-400/15 dark:text-emerald-200 dark:border-emerald-400/25", children: [
-    /* @__PURE__ */ jsx(Check, { className: "w-2.5 h-2.5" }),
-    "مؤكد"
-  ] }) : /* @__PURE__ */ jsx("span", { className: "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-400/15 dark:text-amber-200 dark:border-amber-400/25", children: "بانتظار" });
-}
-function PendingFixedRow({
-  pending,
-  month,
-  onConfirmFixed
-}) {
-  const [amount, setAmount] = useState(String(pending.default_amount || ""));
-  const [note, setNote] = useState("");
-  const [showNote, setShowNote] = useState(false);
-  const handleConfirm = () => {
-    onConfirmFixed({
-      id: pending.id,
-      month,
-      confirmed_amount: amount !== "" ? Number(amount) : Number(pending.default_amount),
-      confirmed_note: note || null
-    });
-  };
-  const typeName = pending.expense_type_name || "—";
-  const expenseName = pending.expense_name || "—";
-  const defaultFormatted = formatMoney$d(pending.default_amount);
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] bg-emerald-400/[0.03]", children: [
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm", style: {
-        maxWidth: 120
-      }, children: typeName }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm", style: {
-        maxWidth: 200
-      }, children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5", children: [
-        /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/15 border border-emerald-400/30 text-emerald-700 dark:text-emerald-200 text-[10px] font-bold", children: [
-          /* @__PURE__ */ jsx(Anchor, { className: "w-2.5 h-2.5" }),
-          "ثابت"
-        ] }),
-        /* @__PURE__ */ jsx("span", { children: expenseName })
-      ] }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm", dir: "ltr", children: defaultFormatted }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: /* @__PURE__ */ jsx("input", { type: "number", value: amount, onChange: (e) => setAmount(e.target.value), className: `${ws$1.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right`, dir: "ltr", placeholder: String(pending.default_amount || 0), step: "0.01" }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1 text-center", children: /* @__PURE__ */ jsx("span", { className: "inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30", children: /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), className: `w-6 h-6 rounded-md inline-flex items-center justify-center transition-all ${note ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: handleConfirm, className: `${ws$1.btnPrimary} text-xs px-2 py-0.5 rounded-lg`, title: "تأكيد الدفع", children: "تأكيد الدفع" })
-      ] }) })
-    ] }),
-    showNote && /* @__PURE__ */ jsx("tr", { className: "border-t border-slate-100 dark:border-white/5", children: /* @__PURE__ */ jsx("td", { colSpan: 6, className: "py-2 px-2", children: /* @__PURE__ */ jsx("div", { className: "flex items-start gap-2 mr-2", children: /* @__PURE__ */ jsx("input", { type: "text", value: note, onChange: (e) => setNote(e.target.value), placeholder: "ملاحظة (اختياري)...", className: `${ws$1.input} text-xs py-1.5 px-3 rounded-xl flex-1` }) }) }) })
-  ] });
-}
-function ExpenseRow({
-  expense,
-  onConfirm,
-  onDelete,
-  onEdit
-}) {
-  const savedConfirmed = !!expense.is_confirmed;
-  const [isConfirmed, setIsConfirmed] = useState(savedConfirmed);
-  const [confirmedAmount, setConfirmedAmount] = useState(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
-  const [confirmedNote, setConfirmedNote] = useState(expense.confirmed_note || "");
-  const [showNote, setShowNote] = useState(false);
-  const [dirty, setDirty] = useState(false);
-  const [isEditingConfirm, setIsEditingConfirm] = useState(false);
-  const isLocked = savedConfirmed && !isEditingConfirm && !dirty;
-  const originalAmount = Number(expense.amount || 0);
-  const currentConfirmedAmount = confirmedAmount !== "" ? Number(confirmedAmount) : null;
-  const amountDiffers = currentConfirmedAmount !== null && Math.abs(currentConfirmedAmount - originalAmount) >= 0.01;
-  useEffect(() => {
-    setIsConfirmed(!!expense.is_confirmed);
-    setConfirmedAmount(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
-    setConfirmedNote(expense.confirmed_note || "");
-    setShowNote(false);
-    setDirty(false);
-    setIsEditingConfirm(false);
-  }, [expense.is_confirmed, expense.confirmed_amount, expense.confirmed_note]);
-  const handleToggleConfirmed = () => {
-    if (isLocked) return;
-    const newConfirmed = !isConfirmed;
-    setIsConfirmed(newConfirmed);
-    if (newConfirmed && !confirmedAmount) {
-      setConfirmedAmount(String(originalAmount));
-    }
-    if (!newConfirmed) {
-      setConfirmedAmount("");
-      setConfirmedNote("");
-      setShowNote(false);
-    }
-    setDirty(true);
-  };
-  const handleAmountChange = (val) => {
-    setConfirmedAmount(val);
-    setDirty(true);
-  };
-  const handleNoteChange = (val) => {
-    setConfirmedNote(val);
-    setDirty(true);
-  };
-  const handleSave = () => {
-    onConfirm({
-      id: expense.id,
-      is_confirmed: isConfirmed,
-      confirmed_amount: isConfirmed && confirmedAmount !== "" ? Number(confirmedAmount) : null,
-      confirmed_note: isConfirmed && confirmedNote ? confirmedNote : null
-    });
-    setDirty(false);
-    setIsEditingConfirm(false);
-  };
-  const handleEditConfirm = () => {
-    setIsEditingConfirm(true);
-  };
-  const handleCancelEditConfirm = () => {
-    setIsConfirmed(!!expense.is_confirmed);
-    setConfirmedAmount(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
-    setConfirmedNote(expense.confirmed_note || "");
-    setShowNote(false);
-    setDirty(false);
-    setIsEditingConfirm(false);
-  };
-  const typeName = expense.expense_type_name || "—";
-  const expenseName = expense.expense_name || "—";
-  const formattedAmount = formatMoney$d(expense.amount);
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]", children: [
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm", style: {
-        maxWidth: 120
-      }, children: typeName }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm", style: {
-        maxWidth: 200
-      }, children: expenseName }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm", dir: "ltr", children: formattedAmount }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: isConfirmed ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$d(confirmedAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => handleAmountChange(e.target.value), className: `${ws$1.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleToggleConfirmed, disabled: isLocked, "aria-label": isConfirmed ? "إلغاء تأكيد المصروف" : "تأكيد المصروف", title: isConfirmed ? "إلغاء التأكيد" : "تأكيد المصروف", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isConfirmed ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isConfirmed ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
-        isConfirmed && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${confirmedNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
-        !savedConfirmed && onEdit && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(expense), className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-sky-500/10 border border-sky-500/25 text-sky-700 dark:text-sky-300 hover:bg-sky-500/20", title: "تعديل المصروف", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
-        isLocked && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleEditConfirm, className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-white/70", title: "تعديل التأكيد", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
-        isEditingConfirm && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleCancelEditConfirm, className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300 hover:bg-red-500/20", title: "إلغاء", children: /* @__PURE__ */ jsx(X, { className: "w-3 h-3" }) }),
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-          const msg = savedConfirmed ? "هذا المصروف مؤكد — هل أنت متأكد من حذفه؟" : "هل تريد حذف هذا المصروف؟";
-          if (window.confirm(msg)) {
-            onDelete(expense.id);
-          }
-        }, className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300 hover:bg-red-500/20", title: savedConfirmed ? "حذف (مؤكد)" : "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3 h-3" }) }),
-        dirty && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleSave, className: `${ws$1.btnPrimary} text-xs px-2 py-0.5 rounded-lg`, children: "حفظ" })
-      ] }) })
-    ] }),
-    showNote && isConfirmed && /* @__PURE__ */ jsx("tr", { className: "border-t border-slate-100 dark:border-white/5", children: /* @__PURE__ */ jsx("td", { colSpan: 6, className: "py-2 px-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-2 mr-2", children: [
-      amountDiffers && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 shrink-0 mt-1", children: [
-        /* @__PURE__ */ jsx("div", { className: "w-2 h-2 rounded-full bg-amber-400", style: {
-          animation: "expensePulse 2s ease-in-out infinite"
-        } }),
-        /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-300 text-xs font-semibold whitespace-nowrap", children: "المبلغ مختلف عن الأصلي" })
-      ] }),
-      isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/60 text-xs py-1.5 flex-1", children: confirmedNote || "—" }) : /* @__PURE__ */ jsx("input", { type: "text", value: confirmedNote, onChange: (e) => handleNoteChange(e.target.value), placeholder: amountDiffers ? "يرجى إدخال سبب الاختلاف..." : "ملاحظة (اختياري)...", className: `${ws$1.input} text-xs py-1.5 px-3 rounded-xl flex-1 ${amountDiffers && !confirmedNote ? "border-amber-400/40 placeholder:text-amber-700 dark:placeholder:text-amber-300/50" : ""}` }),
-      dirty && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleSave, className: `${ws$1.btnPrimary} text-xs px-3 py-1.5 rounded-xl shrink-0`, children: "حفظ" })
-    ] }) }) })
-  ] });
-}
-function PendingFixedCard({
-  pending,
-  month,
-  onConfirmFixed
-}) {
-  const [amount, setAmount] = useState(String(pending.default_amount || ""));
-  const [note, setNote] = useState("");
-  const [showNote, setShowNote] = useState(false);
-  const handleConfirm = () => {
-    onConfirmFixed({
-      id: pending.id,
-      month,
-      confirmed_amount: amount !== "" ? Number(amount) : Number(pending.default_amount),
-      confirmed_note: note || null
-    });
-  };
-  return /* @__PURE__ */ jsxs("div", { className: `${ws$1.innerCard} p-3 bg-emerald-400/[0.04]`, children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-2", children: [
-      /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 mb-1", children: [
-          /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/15 border border-emerald-400/30 text-emerald-700 dark:text-emerald-200 text-[10px] font-bold", children: [
-            /* @__PURE__ */ jsx(Anchor, { className: "w-2.5 h-2.5" }),
-            "ثابت"
-          ] }),
-          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40 text-[11px]", children: pending.expense_type_name || "—" })
-        ] }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-semibold truncate", children: pending.expense_name || "—" })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "text-left shrink-0", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-500 dark:text-white/40", children: "الافتراضي" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/70 text-sm font-semibold", dir: "ltr", children: formatMoney$d(pending.default_amount) })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mt-3", children: [
-      /* @__PURE__ */ jsx("input", { type: "number", value: amount, onChange: (e) => setAmount(e.target.value), className: `${ws$1.input} text-xs py-1.5 px-2 rounded-lg w-[110px] text-right`, dir: "ltr", placeholder: String(pending.default_amount || 0), step: "0.01" }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote((s) => !s), className: `w-8 h-8 rounded-lg inline-flex items-center justify-center transition-all ${note ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3.5 h-3.5" }) }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: handleConfirm, className: `${ws$1.btnPrimary} text-xs px-3 py-1.5 rounded-lg flex-1 justify-center`, children: "تأكيد الدفع" })
-    ] }),
-    showNote && /* @__PURE__ */ jsx("input", { type: "text", value: note, onChange: (e) => setNote(e.target.value), placeholder: "ملاحظة (اختياري)…", className: `${ws$1.input} text-xs py-1.5 px-3 rounded-xl mt-2` })
-  ] });
-}
-function ExpenseCard({
-  expense,
-  onConfirm,
-  onDelete,
-  onEdit
-}) {
-  const savedConfirmed = !!expense.is_confirmed;
-  const [isConfirmed, setIsConfirmed] = useState(savedConfirmed);
-  const [confirmedAmount, setConfirmedAmount] = useState(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
-  const [confirmedNote, setConfirmedNote] = useState(expense.confirmed_note || "");
-  const [showNote, setShowNote] = useState(false);
-  const [dirty, setDirty] = useState(false);
-  const [isEditingConfirm, setIsEditingConfirm] = useState(false);
-  const isLocked = savedConfirmed && !isEditingConfirm && !dirty;
-  const originalAmount = Number(expense.amount || 0);
-  const currentConfirmedAmount = confirmedAmount !== "" ? Number(confirmedAmount) : null;
-  const amountDiffers = currentConfirmedAmount !== null && Math.abs(currentConfirmedAmount - originalAmount) >= 0.01;
-  useEffect(() => {
-    setIsConfirmed(!!expense.is_confirmed);
-    setConfirmedAmount(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
-    setConfirmedNote(expense.confirmed_note || "");
-    setShowNote(false);
-    setDirty(false);
-    setIsEditingConfirm(false);
-  }, [expense.is_confirmed, expense.confirmed_amount, expense.confirmed_note]);
-  const handleToggleConfirmed = () => {
-    if (isLocked) return;
-    const next = !isConfirmed;
-    setIsConfirmed(next);
-    if (next && !confirmedAmount) setConfirmedAmount(String(originalAmount));
-    if (!next) {
-      setConfirmedAmount("");
-      setConfirmedNote("");
-      setShowNote(false);
-    }
-    setDirty(true);
-  };
-  const handleSave = () => {
-    onConfirm({
-      id: expense.id,
-      is_confirmed: isConfirmed,
-      confirmed_amount: isConfirmed && confirmedAmount !== "" ? Number(confirmedAmount) : null,
-      confirmed_note: isConfirmed && confirmedNote ? confirmedNote : null
-    });
-    setDirty(false);
-    setIsEditingConfirm(false);
-  };
-  const handleCancelEditConfirm = () => {
-    setIsConfirmed(!!expense.is_confirmed);
-    setConfirmedAmount(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
-    setConfirmedNote(expense.confirmed_note || "");
-    setShowNote(false);
-    setDirty(false);
-    setIsEditingConfirm(false);
-  };
-  return /* @__PURE__ */ jsxs("div", { className: `${ws$1.innerCard} p-3 ${savedConfirmed ? "bg-emerald-400/[0.04]" : ""}`, children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-2", children: [
-      /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/40 text-[11px] mb-0.5", children: expense.expense_type_name || "—" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-semibold truncate", children: expense.expense_name || "—" })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-end gap-1 shrink-0", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 text-sm font-bold", dir: "ltr", children: formatMoney$d(expense.amount) }),
-        /* @__PURE__ */ jsx(StatusBadge, { confirmed: isConfirmed })
-      ] })
-    ] }),
-    isConfirmed && !isLocked && /* @__PURE__ */ jsxs("div", { className: "mt-2 flex items-center gap-2", children: [
-      /* @__PURE__ */ jsx("span", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المبلغ المؤكد" }),
-      /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => {
-        setConfirmedAmount(e.target.value);
-        setDirty(true);
-      }, className: `${ws$1.input} text-xs py-1.5 px-2 rounded-lg w-[110px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" })
-    ] }),
-    isConfirmed && isLocked && /* @__PURE__ */ jsxs("div", { className: "mt-1.5 text-[11px] text-slate-500 dark:text-white/45", children: [
-      "المبلغ المؤكد:",
-      " ",
-      /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$d(confirmedAmount) })
-    ] }),
-    showNote && isConfirmed && /* @__PURE__ */ jsx("div", { className: "mt-2", children: isLocked ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/60", children: confirmedNote || "—" }) : /* @__PURE__ */ jsx("input", { type: "text", value: confirmedNote, onChange: (e) => {
-      setConfirmedNote(e.target.value);
-      setDirty(true);
-    }, placeholder: amountDiffers ? "سبب اختلاف المبلغ…" : "ملاحظة (اختياري)…", className: `${ws$1.input} text-xs py-1.5 px-3 rounded-xl ${amountDiffers && !confirmedNote ? "border-amber-400/40" : ""}` }) }),
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 mt-3 flex-wrap", children: [
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleToggleConfirmed, disabled: isLocked, className: `h-8 px-3 rounded-lg inline-flex items-center gap-1.5 text-xs font-semibold transition-all ${isConfirmed ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50"} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`, children: [
-        isConfirmed ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }),
-        isConfirmed ? "مؤكد" : "تأكيد"
-      ] }),
-      isConfirmed && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote((s) => !s), className: `w-8 h-8 rounded-lg inline-flex items-center justify-center transition-all ${confirmedNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3.5 h-3.5" }) }),
-      !savedConfirmed && onEdit && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(expense), className: "w-8 h-8 rounded-lg inline-flex items-center justify-center bg-sky-500/10 border border-sky-500/25 text-sky-700 dark:text-sky-300", title: "تعديل المصروف", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
-      isLocked && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setIsEditingConfirm(true), className: "w-8 h-8 rounded-lg inline-flex items-center justify-center bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40", title: "تعديل التأكيد", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
-      isEditingConfirm && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleCancelEditConfirm, className: "w-8 h-8 rounded-lg inline-flex items-center justify-center bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300", title: "إلغاء", children: /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-        const msg = savedConfirmed ? "هذا المصروف مؤكد — هل أنت متأكد من حذفه؟" : "هل تريد حذف هذا المصروف؟";
-        if (window.confirm(msg)) onDelete(expense.id);
-      }, className: "w-8 h-8 rounded-lg inline-flex items-center justify-center bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300", title: savedConfirmed ? "حذف (مؤكد)" : "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) }),
-      dirty && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleSave, className: `${ws$1.btnPrimary} text-xs px-3 py-1.5 rounded-lg mr-auto`, children: "حفظ" })
-    ] })
-  ] });
-}
-function ExpenseTable({
-  expenses,
-  pendingFixed = [],
-  month,
-  onConfirm,
-  onDelete,
-  onEdit,
-  onConfirmFixed
-}) {
-  const hasAny = Array.isArray(expenses) && expenses.length > 0 || Array.isArray(pendingFixed) && pendingFixed.length > 0;
-  if (!hasAny) {
-    return /* @__PURE__ */ jsxs("div", { className: "text-center py-8", children: [
-      /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/40 text-sm", children: "لا يوجد مصروفات لهذا الشهر" }),
-      /* @__PURE__ */ jsx("div", { className: "text-slate-400 dark:text-white/25 text-xs mt-1", children: "أضف مصروفات من قسم مصروف متغيّر أو سجّل مصاريف ثابتة" })
-    ] });
-  }
-  const confirmedCount = expenses.filter((e) => e.is_confirmed).length;
-  const totalOriginal = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
-  const totalConfirmed = expenses.filter((e) => e.is_confirmed).reduce((s, e) => s + Number(e.confirmed_amount || e.amount || 0), 0);
-  const pendingCount = Array.isArray(pendingFixed) ? pendingFixed.length : 0;
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: "jsx-3778571168 flex flex-wrap items-center gap-3 mb-3", children: [
-      /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
-        "تم التأكيد: ",
-        confirmedCount,
-        " / ",
-        expenses.length
-      ] }),
-      pendingCount > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/40", children: "|" }),
-        /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 inline-flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-200", children: [
-          /* @__PURE__ */ jsx(Anchor, { className: "w-3 h-3" }),
-          "مصروفات ثابتة بانتظار التأكيد: ",
-          pendingCount
-        ] })
-      ] }),
-      /* @__PURE__ */ jsx("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/40", children: "|" }),
-      /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
-        "إجمالي المصروفات:",
-        " ",
-        /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-slate-800 dark:text-white/80 font-semibold", children: formatMoney$d(totalOriginal) })
-      ] }),
-      confirmedCount > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/40", children: "|" }),
-        /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
-          "إجمالي المؤكد:",
-          " ",
-          /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-emerald-700 dark:text-emerald-200 font-semibold", children: formatMoney$d(totalConfirmed) })
-        ] })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs("table", { className: "jsx-3778571168 w-full text-xs hidden lg:table", children: [
-      /* @__PURE__ */ jsx("thead", { className: "jsx-3778571168", children: /* @__PURE__ */ jsxs("tr", { className: "jsx-3778571168 text-slate-700 dark:text-white/70 text-[11px]", children: [
-        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-right font-semibold py-2 px-2 whitespace-nowrap", children: "النوع" }),
-        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-right font-semibold py-2 px-2 whitespace-nowrap", children: "اسم المصروف" }),
-        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-right font-semibold py-2 px-2 whitespace-nowrap", children: "المبلغ" }),
-        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-right font-semibold py-2 px-2 whitespace-nowrap", children: "المبلغ المؤكد" }),
-        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-center font-semibold py-2 px-1 whitespace-nowrap", children: "✓" }),
-        /* @__PURE__ */ jsx("th", { style: {
-          width: 120
-        }, className: "jsx-3778571168 py-2 px-1" })
-      ] }) }),
-      /* @__PURE__ */ jsxs("tbody", { className: "jsx-3778571168", children: [
-        Array.isArray(pendingFixed) && pendingFixed.map((p) => /* @__PURE__ */ jsx(PendingFixedRow, { pending: p, month, onConfirmFixed }, `fixed-${p.id}`)),
-        expenses.map((e) => /* @__PURE__ */ jsx(ExpenseRow, { expense: e, onConfirm, onDelete, onEdit }, e.id))
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "jsx-3778571168 lg:hidden space-y-2.5", children: [
-      Array.isArray(pendingFixed) && pendingFixed.map((p) => /* @__PURE__ */ jsx(PendingFixedCard, { pending: p, month, onConfirmFixed }, `fixed-${p.id}`)),
-      expenses.map((e) => /* @__PURE__ */ jsx(ExpenseCard, { expense: e, onConfirm, onDelete, onEdit }, e.id))
-    ] }),
-    /* @__PURE__ */ jsx(_JSXStyle, { id: "3778571168", children: ["@-webkit-keyframes expensePulse{0%,100%{opacity:1;}50%{opacity:0.4;}}", "@keyframes expensePulse{0%,100%{opacity:1;}50%{opacity:0.4;}}"] })
-  ] });
-}
-
-const PIE_COLORS = [
-  "#34d399",
-  // emerald
-  "#60a5fa",
-  // sky
-  "#f472b6",
-  // pink
-  "#fbbf24",
-  // amber
-  "#a78bfa",
-  // violet
-  "#fb7185",
-  // rose
-  "#f87171",
-  // red
-  "#22d3ee",
-  // cyan
-  "#facc15",
-  // yellow
-  "#c084fc",
-  // purple
-  "#4ade80",
-  // green
-  "#fdba74"
-  // orange
-];
-function shortMonth(label) {
-  if (!label || typeof label !== "string") return label;
-  const [y, m] = label.split("-");
-  if (!y || !m) return label;
-  return `${m}/${y.slice(2)}`;
-}
-function TooltipBox({
-  active,
-  payload,
-  labelFormatter,
-  isDark
-}) {
-  if (!active || !payload || !payload.length) return null;
-  const bg = isDark ? "rgba(15, 23, 42, 0.96)" : "rgba(255, 255, 255, 0.98)";
-  const borderColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(15, 23, 42, 0.12)";
-  const labelColor = isDark ? "rgba(255,255,255,0.55)" : "rgb(71, 85, 105)";
-  const nameColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
-  const valueColor = isDark ? "#fff" : "rgb(15, 23, 42)";
-  return /* @__PURE__ */ jsxs("div", { className: "text-xs px-3 py-2 rounded-xl shadow-lg", style: {
-    background: bg,
-    border: `1px solid ${borderColor}`,
-    color: valueColor,
-    minWidth: 140
-  }, dir: "rtl", children: [
-    payload[0]?.payload?.month || payload[0]?.name ? /* @__PURE__ */ jsx("div", { className: "mb-1", style: {
-      color: labelColor
-    }, children: labelFormatter ? labelFormatter(payload[0].payload?.month || payload[0].name) : payload[0].payload?.month || payload[0].name }) : null,
-    payload.map((p, i) => /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-      /* @__PURE__ */ jsx("span", { className: "inline-block w-2.5 h-2.5 rounded-full", style: {
-        background: p.color || p.fill
-      } }),
-      /* @__PURE__ */ jsxs("span", { style: {
-        color: nameColor
-      }, children: [
-        p.name,
-        ":"
-      ] }),
-      /* @__PURE__ */ jsx("span", { className: "font-bold", style: {
-        color: valueColor
-      }, dir: "ltr", children: formatMoney$d(p.value) })
-    ] }, i))
-  ] });
-}
-function ExpensesCharts({
-  month
-}) {
-  const {
-    isDark
-  } = useAdminTheme();
-  const gridStroke = isDark ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.10)";
-  const axisStroke = isDark ? "rgba(255,255,255,0.55)" : "rgba(15,23,42,0.55)";
-  const legendColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
-  const trendQuery = useQuery({
-    queryKey: queryKeys.accountingExpenseTrend(month, 12),
-    enabled: !!month,
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        months: "12",
-        ...month ? {
-          currentMonth: month
-        } : {}
-      });
-      const r = await adminFetch(`/api/accounting/expenses/trend?${params}`);
-      if (!r.ok) {
-        const d = await r.json().catch(() => ({}));
-        throw new Error(d?.error || "فشل تحميل البيانات");
-      }
-      return r.json();
-    },
-    staleTime: 6e4
-  });
-  const months = trendQuery.data?.months || [];
-  const byType = trendQuery.data?.by_type || [];
-  const trendData = useMemo(() => months.map((m) => ({
-    month: m.month,
-    confirmed: Number(m.confirmed) || 0,
-    pending: Number(m.pending) || 0,
-    total: Number(m.total) || 0
-  })), [months]);
-  const pieData = useMemo(() => byType.map((t) => ({
-    name: t.type_name,
-    value: Number(t.total) || 0
-  })), [byType]);
-  const barData = useMemo(() => byType.slice().map((t) => ({
-    name: t.type_name,
-    total: Number(t.total) || 0,
-    confirmed: Number(t.confirmed) || 0
-  })), [byType]);
-  const hasTrend = trendData.some((d) => d.total > 0);
-  const hasByType = pieData.length > 0;
-  if (trendQuery.isLoading) {
-    return /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: /* @__PURE__ */ jsx("div", { className: "h-64 flex items-center justify-center text-slate-600 dark:text-white/55", children: "جاري تحميل الرسوم البيانية…" }) });
-  }
-  if (trendQuery.isError) {
-    return /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-5 text-red-700 dark:text-red-200 text-sm`, children: trendQuery.error?.message || "تعذّر تحميل البيانات" });
-  }
-  return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-4", dir: "rtl", children: [
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5 lg:col-span-2`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-4 h-4" }) }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "آخر 12 شهر" }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: "مؤكد + بانتظار التأكيد" })
-        ] })
-      ] }),
-      hasTrend ? /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: 260, children: /* @__PURE__ */ jsxs(LineChart, { data: trendData, margin: {
-        top: 6,
-        right: 12,
-        left: 0,
-        bottom: 6
-      }, children: [
-        /* @__PURE__ */ jsx(CartesianGrid, { stroke: gridStroke }),
-        /* @__PURE__ */ jsx(XAxis, { dataKey: "month", tickFormatter: shortMonth, stroke: axisStroke, tick: {
-          fontSize: 11,
-          fill: axisStroke
-        } }),
-        /* @__PURE__ */ jsx(YAxis, { stroke: axisStroke, tick: {
-          fontSize: 11,
-          fill: axisStroke
-        }, tickFormatter: (v) => v >= 1e3 ? `${Math.round(v / 1e3)}k` : v }),
-        /* @__PURE__ */ jsx(Tooltip, { content: /* @__PURE__ */ jsx(TooltipBox, { isDark, labelFormatter: (m) => monthLabel$1(m) }) }),
-        /* @__PURE__ */ jsx(Legend, { wrapperStyle: {
-          color: legendColor,
-          fontSize: 12
-        } }),
-        /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "confirmed", name: "مؤكد", stroke: "#34d399", strokeWidth: 2, dot: {
-          r: 3
-        }, isAnimationActive: false }),
-        /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "pending", name: "بانتظار", stroke: "#fbbf24", strokeWidth: 2, dot: {
-          r: 3
-        }, isAnimationActive: false }),
-        /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "total", name: "الإجمالي", stroke: "#60a5fa", strokeWidth: 2, strokeDasharray: "4 4", dot: false, isAnimationActive: false })
-      ] }) }) : /* @__PURE__ */ jsx("div", { className: "h-64 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm", children: "لا توجد بيانات بعد" })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(PieChart, { className: "w-4 h-4" }) }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "توزيع الشهر" }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: monthLabel$1(month) || "—" })
-        ] })
-      ] }),
-      hasByType ? /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: 260, children: /* @__PURE__ */ jsxs(PieChart$1, { children: [
-        /* @__PURE__ */ jsx(Pie, { data: pieData, dataKey: "value", nameKey: "name", cx: "50%", cy: "50%", outerRadius: 90, innerRadius: 40, paddingAngle: 2, isAnimationActive: false, children: pieData.map((_, idx) => /* @__PURE__ */ jsx(Cell, { fill: PIE_COLORS[idx % PIE_COLORS.length] }, idx)) }),
-        /* @__PURE__ */ jsx(Tooltip, { content: /* @__PURE__ */ jsx(TooltipBox, { isDark }) }),
-        /* @__PURE__ */ jsx(Legend, { wrapperStyle: {
-          color: legendColor,
-          fontSize: 11
-        } })
-      ] }) }) : /* @__PURE__ */ jsx("div", { className: "h-64 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm", children: "لا توجد مصروفات لهذا الشهر" })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5 lg:col-span-3`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-pink-700 dark:text-pink-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-4 h-4" }) }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "حسب النوع" }),
-          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: monthLabel$1(month) || "—" })
-        ] })
-      ] }),
-      hasByType ? /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: 220, children: /* @__PURE__ */ jsxs(BarChart, { data: barData, margin: {
-        top: 6,
-        right: 12,
-        left: 0,
-        bottom: 6
-      }, children: [
-        /* @__PURE__ */ jsx(CartesianGrid, { stroke: gridStroke }),
-        /* @__PURE__ */ jsx(XAxis, { dataKey: "name", stroke: axisStroke, tick: {
-          fontSize: 11,
-          fill: axisStroke
-        }, interval: 0, angle: -15, textAnchor: "end", height: 50 }),
-        /* @__PURE__ */ jsx(YAxis, { stroke: axisStroke, tick: {
-          fontSize: 11,
-          fill: axisStroke
-        }, tickFormatter: (v) => v >= 1e3 ? `${Math.round(v / 1e3)}k` : v }),
-        /* @__PURE__ */ jsx(Tooltip, { content: /* @__PURE__ */ jsx(TooltipBox, { isDark }) }),
-        /* @__PURE__ */ jsx(Legend, { wrapperStyle: {
-          color: legendColor,
-          fontSize: 12
-        } }),
-        /* @__PURE__ */ jsx(Bar, { dataKey: "total", name: "الإجمالي", fill: "#60a5fa", radius: [6, 6, 0, 0], isAnimationActive: false }),
-        /* @__PURE__ */ jsx(Bar, { dataKey: "confirmed", name: "مؤكد", fill: "#34d399", radius: [6, 6, 0, 0], isAnimationActive: false })
-      ] }) }) : /* @__PURE__ */ jsx("div", { className: "h-32 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm", children: "لا توجد مصروفات لهذا الشهر" })
-    ] })
-  ] });
-}
-
-const EXPENSE_SORT_OPTIONS = [{
-  value: "amount_desc",
-  label: "المبلغ: الأعلى"
-}, {
-  value: "amount_asc",
-  label: "المبلغ: الأقل"
-}, {
-  value: "name_asc",
-  label: "الاسم أ-ي"
-}, {
-  value: "status",
-  label: "الحالة"
-}];
-const STATUS_OPTIONS = [{
-  value: "all",
-  label: "الكل"
-}, {
-  value: "confirmed",
-  label: "مؤكد"
-}, {
-  value: "pending",
-  label: "بانتظار"
-}];
-function ExpenseFilters({
-  typeFilter,
-  onTypeFilterChange,
-  statusFilter,
-  onStatusFilterChange,
-  search,
-  onSearchChange,
-  sort,
-  onSortChange,
-  typeOptions,
-  // [{ value, label }] derived from the month's expenses
-  onReset,
-  hasActiveFilters
-}) {
-  const types = [{
-    value: "",
-    label: "كل الأنواع"
-  }, ...typeOptions || []];
-  return /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col lg:flex-row lg:items-end gap-3", children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-slate-600 dark:text-white/55 text-xs lg:mb-2.5", children: [
-      /* @__PURE__ */ jsx(Filter, { className: "w-4 h-4" }),
-      "تصفية"
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2", children: [
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-[11px] font-semibold text-slate-500 dark:text-white/45 mb-1", children: "بحث" }),
-        /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-          /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35 pointer-events-none" }),
-          /* @__PURE__ */ jsx("input", { type: "text", value: search, onChange: (e) => onSearchChange(e.target.value), placeholder: "اسم المصروف…", className: `${ws$1.input} text-sm py-2 pr-9 pl-3` })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-[11px] font-semibold text-slate-500 dark:text-white/45 mb-1", children: "النوع" }),
-        /* @__PURE__ */ jsx(GlassSelect, { value: typeFilter, onChange: onTypeFilterChange, options: types, buttonClassName: "text-sm py-2 px-3" })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-[11px] font-semibold text-slate-500 dark:text-white/45 mb-1", children: "الحالة" }),
-        /* @__PURE__ */ jsx(GlassSelect, { value: statusFilter, onChange: onStatusFilterChange, options: STATUS_OPTIONS, buttonClassName: "text-sm py-2 px-3" })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-[11px] font-semibold text-slate-500 dark:text-white/45 mb-1", children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
-          /* @__PURE__ */ jsx(ArrowDownWideNarrow, { className: "w-3 h-3" }),
-          "ترتيب"
-        ] }) }),
-        /* @__PURE__ */ jsx(GlassSelect, { value: sort, onChange: onSortChange, options: EXPENSE_SORT_OPTIONS, buttonClassName: "text-sm py-2 px-3" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs("button", { type: "button", onClick: onReset, disabled: !hasActiveFilters, className: `${ws$1.btnNeutral} px-4 py-2 justify-center disabled:opacity-40 disabled:cursor-not-allowed`, children: [
-      /* @__PURE__ */ jsx(RotateCcw, { className: "w-4 h-4" }),
-      "إعادة تعيين"
-    ] })
-  ] }) });
-}
-
-/**
- * Export utilities for Excel and PDF generation
- * Supports Arabic RTL content
- */
-
-/**
- * Export to Excel with better formatting (uses HTML table trick)
- * This creates a proper Excel file that can be opened in Excel
- */
-function exportToExcelHTML(data, filename, columns, title) {
-  // Create HTML table
-  const headers = columns.map(col => col.header).join("</th><th>");
-  const rows = data.map(item => `<tr>${columns.map(col => {
-    const value = col.accessor(item);
-    const formatted = col.format ? col.format(value, item) : value;
-    return `<td>${formatted ?? ""}</td>`;
-  }).join("")}</tr>`).join("");
-  const now = new Date().toLocaleDateString(LOCALE, {
-    timeZone: "Asia/Riyadh"
-  });
-  const htmlContent = `
-    <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
-      <head>
-        <meta charset="UTF-8">
-        <style>
-          table { 
-            border-collapse: collapse; 
-            width: 100%; 
-            font-family: Arial, sans-serif;
-            direction: rtl;
-          }
-          th { 
-            background-color: #0f172a; 
-            color: white; 
-            padding: 12px; 
-            text-align: right;
-            border: 1px solid #ddd;
-            font-weight: bold;
-          }
-          td { 
-            padding: 10px; 
-            border: 1px solid #ddd;
-            text-align: right;
-          }
-          tr:nth-child(even) { 
-            background-color: #f9f9f9; 
-          }
-          .header {
-            margin-bottom: 20px;
-            text-align: center;
-          }
-          .header h1 {
-            color: #0f172a;
-            margin: 10px 0;
-          }
-          .header p {
-            color: #666;
-            margin: 5px 0;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>${title}</h1>
-          <p>تاريخ الإنشاء: ${now}</p>
-        </div>
-        <table>
-          <thead>
-            <tr><th>${headers}</th></tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-      </body>
-    </html>
-  `;
-  const blob = new Blob([htmlContent], {
-    type: "application/vnd.ms-excel;charset=utf-8;"
-  });
-  downloadBlob(blob, `${filename}.xls`);
-}
-
-/**
- * Export data to PDF using print dialog
- * Creates a formatted print-friendly page
- */
-function exportToPDF(data, filename, columns, title) {
-  // Create a new window for printing
-  const printWindow = window.open("", "_blank");
-  if (!printWindow) {
-    alert("الرجاء السماح بفتح النوافذ المنبثقة للتصدير");
-    return;
-  }
-  const headers = columns.map(col => col.header).join("</th><th>");
-  const rows = data.map(item => `<tr>${columns.map(col => {
-    const value = col.accessor(item);
-    const formatted = col.format ? col.format(value, item) : value;
-    return `<td>${formatted ?? ""}</td>`;
-  }).join("")}</tr>`).join("");
-  const now = new Date().toLocaleDateString(LOCALE, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Riyadh"
-  });
-  const htmlContent = `
-    <!DOCTYPE html>
-    <html dir="rtl">
-      <head>
-        <meta charset="UTF-8">
-        <title>${title}</title>
-        <style>
-          @media print {
-            @page {
-              size: A4 landscape;
-              margin: 15mm;
-            }
-            body {
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
-            }
-            .no-print {
-              display: none !important;
-            }
-          }
-          
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
-          
-          body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
-            background: #f5f5f5;
-            direction: rtl;
-          }
-          
-          .header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-          }
-          
-          .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: bold;
-          }
-          
-          .header p {
-            font-size: 14px;
-            opacity: 0.9;
-          }
-          
-          .stats {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-          }
-          
-          .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px 25px;
-            border-radius: 8px;
-            text-align: center;
-          }
-          
-          .stat-card .label {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-bottom: 5px;
-          }
-          
-          .stat-card .value {
-            font-size: 24px;
-            font-weight: bold;
-          }
-          
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-          }
-          
-          thead {
-            background: #0f172a;
-            color: white;
-          }
-          
-          th {
-            padding: 15px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 14px;
-            border-bottom: 2px solid #14b8a6;
-          }
-          
-          td {
-            padding: 12px 15px;
-            text-align: right;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 13px;
-          }
-          
-          tr:nth-child(even) {
-            background-color: #f9fafb;
-          }
-          
-          tr:hover {
-            background-color: #f1f5f9;
-          }
-          
-          .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-            padding: 20px;
-          }
-          
-          .print-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #14b8a6;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 1000;
-          }
-          
-          .print-button:hover {
-            background: #0d9488;
-          }
-          
-          @media print {
-            body {
-              background: white;
-              padding: 0;
-            }
-            .header {
-              border-radius: 0;
-            }
-            table {
-              box-shadow: none;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <button class="print-button no-print" onclick="window.print()">
-          🖨️ طباعة / حفظ PDF
-        </button>
-        
-        <div class="header">
-          <h1>${title}</h1>
-          <p>تاريخ الإنشاء: ${now}</p>
-          <div class="stats">
-            <div class="stat-card">
-              <div class="label">إجمالي السجلات</div>
-              <div class="value">${data.length}</div>
-            </div>
-          </div>
-        </div>
-        
-        <table>
-          <thead>
-            <tr><th>${headers}</th></tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-        
-        <div class="footer">
-          <p>تم الإنشاء بواسطة نظام إدارة المخزون</p>
-          <p>© ${new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    timeZone: "Asia/Riyadh"
-  })} - جميع الحقوق محفوظة</p>
-        </div>
-      </body>
-    </html>
-  `;
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
-
-  // Auto print after content loads
-  printWindow.onload = () => {
-    setTimeout(() => {
-      printWindow.focus();
-    }, 250);
-  };
-}
-
-/**
- * Helper function to download blob
- */
-function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
-
-/**
- * Format inventory type for export
- */
-function formatInventoryType(type) {
-  const typeMap = {
-    Daily: "يومي",
-    Weekly: "أسبوعي",
-    Transfer: "تحويل",
-    Receipt: "وارد",
-    Opening: "مخزون افتتاحي"
-  };
-  return typeMap[type] || type;
-}
-
-/**
- * Format role for export
- */
-function formatRole(role) {
-  const roleMap = {
-    Admin: "مدير",
-    Employee: "موظف"
-  };
-  return roleMap[role] || role;
-}
-
-/**
- * Format date and time for export.
- */
-function formatDateTime$2(dateString) {
-  if (!dateString) return "-";
-  // IMPORTANT: use toLocaleString (not toLocaleDateString) so time is always rendered
-  // across browsers (especially iOS/Safari) when hour/minute options are provided.
-  return new Date(dateString).toLocaleString(LOCALE, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Riyadh"
-  });
-}
-
-function confirmedValue(item) {
-  if (item.confirmed_amount !== null && item.confirmed_amount !== void 0 && item.confirmed_amount !== "") {
-    return item.confirmed_amount;
-  }
-  return item.is_confirmed ? item.amount : null;
-}
-function buildColumns$1() {
-  return [{
-    header: "اسم المصروف",
-    accessor: (i) => i.expense_name || "-"
-  }, {
-    header: "النوع",
-    accessor: (i) => i.expense_type_name || "-"
-  }, {
-    header: "المبلغ الأصلي",
-    accessor: (i) => i.amount,
-    format: (v) => formatMoney$d(v)
-  }, {
-    header: "المبلغ المؤكد",
-    accessor: (i) => confirmedValue(i),
-    format: (v) => v === null || v === void 0 ? "-" : formatMoney$d(v)
-  }, {
-    header: "الحالة",
-    accessor: (i) => i.is_confirmed,
-    format: (v) => v ? "مؤكد" : "بانتظار"
-  }, {
-    header: "ملاحظة التأكيد",
-    accessor: (i) => i.confirmed_note || "-"
-  }];
-}
-function ExpensesExportMenu({
-  expenses,
-  month,
-  todayRiyadh
-}) {
-  const [open, setOpen] = useState(false);
-  const btnRef = useRef(null);
-  const list = Array.isArray(expenses) ? expenses : [];
-  const filename = `مصروفات_${month || ""}_${todayRiyadh}`;
-  const title = `المصروفات — ${monthLabel$1(month) || month || ""}`;
-  const handleExcel = () => {
-    exportToExcelHTML(list, filename, buildColumns$1(), title);
-    setOpen(false);
-  };
-  const handlePDF = () => {
-    exportToPDF(list, filename, buildColumns$1(), title);
-    setOpen(false);
-  };
-  return /* @__PURE__ */ jsxs("div", { children: [
-    /* @__PURE__ */ jsxs("button", { ref: btnRef, type: "button", onClick: () => setOpen((s) => !s), disabled: list.length === 0, className: `${ws$1.btnNeutral} px-4 py-2 justify-center disabled:opacity-40 disabled:cursor-not-allowed`, "aria-expanded": open, children: [
-      /* @__PURE__ */ jsx(Download, { className: "w-4 h-4" }),
-      /* @__PURE__ */ jsx("span", { children: "تصدير" }),
-      /* @__PURE__ */ jsx(ChevronDown, { className: "w-4 h-4" })
-    ] }),
-    /* @__PURE__ */ jsxs(GlassPopover, { open, anchorRef: btnRef, onClose: () => setOpen(false), style: {
-      width: 224
-    }, children: [
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للتحليل والمعالجة" })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handlePDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
-        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-700 dark:text-red-200" }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
-          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
-        ] })
-      ] })
-    ] })
-  ] });
-}
-
-function safeNum$1(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
-}
-const BAR_COLORS = [
-  "#34d399",
-  // emerald
-  "#60a5fa",
-  // sky
-  "#f472b6",
-  // pink
-  "#fbbf24",
-  // amber
-  "#a78bfa",
-  // violet
-  "#fb7185",
-  // rose
-  "#22d3ee",
-  // cyan
-  "#facc15",
-  // yellow
-  "#c084fc",
-  // purple
-  "#fdba74"
-  // orange
-];
-function ExpensesAnalytics({
-  month,
-  expenses
-}) {
-  const {
-    isDark
-  } = useAdminTheme();
-  const trendQuery = useQuery({
-    queryKey: queryKeys.accountingExpenseTrend(month, 12),
-    enabled: !!month,
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        months: "12",
-        ...month ? {
-          currentMonth: month
-        } : {}
-      });
-      const r = await adminFetch(`/api/accounting/expenses/trend?${params}`);
-      if (!r.ok) {
-        const d = await r.json().catch(() => ({}));
-        throw new Error(d?.error || "فشل تحميل الاتجاه");
-      }
-      return r.json();
-    },
-    staleTime: 6e4
-  });
-  const list = Array.isArray(expenses) ? expenses : [];
-  const monthTotal = useMemo(() => list.reduce((s, e) => s + safeNum$1(e.amount), 0), [list]);
-  const categories = useMemo(() => {
-    const byType = {};
-    for (const e of list) {
-      const name = e.expense_type_name || "أخرى";
-      if (!byType[name]) byType[name] = {
-        name,
-        total: 0,
-        count: 0
-      };
-      byType[name].total += safeNum$1(e.amount);
-      byType[name].count += 1;
-    }
-    return Object.values(byType).sort((a, b) => b.total - a.total);
-  }, [list]);
-  const prevMonthTotal = useMemo(() => {
-    const months = trendQuery.data?.months || [];
-    if (!month || months.length < 2) return null;
-    const idx = months.findIndex((m) => m.month === month);
-    if (idx > 0) return safeNum$1(months[idx - 1]?.total);
-    if (idx === -1) return safeNum$1(months[months.length - 2]?.total);
-    return null;
-  }, [trendQuery.data, month]);
-  const delta = prevMonthTotal === null ? null : monthTotal - prevMonthTotal;
-  const pct = prevMonthTotal === null || prevMonthTotal === 0 ? null : (monthTotal - prevMonthTotal) / prevMonthTotal * 100;
-  const down = delta !== null && delta < 0;
-  const up = delta !== null && delta > 0;
-  const deltaColor = down ? "text-emerald-700 dark:text-emerald-300" : up ? "text-red-700 dark:text-red-300" : "text-slate-500 dark:text-white/45";
-  const DeltaIcon = down ? ArrowDownRight : up ? ArrowUpRight : Minus;
-  return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-4", dir: "rtl", children: [
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-4 h-4" }) }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "مقارنة شهرية" }),
-          /* @__PURE__ */ jsxs("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: [
-            monthLabel$1(month) || "—",
-            " مقابل الشهر السابق"
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold text-2xl", dir: "ltr", children: formatMoney$d(monthTotal) }),
-      trendQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "جاري التحميل…" }) : delta === null ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "لا يوجد شهر سابق للمقارنة —" }) : /* @__PURE__ */ jsxs("div", { className: "mt-3", children: [
-        /* @__PURE__ */ jsxs("div", { className: `inline-flex items-center gap-1.5 text-sm font-bold ${deltaColor}`, children: [
-          /* @__PURE__ */ jsx(DeltaIcon, { className: "w-4 h-4" }),
-          /* @__PURE__ */ jsxs("span", { dir: "ltr", children: [
-            delta > 0 ? "+" : "",
-            formatMoney$d(delta),
-            pct !== null ? ` (${pct > 0 ? "+" : ""}${Math.round(pct)}%)` : ""
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1.5", children: [
-          "الشهر السابق:",
-          " ",
-          /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$d(prevMonthTotal) })
-        ] }),
-        /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-400 dark:text-white/35 mt-1", children: down ? "انخفض الإنفاق عن الشهر السابق" : up ? "ارتفع الإنفاق عن الشهر السابق" : "لا تغيير عن الشهر السابق" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5 lg:col-span-2`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Layers, { className: "w-4 h-4" }) }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "التوزيع حسب التصنيف" }),
-          /* @__PURE__ */ jsxs("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: [
-            monthLabel$1(month) || "—",
-            " — ",
-            categories.length,
-            " تصنيف"
-          ] })
-        ] })
-      ] }),
-      categories.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 text-xs text-center py-6", children: "لا توجد مصروفات لهذا الشهر" }) : /* @__PURE__ */ jsx("div", { className: "space-y-2.5", children: categories.map((c, idx) => {
-        const p = monthTotal > 0 ? c.total / monthTotal * 100 : 0;
-        const color = BAR_COLORS[idx % BAR_COLORS.length];
-        return /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-xs mb-1", children: [
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
-              /* @__PURE__ */ jsx("span", { className: "inline-block w-2.5 h-2.5 rounded-full shrink-0", style: {
-                background: color
-              } }),
-              /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold truncate", children: c.name }),
-              /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/35 text-[10px] shrink-0", children: [
-                c.count,
-                " مصروف"
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 shrink-0", children: [
-              /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$d(c.total) }),
-              /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/40 text-[10px]", dir: "ltr", children: [
-                Math.round(p),
-                "%"
-              ] })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-100 dark:bg-white/[0.05] rounded-full h-2 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "h-full rounded-full transition-all", style: {
-            width: `${Math.max(p, 1.5)}%`,
-            background: color,
-            opacity: isDark ? 0.8 : 1
-          } }) })
-        ] }, c.name);
-      }) })
-    ] }),
-    categories.length > 0 && /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-4 lg:col-span-3`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
-        /* @__PURE__ */ jsx(Trophy, { className: "w-4 h-4 text-amber-600 dark:text-amber-300" }),
-        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/85 font-bold text-xs", children: "أعلى التصنيفات" })
-      ] }),
-      /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-2", children: categories.slice(0, 5).map((c, idx) => /* @__PURE__ */ jsxs("div", { className: `${ws$1.chip} gap-2`, children: [
-        /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/35 text-[10px]", children: [
-          idx + 1,
-          "."
-        ] }),
-        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80", children: c.name }),
-        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$d(c.total) })
-      ] }, c.name)) })
-    ] })
-  ] });
-}
-
-function FixedPanel({
-  templates,
-  monthExpenses,
-  types,
-  month,
-  onMutate
-}) {
-  const queryClient = useQueryClient();
-  const paidMap = useMemo(() => {
-    const m = /* @__PURE__ */ new Map();
-    for (const e of monthExpenses || []) {
-      if (e.fixed_expense_id) {
-        m.set(Number(e.fixed_expense_id), {
-          expenseId: e.id,
-          amount: Number(e.confirmed_amount ?? e.amount) || 0
-        });
-      }
-    }
-    return m;
-  }, [monthExpenses]);
-  const togglePaidMut = useMutation({
-    mutationFn: async ({
-      id,
-      amount
-    }) => {
-      const r = await adminFetch(`/api/accounting/fixed-expenses/${id}/toggle-paid`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          month,
-          amount
-        })
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل التحديث");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingExpenses()
-      });
-    },
-    onError: (e) => toast.error(e.message || "فشل التحديث")
-  });
-  const deleteMut = useMutation({
-    mutationFn: async (id) => {
-      const r = await adminFetch(`/api/accounting/fixed-expenses/${id}`, {
-        method: "DELETE"
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      toast.success("تم الحذف");
-    },
-    onError: (e) => toast.error(e.message || "فشل الحذف")
-  });
-  const createMut = useMutation({
-    mutationFn: async (body) => {
-      const r = await adminFetch("/api/accounting/fixed-expenses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      toast.success("تم الإضافة");
-    },
-    onError: (e) => toast.error(e.message || "فشل الإضافة")
-  });
-  const updateMut = useMutation({
-    mutationFn: async ({
-      id,
-      ...body
-    }) => {
-      const r = await adminFetch(`/api/accounting/fixed-expenses/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      toast.success("تم التعديل");
-    },
-    onError: (e) => toast.error(e.message || "فشل التعديل")
-  });
-  const [overrideAmount, setOverrideAmount] = useState({});
-  const [showAdd, setShowAdd] = useState(false);
-  const [editTarget, setEditTarget] = useState(null);
-  const totalConfirmed = useMemo(() => {
-    let sum = 0;
-    for (const v of paidMap.values()) sum += v.amount;
-    return sum;
-  }, [paidMap]);
-  const totals = useMemo(() => {
-    let expected = 0;
-    for (const t of templates || []) {
-      expected += perMonthAmount(t.default_amount, t.frequency);
-    }
-    const paid = totalConfirmed;
-    const pending = Math.max(0, expected - paid);
-    return {
-      total: expected,
-      paid,
-      pending
-    };
-  }, [templates, totalConfirmed]);
-  const handleToggle = (t) => {
-    const paid = paidMap.has(Number(t.id));
-    if (paid) {
-      togglePaidMut.mutate({
-        id: t.id,
-        amount: null
-      });
-      return;
-    }
-    const overrideRaw = overrideAmount[t.id];
-    const amount = overrideRaw !== void 0 && overrideRaw !== "" ? Number(overrideRaw) : null;
-    togglePaidMut.mutate({
-      id: t.id,
-      amount
-    });
-  };
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Anchor, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات الثابتة" }),
-            /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mt-0.5", children: [
-              monthLabel$1(month),
-              " — أدخلها مرة، حدّد «تم السداد» كل شهر"
-            ] })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs flex-wrap", children: [
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الإجمالي: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$d(totals.total) })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مؤكد: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$d(totals.paid) })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "بانتظار: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$d(totals.pending) })
-          ] }),
-          /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowAdd(true), className: `${ws$1.btnPrimary} px-3 py-2 text-sm`, children: [
-            /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
-            /* @__PURE__ */ jsx("span", { children: "إضافة قالب" })
-          ] })
-        ] })
-      ] }),
-      templates.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm text-center py-6", children: "لا توجد قوالب ثابتة بعد. أضف قالباً لتعرضه هنا كل شهر." }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
-          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "البند" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "التصنيف" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "التكرار" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "الشهري (الإجمالي)" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "مبلغ الشهر" }),
-          /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "تم السداد" }),
-          /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "إجراءات" })
-        ] }) }),
-        /* @__PURE__ */ jsx("tbody", { children: templates.map((t) => {
-          const paidInfo = paidMap.get(Number(t.id));
-          const paid = !!paidInfo;
-          return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02]", children: [
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-900 dark:text-white text-sm font-medium", children: t.expense_name }),
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-700 dark:text-white/70 text-xs", children: t.expense_type_name }),
-            /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-xs", children: [
-              /* @__PURE__ */ jsx(FrequencyBadge, { frequency: t.frequency || "monthly" }),
-              (() => {
-                const m = toMonthString(t.start_month);
-                return m ? /* @__PURE__ */ jsxs("div", { className: "text-slate-500 dark:text-white/40 text-[10px] mt-0.5", dir: "ltr", children: [
-                  "من ",
-                  m
-                ] }) : null;
-              })()
-            ] }),
-            /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-sm", dir: "ltr", children: [
-              /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-semibold", children: formatMoney$d(perMonthAmount(t.default_amount, t.frequency)) }),
-              (FREQ_CYCLE_MONTHS[t.frequency] || 1) > 1 ? /* @__PURE__ */ jsxs("div", { className: "text-slate-500 dark:text-white/40 text-[10px] mt-0.5", children: [
-                "إجمالي: ",
-                formatMoney$d(t.default_amount)
-              ] }) : null
-            ] }),
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: paid ? /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$d(paidInfo.amount) }) : /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: overrideAmount[t.id] ?? "", onChange: (e) => setOverrideAmount((prev) => ({
-              ...prev,
-              [t.id]: e.target.value
-            })), className: `${ws$1.input} px-2 py-1.5 text-sm w-28`, placeholder: String(perMonthAmount(t.default_amount, t.frequency)), dir: "ltr" }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleToggle(t), disabled: togglePaidMut.isPending, className: `${paid ? "text-emerald-700 dark:text-emerald-200 hover:text-emerald-100" : "text-slate-500 dark:text-white/40 hover:text-slate-700 dark:hover:text-white/70"} disabled:opacity-50 inline-flex`, title: paid ? "إلغاء السداد" : "تعليم تم السداد", children: paid ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-5 h-5" }) : /* @__PURE__ */ jsx(Circle, { className: "w-5 h-5" }) }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-1", children: [
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditTarget(t), className: `${ws$1.btnNeutral} px-2 py-1 text-xs`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-                if (window.confirm(`حذف القالب «${t.expense_name}»؟`)) {
-                  deleteMut.mutate(t.id);
-                }
-              }, className: `${ws$1.btnDanger} px-2 py-1 text-xs`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3 h-3" }) })
-            ] }) })
-          ] }, t.id);
-        }) })
-      ] }) })
-    ] }),
-    (showAdd || editTarget) && /* @__PURE__ */ jsx(FixedFormModal, { target: editTarget, types, onClose: () => {
-      setShowAdd(false);
-      setEditTarget(null);
-    }, onSubmit: (payload) => {
-      if (editTarget) {
-        updateMut.mutate({
-          id: editTarget.id,
-          ...payload
-        }, {
-          onSuccess: () => {
-            setEditTarget(null);
-          }
-        });
-      } else {
-        createMut.mutate(payload, {
-          onSuccess: () => {
-            setShowAdd(false);
-          }
-        });
-      }
-    }, isPending: createMut.isPending || updateMut.isPending })
-  ] });
-}
-const FREQUENCY_OPTIONS$1 = [{
-  value: "monthly",
-  label: "شهري"
-}, {
-  value: "quarterly",
-  label: "ربع سنوي"
-}, {
-  value: "semi_annual",
-  label: "نصف سنوي"
-}, {
-  value: "annual",
-  label: "سنوي"
-}];
-const FREQ_LABEL = {
-  monthly: "شهري",
-  quarterly: "ربع سنوي",
-  semi_annual: "نصف سنوي",
-  annual: "سنوي"
-};
-const FREQ_BADGE = {
-  monthly: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25",
-  quarterly: "bg-pink-500/15 text-pink-700 dark:text-pink-200 border-pink-500/25",
-  semi_annual: "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25",
-  annual: "bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-500/25"
-};
-const FREQ_CYCLE_MONTHS = {
-  monthly: 1,
-  quarterly: 3,
-  semi_annual: 6,
-  annual: 12
-};
-function perMonthAmount(totalAmount, frequency) {
-  const cycle = FREQ_CYCLE_MONTHS[frequency] || 1;
-  const total = Number(totalAmount);
-  if (!Number.isFinite(total) || total <= 0) return 0;
-  return Math.round(total / cycle * 100) / 100;
-}
-function toMonthString(value) {
-  if (!value) return "";
-  const s = String(value);
-  if (/^\d{4}-\d{2}/.test(s)) return s.slice(0, 7);
-  const d = new Date(s);
-  if (Number.isNaN(d.getTime())) return "";
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-  return `${y}-${m}`;
-}
-function FrequencyBadge({
-  frequency
-}) {
-  return /* @__PURE__ */ jsx("span", { className: `inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full border ${FREQ_BADGE[frequency] || FREQ_BADGE.monthly}`, children: FREQ_LABEL[frequency] || "شهري" });
-}
-function FixedFormModal({
-  target,
-  types,
-  onClose,
-  onSubmit,
-  isPending
-}) {
-  const [form, setForm] = useState(() => ({
-    expense_name: target?.expense_name || "",
-    expense_type_id: target?.expense_type_id ? String(target.expense_type_id) : "",
-    default_amount: target?.default_amount ?? "",
-    frequency: target?.frequency || "monthly",
-    start_month: toMonthString(target?.start_month)
-  }));
-  const typeOptions = useMemo(() => {
-    const opts = [{
-      value: "",
-      label: "اختر النوع…"
-    }];
-    for (const t of types || []) {
-      opts.push({
-        value: String(t.id),
-        label: t.name
-      });
-    }
-    return opts;
-  }, [types]);
-  const startMonthOptions = useMemo(() => {
-    const base = buildRecentMonthOptions$1(30);
-    return [{
-      value: "",
-      label: "من البداية دائماً"
-    }, ...base];
-  }, []);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!form.expense_name.trim()) return;
-    if (!form.expense_type_id) return;
-    const amt = Number(form.default_amount);
-    if (!Number.isFinite(amt) || amt < 0) return;
-    onSubmit({
-      expense_name: form.expense_name.trim(),
-      expense_type_id: Number(form.expense_type_id),
-      default_amount: amt,
-      frequency: form.frequency,
-      start_month: form.start_month || null
-    });
-  };
-  return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, onClick: (e) => e.stopPropagation(), className: `w-full max-w-md ${ws$1.glass} ${ws$1.card} p-5 space-y-4`, children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-      /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: target ? "تعديل القالب" : "إضافة قالب ثابت" }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws$1.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "اسم البند *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.expense_name, onChange: (e) => setForm((f) => ({
-        ...f,
-        expense_name: e.target.value
-      })), className: `${ws$1.input} px-3 py-2.5`, required: true, placeholder: "مثال: إيجار المحل" })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "التصنيف *" }),
-      /* @__PURE__ */ jsx(GlassSelect, { value: form.expense_type_id, onChange: (v) => setForm((f) => ({
-        ...f,
-        expense_type_id: v
-      })), options: typeOptions, buttonClassName: "px-3 py-2.5" }),
-      /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5 leading-relaxed", children: "البند العام الذي ينتمي إليه هذا القالب — مثل «إيجار»، «كهرباء»، «اشتراك». يستخدم في تجميع المصاريف للتقارير." })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "إجمالي المبلغ للدورة *" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.default_amount, onChange: (e) => setForm((f) => ({
-        ...f,
-        default_amount: e.target.value
-      })), className: `${ws$1.input} px-3 py-2.5`, required: true, dir: "ltr" }),
-      form.default_amount && form.frequency !== "monthly" ? /* @__PURE__ */ jsxs("p", { className: "text-[10px] text-slate-600 dark:text-white/55 mt-1.5", children: [
-        "ينقسم إلى",
-        " ",
-        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: perMonthAmount(form.default_amount, form.frequency) }),
-        " ",
-        "ر.س شهرياً (×",
-        FREQ_CYCLE_MONTHS[form.frequency] || 1,
-        ")"
-      ] }) : null
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "التكرار *" }),
-        /* @__PURE__ */ jsx(GlassSelect, { value: form.frequency, onChange: (v) => setForm((f) => ({
-          ...f,
-          frequency: v
-        })), options: FREQUENCY_OPTIONS$1, buttonClassName: "px-3 py-2.5" })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "شهر البدء" }),
-        /* @__PURE__ */ jsx(GlassSelect, { value: form.start_month, onChange: (v) => setForm((f) => ({
-          ...f,
-          start_month: v
-        })), options: startMonthOptions, buttonClassName: "px-3 py-2.5", placeholder: "من البداية دائماً" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 leading-relaxed", children: "المبلغ الإجمالي ينقسم على شهور الدورة ويظهر كل شهر بدءاً من «شهر البدء». «شهري» × 1، «ربع سنوي» × 3، «نصف سنوي» × 6، «سنوي» × 12. اترك شهر البدء فارغاً لـ«من البداية دائماً»." }),
-    /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
-      /* @__PURE__ */ jsx("button", { type: "submit", disabled: isPending, className: `${ws$1.btnPrimary} flex-1 px-4 py-2.5 justify-center disabled:opacity-50`, children: isPending ? "جاري الحفظ…" : "حفظ" }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws$1.btnNeutral} px-4 py-2.5`, children: "إلغاء" })
-    ] })
-  ] }) });
-}
-
-function VariableGrid({
-  types,
-  monthExpenses,
-  month,
-  onMutate
-}) {
-  const queryClient = useQueryClient();
-  const templatesQuery = useQuery({
-    queryKey: queryKeys.accountingVariableTemplates(),
-    queryFn: async () => {
-      const r = await adminFetch("/api/accounting/variable-templates");
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل تحميل القوالب");
-      return d.templates || [];
-    }
-  });
-  const templates = templatesQuery.data || [];
-  const variableTypes = useMemo(() => (types || []).filter((t) => (t.scope === "variable" || t.scope === "both" || !t.scope) && (t.is_active === void 0 || t.is_active === true)), [types]);
-  const existingByTemplate = useMemo(() => {
-    const m = /* @__PURE__ */ new Map();
-    for (const e of monthExpenses || []) {
-      const tid = Number(e.variable_template_id);
-      if (!Number.isFinite(tid) || tid <= 0) continue;
-      if (!m.has(tid)) m.set(tid, e);
-    }
-    return m;
-  }, [monthExpenses]);
-  const [draft, setDraft] = useState({});
-  useEffect(() => {
-    const next = {};
-    for (const t of templates) {
-      const row = existingByTemplate.get(Number(t.id));
-      next[t.id] = row ? String(row.amount) : "";
-    }
-    setDraft(next);
-  }, [templates, existingByTemplate, month]);
-  const saveMut = useMutation({
-    mutationFn: async ({
-      template_id,
-      amount,
-      mark_paid
-    }) => {
-      const r = await adminFetch("/api/accounting/expenses/variable", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          month,
-          variable_template_id: template_id,
-          amount: amount === "" || amount === null ? null : Number(amount),
-          mark_paid: !!mark_paid
-        })
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الحفظ");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingExpenses()
-      });
-    },
-    onError: (e) => toast.error(e.message || "فشل الحفظ")
-  });
-  const [showAdd, setShowAdd] = useState(false);
-  const [editTarget, setEditTarget] = useState(null);
-  const createTemplateMut = useMutation({
-    mutationFn: async (body) => {
-      const r = await adminFetch("/api/accounting/variable-templates", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingVariableTemplates()
-      });
-      toast.success("تم إضافة القالب");
-      setShowAdd(false);
-    },
-    onError: (e) => toast.error(e.message || "فشل الإضافة")
-  });
-  const updateTemplateMut = useMutation({
-    mutationFn: async ({
-      id,
-      ...body
-    }) => {
-      const r = await adminFetch(`/api/accounting/variable-templates/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingVariableTemplates()
-      });
-      toast.success("تم التعديل");
-      setEditTarget(null);
-    },
-    onError: (e) => toast.error(e.message || "فشل التعديل")
-  });
-  const deactivateTemplateMut = useMutation({
-    mutationFn: async (id) => {
-      const r = await adminFetch(`/api/accounting/variable-templates/${id}`, {
-        method: "DELETE"
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "تعذّر الإيقاف");
-      return d;
-    },
-    onSuccess: () => {
-      onMutate?.();
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingVariableTemplates()
-      });
-      toast.success("تم إيقاف القالب");
-    },
-    onError: (e) => toast.error(e.message || "تعذّر الإيقاف")
-  });
-  const handleBlur = (t) => {
-    const row = existingByTemplate.get(Number(t.id));
-    const draftVal = draft[t.id] ?? "";
-    const draftNum = draftVal === "" || draftVal === null ? null : Number(draftVal);
-    const existingNum = row ? Number(row.amount) : null;
-    if (draftNum === existingNum) return;
-    saveMut.mutate({
-      template_id: t.id,
-      amount: draftVal
-    });
-  };
-  const handleMarkPaid = (t) => {
-    const draftVal = draft[t.id] ?? "";
-    if (!draftVal || Number(draftVal) <= 0) {
-      toast.error("أدخل المبلغ أولاً");
-      return;
-    }
-    saveMut.mutate({
-      template_id: t.id,
-      amount: draftVal,
-      mark_paid: true
-    });
-  };
-  const totals = useMemo(() => {
-    let paid = 0;
-    let pending = 0;
-    for (const t of templates) {
-      const row = existingByTemplate.get(Number(t.id));
-      const expected = Number(t.expected_amount) || 0;
-      if (row?.is_confirmed) {
-        paid += Number(row.confirmed_amount ?? row.amount) || 0;
-      } else {
-        pending += expected;
-      }
-    }
-    return {
-      total: paid + pending,
-      paid,
-      pending
-    };
-  }, [templates, existingByTemplate]);
-  const addCta = /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowAdd(true), className: `${ws$1.btnPrimary} px-3 py-2 text-xs`, children: [
-    /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
-    /* @__PURE__ */ jsx("span", { children: "إضافة قالب" })
-  ] });
-  const modal = useMemo(() => {
-    if (typeof document === "undefined") return null;
-    if (!showAdd && !editTarget) return null;
-    return createPortal(/* @__PURE__ */ jsx(VariableTemplateModal, { target: editTarget, types: variableTypes, month, onClose: () => {
-      setShowAdd(false);
-      setEditTarget(null);
-    }, onSubmit: (payload) => {
-      if (editTarget) {
-        updateTemplateMut.mutate({
-          id: editTarget.id,
-          ...payload
-        });
-      } else {
-        createTemplateMut.mutate(payload);
-      }
-    }, isPending: createTemplateMut.isPending || updateTemplateMut.isPending }), document.body);
-  }, [showAdd, editTarget, variableTypes, month, createTemplateMut.isPending, updateTemplateMut.isPending]);
-  if (templatesQuery.isLoading) {
-    return /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-5 text-slate-600 dark:text-white/55 text-sm text-center py-6`, children: "جاري التحميل…" });
-  }
-  if (templates.length === 0) {
-    return /* @__PURE__ */ jsxs(Fragment, { children: [
-      /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 flex-wrap", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm", children: "لا توجد قوالب متغيرة بعد. أضف أول قالب للبدء." }),
-        addCta
-      ] }) }),
-      modal
-    ] });
-  }
-  return /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-        /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Receipt, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات المتغيرة" }),
-          /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mt-0.5", children: [
-            monthLabel$1(month),
-            " — القوالب موحّدة كل شهر، يتغيّر المبلغ فقط"
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs flex-wrap", children: [
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الإجمالي: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$d(totals.total) })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مؤكد: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$d(totals.paid) })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "بانتظار: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$d(totals.pending) })
-        ] }),
-        addCta
-      ] })
-    ] }),
-    /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
-        /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "البند" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "التصنيف" }),
-        /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "المبلغ" }),
-        /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "الحالة" }),
-        /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "إجراء" })
-      ] }) }),
-      /* @__PURE__ */ jsx("tbody", { children: templates.map((t) => {
-        const row = existingByTemplate.get(Number(t.id));
-        const confirmed = !!row?.is_confirmed;
-        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02]", children: [
-          /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-medium", children: t.name }) }),
-          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-700 dark:text-white/70 text-xs", children: t.expense_type_name }),
-          /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: draft[t.id] ?? "", onChange: (e) => setDraft((prev) => ({
-            ...prev,
-            [t.id]: e.target.value
-          })), onBlur: () => handleBlur(t), onKeyDown: (e) => {
-            if (e.key === "Enter") e.currentTarget.blur();
-          }, className: `${ws$1.input} px-2 py-1.5 text-sm w-32`, placeholder: t.expected_amount !== null && t.expected_amount !== void 0 ? String(t.expected_amount) : "0", dir: "ltr" }) }),
-          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: confirmed ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-xs text-emerald-700 dark:text-emerald-200", children: [
-            /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3" }),
-            "مؤكد"
-          ] }) : row ? /* @__PURE__ */ jsx("span", { className: "text-xs text-amber-700 dark:text-amber-200", children: "بانتظار" }) : /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-400 dark:text-white/35", children: "—" }) }),
-          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: /* @__PURE__ */ jsxs("div", { className: "inline-flex items-center gap-1", children: [
-            !confirmed && /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleMarkPaid(t), disabled: saveMut.isPending, className: `${ws$1.btnPrimary} px-2 py-1 text-xs disabled:opacity-50`, children: [
-              /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3" }),
-              /* @__PURE__ */ jsx("span", { children: "تأكيد" })
-            ] }),
-            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditTarget(t), className: `${ws$1.btnNeutral} px-2 py-1 text-xs`, title: "تعديل القالب", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
-            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-              if (window.confirm(`إيقاف القالب «${t.name}»؟ سيختفي من القائمة والمصاريف السابقة تبقى كما هي.`)) {
-                deactivateTemplateMut.mutate(t.id);
-              }
-            }, disabled: deactivateTemplateMut.isPending, className: `${ws$1.btnDanger} px-2 py-1 text-xs disabled:opacity-50`, title: "إيقاف القالب", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3 h-3" }) })
-          ] }) })
-        ] }, t.id);
-      }) })
-    ] }) }),
-    modal
-  ] });
-}
-function VariableTemplateModal({
-  target,
-  types,
-  month,
-  onClose,
-  onSubmit,
-  isPending
-}) {
-  const [name, setName] = useState(target?.name || "");
-  const [typeId, setTypeId] = useState(target?.expense_type_id ? String(target.expense_type_id) : "");
-  const [expectedAmount, setExpectedAmount] = useState(target?.expected_amount !== null && target?.expected_amount !== void 0 ? String(target.expected_amount) : "");
-  const [historyHint, setHistoryHint] = useState(null);
-  const typeOptions = useMemo(() => {
-    const opts = [{
-      value: "",
-      label: "اختر التصنيف…"
-    }];
-    for (const t of types || []) {
-      opts.push({
-        value: String(t.id),
-        label: t.name
-      });
-    }
-    return opts;
-  }, [types]);
-  useEffect(() => {
-    if (!typeId || !month) {
-      setHistoryHint(null);
-      return;
-    }
-    let cancelled = false;
-    (async () => {
-      try {
-        const params = new URLSearchParams({
-          expense_type_id: String(typeId),
-          beforeMonth: month
-        });
-        const r = await adminFetch(`/api/accounting/expenses/last-amount?${params}`);
-        if (!r.ok) return;
-        const d = await r.json();
-        if (cancelled) return;
-        if (d?.amount !== null && d?.amount !== void 0) {
-          setHistoryHint({
-            amount: d.amount,
-            month: String(d.expense_month || "").slice(0, 7)
-          });
-          if (!target && !expectedAmount) {
-            setExpectedAmount(String(d.amount));
-          }
-        } else {
-          setHistoryHint(null);
-        }
-      } catch {
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [typeId, month]);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    const tid = Number(typeId);
-    if (!Number.isFinite(tid) || tid <= 0) return;
-    const exp = expectedAmount === "" ? null : Number(expectedAmount);
-    if (exp !== null && (!Number.isFinite(exp) || exp < 0)) return;
-    onSubmit({
-      name: trimmed,
-      expense_type_id: tid,
-      expected_amount: exp
-    });
-  };
-  return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, onClick: (e) => e.stopPropagation(), className: `w-full max-w-md ${ws$1.glass} ${ws$1.card} p-5 space-y-4`, children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-      /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: target ? "تعديل قالب متغيّر" : "إضافة قالب متغيّر" }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws$1.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "اسم البند *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: name, onChange: (e) => setName(e.target.value), className: `${ws$1.input} px-3 py-2.5`, required: true, autoFocus: true, placeholder: "مثال: قهوة" })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "التصنيف *" }),
-      /* @__PURE__ */ jsx(GlassSelect, { value: typeId, onChange: setTypeId, options: typeOptions, buttonClassName: "px-3 py-2.5" }),
-      /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5", children: "البنود المعروضة هنا فقط من التصنيفات المرتبطة بـ«مصروف متغيّر»." })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "إجمالي المبلغ المتوقع" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: expectedAmount, onChange: (e) => setExpectedAmount(e.target.value), className: `${ws$1.input} px-3 py-2.5`, dir: "ltr", placeholder: "0" }),
-      historyHint ? /* @__PURE__ */ jsxs("p", { className: "text-[10px] text-emerald-700 dark:text-emerald-200/80 mt-1.5", children: [
-        "تمت تعبئته من شهر",
-        " ",
-        /* @__PURE__ */ jsx("span", { dir: "ltr", children: historyHint.month }),
-        " (",
-        /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$d(historyHint.amount) }),
-        ")"
-      ] }) : /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5", children: "يستخدم كقيمة افتراضية كل شهر — يمكن تغييرها لاحقاً." })
-    ] }),
-    /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 leading-relaxed", children: "القالب يتكرر كل شهر في قائمة المصروفات المتغيرة. تعديل المبلغ الشهري لا يؤثر على الأشهر الماضية." }),
-    /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
-      /* @__PURE__ */ jsx("button", { type: "submit", disabled: isPending, className: `${ws$1.btnPrimary} flex-1 px-4 py-2.5 justify-center disabled:opacity-50`, children: isPending ? "جاري الحفظ…" : "حفظ" }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws$1.btnNeutral} px-4 py-2.5`, children: "إلغاء" })
-    ] })
-  ] }) });
-}
-
-const SCOPE_OPTIONS = [{
-  value: "both",
-  label: "الاثنين (ثابت + متغيّر)"
-}, {
-  value: "fixed",
-  label: "ثابت فقط"
-}, {
-  value: "variable",
-  label: "متغيّر فقط"
-}];
-const SCOPE_LABEL = {
-  fixed: "ثابت",
-  variable: "متغيّر",
-  both: "الاثنين"
-};
-const SCOPE_BADGE = {
-  fixed: "bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-500/25",
-  variable: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25",
-  both: "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25"
-};
-function CategoriesManager() {
-  const queryClient = useQueryClient();
-  const typesQuery = useQuery({
-    queryKey: queryKeys.accountingExpenseTypesFull(),
-    queryFn: async () => {
-      const r = await adminFetch("/api/accounting/expense-types?includeInactive=1");
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل التحميل");
-      return d.types || [];
-    }
-  });
-  const invalidate = () => {
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.accountingExpenseTypes()
-    });
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.accountingExpenseTypesFull()
-    });
-  };
-  const createMut = useMutation({
-    mutationFn: async (body) => {
-      const r = await adminFetch("/api/accounting/expense-types", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
-      return d;
-    },
-    onSuccess: () => {
-      invalidate();
-      toast.success("تم الإضافة");
-    },
-    onError: (e) => toast.error(e.message || "فشل الإضافة")
-  });
-  const updateMut = useMutation({
-    mutationFn: async ({
-      id,
-      ...body
-    }) => {
-      const r = await adminFetch(`/api/accounting/expense-types/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
-      return d;
-    },
-    onSuccess: () => {
-      invalidate();
-      toast.success("تم التعديل");
-    },
-    onError: (e) => toast.error(e.message || "فشل التعديل")
-  });
-  const deleteMut = useMutation({
-    mutationFn: async ({
-      id,
-      force = false
-    }) => {
-      const url = force ? `/api/accounting/expense-types/${id}?force=1` : `/api/accounting/expense-types/${id}`;
-      const r = await adminFetch(url, {
-        method: "DELETE"
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) {
-        const err = new Error(d?.error || "فشل الحذف");
-        err.status = r.status;
-        err.expense_refs = d?.expense_refs;
-        err.fixed_refs = d?.fixed_refs;
-        err.id = id;
-        throw err;
-      }
-      return d;
-    },
-    onSuccess: () => {
-      invalidate();
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingExpenses()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingFixedExpenses()
-      });
-      toast.success("تم الحذف");
-    },
-    onError: (e) => {
-      if (e?.status === 409 && ((e?.expense_refs ?? 0) > 0 || (e?.fixed_refs ?? 0) > 0)) {
-        const refs = [];
-        if (e.expense_refs > 0) refs.push(`${e.expense_refs} مصروف مسجّل`);
-        if (e.fixed_refs > 0) refs.push(`${e.fixed_refs} قالب ثابت`);
-        const msg = `هذا البند مستخدم في ${refs.join(" و ")}. هل تريد حذفه نهائياً مع جميع المصاريف المرتبطة به؟`;
-        if (window.confirm(msg)) {
-          deleteMut.mutate({
-            id: e.id,
-            force: true
-          });
-          return;
-        }
-      }
-      toast.error(e.message || "فشل الحذف");
-    }
-  });
-  const [showForm, setShowForm] = useState(false);
-  const [editTarget, setEditTarget] = useState(null);
-  const types = useMemo(() => typesQuery.data || [], [typesQuery.data]);
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(ListChecks, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "البنود" }),
-            /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mt-0.5", children: "أضف، حرّر، أو احذف بنود المصروفات وحدّد نطاق كل واحد" })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowForm(true), className: `${ws$1.btnPrimary} px-3 py-2 text-sm`, children: [
-          /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
-          /* @__PURE__ */ jsx("span", { children: "بند جديد" })
-        ] })
-      ] }),
-      typesQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm text-center py-6", children: "جاري التحميل…" }) : types.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm text-center py-6", children: "لا توجد بنود بعد." }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
-        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
-          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "الاسم" }),
-          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "النطاق" }),
-          /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "إجراءات" })
-        ] }) }),
-        /* @__PURE__ */ jsx("tbody", { children: types.map((t) => {
-          const isInactive = t.is_active === false;
-          return /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02] ${isInactive ? "opacity-50" : ""}`, children: [
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-900 dark:text-white text-sm font-medium", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-              /* @__PURE__ */ jsx("span", { children: t.name }),
-              isInactive ? /* @__PURE__ */ jsx("span", { className: "text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60", children: "غير مفعّل" }) : null
-            ] }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx("span", { className: `inline-flex items-center text-xs px-2 py-1 rounded-full border ${SCOPE_BADGE[t.scope || "both"] || SCOPE_BADGE.both}`, children: SCOPE_LABEL[t.scope || "both"] || "—" }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-1", children: [
-              /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => updateMut.mutate({
-                id: t.id,
-                // legacy `undefined` treated as active,
-                // so toggle resolves to false there too.
-                is_active: isInactive ? true : false
-              }), disabled: updateMut.isPending, className: `${isInactive ? ws$1.btnPrimary : ws$1.btnNeutral} px-2 py-1 text-xs disabled:opacity-50`, title: isInactive ? "تفعيل" : "إلغاء التفعيل", children: [
-                /* @__PURE__ */ jsx(Power, { className: "w-3 h-3" }),
-                /* @__PURE__ */ jsx("span", { children: isInactive ? "تفعيل" : "إيقاف" })
-              ] }),
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditTarget(t), className: `${ws$1.btnNeutral} px-2 py-1 text-xs`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-                if (window.confirm(`حذف البند «${t.name}»؟`)) {
-                  deleteMut.mutate({
-                    id: t.id,
-                    force: false
-                  });
-                }
-              }, className: `${ws$1.btnDanger} px-2 py-1 text-xs`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3 h-3" }) })
-            ] }) })
-          ] }, t.id);
-        }) })
-      ] }) })
-    ] }),
-    (showForm || editTarget) && /* @__PURE__ */ jsx(CategoryFormModal, { target: editTarget, onClose: () => {
-      setShowForm(false);
-      setEditTarget(null);
-    }, onSubmit: (payload) => {
-      if (editTarget) {
-        updateMut.mutate({
-          id: editTarget.id,
-          ...payload
-        }, {
-          onSuccess: () => setEditTarget(null)
-        });
-      } else {
-        createMut.mutate(payload, {
-          onSuccess: () => setShowForm(false)
-        });
-      }
-    }, isPending: createMut.isPending || updateMut.isPending })
-  ] });
-}
-function CategoryFormModal({
-  target,
-  onClose,
-  onSubmit,
-  isPending
-}) {
-  const [name, setName] = useState(target?.name || "");
-  const [scope, setScope] = useState(target?.scope || "both");
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    onSubmit({
-      name: trimmed,
-      scope
-    });
-  };
-  return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, onClick: (e) => e.stopPropagation(), className: `w-full max-w-sm ${ws$1.glass} ${ws$1.card} p-5 space-y-4`, children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-      /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: target ? "تعديل البند" : "بند جديد" }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws$1.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "الاسم *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: name, onChange: (e) => setName(e.target.value), className: `${ws$1.input} px-3 py-2.5`, required: true, placeholder: "مثال: كهرباء" })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "النطاق *" }),
-      /* @__PURE__ */ jsx(GlassSelect, { value: scope, onChange: setScope, options: SCOPE_OPTIONS, buttonClassName: "px-3 py-2.5" }),
-      /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5", children: "«ثابت» يظهر في قوالب المصروف الثابت فقط. «متغيّر» يظهر في قائمة المتغيّر فقط. «الاثنين» يظهر في الاثنين." })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
-      /* @__PURE__ */ jsx("button", { type: "submit", disabled: isPending, className: `${ws$1.btnPrimary} flex-1 px-4 py-2.5 justify-center disabled:opacity-50`, children: isPending ? "جاري الحفظ…" : "حفظ" }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws$1.btnNeutral} px-4 py-2.5`, children: "إلغاء" })
-    ] })
-  ] }) });
-}
-
-const STATUS_CHIPS = [{
-  value: "all",
-  label: "الكل",
-  icon: Filter
-}, {
-  value: "confirmed",
-  label: "المؤكدة",
-  icon: CheckCircle2
-}, {
-  value: "pending",
-  label: "بانتظار",
-  icon: Clock
-}];
-function safeNum(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
-}
-function ReviewTabContent({
-  month,
-  monthHint,
-  expenses,
-  pendingFixed,
-  expensesQuery,
-  statusFilter,
-  onStatusFilterChange,
-  onConfirm,
-  onDelete,
-  onEdit,
-  onConfirmFixed
-}) {
-  const trendQuery = useQuery({
-    queryKey: queryKeys.accountingExpenseTrend(month, 12),
-    enabled: !!month,
-    queryFn: async () => {
-      const params = new URLSearchParams({
-        months: "12",
-        ...month ? {
-          currentMonth: month
-        } : {}
-      });
-      const r = await adminFetch(`/api/accounting/expenses/trend?${params}`);
-      if (!r.ok) {
-        const d = await r.json().catch(() => ({}));
-        throw new Error(d?.error || "فشل تحميل الاتجاه");
-      }
-      return r.json();
-    },
-    staleTime: 6e4
-  });
-  const stats = useMemo(() => {
-    const totalCount = expenses.length;
-    const confirmedCount = expenses.filter((e) => e.is_confirmed).length;
-    const pendingCount = totalCount - confirmedCount;
-    const totalAmount = expenses.reduce((s, e) => s + safeNum(e.amount), 0);
-    const confirmedAmount = expenses.filter((e) => e.is_confirmed).reduce((s, e) => s + safeNum(e.confirmed_amount !== null && e.confirmed_amount !== void 0 ? e.confirmed_amount : e.amount), 0);
-    const pendingAmount = totalAmount - confirmedAmount;
-    const byType = {};
-    for (const e of expenses) {
-      const name = e.expense_type_name || "أخرى";
-      if (!byType[name]) byType[name] = {
-        name,
-        total: 0,
-        count: 0
-      };
-      byType[name].total += safeNum(e.amount);
-      byType[name].count += 1;
-    }
-    const topTypes = Object.values(byType).sort((a, b) => b.total - a.total).slice(0, 5);
-    return {
-      totalCount,
-      confirmedCount,
-      pendingCount,
-      totalAmount,
-      confirmedAmount,
-      pendingAmount,
-      topTypes
-    };
-  }, [expenses]);
-  const prevMonthTotal = useMemo(() => {
-    const months = trendQuery.data?.months || [];
-    if (months.length < 2 || !month) return null;
-    const idx = months.findIndex((m) => m.month === month);
-    if (idx > 0) {
-      return safeNum(months[idx - 1]?.total);
-    }
-    return safeNum(months[months.length - 2]?.total);
-  }, [trendQuery.data, month]);
-  const momDelta = useMemo(() => {
-    if (prevMonthTotal === null) return null;
-    return stats.totalAmount - prevMonthTotal;
-  }, [stats.totalAmount, prevMonthTotal]);
-  const momPct = useMemo(() => {
-    if (prevMonthTotal === null || prevMonthTotal === 0) return null;
-    return (stats.totalAmount - prevMonthTotal) / prevMonthTotal * 100;
-  }, [stats.totalAmount, prevMonthTotal]);
-  const filteredExpenses = useMemo(() => {
-    if (statusFilter === "confirmed") {
-      return expenses.filter((e) => !!e.is_confirmed);
-    }
-    if (statusFilter === "pending") {
-      return expenses.filter((e) => !e.is_confirmed);
-    }
-    return expenses;
-  }, [expenses, statusFilter]);
-  if (!month) {
-    return /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-8 text-center`, children: [
-      /* @__PURE__ */ jsx(Receipt, { className: "w-10 h-10 mx-auto mb-3 text-slate-400 dark:text-white/30" }),
-      /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60 text-sm", children: "اختر الشهر من القائمة في الأعلى لعرض المراجعة" })
-    ] });
-  }
-  const confirmationPct = stats.totalCount > 0 ? Math.round(stats.confirmedCount / stats.totalCount * 100) : 0;
-  return /* @__PURE__ */ jsxs("div", { className: "space-y-5", children: [
-    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-4 gap-3", children: [
-      /* @__PURE__ */ jsx(HeroStat, { label: "إجمالي المصروفات", value: formatMoney$d(stats.totalAmount), sub: `${stats.totalCount} مصروف`, icon: Banknote, accent: "emerald", momDelta, momPct }),
-      /* @__PURE__ */ jsx(HeroStat, { label: "تم التأكيد", value: formatMoney$d(stats.confirmedAmount), sub: `${stats.confirmedCount} / ${stats.totalCount}`, icon: CheckCircle2, accent: "emerald" }),
-      /* @__PURE__ */ jsx(HeroStat, { label: "بانتظار التأكيد", value: formatMoney$d(stats.pendingAmount), sub: `${stats.pendingCount} مصروف`, icon: Clock, accent: "amber" }),
-      /* @__PURE__ */ jsx(HeroStat, { label: "نسبة التأكيد", value: `${confirmationPct}%`, sub: /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-200 dark:bg-white/10 rounded-full h-1.5 mt-2", children: /* @__PURE__ */ jsx("div", { className: "bg-emerald-400 h-1.5 rounded-full transition-all", style: {
-        width: `${confirmationPct}%`
-      } }) }), icon: TrendingUp, accent: "sky" })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-4", children: [
-      /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(Trophy, { className: "w-4 h-4" }) }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "أعلى التصنيفات" }),
-            /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: "ترتيب حسب الإجمالي" })
-          ] })
-        ] }),
-        stats.topTypes.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 text-xs text-center py-6", children: "لا توجد بيانات" }) : /* @__PURE__ */ jsx("div", { className: "space-y-2", children: stats.topTypes.map((t, idx) => {
-          const pct = stats.totalAmount > 0 ? t.total / stats.totalAmount * 100 : 0;
-          return /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-xs mb-1", children: [
-              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
-                /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/40 text-[10px]", children: [
-                  idx + 1,
-                  "."
-                ] }),
-                /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold truncate", children: t.name })
-              ] }),
-              /* @__PURE__ */ jsx("div", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$d(t.total) })
-            ] }),
-            /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-100 dark:bg-white/[0.04] rounded-full h-1.5 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "bg-gradient-to-r from-emerald-400/70 to-sky-400/70 h-full rounded-full", style: {
-              width: `${pct}%`
-            } }) }),
-            /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-slate-400 dark:text-white/35 mt-0.5", children: [
-              Math.round(pct),
-              "% — ",
-              t.count,
-              " مصروف"
-            ] })
-          ] }, t.name);
-        }) })
-      ] }),
-      /* @__PURE__ */ jsx("div", { className: "lg:col-span-2", children: /* @__PURE__ */ jsx(ExpensesCharts, { month }) })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-5`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(ClipboardCheck, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "سجل المصروفات" }),
-            /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-0.5", children: [
-              monthHint,
-              " — ",
-              filteredExpenses.length,
-              " من",
-              " ",
-              stats.totalCount
-            ] })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsx("div", { className: `inline-flex items-center gap-1 p-1 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03]`, children: STATUS_CHIPS.map((chip) => {
-          const Icon = chip.icon;
-          const active = statusFilter === chip.value;
-          return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onStatusFilterChange(chip.value), className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-colors ${active ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border border-slate-300 dark:border-white/20" : "text-slate-600 dark:text-white/55 hover:text-slate-800 dark:hover:text-white/80 border border-transparent"}`, children: [
-            /* @__PURE__ */ jsx(Icon, { className: "w-3 h-3" }),
-            chip.label
-          ] }, chip.value);
-        }) })
-      ] }),
-      expensesQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-center py-8 text-slate-600 dark:text-white/60 text-sm", children: "جاري التحميل…" }) : expensesQuery.error ? /* @__PURE__ */ jsx("div", { className: "text-center py-8 text-red-700 dark:text-red-300 text-sm", children: String(expensesQuery.error.message) }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsx(ExpenseTable, { expenses: filteredExpenses, pendingFixed, month, onConfirm, onDelete, onEdit, onConfirmFixed }) })
-    ] })
-  ] });
-}
-const ACCENT = {
-  emerald: {
-    text: "text-emerald-700 dark:text-emerald-200",
-    icon: "text-emerald-700 dark:text-emerald-200"
-  },
-  amber: {
-    text: "text-amber-700 dark:text-amber-200",
-    icon: "text-amber-700 dark:text-amber-200"
-  },
-  sky: {
-    text: "text-sky-700 dark:text-sky-200",
-    icon: "text-sky-700 dark:text-sky-200"
-  },
-  white: {
-    text: "text-slate-900 dark:text-white",
-    icon: "text-slate-700 dark:text-white/70"
-  }
-};
-function HeroStat({
-  label,
-  value,
-  sub,
-  icon: Icon,
-  accent = "white",
-  momDelta,
-  momPct
-}) {
-  const a = ACCENT[accent] || ACCENT.white;
-  return /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-4`, children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-2", children: [
-      /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: label }),
-        /* @__PURE__ */ jsx("div", { className: `font-extrabold mt-1 text-xl ${a.text}`, dir: "ltr", children: value })
-      ] }),
-      Icon ? /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-8 h-8 ${a.icon}`, children: /* @__PURE__ */ jsx(Icon, { className: "w-4 h-4" }) }) : null
-    ] }),
-    momDelta !== null && momDelta !== void 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-[10px] mt-1.5", children: [
-      momDelta > 0 ? /* @__PURE__ */ jsx(ArrowUpRight, { className: "w-3 h-3 text-red-700 dark:text-red-300" }) : momDelta < 0 ? /* @__PURE__ */ jsx(ArrowDownRight, { className: "w-3 h-3 text-emerald-700 dark:text-emerald-300" }) : /* @__PURE__ */ jsx(Minus, { className: "w-3 h-3 text-slate-500 dark:text-white/40" }),
-      /* @__PURE__ */ jsxs("span", { className: momDelta > 0 ? "text-red-700 dark:text-red-300" : momDelta < 0 ? "text-emerald-700 dark:text-emerald-300" : "text-slate-500 dark:text-white/40", dir: "ltr", children: [
-        momDelta > 0 ? "+" : "",
-        formatMoney$d(momDelta),
-        momPct !== null && momPct !== void 0 ? ` (${momPct > 0 ? "+" : ""}${Math.round(momPct)}%)` : ""
-      ] }),
-      /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "عن الشهر السابق" })
-    ] }) : sub && typeof sub === "string" ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/40 mt-1", children: sub }) : sub ? /* @__PURE__ */ jsx(Fragment, { children: sub }) : null
-  ] });
-}
-
-function QuickAddSheet({
-  open,
-  onClose,
-  types,
-  onSubmit,
-  isSubmitting,
-  onCreateType,
-  // Page's currently-viewed month, so the quick-add form lands the new
-  // expense in the same month the user is on (not always wall-clock now).
-  month
-}) {
-  const submittingRef = useRef(false);
-  useEffect(() => {
-    if (!open) return;
-    function onKey(e) {
-      if (e.key === "Escape") onClose();
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-  useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
-  useEffect(() => {
-    if (submittingRef.current && !isSubmitting) {
-      submittingRef.current = false;
-      onClose();
-    }
-    if (isSubmitting) submittingRef.current = true;
-  }, [isSubmitting, onClose]);
-  if (!open) return null;
-  return /* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[60] flex items-end lg:items-center justify-center", dir: "rtl", role: "dialog", "aria-modal": "true", "aria-label": "إضافة مصروف سريع", children: [
-    /* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-black/70 backdrop-blur-sm", onClick: onClose }),
-    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} relative z-10 w-full lg:w-[640px] max-h-[92svh] overflow-y-auto p-5 rounded-t-3xl lg:rounded-3xl m-0 lg:m-4 shadow-2xl`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-4 sticky top-0 bg-transparent", children: [
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "+ إضافة مصروف سريع" }),
-          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mt-0.5", children: "اكتب التفاصيل واحفظ — الإضافة تُسجَّل فوراً." })
-        ] }),
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, "aria-label": "إغلاق", className: `${ws$1.iconButton}`, children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
-      ] }),
-      /* @__PURE__ */ jsx(ExpenseForm, { types, onSubmit, isSubmitting, onCreateType, defaultMonth: month })
-    ] })
-  ] });
-}
-
-/**
- * Preset expense categories tailored for café/coffee-bar operations.
- * Used to bulk-seed `expense_types` for new accounts so the operator
- * doesn't have to type "إيجار / رواتب / حليب / بن / ..." themselves.
- *
- * `kind` is informational — both kinds use the same expense_types table;
- * the variable expense form just consumes the names.
- */
-
-const CAFE_EXPENSE_CATEGORIES = [
-// ── المصروفات الثابتة (fixed) ──
-{
-  name: "إيجار",
-  kind: "fixed"
-}, {
-  name: "رواتب",
-  kind: "fixed"
-}, {
-  name: "اشتراكات (نت / POS / محاسبة)",
-  kind: "fixed"
-}, {
-  name: "اشتراكات تطبيقات التوصيل",
-  kind: "fixed"
-}, {
-  name: "تأمين",
-  kind: "fixed"
-}, {
-  name: "صيانة دورية",
-  kind: "fixed"
-}, {
-  name: "رسوم بلدية وتراخيص",
-  kind: "fixed"
-},
-// ── المواد الخام (raw materials) ──
-{
-  name: "بن",
-  kind: "variable"
-}, {
-  name: "حليب",
-  kind: "variable"
-}, {
-  name: "شراب ونكهات",
-  kind: "variable"
-}, {
-  name: "سكر",
-  kind: "variable"
-}, {
-  name: "شوكلت",
-  kind: "variable"
-}, {
-  name: "فواكه",
-  kind: "variable"
-},
-// ── تشغيلية متغيّرة ──
-{
-  name: "أكواب وتغليف",
-  kind: "variable"
-}, {
-  name: "صيانة طارئة",
-  kind: "variable"
-}, {
-  name: "تنظيف",
-  kind: "variable"
-}, {
-  name: "مواصلات وتوصيل",
-  kind: "variable"
-}, {
-  name: "تسويق",
-  kind: "variable"
-}, {
-  name: "ضيافة وعينات",
-  kind: "variable"
-}, {
-  name: "نثريات",
-  kind: "variable"
-}];
-function isCategoryPresent(name, types) {
-  if (!Array.isArray(types) || !name) return false;
-  const normalized = String(name).trim();
-  return types.some(t => String(t?.name || "").trim() === normalized);
-}
-
-/** Returns the preset categories that don't already exist in `types`. */
-function getMissingPresetCategories(types) {
-  return CAFE_EXPENSE_CATEGORIES.filter(c => !isCategoryPresent(c.name, types));
-}
-
-function useExpensesData(month, employeeId, isAdmin) {
-  return useQuery({
-    queryKey: queryKeys.accountingExpenses(month),
-    enabled: !!employeeId && isAdmin && !!month,
-    queryFn: async () => {
-      const qs = new URLSearchParams({
-        month: String(month)
-      });
-      const res = await adminFetch(`/api/accounting/expenses?${qs.toString()}`);
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || `When fetching /api/accounting/expenses, the response was [${res.status}] ${res.statusText}`);
-      }
-      return data;
-    }
-  });
-}
-function useExpenseTypes(employeeId, isAdmin) {
-  return useQuery({
-    queryKey: queryKeys.accountingExpenseTypes(),
-    enabled: !!employeeId && isAdmin,
-    queryFn: async () => {
-      const res = await adminFetch("/api/accounting/expense-types");
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تحميل أنواع المصروفات");
-      }
-      return data.types || [];
-    }
-  });
-}
-function useCreateExpense(month) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      expense_type_id,
-      expense_name,
-      amount,
-      month: expenseMonth
-    }) => {
-      const m = expenseMonth || month;
-      const res = await adminFetch("/api/accounting/expenses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          expense_type_id,
-          expense_name,
-          amount,
-          month: m
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إضافة المصروف");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateExpenseQueries(queryClient);
-      toast.success("تم إضافة المصروف بنجاح");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل إضافة المصروف: ${error.message}`);
-    }
-  });
-}
-function useUpdateExpense(month) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      expense_type_id,
-      expense_name,
-      amount
-    }) => {
-      const res = await adminFetch(`/api/accounting/expenses/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          expense_type_id,
-          expense_name,
-          amount
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تعديل المصروف");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateExpenseQueries(queryClient);
-      toast.success("تم تعديل المصروف بنجاح");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل تعديل المصروف: ${error.message}`);
-    }
-  });
-}
-function useConfirmExpense(month) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      is_confirmed,
-      confirmed_amount,
-      confirmed_note
-    }) => {
-      const res = await adminFetch(`/api/accounting/expenses/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          is_confirmed,
-          confirmed_amount,
-          confirmed_note
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تأكيد المصروف");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateExpenseQueries(queryClient);
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل تأكيد المصروف: ${error.message}`);
-    }
-  });
-}
-function useDeleteExpense(month) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async id => {
-      const res = await adminFetch(`/api/accounting/expenses/${id}`, {
-        method: "DELETE"
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل حذف المصروف");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateExpenseQueries(queryClient);
-      toast.success("تم حذف المصروف");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل حذف المصروف: ${error.message}`);
-    }
-  });
-}
-function useCreateExpenseType() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      name
-    }) => {
-      const res = await adminFetch("/api/accounting/expense-types", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إضافة نوع المصروف");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingExpenseTypes()
-      });
-      toast.success("تم إضافة نوع المصروف بنجاح");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل إضافة نوع المصروف: ${error.message}`);
-    }
-  });
-}
-
-// List active fixed-expense templates
-function useFixedExpenses(employeeId, isAdmin, includeInactive = false) {
-  return useQuery({
-    queryKey: queryKeys.accountingFixedExpenses({
-      includeInactive
-    }),
-    enabled: !!employeeId && isAdmin,
-    queryFn: async () => {
-      const qs = includeInactive ? "?includeInactive=1" : "";
-      const res = await adminFetch(`/api/accounting/fixed-expenses${qs}`);
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تحميل المصروفات الثابتة");
-      }
-      return Array.isArray(data.fixed_expenses) ? data.fixed_expenses : [];
-    }
-  });
-}
-function useCreateFixedExpense() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      expense_type_id,
-      expense_name,
-      default_amount,
-      start_month
-    }) => {
-      const res = await adminFetch("/api/accounting/fixed-expenses", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          expense_type_id,
-          expense_name,
-          default_amount,
-          start_month
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إضافة المصروف الثابت");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateExpenseQueries(queryClient);
-      toast.success("تم إضافة المصروف الثابت بنجاح");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإضافة: ${error.message}`);
-    }
-  });
-}
-function useUpdateFixedExpense() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      ...patch
-    }) => {
-      const res = await adminFetch(`/api/accounting/fixed-expenses/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(patch)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تعديل المصروف الثابت");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateExpenseQueries(queryClient);
-      toast.success("تم تعديل المصروف الثابت");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل التعديل: ${error.message}`);
-    }
-  });
-}
-function useDeleteFixedExpense() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async id => {
-      const res = await adminFetch(`/api/accounting/fixed-expenses/${id}`, {
-        method: "DELETE"
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل حذف المصروف الثابت");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateExpenseQueries(queryClient);
-      toast.success("تم إلغاء تنشيط المصروف الثابت");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الحذف: ${error.message}`);
-    }
-  });
-}
-
-// Confirm payment of a fixed-expense template for a specific month.
-// This materializes a real accounting_expenses row.
-function useConfirmFixedExpense() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      month,
-      confirmed_amount,
-      confirmed_note
-    }) => {
-      const res = await adminFetch(`/api/accounting/fixed-expenses/${id}/confirm`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          month,
-          confirmed_amount,
-          confirmed_note
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تأكيد الدفع");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateExpenseQueries(queryClient);
-      toast.success("تم تأكيد الدفع");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل التأكيد: ${error.message}`);
-    }
-  });
-}
-
-function ExpensesMobileHeader() {
-  return /* @__PURE__ */ jsxs("div", { className: `lg:hidden sticky top-0 z-30 ${ws$1.topBar} px-4 py-3 flex items-center gap-3`, children: [
-    /* @__PURE__ */ jsx("div", { className: "w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center", children: /* @__PURE__ */ jsx(Receipt, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات" }),
-      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: "تسجيل وإدارة المصروفات" })
-    ] })
-  ] });
-}
-function ExpensesDesktopHeader() {
-  return /* @__PURE__ */ jsxs("div", { className: "hidden lg:flex items-center gap-4", children: [
-    /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Receipt, { className: "w-6 h-6 text-emerald-700 dark:text-emerald-200" }) }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("h1", { className: "text-xl font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات" }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-sm mt-0.5", children: "تسجيل وإدارة المصروفات الشهرية" })
-    ] })
-  ] });
-}
-function ExpensesInfoCard() {
-  return /* @__PURE__ */ jsx("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3", children: [
-    /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-10 h-10`, children: /* @__PURE__ */ jsx(Info, { className: "w-5 h-5 text-sky-700 dark:text-sky-200" }) }),
-    /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
-      /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "ملاحظة" }),
-      /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-600 dark:text-white/60 mt-1 leading-6", children: "أضف المصروفات من قسم «مصروف متغيّر» ثم راجعها وأكّدها من قسم «رفع المصروفات» حسب الشهر." })
-    ] })
-  ] }) });
-}
 function ExpensesPage() {
-  const {
-    ready,
-    employeeId,
-    user
-  } = useWorkspaceUser();
-  const isAdmin = user?.role === "Admin";
-  const [month, setMonth] = useState(currentRiyadhMonthKey);
-  const monthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
-  const monthHint = month ? monthLabel$1(month) : "";
-  const [activeTab, setActiveTab] = useState("fixed");
-  const [reviewStatusFilter, setReviewStatusFilter] = useState("all");
-  const [filterType, setFilterType] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [filterSearch, setFilterSearch] = useState("");
-  const [filterSort, setFilterSort] = useState("amount_desc");
-  const resetFilters = () => {
-    setFilterType("");
-    setFilterStatus("all");
-    setFilterSearch("");
-    setFilterSort("amount_desc");
-  };
-  const hasActiveFilters = !!filterType || filterStatus !== "all" || !!filterSearch.trim() || filterSort !== "amount_desc";
-  const [editingExpense, setEditingExpense] = useState(null);
-  const [editingFixed, setEditingFixed] = useState(null);
-  const [quickAddOpen, setQuickAddOpen] = useState(false);
-  const [isSeedingCategories, setIsSeedingCategories] = useState(false);
-  const expensesQuery = useExpensesData(month, employeeId, isAdmin);
-  const typesQuery = useExpenseTypes(employeeId, isAdmin);
-  const fixedExpensesQuery = useFixedExpenses(employeeId, isAdmin);
-  const createExpenseMutation = useCreateExpense(month);
-  const updateExpenseMutation = useUpdateExpense();
-  const confirmExpenseMutation = useConfirmExpense();
-  const deleteExpenseMutation = useDeleteExpense();
-  const createTypeMutation = useCreateExpenseType();
-  useCreateFixedExpense();
-  useUpdateFixedExpense();
-  useDeleteFixedExpense();
-  const confirmFixedMutation = useConfirmFixedExpense();
-  const expenses = Array.isArray(expensesQuery.data?.expenses) ? expensesQuery.data.expenses : [];
-  const pendingFixed = Array.isArray(expensesQuery.data?.pending_fixed) ? expensesQuery.data.pending_fixed : [];
-  const types = Array.isArray(typesQuery.data) ? typesQuery.data : [];
-  const fixedExpenses = Array.isArray(fixedExpensesQuery.data) ? fixedExpensesQuery.data : [];
-  const handleCreateExpense = (data) => {
-    createExpenseMutation.mutate(data);
-  };
-  const handleUpdateExpense = (data) => {
-    updateExpenseMutation.mutate(data, {
-      onSuccess: () => {
-        setEditingExpense(null);
-      }
-    });
-  };
-  const handleConfirmExpense = (data) => {
-    confirmExpenseMutation.mutate(data);
-  };
-  const handleDeleteExpense = (id) => {
-    deleteExpenseMutation.mutate(id);
-  };
-  const handleCreateType = (data) => {
-    createTypeMutation.mutate(data);
-  };
-  const handleEditExpense = (expense) => {
-    setEditingExpense(expense);
-    setActiveTab("register");
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
-  const handleCancelEdit = () => {
-    setEditingExpense(null);
-  };
-  const handleConfirmFixedExpense = (data) => {
-    confirmFixedMutation.mutate(data);
-  };
-  useQueryClient();
-  useMemo(() => getMissingPresetCategories(types), [types]);
-  useMemo(() => expenses.reduce((s, e) => {
-    const n = Number(e?.amount);
-    return s + (Number.isFinite(n) ? n : 0);
-  }, 0), [expenses]);
-  const filterTypeOptions = useMemo(() => {
-    const names = /* @__PURE__ */ new Set();
-    for (const e of expenses) {
-      if (e.expense_type_name) names.add(e.expense_type_name);
-    }
-    return Array.from(names).sort((a, b) => a.localeCompare(b, "ar")).map((n) => ({
-      value: n,
-      label: n
-    }));
-  }, [expenses]);
-  const filteredExpenses = useMemo(() => {
-    const q = filterSearch.trim().toLowerCase();
-    let out = expenses.filter((e) => {
-      if (filterType && e.expense_type_name !== filterType) return false;
-      if (filterStatus === "confirmed" && !e.is_confirmed) return false;
-      if (filterStatus === "pending" && e.is_confirmed) return false;
-      if (q) {
-        const name = String(e.expense_name || "").toLowerCase();
-        if (!name.includes(q)) return false;
-      }
-      return true;
-    });
-    const num = (v) => {
-      const n = Number(v);
-      return Number.isFinite(n) ? n : 0;
-    };
-    out = out.slice().sort((a, b) => {
-      switch (filterSort) {
-        case "amount_asc":
-          return num(a.amount) - num(b.amount);
-        case "name_asc":
-          return String(a.expense_name || "").localeCompare(String(b.expense_name || ""), "ar");
-        case "status":
-          return Number(!!a.is_confirmed) - Number(!!b.is_confirmed);
-        case "amount_desc":
-        default:
-          return num(b.amount) - num(a.amount);
-      }
-    });
-    return out;
-  }, [expenses, filterType, filterStatus, filterSearch, filterSort]);
-  const todayRiyadh = useMemo(() => (/* @__PURE__ */ new Date()).toLocaleDateString("en-CA", {
-    timeZone: "Asia/Riyadh"
-  }), []);
-  const handleQuickAddSubmit = (data) => {
-    createExpenseMutation.mutate(data);
-  };
-  useEffect(() => {
-    function onKey(e) {
-      const isCmdOrCtrl = e.ctrlKey || e.metaKey;
-      if (!isCmdOrCtrl) return;
-      const key = e.key?.toLowerCase();
-      if (key !== "n") return;
-      const tgt = e.target;
-      const tag = (tgt?.tagName || "").toUpperCase();
-      const isEditable = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || tgt?.isContentEditable;
-      if (isEditable) return;
-      e.preventDefault();
-      setQuickAddOpen(true);
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-  if (!ready) {
-    return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh] pb-24 lg:pb-0", dir: "rtl", children: [
-      /* @__PURE__ */ jsx(AccountingSidebar, { active: "expenses" }),
-      /* @__PURE__ */ jsx("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-6 text-center`, children: /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60", children: "جاري التحميل…" }) }) })
-    ] });
-  }
-  if (!employeeId) {
-    return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh] pb-24 lg:pb-0", dir: "rtl", children: [
-      /* @__PURE__ */ jsx(AccountingSidebar, { active: "expenses" }),
-      /* @__PURE__ */ jsx("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-6 text-center`, children: [
-        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60", children: "يرجى تسجيل الدخول" }),
-        /* @__PURE__ */ jsx("div", { className: "mt-3", children: /* @__PURE__ */ jsx("a", { href: "/admin/login", className: `${ws$1.btnPrimary} px-4 py-2 inline-flex`, children: "تسجيل دخول الإدارة" }) })
-      ] }) })
-    ] });
-  }
-  if (!isAdmin) {
-    return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh] pb-24 lg:pb-0", dir: "rtl", children: [
-      /* @__PURE__ */ jsx(AccountingSidebar, { active: "expenses" }),
-      /* @__PURE__ */ jsx("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-6 text-center`, children: /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60", children: "غير مصرح لك بالوصول" }) }) })
-    ] });
-  }
-  const isRegisterTab = activeTab === "register";
-  const isReviewTab = activeTab === "review";
-  const isFixedTab = activeTab === "fixed";
-  const isCategoriesTab = activeTab === "categories";
-  const fixedTypes = (types || []).filter((t) => ["fixed", "both"].includes(t.scope || "both"));
-  const variableTypes = (types || []).filter((t) => ["variable", "both"].includes(t.scope || "both"));
-  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh] pb-24 lg:pb-0", dir: "rtl", children: [
-    /* @__PURE__ */ jsx(AccountingSidebar, { active: "expenses" }),
-    /* @__PURE__ */ jsx(ExpensesMobileHeader, {}),
-    /* @__PURE__ */ jsx("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto w-full space-y-5", children: [
-      /* @__PURE__ */ jsx(ExpensesDesktopHeader, {}),
-      /* @__PURE__ */ jsx("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: "الشهر" }),
-        /* @__PURE__ */ jsx("div", { className: "w-44", children: /* @__PURE__ */ jsx(GlassSelect, { value: month, onChange: setMonth, options: monthOptions, placeholder: "اختر الشهر", buttonClassName: "text-sm py-2 px-3" }) })
-      ] }) }),
-      /* @__PURE__ */ jsx(ExpensesInfoCard, {}),
-      /* @__PURE__ */ jsxs("div", { className: `${ws$1.segWrap} relative z-10`, children: [
-        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setActiveTab("fixed"), className: `${ws$1.segBtn} ${isFixedTab ? ws$1.segActive : ws$1.segInactive} flex items-center gap-2`, children: [
-          /* @__PURE__ */ jsx(Anchor, { className: "w-4 h-4" }),
-          "مصروف ثابت",
-          fixedExpenses.length > 0 && /* @__PURE__ */ jsx("span", { className: "bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold", children: fixedExpenses.length })
-        ] }),
-        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setActiveTab("register"), className: `${ws$1.segBtn} ${isRegisterTab ? ws$1.segActive : ws$1.segInactive} flex items-center gap-2`, children: [
-          /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4" }),
-          "مصروف متغيّر",
-          variableTypes.length > 0 && /* @__PURE__ */ jsx("span", { className: "bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold", children: variableTypes.length })
-        ] }),
-        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setActiveTab("review"), className: `${ws$1.segBtn} ${isReviewTab ? ws$1.segActive : ws$1.segInactive} flex items-center gap-2`, children: [
-          /* @__PURE__ */ jsx(ClipboardCheck, { className: "w-4 h-4" }),
-          "تقارير ومراجعة"
-        ] }),
-        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setActiveTab("categories"), className: `${ws$1.segBtn} ${isCategoriesTab ? ws$1.segActive : ws$1.segInactive} flex items-center gap-2`, children: [
-          /* @__PURE__ */ jsx(ListChecks, { className: "w-4 h-4" }),
-          "البنود",
-          types.length > 0 && /* @__PURE__ */ jsx("span", { className: "bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold", children: types.length })
-        ] })
-      ] }),
-      isRegisterTab && /* @__PURE__ */ jsxs(Fragment, { children: [
-        /* @__PURE__ */ jsx(VariableGrid, { types: variableTypes, monthExpenses: expenses, month, onMutate: () => expensesQuery.refetch() }),
-        /* @__PURE__ */ jsxs("details", { className: `${ws$1.glassSoft} ${ws$1.card} p-4`, children: [
-          /* @__PURE__ */ jsx("summary", { className: "text-slate-600 dark:text-white/55 text-xs cursor-pointer select-none", children: "إضافة مصروف خارج البنود (متقدم)" }),
-          /* @__PURE__ */ jsx("div", { className: "mt-4", children: /* @__PURE__ */ jsx(ExpenseForm, { types, onSubmit: editingExpense ? handleUpdateExpense : handleCreateExpense, isSubmitting: editingExpense ? updateExpenseMutation.isPending : createExpenseMutation.isPending, onCreateType: handleCreateType, editingExpense, onCancelEdit: handleCancelEdit }) })
-        ] }),
-        month && expenses.length > 0 && /* @__PURE__ */ jsx(ExpensesAnalytics, { month, expenses }),
-        month && (() => {
-          const allVariable = (expenses || []).filter((e) => e.fixed_expense_id === null || e.fixed_expense_id === void 0);
-          if (allVariable.length === 0) return null;
-          const variableExpenses = filteredExpenses.filter((e) => e.fixed_expense_id === null || e.fixed_expense_id === void 0);
-          return /* @__PURE__ */ jsxs(Fragment, { children: [
-            /* @__PURE__ */ jsx(ExpenseFilters, { typeFilter: filterType, onTypeFilterChange: setFilterType, statusFilter: filterStatus, onStatusFilterChange: setFilterStatus, search: filterSearch, onSearchChange: setFilterSearch, sort: filterSort, onSortChange: setFilterSort, typeOptions: filterTypeOptions, onReset: resetFilters, hasActiveFilters }),
-            /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-5`, children: [
-              /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
-                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-                  /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Receipt, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
-                  /* @__PURE__ */ jsxs("div", { children: [
-                    /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات المضافة" }),
-                    /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-0.5", children: [
-                      monthHint,
-                      " — ",
-                      variableExpenses.length,
-                      " من",
-                      " ",
-                      allVariable.length,
-                      " مصروف متغير"
-                    ] })
-                  ] })
-                ] }),
-                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-                  /* @__PURE__ */ jsx(ExpensesExportMenu, { expenses: variableExpenses, month, todayRiyadh }),
-                  /* @__PURE__ */ jsx("div", { className: "w-40", children: /* @__PURE__ */ jsx(GlassSelect, { value: month, onChange: setMonth, options: monthOptions, placeholder: "الشهر", buttonClassName: "text-xs py-2 px-2.5" }) })
-                ] })
-              ] }),
-              /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsx(ExpenseTable, { expenses: variableExpenses, month, onConfirm: handleConfirmExpense, onDelete: handleDeleteExpense, onEdit: handleEditExpense }) })
-            ] })
-          ] });
-        })(),
-        !month && /* @__PURE__ */ jsx("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Receipt, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات المضافة" }),
-            /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-0.5", children: "اختر الشهر في نموذج الإضافة أعلاه لعرض المصروفات" })
-          ] })
-        ] }) })
-      ] }),
-      isReviewTab && /* @__PURE__ */ jsxs(Fragment, { children: [
-        month && expenses.length > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
-          /* @__PURE__ */ jsx(ExpenseFilters, { typeFilter: filterType, onTypeFilterChange: setFilterType, statusFilter: filterStatus, onStatusFilterChange: setFilterStatus, search: filterSearch, onSearchChange: setFilterSearch, sort: filterSort, onSortChange: setFilterSort, typeOptions: filterTypeOptions, onReset: resetFilters, hasActiveFilters }),
-          /* @__PURE__ */ jsx("div", { className: "flex items-center justify-end", children: /* @__PURE__ */ jsx(ExpensesExportMenu, { expenses: filteredExpenses, month, todayRiyadh }) })
-        ] }),
-        /* @__PURE__ */ jsx(ReviewTabContent, { month, monthHint, expenses: filteredExpenses, pendingFixed, expensesQuery, statusFilter: reviewStatusFilter, onStatusFilterChange: setReviewStatusFilter, onConfirm: handleConfirmExpense, onDelete: handleDeleteExpense, onEdit: handleEditExpense, onConfirmFixed: handleConfirmFixedExpense })
-      ] }),
-      isFixedTab && /* @__PURE__ */ jsx(FixedPanel, { templates: fixedExpenses, monthExpenses: expenses, types: fixedTypes, month, onMutate: () => {
-        fixedExpensesQuery.refetch();
-        expensesQuery.refetch();
-      } }),
-      isCategoriesTab && /* @__PURE__ */ jsx(CategoriesManager, {})
-    ] }) }),
-    /* @__PURE__ */ jsx(QuickAddSheet, { open: quickAddOpen, onClose: () => setQuickAddOpen(false), types, onSubmit: handleQuickAddSubmit, isSubmitting: createExpenseMutation.isPending, onCreateType: handleCreateType, month })
-  ] });
+  return /* @__PURE__ */ jsx(Navigate, { to: "/accounting/purchases?tab=expenses", replace: true });
 }
 
 const page$J = UNSAFE_withComponentProps(function WrappedPage(props) {
@@ -6720,7 +3228,7 @@ const route4 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const VAT_RATE = 0.15;
-function formatMoney$c(value) {
+function formatMoney$d(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-nu-latn", {
@@ -7340,8 +3848,8 @@ function CalculatorForm({
       /* @__PURE__ */ jsxs("div", { className: "px-4", children: [
         /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو الخام", hint: "Excl. tax", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.01", inputMode: "decimal", value: draft.priceKgExclTax, onChange: handleChangePriceKgExclTax, placeholder: "مثال: 35" }) }),
         /* @__PURE__ */ jsx(FieldRow, { label: "حجم الخيشة", hint: "بالكيلو", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.001", inputMode: "decimal", value: draft.bagSizeKg, onChange: handleChangeBagSizeKg, placeholder: "مثال: 60" }) }),
-        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "غير شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$c(computed.bagCostExcl) }) }),
-        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$c(computed.bagCostIncl) }) }),
+        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "غير شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$d(computed.bagCostExcl) }) }),
+        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$d(computed.bagCostIncl) }) }),
         !isRegister ? /* @__PURE__ */ jsxs(Fragment, { children: [
           /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة التحميص", hint: "اختر الإدخال: غير شامل الضريبة أو شامل الضريبة", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-2", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex gap-2 flex-wrap", children: [
@@ -7370,11 +3878,11 @@ function CalculatorForm({
               ] })
             ] })
           ] }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الاجماليه للتحميص", hint: "حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$c(computed.roastTotalIncl) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الاجماليه للتحميص", hint: "حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$d(computed.roastTotalIncl) }) }),
           /* @__PURE__ */ jsx(FieldRow, { label: "الواصل بعد الهدر", hint: "مدخل (بالكيلو)", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.001", inputMode: "decimal", value: draft.receivedKg, onChange: handleChangeReceivedKg, placeholder: "مثال: 50" }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "نسبة الهدر", hint: "% (محسوبة تلقائيًا من الكمية الواصلة)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$c(computed.wastePercentDerived) }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "الإجمالي", hint: "شامل الضريبة", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$c(computed.totalIncl) }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو النهائي", hint: "(الإجمالي / الواصل بعد الهدر)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$c(computed.finalPricePerKg) }) })
+          /* @__PURE__ */ jsx(FieldRow, { label: "نسبة الهدر", hint: "% (محسوبة تلقائيًا من الكمية الواصلة)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$d(computed.wastePercentDerived) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "الإجمالي", hint: "شامل الضريبة", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$d(computed.totalIncl) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو النهائي", hint: "(الإجمالي / الواصل بعد الهدر)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$d(computed.finalPricePerKg) }) })
         ] }) : null,
         /* @__PURE__ */ jsx("div", { className: "py-4" })
       ] })
@@ -7641,7 +4149,375 @@ function ExportMenu({
   ] });
 }
 
-function formatMoney$b(value) {
+/**
+ * Export utilities for Excel and PDF generation
+ * Supports Arabic RTL content
+ */
+
+/**
+ * Export to Excel with better formatting (uses HTML table trick)
+ * This creates a proper Excel file that can be opened in Excel
+ */
+function exportToExcelHTML(data, filename, columns, title) {
+  // Create HTML table
+  const headers = columns.map(col => col.header).join("</th><th>");
+  const rows = data.map(item => `<tr>${columns.map(col => {
+    const value = col.accessor(item);
+    const formatted = col.format ? col.format(value, item) : value;
+    return `<td>${formatted ?? ""}</td>`;
+  }).join("")}</tr>`).join("");
+  const now = new Date().toLocaleDateString(LOCALE, {
+    timeZone: "Asia/Riyadh"
+  });
+  const htmlContent = `
+    <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
+      <head>
+        <meta charset="UTF-8">
+        <style>
+          table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            font-family: Arial, sans-serif;
+            direction: rtl;
+          }
+          th { 
+            background-color: #0f172a; 
+            color: white; 
+            padding: 12px; 
+            text-align: right;
+            border: 1px solid #ddd;
+            font-weight: bold;
+          }
+          td { 
+            padding: 10px; 
+            border: 1px solid #ddd;
+            text-align: right;
+          }
+          tr:nth-child(even) { 
+            background-color: #f9f9f9; 
+          }
+          .header {
+            margin-bottom: 20px;
+            text-align: center;
+          }
+          .header h1 {
+            color: #0f172a;
+            margin: 10px 0;
+          }
+          .header p {
+            color: #666;
+            margin: 5px 0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>${title}</h1>
+          <p>تاريخ الإنشاء: ${now}</p>
+        </div>
+        <table>
+          <thead>
+            <tr><th>${headers}</th></tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `;
+  const blob = new Blob([htmlContent], {
+    type: "application/vnd.ms-excel;charset=utf-8;"
+  });
+  downloadBlob(blob, `${filename}.xls`);
+}
+
+/**
+ * Export data to PDF using print dialog
+ * Creates a formatted print-friendly page
+ */
+function exportToPDF(data, filename, columns, title) {
+  // Create a new window for printing
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    alert("الرجاء السماح بفتح النوافذ المنبثقة للتصدير");
+    return;
+  }
+  const headers = columns.map(col => col.header).join("</th><th>");
+  const rows = data.map(item => `<tr>${columns.map(col => {
+    const value = col.accessor(item);
+    const formatted = col.format ? col.format(value, item) : value;
+    return `<td>${formatted ?? ""}</td>`;
+  }).join("")}</tr>`).join("");
+  const now = new Date().toLocaleDateString(LOCALE, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh"
+  });
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html dir="rtl">
+      <head>
+        <meta charset="UTF-8">
+        <title>${title}</title>
+        <style>
+          @media print {
+            @page {
+              size: A4 landscape;
+              margin: 15mm;
+            }
+            body {
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            .no-print {
+              display: none !important;
+            }
+          }
+          
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+            direction: rtl;
+          }
+          
+          .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+          }
+          
+          .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: bold;
+          }
+          
+          .header p {
+            font-size: 14px;
+            opacity: 0.9;
+          }
+          
+          .stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+          }
+          
+          .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+          }
+          
+          .stat-card .label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+          }
+          
+          .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
+          }
+          
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          }
+          
+          thead {
+            background: #0f172a;
+            color: white;
+          }
+          
+          th {
+            padding: 15px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px solid #14b8a6;
+          }
+          
+          td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #f9fafb;
+          }
+          
+          tr:hover {
+            background-color: #f1f5f9;
+          }
+          
+          .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            padding: 20px;
+          }
+          
+          .print-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #14b8a6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+          }
+          
+          .print-button:hover {
+            background: #0d9488;
+          }
+          
+          @media print {
+            body {
+              background: white;
+              padding: 0;
+            }
+            .header {
+              border-radius: 0;
+            }
+            table {
+              box-shadow: none;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <button class="print-button no-print" onclick="window.print()">
+          🖨️ طباعة / حفظ PDF
+        </button>
+        
+        <div class="header">
+          <h1>${title}</h1>
+          <p>تاريخ الإنشاء: ${now}</p>
+          <div class="stats">
+            <div class="stat-card">
+              <div class="label">إجمالي السجلات</div>
+              <div class="value">${data.length}</div>
+            </div>
+          </div>
+        </div>
+        
+        <table>
+          <thead>
+            <tr><th>${headers}</th></tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+        
+        <div class="footer">
+          <p>تم الإنشاء بواسطة نظام إدارة المخزون</p>
+          <p>© ${new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    timeZone: "Asia/Riyadh"
+  })} - جميع الحقوق محفوظة</p>
+        </div>
+      </body>
+    </html>
+  `;
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+
+  // Auto print after content loads
+  printWindow.onload = () => {
+    setTimeout(() => {
+      printWindow.focus();
+    }, 250);
+  };
+}
+
+/**
+ * Helper function to download blob
+ */
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+/**
+ * Format inventory type for export
+ */
+function formatInventoryType(type) {
+  const typeMap = {
+    Daily: "يومي",
+    Weekly: "أسبوعي",
+    Transfer: "تحويل",
+    Receipt: "وارد",
+    Opening: "مخزون افتتاحي"
+  };
+  return typeMap[type] || type;
+}
+
+/**
+ * Format role for export
+ */
+function formatRole(role) {
+  const roleMap = {
+    Admin: "مدير",
+    Employee: "موظف"
+  };
+  return roleMap[role] || role;
+}
+
+/**
+ * Format date and time for export.
+ */
+function formatDateTime$2(dateString) {
+  if (!dateString) return "-";
+  // IMPORTANT: use toLocaleString (not toLocaleDateString) so time is always rendered
+  // across browsers (especially iOS/Safari) when hour/minute options are provided.
+  return new Date(dateString).toLocaleString(LOCALE, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh"
+  });
+}
+
+function formatMoney$c(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-nu-latn", {
@@ -7700,6 +4576,39 @@ function groupOrderItems(items) {
 }
 function todayISO$1() {
   return todayRiyadhDateKey();
+}
+
+function formatMoney$b(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "—";
+  return n.toLocaleString("ar-SA-u-nu-latn", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+function monthLabel$1(month) {
+  const value = month ? String(month) : "";
+  const m = value.match(/^(\d{4})-(\d{2})$/);
+  if (!m) return value;
+  const year = Number(m[1]);
+  const idx = Number(m[2]) - 1;
+  const monthsAr = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+  const name = monthsAr[idx] || value;
+  return `${name} ${year}`;
+}
+function buildRecentMonthOptions$1(count = 24) {
+  const options = [{
+    value: "",
+    label: "اختار الشهر"
+  }];
+  for (let i = 0; i < count; i += 1) {
+    const value = riyadhMonthKeyFromOffset(-i);
+    options.push({
+      value,
+      label: monthLabel$1(value)
+    });
+  }
+  return options;
 }
 
 function computeMonthRange(monthValue) {
@@ -7773,7 +4682,7 @@ function OrdersList({
   }, {
     header: "سعر الكيلو (بدون ضريبة)",
     accessor: (r) => r.price_kg_excl_tax,
-    format: (v) => formatMoney$b(v)
+    format: (v) => formatMoney$c(v)
   }, {
     header: "حجم الخيشة (كغ)",
     accessor: (r) => r.bag_size_kg,
@@ -7781,15 +4690,15 @@ function OrdersList({
   }, {
     header: "تحميص/كغ (شامل)",
     accessor: (r) => r.roast_cost_incl_tax,
-    format: (v) => formatMoney$b(v)
+    format: (v) => formatMoney$c(v)
   }, {
     header: "تكلفة إضافية/كغ",
     accessor: (r) => r.extra_cost_per_kg,
-    format: (v) => formatMoney$b(v)
+    format: (v) => formatMoney$c(v)
   }, {
     header: "الهدر %",
     accessor: (r) => r.waste_percent,
-    format: (v) => formatMoney$b(v)
+    format: (v) => formatMoney$c(v)
   }, {
     header: "الواصل بعد الهدر (كغ)",
     accessor: (r) => r.computed_received_after_waste_kg,
@@ -7797,15 +4706,15 @@ function OrdersList({
   }, {
     header: "السعر الصافي/كغ",
     accessor: (r) => r.computed_final_price_per_kg,
-    format: (v) => formatMoney$b(v)
+    format: (v) => formatMoney$c(v)
   }, {
     header: "إجمالي الصنف (شامل)",
     accessor: (r) => r.computed_total_incl,
-    format: (v) => formatMoney$b(v)
+    format: (v) => formatMoney$c(v)
   }, {
     header: "إجمالي الطلب (شامل)",
     accessor: (r) => r.order_total_incl,
-    format: (v) => formatMoney$b(v)
+    format: (v) => formatMoney$c(v)
   }, {
     header: "ملاحظة",
     accessor: (r) => r.note
@@ -7982,7 +4891,7 @@ function OrdersList({
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: String(o.order_date || "—") }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: o.supplier_name || "—" }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: o.items_count ?? 0 }),
-            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-bold truncate", children: formatMoney$b(o.total_incl) })
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-bold truncate", children: formatMoney$c(o.total_incl) })
           ] }, o.id);
         }) })
       ] }),
@@ -8130,7 +5039,7 @@ function buildItemTableRow(group, idx) {
   const extraTotal = extraPerBag * bagCount;
   const extraCostKgText = extraKg !== null ? formatQty(extraKg) : "الكل";
   const bagCountText = String(bagCount);
-  return [String(idx + 1), beanName, bagCountText, formatMoney$b(price), formatMoney$b(priceInclTax), formatQty(bag), formatMoney$b(roastIncl), formatMoney$b(extraPerKg), extraCostKgText, formatMoney$b(waste), formatQty(group.totalReceived), formatMoney$b(beanCostIncl), formatMoney$b(roastTotal), formatMoney$b(extraTotal), formatMoney$b(group.totalCostIncl), formatMoney$b(it.computed_final_price_per_kg)];
+  return [String(idx + 1), beanName, bagCountText, formatMoney$c(price), formatMoney$c(priceInclTax), formatQty(bag), formatMoney$c(roastIncl), formatMoney$c(extraPerKg), extraCostKgText, formatMoney$c(waste), formatQty(group.totalReceived), formatMoney$c(beanCostIncl), formatMoney$c(roastTotal), formatMoney$c(extraTotal), formatMoney$c(group.totalCostIncl), formatMoney$c(it.computed_final_price_per_kg)];
 }
 function exportGreenBeanOrderExcel(order, items, totals) {
   const headers = buildItemTableHeaders();
@@ -8158,10 +5067,10 @@ function exportGreenBeanOrderExcel(order, items, totals) {
     <tr><td colspan="${colCount}" style="height:15px;border:none;"></td></tr>
     <tr><td colspan="${colCount}" style="font-weight:bold;font-size:14px;background:#1e293b;color:white;padding:10px;border:1px solid #94a3b8;">ملخص الطلب</td></tr>
     <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">عدد أنواع البن</td><td style="padding:6px;border:1px solid #ddd;">${totals.beanTypesCount}</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">عدد الخياش</td><td style="padding:6px;border:1px solid #ddd;">${totals.totalBags}</td><td colspan="${colCount - 6}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">مجموع الكيلوات</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$b(totals.totalKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">الواصل بعد الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$b(totals.totalReceivedKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">كمية الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$b(totals.wasteKg)} كغ (${formatMoney$b(totals.wastePercent)}%)</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة البن (شامل الضريبة)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$b(totals.totalBeanCostIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة التحميص (شامل)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$b(totals.totalRoastIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي التكلفة الإضافية</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$b(totals.totalExtra)} ر.س</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">متوسط السعر الصافي / كغ</td><td style="padding:6px;font-weight:bold;color:#059669;border:1px solid #ddd;">${formatMoney$b(totals.avgPricePerKg)} ر.س</td><td colspan="${colCount - 3}" style="border:1px solid #ddd;"></td></tr>
-    <tr style="background:#0f172a;"><td colspan="2" style="font-weight:bold;padding:10px;color:white;border:1px solid #94a3b8;">إجمالي الطلب (شامل)</td><td colspan="${colCount - 2}" style="padding:10px;font-weight:bold;font-size:16px;color:white;border:1px solid #94a3b8;">${formatMoney$b(totals.totalGrand)} ر.س</td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">مجموع الكيلوات</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">الواصل بعد الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalReceivedKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">كمية الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.wasteKg)} كغ (${formatMoney$c(totals.wastePercent)}%)</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة البن (شامل الضريبة)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalBeanCostIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة التحميص (شامل)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalRoastIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي التكلفة الإضافية</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalExtra)} ر.س</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">متوسط السعر الصافي / كغ</td><td style="padding:6px;font-weight:bold;color:#059669;border:1px solid #ddd;">${formatMoney$c(totals.avgPricePerKg)} ر.س</td><td colspan="${colCount - 3}" style="border:1px solid #ddd;"></td></tr>
+    <tr style="background:#0f172a;"><td colspan="2" style="font-weight:bold;padding:10px;color:white;border:1px solid #94a3b8;">إجمالي الطلب (شامل)</td><td colspan="${colCount - 2}" style="padding:10px;font-weight:bold;font-size:16px;color:white;border:1px solid #94a3b8;">${formatMoney$c(totals.totalGrand)} ر.س</td></tr>
   ` : "";
   const noteRow = note ? `<tr><td colspan="${colCount}" style="padding:6px;border:1px solid #ddd;"><b>ملاحظة:</b> ${note}</td></tr>` : "";
   const htmlContent = `
@@ -8257,36 +5166,36 @@ function exportGreenBeanOrderPDF(order, items, totals) {
         </div>
         <div class="summary-card">
           <div class="s-label">مجموع الكيلوات</div>
-          <div class="s-value">${formatMoney$b(totals.totalKg)} كغ</div>
+          <div class="s-value">${formatMoney$c(totals.totalKg)} كغ</div>
         </div>
         <div class="summary-card">
           <div class="s-label">الواصل بعد الهدر</div>
-          <div class="s-value">${formatMoney$b(totals.totalReceivedKg)} كغ</div>
+          <div class="s-value">${formatMoney$c(totals.totalReceivedKg)} كغ</div>
         </div>
         <div class="summary-card warn">
           <div class="s-label">كمية الهدر</div>
-          <div class="s-value">${formatMoney$b(totals.wasteKg)} كغ (${formatMoney$b(totals.wastePercent)}%)</div>
+          <div class="s-value">${formatMoney$c(totals.wasteKg)} كغ (${formatMoney$c(totals.wastePercent)}%)</div>
         </div>
         <div class="summary-card">
           <div class="s-label">تكلفة البن (شامل الضريبة)</div>
-          <div class="s-value">${formatMoney$b(totals.totalBeanCostIncl)} ر.س</div>
+          <div class="s-value">${formatMoney$c(totals.totalBeanCostIncl)} ر.س</div>
         </div>
         <div class="summary-card">
           <div class="s-label">تكلفة التحميص (شامل)</div>
-          <div class="s-value">${formatMoney$b(totals.totalRoastIncl)} ر.س</div>
+          <div class="s-value">${formatMoney$c(totals.totalRoastIncl)} ر.س</div>
         </div>
         <div class="summary-card">
           <div class="s-label">التكلفة الإضافية</div>
-          <div class="s-value">${formatMoney$b(totals.totalExtra)} ر.س</div>
+          <div class="s-value">${formatMoney$c(totals.totalExtra)} ر.س</div>
         </div>
         <div class="summary-card accent">
           <div class="s-label">متوسط السعر الصافي / كغ</div>
-          <div class="s-value">${formatMoney$b(totals.avgPricePerKg)} ر.س</div>
+          <div class="s-value">${formatMoney$c(totals.avgPricePerKg)} ر.س</div>
         </div>
       </div>
       <div class="grand-total-bar">
         <span>إجمالي الطلب (شامل)</span>
-        <span class="grand-total-value">${formatMoney$b(totals.totalGrand)} ر.س</span>
+        <span class="grand-total-value">${formatMoney$c(totals.totalGrand)} ر.س</span>
       </div>
     </div>
   ` : "";
@@ -8486,11 +5395,11 @@ function OrderDetailsTable({
             " خيشة"
           ] }) : null
         ] }) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$b(it.price_kg_excl_tax) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$b(it.waste_percent) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$c(it.price_kg_excl_tax) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$c(it.waste_percent) }),
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: extraCostKgText }),
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: totalReceivedDisplay }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-emerald-700 dark:text-emerald-200 font-extrabold", children: formatMoney$b(it.computed_final_price_per_kg) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-emerald-700 dark:text-emerald-200 font-extrabold", children: formatMoney$c(it.computed_final_price_per_kg) }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
           /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-3 py-2 w-[110px]`, type: "number", step: "0.001", inputMode: "decimal", value: receivedValue, "data-group-key": g.groupKey, onChange: handleReceivedInputChange, placeholder: showBagCount ? `إجمالي ${g.bagCount} خياشات` : "مثال: 58", disabled: isRowSaving, title: showBagCount ? `القيمة المُدخلة تُوزَّع بالتساوي على ${g.bagCount} خياشات` : "كمية الواصل بعد الهدر" }),
           /* @__PURE__ */ jsx("button", { type: "button", className: `${ws$1.btnPrimary} px-3 py-2`, "data-group-key": g.groupKey, onClick: handleSaveReceivedClick, disabled: isRowSaving, title: "حفظ الكمية الواصلة", children: /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }) })
@@ -8550,31 +5459,31 @@ function OrderSummary({
       color: "text-blue-700 dark:text-blue-200"
     }, {
       label: "مجموع الكيلوات",
-      value: `${formatMoney$b(totals.totalKg)} كغ`,
+      value: `${formatMoney$c(totals.totalKg)} كغ`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "مجموع الكيلوات الواصلة بعد الهدر",
-      value: `${formatMoney$b(totals.totalReceivedKg)} كغ`,
+      value: `${formatMoney$c(totals.totalReceivedKg)} كغ`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "كمية الهدر",
-      value: `${formatMoney$b(totals.wasteKg)} كغ (${formatMoney$b(totals.wastePercent)}%)`,
+      value: `${formatMoney$c(totals.wasteKg)} كغ (${formatMoney$c(totals.wastePercent)}%)`,
       color: "text-orange-700 dark:text-orange-200"
     }, {
       label: "إجمالي تكلفة البن (شامل الضريبة)",
-      value: `${formatMoney$b(totals.totalBeanCostIncl)} ر.س`,
+      value: `${formatMoney$c(totals.totalBeanCostIncl)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "إجمالي تكلفة التحميص (شامل الضريبة)",
-      value: `${formatMoney$b(totals.totalRoastIncl)} ر.س`,
+      value: `${formatMoney$c(totals.totalRoastIncl)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "إجمالي التكلفة الإضافية",
-      value: `${formatMoney$b(totals.totalExtra)} ر.س`,
+      value: `${formatMoney$c(totals.totalExtra)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "متوسط السعر الصافي / كغ",
-      value: `${formatMoney$b(totals.avgPricePerKg)} ر.س`,
+      value: `${formatMoney$c(totals.avgPricePerKg)} ر.س`,
       color: "text-emerald-700 dark:text-emerald-200"
     }];
     return /* @__PURE__ */ jsxs("div", { className: "mt-5 pt-4 border-t border-slate-200 dark:border-white/10", children: [
@@ -8590,7 +5499,7 @@ function OrderSummary({
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm mt-2 pt-3 border-t border-slate-200 dark:border-white/15", children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", children: "إجمالي الطلب (شامل):" }),
           /* @__PURE__ */ jsxs("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-base", children: [
-            formatMoney$b(totals.totalGrand),
+            formatMoney$c(totals.totalGrand),
             " ر.س"
           ] })
         ] })
@@ -9478,8 +6387,8 @@ function OrderBuilder({
       const line = row.line;
       const computed = row.computed;
       const qty = row.qty || 1;
-      const wasteText = Number.isFinite(computed?.wastePercent) ? `${formatMoney$b(computed.wastePercent)}%` : "—";
-      const finalPriceText = formatMoney$b(computed?.finalPricePerKg);
+      const wasteText = Number.isFinite(computed?.wastePercent) ? `${formatMoney$c(computed.wastePercent)}%` : "—";
+      const finalPriceText = formatMoney$c(computed?.finalPricePerKg);
       return /* @__PURE__ */ jsxs("tr", { className: "bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10", children: [
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-semibold truncate", children: row.beanName }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 justify-center", children: [
@@ -9499,13 +6408,13 @@ function OrderBuilder({
       ] }, beanIdText);
     });
   }, [hasItems, previewRows, handleItemChange, handleRemoveClick, handlePlusClick, handleMinusClick, isSaving]);
-  const totalBeanCostText = hasItems ? formatMoney$b(totals.totalBeanCostIncl) : "—";
-  const totalRoastText = hasItems ? formatMoney$b(totals.totalRoastIncl) : "—";
-  const totalExtraText = hasItems ? formatMoney$b(totals.totalExtra) : "—";
-  const grandTotalText = totals.ok ? formatMoney$b(totals.grandTotal) : "—";
+  const totalBeanCostText = hasItems ? formatMoney$c(totals.totalBeanCostIncl) : "—";
+  const totalRoastText = hasItems ? formatMoney$c(totals.totalRoastIncl) : "—";
+  const totalExtraText = hasItems ? formatMoney$c(totals.totalExtra) : "—";
+  const grandTotalText = totals.ok ? formatMoney$c(totals.grandTotal) : "—";
   const totalBagsText = hasItems ? String(totals.totalBags) : "—";
-  const totalKgText = hasItems ? formatMoney$b(totals.totalKg) : "—";
-  const totalReceivedKgText = hasItems ? formatMoney$b(totals.totalReceivedKg) : "—";
+  const totalKgText = hasItems ? formatMoney$c(totals.totalKg) : "—";
+  const totalReceivedKgText = hasItems ? formatMoney$c(totals.totalReceivedKg) : "—";
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
       /* @__PURE__ */ jsxs("div", { children: [
@@ -10306,7 +7215,7 @@ function LoanModal({
       ] }),
       monthly > 0 ? /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} px-3 py-2 flex items-center justify-between`, children: [
         /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/60", children: "قسط شهري متوقع" }),
-        /* @__PURE__ */ jsx("span", { className: "text-sm font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: formatMoney$d(monthly) })
+        /* @__PURE__ */ jsx("span", { className: "text-sm font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: formatMoney$b(monthly) })
       ] }) : null,
       isEditing ? /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-2 cursor-pointer select-none", children: [
         /* @__PURE__ */ jsx("input", { type: "checkbox", checked: isActive, onChange: (e) => setIsActive(e.target.checked), className: "accent-emerald-400" }),
@@ -10362,8 +7271,8 @@ function LoansList({
       const isActive = l.is_active !== false;
       return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]", children: [
         /* @__PURE__ */ jsx("td", { className: "py-3 px-3 font-semibold text-slate-900 dark:text-white whitespace-nowrap", children: l.employee_name || `#${l.employee_id}` }),
-        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(l.total_amount) }),
-        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(l.monthly_amount) }),
+        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(l.total_amount) }),
+        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(l.monthly_amount) }),
         /* @__PURE__ */ jsxs("td", { className: "py-3 px-3 text-slate-700 dark:text-white/75 whitespace-nowrap", children: [
           inst,
           " شهر"
@@ -10746,7 +7655,7 @@ function LoansPage() {
     const monthly = Number(loan.monthly_amount || 0);
     const confirmed = window.confirm(`حذف القرض نهائياً لـ ${loan.employee_name || "هذا الموظف"}؟
 
-سيُحذف من القائمة بالكامل، وتُمسح الاستقطاعات (${formatMoney$d(monthly)}/شهر) من مسير الرواتب لأي شهر لم يُقفل بعد.
+سيُحذف من القائمة بالكامل، وتُمسح الاستقطاعات (${formatMoney$b(monthly)}/شهر) من مسير الرواتب لأي شهر لم يُقفل بعد.
 الأشهر المُقفلة تحتفظ بقيمها كما هي.`);
     if (!confirmed) return;
     deleteMutation.mutate({
@@ -10775,12 +7684,12 @@ function LoansPage() {
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-4`, children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الخصم الشهري" }),
-          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-emerald-700 dark:text-emerald-200 mt-1", dir: "ltr", children: formatMoney$d(totals.monthly) }),
+          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-emerald-700 dark:text-emerald-200 mt-1", dir: "ltr", children: formatMoney$b(totals.monthly) }),
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40 mt-1", children: "يُطرح من المسير" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-4 col-span-2`, children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "المتبقي للسداد" }),
-          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$d(totals.outstanding) }),
+          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$b(totals.outstanding) }),
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40 mt-1", children: "للقروض النشطة فقط" })
         ] })
       ] }),
@@ -11612,34 +8521,34 @@ function PayrollTotals({
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-8 gap-3 w-full md:w-auto", children: [
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الرواتب" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalSalary) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalSalary) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي البونص" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalBonuses) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalBonuses) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "أوفر تايم" }),
-        /* @__PURE__ */ jsx("div", { className: "text-sky-700 dark:text-sky-200 font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalOvertime) })
+        /* @__PURE__ */ jsx("div", { className: "text-sky-700 dark:text-sky-200 font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalOvertime) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الخصميات" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalDeductions) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalDeductions) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "قسط السلف" }),
-        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalLoanDeductions) })
+        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalLoanDeductions) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "الصافي" }),
-        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$d(totals.net) })
+        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$b(totals.net) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-xs text-slate-600 dark:text-white/55", children: [
           /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3 text-emerald-700 dark:text-emerald-400" }),
           "تم الدفع"
         ] }),
-        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$d(paymentStats.totalPaid) }),
+        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$b(paymentStats.totalPaid) }),
         /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/40 mt-0.5", children: [
           paymentStats.paidCount,
           " / ",
@@ -11651,7 +8560,7 @@ function PayrollTotals({
           /* @__PURE__ */ jsx(Clock, { className: "w-3 h-3 text-amber-700 dark:text-amber-400" }),
           "متبقي"
         ] }),
-        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$d(paymentStats.totalUnpaid) }),
+        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$b(paymentStats.totalUnpaid) }),
         /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/40 mt-0.5", children: [
           paymentStats.unpaidCount,
           " موظف"
@@ -11754,17 +8663,17 @@ function PaymentRow({
   const employeeName = entry.employee_name || "—";
   const branchName = entry.branch_name || "—";
   const isSuspended = !!entry.is_suspended;
-  const baseSalary = formatMoney$d(entry.base_salary);
-  const otherAllowances = formatMoney$d(entry.other_allowances);
-  const totalSalary = formatMoney$d(entry.total_salary);
-  const totalBonuses = formatMoney$d(entry.total_bonuses);
-  const totalDeductions = formatMoney$d(entry.total_deductions);
-  const loanDeduction = formatMoney$d(entry.loan_deduction);
+  const baseSalary = formatMoney$b(entry.base_salary);
+  const otherAllowances = formatMoney$b(entry.other_allowances);
+  const totalSalary = formatMoney$b(entry.total_salary);
+  const totalBonuses = formatMoney$b(entry.total_bonuses);
+  const totalDeductions = formatMoney$b(entry.total_deductions);
+  const loanDeduction = formatMoney$b(entry.loan_deduction);
   const hasLoan = Number(entry.loan_deduction || 0) > 0;
-  const totalOvertime = formatMoney$d(entry.total_overtime);
+  const totalOvertime = formatMoney$b(entry.total_overtime);
   const hasOvertime = Number(entry.total_overtime || 0) > 0;
   const overtimeDays = Number(entry.overtime_days || 0);
-  const formattedNet = formatMoney$d(entry.net_salary);
+  const formattedNet = formatMoney$b(entry.net_salary);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] ${isSuspended ? "opacity-70" : ""}`, children: [
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis", style: {
@@ -11788,7 +8697,7 @@ function PaymentRow({
       /* @__PURE__ */ jsx("td", { className: `py-2 px-1.5 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", title: hasLoan ? "قسط شهري لقرض / سلفة نشطة" : "", children: hasLoan ? loanDeduction : "—" }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formattedNet }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", children: METHOD_LABELS[paymentMethod] || "—" }) : /* @__PURE__ */ jsx(GlassSelect, { value: paymentMethod, onChange: handleMethodChange, options: PAYMENT_METHOD_OPTIONS, placeholder: "اختر", disabled: isClosed, buttonClassName: "text-xs py-1 px-2 !rounded-lg" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$d(paidAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (e) => handleAmountChange(e.target.value), disabled: isClosed, className: `${ws$1.input} text-xs py-1 px-1 rounded-lg w-[50px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(netSalary), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$b(paidAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (e) => handleAmountChange(e.target.value), disabled: isClosed, className: `${ws$1.input} text-xs py-1 px-1 rounded-lg w-[50px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(netSalary), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleTogglePaid, disabled: isClosed || isLocked, "aria-label": isPaid ? "إلغاء حالة الدفع" : "تحديد الراتب كمدفوع", title: isPaid ? "إلغاء حالة الدفع" : "تم الدفع", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isPaid ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isClosed || isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isPaid ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
         isPaid && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), disabled: isClosed, className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${paymentNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
@@ -19935,7 +16844,7 @@ function BulkReviewModal({
 }
 
 const SCHEDULES_KEY = queryKeys.scheduledPurchaseReports();
-const FREQUENCY_OPTIONS = [{
+const FREQUENCY_OPTIONS$1 = [{
   value: "monthly",
   label: "شهري — صباح أول الشهر عن الشهر الماضي"
 }, {
@@ -20147,7 +17056,7 @@ function ScheduledReportsModal({
             /* @__PURE__ */ jsx(GlassSelect, { value: form.frequency, onChange: (value) => setForm({
               ...form,
               frequency: value
-            }), options: FREQUENCY_OPTIONS, buttonClassName: "text-sm py-2 px-3" })
+            }), options: FREQUENCY_OPTIONS$1, buttonClassName: "text-sm py-2 px-3" })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: [
@@ -21711,6 +18620,2859 @@ function PurchasesReportsPanel({
   ] });
 }
 
+function ExpenseForm({
+  types,
+  onSubmit,
+  isSubmitting,
+  onCreateType,
+  editingExpense,
+  onCancelEdit,
+  // Optional: prefill form's month (e.g. when opened from QuickAddSheet so
+  // the new expense lands in the same month the user is currently viewing).
+  // Falls back to current calendar month when omitted.
+  defaultMonth
+}) {
+  const [typeId, setTypeId] = useState("");
+  const [expenseName, setExpenseName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [formMonth, setFormMonth] = useState("");
+  const [showNewType, setShowNewType] = useState(false);
+  const [newTypeName, setNewTypeName] = useState("");
+  const monthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
+  useEffect(() => {
+    if (editingExpense) return;
+    if (defaultMonth) {
+      setFormMonth(defaultMonth);
+      return;
+    }
+    setFormMonth(currentRiyadhMonthKey());
+  }, []);
+  useEffect(() => {
+    if (editingExpense) {
+      setTypeId(String(editingExpense.expense_type_id || ""));
+      setExpenseName(editingExpense.expense_name || "");
+      setAmount(String(editingExpense.amount || ""));
+      const em = editingExpense.expense_month ? String(editingExpense.expense_month).slice(0, 7) : "";
+      setFormMonth(em);
+    }
+  }, [editingExpense]);
+  const typeOptions = [{
+    value: "",
+    label: "اختر نوع المصروف"
+  }, ...(types || []).map((t) => ({
+    value: String(t.id),
+    label: t.name
+  }))];
+  const isEditing = !!editingExpense;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!typeId || !expenseName.trim() || !amount || !formMonth) return;
+    onSubmit({
+      ...isEditing ? {
+        id: editingExpense.id
+      } : {},
+      expense_type_id: Number(typeId),
+      expense_name: expenseName.trim(),
+      amount: Number(amount),
+      month: formMonth
+    });
+    if (!isEditing) {
+      setExpenseName("");
+      setAmount("");
+    }
+  };
+  const handleCancel = () => {
+    setTypeId("");
+    setExpenseName("");
+    setAmount("");
+    setShowNewType(false);
+    setNewTypeName("");
+    if (onCancelEdit) onCancelEdit();
+  };
+  const handleCreateType = (e) => {
+    e.preventDefault();
+    if (!newTypeName.trim()) return;
+    onCreateType({
+      name: newTypeName.trim()
+    });
+    setNewTypeName("");
+    setShowNewType(false);
+  };
+  const canSubmit = typeId && expenseName.trim() && amount && Number(amount) > 0 && formMonth;
+  return /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+    isEditing && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-400/10 border border-amber-400/20", children: [
+      /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 text-xs font-semibold", children: "✏️ تعديل المصروف:" }),
+      /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white text-xs font-bold", children: editingExpense.expense_name })
+    ] }),
+    /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3", children: [
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "الشهر" }),
+          /* @__PURE__ */ jsx(GlassSelect, { value: formMonth, onChange: setFormMonth, options: monthOptions, placeholder: "اختر الشهر", buttonClassName: "text-sm py-2.5 px-3", disabled: isEditing })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "نوع المصروف" }),
+          /* @__PURE__ */ jsx(GlassSelect, { value: typeId, onChange: setTypeId, options: typeOptions, placeholder: "اختر نوع المصروف", buttonClassName: "text-sm py-2.5 px-3" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "اسم المصروف" }),
+          /* @__PURE__ */ jsx("input", { type: "text", value: expenseName, onChange: (e) => setExpenseName(e.target.value), placeholder: "مثال: كهرباء فرع الندى", className: `${ws$1.input} text-sm py-2.5 px-3 rounded-2xl` })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "المبلغ (ريال)" }),
+          /* @__PURE__ */ jsx("input", { type: "number", value: amount, onChange: (e) => setAmount(e.target.value), placeholder: "0.00", step: "0.01", min: "0", dir: "ltr", className: `${ws$1.input} text-sm py-2.5 px-3 rounded-2xl text-right` })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxs("button", { type: "submit", disabled: !canSubmit || isSubmitting, className: `${isEditing ? ws$1.btnPrimary : ws$1.btnPrimary} px-5 py-2.5 rounded-2xl`, children: [
+          isEditing ? /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }) : /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: isSubmitting ? isEditing ? "جاري الحفظ..." : "جاري الإضافة..." : isEditing ? "حفظ التعديل" : "إضافة مصروف" })
+        ] }),
+        isEditing && /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleCancel, className: `${ws$1.btnNeutral} px-4 py-2.5 rounded-2xl`, children: [
+          /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }),
+          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: "إلغاء" })
+        ] }),
+        !isEditing && /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowNewType(!showNewType), className: `${ws$1.btnNeutral} px-4 py-2.5 rounded-2xl`, children: [
+          /* @__PURE__ */ jsx(Tag, { className: "w-4 h-4" }),
+          /* @__PURE__ */ jsx("span", { className: "font-semibold", children: "نوع جديد" })
+        ] })
+      ] })
+    ] }),
+    showNewType && !isEditing && /* @__PURE__ */ jsxs("form", { onSubmit: handleCreateType, className: "flex items-end gap-2", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
+        /* @__PURE__ */ jsx("label", { className: "block text-xs text-slate-600 dark:text-white/60 font-semibold mb-1.5", children: "اسم النوع الجديد" }),
+        /* @__PURE__ */ jsx("input", { type: "text", value: newTypeName, onChange: (e) => setNewTypeName(e.target.value), placeholder: "مثال: تأمين", className: `${ws$1.input} text-sm py-2.5 px-3 rounded-2xl`, autoFocus: true })
+      ] }),
+      /* @__PURE__ */ jsxs("button", { type: "submit", disabled: !newTypeName.trim(), className: `${ws$1.btnPrimary} px-4 py-2.5 rounded-2xl`, children: [
+        /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+        /* @__PURE__ */ jsx("span", { className: "font-semibold", children: "إضافة" })
+      ] }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+        setShowNewType(false);
+        setNewTypeName("");
+      }, className: `${ws$1.btnNeutral} px-4 py-2.5 rounded-2xl`, children: "إلغاء" })
+    ] })
+  ] });
+}
+
+function StatusBadge({
+  confirmed
+}) {
+  return confirmed ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-400/15 dark:text-emerald-200 dark:border-emerald-400/25", children: [
+    /* @__PURE__ */ jsx(Check, { className: "w-2.5 h-2.5" }),
+    "مؤكد"
+  ] }) : /* @__PURE__ */ jsx("span", { className: "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-400/15 dark:text-amber-200 dark:border-amber-400/25", children: "بانتظار" });
+}
+function PendingFixedRow({
+  pending,
+  month,
+  onConfirmFixed
+}) {
+  const [amount, setAmount] = useState(String(pending.default_amount || ""));
+  const [note, setNote] = useState("");
+  const [showNote, setShowNote] = useState(false);
+  const handleConfirm = () => {
+    onConfirmFixed({
+      id: pending.id,
+      month,
+      confirmed_amount: amount !== "" ? Number(amount) : Number(pending.default_amount),
+      confirmed_note: note || null
+    });
+  };
+  const typeName = pending.expense_type_name || "—";
+  const expenseName = pending.expense_name || "—";
+  const defaultFormatted = formatMoney$b(pending.default_amount);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] bg-emerald-400/[0.03]", children: [
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm", style: {
+        maxWidth: 120
+      }, children: typeName }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm", style: {
+        maxWidth: 200
+      }, children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5", children: [
+        /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/15 border border-emerald-400/30 text-emerald-700 dark:text-emerald-200 text-[10px] font-bold", children: [
+          /* @__PURE__ */ jsx(Anchor, { className: "w-2.5 h-2.5" }),
+          "ثابت"
+        ] }),
+        /* @__PURE__ */ jsx("span", { children: expenseName })
+      ] }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm", dir: "ltr", children: defaultFormatted }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: /* @__PURE__ */ jsx("input", { type: "number", value: amount, onChange: (e) => setAmount(e.target.value), className: `${ws$1.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right`, dir: "ltr", placeholder: String(pending.default_amount || 0), step: "0.01" }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1 text-center", children: /* @__PURE__ */ jsx("span", { className: "inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30", children: /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), className: `w-6 h-6 rounded-md inline-flex items-center justify-center transition-all ${note ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: handleConfirm, className: `${ws$1.btnPrimary} text-xs px-2 py-0.5 rounded-lg`, title: "تأكيد الدفع", children: "تأكيد الدفع" })
+      ] }) })
+    ] }),
+    showNote && /* @__PURE__ */ jsx("tr", { className: "border-t border-slate-100 dark:border-white/5", children: /* @__PURE__ */ jsx("td", { colSpan: 6, className: "py-2 px-2", children: /* @__PURE__ */ jsx("div", { className: "flex items-start gap-2 mr-2", children: /* @__PURE__ */ jsx("input", { type: "text", value: note, onChange: (e) => setNote(e.target.value), placeholder: "ملاحظة (اختياري)...", className: `${ws$1.input} text-xs py-1.5 px-3 rounded-xl flex-1` }) }) }) })
+  ] });
+}
+function ExpenseRow({
+  expense,
+  onConfirm,
+  onDelete,
+  onEdit
+}) {
+  const savedConfirmed = !!expense.is_confirmed;
+  const [isConfirmed, setIsConfirmed] = useState(savedConfirmed);
+  const [confirmedAmount, setConfirmedAmount] = useState(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
+  const [confirmedNote, setConfirmedNote] = useState(expense.confirmed_note || "");
+  const [showNote, setShowNote] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const [isEditingConfirm, setIsEditingConfirm] = useState(false);
+  const isLocked = savedConfirmed && !isEditingConfirm && !dirty;
+  const originalAmount = Number(expense.amount || 0);
+  const currentConfirmedAmount = confirmedAmount !== "" ? Number(confirmedAmount) : null;
+  const amountDiffers = currentConfirmedAmount !== null && Math.abs(currentConfirmedAmount - originalAmount) >= 0.01;
+  useEffect(() => {
+    setIsConfirmed(!!expense.is_confirmed);
+    setConfirmedAmount(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
+    setConfirmedNote(expense.confirmed_note || "");
+    setShowNote(false);
+    setDirty(false);
+    setIsEditingConfirm(false);
+  }, [expense.is_confirmed, expense.confirmed_amount, expense.confirmed_note]);
+  const handleToggleConfirmed = () => {
+    if (isLocked) return;
+    const newConfirmed = !isConfirmed;
+    setIsConfirmed(newConfirmed);
+    if (newConfirmed && !confirmedAmount) {
+      setConfirmedAmount(String(originalAmount));
+    }
+    if (!newConfirmed) {
+      setConfirmedAmount("");
+      setConfirmedNote("");
+      setShowNote(false);
+    }
+    setDirty(true);
+  };
+  const handleAmountChange = (val) => {
+    setConfirmedAmount(val);
+    setDirty(true);
+  };
+  const handleNoteChange = (val) => {
+    setConfirmedNote(val);
+    setDirty(true);
+  };
+  const handleSave = () => {
+    onConfirm({
+      id: expense.id,
+      is_confirmed: isConfirmed,
+      confirmed_amount: isConfirmed && confirmedAmount !== "" ? Number(confirmedAmount) : null,
+      confirmed_note: isConfirmed && confirmedNote ? confirmedNote : null
+    });
+    setDirty(false);
+    setIsEditingConfirm(false);
+  };
+  const handleEditConfirm = () => {
+    setIsEditingConfirm(true);
+  };
+  const handleCancelEditConfirm = () => {
+    setIsConfirmed(!!expense.is_confirmed);
+    setConfirmedAmount(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
+    setConfirmedNote(expense.confirmed_note || "");
+    setShowNote(false);
+    setDirty(false);
+    setIsEditingConfirm(false);
+  };
+  const typeName = expense.expense_type_name || "—";
+  const expenseName = expense.expense_name || "—";
+  const formattedAmount = formatMoney$b(expense.amount);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]", children: [
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm", style: {
+        maxWidth: 120
+      }, children: typeName }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis text-sm", style: {
+        maxWidth: 200
+      }, children: expenseName }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm", dir: "ltr", children: formattedAmount }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: isConfirmed ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$b(confirmedAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => handleAmountChange(e.target.value), className: `${ws$1.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleToggleConfirmed, disabled: isLocked, "aria-label": isConfirmed ? "إلغاء تأكيد المصروف" : "تأكيد المصروف", title: isConfirmed ? "إلغاء التأكيد" : "تأكيد المصروف", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isConfirmed ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isConfirmed ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
+        isConfirmed && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${confirmedNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
+        !savedConfirmed && onEdit && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(expense), className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-sky-500/10 border border-sky-500/25 text-sky-700 dark:text-sky-300 hover:bg-sky-500/20", title: "تعديل المصروف", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
+        isLocked && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleEditConfirm, className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08] hover:text-slate-700 dark:hover:text-white/70", title: "تعديل التأكيد", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
+        isEditingConfirm && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleCancelEditConfirm, className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300 hover:bg-red-500/20", title: "إلغاء", children: /* @__PURE__ */ jsx(X, { className: "w-3 h-3" }) }),
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+          const msg = savedConfirmed ? "هذا المصروف مؤكد — هل أنت متأكد من حذفه؟" : "هل تريد حذف هذا المصروف؟";
+          if (window.confirm(msg)) {
+            onDelete(expense.id);
+          }
+        }, className: "w-6 h-6 rounded-md flex items-center justify-center transition-all bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300 hover:bg-red-500/20", title: savedConfirmed ? "حذف (مؤكد)" : "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3 h-3" }) }),
+        dirty && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleSave, className: `${ws$1.btnPrimary} text-xs px-2 py-0.5 rounded-lg`, children: "حفظ" })
+      ] }) })
+    ] }),
+    showNote && isConfirmed && /* @__PURE__ */ jsx("tr", { className: "border-t border-slate-100 dark:border-white/5", children: /* @__PURE__ */ jsx("td", { colSpan: 6, className: "py-2 px-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-2 mr-2", children: [
+      amountDiffers && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 shrink-0 mt-1", children: [
+        /* @__PURE__ */ jsx("div", { className: "w-2 h-2 rounded-full bg-amber-400", style: {
+          animation: "expensePulse 2s ease-in-out infinite"
+        } }),
+        /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-300 text-xs font-semibold whitespace-nowrap", children: "المبلغ مختلف عن الأصلي" })
+      ] }),
+      isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/60 text-xs py-1.5 flex-1", children: confirmedNote || "—" }) : /* @__PURE__ */ jsx("input", { type: "text", value: confirmedNote, onChange: (e) => handleNoteChange(e.target.value), placeholder: amountDiffers ? "يرجى إدخال سبب الاختلاف..." : "ملاحظة (اختياري)...", className: `${ws$1.input} text-xs py-1.5 px-3 rounded-xl flex-1 ${amountDiffers && !confirmedNote ? "border-amber-400/40 placeholder:text-amber-700 dark:placeholder:text-amber-300/50" : ""}` }),
+      dirty && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleSave, className: `${ws$1.btnPrimary} text-xs px-3 py-1.5 rounded-xl shrink-0`, children: "حفظ" })
+    ] }) }) })
+  ] });
+}
+function PendingFixedCard({
+  pending,
+  month,
+  onConfirmFixed
+}) {
+  const [amount, setAmount] = useState(String(pending.default_amount || ""));
+  const [note, setNote] = useState("");
+  const [showNote, setShowNote] = useState(false);
+  const handleConfirm = () => {
+    onConfirmFixed({
+      id: pending.id,
+      month,
+      confirmed_amount: amount !== "" ? Number(amount) : Number(pending.default_amount),
+      confirmed_note: note || null
+    });
+  };
+  return /* @__PURE__ */ jsxs("div", { className: `${ws$1.innerCard} p-3 bg-emerald-400/[0.04]`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-2", children: [
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 mb-1", children: [
+          /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-400/15 border border-emerald-400/30 text-emerald-700 dark:text-emerald-200 text-[10px] font-bold", children: [
+            /* @__PURE__ */ jsx(Anchor, { className: "w-2.5 h-2.5" }),
+            "ثابت"
+          ] }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40 text-[11px]", children: pending.expense_type_name || "—" })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-semibold truncate", children: pending.expense_name || "—" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "text-left shrink-0", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-500 dark:text-white/40", children: "الافتراضي" }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/70 text-sm font-semibold", dir: "ltr", children: formatMoney$b(pending.default_amount) })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mt-3", children: [
+      /* @__PURE__ */ jsx("input", { type: "number", value: amount, onChange: (e) => setAmount(e.target.value), className: `${ws$1.input} text-xs py-1.5 px-2 rounded-lg w-[110px] text-right`, dir: "ltr", placeholder: String(pending.default_amount || 0), step: "0.01" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote((s) => !s), className: `w-8 h-8 rounded-lg inline-flex items-center justify-center transition-all ${note ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3.5 h-3.5" }) }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: handleConfirm, className: `${ws$1.btnPrimary} text-xs px-3 py-1.5 rounded-lg flex-1 justify-center`, children: "تأكيد الدفع" })
+    ] }),
+    showNote && /* @__PURE__ */ jsx("input", { type: "text", value: note, onChange: (e) => setNote(e.target.value), placeholder: "ملاحظة (اختياري)…", className: `${ws$1.input} text-xs py-1.5 px-3 rounded-xl mt-2` })
+  ] });
+}
+function ExpenseCard({
+  expense,
+  onConfirm,
+  onDelete,
+  onEdit
+}) {
+  const savedConfirmed = !!expense.is_confirmed;
+  const [isConfirmed, setIsConfirmed] = useState(savedConfirmed);
+  const [confirmedAmount, setConfirmedAmount] = useState(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
+  const [confirmedNote, setConfirmedNote] = useState(expense.confirmed_note || "");
+  const [showNote, setShowNote] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const [isEditingConfirm, setIsEditingConfirm] = useState(false);
+  const isLocked = savedConfirmed && !isEditingConfirm && !dirty;
+  const originalAmount = Number(expense.amount || 0);
+  const currentConfirmedAmount = confirmedAmount !== "" ? Number(confirmedAmount) : null;
+  const amountDiffers = currentConfirmedAmount !== null && Math.abs(currentConfirmedAmount - originalAmount) >= 0.01;
+  useEffect(() => {
+    setIsConfirmed(!!expense.is_confirmed);
+    setConfirmedAmount(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
+    setConfirmedNote(expense.confirmed_note || "");
+    setShowNote(false);
+    setDirty(false);
+    setIsEditingConfirm(false);
+  }, [expense.is_confirmed, expense.confirmed_amount, expense.confirmed_note]);
+  const handleToggleConfirmed = () => {
+    if (isLocked) return;
+    const next = !isConfirmed;
+    setIsConfirmed(next);
+    if (next && !confirmedAmount) setConfirmedAmount(String(originalAmount));
+    if (!next) {
+      setConfirmedAmount("");
+      setConfirmedNote("");
+      setShowNote(false);
+    }
+    setDirty(true);
+  };
+  const handleSave = () => {
+    onConfirm({
+      id: expense.id,
+      is_confirmed: isConfirmed,
+      confirmed_amount: isConfirmed && confirmedAmount !== "" ? Number(confirmedAmount) : null,
+      confirmed_note: isConfirmed && confirmedNote ? confirmedNote : null
+    });
+    setDirty(false);
+    setIsEditingConfirm(false);
+  };
+  const handleCancelEditConfirm = () => {
+    setIsConfirmed(!!expense.is_confirmed);
+    setConfirmedAmount(expense.confirmed_amount !== null && expense.confirmed_amount !== void 0 ? String(expense.confirmed_amount) : "");
+    setConfirmedNote(expense.confirmed_note || "");
+    setShowNote(false);
+    setDirty(false);
+    setIsEditingConfirm(false);
+  };
+  return /* @__PURE__ */ jsxs("div", { className: `${ws$1.innerCard} p-3 ${savedConfirmed ? "bg-emerald-400/[0.04]" : ""}`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-2", children: [
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/40 text-[11px] mb-0.5", children: expense.expense_type_name || "—" }),
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-semibold truncate", children: expense.expense_name || "—" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-end gap-1 shrink-0", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 text-sm font-bold", dir: "ltr", children: formatMoney$b(expense.amount) }),
+        /* @__PURE__ */ jsx(StatusBadge, { confirmed: isConfirmed })
+      ] })
+    ] }),
+    isConfirmed && !isLocked && /* @__PURE__ */ jsxs("div", { className: "mt-2 flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx("span", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المبلغ المؤكد" }),
+      /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => {
+        setConfirmedAmount(e.target.value);
+        setDirty(true);
+      }, className: `${ws$1.input} text-xs py-1.5 px-2 rounded-lg w-[110px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" })
+    ] }),
+    isConfirmed && isLocked && /* @__PURE__ */ jsxs("div", { className: "mt-1.5 text-[11px] text-slate-500 dark:text-white/45", children: [
+      "المبلغ المؤكد:",
+      " ",
+      /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$b(confirmedAmount) })
+    ] }),
+    showNote && isConfirmed && /* @__PURE__ */ jsx("div", { className: "mt-2", children: isLocked ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/60", children: confirmedNote || "—" }) : /* @__PURE__ */ jsx("input", { type: "text", value: confirmedNote, onChange: (e) => {
+      setConfirmedNote(e.target.value);
+      setDirty(true);
+    }, placeholder: amountDiffers ? "سبب اختلاف المبلغ…" : "ملاحظة (اختياري)…", className: `${ws$1.input} text-xs py-1.5 px-3 rounded-xl ${amountDiffers && !confirmedNote ? "border-amber-400/40" : ""}` }) }),
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 mt-3 flex-wrap", children: [
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleToggleConfirmed, disabled: isLocked, className: `h-8 px-3 rounded-lg inline-flex items-center gap-1.5 text-xs font-semibold transition-all ${isConfirmed ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/50"} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`, children: [
+        isConfirmed ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }),
+        isConfirmed ? "مؤكد" : "تأكيد"
+      ] }),
+      isConfirmed && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote((s) => !s), className: `w-8 h-8 rounded-lg inline-flex items-center justify-center transition-all ${confirmedNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3.5 h-3.5" }) }),
+      !savedConfirmed && onEdit && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(expense), className: "w-8 h-8 rounded-lg inline-flex items-center justify-center bg-sky-500/10 border border-sky-500/25 text-sky-700 dark:text-sky-300", title: "تعديل المصروف", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
+      isLocked && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setIsEditingConfirm(true), className: "w-8 h-8 rounded-lg inline-flex items-center justify-center bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40", title: "تعديل التأكيد", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
+      isEditingConfirm && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleCancelEditConfirm, className: "w-8 h-8 rounded-lg inline-flex items-center justify-center bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300", title: "إلغاء", children: /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+        const msg = savedConfirmed ? "هذا المصروف مؤكد — هل أنت متأكد من حذفه؟" : "هل تريد حذف هذا المصروف؟";
+        if (window.confirm(msg)) onDelete(expense.id);
+      }, className: "w-8 h-8 rounded-lg inline-flex items-center justify-center bg-red-500/10 border border-red-500/25 text-red-700 dark:text-red-300", title: savedConfirmed ? "حذف (مؤكد)" : "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) }),
+      dirty && /* @__PURE__ */ jsx("button", { type: "button", onClick: handleSave, className: `${ws$1.btnPrimary} text-xs px-3 py-1.5 rounded-lg mr-auto`, children: "حفظ" })
+    ] })
+  ] });
+}
+function ExpenseTable({
+  expenses,
+  pendingFixed = [],
+  month,
+  onConfirm,
+  onDelete,
+  onEdit,
+  onConfirmFixed
+}) {
+  const hasAny = Array.isArray(expenses) && expenses.length > 0 || Array.isArray(pendingFixed) && pendingFixed.length > 0;
+  if (!hasAny) {
+    return /* @__PURE__ */ jsxs("div", { className: "text-center py-8", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/40 text-sm", children: "لا يوجد مصروفات لهذا الشهر" }),
+      /* @__PURE__ */ jsx("div", { className: "text-slate-400 dark:text-white/25 text-xs mt-1", children: "أضف مصروفات من قسم مصروف متغيّر أو سجّل مصاريف ثابتة" })
+    ] });
+  }
+  const confirmedCount = expenses.filter((e) => e.is_confirmed).length;
+  const totalOriginal = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const totalConfirmed = expenses.filter((e) => e.is_confirmed).reduce((s, e) => s + Number(e.confirmed_amount || e.amount || 0), 0);
+  const pendingCount = Array.isArray(pendingFixed) ? pendingFixed.length : 0;
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("div", { className: "jsx-3778571168 flex flex-wrap items-center gap-3 mb-3", children: [
+      /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
+        "تم التأكيد: ",
+        confirmedCount,
+        " / ",
+        expenses.length
+      ] }),
+      pendingCount > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
+        /* @__PURE__ */ jsx("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/40", children: "|" }),
+        /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 inline-flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-200", children: [
+          /* @__PURE__ */ jsx(Anchor, { className: "w-3 h-3" }),
+          "مصروفات ثابتة بانتظار التأكيد: ",
+          pendingCount
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/40", children: "|" }),
+      /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
+        "إجمالي المصروفات:",
+        " ",
+        /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-slate-800 dark:text-white/80 font-semibold", children: formatMoney$b(totalOriginal) })
+      ] }),
+      confirmedCount > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
+        /* @__PURE__ */ jsx("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/40", children: "|" }),
+        /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
+          "إجمالي المؤكد:",
+          " ",
+          /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-emerald-700 dark:text-emerald-200 font-semibold", children: formatMoney$b(totalConfirmed) })
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("table", { className: "jsx-3778571168 w-full text-xs hidden lg:table", children: [
+      /* @__PURE__ */ jsx("thead", { className: "jsx-3778571168", children: /* @__PURE__ */ jsxs("tr", { className: "jsx-3778571168 text-slate-700 dark:text-white/70 text-[11px]", children: [
+        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-right font-semibold py-2 px-2 whitespace-nowrap", children: "النوع" }),
+        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-right font-semibold py-2 px-2 whitespace-nowrap", children: "اسم المصروف" }),
+        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-right font-semibold py-2 px-2 whitespace-nowrap", children: "المبلغ" }),
+        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-right font-semibold py-2 px-2 whitespace-nowrap", children: "المبلغ المؤكد" }),
+        /* @__PURE__ */ jsx("th", { className: "jsx-3778571168 text-center font-semibold py-2 px-1 whitespace-nowrap", children: "✓" }),
+        /* @__PURE__ */ jsx("th", { style: {
+          width: 120
+        }, className: "jsx-3778571168 py-2 px-1" })
+      ] }) }),
+      /* @__PURE__ */ jsxs("tbody", { className: "jsx-3778571168", children: [
+        Array.isArray(pendingFixed) && pendingFixed.map((p) => /* @__PURE__ */ jsx(PendingFixedRow, { pending: p, month, onConfirmFixed }, `fixed-${p.id}`)),
+        expenses.map((e) => /* @__PURE__ */ jsx(ExpenseRow, { expense: e, onConfirm, onDelete, onEdit }, e.id))
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "jsx-3778571168 lg:hidden space-y-2.5", children: [
+      Array.isArray(pendingFixed) && pendingFixed.map((p) => /* @__PURE__ */ jsx(PendingFixedCard, { pending: p, month, onConfirmFixed }, `fixed-${p.id}`)),
+      expenses.map((e) => /* @__PURE__ */ jsx(ExpenseCard, { expense: e, onConfirm, onDelete, onEdit }, e.id))
+    ] }),
+    /* @__PURE__ */ jsx(_JSXStyle, { id: "3778571168", children: ["@-webkit-keyframes expensePulse{0%,100%{opacity:1;}50%{opacity:0.4;}}", "@keyframes expensePulse{0%,100%{opacity:1;}50%{opacity:0.4;}}"] })
+  ] });
+}
+
+const EXPENSE_SORT_OPTIONS = [{
+  value: "amount_desc",
+  label: "المبلغ: الأعلى"
+}, {
+  value: "amount_asc",
+  label: "المبلغ: الأقل"
+}, {
+  value: "name_asc",
+  label: "الاسم أ-ي"
+}, {
+  value: "status",
+  label: "الحالة"
+}];
+const STATUS_OPTIONS = [{
+  value: "all",
+  label: "الكل"
+}, {
+  value: "confirmed",
+  label: "مؤكد"
+}, {
+  value: "pending",
+  label: "بانتظار"
+}];
+function ExpenseFilters({
+  typeFilter,
+  onTypeFilterChange,
+  statusFilter,
+  onStatusFilterChange,
+  search,
+  onSearchChange,
+  sort,
+  onSortChange,
+  typeOptions,
+  // [{ value, label }] derived from the month's expenses
+  onReset,
+  hasActiveFilters
+}) {
+  const types = [{
+    value: "",
+    label: "كل الأنواع"
+  }, ...typeOptions || []];
+  return /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col lg:flex-row lg:items-end gap-3", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-slate-600 dark:text-white/55 text-xs lg:mb-2.5", children: [
+      /* @__PURE__ */ jsx(Filter, { className: "w-4 h-4" }),
+      "تصفية"
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("label", { className: "block text-[11px] font-semibold text-slate-500 dark:text-white/45 mb-1", children: "بحث" }),
+        /* @__PURE__ */ jsxs("div", { className: "relative", children: [
+          /* @__PURE__ */ jsx(Search, { className: "absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-white/35 pointer-events-none" }),
+          /* @__PURE__ */ jsx("input", { type: "text", value: search, onChange: (e) => onSearchChange(e.target.value), placeholder: "اسم المصروف…", className: `${ws$1.input} text-sm py-2 pr-9 pl-3` })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("label", { className: "block text-[11px] font-semibold text-slate-500 dark:text-white/45 mb-1", children: "النوع" }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: typeFilter, onChange: onTypeFilterChange, options: types, buttonClassName: "text-sm py-2 px-3" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("label", { className: "block text-[11px] font-semibold text-slate-500 dark:text-white/45 mb-1", children: "الحالة" }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: statusFilter, onChange: onStatusFilterChange, options: STATUS_OPTIONS, buttonClassName: "text-sm py-2 px-3" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("label", { className: "block text-[11px] font-semibold text-slate-500 dark:text-white/45 mb-1", children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+          /* @__PURE__ */ jsx(ArrowDownWideNarrow, { className: "w-3 h-3" }),
+          "ترتيب"
+        ] }) }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: sort, onChange: onSortChange, options: EXPENSE_SORT_OPTIONS, buttonClassName: "text-sm py-2 px-3" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("button", { type: "button", onClick: onReset, disabled: !hasActiveFilters, className: `${ws$1.btnNeutral} px-4 py-2 justify-center disabled:opacity-40 disabled:cursor-not-allowed`, children: [
+      /* @__PURE__ */ jsx(RotateCcw, { className: "w-4 h-4" }),
+      "إعادة تعيين"
+    ] })
+  ] }) });
+}
+
+function confirmedValue(item) {
+  if (item.confirmed_amount !== null && item.confirmed_amount !== void 0 && item.confirmed_amount !== "") {
+    return item.confirmed_amount;
+  }
+  return item.is_confirmed ? item.amount : null;
+}
+function buildColumns$1() {
+  return [{
+    header: "اسم المصروف",
+    accessor: (i) => i.expense_name || "-"
+  }, {
+    header: "النوع",
+    accessor: (i) => i.expense_type_name || "-"
+  }, {
+    header: "المبلغ الأصلي",
+    accessor: (i) => i.amount,
+    format: (v) => formatMoney$b(v)
+  }, {
+    header: "المبلغ المؤكد",
+    accessor: (i) => confirmedValue(i),
+    format: (v) => v === null || v === void 0 ? "-" : formatMoney$b(v)
+  }, {
+    header: "الحالة",
+    accessor: (i) => i.is_confirmed,
+    format: (v) => v ? "مؤكد" : "بانتظار"
+  }, {
+    header: "ملاحظة التأكيد",
+    accessor: (i) => i.confirmed_note || "-"
+  }];
+}
+function ExpensesExportMenu({
+  expenses,
+  month,
+  todayRiyadh
+}) {
+  const [open, setOpen] = useState(false);
+  const btnRef = useRef(null);
+  const list = Array.isArray(expenses) ? expenses : [];
+  const filename = `مصروفات_${month || ""}_${todayRiyadh}`;
+  const title = `المصروفات — ${monthLabel$1(month) || month || ""}`;
+  const handleExcel = () => {
+    exportToExcelHTML(list, filename, buildColumns$1(), title);
+    setOpen(false);
+  };
+  const handlePDF = () => {
+    exportToPDF(list, filename, buildColumns$1(), title);
+    setOpen(false);
+  };
+  return /* @__PURE__ */ jsxs("div", { children: [
+    /* @__PURE__ */ jsxs("button", { ref: btnRef, type: "button", onClick: () => setOpen((s) => !s), disabled: list.length === 0, className: `${ws$1.btnNeutral} px-4 py-2 justify-center disabled:opacity-40 disabled:cursor-not-allowed`, "aria-expanded": open, children: [
+      /* @__PURE__ */ jsx(Download, { className: "w-4 h-4" }),
+      /* @__PURE__ */ jsx("span", { children: "تصدير" }),
+      /* @__PURE__ */ jsx(ChevronDown, { className: "w-4 h-4" })
+    ] }),
+    /* @__PURE__ */ jsxs(GlassPopover, { open, anchorRef: btnRef, onClose: () => setOpen(false), style: {
+      width: 224
+    }, children: [
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleExcel, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "Excel" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للتحليل والمعالجة" })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handlePDF, className: "w-full flex items-center gap-3 px-4 py-3 text-right text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-colors border-t border-slate-200 dark:border-white/10", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-5 h-5 text-red-700 dark:text-red-200" }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("p", { className: "font-semibold text-slate-900 dark:text-white", children: "PDF" }),
+          /* @__PURE__ */ jsx("p", { className: "text-xs text-slate-500 dark:text-white/45", children: "للطباعة والأرشفة" })
+        ] })
+      ] })
+    ] })
+  ] });
+}
+
+function safeNum$1(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+const BAR_COLORS = [
+  "#34d399",
+  // emerald
+  "#60a5fa",
+  // sky
+  "#f472b6",
+  // pink
+  "#fbbf24",
+  // amber
+  "#a78bfa",
+  // violet
+  "#fb7185",
+  // rose
+  "#22d3ee",
+  // cyan
+  "#facc15",
+  // yellow
+  "#c084fc",
+  // purple
+  "#fdba74"
+  // orange
+];
+function ExpensesAnalytics({
+  month,
+  expenses
+}) {
+  const {
+    isDark
+  } = useAdminTheme();
+  const trendQuery = useQuery({
+    queryKey: queryKeys.accountingExpenseTrend(month, 12),
+    enabled: !!month,
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        months: "12",
+        ...month ? {
+          currentMonth: month
+        } : {}
+      });
+      const r = await adminFetch(`/api/accounting/expenses/trend?${params}`);
+      if (!r.ok) {
+        const d = await r.json().catch(() => ({}));
+        throw new Error(d?.error || "فشل تحميل الاتجاه");
+      }
+      return r.json();
+    },
+    staleTime: 6e4
+  });
+  const list = Array.isArray(expenses) ? expenses : [];
+  const monthTotal = useMemo(() => list.reduce((s, e) => s + safeNum$1(e.amount), 0), [list]);
+  const categories = useMemo(() => {
+    const byType = {};
+    for (const e of list) {
+      const name = e.expense_type_name || "أخرى";
+      if (!byType[name]) byType[name] = {
+        name,
+        total: 0,
+        count: 0
+      };
+      byType[name].total += safeNum$1(e.amount);
+      byType[name].count += 1;
+    }
+    return Object.values(byType).sort((a, b) => b.total - a.total);
+  }, [list]);
+  const prevMonthTotal = useMemo(() => {
+    const months = trendQuery.data?.months || [];
+    if (!month || months.length < 2) return null;
+    const idx = months.findIndex((m) => m.month === month);
+    if (idx > 0) return safeNum$1(months[idx - 1]?.total);
+    if (idx === -1) return safeNum$1(months[months.length - 2]?.total);
+    return null;
+  }, [trendQuery.data, month]);
+  const delta = prevMonthTotal === null ? null : monthTotal - prevMonthTotal;
+  const pct = prevMonthTotal === null || prevMonthTotal === 0 ? null : (monthTotal - prevMonthTotal) / prevMonthTotal * 100;
+  const down = delta !== null && delta < 0;
+  const up = delta !== null && delta > 0;
+  const deltaColor = down ? "text-emerald-700 dark:text-emerald-300" : up ? "text-red-700 dark:text-red-300" : "text-slate-500 dark:text-white/45";
+  const DeltaIcon = down ? ArrowDownRight : up ? ArrowUpRight : Minus;
+  return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-4", dir: "rtl", children: [
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-4 h-4" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "مقارنة شهرية" }),
+          /* @__PURE__ */ jsxs("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: [
+            monthLabel$1(month) || "—",
+            " مقابل الشهر السابق"
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold text-2xl", dir: "ltr", children: formatMoney$b(monthTotal) }),
+      trendQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "جاري التحميل…" }) : delta === null ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "لا يوجد شهر سابق للمقارنة —" }) : /* @__PURE__ */ jsxs("div", { className: "mt-3", children: [
+        /* @__PURE__ */ jsxs("div", { className: `inline-flex items-center gap-1.5 text-sm font-bold ${deltaColor}`, children: [
+          /* @__PURE__ */ jsx(DeltaIcon, { className: "w-4 h-4" }),
+          /* @__PURE__ */ jsxs("span", { dir: "ltr", children: [
+            delta > 0 ? "+" : "",
+            formatMoney$b(delta),
+            pct !== null ? ` (${pct > 0 ? "+" : ""}${Math.round(pct)}%)` : ""
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1.5", children: [
+          "الشهر السابق:",
+          " ",
+          /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$b(prevMonthTotal) })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-400 dark:text-white/35 mt-1", children: down ? "انخفض الإنفاق عن الشهر السابق" : up ? "ارتفع الإنفاق عن الشهر السابق" : "لا تغيير عن الشهر السابق" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5 lg:col-span-2`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Layers, { className: "w-4 h-4" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "التوزيع حسب التصنيف" }),
+          /* @__PURE__ */ jsxs("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: [
+            monthLabel$1(month) || "—",
+            " — ",
+            categories.length,
+            " تصنيف"
+          ] })
+        ] })
+      ] }),
+      categories.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 text-xs text-center py-6", children: "لا توجد مصروفات لهذا الشهر" }) : /* @__PURE__ */ jsx("div", { className: "space-y-2.5", children: categories.map((c, idx) => {
+        const p = monthTotal > 0 ? c.total / monthTotal * 100 : 0;
+        const color = BAR_COLORS[idx % BAR_COLORS.length];
+        return /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-xs mb-1", children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
+              /* @__PURE__ */ jsx("span", { className: "inline-block w-2.5 h-2.5 rounded-full shrink-0", style: {
+                background: color
+              } }),
+              /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold truncate", children: c.name }),
+              /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/35 text-[10px] shrink-0", children: [
+                c.count,
+                " مصروف"
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 shrink-0", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$b(c.total) }),
+              /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/40 text-[10px]", dir: "ltr", children: [
+                Math.round(p),
+                "%"
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-100 dark:bg-white/[0.05] rounded-full h-2 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "h-full rounded-full transition-all", style: {
+            width: `${Math.max(p, 1.5)}%`,
+            background: color,
+            opacity: isDark ? 0.8 : 1
+          } }) })
+        ] }, c.name);
+      }) })
+    ] }),
+    categories.length > 0 && /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-4 lg:col-span-3`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
+        /* @__PURE__ */ jsx(Trophy, { className: "w-4 h-4 text-amber-600 dark:text-amber-300" }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/85 font-bold text-xs", children: "أعلى التصنيفات" })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-2", children: categories.slice(0, 5).map((c, idx) => /* @__PURE__ */ jsxs("div", { className: `${ws$1.chip} gap-2`, children: [
+        /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/35 text-[10px]", children: [
+          idx + 1,
+          "."
+        ] }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80", children: c.name }),
+        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$b(c.total) })
+      ] }, c.name)) })
+    ] })
+  ] });
+}
+
+function FixedPanel({
+  templates,
+  monthExpenses,
+  types,
+  month,
+  onMutate
+}) {
+  const queryClient = useQueryClient();
+  const paidMap = useMemo(() => {
+    const m = /* @__PURE__ */ new Map();
+    for (const e of monthExpenses || []) {
+      if (e.fixed_expense_id) {
+        m.set(Number(e.fixed_expense_id), {
+          expenseId: e.id,
+          amount: Number(e.confirmed_amount ?? e.amount) || 0
+        });
+      }
+    }
+    return m;
+  }, [monthExpenses]);
+  const togglePaidMut = useMutation({
+    mutationFn: async ({
+      id,
+      amount
+    }) => {
+      const r = await adminFetch(`/api/accounting/fixed-expenses/${id}/toggle-paid`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          month,
+          amount
+        })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل التحديث");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingExpenses()
+      });
+    },
+    onError: (e) => toast.error(e.message || "فشل التحديث")
+  });
+  const deleteMut = useMutation({
+    mutationFn: async (id) => {
+      const r = await adminFetch(`/api/accounting/fixed-expenses/${id}`, {
+        method: "DELETE"
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الحذف");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      toast.success("تم الحذف");
+    },
+    onError: (e) => toast.error(e.message || "فشل الحذف")
+  });
+  const createMut = useMutation({
+    mutationFn: async (body) => {
+      const r = await adminFetch("/api/accounting/fixed-expenses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      toast.success("تم الإضافة");
+    },
+    onError: (e) => toast.error(e.message || "فشل الإضافة")
+  });
+  const updateMut = useMutation({
+    mutationFn: async ({
+      id,
+      ...body
+    }) => {
+      const r = await adminFetch(`/api/accounting/fixed-expenses/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      toast.success("تم التعديل");
+    },
+    onError: (e) => toast.error(e.message || "فشل التعديل")
+  });
+  const [overrideAmount, setOverrideAmount] = useState({});
+  const [showAdd, setShowAdd] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
+  const totalConfirmed = useMemo(() => {
+    let sum = 0;
+    for (const v of paidMap.values()) sum += v.amount;
+    return sum;
+  }, [paidMap]);
+  const totals = useMemo(() => {
+    let expected = 0;
+    for (const t of templates || []) {
+      expected += perMonthAmount(t.default_amount, t.frequency);
+    }
+    const paid = totalConfirmed;
+    const pending = Math.max(0, expected - paid);
+    return {
+      total: expected,
+      paid,
+      pending
+    };
+  }, [templates, totalConfirmed]);
+  const handleToggle = (t) => {
+    const paid = paidMap.has(Number(t.id));
+    if (paid) {
+      togglePaidMut.mutate({
+        id: t.id,
+        amount: null
+      });
+      return;
+    }
+    const overrideRaw = overrideAmount[t.id];
+    const amount = overrideRaw !== void 0 && overrideRaw !== "" ? Number(overrideRaw) : null;
+    togglePaidMut.mutate({
+      id: t.id,
+      amount
+    });
+  };
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Anchor, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات الثابتة" }),
+            /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mt-0.5", children: [
+              monthLabel$1(month),
+              " — أدخلها مرة، حدّد «تم السداد» كل شهر"
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs flex-wrap", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الإجمالي: " }),
+            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$b(totals.total) })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مؤكد: " }),
+            /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$b(totals.paid) })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "بانتظار: " }),
+            /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$b(totals.pending) })
+          ] }),
+          /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowAdd(true), className: `${ws$1.btnPrimary} px-3 py-2 text-sm`, children: [
+            /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+            /* @__PURE__ */ jsx("span", { children: "إضافة قالب" })
+          ] })
+        ] })
+      ] }),
+      templates.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm text-center py-6", children: "لا توجد قوالب ثابتة بعد. أضف قالباً لتعرضه هنا كل شهر." }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
+        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "البند" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "التصنيف" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "التكرار" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "الشهري (الإجمالي)" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "مبلغ الشهر" }),
+          /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "تم السداد" }),
+          /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "إجراءات" })
+        ] }) }),
+        /* @__PURE__ */ jsx("tbody", { children: templates.map((t) => {
+          const paidInfo = paidMap.get(Number(t.id));
+          const paid = !!paidInfo;
+          return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02]", children: [
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-900 dark:text-white text-sm font-medium", children: t.expense_name }),
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-700 dark:text-white/70 text-xs", children: t.expense_type_name }),
+            /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-xs", children: [
+              /* @__PURE__ */ jsx(FrequencyBadge, { frequency: t.frequency || "monthly" }),
+              (() => {
+                const m = toMonthString(t.start_month);
+                return m ? /* @__PURE__ */ jsxs("div", { className: "text-slate-500 dark:text-white/40 text-[10px] mt-0.5", dir: "ltr", children: [
+                  "من ",
+                  m
+                ] }) : null;
+              })()
+            ] }),
+            /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-sm", dir: "ltr", children: [
+              /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-semibold", children: formatMoney$b(perMonthAmount(t.default_amount, t.frequency)) }),
+              (FREQ_CYCLE_MONTHS[t.frequency] || 1) > 1 ? /* @__PURE__ */ jsxs("div", { className: "text-slate-500 dark:text-white/40 text-[10px] mt-0.5", children: [
+                "إجمالي: ",
+                formatMoney$b(t.default_amount)
+              ] }) : null
+            ] }),
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: paid ? /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$b(paidInfo.amount) }) : /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: overrideAmount[t.id] ?? "", onChange: (e) => setOverrideAmount((prev) => ({
+              ...prev,
+              [t.id]: e.target.value
+            })), className: `${ws$1.input} px-2 py-1.5 text-sm w-28`, placeholder: String(perMonthAmount(t.default_amount, t.frequency)), dir: "ltr" }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleToggle(t), disabled: togglePaidMut.isPending, className: `${paid ? "text-emerald-700 dark:text-emerald-200 hover:text-emerald-100" : "text-slate-500 dark:text-white/40 hover:text-slate-700 dark:hover:text-white/70"} disabled:opacity-50 inline-flex`, title: paid ? "إلغاء السداد" : "تعليم تم السداد", children: paid ? /* @__PURE__ */ jsx(CheckCircle2, { className: "w-5 h-5" }) : /* @__PURE__ */ jsx(Circle, { className: "w-5 h-5" }) }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-1", children: [
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditTarget(t), className: `${ws$1.btnNeutral} px-2 py-1 text-xs`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+                if (window.confirm(`حذف القالب «${t.expense_name}»؟`)) {
+                  deleteMut.mutate(t.id);
+                }
+              }, className: `${ws$1.btnDanger} px-2 py-1 text-xs`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3 h-3" }) })
+            ] }) })
+          ] }, t.id);
+        }) })
+      ] }) })
+    ] }),
+    (showAdd || editTarget) && /* @__PURE__ */ jsx(FixedFormModal, { target: editTarget, types, onClose: () => {
+      setShowAdd(false);
+      setEditTarget(null);
+    }, onSubmit: (payload) => {
+      if (editTarget) {
+        updateMut.mutate({
+          id: editTarget.id,
+          ...payload
+        }, {
+          onSuccess: () => {
+            setEditTarget(null);
+          }
+        });
+      } else {
+        createMut.mutate(payload, {
+          onSuccess: () => {
+            setShowAdd(false);
+          }
+        });
+      }
+    }, isPending: createMut.isPending || updateMut.isPending })
+  ] });
+}
+const FREQUENCY_OPTIONS = [{
+  value: "monthly",
+  label: "شهري"
+}, {
+  value: "quarterly",
+  label: "ربع سنوي"
+}, {
+  value: "semi_annual",
+  label: "نصف سنوي"
+}, {
+  value: "annual",
+  label: "سنوي"
+}];
+const FREQ_LABEL = {
+  monthly: "شهري",
+  quarterly: "ربع سنوي",
+  semi_annual: "نصف سنوي",
+  annual: "سنوي"
+};
+const FREQ_BADGE = {
+  monthly: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25",
+  quarterly: "bg-pink-500/15 text-pink-700 dark:text-pink-200 border-pink-500/25",
+  semi_annual: "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25",
+  annual: "bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-500/25"
+};
+const FREQ_CYCLE_MONTHS = {
+  monthly: 1,
+  quarterly: 3,
+  semi_annual: 6,
+  annual: 12
+};
+function perMonthAmount(totalAmount, frequency) {
+  const cycle = FREQ_CYCLE_MONTHS[frequency] || 1;
+  const total = Number(totalAmount);
+  if (!Number.isFinite(total) || total <= 0) return 0;
+  return Math.round(total / cycle * 100) / 100;
+}
+function toMonthString(value) {
+  if (!value) return "";
+  const s = String(value);
+  if (/^\d{4}-\d{2}/.test(s)) return s.slice(0, 7);
+  const d = new Date(s);
+  if (Number.isNaN(d.getTime())) return "";
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  return `${y}-${m}`;
+}
+function FrequencyBadge({
+  frequency
+}) {
+  return /* @__PURE__ */ jsx("span", { className: `inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full border ${FREQ_BADGE[frequency] || FREQ_BADGE.monthly}`, children: FREQ_LABEL[frequency] || "شهري" });
+}
+function FixedFormModal({
+  target,
+  types,
+  onClose,
+  onSubmit,
+  isPending
+}) {
+  const [form, setForm] = useState(() => ({
+    expense_name: target?.expense_name || "",
+    expense_type_id: target?.expense_type_id ? String(target.expense_type_id) : "",
+    default_amount: target?.default_amount ?? "",
+    frequency: target?.frequency || "monthly",
+    start_month: toMonthString(target?.start_month)
+  }));
+  const typeOptions = useMemo(() => {
+    const opts = [{
+      value: "",
+      label: "اختر النوع…"
+    }];
+    for (const t of types || []) {
+      opts.push({
+        value: String(t.id),
+        label: t.name
+      });
+    }
+    return opts;
+  }, [types]);
+  const startMonthOptions = useMemo(() => {
+    const base = buildRecentMonthOptions$1(30);
+    return [{
+      value: "",
+      label: "من البداية دائماً"
+    }, ...base];
+  }, []);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!form.expense_name.trim()) return;
+    if (!form.expense_type_id) return;
+    const amt = Number(form.default_amount);
+    if (!Number.isFinite(amt) || amt < 0) return;
+    onSubmit({
+      expense_name: form.expense_name.trim(),
+      expense_type_id: Number(form.expense_type_id),
+      default_amount: amt,
+      frequency: form.frequency,
+      start_month: form.start_month || null
+    });
+  };
+  return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, onClick: (e) => e.stopPropagation(), className: `w-full max-w-md ${ws$1.glass} ${ws$1.card} p-5 space-y-4`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: target ? "تعديل القالب" : "إضافة قالب ثابت" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws$1.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "اسم البند *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.expense_name, onChange: (e) => setForm((f) => ({
+        ...f,
+        expense_name: e.target.value
+      })), className: `${ws$1.input} px-3 py-2.5`, required: true, placeholder: "مثال: إيجار المحل" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "التصنيف *" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: form.expense_type_id, onChange: (v) => setForm((f) => ({
+        ...f,
+        expense_type_id: v
+      })), options: typeOptions, buttonClassName: "px-3 py-2.5" }),
+      /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5 leading-relaxed", children: "البند العام الذي ينتمي إليه هذا القالب — مثل «إيجار»، «كهرباء»، «اشتراك». يستخدم في تجميع المصاريف للتقارير." })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "إجمالي المبلغ للدورة *" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.default_amount, onChange: (e) => setForm((f) => ({
+        ...f,
+        default_amount: e.target.value
+      })), className: `${ws$1.input} px-3 py-2.5`, required: true, dir: "ltr" }),
+      form.default_amount && form.frequency !== "monthly" ? /* @__PURE__ */ jsxs("p", { className: "text-[10px] text-slate-600 dark:text-white/55 mt-1.5", children: [
+        "ينقسم إلى",
+        " ",
+        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: perMonthAmount(form.default_amount, form.frequency) }),
+        " ",
+        "ر.س شهرياً (×",
+        FREQ_CYCLE_MONTHS[form.frequency] || 1,
+        ")"
+      ] }) : null
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 gap-3", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "التكرار *" }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: form.frequency, onChange: (v) => setForm((f) => ({
+          ...f,
+          frequency: v
+        })), options: FREQUENCY_OPTIONS, buttonClassName: "px-3 py-2.5" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "شهر البدء" }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: form.start_month, onChange: (v) => setForm((f) => ({
+          ...f,
+          start_month: v
+        })), options: startMonthOptions, buttonClassName: "px-3 py-2.5", placeholder: "من البداية دائماً" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 leading-relaxed", children: "المبلغ الإجمالي ينقسم على شهور الدورة ويظهر كل شهر بدءاً من «شهر البدء». «شهري» × 1، «ربع سنوي» × 3، «نصف سنوي» × 6، «سنوي» × 12. اترك شهر البدء فارغاً لـ«من البداية دائماً»." }),
+    /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
+      /* @__PURE__ */ jsx("button", { type: "submit", disabled: isPending, className: `${ws$1.btnPrimary} flex-1 px-4 py-2.5 justify-center disabled:opacity-50`, children: isPending ? "جاري الحفظ…" : "حفظ" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws$1.btnNeutral} px-4 py-2.5`, children: "إلغاء" })
+    ] })
+  ] }) });
+}
+
+function VariableGrid({
+  types,
+  monthExpenses,
+  month,
+  onMutate
+}) {
+  const queryClient = useQueryClient();
+  const templatesQuery = useQuery({
+    queryKey: queryKeys.accountingVariableTemplates(),
+    queryFn: async () => {
+      const r = await adminFetch("/api/accounting/variable-templates");
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل تحميل القوالب");
+      return d.templates || [];
+    }
+  });
+  const templates = templatesQuery.data || [];
+  const variableTypes = useMemo(() => (types || []).filter((t) => (t.scope === "variable" || t.scope === "both" || !t.scope) && (t.is_active === void 0 || t.is_active === true)), [types]);
+  const existingByTemplate = useMemo(() => {
+    const m = /* @__PURE__ */ new Map();
+    for (const e of monthExpenses || []) {
+      const tid = Number(e.variable_template_id);
+      if (!Number.isFinite(tid) || tid <= 0) continue;
+      if (!m.has(tid)) m.set(tid, e);
+    }
+    return m;
+  }, [monthExpenses]);
+  const [draft, setDraft] = useState({});
+  useEffect(() => {
+    const next = {};
+    for (const t of templates) {
+      const row = existingByTemplate.get(Number(t.id));
+      next[t.id] = row ? String(row.amount) : "";
+    }
+    setDraft(next);
+  }, [templates, existingByTemplate, month]);
+  const saveMut = useMutation({
+    mutationFn: async ({
+      template_id,
+      amount,
+      mark_paid
+    }) => {
+      const r = await adminFetch("/api/accounting/expenses/variable", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          month,
+          variable_template_id: template_id,
+          amount: amount === "" || amount === null ? null : Number(amount),
+          mark_paid: !!mark_paid
+        })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الحفظ");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingExpenses()
+      });
+    },
+    onError: (e) => toast.error(e.message || "فشل الحفظ")
+  });
+  const [showAdd, setShowAdd] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
+  const createTemplateMut = useMutation({
+    mutationFn: async (body) => {
+      const r = await adminFetch("/api/accounting/variable-templates", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingVariableTemplates()
+      });
+      toast.success("تم إضافة القالب");
+      setShowAdd(false);
+    },
+    onError: (e) => toast.error(e.message || "فشل الإضافة")
+  });
+  const updateTemplateMut = useMutation({
+    mutationFn: async ({
+      id,
+      ...body
+    }) => {
+      const r = await adminFetch(`/api/accounting/variable-templates/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingVariableTemplates()
+      });
+      toast.success("تم التعديل");
+      setEditTarget(null);
+    },
+    onError: (e) => toast.error(e.message || "فشل التعديل")
+  });
+  const deactivateTemplateMut = useMutation({
+    mutationFn: async (id) => {
+      const r = await adminFetch(`/api/accounting/variable-templates/${id}`, {
+        method: "DELETE"
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "تعذّر الإيقاف");
+      return d;
+    },
+    onSuccess: () => {
+      onMutate?.();
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingVariableTemplates()
+      });
+      toast.success("تم إيقاف القالب");
+    },
+    onError: (e) => toast.error(e.message || "تعذّر الإيقاف")
+  });
+  const handleBlur = (t) => {
+    const row = existingByTemplate.get(Number(t.id));
+    const draftVal = draft[t.id] ?? "";
+    const draftNum = draftVal === "" || draftVal === null ? null : Number(draftVal);
+    const existingNum = row ? Number(row.amount) : null;
+    if (draftNum === existingNum) return;
+    saveMut.mutate({
+      template_id: t.id,
+      amount: draftVal
+    });
+  };
+  const handleMarkPaid = (t) => {
+    const draftVal = draft[t.id] ?? "";
+    if (!draftVal || Number(draftVal) <= 0) {
+      toast.error("أدخل المبلغ أولاً");
+      return;
+    }
+    saveMut.mutate({
+      template_id: t.id,
+      amount: draftVal,
+      mark_paid: true
+    });
+  };
+  const totals = useMemo(() => {
+    let paid = 0;
+    let pending = 0;
+    for (const t of templates) {
+      const row = existingByTemplate.get(Number(t.id));
+      const expected = Number(t.expected_amount) || 0;
+      if (row?.is_confirmed) {
+        paid += Number(row.confirmed_amount ?? row.amount) || 0;
+      } else {
+        pending += expected;
+      }
+    }
+    return {
+      total: paid + pending,
+      paid,
+      pending
+    };
+  }, [templates, existingByTemplate]);
+  const addCta = /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowAdd(true), className: `${ws$1.btnPrimary} px-3 py-2 text-xs`, children: [
+    /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
+    /* @__PURE__ */ jsx("span", { children: "إضافة قالب" })
+  ] });
+  const modal = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    if (!showAdd && !editTarget) return null;
+    return createPortal(/* @__PURE__ */ jsx(VariableTemplateModal, { target: editTarget, types: variableTypes, month, onClose: () => {
+      setShowAdd(false);
+      setEditTarget(null);
+    }, onSubmit: (payload) => {
+      if (editTarget) {
+        updateTemplateMut.mutate({
+          id: editTarget.id,
+          ...payload
+        });
+      } else {
+        createTemplateMut.mutate(payload);
+      }
+    }, isPending: createTemplateMut.isPending || updateTemplateMut.isPending }), document.body);
+  }, [showAdd, editTarget, variableTypes, month, createTemplateMut.isPending, updateTemplateMut.isPending]);
+  if (templatesQuery.isLoading) {
+    return /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-5 text-slate-600 dark:text-white/55 text-sm text-center py-6`, children: "جاري التحميل…" });
+  }
+  if (templates.length === 0) {
+    return /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 flex-wrap", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm", children: "لا توجد قوالب متغيرة بعد. أضف أول قالب للبدء." }),
+        addCta
+      ] }) }),
+      modal
+    ] });
+  }
+  return /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+        /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Receipt, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات المتغيرة" }),
+          /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mt-0.5", children: [
+            monthLabel$1(month),
+            " — القوالب موحّدة كل شهر، يتغيّر المبلغ فقط"
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الإجمالي: " }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$b(totals.total) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مؤكد: " }),
+          /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$b(totals.paid) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "بانتظار: " }),
+          /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$b(totals.pending) })
+        ] }),
+        addCta
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
+      /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+        /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "البند" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "التصنيف" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "المبلغ" }),
+        /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "الحالة" }),
+        /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "إجراء" })
+      ] }) }),
+      /* @__PURE__ */ jsx("tbody", { children: templates.map((t) => {
+        const row = existingByTemplate.get(Number(t.id));
+        const confirmed = !!row?.is_confirmed;
+        return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02]", children: [
+          /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-medium", children: t.name }) }),
+          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-700 dark:text-white/70 text-xs", children: t.expense_type_name }),
+          /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: draft[t.id] ?? "", onChange: (e) => setDraft((prev) => ({
+            ...prev,
+            [t.id]: e.target.value
+          })), onBlur: () => handleBlur(t), onKeyDown: (e) => {
+            if (e.key === "Enter") e.currentTarget.blur();
+          }, className: `${ws$1.input} px-2 py-1.5 text-sm w-32`, placeholder: t.expected_amount !== null && t.expected_amount !== void 0 ? String(t.expected_amount) : "0", dir: "ltr" }) }),
+          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: confirmed ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-xs text-emerald-700 dark:text-emerald-200", children: [
+            /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3" }),
+            "مؤكد"
+          ] }) : row ? /* @__PURE__ */ jsx("span", { className: "text-xs text-amber-700 dark:text-amber-200", children: "بانتظار" }) : /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-400 dark:text-white/35", children: "—" }) }),
+          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: /* @__PURE__ */ jsxs("div", { className: "inline-flex items-center gap-1", children: [
+            !confirmed && /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleMarkPaid(t), disabled: saveMut.isPending, className: `${ws$1.btnPrimary} px-2 py-1 text-xs disabled:opacity-50`, children: [
+              /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3" }),
+              /* @__PURE__ */ jsx("span", { children: "تأكيد" })
+            ] }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditTarget(t), className: `${ws$1.btnNeutral} px-2 py-1 text-xs`, title: "تعديل القالب", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+              if (window.confirm(`إيقاف القالب «${t.name}»؟ سيختفي من القائمة والمصاريف السابقة تبقى كما هي.`)) {
+                deactivateTemplateMut.mutate(t.id);
+              }
+            }, disabled: deactivateTemplateMut.isPending, className: `${ws$1.btnDanger} px-2 py-1 text-xs disabled:opacity-50`, title: "إيقاف القالب", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3 h-3" }) })
+          ] }) })
+        ] }, t.id);
+      }) })
+    ] }) }),
+    modal
+  ] });
+}
+function VariableTemplateModal({
+  target,
+  types,
+  month,
+  onClose,
+  onSubmit,
+  isPending
+}) {
+  const [name, setName] = useState(target?.name || "");
+  const [typeId, setTypeId] = useState(target?.expense_type_id ? String(target.expense_type_id) : "");
+  const [expectedAmount, setExpectedAmount] = useState(target?.expected_amount !== null && target?.expected_amount !== void 0 ? String(target.expected_amount) : "");
+  const [historyHint, setHistoryHint] = useState(null);
+  const typeOptions = useMemo(() => {
+    const opts = [{
+      value: "",
+      label: "اختر التصنيف…"
+    }];
+    for (const t of types || []) {
+      opts.push({
+        value: String(t.id),
+        label: t.name
+      });
+    }
+    return opts;
+  }, [types]);
+  useEffect(() => {
+    if (!typeId || !month) {
+      setHistoryHint(null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const params = new URLSearchParams({
+          expense_type_id: String(typeId),
+          beforeMonth: month
+        });
+        const r = await adminFetch(`/api/accounting/expenses/last-amount?${params}`);
+        if (!r.ok) return;
+        const d = await r.json();
+        if (cancelled) return;
+        if (d?.amount !== null && d?.amount !== void 0) {
+          setHistoryHint({
+            amount: d.amount,
+            month: String(d.expense_month || "").slice(0, 7)
+          });
+          if (!target && !expectedAmount) {
+            setExpectedAmount(String(d.amount));
+          }
+        } else {
+          setHistoryHint(null);
+        }
+      } catch {
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [typeId, month]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const tid = Number(typeId);
+    if (!Number.isFinite(tid) || tid <= 0) return;
+    const exp = expectedAmount === "" ? null : Number(expectedAmount);
+    if (exp !== null && (!Number.isFinite(exp) || exp < 0)) return;
+    onSubmit({
+      name: trimmed,
+      expense_type_id: tid,
+      expected_amount: exp
+    });
+  };
+  return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, onClick: (e) => e.stopPropagation(), className: `w-full max-w-md ${ws$1.glass} ${ws$1.card} p-5 space-y-4`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: target ? "تعديل قالب متغيّر" : "إضافة قالب متغيّر" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws$1.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "اسم البند *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: name, onChange: (e) => setName(e.target.value), className: `${ws$1.input} px-3 py-2.5`, required: true, autoFocus: true, placeholder: "مثال: قهوة" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "التصنيف *" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: typeId, onChange: setTypeId, options: typeOptions, buttonClassName: "px-3 py-2.5" }),
+      /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5", children: "البنود المعروضة هنا فقط من التصنيفات المرتبطة بـ«مصروف متغيّر»." })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "إجمالي المبلغ المتوقع" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: expectedAmount, onChange: (e) => setExpectedAmount(e.target.value), className: `${ws$1.input} px-3 py-2.5`, dir: "ltr", placeholder: "0" }),
+      historyHint ? /* @__PURE__ */ jsxs("p", { className: "text-[10px] text-emerald-700 dark:text-emerald-200/80 mt-1.5", children: [
+        "تمت تعبئته من شهر",
+        " ",
+        /* @__PURE__ */ jsx("span", { dir: "ltr", children: historyHint.month }),
+        " (",
+        /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$b(historyHint.amount) }),
+        ")"
+      ] }) : /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5", children: "يستخدم كقيمة افتراضية كل شهر — يمكن تغييرها لاحقاً." })
+    ] }),
+    /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 leading-relaxed", children: "القالب يتكرر كل شهر في قائمة المصروفات المتغيرة. تعديل المبلغ الشهري لا يؤثر على الأشهر الماضية." }),
+    /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
+      /* @__PURE__ */ jsx("button", { type: "submit", disabled: isPending, className: `${ws$1.btnPrimary} flex-1 px-4 py-2.5 justify-center disabled:opacity-50`, children: isPending ? "جاري الحفظ…" : "حفظ" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws$1.btnNeutral} px-4 py-2.5`, children: "إلغاء" })
+    ] })
+  ] }) });
+}
+
+const SCOPE_OPTIONS = [{
+  value: "both",
+  label: "الاثنين (ثابت + متغيّر)"
+}, {
+  value: "fixed",
+  label: "ثابت فقط"
+}, {
+  value: "variable",
+  label: "متغيّر فقط"
+}];
+const SCOPE_LABEL = {
+  fixed: "ثابت",
+  variable: "متغيّر",
+  both: "الاثنين"
+};
+const SCOPE_BADGE = {
+  fixed: "bg-sky-500/15 text-sky-700 dark:text-sky-200 border-sky-500/25",
+  variable: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-200 border-emerald-500/25",
+  both: "bg-amber-500/15 text-amber-700 dark:text-amber-200 border-amber-500/25"
+};
+function CategoriesManager() {
+  const queryClient = useQueryClient();
+  const typesQuery = useQuery({
+    queryKey: queryKeys.accountingExpenseTypesFull(),
+    queryFn: async () => {
+      const r = await adminFetch("/api/accounting/expense-types?includeInactive=1");
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل التحميل");
+      return d.types || [];
+    }
+  });
+  const invalidate = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.accountingExpenseTypes()
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.accountingExpenseTypesFull()
+    });
+  };
+  const createMut = useMutation({
+    mutationFn: async (body) => {
+      const r = await adminFetch("/api/accounting/expense-types", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل الإضافة");
+      return d;
+    },
+    onSuccess: () => {
+      invalidate();
+      toast.success("تم الإضافة");
+    },
+    onError: (e) => toast.error(e.message || "فشل الإضافة")
+  });
+  const updateMut = useMutation({
+    mutationFn: async ({
+      id,
+      ...body
+    }) => {
+      const r = await adminFetch(`/api/accounting/expense-types/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d?.error || "فشل التعديل");
+      return d;
+    },
+    onSuccess: () => {
+      invalidate();
+      toast.success("تم التعديل");
+    },
+    onError: (e) => toast.error(e.message || "فشل التعديل")
+  });
+  const deleteMut = useMutation({
+    mutationFn: async ({
+      id,
+      force = false
+    }) => {
+      const url = force ? `/api/accounting/expense-types/${id}?force=1` : `/api/accounting/expense-types/${id}`;
+      const r = await adminFetch(url, {
+        method: "DELETE"
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const err = new Error(d?.error || "فشل الحذف");
+        err.status = r.status;
+        err.expense_refs = d?.expense_refs;
+        err.fixed_refs = d?.fixed_refs;
+        err.id = id;
+        throw err;
+      }
+      return d;
+    },
+    onSuccess: () => {
+      invalidate();
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingExpenses()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingFixedExpenses()
+      });
+      toast.success("تم الحذف");
+    },
+    onError: (e) => {
+      if (e?.status === 409 && ((e?.expense_refs ?? 0) > 0 || (e?.fixed_refs ?? 0) > 0)) {
+        const refs = [];
+        if (e.expense_refs > 0) refs.push(`${e.expense_refs} مصروف مسجّل`);
+        if (e.fixed_refs > 0) refs.push(`${e.fixed_refs} قالب ثابت`);
+        const msg = `هذا البند مستخدم في ${refs.join(" و ")}. هل تريد حذفه نهائياً مع جميع المصاريف المرتبطة به؟`;
+        if (window.confirm(msg)) {
+          deleteMut.mutate({
+            id: e.id,
+            force: true
+          });
+          return;
+        }
+      }
+      toast.error(e.message || "فشل الحذف");
+    }
+  });
+  const [showForm, setShowForm] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
+  const types = useMemo(() => typesQuery.data || [], [typesQuery.data]);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(ListChecks, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "البنود" }),
+            /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mt-0.5", children: "أضف، حرّر، أو احذف بنود المصروفات وحدّد نطاق كل واحد" })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowForm(true), className: `${ws$1.btnPrimary} px-3 py-2 text-sm`, children: [
+          /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+          /* @__PURE__ */ jsx("span", { children: "بند جديد" })
+        ] })
+      ] }),
+      typesQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm text-center py-6", children: "جاري التحميل…" }) : types.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-sm text-center py-6", children: "لا توجد بنود بعد." }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full", children: [
+        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "bg-slate-100 dark:bg-white/[0.04]", children: [
+          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "الاسم" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "النطاق" }),
+          /* @__PURE__ */ jsx("th", { className: "text-center px-3 py-2 text-xs font-semibold text-slate-600 dark:text-white/55", children: "إجراءات" })
+        ] }) }),
+        /* @__PURE__ */ jsx("tbody", { children: types.map((t) => {
+          const isInactive = t.is_active === false;
+          return /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02] ${isInactive ? "opacity-50" : ""}`, children: [
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-900 dark:text-white text-sm font-medium", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+              /* @__PURE__ */ jsx("span", { children: t.name }),
+              isInactive ? /* @__PURE__ */ jsx("span", { className: "text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60", children: "غير مفعّل" }) : null
+            ] }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx("span", { className: `inline-flex items-center text-xs px-2 py-1 rounded-full border ${SCOPE_BADGE[t.scope || "both"] || SCOPE_BADGE.both}`, children: SCOPE_LABEL[t.scope || "both"] || "—" }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-center", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-1", children: [
+              /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => updateMut.mutate({
+                id: t.id,
+                // legacy `undefined` treated as active,
+                // so toggle resolves to false there too.
+                is_active: isInactive ? true : false
+              }), disabled: updateMut.isPending, className: `${isInactive ? ws$1.btnPrimary : ws$1.btnNeutral} px-2 py-1 text-xs disabled:opacity-50`, title: isInactive ? "تفعيل" : "إلغاء التفعيل", children: [
+                /* @__PURE__ */ jsx(Power, { className: "w-3 h-3" }),
+                /* @__PURE__ */ jsx("span", { children: isInactive ? "تفعيل" : "إيقاف" })
+              ] }),
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditTarget(t), className: `${ws$1.btnNeutral} px-2 py-1 text-xs`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3 h-3" }) }),
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+                if (window.confirm(`حذف البند «${t.name}»؟`)) {
+                  deleteMut.mutate({
+                    id: t.id,
+                    force: false
+                  });
+                }
+              }, className: `${ws$1.btnDanger} px-2 py-1 text-xs`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3 h-3" }) })
+            ] }) })
+          ] }, t.id);
+        }) })
+      ] }) })
+    ] }),
+    (showForm || editTarget) && /* @__PURE__ */ jsx(CategoryFormModal, { target: editTarget, onClose: () => {
+      setShowForm(false);
+      setEditTarget(null);
+    }, onSubmit: (payload) => {
+      if (editTarget) {
+        updateMut.mutate({
+          id: editTarget.id,
+          ...payload
+        }, {
+          onSuccess: () => setEditTarget(null)
+        });
+      } else {
+        createMut.mutate(payload, {
+          onSuccess: () => setShowForm(false)
+        });
+      }
+    }, isPending: createMut.isPending || updateMut.isPending })
+  ] });
+}
+function CategoryFormModal({
+  target,
+  onClose,
+  onSubmit,
+  isPending
+}) {
+  const [name, setName] = useState(target?.name || "");
+  const [scope, setScope] = useState(target?.scope || "both");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    onSubmit({
+      name: trimmed,
+      scope
+    });
+  };
+  return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, onClick: (e) => e.stopPropagation(), className: `w-full max-w-sm ${ws$1.glass} ${ws$1.card} p-5 space-y-4`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+      /* @__PURE__ */ jsx("h3", { className: "text-slate-900 dark:text-white font-bold tracking-tight", children: target ? "تعديل البند" : "بند جديد" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws$1.iconButton, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "الاسم *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: name, onChange: (e) => setName(e.target.value), className: `${ws$1.input} px-3 py-2.5`, required: true, placeholder: "مثال: كهرباء" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("label", { className: "block text-xs font-semibold text-slate-600 dark:text-white/55 mb-2", children: "النطاق *" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: scope, onChange: setScope, options: SCOPE_OPTIONS, buttonClassName: "px-3 py-2.5" }),
+      /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5", children: "«ثابت» يظهر في قوالب المصروف الثابت فقط. «متغيّر» يظهر في قائمة المتغيّر فقط. «الاثنين» يظهر في الاثنين." })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "flex gap-2", children: [
+      /* @__PURE__ */ jsx("button", { type: "submit", disabled: isPending, className: `${ws$1.btnPrimary} flex-1 px-4 py-2.5 justify-center disabled:opacity-50`, children: isPending ? "جاري الحفظ…" : "حفظ" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws$1.btnNeutral} px-4 py-2.5`, children: "إلغاء" })
+    ] })
+  ] }) });
+}
+
+const PIE_COLORS = [
+  "#34d399",
+  // emerald
+  "#60a5fa",
+  // sky
+  "#f472b6",
+  // pink
+  "#fbbf24",
+  // amber
+  "#a78bfa",
+  // violet
+  "#fb7185",
+  // rose
+  "#f87171",
+  // red
+  "#22d3ee",
+  // cyan
+  "#facc15",
+  // yellow
+  "#c084fc",
+  // purple
+  "#4ade80",
+  // green
+  "#fdba74"
+  // orange
+];
+function shortMonth(label) {
+  if (!label || typeof label !== "string") return label;
+  const [y, m] = label.split("-");
+  if (!y || !m) return label;
+  return `${m}/${y.slice(2)}`;
+}
+function TooltipBox({
+  active,
+  payload,
+  labelFormatter,
+  isDark
+}) {
+  if (!active || !payload || !payload.length) return null;
+  const bg = isDark ? "rgba(15, 23, 42, 0.96)" : "rgba(255, 255, 255, 0.98)";
+  const borderColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(15, 23, 42, 0.12)";
+  const labelColor = isDark ? "rgba(255,255,255,0.55)" : "rgb(71, 85, 105)";
+  const nameColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
+  const valueColor = isDark ? "#fff" : "rgb(15, 23, 42)";
+  return /* @__PURE__ */ jsxs("div", { className: "text-xs px-3 py-2 rounded-xl shadow-lg", style: {
+    background: bg,
+    border: `1px solid ${borderColor}`,
+    color: valueColor,
+    minWidth: 140
+  }, dir: "rtl", children: [
+    payload[0]?.payload?.month || payload[0]?.name ? /* @__PURE__ */ jsx("div", { className: "mb-1", style: {
+      color: labelColor
+    }, children: labelFormatter ? labelFormatter(payload[0].payload?.month || payload[0].name) : payload[0].payload?.month || payload[0].name }) : null,
+    payload.map((p, i) => /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx("span", { className: "inline-block w-2.5 h-2.5 rounded-full", style: {
+        background: p.color || p.fill
+      } }),
+      /* @__PURE__ */ jsxs("span", { style: {
+        color: nameColor
+      }, children: [
+        p.name,
+        ":"
+      ] }),
+      /* @__PURE__ */ jsx("span", { className: "font-bold", style: {
+        color: valueColor
+      }, dir: "ltr", children: formatMoney$b(p.value) })
+    ] }, i))
+  ] });
+}
+function ExpensesCharts({
+  month
+}) {
+  const {
+    isDark
+  } = useAdminTheme();
+  const gridStroke = isDark ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.10)";
+  const axisStroke = isDark ? "rgba(255,255,255,0.55)" : "rgba(15,23,42,0.55)";
+  const legendColor = isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)";
+  const trendQuery = useQuery({
+    queryKey: queryKeys.accountingExpenseTrend(month, 12),
+    enabled: !!month,
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        months: "12",
+        ...month ? {
+          currentMonth: month
+        } : {}
+      });
+      const r = await adminFetch(`/api/accounting/expenses/trend?${params}`);
+      if (!r.ok) {
+        const d = await r.json().catch(() => ({}));
+        throw new Error(d?.error || "فشل تحميل البيانات");
+      }
+      return r.json();
+    },
+    staleTime: 6e4
+  });
+  const months = trendQuery.data?.months || [];
+  const byType = trendQuery.data?.by_type || [];
+  const trendData = useMemo(() => months.map((m) => ({
+    month: m.month,
+    confirmed: Number(m.confirmed) || 0,
+    pending: Number(m.pending) || 0,
+    total: Number(m.total) || 0
+  })), [months]);
+  const pieData = useMemo(() => byType.map((t) => ({
+    name: t.type_name,
+    value: Number(t.total) || 0
+  })), [byType]);
+  const barData = useMemo(() => byType.slice().map((t) => ({
+    name: t.type_name,
+    total: Number(t.total) || 0,
+    confirmed: Number(t.confirmed) || 0
+  })), [byType]);
+  const hasTrend = trendData.some((d) => d.total > 0);
+  const hasByType = pieData.length > 0;
+  if (trendQuery.isLoading) {
+    return /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: /* @__PURE__ */ jsx("div", { className: "h-64 flex items-center justify-center text-slate-600 dark:text-white/55", children: "جاري تحميل الرسوم البيانية…" }) });
+  }
+  if (trendQuery.isError) {
+    return /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-5 text-red-700 dark:text-red-200 text-sm`, children: trendQuery.error?.message || "تعذّر تحميل البيانات" });
+  }
+  return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-4", dir: "rtl", children: [
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5 lg:col-span-2`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-emerald-700 dark:text-emerald-200`, children: /* @__PURE__ */ jsx(TrendingUp, { className: "w-4 h-4" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "آخر 12 شهر" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: "مؤكد + بانتظار التأكيد" })
+        ] })
+      ] }),
+      hasTrend ? /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: 260, children: /* @__PURE__ */ jsxs(LineChart, { data: trendData, margin: {
+        top: 6,
+        right: 12,
+        left: 0,
+        bottom: 6
+      }, children: [
+        /* @__PURE__ */ jsx(CartesianGrid, { stroke: gridStroke }),
+        /* @__PURE__ */ jsx(XAxis, { dataKey: "month", tickFormatter: shortMonth, stroke: axisStroke, tick: {
+          fontSize: 11,
+          fill: axisStroke
+        } }),
+        /* @__PURE__ */ jsx(YAxis, { stroke: axisStroke, tick: {
+          fontSize: 11,
+          fill: axisStroke
+        }, tickFormatter: (v) => v >= 1e3 ? `${Math.round(v / 1e3)}k` : v }),
+        /* @__PURE__ */ jsx(Tooltip, { content: /* @__PURE__ */ jsx(TooltipBox, { isDark, labelFormatter: (m) => monthLabel$1(m) }) }),
+        /* @__PURE__ */ jsx(Legend, { wrapperStyle: {
+          color: legendColor,
+          fontSize: 12
+        } }),
+        /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "confirmed", name: "مؤكد", stroke: "#34d399", strokeWidth: 2, dot: {
+          r: 3
+        }, isAnimationActive: false }),
+        /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "pending", name: "بانتظار", stroke: "#fbbf24", strokeWidth: 2, dot: {
+          r: 3
+        }, isAnimationActive: false }),
+        /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "total", name: "الإجمالي", stroke: "#60a5fa", strokeWidth: 2, strokeDasharray: "4 4", dot: false, isAnimationActive: false })
+      ] }) }) : /* @__PURE__ */ jsx("div", { className: "h-64 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm", children: "لا توجد بيانات بعد" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(PieChart, { className: "w-4 h-4" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "توزيع الشهر" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: monthLabel$1(month) || "—" })
+        ] })
+      ] }),
+      hasByType ? /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: 260, children: /* @__PURE__ */ jsxs(PieChart$1, { children: [
+        /* @__PURE__ */ jsx(Pie, { data: pieData, dataKey: "value", nameKey: "name", cx: "50%", cy: "50%", outerRadius: 90, innerRadius: 40, paddingAngle: 2, isAnimationActive: false, children: pieData.map((_, idx) => /* @__PURE__ */ jsx(Cell, { fill: PIE_COLORS[idx % PIE_COLORS.length] }, idx)) }),
+        /* @__PURE__ */ jsx(Tooltip, { content: /* @__PURE__ */ jsx(TooltipBox, { isDark }) }),
+        /* @__PURE__ */ jsx(Legend, { wrapperStyle: {
+          color: legendColor,
+          fontSize: 11
+        } })
+      ] }) }) : /* @__PURE__ */ jsx("div", { className: "h-64 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm", children: "لا توجد مصروفات لهذا الشهر" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5 lg:col-span-3`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-3", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-pink-700 dark:text-pink-200`, children: /* @__PURE__ */ jsx(BarChart3, { className: "w-4 h-4" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "حسب النوع" }),
+          /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: monthLabel$1(month) || "—" })
+        ] })
+      ] }),
+      hasByType ? /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: 220, children: /* @__PURE__ */ jsxs(BarChart, { data: barData, margin: {
+        top: 6,
+        right: 12,
+        left: 0,
+        bottom: 6
+      }, children: [
+        /* @__PURE__ */ jsx(CartesianGrid, { stroke: gridStroke }),
+        /* @__PURE__ */ jsx(XAxis, { dataKey: "name", stroke: axisStroke, tick: {
+          fontSize: 11,
+          fill: axisStroke
+        }, interval: 0, angle: -15, textAnchor: "end", height: 50 }),
+        /* @__PURE__ */ jsx(YAxis, { stroke: axisStroke, tick: {
+          fontSize: 11,
+          fill: axisStroke
+        }, tickFormatter: (v) => v >= 1e3 ? `${Math.round(v / 1e3)}k` : v }),
+        /* @__PURE__ */ jsx(Tooltip, { content: /* @__PURE__ */ jsx(TooltipBox, { isDark }) }),
+        /* @__PURE__ */ jsx(Legend, { wrapperStyle: {
+          color: legendColor,
+          fontSize: 12
+        } }),
+        /* @__PURE__ */ jsx(Bar, { dataKey: "total", name: "الإجمالي", fill: "#60a5fa", radius: [6, 6, 0, 0], isAnimationActive: false }),
+        /* @__PURE__ */ jsx(Bar, { dataKey: "confirmed", name: "مؤكد", fill: "#34d399", radius: [6, 6, 0, 0], isAnimationActive: false })
+      ] }) }) : /* @__PURE__ */ jsx("div", { className: "h-32 flex items-center justify-center text-slate-600 dark:text-white/55 text-sm", children: "لا توجد مصروفات لهذا الشهر" })
+    ] })
+  ] });
+}
+
+const STATUS_CHIPS = [{
+  value: "all",
+  label: "الكل",
+  icon: Filter
+}, {
+  value: "confirmed",
+  label: "المؤكدة",
+  icon: CheckCircle2
+}, {
+  value: "pending",
+  label: "بانتظار",
+  icon: Clock
+}];
+function safeNum(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+function ReviewTabContent({
+  month,
+  monthHint,
+  expenses,
+  pendingFixed,
+  expensesQuery,
+  statusFilter,
+  onStatusFilterChange,
+  onConfirm,
+  onDelete,
+  onEdit,
+  onConfirmFixed
+}) {
+  const trendQuery = useQuery({
+    queryKey: queryKeys.accountingExpenseTrend(month, 12),
+    enabled: !!month,
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        months: "12",
+        ...month ? {
+          currentMonth: month
+        } : {}
+      });
+      const r = await adminFetch(`/api/accounting/expenses/trend?${params}`);
+      if (!r.ok) {
+        const d = await r.json().catch(() => ({}));
+        throw new Error(d?.error || "فشل تحميل الاتجاه");
+      }
+      return r.json();
+    },
+    staleTime: 6e4
+  });
+  const stats = useMemo(() => {
+    const totalCount = expenses.length;
+    const confirmedCount = expenses.filter((e) => e.is_confirmed).length;
+    const pendingCount = totalCount - confirmedCount;
+    const totalAmount = expenses.reduce((s, e) => s + safeNum(e.amount), 0);
+    const confirmedAmount = expenses.filter((e) => e.is_confirmed).reduce((s, e) => s + safeNum(e.confirmed_amount !== null && e.confirmed_amount !== void 0 ? e.confirmed_amount : e.amount), 0);
+    const pendingAmount = totalAmount - confirmedAmount;
+    const byType = {};
+    for (const e of expenses) {
+      const name = e.expense_type_name || "أخرى";
+      if (!byType[name]) byType[name] = {
+        name,
+        total: 0,
+        count: 0
+      };
+      byType[name].total += safeNum(e.amount);
+      byType[name].count += 1;
+    }
+    const topTypes = Object.values(byType).sort((a, b) => b.total - a.total).slice(0, 5);
+    return {
+      totalCount,
+      confirmedCount,
+      pendingCount,
+      totalAmount,
+      confirmedAmount,
+      pendingAmount,
+      topTypes
+    };
+  }, [expenses]);
+  const prevMonthTotal = useMemo(() => {
+    const months = trendQuery.data?.months || [];
+    if (months.length < 2 || !month) return null;
+    const idx = months.findIndex((m) => m.month === month);
+    if (idx > 0) {
+      return safeNum(months[idx - 1]?.total);
+    }
+    return safeNum(months[months.length - 2]?.total);
+  }, [trendQuery.data, month]);
+  const momDelta = useMemo(() => {
+    if (prevMonthTotal === null) return null;
+    return stats.totalAmount - prevMonthTotal;
+  }, [stats.totalAmount, prevMonthTotal]);
+  const momPct = useMemo(() => {
+    if (prevMonthTotal === null || prevMonthTotal === 0) return null;
+    return (stats.totalAmount - prevMonthTotal) / prevMonthTotal * 100;
+  }, [stats.totalAmount, prevMonthTotal]);
+  const filteredExpenses = useMemo(() => {
+    if (statusFilter === "confirmed") {
+      return expenses.filter((e) => !!e.is_confirmed);
+    }
+    if (statusFilter === "pending") {
+      return expenses.filter((e) => !e.is_confirmed);
+    }
+    return expenses;
+  }, [expenses, statusFilter]);
+  if (!month) {
+    return /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-8 text-center`, children: [
+      /* @__PURE__ */ jsx(Receipt, { className: "w-10 h-10 mx-auto mb-3 text-slate-400 dark:text-white/30" }),
+      /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60 text-sm", children: "اختر الشهر من القائمة في الأعلى لعرض المراجعة" })
+    ] });
+  }
+  const confirmationPct = stats.totalCount > 0 ? Math.round(stats.confirmedCount / stats.totalCount * 100) : 0;
+  return /* @__PURE__ */ jsxs("div", { className: "space-y-5", children: [
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-4 gap-3", children: [
+      /* @__PURE__ */ jsx(HeroStat, { label: "إجمالي المصروفات", value: formatMoney$b(stats.totalAmount), sub: `${stats.totalCount} مصروف`, icon: Banknote, accent: "emerald", momDelta, momPct }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "تم التأكيد", value: formatMoney$b(stats.confirmedAmount), sub: `${stats.confirmedCount} / ${stats.totalCount}`, icon: CheckCircle2, accent: "emerald" }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "بانتظار التأكيد", value: formatMoney$b(stats.pendingAmount), sub: `${stats.pendingCount} مصروف`, icon: Clock, accent: "amber" }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "نسبة التأكيد", value: `${confirmationPct}%`, sub: /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-200 dark:bg-white/10 rounded-full h-1.5 mt-2", children: /* @__PURE__ */ jsx("div", { className: "bg-emerald-400 h-1.5 rounded-full transition-all", style: {
+        width: `${confirmationPct}%`
+      } }) }), icon: TrendingUp, accent: "sky" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-4", children: [
+      /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-5`, children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(Trophy, { className: "w-4 h-4" }) }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm", children: "أعلى التصنيفات" }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: "ترتيب حسب الإجمالي" })
+          ] })
+        ] }),
+        stats.topTypes.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 text-xs text-center py-6", children: "لا توجد بيانات" }) : /* @__PURE__ */ jsx("div", { className: "space-y-2", children: stats.topTypes.map((t, idx) => {
+          const pct = stats.totalAmount > 0 ? t.total / stats.totalAmount * 100 : 0;
+          return /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-xs mb-1", children: [
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0", children: [
+                /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/40 text-[10px]", children: [
+                  idx + 1,
+                  "."
+                ] }),
+                /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold truncate", children: t.name })
+              ] }),
+              /* @__PURE__ */ jsx("div", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$b(t.total) })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-100 dark:bg-white/[0.04] rounded-full h-1.5 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "bg-gradient-to-r from-emerald-400/70 to-sky-400/70 h-full rounded-full", style: {
+              width: `${pct}%`
+            } }) }),
+            /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-slate-400 dark:text-white/35 mt-0.5", children: [
+              Math.round(pct),
+              "% — ",
+              t.count,
+              " مصروف"
+            ] })
+          ] }, t.name);
+        }) })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "lg:col-span-2", children: /* @__PURE__ */ jsx(ExpensesCharts, { month }) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-5`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(ClipboardCheck, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "سجل المصروفات" }),
+            /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-0.5", children: [
+              monthHint,
+              " — ",
+              filteredExpenses.length,
+              " من",
+              " ",
+              stats.totalCount
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: `inline-flex items-center gap-1 p-1 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03]`, children: STATUS_CHIPS.map((chip) => {
+          const Icon = chip.icon;
+          const active = statusFilter === chip.value;
+          return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onStatusFilterChange(chip.value), className: `flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs transition-colors ${active ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white border border-slate-300 dark:border-white/20" : "text-slate-600 dark:text-white/55 hover:text-slate-800 dark:hover:text-white/80 border border-transparent"}`, children: [
+            /* @__PURE__ */ jsx(Icon, { className: "w-3 h-3" }),
+            chip.label
+          ] }, chip.value);
+        }) })
+      ] }),
+      expensesQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-center py-8 text-slate-600 dark:text-white/60 text-sm", children: "جاري التحميل…" }) : expensesQuery.error ? /* @__PURE__ */ jsx("div", { className: "text-center py-8 text-red-700 dark:text-red-300 text-sm", children: String(expensesQuery.error.message) }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsx(ExpenseTable, { expenses: filteredExpenses, pendingFixed, month, onConfirm, onDelete, onEdit, onConfirmFixed }) })
+    ] })
+  ] });
+}
+const ACCENT = {
+  emerald: {
+    text: "text-emerald-700 dark:text-emerald-200",
+    icon: "text-emerald-700 dark:text-emerald-200"
+  },
+  amber: {
+    text: "text-amber-700 dark:text-amber-200",
+    icon: "text-amber-700 dark:text-amber-200"
+  },
+  sky: {
+    text: "text-sky-700 dark:text-sky-200",
+    icon: "text-sky-700 dark:text-sky-200"
+  },
+  white: {
+    text: "text-slate-900 dark:text-white",
+    icon: "text-slate-700 dark:text-white/70"
+  }
+};
+function HeroStat({
+  label,
+  value,
+  sub,
+  icon: Icon,
+  accent = "white",
+  momDelta,
+  momPct
+}) {
+  const a = ACCENT[accent] || ACCENT.white;
+  return /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-4`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-2", children: [
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: label }),
+        /* @__PURE__ */ jsx("div", { className: `font-extrabold mt-1 text-xl ${a.text}`, dir: "ltr", children: value })
+      ] }),
+      Icon ? /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-8 h-8 ${a.icon}`, children: /* @__PURE__ */ jsx(Icon, { className: "w-4 h-4" }) }) : null
+    ] }),
+    momDelta !== null && momDelta !== void 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-[10px] mt-1.5", children: [
+      momDelta > 0 ? /* @__PURE__ */ jsx(ArrowUpRight, { className: "w-3 h-3 text-red-700 dark:text-red-300" }) : momDelta < 0 ? /* @__PURE__ */ jsx(ArrowDownRight, { className: "w-3 h-3 text-emerald-700 dark:text-emerald-300" }) : /* @__PURE__ */ jsx(Minus, { className: "w-3 h-3 text-slate-500 dark:text-white/40" }),
+      /* @__PURE__ */ jsxs("span", { className: momDelta > 0 ? "text-red-700 dark:text-red-300" : momDelta < 0 ? "text-emerald-700 dark:text-emerald-300" : "text-slate-500 dark:text-white/40", dir: "ltr", children: [
+        momDelta > 0 ? "+" : "",
+        formatMoney$b(momDelta),
+        momPct !== null && momPct !== void 0 ? ` (${momPct > 0 ? "+" : ""}${Math.round(momPct)}%)` : ""
+      ] }),
+      /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "عن الشهر السابق" })
+    ] }) : sub && typeof sub === "string" ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/40 mt-1", children: sub }) : sub ? /* @__PURE__ */ jsx(Fragment, { children: sub }) : null
+  ] });
+}
+
+function QuickAddSheet({
+  open,
+  onClose,
+  types,
+  onSubmit,
+  isSubmitting,
+  onCreateType,
+  // Page's currently-viewed month, so the quick-add form lands the new
+  // expense in the same month the user is on (not always wall-clock now).
+  month
+}) {
+  const submittingRef = useRef(false);
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+  useEffect(() => {
+    if (submittingRef.current && !isSubmitting) {
+      submittingRef.current = false;
+      onClose();
+    }
+    if (isSubmitting) submittingRef.current = true;
+  }, [isSubmitting, onClose]);
+  if (!open) return null;
+  return /* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[60] flex items-end lg:items-center justify-center", dir: "rtl", role: "dialog", "aria-modal": "true", "aria-label": "إضافة مصروف سريع", children: [
+    /* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-black/70 backdrop-blur-sm", onClick: onClose }),
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} relative z-10 w-full lg:w-[640px] max-h-[92svh] overflow-y-auto p-5 rounded-t-3xl lg:rounded-3xl m-0 lg:m-4 shadow-2xl`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between mb-4 sticky top-0 bg-transparent", children: [
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "+ إضافة مصروف سريع" }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mt-0.5", children: "اكتب التفاصيل واحفظ — الإضافة تُسجَّل فوراً." })
+        ] }),
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, "aria-label": "إغلاق", className: `${ws$1.iconButton}`, children: /* @__PURE__ */ jsx(X, { className: "w-5 h-5" }) })
+      ] }),
+      /* @__PURE__ */ jsx(ExpenseForm, { types, onSubmit, isSubmitting, onCreateType, defaultMonth: month })
+    ] })
+  ] });
+}
+
+function useExpensesData(month, employeeId, isAdmin) {
+  return useQuery({
+    queryKey: queryKeys.accountingExpenses(month),
+    enabled: !!employeeId && isAdmin && !!month,
+    queryFn: async () => {
+      const qs = new URLSearchParams({
+        month: String(month)
+      });
+      const res = await adminFetch(`/api/accounting/expenses?${qs.toString()}`);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || `When fetching /api/accounting/expenses, the response was [${res.status}] ${res.statusText}`);
+      }
+      return data;
+    }
+  });
+}
+function useExpenseTypes(employeeId, isAdmin) {
+  return useQuery({
+    queryKey: queryKeys.accountingExpenseTypes(),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const res = await adminFetch("/api/accounting/expense-types");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تحميل أنواع المصروفات");
+      }
+      return data.types || [];
+    }
+  });
+}
+function useCreateExpense(month) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      expense_type_id,
+      expense_name,
+      amount,
+      month: expenseMonth
+    }) => {
+      const m = expenseMonth || month;
+      const res = await adminFetch("/api/accounting/expenses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          expense_type_id,
+          expense_name,
+          amount,
+          month: m
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إضافة المصروف");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateExpenseQueries(queryClient);
+      toast.success("تم إضافة المصروف بنجاح");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل إضافة المصروف: ${error.message}`);
+    }
+  });
+}
+function useUpdateExpense(month) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      expense_type_id,
+      expense_name,
+      amount
+    }) => {
+      const res = await adminFetch(`/api/accounting/expenses/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          expense_type_id,
+          expense_name,
+          amount
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تعديل المصروف");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateExpenseQueries(queryClient);
+      toast.success("تم تعديل المصروف بنجاح");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل تعديل المصروف: ${error.message}`);
+    }
+  });
+}
+function useConfirmExpense(month) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      is_confirmed,
+      confirmed_amount,
+      confirmed_note
+    }) => {
+      const res = await adminFetch(`/api/accounting/expenses/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          is_confirmed,
+          confirmed_amount,
+          confirmed_note
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تأكيد المصروف");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateExpenseQueries(queryClient);
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل تأكيد المصروف: ${error.message}`);
+    }
+  });
+}
+function useDeleteExpense(month) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async id => {
+      const res = await adminFetch(`/api/accounting/expenses/${id}`, {
+        method: "DELETE"
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل حذف المصروف");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateExpenseQueries(queryClient);
+      toast.success("تم حذف المصروف");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل حذف المصروف: ${error.message}`);
+    }
+  });
+}
+function useCreateExpenseType() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      name
+    }) => {
+      const res = await adminFetch("/api/accounting/expense-types", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إضافة نوع المصروف");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingExpenseTypes()
+      });
+      toast.success("تم إضافة نوع المصروف بنجاح");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل إضافة نوع المصروف: ${error.message}`);
+    }
+  });
+}
+
+// List active fixed-expense templates
+function useFixedExpenses(employeeId, isAdmin, includeInactive = false) {
+  return useQuery({
+    queryKey: queryKeys.accountingFixedExpenses({
+      includeInactive
+    }),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const qs = includeInactive ? "?includeInactive=1" : "";
+      const res = await adminFetch(`/api/accounting/fixed-expenses${qs}`);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تحميل المصروفات الثابتة");
+      }
+      return Array.isArray(data.fixed_expenses) ? data.fixed_expenses : [];
+    }
+  });
+}
+
+// Confirm payment of a fixed-expense template for a specific month.
+// This materializes a real accounting_expenses row.
+function useConfirmFixedExpense() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      month,
+      confirmed_amount,
+      confirmed_note
+    }) => {
+      const res = await adminFetch(`/api/accounting/fixed-expenses/${id}/confirm`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          month,
+          confirmed_amount,
+          confirmed_note
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تأكيد الدفع");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateExpenseQueries(queryClient);
+      toast.success("تم تأكيد الدفع");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل التأكيد: ${error.message}`);
+    }
+  });
+}
+
+function ExpensesInfoCard() {
+  return /* @__PURE__ */ jsx("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3", children: [
+    /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-10 h-10`, children: /* @__PURE__ */ jsx(Info, { className: "w-5 h-5 text-sky-700 dark:text-sky-200" }) }),
+    /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+      /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "ملاحظة" }),
+      /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-600 dark:text-white/60 mt-1 leading-6", children: "أضف المصروفات من قسم «مصروف متغيّر» ثم راجعها وأكّدها من قسم «رفع المصروفات» حسب الشهر." })
+    ] })
+  ] }) });
+}
+function ExpensesPanel({
+  employeeId,
+  isAdmin
+}) {
+  const [month, setMonth] = useState(currentRiyadhMonthKey);
+  const monthOptions = useMemo(() => buildRecentMonthOptions$1(30), []);
+  const monthHint = month ? monthLabel$1(month) : "";
+  const [activeTab, setActiveTab] = useState("fixed");
+  const [reviewStatusFilter, setReviewStatusFilter] = useState("all");
+  const [filterType, setFilterType] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterSearch, setFilterSearch] = useState("");
+  const [filterSort, setFilterSort] = useState("amount_desc");
+  const resetFilters = () => {
+    setFilterType("");
+    setFilterStatus("all");
+    setFilterSearch("");
+    setFilterSort("amount_desc");
+  };
+  const hasActiveFilters = !!filterType || filterStatus !== "all" || !!filterSearch.trim() || filterSort !== "amount_desc";
+  const [editingExpense, setEditingExpense] = useState(null);
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
+  const expensesQuery = useExpensesData(month, employeeId, isAdmin);
+  const typesQuery = useExpenseTypes(employeeId, isAdmin);
+  const fixedExpensesQuery = useFixedExpenses(employeeId, isAdmin);
+  const createExpenseMutation = useCreateExpense(month);
+  const updateExpenseMutation = useUpdateExpense();
+  const confirmExpenseMutation = useConfirmExpense();
+  const deleteExpenseMutation = useDeleteExpense();
+  const createTypeMutation = useCreateExpenseType();
+  const confirmFixedMutation = useConfirmFixedExpense();
+  const expenses = Array.isArray(expensesQuery.data?.expenses) ? expensesQuery.data.expenses : [];
+  const pendingFixed = Array.isArray(expensesQuery.data?.pending_fixed) ? expensesQuery.data.pending_fixed : [];
+  const types = Array.isArray(typesQuery.data) ? typesQuery.data : [];
+  const fixedExpenses = Array.isArray(fixedExpensesQuery.data) ? fixedExpensesQuery.data : [];
+  const handleCreateExpense = (data) => {
+    createExpenseMutation.mutate(data);
+  };
+  const handleUpdateExpense = (data) => {
+    updateExpenseMutation.mutate(data, {
+      onSuccess: () => {
+        setEditingExpense(null);
+      }
+    });
+  };
+  const handleConfirmExpense = (data) => {
+    confirmExpenseMutation.mutate(data);
+  };
+  const handleDeleteExpense = (id) => {
+    deleteExpenseMutation.mutate(id);
+  };
+  const handleCreateType = (data) => {
+    createTypeMutation.mutate(data);
+  };
+  const handleEditExpense = (expense) => {
+    setEditingExpense(expense);
+    setActiveTab("register");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+  const handleCancelEdit = () => {
+    setEditingExpense(null);
+  };
+  const handleConfirmFixedExpense = (data) => {
+    confirmFixedMutation.mutate(data);
+  };
+  const filterTypeOptions = useMemo(() => {
+    const names = /* @__PURE__ */ new Set();
+    for (const e of expenses) {
+      if (e.expense_type_name) names.add(e.expense_type_name);
+    }
+    return Array.from(names).sort((a, b) => a.localeCompare(b, "ar")).map((n) => ({
+      value: n,
+      label: n
+    }));
+  }, [expenses]);
+  const filteredExpenses = useMemo(() => {
+    const q = filterSearch.trim().toLowerCase();
+    let out = expenses.filter((e) => {
+      if (filterType && e.expense_type_name !== filterType) return false;
+      if (filterStatus === "confirmed" && !e.is_confirmed) return false;
+      if (filterStatus === "pending" && e.is_confirmed) return false;
+      if (q) {
+        const name = String(e.expense_name || "").toLowerCase();
+        if (!name.includes(q)) return false;
+      }
+      return true;
+    });
+    const num = (v) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    };
+    out = out.slice().sort((a, b) => {
+      switch (filterSort) {
+        case "amount_asc":
+          return num(a.amount) - num(b.amount);
+        case "name_asc":
+          return String(a.expense_name || "").localeCompare(String(b.expense_name || ""), "ar");
+        case "status":
+          return Number(!!a.is_confirmed) - Number(!!b.is_confirmed);
+        case "amount_desc":
+        default:
+          return num(b.amount) - num(a.amount);
+      }
+    });
+    return out;
+  }, [expenses, filterType, filterStatus, filterSearch, filterSort]);
+  const todayRiyadh = useMemo(() => (/* @__PURE__ */ new Date()).toLocaleDateString("en-CA", {
+    timeZone: "Asia/Riyadh"
+  }), []);
+  const handleQuickAddSubmit = (data) => {
+    createExpenseMutation.mutate(data);
+  };
+  useEffect(() => {
+    function onKey(e) {
+      const isCmdOrCtrl = e.ctrlKey || e.metaKey;
+      if (!isCmdOrCtrl) return;
+      const key = e.key?.toLowerCase();
+      if (key !== "n") return;
+      const tgt = e.target;
+      const tag = (tgt?.tagName || "").toUpperCase();
+      const isEditable = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || tgt?.isContentEditable;
+      if (isEditable) return;
+      e.preventDefault();
+      setQuickAddOpen(true);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  const isRegisterTab = activeTab === "register";
+  const isReviewTab = activeTab === "review";
+  const isFixedTab = activeTab === "fixed";
+  const isCategoriesTab = activeTab === "categories";
+  const fixedTypes = (types || []).filter((t) => ["fixed", "both"].includes(t.scope || "both"));
+  const variableTypes = (types || []).filter((t) => ["variable", "both"].includes(t.scope || "both"));
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/55 text-xs", children: "الشهر" }),
+      /* @__PURE__ */ jsx("div", { className: "w-44", children: /* @__PURE__ */ jsx(GlassSelect, { value: month, onChange: setMonth, options: monthOptions, placeholder: "اختر الشهر", buttonClassName: "text-sm py-2 px-3" }) })
+    ] }) }),
+    /* @__PURE__ */ jsx(ExpensesInfoCard, {}),
+    /* @__PURE__ */ jsxs("div", { className: `${ws$1.segWrap} relative z-10`, children: [
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setActiveTab("fixed"), className: `${ws$1.segBtn} ${isFixedTab ? ws$1.segActive : ws$1.segInactive} flex items-center gap-2`, children: [
+        /* @__PURE__ */ jsx(Anchor, { className: "w-4 h-4" }),
+        "مصروف ثابت",
+        fixedExpenses.length > 0 && /* @__PURE__ */ jsx("span", { className: "bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold", children: fixedExpenses.length })
+      ] }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setActiveTab("register"), className: `${ws$1.segBtn} ${isRegisterTab ? ws$1.segActive : ws$1.segInactive} flex items-center gap-2`, children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-4 h-4" }),
+        "مصروف متغيّر",
+        variableTypes.length > 0 && /* @__PURE__ */ jsx("span", { className: "bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold", children: variableTypes.length })
+      ] }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setActiveTab("review"), className: `${ws$1.segBtn} ${isReviewTab ? ws$1.segActive : ws$1.segInactive} flex items-center gap-2`, children: [
+        /* @__PURE__ */ jsx(ClipboardCheck, { className: "w-4 h-4" }),
+        "تقارير ومراجعة"
+      ] }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setActiveTab("categories"), className: `${ws$1.segBtn} ${isCategoriesTab ? ws$1.segActive : ws$1.segInactive} flex items-center gap-2`, children: [
+        /* @__PURE__ */ jsx(ListChecks, { className: "w-4 h-4" }),
+        "البنود",
+        types.length > 0 && /* @__PURE__ */ jsx("span", { className: "bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/70 text-[10px] px-1.5 py-0.5 rounded-full font-bold", children: types.length })
+      ] })
+    ] }),
+    isRegisterTab && /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx(VariableGrid, { types: variableTypes, monthExpenses: expenses, month, onMutate: () => expensesQuery.refetch() }),
+      /* @__PURE__ */ jsxs("details", { className: `${ws$1.glassSoft} ${ws$1.card} p-4`, children: [
+        /* @__PURE__ */ jsx("summary", { className: "text-slate-600 dark:text-white/55 text-xs cursor-pointer select-none", children: "إضافة مصروف خارج البنود (متقدم)" }),
+        /* @__PURE__ */ jsx("div", { className: "mt-4", children: /* @__PURE__ */ jsx(ExpenseForm, { types, onSubmit: editingExpense ? handleUpdateExpense : handleCreateExpense, isSubmitting: editingExpense ? updateExpenseMutation.isPending : createExpenseMutation.isPending, onCreateType: handleCreateType, editingExpense, onCancelEdit: handleCancelEdit }) })
+      ] }),
+      month && expenses.length > 0 && /* @__PURE__ */ jsx(ExpensesAnalytics, { month, expenses }),
+      month && (() => {
+        const allVariable = (expenses || []).filter((e) => e.fixed_expense_id === null || e.fixed_expense_id === void 0);
+        if (allVariable.length === 0) return null;
+        const variableExpenses = filteredExpenses.filter((e) => e.fixed_expense_id === null || e.fixed_expense_id === void 0);
+        return /* @__PURE__ */ jsxs(Fragment, { children: [
+          /* @__PURE__ */ jsx(ExpenseFilters, { typeFilter: filterType, onTypeFilterChange: setFilterType, statusFilter: filterStatus, onStatusFilterChange: setFilterStatus, search: filterSearch, onSearchChange: setFilterSearch, sort: filterSort, onSortChange: setFilterSort, typeOptions: filterTypeOptions, onReset: resetFilters, hasActiveFilters }),
+          /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-5`, children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 mb-4 flex-wrap", children: [
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+                /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Receipt, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
+                /* @__PURE__ */ jsxs("div", { children: [
+                  /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات المضافة" }),
+                  /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-0.5", children: [
+                    monthHint,
+                    " — ",
+                    variableExpenses.length,
+                    " من",
+                    " ",
+                    allVariable.length,
+                    " مصروف متغير"
+                  ] })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+                /* @__PURE__ */ jsx(ExpensesExportMenu, { expenses: variableExpenses, month, todayRiyadh }),
+                /* @__PURE__ */ jsx("div", { className: "w-40", children: /* @__PURE__ */ jsx(GlassSelect, { value: month, onChange: setMonth, options: monthOptions, placeholder: "الشهر", buttonClassName: "text-xs py-2 px-2.5" }) })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsx(ExpenseTable, { expenses: variableExpenses, month, onConfirm: handleConfirmExpense, onDelete: handleDeleteExpense, onEdit: handleEditExpense }) })
+          ] })
+        ] });
+      })(),
+      !month && /* @__PURE__ */ jsx("div", { className: `${ws$1.glassSoft} ${ws$1.card} p-5`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+        /* @__PURE__ */ jsx("div", { className: ws$1.iconBox, children: /* @__PURE__ */ jsx(Receipt, { className: "w-5 h-5 text-emerald-700 dark:text-emerald-200" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "المصروفات المضافة" }),
+          /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-0.5", children: "اختر الشهر في نموذج الإضافة أعلاه لعرض المصروفات" })
+        ] })
+      ] }) })
+    ] }),
+    isReviewTab && /* @__PURE__ */ jsxs(Fragment, { children: [
+      month && expenses.length > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
+        /* @__PURE__ */ jsx(ExpenseFilters, { typeFilter: filterType, onTypeFilterChange: setFilterType, statusFilter: filterStatus, onStatusFilterChange: setFilterStatus, search: filterSearch, onSearchChange: setFilterSearch, sort: filterSort, onSortChange: setFilterSort, typeOptions: filterTypeOptions, onReset: resetFilters, hasActiveFilters }),
+        /* @__PURE__ */ jsx("div", { className: "flex items-center justify-end", children: /* @__PURE__ */ jsx(ExpensesExportMenu, { expenses: filteredExpenses, month, todayRiyadh }) })
+      ] }),
+      /* @__PURE__ */ jsx(ReviewTabContent, { month, monthHint, expenses: filteredExpenses, pendingFixed, expensesQuery, statusFilter: reviewStatusFilter, onStatusFilterChange: setReviewStatusFilter, onConfirm: handleConfirmExpense, onDelete: handleDeleteExpense, onEdit: handleEditExpense, onConfirmFixed: handleConfirmFixedExpense })
+    ] }),
+    isFixedTab && /* @__PURE__ */ jsx(FixedPanel, { templates: fixedExpenses, monthExpenses: expenses, types: fixedTypes, month, onMutate: () => {
+      fixedExpensesQuery.refetch();
+      expensesQuery.refetch();
+    } }),
+    isCategoriesTab && /* @__PURE__ */ jsx(CategoriesManager, {}),
+    /* @__PURE__ */ jsx(QuickAddSheet, { open: quickAddOpen, onClose: () => setQuickAddOpen(false), types, onSubmit: handleQuickAddSubmit, isSubmitting: createExpenseMutation.isPending, onCreateType: handleCreateType, month })
+  ] });
+}
+
 const VENDOR_SUBTABS = [{
   key: "contacts",
   label: "جهات الاتصال",
@@ -21759,6 +21521,12 @@ const TABS = [{
   shortLabel: "بنوك",
   Icon: Building,
   description: "حسابات البنك المستخدمة في عمليات الدفع."
+}, {
+  key: "expenses",
+  label: "المصروفات",
+  shortLabel: "مصروفات",
+  Icon: Receipt,
+  description: "تسجيل وإدارة المصروفات الشهرية — الثابتة والمتغيّرة، المراجعة والبنود."
 }, {
   key: "reports",
   label: "التقارير",
@@ -21940,10 +21708,11 @@ function PurchasesPage() {
     user
   } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
+  const canManageAccounting = user?.can_manage_accounting !== false;
   const [searchParams, setSearchParams] = useSearchParams();
   const rawTabParam = searchParams.get("tab") || "overview";
   const rawTab = rawTabParam === "tax" ? "reports" : rawTabParam;
-  const activeTabKey = TAB_KEYS.has(rawTab) ? rawTab : "overview";
+  const activeTabKey = TAB_KEYS.has(rawTab) && (rawTab !== "expenses" || canManageAccounting) ? rawTab : "overview";
   const rawSub = searchParams.get("sub") || "contacts";
   const vendorSubKey = VENDOR_KEYS.has(rawSub) ? rawSub : "contacts";
   const intent = searchParams.get("intent") || "";
@@ -21983,7 +21752,7 @@ function PurchasesPage() {
     body = /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`, children: "هذا القسم متاح فقط لمستخدمي المحاسبة." });
   } else {
     body = /* @__PURE__ */ jsxs(Fragment, { children: [
-      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-2 overflow-x-auto`, children: /* @__PURE__ */ jsx("div", { className: "flex items-center gap-1 min-w-max", children: TABS.map((tab) => {
+      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-2 overflow-x-auto`, children: /* @__PURE__ */ jsx("div", { className: "flex items-center gap-1 min-w-max", children: TABS.filter((tab) => tab.key !== "expenses" || canManageAccounting).map((tab) => {
         const isActive = tab.key === activeTabKey;
         const Icon = tab.Icon;
         return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setTab(tab.key), className: `${ws.segBtn} ${isActive ? ws.segActive : ws.segInactive} flex items-center gap-2 whitespace-nowrap`, title: tab.description, children: [
@@ -22002,7 +21771,7 @@ function PurchasesPage() {
           /* @__PURE__ */ jsx("span", { children: sub.label })
         ] }, sub.key);
       }) }) }) : null,
-      activeTabKey === "overview" ? /* @__PURE__ */ jsx(PurchasesOverviewPanel, { employeeId, isAdmin, onNavigate: setTab }) : activeTabKey === "invoices" ? /* @__PURE__ */ jsx(PurchasesInvoicesPanel, { employeeId, isAdmin, autoOpenAdd: intent === "add", initialStatus: searchParams.get("status") || "", onIntentConsumed: clearIntent }) : activeTabKey === "bulk" ? /* @__PURE__ */ jsx(BulkInvoiceUploadPanel, { employeeId, isAdmin }) : activeTabKey === "vendors" && activeVendorSub.key === "contacts" ? /* @__PURE__ */ jsx(ContactsPanel, { employeeId, isAdmin }) : activeTabKey === "vendors" ? /* @__PURE__ */ jsx(BeneficiariesPanel, { employeeId, isAdmin }) : activeTabKey === "accounts" ? /* @__PURE__ */ jsx(PurchasesAccountsTreePanel, { employeeId, isAdmin }) : activeTabKey === "banks" ? /* @__PURE__ */ jsx(PurchasesBankAccountsPanel, { employeeId, isAdmin }) : /* @__PURE__ */ jsx(PurchasesReportsPanel, { employeeId, isAdmin })
+      activeTabKey === "overview" ? /* @__PURE__ */ jsx(PurchasesOverviewPanel, { employeeId, isAdmin, onNavigate: setTab }) : activeTabKey === "invoices" ? /* @__PURE__ */ jsx(PurchasesInvoicesPanel, { employeeId, isAdmin, autoOpenAdd: intent === "add", initialStatus: searchParams.get("status") || "", onIntentConsumed: clearIntent }) : activeTabKey === "bulk" ? /* @__PURE__ */ jsx(BulkInvoiceUploadPanel, { employeeId, isAdmin }) : activeTabKey === "vendors" && activeVendorSub.key === "contacts" ? /* @__PURE__ */ jsx(ContactsPanel, { employeeId, isAdmin }) : activeTabKey === "vendors" ? /* @__PURE__ */ jsx(BeneficiariesPanel, { employeeId, isAdmin }) : activeTabKey === "accounts" ? /* @__PURE__ */ jsx(PurchasesAccountsTreePanel, { employeeId, isAdmin }) : activeTabKey === "banks" ? /* @__PURE__ */ jsx(PurchasesBankAccountsPanel, { employeeId, isAdmin }) : activeTabKey === "expenses" ? /* @__PURE__ */ jsx(ExpensesPanel, { employeeId, isAdmin }) : /* @__PURE__ */ jsx(PurchasesReportsPanel, { employeeId, isAdmin })
     ] });
   }
   const bell = ready && employeeId && isAdmin ? /* @__PURE__ */ jsx(PurchasesNotificationsBell, { employeeId, isAdmin, onNavigate: setTab }) : null;
@@ -22678,7 +22447,7 @@ function ReasonBreakdownCard({
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsxs("div", { className: "text-lg font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-        formatMoney$d(cost),
+        formatMoney$b(cost),
         " ر.س"
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-0.5", children: [
@@ -22722,7 +22491,7 @@ function WasteOperationCard({
         /* @__PURE__ */ jsxs("div", { className: "text-left", children: [
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40", children: "التكلفة" }),
           /* @__PURE__ */ jsxs("div", { className: "text-base font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-            formatMoney$d(op.total_cost),
+            formatMoney$b(op.total_cost),
             " ر.س"
           ] })
         ] }),
@@ -22745,15 +22514,15 @@ function WasteOperationCard({
         ] }) }),
         /* @__PURE__ */ jsx("tbody", { children: items.length === 0 ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 6, className: "px-3 py-4 text-center text-slate-500 dark:text-white/45", children: "لا توجد أصناف" }) }) : items.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-b border-slate-200/60 dark:border-white/[0.06] last:border-0", children: [
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-800 dark:text-white/85", children: it.item_name || "—" }),
-          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$d(it.quantity) }),
+          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$b(it.quantity) }),
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx(ReasonBadge, { reason: it.reason }) }),
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-600 dark:text-white/60", children: it.note ? it.note : "—" }),
           /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: [
-            formatMoney$d(it.unit_cost),
+            formatMoney$b(it.unit_cost),
             " ر.س"
           ] }),
           /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-left font-semibold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-            formatMoney$d(it.cost),
+            formatMoney$b(it.cost),
             " ر.س"
           ] })
         ] }, it.id)) })
@@ -22886,7 +22655,7 @@ function WastePage$1() {
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3", children: [
         /* @__PURE__ */ jsx(StatCard$4, { icon: Layers, label: "عدد عمليات الهدر", value: Number(summary.operations_count || 0) }),
         /* @__PURE__ */ jsx(StatCard$4, { icon: Boxes, label: "عدد أصناف الهدر", value: Number(summary.items_count || 0) }),
-        /* @__PURE__ */ jsx(StatCard$4, { icon: Coins, label: "إجمالي تكلفة الهدر", value: formatMoney$d(summary.total_cost), suffix: "ر.س", emerald: true })
+        /* @__PURE__ */ jsx(StatCard$4, { icon: Coins, label: "إجمالي تكلفة الهدر", value: formatMoney$b(summary.total_cost), suffix: "ر.س", emerald: true })
       ] }),
       wasteQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-6 text-slate-600 dark:text-white/60`, children: "جاري التحميل…" }) : wasteQuery.isError ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-6 text-red-600 dark:text-red-300`, children: wasteQuery.error?.message || "حدث خطأ أثناء تحميل البيانات." }) : operations.length === 0 ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-10 text-center text-slate-500 dark:text-white/50`, children: "لا توجد عمليات هدر" }) : /* @__PURE__ */ jsxs(Fragment, { children: [
         visibleReasons.length > 0 ? /* @__PURE__ */ jsxs("section", { className: "space-y-3", children: [
@@ -22911,9 +22680,9 @@ function WastePage$1() {
             /* @__PURE__ */ jsx("tbody", { children: topItems.slice(0, 10).map((it, idx) => /* @__PURE__ */ jsxs("tr", { className: "border-b border-slate-200/60 dark:border-white/[0.06] last:border-0 hover:bg-slate-50 dark:hover:bg-white/[0.03]", children: [
               /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-slate-400 dark:text-white/40 font-semibold", dir: "ltr", children: idx + 1 }),
               /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-slate-800 dark:text-white/85 font-medium", children: it.item_name || "—" }),
-              /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$d(it.total_quantity) }),
+              /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$b(it.total_quantity) }),
               /* @__PURE__ */ jsxs("td", { className: "px-4 py-2.5 text-left font-semibold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-                formatMoney$d(it.total_cost),
+                formatMoney$b(it.total_cost),
                 " ر.س"
               ] })
             ] }, it.item_id ?? idx)) })
@@ -41671,8 +41440,8 @@ function HROvertimePage() {
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 font-semibold text-slate-900 dark:text-white", children: r.employee_name || `#${r.employee_id}` }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-700 dark:text-white/75", children: monthLabel$1(String(r.month).slice(0, 7)) }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 text-right", dir: "ltr", children: Number(r.days || 0) }),
-          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/55 text-right", dir: "ltr", children: formatMoney$d(r.base_salary) }),
-          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold text-right", dir: "ltr", children: formatMoney$d(r.amount) }),
+          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/55 text-right", dir: "ltr", children: formatMoney$b(r.base_salary) }),
+          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold text-right", dir: "ltr", children: formatMoney$b(r.amount) }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/60 text-xs", style: {
             maxWidth: 240
           }, children: /* @__PURE__ */ jsx("div", { className: "truncate", title: r.reason || "", children: r.reason || "—" }) }),
@@ -41739,11 +41508,11 @@ function HRPayrollTable({
           ] }) : null
         ] }) }),
         /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap", children: e.branch_name || "—" }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-600 dark:text-white/55 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(e.other_allowances) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/75 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(e.total_salary) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-red-700 dark:text-red-300/80 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(e.total_deductions) }),
-        /* @__PURE__ */ jsx("td", { className: `py-2 px-2 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", children: hasLoan ? formatMoney$d(e.loan_deduction) : "—" }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(hrNet) })
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-600 dark:text-white/55 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(e.other_allowances) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/75 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(e.total_salary) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-red-700 dark:text-red-300/80 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(e.total_deductions) }),
+        /* @__PURE__ */ jsx("td", { className: `py-2 px-2 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", children: hasLoan ? formatMoney$b(e.loan_deduction) : "—" }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(hrNet) })
       ] }, e.id);
     }) })
   ] }) }) });
@@ -49107,9 +48876,9 @@ const route50 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: notFound
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-FAQma8pb.js','imports':['/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/client-BO2bVJGB.js','/assets/index-LXM0gpc5.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-B0jN-f5l.js','imports':['/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/client-BO2bVJGB.js','/assets/index-LXM0gpc5.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-DRPdBQtE.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-BE66ZHAv.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DckLSDEC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/shield-DXw_1dIU.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/trash-2-DCP4oHZr.js','/assets/receipt-text-CGEhLaOG.js','/assets/languages-BnhipiAs.js','/assets/arrow-left-BS8isMtF.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DKOeMCxB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/payrollCalculations-DszFSuBE.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/layout-dashboard-DFywwbX6.js','/assets/calculator-CbVTcJ2Z.js','/assets/banknote-Zrg2Y6GZ.js','/assets/wallet-TPHFLoq6.js','/assets/arrow-left-BS8isMtF.js','/assets/trending-up-DS9skeEl.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/trash-2-DCP4oHZr.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-JEn_uv7S.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/GlassSelect-CDFVtbcw.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/banknote-Zrg2Y6GZ.js','/assets/building-2-Mk36Jx1D.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/refresh-cw-DPjjEPsF.js','/assets/history-CNUWQHMt.js','/assets/save-DJYG0R8V.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/wallet-TPHFLoq6.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/trash-2-DCP4oHZr.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B_vjc7fP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/dateUtils-B35lzzJe.js','/assets/save-DJYG0R8V.js','/assets/plus-CZ2ZuSKk.js','/assets/x-BheOJZhk.js','/assets/style-LGaCXphA.js','/assets/message-square-B_ZGOcHe.js','/assets/pencil-BIGenoi_.js','/assets/trash-2-DCP4oHZr.js','/assets/apiAuth-BplCYYkl.js','/assets/useAdminTheme-xDcD6r79.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/trending-up-DS9skeEl.js','/assets/LineChart-CMyAQlYJ.js','/assets/PieChart-L4MSwBNE.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/filter-Dw4ebkTW.js','/assets/search-B4ap1tYx.js','/assets/rotate-ccw-BWqiWJjW.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/exportUtils-B52DYAkn.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/arrow-up-right-jiZMo3zA.js','/assets/minus-BHXOD5Yz.js','/assets/layers-Dq5JgF_U.js','/assets/trophy-D7cxvxH-.js','/assets/index-DRPdBQtE.js','/assets/useMutation-DS_XvyHz.js','/assets/circle-check-BELyc5oO.js','/assets/circle-X56NlbJO.js','/assets/index-LXM0gpc5.js','/assets/banknote-Zrg2Y6GZ.js','/assets/clock-Ct2hCng2.js','/assets/clipboard-check-B_8Mz-id.js','/assets/info-ggtgQ-Mm.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/wallet-TPHFLoq6.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DMfiVxjP.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/ui-XzU3Q-_h.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollCalculations-DszFSuBE.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/arrow-left-BS8isMtF.js','/assets/GlassSelect-CDFVtbcw.js','/assets/refresh-cw-DPjjEPsF.js','/assets/plus-CZ2ZuSKk.js','/assets/save-DJYG0R8V.js','/assets/copy-DD2DSCzr.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/banknote-Zrg2Y6GZ.js','/assets/wallet-TPHFLoq6.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/trash-2-DCP4oHZr.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BCNhRfJe.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/ui-XzU3Q-_h.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/arrow-left-BS8isMtF.js','/assets/refresh-cw-DPjjEPsF.js','/assets/index-DRPdBQtE.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/exportUtils-B52DYAkn.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/useMutation-DS_XvyHz.js','/assets/trash-2-DCP4oHZr.js','/assets/package-Dgtg-TWY.js','/assets/pencil-BIGenoi_.js','/assets/eye-BtIxnisC.js','/assets/save-DJYG0R8V.js','/assets/circle-check-big-CnUtDMKJ.js','/assets/triangle-alert-C-OfeVRw.js','/assets/x-BheOJZhk.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/square-check-big-A1-b4Fqq.js','/assets/square-DqwosZxY.js','/assets/minus-BHXOD5Yz.js','/assets/plus-CZ2ZuSKk.js','/assets/SidebarShell-fCOptr9M.js','/assets/index-LXM0gpc5.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/banknote-Zrg2Y6GZ.js','/assets/wallet-TPHFLoq6.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CQzbHRWp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/index-LXM0gpc5.js','/assets/dateUtils-B35lzzJe.js','/assets/wallet-TPHFLoq6.js','/assets/x-BheOJZhk.js','/assets/save-DJYG0R8V.js','/assets/pencil-BIGenoi_.js','/assets/rotate-ccw-BWqiWJjW.js','/assets/trash-2-DCP4oHZr.js','/assets/useEmployeeLoans-DdPFy4AK.js','/assets/filter-Dw4ebkTW.js','/assets/plus-CZ2ZuSKk.js','/assets/info-ggtgQ-Mm.js','/assets/index-DRPdBQtE.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/apiAuth-BplCYYkl.js','/assets/search-B4ap1tYx.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/useQuery-AqL0hIz6.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/banknote-Zrg2Y6GZ.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js','/assets/queryKeys-p9YaOikW.js','/assets/useMutation-DS_XvyHz.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cv-kNWpR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassMultiSelect-DNkAQiVy.js','/assets/x-BheOJZhk.js','/assets/user-Dyn8ab3D.js','/assets/file-text-D2hdhq8s.js','/assets/dollar-sign-RPOfWZnD.js','/assets/percent-CeLjNeTe.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-C5ysZqy1.js','/assets/apiAuth-BplCYYkl.js','/assets/index-DRPdBQtE.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/payrollCalculations-DszFSuBE.js','/assets/info-ggtgQ-Mm.js','/assets/lock-CacP_TEb.js','/assets/circle-check-BELyc5oO.js','/assets/clock-Ct2hCng2.js','/assets/style-LGaCXphA.js','/assets/ban-DgoYyx7J.js','/assets/message-square-B_ZGOcHe.js','/assets/pencil-BIGenoi_.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/exportUtils-B52DYAkn.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/send-tS3mDYmP.js','/assets/gift-CeSmH9Kw.js','/assets/trash-2-DCP4oHZr.js','/assets/users-VBZxiOvD.js','/assets/plus-CZ2ZuSKk.js','/assets/wallet-TPHFLoq6.js','/assets/dateUtils-B35lzzJe.js','/assets/SidebarShell-fCOptr9M.js','/assets/index-LXM0gpc5.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/banknote-Zrg2Y6GZ.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-RBUnhM2L.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/uiPurchases-DpGbPQKd.js','/assets/BulkInvoiceUploadPanel-BnMshKVI.js','/assets/map-pin-Bc-jFgCl.js','/assets/circle-check-BELyc5oO.js','/assets/hash-BaCkJWeD.js','/assets/ui-XzU3Q-_h.js','/assets/pencil-BIGenoi_.js','/assets/trash-2-DCP4oHZr.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/hand-coins-BkkBoiJI.js','/assets/preload-helper-xFOqD-k9.js','/assets/index-DRPdBQtE.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/arrow-left-BS8isMtF.js','/assets/triangle-alert-C-OfeVRw.js','/assets/plus-CZ2ZuSKk.js','/assets/trending-up-DS9skeEl.js','/assets/trending-down-Yw6CDOIc.js','/assets/copy-DD2DSCzr.js','/assets/bell-DwzMjDve.js','/assets/loader-circle-Cj7UPgp6.js','/assets/send-tS3mDYmP.js','/assets/index-LXM0gpc5.js','/assets/user-Dyn8ab3D.js','/assets/percent-CeLjNeTe.js','/assets/x-BheOJZhk.js','/assets/banknote-Zrg2Y6GZ.js','/assets/GlassSelect-CDFVtbcw.js','/assets/search-B4ap1tYx.js','/assets/file-spreadsheet-DOoaOeoN.js','/assets/chevron-left-B21KmKny.js','/assets/lock-CacP_TEb.js','/assets/save-DJYG0R8V.js','/assets/building-2-Mk36Jx1D.js','/assets/refresh-cw-DPjjEPsF.js','/assets/info-ggtgQ-Mm.js','/assets/credit-card-DIZeb78l.js','/assets/wallet-TPHFLoq6.js','/assets/useUpload-re3hQx7G.js','/assets/unlink-Bsf2j4Oe.js','/assets/external-link-BpRuhz6G.js','/assets/users-VBZxiOvD.js','/assets/history-CNUWQHMt.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/layout-dashboard-DFywwbX6.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/useAdminTheme-xDcD6r79.js','/assets/package-Dgtg-TWY.js','/assets/globe-DNf3xgk-.js','/assets/sparkles-DFbr99hX.js','/assets/badge-check-DLsUzdUc.js','/assets/chevron-right-DrouFxC3.js','/assets/arrow-right-ihOXkcCN.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-mknjsQa_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassDatePicker-CzBMz_Qm.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/calculator-CbVTcJ2Z.js','/assets/building-2-Mk36Jx1D.js','/assets/info-ggtgQ-Mm.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/banknote-Zrg2Y6GZ.js','/assets/wallet-TPHFLoq6.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/trash-2-DCP4oHZr.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-Ct2hCng2.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/chevron-right-DrouFxC3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BHsS9NSI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-kZIhLFPL.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassDatePicker-CzBMz_Qm.js','/assets/apiAuth-BplCYYkl.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/filter-Dw4ebkTW.js','/assets/rotate-ccw-BWqiWJjW.js','/assets/layers-Dq5JgF_U.js','/assets/boxes-BBaFofFK.js','/assets/trophy-D7cxvxH-.js','/assets/trash-2-DCP4oHZr.js','/assets/building-2-Mk36Jx1D.js','/assets/user-Dyn8ab3D.js','/assets/clock-Ct2hCng2.js','/assets/chevron-down-CPuhXSqu.js','/assets/sticky-note-By5NC_Io.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/banknote-Zrg2Y6GZ.js','/assets/wallet-TPHFLoq6.js','/assets/hand-coins-BkkBoiJI.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/chevron-right-DrouFxC3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CBtu4d5i.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/Sidebar-BwjIe4p9.js','/assets/ui-XzU3Q-_h.js','/assets/trending-up-DS9skeEl.js','/assets/clipboard-list-BBxyeF8q.js','/assets/circle-check-big-CnUtDMKJ.js','/assets/clock-Ct2hCng2.js','/assets/building-2-Mk36Jx1D.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/dateUtils-B35lzzJe.js','/assets/sparkles-DFbr99hX.js','/assets/trending-down-Yw6CDOIc.js','/assets/chevron-up-C2kKeGjV.js','/assets/chevron-down-CPuhXSqu.js','/assets/x-BheOJZhk.js','/assets/info-ggtgQ-Mm.js','/assets/circle-alert-BdqHjLDm.js','/assets/triangle-alert-C-OfeVRw.js','/assets/package-plus-vy8z3PR6.js','/assets/truck-CATeUxvO.js','/assets/calendar-BX61wbjB.js','/assets/useAdminTheme-xDcD6r79.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/LineChart-CMyAQlYJ.js','/assets/PieChart-L4MSwBNE.js','/assets/activity-CqAgQpM3.js','/assets/dollar-sign-RPOfWZnD.js','/assets/package-Dgtg-TWY.js','/assets/exportUtils-B52DYAkn.js','/assets/file-text-D2hdhq8s.js','/assets/search-B4ap1tYx.js','/assets/download-DJOdhbev.js','/assets/printer-BaLtdm7J.js','/assets/users-VBZxiOvD.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassDatePicker-CzBMz_Qm.js','/assets/GlassMultiSelect-DNkAQiVy.js','/assets/layers-Dq5JgF_U.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/SidebarShell-fCOptr9M.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/banknote-Zrg2Y6GZ.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-right-DrouFxC3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DcuWjuRM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/Sidebar-BwjIe4p9.js','/assets/ui-XzU3Q-_h.js','/assets/exportUtils-B52DYAkn.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/building-2-Mk36Jx1D.js','/assets/map-pin-Bc-jFgCl.js','/assets/clipboard-list-BBxyeF8q.js','/assets/search-B4ap1tYx.js','/assets/plus-CZ2ZuSKk.js','/assets/square-pen-D6LiAr7X.js','/assets/trash-2-DCP4oHZr.js','/assets/x-BheOJZhk.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/triangle-alert-C-OfeVRw.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/SidebarShell-fCOptr9M.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/truck-CATeUxvO.js','/assets/trending-down-Yw6CDOIc.js','/assets/file-text-D2hdhq8s.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/banknote-Zrg2Y6GZ.js','/assets/dateUtils-B35lzzJe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-KEsFYLcl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/Sidebar-BwjIe4p9.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/index-DRPdBQtE.js','/assets/useMutation-DS_XvyHz.js','/assets/employeeUtils-BK05ByQx.js','/assets/users-VBZxiOvD.js','/assets/shield-DXw_1dIU.js','/assets/user-Dyn8ab3D.js','/assets/search-B4ap1tYx.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/circle-check-BELyc5oO.js','/assets/circle-x-s8f42GAN.js','/assets/pencil-BIGenoi_.js','/assets/trash-2-DCP4oHZr.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/briefcase-DpsnFCXH.js','/assets/dollar-sign-RPOfWZnD.js','/assets/x-BheOJZhk.js','/assets/mail-BfwFkwzg.js','/assets/lock-CacP_TEb.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/receipt-text-CGEhLaOG.js','/assets/truck-CATeUxvO.js','/assets/bell-DwzMjDve.js','/assets/building-2-Mk36Jx1D.js','/assets/loader-circle-Cj7UPgp6.js','/assets/send-tS3mDYmP.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/plus-CZ2ZuSKk.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/triangle-alert-C-OfeVRw.js','/assets/SidebarShell-fCOptr9M.js','/assets/index-LXM0gpc5.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/trending-down-Yw6CDOIc.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/banknote-Zrg2Y6GZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-iFhkkRwJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/preload-helper-xFOqD-k9.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/ui-XzU3Q-_h.js','/assets/layers-Dq5JgF_U.js','/assets/x-BheOJZhk.js','/assets/languages-BnhipiAs.js','/assets/plus-CZ2ZuSKk.js','/assets/pencil-BIGenoi_.js','/assets/GlassSelect-CDFVtbcw.js','/assets/ban-DgoYyx7J.js','/assets/Sidebar-BwjIe4p9.js','/assets/package-Dgtg-TWY.js','/assets/circle-check-big-CnUtDMKJ.js','/assets/triangle-alert-C-OfeVRw.js','/assets/circle-x-s8f42GAN.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/search-B4ap1tYx.js','/assets/filter-Dw4ebkTW.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/dateUtils-B35lzzJe.js','/assets/eye-BtIxnisC.js','/assets/building-2-Mk36Jx1D.js','/assets/trash-2-DCP4oHZr.js','/assets/square-check-big-A1-b4Fqq.js','/assets/clipboard-check-B_8Mz-id.js','/assets/square-DqwosZxY.js','/assets/eye-off-FDlRVFkl.js','/assets/index-LXM0gpc5.js','/assets/shopping-cart-BIgQ5UsO.js','/assets/boxes-BBaFofFK.js','/assets/clipboard-list-BBxyeF8q.js','/assets/circle-alert-BdqHjLDm.js','/assets/exportUtils-B52DYAkn.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/index-DRPdBQtE.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/SidebarShell-fCOptr9M.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/truck-CATeUxvO.js','/assets/trending-down-Yw6CDOIc.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/banknote-Zrg2Y6GZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-PvT2FJKM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/useAdminAuth-CQKNupfX.js','/assets/Sidebar-BwjIe4p9.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/ui-XzU3Q-_h.js','/assets/arrow-left-BS8isMtF.js','/assets/package-Dgtg-TWY.js','/assets/building-2-Mk36Jx1D.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/trending-down-Yw6CDOIc.js','/assets/circle-x-s8f42GAN.js','/assets/GlassSelect-CDFVtbcw.js','/assets/search-B4ap1tYx.js','/assets/refresh-cw-DPjjEPsF.js','/assets/hash-BaCkJWeD.js','/assets/calendar-BX61wbjB.js','/assets/user-Dyn8ab3D.js','/assets/file-text-D2hdhq8s.js','/assets/triangle-alert-C-OfeVRw.js','/assets/circle-check-big-CnUtDMKJ.js','/assets/chevron-up-C2kKeGjV.js','/assets/chevron-down-CPuhXSqu.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/download-DJOdhbev.js','/assets/useAdminTheme-xDcD6r79.js','/assets/trending-up-DS9skeEl.js','/assets/x-BheOJZhk.js','/assets/LineChart-CMyAQlYJ.js','/assets/package-plus-vy8z3PR6.js','/assets/clipboard-list-BBxyeF8q.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/SidebarShell-fCOptr9M.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/truck-CATeUxvO.js','/assets/banknote-Zrg2Y6GZ.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CXK77Vyt.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/useAdminTheme-xDcD6r79.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/shield-DXw_1dIU.js','/assets/user-Dyn8ab3D.js','/assets/lock-CacP_TEb.js','/assets/circle-alert-BdqHjLDm.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/triangle-alert-C-OfeVRw.js','/assets/clipboard-list-BBxyeF8q.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page--N3QsdOW.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/Sidebar-BwjIe4p9.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/ui-XzU3Q-_h.js','/assets/arrow-left-BS8isMtF.js','/assets/trending-down-Yw6CDOIc.js','/assets/circle-x-s8f42GAN.js','/assets/triangle-alert-C-OfeVRw.js','/assets/building-2-Mk36Jx1D.js','/assets/GlassSelect-CDFVtbcw.js','/assets/search-B4ap1tYx.js','/assets/refresh-cw-DPjjEPsF.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/package-Dgtg-TWY.js','/assets/circle-check-big-CnUtDMKJ.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/clipboard-list-BBxyeF8q.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/SidebarShell-fCOptr9M.js','/assets/x-BheOJZhk.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/truck-CATeUxvO.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/banknote-Zrg2Y6GZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-OH9qhm39.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/dateUtils-B35lzzJe.js','/assets/Sidebar-BwjIe4p9.js','/assets/ui-XzU3Q-_h.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calendar-check-CTNXtT3k.js','/assets/package-plus-vy8z3PR6.js','/assets/clock-Ct2hCng2.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassDatePicker-CzBMz_Qm.js','/assets/filter-Dw4ebkTW.js','/assets/x-BheOJZhk.js','/assets/search-B4ap1tYx.js','/assets/exportUtils-B52DYAkn.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/printer-BaLtdm7J.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/square-check-big-A1-b4Fqq.js','/assets/trash-2-DCP4oHZr.js','/assets/square-DqwosZxY.js','/assets/building-2-Mk36Jx1D.js','/assets/eye-BtIxnisC.js','/assets/pencil-BIGenoi_.js','/assets/calendar-BX61wbjB.js','/assets/arrow-up-right-jiZMo3zA.js','/assets/user-Dyn8ab3D.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/sticky-note-By5NC_Io.js','/assets/hash-BaCkJWeD.js','/assets/circle-check-big-CnUtDMKJ.js','/assets/percent-CeLjNeTe.js','/assets/package-Dgtg-TWY.js','/assets/circle-alert-BdqHjLDm.js','/assets/circle-check-BELyc5oO.js','/assets/plus-CZ2ZuSKk.js','/assets/send-tS3mDYmP.js','/assets/triangle-alert-C-OfeVRw.js','/assets/clipboard-check-B_8Mz-id.js','/assets/rotate-ccw-BWqiWJjW.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/truck-CATeUxvO.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/SidebarShell-fCOptr9M.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/trending-down-Yw6CDOIc.js','/assets/banknote-Zrg2Y6GZ.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/chevron-right-DrouFxC3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-_3LJHnnm.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/Sidebar-BwjIe4p9.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/refresh-cw-DPjjEPsF.js','/assets/dateUtils-B35lzzJe.js','/assets/truck-CATeUxvO.js','/assets/calendar-BX61wbjB.js','/assets/chevron-up-C2kKeGjV.js','/assets/chevron-down-CPuhXSqu.js','/assets/package-Dgtg-TWY.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/triangle-alert-C-OfeVRw.js','/assets/clipboard-list-BBxyeF8q.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/SidebarShell-fCOptr9M.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/building-2-Mk36Jx1D.js','/assets/layout-dashboard-DFywwbX6.js','/assets/trending-down-Yw6CDOIc.js','/assets/file-text-D2hdhq8s.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/banknote-Zrg2Y6GZ.js','/assets/GlassPopover-Bw0Lwprd.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C77DWSkT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/Sidebar-BwjIe4p9.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/ui-XzU3Q-_h.js','/assets/banknote-Zrg2Y6GZ.js','/assets/building-2-Mk36Jx1D.js','/assets/package-Dgtg-TWY.js','/assets/triangle-alert-C-OfeVRw.js','/assets/trending-up-DS9skeEl.js','/assets/GlassSelect-CDFVtbcw.js','/assets/search-B4ap1tYx.js','/assets/arrow-up-down-zNzX32Ve.js','/assets/refresh-cw-DPjjEPsF.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/circle-alert-BdqHjLDm.js','/assets/layers-Dq5JgF_U.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/clipboard-list-BBxyeF8q.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/SidebarShell-fCOptr9M.js','/assets/x-BheOJZhk.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/truck-CATeUxvO.js','/assets/trending-down-Yw6CDOIc.js','/assets/bar-chart-3-BlKh5n7P.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DSolnEEE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-tOHlPTzO.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/Sidebar-BwjIe4p9.js','/assets/Breadcrumb-BU9bjNSG.js','/assets/ui-XzU3Q-_h.js','/assets/arrow-left-BS8isMtF.js','/assets/bar-chart-3-BlKh5n7P.js','/assets/GlassSelect-CDFVtbcw.js','/assets/search-B4ap1tYx.js','/assets/refresh-cw-DPjjEPsF.js','/assets/trending-down-Yw6CDOIc.js','/assets/trending-up-DS9skeEl.js','/assets/triangle-alert-C-OfeVRw.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-BX61wbjB.js','/assets/exportUtils-B52DYAkn.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/clipboard-list-BBxyeF8q.js','/assets/briefcase-DpsnFCXH.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/SidebarShell-fCOptr9M.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/building-2-Mk36Jx1D.js','/assets/layout-dashboard-DFywwbX6.js','/assets/truck-CATeUxvO.js','/assets/banknote-Zrg2Y6GZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-N7jS1wt5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/circle-check-big-CnUtDMKJ.js','/assets/package-Dgtg-TWY.js','/assets/search-B4ap1tYx.js','/assets/save-DJYG0R8V.js','/assets/trending-up-DS9skeEl.js','/assets/arrow-left-BS8isMtF.js','/assets/layers-Dq5JgF_U.js','/assets/filter-Dw4ebkTW.js','/assets/circle-alert-BdqHjLDm.js','/assets/zap-_UcS__rt.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-COv1ks8_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/globe-DNf3xgk-.js','/assets/user-Dyn8ab3D.js','/assets/lock-CacP_TEb.js','/assets/building-2-Mk36Jx1D.js','/assets/circle-check-BELyc5oO.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/page':{'id':'employee/purchase-invoice/page','parentId':'root','path':'employee/purchase-invoice','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DmEO8Xvb.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/uiPurchases-DpGbPQKd.js','/assets/BulkInvoiceUploadPanel-BnMshKVI.js','/assets/apiAuth-BplCYYkl.js','/assets/arrow-right-ihOXkcCN.js','/assets/receipt-text-CGEhLaOG.js','/assets/loader-circle-Cj7UPgp6.js','/assets/circle-check-BELyc5oO.js','/assets/plus-CZ2ZuSKk.js','/assets/truck-CATeUxvO.js','/assets/search-B4ap1tYx.js','/assets/pencil-BIGenoi_.js','/assets/ui-XzU3Q-_h.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/hand-coins-BkkBoiJI.js','/assets/x-BheOJZhk.js','/assets/save-DJYG0R8V.js','/assets/percent-CeLjNeTe.js','/assets/unlink-Bsf2j4Oe.js','/assets/preload-helper-xFOqD-k9.js','/assets/useUpload-re3hQx7G.js','/assets/file-text-D2hdhq8s.js','/assets/sparkles-DFbr99hX.js','/assets/badge-check-DLsUzdUc.js','/assets/trash-2-DCP4oHZr.js','/assets/external-link-BpRuhz6G.js','/assets/triangle-alert-C-OfeVRw.js','/assets/chevron-right-DrouFxC3.js','/assets/copy-DD2DSCzr.js','/assets/refresh-cw-DPjjEPsF.js','/assets/arrow-left-BS8isMtF.js','/assets/send-tS3mDYmP.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/login/page':{'id':'employee/purchase-invoice/login/page','parentId':'root','path':'employee/purchase-invoice/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B5URDxjC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/uiPurchases-DpGbPQKd.js','/assets/apiAuth-BplCYYkl.js','/assets/globe-DNf3xgk-.js','/assets/receipt-text-CGEhLaOG.js','/assets/user-Dyn8ab3D.js','/assets/lock-CacP_TEb.js','/assets/ui-XzU3Q-_h.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CcpnpO4Y.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/circle-check-big-CnUtDMKJ.js','/assets/trash-2-DCP4oHZr.js','/assets/search-B4ap1tYx.js','/assets/save-DJYG0R8V.js','/assets/trending-up-DS9skeEl.js','/assets/arrow-left-BS8isMtF.js','/assets/layers-Dq5JgF_U.js','/assets/filter-Dw4ebkTW.js','/assets/circle-alert-BdqHjLDm.js','/assets/zap-_UcS__rt.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CeYNGHf5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/globe-DNf3xgk-.js','/assets/user-Dyn8ab3D.js','/assets/lock-CacP_TEb.js','/assets/building-2-Mk36Jx1D.js','/assets/circle-check-BELyc5oO.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DV7qac2x.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-CxZiYG54.js','/assets/ui-XzU3Q-_h.js','/assets/useAdminAuth-CQKNupfX.js','/assets/Sidebar-Diq0jJBd.js','/assets/users-VBZxiOvD.js','/assets/arrow-left-BS8isMtF.js','/assets/dollar-sign-RPOfWZnD.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/apiAuth-BplCYYkl.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/useQuery-AqL0hIz6.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/clock-Ct2hCng2.js','/assets/wallet-TPHFLoq6.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B31Uv6bE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-CxZiYG54.js','/assets/ui-XzU3Q-_h.js','/assets/useAdminAuth-CQKNupfX.js','/assets/gift-CeSmH9Kw.js','/assets/arrow-left-BS8isMtF.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/apiAuth-BplCYYkl.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-JY9MIhHv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-CxZiYG54.js','/assets/ui-XzU3Q-_h.js','/assets/Sidebar-Diq0jJBd.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/index-DRPdBQtE.js','/assets/useMutation-DS_XvyHz.js','/assets/users-VBZxiOvD.js','/assets/dollar-sign-RPOfWZnD.js','/assets/image-OiscM-X9.js','/assets/pencil-BIGenoi_.js','/assets/trash-2-DCP4oHZr.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassMultiSelect-DNkAQiVy.js','/assets/GlassDatePicker-CzBMz_Qm.js','/assets/useUpload-re3hQx7G.js','/assets/x-BheOJZhk.js','/assets/user-Dyn8ab3D.js','/assets/calendar-BX61wbjB.js','/assets/file-text-D2hdhq8s.js','/assets/loader-circle-Cj7UPgp6.js','/assets/dateUtils-B35lzzJe.js','/assets/plus-CZ2ZuSKk.js','/assets/send-tS3mDYmP.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/SidebarShell-fCOptr9M.js','/assets/index-LXM0gpc5.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/search-B4ap1tYx.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/clock-Ct2hCng2.js','/assets/wallet-TPHFLoq6.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/chevron-right-DrouFxC3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-yR8-sNxm.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-CxZiYG54.js','/assets/ui-XzU3Q-_h.js','/assets/Sidebar-Diq0jJBd.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/index-DRPdBQtE.js','/assets/useMutation-DS_XvyHz.js','/assets/employeeUtils-BK05ByQx.js','/assets/search-B4ap1tYx.js','/assets/users-VBZxiOvD.js','/assets/wallet-TPHFLoq6.js','/assets/credit-card-DIZeb78l.js','/assets/heart-pulse-JphPEX4t.js','/assets/GlassSelect-CDFVtbcw.js','/assets/filter-Dw4ebkTW.js','/assets/rotate-ccw-BWqiWJjW.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/exportUtils-B52DYAkn.js','/assets/download-DJOdhbev.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-text-D2hdhq8s.js','/assets/user-Dyn8ab3D.js','/assets/ban-DgoYyx7J.js','/assets/pencil-BIGenoi_.js','/assets/trash-2-DCP4oHZr.js','/assets/badge-check-DLsUzdUc.js','/assets/x-BheOJZhk.js','/assets/GlassMultiSelect-DNkAQiVy.js','/assets/GlassDatePicker-CzBMz_Qm.js','/assets/dateUtils-B35lzzJe.js','/assets/refresh-cw-DPjjEPsF.js','/assets/calendar-BX61wbjB.js','/assets/circle-check-BELyc5oO.js','/assets/briefcase-DpsnFCXH.js','/assets/building-2-Mk36Jx1D.js','/assets/calendar-check-CTNXtT3k.js','/assets/circle-x-s8f42GAN.js','/assets/dollar-sign-RPOfWZnD.js','/assets/index-LXM0gpc5.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/save-DJYG0R8V.js','/assets/plus-CZ2ZuSKk.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/clock-Ct2hCng2.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/chevron-right-DrouFxC3.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DyyoI25N.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-CxZiYG54.js','/assets/index-DRPdBQtE.js','/assets/Sidebar-Diq0jJBd.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassMultiSelect-DNkAQiVy.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/dateUtils-B35lzzJe.js','/assets/useEmployeeLoans-DdPFy4AK.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/plus-CZ2ZuSKk.js','/assets/clock-Ct2hCng2.js','/assets/trash-2-DCP4oHZr.js','/assets/info-ggtgQ-Mm.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/dollar-sign-RPOfWZnD.js','/assets/wallet-TPHFLoq6.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CKC-2sau.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/layout-CxZiYG54.js','/assets/index-DRPdBQtE.js','/assets/Sidebar-Diq0jJBd.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-C5ysZqy1.js','/assets/users-VBZxiOvD.js','/assets/ban-DgoYyx7J.js','/assets/dateUtils-B35lzzJe.js','/assets/lock-CacP_TEb.js','/assets/refresh-cw-DPjjEPsF.js','/assets/send-tS3mDYmP.js','/assets/info-ggtgQ-Mm.js','/assets/wallet-TPHFLoq6.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/apiAuth-BplCYYkl.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/useQuery-AqL0hIz6.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/layout-dashboard-DFywwbX6.js','/assets/dollar-sign-RPOfWZnD.js','/assets/clock-Ct2hCng2.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js','/assets/queryKeys-p9YaOikW.js','/assets/useMutation-DS_XvyHz.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-COlKRwx0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CohRZcX8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-dOS0K7Dj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-DoOIno5X.js','/assets/index-LXM0gpc5.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/client-BO2bVJGB.js','/assets/_commonjs-dynamic-modules-TDtrdbi3.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-ta-jSUvN.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/image-OiscM-X9.js','/assets/chevron-down-CPuhXSqu.js','/assets/file-spreadsheet-DOoaOeoN.js','/assets/download-DJOdhbev.js','/assets/useMutation-DS_XvyHz.js','/assets/upload-BEVdahAw.js','/assets/x-BheOJZhk.js','/assets/circle-alert-BdqHjLDm.js','/assets/circle-check-BELyc5oO.js','/assets/useAdminAuth-CQKNupfX.js','/assets/users-VBZxiOvD.js','/assets/plus-CZ2ZuSKk.js','/assets/clock-Ct2hCng2.js','/assets/send-tS3mDYmP.js','/assets/square-pen-D6LiAr7X.js','/assets/trash-2-DCP4oHZr.js','/assets/index-DRPdBQtE.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/search-B4ap1tYx.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DPWiaSB7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-DoOIno5X.js','/assets/BloggerInvitationCard-ta-jSUvN.js','/assets/ui-XzU3Q-_h.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/arrow-right-ihOXkcCN.js','/assets/external-link-BpRuhz6G.js','/assets/printer-BaLtdm7J.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Az9-5ce4.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-DoOIno5X.js','/assets/ui-XzU3Q-_h.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/coffee-BdkHwl4Y.js','/assets/plus-CZ2ZuSKk.js','/assets/x-BheOJZhk.js','/assets/eye-off-FDlRVFkl.js','/assets/eye-BtIxnisC.js','/assets/square-pen-D6LiAr7X.js','/assets/trash-2-DCP4oHZr.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/search-B4ap1tYx.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DG0Vwvqh.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-DoOIno5X.js','/assets/ui-XzU3Q-_h.js','/assets/useAdminAuth-CQKNupfX.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/save-DJYG0R8V.js','/assets/coffee-BdkHwl4Y.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/useAdminTheme-xDcD6r79.js','/assets/AdminThemeToggle-DmoENX5f.js','/assets/useMediaQuery-BSFVgm2I.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-3Y9DcWsm.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/shield-DXw_1dIU.js','/assets/globe-DNf3xgk-.js','/assets/eye-BtIxnisC.js','/assets/lock-CacP_TEb.js','/assets/trash-2-DCP4oHZr.js','/assets/mail-BfwFkwzg.js','/assets/ui-XzU3Q-_h.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-_LksWmND.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassDatePicker-CzBMz_Qm.js','/assets/apiAuth-BplCYYkl.js','/assets/languages-BnhipiAs.js','/assets/useMutation-DS_XvyHz.js','/assets/calculator-CbVTcJ2Z.js','/assets/building-2-Mk36Jx1D.js','/assets/user-Dyn8ab3D.js','/assets/lock-CacP_TEb.js','/assets/info-ggtgQ-Mm.js','/assets/search-B4ap1tYx.js','/assets/send-tS3mDYmP.js','/assets/arrow-left-BS8isMtF.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-Ct2hCng2.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/x-BheOJZhk.js','/assets/chevron-right-DrouFxC3.js','/assets/chevron-left-B21KmKny.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CKO-o9NQ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/ui-XzU3Q-_h.js','/assets/globe-DNf3xgk-.js','/assets/mail-BfwFkwzg.js','/assets/external-link-BpRuhz6G.js','/assets/shield-DXw_1dIU.js','/assets/file-text-D2hdhq8s.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-54ZKTJpA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/circle-alert-BdqHjLDm.js','/assets/lock-CacP_TEb.js','/assets/sparkles-DFbr99hX.js','/assets/coffee-BdkHwl4Y.js','/assets/ui-XzU3Q-_h.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-LmbAG0es.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-CwITnmh6.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/apiAuth-BplCYYkl.js','/assets/ui-XzU3Q-_h.js','/assets/PriorityPill-D_VsXS3A.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/loader-circle-Cj7UPgp6.js','/assets/circle-check-BELyc5oO.js','/assets/message-square-B_ZGOcHe.js','/assets/triangle-alert-C-OfeVRw.js','/assets/chevron-left-B21KmKny.js','/assets/activity-CqAgQpM3.js','/assets/circle-X56NlbJO.js','/assets/heart-pulse-JphPEX4t.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/home-Htv-o4xp.js','/assets/square-check-big-A1-b4Fqq.js','/assets/file-text-D2hdhq8s.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-jGZPIYXl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-CwITnmh6.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/message-square-B_ZGOcHe.js','/assets/plus-CZ2ZuSKk.js','/assets/search-B4ap1tYx.js','/assets/chevron-left-B21KmKny.js','/assets/send-tS3mDYmP.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/home-Htv-o4xp.js','/assets/square-check-big-A1-b4Fqq.js','/assets/file-text-D2hdhq8s.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dki3OjEi.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-CwITnmh6.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/useUpload-re3hQx7G.js','/assets/ui-XzU3Q-_h.js','/assets/circle-X56NlbJO.js','/assets/x-BheOJZhk.js','/assets/arrow-right-ihOXkcCN.js','/assets/GlassSelect-CDFVtbcw.js','/assets/GlassDatePicker-CzBMz_Qm.js','/assets/flag-8wRyOOSv.js','/assets/calendar-days-ZtAr3_Mq.js','/assets/upload-BEVdahAw.js','/assets/trash-2-DCP4oHZr.js','/assets/unlink-Bsf2j4Oe.js','/assets/file-text-D2hdhq8s.js','/assets/clock-Ct2hCng2.js','/assets/PriorityPill-D_VsXS3A.js','/assets/loader-circle-Cj7UPgp6.js','/assets/plus-CZ2ZuSKk.js','/assets/circle-check-BELyc5oO.js','/assets/search-B4ap1tYx.js','/assets/SidebarShell-fCOptr9M.js','/assets/triangle-alert-C-OfeVRw.js','/assets/activity-CqAgQpM3.js','/assets/chevron-left-B21KmKny.js','/assets/arrow-up-down-zNzX32Ve.js','/assets/square-check-big-A1-b4Fqq.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/home-Htv-o4xp.js','/assets/users-VBZxiOvD.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js','/assets/chevron-right-DrouFxC3.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/useAdminTheme-xDcD6r79.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CElN7L36.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-CwITnmh6.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/users-VBZxiOvD.js','/assets/plus-CZ2ZuSKk.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/home-Htv-o4xp.js','/assets/square-check-big-A1-b4Fqq.js','/assets/file-text-D2hdhq8s.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-6IDlpBy5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/layout-BfXAbWaD.js','/assets/Sidebar-CwITnmh6.js','/assets/useWorkspaceUser-BsHvit7O.js','/assets/ui-XzU3Q-_h.js','/assets/GlassSelect-CDFVtbcw.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-p9YaOikW.js','/assets/useQuery-AqL0hIz6.js','/assets/useMutation-DS_XvyHz.js','/assets/file-text-D2hdhq8s.js','/assets/plus-CZ2ZuSKk.js','/assets/trash-2-DCP4oHZr.js','/assets/flag-8wRyOOSv.js','/assets/square-check-big-A1-b4Fqq.js','/assets/loader-circle-Cj7UPgp6.js','/assets/copy-DD2DSCzr.js','/assets/index-DRPdBQtE.js','/assets/index-LXM0gpc5.js','/assets/SidebarShell-fCOptr9M.js','/assets/clipboard-list-BBxyeF8q.js','/assets/calculator-CbVTcJ2Z.js','/assets/users-VBZxiOvD.js','/assets/useAdminTheme-xDcD6r79.js','/assets/search-B4ap1tYx.js','/assets/x-BheOJZhk.js','/assets/package-Dgtg-TWY.js','/assets/arrow-left-BS8isMtF.js','/assets/globe-DNf3xgk-.js','/assets/chevron-left-B21KmKny.js','/assets/home-Htv-o4xp.js','/assets/GlassPopover-Bw0Lwprd.js','/assets/chevron-down-CPuhXSqu.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-ltGyn1iL.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-DFqIb6UZ.js','/assets/ui-XzU3Q-_h.js','/assets/arrow-right-ihOXkcCN.js','/assets/home-Htv-o4xp.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-37138782.js','version':'37138782','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-CrhP6QRF.js','imports':['/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/client-wSjAenBr.js','/assets/index-mDHkYRn_.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-N-fD4MCA.js','imports':['/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/client-wSjAenBr.js','/assets/index-mDHkYRn_.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-B074vRgA.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-DVe0BllW.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CeZeDVQE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/shield-Bi8S1a_E.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/trash-2-BZEabRjj.js','/assets/receipt-text-CMEEYSTK.js','/assets/languages-BblGVubv.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Nw-ovVOA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/payrollCalculations-DszFSuBE.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/layout-dashboard-CfTv19L-.js','/assets/calculator-CuHKkksc.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-up-vm2aXccZ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C4vLhlz1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/GlassSelect-mulBuSBB.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/banknote-Cwn5eNTq.js','/assets/building-2-C4-avAoH.js','/assets/calendar-days-ZP49EuZ8.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/history-BZpeAbA6.js','/assets/save-j3TblwGW.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DhAb4zqU.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/apiAuth-BplCYYkl.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DM9htb21.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/ui-Dlez-q8v.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollCalculations-DszFSuBE.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/GlassSelect-mulBuSBB.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/plus-DDJwKK4q.js','/assets/save-j3TblwGW.js','/assets/copy-CDBDUCCU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CyyQtAAR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/ui-Dlez-q8v.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/arrow-left-DHUuVIZy.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/index-B074vRgA.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/exportUtils-B52DYAkn.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/useMutation-YPPwjwxZ.js','/assets/trash-2-BZEabRjj.js','/assets/package-eQR-e_-7.js','/assets/pencil-D8aHAzD8.js','/assets/eye-CiT1BuH_.js','/assets/save-j3TblwGW.js','/assets/circle-check-big-Da9qNVxV.js','/assets/triangle-alert-Boaua5py.js','/assets/x-CJMV-H_W.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/square-check-big-QOWBUAjV.js','/assets/square-DlbVPQ1P.js','/assets/minus-BxIOy9AD.js','/assets/plus-DDJwKK4q.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-TonT8n4q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/index-mDHkYRn_.js','/assets/dateUtils-B35lzzJe.js','/assets/wallet-Bj0CEyHo.js','/assets/x-CJMV-H_W.js','/assets/save-j3TblwGW.js','/assets/pencil-D8aHAzD8.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/trash-2-BZEabRjj.js','/assets/useEmployeeLoans-DOtBAsjr.js','/assets/filter-DGpiaYIH.js','/assets/plus-DDJwKK4q.js','/assets/info-BGxn2qxB.js','/assets/index-B074vRgA.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/apiAuth-BplCYYkl.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-CAjtJlc8.js','/assets/useMutation-YPPwjwxZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CGVrU7Me.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/x-CJMV-H_W.js','/assets/user-TAYO6wFz.js','/assets/file-text-BsXVEDDb.js','/assets/dollar-sign-CPOiC5y3.js','/assets/percent-Drb7mxOw.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-FinR_hMB.js','/assets/apiAuth-BplCYYkl.js','/assets/index-B074vRgA.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/payrollCalculations-DszFSuBE.js','/assets/info-BGxn2qxB.js','/assets/lock-CTGO69Da.js','/assets/circle-check-DYVsyltl.js','/assets/clock-BLQV2p7w.js','/assets/style-C-BeU7vR.js','/assets/ban-HVmbf0Bi.js','/assets/message-square-CQ1_CnCg.js','/assets/pencil-D8aHAzD8.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/send-NBZit5sF.js','/assets/gift-DDoKzxfU.js','/assets/trash-2-BZEabRjj.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/wallet-Bj0CEyHo.js','/assets/dateUtils-B35lzzJe.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cc-LgC-P.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/uiPurchases-DpGbPQKd.js','/assets/BulkInvoiceUploadPanel-DVhHN05H.js','/assets/map-pin-Dqo7hI9m.js','/assets/circle-check-DYVsyltl.js','/assets/hash-CBHDgDQ3.js','/assets/ui-Dlez-q8v.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/hand-coins-BQvnxKbd.js','/assets/preload-helper-CPG8aq5z.js','/assets/index-B074vRgA.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/triangle-alert-Boaua5py.js','/assets/plus-DDJwKK4q.js','/assets/trending-up-vm2aXccZ.js','/assets/trending-down-4D7R8o0Y.js','/assets/copy-CDBDUCCU.js','/assets/bell-BOrsd0dI.js','/assets/loader-circle-cj3OShwt.js','/assets/send-NBZit5sF.js','/assets/index-mDHkYRn_.js','/assets/user-TAYO6wFz.js','/assets/percent-Drb7mxOw.js','/assets/x-CJMV-H_W.js','/assets/banknote-Cwn5eNTq.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/file-spreadsheet-DHsESvwd.js','/assets/chevron-left-vtV8fD67.js','/assets/lock-CTGO69Da.js','/assets/save-j3TblwGW.js','/assets/building-2-C4-avAoH.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/info-BGxn2qxB.js','/assets/credit-card-BsVUxoTE.js','/assets/wallet-Bj0CEyHo.js','/assets/useUpload-CXTWBC7f.js','/assets/unlink-DVXDxYhm.js','/assets/external-link-BX9iGKtf.js','/assets/users-VA8LPGTJ.js','/assets/history-BZpeAbA6.js','/assets/calendar-days-ZP49EuZ8.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/style-C-BeU7vR.js','/assets/message-square-CQ1_CnCg.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/arrow-up-right-BF8vhYZS.js','/assets/minus-BxIOy9AD.js','/assets/layers-9Vc-tcAx.js','/assets/trophy-B8rv-fXg.js','/assets/circle-B23E5JJ9.js','/assets/LineChart-DzXBW_Q3.js','/assets/PieChart-CInDFe0c.js','/assets/clock-BLQV2p7w.js','/assets/clipboard-check-CFfW7iHf.js','/assets/layout-dashboard-CfTv19L-.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/sparkles-DbziavYF.js','/assets/badge-check-pQujwjvV.js','/assets/chevron-right-CXLYWaqy.js','/assets/arrow-right-BDl4ebOl.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BXTSIK_G.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/calculator-CuHKkksc.js','/assets/building-2-C4-avAoH.js','/assets/info-BGxn2qxB.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-FO7o5_9Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-Dv2Lwxo2.js','/assets/Sidebar-pEId8Vnp.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/apiAuth-BplCYYkl.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/layers-9Vc-tcAx.js','/assets/boxes-D8lzOFTO.js','/assets/trophy-B8rv-fXg.js','/assets/trash-2-BZEabRjj.js','/assets/building-2-C4-avAoH.js','/assets/user-TAYO6wFz.js','/assets/clock-BLQV2p7w.js','/assets/chevron-down-DC34JNfT.js','/assets/sticky-note-eE2tkwJ8.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DiMdu4lG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-DpqoCIF9.js','/assets/ui-Dlez-q8v.js','/assets/trending-up-vm2aXccZ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/circle-check-big-Da9qNVxV.js','/assets/clock-BLQV2p7w.js','/assets/building-2-C4-avAoH.js','/assets/calendar-days-ZP49EuZ8.js','/assets/dateUtils-B35lzzJe.js','/assets/sparkles-DbziavYF.js','/assets/trending-down-4D7R8o0Y.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/x-CJMV-H_W.js','/assets/info-BGxn2qxB.js','/assets/circle-alert-DIs_K0Qw.js','/assets/triangle-alert-Boaua5py.js','/assets/package-plus-Dq8M9Bmt.js','/assets/truck-BhEhG7v1.js','/assets/calendar-DSqa1Jk6.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/LineChart-DzXBW_Q3.js','/assets/PieChart-CInDFe0c.js','/assets/activity-Wj1gkxln.js','/assets/dollar-sign-CPOiC5y3.js','/assets/package-eQR-e_-7.js','/assets/exportUtils-B52DYAkn.js','/assets/file-text-BsXVEDDb.js','/assets/search-C-xwzjou.js','/assets/download-_6wEJoMR.js','/assets/printer-B2EnO-MI.js','/assets/users-VA8LPGTJ.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/layers-9Vc-tcAx.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D2UttaE8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-DpqoCIF9.js','/assets/ui-Dlez-q8v.js','/assets/exportUtils-B52DYAkn.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/Breadcrumb-B14MMdPF.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/building-2-C4-avAoH.js','/assets/map-pin-Dqo7hI9m.js','/assets/clipboard-list-DPrO7lZd.js','/assets/search-C-xwzjou.js','/assets/plus-DDJwKK4q.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/x-CJMV-H_W.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js','/assets/file-text-BsXVEDDb.js','/assets/banknote-Cwn5eNTq.js','/assets/dateUtils-B35lzzJe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-N48bkICA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-DpqoCIF9.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/employeeUtils-BedSPahl.js','/assets/users-VA8LPGTJ.js','/assets/shield-Bi8S1a_E.js','/assets/user-TAYO6wFz.js','/assets/search-C-xwzjou.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/circle-check-DYVsyltl.js','/assets/circle-x-C5HLpfHG.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/briefcase-BJs6GZ4-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/x-CJMV-H_W.js','/assets/mail-6uMJqDb0.js','/assets/lock-CTGO69Da.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/receipt-text-CMEEYSTK.js','/assets/truck-BhEhG7v1.js','/assets/bell-BOrsd0dI.js','/assets/building-2-C4-avAoH.js','/assets/loader-circle-cj3OShwt.js','/assets/send-NBZit5sF.js','/assets/Breadcrumb-B14MMdPF.js','/assets/plus-DDJwKK4q.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/index-mDHkYRn_.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/trending-down-4D7R8o0Y.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DbZZoeog.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/preload-helper-CPG8aq5z.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/ui-Dlez-q8v.js','/assets/layers-9Vc-tcAx.js','/assets/x-CJMV-H_W.js','/assets/languages-BblGVubv.js','/assets/plus-DDJwKK4q.js','/assets/pencil-D8aHAzD8.js','/assets/GlassSelect-mulBuSBB.js','/assets/ban-HVmbf0Bi.js','/assets/Sidebar-DpqoCIF9.js','/assets/package-eQR-e_-7.js','/assets/circle-check-big-Da9qNVxV.js','/assets/triangle-alert-Boaua5py.js','/assets/circle-x-C5HLpfHG.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/search-C-xwzjou.js','/assets/filter-DGpiaYIH.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/dateUtils-B35lzzJe.js','/assets/eye-CiT1BuH_.js','/assets/building-2-C4-avAoH.js','/assets/trash-2-BZEabRjj.js','/assets/square-check-big-QOWBUAjV.js','/assets/clipboard-check-CFfW7iHf.js','/assets/square-DlbVPQ1P.js','/assets/eye-off-6jceujNo.js','/assets/index-mDHkYRn_.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/boxes-D8lzOFTO.js','/assets/clipboard-list-DPrO7lZd.js','/assets/circle-alert-DIs_K0Qw.js','/assets/exportUtils-B52DYAkn.js','/assets/Breadcrumb-B14MMdPF.js','/assets/index-B074vRgA.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-WNJg2crs.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/Sidebar-DpqoCIF9.js','/assets/Breadcrumb-B14MMdPF.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/package-eQR-e_-7.js','/assets/building-2-C4-avAoH.js','/assets/trending-down-4D7R8o0Y.js','/assets/circle-x-C5HLpfHG.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/hash-CBHDgDQ3.js','/assets/calendar-DSqa1Jk6.js','/assets/user-TAYO6wFz.js','/assets/file-text-BsXVEDDb.js','/assets/triangle-alert-Boaua5py.js','/assets/circle-check-big-Da9qNVxV.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/trending-up-vm2aXccZ.js','/assets/x-CJMV-H_W.js','/assets/LineChart-DzXBW_Q3.js','/assets/package-plus-Dq8M9Bmt.js','/assets/clipboard-list-DPrO7lZd.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CWCCwg31.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/shield-Bi8S1a_E.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/circle-alert-DIs_K0Qw.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-saE4m9mH.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/Sidebar-DpqoCIF9.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-down-4D7R8o0Y.js','/assets/circle-x-C5HLpfHG.js','/assets/triangle-alert-Boaua5py.js','/assets/building-2-C4-avAoH.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/package-eQR-e_-7.js','/assets/circle-check-big-Da9qNVxV.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/x-CJMV-H_W.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BK7kc4ci.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/dateUtils-B35lzzJe.js','/assets/Sidebar-DpqoCIF9.js','/assets/ui-Dlez-q8v.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calendar-check-B4g7Zyf7.js','/assets/package-plus-Dq8M9Bmt.js','/assets/clock-BLQV2p7w.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/filter-DGpiaYIH.js','/assets/x-CJMV-H_W.js','/assets/search-C-xwzjou.js','/assets/exportUtils-B52DYAkn.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/printer-B2EnO-MI.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/square-check-big-QOWBUAjV.js','/assets/trash-2-BZEabRjj.js','/assets/square-DlbVPQ1P.js','/assets/building-2-C4-avAoH.js','/assets/eye-CiT1BuH_.js','/assets/pencil-D8aHAzD8.js','/assets/calendar-DSqa1Jk6.js','/assets/arrow-up-right-BF8vhYZS.js','/assets/user-TAYO6wFz.js','/assets/trending-down-4D7R8o0Y.js','/assets/sticky-note-eE2tkwJ8.js','/assets/hash-CBHDgDQ3.js','/assets/circle-check-big-Da9qNVxV.js','/assets/percent-Drb7mxOw.js','/assets/package-eQR-e_-7.js','/assets/circle-alert-DIs_K0Qw.js','/assets/circle-check-DYVsyltl.js','/assets/plus-DDJwKK4q.js','/assets/send-NBZit5sF.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-check-CFfW7iHf.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/Breadcrumb-B14MMdPF.js','/assets/truck-BhEhG7v1.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BsQpSHaR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/Sidebar-DpqoCIF9.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/dateUtils-B35lzzJe.js','/assets/truck-BhEhG7v1.js','/assets/calendar-DSqa1Jk6.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/package-eQR-e_-7.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/building-2-C4-avAoH.js','/assets/layout-dashboard-CfTv19L-.js','/assets/trending-down-4D7R8o0Y.js','/assets/file-text-BsXVEDDb.js','/assets/banknote-Cwn5eNTq.js','/assets/GlassPopover-Bgi0qw9-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BXOmx96z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/Sidebar-DpqoCIF9.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/banknote-Cwn5eNTq.js','/assets/building-2-C4-avAoH.js','/assets/package-eQR-e_-7.js','/assets/triangle-alert-Boaua5py.js','/assets/trending-up-vm2aXccZ.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/arrow-up-down-BN0uTm5Y.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/circle-alert-DIs_K0Qw.js','/assets/layers-9Vc-tcAx.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/x-CJMV-H_W.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BYrHJP3F.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/Sidebar-DpqoCIF9.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-down-4D7R8o0Y.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/trending-up-vm2aXccZ.js','/assets/triangle-alert-Boaua5py.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-DSqa1Jk6.js','/assets/exportUtils-B52DYAkn.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/building-2-C4-avAoH.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-GeiFjuyu.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-check-big-Da9qNVxV.js','/assets/package-eQR-e_-7.js','/assets/search-C-xwzjou.js','/assets/save-j3TblwGW.js','/assets/trending-up-vm2aXccZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/layers-9Vc-tcAx.js','/assets/filter-DGpiaYIH.js','/assets/circle-alert-DIs_K0Qw.js','/assets/zap-zUoAUmkJ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CuuqZqq6.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/globe-CkB3LEXs.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/building-2-C4-avAoH.js','/assets/circle-check-DYVsyltl.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/page':{'id':'employee/purchase-invoice/page','parentId':'root','path':'employee/purchase-invoice','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CvwZa8b-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/uiPurchases-DpGbPQKd.js','/assets/BulkInvoiceUploadPanel-DVhHN05H.js','/assets/apiAuth-BplCYYkl.js','/assets/arrow-right-BDl4ebOl.js','/assets/receipt-text-CMEEYSTK.js','/assets/loader-circle-cj3OShwt.js','/assets/circle-check-DYVsyltl.js','/assets/plus-DDJwKK4q.js','/assets/truck-BhEhG7v1.js','/assets/search-C-xwzjou.js','/assets/pencil-D8aHAzD8.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/hand-coins-BQvnxKbd.js','/assets/x-CJMV-H_W.js','/assets/save-j3TblwGW.js','/assets/percent-Drb7mxOw.js','/assets/unlink-DVXDxYhm.js','/assets/preload-helper-CPG8aq5z.js','/assets/useUpload-CXTWBC7f.js','/assets/file-text-BsXVEDDb.js','/assets/sparkles-DbziavYF.js','/assets/badge-check-pQujwjvV.js','/assets/trash-2-BZEabRjj.js','/assets/external-link-BX9iGKtf.js','/assets/triangle-alert-Boaua5py.js','/assets/chevron-right-CXLYWaqy.js','/assets/copy-CDBDUCCU.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/arrow-left-DHUuVIZy.js','/assets/send-NBZit5sF.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/login/page':{'id':'employee/purchase-invoice/login/page','parentId':'root','path':'employee/purchase-invoice/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DyP4j43p.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/uiPurchases-DpGbPQKd.js','/assets/apiAuth-BplCYYkl.js','/assets/globe-CkB3LEXs.js','/assets/receipt-text-CMEEYSTK.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D3ZQYI4d.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-check-big-Da9qNVxV.js','/assets/trash-2-BZEabRjj.js','/assets/search-C-xwzjou.js','/assets/save-j3TblwGW.js','/assets/trending-up-vm2aXccZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/layers-9Vc-tcAx.js','/assets/filter-DGpiaYIH.js','/assets/circle-alert-DIs_K0Qw.js','/assets/zap-zUoAUmkJ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BRHzlQtq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/globe-CkB3LEXs.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/building-2-C4-avAoH.js','/assets/circle-check-DYVsyltl.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-tkhBZ3Jn.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/Sidebar-CQ_kEN99.js','/assets/users-VA8LPGTJ.js','/assets/arrow-left-DHUuVIZy.js','/assets/dollar-sign-CPOiC5y3.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/apiAuth-BplCYYkl.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/wallet-Bj0CEyHo.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-5WdiADkK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/gift-DDoKzxfU.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/apiAuth-BplCYYkl.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-7d4h9zRW.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/Sidebar-CQ_kEN99.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/users-VA8LPGTJ.js','/assets/dollar-sign-CPOiC5y3.js','/assets/image-DQ7nR7FM.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/useUpload-CXTWBC7f.js','/assets/x-CJMV-H_W.js','/assets/user-TAYO6wFz.js','/assets/calendar-DSqa1Jk6.js','/assets/file-text-BsXVEDDb.js','/assets/loader-circle-cj3OShwt.js','/assets/dateUtils-B35lzzJe.js','/assets/plus-DDJwKK4q.js','/assets/send-NBZit5sF.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/wallet-Bj0CEyHo.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CE8WZGuj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/Sidebar-CQ_kEN99.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/employeeUtils-BedSPahl.js','/assets/search-C-xwzjou.js','/assets/users-VA8LPGTJ.js','/assets/wallet-Bj0CEyHo.js','/assets/credit-card-BsVUxoTE.js','/assets/heart-pulse-0LKG09CU.js','/assets/GlassSelect-mulBuSBB.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/user-TAYO6wFz.js','/assets/ban-HVmbf0Bi.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/badge-check-pQujwjvV.js','/assets/x-CJMV-H_W.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/dateUtils-B35lzzJe.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/calendar-DSqa1Jk6.js','/assets/circle-check-DYVsyltl.js','/assets/briefcase-BJs6GZ4-.js','/assets/building-2-C4-avAoH.js','/assets/calendar-check-B4g7Zyf7.js','/assets/circle-x-C5HLpfHG.js','/assets/dollar-sign-CPOiC5y3.js','/assets/index-mDHkYRn_.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/save-j3TblwGW.js','/assets/plus-DDJwKK4q.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DKUt0q6E.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/index-B074vRgA.js','/assets/Sidebar-CQ_kEN99.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/dateUtils-B35lzzJe.js','/assets/useEmployeeLoans-DOtBAsjr.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/plus-DDJwKK4q.js','/assets/clock-BLQV2p7w.js','/assets/trash-2-BZEabRjj.js','/assets/info-BGxn2qxB.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/wallet-Bj0CEyHo.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CuS-kriK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/index-B074vRgA.js','/assets/Sidebar-CQ_kEN99.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-FinR_hMB.js','/assets/users-VA8LPGTJ.js','/assets/ban-HVmbf0Bi.js','/assets/dateUtils-B35lzzJe.js','/assets/lock-CTGO69Da.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/send-NBZit5sF.js','/assets/info-BGxn2qxB.js','/assets/wallet-Bj0CEyHo.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/apiAuth-BplCYYkl.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/clock-BLQV2p7w.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-CAjtJlc8.js','/assets/useMutation-YPPwjwxZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B5h2VyaB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B8_3X-KA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DwdwOkoF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DassQ9O7.js','/assets/index-mDHkYRn_.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/client-wSjAenBr.js','/assets/_commonjs-dynamic-modules-TDtrdbi3.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-BZvVbjy8.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/image-DQ7nR7FM.js','/assets/chevron-down-DC34JNfT.js','/assets/file-spreadsheet-DHsESvwd.js','/assets/download-_6wEJoMR.js','/assets/useMutation-YPPwjwxZ.js','/assets/upload-CS5AK87H.js','/assets/x-CJMV-H_W.js','/assets/circle-alert-DIs_K0Qw.js','/assets/circle-check-DYVsyltl.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/clock-BLQV2p7w.js','/assets/send-NBZit5sF.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/index-B074vRgA.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dq2erQGQ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DassQ9O7.js','/assets/BloggerInvitationCard-BZvVbjy8.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/arrow-right-BDl4ebOl.js','/assets/external-link-BX9iGKtf.js','/assets/printer-B2EnO-MI.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-XBjvRU4C.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DassQ9O7.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/coffee-CEdfpW0U.js','/assets/plus-DDJwKK4q.js','/assets/x-CJMV-H_W.js','/assets/eye-off-6jceujNo.js','/assets/eye-CiT1BuH_.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-xJ2oV8Kp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DassQ9O7.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-m-0t_0Wo.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/save-j3TblwGW.js','/assets/coffee-CEdfpW0U.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CEAxEIfZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/shield-Bi8S1a_E.js','/assets/globe-CkB3LEXs.js','/assets/eye-CiT1BuH_.js','/assets/lock-CTGO69Da.js','/assets/trash-2-BZEabRjj.js','/assets/mail-6uMJqDb0.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BByNU6Ak.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/apiAuth-BplCYYkl.js','/assets/languages-BblGVubv.js','/assets/useMutation-YPPwjwxZ.js','/assets/calculator-CuHKkksc.js','/assets/building-2-C4-avAoH.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/info-BGxn2qxB.js','/assets/search-C-xwzjou.js','/assets/send-NBZit5sF.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/x-CJMV-H_W.js','/assets/chevron-right-CXLYWaqy.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D---gW7h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/globe-CkB3LEXs.js','/assets/mail-6uMJqDb0.js','/assets/external-link-BX9iGKtf.js','/assets/shield-Bi8S1a_E.js','/assets/file-text-BsXVEDDb.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-sOePSuDx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-alert-DIs_K0Qw.js','/assets/lock-CTGO69Da.js','/assets/sparkles-DbziavYF.js','/assets/coffee-CEdfpW0U.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-qLxNVSJG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-C_tAS1-h.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/apiAuth-BplCYYkl.js','/assets/ui-Dlez-q8v.js','/assets/PriorityPill-CkCrMdCY.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/calendar-days-ZP49EuZ8.js','/assets/loader-circle-cj3OShwt.js','/assets/circle-check-DYVsyltl.js','/assets/message-square-CQ1_CnCg.js','/assets/triangle-alert-Boaua5py.js','/assets/chevron-left-vtV8fD67.js','/assets/activity-Wj1gkxln.js','/assets/circle-B23E5JJ9.js','/assets/heart-pulse-0LKG09CU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DYxXdM-K.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-C_tAS1-h.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/message-square-CQ1_CnCg.js','/assets/plus-DDJwKK4q.js','/assets/search-C-xwzjou.js','/assets/chevron-left-vtV8fD67.js','/assets/send-NBZit5sF.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-upUQgy1k.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-C_tAS1-h.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/apiAuth-BplCYYkl.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/useUpload-CXTWBC7f.js','/assets/ui-Dlez-q8v.js','/assets/circle-B23E5JJ9.js','/assets/x-CJMV-H_W.js','/assets/arrow-right-BDl4ebOl.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/flag-C6AJZwul.js','/assets/calendar-days-ZP49EuZ8.js','/assets/upload-CS5AK87H.js','/assets/trash-2-BZEabRjj.js','/assets/unlink-DVXDxYhm.js','/assets/file-text-BsXVEDDb.js','/assets/clock-BLQV2p7w.js','/assets/PriorityPill-CkCrMdCY.js','/assets/loader-circle-cj3OShwt.js','/assets/plus-DDJwKK4q.js','/assets/circle-check-DYVsyltl.js','/assets/search-C-xwzjou.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/triangle-alert-Boaua5py.js','/assets/activity-Wj1gkxln.js','/assets/chevron-left-vtV8fD67.js','/assets/arrow-up-down-BN0uTm5Y.js','/assets/square-check-big-QOWBUAjV.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/home-C0l_z9P_.js','/assets/users-VA8LPGTJ.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/chevron-right-CXLYWaqy.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-44l6WQLD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-C_tAS1-h.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DOQH-1CZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-C_tAS1-h.js','/assets/useWorkspaceUser-CIMTA5-i.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-BplCYYkl.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/file-text-BsXVEDDb.js','/assets/plus-DDJwKK4q.js','/assets/trash-2-BZEabRjj.js','/assets/flag-C6AJZwul.js','/assets/square-check-big-QOWBUAjV.js','/assets/loader-circle-cj3OShwt.js','/assets/copy-CDBDUCCU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-C_PR_2Mj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/home-C0l_z9P_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CRFiXC_M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/ui-Dlez-q8v.js','/assets/arrow-right-BDl4ebOl.js','/assets/home-C0l_z9P_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-b561249a.js','version':'b561249a','sri':undefined};
 
-const assetsBuildDirectory = "build\\client";
+const assetsBuildDirectory = "build/client";
       const basename = "/";
       const future = {"unstable_optimizeDeps":false,"unstable_subResourceIntegrity":false,"unstable_trailingSlashAwareDataRequests":false,"unstable_previewServerPrerendering":false,"v8_middleware":false,"v8_splitRouteModules":false,"v8_viteEnvironmentApi":false};
       const ssr = true;

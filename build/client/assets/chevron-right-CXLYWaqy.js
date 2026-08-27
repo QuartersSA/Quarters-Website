@@ -1,0 +1,1 @@
+import{c as r}from"./ui-Dlez-q8v.js";if(typeof window<"u"){const o={};globalThis.process??={};const s=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},o,s),{get(e,n){return n in e?e[n]:void 0},has(){return!0}})}const i=r("ChevronRight",[["path",{d:"m9 18 6-6-6-6",key:"mthhwq"}]]);export{i as C};
