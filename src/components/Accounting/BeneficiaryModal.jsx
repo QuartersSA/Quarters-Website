@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { Save, X, HandCoins, Building, Wand2 } from "lucide-react";
+import { Save, X, HandCoins, Building, Landmark, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
@@ -87,6 +87,10 @@ export default function BeneficiaryModal({
   const isContactLocked = lockedContactId !== null && lockedContactId !== undefined;
 
   const [name, setName] = useState("");
+  // نوع المستفيد: bank = حساب بنكي (آيبان/بنك/عملة/سويفت) —
+  // government = حساب مدفوعات حكومية (سداد ونحوه): رقم حساب فقط.
+  const [beneficiaryType, setBeneficiaryType] = useState("bank");
+  const [accountNumber, setAccountNumber] = useState("");
   const [iban, setIban] = useState("");
   const [currency, setCurrency] = useState("SAR");
   const [bankName, setBankName] = useState("");
@@ -99,6 +103,10 @@ export default function BeneficiaryModal({
     if (!open) return;
     if (beneficiary) {
       setName(beneficiary.name || "");
+      setBeneficiaryType(
+        beneficiary.beneficiary_type === "government" ? "government" : "bank",
+      );
+      setAccountNumber(beneficiary.account_number || "");
       setIban(beneficiary.iban || "");
       setCurrency(beneficiary.currency || "SAR");
       setBankName(beneficiary.bank_name || "");
@@ -110,6 +118,8 @@ export default function BeneficiaryModal({
       setIsActive(beneficiary.is_active !== false);
     } else {
       setName("");
+      setBeneficiaryType("bank");
+      setAccountNumber("");
       setIban("");
       setCurrency("SAR");
       setBankName("");
@@ -119,6 +129,8 @@ export default function BeneficiaryModal({
       setIsActive(true);
     }
   }, [open, beneficiary, isContactLocked, lockedContactId]);
+
+  const isGovernment = beneficiaryType === "government";
 
   const contactOptions = useMemo(
     () => [
@@ -131,20 +143,38 @@ export default function BeneficiaryModal({
     [contacts],
   );
 
-  const canSubmit = !isSubmitting && !!name.trim() && !!iban.trim();
+  const canSubmit =
+    !isSubmitting &&
+    !!name.trim() &&
+    (isGovernment ? !!accountNumber.trim() : !!iban.trim());
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!canSubmit) return;
-    const payload = {
-      name: name.trim(),
-      iban: iban.replace(/\s+/g, "").toUpperCase(),
-      currency: currency || "SAR",
-      bank_name: bankName.trim() || null,
-      swift: swift.trim() ? swift.trim().toUpperCase() : null,
-      contact_id: contactId ? Number(contactId) : null,
-      notes: notes.trim() || null,
-    };
+    const payload = isGovernment
+      ? {
+          // حكومي: رقم الحساب فقط — لا آيبان ولا بنك/عملة/سويفت.
+          name: name.trim(),
+          beneficiary_type: "government",
+          account_number: accountNumber.replace(/\s+/g, ""),
+          iban: "",
+          currency: "SAR",
+          bank_name: null,
+          swift: null,
+          contact_id: contactId ? Number(contactId) : null,
+          notes: notes.trim() || null,
+        }
+      : {
+          name: name.trim(),
+          beneficiary_type: "bank",
+          account_number: null,
+          iban: iban.replace(/\s+/g, "").toUpperCase(),
+          currency: currency || "SAR",
+          bank_name: bankName.trim() || null,
+          swift: swift.trim() ? swift.trim().toUpperCase() : null,
+          contact_id: contactId ? Number(contactId) : null,
+          notes: notes.trim() || null,
+        };
     if (isEditing) {
       payload.id = beneficiary.id;
       payload.is_active = isActive;
@@ -177,7 +207,9 @@ export default function BeneficiaryModal({
                 {isEditing ? "تعديل مستفيد" : "إضافة مستفيد"}
               </div>
               <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5">
-                حساب بنكي يُحوَّل له المبلغ
+                {isGovernment
+                  ? "حساب مدفوعات حكومية (سداد ونحوه) يُسدَّد له المبلغ"
+                  : "حساب بنكي يُحوَّل له المبلغ"}
               </div>
             </div>
           </div>
@@ -192,6 +224,30 @@ export default function BeneficiaryModal({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* نوع المستفيد */}
+          <div className={`${ws.segWrap} w-full`}>
+            <button
+              type="button"
+              onClick={() => setBeneficiaryType("bank")}
+              className={`${ws.segBtn} flex-1 text-xs flex items-center justify-center gap-1.5 ${
+                !isGovernment ? ws.segActive : ws.segInactive
+              }`}
+            >
+              <Building className="w-3.5 h-3.5" />
+              حساب بنكي
+            </button>
+            <button
+              type="button"
+              onClick={() => setBeneficiaryType("government")}
+              className={`${ws.segBtn} flex-1 text-xs flex items-center justify-center gap-1.5 ${
+                isGovernment ? ws.segActive : ws.segInactive
+              }`}
+            >
+              <Landmark className="w-3.5 h-3.5" />
+              مدفوعات حكومية
+            </button>
+          </div>
+
           <div>
             <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
               اسم المستفيد <span className="text-rose-700 dark:text-rose-300">*</span>
@@ -200,7 +256,11 @@ export default function BeneficiaryModal({
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="اسم صاحب الحساب البنكي"
+              placeholder={
+                isGovernment
+                  ? "مثال: الجوازات — رسوم إقامة"
+                  : "اسم صاحب الحساب البنكي"
+              }
               className={`${ws.input} px-3 py-2`}
             />
           </div>
@@ -234,6 +294,27 @@ export default function BeneficiaryModal({
             </div>
           )}
 
+          {isGovernment ? (
+            <div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+                رقم الحساب{" "}
+                <span className="text-rose-700 dark:text-rose-300">*</span>
+              </div>
+              <input
+                type="text"
+                value={accountNumber}
+                onChange={(e) => setAccountNumber(e.target.value)}
+                placeholder="رقم حساب المدفوعات الحكومية / رقم المفوتر في سداد"
+                className={`${ws.input} px-3 py-2 font-mono`}
+                dir="ltr"
+              />
+              <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                المدفوعات الحكومية لا تحتاج بنكاً أو عملة أو سويفت — رقم
+                الحساب يكفي.
+              </div>
+            </div>
+          ) : (
+          <>
           <div>
             <div className="flex items-center justify-between gap-2 mb-1">
               <div className="text-xs text-slate-600 dark:text-white/55">
@@ -319,6 +400,8 @@ export default function BeneficiaryModal({
               className={`${ws.input} px-3 py-2`}
             />
           </div>
+          </>
+          )}
 
           <div>
             <div className="text-xs text-slate-600 dark:text-white/55 mb-1">

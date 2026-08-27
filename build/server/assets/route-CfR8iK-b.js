@@ -56,6 +56,10 @@ async function PUT(request, {
     const sets = [];
     const values = [];
     let idx = 1;
+
+    // نوع المستفيد: bank (آيبان/بنك) أو government (رقم حساب فقط).
+    const beneficiaryType = ["bank", "government"].includes(body.beneficiary_type) ? body.beneficiary_type : null;
+    const isGovernment = beneficiaryType === "government";
     if (body.name !== undefined) {
       const v = String(body.name).trim();
       if (!v) {
@@ -69,9 +73,28 @@ async function PUT(request, {
       values.push(v);
       idx += 1;
     }
+    if (beneficiaryType) {
+      sets.push(`beneficiary_type = $${idx}`);
+      values.push(beneficiaryType);
+      idx += 1;
+    }
+    if (body.account_number !== undefined) {
+      const v = body.account_number ? String(body.account_number).replace(/\s+/g, "") : null;
+      if (isGovernment && !v) {
+        return Response.json({
+          error: "رقم الحساب مطلوب"
+        }, {
+          status: 400
+        });
+      }
+      sets.push(`account_number = $${idx}`);
+      values.push(v);
+      idx += 1;
+    }
     if (body.iban !== undefined) {
       const v = String(body.iban).replace(/\s+/g, "").toUpperCase();
-      if (!v) {
+      // الحكومي بلا آيبان — الفارغ مقبول له فقط.
+      if (!v && !isGovernment) {
         return Response.json({
           error: "رقم الآيبان مطلوب"
         }, {

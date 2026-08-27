@@ -18,6 +18,16 @@ function formatIban(iban) {
 function activeLabel(value) {
   return value === false ? "موقوف" : "نشط";
 }
+function isGovernment(b) {
+  return b.beneficiary_type === "government";
+}
+function typeLabel(b) {
+  return isGovernment(b) ? "مدفوعات حكومية" : "حساب بنكي";
+}
+// حكومي = رقم حساب؛ بنكي = آيبان.
+function accountCell(b) {
+  return isGovernment(b) ? b.account_number || "-" : formatIban(b.iban);
+}
 
 export default function BeneficiariesExportMenu({ beneficiaries }) {
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -25,11 +35,12 @@ export default function BeneficiariesExportMenu({ beneficiaries }) {
 
   const excelColumns = [
     { header: "اسم المستفيد", accessor: (b) => b.name },
+    { header: "النوع", accessor: (b) => typeLabel(b) },
     { header: "جهة الاتصال", accessor: (b) => b.contact_name || "—" },
-    { header: "الآيبان", accessor: (b) => formatIban(b.iban) },
-    { header: "اسم البنك", accessor: (b) => b.bank_name || "-" },
-    { header: "العملة", accessor: (b) => b.currency || "SAR" },
-    { header: "السويفت SWIFT", accessor: (b) => b.swift || "-" },
+    { header: "الآيبان / رقم الحساب", accessor: (b) => accountCell(b) },
+    { header: "اسم البنك", accessor: (b) => (isGovernment(b) ? "-" : b.bank_name || "-") },
+    { header: "العملة", accessor: (b) => (isGovernment(b) ? "-" : b.currency || "SAR") },
+    { header: "السويفت SWIFT", accessor: (b) => (isGovernment(b) ? "-" : b.swift || "-") },
     { header: "ملاحظات", accessor: (b) => b.notes || "-" },
     { header: "الحالة", accessor: (b) => activeLabel(b.is_active) },
     {
@@ -41,11 +52,12 @@ export default function BeneficiariesExportMenu({ beneficiaries }) {
 
   const pdfColumns = [
     { header: "اسم المستفيد", accessor: (b) => b.name },
+    { header: "النوع", accessor: (b) => typeLabel(b) },
     { header: "جهة الاتصال", accessor: (b) => b.contact_name || "—" },
-    { header: "الآيبان", accessor: (b) => formatIban(b.iban) },
-    { header: "البنك", accessor: (b) => b.bank_name || "-" },
-    { header: "العملة", accessor: (b) => b.currency || "SAR" },
-    { header: "SWIFT", accessor: (b) => b.swift || "-" },
+    { header: "الآيبان / رقم الحساب", accessor: (b) => accountCell(b) },
+    { header: "البنك", accessor: (b) => (isGovernment(b) ? "-" : b.bank_name || "-") },
+    { header: "العملة", accessor: (b) => (isGovernment(b) ? "-" : b.currency || "SAR") },
+    { header: "SWIFT", accessor: (b) => (isGovernment(b) ? "-" : b.swift || "-") },
     { header: "الحالة", accessor: (b) => activeLabel(b.is_active) },
   ];
 

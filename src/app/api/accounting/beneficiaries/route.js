@@ -61,7 +61,17 @@ async function ensureSchema() {
       created_by_employee_name TEXT
     )
   `;
+  // نوعا المستفيد: bank = حساب بنكي (آيبان/بنك/عملة/سويفت) —
+  // government = حساب مدفوعات حكومية (سداد ونحوه): رقم حساب فقط،
+  // بلا بنك أو عملة أو سويفت.
+  await sql`
+    ALTER TABLE accounting_beneficiaries
+      ADD COLUMN IF NOT EXISTS beneficiary_type TEXT NOT NULL DEFAULT 'bank',
+      ADD COLUMN IF NOT EXISTS account_number TEXT
+  `;
 }
+
+export const BENEFICIARY_TYPES = new Set(["bank", "government"]);
 
 // GET /api/accounting/beneficiaries
 //   ?q=               name / IBAN / bank search
@@ -97,7 +107,7 @@ export async function GET(request) {
     }
     if (q) {
       conditions.push(
-        `(LOWER(b.name) LIKE $${idx} OR LOWER(b.iban) LIKE $${idx} OR LOWER(COALESCE(b.bank_name,'')) LIKE $${idx})`,
+        `(LOWER(b.name) LIKE $${idx} OR LOWER(b.iban) LIKE $${idx} OR LOWER(COALESCE(b.account_number,'')) LIKE $${idx} OR LOWER(COALESCE(b.bank_name,'')) LIKE $${idx})`,
       );
       values.push(`%${q.toLowerCase()}%`);
       idx += 1;
@@ -108,7 +118,8 @@ export async function GET(request) {
       : "";
 
     const query = `
-      SELECT b.id, b.name, b.iban, b.currency, b.bank_name, b.swift,
+      SELECT b.id, b.name, b.beneficiary_type, b.iban, b.account_number,
+             b.currency, b.bank_name, b.swift,
              b.contact_id, b.notes, b.is_active,
              b.created_at, b.updated_at,
              b.created_by_employee_id, b.created_by_employee_name,
@@ -147,22 +158,40 @@ export async function POST(request) {
     if (!name) {
       return Response.json({ error: "اسم المستفيد مطلوب" }, { status: 400 });
     }
+    const beneficiaryType = BENEFICIARY_TYPES.has(body.beneficiary_type)
+      ? body.beneficiary_type
+      : "bank";
+    const isGovernment = beneficiaryType === "government";
+
     const iban = body.iban
       ? String(body.iban).replace(/\s+/g, "").toUpperCase()
       : "";
-    if (!iban) {
+    const accountNumber = body.account_number
+      ? String(body.account_number).replace(/\s+/g, "")
+      : null;
+    // حكومي: رقم الحساب هو المطلوب — لا آيبان ولا بنك/عملة/سويفت.
+    if (isGovernment && !accountNumber) {
+      return Response.json({ error: "رقم الحساب مطلوب" }, { status: 400 });
+    }
+    if (!isGovernment && !iban) {
       return Response.json({ error: "رقم الآيبان مطلوب" }, { status: 400 });
     }
 
-    const currency = body.currency
-      ? String(body.currency).trim().toUpperCase()
-      : "SAR";
-    const bankName = body.bank_name
-      ? String(body.bank_name).trim()
-      : null;
-    const swift = body.swift
-      ? String(body.swift).trim().toUpperCase()
-      : null;
+    const currency = isGovernment
+      ? "SAR"
+      : body.currency
+        ? String(body.currency).trim().toUpperCase()
+        : "SAR";
+    const bankName = isGovernment
+      ? null
+      : body.bank_name
+        ? String(body.bank_name).trim()
+        : null;
+    const swift = isGovernment
+      ? null
+      : body.swift
+        ? String(body.swift).trim().toUpperCase()
+        : null;
     const contactId =
       body.contact_id === null ||
       body.contact_id === undefined ||
@@ -183,11 +212,13 @@ export async function POST(request) {
 
     const [created] = await sql`
       INSERT INTO accounting_beneficiaries (
-        name, iban, currency, bank_name, swift, contact_id, notes,
+        name, beneficiary_type, iban, account_number,
+        currency, bank_name, swift, contact_id, notes,
         created_by_employee_id, created_by_employee_name
       )
       VALUES (
-        ${name}, ${iban}, ${currency}, ${bankName}, ${swift}, ${contactId}, ${notes},
+        ${name}, ${beneficiaryType}, ${iban}, ${accountNumber},
+        ${currency}, ${bankName}, ${swift}, ${contactId}, ${notes},
         ${createdById}, ${createdByName}
       )
       RETURNING *
