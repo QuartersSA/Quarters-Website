@@ -4,12 +4,12 @@ import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { e as ensureInvoiceBatchSchema, r as readUploadBase64 } from './invoiceBatches-BefXoxDb.js';
 import { F as FILE_MEDIA_TYPES, r as runInvoiceAnalysis } from './invoiceAnalysis-BSNIl_Cm.js';
 import { c as computeDraftTotals, r as round2 } from './invoiceDraftMath-C8Db36NO.js';
-import { createPurchaseInvoice } from './route-KaKy3TtC.js';
+import { createPurchaseInvoice } from './route-C8q5BWx3.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import '@anthropic-ai/sdk';
 import './accountsTree-BiYqjwch.js';
-import './purchaseAutomation-BUYtx20E.js';
+import './purchaseAutomation-CeFiLicW.js';
 import './wasender-DykD1wlV.js';
 import './waNotify-CtLfIpXX.js';
 
@@ -48,6 +48,9 @@ function buildDraft(analysis) {
     currency: analysis?.currency || "SAR",
     discount: Number(analysis?.discount) || 0,
     notes: analysis?.operator_note ? String(analysis.operator_note) : "",
+    // «فاتورة متكررة بشكل شهري» — يفعّلها المراجع يدوياً عند حساب
+    // «مصروف ثابت»، لا يقررها التحليل.
+    recurring_monthly: false,
     items
   };
 }
@@ -79,6 +82,7 @@ function sanitizeDraft(input) {
     currency: text(input.currency, 8) || "SAR",
     discount: Math.max(Number(input.discount) || 0, 0),
     notes: text(input.notes, 2000),
+    recurring_monthly: input.recurring_monthly === true,
     items
   };
 }
@@ -566,7 +570,9 @@ async function PATCH(request, {
         branch_id: null,
         notes: String(draft?.notes || "").trim() || null,
         attachment_url: claimed[0].file_url || null,
-        attachment_kind: draft?.document_type || null
+        attachment_kind: draft?.document_type || null,
+        // قالب متكرر شهرياً — الخادم يعيد فرض شرط «مصروف ثابت».
+        recurring_monthly: draft?.recurring_monthly === true
       };
       let created;
       try {

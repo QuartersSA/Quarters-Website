@@ -9,6 +9,7 @@ import {
   Loader2,
   Paperclip,
   Plus,
+  Repeat,
   ScanLine,
   Save,
   Sparkles,
@@ -21,6 +22,7 @@ import useUpload from "@/utils/useUpload";
 // authedFetch prefers the admin token but falls back to field-flow
 // tokens — the modal is also used by /employee/purchase-invoice.
 import { authedFetch } from "@/utils/apiAuth";
+import { isFixedExpenseAccountId } from "@/utils/fixedExpenseAccount";
 
 // نموذج الحالات المبسّط (حسب مستند التصميم): أربع حالات كلها محسوبة
 // من المبالغ والاستحقاق — لا «مسودة» ولا «معتمدة» ولا اختيار يدوي.
@@ -1137,6 +1139,11 @@ export default function PurchaseInvoiceModal({
   // حقول الدفع تختفي وتخرج بحالة «بانتظار الاعتماد» ليسددها
   // المحاسب لاحقاً من سجل الدفعات. للإنشاء فقط، لا للتعديل.
   const [sendToApproval, setSendToApproval] = useState(false);
+  // «فاتورة متكررة بشكل شهري»: يظهر فقط عند تصنيف أحد البنود على
+  // حساب «مصروف ثابت» أو أحد فروعه — عند تفعيله ينشئ الخادم قالباً
+  // يولّد الفاتورة تلقائياً مع بداية كل شهر (بانتظار الدفع، استحقاق
+  // نهاية الشهر). للإنشاء فقط، لا للتعديل.
+  const [recurringMonthly, setRecurringMonthly] = useState(false);
   // إيصال الدفع — اختياري، يظهر مع وجود مبلغ مدفوع.
   const [paymentReceiptUrl, setPaymentReceiptUrl] = useState("");
   const [paymentReceiptName, setPaymentReceiptName] = useState("");
@@ -1244,6 +1251,7 @@ export default function PurchaseInvoiceModal({
         : "",
     );
     setSendToApproval(false);
+    setRecurringMonthly(false);
     setScanSupplier(null);
     setConfirmSupplier(null);
     setCreatingSupplier(false);
@@ -1389,6 +1397,13 @@ export default function PurchaseInvoiceModal({
     );
   };
 
+  // هل أحد بنود الفاتورة مصنّف على «مصروف ثابت» أو أحد فروعه؟ يتحكم
+  // بظهور خيار «فاتورة متكررة بشكل شهري».
+  const hasFixedExpenseLine = useMemo(
+    () => lines.some((line) => isFixedExpenseAccountId(line.account_id, accounts)),
+    [lines, accounts],
+  );
+
   const status = computedStatus({
     totalAmount: totals.total,
     paidAmount,
@@ -1457,6 +1472,9 @@ export default function PurchaseInvoiceModal({
       payment_receipt_url:
         effectivePaid > 0 ? paymentReceiptUrl || null : null,
       submit_for_approval: forApproval,
+      // قالب فاتورة متكررة شهرياً — الخادم يعيد التحقق من شرط
+      // «مصروف ثابت» قبل الإنشاء.
+      recurring_monthly: recurringMonthly && hasFixedExpenseLine && !isEditing,
       // القيمة الثابتة المتبقية — الحالة الفعلية تُحسب من المبالغ.
       workflow_status: "pending_payment",
       branch_id: branchId || null,
@@ -2528,6 +2546,35 @@ export default function PurchaseInvoiceModal({
                   <span dir="ltr">{formatMoney(totals.total, currency)}</span>
                 </div>
               </div>
+
+              {/* فاتورة متكررة شهرياً — يظهر فقط عندما يكون أحد بنود
+                  الفاتورة على حساب «مصروف ثابت» أو أحد فروعه. */}
+              {!isEditing && hasFixedExpenseLine ? (
+                <label
+                  className={`${ws.glassSoft} ${ws.card} p-3 flex items-start gap-3 cursor-pointer select-none`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={recurringMonthly}
+                    onChange={(event) =>
+                      setRecurringMonthly(event.target.checked)
+                    }
+                    className="accent-[#0e7a5f] mt-1"
+                  />
+                  <span className="min-w-0">
+                    <span className="flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-white">
+                      <Repeat className="w-4 h-4 text-[#0e7a5f] dark:text-emerald-200" />
+                      فاتورة متكررة بشكل شهري
+                    </span>
+                    <span className="block text-[11px] text-slate-600 dark:text-white/55 mt-1 leading-relaxed">
+                      حساب الفاتورة ضمن «مصروف ثابت» — عند التفعيل ينشئ
+                      النظام هذه الفاتورة تلقائياً مع بداية كل شهر بحالة
+                      «بانتظار الدفع» وتاريخ استحقاق نهاية الشهر، دون أي
+                      تدخل.
+                    </span>
+                  </span>
+                </label>
+              ) : null}
 
               {/* طريقة الإنشاء: دفع الآن أو إرسال إلى الاعتماد
                   (غير مدفوعة إجبارياً). للإنشاء فقط. */}

@@ -84,8 +84,121 @@ export async function ensureScheduledReportsSchema() {
   `;
 }
 
-// فاتورة متكررة → فاتورة فعلية «بانتظار الاعتماد» ببند واحد مصنّف
-// على حساب القالب. رقم الفاتورة حتمي (REC-YYYYMM-قالب) فلا يتكرر
+// هل أي من الحسابات المحددة «مصروف ثابت» أو أحد فروعه؟ الفحص بالاسم
+// صعوداً في سلسلة الآباء (translate يوحّد الهمزات) لأن الشجرة قابلة
+// للتعديل من المستخدم ولا كود ثابتاً يُعتمد عليه. سقف العمق يمنع
+// الدوران لو فسدت parent_id.
+export async function anyFixedExpenseAccount(accountIds = []) {
+  const ids = accountIds
+    .map(Number)
+    .filter((id) => Number.isInteger(id) && id > 0);
+  if (!ids.length) return false;
+  const [match] = await sql`
+    WITH RECURSIVE chain AS (
+      SELECT id, parent_id, name, 0 AS depth
+      FROM accounting_accounts
+      WHERE id = ANY(${ids})
+      UNION ALL
+      SELECT a.id, a.parent_id, a.name, c.depth + 1
+      FROM accounting_accounts a
+      JOIN chain c ON a.id = c.parent_id
+      WHERE c.depth < 20
+    )
+    SELECT 1 AS hit FROM chain
+    WHERE translate(name, 'أإآ', 'ااا') LIKE '%ثابت%'
+      AND (translate(name, 'أإآ', 'ااا') LIKE '%مصروف%'
+        OR translate(name, 'أإآ', 'ااا') LIKE '%مصاريف%')
+    LIMIT 1
+  `;
+  return !!match;
+}
+
+// خيار «فاتورة متكررة بشكل شهري» في نافذة الفاتورة والرفع الجماعي:
+// ينشئ قالباً في accounting_recurring_purchase_invoices من بيانات
+// الفاتورة المُنشأة للتو، بشرط أن يكون أحد حساباتها «مصروف ثابت» أو
+// فرعاً منه. last_generated_period يُضبط على شهر الفاتورة الحالي حتى
+// يبدأ التوليد التلقائي من الشهر التالي — فاتورة هذا الشهر هي الأصل
+// الذي أنشأه المستخدم بنفسه.
+export async function createRecurringTemplateFromInvoice({
+  payload,
+  accountIds = [],
+  description = null,
+  actor = null,
+}) {
+  await ensureRecurringSchema();
+
+  const isFixed = await anyFixedExpenseAccount(accountIds);
+  if (!isFixed) return { created: false, reason: "not_fixed_expense" };
+
+  const amount = round2(Number(payload.totalAmount) || 0);
+  if (amount <= 0) return { created: false, reason: "zero_amount" };
+
+  // معدل الضريبة مشتق من نسب الفاتورة نفسها — المبلغ المخزن شامل
+  // الضريبة فيعيد التوليد نفس الإجمالي.
+  const subtotal = Number(payload.subtotalAmount) || 0;
+  const tax = Number(payload.taxAmount) || 0;
+  const taxRate =
+    subtotal > 0
+      ? Math.min(Math.max(round2((tax / subtotal) * 100), 0), 100)
+      : 0;
+
+  let supplierLabel = payload.supplierName || null;
+  if (!supplierLabel && payload.contactId) {
+    const [contact] = await sql`
+      SELECT name FROM accounting_contacts WHERE id = ${payload.contactId}
+    `;
+    supplierLabel = contact?.name || null;
+  }
+  const name = [supplierLabel || `مورد #${payload.contactId}`, description]
+    .filter(Boolean)
+    .join(" — ")
+    .slice(0, 200);
+
+  // نفس المورد + نفس الحساب + نفس المبلغ وقالب نشط قائم = تكرار
+  // ضغطة، لا قالب جديد.
+  const [existing] = await sql`
+    SELECT id FROM accounting_recurring_purchase_invoices
+    WHERE is_active = TRUE
+      AND amount = ${amount}
+      AND COALESCE(contact_id, 0) = ${payload.contactId || 0}
+      AND COALESCE(supplier_name, '') = ${payload.supplierName || ""}
+      AND COALESCE(expense_account_id, 0) = ${payload.expenseAccountId || 0}
+  `;
+  if (existing) {
+    return { created: false, reason: "duplicate", id: existing.id };
+  }
+
+  const period = todayRiyadh().slice(0, 7);
+  const [created] = await sql`
+    INSERT INTO accounting_recurring_purchase_invoices (
+      name, contact_id, supplier_name, branch_id, expense_account_id,
+      description, amount, tax_rate, amount_includes_tax,
+      day_of_month, is_active, last_generated_period,
+      created_by_employee_id, created_by_employee_name
+    )
+    VALUES (
+      ${name}, ${payload.contactId || null}, ${payload.supplierName || null},
+      ${payload.branchId || null}, ${payload.expenseAccountId || null},
+      ${description}, ${amount}, ${taxRate}, TRUE,
+      1, TRUE, ${period},
+      ${actor?.id ? Number(actor.id) : null},
+      ${actor?.name ? String(actor.name) : null}
+    )
+    RETURNING id
+  `;
+  await logPurchaseAudit({
+    entityType: "recurring",
+    entityId: created.id,
+    action: "created",
+    summary: `إنشاء قالب فاتورة متكررة «${name}» من فاتورة ${payload.invoiceNumber} — ${amount.toFixed(2)} SAR مع بداية كل شهر، استحقاق نهاية الشهر`,
+    actor,
+  });
+  return { created: true, id: created.id };
+}
+
+// فاتورة متكررة → فاتورة فعلية غير مدفوعة (بانتظار الدفع) ببند
+// واحد مصنّف على حساب القالب، بتاريخ يوم القالب من الشهر واستحقاق
+// نهاية الشهر نفسه. رقم الفاتورة حتمي (REC-YYYYMM-قالب) فلا يتكرر
 // التوليد لنفس الشهر حتى لو تسابق طلبان.
 async function generateRecurringInvoices() {
   const today = todayRiyadh();
@@ -98,6 +211,12 @@ async function generateRecurringInvoices() {
       AND day_of_month <= ${dayOfMonth}
       AND (last_generated_period IS NULL OR last_generated_period < ${period})
   `;
+
+  const pad = (value) => String(value).padStart(2, "0");
+  const [periodYear, periodMonth] = period.split("-").map(Number);
+  // اليوم الأخير من شهر التوليد — تاريخ استحقاق كل فواتير الشهر.
+  const monthLastDay = new Date(periodYear, periodMonth, 0).getDate();
+  const dueDate = `${period}-${pad(monthLastDay)}`;
 
   for (const template of due) {
     const invoiceNumber = `REC-${period.replace("-", "")}-${template.id}`;
@@ -122,10 +241,18 @@ async function generateRecurringInvoices() {
     const tax = includesTax ? round2(amount - subtotal) : round2((amount * rate) / 100);
     const total = round2(subtotal + tax);
 
+    // تاريخ الفاتورة = يوم القالب من الشهر (لا يوم التوليد الفعلي —
+    // خادم متأخر أياماً لا يغيّر تواريخ الدفتر).
+    const templateDay = Math.min(
+      Math.max(Number(template.day_of_month) || 1, 1),
+      28,
+    );
+    const invoiceDate = `${period}-${pad(templateDay)}`;
+
     const [invoice] = await sql`
       INSERT INTO accounting_purchase_invoices (
         invoice_number, contact_id, supplier_name, expense_account_id,
-        invoice_date, currency,
+        invoice_date, due_date, currency,
         subtotal_amount, discount_amount, tax_amount, total_amount,
         paid_amount, branch_id, workflow_status, notes,
         created_by_employee_name
@@ -135,7 +262,7 @@ async function generateRecurringInvoices() {
         ${template.contact_id || null},
         ${template.supplier_name || null},
         ${template.expense_account_id || null},
-        ${today}, 'SAR',
+        ${invoiceDate}, ${dueDate}, 'SAR',
         ${subtotal}, 0, ${tax}, ${total},
         0, ${template.branch_id || null}, 'pending_payment',
         ${`فاتورة متكررة — ${template.name}`},

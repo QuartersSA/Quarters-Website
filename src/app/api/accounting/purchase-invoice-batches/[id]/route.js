@@ -53,6 +53,9 @@ function buildDraft(analysis) {
     currency: analysis?.currency || "SAR",
     discount: Number(analysis?.discount) || 0,
     notes: analysis?.operator_note ? String(analysis.operator_note) : "",
+    // «فاتورة متكررة بشكل شهري» — يفعّلها المراجع يدوياً عند حساب
+    // «مصروف ثابت»، لا يقررها التحليل.
+    recurring_monthly: false,
     items,
   };
 }
@@ -95,6 +98,7 @@ function sanitizeDraft(input) {
     currency: text(input.currency, 8) || "SAR",
     discount: Math.max(Number(input.discount) || 0, 0),
     notes: text(input.notes, 2000),
+    recurring_monthly: input.recurring_monthly === true,
     items,
   };
 }
@@ -522,6 +526,8 @@ export async function PATCH(request, { params: { id } }) {
         notes: String(draft?.notes || "").trim() || null,
         attachment_url: claimed[0].file_url || null,
         attachment_kind: draft?.document_type || null,
+        // قالب متكرر شهرياً — الخادم يعيد فرض شرط «مصروف ثابت».
+        recurring_monthly: draft?.recurring_monthly === true,
       };
       let created;
       try {

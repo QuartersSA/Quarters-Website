@@ -2,7 +2,10 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
-import { runPurchaseAutomation } from "@/app/api/utils/purchaseAutomation";
+import {
+  runPurchaseAutomation,
+  createRecurringTemplateFromInvoice,
+} from "@/app/api/utils/purchaseAutomation";
 import { notifyByPref } from "@/app/api/utils/waNotify";
 
 // Full accounting admins OR admins limited to قسم المشتريات only.
@@ -794,6 +797,29 @@ export async function createPurchaseInvoice(body, actor) {
       summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}${body.submit_for_approval === true ? " — أُرسلت إلى الاعتماد" : ""}`,
       actor,
     });
+
+  // خيار «فاتورة متكررة بشكل شهري»: أنشئ قالباً يتولّى النظام توليده
+  // تلقائياً مع بداية كل شهر (بانتظار الدفع، استحقاق نهاية الشهر).
+  // مشروط بأن يكون أحد حسابات الفاتورة «مصروف ثابت» أو فرعاً منه —
+  // الشرط يُعاد فرضه هنا كي لا يعتمد على الواجهة. فشله لا يعطل
+  // الفاتورة نفسها.
+  if (body.recurring_monthly === true) {
+    try {
+      const accountIds = [
+        ...(items || []).map((item) => item.accountId),
+        payload.expenseAccountId,
+      ].filter(Boolean);
+      await createRecurringTemplateFromInvoice({
+        payload,
+        accountIds,
+        description:
+          (items || []).find((item) => item.description)?.description || null,
+        actor,
+      });
+    } catch (error) {
+      console.error("recurring template from invoice failed", error);
+    }
+  }
 
   // إشعار المشتركين في «فاتورة مشتريات جديدة».
   notifyByPref(

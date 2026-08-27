@@ -19,6 +19,7 @@ import {
   Loader2,
   Plus,
   RefreshCw,
+  Repeat,
   Send,
   Trash2,
   X,
@@ -30,6 +31,7 @@ import useUpload from "@/utils/useUpload";
 import { compressImage } from "@/utils/compressImage";
 import { computeDraftTotals } from "@/utils/invoiceDraftMath";
 import { buildExpenseAccountOptions } from "@/components/Accounting/PurchaseInvoiceModal";
+import { isFixedExpenseAccountId } from "@/utils/fixedExpenseAccount";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 import {
@@ -747,6 +749,7 @@ function BulkReviewModal({
     currency: "SAR",
     discount: 0,
     notes: "",
+    recurring_monthly: false,
     items: [],
     ...(item.draft || {}),
   }));
@@ -778,6 +781,15 @@ function BulkReviewModal({
     setDraft((previous) => ({ ...previous, ...patch }));
     setDirty(true);
   };
+  // هل أحد بنود المسودة على حساب «مصروف ثابت» أو أحد فروعه؟ يتحكم
+  // بظهور خيار «فاتورة متكررة بشكل شهري».
+  const hasFixedExpenseLine = useMemo(
+    () =>
+      (draft.items || []).some((line) =>
+        isFixedExpenseAccountId(line.account_id, accounts),
+      ),
+    [draft.items, accounts],
+  );
   const updateLine = (index, patch) => {
     setDraft((previous) => ({
       ...previous,
@@ -1055,6 +1067,34 @@ function BulkReviewModal({
                 />
               </label>
             </div>
+
+            {/* فاتورة متكررة شهرياً — يظهر فقط عندما يكون أحد البنود
+                على حساب «مصروف ثابت» أو أحد فروعه. */}
+            {hasFixedExpenseLine ? (
+              <label
+                className={`${ws.glass} rounded-[10px] p-3 flex items-start gap-3 cursor-pointer select-none`}
+              >
+                <input
+                  type="checkbox"
+                  checked={draft.recurring_monthly === true}
+                  onChange={(event) =>
+                    updateDraft({ recurring_monthly: event.target.checked })
+                  }
+                  className="accent-[#0e7a5f] mt-1"
+                />
+                <span className="min-w-0">
+                  <span className="flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-white">
+                    <Repeat className="w-4 h-4 text-[#0e7a5f] dark:text-emerald-200" />
+                    فاتورة متكررة بشكل شهري
+                  </span>
+                  <span className={`${ws.muted} block text-[11px] mt-1 leading-relaxed`}>
+                    حساب الفاتورة ضمن «مصروف ثابت» — عند الإرسال ينشئ
+                    النظام قالباً يولّد هذه الفاتورة تلقائياً مع بداية كل
+                    شهر بحالة «بانتظار الدفع» وتاريخ استحقاق نهاية الشهر.
+                  </span>
+                </span>
+              </label>
+            ) : null}
 
             {/* البنود */}
             <div>

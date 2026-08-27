@@ -2,7 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-BiYqjwch.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as runPurchaseAutomation } from './purchaseAutomation-BUYtx20E.js';
+import { r as runPurchaseAutomation, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-CeFiLicW.js';
 import { n as notifyByPref } from './waNotify-CtLfIpXX.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -735,6 +735,25 @@ async function createPurchaseInvoice(body, actor) {
     summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}${body.submit_for_approval === true ? " — أُرسلت إلى الاعتماد" : ""}`,
     actor
   });
+
+  // خيار «فاتورة متكررة بشكل شهري»: أنشئ قالباً يتولّى النظام توليده
+  // تلقائياً مع بداية كل شهر (بانتظار الدفع، استحقاق نهاية الشهر).
+  // مشروط بأن يكون أحد حسابات الفاتورة «مصروف ثابت» أو فرعاً منه —
+  // الشرط يُعاد فرضه هنا كي لا يعتمد على الواجهة. فشله لا يعطل
+  // الفاتورة نفسها.
+  if (body.recurring_monthly === true) {
+    try {
+      const accountIds = [...(items || []).map(item => item.accountId), payload.expenseAccountId].filter(Boolean);
+      await createRecurringTemplateFromInvoice({
+        payload,
+        accountIds,
+        description: (items || []).find(item => item.description)?.description || null,
+        actor
+      });
+    } catch (error) {
+      console.error("recurring template from invoice failed", error);
+    }
+  }
 
   // إشعار المشتركين في «فاتورة مشتريات جديدة».
   notifyByPref("acc_invoice_created", ["🧾 فاتورة مشتريات جديدة", `الرقم: ${payload.invoiceNumber}`, `المورد: ${payload.supplierName || `#${payload.contactId}`}`, `المبلغ: ${payload.totalAmount.toFixed(2)} ${payload.currency}`, payload.paidAmount > 0 ? `المدفوع: ${payload.paidAmount.toFixed(2)}` : body.submit_for_approval === true ? "الحالة: بانتظار الاعتماد" : null, createdByName ? `بواسطة: ${createdByName}` : null].filter(Boolean).join("\n"));
