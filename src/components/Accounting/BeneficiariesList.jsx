@@ -7,6 +7,7 @@ import {
   HandCoins,
   Building,
   Hash,
+  Landmark,
   Link as LinkIcon,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/uiPurchases";
@@ -69,7 +70,7 @@ export default function BeneficiariesList({
                 جهة الاتصال
               </th>
               <th className="text-right font-semibold py-3 px-3 whitespace-nowrap">
-                الآيبان
+                الآيبان / رقم الحساب
               </th>
               <th className="text-right font-semibold py-3 px-3 whitespace-nowrap">
                 البنك
@@ -89,6 +90,7 @@ export default function BeneficiariesList({
           <tbody>
             {beneficiaries.map((b) => {
               const isActive = b.is_active !== false;
+              const isGovernment = b.beneficiary_type === "government";
               return (
                 <tr
                   key={b.id}
@@ -113,10 +115,17 @@ export default function BeneficiariesList({
                     className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap font-mono text-xs"
                     dir="ltr"
                   >
-                    {formatIban(b.iban)}
+                    {isGovernment ? b.account_number || "—" : formatIban(b.iban)}
                   </td>
                   <td className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap">
-                    {b.bank_name ? (
+                    {isGovernment ? (
+                      <span
+                        className={`${ws.pill} bg-sky-50 dark:bg-sky-400/10 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-400/25 inline-flex items-center gap-1`}
+                      >
+                        <Landmark className="w-3 h-3" />
+                        مدفوعات حكومية
+                      </span>
+                    ) : b.bank_name ? (
                       <span className="inline-flex items-center gap-1">
                         <Building className="w-3 h-3" />
                         {b.bank_name}
@@ -129,13 +138,13 @@ export default function BeneficiariesList({
                     className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap font-mono"
                     dir="ltr"
                   >
-                    {b.currency || "SAR"}
+                    {isGovernment ? "—" : b.currency || "SAR"}
                   </td>
                   <td
                     className="py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap font-mono text-xs"
                     dir="ltr"
                   >
-                    {b.swift ? (
+                    {!isGovernment && b.swift ? (
                       <span className="inline-flex items-center gap-1">
                         <Hash className="w-3 h-3" />
                         {b.swift}

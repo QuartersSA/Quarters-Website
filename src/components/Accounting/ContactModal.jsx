@@ -153,8 +153,9 @@ function BeneficiariesPanel({ contactId }) {
                   className="text-[11px] text-slate-500 dark:text-white/45 font-mono truncate"
                   dir="ltr"
                 >
-                  {formatIban(b.iban)}
-                  {b.bank_name ? ` · ${b.bank_name}` : ""}
+                  {b.beneficiary_type === "government"
+                    ? `${b.account_number || ""} · مدفوعات حكومية`
+                    : `${formatIban(b.iban)}${b.bank_name ? ` · ${b.bank_name}` : ""}`}
                 </div>
               </div>
               <div className="flex items-center gap-1 shrink-0">

@@ -203,7 +203,12 @@ function RecordPaymentModal({
 
   const copyIban = async (beneficiary) => {
     try {
-      await navigator.clipboard.writeText(beneficiary.iban || "");
+      // حكومي → رقم الحساب؛ بنكي → الآيبان.
+      await navigator.clipboard.writeText(
+        beneficiary.beneficiary_type === "government"
+          ? beneficiary.account_number || ""
+          : beneficiary.iban || "",
+      );
       setCopiedId(beneficiary.id);
       setTimeout(() => setCopiedId(null), 2000);
     } catch {
@@ -350,7 +355,12 @@ function RecordPaymentModal({
                   <div className="flex-1 min-w-0">
                     <div className="truncate text-slate-700 dark:text-white/75 font-semibold">
                       {beneficiary.name}
-                      {beneficiary.bank_name ? (
+                      {beneficiary.beneficiary_type === "government" ? (
+                        <span className="text-slate-400 dark:text-white/40 font-normal">
+                          {" "}
+                          — مدفوعات حكومية
+                        </span>
+                      ) : beneficiary.bank_name ? (
                         <span className="text-slate-400 dark:text-white/40 font-normal">
                           {" "}
                           — {beneficiary.bank_name}
@@ -361,7 +371,9 @@ function RecordPaymentModal({
                       className="font-mono text-slate-500 dark:text-white/50 truncate"
                       dir="ltr"
                     >
-                      {beneficiary.iban}
+                      {beneficiary.beneficiary_type === "government"
+                        ? beneficiary.account_number
+                        : beneficiary.iban}
                     </div>
                   </div>
                   <button
