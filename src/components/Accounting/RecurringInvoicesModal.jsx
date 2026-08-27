@@ -208,7 +208,8 @@ export default function RecurringInvoicesModal({
                 الفواتير المتكررة
               </div>
               <div className="text-[11px] text-slate-500 dark:text-white/50 mt-0.5">
-                إيجارات واشتراكات تتحول لفاتورة «بانتظار الاعتماد» تلقائياً كل شهر.
+                إيجارات واشتراكات تتحول لفاتورة غير مدفوعة تلقائياً كل
+                شهر — باستحقاق نهاية الشهر.
               </div>
             </div>
           </div>

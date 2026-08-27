@@ -1,7 +1,7 @@
-import sql from "@/app/api/utils/sql";
-import { sendWhatsAppViaWasender, flushWaOutbox } from "@/app/api/utils/wasender";
-import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
-import { notifyByPref, onceDaily } from "@/app/api/utils/waNotify";
+import sql from './sql-CSDV1lSC.js';
+import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-DykD1wlV.js';
+import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
+import { o as onceDaily, n as notifyByPref } from './waNotify-CtLfIpXX.js';
 
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
@@ -22,29 +22,26 @@ function todayRiyadh() {
     timeZone: "Asia/Riyadh",
     year: "numeric",
     month: "2-digit",
-    day: "2-digit",
+    day: "2-digit"
   }).formatToParts(new Date());
-  const get = (type) => parts.find((part) => part.type === type)?.value || "";
+  const get = type => parts.find(part => part.type === type)?.value || "";
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
-
 function hourRiyadh() {
   const hour = new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Riyadh",
     hour: "2-digit",
-    hour12: false,
+    hour12: false
   }).format(new Date());
   return Number(hour) % 24;
 }
 
 // موعد خروج التقارير المجدولة — صباح يوم الاستحقاق بتوقيت الرياض.
 const SEND_HOUR_RIYADH = 8;
-
 function round2(value) {
   return Math.round(value * 100) / 100;
 }
-
-export async function ensureRecurringSchema() {
+async function ensureRecurringSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_recurring_purchase_invoices (
       id SERIAL PRIMARY KEY,
@@ -85,14 +82,10 @@ export async function ensureRecurringSchema() {
         ADD COLUMN IF NOT EXISTS recurring_template_id INTEGER
     `;
   } catch (error) {
-    console.error(
-      "recurring schema: invoices link column skipped:",
-      error?.message,
-    );
+    console.error("recurring schema: invoices link column skipped:", error?.message);
   }
 }
-
-export async function ensureScheduledReportsSchema() {
+async function ensureScheduledReportsSchema() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_scheduled_purchase_reports (
       id SERIAL PRIMARY KEY,
@@ -113,10 +106,8 @@ export async function ensureScheduledReportsSchema() {
 // صعوداً في سلسلة الآباء (translate يوحّد الهمزات) لأن الشجرة قابلة
 // للتعديل من المستخدم ولا كود ثابتاً يُعتمد عليه. سقف العمق يمنع
 // الدوران لو فسدت parent_id.
-export async function anyFixedExpenseAccount(accountIds = []) {
-  const ids = accountIds
-    .map(Number)
-    .filter((id) => Number.isInteger(id) && id > 0);
+async function anyFixedExpenseAccount(accountIds = []) {
+  const ids = accountIds.map(Number).filter(id => Number.isInteger(id) && id > 0);
   if (!ids.length) return false;
   const [match] = await sql`
     WITH RECURSIVE chain AS (
@@ -143,20 +134,14 @@ export async function anyFixedExpenseAccount(accountIds = []) {
 // الفاتورة شهرياً لا مبلغ واحد مجمّع.
 function serializeTemplateItems(items) {
   if (!Array.isArray(items)) return null;
-  const rows = items
-    .filter((item) => round2(Number(item.amount) || 0) > 0)
-    .map((item) => ({
-      description: item.description || null,
-      account_id:
-        Number(item.accountId) > 0 ? Number(item.accountId) : null,
-      quantity: Number(item.quantity) > 0 ? Number(item.quantity) : 1,
-      unit_price:
-        Number(item.unitPrice) > 0
-          ? Number(item.unitPrice)
-          : round2(Number(item.amount) || 0),
-      tax_rate: Math.min(Math.max(Number(item.taxRate) || 0, 0), 100),
-      amount_includes_tax: !!item.includesTax,
-    }));
+  const rows = items.filter(item => round2(Number(item.amount) || 0) > 0).map(item => ({
+    description: item.description || null,
+    account_id: Number(item.accountId) > 0 ? Number(item.accountId) : null,
+    quantity: Number(item.quantity) > 0 ? Number(item.quantity) : 1,
+    unit_price: Number(item.unitPrice) > 0 ? Number(item.unitPrice) : round2(Number(item.amount) || 0),
+    tax_rate: Math.min(Math.max(Number(item.taxRate) || 0, 0), 100),
+    amount_includes_tax: !!item.includesTax
+  }));
   return rows.length > 0 ? rows : null;
 }
 
@@ -174,7 +159,7 @@ function computeTemplateLines(template) {
     const rate = Math.min(Math.max(Number(raw?.tax_rate) || 0, 0), 100);
     const includesTax = !!raw?.amount_includes_tax;
     const subtotal = includesTax ? amount / (1 + rate / 100) : amount;
-    const tax = includesTax ? amount - subtotal : (amount * rate) / 100;
+    const tax = includesTax ? amount - subtotal : amount * rate / 100;
     rows.push({
       position: rows.length,
       description: raw?.description || null,
@@ -186,16 +171,13 @@ function computeTemplateLines(template) {
       includesTax,
       subtotal: round2(subtotal),
       tax: round2(tax),
-      total: round2(subtotal + tax),
+      total: round2(subtotal + tax)
     });
   }
   if (!rows.length) return null;
   const rawSubtotal = round2(rows.reduce((sum, row) => sum + row.subtotal, 0));
   const rawTax = round2(rows.reduce((sum, row) => sum + row.tax, 0));
-  const discount = Math.min(
-    Math.max(Number(template.discount_amount) || 0, 0),
-    rawSubtotal,
-  );
+  const discount = Math.min(Math.max(Number(template.discount_amount) || 0, 0), rawSubtotal);
   const factor = rawSubtotal > 0 ? (rawSubtotal - discount) / rawSubtotal : 1;
   const subtotal = round2(rawSubtotal - discount);
   const tax = round2(rawTax * factor);
@@ -205,11 +187,7 @@ function computeTemplateLines(template) {
     subtotal,
     tax,
     total: round2(subtotal + tax),
-    headerAccountId:
-      rows.find((row) => row.accountId)?.accountId ||
-      (Number(template.expense_account_id) > 0
-        ? Number(template.expense_account_id)
-        : null),
+    headerAccountId: rows.find(row => row.accountId)?.accountId || (Number(template.expense_account_id) > 0 ? Number(template.expense_account_id) : null)
   };
 }
 
@@ -220,22 +198,24 @@ function computeTemplateLines(template) {
 // فرعاً منه. last_generated_period يُضبط على شهر الفاتورة الحالي حتى
 // يبدأ التوليد التلقائي من الشهر التالي — فاتورة هذا الشهر هي الأصل
 // الذي أنشأه المستخدم بنفسه.
-export async function createRecurringTemplateFromInvoice({
+async function createRecurringTemplateFromInvoice({
   payload,
   accountIds = [],
   items = null,
   description = null,
   invoiceId = null,
-  actor = null,
+  actor = null
 }) {
   await ensureRecurringSchema();
-
   const isFixed = await anyFixedExpenseAccount(accountIds);
-  if (!isFixed) return { created: false, reason: "not_fixed_expense" };
+  if (!isFixed) return {
+    created: false,
+    reason: "not_fixed_expense"
+  };
 
   // ربط الفاتورة الأصل بقالبها حتى تسري تعديلاتها اللاحقة على
   // فواتير الأشهر القادمة (مزامنة القالب في PUT الفواتير).
-  const linkInvoice = async (templateId) => {
+  const linkInvoice = async templateId => {
     if (!invoiceId) return;
     await sql`
       UPDATE accounting_purchase_invoices
@@ -243,19 +223,17 @@ export async function createRecurringTemplateFromInvoice({
       WHERE id = ${invoiceId}
     `;
   };
-
   const amount = round2(Number(payload.totalAmount) || 0);
-  if (amount <= 0) return { created: false, reason: "zero_amount" };
+  if (amount <= 0) return {
+    created: false,
+    reason: "zero_amount"
+  };
 
   // معدل الضريبة مشتق من نسب الفاتورة نفسها — المبلغ المخزن شامل
   // الضريبة فيعيد التوليد نفس الإجمالي.
   const subtotal = Number(payload.subtotalAmount) || 0;
   const tax = Number(payload.taxAmount) || 0;
-  const taxRate =
-    subtotal > 0
-      ? Math.min(Math.max(round2((tax / subtotal) * 100), 0), 100)
-      : 0;
-
+  const taxRate = subtotal > 0 ? Math.min(Math.max(round2(tax / subtotal * 100), 0), 100) : 0;
   let supplierLabel = payload.supplierName || null;
   if (!supplierLabel && payload.contactId) {
     const [contact] = await sql`
@@ -263,10 +241,7 @@ export async function createRecurringTemplateFromInvoice({
     `;
     supplierLabel = contact?.name || null;
   }
-  const name = [supplierLabel || `مورد #${payload.contactId}`, description]
-    .filter(Boolean)
-    .join(" — ")
-    .slice(0, 200);
+  const name = [supplierLabel || `مورد #${payload.contactId}`, description].filter(Boolean).join(" — ").slice(0, 200);
 
   // نفس المورد + نفس الحساب + نفس المبلغ وقالب نشط قائم = تكرار
   // ضغطة، لا قالب جديد.
@@ -280,9 +255,12 @@ export async function createRecurringTemplateFromInvoice({
   `;
   if (existing) {
     await linkInvoice(existing.id);
-    return { created: false, reason: "duplicate", id: existing.id };
+    return {
+      created: false,
+      reason: "duplicate",
+      id: existing.id
+    };
   }
-
   const period = todayRiyadh().slice(0, 7);
   const templateItems = serializeTemplateItems(items);
   const [created] = await sql`
@@ -313,9 +291,12 @@ export async function createRecurringTemplateFromInvoice({
     entityId: created.id,
     action: "created",
     summary: `إنشاء قالب فاتورة متكررة «${name}» من فاتورة ${payload.invoiceNumber} — ${amount.toFixed(2)} SAR مع بداية كل شهر، استحقاق نهاية الشهر`,
-    actor,
+    actor
   });
-  return { created: true, id: created.id };
+  return {
+    created: true,
+    id: created.id
+  };
 }
 
 // مزامنة القالب من تعديل فاتورة مرتبطة به: عدّل المستخدم آخر فاتورة
@@ -323,28 +304,30 @@ export async function createRecurringTemplateFromInvoice({
 // الأشهر القادمة تلقائياً. تُزامَن آخر فاتورة فقط — تعديل فاتورة شهر
 // قديم لا يغيّر المستقبل. الفواتير المولّدة قبل عمود الربط تُلحق عبر
 // رقمها الحتمي REC-YYYYMM-قالب.
-export async function syncRecurringTemplateFromInvoice({
+async function syncRecurringTemplateFromInvoice({
   invoiceId,
   payload,
   items = null,
-  actor = null,
+  actor = null
 }) {
   await ensureRecurringSchema();
-
   const [invoice] = await sql`
     SELECT id, invoice_number, recurring_template_id
     FROM accounting_purchase_invoices
     WHERE id = ${invoiceId}
   `;
-  if (!invoice) return { synced: false, reason: "invoice_not_found" };
-
+  if (!invoice) return {
+    synced: false,
+    reason: "invoice_not_found"
+  };
   let templateId = Number(invoice.recurring_template_id) || null;
   if (!templateId) {
     // فواتير مولّدة قبل إضافة عمود الربط — الرقم الحتمي يدل عليها.
-    const match = /^REC-\d{6}-(\d+)$/.exec(
-      String(invoice.invoice_number || ""),
-    );
-    if (!match) return { synced: false, reason: "not_recurring" };
+    const match = /^REC-\d{6}-(\d+)$/.exec(String(invoice.invoice_number || ""));
+    if (!match) return {
+      synced: false,
+      reason: "not_recurring"
+    };
     templateId = Number(match[1]);
     await sql`
       UPDATE accounting_purchase_invoices
@@ -352,12 +335,14 @@ export async function syncRecurringTemplateFromInvoice({
       WHERE id = ${invoiceId}
     `;
   }
-
   const [template] = await sql`
     SELECT id, name, amount FROM accounting_recurring_purchase_invoices
     WHERE id = ${templateId} AND is_active = TRUE
   `;
-  if (!template) return { synced: false, reason: "template_not_found" };
+  if (!template) return {
+    synced: false,
+    reason: "template_not_found"
+  };
 
   // آخر فاتورة مرتبطة بالقالب هي وحدها من يقود المستقبل.
   const [latest] = await sql`
@@ -367,20 +352,20 @@ export async function syncRecurringTemplateFromInvoice({
     LIMIT 1
   `;
   if (latest && Number(latest.id) !== Number(invoiceId)) {
-    return { synced: false, reason: "not_latest" };
+    return {
+      synced: false,
+      reason: "not_latest"
+    };
   }
-
   const amount = round2(Number(payload.totalAmount) || 0);
-  if (amount <= 0) return { synced: false, reason: "zero_amount" };
+  if (amount <= 0) return {
+    synced: false,
+    reason: "zero_amount"
+  };
   const subtotal = Number(payload.subtotalAmount) || 0;
   const tax = Number(payload.taxAmount) || 0;
-  const taxRate =
-    subtotal > 0
-      ? Math.min(Math.max(round2((tax / subtotal) * 100), 0), 100)
-      : 0;
-  const description =
-    (Array.isArray(items) ? items : []).find((item) => item.description)
-      ?.description || null;
+  const taxRate = subtotal > 0 ? Math.min(Math.max(round2(tax / subtotal * 100), 0), 100) : 0;
+  const description = (Array.isArray(items) ? items : []).find(item => item.description)?.description || null;
 
   // البنود تُستبدل بالكامل عندما يرسلها المحرر (مصفوفة)؛ نداء بلا
   // items (نافذة الدفع السريع) يترك بنود القالب كما هي.
@@ -410,7 +395,6 @@ export async function syncRecurringTemplateFromInvoice({
         END
     WHERE id = ${templateId}
   `;
-
   const previousAmount = round2(Number(template.amount) || 0);
   if (Math.abs(previousAmount - amount) > 0.004) {
     await logPurchaseAudit({
@@ -418,10 +402,13 @@ export async function syncRecurringTemplateFromInvoice({
       entityId: templateId,
       action: "updated",
       summary: `تحديث قالب الفاتورة المتكررة «${template.name}» من تعديل الفاتورة ${payload.invoiceNumber} — المبلغ ${previousAmount.toFixed(2)} → ${amount.toFixed(2)} SAR لفواتير الأشهر القادمة`,
-      actor,
+      actor
     });
   }
-  return { synced: true, id: templateId };
+  return {
+    synced: true,
+    id: templateId
+  };
 }
 
 // فاتورة متكررة → فاتورة فعلية غير مدفوعة (بانتظار الدفع) بكامل
@@ -434,20 +421,17 @@ async function generateRecurringInvoices() {
   const today = todayRiyadh();
   const period = today.slice(0, 7); // YYYY-MM
   const dayOfMonth = Number(today.slice(8, 10));
-
   const due = await sql`
     SELECT * FROM accounting_recurring_purchase_invoices
     WHERE is_active = TRUE
       AND day_of_month <= ${dayOfMonth}
       AND (last_generated_period IS NULL OR last_generated_period < ${period})
   `;
-
-  const pad = (value) => String(value).padStart(2, "0");
+  const pad = value => String(value).padStart(2, "0");
   const [periodYear, periodMonth] = period.split("-").map(Number);
   // اليوم الأخير من شهر التوليد — تاريخ استحقاق كل فواتير الشهر.
   const monthLastDay = new Date(periodYear, periodMonth, 0).getDate();
   const dueDate = `${period}-${pad(monthLastDay)}`;
-
   for (const template of due) {
     const invoiceNumber = `REC-${period.replace("-", "")}-${template.id}`;
     const [exists] = await sql`
@@ -484,27 +468,21 @@ async function generateRecurringInvoices() {
       if (amount <= 0) continue;
       const rate = Math.min(Math.max(Number(template.tax_rate) || 0, 0), 100);
       const includesTax = template.amount_includes_tax !== false;
-      const lineSubtotal = includesTax
-        ? round2(amount / (1 + rate / 100))
-        : amount;
-      const lineTax = includesTax
-        ? round2(amount - lineSubtotal)
-        : round2((amount * rate) / 100);
-      lines = [
-        {
-          position: 0,
-          description: template.description || template.name,
-          accountId: template.expense_account_id || null,
-          quantity: 1,
-          unitPrice: amount,
-          amount,
-          taxRate: rate,
-          includesTax,
-          subtotal: lineSubtotal,
-          tax: lineTax,
-          total: round2(lineSubtotal + lineTax),
-        },
-      ];
+      const lineSubtotal = includesTax ? round2(amount / (1 + rate / 100)) : amount;
+      const lineTax = includesTax ? round2(amount - lineSubtotal) : round2(amount * rate / 100);
+      lines = [{
+        position: 0,
+        description: template.description || template.name,
+        accountId: template.expense_account_id || null,
+        quantity: 1,
+        unitPrice: amount,
+        amount,
+        taxRate: rate,
+        includesTax,
+        subtotal: lineSubtotal,
+        tax: lineTax,
+        total: round2(lineSubtotal + lineTax)
+      }];
       discount = 0;
       subtotal = lineSubtotal;
       tax = lineTax;
@@ -515,15 +493,9 @@ async function generateRecurringInvoices() {
 
     // تاريخ الفاتورة = يوم القالب من الشهر (لا يوم التوليد الفعلي —
     // خادم متأخر أياماً لا يغيّر تواريخ الدفتر).
-    const templateDay = Math.min(
-      Math.max(Number(template.day_of_month) || 1, 1),
-      28,
-    );
+    const templateDay = Math.min(Math.max(Number(template.day_of_month) || 1, 1), 28);
     const invoiceDate = `${period}-${pad(templateDay)}`;
-    const notes = [`فاتورة متكررة — ${template.name}`, template.notes]
-      .filter(Boolean)
-      .join("\n");
-
+    const notes = [`فاتورة متكررة — ${template.name}`, template.notes].filter(Boolean).join("\n");
     const [invoice] = await sql`
       INSERT INTO accounting_purchase_invoices (
         invoice_number, contact_id, supplier_name, expense_account_id,
@@ -573,13 +545,19 @@ async function generateRecurringInvoices() {
       entityId: invoice.id,
       action: "recurring",
       summary: `توليد تلقائي للفاتورة المتكررة «${template.name}» — ${invoiceNumber} بمبلغ ${total.toFixed(2)} SAR`,
-      actor: { name: "النظام" },
+      actor: {
+        name: "النظام"
+      }
     });
   }
 }
 
 // نص ملخص لفترة [from, to] يُرسل واتساب — يقرأ نفس أعمدة الدفتر.
-export async function buildPurchasesSummaryText({ title, from, to }) {
+async function buildPurchasesSummaryText({
+  title,
+  from,
+  to
+}) {
   const [totals] = await sql`
     SELECT COUNT(*)::int AS count,
            COALESCE(SUM(total_amount), 0) AS total,
@@ -611,24 +589,11 @@ export async function buildPurchasesSummaryText({ title, from, to }) {
     ORDER BY 2 DESC
     LIMIT 3
   `;
-
-  const money = (value) =>
-    Number(value || 0).toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-  const lines = [
-    `📊 ${title}`,
-    `الفترة: ${from} → ${to}`,
-    "",
-    `عدد الفواتير: ${totals.count}`,
-    `إجمالي المشتريات: ${money(totals.total)} SAR`,
-    `المدفوع: ${money(totals.paid)} SAR`,
-    `الرصيد المتبقي: ${money(totals.balance)} SAR`,
-    "",
-    `⚠️ المتأخرات حالياً (كل الفترات): ${overdue.count} فاتورة بمبلغ ${money(overdue.balance)} SAR`,
-  ];
+  const money = value => Number(value || 0).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  const lines = [`📊 ${title}`, `الفترة: ${from} → ${to}`, "", `عدد الفواتير: ${totals.count}`, `إجمالي المشتريات: ${money(totals.total)} SAR`, `المدفوع: ${money(totals.paid)} SAR`, `الرصيد المتبقي: ${money(totals.balance)} SAR`, "", `⚠️ المتأخرات حالياً (كل الفترات): ${overdue.count} فاتورة بمبلغ ${money(overdue.balance)} SAR`];
   if (topSuppliers.length > 0) {
     lines.push("", "أعلى الموردين في الفترة:");
     for (const supplier of topSuppliers) {
@@ -658,22 +623,21 @@ function scheduleState(frequency, today) {
       key: `w:${key}`,
       from: prevStart.toISOString().slice(0, 10),
       to: prevEnd.toISOString().slice(0, 10),
-      rangeLabel: "الأسبوع الماضي",
+      rangeLabel: "الأسبوع الماضي"
     };
   }
   // monthly: أرسل ملخص الشهر السابق مرة واحدة كل شهر جديد.
   const prevY = m === 1 ? y - 1 : y;
   const prevM = m === 1 ? 12 : m - 1;
-  const pad = (n) => String(n).padStart(2, "0");
+  const pad = n => String(n).padStart(2, "0");
   const lastDay = new Date(prevY, prevM, 0).getDate();
   return {
     key: `m:${y}-${pad(m)}`,
     from: `${prevY}-${pad(prevM)}-01`,
     to: `${prevY}-${pad(prevM)}-${pad(lastDay)}`,
-    rangeLabel: "الشهر الماضي",
+    rangeLabel: "الشهر الماضي"
   };
 }
-
 async function sendDueScheduledReports() {
   if (!process.env.WASENDER_API_KEY) return;
   // قبل الثامنة صباحاً لا يخرج شيء — الموعد المعلن للمستخدم، ويمنع
@@ -690,11 +654,11 @@ async function sendDueScheduledReports() {
     const text = await buildPurchasesSummaryText({
       title: `${schedule.title} — ملخص مشتريات ${state.rangeLabel}`,
       from: state.from,
-      to: state.to,
+      to: state.to
     });
     const result = await sendWhatsAppViaWasender({
       to: schedule.phone,
-      text,
+      text
     });
     if (!result.ok) {
       console.error("scheduled purchases report send failed", result);
@@ -711,7 +675,9 @@ async function sendDueScheduledReports() {
       entityId: schedule.id,
       action: "scheduled_report",
       summary: `إرسال تقرير مجدول «${schedule.title}» (${state.from} → ${state.to}) إلى واتساب`,
-      actor: { name: "النظام" },
+      actor: {
+        name: "النظام"
+      }
     });
   }
 }
@@ -740,21 +706,11 @@ async function sendOverdueDigest() {
   // يستهلك الإرسال.
   if (!(await onceDaily("acc_invoice_overdue"))) return;
   const total = rows.reduce((acc, row) => acc + Number(row.balance || 0), 0);
-  const lines = [
-    `⏰ فواتير متأخرة (${rows.length})`,
-    ...rows.map(
-      (row) =>
-        `• ${row.invoice_number} — ${row.supplier}: ${Number(row.balance).toFixed(2)} SAR (استحقاق ${row.due_date})`,
-    ),
-    "",
-    `الإجمالي المتأخر: ${total.toFixed(2)} SAR`,
-  ];
+  const lines = [`⏰ فواتير متأخرة (${rows.length})`, ...rows.map(row => `• ${row.invoice_number} — ${row.supplier}: ${Number(row.balance).toFixed(2)} SAR (استحقاق ${row.due_date})`), "", `الإجمالي المتأخر: ${total.toFixed(2)} SAR`];
   await notifyByPref("acc_invoice_overdue", lines.join("\n"));
 }
-
 let automationRunning = false;
-
-export async function runPurchaseAutomation() {
+async function runPurchaseAutomation() {
   if (automationRunning) return;
   automationRunning = true;
   try {
@@ -775,8 +731,7 @@ export async function runPurchaseAutomation() {
 // المجدول الداخلي — يُستدعى مرة واحدة من نقطة إقلاع الخادم.
 const TIMER_INTERVAL_MS = 5 * 60 * 1000;
 let timerStarted = false;
-
-export function startPurchaseAutomationTimer() {
+function startPurchaseAutomationTimer() {
   if (timerStarted) return;
   timerStarted = true;
   const tick = () => {
@@ -788,7 +743,7 @@ export function startPurchaseAutomationTimer() {
   // لا يمسكان العملية لو أُغلق الخادم — الويب سيرفر هو من يبقيها حية.
   first.unref?.();
   interval.unref?.();
-  console.log(
-    `purchase automation timer started (every ${TIMER_INTERVAL_MS / 60000} min, sends after ${SEND_HOUR_RIYADH}:00 Riyadh)`,
-  );
+  console.log(`purchase automation timer started (every ${TIMER_INTERVAL_MS / 60000} min, sends after ${SEND_HOUR_RIYADH}:00 Riyadh)`);
 }
+
+export { syncRecurringTemplateFromInvoice as a, ensureScheduledReportsSchema as b, createRecurringTemplateFromInvoice as c, buildPurchasesSummaryText as d, ensureRecurringSchema as e, runPurchaseAutomation as r, startPurchaseAutomationTimer as s };

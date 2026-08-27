@@ -2,7 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-BiYqjwch.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as runPurchaseAutomation } from './purchaseAutomation-BUYtx20E.js';
+import { r as runPurchaseAutomation, a as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-D34CYa3_.js';
 import { n as notifyByPref } from './waNotify-CtLfIpXX.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -128,7 +128,8 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
       ADD COLUMN IF NOT EXISTS created_by_employee_id INTEGER,
       ADD COLUMN IF NOT EXISTS created_by_employee_name TEXT,
-      ADD COLUMN IF NOT EXISTS expense_account_id INTEGER
+      ADD COLUMN IF NOT EXISTS expense_account_id INTEGER,
+      ADD COLUMN IF NOT EXISTS recurring_template_id INTEGER
   `;
   // Invoices classify against expense accounts from شجرة الحسابات.
   await ensureAccountsSchema();
@@ -548,6 +549,7 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.branch_id,
         br.name AS branch_name,
         GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance_due,
+        inv.recurring_template_id,
         inv.workflow_status,
         CASE
           WHEN inv.is_active = FALSE THEN 'inactive'
@@ -736,6 +738,27 @@ async function createPurchaseInvoice(body, actor) {
     actor
   });
 
+  // خيار «فاتورة متكررة بشكل شهري»: أنشئ قالباً يتولّى النظام توليده
+  // تلقائياً مع بداية كل شهر (بانتظار الدفع، استحقاق نهاية الشهر).
+  // مشروط بأن يكون أحد حسابات الفاتورة «مصروف ثابت» أو فرعاً منه —
+  // الشرط يُعاد فرضه هنا كي لا يعتمد على الواجهة. فشله لا يعطل
+  // الفاتورة نفسها.
+  if (body.recurring_monthly === true) {
+    try {
+      const accountIds = [...(items || []).map(item => item.accountId), payload.expenseAccountId].filter(Boolean);
+      await createRecurringTemplateFromInvoice({
+        payload,
+        accountIds,
+        items,
+        description: (items || []).find(item => item.description)?.description || null,
+        invoiceId: created.id,
+        actor
+      });
+    } catch (error) {
+      console.error("recurring template from invoice failed", error);
+    }
+  }
+
   // إشعار المشتركين في «فاتورة مشتريات جديدة».
   notifyByPref("acc_invoice_created", ["🧾 فاتورة مشتريات جديدة", `الرقم: ${payload.invoiceNumber}`, `المورد: ${payload.supplierName || `#${payload.contactId}`}`, `المبلغ: ${payload.totalAmount.toFixed(2)} ${payload.currency}`, payload.paidAmount > 0 ? `المدفوع: ${payload.paidAmount.toFixed(2)}` : body.submit_for_approval === true ? "الحالة: بانتظار الاعتماد" : null, createdByName ? `بواسطة: ${createdByName}` : null].filter(Boolean).join("\n"));
   return {
@@ -899,6 +922,20 @@ async function PUT(request) {
         summary: `تعديل الفاتورة ${payload.invoiceNumber} — الإجمالي ${payload.totalAmount.toFixed(2)} ${payload.currency}، المدفوع ${payload.paidAmount.toFixed(2)}`,
         actor: auth.user
       });
+    }
+
+    // فاتورة مرتبطة بقالب متكرر: تعديل آخر فاتورة (المبلغ 5000 →
+    // 4000 مثلاً) يزامن القالب فتخرج فواتير الأشهر القادمة بالقيم
+    // الجديدة. فشل المزامنة لا يعطل حفظ الفاتورة.
+    try {
+      await syncRecurringTemplateFromInvoice({
+        invoiceId: id,
+        payload,
+        items,
+        actor: auth.user
+      });
+    } catch (error) {
+      console.error("recurring template sync failed", error);
     }
     return Response.json({
       ok: true,

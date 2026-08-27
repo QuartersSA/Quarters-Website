@@ -1,6 +1,6 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureRecurringSchema } from './purchaseAutomation-BUYtx20E.js';
+import { e as ensureRecurringSchema } from './purchaseAutomation-D34CYa3_.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -173,6 +173,30 @@ async function PUT(request) {
         status: 400
       });
     }
+
+    // قالب كامل (بنود مخزنة من فاتورة): تغيير المبلغ من هذه النافذة
+    // يقيس أسعار البنود بنفس النسبة حتى يبقى التوليد على البنود
+    // نفسها بالإجمالي الجديد — بدون تغيير المبلغ تبقى البنود كما هي.
+    const [current] = await sql`
+      SELECT amount, items FROM accounting_recurring_purchase_invoices
+      WHERE id = ${id}
+    `;
+    if (!current) {
+      return Response.json({
+        error: "القالب غير موجود"
+      }, {
+        status: 404
+      });
+    }
+    let nextItems = Array.isArray(current.items) ? current.items : null;
+    const currentAmount = Number(current.amount) || 0;
+    if (nextItems && currentAmount > 0 && Math.abs(payload.amount - currentAmount) > 0.004) {
+      const factor = payload.amount / currentAmount;
+      nextItems = nextItems.map(item => ({
+        ...item,
+        unit_price: Math.round((Number(item.unit_price) || 0) * factor * 10000) / 10000
+      }));
+    }
     const [updated] = await sql`
       UPDATE accounting_recurring_purchase_invoices
       SET name = ${payload.name},
@@ -184,6 +208,7 @@ async function PUT(request) {
           amount = ${payload.amount},
           tax_rate = ${payload.taxRate},
           amount_includes_tax = ${payload.amountIncludesTax},
+          items = ${nextItems ? JSON.stringify(nextItems) : null}::jsonb,
           day_of_month = ${payload.dayOfMonth},
           is_active = ${payload.isActive}
       WHERE id = ${id}
