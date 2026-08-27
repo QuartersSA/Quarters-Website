@@ -2,7 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-BiYqjwch.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as runPurchaseAutomation, a as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-DHLQ48X4.js';
+import { r as runPurchaseAutomation, a as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-D34CYa3_.js';
 import { n as notifyByPref } from './waNotify-CtLfIpXX.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -749,6 +749,7 @@ async function createPurchaseInvoice(body, actor) {
       await createRecurringTemplateFromInvoice({
         payload,
         accountIds,
+        items,
         description: (items || []).find(item => item.description)?.description || null,
         invoiceId: created.id,
         actor

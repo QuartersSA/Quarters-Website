@@ -62,6 +62,17 @@ async function ensureRecurringSchema() {
       created_by_employee_name TEXT
     )
   `;
+  // القالب الكامل: بنود الفاتورة كما هي (وصف/حساب/كمية/سعر/ضريبة)
+  // في items JSONB + الخصم والعملة والملاحظات — فيتكرر كل تفاصيل
+  // الفاتورة لا مبلغاً واحداً. القوالب القديمة بلا items تبقى تعمل
+  // بمسار المبلغ الواحد.
+  await sql`
+    ALTER TABLE accounting_recurring_purchase_invoices
+      ADD COLUMN IF NOT EXISTS items JSONB,
+      ADD COLUMN IF NOT EXISTS discount_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS currency TEXT,
+      ADD COLUMN IF NOT EXISTS notes TEXT
+  `;
   // ربط الفاتورة بقالبها المتكرر: الفواتير المولّدة والفاتورة الأصل
   // تحمل معرف القالب، فتعديل آخر فاتورة يزامن القالب للشهر القادم.
   // ملفوف لأن جدول الفواتير قد لا يكون موجوداً بعد على تنصيب جديد.
@@ -118,15 +129,79 @@ async function anyFixedExpenseAccount(accountIds = []) {
   return !!match;
 }
 
+// بنود الفاتورة (ناتج parseItems في مسار الفواتير) → JSON يُخزن في
+// القالب كما هي: وصف، حساب، كمية، سعر، ضريبة — فيتكرر كل تفاصيل
+// الفاتورة شهرياً لا مبلغ واحد مجمّع.
+function serializeTemplateItems(items) {
+  if (!Array.isArray(items)) return null;
+  const rows = items.filter(item => round2(Number(item.amount) || 0) > 0).map(item => ({
+    description: item.description || null,
+    account_id: Number(item.accountId) > 0 ? Number(item.accountId) : null,
+    quantity: Number(item.quantity) > 0 ? Number(item.quantity) : 1,
+    unit_price: Number(item.unitPrice) > 0 ? Number(item.unitPrice) : round2(Number(item.amount) || 0),
+    tax_rate: Math.min(Math.max(Number(item.taxRate) || 0, 0), 100),
+    amount_includes_tax: !!item.includesTax
+  }));
+  return rows.length > 0 ? rows : null;
+}
+
+// بنود القالب المخزنة + خصم القالب → صفوف جاهزة للإدراج مع إجماليات
+// الرأس — نفس رياضيات مسار الفواتير (الخصم قبل الضريبة يقلّص الوعاء
+// والضريبة تنكمش بنفس النسبة).
+function computeTemplateLines(template) {
+  const stored = Array.isArray(template.items) ? template.items : [];
+  const rows = [];
+  for (const raw of stored) {
+    const quantity = Number(raw?.quantity) > 0 ? Number(raw.quantity) : 1;
+    const unitPrice = Number(raw?.unit_price) > 0 ? Number(raw.unit_price) : 0;
+    const amount = round2(quantity * unitPrice);
+    if (amount <= 0) continue;
+    const rate = Math.min(Math.max(Number(raw?.tax_rate) || 0, 0), 100);
+    const includesTax = !!raw?.amount_includes_tax;
+    const subtotal = includesTax ? amount / (1 + rate / 100) : amount;
+    const tax = includesTax ? amount - subtotal : amount * rate / 100;
+    rows.push({
+      position: rows.length,
+      description: raw?.description || null,
+      accountId: Number(raw?.account_id) > 0 ? Number(raw.account_id) : null,
+      quantity,
+      unitPrice,
+      amount,
+      taxRate: rate,
+      includesTax,
+      subtotal: round2(subtotal),
+      tax: round2(tax),
+      total: round2(subtotal + tax)
+    });
+  }
+  if (!rows.length) return null;
+  const rawSubtotal = round2(rows.reduce((sum, row) => sum + row.subtotal, 0));
+  const rawTax = round2(rows.reduce((sum, row) => sum + row.tax, 0));
+  const discount = Math.min(Math.max(Number(template.discount_amount) || 0, 0), rawSubtotal);
+  const factor = rawSubtotal > 0 ? (rawSubtotal - discount) / rawSubtotal : 1;
+  const subtotal = round2(rawSubtotal - discount);
+  const tax = round2(rawTax * factor);
+  return {
+    rows,
+    discount: round2(discount),
+    subtotal,
+    tax,
+    total: round2(subtotal + tax),
+    headerAccountId: rows.find(row => row.accountId)?.accountId || (Number(template.expense_account_id) > 0 ? Number(template.expense_account_id) : null)
+  };
+}
+
 // خيار «فاتورة متكررة بشكل شهري» في نافذة الفاتورة والرفع الجماعي:
 // ينشئ قالباً في accounting_recurring_purchase_invoices من بيانات
-// الفاتورة المُنشأة للتو، بشرط أن يكون أحد حساباتها «مصروف ثابت» أو
+// الفاتورة المُنشأة للتو — بكامل تفاصيلها: المورد والبنود والخصم
+// والعملة والملاحظات — بشرط أن يكون أحد حساباتها «مصروف ثابت» أو
 // فرعاً منه. last_generated_period يُضبط على شهر الفاتورة الحالي حتى
 // يبدأ التوليد التلقائي من الشهر التالي — فاتورة هذا الشهر هي الأصل
 // الذي أنشأه المستخدم بنفسه.
 async function createRecurringTemplateFromInvoice({
   payload,
   accountIds = [],
+  items = null,
   description = null,
   invoiceId = null,
   actor = null
@@ -187,10 +262,12 @@ async function createRecurringTemplateFromInvoice({
     };
   }
   const period = todayRiyadh().slice(0, 7);
+  const templateItems = serializeTemplateItems(items);
   const [created] = await sql`
     INSERT INTO accounting_recurring_purchase_invoices (
       name, contact_id, supplier_name, branch_id, expense_account_id,
       description, amount, tax_rate, amount_includes_tax,
+      items, discount_amount, currency, notes,
       day_of_month, is_active, last_generated_period,
       created_by_employee_id, created_by_employee_name
     )
@@ -198,6 +275,10 @@ async function createRecurringTemplateFromInvoice({
       ${name}, ${payload.contactId || null}, ${payload.supplierName || null},
       ${payload.branchId || null}, ${payload.expenseAccountId || null},
       ${description}, ${amount}, ${taxRate}, TRUE,
+      ${templateItems ? JSON.stringify(templateItems) : null}::jsonb,
+      ${round2(Number(payload.discountAmount) || 0)},
+      ${payload.currency || "SAR"},
+      ${payload.notes || null},
       1, TRUE, ${period},
       ${actor?.id ? Number(actor.id) : null},
       ${actor?.name ? String(actor.name) : null}
@@ -285,6 +366,10 @@ async function syncRecurringTemplateFromInvoice({
   const tax = Number(payload.taxAmount) || 0;
   const taxRate = subtotal > 0 ? Math.min(Math.max(round2(tax / subtotal * 100), 0), 100) : 0;
   const description = (Array.isArray(items) ? items : []).find(item => item.description)?.description || null;
+
+  // البنود تُستبدل بالكامل عندما يرسلها المحرر (مصفوفة)؛ نداء بلا
+  // items (نافذة الدفع السريع) يترك بنود القالب كما هي.
+  const templateItems = items !== null ? serializeTemplateItems(items) : null;
   await sql`
     UPDATE accounting_recurring_purchase_invoices
     SET contact_id = ${payload.contactId || null},
@@ -294,7 +379,20 @@ async function syncRecurringTemplateFromInvoice({
         description = COALESCE(${description}, description),
         amount = ${amount},
         tax_rate = ${taxRate},
-        amount_includes_tax = TRUE
+        amount_includes_tax = TRUE,
+        items = CASE
+          WHEN ${items !== null} THEN ${templateItems ? JSON.stringify(templateItems) : null}::jsonb
+          ELSE items
+        END,
+        discount_amount = CASE
+          WHEN ${items !== null} THEN ${round2(Number(payload.discountAmount) || 0)}
+          ELSE discount_amount
+        END,
+        currency = COALESCE(${payload.currency || null}, currency),
+        notes = CASE
+          WHEN ${items !== null} THEN ${payload.notes || null}
+          ELSE notes
+        END
     WHERE id = ${templateId}
   `;
   const previousAmount = round2(Number(template.amount) || 0);
@@ -313,9 +411,11 @@ async function syncRecurringTemplateFromInvoice({
   };
 }
 
-// فاتورة متكررة → فاتورة فعلية غير مدفوعة (بانتظار الدفع) ببند
-// واحد مصنّف على حساب القالب، بتاريخ يوم القالب من الشهر واستحقاق
-// نهاية الشهر نفسه. رقم الفاتورة حتمي (REC-YYYYMM-قالب) فلا يتكرر
+// فاتورة متكررة → فاتورة فعلية غير مدفوعة (بانتظار الدفع) بكامل
+// تفاصيل القالب: المورد وكل البنود (وصف/حساب/كمية/سعر/ضريبة) والخصم
+// والعملة والملاحظات، بتاريخ يوم القالب من الشهر واستحقاق نهاية
+// الشهر نفسه. القوالب القديمة بلا بنود مخزنة تولّد ببند واحد من
+// المبلغ المجمّع. رقم الفاتورة حتمي (REC-YYYYMM-قالب) فلا يتكرر
 // التوليد لنفس الشهر حتى لو تسابق طلبان.
 async function generateRecurringInvoices() {
   const today = todayRiyadh();
@@ -346,18 +446,56 @@ async function generateRecurringInvoices() {
       `;
       continue;
     }
-    const amount = round2(Number(template.amount) || 0);
-    if (amount <= 0) continue;
-    const rate = Math.min(Math.max(Number(template.tax_rate) || 0, 0), 100);
-    const includesTax = template.amount_includes_tax !== false;
-    const subtotal = includesTax ? round2(amount / (1 + rate / 100)) : amount;
-    const tax = includesTax ? round2(amount - subtotal) : round2(amount * rate / 100);
-    const total = round2(subtotal + tax);
+
+    // القالب الكامل (بنود مخزنة) أولاً؛ وإلا مسار المبلغ الواحد
+    // للقوالب القديمة.
+    let lines;
+    let discount;
+    let subtotal;
+    let tax;
+    let total;
+    let headerAccountId;
+    const full = computeTemplateLines(template);
+    if (full) {
+      lines = full.rows;
+      discount = full.discount;
+      subtotal = full.subtotal;
+      tax = full.tax;
+      total = full.total;
+      headerAccountId = full.headerAccountId;
+    } else {
+      const amount = round2(Number(template.amount) || 0);
+      if (amount <= 0) continue;
+      const rate = Math.min(Math.max(Number(template.tax_rate) || 0, 0), 100);
+      const includesTax = template.amount_includes_tax !== false;
+      const lineSubtotal = includesTax ? round2(amount / (1 + rate / 100)) : amount;
+      const lineTax = includesTax ? round2(amount - lineSubtotal) : round2(amount * rate / 100);
+      lines = [{
+        position: 0,
+        description: template.description || template.name,
+        accountId: template.expense_account_id || null,
+        quantity: 1,
+        unitPrice: amount,
+        amount,
+        taxRate: rate,
+        includesTax,
+        subtotal: lineSubtotal,
+        tax: lineTax,
+        total: round2(lineSubtotal + lineTax)
+      }];
+      discount = 0;
+      subtotal = lineSubtotal;
+      tax = lineTax;
+      total = round2(lineSubtotal + lineTax);
+      headerAccountId = template.expense_account_id || null;
+    }
+    if (total <= 0) continue;
 
     // تاريخ الفاتورة = يوم القالب من الشهر (لا يوم التوليد الفعلي —
     // خادم متأخر أياماً لا يغيّر تواريخ الدفتر).
     const templateDay = Math.min(Math.max(Number(template.day_of_month) || 1, 1), 28);
     const invoiceDate = `${period}-${pad(templateDay)}`;
+    const notes = [`فاتورة متكررة — ${template.name}`, template.notes].filter(Boolean).join("\n");
     const [invoice] = await sql`
       INSERT INTO accounting_purchase_invoices (
         invoice_number, contact_id, supplier_name, expense_account_id,
@@ -370,31 +508,33 @@ async function generateRecurringInvoices() {
         ${invoiceNumber},
         ${template.contact_id || null},
         ${template.supplier_name || null},
-        ${template.expense_account_id || null},
-        ${invoiceDate}, ${dueDate}, 'SAR',
-        ${subtotal}, 0, ${tax}, ${total},
+        ${headerAccountId},
+        ${invoiceDate}, ${dueDate}, ${template.currency || "SAR"},
+        ${subtotal}, ${discount}, ${tax}, ${total},
         0, ${template.branch_id || null}, 'pending_payment',
-        ${`فاتورة متكررة — ${template.name}`},
+        ${notes},
         ${template.id}, 'النظام — فواتير متكررة'
       )
       RETURNING id
     `;
-    await sql`
-      INSERT INTO accounting_purchase_invoice_items (
-        invoice_id, position, description, account_id,
-        quantity, unit_price,
-        amount, tax_rate, amount_includes_tax,
-        line_subtotal, line_tax, line_total
-      )
-      VALUES (
-        ${invoice.id}, 0,
-        ${template.description || template.name},
-        ${template.expense_account_id || null},
-        1, ${amount},
-        ${amount}, ${rate}, ${includesTax},
-        ${subtotal}, ${tax}, ${total}
-      )
-    `;
+    for (const line of lines) {
+      await sql`
+        INSERT INTO accounting_purchase_invoice_items (
+          invoice_id, position, description, account_id,
+          quantity, unit_price,
+          amount, tax_rate, amount_includes_tax,
+          line_subtotal, line_tax, line_total
+        )
+        VALUES (
+          ${invoice.id}, ${line.position},
+          ${line.description},
+          ${line.accountId},
+          ${line.quantity}, ${line.unitPrice},
+          ${line.amount}, ${line.taxRate}, ${line.includesTax},
+          ${line.subtotal}, ${line.tax}, ${line.total}
+        )
+      `;
+    }
     await sql`
       UPDATE accounting_recurring_purchase_invoices
       SET last_generated_period = ${period}

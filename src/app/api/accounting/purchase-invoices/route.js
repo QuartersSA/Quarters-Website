@@ -815,6 +815,7 @@ export async function createPurchaseInvoice(body, actor) {
       await createRecurringTemplateFromInvoice({
         payload,
         accountIds,
+        items,
         description:
           (items || []).find((item) => item.description)?.description || null,
         invoiceId: created.id,
