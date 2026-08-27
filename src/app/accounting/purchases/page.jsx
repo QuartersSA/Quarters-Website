@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   ListTree,
   Plus,
+  Receipt,
   Search,
   ShoppingCart,
   Users,
@@ -34,6 +35,7 @@ import PurchasesBankAccountsPanel from "@/components/Accounting/PurchasesBankAcc
 import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPanel";
 import BulkInvoiceUploadPanel from "@/components/Accounting/BulkInvoiceUploadPanel";
 import PurchasesReportsPanel from "@/components/Accounting/PurchasesReportsPanel";
+import ExpensesPanel from "@/components/Accounting/ExpensesPanel";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -61,6 +63,7 @@ import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
  *   - الموردين والمستفيدين  — two-pane (suppliers + beneficiaries)
  *   - شجرة الحسابات         — hierarchical chart of accounts
  *   - الحسابات البنكية      — bank accounts master list
+ *   - المصروفات             — monthly expenses workspace (ExpensesPanel)
  *   - الضريبة              — VAT report aggregated from invoices
  *
  * The active tab (and vendor sub-tab) live in the URL query string so
@@ -126,6 +129,14 @@ const TABS = [
     shortLabel: "بنوك",
     Icon: Building,
     description: "حسابات البنك المستخدمة في عمليات الدفع.",
+  },
+  {
+    key: "expenses",
+    label: "المصروفات",
+    shortLabel: "مصروفات",
+    Icon: Receipt,
+    description:
+      "تسجيل وإدارة المصروفات الشهرية — الثابتة والمتغيّرة، المراجعة والبنود.",
   },
   {
     key: "reports",
@@ -399,13 +410,19 @@ function BeneficiariesPanel({ employeeId, isAdmin }) {
 export default function PurchasesPage() {
   const { ready, employeeId, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
+  // المصروفات APIs require can_manage_accounting — purchases-only users
+  // (can_manage_purchases without accounting) don't get the tab.
+  const canManageAccounting = user?.can_manage_accounting !== false;
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const rawTabParam = searchParams.get("tab") || "overview";
   // Legacy deep links: the old الضريبة tab lives inside التقارير now.
   const rawTab = rawTabParam === "tax" ? "reports" : rawTabParam;
-  const activeTabKey = TAB_KEYS.has(rawTab) ? rawTab : "overview";
+  const activeTabKey =
+    TAB_KEYS.has(rawTab) && (rawTab !== "expenses" || canManageAccounting)
+      ? rawTab
+      : "overview";
   const rawSub = searchParams.get("sub") || "contacts";
   const vendorSubKey = VENDOR_KEYS.has(rawSub) ? rawSub : "contacts";
 
@@ -470,7 +487,9 @@ export default function PurchasesPage() {
             mobile. Short labels keep the rail compact under 420px. */}
         <div className={`${ws.glass} ${ws.card} p-2 overflow-x-auto`}>
           <div className="flex items-center gap-1 min-w-max">
-            {TABS.map((tab) => {
+            {TABS.filter(
+              (tab) => tab.key !== "expenses" || canManageAccounting,
+            ).map((tab) => {
               const isActive = tab.key === activeTabKey;
               const Icon = tab.Icon;
               return (
@@ -540,6 +559,8 @@ export default function PurchasesPage() {
           <PurchasesAccountsTreePanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : activeTabKey === "banks" ? (
           <PurchasesBankAccountsPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTabKey === "expenses" ? (
+          <ExpensesPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : (
           <PurchasesReportsPanel employeeId={employeeId} isAdmin={isAdmin} />
         )}
