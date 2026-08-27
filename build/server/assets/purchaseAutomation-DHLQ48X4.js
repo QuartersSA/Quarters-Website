@@ -62,6 +62,17 @@ async function ensureRecurringSchema() {
       created_by_employee_name TEXT
     )
   `;
+  // ربط الفاتورة بقالبها المتكرر: الفواتير المولّدة والفاتورة الأصل
+  // تحمل معرف القالب، فتعديل آخر فاتورة يزامن القالب للشهر القادم.
+  // ملفوف لأن جدول الفواتير قد لا يكون موجوداً بعد على تنصيب جديد.
+  try {
+    await sql`
+      ALTER TABLE accounting_purchase_invoices
+        ADD COLUMN IF NOT EXISTS recurring_template_id INTEGER
+    `;
+  } catch (error) {
+    console.error("recurring schema: invoices link column skipped:", error?.message);
+  }
 }
 async function ensureScheduledReportsSchema() {
   await sql`
@@ -117,6 +128,7 @@ async function createRecurringTemplateFromInvoice({
   payload,
   accountIds = [],
   description = null,
+  invoiceId = null,
   actor = null
 }) {
   await ensureRecurringSchema();
@@ -124,6 +136,17 @@ async function createRecurringTemplateFromInvoice({
   if (!isFixed) return {
     created: false,
     reason: "not_fixed_expense"
+  };
+
+  // ربط الفاتورة الأصل بقالبها حتى تسري تعديلاتها اللاحقة على
+  // فواتير الأشهر القادمة (مزامنة القالب في PUT الفواتير).
+  const linkInvoice = async templateId => {
+    if (!invoiceId) return;
+    await sql`
+      UPDATE accounting_purchase_invoices
+      SET recurring_template_id = ${templateId}
+      WHERE id = ${invoiceId}
+    `;
   };
   const amount = round2(Number(payload.totalAmount) || 0);
   if (amount <= 0) return {
@@ -156,6 +179,7 @@ async function createRecurringTemplateFromInvoice({
       AND COALESCE(expense_account_id, 0) = ${payload.expenseAccountId || 0}
   `;
   if (existing) {
+    await linkInvoice(existing.id);
     return {
       created: false,
       reason: "duplicate",
@@ -180,6 +204,7 @@ async function createRecurringTemplateFromInvoice({
     )
     RETURNING id
   `;
+  await linkInvoice(created.id);
   await logPurchaseAudit({
     entityType: "recurring",
     entityId: created.id,
@@ -190,6 +215,101 @@ async function createRecurringTemplateFromInvoice({
   return {
     created: true,
     id: created.id
+  };
+}
+
+// مزامنة القالب من تعديل فاتورة مرتبطة به: عدّل المستخدم آخر فاتورة
+// متكررة (المبلغ 5000 → 4000 مثلاً) فيُطبَّق التعديل على فواتير
+// الأشهر القادمة تلقائياً. تُزامَن آخر فاتورة فقط — تعديل فاتورة شهر
+// قديم لا يغيّر المستقبل. الفواتير المولّدة قبل عمود الربط تُلحق عبر
+// رقمها الحتمي REC-YYYYMM-قالب.
+async function syncRecurringTemplateFromInvoice({
+  invoiceId,
+  payload,
+  items = null,
+  actor = null
+}) {
+  await ensureRecurringSchema();
+  const [invoice] = await sql`
+    SELECT id, invoice_number, recurring_template_id
+    FROM accounting_purchase_invoices
+    WHERE id = ${invoiceId}
+  `;
+  if (!invoice) return {
+    synced: false,
+    reason: "invoice_not_found"
+  };
+  let templateId = Number(invoice.recurring_template_id) || null;
+  if (!templateId) {
+    // فواتير مولّدة قبل إضافة عمود الربط — الرقم الحتمي يدل عليها.
+    const match = /^REC-\d{6}-(\d+)$/.exec(String(invoice.invoice_number || ""));
+    if (!match) return {
+      synced: false,
+      reason: "not_recurring"
+    };
+    templateId = Number(match[1]);
+    await sql`
+      UPDATE accounting_purchase_invoices
+      SET recurring_template_id = ${templateId}
+      WHERE id = ${invoiceId}
+    `;
+  }
+  const [template] = await sql`
+    SELECT id, name, amount FROM accounting_recurring_purchase_invoices
+    WHERE id = ${templateId} AND is_active = TRUE
+  `;
+  if (!template) return {
+    synced: false,
+    reason: "template_not_found"
+  };
+
+  // آخر فاتورة مرتبطة بالقالب هي وحدها من يقود المستقبل.
+  const [latest] = await sql`
+    SELECT id FROM accounting_purchase_invoices
+    WHERE recurring_template_id = ${templateId} AND is_active = TRUE
+    ORDER BY invoice_date DESC, id DESC
+    LIMIT 1
+  `;
+  if (latest && Number(latest.id) !== Number(invoiceId)) {
+    return {
+      synced: false,
+      reason: "not_latest"
+    };
+  }
+  const amount = round2(Number(payload.totalAmount) || 0);
+  if (amount <= 0) return {
+    synced: false,
+    reason: "zero_amount"
+  };
+  const subtotal = Number(payload.subtotalAmount) || 0;
+  const tax = Number(payload.taxAmount) || 0;
+  const taxRate = subtotal > 0 ? Math.min(Math.max(round2(tax / subtotal * 100), 0), 100) : 0;
+  const description = (Array.isArray(items) ? items : []).find(item => item.description)?.description || null;
+  await sql`
+    UPDATE accounting_recurring_purchase_invoices
+    SET contact_id = ${payload.contactId || null},
+        supplier_name = ${payload.supplierName || null},
+        branch_id = ${payload.branchId || null},
+        expense_account_id = ${payload.expenseAccountId || null},
+        description = COALESCE(${description}, description),
+        amount = ${amount},
+        tax_rate = ${taxRate},
+        amount_includes_tax = TRUE
+    WHERE id = ${templateId}
+  `;
+  const previousAmount = round2(Number(template.amount) || 0);
+  if (Math.abs(previousAmount - amount) > 0.004) {
+    await logPurchaseAudit({
+      entityType: "recurring",
+      entityId: templateId,
+      action: "updated",
+      summary: `تحديث قالب الفاتورة المتكررة «${template.name}» من تعديل الفاتورة ${payload.invoiceNumber} — المبلغ ${previousAmount.toFixed(2)} → ${amount.toFixed(2)} SAR لفواتير الأشهر القادمة`,
+      actor
+    });
+  }
+  return {
+    synced: true,
+    id: templateId
   };
 }
 
@@ -244,7 +364,7 @@ async function generateRecurringInvoices() {
         invoice_date, due_date, currency,
         subtotal_amount, discount_amount, tax_amount, total_amount,
         paid_amount, branch_id, workflow_status, notes,
-        created_by_employee_name
+        recurring_template_id, created_by_employee_name
       )
       VALUES (
         ${invoiceNumber},
@@ -255,7 +375,7 @@ async function generateRecurringInvoices() {
         ${subtotal}, 0, ${tax}, ${total},
         0, ${template.branch_id || null}, 'pending_payment',
         ${`فاتورة متكررة — ${template.name}`},
-        'النظام — فواتير متكررة'
+        ${template.id}, 'النظام — فواتير متكررة'
       )
       RETURNING id
     `;
@@ -486,4 +606,4 @@ function startPurchaseAutomationTimer() {
   console.log(`purchase automation timer started (every ${TIMER_INTERVAL_MS / 60000} min, sends after ${SEND_HOUR_RIYADH}:00 Riyadh)`);
 }
 
-export { ensureScheduledReportsSchema as a, buildPurchasesSummaryText as b, createRecurringTemplateFromInvoice as c, ensureRecurringSchema as e, runPurchaseAutomation as r, startPurchaseAutomationTimer as s };
+export { syncRecurringTemplateFromInvoice as a, ensureScheduledReportsSchema as b, createRecurringTemplateFromInvoice as c, buildPurchasesSummaryText as d, ensureRecurringSchema as e, runPurchaseAutomation as r, startPurchaseAutomationTimer as s };

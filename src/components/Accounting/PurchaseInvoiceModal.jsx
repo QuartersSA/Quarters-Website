@@ -1403,6 +1403,11 @@ export default function PurchaseInvoiceModal({
     () => lines.some((line) => isFixedExpenseAccountId(line.account_id, accounts)),
     [lines, accounts],
   );
+  // فاتورة مرتبطة بقالب متكرر (بالعمود أو بالرقم الحتمي للمولّدة
+  // القديمة) — تعديلها يزامن قالب الأشهر القادمة.
+  const isRecurringLinked =
+    !!invoice?.recurring_template_id ||
+    /^REC-\d{6}-\d+$/.test(invoice?.invoice_number || "");
 
   const status = computedStatus({
     totalAmount: totals.total,
@@ -2568,12 +2573,26 @@ export default function PurchaseInvoiceModal({
                     </span>
                     <span className="block text-[11px] text-slate-600 dark:text-white/55 mt-1 leading-relaxed">
                       حساب الفاتورة ضمن «مصروف ثابت» — عند التفعيل ينشئ
-                      النظام هذه الفاتورة تلقائياً مع بداية كل شهر بحالة
-                      «بانتظار الدفع» وتاريخ استحقاق نهاية الشهر، دون أي
-                      تدخل.
+                      النظام هذه الفاتورة تلقائياً مع بداية كل شهر بنفس
+                      التفاصيل بحالة «بانتظار الدفع» وتاريخ استحقاق نهاية
+                      الشهر، دون أي تدخل. تعديل آخر فاتورة منها لاحقاً
+                      (المبلغ مثلاً) يُطبَّق على فواتير الأشهر القادمة.
                     </span>
                   </span>
                 </label>
+              ) : null}
+
+              {/* فاتورة مرتبطة بقالب متكرر — تعديلها يقود فواتير
+                  الأشهر القادمة. */}
+              {isEditing && isRecurringLinked ? (
+                <div className={`${ws.glassSoft} ${ws.card} p-3 flex items-start gap-2.5`}>
+                  <Repeat className="w-4 h-4 mt-0.5 text-[#0e7a5f] dark:text-emerald-200 shrink-0" />
+                  <div className="text-[11px] text-slate-600 dark:text-white/60 leading-relaxed">
+                    فاتورة متكررة شهرياً — أي تعديل تحفظه هنا (المبلغ،
+                    المورد، الحساب…) يُطبَّق تلقائياً على فواتير الأشهر
+                    القادمة ما دامت هذه آخر فاتورة من القالب.
+                  </div>
+                </div>
               ) : null}
 
               {/* طريقة الإنشاء: دفع الآن أو إرسال إلى الاعتماد
