@@ -41,6 +41,7 @@ import {
   useAccountingPurchaseInvoices,
   useAddInvoiceAttachment,
   useAddPurchaseInvoicePayment,
+  useBulkPayPurchaseInvoices,
   useCreateAccountingPurchaseInvoice,
   useDeleteAccountingPurchaseInvoice,
   useDeleteInvoiceAttachment,
@@ -542,6 +543,261 @@ function RecordPaymentModal({
   );
 }
 
+// دفعة جماعية: سداد كل الفواتير المحددة (نفس المورد) دفعة واحدة —
+// إيصال سداد واحد وحساب بنكي واحد، وكل فاتورة تُسدَّد بكامل رصيدها.
+function BulkPayModal({
+  rows = [],
+  bankAccounts = [],
+  isSubmitting,
+  onClose,
+  onSubmit,
+}) {
+  const [paymentDate, setPaymentDate] = useState(() =>
+    new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Riyadh" }),
+  );
+  const [bankAccountId, setBankAccountId] = useState("");
+  const [notes, setNotes] = useState("");
+  const [receiptUrl, setReceiptUrl] = useState("");
+  const [receiptName, setReceiptName] = useState("");
+  const [receiptUploading, setReceiptUploading] = useState(false);
+  const receiptInputRef = useRef(null);
+  const [upload] = useUpload();
+
+  const currency = rows[0]?.currency || "SAR";
+  const supplier = rows[0]?.contact_name || rows[0]?.supplier_name || "—";
+  const total = rows.reduce(
+    (sum, invoice) => sum + moneyValue(invoice.balance_due),
+    0,
+  );
+
+  const handleReceiptPicked = async (fileArg) => {
+    if (!fileArg) return;
+    setReceiptUploading(true);
+    try {
+      const result = await upload({ file: fileArg, unoptimized: true });
+      if (result?.error) {
+        alert(`فشل رفع الإيصال: ${result.error}`);
+        return;
+      }
+      setReceiptUrl(result.url || "");
+      setReceiptName(fileArg.name || "");
+    } finally {
+      setReceiptUploading(false);
+      if (receiptInputRef.current) receiptInputRef.current.value = "";
+    }
+  };
+
+  const bankOptions = useMemo(
+    () => [
+      { value: "", label: "بدون تحديد حساب" },
+      ...bankAccounts
+        .filter((account) => account.is_active !== false)
+        .map((account) => ({
+          value: String(account.id),
+          label: account.bank_name
+            ? `${account.name} — ${account.bank_name}`
+            : account.name,
+        })),
+    ],
+    [bankAccounts],
+  );
+
+  if (rows.length === 0 || typeof document === "undefined") return null;
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (isSubmitting || receiptUploading) return;
+    onSubmit({
+      invoice_ids: rows.map((invoice) => invoice.id),
+      payment_date: paymentDate || null,
+      bank_account_id: bankAccountId || null,
+      receipt_url: receiptUrl || null,
+      notes: notes.trim() || null,
+    });
+  };
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[1000] flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-sm p-0 sm:p-4"
+      dir="rtl"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <div
+        className={`${ws.glass} ${ws.card} w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl p-5 max-h-[92svh] overflow-y-auto`}
+      >
+        <div className="flex items-start justify-between gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <div className={`${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`}>
+              <HandCoins className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="font-bold text-slate-900 dark:text-white tracking-tight">
+                دفعة جماعية — {rows.length} فاتورة
+              </div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mt-0.5">
+                المورد: {supplier}
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className={`${ws.iconButton} w-9 h-9`}
+            aria-label="إغلاق"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* الفواتير المحددة وأرصدتها */}
+          <div className={`${ws.glassSoft} ${ws.card} p-3 space-y-1.5`}>
+            {rows.map((invoice) => (
+              <div
+                key={invoice.id}
+                className="flex items-center justify-between gap-2 text-xs border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0 last:pb-0"
+              >
+                <span className="font-mono text-slate-700 dark:text-white/70" dir="ltr">
+                  {invoice.invoice_number}
+                </span>
+                <span className="font-bold text-slate-900 dark:text-white" dir="ltr">
+                  {formatMoney(invoice.balance_due, currency)}
+                </span>
+              </div>
+            ))}
+            <div className="flex items-center justify-between gap-2 pt-2 font-bold text-slate-900 dark:text-white">
+              <span>الإجمالي</span>
+              <span dir="ltr">{formatMoney(total, currency)}</span>
+            </div>
+            <div className="text-[11px] text-slate-500 dark:text-white/45">
+              كل فاتورة تُسدَّد بكامل رصيدها المتبقي وتتحول إلى «مدفوعة».
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+                تاريخ الدفع
+              </div>
+              <input
+                type="date"
+                value={paymentDate}
+                onChange={(event) => setPaymentDate(event.target.value)}
+                className={`${ws.input} px-3 py-2`}
+              />
+            </div>
+            <div>
+              <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+                الحساب البنكي المدفوع منه
+              </div>
+              <GlassSelect
+                value={bankAccountId}
+                onChange={setBankAccountId}
+                options={bankOptions}
+                placeholder="بدون تحديد حساب"
+                buttonClassName="text-sm py-2 px-3"
+              />
+            </div>
+          </div>
+
+          {/* إيصال السداد الواحد — يُربط بكل الفواتير */}
+          <div>
+            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+              إيصال السداد{" "}
+              <span className="text-slate-400 dark:text-white/35">
+                (واحد لكل الفواتير)
+              </span>
+            </div>
+            {receiptUrl ? (
+              <div
+                className={`${ws.glassSoft} ${ws.card} px-3 py-2 flex items-center justify-between gap-2`}
+              >
+                <div className="flex items-center gap-2 min-w-0 text-xs text-slate-700 dark:text-white/70">
+                  <Paperclip className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate" dir="ltr">
+                    {receiptName || "إيصال مرفق"}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReceiptUrl("");
+                    setReceiptName("");
+                  }}
+                  className={`${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`}
+                  title="إزالة الإيصال"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                disabled={receiptUploading}
+                onClick={() => receiptInputRef.current?.click()}
+                className={`${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`}
+              >
+                {receiptUploading ? (
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <Paperclip className="w-3.5 h-3.5" />
+                )}
+                {receiptUploading ? "جاري الرفع…" : "إرفاق إيصال السداد"}
+              </button>
+            )}
+            <input
+              ref={receiptInputRef}
+              type="file"
+              accept="application/pdf,image/*"
+              onChange={(event) =>
+                handleReceiptPicked(event?.target?.files?.[0])
+              }
+              className="hidden"
+            />
+          </div>
+
+          <div>
+            <div className="text-xs text-slate-600 dark:text-white/55 mb-1">
+              ملاحظات{" "}
+              <span className="text-slate-400 dark:text-white/35">(اختياري)</span>
+            </div>
+            <input
+              type="text"
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              placeholder="مثال: رقم أمر التحويل"
+              className={`${ws.input} px-3 py-2`}
+            />
+          </div>
+
+          <div className="flex items-center gap-2 pt-1">
+            <button
+              type="submit"
+              disabled={isSubmitting || receiptUploading}
+              className={`${ws.btnPrimary} px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              <HandCoins className="w-4 h-4" />
+              {isSubmitting
+                ? "جاري التسجيل…"
+                : `سداد ${rows.length} فاتورة — ${formatMoney(total, currency)}`}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className={`${ws.btnNeutral} px-4 py-2`}
+            >
+              إلغاء
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 export default function PurchasesInvoicesPanel({
   employeeId,
   isAdmin,
@@ -559,6 +815,8 @@ export default function PurchasesInvoicesPanel({
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState(null);
   const [paying, setPaying] = useState(null);
+  // الدفع الجماعي: سداد الفواتير المحددة (نفس المورد) دفعة واحدة.
+  const [bulkPaying, setBulkPaying] = useState(null);
   // المعاينة الجانبية: نقرة على الصف تفتح درجاً دون مغادرة الجدول.
   const [preview, setPreview] = useState(null);
   // تحديد جماعي: تصدير المحدد فقط.
@@ -708,6 +966,7 @@ export default function PurchasesInvoicesPanel({
   const updateMut = useUpdateAccountingPurchaseInvoice();
   const deleteMut = useDeleteAccountingPurchaseInvoice();
   const addPaymentMut = useAddPurchaseInvoicePayment();
+  const bulkPayMut = useBulkPayPurchaseInvoices();
   const deletePaymentMut = useDeletePurchaseInvoicePayment();
   const addAttachmentMut = useAddInvoiceAttachment();
   const deleteAttachmentMut = useDeleteInvoiceAttachment();
@@ -812,7 +1071,15 @@ export default function PurchasesInvoicesPanel({
         setPreview(null);
         return;
       }
-      if (typing || showAdd || editing || paying || showRecurring || supplier360)
+      if (
+        typing ||
+        showAdd ||
+        editing ||
+        paying ||
+        bulkPaying ||
+        showRecurring ||
+        supplier360
+      )
         return;
       if (event.key === "/" ) {
         event.preventDefault();
@@ -835,7 +1102,16 @@ export default function PurchasesInvoicesPanel({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [filtered, activeIdx, showAdd, editing, paying, showRecurring, supplier360]);
+  }, [
+    filtered,
+    activeIdx,
+    showAdd,
+    editing,
+    paying,
+    bulkPaying,
+    showRecurring,
+    supplier360,
+  ]);
 
   const handleExport = (kind, rowsOverride = null) => {
     const rows = rowsOverride || filtered;
@@ -885,6 +1161,49 @@ export default function PurchasesInvoicesPanel({
     if (rows.length === 0) return;
     handleExport(kind, rows);
   };
+
+  // أهلية الدفع الجماعي للمحدد: فواتير نشطة برصيد متبقٍ، كلها لنفس
+  // المورد وبنفس العملة — نفس شروط الخادم حتى لا يفاجأ المستخدم.
+  const bulkPayRows = useMemo(
+    () =>
+      filtered.filter(
+        (invoice) =>
+          selected.has(invoice.id) &&
+          invoice.is_active !== false &&
+          moneyValue(invoice.balance_due) > 0,
+      ),
+    [filtered, selected],
+  );
+  const bulkPayEligibility = useMemo(() => {
+    if (bulkPayRows.length === 0) {
+      return { ok: false, reason: "لا فواتير برصيد متبقٍ ضمن المحدد" };
+    }
+    const keys = new Set(
+      bulkPayRows.map((invoice) =>
+        invoice.contact_id
+          ? `c:${invoice.contact_id}`
+          : `s:${(invoice.supplier_name || "").trim().toLowerCase()}`,
+      ),
+    );
+    if (keys.size > 1) {
+      return { ok: false, reason: "الدفع الجماعي متاح لفواتير نفس المورد فقط" };
+    }
+    const currencies = new Set(
+      bulkPayRows.map((invoice) => (invoice.currency || "SAR").toUpperCase()),
+    );
+    if (currencies.size > 1) {
+      return { ok: false, reason: "كل الفواتير يجب أن تكون بنفس العملة" };
+    }
+    return { ok: true, reason: "" };
+  }, [bulkPayRows]);
+  const bulkPayTotal = useMemo(
+    () =>
+      bulkPayRows.reduce(
+        (sum, invoice) => sum + moneyValue(invoice.balance_due),
+        0,
+      ),
+    [bulkPayRows],
+  );
 
   const totals = useMemo(() => {
     return filtered.reduce(
@@ -1457,6 +1776,24 @@ export default function PurchasesInvoicesPanel({
         />
       ) : null}
 
+      {/* الدفع الجماعي — فواتير نفس المورد بإيصال سداد واحد */}
+      {bulkPaying ? (
+        <BulkPayModal
+          rows={bulkPaying}
+          bankAccounts={bankAccounts}
+          isSubmitting={bulkPayMut.isPending}
+          onClose={() => setBulkPaying(null)}
+          onSubmit={(payload) =>
+            bulkPayMut.mutate(payload, {
+              onSuccess: () => {
+                setBulkPaying(null);
+                setSelected(new Set());
+              },
+            })
+          }
+        />
+      ) : null}
+
       {/* شريط التحديد الجماعي */}
       {selected.size > 0 && typeof document !== "undefined"
         ? createPortal(
@@ -1467,6 +1804,24 @@ export default function PurchasesInvoicesPanel({
               <span className="text-sm font-bold text-slate-900 dark:text-white">
                 {selected.size} فاتورة محددة
               </span>
+              <button
+                type="button"
+                disabled={!bulkPayEligibility.ok}
+                onClick={() =>
+                  bulkPayEligibility.ok && setBulkPaying(bulkPayRows)
+                }
+                className={`${ws.btnPrimary} px-3 py-1.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed`}
+                title={
+                  bulkPayEligibility.ok
+                    ? `سداد ${bulkPayRows.length} فاتورة دفعة واحدة`
+                    : bulkPayEligibility.reason
+                }
+              >
+                <HandCoins className="w-3.5 h-3.5" />
+                {bulkPayEligibility.ok
+                  ? `دفع المحدد — ${formatMoney(bulkPayTotal, bulkPayRows[0]?.currency)}`
+                  : "دفع المحدد"}
+              </button>
               <button
                 type="button"
                 onClick={() => exportSelected("excel")}
