@@ -121,6 +121,43 @@ export function useAddPurchaseInvoicePayment() {
   });
 }
 
+// دفعة جماعية: سداد أكثر من فاتورة لنفس المورد دفعة واحدة بإيصال
+// واحد وحساب بنكي واحد — كل فاتورة تُسدَّد بكامل رصيدها.
+export function useBulkPayPurchaseInvoices() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload) => {
+      const res = await adminFetch(
+        "/api/accounting/purchase-invoice-payments/bulk",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تسجيل الدفعة الجماعية");
+      }
+      return data;
+    },
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
+      });
+      toast.success(
+        `تم سداد ${data?.count || 0} فاتورة بإجمالي ${Number(
+          data?.total || 0,
+        ).toFixed(2)} ${data?.currency || "SAR"}`,
+      );
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(`فشل الدفع الجماعي: ${error.message}`);
+    },
+  });
+}
+
 export function useDeletePurchaseInvoicePayment() {
   const queryClient = useQueryClient();
   return useMutation({
