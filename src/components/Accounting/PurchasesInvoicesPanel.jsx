@@ -548,6 +548,7 @@ function RecordPaymentModal({
 function BulkPayModal({
   rows = [],
   bankAccounts = [],
+  beneficiaries = [],
   isSubmitting,
   onClose,
   onSubmit,
@@ -562,13 +563,42 @@ function BulkPayModal({
   const [receiptUploading, setReceiptUploading] = useState(false);
   const receiptInputRef = useRef(null);
   const [upload] = useUpload();
+  // نسخ الآيبان — يظهر ✓ لثوانٍ على السطر المنسوخ.
+  const [copiedId, setCopiedId] = useState(null);
 
   const currency = rows[0]?.currency || "SAR";
   const supplier = rows[0]?.contact_name || rows[0]?.supplier_name || "—";
+  const supplierContactId = rows[0]?.contact_id || null;
   const total = rows.reduce(
     (sum, invoice) => sum + moneyValue(invoice.balance_due),
     0,
   );
+
+  // حسابات هذا المورد البنكية (المستفيدون المربوطون بجهة الاتصال) —
+  // الفواتير كلها لنفس المورد فحساباته واحدة للدفعة كلها.
+  const supplierBeneficiaries = useMemo(() => {
+    if (!supplierContactId) return [];
+    return beneficiaries.filter(
+      (beneficiary) =>
+        beneficiary.is_active !== false &&
+        Number(beneficiary.contact_id) === Number(supplierContactId),
+    );
+  }, [beneficiaries, supplierContactId]);
+
+  const copyIban = async (beneficiary) => {
+    try {
+      // حكومي → رقم الحساب؛ بنكي → الآيبان.
+      await navigator.clipboard.writeText(
+        beneficiary.beneficiary_type === "government"
+          ? beneficiary.account_number || ""
+          : beneficiary.iban || "",
+      );
+      setCopiedId(beneficiary.id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      // ignore — clipboard may be blocked
+    }
+  };
 
   const handleReceiptPicked = async (fileArg) => {
     if (!fileArg) return;
@@ -674,6 +704,68 @@ function BulkPayModal({
             <div className="text-[11px] text-slate-500 dark:text-white/45">
               كل فاتورة تُسدَّد بكامل رصيدها المتبقي وتتحول إلى «مدفوعة».
             </div>
+          </div>
+
+          {/* وجهة التحويل: حسابات المورد البنكية بالآيبان للنسخ */}
+          <div className={`${ws.glassSoft} ${ws.card} p-3`}>
+            <div className="flex items-center gap-2 text-[11px] font-bold text-slate-700 dark:text-white/70 mb-1.5">
+              <Landmark className="w-3.5 h-3.5 shrink-0 text-[#0e7a5f] dark:text-emerald-300" />
+              <span className="truncate">حسابات المورد البنكية</span>
+            </div>
+            {supplierBeneficiaries.length > 0 ? (
+              <div className="space-y-1.5">
+                {supplierBeneficiaries.map((beneficiary) => (
+                  <div
+                    key={beneficiary.id}
+                    className="flex items-center gap-2 text-[11px] border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0 last:pb-0"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="truncate text-slate-700 dark:text-white/75 font-semibold">
+                        {beneficiary.name}
+                        {beneficiary.beneficiary_type === "government" ? (
+                          <span className="text-slate-400 dark:text-white/40 font-normal">
+                            {" "}
+                            — مدفوعات حكومية
+                          </span>
+                        ) : beneficiary.bank_name ? (
+                          <span className="text-slate-400 dark:text-white/40 font-normal">
+                            {" "}
+                            — {beneficiary.bank_name}
+                          </span>
+                        ) : null}
+                      </div>
+                      <div
+                        className="font-mono text-slate-500 dark:text-white/50 truncate"
+                        dir="ltr"
+                      >
+                        {beneficiary.beneficiary_type === "government"
+                          ? beneficiary.account_number
+                          : beneficiary.iban}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => copyIban(beneficiary)}
+                      className={`${ws.btnNeutral} px-2 py-1 text-[10px] shrink-0`}
+                      title="نسخ الآيبان"
+                    >
+                      {copiedId === beneficiary.id ? (
+                        <Check className="w-3 h-3 text-[#0e7a5f] dark:text-emerald-300" />
+                      ) : (
+                        <Copy className="w-3 h-3" />
+                      )}
+                      {copiedId === beneficiary.id ? "نُسخ" : "نسخ"}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-[11px] text-slate-400 dark:text-white/35">
+                {supplierContactId
+                  ? "لا حسابات بنكية مسجلة لهذا المورد — تُضاف من الموردين والمستفيدين ← المستفيدون."
+                  : "الفواتير غير مربوطة بجهة اتصال — اربطها بمورد لعرض حساباته البنكية."}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -1781,6 +1873,7 @@ export default function PurchasesInvoicesPanel({
         <BulkPayModal
           rows={bulkPaying}
           bankAccounts={bankAccounts}
+          beneficiaries={beneficiaries}
           isSubmitting={bulkPayMut.isPending}
           onClose={() => setBulkPaying(null)}
           onSubmit={(payload) =>
