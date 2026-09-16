@@ -1989,6 +1989,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                         { header: "الرقم", accessor: (row) => row.code, numeric: true },
                         { header: "الحساب", accessor: (row) => row.name },
                         { header: "البنود", accessor: (row) => row.count, numeric: true },
+                        // العدد = مجموع كميات المنتجات على هذا الحساب.
+                        { header: "العدد", accessor: (row) => qty(row.qty), numeric: true },
                         { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
                         { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
                         { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
@@ -2000,6 +2002,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                       rows={statementReport.byAccount.rows}
                       footer={{
                         الحساب: "الإجمالي",
+                        العدد: qty(statementReport.byAccount.totals.qty),
                         الصافي: money(statementReport.byAccount.totals.net),
                         الضريبة: money(statementReport.byAccount.totals.tax),
                         الإجمالي: money(statementReport.byAccount.totals.total),
