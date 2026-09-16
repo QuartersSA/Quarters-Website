@@ -1284,21 +1284,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     );
   };
 
-  // ── Render ──────────────────────────────────────────────────────
-
-  if (invoicesQuery.isLoading) {
-    return (
-      <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60 text-sm`}>
-        جاري تحميل بيانات التقارير…
-      </div>
-    );
-  }
-
-  // التقرير الضريبي له اختيار فترة خاص (شهر ميلادي / ربع + سنة) —
-  // الفلتر العام يخص بقية التقارير.
-  const showPeriodFilter = reportKey !== "aging" && reportKey !== "vat";
-
-  // آخر 24 شهراً ميلادياً كخيارات + سنوات الربع.
+  // آخر 24 شهراً ميلادياً كخيارات + سنوات الربع. (قبل أي return مبكر —
+  // الـ hooks يجب أن تُستدعى بنفس العدد في كل رندر.)
   const vatMonthOptions = useMemo(() => {
     const [cy, cm] = currentMonthKey.split("-").map(Number);
     const options = [];
@@ -1318,6 +1305,21 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
       label: String(cy - offset),
     }));
   }, [currentMonthKey]);
+
+  // ── Render ──────────────────────────────────────────────────────
+
+  if (invoicesQuery.isLoading) {
+    return (
+      <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60 text-sm`}>
+        جاري تحميل بيانات التقارير…
+      </div>
+    );
+  }
+
+  // التقرير الضريبي له اختيار فترة خاص (شهر ميلادي / ربع + سنة) —
+  // الفلتر العام يخص بقية التقارير.
+  const showPeriodFilter = reportKey !== "aging" && reportKey !== "vat";
+
   const QUARTER_OPTIONS = [
     { value: "1", label: "الربع الأول (يناير – مارس)" },
     { value: "2", label: "الربع الثاني (أبريل – يونيو)" },
