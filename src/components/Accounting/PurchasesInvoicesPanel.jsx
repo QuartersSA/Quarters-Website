@@ -1123,8 +1123,15 @@ export default function PurchasesInvoicesPanel({
       }
       return ids;
     };
+    // «غير مصنّفة» = فيها أي بند بلا حساب (فاتورة مختلطة: بند مصنّف +
+    // بند بلا حساب تظهر أيضاً)، أو فاتورة قديمة بلا بنود ولا حساب رأس.
+    const hasUnclassifiedLine = (invoice) => {
+      const items = Array.isArray(invoice.items) ? invoice.items : [];
+      if (items.length === 0) return !invoice.expense_account_id;
+      return items.some((item) => !item.account_id);
+    };
     if (accountFilter === "none") {
-      list = list.filter((invoice) => invoiceAccountIds(invoice).size === 0);
+      list = list.filter(hasUnclassifiedLine);
     } else if (accountFilter) {
       list = list.filter((invoice) =>
         invoiceAccountIds(invoice).has(accountFilter),
