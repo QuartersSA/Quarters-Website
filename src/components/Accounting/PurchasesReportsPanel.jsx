@@ -134,6 +134,9 @@ function bucketInvoicesByAccount(invoices, accountById) {
         total: 0,
         count: 0,
         qty: 0,
+        // أرقام الفواتير التي ساهمت في هذا الحساب — لتتبّع أي بند
+        // خرج عن التصنيف المعتاد إلى فاتورته مباشرة.
+        invoices: new Set(),
       });
     }
     return map.get(key);
@@ -148,6 +151,7 @@ function bucketInvoicesByAccount(invoices, accountById) {
       bucket.tax += moneyValue(invoice.tax_amount);
       bucket.total += moneyValue(invoice.total_amount);
       bucket.count += 1;
+      bucket.invoices.add(invoice.invoice_number);
       continue;
     }
     for (const item of items) {
@@ -157,6 +161,7 @@ function bucketInvoicesByAccount(invoices, accountById) {
       bucket.total += moneyValue(item.line_total);
       bucket.count += 1;
       bucket.qty += moneyValue(item.quantity);
+      bucket.invoices.add(invoice.invoice_number);
     }
   }
   const rows = [...map.values()]
@@ -166,6 +171,7 @@ function bucketInvoicesByAccount(invoices, accountById) {
         : null;
       return {
         ...bucket,
+        invoiceNumbers: [...bucket.invoices],
         code: account?.code || "—",
         name: account?.name || "غير مصنّفة",
       };
@@ -979,7 +985,21 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
       .filter((invoice) => String(invoice.contact_id) === supplierId)
       .sort((a, b) =>
         String(a.invoice_date).localeCompare(String(b.invoice_date)),
-      );
+      )
+      // مجموع بنود كل فاتورة مقابل رأسها — الفرق يكشف فاتورة عُدّل
+      // رأسها دون بنودها فاختفى جزء منها من تقارير الحسابات.
+      .map((invoice) => {
+        const items = Array.isArray(invoice.items) ? invoice.items : [];
+        const linesTotal =
+          items.length === 0
+            ? moneyValue(invoice.total_amount)
+            : items.reduce((sum, item) => sum + moneyValue(item.line_total), 0);
+        return {
+          ...invoice,
+          lines_total: linesTotal,
+          lines_diff: moneyValue(invoice.total_amount) - linesTotal,
+        };
+      });
     const totals = rows.reduce(
       (acc, invoice) => {
         acc.total += moneyValue(invoice.total_amount);
@@ -1926,6 +1946,21 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                     { header: "التاريخ", accessor: (row) => row.invoice_date, numeric: true },
                     { header: "رقم الفاتورة", accessor: (row) => row.invoice_number, numeric: true },
                     { header: "الإجمالي", accessor: (row) => money(row.total_amount), numeric: true },
+                    // يظهر فقط عند وجود فاتورة رأسها ≠ مجموع بنودها.
+                    ...(statementReport.rows.some(
+                      (row) => Math.abs(row.lines_diff) > 0.01,
+                    )
+                      ? [
+                          {
+                            header: "مجموع البنود",
+                            accessor: (row) =>
+                              Math.abs(row.lines_diff) > 0.01
+                                ? `${money(row.lines_total)} ⚠️ (${money(row.lines_diff)})`
+                                : money(row.lines_total),
+                            numeric: true,
+                          },
+                        ]
+                      : []),
                     { header: "المدفوع", accessor: (row) => money(row.paid_amount), numeric: true },
                     { header: "المتبقي", accessor: (row) => money(row.balance_due), numeric: true },
                     { header: "البنك", accessor: (row) => row.paid_bank_name || "—" },
@@ -1955,6 +1990,10 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                         { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
                         { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
                         { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
+                        {
+                          header: "الفواتير",
+                          accessor: (row) => row.invoiceNumbers.join("، "),
+                        },
                       ]}
                       rows={statementReport.byAccount.rows}
                       footer={{
@@ -1967,8 +2006,12 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                     {statementReport.byAccount.unclassified ? (
                       <div className="text-[11px] text-amber-700 dark:text-amber-200">
                         ⚠️ {money(statementReport.byAccount.unclassified.total)} SAR
-                        في بنود بلا حساب — لا تظهر تحت أي حساب في تقرير
-                        «المشتريات حسب الحساب». صنّفها من محرر الفاتورة.
+                        في بنود بلا حساب داخل الفواتير:{" "}
+                        <span className="font-mono" dir="ltr">
+                          {statementReport.byAccount.unclassified.invoiceNumbers.join(", ")}
+                        </span>
+                        {" "}— لا تظهر تحت أي حساب في تقرير «المشتريات حسب
+                        الحساب». صنّفها من محرر الفاتورة.
                       </div>
                     ) : null}
                     {Math.abs(
