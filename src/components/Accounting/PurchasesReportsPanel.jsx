@@ -118,6 +118,73 @@ function moneyValue(value) {
   return Number.isFinite(number) ? number : 0;
 }
 
+// تجميع الفواتير حسب حساب البند (شجرة الحسابات): كل بند يُحسب على
+// حسابه، والبنود بلا حساب تحت «غير مصنّفة». الفواتير القديمة بلا
+// بنود تُصنَّف على حساب الرأس. يخدم تقرير «المشتريات حسب الحساب»
+// وتوزيع كشف حساب المورد بنفس المنطق حتى يتطابق الرقمان دائماً.
+function bucketInvoicesByAccount(invoices, accountById) {
+  const map = new Map();
+  const bucketFor = (id) => {
+    const key = id ?? "none";
+    if (!map.has(key)) {
+      map.set(key, {
+        accountId: id,
+        net: 0,
+        tax: 0,
+        total: 0,
+        count: 0,
+        qty: 0,
+      });
+    }
+    return map.get(key);
+  };
+  for (const invoice of invoices) {
+    const items = Array.isArray(invoice.items) ? invoice.items : [];
+    if (items.length === 0) {
+      const bucket = bucketFor(
+        invoice.expense_account_id ? Number(invoice.expense_account_id) : null,
+      );
+      bucket.net += moneyValue(invoice.subtotal_amount);
+      bucket.tax += moneyValue(invoice.tax_amount);
+      bucket.total += moneyValue(invoice.total_amount);
+      bucket.count += 1;
+      continue;
+    }
+    for (const item of items) {
+      const bucket = bucketFor(item.account_id ? Number(item.account_id) : null);
+      bucket.net += moneyValue(item.line_subtotal);
+      bucket.tax += moneyValue(item.line_tax);
+      bucket.total += moneyValue(item.line_total);
+      bucket.count += 1;
+      bucket.qty += moneyValue(item.quantity);
+    }
+  }
+  const rows = [...map.values()]
+    .map((bucket) => {
+      const account = bucket.accountId
+        ? accountById.get(bucket.accountId)
+        : null;
+      return {
+        ...bucket,
+        code: account?.code || "—",
+        name: account?.name || "غير مصنّفة",
+      };
+    })
+    .sort((a, b) => b.total - a.total);
+  const unclassified = rows.find((row) => !row.accountId) || null;
+  const totals = rows.reduce(
+    (acc, row) => {
+      acc.net += row.net;
+      acc.tax += row.tax;
+      acc.total += row.total;
+      acc.qty += row.qty;
+      return acc;
+    },
+    { net: 0, tax: 0, total: 0, qty: 0 },
+  );
+  return { rows, totals, unclassified };
+}
+
 // كميات البنود قد تكون كسرية (كيلو/لتر) — حدان عشريان بلا أصفار زائدة.
 function qty(value) {
   return Number(value || 0).toLocaleString("en-US", {
@@ -859,80 +926,10 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     [salesComputed, vatReturn, netBaseDue, netVatDue],
   );
 
-  const byAccountReport = useMemo(() => {
-    const map = new Map();
-    let unclassified = null;
-    for (const invoice of periodInvoices) {
-      const items = Array.isArray(invoice.items) ? invoice.items : [];
-      if (items.length === 0) {
-        // Legacy header-only invoice — classify on the header account.
-        const id = invoice.expense_account_id
-          ? Number(invoice.expense_account_id)
-          : null;
-        const key = id ?? "none";
-        if (!map.has(key)) {
-          map.set(key, {
-            accountId: id,
-            net: 0,
-            tax: 0,
-            total: 0,
-            count: 0,
-            qty: 0,
-          });
-        }
-        const bucket = map.get(key);
-        bucket.net += moneyValue(invoice.subtotal_amount);
-        bucket.tax += moneyValue(invoice.tax_amount);
-        bucket.total += moneyValue(invoice.total_amount);
-        bucket.count += 1;
-        continue;
-      }
-      for (const item of items) {
-        const id = item.account_id ? Number(item.account_id) : null;
-        const key = id ?? "none";
-        if (!map.has(key)) {
-          map.set(key, {
-            accountId: id,
-            net: 0,
-            tax: 0,
-            total: 0,
-            count: 0,
-            qty: 0,
-          });
-        }
-        const bucket = map.get(key);
-        bucket.net += moneyValue(item.line_subtotal);
-        bucket.tax += moneyValue(item.line_tax);
-        bucket.total += moneyValue(item.line_total);
-        bucket.count += 1;
-        bucket.qty += moneyValue(item.quantity);
-      }
-    }
-    const rows = [...map.values()]
-      .map((bucket) => {
-        const account = bucket.accountId
-          ? accountById.get(bucket.accountId)
-          : null;
-        return {
-          ...bucket,
-          code: account?.code || "—",
-          name: account?.name || "غير مصنّفة",
-        };
-      })
-      .sort((a, b) => b.total - a.total);
-    unclassified = rows.find((row) => !row.accountId) || null;
-    const totals = rows.reduce(
-      (acc, row) => {
-        acc.net += row.net;
-        acc.tax += row.tax;
-        acc.total += row.total;
-        acc.qty += row.qty;
-        return acc;
-      },
-      { net: 0, tax: 0, total: 0, qty: 0 },
-    );
-    return { rows, totals, unclassified };
-  }, [periodInvoices, accountById]);
+  const byAccountReport = useMemo(
+    () => bucketInvoicesByAccount(periodInvoices, accountById),
+    [periodInvoices, accountById],
+  );
 
   const bySupplierReport = useMemo(() => {
     const map = new Map();
@@ -977,7 +974,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   }, [periodInvoices]);
 
   const statementReport = useMemo(() => {
-    if (!supplierId) return { rows: [], totals: null };
+    if (!supplierId) return { rows: [], totals: null, byAccount: null };
     const rows = periodInvoices
       .filter((invoice) => String(invoice.contact_id) === supplierId)
       .sort((a, b) =>
@@ -992,8 +989,12 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
       },
       { total: 0, paid: 0, balance: 0 },
     );
-    return { rows, totals };
-  }, [periodInvoices, supplierId]);
+    // التوزيع حسب الحساب لفواتير هذا المورد وحده — نفس تجميع تقرير
+    // «المشتريات حسب الحساب»، فيتضح فوراً أي بند خرج عن حسابات
+    // المورد المعتادة أو بقي بلا تصنيف.
+    const byAccount = bucketInvoicesByAccount(rows, accountById);
+    return { rows, totals, byAccount };
+  }, [periodInvoices, supplierId, accountById]);
 
   // Aging always reads ALL active unpaid invoices — a debt doesn't
   // stop existing because the filter looks at last month.
@@ -1937,6 +1938,51 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                     المتبقي: money(statementReport.totals.balance),
                   }}
                 />
+
+                {/* التوزيع حسب الحساب — نفس أرقام تقرير «المشتريات حسب
+                    الحساب» لكن لهذا المورد وحده؛ أي بند بلا تصنيف أو على
+                    حساب غير معتاد يظهر هنا مباشرة. */}
+                {statementReport.byAccount?.rows.length ? (
+                  <div className="space-y-2 pt-2">
+                    <div className="text-sm font-bold text-slate-900 dark:text-white">
+                      التوزيع حسب الحساب
+                    </div>
+                    <ReportTable
+                      columns={[
+                        { header: "الرقم", accessor: (row) => row.code, numeric: true },
+                        { header: "الحساب", accessor: (row) => row.name },
+                        { header: "البنود", accessor: (row) => row.count, numeric: true },
+                        { header: "الصافي", accessor: (row) => money(row.net), numeric: true },
+                        { header: "الضريبة", accessor: (row) => money(row.tax), numeric: true },
+                        { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
+                      ]}
+                      rows={statementReport.byAccount.rows}
+                      footer={{
+                        الحساب: "الإجمالي",
+                        الصافي: money(statementReport.byAccount.totals.net),
+                        الضريبة: money(statementReport.byAccount.totals.tax),
+                        الإجمالي: money(statementReport.byAccount.totals.total),
+                      }}
+                    />
+                    {statementReport.byAccount.unclassified ? (
+                      <div className="text-[11px] text-amber-700 dark:text-amber-200">
+                        ⚠️ {money(statementReport.byAccount.unclassified.total)} SAR
+                        في بنود بلا حساب — لا تظهر تحت أي حساب في تقرير
+                        «المشتريات حسب الحساب». صنّفها من محرر الفاتورة.
+                      </div>
+                    ) : null}
+                    {Math.abs(
+                      statementReport.byAccount.totals.total -
+                        statementReport.totals.total,
+                    ) > 0.01 ? (
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">
+                        الفرق بين مجموع البنود ({money(statementReport.byAccount.totals.total)})
+                        وإجمالي الفواتير ({money(statementReport.totals.total)}) يعود لخصم
+                        على مستوى الفاتورة أو فواتير قديمة عُدّل رأسها دون بنودها.
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
               </>
             )
           ) : null}
