@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useItemsData } from "@/hooks/useItemsData";
 import { useItemForm } from "@/hooks/useItemForm";
@@ -23,7 +22,6 @@ import {
 import { todayRiyadhDateKey } from "@/utils/dateUtils";
 import { ws } from "@/components/Workspace/ui";
 import { Breadcrumb } from "@/components/Dashboard/Breadcrumb";
-import { queryKeys } from "../../../utils/queryKeys.js";
 
 function getItemTotalStock(item) {
   const list = Array.isArray(item?.branch_stock) ? item.branch_stock : [];
@@ -69,19 +67,6 @@ export default function ItemsPage() {
     createMutation: createCategoryMutation,
     updateMutation: updateCategoryMutation,
   } = useItemCategories(isAuthenticated);
-
-  // Fetch green beans for linking
-  const { data: greenBeansData } = useQuery({
-    queryKey: queryKeys.greenBeans(),
-    queryFn: async () => {
-      const { adminFetch } = await import("@/utils/apiAuth");
-      const response = await adminFetch("/api/accounting/green-beans");
-      if (!response.ok) throw new Error("Failed to fetch green beans");
-      return response.json();
-    },
-    enabled: isAuthenticated,
-  });
-  const greenBeans = greenBeansData?.beans || [];
 
   const { formData, setFormData, editingItem, resetForm, loadItem } =
     useItemForm();
@@ -384,7 +369,6 @@ export default function ItemsPage() {
         formData={formData}
         setFormData={setFormData}
         categories={categories}
-        greenBeans={greenBeans}
         onSubmit={handleSubmit}
         onClose={handleCloseModal}
         createMutation={createMutation}

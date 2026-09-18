@@ -10,6 +10,8 @@ export function ActionsCard({
   success,
   onResetDraft,
   resetDisabled,
+  // الصفحة مؤرشفة: لا «توريد جديد» ولا تفريغ — الأرشيف للقراءة فقط.
+  archived = false,
 }) {
   const cardShell = `${ws.glassSoft} ${ws.card} p-5`;
 
@@ -24,10 +26,12 @@ export function ActionsCard({
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
           <div className="text-slate-900 dark:text-white font-bold tracking-tight">
-            توريد البن الأخضر
+            {archived ? "أرشيف توريد البن (قديم)" : "توريد البن الأخضر"}
           </div>
           <div className="text-xs text-slate-500 dark:text-white/50 mt-1">
-            اختر أنواع البن ثم احفظ الطلب ليظهر في الأرشيف حسب التاريخ.
+            {archived
+              ? "للقراءة فقط — شراء البن ووصوله وتكلفته تُدار الآن من فواتير المشتريات."
+              : "اختر أنواع البن ثم احفظ الطلب ليظهر في الأرشيف حسب التاريخ."}
           </div>
         </div>
 
@@ -42,24 +46,33 @@ export function ActionsCard({
             تحديث
           </button>
 
-          <div className="flex gap-2">
-            <button
-              type="button"
-              className={createBtnClass}
-              onClick={() => onChangeMode("create")}
+          {archived ? (
+            <a
+              href="/accounting/purchases?tab=invoices&intent=add"
+              className={`${ws.btnPrimary} px-4 py-2`}
             >
-              توريد جديد
-            </button>
-            <button
-              type="button"
-              className={archiveBtnClass}
-              onClick={() => onChangeMode("archive")}
-            >
-              الأرشيف
-            </button>
-          </div>
+              فاتورة بن جديدة
+            </a>
+          ) : (
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className={createBtnClass}
+                onClick={() => onChangeMode("create")}
+              >
+                توريد جديد
+              </button>
+              <button
+                type="button"
+                className={archiveBtnClass}
+                onClick={() => onChangeMode("archive")}
+              >
+                الأرشيف
+              </button>
+            </div>
+          )}
 
-          {createActive ? (
+          {createActive && !archived ? (
             <button
               type="button"
               className={`${ws.btnDanger} px-4 py-2`}

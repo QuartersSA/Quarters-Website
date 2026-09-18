@@ -1,6 +1,186 @@
 import { useMemo, useState } from "react";
-import { Layers, Plus, X, Languages, Pencil, Check, Ban } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Layers,
+  Plus,
+  X,
+  Languages,
+  Pencil,
+  Check,
+  Ban,
+  Flame,
+} from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
+import GlassSelect from "@/components/Workspace/GlassSelect";
+import { adminFetch } from "@/utils/apiAuth";
+import { queryKeys } from "../../utils/queryKeys.js";
+
+const EMPTY_COFFEE = {
+  is_roasted_coffee: false,
+  roast_cost_per_kg: "",
+  roast_tax_rate: "",
+  default_roaster_contact_id: "",
+};
+
+function coffeeFromCategory(c) {
+  return {
+    is_roasted_coffee: c?.is_roasted_coffee === true,
+    roast_cost_per_kg:
+      c?.roast_cost_per_kg == null ? "" : String(Number(c.roast_cost_per_kg)),
+    roast_tax_rate:
+      c?.roast_tax_rate == null ? "" : String(Number(c.roast_tax_rate)),
+    default_roaster_contact_id: c?.default_roaster_contact_id
+      ? String(c.default_roaster_contact_id)
+      : "",
+  };
+}
+
+// يحوّل حقول النموذج إلى جسم الطلب. عند إلغاء علم البن تُمسح الافتراضات.
+function coffeePayload(coffee) {
+  if (!coffee.is_roasted_coffee) {
+    return {
+      is_roasted_coffee: false,
+      roast_cost_per_kg: null,
+      roast_tax_rate: null,
+      default_roaster_contact_id: null,
+    };
+  }
+  return {
+    is_roasted_coffee: true,
+    roast_cost_per_kg:
+      coffee.roast_cost_per_kg === "" ? null : Number(coffee.roast_cost_per_kg),
+    roast_tax_rate:
+      coffee.roast_tax_rate === "" ? null : Number(coffee.roast_tax_rate),
+    default_roaster_contact_id: coffee.default_roaster_contact_id
+      ? Number(coffee.default_roaster_contact_id)
+      : null,
+  };
+}
+
+function validateCoffee(coffee) {
+  if (!coffee.is_roasted_coffee) return null;
+  if (coffee.roast_cost_per_kg !== "") {
+    const n = Number(coffee.roast_cost_per_kg);
+    if (!Number.isFinite(n) || n < 0) return "تكلفة التحميص للكيلو غير صالحة";
+  }
+  if (coffee.roast_tax_rate !== "") {
+    const n = Number(coffee.roast_tax_rate);
+    if (!Number.isFinite(n) || n < 0 || n > 100)
+      return "نسبة ضريبة التحميص غير صالحة (0–100)";
+  }
+  return null;
+}
+
+// إعدادات البن المحمّص للفئة: العلم + تحميص/كغ + ضريبة التحميص + المحمصة.
+function CoffeeFields({ coffee, setCoffee, contacts, contactsError, fallbackRoasterName, disabled }) {
+  const roasterOptions = useMemo(() => {
+    const list = Array.isArray(contacts) ? contacts : [];
+    const opts = list.map((c) => ({ value: String(c.id), label: c.name }));
+    // المحمصة الحالية قد تكون غير موجودة في القائمة (موقوفة/بلا صلاحية قراءة)
+    if (
+      coffee.default_roaster_contact_id &&
+      !opts.some((o) => o.value === coffee.default_roaster_contact_id)
+    ) {
+      opts.unshift({
+        value: coffee.default_roaster_contact_id,
+        label: fallbackRoasterName || `جهة اتصال #${coffee.default_roaster_contact_id}`,
+      });
+    }
+    return [{ value: "", label: "المحمصة الافتراضية للنظام (محمصة درر)" }, ...opts];
+  }, [contacts, coffee.default_roaster_contact_id, fallbackRoasterName]);
+
+  const on = coffee.is_roasted_coffee;
+  return (
+    <div
+      className={`rounded-2xl border p-3 space-y-3 ${
+        on
+          ? "border-amber-500/25 bg-amber-500/5"
+          : "border-slate-200 dark:border-white/10"
+      }`}
+    >
+      <label className="flex items-center justify-between gap-3 cursor-pointer">
+        <span className="flex items-center gap-2 text-sm font-semibold text-slate-800 dark:text-white/85">
+          <Flame className={`w-4 h-4 ${on ? "text-amber-600 dark:text-amber-300" : "text-slate-400"}`} />
+          فئة بن قهوة محمّصة
+        </span>
+        <input
+          type="checkbox"
+          checked={on}
+          disabled={disabled}
+          onChange={(e) =>
+            setCoffee({ ...coffee, is_roasted_coffee: e.target.checked })
+          }
+          className="w-4 h-4 accent-amber-500"
+        />
+      </label>
+      <p className="text-[11px] text-slate-500 dark:text-white/40">
+        أصناف هذه الفئة تظهر لها خانة «إضافة قيمة تحميص» في فاتورة المشتريات،
+        وتُحسب تكلفتها بالكيلو الصافي بعد الهدر والتحميص.
+      </p>
+      {on ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <label className="block text-xs text-slate-600 dark:text-white/55 mb-1">
+              تكلفة التحميص للكيلو (ر.س)
+            </label>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={coffee.roast_cost_per_kg}
+              disabled={disabled}
+              onChange={(e) =>
+                setCoffee({ ...coffee, roast_cost_per_kg: e.target.value })
+              }
+              className={`${ws.input} px-3 py-2`}
+              placeholder="9"
+              dir="ltr"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-slate-600 dark:text-white/55 mb-1">
+              ضريبة التحميص (%)
+            </label>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              value={coffee.roast_tax_rate}
+              disabled={disabled}
+              onChange={(e) =>
+                setCoffee({ ...coffee, roast_tax_rate: e.target.value })
+              }
+              className={`${ws.input} px-3 py-2`}
+              placeholder="0"
+              dir="ltr"
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs text-slate-600 dark:text-white/55 mb-1">
+              المحمصة الافتراضية (جهة اتصال)
+            </label>
+            <GlassSelect
+              value={coffee.default_roaster_contact_id}
+              onChange={(v) =>
+                setCoffee({ ...coffee, default_roaster_contact_id: v || "" })
+              }
+              options={roasterOptions}
+              placeholder="اختر المحمصة…"
+              disabled={disabled}
+            />
+            {contactsError ? (
+              <p className="text-[11px] text-amber-700 dark:text-amber-200/70 mt-1">
+                تعذّر تحميل جهات الاتصال (تحتاج صلاحية المشتريات) — تبقى
+                المحمصة الحالية كما هي.
+              </p>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 export default function ItemCategoriesModal({
   isOpen,
@@ -11,11 +191,27 @@ export default function ItemCategoriesModal({
 }) {
   const [name, setName] = useState("");
   const [nameEn, setNameEn] = useState("");
+  const [coffee, setCoffee] = useState(EMPTY_COFFEE);
   const [localError, setLocalError] = useState(null);
 
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState("");
   const [editNameEn, setEditNameEn] = useState("");
+  const [editCoffee, setEditCoffee] = useState(EMPTY_COFFEE);
+
+  // جهات الاتصال (لاختيار المحمصة). قد تفشل لمدير مخزون بلا صلاحية
+  // مشتريات — عندها نُبقي المحمصة الحالية للفئة كما هي.
+  const contactsQuery = useQuery({
+    queryKey: queryKeys.accountingContacts("", false),
+    enabled: isOpen,
+    retry: false,
+    queryFn: async () => {
+      const res = await adminFetch("/api/accounting/contacts");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "فشل تحميل جهات الاتصال");
+      return Array.isArray(data?.contacts) ? data.contacts : [];
+    },
+  });
 
   const sorted = useMemo(() => {
     const list = Array.isArray(categories) ? categories : [];
@@ -33,12 +229,14 @@ export default function ItemCategoriesModal({
     setEditingId(c.id);
     setEditName(c.name || "");
     setEditNameEn(c.name_en || "");
+    setEditCoffee(coffeeFromCategory(c));
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setEditName("");
     setEditNameEn("");
+    setEditCoffee(EMPTY_COFFEE);
   };
 
   const onCreate = async (e) => {
@@ -58,10 +256,21 @@ export default function ItemCategoriesModal({
       return;
     }
 
+    const coffeeError = validateCoffee(coffee);
+    if (coffeeError) {
+      setLocalError(coffeeError);
+      return;
+    }
+
     try {
-      await createMutation.mutateAsync({ name: trimmedAr, name_en: trimmedEn });
+      await createMutation.mutateAsync({
+        name: trimmedAr,
+        name_en: trimmedEn,
+        ...coffeePayload(coffee),
+      });
       setName("");
       setNameEn("");
+      setCoffee(EMPTY_COFFEE);
     } catch (err) {
       console.error(err);
       setLocalError(err?.message || "فشل إضافة الفئة");
@@ -84,11 +293,18 @@ export default function ItemCategoriesModal({
       return;
     }
 
+    const coffeeError = validateCoffee(editCoffee);
+    if (coffeeError) {
+      setLocalError(coffeeError);
+      return;
+    }
+
     try {
       await updateMutation.mutateAsync({
         id,
         name: trimmedAr,
         name_en: trimmedEn,
+        ...coffeePayload(editCoffee),
       });
       cancelEdit();
     } catch (err) {
@@ -152,6 +368,15 @@ export default function ItemCategoriesModal({
               </div>
             </div>
 
+            <CoffeeFields
+              coffee={coffee}
+              setCoffee={setCoffee}
+              contacts={contactsQuery.data}
+              contactsError={contactsQuery.isError}
+              fallbackRoasterName={null}
+              disabled={saving}
+            />
+
             <button
               type="submit"
               disabled={saving}
@@ -199,6 +424,19 @@ export default function ItemCategoriesModal({
                             >
                               {c.name_en || "-"}
                             </div>
+                            {c.is_roasted_coffee ? (
+                              <div className="mt-2 inline-flex items-center gap-1 rounded-full border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-700 dark:text-amber-200">
+                                <Flame className="w-3 h-3" />
+                                بن محمّص · تحميص{" "}
+                                {c.roast_cost_per_kg != null
+                                  ? Number(c.roast_cost_per_kg)
+                                  : 9}{" "}
+                                ر.س/كغ
+                                {c.default_roaster_name
+                                  ? ` · ${c.default_roaster_name}`
+                                  : ""}
+                              </div>
+                            ) : null}
                           </div>
 
                           <button
@@ -228,6 +466,15 @@ export default function ItemCategoriesModal({
                             placeholder="Category name (English)"
                             disabled={updating}
                             dir="ltr"
+                          />
+
+                          <CoffeeFields
+                            coffee={editCoffee}
+                            setCoffee={setEditCoffee}
+                            contacts={contactsQuery.data}
+                            contactsError={contactsQuery.isError}
+                            fallbackRoasterName={c.default_roaster_name || null}
+                            disabled={updating}
                           />
 
                           <div className="flex gap-2">

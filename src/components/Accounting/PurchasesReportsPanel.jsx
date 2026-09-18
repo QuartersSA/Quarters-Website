@@ -8,6 +8,7 @@ import {
   Clock3,
   FileSpreadsheet,
   FileText,
+  Flame,
   History,
   Landmark,
   ListTree,
@@ -26,6 +27,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { authedFetch } from "@/utils/apiAuth";
 import { queryKeys } from "@/utils/queryKeys";
+import { coffeeLineStatus } from "@/utils/coffeeMath";
 
 /**
  * مركز التقارير — قسم المشتريات.
@@ -92,6 +94,13 @@ const REPORTS = [
     Icon: Landmark,
     description:
       "دفعات الفترة من سجل الدفعات — كل دفعة بتاريخها الفعلي على بنكها.",
+  },
+  {
+    key: "coffee",
+    label: "تقرير البن",
+    Icon: Flame,
+    description:
+      "بنود البن في فواتير المشتريات: الكيلو الخام والواصل والهدر وتكلفة التحميص وصافي الكيلو شامل الضريبة — حسب الصنف أو الفاتورة أو الشهر.",
   },
   {
     key: "audit",
@@ -431,6 +440,11 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const [compare, setCompare] = useState(false);
   const [showSchedules, setShowSchedules] = useState(false);
   const [auditSearch, setAuditSearch] = useState("");
+  // تقرير البن: العرض (صنف/فاتورة/شهر)، أساس التاريخ، الصنف، الحالة.
+  const [coffeeView, setCoffeeView] = useState("bean");
+  const [coffeeBasis, setCoffeeBasis] = useState("invoice");
+  const [coffeeItem, setCoffeeItem] = useState("");
+  const [coffeeStatus, setCoffeeStatus] = useState("");
 
   // فترة التقرير الضريبي مستقلة عن فلتر بقية التقارير: إما شهر
   // ميلادي محدد (مع إدخال مبيعات وحفظ)، أو ربع + سنة (عرض فقط —
@@ -1125,6 +1139,160 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     return { rows, total };
   }, [invoices, matchesBranch, from, to, bankById]);
 
+  // ── تقرير البن ─────────────────────────────────────────────────
+  // كل بند بن (roast_enabled) في الفواتير النشطة (غير فواتير التحميص)
+  // ضمن الفترة بأساس تاريخ الفاتورة أو تاريخ الوصول، مع فلتر الفرع
+  // والصنف والحالة. الأرقام من أعمدة الخادم المحسوبة (لا إعادة حساب).
+  const coffeeReport = useMemo(() => {
+    const lines = [];
+    for (const invoice of invoices) {
+      if (invoice.is_active === false) continue;
+      if (invoice.invoice_kind === "roast") continue;
+      if (!matchesBranch(invoice)) continue;
+      const items = Array.isArray(invoice.items) ? invoice.items : [];
+      for (const item of items) {
+        if (!item.roast_enabled) continue;
+        const date =
+          coffeeBasis === "arrival" ? item.arrival_date || "" : invoice.invoice_date || "";
+        if (coffeeBasis === "arrival" && !date) continue;
+        if (from && date < from) continue;
+        if (to && date > to) continue;
+        if (coffeeItem && String(item.item_id || "") !== coffeeItem) continue;
+        const status = coffeeLineStatus(item);
+        if (coffeeStatus === "received" && status !== "received") continue;
+        if (coffeeStatus === "pending" && status === "received") continue;
+        lines.push({
+          id: item.id,
+          invoice_id: invoice.id,
+          invoice_number: invoice.invoice_number,
+          invoice_date: invoice.invoice_date,
+          supplier: invoice.contact_name || invoice.supplier_name || "—",
+          branch: invoice.branch_name || "—",
+          item_id: item.item_id ? Number(item.item_id) : null,
+          bean: item.bean_name || item.description || "بن",
+          status,
+          sacks: moneyValue(item.sacks),
+          raw_kg: moneyValue(item.raw_kg),
+          received_kg: item.received_kg != null ? moneyValue(item.received_kg) : null,
+          arrival_date: item.arrival_date || null,
+          waste_percent: item.waste_percent != null ? moneyValue(item.waste_percent) : null,
+          bean_cost_excl: moneyValue(item.bean_cost_excl),
+          bean_cost_incl: moneyValue(item.bean_cost_incl),
+          raw_cost_per_kg: item.raw_cost_per_kg != null ? moneyValue(item.raw_cost_per_kg) : null,
+          roast_total: moneyValue(item.roast_total_net) + moneyValue(item.roast_tax_amount),
+          extra_cost: moneyValue(item.extra_cost),
+          landed_incl: moneyValue(item.landed_incl),
+          net_incl_per_kg: item.net_incl_per_kg != null ? moneyValue(item.net_incl_per_kg) : null,
+          deposited_kg: item.deposited_kg != null ? moneyValue(item.deposited_kg) : null,
+          roast_invoice: invoice.roast_invoice || null,
+        });
+      }
+    }
+    lines.sort((a, b) =>
+      String(b.invoice_date || "").localeCompare(String(a.invoice_date || "")) || b.id - a.id,
+    );
+
+    const sumKpi = (list) => {
+      const k = { count: list.length, raw: 0, received: 0, bean_incl: 0, roast: 0, landed: 0, receivedLanded: 0, pending: 0 };
+      for (const l of list) {
+        k.raw += l.raw_kg;
+        k.bean_incl += l.bean_cost_incl;
+        k.roast += l.roast_total;
+        k.landed += l.landed_incl;
+        if (l.status === "received") {
+          k.received += l.received_kg || 0;
+          k.receivedLanded += l.landed_incl;
+        } else k.pending += 1;
+      }
+      const rawOfReceived = list
+        .filter((l) => l.status === "received")
+        .reduce((sum, l) => sum + l.raw_kg, 0);
+      k.waste = rawOfReceived > 0 ? round2((1 - k.received / rawOfReceived) * 100) : null;
+      k.net = k.received > 0 ? round2(k.receivedLanded / k.received) : null;
+      return k;
+    };
+
+    const groupBy = (keyOf, labelOf) => {
+      const map = new Map();
+      for (const l of lines) {
+        const key = keyOf(l);
+        if (!map.has(key)) map.set(key, { key, label: labelOf(l), lines: [] });
+        map.get(key).lines.push(l);
+      }
+      return [...map.values()].map((g) => ({ ...g, ...sumKpi(g.lines) }));
+    };
+
+    const byBean = groupBy((l) => l.item_id || l.bean, (l) => l.bean).sort(
+      (a, b) => b.landed - a.landed,
+    );
+    const byMonth = groupBy(
+      (l) => (coffeeBasis === "arrival" ? l.arrival_date : l.invoice_date || "").slice(0, 7),
+      (l) => {
+        const key = (coffeeBasis === "arrival" ? l.arrival_date : l.invoice_date || "").slice(0, 7);
+        const [yy, mm] = key.split("-").map(Number);
+        return mm ? `${MONTH_LABELS[mm - 1]} ${yy}` : "—";
+      },
+    ).sort((a, b) => String(b.key).localeCompare(String(a.key)));
+
+    // مطابقة فواتير التحميص: مجموع التحميص المحسوب على بنود كل فاتورة
+    // بن مقابل إجمالي فاتورة التحميص المولّدة لها.
+    const reconcile = [];
+    const seen = new Set();
+    for (const l of lines) {
+      if (seen.has(l.invoice_id)) continue;
+      seen.add(l.invoice_id);
+      const computed = round2(
+        lines.filter((x) => x.invoice_id === l.invoice_id).reduce((s, x) => s + x.roast_total, 0),
+      );
+      const roast = l.roast_invoice;
+      const actual = roast && roast.is_active !== false ? moneyValue(roast.total_amount) : 0;
+      const diff = round2(actual - computed);
+      reconcile.push({
+        invoice_number: l.invoice_number,
+        roast_number: roast?.invoice_number || "—",
+        roaster: roast?.roaster_name || "—",
+        computed,
+        actual,
+        diff,
+        paid: roast ? moneyValue(roast.paid_amount) : 0,
+        note:
+          !roast && computed > 0
+            ? "لا فاتورة تحميص"
+            : roast?.is_active === false
+              ? "فاتورة التحميص موقوفة"
+              : roast?.roast_link_state === "detached"
+                ? "مفكوكة الارتباط"
+                : roast?.roast_confirmed
+                  ? "مؤكدة يدويًا"
+                  : Math.abs(diff) >= 0.01
+                    ? "فرق"
+                    : "",
+      });
+    }
+
+    const itemOptions = [...new Map(lines.map((l) => [l.item_id || l.bean, l.bean])).entries()];
+    return { lines, kpi: sumKpi(lines), byBean, byMonth, reconcile, itemOptions };
+  }, [invoices, matchesBranch, from, to, coffeeBasis, coffeeItem, coffeeStatus]);
+
+  // خيارات الصنف للفلتر — من كل بنود البن (بلا فلتر الصنف نفسه).
+  const coffeeItemOptions = useMemo(() => {
+    const map = new Map();
+    for (const invoice of invoices) {
+      if (invoice.invoice_kind === "roast") continue;
+      for (const item of Array.isArray(invoice.items) ? invoice.items : []) {
+        if (item.roast_enabled && item.item_id) {
+          map.set(String(item.item_id), item.bean_name || item.description || `#${item.item_id}`);
+        }
+      }
+    }
+    return [
+      { value: "", label: "كل الأصناف" },
+      ...[...map.entries()]
+        .sort((a, b) => a[1].localeCompare(b[1], "ar"))
+        .map(([value, label]) => ({ value, label })),
+    ];
+  }, [invoices]);
+
   // ── Export ──────────────────────────────────────────────────────
 
   const exportConfig = useMemo(() => {
@@ -1231,6 +1399,47 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
           ],
           rows: byBankReport.rows,
         };
+      case "coffee": {
+        const kg = (v) => (v == null ? "" : qty(v));
+        if (coffeeView === "invoice") {
+          return {
+            filename: "coffee-lines",
+            title: `تقرير البن — حسب الفاتورة (${label})`,
+            columns: [
+              { header: "التاريخ", accessor: (row) => row.invoice_date || "" },
+              { header: "رقم الفاتورة", accessor: (row) => row.invoice_number },
+              { header: "المورد", accessor: (row) => row.supplier },
+              { header: "الصنف", accessor: (row) => row.bean },
+              { header: "الخام (كغ)", accessor: (row) => kg(row.raw_kg) },
+              { header: "الواصل (كغ)", accessor: (row) => kg(row.received_kg) },
+              { header: "الهدر %", accessor: (row) => kg(row.waste_percent) },
+              { header: "البن شامل (SAR)", accessor: (row) => money(row.bean_cost_incl) },
+              { header: "التحميص (SAR)", accessor: (row) => money(row.roast_total) },
+              { header: "التكلفة الواصلة (SAR)", accessor: (row) => money(row.landed_incl) },
+              { header: "صافي/كغ شامل (SAR)", accessor: (row) => (row.net_incl_per_kg == null ? "" : money(row.net_incl_per_kg)) },
+              { header: "الحالة", accessor: (row) => (row.status === "received" ? "وصل" : row.status === "partial" ? "جزئي" : "بانتظار الوصول") },
+            ],
+            rows: coffeeReport.lines,
+          };
+        }
+        const groups = coffeeView === "month" ? coffeeReport.byMonth : coffeeReport.byBean;
+        return {
+          filename: coffeeView === "month" ? "coffee-monthly" : "coffee-by-bean",
+          title: `تقرير البن — ${coffeeView === "month" ? "شهري" : "حسب الصنف"} (${label})`,
+          columns: [
+            { header: coffeeView === "month" ? "الشهر" : "الصنف", accessor: (row) => row.label },
+            { header: "البنود", accessor: (row) => row.count },
+            { header: "الخام (كغ)", accessor: (row) => kg(row.raw) },
+            { header: "الواصل (كغ)", accessor: (row) => kg(row.received) },
+            { header: "الهدر %", accessor: (row) => kg(row.waste) },
+            { header: "البن شامل (SAR)", accessor: (row) => money(row.bean_incl) },
+            { header: "التحميص (SAR)", accessor: (row) => money(row.roast) },
+            { header: "التكلفة الواصلة (SAR)", accessor: (row) => money(row.landed) },
+            { header: "صافي/كغ شامل (SAR)", accessor: (row) => (row.net == null ? "" : money(row.net)) },
+          ],
+          rows: groups,
+        };
+      }
       case "audit":
         return {
           filename: "purchases-audit-log",
@@ -1263,6 +1472,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     auditRows,
     contacts,
     supplierId,
+    coffeeReport,
+    coffeeView,
   ]);
 
   const handleExportExcel = () => {
@@ -1333,7 +1544,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   return (
     <>
       {/* Report picker */}
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
         {REPORTS.map((report) => {
           const Icon = report.Icon;
           const isActive = report.key === reportKey;
@@ -1470,6 +1681,65 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                 searchPlaceholder="ابحث عن مورد…"
               />
             </div>
+          ) : null}
+
+          {reportKey === "coffee" ? (
+            <>
+              <div className={ws.segWrap}>
+                {[
+                  ["bean", "حسب الصنف"],
+                  ["invoice", "حسب الفاتورة"],
+                  ["month", "شهري"],
+                ].map(([value, label]) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setCoffeeView(value)}
+                    className={`${ws.segBtn} text-xs ${coffeeView === value ? ws.segActive : ws.segInactive}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <div className={ws.segWrap} title="أساس الفترة: تاريخ الفاتورة أو تاريخ الوصول">
+                <button
+                  type="button"
+                  onClick={() => setCoffeeBasis("invoice")}
+                  className={`${ws.segBtn} text-xs ${coffeeBasis === "invoice" ? ws.segActive : ws.segInactive}`}
+                >
+                  بتاريخ الفاتورة
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCoffeeBasis("arrival")}
+                  className={`${ws.segBtn} text-xs ${coffeeBasis === "arrival" ? ws.segActive : ws.segInactive}`}
+                >
+                  بتاريخ الوصول
+                </button>
+              </div>
+              <div className="w-48">
+                <GlassSelect
+                  value={coffeeItem}
+                  onChange={setCoffeeItem}
+                  options={coffeeItemOptions}
+                  placeholder="كل الأصناف"
+                  buttonClassName="text-sm py-2 px-3"
+                />
+              </div>
+              <div className="w-40">
+                <GlassSelect
+                  value={coffeeStatus}
+                  onChange={setCoffeeStatus}
+                  options={[
+                    { value: "", label: "كل الحالات" },
+                    { value: "received", label: "وصل (مكتمل)" },
+                    { value: "pending", label: "بانتظار الوصول" },
+                  ]}
+                  placeholder="كل الحالات"
+                  buttonClassName="text-sm py-2 px-3"
+                />
+              </div>
+            </>
           ) : null}
 
           {reportKey === "audit" ? (
@@ -2089,6 +2359,150 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                   المدفوع: money(byBankReport.total),
                 }}
               />
+              </>
+            )
+          ) : null}
+
+          {reportKey === "coffee" ? (
+            coffeeReport.lines.length === 0 ? (
+              <div className="text-center text-sm text-slate-500 dark:text-white/50 py-8">
+                لا بنود بن في الفترة المحددة. بنود البن هي بنود فواتير
+                المشتريات على أصناف فئة «بن قهوة محمّصة» مع «إضافة قيمة تحميص».
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+                  <KpiCard label="الكيلو الخام" value={`${qty(coffeeReport.kpi.raw)} كغ`} sub={`${coffeeReport.kpi.count} بند`} />
+                  <KpiCard
+                    label="الواصل (مكتمل)"
+                    value={`${qty(coffeeReport.kpi.received)} كغ`}
+                    sub={coffeeReport.kpi.pending > 0 ? `${coffeeReport.kpi.pending} بند بانتظار الوصول` : "كل البنود وصلت"}
+                  />
+                  <KpiCard label="متوسط الهدر" value={coffeeReport.kpi.waste == null ? "—" : `${money(coffeeReport.kpi.waste)}%`} sub="على البنود المكتملة" />
+                  <KpiCard label="البن شامل الضريبة" value={money(coffeeReport.kpi.bean_incl)} sub="ضمن فواتير الموردين" />
+                  <KpiCard label="تكلفة التحميص" value={money(coffeeReport.kpi.roast)} sub="فواتير تحميص مستقلة" />
+                  <KpiCard
+                    label="صافي الكيلو (شامل)"
+                    value={coffeeReport.kpi.net == null ? "—" : money(coffeeReport.kpi.net)}
+                    sub="موزون على الواصل المكتمل"
+                  />
+                </div>
+
+                {coffeeView === "invoice" ? (
+                  <ReportTable
+                    columns={[
+                      { header: "التاريخ", accessor: (row) => row.invoice_date || "—", numeric: true },
+                      { header: "الفاتورة", accessor: (row) => row.invoice_number, numeric: true },
+                      { header: "المورد", accessor: (row) => row.supplier },
+                      { header: "الصنف", accessor: (row) => row.bean },
+                      { header: "الخام", accessor: (row) => `${qty(row.raw_kg)} كغ`, numeric: true },
+                      {
+                        header: "الواصل",
+                        accessor: (row) => (row.received_kg == null ? "—" : `${qty(row.received_kg)} كغ`),
+                        numeric: true,
+                      },
+                      { header: "الهدر", accessor: (row) => (row.waste_percent == null ? "—" : `${money(row.waste_percent)}%`), numeric: true },
+                      { header: "البن شامل", accessor: (row) => money(row.bean_cost_incl), numeric: true },
+                      { header: "التحميص", accessor: (row) => money(row.roast_total), numeric: true },
+                      { header: "الواصلة", accessor: (row) => money(row.landed_incl), numeric: true },
+                      { header: "صافي/كغ", accessor: (row) => (row.net_incl_per_kg == null ? "—" : money(row.net_incl_per_kg)), numeric: true },
+                      {
+                        header: "الحالة",
+                        accessor: (row) => row.status,
+                        format: (value) => (
+                          <span
+                            className={`${ws.pill} whitespace-nowrap ${
+                              value === "received"
+                                ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
+                                : value === "partial"
+                                  ? "bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25"
+                                  : "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10"
+                            }`}
+                          >
+                            {value === "received" ? "وصل" : value === "partial" ? "جزئي" : "بانتظار"}
+                          </span>
+                        ),
+                      },
+                    ]}
+                    rows={coffeeReport.lines}
+                    footer={{
+                      التاريخ: "الإجمالي",
+                      الخام: `${qty(coffeeReport.kpi.raw)} كغ`,
+                      الواصل: `${qty(coffeeReport.kpi.received)} كغ`,
+                      الهدر: coffeeReport.kpi.waste == null ? "" : `${money(coffeeReport.kpi.waste)}%`,
+                      "البن شامل": money(coffeeReport.kpi.bean_incl),
+                      التحميص: money(coffeeReport.kpi.roast),
+                      الواصلة: money(coffeeReport.kpi.landed),
+                      "صافي/كغ": coffeeReport.kpi.net == null ? "" : money(coffeeReport.kpi.net),
+                    }}
+                  />
+                ) : (
+                  <>
+                    {coffeeView === "bean" ? (
+                      <HBars
+                        rows={coffeeReport.byBean}
+                        nameOf={(row) => row.label}
+                        valueOf={(row) => row.landed}
+                      />
+                    ) : null}
+                    <ReportTable
+                      columns={[
+                        { header: coffeeView === "month" ? "الشهر" : "الصنف", accessor: (row) => row.label },
+                        { header: "البنود", accessor: (row) => row.count, numeric: true },
+                        { header: "الخام", accessor: (row) => `${qty(row.raw)} كغ`, numeric: true },
+                        { header: "الواصل", accessor: (row) => `${qty(row.received)} كغ`, numeric: true },
+                        { header: "الهدر", accessor: (row) => (row.waste == null ? "—" : `${money(row.waste)}%`), numeric: true },
+                        { header: "البن شامل", accessor: (row) => money(row.bean_incl), numeric: true },
+                        { header: "التحميص", accessor: (row) => money(row.roast), numeric: true },
+                        { header: "الواصلة", accessor: (row) => money(row.landed), numeric: true },
+                        { header: "صافي/كغ", accessor: (row) => (row.net == null ? "—" : money(row.net)), numeric: true },
+                      ]}
+                      rows={coffeeView === "month" ? coffeeReport.byMonth : coffeeReport.byBean}
+                      footer={{
+                        [coffeeView === "month" ? "الشهر" : "الصنف"]: "الإجمالي",
+                        البنود: coffeeReport.kpi.count,
+                        الخام: `${qty(coffeeReport.kpi.raw)} كغ`,
+                        الواصل: `${qty(coffeeReport.kpi.received)} كغ`,
+                        الهدر: coffeeReport.kpi.waste == null ? "" : `${money(coffeeReport.kpi.waste)}%`,
+                        "البن شامل": money(coffeeReport.kpi.bean_incl),
+                        التحميص: money(coffeeReport.kpi.roast),
+                        الواصلة: money(coffeeReport.kpi.landed),
+                        "صافي/كغ": coffeeReport.kpi.net == null ? "" : money(coffeeReport.kpi.net),
+                      }}
+                    />
+                  </>
+                )}
+
+                {/* مطابقة فواتير التحميص مع التحميص المحسوب على البنود */}
+                {coffeeReport.reconcile.length > 0 ? (
+                  <div className="space-y-2">
+                    <div className="text-xs font-bold text-slate-700 dark:text-white/70">
+                      مطابقة فواتير التحميص ({coffeeReport.reconcile.length})
+                    </div>
+                    <ReportTable
+                      columns={[
+                        { header: "فاتورة البن", accessor: (row) => row.invoice_number, numeric: true },
+                        { header: "فاتورة التحميص", accessor: (row) => row.roast_number, numeric: true },
+                        { header: "المحمصة", accessor: (row) => row.roaster },
+                        { header: "المحسوب", accessor: (row) => money(row.computed), numeric: true },
+                        { header: "فاتورة التحميص", accessor: (row) => money(row.actual), numeric: true },
+                        {
+                          header: "الفرق",
+                          accessor: (row) => row.diff,
+                          numeric: true,
+                          format: (value) => (
+                            <span className={Math.abs(value) >= 0.01 ? "text-rose-700 dark:text-rose-200 font-bold" : ""}>
+                              {money(value)}
+                            </span>
+                          ),
+                        },
+                        { header: "المدفوع", accessor: (row) => money(row.paid), numeric: true },
+                        { header: "ملاحظة", accessor: (row) => row.note || "—" },
+                      ]}
+                      rows={coffeeReport.reconcile}
+                    />
+                  </div>
+                ) : null}
               </>
             )
           ) : null}

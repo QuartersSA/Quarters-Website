@@ -123,8 +123,8 @@ File-based routing — every `page.jsx` under `src/app/` becomes a URL.
 | `/accounting` | Dashboard | Financial KPIs |
 | `/accounting/cash-calculator` | Cash count tool | Per-register reconciliation, variance |
 | `/accounting/expenses` | Expense log | Categories, dates, export |
-| `/accounting/green-bean-calculator` | Cost calculator | Coffee bean import margin |
-| `/accounting/green-bean-orders` | Supplier orders | CSV bulk import, deposit tracking, drag-drop reorder |
+| `/accounting/green-bean-calculator` | Cost calculator | Pricing what-ifs only (`accounting_green_beans` rows; does not touch `items`) |
+| `/accounting/green-bean-orders` | **Archive (read-only)** | Legacy supplier orders; all write routes return 410. Coffee purchasing now lives in purchase invoices (see §Coffee costing) |
 | `/accounting/payroll` | Monthly payroll | Bonuses + deductions integration |
 | `/accounting/shift-close` | Submitted closures | Filter by branch/date |
 
@@ -157,7 +157,8 @@ Routes auto-discovered from `src/app/api/**/route.js` by `__create/route-builder
 - `/api/hr/employees|bonuses|deductions/*`
 - `/api/items/*` (incl. `/summary`, `/low-stock`, `/batch-inventory`, `/[id]/analysis`, `/[id]/history`)
 - `/api/branches`, `/api/item-categories`
-- `/api/accounting/cash-counts|expenses|expense-types|payroll|shift-closings|green-beans|green-bean-orders|green-bean-order-items`
+- `/api/accounting/cash-counts|expenses|expense-types|payroll|shift-closings|green-beans` (calculator) — `green-bean-orders*` / `green-bean-order-items` are read-only archive (writes → 410 via `utils/legacyGreenBean.js`)
+- `/api/accounting/purchase-invoices` (+ `/arrival`), `purchase-invoice-payments` (+ `/bulk`), `purchase-invoice-batches`, `recurring-purchase-invoices`, `accounts`, `contacts`, `beneficiaries`, `bank-accounts`, `purchase-audit-log`, `vat-reports`
 - `/api/inventory-operations`, `/api/inventory-transfers`, `/api/opening-sessions`
 - `/api/workspace/tasks|spaces|templates|users|threads|summary|cron|overdue|reminders` (full task management API including subtasks, checklist, attachments, updates, history)
 - `/api/uploads/*` — chunked uploads (init → chunk → complete → file), `MAX_UPLOAD_BYTES` configurable
@@ -488,3 +489,19 @@ Selective via `vite-plugin-babel` — `src/**/*.{js,jsx,ts,tsx}` only, plugin `s
 | New modal | Pattern: `src/components/<Area>/<Thing>Modal/` + sonner toasts |
 | Fix a hydration warning | Often `addRenderIds` plugin or a missing `dir`/`lang` mismatch |
 | Build failures on Railway | Reread [CLAUDE.md](../CLAUDE.md) — almost always a missing rebuild or `build/` in `.gitignore` |
+
+---
+
+## 13. Coffee costing inside purchase invoices (روستد كوفي)
+
+Owner decisions: roasting cost is **not** part of the supplier invoice total or VAT; a separate roasting invoice is auto-generated on contact «محمصة درر» (pending payment, due = bean invoice date + 15 days, VAT 0%, default 9 SAR/kg); item cost = net cost per kg **including VAT** from the last fully-received invoice; SAR only.
+
+**Shared math:** `src/utils/coffeeMath.js` (`computeCoffeeLine`, `allocateDiscount`, `wasteFlag`, `coffeeLineStatus`) — used verbatim on server and client so previews equal stored numbers.
+
+**Server:** `src/app/api/utils/coffeeInvoices.js`
+- `ensureCoffeeSchema()` (memoized, run from purchase-invoices/accounts/items/item-categories routes): line columns on `accounting_purchase_invoice_items` (`roast_enabled`, `item_id`, `quantity_unit` sack|kg, `kg_per_sack`, `roast_per_kg`, `raw_kg`, `bean_cost_*`, `roast_total_net`, `landed_*`, `received_kg`, `arrival_*`, `waste_percent`, `net_incl_per_kg`, `receipt_batch_id`, `deposited_kg`, `roast_for_item_id`), header columns (`invoice_kind` purchase|roast, `source_invoice_id`, `roast_link_state`, `roast_confirmed`, `roaster_reference`, `roaster_contact_id`, `due_date_auto`), `item_categories.is_roasted_coffee/roast_cost_per_kg/roast_tax_rate/default_roaster_contact_id`, `items.bag_size_kg/roast_cost_per_kg/cost_source*`, `measurement_units.kg_per_unit`, `accounting_accounts.system_key` ('roasting' account under 52), seeds category «بن قهوة محمصة» + contact «محمصة درر».
+- Eligibility: a line is a bean line when its account mirrors an active item whose category has `is_roasted_coffee` (`loadBeanInfo`); `accounts` GET exposes `bean: {...}` per account and `is_roasting_account`.
+- `applyCoffeeToItems` (validation, defaults, raw-price guard 3–500 SAR/kg unless `free_sample`/`confirm_unusual_price`), `planLineReconcile` (UPDATE by line id / INSERT / DELETE — never delete+insert; server-owned arrival columns kept), `syncRoastInvoice` (create/update/deactivate child `ROAST-{id}`; payment lock: fully paid → 409 `roast_paid`; manual edit of roast invoice sets `roast_confirmed` and `reverseSyncRoastToBean`), `recordArrival` (finalize vs report-only for `can_add_purchase_invoices`; deposits via deterministic `purchase_receipts.receipt_batch_id = PINV-{invoice}-L{line}` at arrival date; waste > 60% needs `confirm_high_waste`), `reverseDeposits`, `recomputeItemCost` (latest complete line by arrival_date → `items.cost/base_purchase_cost` = net incl per kg × kg_per_base_unit, `cost_source='invoice'`; manual edit in item form resets to `'manual'`).
+- Routes: `purchase-invoices` POST/PUT/DELETE (409 codes `stale_invoice`, `inactive_invoice`, `roast_paid`, `reconfirm_received`, `deposited`, `has_payments`, `roast_linked`; DELETE `detach=1` for roast kind), `purchase-invoices/arrival` POST (`reverse_deposit: true` to undo). Recurring templates are refused for coffee lines.
+
+**UI:** `PurchaseInvoiceModal` (`CoffeeLineRow` sub-row, live tiles, roaster select, arrival + deposit at creation for `allowArrival`), `CoffeeArrivalModal` (from the invoices drawer «تسجيل الوصول»), `PurchasesInvoicesPanel` (badges, drawer coffee section, roast-invoice link), `BulkInvoiceUploadPanel` review sub-row, `PurchasesReportsPanel` report key `coffee` («تقرير البن»: by bean / by invoice / monthly, reconciliation of roasting invoices), item/category forms (`ItemFormModal`, `ItemCategoriesModal`), accounts-tree badges «بن محمّص» / «خدمة تحميص».

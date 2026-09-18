@@ -27,12 +27,37 @@ export default function useItemCategories(enabled = true, { scope = "inventory" 
     enabled,
   });
 
+  // حقول البن المحمّص تُمرَّر كما هي؛ undefined = لا تغيير.
+  const pickCoffee = (input) => ({
+    is_roasted_coffee: input.is_roasted_coffee,
+    roast_cost_per_kg: input.roast_cost_per_kg,
+    roast_tax_rate: input.roast_tax_rate,
+    default_roaster_contact_id: input.default_roaster_contact_id,
+  });
+
+  const invalidateAll = () => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.itemCategories() });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.purchaseItemCategories(),
+    });
+    queryClient.invalidateQueries({ queryKey: queryKeys.items() });
+    queryClient.invalidateQueries({ queryKey: queryKeys.purchaseItems() });
+    // شجرة الحسابات تحمل معلومات البن لكل حساب صنف (bean/…)
+    queryClient.invalidateQueries({ queryKey: queryKeys.accountingAccounts() });
+  };
+
   const createMutation = useMutation({
-    mutationFn: async ({ name, name_en, show_in_inventory }) => {
+    mutationFn: async (input) => {
+      const { name, name_en, show_in_inventory } = input;
       const response = await adminFetch("/api/item-categories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, name_en, show_in_inventory }),
+        body: JSON.stringify({
+          name,
+          name_en,
+          show_in_inventory,
+          ...pickCoffee(input),
+        }),
       });
 
       if (!response.ok) {
@@ -48,22 +73,22 @@ export default function useItemCategories(enabled = true, { scope = "inventory" 
 
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.itemCategories() });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.purchaseItemCategories(),
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
-      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseItems() });
-    },
+    onSuccess: invalidateAll,
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, name, name_en, show_in_inventory }) => {
+    mutationFn: async (input) => {
+      const { id, name, name_en, show_in_inventory } = input;
       const response = await adminFetch("/api/item-categories", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, name, name_en, show_in_inventory }),
+        body: JSON.stringify({
+          id,
+          name,
+          name_en,
+          show_in_inventory,
+          ...pickCoffee(input),
+        }),
       });
 
       if (!response.ok) {
@@ -79,14 +104,7 @@ export default function useItemCategories(enabled = true, { scope = "inventory" 
 
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.itemCategories() });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.purchaseItemCategories(),
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
-      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseItems() });
-    },
+    onSuccess: invalidateAll,
   });
 
   return {

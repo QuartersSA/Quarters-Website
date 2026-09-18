@@ -45,6 +45,8 @@ export function useItemsData(isAuthenticated) {
     onSuccess: (data) => {
       console.log("Item created successfully:", data);
       invalidateInventoryQueries(queryClient);
+      // شجرة الحسابات تعكس الأصناف (حساب لكل صنف + معلومات البن)
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountingAccounts() });
     },
     onError: (error) => {
       console.error("Failed to create item:", error);
@@ -68,6 +70,7 @@ export function useItemsData(isAuthenticated) {
     onSuccess: (data) => {
       console.log("Item updated successfully:", data);
       invalidateInventoryQueries(queryClient);
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountingAccounts() });
     },
     onError: (error) => {
       console.error("Failed to update item:", error);
@@ -89,6 +92,7 @@ export function useItemsData(isAuthenticated) {
     },
     onSuccess: () => {
       invalidateInventoryQueries(queryClient);
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountingAccounts() });
     },
   });
 

@@ -14,6 +14,7 @@ import {
   ExternalLink,
   FileSpreadsheet,
   FileText,
+  Flame,
   HandCoins,
   Landmark,
   Loader2,
@@ -46,8 +47,11 @@ import {
   useDeleteAccountingPurchaseInvoice,
   useDeleteInvoiceAttachment,
   useDeletePurchaseInvoicePayment,
+  useRecordCoffeeArrival,
   useUpdateAccountingPurchaseInvoice,
 } from "@/hooks/useAccountingPurchaseInvoices";
+import CoffeeArrivalModal from "@/components/Accounting/CoffeeArrivalModal";
+import { coffeeLineStatus } from "@/utils/coffeeMath";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingBeneficiaries } from "@/hooks/useAccountingBeneficiaries";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
@@ -83,6 +87,54 @@ function formatMoney(value, currency = "SAR") {
 function formatDate(value) {
   if (!value) return "—";
   return String(value);
+}
+
+// هل الفاتورة تحمل بنود بن (تحميص) أو هي فاتورة تحميص مولّدة؟
+function coffeeSummary(invoice) {
+  const items = Array.isArray(invoice?.items) ? invoice.items : [];
+  const beans = items.filter((item) => item.roast_enabled);
+  if (invoice?.invoice_kind === "roast") {
+    return { kind: "roast", beans: [], pending: 0, received: 0 };
+  }
+  if (!beans.length) return null;
+  let pending = 0;
+  let received = 0;
+  for (const line of beans) {
+    const st = coffeeLineStatus(line);
+    if (st === "received") received += 1;
+    else pending += 1;
+  }
+  return { kind: "bean", beans, pending, received };
+}
+
+function CoffeeBadge({ invoice }) {
+  const summary = coffeeSummary(invoice);
+  if (!summary) return null;
+  if (summary.kind === "roast") {
+    return (
+      <span
+        className={`${ws.pill} bg-orange-100 dark:bg-orange-400/10 text-orange-800 dark:text-orange-200 border-orange-200 dark:border-orange-400/25 inline-flex items-center gap-1`}
+        title={`فاتورة تحميص مولّدة من ${invoice.source_invoice_number || "فاتورة بن"}`}
+      >
+        <Flame className="w-3 h-3" />
+        تحميص
+      </span>
+    );
+  }
+  const allIn = summary.pending === 0;
+  return (
+    <span
+      className={`${ws.pill} inline-flex items-center gap-1 ${
+        allIn
+          ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
+          : "bg-amber-100 dark:bg-amber-400/10 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25"
+      }`}
+      title={allIn ? "بن — الوصول مكتمل" : `بن — ${summary.pending} بند بانتظار الوصول`}
+    >
+      <Flame className="w-3 h-3" />
+      {allIn ? "وصل" : "بن"}
+    </span>
+  );
 }
 
 function statusIcon(status) {
@@ -920,6 +972,8 @@ export default function PurchasesInvoicesPanel({
   // قوالب الفواتير المتكررة + بطاقة المورد 360°.
   const [showRecurring, setShowRecurring] = useState(false);
   const [supplier360, setSupplier360] = useState(null);
+  // تسجيل وصول بنود البن (نافذة مستقلة من الدفتر).
+  const [arrivalFor, setArrivalFor] = useState(null);
   const searchRef = React.useRef(null);
 
   useEffect(() => {
@@ -1057,6 +1111,7 @@ export default function PurchasesInvoicesPanel({
   const createMut = useCreateAccountingPurchaseInvoice();
   const updateMut = useUpdateAccountingPurchaseInvoice();
   const deleteMut = useDeleteAccountingPurchaseInvoice();
+  const arrivalMut = useRecordCoffeeArrival();
   const addPaymentMut = useAddPurchaseInvoicePayment();
   const bulkPayMut = useBulkPayPurchaseInvoices();
   const deletePaymentMut = useDeletePurchaseInvoicePayment();
@@ -1332,8 +1387,21 @@ export default function PurchasesInvoicesPanel({
   };
 
   const handleDelete = (invoice) => {
+    if (invoice.invoice_kind === "roast" && invoice.roast_link_state !== "detached") {
+      const ok = window.confirm(
+        `فاتورة "${invoice.invoice_number}" فاتورة تحميص مرتبطة بفاتورة البن ${invoice.source_invoice_number || ""}.\n` +
+          "إيقافها يفك الارتباط: لن تُزامَن مع فاتورة البن بعد ذلك. للإيقاف مع بقاء الربط صفّر تكلفة التحميص من فاتورة البن.\n\nفك الارتباط والإيقاف؟",
+      );
+      if (!ok) return;
+      deleteMut.mutate({ id: invoice.id, force: false, detach: true });
+      return;
+    }
+    const roastNote =
+      invoice.roast_invoice && invoice.roast_invoice.is_active !== false
+        ? ` تُوقف معها فاتورة التحميص ${invoice.roast_invoice.invoice_number} (أو تُفك إن كانت مسددة)، ويُعكس أي إيداع مخزون.`
+        : "";
     const ok = window.confirm(
-      `إيقاف فاتورة "${invoice.invoice_number}"؟ يمكنك عرضها لاحقاً من خيار عرض الموقوفة.`,
+      `إيقاف فاتورة "${invoice.invoice_number}"؟ يمكنك عرضها لاحقاً من خيار عرض الموقوفة.${roastNote}`,
     );
     if (!ok) return;
     deleteMut.mutate({ id: invoice.id, force: false });
@@ -1671,6 +1739,7 @@ export default function PurchasesInvoicesPanel({
                       <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">
                         <div className="flex items-center gap-1.5" dir="ltr">
                           <span>{invoice.invoice_number}</span>
+                          <CoffeeBadge invoice={invoice} />
                           {invoice.attachment_url ? (
                             <a
                               href={invoice.attachment_url}
@@ -1860,7 +1929,25 @@ export default function PurchasesInvoicesPanel({
           setEditing(null);
         }}
         onSubmit={handleSubmit}
+        allowArrival={isAdmin}
       />
+
+      {/* تسجيل وصول بنود البن — يُقرأ من أحدث بيانات القائمة */}
+      {arrivalFor ? (
+        <CoffeeArrivalModal
+          invoice={invoices.find((invoice) => invoice.id === arrivalFor.id) || arrivalFor}
+          branches={branches}
+          canFinalize={isAdmin}
+          isSubmitting={arrivalMut.isPending}
+          onClose={() => setArrivalFor(null)}
+          onSubmit={(payload) =>
+            arrivalMut.mutate(payload, { onSuccess: () => setArrivalFor(null) })
+          }
+          onReverseDeposit={(payload) =>
+            arrivalMut.mutate(payload, { onSuccess: () => setArrivalFor(null) })
+          }
+        />
+      ) : null}
 
       {paying ? (
         <RecordPaymentModal
@@ -2074,6 +2161,156 @@ export default function PurchasesInvoicesPanel({
                       </div>
                     </div>
                   ) : null}
+
+                  {/* البن: حالة الوصول لكل بند + فاتورة التحميص المرتبطة */}
+                  {(() => {
+                    const summary = coffeeSummary(drawerRow);
+                    if (!summary) return null;
+                    if (summary.kind === "roast") {
+                      const source = drawerRow.source_invoice_id
+                        ? invoices.find((row) => row.id === Number(drawerRow.source_invoice_id))
+                        : null;
+                      return (
+                        <div className="rounded-xl border border-orange-200 dark:border-orange-400/25 bg-orange-50/70 dark:bg-orange-400/[0.05] p-3 space-y-1.5">
+                          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-800 dark:text-orange-200">
+                            <Flame className="w-3.5 h-3.5" />
+                            فاتورة تحميص مولّدة من فاتورة البن
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap text-[11px]">
+                            <button
+                              type="button"
+                              onClick={() => source && setPreview(source)}
+                              disabled={!source}
+                              className="font-mono text-[#0e7a5f] dark:text-emerald-300 hover:underline disabled:no-underline disabled:opacity-60"
+                              dir="ltr"
+                            >
+                              {drawerRow.source_invoice_number || `#${drawerRow.source_invoice_id}`}
+                            </button>
+                            <span className="text-slate-500 dark:text-white/45">
+                              {drawerRow.roast_link_state === "detached"
+                                ? "مفكوكة الارتباط"
+                                : drawerRow.roast_confirmed
+                                  ? "مؤكدة يدويًا — هي المرجع لتكلفة التحميص"
+                                  : "تُزامَن تلقائيًا من فاتورة البن"}
+                            </span>
+                            {drawerRow.roaster_reference ? (
+                              <span className="text-slate-500 dark:text-white/45" dir="ltr">
+                                رقم المحمصة: {drawerRow.roaster_reference}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      );
+                    }
+                    const roast = drawerRow.roast_invoice;
+                    const roastRow = roast
+                      ? invoices.find((row) => row.id === Number(roast.id))
+                      : null;
+                    return (
+                      <div className="rounded-xl border border-amber-200 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 dark:text-amber-200">
+                            <Flame className="w-3.5 h-3.5" />
+                            بنود البن ({summary.beans.length})
+                          </div>
+                          {drawerRow.is_active !== false ? (
+                            <button
+                              type="button"
+                              onClick={() => setArrivalFor(drawerRow)}
+                              className={`${ws.btnPrimary} px-3 py-1.5 text-xs`}
+                            >
+                              تسجيل الوصول
+                            </button>
+                          ) : null}
+                        </div>
+                        <div className="space-y-1.5">
+                          {summary.beans.map((line) => {
+                            const st = coffeeLineStatus(line);
+                            return (
+                              <div
+                                key={line.id}
+                                className="text-[11px] border-b border-dashed border-amber-200/70 dark:border-amber-400/15 pb-1.5 last:border-0 space-y-0.5"
+                              >
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="font-semibold text-slate-800 dark:text-white/85 truncate">
+                                    {line.bean_name || line.description || "بند بن"}
+                                  </span>
+                                  <span
+                                    className={`${ws.pill} shrink-0 ${
+                                      st === "received"
+                                        ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
+                                        : st === "partial"
+                                          ? "bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25"
+                                          : "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10"
+                                    }`}
+                                  >
+                                    {st === "received"
+                                      ? "وصل"
+                                      : st === "partial"
+                                        ? "جزئي"
+                                        : line.arrival_reported_kg != null
+                                          ? "بلاغ ميداني"
+                                          : "بانتظار الوصول"}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-x-3 gap-y-0.5 flex-wrap text-slate-600 dark:text-white/55" dir="ltr">
+                                  <span>خام {moneyValue(line.raw_kg)} كغ</span>
+                                  {line.received_kg != null ? (
+                                    <span>واصل {moneyValue(line.received_kg)} كغ</span>
+                                  ) : line.arrival_reported_kg != null ? (
+                                    <span>بلاغ {moneyValue(line.arrival_reported_kg)} كغ</span>
+                                  ) : null}
+                                  {line.waste_percent != null ? (
+                                    <span>هدر {moneyValue(line.waste_percent)}%</span>
+                                  ) : null}
+                                  <span>تحميص {moneyValue(line.roast_total_net).toFixed(2)}</span>
+                                  {line.net_incl_per_kg != null ? (
+                                    <span className="font-bold text-slate-800 dark:text-white/85">
+                                      صافي {moneyValue(line.net_incl_per_kg).toFixed(2)}/كغ
+                                    </span>
+                                  ) : null}
+                                  {line.deposited_kg != null && moneyValue(line.deposited_kg) > 0 ? (
+                                    <span className="text-sky-700 dark:text-sky-200">
+                                      مودَع {moneyValue(line.deposited_kg)} كغ
+                                    </span>
+                                  ) : null}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {roast ? (
+                          <div className="flex items-center gap-2 flex-wrap text-[11px] pt-1 border-t border-dashed border-amber-200/70 dark:border-amber-400/15">
+                            <span className="text-slate-600 dark:text-white/55">فاتورة التحميص:</span>
+                            <button
+                              type="button"
+                              onClick={() => roastRow && setPreview(roastRow)}
+                              disabled={!roastRow}
+                              className="font-mono text-[#0e7a5f] dark:text-emerald-300 hover:underline disabled:no-underline disabled:opacity-60"
+                              dir="ltr"
+                            >
+                              {roast.invoice_number}
+                            </button>
+                            <span className="tabular-nums" dir="ltr">
+                              {formatMoney(roast.total_amount, drawerRow.currency)}
+                            </span>
+                            <span className="text-slate-500 dark:text-white/45">
+                              {roast.is_active === false
+                                ? "موقوفة"
+                                : moneyValue(roast.paid_amount) >= moneyValue(roast.total_amount)
+                                  ? "مدفوعة"
+                                  : `بانتظار الدفع — استحقاق ${roast.due_date || "—"}`}
+                              {roast.roaster_name ? ` · ${roast.roaster_name}` : ""}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="text-[11px] text-slate-500 dark:text-white/45">
+                            لا فاتورة تحميص (التحميص 0).
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {/* سجل الدفعات — كل دفعة بتاريخها وبنكها وإيصالها */}
                   {(() => {
