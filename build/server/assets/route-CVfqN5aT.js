@@ -4,14 +4,18 @@ import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { e as ensureInvoiceBatchSchema, r as readUploadBase64 } from './invoiceBatches-BefXoxDb.js';
 import { F as FILE_MEDIA_TYPES, r as runInvoiceAnalysis } from './invoiceAnalysis-BSNIl_Cm.js';
 import { c as computeDraftTotals, r as round2 } from './invoiceDraftMath-C8Db36NO.js';
-import { createPurchaseInvoice } from './route-Bc6P_yGB.js';
+import { createPurchaseInvoice } from './route-vffr3y8r.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import '@anthropic-ai/sdk';
 import './accountsTree-BiYqjwch.js';
-import './purchaseAutomation-D34CYa3_.js';
+import './purchaseAutomation-BrPqBK9k.js';
 import './wasender-DykD1wlV.js';
 import './waNotify-CtLfIpXX.js';
+import './coffeeInvoices-CqLuS3xh.js';
+import './inventoryUnitSnapshots-B5krAOBv.js';
+import './employeeDisplayName-CwZGtUC2.js';
+import './branchVisibility-CPqSH5sT.js';
 
 const REQUIRE_PURCHASES_CREATE = {
   anyOf: [{
@@ -34,7 +38,14 @@ function buildDraft(analysis) {
     quantity: Number(item.quantity) || 0,
     unit_price: Number(item.unit_price) || 0,
     tax_rate: Number.isFinite(Number(item.tax_rate)) ? Number(item.tax_rate) : 15,
-    amount_includes_tax: !!item.amount_includes_tax
+    amount_includes_tax: !!item.amount_includes_tax,
+    // بنود البن: التحميص لا يُفعَّل ولا تُستنتج الوحدة من المسح —
+    // المراجع يختارهما صراحةً في نافذة المراجعة.
+    roast_enabled: false,
+    quantity_unit: null,
+    kg_per_sack: null,
+    roast_per_kg: null,
+    extra_cost: 0
   })).filter(item => item.quantity > 0 || item.unit_price > 0);
   return {
     document_type: analysis?.document_type || null,
@@ -68,7 +79,13 @@ function sanitizeDraft(input) {
     quantity: Number(item?.quantity) || 0,
     unit_price: Number(item?.unit_price) || 0,
     tax_rate: Math.min(Math.max(Number(item?.tax_rate) || 0, 0), 100),
-    amount_includes_tax: !!item?.amount_includes_tax
+    amount_includes_tax: !!item?.amount_includes_tax,
+    roast_enabled: item?.roast_enabled === true,
+    quantity_unit: ["sack", "kg"].includes(item?.quantity_unit) ? item.quantity_unit : null,
+    kg_per_sack: Number(item?.kg_per_sack) > 0 ? Number(item.kg_per_sack) : null,
+    roast_per_kg: Number.isFinite(Number(item?.roast_per_kg)) && item?.roast_per_kg !== null && item?.roast_per_kg !== "" ? Number(item.roast_per_kg) : null,
+    extra_cost: Math.max(Number(item?.extra_cost) || 0, 0),
+    confirm_unusual_price: item?.confirm_unusual_price === true
   }));
   return {
     document_type: ["quote", "tax_invoice", "payment_receipt", "other"].includes(input.document_type) ? input.document_type : null,
@@ -83,6 +100,7 @@ function sanitizeDraft(input) {
     discount: Math.max(Number(input.discount) || 0, 0),
     notes: text(input.notes, 2000),
     recurring_monthly: input.recurring_monthly === true,
+    roaster_contact_id: Number(input.roaster_contact_id) > 0 ? Number(input.roaster_contact_id) : null,
     items
   };
 }
@@ -545,7 +563,13 @@ async function PATCH(request, {
         unit_price: Number(line.unit_price) || 0,
         amount: round2((Number(line.quantity) || 0) * (Number(line.unit_price) || 0)),
         tax_rate: Number.isFinite(Number(line.tax_rate)) ? Number(line.tax_rate) : 15,
-        amount_includes_tax: !!line.amount_includes_tax
+        amount_includes_tax: !!line.amount_includes_tax,
+        roast_enabled: line.roast_enabled === true,
+        quantity_unit: line.quantity_unit || null,
+        kg_per_sack: line.kg_per_sack ?? null,
+        roast_per_kg: line.roast_per_kg ?? null,
+        extra_cost: line.extra_cost ?? 0,
+        confirm_unusual_price: line.confirm_unusual_price === true
       })).filter(line => line.amount > 0);
       const totals = computeDraftTotals({
         ...draft,
@@ -572,7 +596,8 @@ async function PATCH(request, {
         attachment_url: claimed[0].file_url || null,
         attachment_kind: draft?.document_type || null,
         // قالب متكرر شهرياً — الخادم يعيد فرض شرط «مصروف ثابت».
-        recurring_monthly: draft?.recurring_monthly === true
+        recurring_monthly: draft?.recurring_monthly === true,
+        roaster_contact_id: draft?.roaster_contact_id || null
       };
       let created;
       try {

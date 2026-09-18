@@ -2,7 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { s as sendWhatsAppViaWasender } from './wasender-DykD1wlV.js';
 import { n as notifyByPref, a as notifyLowStockIfAny } from './waNotify-CtLfIpXX.js';
-import { a as assertItemsEnabledAtBranch } from './branchVisibility-ZuKqFzRG.js';
+import { a as assertItemsEnabledAtBranch } from './branchVisibility-CPqSH5sT.js';
 import { g as getDefaultInventoryUnitSnapshots, s as snapshotForItem, e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-B5krAOBv.js';
 import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-CwZGtUC2.js';
 import { p as parseBusinessTimestamp } from './dateUtils-CVVwj6xk.js';

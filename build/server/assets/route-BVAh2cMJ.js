@@ -1,8 +1,13 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema, n as nextChildCode } from './accountsTree-BiYqjwch.js';
+import { e as ensureCoffeeSchema, l as loadBeanInfo, r as resolveKgPerBaseUnit } from './coffeeInvoices-CqLuS3xh.js';
 import '@neondatabase/serverless';
 import 'crypto';
+import './purchaseAudit-CVdAiEPz.js';
+import './inventoryUnitSnapshots-B5krAOBv.js';
+import './employeeDisplayName-CwZGtUC2.js';
+import './branchVisibility-CPqSH5sT.js';
 
 // Full accounting admins OR admins limited to قسم المشتريات only
 // (شجرة الحسابات is a tab inside the purchases section).
@@ -132,14 +137,14 @@ async function GET(request) {
           SELECT
             id, code, name, name_en, account_type, parent_id,
             is_postable, is_system, source_category_id,
-            source_item_id, source_bank_account_id, notes, is_active
+            source_item_id, source_bank_account_id, notes, is_active, system_key
           FROM accounting_accounts
           ORDER BY code ASC, id ASC
         ` : await sql`
           SELECT
             id, code, name, name_en, account_type, parent_id,
             is_postable, is_system, source_category_id,
-            source_item_id, source_bank_account_id, notes, is_active
+            source_item_id, source_bank_account_id, notes, is_active, system_key
           FROM accounting_accounts
           WHERE is_active
           ORDER BY code ASC, id ASC
@@ -150,13 +155,53 @@ async function GET(request) {
       spendTotals
     } = await fetchUsageCounts();
     const purchaseUnits = await fetchPurchaseUnits();
-    const accounts = rows.map(row => ({
-      ...row,
-      invoice_count: invoiceCounts.get(Number(row.id)) || 0,
-      bank_count: bankCounts.get(Number(row.id)) || 0,
-      purchases_total: spendTotals.get(Number(row.id)) || 0,
-      purchase_unit: purchaseUnits.get(Number(row.id)) || null
-    }));
+    // معلومات البن لكل حساب مرآة صنف: أهلية التحميص + الافتراضات
+    // (كيلو/خيشة، تحميص/كغ، ضريبة التحميص، المحمصة، معامل الكيلو) —
+    // المصدر الوحيد الذي تقرأ منه نافذة الفاتورة. دفاعي: الجداول قد لا
+    // تكون موجودة على قاعدة جديدة.
+    let beanInfo = new Map();
+    const kgFactors = new Map();
+    try {
+      await ensureCoffeeSchema();
+      beanInfo = await loadBeanInfo(rows.filter(row => row.source_item_id).map(row => row.id));
+      for (const [accountId, info] of beanInfo) {
+        if (info.isBean) kgFactors.set(accountId, await resolveKgPerBaseUnit(info.itemId));
+      }
+    } catch (error) {
+      console.error("accounts GET: bean info skipped:", error?.message);
+    }
+    const roasterIds = [...new Set([...beanInfo.values()].map(i => i.roasterContactId).filter(Boolean))];
+    const roasterNames = new Map();
+    if (roasterIds.length) {
+      try {
+        const contacts = await sql`SELECT id, name FROM accounting_contacts WHERE id = ANY(${roasterIds})`;
+        for (const c of contacts) roasterNames.set(Number(c.id), c.name);
+      } catch {
+        // ignore
+      }
+    }
+    const accounts = rows.map(row => {
+      const info = beanInfo.get(Number(row.id));
+      return {
+        ...row,
+        invoice_count: invoiceCounts.get(Number(row.id)) || 0,
+        bank_count: bankCounts.get(Number(row.id)) || 0,
+        purchases_total: spendTotals.get(Number(row.id)) || 0,
+        purchase_unit: purchaseUnits.get(Number(row.id)) || null,
+        is_roasting_account: row.system_key === "roasting",
+        bean: info?.isBean ? {
+          item_id: info.itemId,
+          item_name: info.itemName,
+          bag_size_kg: info.bagSizeKg,
+          roast_per_kg: info.roastPerKg,
+          roast_tax_rate: info.roastTaxRate,
+          roaster_contact_id: info.roasterContactId,
+          roaster_name: info.roasterContactId ? roasterNames.get(info.roasterContactId) || null : null,
+          kg_per_base_unit: kgFactors.get(Number(row.id)) || null,
+          show_in_inventory: info.showInInventory
+        } : null
+      };
+    });
     return Response.json({
       accounts
     });

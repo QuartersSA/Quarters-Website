@@ -45,6 +45,10 @@ async function assertItemsEnabledAtBranch(branchId, itemIds, lookupName) {
   const disabled = await findDisabledItemsAtBranch(branchId, itemIds);
   if (disabled.length === 0) return null;
   const namesOrIds = disabled.map(id => {
+    if (typeof lookupName === "function") {
+      const n = lookupName(id);
+      return n ? `${n}` : `#${id}`;
+    }
     return `#${id}`;
   });
   return {

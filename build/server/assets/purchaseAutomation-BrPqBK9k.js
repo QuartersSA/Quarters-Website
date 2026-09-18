@@ -2,6 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-DykD1wlV.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-CtLfIpXX.js';
+import { a as anyCoffeeAccount } from './coffeeInvoices-CqLuS3xh.js';
 
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
@@ -212,6 +213,11 @@ async function createRecurringTemplateFromInvoice({
     created: false,
     reason: "not_fixed_expense"
   };
+  // بنود البن لا تُكرَّر أبدًا (لكل توريد وصوله وتحميصه وتكلفته).
+  if (await anyCoffeeAccount(accountIds)) return {
+    created: false,
+    reason: "coffee_line"
+  };
 
   // ربط الفاتورة الأصل بقالبها حتى تسري تعديلاتها اللاحقة على
   // فواتير الأشهر القادمة (مزامنة القالب في PUT الفواتير).
@@ -311,6 +317,13 @@ async function syncRecurringTemplateFromInvoice({
   actor = null
 }) {
   await ensureRecurringSchema();
+  // فاتورة صار فيها بند بن لا تُزامَن إلى قالب متكرر.
+  if (Array.isArray(items) && (await anyCoffeeAccount(items.map(i => i.accountId)))) {
+    return {
+      synced: false,
+      reason: "coffee_line"
+    };
+  }
   const [invoice] = await sql`
     SELECT id, invoice_number, recurring_template_id
     FROM accounting_purchase_invoices
@@ -434,6 +447,23 @@ async function generateRecurringInvoices() {
   const dueDate = `${period}-${pad(monthLastDay)}`;
   for (const template of due) {
     const invoiceNumber = `REC-${period.replace("-", "")}-${template.id}`;
+    // قالب يحمل حساب بن (قديم أو أُنشئ يدويًا): يُوقف ولا يولّد.
+    const templateAccounts = [template.expense_account_id, ...(Array.isArray(template.items) ? template.items.map(i => i?.account_id) : [])].filter(Boolean);
+    if (await anyCoffeeAccount(templateAccounts)) {
+      await sql`
+        UPDATE accounting_recurring_purchase_invoices SET is_active = FALSE WHERE id = ${template.id}
+      `;
+      await logPurchaseAudit({
+        entityType: "recurring",
+        entityId: template.id,
+        action: "deactivated",
+        summary: `إيقاف القالب المتكرر «${template.name}» — يحمل حساب بن، وفواتير البن لا تُكرَّر تلقائيًا`,
+        actor: {
+          name: "النظام"
+        }
+      });
+      continue;
+    }
     const [exists] = await sql`
       SELECT id FROM accounting_purchase_invoices
       WHERE invoice_number = ${invoiceNumber}
@@ -523,7 +553,7 @@ async function generateRecurringInvoices() {
           invoice_id, position, description, account_id,
           quantity, unit_price,
           amount, tax_rate, amount_includes_tax,
-          line_subtotal, line_tax, line_total
+          line_subtotal, line_tax, line_total, line_discount, line_net
         )
         VALUES (
           ${invoice.id}, ${line.position},
@@ -531,7 +561,9 @@ async function generateRecurringInvoices() {
           ${line.accountId},
           ${line.quantity}, ${line.unitPrice},
           ${line.amount}, ${line.taxRate}, ${line.includesTax},
-          ${line.subtotal}, ${line.tax}, ${line.total}
+          ${line.subtotal}, ${line.tax}, ${line.total},
+          ${round2(line.subtotal - line.subtotal * (subtotal > 0 && discount > 0 ? discount / (subtotal + discount) : 0))},
+          ${round2(line.subtotal * (subtotal > 0 && discount > 0 ? 1 - discount / (subtotal + discount) : 1))}
         )
       `;
     }

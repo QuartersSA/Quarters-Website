@@ -2,11 +2,15 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-BiYqjwch.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as runPurchaseAutomation, a as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-D34CYa3_.js';
+import { r as runPurchaseAutomation, a as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-BrPqBK9k.js';
 import { n as notifyByPref } from './waNotify-CtLfIpXX.js';
+import { b as loadRoastChild, c as loadInvoiceLines, d as recomputeItemCost, f as reverseDeposits, g as loadRoastLinks, h as applyCoffeeToItems, i as assertRoastSyncAllowed, s as syncRoastInvoice, j as reverseSyncRoastToBean, C as CoffeeError, k as resolveRoaster, m as getRoastingAccountId, n as reserveIds, o as insertLineStatement, p as recordArrival, e as ensureCoffeeSchema, L as LINE_SELECT_COLUMNS, q as planLineReconcile } from './coffeeInvoices-CqLuS3xh.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-DykD1wlV.js';
+import './inventoryUnitSnapshots-B5krAOBv.js';
+import './employeeDisplayName-CwZGtUC2.js';
+import './branchVisibility-CPqSH5sT.js';
 
 // Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
@@ -240,6 +244,26 @@ async function ensureSchema() {
     CREATE INDEX IF NOT EXISTS idx_accounting_purchase_invoices_due_date
       ON accounting_purchase_invoices (due_date)
   `;
+  // تكلفة البن: أعمدة البند/الرأس، حساب «تحميص»، افتراضات الصنف
+  // والتصنيف، وحدة الكيلو، المحمصة الافتراضية.
+  await ensureCoffeeSchema();
+}
+
+// من يحق له اعتماد الوصول (إيداع + تكلفة الصنف): إدارة المحاسبة أو
+// المشتريات أو المخزون. موظف الإدخال الميداني يبلّغ فقط.
+function canFinalizeArrival(user) {
+  return user?.role === "Admin" && !!(user?.can_manage_accounting || user?.can_manage_purchases || user?.can_manage_inventory);
+}
+function coffeeErrorResponse(error) {
+  if (error instanceof CoffeeError) {
+    return Response.json({
+      error: error.message,
+      ...(error.extra || {})
+    }, {
+      status: error.status || 400
+    });
+  }
+  return null;
 }
 function parseMoney(value, fallback = 0) {
   if (value === undefined || value === null || value === "") return fallback;
@@ -272,8 +296,15 @@ function parsePayload(body = {}) {
   const paidBankAccountIdRaw = body.paid_bank_account_id === undefined || body.paid_bank_account_id === null || body.paid_bank_account_id === "" ? null : Number(body.paid_bank_account_id);
   const workflowRaw = body.workflow_status ? String(body.workflow_status).trim() : "new";
   const expenseAccountId = body.expense_account_id === undefined || body.expense_account_id === null || body.expense_account_id === "" ? null : Number(body.expense_account_id);
+  const roasterRaw = Number(body.roaster_contact_id);
   return {
     expenseAccountId: Number.isInteger(expenseAccountId) ? expenseAccountId : null,
+    // المحمصة لفاتورة التحميص المولّدة (null = افتراضي التصنيف).
+    roasterContactId: Number.isInteger(roasterRaw) && roasterRaw > 0 ? roasterRaw : null,
+    // رقم فاتورة المحمصة الفعلية على فاتورة التحميص (لا يستبدل الرقم).
+    roasterReference: body.roaster_reference ? String(body.roaster_reference).trim().slice(0, 120) : null,
+    // تفاؤل تزامني: النافذة ترسل updated_at الذي حمّلته.
+    expectedUpdatedAt: body.expected_updated_at ? String(body.expected_updated_at) : null,
     invoiceNumber: body.invoice_number ? String(body.invoice_number).trim() : generateInvoiceNumber(),
     contactId: Number.isFinite(contactId) ? contactId : null,
     supplierName,
@@ -319,14 +350,20 @@ function parseItems(body) {
     const priceRaw = Number(raw?.unit_price);
     const unitPrice = Number.isFinite(priceRaw) && priceRaw > 0 ? Math.round(priceRaw * 10000) / 10000 : null;
     const amount = quantity !== null && unitPrice !== null ? round2(quantity * unitPrice) : parseMoney(raw?.amount, 0);
-    if (amount <= 0) continue;
+    // بند بمبلغ 0 يُسقَط — إلا عينة/خيشة مجانية من البن (تحمل كيلو
+    // وتحميصًا وإيداعًا بتكلفة 0).
+    const freeSample = raw?.free_sample === true && raw?.roast_enabled === true;
+    if (amount <= 0 && !freeSample) continue;
     const rateRaw = Number(raw?.tax_rate);
     const taxRate = Number.isFinite(rateRaw) ? Math.min(Math.max(rateRaw, 0), 100) : 15;
     const includesTax = !!raw?.amount_includes_tax;
     const accountId = raw?.account_id === undefined || raw?.account_id === null || raw?.account_id === "" ? null : Number(raw.account_id);
     const subtotal = includesTax ? amount / (1 + taxRate / 100) : amount;
     const tax = includesTax ? amount - subtotal : amount * taxRate / 100;
+    const lineIdRaw = Number(raw?.id);
     items.push({
+      // معرّف البند القائم — الحفظ يطابق البنود بمعرّفها لا يستبدلها.
+      id: Number.isInteger(lineIdRaw) && lineIdRaw > 0 ? lineIdRaw : null,
       position: items.length,
       description: raw?.description ? String(raw.description).trim() : null,
       accountId: Number.isInteger(accountId) ? accountId : null,
@@ -337,32 +374,29 @@ function parseItems(body) {
       includesTax,
       subtotal: round2(subtotal),
       tax: round2(tax),
-      total: round2(subtotal + tax)
+      total: round2(subtotal + tax),
+      // بيانات البن — غياب المفتاح يعني «أبقِ المخزَّن» عند التعديل.
+      roast_enabled: raw?.roast_enabled,
+      quantity_unit: raw?.quantity_unit,
+      kg_per_sack: raw?.kg_per_sack,
+      roast_per_kg: raw?.roast_per_kg,
+      roast_tax_rate: raw?.roast_tax_rate,
+      extra_cost: raw?.extra_cost,
+      free_sample: raw?.free_sample,
+      confirm_unusual_price: raw?.confirm_unusual_price === true
     });
   }
   return items;
 }
-async function replaceInvoiceItems(invoiceId, items) {
-  await sql`
-    DELETE FROM accounting_purchase_invoice_items
-    WHERE invoice_id = ${invoiceId}
-  `;
-  for (const item of items) {
-    await sql`
-      INSERT INTO accounting_purchase_invoice_items (
-        invoice_id, position, description, account_id,
-        quantity, unit_price,
-        amount, tax_rate, amount_includes_tax,
-        line_subtotal, line_tax, line_total
-      )
-      VALUES (
-        ${invoiceId}, ${item.position}, ${item.description}, ${item.accountId},
-        ${item.quantity}, ${item.unitPrice},
-        ${item.amount}, ${item.taxRate}, ${item.includesTax},
-        ${item.subtotal}, ${item.tax}, ${item.total}
-      )
-    `;
-  }
+
+// حفظ البنود بالمطابقة (تحديث القائم بمعرّفه، إدراج الجديد، حذف
+// الغائب) — لا حذف+إدراج، حتى تبقى بيانات الوصول/الإيداع/الربط.
+// extraStatements تُنفَّذ في نفس المعاملة (تحديث الرأس مثلًا).
+async function replaceInvoiceItems(invoiceId, items, extraStatements = []) {
+  const plan = await planLineReconcile(invoiceId, items);
+  const statements = [...plan.statements, ...extraStatements];
+  if (statements.length) await sql.transaction(statements);
+  return plan;
 }
 
 // When lines are present they are the source of truth for the header
@@ -391,15 +425,10 @@ async function attachItems(rows) {
   const ids = rows.map(row => row.id);
   if (ids.length === 0) return rows;
   try {
-    const items = await sql`
-      SELECT id, invoice_id, position, description, account_id,
-             quantity, unit_price,
-             amount, tax_rate, amount_includes_tax,
-             line_subtotal, line_tax, line_total
-      FROM accounting_purchase_invoice_items
-      WHERE invoice_id = ANY(${ids})
-      ORDER BY invoice_id, position
-    `;
+    const items = await sql(`SELECT ${LINE_SELECT_COLUMNS}
+       FROM accounting_purchase_invoice_items
+       WHERE invoice_id = ANY($1)
+       ORDER BY invoice_id, position, id`, [ids]);
     const byInvoice = new Map();
     for (const item of items) {
       const key = Number(item.invoice_id);
@@ -550,6 +579,14 @@ function selectInvoicesQuery(where, statusFilter) {
         br.name AS branch_name,
         GREATEST(inv.total_amount - inv.paid_amount, 0) AS balance_due,
         inv.recurring_template_id,
+        inv.invoice_kind,
+        inv.source_invoice_id,
+        src.invoice_number AS source_invoice_number,
+        inv.roaster_contact_id,
+        rc.name AS roaster_name,
+        inv.roast_link_state,
+        inv.roast_confirmed,
+        inv.roaster_reference,
         inv.workflow_status,
         CASE
           WHEN inv.is_active = FALSE THEN 'inactive'
@@ -573,6 +610,8 @@ function selectInvoicesQuery(where, statusFilter) {
       LEFT JOIN accounting_accounts acc ON acc.id = inv.expense_account_id
       LEFT JOIN accounting_bank_accounts bank ON bank.id = inv.paid_bank_account_id
       LEFT JOIN branches br ON br.id = inv.branch_id
+      LEFT JOIN accounting_purchase_invoices src ON src.id = inv.source_invoice_id
+      LEFT JOIN accounting_contacts rc ON rc.id = inv.roaster_contact_id
       ${where.sql}
     )
     SELECT *
@@ -621,8 +660,14 @@ async function GET(request) {
     const withItems = await attachItems(rows);
     const withPayments = await attachPayments(withItems);
     const withAttachments = await attachExtraAttachments(withPayments);
+    // ملخص فاتورة التحميص المرتبطة بكل فاتورة بن (للدرج والتقرير).
+    const roastLinks = await loadRoastLinks(withAttachments.filter(row => row.invoice_kind !== "roast").map(row => row.id));
+    const invoices = withAttachments.map(row => ({
+      ...row,
+      roast_invoice: roastLinks.get(Number(row.id)) || null
+    }));
     return Response.json({
-      invoices: withAttachments
+      invoices
     });
   } catch (error) {
     console.error("purchase invoices GET error", error);
@@ -637,8 +682,12 @@ async function GET(request) {
 
 // نواة الإنشاء — يستدعيها POST أدناه ومسار الرفع الجماعي (إرسال بند
 // معتمد) حتى يمر الطريقان بنفس التحقق والترقيم والتدقيق والإشعارات.
-// ترجع { ok:true, invoice } أو { ok:false, status, error }.
-async function createPurchaseInvoice(body, actor) {
+// الرأس والبنود ودفعة الإنشاء في معاملة واحدة بمعرّفات محجوزة مسبقًا.
+// ترجع { ok:true, invoice, roast?, warnings? } أو { ok:false, status, error }.
+async function createPurchaseInvoice(body, actor, options = {}) {
+  const {
+    canFinalize = false
+  } = options;
   await ensureSchema();
   const items = parseItems(body);
   let payload = parsePayload(body);
@@ -659,77 +708,85 @@ async function createPurchaseInvoice(body, actor) {
       error: accountError
     };
   }
+
+  // بنود البن: أهلية الحساب + الحساب + الحمايات (على الخادم دائمًا).
+  let enriched;
+  try {
+    enriched = await applyCoffeeToItems(items, payload, {
+      invoiceKind: "purchase"
+    });
+  } catch (error) {
+    if (error instanceof CoffeeError) {
+      return {
+        ok: false,
+        status: error.status,
+        error: error.message,
+        ...(error.extra || {})
+      };
+    }
+    throw error;
+  }
+  const hasRoast = enriched.some(line => line.coffee && line.coffee.roastTotalNet > 0);
+  if (hasRoast) {
+    // تحقق مسبق قبل أي كتابة: المحمصة وحساب «تحميص» موجودان.
+    const roaster = await resolveRoaster(payload.roasterContactId, enriched);
+    if (!roaster) {
+      return {
+        ok: false,
+        status: 400,
+        error: "حدد المحمصة (جهة اتصال) لفاتورة التحميص — أو اضبط المحمصة الافتراضية على تصنيف البن"
+      };
+    }
+    if (!(await getRoastingAccountId())) {
+      return {
+        ok: false,
+        status: 500,
+        error: "حساب «تحميص» غير موجود في شجرة الحسابات"
+      };
+    }
+  }
   const createdById = actor?.id ? Number(actor.id) : null;
   const createdByName = actor?.name ? String(actor.name) : null;
-  const [created] = await sql`
+  const [invoiceId] = await reserveIds("accounting_purchase_invoices", 1);
+  const lineIds = await reserveIds("accounting_purchase_invoice_items", enriched.length);
+  const statements = [sql`
       INSERT INTO accounting_purchase_invoices (
-        invoice_number,
-        contact_id,
-        supplier_name,
-        expense_account_id,
-        invoice_date,
-        due_date,
-        currency,
-        subtotal_amount,
-        discount_amount,
-        tax_amount,
-        total_amount,
-        paid_amount,
-        paid_bank_account_id,
-        payment_receipt_url,
-        branch_id,
-        workflow_status,
-        notes,
-        attachment_url,
-        attachment_kind,
-        created_by_employee_id,
-        created_by_employee_name
+        id, invoice_number, contact_id, supplier_name, expense_account_id,
+        invoice_date, due_date, currency,
+        subtotal_amount, discount_amount, tax_amount, total_amount, paid_amount,
+        paid_bank_account_id, payment_receipt_url, branch_id, workflow_status,
+        notes, attachment_url, attachment_kind, roaster_contact_id,
+        created_by_employee_id, created_by_employee_name
       )
       VALUES (
-        ${payload.invoiceNumber},
-        ${payload.contactId},
-        ${payload.supplierName},
-        ${payload.expenseAccountId},
-        ${payload.invoiceDate},
-        ${payload.dueDate},
-        ${payload.currency},
-        ${payload.subtotalAmount},
-        ${payload.discountAmount},
-        ${payload.taxAmount},
-        ${payload.totalAmount},
-        ${payload.paidAmount},
-        ${payload.paidBankAccountId},
-        ${payload.paymentReceiptUrl},
-        ${payload.branchId},
-        ${payload.workflowStatus},
-        ${payload.notes},
-        ${payload.attachmentUrl},
-        ${payload.attachmentKind},
-        ${createdById},
-        ${createdByName}
+        ${invoiceId}, ${payload.invoiceNumber}, ${payload.contactId}, ${payload.supplierName}, ${payload.expenseAccountId},
+        ${payload.invoiceDate}, ${payload.dueDate}, ${payload.currency},
+        ${payload.subtotalAmount}, ${payload.discountAmount}, ${payload.taxAmount}, ${payload.totalAmount}, ${payload.paidAmount},
+        ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl}, ${payload.branchId}, ${payload.workflowStatus},
+        ${payload.notes}, ${payload.attachmentUrl}, ${payload.attachmentKind}, ${payload.roasterContactId},
+        ${createdById}, ${createdByName}
       )
-      RETURNING *
-    `;
-  if (items && items.length > 0) {
-    await replaceInvoiceItems(created.id, items);
-  }
-
+    `, ...enriched.map((line, index) => insertLineStatement(lineIds[index], invoiceId, line))];
   // ما دُفع عند الإنشاء يدخل سجل الدفعات كسطر أول بتاريخ الفاتورة.
   if (payload.paidAmount > 0) {
-    await sql`
-        INSERT INTO accounting_purchase_invoice_payments (
-          invoice_id, amount, payment_date, bank_account_id,
-          receipt_url, notes,
-          created_by_employee_id, created_by_employee_name
-        )
-        VALUES (
-          ${created.id}, ${payload.paidAmount}, ${payload.invoiceDate},
-          ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl},
-          'دفعة عند إنشاء الفاتورة',
-          ${createdById}, ${createdByName}
-        )
-      `;
+    statements.push(sql`
+      INSERT INTO accounting_purchase_invoice_payments (
+        invoice_id, amount, payment_date, bank_account_id,
+        receipt_url, notes,
+        created_by_employee_id, created_by_employee_name
+      )
+      VALUES (
+        ${invoiceId}, ${payload.paidAmount}, ${payload.invoiceDate},
+        ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl},
+        'دفعة عند إنشاء الفاتورة',
+        ${createdById}, ${createdByName}
+      )
+    `);
   }
+  await sql.transaction(statements);
+  const [created] = await sql`
+    SELECT * FROM accounting_purchase_invoices WHERE id = ${invoiceId}
+  `;
   await logPurchaseAudit({
     entityType: "invoice",
     entityId: created.id,
@@ -737,13 +794,15 @@ async function createPurchaseInvoice(body, actor) {
     summary: `إنشاء الفاتورة ${payload.invoiceNumber} — ${payload.supplierName || `مورد #${payload.contactId}`} بمبلغ ${payload.totalAmount.toFixed(2)} ${payload.currency}${payload.paidAmount > 0 ? ` (مدفوع ${payload.paidAmount.toFixed(2)})` : ""}${body.submit_for_approval === true ? " — أُرسلت إلى الاعتماد" : ""}`,
     actor
   });
+  const warnings = [];
+  const hasCoffee = enriched.some(line => line.coffee);
 
   // خيار «فاتورة متكررة بشكل شهري»: أنشئ قالباً يتولّى النظام توليده
   // تلقائياً مع بداية كل شهر (بانتظار الدفع، استحقاق نهاية الشهر).
   // مشروط بأن يكون أحد حسابات الفاتورة «مصروف ثابت» أو فرعاً منه —
   // الشرط يُعاد فرضه هنا كي لا يعتمد على الواجهة. فشله لا يعطل
-  // الفاتورة نفسها.
-  if (body.recurring_monthly === true) {
+  // الفاتورة نفسها. بنود البن لا تُكرَّر أبدًا.
+  if (body.recurring_monthly === true && !hasCoffee) {
     try {
       const accountIds = [...(items || []).map(item => item.accountId), payload.expenseAccountId].filter(Boolean);
       await createRecurringTemplateFromInvoice({
@@ -757,13 +816,54 @@ async function createPurchaseInvoice(body, actor) {
     } catch (error) {
       console.error("recurring template from invoice failed", error);
     }
+  } else if (body.recurring_monthly === true && hasCoffee) {
+    warnings.push("فواتير البن لا تُكرَّر تلقائيًا — لم يُنشأ قالب متكرر");
+  }
+
+  // فاتورة التحميص المولّدة + الوصول عند الإنشاء.
+  let roast = null;
+  if (hasCoffee) {
+    try {
+      const beanLines = await loadInvoiceLines(invoiceId);
+      roast = await syncRoastInvoice({
+        id: invoiceId,
+        invoice_number: payload.invoiceNumber,
+        invoice_date: payload.invoiceDate,
+        roaster_contact_id: payload.roasterContactId
+      }, beanLines, actor);
+    } catch (error) {
+      console.error("roast invoice generation failed", error);
+      warnings.push(`لم تُولَّد فاتورة التحميص: ${error.message} — ستُولَّد عند أول تعديل للفاتورة`);
+    }
+    const arrival = body.arrival;
+    if (arrival && Array.isArray(arrival.lines) && arrival.lines.length > 0) {
+      const lines = arrival.lines.map(entry => ({
+        ...entry,
+        id: lineIds[Number(entry.index)]
+      })).filter(entry => Number.isInteger(entry.id));
+      try {
+        await recordArrival({
+          id: invoiceId,
+          invoice_number: payload.invoiceNumber
+        }, lines, {
+          deposit: arrival.deposit || null,
+          actor,
+          canFinalize
+        });
+      } catch (error) {
+        console.error("arrival at creation failed", error);
+        warnings.push(`حُفظت الفاتورة لكن لم يُسجَّل الوصول: ${error.message} — سجّله من الدفتر`);
+      }
+    }
   }
 
   // إشعار المشتركين في «فاتورة مشتريات جديدة».
-  notifyByPref("acc_invoice_created", ["🧾 فاتورة مشتريات جديدة", `الرقم: ${payload.invoiceNumber}`, `المورد: ${payload.supplierName || `#${payload.contactId}`}`, `المبلغ: ${payload.totalAmount.toFixed(2)} ${payload.currency}`, payload.paidAmount > 0 ? `المدفوع: ${payload.paidAmount.toFixed(2)}` : body.submit_for_approval === true ? "الحالة: بانتظار الاعتماد" : null, createdByName ? `بواسطة: ${createdByName}` : null].filter(Boolean).join("\n"));
+  notifyByPref("acc_invoice_created", ["🧾 فاتورة مشتريات جديدة", `الرقم: ${payload.invoiceNumber}`, `المورد: ${payload.supplierName || `#${payload.contactId}`}`, `المبلغ: ${payload.totalAmount.toFixed(2)} ${payload.currency}`, payload.paidAmount > 0 ? `المدفوع: ${payload.paidAmount.toFixed(2)}` : body.submit_for_approval === true ? "الحالة: بانتظار الاعتماد" : null, roast?.total ? `فاتورة تحميص مولّدة: ${roast.total.toFixed(2)} SAR` : null, createdByName ? `بواسطة: ${createdByName}` : null].filter(Boolean).join("\n"));
   return {
     ok: true,
-    invoice: created
+    invoice: created,
+    roast,
+    warnings
   };
 }
 async function POST(request) {
@@ -777,21 +877,34 @@ async function POST(request) {
   }
   try {
     const body = await request.json().catch(() => ({}));
-    const result = await createPurchaseInvoice(body, auth.user);
+    const result = await createPurchaseInvoice(body, auth.user, {
+      canFinalize: canFinalizeArrival(auth.user)
+    });
     if (!result.ok) {
+      const {
+        ok,
+        status,
+        error,
+        ...extra
+      } = result;
       return Response.json({
-        error: result.error
+        error,
+        ...extra
       }, {
-        status: result.status || 400
+        status: status || 400
       });
     }
     return Response.json({
       ok: true,
-      invoice: result.invoice
+      invoice: result.invoice,
+      roast: result.roast || null,
+      warnings: result.warnings || []
     }, {
       status: 201
     });
   } catch (error) {
+    const coffee = coffeeErrorResponse(error);
+    if (coffee) return coffee;
     console.error("purchase invoices POST error", error);
     return Response.json({
       error: "فشل إضافة فاتورة المشتريات",
@@ -800,6 +913,13 @@ async function POST(request) {
       status: 500
     });
   }
+}
+function sameInstant(a, b) {
+  if (!a || !b) return true;
+  const ta = new Date(a).getTime();
+  const tb = new Date(b).getTime();
+  if (!Number.isFinite(ta) || !Number.isFinite(tb)) return true;
+  return Math.abs(ta - tb) < 1000;
 }
 async function PUT(request) {
   const auth = requireAuth(request, REQUIRE_ACCOUNTING);
@@ -821,8 +941,43 @@ async function PUT(request) {
         status: 400
       });
     }
+
+    // اللقطة السابقة: نوع الفاتورة، حالتها، وقت آخر تعديل، الدفع.
+    const [existing] = await sql`
+      SELECT id, invoice_number, invoice_kind, source_invoice_id, is_active,
+             updated_at, paid_amount, total_amount, roaster_contact_id,
+             roaster_reference, TO_CHAR(due_date, 'YYYY-MM-DD') AS due_date
+      FROM accounting_purchase_invoices
+      WHERE id = ${id}
+    `;
+    if (!existing) {
+      return Response.json({
+        error: "الفاتورة غير موجودة"
+      }, {
+        status: 404
+      });
+    }
+    if (existing.is_active === false) {
+      return Response.json({
+        error: "الفاتورة موقوفة — لا يمكن تعديلها",
+        code: "inactive_invoice"
+      }, {
+        status: 409
+      });
+    }
+    const invoiceKind = existing.invoice_kind === "roast" ? "roast" : "purchase";
     const items = parseItems(body);
     let payload = parsePayload(body);
+    // حزمة بلا رقم (دفعة سريعة) تحتفظ بالرقم المخزَّن — لا رقم PINV جديد.
+    if (!body.invoice_number) payload.invoiceNumber = existing.invoice_number;
+    if (payload.expectedUpdatedAt && !sameInstant(existing.updated_at, payload.expectedUpdatedAt)) {
+      return Response.json({
+        error: "الفاتورة تغيّرت من مستخدم آخر — أعد فتحها ثم كرّر التعديل",
+        code: "stale_invoice"
+      }, {
+        status: 409
+      });
+    }
     payload = applyItemsToPayload(payload, items);
     const validationError = validatePayload(payload);
     if (validationError) {
@@ -841,13 +996,22 @@ async function PUT(request) {
       });
     }
 
-    // اللقطة السابقة تحدد نوع الحدث في سجل التدقيق: دفعة أم تعديل.
-    const [existing] = await sql`
-      SELECT invoice_number, paid_amount, total_amount, due_date
-      FROM accounting_purchase_invoices
-      WHERE id = ${id}
-    `;
-    const [updated] = await sql`
+    // بنود البن: الحساب على الخادم مع إبقاء ما يملكه الخادم (الوصول).
+    let enriched = null;
+    let existingLines = [];
+    if (items !== null) {
+      existingLines = await loadInvoiceLines(id);
+      enriched = await applyCoffeeToItems(items, payload, {
+        existingLines,
+        invoiceKind
+      });
+      if (invoiceKind === "purchase") {
+        await assertRoastSyncAllowed(id, enriched, payload.roasterContactId);
+      }
+    }
+    const roasterReference = payload.roasterReference !== null ? payload.roasterReference : existing.roaster_reference;
+    const dueDateChanged = (payload.dueDate || null) !== (existing.due_date || null);
+    const headerUpdate = sql`
       UPDATE accounting_purchase_invoices
       SET
         invoice_number = ${payload.invoiceNumber},
@@ -869,23 +1033,25 @@ async function PUT(request) {
         notes = ${payload.notes},
         attachment_url = ${payload.attachmentUrl},
         attachment_kind = ${payload.attachmentKind},
+        roaster_contact_id = COALESCE(${payload.roasterContactId}, roaster_contact_id),
+        roaster_reference = ${roasterReference},
+        -- تعديل فاتورة التحميص يدويًا يجعلها الحقيقة ويثبّت استحقاقها.
+        roast_confirmed = CASE WHEN ${invoiceKind === "roast" && items !== null} THEN TRUE ELSE roast_confirmed END,
+        due_date_auto = CASE WHEN ${dueDateChanged} THEN FALSE ELSE due_date_auto END,
         updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
-      RETURNING *
     `;
-    if (!updated) {
-      return Response.json({
-        error: "الفاتورة غير موجودة"
-      }, {
-        status: 404
-      });
-    }
 
     // `items` missing from the payload (quick-payment modal) → leave
-    // the stored lines untouched; an array (even empty) replaces them.
+    // the stored lines untouched; an array (even empty) reconciles them.
     if (items !== null) {
-      await replaceInvoiceItems(id, items);
+      await replaceInvoiceItems(id, enriched, [headerUpdate]);
+    } else {
+      await headerUpdate;
     }
+    const [updated] = await sql`
+      SELECT * FROM accounting_purchase_invoices WHERE id = ${id}
+    `;
     const previousPaid = Number(existing?.paid_amount || 0);
     const paidDelta = Math.round((payload.paidAmount - previousPaid) * 100) / 100;
     // أي تغيير للمدفوع من المحرر الكامل يدخل سجل الدفعات — موجباً
@@ -923,6 +1089,33 @@ async function PUT(request) {
         actor: auth.user
       });
     }
+    const warnings = [];
+    if (invoiceKind === "purchase") {
+      // فاتورة التحميص تتبع فاتورة البن (ما دامت غير مؤكَّدة ولا مسددة).
+      if (items !== null || payload.roasterContactId) {
+        try {
+          const beanLines = await loadInvoiceLines(id);
+          await syncRoastInvoice({
+            id,
+            invoice_number: payload.invoiceNumber,
+            invoice_date: payload.invoiceDate,
+            roaster_contact_id: updated.roaster_contact_id
+          }, beanLines, auth.user);
+        } catch (error) {
+          console.error("roast invoice sync failed", error);
+          warnings.push(`لم تُزامَن فاتورة التحميص: ${error.message}`);
+        }
+      }
+      // تكلفة الصنف تُعاد من الصفر لكل صنف تأثر (قبل ∪ بعد).
+      const itemIds = new Set();
+      for (const line of existingLines) if (line.item_id) itemIds.add(Number(line.item_id));
+      for (const line of enriched || []) if (line.coffee?.itemId) itemIds.add(line.coffee.itemId);
+      for (const itemId of itemIds) await recomputeItemCost(itemId, auth.user);
+    } else if (items !== null) {
+      // فاتورة تحميص عُدّلت يدويًا → تصير الحقيقة لبنود البن.
+      const touched = await reverseSyncRoastToBean(id, auth.user);
+      for (const itemId of touched) await recomputeItemCost(itemId, auth.user);
+    }
 
     // فاتورة مرتبطة بقالب متكرر: تعديل آخر فاتورة (المبلغ 5000 →
     // 4000 مثلاً) يزامن القالب فتخرج فواتير الأشهر القادمة بالقيم
@@ -939,9 +1132,12 @@ async function PUT(request) {
     }
     return Response.json({
       ok: true,
-      invoice: updated
+      invoice: updated,
+      warnings
     });
   } catch (error) {
+    const coffee = coffeeErrorResponse(error);
+    if (coffee) return coffee;
     console.error("purchase invoices PUT error", error);
     return Response.json({
       error: "فشل تعديل فاتورة المشتريات",
@@ -965,6 +1161,7 @@ async function DELETE(request) {
     const url = new URL(request.url);
     const id = Number(url.searchParams.get("id"));
     const force = url.searchParams.get("force") === "1";
+    const detach = url.searchParams.get("detach") === "1";
     if (!Number.isInteger(id) || id <= 0) {
       return Response.json({
         error: "معرف الفاتورة غير صحيح"
@@ -972,30 +1169,115 @@ async function DELETE(request) {
         status: 400
       });
     }
+    const [invoice] = await sql`
+      SELECT id, invoice_number, invoice_kind, source_invoice_id, paid_amount, is_active
+      FROM accounting_purchase_invoices WHERE id = ${id}
+    `;
+    if (!invoice) {
+      return Response.json({
+        error: "الفاتورة غير موجودة"
+      }, {
+        status: 404
+      });
+    }
+    const isRoast = invoice.invoice_kind === "roast";
+    const child = isRoast ? null : await loadRoastChild(id);
     if (force) {
-      const [deleted] = await sql`
-        DELETE FROM accounting_purchase_invoices
-        WHERE id = ${id}
-        RETURNING id, invoice_number
+      // الحذف النهائي محروس: لا حذف لفاتورة (أو نظيرتها) لها دفعات أو إيداع.
+      const guardIds = [id, ...(child ? [Number(child.id)] : [])];
+      const [pay] = await sql`
+        SELECT COUNT(*)::int AS count FROM accounting_purchase_invoice_payments
+        WHERE invoice_id = ANY(${guardIds})
       `;
-      if (!deleted) {
+      if (Number(pay?.count) > 0 || Number(invoice.paid_amount) > 0) {
         return Response.json({
-          error: "الفاتورة غير موجودة"
+          error: "لا يمكن الحذف النهائي لفاتورة لها دفعات (أو فاتورة تحميص مرتبطة لها دفعات) — أوقفها بدل حذفها",
+          code: "has_payments"
         }, {
-          status: 404
+          status: 409
         });
       }
+      const [dep] = await sql`
+        SELECT COUNT(*)::int AS count FROM accounting_purchase_invoice_items
+        WHERE invoice_id = ${id} AND receipt_batch_id IS NOT NULL
+      `;
+      if (Number(dep?.count) > 0) {
+        return Response.json({
+          error: "الفاتورة مودَعة في المخزون — ألغِ الإيداع من نافذة تسجيل الوصول قبل الحذف",
+          code: "deposited"
+        }, {
+          status: 409
+        });
+      }
+      const itemIds = (await loadInvoiceLines(id)).map(l => l.item_id).filter(Boolean);
+      const statements = [];
+      if (child) statements.push(sql`DELETE FROM accounting_purchase_invoices WHERE id = ${child.id}`);
+      statements.push(sql`DELETE FROM accounting_purchase_invoices WHERE id = ${id}`);
+      await sql.transaction(statements);
       await logPurchaseAudit({
         entityType: "invoice",
         entityId: id,
         action: "deleted",
-        summary: `حذف نهائي للفاتورة ${deleted.invoice_number}`,
+        summary: `حذف نهائي للفاتورة ${invoice.invoice_number}${child ? ` وفاتورة التحميص ${child.invoice_number}` : ""}`,
         actor: auth.user
       });
+      for (const itemId of new Set(itemIds.map(Number))) await recomputeItemCost(itemId, auth.user);
       return Response.json({
         ok: true,
         hard: true
       });
+    }
+    if (isRoast) {
+      // إيقاف فاتورة تحميص مباشرة: فقط بفك الارتباط الصريح — وإلا من
+      // فاتورة البن (صفّر التحميص فتتوقف تلقائيًا).
+      if (!detach) {
+        return Response.json({
+          error: "أوقف فاتورة التحميص من فاتورة البن (صفّر تكلفة التحميص) أو استخدم «فك الارتباط»",
+          code: "roast_linked"
+        }, {
+          status: 409
+        });
+      }
+      await sql`
+        UPDATE accounting_purchase_invoices
+        SET is_active = FALSE, roast_link_state = 'detached', updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+        WHERE id = ${id}
+      `;
+      await logPurchaseAudit({
+        entityType: "invoice",
+        entityId: id,
+        action: "deactivated",
+        summary: `إيقاف فاتورة التحميص ${invoice.invoice_number} مع فك ارتباطها بفاتورة البن`,
+        actor: auth.user
+      });
+      return Response.json({
+        ok: true,
+        hard: false
+      });
+    }
+
+    // إيقاف فاتورة بن: عكس الإيداع، ثم الطفل (يتوقف إن كان بلا دفعات،
+    // وإلا يبقى مفصولًا)، ثم إعادة حساب تكلفة الأصناف.
+    const lines = await loadInvoiceLines(id);
+    const itemIds = new Set(lines.map(l => l.item_id).filter(Boolean).map(Number));
+    const reversed = await reverseDeposits(id, auth.user);
+    let childNote = "";
+    if (child) {
+      if (Number(child.paid_amount) > 0) {
+        await sql`
+          UPDATE accounting_purchase_invoices
+          SET roast_link_state = 'detached', updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+          WHERE id = ${child.id}
+        `;
+        childNote = ` — فاتورة التحميص ${child.invoice_number} عليها دفعات فبقيت نشطة مفصولة`;
+      } else {
+        await sql`
+          UPDATE accounting_purchase_invoices
+          SET is_active = FALSE, roast_link_state = 'detached', updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+          WHERE id = ${child.id}
+        `;
+        childNote = ` — أُوقفت فاتورة التحميص ${child.invoice_number} معها`;
+      }
     }
     const [updated] = await sql`
       UPDATE accounting_purchase_invoices
@@ -1005,25 +1287,22 @@ async function DELETE(request) {
       WHERE id = ${id}
       RETURNING id, invoice_number
     `;
-    if (!updated) {
-      return Response.json({
-        error: "الفاتورة غير موجودة"
-      }, {
-        status: 404
-      });
-    }
     await logPurchaseAudit({
       entityType: "invoice",
       entityId: id,
       action: "deactivated",
-      summary: `إيقاف الفاتورة ${updated.invoice_number}`,
+      summary: `إيقاف الفاتورة ${updated.invoice_number}${reversed ? ` — عُكس إيداع ${reversed} بند من المخزون` : ""}${childNote}`,
       actor: auth.user
     });
+    for (const itemId of itemIds) await recomputeItemCost(itemId, auth.user);
     return Response.json({
       ok: true,
-      hard: false
+      hard: false,
+      detached_roast: !!(child && Number(child.paid_amount) > 0)
     });
   } catch (error) {
+    const coffee = coffeeErrorResponse(error);
+    if (coffee) return coffee;
     console.error("purchase invoices DELETE error", error);
     return Response.json({
       error: "فشل إيقاف فاتورة المشتريات",
