@@ -149,6 +149,28 @@ export function guessQuantityUnit(description, purchaseUnit) {
   return null;
 }
 
+// كم كيلو في الخيشة/الكيس من وصف البند: «60 كجم»، «69kg»، «كيس 30 كيلو»،
+// «1×60 KG»، «60 كلغ». null إن لم يُذكر. يتجاهل الأوزان الصغيرة
+// (أقل من 5 كغ = عبوات لا خِيَش).
+export function guessKgPerSack(description) {
+  const text = String(description || "")
+    .replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)))
+    .replace(/[×xX*]\s*/g, " x ")
+    .toLowerCase();
+  const patterns = [
+    /(\d+(?:[.,]\d+)?)\s*(?:kgs?|kilo(?:gram)?s?|كجم|كغم|كغ|كلغ|كيلو(?:\s*(?:جرام|غرام))?)(?![a-z])/,
+    /(?:kgs?|كجم|كغم|كغ|كلغ|كيلو)\s*(\d+(?:[.,]\d+)?)/,
+  ];
+  for (const re of patterns) {
+    const m = re.exec(text);
+    if (m) {
+      const n = Number(String(m[1]).replace(",", "."));
+      if (Number.isFinite(n) && n >= 5 && n <= 1000) return Math.round(n * 1000) / 1000;
+    }
+  }
+  return null;
+}
+
 // تاريخ + أيام (سلاسل YYYY-MM-DD) — بلا اعتماد على المنطقة الزمنية.
 export function addDays(dateKey, days) {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateKey || ""));

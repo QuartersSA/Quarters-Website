@@ -29,6 +29,7 @@ import {
   allocateDiscount,
   numOrNull,
   wasteFlag,
+  guessKgPerSack,
   DEFAULT_ROAST_PER_KG,
   RAW_PRICE_MIN,
   RAW_PRICE_MAX,
@@ -1035,6 +1036,8 @@ function newLine(overrides = {}) {
     extra_cost: "",
     free_sample: false,
     confirm_unusual_price: false,
+    // مصدر «كيلو/خيشة»: scan | description | item | null (يدوي)
+    kg_source: null,
     // الوصول عند الإنشاء (للمعتمِدين فقط)
     arrival_received_kg: "",
     arrival_date: "",
@@ -1061,6 +1064,31 @@ function beanUnitDefaults(bean) {
   return {
     quantity_unit: "sack",
     kg_per_sack: coffeeInput(unitKg && unitKg > 1 ? unitKg : bean?.bag_size_kg, 3),
+  };
+}
+
+// بذرة بند البن عند اختيار حساب بن أو تعبئته من المسح: «كيلو/خيشة»
+// من التحليل الذكي (pack_size_kg) ← وصف البند («60 كجم») ← وحدة الشراء
+// في الصنف ← وزن الخيشة؛ وإلا تبقى فارغة للإدخال اليدوي. الكمية في
+// الفاتورة = عدد الخِيَش/الأكياس.
+function coffeeSeed(accounts, accountId, description, hints = {}) {
+  const bean = beanForAccount(accounts, accountId);
+  if (!bean) return {};
+  const hintUnit =
+    hints.quantity_unit === "kg" ? "kg" : hints.quantity_unit === "sack" ? "sack" : null;
+  const scanned = numOrNull(hints.pack_size_kg);
+  const fromText = scanned ? null : guessKgPerSack(description);
+  const defaults = beanUnitDefaults(bean);
+  const unit = hintUnit || (scanned || fromText ? "sack" : defaults.quantity_unit);
+  const kg = unit === "kg" ? "" : scanned ? coffeeInput(scanned, 3) : fromText ? coffeeInput(fromText, 3) : defaults.kg_per_sack;
+  return {
+    roast_enabled: true,
+    amount_includes_tax: false,
+    quantity_unit: unit,
+    kg_per_sack: kg,
+    kg_source:
+      unit === "kg" ? null : scanned ? "scan" : fromText ? "description" : kg ? "item" : null,
+    roast_per_kg: bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : "",
   };
 }
 
@@ -1212,7 +1240,12 @@ function CoffeeLineRow({
                 updateLine(line.key, {
                   roast_enabled: event.target.checked,
                   amount_includes_tax: false,
-                  ...(line.kg_per_sack || line.quantity_unit === "kg" ? {} : beanUnitDefaults(bean)),
+                  ...(line.kg_per_sack || line.quantity_unit === "kg"
+                    ? {}
+                    : (() => {
+                        const seed = coffeeSeed([{ id: "x", bean }], "x", line.description);
+                        return { quantity_unit: seed.quantity_unit, kg_per_sack: seed.kg_per_sack, kg_source: seed.kg_source };
+                      })()),
                   roast_per_kg:
                     line.roast_per_kg ||
                     (bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : ""),
@@ -1272,13 +1305,31 @@ function CoffeeLineRow({
                   type="number"
                   value={line.kg_per_sack}
                   disabled={kgMode}
-                  onChange={(event) => updateLine(line.key, { kg_per_sack: event.target.value })}
-                  className={`${fieldInput} disabled:opacity-40`}
+                  onChange={(event) =>
+                    updateLine(line.key, { kg_per_sack: event.target.value, kg_source: null })
+                  }
+                  className={`${fieldInput} disabled:opacity-40 ${
+                    !kgMode && !line.kg_per_sack ? "border-amber-400/70 dark:border-amber-400/50" : ""
+                  }`}
                   step="any"
                   min="0"
                   dir="ltr"
-                  placeholder={kgMode ? "الكمية بالكيلو" : bean.bag_size_kg ? String(bean.bag_size_kg) : "60"}
+                  placeholder={kgMode ? "الكمية بالكيلو" : "أدخلها يدويًا"}
                 />
+                <div className="text-[10px] text-slate-400 dark:text-white/35 mt-0.5 truncate">
+                  {kgMode
+                    ? "الكمية بالكيلو مباشرة"
+                    : !line.kg_per_sack
+                      ? "لم يُعرف وزن الخيشة — أدخله"
+                      : line.kg_source === "scan"
+                        ? "من التحليل الذكي"
+                        : line.kg_source === "description"
+                          ? "من وصف البند"
+                          : line.kg_source === "item"
+                            ? "من وحدة الشراء في الصنف"
+                            : "مُدخل يدويًا"}
+                  {" "}· الكمية = عدد الخِيَش
+                </div>
               </div>
               <div>
                 <div className={fieldLabel}>تحميص / كغ (ر.س)</div>
@@ -1916,11 +1967,7 @@ export default function PurchaseInvoiceModal({
         if (patch.account_id !== undefined && patch.account_id !== line.account_id) {
           const bean = isRoastInvoice ? null : beanForAccount(accounts, patch.account_id);
           if (bean && !line.id) {
-            next.roast_enabled = true;
-            next.amount_includes_tax = false;
-            Object.assign(next, beanUnitDefaults(bean));
-            next.roast_per_kg =
-              bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : "";
+            Object.assign(next, coffeeSeed(accounts, patch.account_id, next.description));
             if (!next.description.trim() && bean.item_name) next.description = bean.item_name;
           } else if (!bean) {
             next.roast_enabled = false;
@@ -2296,12 +2343,13 @@ export default function PurchaseInvoiceModal({
         const hasAmounts = lines.some((line) => lineAmount(line) > 0);
         if (items.length > 0 && canFill("lines", !hasAmounts)) {
           setLines(
-            items.map((item) =>
-              newLine({
+            items.map((item) => {
+              const accountId = item.account_id
+                ? String(item.account_id)
+                : fallbackAccount;
+              return newLine({
                 description: String(item.description || ""),
-                account_id: item.account_id
-                  ? String(item.account_id)
-                  : fallbackAccount,
+                account_id: accountId,
                 quantity: String(Number(item.quantity)),
                 unit_price: priceInput(Number(item.unit_price)),
                 tax_rate: String(
@@ -2310,8 +2358,15 @@ export default function PurchaseInvoiceModal({
                     : 15,
                 ),
                 amount_includes_tax: !!item.amount_includes_tax,
-              }),
-            ),
+                // بند بن: التحميص + كيلو/خيشة من التحليل الذكي أو الوصف.
+                ...(isRoastInvoice
+                  ? {}
+                  : coffeeSeed(accounts, accountId, String(item.description || ""), {
+                      pack_size_kg: item.pack_size_kg,
+                      quantity_unit: item.quantity_unit,
+                    })),
+              });
+            }),
           );
           owned.add("lines");
           filled.push(`بنود الفاتورة (${items.length})`);
@@ -2457,6 +2512,9 @@ export default function PurchaseInvoiceModal({
                     unit_price: priceInput(item.unitPrice),
                     tax_rate: String(item.rate),
                     amount_includes_tax: !!item.priceIncludesTax,
+                    ...(isRoastInvoice
+                      ? {}
+                      : coffeeSeed(accounts, scanDefaultAccount, item.description)),
                   })
                 : newLine({
                     description: item.description,

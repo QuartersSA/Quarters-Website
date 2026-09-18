@@ -107,6 +107,16 @@ const OUTPUT_SCHEMA = {
             description:
               "Best-fitting expense account id from the provided tree",
           },
+          pack_size_kg: {
+            type: ["number", "null"],
+            description:
+              "For coffee bean lines only: kilograms per sack/bag as printed (e.g. '60 كجم', '69 KG', '1x60kg'). Null when not printed or not a coffee line.",
+          },
+          quantity_unit: {
+            type: ["string", "null"],
+            description:
+              "For coffee bean lines only: 'sack' when quantity counts sacks/bags, 'kg' when quantity is kilograms. Null otherwise.",
+          },
         },
       },
     },
@@ -139,6 +149,7 @@ const SYSTEM_PROMPT = `أنت خبير محاسبة سعودي متخصص في �
 9. **كل منتج في جدول الأصناف بند مستقل** — إيصالات نقاط البيع وفواتير الجملة تكتب كل منتج في سطر باسمه وكميته وسعره؛ استخرجها كلها واحداً واحداً ولا تدمج منتجات مختلفة في بند واحد أبداً. افحص المستند بعناية: عدد البنود التي تُرجعها يجب أن يساوي عدد أسطر المنتجات المطبوعة في الجدول.
 10. الخصم: لا توزّعه على البنود ولا تغيّر أسعارها المطبوعة أبداً. أرجع قيمة الخصم الإجمالي (قبل الضريبة) كما هي مطبوعة في حقل discount، واترك البنود بأسعارها الأصلية. النظام يخصمه من الإجمالي قبل الضريبة.
 11. مجموع البنود ناقص الخصم زائد الضريبة يجب أن يطابق الإجمالي النهائي. البند المجمّع الواحد بوصف "إجمالي الفاتورة" حل أخير فقط عندما يستحيل تمييز أسطر المنتجات إطلاقاً — واذكر السبب في operator_note.
+13. بنود البن (حسابات الشجرة المعلَّمة is_coffee=true أو بنود اسمها بن/قهوة خضراء/green coffee): الكمية = عدد الخِيَش/الأكياس كما في الفاتورة (quantity_unit="sack")، واستخرج وزن الخيشة بالكيلو في pack_size_kg من الوصف أو عمود الوحدة/التعبئة ("60 كجم"، "69 KG"، "1×60kg"، "كيس 30 كيلو"). إذا كانت الكمية مطبوعة بالكيلو مباشرة فـ quantity_unit="kg" وpack_size_kg فارغ. إن لم يُطبع الوزن اترك pack_size_kg فارغاً — لا تخمّنه. لغير البن اترك الحقلين فارغين.
 12. صنّف نوع المستند في document_type: "quote" إذا كان عرض سعر (عناوين مثل «عرض سعر/عرض أسعار/Quotation/Proforma»، غالباً بلا رمز QR ضريبي وقد يحمل مدة صلاحية العرض)؛ "tax_invoice" إذا كان فاتورة ضريبية أو فاتورة ضريبية مبسطة (تحمل «فاتورة ضريبية/Tax Invoice» ورقماً ضريبياً وغالباً رمز QR)؛ "payment_receipt" إذا كان سند سداد/سند قبض/إيصال دفع/إشعار تحويل بنكي؛ "other" لما سواها. العنوان المطبوع على المستند هو الفيصل عند التعارض.
 
 أرجع JSON فقط حسب المخطط.`;
@@ -178,12 +189,27 @@ export async function runInvoiceAnalysis({
     WHERE is_active = TRUE
     ORDER BY name
   `;
-  const accounts = await sql`
-    SELECT id, code, name, name_en
-    FROM accounting_accounts
-    WHERE account_type = 'expense' AND is_postable AND is_active
-    ORDER BY code
-  `;
+  // is_coffee: حساب مرآة صنف من فئة «بن قهوة محمّصة» — يوجّه النموذج
+  // لاستخراج عدد الخِيَش ووزن الخيشة. دفاعي إن لم تُنشأ أعمدة البن بعد.
+  let accounts;
+  try {
+    accounts = await sql`
+      SELECT a.id, a.code, a.name, a.name_en,
+             (i.id IS NOT NULL AND c.is_roasted_coffee = TRUE) AS is_coffee
+      FROM accounting_accounts a
+      LEFT JOIN items i ON i.id = a.source_item_id AND i.is_active IS DISTINCT FROM FALSE
+      LEFT JOIN item_categories c ON c.id = i.category_id
+      WHERE a.account_type = 'expense' AND a.is_postable AND a.is_active
+      ORDER BY a.code
+    `;
+  } catch {
+    accounts = await sql`
+      SELECT id, code, name, name_en
+      FROM accounting_accounts
+      WHERE account_type = 'expense' AND is_postable AND is_active
+      ORDER BY code
+    `;
+  }
 
   const client = new Anthropic();
   const response = await client.messages.create({
@@ -296,6 +322,11 @@ export async function runInvoiceAnalysis({
     if (item.account_id && !accountIds.has(item.account_id)) {
       item.account_id = null;
     }
+    // وزن الخيشة: رقم منطقي (5–1000 كغ) وإلا فارغ؛ الوحدة sack|kg فقط.
+    const pack = Number(item.pack_size_kg);
+    item.pack_size_kg =
+      Number.isFinite(pack) && pack >= 5 && pack <= 1000 ? Math.round(pack * 1000) / 1000 : null;
+    item.quantity_unit = ["sack", "kg"].includes(item.quantity_unit) ? item.quantity_unit : null;
   }
 
   // Arithmetic guard on the tax-inclusive flag: the model sometimes

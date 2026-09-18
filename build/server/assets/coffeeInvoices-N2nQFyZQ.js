@@ -137,6 +137,22 @@ function coffeeLineStatus(line) {
   return "pending";
 }
 
+// كم كيلو في الخيشة/الكيس من وصف البند: «60 كجم»، «69kg»، «كيس 30 كيلو»،
+// «1×60 KG»، «60 كلغ». null إن لم يُذكر. يتجاهل الأوزان الصغيرة
+// (أقل من 5 كغ = عبوات لا خِيَش).
+function guessKgPerSack(description) {
+  const text = String(description || "").replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d))).replace(/[×xX*]\s*/g, " x ").toLowerCase();
+  const patterns = [/(\d+(?:[.,]\d+)?)\s*(?:kgs?|kilo(?:gram)?s?|كجم|كغم|كغ|كلغ|كيلو(?:\s*(?:جرام|غرام))?)(?![a-z])/, /(?:kgs?|كجم|كغم|كغ|كلغ|كيلو)\s*(\d+(?:[.,]\d+)?)/];
+  for (const re of patterns) {
+    const m = re.exec(text);
+    if (m) {
+      const n = Number(String(m[1]).replace(",", "."));
+      if (Number.isFinite(n) && n >= 5 && n <= 1000) return Math.round(n * 1000) / 1000;
+    }
+  }
+  return null;
+}
+
 // تاريخ + أيام (سلاسل YYYY-MM-DD) — بلا اعتماد على المنطقة الزمنية.
 function addDays(dateKey, days) {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateKey || ""));
@@ -1388,4 +1404,4 @@ async function loadRoastLinks(invoiceIds = []) {
   return map;
 }
 
-export { CoffeeError as C, DEFAULT_ROAST_PER_KG as D, LINE_SELECT_COLUMNS as L, RAW_PRICE_MIN as R, WASTE_CONFIRM as W, anyCoffeeAccount as a, loadRoastChild as b, loadInvoiceLines as c, recomputeItemCost as d, ensureCoffeeSchema as e, reverseDeposits as f, loadRoastLinks as g, applyCoffeeToItems as h, assertRoastSyncAllowed as i, reverseSyncRoastToBean as j, resolveRoaster as k, loadBeanInfo as l, getRoastingAccountId as m, reserveIds as n, insertLineStatement as o, recordArrival as p, planLineReconcile as q, resolveKgPerBaseUnit as r, syncRoastInvoice as s, allocateDiscount as t, numOrNull as u, computeCoffeeLine as v, RAW_PRICE_MAX as w, wasteFlag as x, coffeeLineStatus as y };
+export { CoffeeError as C, DEFAULT_ROAST_PER_KG as D, LINE_SELECT_COLUMNS as L, RAW_PRICE_MIN as R, WASTE_CONFIRM as W, anyCoffeeAccount as a, loadRoastChild as b, loadInvoiceLines as c, recomputeItemCost as d, ensureCoffeeSchema as e, reverseDeposits as f, guessKgPerSack as g, loadRoastLinks as h, applyCoffeeToItems as i, assertRoastSyncAllowed as j, reverseSyncRoastToBean as k, loadBeanInfo as l, resolveRoaster as m, getRoastingAccountId as n, reserveIds as o, insertLineStatement as p, recordArrival as q, resolveKgPerBaseUnit as r, syncRoastInvoice as s, planLineReconcile as t, allocateDiscount as u, numOrNull as v, computeCoffeeLine as w, RAW_PRICE_MAX as x, wasteFlag as y, coffeeLineStatus as z };
