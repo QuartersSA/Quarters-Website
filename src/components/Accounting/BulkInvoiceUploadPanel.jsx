@@ -818,8 +818,11 @@ function BulkReviewModal({
           if (bean) {
             next.roast_enabled = true;
             next.amount_includes_tax = false;
-            next.quantity_unit = next.quantity_unit || "sack";
-            next.kg_per_sack = next.kg_per_sack ?? bean.bag_size_kg ?? null;
+            const unitKg = Number(bean.purchase_unit_kg) || null;
+            next.quantity_unit =
+              next.quantity_unit || (unitKg && unitKg <= 1 ? "kg" : "sack");
+            next.kg_per_sack =
+              next.kg_per_sack ?? (unitKg && unitKg > 1 ? unitKg : bean.bag_size_kg ?? null);
             next.roast_per_kg = next.roast_per_kg ?? bean.roast_per_kg ?? null;
           } else {
             next.roast_enabled = false;
@@ -1297,7 +1300,9 @@ function BulkReviewModal({
                                     roast_enabled: event.target.checked,
                                     amount_includes_tax: false,
                                     quantity_unit: line.quantity_unit || "sack",
-                                    kg_per_sack: line.kg_per_sack ?? bean.bag_size_kg ?? null,
+                                    kg_per_sack:
+                                      line.kg_per_sack ??
+                                      (Number(bean.purchase_unit_kg) > 1 ? Number(bean.purchase_unit_kg) : bean.bag_size_kg ?? null),
                                     roast_per_kg: line.roast_per_kg ?? bean.roast_per_kg ?? null,
                                   })
                                 }

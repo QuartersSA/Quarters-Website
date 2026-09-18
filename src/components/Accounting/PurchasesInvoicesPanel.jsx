@@ -1376,8 +1376,21 @@ export default function PurchasesInvoicesPanel({
 
   const handleSubmit = (payload) => {
     if (editing) {
+      // الوصول بعد الهدر المُدخل في نافذة التعديل يُسجَّل بعد حفظ
+      // الفاتورة عبر مسار الوصول (البنود بمعرّفها).
+      const arrival = payload.arrival;
       updateMut.mutate(payload, {
-        onSuccess: () => setEditing(null),
+        onSuccess: () => {
+          setEditing(null);
+          const lines = (arrival?.lines || []).filter((line) => line.id);
+          if (lines.length > 0) {
+            arrivalMut.mutate({
+              invoice_id: editing.id,
+              lines,
+              deposit: arrival.deposit || null,
+            });
+          }
+        },
       });
     } else {
       createMut.mutate(payload, {

@@ -1039,6 +1039,7 @@ function newLine(overrides = {}) {
     arrival_received_kg: "",
     arrival_date: "",
     arrival_complete: false,
+    confirm_high_waste: false,
     // بيانات يملكها الخادم — للعرض فقط عند التعديل
     stored: null,
     ...overrides,
@@ -1050,6 +1051,17 @@ function beanForAccount(accounts, accountId) {
   if (!accountId) return null;
   const account = accounts.find((a) => String(a.id) === String(accountId));
   return account?.bean || null;
+}
+
+// افتراضات البند من الصنف: وحدة الشراء (خيشة/كغ) وكم كيلو فيها —
+// من وحدة الشراء في بطاقة الصنف أولًا ثم «وزن الخيشة».
+function beanUnitDefaults(bean) {
+  const unitKg = Number(bean?.purchase_unit_kg) || null;
+  if (unitKg && unitKg <= 1.0005) return { quantity_unit: "kg", kg_per_sack: "" };
+  return {
+    quantity_unit: "sack",
+    kg_per_sack: coffeeInput(unitKg && unitKg > 1 ? unitKg : bean?.bag_size_kg, 3),
+  };
 }
 
 function coffeeInput(value, digits = 3) {
@@ -1116,6 +1128,10 @@ function linesFromInvoice(invoice) {
         roast_per_kg: item.roast_per_kg != null ? String(Number(item.roast_per_kg)) : "",
         extra_cost: coffeeInput(item.extra_cost, 2),
         free_sample: !!item.free_sample,
+        // الواصل بعد الهدر المخزَّن — يُعرض ويُعدَّل من نفس الصف.
+        arrival_received_kg: roast && item.received_kg != null ? String(Number(item.received_kg)) : "",
+        arrival_date: roast ? item.arrival_date || "" : "",
+        arrival_complete: roast ? !!item.arrival_complete : false,
         stored: roast
           ? {
               raw_kg: numOrNull(item.raw_kg),
@@ -1167,11 +1183,17 @@ function CoffeeLineRow({
   currency,
 }) {
   const on = !!line.roast_enabled;
-  const tile = "rounded-lg bg-white/70 dark:bg-white/[0.04] border border-amber-200/60 dark:border-amber-400/15 px-2 py-1 min-w-0";
+  const tile = "rounded-lg bg-white/70 dark:bg-white/[0.04] border border-amber-200/60 dark:border-amber-400/15 px-2 py-1.5 min-w-0";
   const tileLabel = "text-[10px] text-slate-500 dark:text-white/45 truncate";
-  const tileValue = "text-xs font-bold tabular-nums text-slate-800 dark:text-white/85";
+  const tileValue = "text-sm font-bold tabular-nums text-slate-800 dark:text-white/85";
   const stored = line.stored;
   const flag = calc ? wasteFlag(calc.wastePercent) : null;
+  const kgMode = line.quantity_unit === "kg";
+  const rawInclPerKg =
+    calc && calc.rawKg > 0 ? round2(calc.beanCostIncl / calc.rawKg) : null;
+  const deposited = (stored?.deposited_kg || 0) > 0;
+  const fieldLabel = "text-[10px] text-slate-500 dark:text-white/45 mb-0.5";
+  const fieldInput = `${ws.input} px-2 py-1.5 text-sm text-center`;
   return (
     <div className="px-2 pb-2 -mt-1">
       <div
@@ -1190,7 +1212,7 @@ function CoffeeLineRow({
                 updateLine(line.key, {
                   roast_enabled: event.target.checked,
                   amount_includes_tax: false,
-                  kg_per_sack: line.kg_per_sack || coffeeInput(bean.bag_size_kg, 3),
+                  ...(line.kg_per_sack || line.quantity_unit === "kg" ? {} : beanUnitDefaults(bean)),
                   roast_per_kg:
                     line.roast_per_kg ||
                     (bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : ""),
@@ -1205,63 +1227,66 @@ function CoffeeLineRow({
             </span>
           </label>
           {on ? (
-            <label className="inline-flex items-center gap-1.5 text-[11px] text-slate-600 dark:text-white/60 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={!!line.free_sample}
-                onChange={(event) =>
-                  updateLine(line.key, { free_sample: event.target.checked })
-                }
-                className="accent-amber-500"
-              />
-              عينة/خيشة مجانية (بسعر 0)
-            </label>
+            <div className="flex items-center gap-3 flex-wrap text-[11px] text-slate-600 dark:text-white/60">
+              <span>
+                وحدة الكمية:{" "}
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateLine(line.key, {
+                      quantity_unit: kgMode ? "sack" : "kg",
+                      kg_per_sack: kgMode ? beanUnitDefaults(bean).kg_per_sack || line.kg_per_sack : line.kg_per_sack,
+                    })
+                  }
+                  className="font-bold text-amber-800 dark:text-amber-200 underline decoration-dotted"
+                  title="بدّل بين خيشة وكيلو"
+                >
+                  {kgMode ? "كغ" : bean.purchase_unit && bean.purchase_unit !== "كيلو" ? bean.purchase_unit : "خيشة"}
+                </button>
+                {bean.purchase_unit ? (
+                  <span className="text-slate-400 dark:text-white/35"> (وحدة الشراء في الصنف)</span>
+                ) : null}
+              </span>
+              <label className="inline-flex items-center gap-1.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={!!line.free_sample}
+                  onChange={(event) =>
+                    updateLine(line.key, { free_sample: event.target.checked })
+                  }
+                  className="accent-amber-500"
+                />
+                عينة مجانية (بسعر 0)
+              </label>
+            </div>
           ) : null}
         </div>
 
         {on ? (
           <>
+            {/* المدخلات */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <div>
-                <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">وحدة الكمية</div>
-                <div className={`${ws.segWrap} w-full`}>
-                  <button
-                    type="button"
-                    onClick={() => updateLine(line.key, { quantity_unit: "sack" })}
-                    className={`${ws.segBtn} flex-1 text-[11px] py-1 ${line.quantity_unit !== "kg" ? ws.segActive : ws.segInactive}`}
-                  >
-                    خيشة
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => updateLine(line.key, { quantity_unit: "kg" })}
-                    className={`${ws.segBtn} flex-1 text-[11px] py-1 ${line.quantity_unit === "kg" ? ws.segActive : ws.segInactive}`}
-                  >
-                    كغ
-                  </button>
-                </div>
-              </div>
-              <div>
-                <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">كيلو / الخيشة</div>
+                <div className={fieldLabel}>كيلو / خيشة</div>
                 <input
                   type="number"
                   value={line.kg_per_sack}
-                  disabled={line.quantity_unit === "kg"}
+                  disabled={kgMode}
                   onChange={(event) => updateLine(line.key, { kg_per_sack: event.target.value })}
-                  className={`${ws.input} px-2 py-1 text-xs text-center disabled:opacity-40`}
+                  className={`${fieldInput} disabled:opacity-40`}
                   step="any"
                   min="0"
                   dir="ltr"
-                  placeholder={bean.bag_size_kg ? String(bean.bag_size_kg) : "60"}
+                  placeholder={kgMode ? "الكمية بالكيلو" : bean.bag_size_kg ? String(bean.bag_size_kg) : "60"}
                 />
               </div>
               <div>
-                <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">تحميص / كغ (ر.س)</div>
+                <div className={fieldLabel}>تحميص / كغ (ر.س)</div>
                 <input
                   type="number"
                   value={line.roast_per_kg}
                   onChange={(event) => updateLine(line.key, { roast_per_kg: event.target.value })}
-                  className={`${ws.input} px-2 py-1 text-xs text-center`}
+                  className={fieldInput}
                   step="any"
                   min="0"
                   dir="ltr"
@@ -1269,45 +1294,92 @@ function CoffeeLineRow({
                 />
               </div>
               <div>
-                <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">تكاليف إضافية (شحن…)</div>
+                <div className={fieldLabel}>تكاليف إضافية (شحن…)</div>
                 <input
                   type="number"
                   value={line.extra_cost}
                   onChange={(event) => updateLine(line.key, { extra_cost: event.target.value })}
-                  className={`${ws.input} px-2 py-1 text-xs text-center`}
+                  className={fieldInput}
                   step="0.01"
                   min="0"
                   dir="ltr"
                   placeholder="0.00"
                 />
               </div>
-            </div>
-
-            {calc ? (
-              <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
+              {allowArrival ? (
+                <div>
+                  <div className={fieldLabel}>الواصل بعد الهدر (كغ)</div>
+                  <input
+                    type="number"
+                    value={line.arrival_received_kg}
+                    disabled={deposited}
+                    onChange={(event) =>
+                      updateLine(line.key, { arrival_received_kg: event.target.value })
+                    }
+                    className={`${fieldInput} disabled:opacity-40`}
+                    step="any"
+                    min="0"
+                    dir="ltr"
+                    placeholder="لم يصل بعد"
+                  />
+                </div>
+              ) : (
                 <div className={tile}>
                   <div className={tileLabel}>الكيلو الخام</div>
-                  <div className={tileValue} dir="ltr">{calc.rawKg > 0 ? `${calc.rawKg} كغ` : "—"}</div>
+                  <div className={tileValue} dir="ltr">
+                    {calc && calc.rawKg > 0 ? `${calc.rawKg} كغ` : "—"}
+                  </div>
                 </div>
+              )}
+            </div>
+
+            {/* المخرجات */}
+            {calc ? (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <div className={`${tile} ${calc.unusualPrice ? "border-rose-300 dark:border-rose-400/40" : ""}`}>
-                  <div className={tileLabel}>سعر الكيلو الخام</div>
+                  <div className={tileLabel}>سعر الكيلو الخام (غير شامل الضريبة)</div>
                   <div className={tileValue} dir="ltr">
                     {calc.rawCostPerKg !== null ? calc.rawCostPerKg.toFixed(2) : "—"}
                   </div>
                 </div>
                 <div className={tile}>
-                  <div className={tileLabel}>البن شامل الضريبة</div>
-                  <div className={tileValue} dir="ltr">{formatMoney(calc.beanCostIncl, currency)}</div>
-                </div>
-                <div className={tile}>
-                  <div className={tileLabel}>التحميص ({calc.roastRate} × كغ)</div>
+                  <div className={tileLabel}>سعر الكيلو الخام (شامل الضريبة)</div>
                   <div className={tileValue} dir="ltr">
-                    {formatMoney(calc.roastTotalNet + calc.roastTaxAmount, currency)}
+                    {rawInclPerKg !== null ? rawInclPerKg.toFixed(2) : "—"}
                   </div>
                 </div>
                 <div className={tile}>
-                  <div className={tileLabel}>التكلفة الواصلة (شامل)</div>
-                  <div className={tileValue} dir="ltr">{formatMoney(calc.landedIncl, currency)}</div>
+                  <div className={tileLabel}>نسبة الهدر</div>
+                  <div
+                    className={`${tileValue} ${
+                      flag === "high" || flag === "confirm" || flag === "over"
+                        ? "text-rose-700 dark:text-rose-200"
+                        : flag === "low"
+                          ? "text-amber-700 dark:text-amber-200"
+                          : ""
+                    }`}
+                    dir="ltr"
+                  >
+                    {calc.arrivalComplete ? `${calc.wastePercent}%` : "—"}
+                  </div>
+                </div>
+                <div className={`${tile} border-[#c9e2d8] dark:border-emerald-400/25`}>
+                  <div className={tileLabel}>السعر الصافي / كغ (شامل الضريبة)</div>
+                  <div className={`${tileValue} text-[#0e7a5f] dark:text-emerald-200`} dir="ltr">
+                    {calc.arrivalComplete && calc.netInclPerKg != null
+                      ? calc.netInclPerKg.toFixed(2)
+                      : "—"}
+                  </div>
+                </div>
+                <div className="col-span-2 sm:col-span-4 text-[11px] text-slate-500 dark:text-white/45" dir="rtl">
+                  الكيلو الخام {calc.rawKg > 0 ? calc.rawKg : "—"} كغ · البن شامل الضريبة{" "}
+                  {formatMoney(calc.beanCostIncl, currency)} · التحميص{" "}
+                  {formatMoney(calc.roastTotalNet + calc.roastTaxAmount, currency)} ({calc.roastRate} × كغ)
+                  {calc.extraCost > 0 ? ` · إضافي ${formatMoney(calc.extraCost, currency)}` : ""}
+                  {" "}· التكلفة الواصلة {formatMoney(calc.landedIncl, currency)}
+                  {!calc.arrivalComplete
+                    ? " — الهدر والصافي يظهران بعد إدخال الواصل بعد الهدر."
+                    : ""}
                 </div>
               </div>
             ) : null}
@@ -1329,86 +1401,55 @@ function CoffeeLineRow({
                 </span>
               </label>
             ) : null}
+            {calc?.arrivalComplete && flag === "over" ? (
+              <div className="text-[11px] text-rose-700 dark:text-rose-200">
+                الواصل أكبر من الكيلو الخام — تحقق من كيلو/خيشة أو الواصل.
+              </div>
+            ) : null}
+            {calc?.arrivalComplete && flag === "confirm" ? (
+              <label className="flex items-start gap-2 text-[11px] text-rose-700 dark:text-rose-200 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={!!line.confirm_high_waste}
+                  onChange={(event) =>
+                    updateLine(line.key, { confirm_high_waste: event.target.checked })
+                  }
+                  className="accent-rose-500 mt-0.5"
+                />
+                <span>هدر {calc.wastePercent}% غير اعتيادي (أكثر من 60%) — أكّده.</span>
+              </label>
+            ) : null}
+
+            {allowArrival && numOrNull(line.arrival_received_kg) > 0 && !deposited ? (
+              <div className="flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60">
+                <span>تاريخ الوصول:</span>
+                <input
+                  type="date"
+                  value={line.arrival_date}
+                  onChange={(event) => updateLine(line.key, { arrival_date: event.target.value })}
+                  className={`${ws.input} px-2 py-1 text-xs w-40`}
+                />
+                <span className="text-slate-400 dark:text-white/35">فارغ = تاريخ الفاتورة</span>
+              </div>
+            ) : null}
 
             {isEditing && stored ? (
               <div className="flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60">
                 {stored.arrival_complete ? (
                   <span className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`}>
-                    وصل {stored.received_kg} كغ — هدر {stored.waste_percent ?? 0}% — صافي/كغ{" "}
-                    {stored.net_incl_per_kg != null ? stored.net_incl_per_kg.toFixed(2) : "—"}
+                    مسجَّل: وصل {stored.received_kg} كغ — هدر {stored.waste_percent ?? 0}%
+                    {stored.arrival_date ? ` — ${stored.arrival_date}` : ""}
                   </span>
                 ) : stored.received_kg ? (
                   <span className={`${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25`}>
-                    وصول جزئي {stored.received_kg} كغ
-                  </span>
-                ) : (
-                  <span className={`${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10`}>
-                    بانتظار الوصول
-                  </span>
-                )}
-                {stored.deposited_kg ? (
-                  <span className={`${ws.pill} bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-400/25`}>
-                    مودَع {stored.deposited_kg} كغ
+                    وصول جزئي مسجَّل {stored.received_kg} كغ
                   </span>
                 ) : null}
-                <span className="text-slate-400 dark:text-white/35">
-                  الوصول يُسجَّل من زر «تسجيل الوصول» في الدفتر.
-                </span>
-              </div>
-            ) : null}
-
-            {!isEditing && allowArrival ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 items-end pt-1 border-t border-dashed border-amber-200/70 dark:border-amber-400/15">
-                <div>
-                  <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">الكمية الواصلة (كغ)</div>
-                  <input
-                    type="number"
-                    value={line.arrival_received_kg}
-                    onChange={(event) =>
-                      updateLine(line.key, { arrival_received_kg: event.target.value })
-                    }
-                    className={`${ws.input} px-2 py-1 text-xs text-center`}
-                    step="any"
-                    min="0"
-                    dir="ltr"
-                    placeholder="لم يصل بعد"
-                  />
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">تاريخ الوصول</div>
-                  <input
-                    type="date"
-                    value={line.arrival_date}
-                    onChange={(event) => updateLine(line.key, { arrival_date: event.target.value })}
-                    className={`${ws.input} px-2 py-1 text-xs`}
-                  />
-                </div>
-                <label className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 dark:text-white/70 cursor-pointer select-none pb-1.5">
-                  <input
-                    type="checkbox"
-                    checked={!!line.arrival_complete}
-                    onChange={(event) =>
-                      updateLine(line.key, { arrival_complete: event.target.checked })
-                    }
-                    className="accent-[#0e7a5f]"
-                  />
-                  الوصول مكتمل
-                </label>
-                <div className={tile}>
-                  <div className={tileLabel}>الهدر / الصافي شامل</div>
-                  <div
-                    className={`${tileValue} ${
-                      flag === "high" || flag === "confirm" || flag === "over"
-                        ? "text-rose-700 dark:text-rose-200"
-                        : ""
-                    }`}
-                    dir="ltr"
-                  >
-                    {calc?.arrivalComplete
-                      ? `${calc.wastePercent}% · ${calc.netInclPerKg?.toFixed(2)}/كغ`
-                      : "—"}
-                  </div>
-                </div>
+                {deposited ? (
+                  <span className={`${ws.pill} bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-400/25`}>
+                    مودَع {stored.deposited_kg} كغ — التعديل من نافذة «تسجيل الوصول»
+                  </span>
+                ) : null}
               </div>
             ) : null}
           </>
@@ -1753,9 +1794,9 @@ export default function PurchaseInvoiceModal({
         roastPerKg: roastRate,
         roastTaxRate: bean.roast_tax_rate ?? 0,
         extraCost: moneyValue(line.extra_cost),
-        receivedKg:
-          !isEditing && allowArrival ? numOrNull(line.arrival_received_kg) : null,
-        arrivalComplete: !isEditing && allowArrival && line.arrival_complete,
+        // إدخال «الواصل بعد الهدر» = الوصول مكتمل (الجزئي من نافذة الوصول).
+        receivedKg: numOrNull(line.arrival_received_kg),
+        arrivalComplete: numOrNull(line.arrival_received_kg) > 0,
       });
       const unusualPrice =
         !line.free_sample &&
@@ -1768,7 +1809,7 @@ export default function PurchaseInvoiceModal({
       count += 1;
     });
     return { perLine, roastTotal: round2(roastTotal), roastTax: round2(roastTax), count, unusual };
-  }, [lines, discount, accounts, isRoastInvoice, isEditing, allowArrival]);
+  }, [lines, discount, accounts, isRoastInvoice]);
 
   // اسم المحمصة الفعلية للعرض: اختيار الفاتورة → افتراض الفئة → النظام.
   const effectiveRoasterName = useMemo(() => {
@@ -1784,14 +1825,20 @@ export default function PurchaseInvoiceModal({
     return "محمصة درر";
   }, [roasterContactId, contacts, createdContacts, coffee.perLine]);
 
+  // هل يحمل الحفظ وصولًا جديدًا (واصل مُدخل يختلف عن المخزَّن)؟
+  const arrivalChanged = (line) => {
+    const received = numOrNull(line.arrival_received_kg);
+    const stored = line.stored?.received_kg ?? null;
+    if (received === null) return stored !== null;
+    return stored === null || Math.abs(received - stored) > 0.0005;
+  };
   const anyArrivalComplete =
-    !isEditing &&
     allowArrival &&
     lines.some(
       (line) =>
         line.roast_enabled &&
-        line.arrival_complete &&
-        numOrNull(line.arrival_received_kg) > 0,
+        numOrNull(line.arrival_received_kg) > 0 &&
+        arrivalChanged(line),
     );
 
   const contactTransactionCount = useMemo(() => {
@@ -1845,12 +1892,17 @@ export default function PurchaseInvoiceModal({
   const unconfirmedUnusual = coffee.unusual.some(
     (key) => !lines.find((line) => line.key === key)?.confirm_unusual_price,
   );
+  const unconfirmedWaste = lines.some((line) => {
+    const c = coffee.perLine.get(line.key);
+    return c?.arrivalComplete && wasteFlag(c.wastePercent) === "confirm" && !line.confirm_high_waste;
+  });
   const canSubmit =
     !isSubmitting &&
     (!!supplierName.trim() || !!contactId) &&
     (totals.total > 0 || hasFreeSampleLine) &&
     moneyValue(paidAmount) <= totals.total &&
-    !unconfirmedUnusual;
+    !unconfirmedUnusual &&
+    !unconfirmedWaste;
 
   const updateLine = (key, patch) => {
     autoFilledRef.current.delete("lines");
@@ -1866,8 +1918,7 @@ export default function PurchaseInvoiceModal({
           if (bean && !line.id) {
             next.roast_enabled = true;
             next.amount_includes_tax = false;
-            next.quantity_unit = "sack";
-            next.kg_per_sack = coffeeInput(bean.bag_size_kg, 3);
+            Object.assign(next, beanUnitDefaults(bean));
             next.roast_per_kg =
               bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : "";
             if (!next.description.trim() && bean.item_name) next.description = bean.item_name;
@@ -1932,18 +1983,23 @@ export default function PurchaseInvoiceModal({
     });
     // الوصول عند الإنشاء: بنود البن التي أُدخلت كميتها الواصلة.
     let arrival = null;
-    if (!isEditing && allowArrival && !isRoastInvoice) {
+    if (allowArrival && !isRoastInvoice) {
       const arrivalLines = [];
       kept.forEach((line, index) => {
         if (!line.roast_enabled || !lineBean(line)) return;
+        if (!arrivalChanged(line)) return;
         const received = numOrNull(line.arrival_received_kg);
-        if (received === null || received <= 0) return;
+        // عند الإنشاء: بالفهرس (الخادم يربطه بالمعرّف)؛ عند التعديل:
+        // بالمعرّف بعد حفظ الفاتورة (مسار الوصول). فارغ = إلغاء الوصول.
+        if (!isEditing && (received === null || received <= 0)) return;
+        if (line.stored?.deposited_kg > 0) return; // المودَع يُعدَّل من نافذة الوصول
         arrivalLines.push({
           index,
+          id: line.id || undefined,
           received_kg: received,
           arrival_date: line.arrival_date || invoiceDate,
-          arrival_complete: !!line.arrival_complete,
-          confirm_high_waste: false,
+          arrival_complete: received !== null && received > 0,
+          confirm_high_waste: !!line.confirm_high_waste,
         });
       });
       if (arrivalLines.length > 0) {
