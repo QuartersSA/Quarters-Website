@@ -103,7 +103,8 @@ async function fetchPurchaseUnits() {
   try {
     const rows = await sql`
       SELECT a.id,
-             COALESCE(dmu.name_ar, bmu.name_ar, NULLIF(TRIM(i.unit), '')) AS unit
+             COALESCE(dmu.name_ar, bmu.name_ar, NULLIF(TRIM(i.unit), '')) AS unit,
+             COALESCE(diu.conversion_factor, 1) AS factor
       FROM accounting_accounts a
       JOIN items i ON i.id = a.source_item_id
       LEFT JOIN item_units diu ON diu.id = i.default_purchase_unit_id
@@ -113,7 +114,10 @@ async function fetchPurchaseUnits() {
       WHERE a.source_item_id IS NOT NULL
     `;
     for (const row of rows) {
-      if (row.unit) units.set(Number(row.id), row.unit);
+      if (row.unit) units.set(Number(row.id), {
+        unit: row.unit,
+        factor: Number(row.factor) || 1
+      });
     }
   } catch {
     // items tables not created yet
@@ -187,7 +191,7 @@ async function GET(request) {
         invoice_count: invoiceCounts.get(Number(row.id)) || 0,
         bank_count: bankCounts.get(Number(row.id)) || 0,
         purchases_total: spendTotals.get(Number(row.id)) || 0,
-        purchase_unit: purchaseUnits.get(Number(row.id)) || null,
+        purchase_unit: purchaseUnits.get(Number(row.id))?.unit || null,
         is_roasting_account: row.system_key === "roasting",
         bean: info?.isBean ? {
           item_id: info.itemId,
@@ -198,6 +202,10 @@ async function GET(request) {
           roaster_contact_id: info.roasterContactId,
           roaster_name: info.roasterContactId ? roasterNames.get(info.roasterContactId) || null : null,
           kg_per_base_unit: kgFactors.get(Number(row.id)) || null,
+          // وحدة الشراء وكم كيلو فيها (كيلو الأساس × معامل التحويل)
+          // — منها تُسحب «كيلو/الخيشة» تلقائيًا في الفاتورة.
+          purchase_unit: purchaseUnits.get(Number(row.id))?.unit || null,
+          purchase_unit_kg: kgFactors.get(Number(row.id)) ? Math.round(kgFactors.get(Number(row.id)) * (purchaseUnits.get(Number(row.id))?.factor || 1) * 1000) / 1000 : null,
           show_in_inventory: info.showInInventory
         } : null
       };
