@@ -16,7 +16,7 @@ export function MobileHeader() {
               المحاسبة
             </div>
             <div className="text-xs text-slate-500 dark:text-white/50 truncate">
-              توريد البن الأخضر
+              أرشيف توريد البن (قديم)
             </div>
           </div>
         </div>
@@ -40,7 +40,7 @@ export function DesktopHeader() {
           <div className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
             المحاسبة
           </div>
-          <div className="text-slate-600 dark:text-white/55 mt-1">طلبات توريد البن الأخضر</div>
+          <div className="text-slate-600 dark:text-white/55 mt-1">أرشيف طلبات توريد البن الأخضر (للقراءة فقط)</div>
         </div>
       </div>
       <a href="/accounting" className={`${ws.btnNeutral} px-4 py-2`}>

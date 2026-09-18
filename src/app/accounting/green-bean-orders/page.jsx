@@ -30,7 +30,9 @@ export default function GreenBeanOrdersPage() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  const [mode, setMode] = useState("create"); // create | archive | edit
+  // الصفحة مؤرشفة: الأرشيف فقط (القراءة). الإنشاء/التعديل/الإيداع
+  // انتقلت إلى فاتورة المشتريات (بند بن + إضافة قيمة تحميص + الوصول).
+  const [mode, setMode] = useState("archive"); // archive فقط
 
   // archive state
   const [selectedOrderId, setSelectedOrderId] = useState("");
@@ -191,16 +193,12 @@ export default function GreenBeanOrdersPage() {
     createOrderMutation.mutate(v.payload);
   }, [builder, createOrderMutation]);
 
-  const onEditOrder = useCallback(
-    (order, items) => {
-      builder.loadFromOrder(order, items);
-      setEditingOrderId(order.id);
-      setMode("edit");
-      setError(null);
-      setSuccess(null);
-    },
-    [builder],
-  );
+  const onEditOrder = useCallback(() => {
+    setSuccess(null);
+    setError(
+      "الأرشيف للقراءة فقط — تعديل الطلبات القديمة موقوف. سجّل شراء البن من فاتورة المشتريات.",
+    );
+  }, []);
 
   const onSaveEdit = useCallback(() => {
     if (!editingOrderId) return;
@@ -312,10 +310,12 @@ export default function GreenBeanOrdersPage() {
         orders={orders}
         selectedOrderId={selectedOrderId}
         onSelectOrder={setSelectedOrderId}
-        onDeleteOrder={(id) => deleteOrderMutation.mutate(id)}
+        onDeleteOrder={() =>
+          setError("الأرشيف للقراءة فقط — حذف الطلبات القديمة موقوف.")
+        }
         isLoading={ordersQuery.isLoading}
         error={ordersErrorText}
-        deleteDisabled={deleteOrderMutation.isPending}
+        deleteDisabled
         filterMonth={filterMonth}
         onFilterMonthChange={setFilterMonth}
       />
@@ -345,7 +345,16 @@ export default function GreenBeanOrdersPage() {
 
           {loadingOrAuth}
 
+          <div className="rounded-2xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] px-4 py-3 text-sm text-amber-900 dark:text-amber-100 leading-relaxed">
+            هذه الصفحة أرشيف للطلبات القديمة (للقراءة فقط). شراء البن الآن
+            من <a href="/accounting/purchases?tab=invoices" className="font-bold underline">المشتريات ← الفواتير</a>:
+            اختر حساب الصنف (فئة «بن قهوة محمّصة») وفعّل «إضافة قيمة تحميص»،
+            ويُسجَّل الوصول من زر «تسجيل الوصول» في الدفتر، وتقرير البن في
+            تبويب التقارير.
+          </div>
+
           <ActionsCard
+            archived
             mode={mode === "edit" ? "create" : mode}
             onChangeMode={onChangeMode}
             onRefresh={onRefresh}

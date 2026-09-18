@@ -1,21 +1,8 @@
-import sql from "@/app/api/utils/sql";
-import { legacyGone } from "@/app/api/utils/legacyGreenBean";
-import { requireAuth } from "@/app/api/utils/sessionToken";
-
-const VAT_MULTIPLIER = 1.15;
-
-function cleanText(value) {
-  const t = value === null || value === undefined ? "" : String(value);
-  const trimmed = t.trim();
-  return trimmed;
-}
-
-function toNumber(value) {
-  if (value === null || value === undefined || value === "") return null;
-  const n = Number(value);
-  if (!Number.isFinite(n)) return null;
-  return n;
-}
+import sql from './sql-CSDV1lSC.js';
+import { l as legacyGone } from './legacyGreenBean-BA_TFDYb.js';
+import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import '@neondatabase/serverless';
+import 'crypto';
 
 function toDateOnly(value) {
   if (!value) return null;
@@ -24,100 +11,56 @@ function toDateOnly(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return null;
   return text;
 }
-
 function toInt(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return null;
   return Math.trunc(n);
 }
-
 function clampInt(n, min, max) {
   if (!Number.isFinite(n)) return null;
   return Math.min(max, Math.max(min, Math.trunc(n)));
 }
 
-function validateNonNegative(n, label) {
-  if (n === null || n === undefined) {
-    return { ok: false, error: `${label} مطلوب` };
-  }
-  if (typeof n !== "number" || !Number.isFinite(n)) {
-    return { ok: false, error: `قيمة غير صحيحة: ${label}` };
-  }
-  if (n < 0) {
-    return { ok: false, error: `${label} يجب أن يكون 0 أو أكثر` };
-  }
-  return { ok: true };
-}
-
-function round4(n) {
-  const x = Number(n);
-  if (!Number.isFinite(x)) return null;
-  return Math.round(x * 10000) / 10000;
-}
-
-function clamp(n, min, max) {
-  const x = Number(n);
-  if (!Number.isFinite(x)) return null;
-  return Math.min(max, Math.max(min, x));
-}
-
-async function fetchBeansByIds(beanIds) {
-  if (!Array.isArray(beanIds) || beanIds.length === 0) return [];
-  const rows = await sql(
-    `
-      SELECT id, name
-      FROM accounting_green_beans
-      WHERE id = ANY($1::bigint[])
-    `,
-    [beanIds],
-  );
-  return rows || [];
-}
-
 // GET /api/accounting/green-bean-orders
-export async function GET(request) {
+async function GET(request) {
   const auth = requireAuth(request, {
     role: "Admin",
-    permission: "can_manage_accounting",
+    permission: "can_manage_accounting"
   });
   if (!auth.ok) {
-    return Response.json({ error: auth.error }, { status: auth.status });
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
   }
-
   try {
-    const { searchParams } = new URL(request.url);
+    const {
+      searchParams
+    } = new URL(request.url);
     const includeItems = String(searchParams.get("includeItems") || "") === "1";
     const from = toDateOnly(searchParams.get("from"));
     const to = toDateOnly(searchParams.get("to"));
     const rawLimit = toInt(searchParams.get("limit"));
     const limit = clampInt(rawLimit ?? 200, 1, 2000);
-
     const whereParts = [];
     const values = [];
     let idx = 1;
-
     if (from) {
       whereParts.push(`o.order_date >= $${idx}`);
       values.push(from);
       idx += 1;
     }
-
     if (to) {
       whereParts.push(`o.order_date <= $${idx}`);
       values.push(to);
       idx += 1;
     }
-
-    const whereClause = whereParts.length
-      ? `WHERE ${whereParts.join(" AND ")}`
-      : "";
-
+    const whereClause = whereParts.length ? `WHERE ${whereParts.join(" AND ")}` : "";
     if (includeItems) {
       values.push(limit);
       const limitParam = `$${idx}`;
-
-      const rows = await sql(
-        `
+      const rows = await sql(`
           SELECT
             o.id,
             o.order_date,
@@ -156,18 +99,14 @@ export async function GET(request) {
           GROUP BY o.id
           ORDER BY o.order_date DESC, o.id DESC
           LIMIT ${limitParam}
-        `,
-        values,
-      );
-
-      return Response.json({ orders: rows || [] });
+        `, values);
+      return Response.json({
+        orders: rows || []
+      });
     }
-
     values.push(limit);
     const limitParam = `$${idx}`;
-
-    const rows = await sql(
-      `
+    const rows = await sql(`
         SELECT
           o.id,
           o.order_date,
@@ -184,18 +123,23 @@ export async function GET(request) {
         GROUP BY o.id
         ORDER BY o.order_date DESC, o.id DESC
         LIMIT ${limitParam}
-      `,
-      values,
-    );
-
-    return Response.json({ orders: rows || [] });
+      `, values);
+    return Response.json({
+      orders: rows || []
+    });
   } catch (error) {
     console.error("green bean orders GET error", error);
-    return Response.json({ error: "فشل تحميل طلبات البن" }, { status: 500 });
+    return Response.json({
+      error: "فشل تحميل طلبات البن"
+    }, {
+      status: 500
+    });
   }
 }
 
 // POST — مؤرشف (410): إنشاء طلب توريد قديم (كان يكتب تكلفة الصنف مباشرة)
-export async function POST(request) {
+async function POST(request) {
   return legacyGone();
 }
+
+export { GET, POST };

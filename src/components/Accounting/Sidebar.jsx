@@ -18,7 +18,7 @@ import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 const PAGE_TITLES = {
   dashboard: "لوحة المحاسبة",
   "green-bean": "حاسبة البن الأخضر",
-  "green-bean-orders": "توريد البن الأخضر",
+  "green-bean-orders": "أرشيف توريد البن (قديم)",
   "shift-close": "تقفيلة الشفت",
   "cash-calculator": "حاسبة الكاش",
   payroll: "مسير الرواتب",
@@ -30,7 +30,7 @@ const PAGE_TITLES = {
 const NAV_CONFIG = [
   { kind: "row", key: "dashboard", href: "/accounting", icon: LayoutDashboard, label: "لوحة المحاسبة" },
   { kind: "row", key: "green-bean", href: "/accounting/green-bean-calculator", icon: Leaf, label: "حاسبة البن الأخضر" },
-  { kind: "row", key: "green-bean-orders", href: "/accounting/green-bean-orders", icon: ClipboardList, label: "توريد البن الأخضر" },
+  { kind: "row", key: "green-bean-orders", href: "/accounting/green-bean-orders", icon: ClipboardList, label: "أرشيف توريد البن (قديم)" },
   { kind: "row", key: "shift-close", href: "/accounting/shift-close", icon: Calculator, label: "تقفيلة الشفت" },
   { kind: "row", key: "cash-calculator", href: "/accounting/cash-calculator", icon: Banknote, label: "حاسبة الكاش" },
   { kind: "row", key: "payroll", href: "/accounting/payroll", icon: Wallet, label: "مسير الرواتب" },

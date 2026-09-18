@@ -1,4 +1,4 @@
-import { legacyGone } from "@/app/api/utils/legacyGreenBean";
+import { l as legacyGone } from './legacyGreenBean-BA_TFDYb.js';
 
 /**
  * POST /api/accounting/green-bean-orders/:id/deposit — مؤرشف (410).
@@ -7,7 +7,10 @@ import { legacyGone } from "@/app/api/utils/legacyGreenBean";
  * الإيداع الآن من فاتورة المشتريات: «تسجيل الوصول» على بند البن
  * (/api/accounting/purchase-invoices/arrival).
  */
-export async function POST(request, { params }) {
-  void params;
+async function POST(request, {
+  params
+}) {
   return legacyGone();
 }
+
+export { POST };

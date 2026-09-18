@@ -18,7 +18,6 @@ export function ItemFormModal({
   formData,
   setFormData,
   categories,
-  greenBeans = [],
   onSubmit,
   onClose,
   createMutation,
