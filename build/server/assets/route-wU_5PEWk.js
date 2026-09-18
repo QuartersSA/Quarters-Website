@@ -1,21 +1,21 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
+import { g as guessKgPerSack } from './coffeeInvoices-N2nQFyZQ.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { e as ensureInvoiceBatchSchema, r as readUploadBase64 } from './invoiceBatches-BefXoxDb.js';
-import { F as FILE_MEDIA_TYPES, r as runInvoiceAnalysis } from './invoiceAnalysis-BSNIl_Cm.js';
+import { F as FILE_MEDIA_TYPES, r as runInvoiceAnalysis } from './invoiceAnalysis-BSDVRLVA.js';
 import { c as computeDraftTotals, r as round2 } from './invoiceDraftMath-C8Db36NO.js';
-import { createPurchaseInvoice } from './route-CXI5h35x.js';
+import { createPurchaseInvoice } from './route-BD1-Tkhs.js';
 import '@neondatabase/serverless';
 import 'crypto';
-import '@anthropic-ai/sdk';
 import './accountsTree-BiYqjwch.js';
-import './purchaseAutomation-D_hvSqBx.js';
-import './wasender-DykD1wlV.js';
-import './waNotify-CtLfIpXX.js';
-import './coffeeInvoices-DQJncxBL.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
+import '@anthropic-ai/sdk';
+import './purchaseAutomation-COpvKo1x.js';
+import './wasender-DykD1wlV.js';
+import './waNotify-CtLfIpXX.js';
 
 const REQUIRE_PURCHASES_CREATE = {
   anyOf: [{
@@ -39,11 +39,11 @@ function buildDraft(analysis) {
     unit_price: Number(item.unit_price) || 0,
     tax_rate: Number.isFinite(Number(item.tax_rate)) ? Number(item.tax_rate) : 15,
     amount_includes_tax: !!item.amount_includes_tax,
-    // بنود البن: التحميص لا يُفعَّل ولا تُستنتج الوحدة من المسح —
-    // المراجع يختارهما صراحةً في نافذة المراجعة.
+    // بنود البن: التحميص يفعّله المراجع في نافذة المراجعة؛ وزن
+    // الخيشة والوحدة يُملآن من التحليل الذكي (أو من الوصف) إن عُرفا.
     roast_enabled: false,
-    quantity_unit: null,
-    kg_per_sack: null,
+    quantity_unit: ["sack", "kg"].includes(item.quantity_unit) ? item.quantity_unit : null,
+    kg_per_sack: Number(item.pack_size_kg) > 0 ? Number(item.pack_size_kg) : guessKgPerSack(item.description),
     roast_per_kg: null,
     extra_cost: 0
   })).filter(item => item.quantity > 0 || item.unit_price > 0);

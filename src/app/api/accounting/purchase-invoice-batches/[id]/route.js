@@ -1,5 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import { guessKgPerSack } from "@/utils/coffeeMath";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
 import {
   ensureInvoiceBatchSchema,
@@ -33,11 +34,14 @@ function buildDraft(analysis) {
         ? Number(item.tax_rate)
         : 15,
       amount_includes_tax: !!item.amount_includes_tax,
-      // بنود البن: التحميص لا يُفعَّل ولا تُستنتج الوحدة من المسح —
-      // المراجع يختارهما صراحةً في نافذة المراجعة.
+      // بنود البن: التحميص يفعّله المراجع في نافذة المراجعة؛ وزن
+      // الخيشة والوحدة يُملآن من التحليل الذكي (أو من الوصف) إن عُرفا.
       roast_enabled: false,
-      quantity_unit: null,
-      kg_per_sack: null,
+      quantity_unit: ["sack", "kg"].includes(item.quantity_unit) ? item.quantity_unit : null,
+      kg_per_sack:
+        Number(item.pack_size_kg) > 0
+          ? Number(item.pack_size_kg)
+          : guessKgPerSack(item.description),
       roast_per_kg: null,
       extra_cost: 0,
     }))
