@@ -9,6 +9,7 @@ import {
   ChevronsUpDown,
   FileSpreadsheet,
   FileText,
+  Flame,
   Landmark,
   ListTree,
   Lock,
@@ -652,6 +653,26 @@ export default function PurchasesAccountsTreePanel({ employeeId, isAdmin }) {
                 title="وحدة الشراء الافتراضية للصنف"
               >
                 وحدة: {account.purchase_unit}
+              </span>
+            ) : null}
+            {account.bean ? (
+              <span
+                className={`${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25 inline-flex items-center gap-1`}
+                title={`صنف بن محمّص — تحميص ${account.bean.roast_per_kg ?? 9} ر.س/كغ${
+                  account.bean.bag_size_kg ? ` · خيشة ${account.bean.bag_size_kg} كغ` : ""
+                }${account.bean.roaster_name ? ` · ${account.bean.roaster_name}` : ""}`}
+              >
+                <Flame className="w-3 h-3" />
+                <span className="hidden sm:inline">بن محمّص</span>
+              </span>
+            ) : null}
+            {account.is_roasting_account ? (
+              <span
+                className={`${ws.pill} bg-orange-100 dark:bg-orange-400/10 text-orange-800 dark:text-orange-200 border-orange-200 dark:border-orange-400/25 inline-flex items-center gap-1`}
+                title="حساب خدمة التحميص — تُصنَّف عليه فواتير التحميص المولّدة من فواتير البن"
+              >
+                <Flame className="w-3 h-3" />
+                <span className="hidden sm:inline">خدمة تحميص</span>
               </span>
             ) : null}
             {account.source_bank_account_id ? (

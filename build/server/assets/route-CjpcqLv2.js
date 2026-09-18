@@ -1,9 +1,13 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-B5krAOBv.js';
+import { e as ensureCoffeeSchema } from './coffeeInvoices-jtYz_PLI.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './employeeDisplayName-CwZGtUC2.js';
+import './accountsTree-BiYqjwch.js';
+import './purchaseAudit-CVdAiEPz.js';
+import './branchVisibility-CPqSH5sT.js';
 
 // Idempotent schema additions; runs cheaply on every request.
 async function ensureSchema() {
@@ -153,12 +157,54 @@ async function ensureSchema() {
   } catch (e) {
     console.error("ensureSchema inventory unit snapshots:", e?.message);
   }
+
+  // أعمدة البن على الصنف (bag_size_kg, roast_cost_per_kg, cost_source*)
+  // — مُعرّفة في مخطط البن المشترك مع فواتير المشتريات.
+  try {
+    await ensureCoffeeSchema();
+  } catch (e) {
+    console.error("ensureSchema items coffee columns:", e?.message);
+  }
 }
 function parseMoney(value) {
   if (value === undefined || value === null || value === "") return null;
   const number = Number(value);
   if (!Number.isFinite(number)) return null;
   return Math.round(number * 100) / 100;
+}
+
+// حقول البن على الصنف: كيلو/خيشة وتكلفة التحميص للكيلو. فارغ = null
+// (يرجع الافتراض للفئة). يرمي Error عربي عند قيمة غير صالحة.
+function parseCoffeeItemFields(body) {
+  // undefined = الحقل لم يُرسل (يبقى كما هو عند التعديل).
+  const out = {
+    bag_size_kg: body?.bag_size_kg === undefined ? undefined : null,
+    roast_cost_per_kg: body?.roast_cost_per_kg === undefined ? undefined : null
+  };
+  const bag = body?.bag_size_kg;
+  if (bag !== undefined && bag !== null && bag !== "") {
+    const n = Number(bag);
+    if (!Number.isFinite(n) || n <= 0 || n > 1000) {
+      throw new Error("وزن الخيشة بالكيلو غير صالح");
+    }
+    out.bag_size_kg = Math.round(n * 1000) / 1000;
+  }
+  const roast = body?.roast_cost_per_kg;
+  if (roast !== undefined && roast !== null && roast !== "") {
+    const n = Number(roast);
+    if (!Number.isFinite(n) || n < 0) {
+      throw new Error("تكلفة التحميص للكيلو غير صالحة");
+    }
+    out.roast_cost_per_kg = Math.round(n * 10000) / 10000;
+  }
+  return out;
+}
+function sameMoney(a, b) {
+  const x = parseMoney(a);
+  const y = parseMoney(b);
+  if (x === null && y === null) return true;
+  if (x === null || y === null) return false;
+  return Math.abs(x - y) < 0.005;
 }
 async function GET(request) {
   const auth = requireAuth(request, {
@@ -198,8 +244,16 @@ async function GET(request) {
         i.default_inventory_unit_id,
         i.show_in_inventory,
         i.linked_green_bean_id,
+        i.bag_size_kg,
+        i.roast_cost_per_kg,
+        i.cost_source,
+        i.cost_source_invoice_item_id,
+        i.cost_source_date,
+        i.cost_updated_at,
         c.name as category_name,
         c.name_en as category_name_en,
+        c.is_roasted_coffee as category_is_roasted_coffee,
+        c.roast_cost_per_kg as category_roast_cost_per_kg,
         gb.name as linked_green_bean_name,
         i.created_at
       FROM items i
@@ -535,6 +589,16 @@ async function POST(request) {
         status: 400
       });
     }
+    let coffee;
+    try {
+      coffee = parseCoffeeItemFields(body);
+    } catch (e) {
+      return Response.json({
+        error: e.message
+      }, {
+        status: 400
+      });
+    }
     const parsedThreshold = Number(min_stock_threshold ?? 10);
     const threshold = Number.isFinite(parsedThreshold) && parsedThreshold >= 0 ? parsedThreshold : 10;
     const maxThreshold = max_stock_threshold !== undefined && max_stock_threshold !== null && max_stock_threshold !== "" ? Number(max_stock_threshold) : null;
@@ -557,9 +621,20 @@ async function POST(request) {
     const safeLinkedBeanId = linked_green_bean_id !== undefined && linked_green_bean_id !== null && linked_green_bean_id !== "" ? parseInt(linked_green_bean_id) : null;
     await ensureSchema();
     const result = await sql`
-      INSERT INTO items (name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id)
-      VALUES (${name.trim()}, ${name_en || null}, ${description || null}, ${image_url || null}, ${unit || null}, ${threshold}, ${safeMaxThreshold}, ${active}, ${safeCategoryId}, ${parsedCost}, ${parsedBaseCost}, ${showInInventory}, ${safeLinkedBeanId})
-      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id, created_at
+      INSERT INTO items (
+        name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold,
+        is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id,
+        bag_size_kg, roast_cost_per_kg,
+        cost_source, cost_updated_at
+      )
+      VALUES (
+        ${name.trim()}, ${name_en || null}, ${description || null}, ${image_url || null}, ${unit || null}, ${threshold}, ${safeMaxThreshold},
+        ${active}, ${safeCategoryId}, ${parsedCost}, ${parsedBaseCost}, ${showInInventory}, ${safeLinkedBeanId},
+        ${coffee.bag_size_kg ?? null}, ${coffee.roast_cost_per_kg ?? null},
+        ${parsedBaseCost !== null ? "manual" : null},
+        CASE WHEN ${parsedBaseCost !== null} THEN (NOW() AT TIME ZONE 'Asia/Riyadh') ELSE NULL END
+      )
+      RETURNING id
     `;
     const newItemId = result[0].id;
 
@@ -581,7 +656,10 @@ async function POST(request) {
       }
     }
     const withCategory = await sql`
-      SELECT i.*, c.name as category_name, c.name_en as category_name_en, gb.name as linked_green_bean_name
+      SELECT i.*, c.name as category_name, c.name_en as category_name_en,
+             c.is_roasted_coffee as category_is_roasted_coffee,
+             c.roast_cost_per_kg as category_roast_cost_per_kg,
+             gb.name as linked_green_bean_name
       FROM items i
       LEFT JOIN item_categories c ON c.id = i.category_id
       LEFT JOIN accounting_green_beans gb ON gb.id = i.linked_green_bean_id
@@ -648,6 +726,16 @@ async function PUT(request) {
         status: 400
       });
     }
+    let coffee;
+    try {
+      coffee = parseCoffeeItemFields(body);
+    } catch (e) {
+      return Response.json({
+        error: e.message
+      }, {
+        status: 400
+      });
+    }
     const resolvedCategoryId = category_id !== undefined && category_id !== null && category_id !== "" ? parseInt(category_id) : categoryId !== undefined && categoryId !== null && categoryId !== "" ? parseInt(categoryId) : null;
     const safeCategoryId = resolvedCategoryId && !Number.isNaN(resolvedCategoryId) ? resolvedCategoryId : null;
     const showInInventory = show_in_inventory !== undefined ? show_in_inventory : true;
@@ -663,7 +751,9 @@ async function PUT(request) {
     const parsedMinThreshold = Number(min_stock_threshold ?? 10);
     const safeMinThreshold = Number.isFinite(parsedMinThreshold) && parsedMinThreshold >= 0 ? parsedMinThreshold : 10;
     await ensureSchema();
-    const [existingItem] = await sql`SELECT id FROM items WHERE id = ${id}`;
+    const [existingItem] = await sql`
+      SELECT id, cost, base_purchase_cost, cost_source FROM items WHERE id = ${id}
+    `;
     if (!existingItem) {
       return Response.json({
         error: "الصنف غير موجود"
@@ -671,6 +761,10 @@ async function PUT(request) {
         status: 404
       });
     }
+
+    // تعديل التكلفة يدويًا من نموذج الصنف يلغي مصدر «فاتورة» — التكلفة
+    // تعود «يدوية» حتى أول وصول مكتمل جديد يعيد حسابها من الفاتورة.
+    const costChanged = !sameMoney(existingItem.base_purchase_cost, parsedBaseCost);
     let unitStatements = [];
     if (Array.isArray(units) && units.length > 0) {
       try {
@@ -698,9 +792,15 @@ async function PUT(request) {
         cost = ${parsedCost},
         base_purchase_cost = ${parsedBaseCost},
         show_in_inventory = ${showInInventory},
-        linked_green_bean_id = ${safeLinkedBeanId}
+        linked_green_bean_id = ${safeLinkedBeanId},
+        bag_size_kg = CASE WHEN ${coffee.bag_size_kg !== undefined} THEN ${coffee.bag_size_kg ?? null}::numeric ELSE bag_size_kg END,
+        roast_cost_per_kg = CASE WHEN ${coffee.roast_cost_per_kg !== undefined} THEN ${coffee.roast_cost_per_kg ?? null}::numeric ELSE roast_cost_per_kg END,
+        cost_source = CASE WHEN ${costChanged} THEN 'manual' ELSE cost_source END,
+        cost_source_invoice_item_id = CASE WHEN ${costChanged} THEN NULL ELSE cost_source_invoice_item_id END,
+        cost_source_date = CASE WHEN ${costChanged} THEN NULL ELSE cost_source_date END,
+        cost_updated_at = CASE WHEN ${costChanged} THEN (NOW() AT TIME ZONE 'Asia/Riyadh') ELSE cost_updated_at END
       WHERE id = ${id}
-      RETURNING id, name, name_en, description, image_url, unit, min_stock_threshold, max_stock_threshold, is_active, category_id, cost, base_purchase_cost, show_in_inventory, linked_green_bean_id, created_at
+      RETURNING id
     `;
     if (unitStatements.length > 0) {
       await sql.transaction([updateStatement, ...unitStatements]);
@@ -708,7 +808,10 @@ async function PUT(request) {
       await updateStatement;
     }
     const withCategory = await sql`
-      SELECT i.*, c.name as category_name, c.name_en as category_name_en, gb.name as linked_green_bean_name
+      SELECT i.*, c.name as category_name, c.name_en as category_name_en,
+             c.is_roasted_coffee as category_is_roasted_coffee,
+             c.roast_cost_per_kg as category_roast_cost_per_kg,
+             gb.name as linked_green_bean_name
       FROM items i
       LEFT JOIN item_categories c ON c.id = i.category_id
       LEFT JOIN accounting_green_beans gb ON gb.id = i.linked_green_bean_id

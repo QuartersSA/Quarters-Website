@@ -18,7 +18,17 @@ const EMPTY_FORM = {
   units: [],
   show_in_inventory: true,
   linked_green_bean_id: null,
+  // البن المحمّص: فارغ = يرث افتراض الفئة
+  bag_size_kg: "",
+  roast_cost_per_kg: "",
 };
+
+function decimalInput(value, digits) {
+  if (value === null || value === undefined || value === "") return "";
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "";
+  return String(Math.round(number * 10 ** digits) / 10 ** digits);
+}
 
 function moneyInput(value) {
   if (value === null || value === undefined || value === "") return "";
@@ -75,6 +85,8 @@ export function useItemForm() {
       units: mappedUnits,
       show_in_inventory: showInInventory,
       linked_green_bean_id: item.linked_green_bean_id || null,
+      bag_size_kg: decimalInput(item.bag_size_kg, 3),
+      roast_cost_per_kg: decimalInput(item.roast_cost_per_kg, 4),
     });
   };
 

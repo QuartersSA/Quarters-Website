@@ -5,7 +5,7 @@ import {
   Languages,
   Layers,
   ClipboardList,
-  Link,
+  Flame,
 } from "lucide-react";
 import { ws } from "@/components/Workspace/ui";
 import GlassSelect from "@/components/Workspace/GlassSelect";
@@ -24,42 +24,32 @@ export function ItemFormModal({
   createMutation,
   updateMutation,
 }) {
-  // Determine if the selected category is a roasted coffee category
-  const isRoastedCoffeeCategory = useMemo(() => {
-    if (!formData.category_id) return false;
-    const cat = (Array.isArray(categories) ? categories : []).find(
-      (c) => String(c.id) === String(formData.category_id),
-    );
-    if (!cat) return false;
-    const catName = (cat.name || "").toLowerCase();
-    const catNameEn = (cat.name_en || "").toLowerCase();
+  // الفئة المختارة «بن قهوة محمّصة»؟ — العلم الصريح على الفئة هو
+  // المصدر الوحيد (لا تخمين بالاسم). أصناف هذه الفئة تظهر لها خانة
+  // «إضافة قيمة تحميص» داخل فاتورة المشتريات.
+  const selectedCategory = useMemo(() => {
+    if (!formData.category_id) return null;
     return (
-      catName.includes("بن") ||
-      catName.includes("محمص") ||
-      catName.includes("قهوة محمصة") ||
-      catNameEn.includes("roast") ||
-      catNameEn.includes("coffee bean")
+      (Array.isArray(categories) ? categories : []).find(
+        (c) => String(c.id) === String(formData.category_id),
+      ) || null
     );
   }, [formData.category_id, categories]);
+  const isRoastedCoffeeCategory = selectedCategory?.is_roasted_coffee === true;
 
-  // When category changes away from roasted coffee, clear linked bean
+  // تغيير الفئة بعيدًا عن البن يمسح افتراضات البن على الصنف.
   const handleCategoryChange = (v) => {
     const newCatId = v ? parseInt(v) : null;
     const newCat = (Array.isArray(categories) ? categories : []).find(
       (c) => String(c.id) === String(newCatId),
     );
-    const newCatName = (newCat?.name || "").toLowerCase();
-    const newCatNameEn = (newCat?.name_en || "").toLowerCase();
-    const isRoasted =
-      newCatName.includes("بن") ||
-      newCatName.includes("محمص") ||
-      newCatName.includes("قهوة محمصة") ||
-      newCatNameEn.includes("roast") ||
-      newCatNameEn.includes("coffee bean");
+    const isRoasted = newCat?.is_roasted_coffee === true;
 
     setFormData({
       ...formData,
       category_id: newCatId,
+      bag_size_kg: isRoasted ? formData.bag_size_kg : "",
+      roast_cost_per_kg: isRoasted ? formData.roast_cost_per_kg : "",
       linked_green_bean_id: isRoasted ? formData.linked_green_bean_id : null,
     });
   };
@@ -73,13 +63,6 @@ export function ItemFormModal({
     { value: "", label: "بدون فئة" },
     ...(Array.isArray(categories)
       ? categories.map((c) => ({ value: String(c.id), label: c.name }))
-      : []),
-  ];
-
-  const greenBeanOptions = [
-    { value: "", label: "بدون ربط" },
-    ...(Array.isArray(greenBeans)
-      ? greenBeans.map((b) => ({ value: String(b.id), label: b.name }))
       : []),
   ];
 
@@ -98,21 +81,28 @@ export function ItemFormModal({
     ? String(formData.category_id)
     : "";
 
-  const linkedBeanValue = formData.linked_green_bean_id
-    ? String(formData.linked_green_bean_id)
-    : "";
-
-  // Show last order info if editing and item is linked
-  const lastOrderInfo =
-    editingItem?.linked_green_bean_id && editingItem?.last_order_price_per_kg
+  // آخر تكلفة صافية محسوبة من فاتورة بن مكتملة الوصول (شاملة الضريبة
+  // وتكلفة التحميص وبعد الهدر) — تُكتب على الصنف تلقائيًا من الفاتورة.
+  const invoiceCostInfo =
+    editingItem && editingItem.cost_source === "invoice"
       ? {
-          price: Number(editingItem.last_order_price_per_kg).toFixed(2),
-          date: editingItem.last_order_date
-            ? formatRiyadhDateForInput(editingItem.last_order_date)
+          cost:
+            editingItem.base_purchase_cost != null
+              ? Number(editingItem.base_purchase_cost).toFixed(2)
+              : editingItem.cost != null
+                ? Number(editingItem.cost).toFixed(2)
+                : null,
+          date: editingItem.cost_source_date
+            ? formatRiyadhDateForInput(editingItem.cost_source_date)
             : null,
-          beanName: editingItem.linked_green_bean_name || "",
         }
       : null;
+  const categoryRoastDefault =
+    selectedCategory?.roast_cost_per_kg != null &&
+    selectedCategory.roast_cost_per_kg !== ""
+      ? Number(selectedCategory.roast_cost_per_kg)
+      : 9;
+  const roasterName = selectedCategory?.default_roaster_name || null;
 
   return (
     <div
@@ -165,47 +155,81 @@ export function ItemFormModal({
             </p>
           </div>
 
-          {/* Green Bean Link — only shown for roasted coffee categories */}
+          {/* افتراضات البن — تظهر فقط لفئة «بن قهوة محمّصة» */}
           {isRoastedCoffeeCategory ? (
             <div
-              className={`${ws.glassSoft} border border-amber-500/20 rounded-2xl p-5`}
+              className={`${ws.glassSoft} border border-amber-500/20 rounded-2xl p-5 space-y-4`}
             >
               <label
-                className={`${labelClass} flex items-center gap-2 text-amber-700 dark:text-amber-700 dark:text-amber-200/80`}
+                className={`${labelClass} flex items-center gap-2 text-amber-700 dark:text-amber-200/80 mb-0`}
               >
-                <Link className="w-4 h-4" />
-                ربط ببن أخضر
+                <Flame className="w-4 h-4" />
+                افتراضات البن المحمّص
               </label>
-
-              <GlassSelect
-                value={linkedBeanValue}
-                onChange={(v) =>
-                  setFormData({
-                    ...formData,
-                    linked_green_bean_id: v ? parseInt(v) : null,
-                  })
-                }
-                options={greenBeanOptions}
-                placeholder="اختر البن الأخضر…"
-              />
-
-              <p className="text-amber-700 dark:text-amber-700 dark:text-amber-200/40 text-xs mt-2">
-                عند ربط الصنف ببن أخضر، التكلفة تتحدث تلقائياً مع كل طلب توريد
-                جديد
+              <p className="text-amber-700 dark:text-amber-200/50 text-xs">
+                تُستخدم كقيم افتراضية عند إضافة الصنف في فاتورة مشتريات مع
+                «إضافة قيمة تحميص». الفارغ يرث افتراض الفئة.
               </p>
 
-              {lastOrderInfo ? (
-                <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/15 rounded-xl">
-                  <p className="text-amber-700 dark:text-amber-700 dark:text-amber-200/80 text-xs">
-                    آخر تكلفة توريد ({lastOrderInfo.beanName}):{" "}
-                    <span className="font-bold text-amber-100">
-                      {lastOrderInfo.price} ر.س/كغ
-                    </span>
-                    {lastOrderInfo.date ? (
-                      <span className="text-amber-700 dark:text-amber-700 dark:text-amber-200/50 mr-2">
-                        — {lastOrderInfo.date}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className={labelClass}>وزن الخيشة (كغ)</label>
+                  <input
+                    type="number"
+                    min="0.001"
+                    step="0.001"
+                    value={formData.bag_size_kg ?? ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, bag_size_kg: e.target.value })
+                    }
+                    className={`${ws.input} px-4 py-3`}
+                    placeholder="مثال: 60"
+                    dir="ltr"
+                  />
+                  <p className={helpClass}>
+                    يحوّل عدد الخِيَش في الفاتورة إلى كيلو خام
+                  </p>
+                </div>
+                <div>
+                  <label className={labelClass}>تكلفة التحميص للكيلو (ر.س)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={formData.roast_cost_per_kg ?? ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        roast_cost_per_kg: e.target.value,
+                      })
+                    }
+                    className={`${ws.input} px-4 py-3`}
+                    placeholder={`افتراض الفئة: ${categoryRoastDefault}`}
+                    dir="ltr"
+                  />
+                  <p className={helpClass}>
+                    {roasterName
+                      ? `تُفوتر على «${roasterName}» بفاتورة تحميص مستقلة`
+                      : "تُفوتر بفاتورة تحميص مستقلة خارج فاتورة المورد"}
+                  </p>
+                </div>
+              </div>
+
+              {invoiceCostInfo?.cost ? (
+                <div className="p-3 bg-amber-500/10 border border-amber-500/15 rounded-xl">
+                  <p className="text-amber-800 dark:text-amber-200/80 text-xs">
+                    تكلفة الصنف الحالية محسوبة من آخر فاتورة بن مكتملة الوصول
+                    (صافي الكيلو شامل الضريبة والتحميص وبعد الهدر):{" "}
+                    <span className="font-bold">{invoiceCostInfo.cost} ر.س</span>
+                    {invoiceCostInfo.date ? (
+                      <span className="text-amber-700 dark:text-amber-200/50 mr-2">
+                        — وصول {invoiceCostInfo.date}
                       </span>
                     ) : null}
+                  </p>
+                  <p className="text-amber-700 dark:text-amber-200/50 text-[11px] mt-1">
+                    تعديل التكلفة يدويًا هنا يوقف التحديث التلقائي حتى أول
+                    وصول مكتمل جديد.
                   </p>
                 </div>
               ) : null}

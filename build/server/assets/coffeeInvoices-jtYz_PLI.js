@@ -1002,6 +1002,18 @@ async function resolveRoaster(roasterContactId, beanLines) {
       break;
     }
   }
+  if (!id) {
+    // لا محمصة على الفاتورة ولا على الفئة → المحمصة الافتراضية للنظام
+    // («محمصة درر») إن كانت موجودة ونشطة.
+    const [fallback] = await sql`
+      SELECT id FROM accounting_contacts
+      WHERE is_active IS DISTINCT FROM FALSE
+        AND (REPLACE(TRIM(name), ' ', '') = REPLACE(${ROASTER_CONTACT_NAME}, ' ', '')
+             OR (name LIKE '%درر%' AND name LIKE '%محمص%'))
+      ORDER BY id ASC LIMIT 1
+    `;
+    id = fallback ? Number(fallback.id) : null;
+  }
   if (!id) return null;
   const [contact] = await sql`SELECT id, name FROM accounting_contacts WHERE id = ${id}`;
   return contact ? {
