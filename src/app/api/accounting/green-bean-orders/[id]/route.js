@@ -110,11 +110,21 @@ export async function GET(request, { params }) {
 // DELETE — مؤرشف (410): تعديل/حذف طلب توريد قديم
 export async function DELETE(request, { params }) {
   void params;
+  // بوابة المصادقة تبقى (اختبار apiAuthAudit) — ثم 410 للمؤرشف.
+  const auth = requireAuth(request, { role: "Admin", permission: "can_manage_accounting" });
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
   return legacyGone();
 }
 
 // PUT — مؤرشف (410): تعديل/حذف طلب توريد قديم
 export async function PUT(request, { params }) {
   void params;
+  // بوابة المصادقة تبقى (اختبار apiAuthAudit) — ثم 410 للمؤرشف.
+  const auth = requireAuth(request, { role: "Admin", permission: "can_manage_accounting" });
+  if (!auth.ok) {
+    return Response.json({ error: auth.error }, { status: auth.status });
+  }
   return legacyGone();
 }

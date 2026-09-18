@@ -71,6 +71,18 @@ async function GET(request, {
 async function DELETE(request, {
   params
 }) {
+  // بوابة المصادقة تبقى (اختبار apiAuthAudit) — ثم 410 للمؤرشف.
+  const auth = requireAuth(request, {
+    role: "Admin",
+    permission: "can_manage_accounting"
+  });
+  if (!auth.ok) {
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
+  }
   return legacyGone();
 }
 
@@ -78,6 +90,18 @@ async function DELETE(request, {
 async function PUT(request, {
   params
 }) {
+  // بوابة المصادقة تبقى (اختبار apiAuthAudit) — ثم 410 للمؤرشف.
+  const auth = requireAuth(request, {
+    role: "Admin",
+    permission: "can_manage_accounting"
+  });
+  if (!auth.ok) {
+    return Response.json({
+      error: auth.error
+    }, {
+      status: auth.status
+    });
+  }
   return legacyGone();
 }
 
