@@ -22,6 +22,8 @@ const ROAST_DUE_DAYS = 15;
 // حارس سعر الكيلو الخام — يلتقط الخطأ الشائع: كمية بالكيلو تُحسب خياشًا.
 const RAW_PRICE_MIN = 3;
 const RAW_PRICE_MAX = 500;
+const WASTE_WARN_LOW = 5;
+const WASTE_WARN_HIGH = 30;
 const WASTE_CONFIRM = 60;
 function round2(value) {
   const n = Number(value);
@@ -114,6 +116,25 @@ function computeCoffeeLine({
     netExclPerKg,
     netInclPerKg
   };
+}
+
+// تصنيف نسبة الهدر للشارات والتأكيدات.
+function wasteFlag(wastePercent) {
+  if (wastePercent === null || wastePercent === undefined) return null;
+  if (wastePercent < 0) return "over";
+  if (wastePercent > WASTE_CONFIRM) return "confirm";
+  if (wastePercent > WASTE_WARN_HIGH) return "high";
+  if (wastePercent < WASTE_WARN_LOW) return "low";
+  return "ok";
+}
+
+// حالة بند البن للعرض.
+function coffeeLineStatus(line) {
+  if (!line?.roast_enabled) return "off";
+  if (line.arrival_complete) return "received";
+  const r = Number(line.received_kg) || 0;
+  if (r > 0) return "partial";
+  return "pending";
 }
 
 // تاريخ + أيام (سلاسل YYYY-MM-DD) — بلا اعتماد على المنطقة الزمنية.
@@ -1367,4 +1388,4 @@ async function loadRoastLinks(invoiceIds = []) {
   return map;
 }
 
-export { CoffeeError as C, LINE_SELECT_COLUMNS as L, anyCoffeeAccount as a, loadRoastChild as b, loadInvoiceLines as c, recomputeItemCost as d, ensureCoffeeSchema as e, reverseDeposits as f, loadRoastLinks as g, applyCoffeeToItems as h, assertRoastSyncAllowed as i, reverseSyncRoastToBean as j, resolveRoaster as k, loadBeanInfo as l, getRoastingAccountId as m, reserveIds as n, insertLineStatement as o, recordArrival as p, planLineReconcile as q, resolveKgPerBaseUnit as r, syncRoastInvoice as s };
+export { CoffeeError as C, DEFAULT_ROAST_PER_KG as D, LINE_SELECT_COLUMNS as L, RAW_PRICE_MIN as R, WASTE_CONFIRM as W, anyCoffeeAccount as a, loadRoastChild as b, loadInvoiceLines as c, recomputeItemCost as d, ensureCoffeeSchema as e, reverseDeposits as f, loadRoastLinks as g, applyCoffeeToItems as h, assertRoastSyncAllowed as i, reverseSyncRoastToBean as j, resolveRoaster as k, loadBeanInfo as l, getRoastingAccountId as m, reserveIds as n, insertLineStatement as o, recordArrival as p, planLineReconcile as q, resolveKgPerBaseUnit as r, syncRoastInvoice as s, allocateDiscount as t, numOrNull as u, computeCoffeeLine as v, RAW_PRICE_MAX as w, wasteFlag as x, coffeeLineStatus as y };

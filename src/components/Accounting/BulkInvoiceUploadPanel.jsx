@@ -16,6 +16,7 @@ import {
   CloudUpload,
   Copy,
   FileText,
+  Flame,
   Loader2,
   Plus,
   RefreshCw,
@@ -32,6 +33,14 @@ import { compressImage } from "@/utils/compressImage";
 import { computeDraftTotals } from "@/utils/invoiceDraftMath";
 import { buildExpenseAccountOptions } from "@/components/Accounting/PurchaseInvoiceModal";
 import { isFixedExpenseAccountId } from "@/utils/fixedExpenseAccount";
+import { DEFAULT_ROAST_PER_KG } from "@/utils/coffeeMath";
+
+// معلومات البن للحساب (من شجرة الحسابات) — تظهر معها خانة التحميص.
+function beanForAccount(accounts, accountId) {
+  if (!accountId) return null;
+  const account = (accounts || []).find((a) => String(a.id) === String(accountId));
+  return account?.bean || null;
+}
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 import {
@@ -790,12 +799,35 @@ function BulkReviewModal({
       ),
     [draft.items, accounts],
   );
+  const hasCoffeeLine = useMemo(
+    () =>
+      (draft.items || []).some(
+        (line) => line.roast_enabled && beanForAccount(accounts, line.account_id),
+      ),
+    [draft.items, accounts],
+  );
   const updateLine = (index, patch) => {
     setDraft((previous) => ({
       ...previous,
-      items: previous.items.map((line, lineIndex) =>
-        lineIndex === index ? { ...line, ...patch } : line,
-      ),
+      items: previous.items.map((line, lineIndex) => {
+        if (lineIndex !== index) return line;
+        const next = { ...line, ...patch };
+        // اختيار حساب بن يفعّل «إضافة قيمة تحميص» بافتراضات الصنف.
+        if (patch.account_id !== undefined && patch.account_id !== line.account_id) {
+          const bean = beanForAccount(accounts, patch.account_id);
+          if (bean) {
+            next.roast_enabled = true;
+            next.amount_includes_tax = false;
+            next.quantity_unit = next.quantity_unit || "sack";
+            next.kg_per_sack = next.kg_per_sack ?? bean.bag_size_kg ?? null;
+            next.roast_per_kg = next.roast_per_kg ?? bean.roast_per_kg ?? null;
+          } else {
+            next.roast_enabled = false;
+          }
+        }
+        if (next.roast_enabled) next.amount_includes_tax = false;
+        return next;
+      }),
     }));
     setDirty(true);
   };
@@ -1070,7 +1102,7 @@ function BulkReviewModal({
 
             {/* فاتورة متكررة شهرياً — يظهر فقط عندما يكون أحد البنود
                 على حساب «مصروف ثابت» أو أحد فروعه. */}
-            {hasFixedExpenseLine ? (
+            {hasFixedExpenseLine && !hasCoffeeLine ? (
               <label
                 className={`${ws.glass} rounded-[10px] p-3 flex items-start gap-3 cursor-pointer select-none`}
               >
@@ -1244,6 +1276,111 @@ function BulkReviewModal({
                           placeholder="حساب المصروف"
                         />
                       </div>
+                      {(() => {
+                        const bean = beanForAccount(accounts, line.account_id);
+                        if (!bean) return null;
+                        const on = !!line.roast_enabled;
+                        return (
+                          <div
+                            className={`rounded-[10px] border px-2.5 py-2 space-y-2 ${
+                              on
+                                ? "border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05]"
+                                : "border-dashed border-[#e2e7e4] dark:border-white/10"
+                            }`}
+                          >
+                            <label className="inline-flex items-center gap-2 text-[11px] font-bold text-amber-800 dark:text-amber-200 cursor-pointer select-none">
+                              <input
+                                type="checkbox"
+                                checked={on}
+                                onChange={(event) =>
+                                  updateLine(index, {
+                                    roast_enabled: event.target.checked,
+                                    amount_includes_tax: false,
+                                    quantity_unit: line.quantity_unit || "sack",
+                                    kg_per_sack: line.kg_per_sack ?? bean.bag_size_kg ?? null,
+                                    roast_per_kg: line.roast_per_kg ?? bean.roast_per_kg ?? null,
+                                  })
+                                }
+                                className="accent-amber-500"
+                              />
+                              <Flame className="w-3.5 h-3.5" />
+                              إضافة قيمة تحميص — {bean.item_name}
+                            </label>
+                            {on ? (
+                              <div className="grid grid-cols-4 gap-2 items-end">
+                                <label className="block">
+                                  <span className={`${ws.muted} text-[10px] block mb-0.5`}>الوحدة</span>
+                                  <GlassSelect
+                                    value={line.quantity_unit === "kg" ? "kg" : "sack"}
+                                    onChange={(value) => updateLine(index, { quantity_unit: value })}
+                                    options={[
+                                      { value: "sack", label: "خيشة" },
+                                      { value: "kg", label: "كغ" },
+                                    ]}
+                                  />
+                                </label>
+                                <label className="block">
+                                  <span className={`${ws.muted} text-[10px] block mb-0.5`}>كيلو / خيشة</span>
+                                  <input
+                                    type="number"
+                                    step="any"
+                                    min="0"
+                                    value={line.kg_per_sack ?? ""}
+                                    disabled={line.quantity_unit === "kg"}
+                                    onChange={(event) =>
+                                      updateLine(index, {
+                                        kg_per_sack: event.target.value === "" ? null : Number(event.target.value),
+                                      })
+                                    }
+                                    className={`${ws.input} px-2 py-1 text-xs text-left disabled:opacity-40`}
+                                    dir="ltr"
+                                    placeholder={bean.bag_size_kg ? String(bean.bag_size_kg) : "60"}
+                                  />
+                                </label>
+                                <label className="block">
+                                  <span className={`${ws.muted} text-[10px] block mb-0.5`}>تحميص / كغ</span>
+                                  <input
+                                    type="number"
+                                    step="any"
+                                    min="0"
+                                    value={line.roast_per_kg ?? ""}
+                                    onChange={(event) =>
+                                      updateLine(index, {
+                                        roast_per_kg: event.target.value === "" ? null : Number(event.target.value),
+                                      })
+                                    }
+                                    className={`${ws.input} px-2 py-1 text-xs text-left`}
+                                    dir="ltr"
+                                    placeholder={String(bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG)}
+                                  />
+                                </label>
+                                <label className="block">
+                                  <span className={`${ws.muted} text-[10px] block mb-0.5`}>إضافي (شحن…)</span>
+                                  <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0"
+                                    value={line.extra_cost ?? ""}
+                                    onChange={(event) =>
+                                      updateLine(index, {
+                                        extra_cost: event.target.value === "" ? 0 : Number(event.target.value),
+                                      })
+                                    }
+                                    className={`${ws.input} px-2 py-1 text-xs text-left`}
+                                    dir="ltr"
+                                    placeholder="0.00"
+                                  />
+                                </label>
+                                <div className={`${ws.muted} text-[10px] col-span-4`}>
+                                  التحميص خارج إجمالي الفاتورة — تُنشأ به فاتورة تحميص
+                                  مستقلة على المحمصة عند الإرسال. الوصول يُسجَّل لاحقًا من
+                                  دفتر الفواتير.
+                                </div>
+                              </div>
+                            ) : null}
+                          </div>
+                        );
+                      })()}
                       <div
                         className={`${ws.muted} text-[10px] text-left font-mono`}
                         dir="ltr"

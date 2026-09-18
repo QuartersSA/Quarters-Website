@@ -6,6 +6,7 @@ import {
   BadgeCheck,
   ExternalLink,
   FileText,
+  Flame,
   Loader2,
   Paperclip,
   Plus,
@@ -23,6 +24,15 @@ import useUpload from "@/utils/useUpload";
 // tokens — the modal is also used by /employee/purchase-invoice.
 import { authedFetch } from "@/utils/apiAuth";
 import { isFixedExpenseAccountId } from "@/utils/fixedExpenseAccount";
+import {
+  computeCoffeeLine,
+  allocateDiscount,
+  numOrNull,
+  wasteFlag,
+  DEFAULT_ROAST_PER_KG,
+  RAW_PRICE_MIN,
+  RAW_PRICE_MAX,
+} from "@/utils/coffeeMath";
 
 // نموذج الحالات المبسّط (حسب مستند التصميم): أربع حالات كلها محسوبة
 // من المبالغ والاستحقاق — لا «مسودة» ولا «معتمدة» ولا اختيار يدوي.
@@ -1015,8 +1025,37 @@ function newLine(overrides = {}) {
     unit_price: "",
     tax_rate: "15",
     amount_includes_tax: false,
+    // معرّف البند المخزَّن (التعديل يطابق بالمعرّف لا يستبدل)
+    id: null,
+    // بند بن محمّص: «إضافة قيمة تحميص» + افتراضاته
+    roast_enabled: false,
+    quantity_unit: "sack",
+    kg_per_sack: "",
+    roast_per_kg: "",
+    extra_cost: "",
+    free_sample: false,
+    confirm_unusual_price: false,
+    // الوصول عند الإنشاء (للمعتمِدين فقط)
+    arrival_received_kg: "",
+    arrival_date: "",
+    arrival_complete: false,
+    // بيانات يملكها الخادم — للعرض فقط عند التعديل
+    stored: null,
     ...overrides,
   };
+}
+
+// معلومات البن للحساب المختار (من شجرة الحسابات: bean = {...} | null).
+function beanForAccount(accounts, accountId) {
+  if (!accountId) return null;
+  const account = accounts.find((a) => String(a.id) === String(accountId));
+  return account?.bean || null;
+}
+
+function coffeeInput(value, digits = 3) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return "";
+  return String(Math.round(n * 10 ** digits) / 10 ** digits);
 }
 
 function lineAmount(line) {
@@ -1061,14 +1100,34 @@ function linesFromInvoice(invoice) {
     return stored.map((item) => {
       const quantity = moneyValue(item.quantity);
       const price = moneyValue(item.unit_price);
+      const roast = !!item.roast_enabled;
       return newLine({
+        id: item.id || null,
         description: item.description || "",
         account_id: item.account_id ? String(item.account_id) : "",
-        quantity: quantity > 0 ? String(quantity) : "1",
+        quantity: quantity > 0 ? String(quantity) : roast ? "0" : "1",
         unit_price:
           price > 0 ? priceInput(price) : moneyInput(item.amount) || "",
         tax_rate: String(moneyValue(item.tax_rate)),
         amount_includes_tax: !!item.amount_includes_tax,
+        roast_enabled: roast,
+        quantity_unit: item.quantity_unit === "kg" ? "kg" : "sack",
+        kg_per_sack: coffeeInput(item.kg_per_sack, 3),
+        roast_per_kg: item.roast_per_kg != null ? String(Number(item.roast_per_kg)) : "",
+        extra_cost: coffeeInput(item.extra_cost, 2),
+        free_sample: !!item.free_sample,
+        stored: roast
+          ? {
+              raw_kg: numOrNull(item.raw_kg),
+              received_kg: numOrNull(item.received_kg),
+              arrival_complete: !!item.arrival_complete,
+              arrival_date: item.arrival_date || null,
+              waste_percent: numOrNull(item.waste_percent),
+              net_incl_per_kg: numOrNull(item.net_incl_per_kg),
+              deposited_kg: numOrNull(item.deposited_kg),
+              roast_tax_rate: numOrNull(item.roast_tax_rate),
+            }
+          : null,
       });
     });
   }
@@ -1093,6 +1152,270 @@ function linesFromInvoice(invoice) {
     ];
   }
   return [newLine()];
+}
+
+// صف البن أسفل البند: «إضافة قيمة تحميص» + الوحدة والكيلو/الخيشة
+// والتحميص/كغ والإضافي + المعاينة الحية (خام، سعر الكيلو الخام، بن
+// شامل، تحميص، تكلفة واصلة) + الوصول عند الإنشاء للمعتمِدين.
+function CoffeeLineRow({
+  line,
+  bean,
+  calc,
+  updateLine,
+  isEditing,
+  allowArrival,
+  currency,
+}) {
+  const on = !!line.roast_enabled;
+  const tile = "rounded-lg bg-white/70 dark:bg-white/[0.04] border border-amber-200/60 dark:border-amber-400/15 px-2 py-1 min-w-0";
+  const tileLabel = "text-[10px] text-slate-500 dark:text-white/45 truncate";
+  const tileValue = "text-xs font-bold tabular-nums text-slate-800 dark:text-white/85";
+  const stored = line.stored;
+  const flag = calc ? wasteFlag(calc.wastePercent) : null;
+  return (
+    <div className="px-2 pb-2 -mt-1">
+      <div
+        className={`rounded-xl border px-3 py-2 space-y-2 ${
+          on
+            ? "border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05]"
+            : "border-dashed border-slate-200 dark:border-white/10"
+        }`}
+      >
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <label className="inline-flex items-center gap-2 text-xs font-bold text-amber-800 dark:text-amber-200 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={on}
+              onChange={(event) =>
+                updateLine(line.key, {
+                  roast_enabled: event.target.checked,
+                  amount_includes_tax: false,
+                  kg_per_sack: line.kg_per_sack || coffeeInput(bean.bag_size_kg, 3),
+                  roast_per_kg:
+                    line.roast_per_kg ||
+                    (bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : ""),
+                })
+              }
+              className="accent-amber-500"
+            />
+            <Flame className="w-3.5 h-3.5" />
+            إضافة قيمة تحميص
+            <span className="font-normal text-slate-500 dark:text-white/45">
+              — {bean.item_name}
+            </span>
+          </label>
+          {on ? (
+            <label className="inline-flex items-center gap-1.5 text-[11px] text-slate-600 dark:text-white/60 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={!!line.free_sample}
+                onChange={(event) =>
+                  updateLine(line.key, { free_sample: event.target.checked })
+                }
+                className="accent-amber-500"
+              />
+              عينة/خيشة مجانية (بسعر 0)
+            </label>
+          ) : null}
+        </div>
+
+        {on ? (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div>
+                <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">وحدة الكمية</div>
+                <div className={`${ws.segWrap} w-full`}>
+                  <button
+                    type="button"
+                    onClick={() => updateLine(line.key, { quantity_unit: "sack" })}
+                    className={`${ws.segBtn} flex-1 text-[11px] py-1 ${line.quantity_unit !== "kg" ? ws.segActive : ws.segInactive}`}
+                  >
+                    خيشة
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateLine(line.key, { quantity_unit: "kg" })}
+                    className={`${ws.segBtn} flex-1 text-[11px] py-1 ${line.quantity_unit === "kg" ? ws.segActive : ws.segInactive}`}
+                  >
+                    كغ
+                  </button>
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">كيلو / الخيشة</div>
+                <input
+                  type="number"
+                  value={line.kg_per_sack}
+                  disabled={line.quantity_unit === "kg"}
+                  onChange={(event) => updateLine(line.key, { kg_per_sack: event.target.value })}
+                  className={`${ws.input} px-2 py-1 text-xs text-center disabled:opacity-40`}
+                  step="any"
+                  min="0"
+                  dir="ltr"
+                  placeholder={bean.bag_size_kg ? String(bean.bag_size_kg) : "60"}
+                />
+              </div>
+              <div>
+                <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">تحميص / كغ (ر.س)</div>
+                <input
+                  type="number"
+                  value={line.roast_per_kg}
+                  onChange={(event) => updateLine(line.key, { roast_per_kg: event.target.value })}
+                  className={`${ws.input} px-2 py-1 text-xs text-center`}
+                  step="any"
+                  min="0"
+                  dir="ltr"
+                  placeholder={String(bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG)}
+                />
+              </div>
+              <div>
+                <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">تكاليف إضافية (شحن…)</div>
+                <input
+                  type="number"
+                  value={line.extra_cost}
+                  onChange={(event) => updateLine(line.key, { extra_cost: event.target.value })}
+                  className={`${ws.input} px-2 py-1 text-xs text-center`}
+                  step="0.01"
+                  min="0"
+                  dir="ltr"
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+
+            {calc ? (
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
+                <div className={tile}>
+                  <div className={tileLabel}>الكيلو الخام</div>
+                  <div className={tileValue} dir="ltr">{calc.rawKg > 0 ? `${calc.rawKg} كغ` : "—"}</div>
+                </div>
+                <div className={`${tile} ${calc.unusualPrice ? "border-rose-300 dark:border-rose-400/40" : ""}`}>
+                  <div className={tileLabel}>سعر الكيلو الخام</div>
+                  <div className={tileValue} dir="ltr">
+                    {calc.rawCostPerKg !== null ? calc.rawCostPerKg.toFixed(2) : "—"}
+                  </div>
+                </div>
+                <div className={tile}>
+                  <div className={tileLabel}>البن شامل الضريبة</div>
+                  <div className={tileValue} dir="ltr">{formatMoney(calc.beanCostIncl, currency)}</div>
+                </div>
+                <div className={tile}>
+                  <div className={tileLabel}>التحميص ({calc.roastRate} × كغ)</div>
+                  <div className={tileValue} dir="ltr">
+                    {formatMoney(calc.roastTotalNet + calc.roastTaxAmount, currency)}
+                  </div>
+                </div>
+                <div className={tile}>
+                  <div className={tileLabel}>التكلفة الواصلة (شامل)</div>
+                  <div className={tileValue} dir="ltr">{formatMoney(calc.landedIncl, currency)}</div>
+                </div>
+              </div>
+            ) : null}
+
+            {calc?.unusualPrice ? (
+              <label className="flex items-start gap-2 text-[11px] text-rose-700 dark:text-rose-200 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={!!line.confirm_unusual_price}
+                  onChange={(event) =>
+                    updateLine(line.key, { confirm_unusual_price: event.target.checked })
+                  }
+                  className="accent-rose-500 mt-0.5"
+                />
+                <span>
+                  سعر الكيلو الخام {calc.rawCostPerKg?.toFixed(2)} ر.س غير معتاد
+                  (المتوقع {RAW_PRICE_MIN}–{RAW_PRICE_MAX}) — تحقق من وحدة الكمية
+                  (خيشة/كغ) أو أكّد السعر هنا.
+                </span>
+              </label>
+            ) : null}
+
+            {isEditing && stored ? (
+              <div className="flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60">
+                {stored.arrival_complete ? (
+                  <span className={`${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`}>
+                    وصل {stored.received_kg} كغ — هدر {stored.waste_percent ?? 0}% — صافي/كغ{" "}
+                    {stored.net_incl_per_kg != null ? stored.net_incl_per_kg.toFixed(2) : "—"}
+                  </span>
+                ) : stored.received_kg ? (
+                  <span className={`${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25`}>
+                    وصول جزئي {stored.received_kg} كغ
+                  </span>
+                ) : (
+                  <span className={`${ws.pill} bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10`}>
+                    بانتظار الوصول
+                  </span>
+                )}
+                {stored.deposited_kg ? (
+                  <span className={`${ws.pill} bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-400/25`}>
+                    مودَع {stored.deposited_kg} كغ
+                  </span>
+                ) : null}
+                <span className="text-slate-400 dark:text-white/35">
+                  الوصول يُسجَّل من زر «تسجيل الوصول» في الدفتر.
+                </span>
+              </div>
+            ) : null}
+
+            {!isEditing && allowArrival ? (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 items-end pt-1 border-t border-dashed border-amber-200/70 dark:border-amber-400/15">
+                <div>
+                  <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">الكمية الواصلة (كغ)</div>
+                  <input
+                    type="number"
+                    value={line.arrival_received_kg}
+                    onChange={(event) =>
+                      updateLine(line.key, { arrival_received_kg: event.target.value })
+                    }
+                    className={`${ws.input} px-2 py-1 text-xs text-center`}
+                    step="any"
+                    min="0"
+                    dir="ltr"
+                    placeholder="لم يصل بعد"
+                  />
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-500 dark:text-white/45 mb-0.5">تاريخ الوصول</div>
+                  <input
+                    type="date"
+                    value={line.arrival_date}
+                    onChange={(event) => updateLine(line.key, { arrival_date: event.target.value })}
+                    className={`${ws.input} px-2 py-1 text-xs`}
+                  />
+                </div>
+                <label className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 dark:text-white/70 cursor-pointer select-none pb-1.5">
+                  <input
+                    type="checkbox"
+                    checked={!!line.arrival_complete}
+                    onChange={(event) =>
+                      updateLine(line.key, { arrival_complete: event.target.checked })
+                    }
+                    className="accent-[#0e7a5f]"
+                  />
+                  الوصول مكتمل
+                </label>
+                <div className={tile}>
+                  <div className={tileLabel}>الهدر / الصافي شامل</div>
+                  <div
+                    className={`${tileValue} ${
+                      flag === "high" || flag === "confirm" || flag === "over"
+                        ? "text-rose-700 dark:text-rose-200"
+                        : ""
+                    }`}
+                    dir="ltr"
+                  >
+                    {calc?.arrivalComplete
+                      ? `${calc.wastePercent}% · ${calc.netInclPerKg?.toFixed(2)}/كغ`
+                      : "—"}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </>
+        ) : null}
+      </div>
+    </div>
+  );
 }
 
 function SectionTitle({ children }) {
@@ -1123,8 +1446,14 @@ export default function PurchaseInvoiceModal({
   isSubmitting,
   onClose,
   onSubmit,
+  // المعتمِد (إدارة محاسبة/مشتريات/مخزون): يسجّل الوصول والإيداع
+  // مباشرة عند إنشاء فاتورة بن. موظف الإدخال الميداني لا يراها.
+  allowArrival = false,
 }) {
   const isEditing = !!invoice;
+  // فاتورة تحميص مولّدة من فاتورة بن — لا صف بن فيها، وتعديلها
+  // يجعلها المرجع (مزامنة عكسية إلى فاتورة البن).
+  const isRoastInvoice = invoice?.invoice_kind === "roast";
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [contactId, setContactId] = useState("");
   const [supplierName, setSupplierName] = useState("");
@@ -1144,6 +1473,13 @@ export default function PurchaseInvoiceModal({
   // يولّد الفاتورة تلقائياً مع بداية كل شهر (بانتظار الدفع، استحقاق
   // نهاية الشهر). للإنشاء فقط، لا للتعديل.
   const [recurringMonthly, setRecurringMonthly] = useState(false);
+  // المحمصة (جهة اتصال) لفاتورة التحميص المولّدة — فارغ = افتراض الفئة.
+  const [roasterContactId, setRoasterContactId] = useState("");
+  // رقم فاتورة المحمصة الحقيقي (لفاتورة التحميص عند التعديل).
+  const [roasterReference, setRoasterReference] = useState("");
+  // إيداع الكمية الواصلة في المخزون عند الإنشاء (افتراضي مفعّل).
+  const [depositOnArrival, setDepositOnArrival] = useState(true);
+  const [depositBranchId, setDepositBranchId] = useState("");
   // إيصال الدفع — اختياري، يظهر مع وجود مبلغ مدفوع.
   const [paymentReceiptUrl, setPaymentReceiptUrl] = useState("");
   const [paymentReceiptName, setPaymentReceiptName] = useState("");
@@ -1252,6 +1588,12 @@ export default function PurchaseInvoiceModal({
     );
     setSendToApproval(false);
     setRecurringMonthly(false);
+    setRoasterContactId(
+      invoice?.roaster_contact_id ? String(invoice.roaster_contact_id) : "",
+    );
+    setRoasterReference(invoice?.roaster_reference || "");
+    setDepositOnArrival(true);
+    setDepositBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
     setScanSupplier(null);
     setConfirmSupplier(null);
     setCreatingSupplier(false);
@@ -1332,6 +1674,16 @@ export default function PurchaseInvoiceModal({
     [accounts],
   );
 
+  // بند البن: الحساب مرآة صنف من فئة «بن قهوة محمّصة».
+  const lineBean = (line) =>
+    isRoastInvoice ? null : beanForAccount(accounts, line.account_id);
+  const hasCoffeeLine = useMemo(
+    () =>
+      !isRoastInvoice &&
+      lines.some((line) => line.roast_enabled && beanForAccount(accounts, line.account_id)),
+    [lines, accounts, isRoastInvoice],
+  );
+
   const bankAccountOptions = useMemo(
     () => [
       { value: "", label: "بدون تحديد حساب" },
@@ -1370,6 +1722,77 @@ export default function PurchaseInvoiceModal({
       total: round2(subtotal + tax),
     };
   }, [lines, discount]);
+
+  // حساب البن لكل بند (معاينة حية بنفس معادلات الخادم): حصة الخصم
+  // بأكبر الباقي، التحميص خارج إجمالي الفاتورة.
+  const coffee = useMemo(() => {
+    const perLine = new Map();
+    if (isRoastInvoice) return { perLine, roastTotal: 0, roastTax: 0, count: 0, unusual: [] };
+    const subtotals = lines.map((line) => lineMath(line).subtotal);
+    const rawSubtotal = subtotals.reduce((s, v) => s + v, 0);
+    const applied = Math.min(Math.max(moneyValue(discount), 0), rawSubtotal);
+    const shares = allocateDiscount(subtotals, applied);
+    const factor = rawSubtotal > 0 ? (rawSubtotal - applied) / rawSubtotal : 1;
+    let roastTotal = 0;
+    let roastTax = 0;
+    let count = 0;
+    const unusual = [];
+    lines.forEach((line, index) => {
+      const bean = beanForAccount(accounts, line.account_id);
+      if (!bean || !line.roast_enabled) return;
+      const math = lineMath(line);
+      const roastRate = numOrNull(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG;
+      const c = computeCoffeeLine({
+        quantity: moneyValue(line.quantity),
+        quantityUnit: line.quantity_unit,
+        kgPerSack: numOrNull(line.kg_per_sack) ?? bean.bag_size_kg,
+        lineSubtotal: math.subtotal,
+        lineTax: math.tax,
+        lineDiscount: shares[index] || 0,
+        discountFactor: factor,
+        roastPerKg: roastRate,
+        roastTaxRate: bean.roast_tax_rate ?? 0,
+        extraCost: moneyValue(line.extra_cost),
+        receivedKg:
+          !isEditing && allowArrival ? numOrNull(line.arrival_received_kg) : null,
+        arrivalComplete: !isEditing && allowArrival && line.arrival_complete,
+      });
+      const unusualPrice =
+        !line.free_sample &&
+        c.rawCostPerKg !== null &&
+        (c.rawCostPerKg < RAW_PRICE_MIN || c.rawCostPerKg > RAW_PRICE_MAX);
+      if (unusualPrice) unusual.push(line.key);
+      perLine.set(line.key, { ...c, roastRate, unusualPrice, bean });
+      roastTotal += c.roastTotalNet;
+      roastTax += c.roastTaxAmount;
+      count += 1;
+    });
+    return { perLine, roastTotal: round2(roastTotal), roastTax: round2(roastTax), count, unusual };
+  }, [lines, discount, accounts, isRoastInvoice, isEditing, allowArrival]);
+
+  // اسم المحمصة الفعلية للعرض: اختيار الفاتورة → افتراض الفئة → النظام.
+  const effectiveRoasterName = useMemo(() => {
+    if (roasterContactId) {
+      const c = [...contacts, ...createdContacts].find(
+        (contact) => String(contact.id) === roasterContactId,
+      );
+      if (c) return c.name;
+    }
+    for (const entry of coffee.perLine.values()) {
+      if (entry.bean?.roaster_name) return entry.bean.roaster_name;
+    }
+    return "محمصة درر";
+  }, [roasterContactId, contacts, createdContacts, coffee.perLine]);
+
+  const anyArrivalComplete =
+    !isEditing &&
+    allowArrival &&
+    lines.some(
+      (line) =>
+        line.roast_enabled &&
+        line.arrival_complete &&
+        numOrNull(line.arrival_received_kg) > 0,
+    );
 
   const contactTransactionCount = useMemo(() => {
     if (!contactId || !contactStats) return null;
@@ -1415,16 +1838,47 @@ export default function PurchaseInvoiceModal({
     dueDate,
   });
   const balance = Math.max(totals.total - moneyValue(paidAmount), 0);
+  const hasFreeSampleLine = lines.some(
+    (line) => line.roast_enabled && line.free_sample && lineBean(line),
+  );
+  // بنود البن غير المؤكدة السعر تمنع الحفظ حتى يؤكدها المستخدم.
+  const unconfirmedUnusual = coffee.unusual.some(
+    (key) => !lines.find((line) => line.key === key)?.confirm_unusual_price,
+  );
   const canSubmit =
     !isSubmitting &&
     (!!supplierName.trim() || !!contactId) &&
-    totals.total > 0 &&
-    moneyValue(paidAmount) <= totals.total;
+    (totals.total > 0 || hasFreeSampleLine) &&
+    moneyValue(paidAmount) <= totals.total &&
+    !unconfirmedUnusual;
 
   const updateLine = (key, patch) => {
     autoFilledRef.current.delete("lines");
     setLines((prev) =>
-      prev.map((line) => (line.key === key ? { ...line, ...patch } : line)),
+      prev.map((line) => {
+        if (line.key !== key) return line;
+        const next = { ...line, ...patch };
+        // اختيار حساب بن على بند جديد يفعّل «إضافة قيمة تحميص» تلقائيًا
+        // بافتراضات الصنف؛ والانتقال لحساب غير بن يطفئه. البنود
+        // المخزَّنة (لها معرّف) تبقى على حالتها.
+        if (patch.account_id !== undefined && patch.account_id !== line.account_id) {
+          const bean = isRoastInvoice ? null : beanForAccount(accounts, patch.account_id);
+          if (bean && !line.id) {
+            next.roast_enabled = true;
+            next.amount_includes_tax = false;
+            next.quantity_unit = "sack";
+            next.kg_per_sack = coffeeInput(bean.bag_size_kg, 3);
+            next.roast_per_kg =
+              bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : "";
+            if (!next.description.trim() && bean.item_name) next.description = bean.item_name;
+          } else if (!bean) {
+            next.roast_enabled = false;
+            next.free_sample = false;
+          }
+        }
+        if (next.roast_enabled) next.amount_includes_tax = false;
+        return next;
+      }),
     );
   };
   const removeLine = (key) => {
@@ -1444,17 +1898,65 @@ export default function PurchaseInvoiceModal({
   const handleSubmit = (event) => {
     event?.preventDefault?.();
     if (!canSubmit) return;
-    const items = lines
-      .filter((line) => lineAmount(line) > 0)
-      .map((line) => ({
+    const kept = lines.filter(
+      (line) =>
+        lineAmount(line) > 0 ||
+        (line.roast_enabled && line.free_sample && !!lineBean(line)),
+    );
+    const items = kept.map((line) => {
+      const bean = lineBean(line);
+      const roast = !!bean && !!line.roast_enabled;
+      const base = {
+        id: line.id || undefined,
         description: line.description.trim() || null,
         account_id: line.account_id || null,
         quantity: moneyValue(line.quantity),
         unit_price: moneyValue(line.unit_price),
         amount: lineAmount(line),
         tax_rate: moneyValue(line.tax_rate),
-        amount_includes_tax: !!line.amount_includes_tax,
-      }));
+        amount_includes_tax: roast ? false : !!line.amount_includes_tax,
+      };
+      if (isRoastInvoice) return base;
+      return {
+        ...base,
+        roast_enabled: roast,
+        quantity_unit: roast ? line.quantity_unit : null,
+        kg_per_sack: roast ? numOrNull(line.kg_per_sack) ?? bean.bag_size_kg ?? null : null,
+        roast_per_kg: roast
+          ? numOrNull(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG
+          : null,
+        extra_cost: roast ? moneyValue(line.extra_cost) : 0,
+        free_sample: roast && !!line.free_sample,
+        confirm_unusual_price: roast && !!line.confirm_unusual_price,
+      };
+    });
+    // الوصول عند الإنشاء: بنود البن التي أُدخلت كميتها الواصلة.
+    let arrival = null;
+    if (!isEditing && allowArrival && !isRoastInvoice) {
+      const arrivalLines = [];
+      kept.forEach((line, index) => {
+        if (!line.roast_enabled || !lineBean(line)) return;
+        const received = numOrNull(line.arrival_received_kg);
+        if (received === null || received <= 0) return;
+        arrivalLines.push({
+          index,
+          received_kg: received,
+          arrival_date: line.arrival_date || invoiceDate,
+          arrival_complete: !!line.arrival_complete,
+          confirm_high_waste: false,
+        });
+      });
+      if (arrivalLines.length > 0) {
+        const depositBranch = depositBranchId || branchId || "";
+        arrival = {
+          lines: arrivalLines,
+          deposit:
+            depositOnArrival && depositBranch
+              ? { enabled: true, branch_id: Number(depositBranch) }
+              : null,
+        };
+      }
+    }
     // «إرسال إلى الاعتماد» يجبر الفاتورة غير مدفوعة مهما كانت
     // الحقول — والخادم يعيد فرض ذلك من العلم نفسه.
     const forApproval = sendToApproval && !isEditing;
@@ -1479,15 +1981,24 @@ export default function PurchaseInvoiceModal({
       submit_for_approval: forApproval,
       // قالب فاتورة متكررة شهرياً — الخادم يعيد التحقق من شرط
       // «مصروف ثابت» قبل الإنشاء.
-      recurring_monthly: recurringMonthly && hasFixedExpenseLine && !isEditing,
+      recurring_monthly:
+        recurringMonthly && hasFixedExpenseLine && !isEditing && !hasCoffeeLine,
       // القيمة الثابتة المتبقية — الحالة الفعلية تُحسب من المبالغ.
       workflow_status: "pending_payment",
       branch_id: branchId || null,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
       attachment_kind: attachmentUrl ? attachmentKind || null : null,
+      // البن: المحمصة لفاتورة التحميص المولّدة + الوصول عند الإنشاء.
+      roaster_contact_id: hasCoffeeLine && roasterContactId ? Number(roasterContactId) : null,
+      arrival,
     };
-    if (isEditing) payload.id = invoice.id;
+    if (isRoastInvoice) payload.roaster_reference = roasterReference.trim() || null;
+    if (isEditing) {
+      payload.id = invoice.id;
+      // حارس التعديل المتزامن — الخادم يرفض إن تغيّرت الفاتورة.
+      payload.expected_updated_at = invoice.updated_at || undefined;
+    }
     onSubmit(payload);
   };
 
@@ -2194,6 +2705,33 @@ export default function PurchaseInvoiceModal({
               </div>
             ) : null}
 
+            {isRoastInvoice ? (
+              <div className="rounded-xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2">
+                <div className="inline-flex items-center gap-1.5 text-sm font-bold text-amber-800 dark:text-amber-200">
+                  <Flame className="w-4 h-4" />
+                  فاتورة تحميص مولّدة من فاتورة البن{" "}
+                  <span dir="ltr" className="font-mono">
+                    {invoice?.source_invoice_number || `#${invoice?.source_invoice_id}`}
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-600 dark:text-white/55 leading-relaxed">
+                  تعديل البنود هنا يجعل هذه الفاتورة المرجع: تكلفة التحميص
+                  في فاتورة البن تُحدَّث منها وتُعاد حساب تكلفة الصنف.
+                </div>
+                <div>
+                  <FieldLabel>رقم فاتورة المحمصة الحقيقي</FieldLabel>
+                  <input
+                    type="text"
+                    value={roasterReference}
+                    onChange={(event) => setRoasterReference(event.target.value)}
+                    className={`${ws.input} px-3 py-2 text-sm`}
+                    placeholder="رقم الفاتورة كما ورد من المحمصة"
+                    dir="ltr"
+                  />
+                </div>
+              </div>
+            ) : null}
+
             {/* معلومات الفاتورة */}
             <div className={`${ws.glass} ${ws.card} p-4 space-y-3`}>
               <SectionTitle>معلومات الفاتورة</SectionTitle>
@@ -2392,9 +2930,10 @@ export default function PurchaseInvoiceModal({
                   <div className={`divide-y ${ws.divider}`}>
                     {lines.map((line) => {
                       const math = lineMath(line);
+                      const bean = lineBean(line);
                       return (
+                        <React.Fragment key={line.key}>
                         <div
-                          key={line.key}
                           className="grid grid-cols-[minmax(190px,1.5fr)_minmax(160px,1fr)_72px_100px_64px_76px_92px_32px] gap-2 items-center px-2 py-2"
                         >
                           <input
@@ -2464,13 +3003,14 @@ export default function PurchaseInvoiceModal({
                           />
                           <button
                             type="button"
+                            disabled={!!bean && !!line.roast_enabled}
                             onClick={() =>
                               updateLine(line.key, {
                                 amount_includes_tax:
                                   !line.amount_includes_tax,
                               })
                             }
-                            className={`${ws.pill} justify-center text-[10px] py-1 cursor-pointer select-none ${
+                            className={`${ws.pill} justify-center text-[10px] py-1 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed ${
                               line.amount_includes_tax
                                 ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
                                 : "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10"
@@ -2500,6 +3040,18 @@ export default function PurchaseInvoiceModal({
                             ) : null}
                           </div>
                         </div>
+                        {bean ? (
+                          <CoffeeLineRow
+                            line={line}
+                            bean={bean}
+                            calc={coffee.perLine.get(line.key) || null}
+                            updateLine={updateLine}
+                            isEditing={isEditing}
+                            allowArrival={allowArrival}
+                            currency={currency}
+                          />
+                        ) : null}
+                        </React.Fragment>
                       );
                     })}
                   </div>
@@ -2552,9 +3104,80 @@ export default function PurchaseInvoiceModal({
                 </div>
               </div>
 
+              {/* تكاليف التحميص — خارج فاتورة المورد وإقرار الضريبة؛
+                  تُولَّد بها فاتورة تحميص مستقلة على المحمصة. */}
+              {hasCoffeeLine ? (
+                <div className="rounded-xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 text-sm font-bold text-amber-800 dark:text-amber-200">
+                      <Flame className="w-4 h-4" />
+                      تكاليف التحميص ({coffee.count} {coffee.count === 1 ? "بند" : "بنود"})
+                    </span>
+                    <span className="text-sm font-bold tabular-nums text-amber-800 dark:text-amber-200" dir="ltr">
+                      {formatMoney(coffee.roastTotal + coffee.roastTax, currency)}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-600 dark:text-white/55 leading-relaxed">
+                    خارج إجمالي فاتورة المورد وخارج الإقرار الضريبي.
+                    {coffee.roastTotal + coffee.roastTax > 0
+                      ? ` تُنشأ تلقائيًا فاتورة تحميص مستقلة على «${effectiveRoasterName}» بحالة «بانتظار الدفع» واستحقاق بعد 15 يومًا من تاريخ الفاتورة.`
+                      : " تحميص بقيمة 0 — لا تُنشأ فاتورة تحميص."}
+                  </div>
+                  <div>
+                    <FieldLabel>المحمصة (جهة اتصال)</FieldLabel>
+                    <GlassSelect
+                      value={roasterContactId}
+                      onChange={setRoasterContactId}
+                      options={[
+                        { value: "", label: `الافتراضية — ${effectiveRoasterName}` },
+                        ...contactOptions.filter((option) => option.value !== ""),
+                      ]}
+                      placeholder="المحمصة الافتراضية"
+                      buttonClassName="text-sm py-2 px-3"
+                      searchable
+                      searchPlaceholder="ابحث في جهات الاتصال…"
+                    />
+                  </div>
+                  {anyArrivalComplete ? (
+                    <div className="pt-2 border-t border-dashed border-amber-200/70 dark:border-amber-400/15 space-y-2">
+                      <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-white/80 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={depositOnArrival}
+                          onChange={(event) => setDepositOnArrival(event.target.checked)}
+                          className="accent-[#0e7a5f]"
+                        />
+                        إيداع الكمية الواصلة في المخزون
+                      </label>
+                      {depositOnArrival && branches.length > 0 ? (
+                        <GlassSelect
+                          value={depositBranchId || branchId}
+                          onChange={setDepositBranchId}
+                          options={[
+                            { value: "", label: "اختر فرع الإيداع…" },
+                            ...branches.map((branch) => ({
+                              value: String(branch.id),
+                              label: branch.name,
+                            })),
+                          ]}
+                          placeholder="اختر فرع الإيداع…"
+                          buttonClassName="text-sm py-2 px-3"
+                        />
+                      ) : null}
+                      {depositOnArrival && !(depositBranchId || branchId) ? (
+                        <div className="text-[11px] text-rose-700 dark:text-rose-200">
+                          حدد فرع الإيداع — وإلا يُحفظ الوصول بلا إيداع.
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
               {/* فاتورة متكررة شهرياً — يظهر فقط عندما يكون أحد بنود
-                  الفاتورة على حساب «مصروف ثابت» أو أحد فروعه. */}
-              {!isEditing && hasFixedExpenseLine ? (
+                  الفاتورة على حساب «مصروف ثابت» أو أحد فروعه (وليس
+                  فاتورة بن). */}
+              {!isEditing && hasFixedExpenseLine && !hasCoffeeLine ? (
                 <label
                   className={`${ws.glassSoft} ${ws.card} p-3 flex items-start gap-3 cursor-pointer select-none`}
                 >

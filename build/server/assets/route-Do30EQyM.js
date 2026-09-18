@@ -1,12 +1,12 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { b as ensureScheduledReportsSchema, d as buildPurchasesSummaryText } from './purchaseAutomation-DeZgD48h.js';
+import { b as ensureScheduledReportsSchema, d as buildPurchasesSummaryText } from './purchaseAutomation-D_hvSqBx.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { s as sendWhatsAppViaWasender, n as normalizeWasenderPhone } from './wasender-DykD1wlV.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './waNotify-CtLfIpXX.js';
-import './coffeeInvoices-jtYz_PLI.js';
+import './coffeeInvoices-DQJncxBL.js';
 import './accountsTree-BiYqjwch.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';

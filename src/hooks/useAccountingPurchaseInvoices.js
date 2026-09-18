@@ -35,6 +35,21 @@ export function useAccountingPurchaseInvoices({
   });
 }
 
+// خطأ يحمل كود الخادم (stale_invoice / roast_paid / unusual_price /
+// deposited_line / high_waste …) حتى تتصرف الواجهة بحسبه.
+function apiError(data, fallback, status) {
+  const error = new Error(data?.error || fallback);
+  error.code = data?.code || null;
+  error.status = status || null;
+  error.data = data || null;
+  return error;
+}
+
+function showWarnings(data) {
+  const warnings = Array.isArray(data?.warnings) ? data.warnings : [];
+  for (const warning of warnings) toast.warning(warning, { duration: 8000 });
+}
+
 export function useCreateAccountingPurchaseInvoice() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -46,15 +61,23 @@ export function useCreateAccountingPurchaseInvoice() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data?.error || "فشل إضافة فاتورة المشتريات");
+        throw apiError(data, "فشل إضافة فاتورة المشتريات", res.status);
       }
       return data;
     },
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.accountingPurchaseInvoices(),
       });
-      toast.success("تم إضافة فاتورة المشتريات");
+      // فاتورة البن قد تعيد حساب تكلفة الصنف وتودع في المخزون.
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseReceipts() });
+      toast.success(
+        data?.roast?.invoice_number
+          ? `تم إضافة الفاتورة — وفاتورة التحميص ${data.roast.invoice_number}`
+          : "تم إضافة فاتورة المشتريات",
+      );
+      showWarnings(data);
     },
     onError: (error) => {
       console.error(error);
@@ -74,15 +97,17 @@ export function useUpdateAccountingPurchaseInvoice() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data?.error || "فشل تعديل فاتورة المشتريات");
+        throw apiError(data, "فشل تعديل فاتورة المشتريات", res.status);
       }
       return data;
     },
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.accountingPurchaseInvoices(),
       });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
       toast.success("تم حفظ فاتورة المشتريات");
+      showWarnings(data);
     },
     onError: (error) => {
       console.error(error);
@@ -247,14 +272,18 @@ export function useDeleteInvoiceAttachment() {
 export function useDeleteAccountingPurchaseInvoice() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, force = false }) => {
-      const url = force
-        ? `/api/accounting/purchase-invoices?id=${id}&force=1`
-        : `/api/accounting/purchase-invoices?id=${id}`;
-      const res = await adminFetch(url, { method: "DELETE" });
+    mutationFn: async ({ id, force = false, detach = false }) => {
+      const params = new URLSearchParams({ id: String(id) });
+      if (force) params.set("force", "1");
+      // فاتورة تحميص مرتبطة بفاتورة بن: إيقافها يتطلب «فك الارتباط».
+      if (detach) params.set("detach", "1");
+      const res = await adminFetch(
+        `/api/accounting/purchase-invoices?${params.toString()}`,
+        { method: "DELETE" },
+      );
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data?.error || "فشل إيقاف الفاتورة");
+        throw apiError(data, "فشل إيقاف الفاتورة", res.status);
       }
       return data;
     },
@@ -262,11 +291,55 @@ export function useDeleteAccountingPurchaseInvoice() {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.accountingPurchaseInvoices(),
       });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseReceipts() });
       toast.success(data?.hard ? "تم حذف الفاتورة نهائياً" : "تم إيقاف الفاتورة");
     },
     onError: (error) => {
       console.error(error);
       toast.error(`فشل الإيقاف: ${error.message}`);
+    },
+  });
+}
+
+// تسجيل وصول بنود البن (الكمية الواصلة، الاكتمال، الإيداع) — أو عكس
+// الإيداع. الخادم يعيد حساب الهدر وصافي الكيلو وتكلفة الصنف.
+export function useRecordCoffeeArrival() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload) => {
+      const res = await adminFetch("/api/accounting/purchase-invoices/arrival", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw apiError(data, "فشل تسجيل الوصول", res.status);
+      }
+      return data;
+    },
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.items() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseReceipts() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.inventoryOperations() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.stockValue() });
+      if (data?.reversed !== undefined) {
+        toast.success("تم عكس الإيداع");
+      } else {
+        toast.success(
+          data?.mode === "reported"
+            ? "تم إبلاغ الكمية الواصلة — بانتظار اعتماد الإدارة"
+            : "تم تسجيل الوصول",
+        );
+      }
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(`فشل تسجيل الوصول: ${error.message}`);
     },
   });
 }
