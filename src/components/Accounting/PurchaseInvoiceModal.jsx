@@ -1259,39 +1259,10 @@ function CoffeeLineRow({
               — {bean.item_name}
             </span>
           </label>
-          {on ? (
-            <div className="flex items-center gap-3 flex-wrap text-[11px] text-slate-600 dark:text-white/60">
-              <span>
-                وحدة الكمية:{" "}
-                <button
-                  type="button"
-                  onClick={() =>
-                    updateLine(line.key, {
-                      quantity_unit: kgMode ? "sack" : "kg",
-                      kg_per_sack: kgMode ? beanUnitDefaults(bean).kg_per_sack || line.kg_per_sack : line.kg_per_sack,
-                    })
-                  }
-                  className="font-bold text-amber-800 dark:text-amber-200 underline decoration-dotted"
-                  title="بدّل بين خيشة وكيلو"
-                >
-                  {kgMode ? "كغ" : bean.purchase_unit && bean.purchase_unit !== "كيلو" ? bean.purchase_unit : "خيشة"}
-                </button>
-                {bean.purchase_unit ? (
-                  <span className="text-slate-400 dark:text-white/35"> (وحدة الشراء في الصنف)</span>
-                ) : null}
-              </span>
-              <label className="inline-flex items-center gap-1.5 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={!!line.free_sample}
-                  onChange={(event) =>
-                    updateLine(line.key, { free_sample: event.target.checked })
-                  }
-                  className="accent-amber-500"
-                />
-                عينة مجانية (بسعر 0)
-              </label>
-            </div>
+          {on && kgMode ? (
+            <span className="text-[11px] text-slate-500 dark:text-white/45">
+              الكمية في الفاتورة بالكيلو مباشرة
+            </span>
           ) : null}
         </div>
 
@@ -1422,16 +1393,6 @@ function CoffeeLineRow({
                       : "—"}
                   </div>
                 </div>
-                <div className="col-span-2 sm:col-span-4 text-[11px] text-slate-500 dark:text-white/45" dir="rtl">
-                  الكيلو الخام {calc.rawKg > 0 ? calc.rawKg : "—"} كغ · البن شامل الضريبة{" "}
-                  {formatMoney(calc.beanCostIncl, currency)} · التحميص{" "}
-                  {formatMoney(calc.roastTotalNet + calc.roastTaxAmount, currency)} ({calc.roastRate} × كغ)
-                  {calc.extraCost > 0 ? ` · إضافي ${formatMoney(calc.extraCost, currency)}` : ""}
-                  {" "}· التكلفة الواصلة {formatMoney(calc.landedIncl, currency)}
-                  {!calc.arrivalComplete
-                    ? " — الهدر والصافي يظهران بعد إدخال الواصل بعد الهدر."
-                    : ""}
-                </div>
               </div>
             ) : null}
 
@@ -1471,16 +1432,16 @@ function CoffeeLineRow({
               </label>
             ) : null}
 
-            {allowArrival && numOrNull(line.arrival_received_kg) > 0 && !deposited ? (
+            {allowArrival && !deposited ? (
               <div className="flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60">
                 <span>تاريخ الوصول:</span>
                 <input
                   type="date"
-                  value={line.arrival_date}
+                  value={line.arrival_date || todayRiyadh()}
+                  max={todayRiyadh()}
                   onChange={(event) => updateLine(line.key, { arrival_date: event.target.value })}
                   className={`${ws.input} px-2 py-1 text-xs w-40`}
                 />
-                <span className="text-slate-400 dark:text-white/35">فارغ = تاريخ الفاتورة</span>
               </div>
             ) : null}
 
@@ -2044,7 +2005,7 @@ export default function PurchaseInvoiceModal({
           index,
           id: line.id || undefined,
           received_kg: received,
-          arrival_date: line.arrival_date || invoiceDate,
+          arrival_date: line.arrival_date || todayRiyadh(),
           arrival_complete: received !== null && received > 0,
           confirm_high_waste: !!line.confirm_high_waste,
         });
