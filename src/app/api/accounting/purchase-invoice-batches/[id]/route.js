@@ -42,8 +42,20 @@ function buildDraft(analysis) {
         Number(item.pack_size_kg) > 0
           ? Number(item.pack_size_kg)
           : guessKgPerSack(item.description),
+      // إجمالي الكيلو الخام: الكمية بالكيلو، أو الخِيَش × وزن الخيشة إن
+      // عُرف — وإلا يُدخله المراجع.
+      raw_kg: null,
       roast_per_kg: null,
       extra_cost: 0,
+    }))
+    .map((item) => ({
+      ...item,
+      raw_kg:
+        item.quantity_unit === "kg"
+          ? item.quantity
+          : item.kg_per_sack && item.quantity > 0
+            ? Math.round(item.quantity * item.kg_per_sack * 1000) / 1000
+            : null,
     }))
     .filter((item) => item.quantity > 0 || item.unit_price > 0);
   return {
@@ -93,6 +105,7 @@ function sanitizeDraft(input) {
       roast_enabled: item?.roast_enabled === true,
       quantity_unit: ["sack", "kg"].includes(item?.quantity_unit) ? item.quantity_unit : null,
       kg_per_sack: Number(item?.kg_per_sack) > 0 ? Number(item.kg_per_sack) : null,
+      raw_kg: Number(item?.raw_kg) > 0 ? Number(item.raw_kg) : null,
       roast_per_kg: Number.isFinite(Number(item?.roast_per_kg)) && item?.roast_per_kg !== null && item?.roast_per_kg !== "" ? Number(item.roast_per_kg) : null,
       extra_cost: Math.max(Number(item?.extra_cost) || 0, 0),
       confirm_unusual_price: item?.confirm_unusual_price === true,
@@ -524,6 +537,7 @@ export async function PATCH(request, { params: { id } }) {
           roast_enabled: line.roast_enabled === true,
           quantity_unit: line.quantity_unit || null,
           kg_per_sack: line.kg_per_sack ?? null,
+          raw_kg: line.raw_kg ?? null,
           roast_per_kg: line.roast_per_kg ?? null,
           extra_cost: line.extra_cost ?? 0,
           confirm_unusual_price: line.confirm_unusual_price === true,

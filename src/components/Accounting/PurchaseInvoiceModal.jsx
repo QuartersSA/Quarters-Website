@@ -1038,6 +1038,10 @@ function newLine(overrides = {}) {
     confirm_unusual_price: false,
     // مصدر «كيلو/خيشة»: scan | description | item | null (يدوي)
     kg_source: null,
+    // إجمالي الكيلو الخام (المدخل الفعلي للحسابات) ومصدره:
+    // quantity (الكمية بالكيلو) | sacks (خِيَش × كيلو/خيشة) | stored | manual | null
+    raw_kg: "",
+    raw_source: null,
     // الوصول عند الإنشاء (للمعتمِدين فقط)
     arrival_received_kg: "",
     arrival_date: "",
@@ -1090,6 +1094,25 @@ function coffeeSeed(accounts, accountId, description, hints = {}) {
       unit === "kg" ? null : scanned ? "scan" : fromText ? "description" : kg ? "item" : null,
     roast_per_kg: bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : "",
   };
+}
+
+// إجمالي الكيلو الخام يُشتق تلقائيًا ما لم يُدخل يدويًا: الكمية بالكيلو
+// (وحدة الشراء كيلو) أو عدد الخِيَش × كيلو/الخيشة إن عُرف؛ وإلا يبقى
+// فارغًا ليُدخل يدويًا. المخزَّن يبقى حتى تتغير الكمية.
+function withDerivedRaw(line, { quantityChanged = false } = {}) {
+  if (!line.roast_enabled) return line;
+  if (line.raw_source === "manual") return line;
+  if (line.raw_source === "stored" && !quantityChanged) return line;
+  const qty = Number(line.quantity) || 0;
+  if (line.quantity_unit === "kg") {
+    return { ...line, raw_kg: qty > 0 ? coffeeInput(qty, 3) : "", raw_source: "quantity" };
+  }
+  const kps = numOrNull(line.kg_per_sack);
+  if (kps && qty > 0) {
+    return { ...line, raw_kg: coffeeInput(qty * kps, 3), raw_source: "sacks" };
+  }
+  if (line.raw_source === "stored") return line;
+  return { ...line, raw_kg: line.raw_source ? "" : line.raw_kg, raw_source: null };
 }
 
 function coffeeInput(value, digits = 3) {
@@ -1153,6 +1176,8 @@ function linesFromInvoice(invoice) {
         roast_enabled: roast,
         quantity_unit: item.quantity_unit === "kg" ? "kg" : "sack",
         kg_per_sack: coffeeInput(item.kg_per_sack, 3),
+        raw_kg: coffeeInput(item.raw_kg, 3),
+        raw_source: item.raw_kg != null ? "stored" : null,
         roast_per_kg: item.roast_per_kg != null ? String(Number(item.roast_per_kg)) : "",
         extra_cost: coffeeInput(item.extra_cost, 2),
         free_sample: !!item.free_sample,
@@ -1246,6 +1271,8 @@ function CoffeeLineRow({
                         const seed = coffeeSeed([{ id: "x", bean }], "x", line.description);
                         return { quantity_unit: seed.quantity_unit, kg_per_sack: seed.kg_per_sack, kg_source: seed.kg_source };
                       })()),
+                  // إعادة اشتقاق إجمالي الكيلو بعد التفعيل (updateLine)
+                  raw_source: line.raw_source === "manual" ? "manual" : null,
                   roast_per_kg:
                     line.roast_per_kg ||
                     (bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : ""),
@@ -1259,11 +1286,6 @@ function CoffeeLineRow({
               — {bean.item_name}
             </span>
           </label>
-          {on && kgMode ? (
-            <span className="text-[11px] text-slate-500 dark:text-white/45">
-              الكمية في الفاتورة بالكيلو مباشرة
-            </span>
-          ) : null}
         </div>
 
         {on ? (
@@ -1271,35 +1293,39 @@ function CoffeeLineRow({
             {/* المدخلات */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <div>
-                <div className={fieldLabel}>كيلو / خيشة</div>
+                <div className={fieldLabel}>عدد الكيلوات (إجمالي الخام)</div>
                 <input
                   type="number"
-                  value={line.kg_per_sack}
-                  disabled={kgMode}
-                  onChange={(event) =>
-                    updateLine(line.key, { kg_per_sack: event.target.value, kg_source: null })
-                  }
-                  className={`${fieldInput} disabled:opacity-40 ${
-                    !kgMode && !line.kg_per_sack ? "border-amber-400/70 dark:border-amber-400/50" : ""
+                  value={line.raw_kg}
+                  onChange={(event) => updateLine(line.key, { raw_kg: event.target.value })}
+                  className={`${fieldInput} ${
+                    !(numOrNull(line.raw_kg) > 0) ? "border-amber-400/70 dark:border-amber-400/50" : ""
                   }`}
                   step="any"
                   min="0"
                   dir="ltr"
-                  placeholder={kgMode ? "الكمية بالكيلو" : "أدخلها يدويًا"}
+                  placeholder="أدخل إجمالي الكيلو"
                 />
                 <div className="text-[10px] text-slate-400 dark:text-white/35 mt-0.5 truncate">
-                  {kgMode
-                    ? "الكمية بالكيلو مباشرة"
-                    : !line.kg_per_sack
-                      ? "لم يُعرف وزن الخيشة — أدخله"
-                      : line.kg_source === "scan"
-                        ? "من التحليل الذكي"
-                        : line.kg_source === "description"
-                          ? "من وصف البند"
-                          : line.kg_source === "item"
-                            ? "من وحدة الشراء في الصنف"
-                            : "مُدخل يدويًا"}
-                  {" "}· الكمية = عدد الخِيَش
+                  {!(numOrNull(line.raw_kg) > 0)
+                    ? kgMode
+                      ? "= الكمية بالكيلو — أدخل الكمية"
+                      : "لم يُعرف وزن الخيشة — أدخل الإجمالي يدويًا"
+                    : line.raw_source === "quantity"
+                      ? "= الكمية في الفاتورة (بالكيلو)"
+                      : line.raw_source === "sacks"
+                        ? `= ${line.quantity || 0} خيشة × ${line.kg_per_sack} كغ${
+                            line.kg_source === "scan"
+                              ? " (من التحليل الذكي)"
+                              : line.kg_source === "description"
+                                ? " (من وصف البند)"
+                                : line.kg_source === "item"
+                                  ? " (من الصنف)"
+                                  : ""
+                          }`
+                        : line.raw_source === "stored"
+                          ? "المخزَّن — عدّله إن لزم"
+                          : "مُدخل يدويًا"}
                 </div>
               </div>
               <div>
@@ -1799,6 +1825,7 @@ export default function PurchaseInvoiceModal({
         quantity: moneyValue(line.quantity),
         quantityUnit: line.quantity_unit,
         kgPerSack: numOrNull(line.kg_per_sack) ?? bean.bag_size_kg,
+        rawKg: numOrNull(line.raw_kg),
         lineSubtotal: math.subtotal,
         lineTax: math.tax,
         lineDiscount: shares[index] || 0,
@@ -1908,13 +1935,18 @@ export default function PurchaseInvoiceModal({
     const c = coffee.perLine.get(line.key);
     return c?.arrivalComplete && wasteFlag(c.wastePercent) === "confirm" && !line.confirm_high_waste;
   });
+  // بند بن بلا إجمالي كيلو خام لا يُحفظ — الحسابات كلها تعتمد عليه.
+  const missingRawKg = lines.some(
+    (line) => line.roast_enabled && lineBean(line) && !(numOrNull(line.raw_kg) > 0),
+  );
   const canSubmit =
     !isSubmitting &&
     (!!supplierName.trim() || !!contactId) &&
     (totals.total > 0 || hasFreeSampleLine) &&
     moneyValue(paidAmount) <= totals.total &&
     !unconfirmedUnusual &&
-    !unconfirmedWaste;
+    !unconfirmedWaste &&
+    !missingRawKg;
 
   const updateLine = (key, patch) => {
     autoFilledRef.current.delete("lines");
@@ -1936,7 +1968,13 @@ export default function PurchaseInvoiceModal({
           }
         }
         if (next.roast_enabled) next.amount_includes_tax = false;
-        return next;
+        if (patch.raw_kg !== undefined) {
+          next.raw_source = next.raw_kg === "" ? null : "manual";
+          return next;
+        }
+        return withDerivedRaw(next, {
+          quantityChanged: patch.quantity !== undefined || patch.kg_per_sack !== undefined,
+        });
       }),
     );
   };
@@ -1981,6 +2019,7 @@ export default function PurchaseInvoiceModal({
         roast_enabled: roast,
         quantity_unit: roast ? line.quantity_unit : null,
         kg_per_sack: roast ? numOrNull(line.kg_per_sack) ?? bean.bag_size_kg ?? null : null,
+        raw_kg: roast ? numOrNull(line.raw_kg) : null,
         roast_per_kg: roast
           ? numOrNull(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG
           : null,
@@ -2327,7 +2366,7 @@ export default function PurchaseInvoiceModal({
                       quantity_unit: item.quantity_unit,
                     })),
               });
-            }),
+            }).map((line) => withDerivedRaw(line)),
           );
           owned.add("lines");
           filled.push(`بنود الفاتورة (${items.length})`);
@@ -2461,7 +2500,7 @@ export default function PurchaseInvoiceModal({
         );
         if (tableItems) {
           setLines(
-            tableItems.map((item) =>
+            tableItems.map((item) => withDerivedRaw(
               item.quantity !== null && item.unitPrice !== null
                 ? // Quantity × unit price recovered from the row —
                   // entered exactly like the invoice quotes it (net or
@@ -2485,7 +2524,7 @@ export default function PurchaseInvoiceModal({
                     tax_rate: String(item.rate),
                     amount_includes_tax: true,
                   }),
-            ),
+            )),
           );
           owned.add("lines");
           filled.push(`بنود الفاتورة (${tableItems.length})`);

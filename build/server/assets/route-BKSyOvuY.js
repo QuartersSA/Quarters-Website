@@ -2,9 +2,9 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-BiYqjwch.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as runPurchaseAutomation, a as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-COpvKo1x.js';
+import { r as runPurchaseAutomation, a as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-oQMrImT7.js';
 import { n as notifyByPref } from './waNotify-CtLfIpXX.js';
-import { b as loadRoastChild, c as loadInvoiceLines, d as recomputeItemCost, f as reverseDeposits, h as loadRoastLinks, i as applyCoffeeToItems, j as assertRoastSyncAllowed, s as syncRoastInvoice, k as reverseSyncRoastToBean, C as CoffeeError, m as resolveRoaster, n as getRoastingAccountId, o as reserveIds, p as insertLineStatement, q as recordArrival, e as ensureCoffeeSchema, L as LINE_SELECT_COLUMNS, t as planLineReconcile } from './coffeeInvoices-N2nQFyZQ.js';
+import { b as loadRoastChild, c as loadInvoiceLines, d as recomputeItemCost, f as reverseDeposits, h as loadRoastLinks, i as applyCoffeeToItems, j as assertRoastSyncAllowed, s as syncRoastInvoice, k as reverseSyncRoastToBean, C as CoffeeError, m as resolveRoaster, n as getRoastingAccountId, o as reserveIds, p as insertLineStatement, q as recordArrival, e as ensureCoffeeSchema, L as LINE_SELECT_COLUMNS, t as planLineReconcile } from './coffeeInvoices-43pTEYyU.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-DykD1wlV.js';
@@ -379,6 +379,8 @@ function parseItems(body) {
       roast_enabled: raw?.roast_enabled,
       quantity_unit: raw?.quantity_unit,
       kg_per_sack: raw?.kg_per_sack,
+      // إجمالي الكيلو الخام المُدخل مباشرة (يتقدم على الكمية × كيلو/الخيشة)
+      raw_kg: raw?.raw_kg,
       roast_per_kg: raw?.roast_per_kg,
       roast_tax_rate: raw?.roast_tax_rate,
       extra_cost: raw?.extra_cost,

@@ -72,11 +72,15 @@ export function computeCoffeeLine({
   extraCost = 0,
   receivedKg = null,
   arrivalComplete = false,
+  // إجمالي الكيلو الخام مُدخلًا مباشرة (يتقدم على الكمية × كيلو/الخيشة)
+  rawKg: rawKgInput = null,
 }) {
   const qty = Number(quantity) || 0;
   const unit = quantityUnit === "kg" ? "kg" : "sack";
   const kps = numOrNull(kgPerSack);
-  const rawKgExact = unit === "kg" ? qty : kps ? qty * kps : 0;
+  const override = numOrNull(rawKgInput);
+  const rawKgExact =
+    override !== null && override > 0 ? override : unit === "kg" ? qty : kps ? qty * kps : 0;
   const rawKg = round3(rawKgExact);
   const sacks =
     unit === "sack" ? round3(qty) : kps && kps > 0 ? round3(qty / kps) : null;

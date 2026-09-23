@@ -423,13 +423,20 @@ export async function applyCoffeeToItems(items, payload, { existingLines = [], i
       throw new CoffeeError(400, `البند «${item.description || bean.itemName}»: بنود البن تُدخل بسعر بدون ضريبة (أطفئ «شامل الضريبة»)`);
     }
 
-    const quantityUnit = item.quantity_unit === "kg" ? "kg" : item.quantity_unit === "sack" ? "sack" : existing?.quantity_unit || null;
-    if (!quantityUnit) {
-      throw new CoffeeError(400, `البند «${item.description || bean.itemName}»: حدد وحدة الكمية (خيشة أم كغ)`);
+    // إجمالي الكيلو الخام: مُدخل مباشرة (raw_kg) أو الكمية بالكيلو أو
+    // الكمية × كيلو/الخيشة. غياب المفتاح عند التعديل = إبقاء المخزَّن.
+    const rawKgInput =
+      item.raw_kg === undefined ? numOrNull(existing?.raw_kg) : numOrNull(item.raw_kg);
+    const quantityUnit =
+      item.quantity_unit === "kg" ? "kg" : item.quantity_unit === "sack" ? "sack" : existing?.quantity_unit || "sack";
+    let kgPerSack = numOrNull(item.kg_per_sack) ?? numOrNull(existing?.kg_per_sack) ?? bean.bagSizeKg;
+    const qtyNum = Number(item.quantity) || 0;
+    if (rawKgInput > 0 && quantityUnit === "sack" && qtyNum > 0) {
+      // كيلو/الخيشة للعرض فقط — مشتق من الإجمالي المُدخل.
+      kgPerSack = round3(rawKgInput / qtyNum);
     }
-    const kgPerSack = numOrNull(item.kg_per_sack) ?? numOrNull(existing?.kg_per_sack) ?? bean.bagSizeKg;
-    if (quantityUnit === "sack" && !(kgPerSack > 0)) {
-      throw new CoffeeError(400, `البند «${item.description || bean.itemName}»: أدخل عدد الكيلو في الخيشة`);
+    if (!(rawKgInput > 0) && quantityUnit === "sack" && !(kgPerSack > 0)) {
+      throw new CoffeeError(400, `البند «${item.description || bean.itemName}»: أدخل عدد الكيلوات (إجمالي الخام)`);
     }
     const roastPerKg = numOrNull(item.roast_per_kg) ?? numOrNull(existing?.roast_per_kg) ?? bean.roastPerKg;
     if (roastPerKg < 0) throw new CoffeeError(400, "تكلفة التحميص لا تكون سالبة");
@@ -447,6 +454,7 @@ export async function applyCoffeeToItems(items, payload, { existingLines = [], i
       quantity: item.quantity,
       quantityUnit,
       kgPerSack,
+      rawKg: rawKgInput,
       lineSubtotal: item.subtotal,
       lineTax: item.tax,
       lineDiscount,
@@ -993,6 +1001,7 @@ export async function recordArrival(invoice, lines, { deposit = null, actor = nu
 
     const c = computeCoffeeLine({
       quantity: Number(line.quantity), quantityUnit: line.quantity_unit, kgPerSack: line.kg_per_sack,
+      rawKg: rawKg,
       lineSubtotal: Number(line.line_subtotal), lineTax: Number(line.line_tax),
       lineDiscount: Number(line.line_discount) || 0,
       discountFactor: Number(line.line_subtotal) > 0 ? Number(line.line_net) / Number(line.line_subtotal) : 1,

@@ -75,12 +75,15 @@ function computeCoffeeLine({
   roastTaxRate = 0,
   extraCost = 0,
   receivedKg = null,
-  arrivalComplete = false
+  arrivalComplete = false,
+  // إجمالي الكيلو الخام مُدخلًا مباشرة (يتقدم على الكمية × كيلو/الخيشة)
+  rawKg: rawKgInput = null
 }) {
   const qty = Number(quantity) || 0;
   const unit = quantityUnit === "kg" ? "kg" : "sack";
   const kps = numOrNull(kgPerSack);
-  const rawKgExact = unit === "kg" ? qty : kps ? qty * kps : 0;
+  const override = numOrNull(rawKgInput);
+  const rawKgExact = override !== null && override > 0 ? override : unit === "kg" ? qty : kps ? qty * kps : 0;
   const rawKg = round3(rawKgExact);
   const sacks = unit === "sack" ? round3(qty) : kps && kps > 0 ? round3(qty / kps) : null;
   const beanExcl = round2(Math.max((Number(lineSubtotal) || 0) - (Number(lineDiscount) || 0), 0));
@@ -561,13 +564,19 @@ async function applyCoffeeToItems(items, payload, {
     if (item.includesTax) {
       throw new CoffeeError(400, `البند «${item.description || bean.itemName}»: بنود البن تُدخل بسعر بدون ضريبة (أطفئ «شامل الضريبة»)`);
     }
-    const quantityUnit = item.quantity_unit === "kg" ? "kg" : item.quantity_unit === "sack" ? "sack" : existing?.quantity_unit || null;
-    if (!quantityUnit) {
-      throw new CoffeeError(400, `البند «${item.description || bean.itemName}»: حدد وحدة الكمية (خيشة أم كغ)`);
+
+    // إجمالي الكيلو الخام: مُدخل مباشرة (raw_kg) أو الكمية بالكيلو أو
+    // الكمية × كيلو/الخيشة. غياب المفتاح عند التعديل = إبقاء المخزَّن.
+    const rawKgInput = item.raw_kg === undefined ? numOrNull(existing?.raw_kg) : numOrNull(item.raw_kg);
+    const quantityUnit = item.quantity_unit === "kg" ? "kg" : item.quantity_unit === "sack" ? "sack" : existing?.quantity_unit || "sack";
+    let kgPerSack = numOrNull(item.kg_per_sack) ?? numOrNull(existing?.kg_per_sack) ?? bean.bagSizeKg;
+    const qtyNum = Number(item.quantity) || 0;
+    if (rawKgInput > 0 && quantityUnit === "sack" && qtyNum > 0) {
+      // كيلو/الخيشة للعرض فقط — مشتق من الإجمالي المُدخل.
+      kgPerSack = round3(rawKgInput / qtyNum);
     }
-    const kgPerSack = numOrNull(item.kg_per_sack) ?? numOrNull(existing?.kg_per_sack) ?? bean.bagSizeKg;
-    if (quantityUnit === "sack" && !(kgPerSack > 0)) {
-      throw new CoffeeError(400, `البند «${item.description || bean.itemName}»: أدخل عدد الكيلو في الخيشة`);
+    if (!(rawKgInput > 0) && quantityUnit === "sack" && !(kgPerSack > 0)) {
+      throw new CoffeeError(400, `البند «${item.description || bean.itemName}»: أدخل عدد الكيلوات (إجمالي الخام)`);
     }
     const roastPerKg = numOrNull(item.roast_per_kg) ?? numOrNull(existing?.roast_per_kg) ?? bean.roastPerKg;
     if (roastPerKg < 0) throw new CoffeeError(400, "تكلفة التحميص لا تكون سالبة");
@@ -584,6 +593,7 @@ async function applyCoffeeToItems(items, payload, {
       quantity: item.quantity,
       quantityUnit,
       kgPerSack,
+      rawKg: rawKgInput,
       lineSubtotal: item.subtotal,
       lineTax: item.tax,
       lineDiscount,
@@ -1186,6 +1196,7 @@ async function recordArrival(invoice, lines, {
       quantity: Number(line.quantity),
       quantityUnit: line.quantity_unit,
       kgPerSack: line.kg_per_sack,
+      rawKg: rawKg,
       lineSubtotal: Number(line.line_subtotal),
       lineTax: Number(line.line_tax),
       lineDiscount: Number(line.line_discount) || 0,

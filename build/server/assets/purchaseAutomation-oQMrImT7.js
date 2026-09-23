@@ -2,7 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-DykD1wlV.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-CtLfIpXX.js';
-import { a as anyCoffeeAccount } from './coffeeInvoices-N2nQFyZQ.js';
+import { a as anyCoffeeAccount } from './coffeeInvoices-43pTEYyU.js';
 
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
