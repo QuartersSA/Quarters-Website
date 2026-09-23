@@ -829,6 +829,18 @@ function BulkReviewModal({
           }
         }
         if (next.roast_enabled) next.amount_includes_tax = false;
+        // إجمالي الكيلو الخام يُشتق تلقائيًا ما لم يُدخل يدويًا:
+        // الكمية بالكيلو، أو عدد الخِيَش × وزن الخيشة.
+        if (patch.raw_kg !== undefined) next.raw_kg_manual = true;
+        if (next.roast_enabled && patch.raw_kg === undefined && !next.raw_kg_manual) {
+          const qty = Number(next.quantity) || 0;
+          next.raw_kg =
+            next.quantity_unit === "kg"
+              ? qty || null
+              : next.kg_per_sack && qty > 0
+                ? Math.round(qty * next.kg_per_sack * 1000) / 1000
+                : (next.raw_kg ?? null);
+        }
         return next;
       }),
     }));
@@ -1313,34 +1325,33 @@ function BulkReviewModal({
                             </label>
                             {on ? (
                               <div className="grid grid-cols-4 gap-2 items-end">
-                                <label className="block">
-                                  <span className={`${ws.muted} text-[10px] block mb-0.5`}>الوحدة</span>
-                                  <GlassSelect
-                                    value={line.quantity_unit === "kg" ? "kg" : "sack"}
-                                    onChange={(value) => updateLine(index, { quantity_unit: value })}
-                                    options={[
-                                      { value: "sack", label: "خيشة" },
-                                      { value: "kg", label: "كغ" },
-                                    ]}
-                                  />
-                                </label>
-                                <label className="block">
-                                  <span className={`${ws.muted} text-[10px] block mb-0.5`}>كيلو / خيشة</span>
+                                <label className="block col-span-2">
+                                  <span className={`${ws.muted} text-[10px] block mb-0.5`}>
+                                    عدد الكيلوات (إجمالي الخام)
+                                  </span>
                                   <input
                                     type="number"
                                     step="any"
                                     min="0"
-                                    value={line.kg_per_sack ?? ""}
-                                    disabled={line.quantity_unit === "kg"}
+                                    value={line.raw_kg ?? ""}
                                     onChange={(event) =>
                                       updateLine(index, {
-                                        kg_per_sack: event.target.value === "" ? null : Number(event.target.value),
+                                        raw_kg: event.target.value === "" ? null : Number(event.target.value),
                                       })
                                     }
-                                    className={`${ws.input} px-2 py-1 text-xs text-left disabled:opacity-40`}
+                                    className={`${ws.input} px-2 py-1 text-xs text-left ${
+                                      !line.raw_kg ? "border-amber-400/70" : ""
+                                    }`}
                                     dir="ltr"
-                                    placeholder={bean.bag_size_kg ? String(bean.bag_size_kg) : "60"}
+                                    placeholder="أدخل إجمالي الكيلو"
                                   />
+                                  <span className={`${ws.muted} text-[10px] block mt-0.5`}>
+                                    {line.quantity_unit === "kg"
+                                      ? "= الكمية بالكيلو"
+                                      : line.kg_per_sack
+                                        ? `= ${line.quantity || 0} × ${line.kg_per_sack} كغ`
+                                        : "لم يُعرف وزن الخيشة — أدخل الإجمالي"}
+                                  </span>
                                 </label>
                                 <label className="block">
                                   <span className={`${ws.muted} text-[10px] block mb-0.5`}>تحميص / كغ</span>

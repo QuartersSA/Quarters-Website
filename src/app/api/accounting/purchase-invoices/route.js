@@ -466,6 +466,8 @@ function parseItems(body) {
       roast_enabled: raw?.roast_enabled,
       quantity_unit: raw?.quantity_unit,
       kg_per_sack: raw?.kg_per_sack,
+      // إجمالي الكيلو الخام المُدخل مباشرة (يتقدم على الكمية × كيلو/الخيشة)
+      raw_kg: raw?.raw_kg,
       roast_per_kg: raw?.roast_per_kg,
       roast_tax_rate: raw?.roast_tax_rate,
       extra_cost: raw?.extra_cost,

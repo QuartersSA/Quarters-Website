@@ -110,6 +110,7 @@ export default function CoffeeArrivalModal({
           quantity: row.quantity,
           quantityUnit: row.quantity_unit,
           kgPerSack: row.kg_per_sack,
+          rawKg: row.raw_kg,
           lineSubtotal: row.line_subtotal,
           lineTax: row.line_tax,
           lineDiscount: row.line_discount,
