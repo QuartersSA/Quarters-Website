@@ -66,7 +66,8 @@ function calendarHref() {
     "DTSTART;VALUE=DATE:20261111",
     "DTEND;VALUE=DATE:20261112",
     "SUMMARY:افتتاح فرع الواحة — Quarters",
-    `DESCRIPTION:${PAGE_URL}`,
+    "LOCATION:الدمام — حي الواحة",
+    `DESCRIPTION:الفرع الرابع لكوارترز — ${PAGE_URL}`,
     "END:VEVENT",
     "END:VCALENDAR",
   ].join("\r\n");
@@ -137,7 +138,7 @@ function Stamp({ opened }) {
   );
 }
 
-const TICKER = "افتتاح فرع الواحة  ✦  11 نوفمبر 2026  ✦  QUARTERS ALWAHA  ✦  قهوتكم تقترب  ✦  ";
+const TICKER = "افتتاح فرع الواحة  ✦  11 نوفمبر 2026  ✦  QUARTERS ALWAHA  ✦  الفرع الرابع لكوارترز  ✦  الدمام — حي الواحة  ✦  ";
 
 export default function AlwahaOpeningPage() {
   const { days, hours, minutes, seconds, total, mounted, now } = useCountdown();
@@ -163,7 +164,7 @@ export default function AlwahaOpeningPage() {
     };
     upsert("name", "description", "العد التنازلي لافتتاح فرع الواحة — كوارترز، 11 نوفمبر 2026.");
     upsert("property", "og:title", PAGE_TITLE);
-    upsert("property", "og:description", "نلتقيكم في 11 نوفمبر 2026.");
+    upsert("property", "og:description", "الفرع الرابع لكوارترز — الدمام، حي الواحة. نلتقيكم في 11 نوفمبر 2026.");
     upsert("property", "og:image", BRAND_LOGO);
     upsert("property", "og:url", PAGE_URL);
     upsert("name", "theme-color", PAPER);
@@ -219,12 +220,11 @@ export default function AlwahaOpeningPage() {
       {/* الترويسة — خط رفيع أعلى وأسفل كصحيفة */}
       <header className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
         <div className="alwaha-in flex items-center justify-between py-4 border-b" style={{ borderColor: `${INK}33` }}>
-          <a href="https://quarters.sa" className="flex items-center gap-3">
-            <img src={BRAND_LOGO} alt="Quarters" className="h-9 w-9 sm:h-10 sm:w-10 rounded-full object-cover" />
-            <span className="font-changa font-bold text-lg sm:text-xl leading-none">Quarters</span>
+          <a href="https://quarters.sa" className="flex items-center">
+            <img src={BRAND_LOGO} alt="Quarters — كوارترز" className="h-12 sm:h-16 w-auto object-contain" />
           </a>
           <div className="hidden sm:block text-xs tracking-[0.3em]" style={{ color: `${INK}99` }}>
-            الرياض — حي الواحة
+            الدمام — حي الواحة
           </div>
           <div className="text-xs sm:text-sm font-bold">
             {opened ? "افتتحنا" : "قريبًا"}
@@ -237,7 +237,7 @@ export default function AlwahaOpeningPage() {
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-6 md:gap-10">
           <div className="alwaha-in" style={{ animationDelay: ".1s" }}>
             <p className="text-sm sm:text-base font-bold tracking-[0.2em]" style={{ color: CLAY }}>
-              نستعد لافتتاح
+              نستعد لافتتاح فرعنا الرابع
             </p>
             <h1 className="mt-1 font-changa font-bold leading-[0.95] text-[72px] sm:text-[120px] md:text-[150px] lg:text-[190px]">
               <span className="block text-[0.32em] font-tajawal font-medium tracking-wide" style={{ color: `${INK}B3` }}>
@@ -265,6 +265,10 @@ export default function AlwahaOpeningPage() {
           <span className="mr-auto font-changa text-base sm:text-xl" dir="ltr" style={{ color: CLAY }}>
             11 / 11 / 2026
           </span>
+        </div>
+        <div className="alwaha-in mt-3 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm sm:text-base" style={{ animationDelay: ".4s" }}>
+          <span className="font-bold">الفرع الرابع لكوارترز</span>
+          <span style={{ color: `${INK}99` }}>الموقع: الدمام — حي الواحة</span>
         </div>
 
         {/* العدّاد */}
