@@ -90,7 +90,7 @@ function Digit({ value, label, last = false }) {
         {value}
       </span>
       <span
-        className="mt-1 sm:mt-2 font-tajawal text-[11px] sm:text-sm tracking-[0.35em] uppercase"
+        className="mt-1 sm:mt-2 font-tajawal text-[11px] sm:text-sm"
         style={{ color: `${INK}99` }}
       >
         {label}
@@ -130,7 +130,7 @@ function Stamp({ opened }) {
         <span className="font-changa font-bold leading-none text-[30px] sm:text-[40px]" style={{ color: CLAY }} dir="ltr">
           {opened ? "✓" : "11.11"}
         </span>
-        <span className="font-tajawal text-[10px] sm:text-xs tracking-[0.2em]" style={{ color: INK }}>
+        <span className="font-tajawal text-[10px] sm:text-xs" style={{ color: INK }}>
           {opened ? "افتتحنا" : "فرع الواحة"}
         </span>
       </div>
@@ -186,7 +186,7 @@ export default function AlwahaOpeningPage() {
   return (
     <main
       dir="rtl"
-      className="relative min-h-[100svh] overflow-hidden font-tajawal"
+      className="relative min-h-[100svh] overflow-hidden w-full max-w-[100vw] font-tajawal"
       style={{ backgroundColor: PAPER, color: INK }}
     >
       <style>{`
@@ -195,6 +195,8 @@ export default function AlwahaOpeningPage() {
         @keyframes alwahaBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .15; } }
         @keyframes alwahaIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
         .alwaha-in { animation: alwahaIn .8s cubic-bezier(.2,.7,.2,1) both; }
+        html, body { overflow-x: hidden; max-width: 100vw; }
+        .alwaha-strip { overflow: hidden; overflow-x: clip; contain: paint; }
         @media (prefers-reduced-motion: reduce) {
           .alwaha-in, [class*="animate-["] { animation: none !important; }
         }
@@ -223,7 +225,7 @@ export default function AlwahaOpeningPage() {
           <a href="https://quarters.sa" className="flex items-center">
             <img src={BRAND_LOGO} alt="Quarters — كوارترز" className="h-12 sm:h-16 w-auto object-contain" />
           </a>
-          <div className="hidden sm:block text-xs tracking-[0.3em]" style={{ color: `${INK}99` }}>
+          <div className="hidden sm:block text-xs" style={{ color: `${INK}99` }}>
             الدمام — حي الواحة
           </div>
           <div className="text-xs sm:text-sm font-bold">
@@ -236,11 +238,11 @@ export default function AlwahaOpeningPage() {
       <section className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 pt-8 sm:pt-12">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-6 md:gap-10">
           <div className="alwaha-in" style={{ animationDelay: ".1s" }}>
-            <p className="text-sm sm:text-base font-bold tracking-[0.2em]" style={{ color: CLAY }}>
+            <p className="text-sm sm:text-base font-bold" style={{ color: CLAY }}>
               نستعد لافتتاح فرعنا الرابع
             </p>
             <h1 className="mt-1 font-changa font-bold leading-[0.95] text-[72px] sm:text-[120px] md:text-[150px] lg:text-[190px]">
-              <span className="block text-[0.32em] font-tajawal font-medium tracking-wide" style={{ color: `${INK}B3` }}>
+              <span className="block text-[0.32em] font-tajawal font-medium" style={{ color: `${INK}B3` }}>
                 فرع
               </span>
               الواحة
@@ -256,7 +258,7 @@ export default function AlwahaOpeningPage() {
           className="alwaha-in mt-6 sm:mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1 border-y py-3"
           style={{ borderColor: `${INK}33`, animationDelay: ".35s" }}
         >
-          <span className="text-xs sm:text-sm tracking-[0.25em]" style={{ color: `${INK}99` }}>
+          <span className="text-xs sm:text-sm" style={{ color: `${INK}99` }}>
             موعد الافتتاح
           </span>
           <span className="font-changa font-bold text-2xl sm:text-4xl leading-none">
@@ -296,7 +298,7 @@ export default function AlwahaOpeningPage() {
           style={{ borderColor: `${INK}33`, animationDelay: ".55s" }}
         >
           <div className="max-w-xl">
-            <div className="flex items-center justify-between text-[11px] sm:text-xs tracking-[0.2em] mb-2" style={{ color: `${INK}99` }}>
+            <div className="flex items-center justify-between text-[11px] sm:text-xs mb-2" style={{ color: `${INK}99` }}>
               <span>الإعلان</span>
               <span>{Math.round(progress * 100)}٪</span>
               <span>الافتتاح</span>
@@ -330,9 +332,9 @@ export default function AlwahaOpeningPage() {
       </section>
 
       {/* شريط متحرك أسفل الصفحة */}
-      <div className="relative z-10 mt-10 sm:mt-14 overflow-hidden border-y" style={{ backgroundColor: INK, borderColor: INK }} dir="ltr">
+      <div className="alwaha-strip relative z-10 mt-10 sm:mt-14 w-full max-w-[100vw] border-y" style={{ backgroundColor: INK, borderColor: INK }} dir="ltr">
         <div
-          className="flex w-max whitespace-nowrap py-3 font-changa text-sm sm:text-lg tracking-wide animate-[alwahaTicker_40s_linear_infinite]"
+          className="flex w-max whitespace-nowrap py-3 font-changa text-sm sm:text-lg animate-[alwahaTicker_40s_linear_infinite]"
           style={{ color: PAPER }}
           dir="ltr"
           aria-hidden="true"
@@ -342,8 +344,8 @@ export default function AlwahaOpeningPage() {
         </div>
       </div>
 
-      <footer className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 py-6 flex items-center justify-between text-[11px] sm:text-xs tracking-[0.2em]" style={{ color: `${INK}80` }}>
-        <span>QUARTERS · كوارترز</span>
+      <footer className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 py-6 flex items-center justify-between text-[11px] sm:text-xs" style={{ color: `${INK}80` }}>
+        <span><span style={{ letterSpacing: "0.2em" }}>QUARTERS</span> · كوارترز</span>
         <a href="https://quarters.sa" className="hover:opacity-70">quarters.sa</a>
       </footer>
     </main>
