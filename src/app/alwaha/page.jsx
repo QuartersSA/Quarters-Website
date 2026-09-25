@@ -55,24 +55,18 @@ function useCountdown() {
   return { ...diffParts(now), mounted, now };
 }
 
-function calendarHref() {
-  const ics = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Quarters//Alwaha Opening//AR",
-    "BEGIN:VEVENT",
-    "UID:alwaha-opening-2026@quarters.sa",
-    "DTSTAMP:20260901T000000Z",
-    "DTSTART;VALUE=DATE:20261111",
-    "DTEND;VALUE=DATE:20261112",
-    "SUMMARY:افتتاح فرع الواحة — Quarters",
-    "LOCATION:الدمام — حي الواحة",
-    `DESCRIPTION:الفرع الرابع لكوارترز — ${PAGE_URL}`,
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ].join("\r\n");
-  return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
-}
+// ملف التقويم يُقدَّم من الخادم بنوع text/calendar — iOS Safari لا يقبل
+// روابط data: ويحتاج ملفًا حقيقيًا ليعرض «إضافة إلى التقويم».
+const ICS_URL = "/api/alwaha/opening.ics";
+const GOOGLE_CAL_URL =
+  "https://calendar.google.com/calendar/render?" +
+  new URLSearchParams({
+    action: "TEMPLATE",
+    text: "افتتاح فرع الواحة — Quarters",
+    dates: "20261111/20261112",
+    details: `الفرع الرابع لكوارترز — ${PAGE_URL}`,
+    location: "الدمام — حي الواحة",
+  }).toString();
 
 // رقم واحد من العدّاد: ضخم، بخط Changa، وتحته التسمية بخط صغير متباعد.
 function Digit({ value, label, last = false }) {
@@ -312,12 +306,20 @@ export default function AlwahaOpeningPage() {
           </div>
           <div className="flex flex-wrap gap-3">
             <a
-              href={calendarHref()}
-              download="alwaha-opening.ics"
+              href={ICS_URL}
               className="inline-flex items-center justify-center px-6 py-3.5 text-sm font-bold transition hover:opacity-90 active:translate-y-px"
               style={{ backgroundColor: INK, color: PAPER }}
             >
               أضف الموعد إلى التقويم
+            </a>
+            <a
+              href={GOOGLE_CAL_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center px-4 py-3.5 text-sm font-bold border-2 transition hover:bg-black/5 active:translate-y-px"
+              style={{ borderColor: INK, color: INK }}
+            >
+              Google Calendar
             </a>
             <button
               type="button"
