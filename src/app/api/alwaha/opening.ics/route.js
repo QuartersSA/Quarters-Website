@@ -3,6 +3,7 @@
 // ملفًا حقيقيًا بنوع text/calendar ليعرض «إضافة إلى التقويم».
 
 const PAGE_URL = "https://quarters.sa/alwaha";
+const MAP_URL = "https://maps.app.goo.gl/3w1HQiLNErsxoY3F8";
 
 function icsEscape(text) {
   return String(text)
@@ -25,8 +26,8 @@ export async function GET() {
     "DTSTART;VALUE=DATE:20261111",
     "DTEND;VALUE=DATE:20261112",
     `SUMMARY:${icsEscape("افتتاح فرع الواحة — Quarters")}`,
-    `LOCATION:${icsEscape("الدمام — حي الواحة")}`,
-    `DESCRIPTION:${icsEscape(`الفرع الرابع لكوارترز — ${PAGE_URL}`)}`,
+    `LOCATION:${icsEscape(`الدمام — حي الواحة — ${MAP_URL}`)}`,
+    `DESCRIPTION:${icsEscape(`الفرع الرابع لكوارترز\nالموقع على الخريطة: ${MAP_URL}\n${PAGE_URL}`)}`,
     `URL:${PAGE_URL}`,
     "BEGIN:VALARM",
     "TRIGGER:-P1D",
