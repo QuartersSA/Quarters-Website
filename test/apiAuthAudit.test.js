@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const PUBLIC_HANDLERS = new Set([
+  "alwaha/opening.ics/route.js:GET",
   "auth/expo-web-success/route.js:GET",
   "auth/token/route.js:GET",
   "employees/login/route.js:POST",
