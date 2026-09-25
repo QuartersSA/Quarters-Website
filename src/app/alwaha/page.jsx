@@ -14,6 +14,7 @@ const OPENING_ISO = "2026-11-11T00:00:00+03:00";
 const OPENING_AT = new Date(OPENING_ISO).getTime();
 const ANNOUNCED_AT = new Date("2026-09-01T00:00:00+03:00").getTime();
 const PAGE_URL = "https://quarters.sa/alwaha";
+const MAP_URL = "https://maps.app.goo.gl/3w1HQiLNErsxoY3F8";
 const PAGE_TITLE = "افتتاح فرع الواحة — Quarters";
 
 const INK = "#10261f"; // أخضر كوارترز الداكن (حبر)
@@ -64,8 +65,8 @@ const GOOGLE_CAL_URL =
     action: "TEMPLATE",
     text: "افتتاح فرع الواحة — Quarters",
     dates: "20261111/20261112",
-    details: `الفرع الرابع لكوارترز — ${PAGE_URL}`,
-    location: "الدمام — حي الواحة",
+    details: `الفرع الرابع لكوارترز\nالموقع على الخريطة: ${MAP_URL}\n${PAGE_URL}`,
+    location: `الدمام — حي الواحة — ${MAP_URL}`,
   }).toString();
 
 // رقم واحد من العدّاد: ضخم، بخط Changa، وتحته التسمية بخط صغير متباعد.
@@ -264,7 +265,15 @@ export default function AlwahaOpeningPage() {
         </div>
         <div className="alwaha-in mt-3 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm sm:text-base" style={{ animationDelay: ".4s" }}>
           <span className="font-bold">الفرع الرابع لكوارترز</span>
-          <span style={{ color: `${INK}99` }}>الموقع: الدمام — حي الواحة</span>
+          <a
+            href={MAP_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="underline decoration-dotted underline-offset-4 hover:opacity-70"
+            style={{ color: `${INK}B3` }}
+          >
+            الموقع: الدمام — حي الواحة ↗
+          </a>
         </div>
 
         {/* العدّاد */}
