@@ -1,10 +1,10 @@
 "use client";
 
 // صفحة مستقلة: العد التنازلي لافتتاح فرع «الواحة» — quarters.sa/alwaha
-// بلا تسجيل دخول، داكنة بلمسة ذهبية/زمردية، متوافقة مع الجوال والكمبيوتر.
+// أسلوب ملصق تحريري لعلامة قهوة: ورق كريمي، أخضر كوارترز الداكن، أرقام
+// ضخمة، ختم دائري، شريط متحرك. بلا تسجيل دخول، للجوال والكمبيوتر.
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarPlus, MapPin, Share2, Sparkles } from "lucide-react";
 
 const BRAND_LOGO =
   "https://ucarecdn.com/9abc4da3-5a32-444e-8a26-4e20862dae6a/-/format/auto/";
@@ -12,47 +12,38 @@ const BRAND_LOGO =
 // موعد الافتتاح: 11 نوفمبر 2026 — بداية اليوم بتوقيت الرياض.
 const OPENING_ISO = "2026-11-11T00:00:00+03:00";
 const OPENING_AT = new Date(OPENING_ISO).getTime();
-const BRANCH_NAME = "فرع الواحة";
+const ANNOUNCED_AT = new Date("2026-09-01T00:00:00+03:00").getTime();
 const PAGE_URL = "https://quarters.sa/alwaha";
+const PAGE_TITLE = "افتتاح فرع الواحة — Quarters";
+
+const INK = "#10261f"; // أخضر كوارترز الداكن (حبر)
+const PAPER = "#F3EDE2"; // ورق كريمي
+const CLAY = "#B8552F"; // طيني — لمسة واحدة فقط
 
 export function meta() {
   return [
-    { title: "افتتاح فرع الواحة — Quarters" },
-    {
-      name: "description",
-      content: "العد التنازلي لافتتاح فرع الواحة — كوارترز، 11 نوفمبر 2026.",
-    },
-    { property: "og:title", content: "افتتاح فرع الواحة — Quarters" },
-    {
-      property: "og:description",
-      content: "نلتقيكم في 11 نوفمبر 2026. تابعوا العد التنازلي.",
-    },
-    { property: "og:image", content: BRAND_LOGO },
-    { property: "og:url", content: PAGE_URL },
-    { name: "theme-color", content: "#07110e" },
+    { title: PAGE_TITLE },
+    { name: "description", content: "العد التنازلي لافتتاح فرع الواحة — كوارترز، 11 نوفمبر 2026." },
   ];
 }
 
-const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
 function pad2(n) {
   return String(Math.max(0, Math.floor(n))).padStart(2, "0");
 }
 
 function diffParts(now) {
   const total = Math.max(OPENING_AT - now, 0);
-  const seconds = Math.floor(total / 1000);
+  const s = Math.floor(total / 1000);
   return {
     total,
-    days: Math.floor(seconds / 86400),
-    hours: Math.floor((seconds % 86400) / 3600),
-    minutes: Math.floor((seconds % 3600) / 60),
-    seconds: seconds % 60,
+    days: Math.floor(s / 86400),
+    hours: Math.floor((s % 86400) / 3600),
+    minutes: Math.floor((s % 3600) / 60),
+    seconds: s % 60,
   };
 }
 
 function useCountdown() {
-  // نبدأ بقيمة الخادم نفسها ثم نُحدّث كل ثانية على العميل — لا اختلاف
-  // بين HTML الأولي والعميل (hydration).
   const [now, setNow] = useState(() => Date.now());
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -61,57 +52,9 @@ function useCountdown() {
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
-  return { ...diffParts(now), mounted };
+  return { ...diffParts(now), mounted, now };
 }
 
-// بطاقة رقم واحدة (أيام/ساعات/…) مع وميض خفيف عند تغيّر القيمة.
-function Unit({ value, label, accent = false }) {
-  const [flash, setFlash] = useState(false);
-  useEffect(() => {
-    setFlash(true);
-    const id = setTimeout(() => setFlash(false), 350);
-    return () => clearTimeout(id);
-  }, [value]);
-  return (
-    <div className="flex flex-col items-center gap-2 sm:gap-3">
-      <div
-        className={`relative w-[72px] h-[84px] sm:w-[110px] sm:h-[124px] md:w-[136px] md:h-[150px] rounded-2xl sm:rounded-3xl overflow-hidden border ${
-          accent
-            ? "border-amber-300/40 bg-gradient-to-b from-amber-200/15 to-amber-500/5"
-            : "border-white/10 bg-white/[0.04]"
-        } backdrop-blur-xl shadow-[0_20px_60px_-25px_rgba(0,0,0,0.9)]`}
-      >
-        {/* خط المنتصف كأرقام الساعة القلّابة */}
-        <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] to-transparent" />
-        <div
-          className={`absolute inset-0 flex items-center justify-center font-cairo font-black tabular-nums text-[40px] sm:text-[60px] md:text-[76px] leading-none transition-transform duration-300 ${
-            flash ? "scale-[1.04]" : "scale-100"
-          } ${accent ? "text-amber-200" : "text-white"}`}
-          dir="ltr"
-        >
-          {value}
-        </div>
-      </div>
-      <span className="text-[11px] sm:text-sm md:text-base tracking-[0.25em] text-white/55 font-cairo">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-function Separator() {
-  return (
-    <div
-      className="hidden sm:flex flex-col items-center justify-center gap-3 h-[124px] md:h-[150px] text-amber-200/60 text-4xl font-black animate-pulse"
-      aria-hidden="true"
-    >
-      :
-    </div>
-  );
-}
-
-// ملف تقويم .ics — يُحمَّل مباشرة من المتصفح (بلا خادم).
 function calendarHref() {
   const ics = [
     "BEGIN:VCALENDAR",
@@ -122,7 +65,7 @@ function calendarHref() {
     "DTSTAMP:20260901T000000Z",
     "DTSTART;VALUE=DATE:20261111",
     "DTEND;VALUE=DATE:20261112",
-    `SUMMARY:افتتاح ${BRANCH_NAME} — Quarters`,
+    "SUMMARY:افتتاح فرع الواحة — Quarters",
     `DESCRIPTION:${PAGE_URL}`,
     "END:VEVENT",
     "END:VCALENDAR",
@@ -130,13 +73,82 @@ function calendarHref() {
   return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
 }
 
-const PAGE_TITLE = "افتتاح فرع الواحة — Quarters";
+// رقم واحد من العدّاد: ضخم، بخط Changa، وتحته التسمية بخط صغير متباعد.
+function Digit({ value, label, last = false }) {
+  return (
+    <div
+      className={`relative flex flex-col items-center px-3 sm:px-6 md:px-8 py-2 ${
+        last ? "" : "sm:border-l sm:border-[#10261f]/20"
+      }`}
+    >
+      <span
+        className="font-changa font-bold leading-none tabular-nums text-[64px] sm:text-[104px] md:text-[136px] lg:text-[160px] tracking-tight"
+        style={{ color: INK }}
+        dir="ltr"
+      >
+        {value}
+      </span>
+      <span
+        className="mt-1 sm:mt-2 font-tajawal text-[11px] sm:text-sm tracking-[0.35em] uppercase"
+        style={{ color: `${INK}99` }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
+// ختم دائري يدور ببطء: نص على مسار دائري + التاريخ في المنتصف.
+function Stamp({ opened }) {
+  return (
+    <div className="relative w-[128px] h-[128px] sm:w-[168px] sm:h-[168px]">
+      <svg
+        viewBox="0 0 200 200"
+        className="absolute inset-0 w-full h-full animate-[alwahaSpin_28s_linear_infinite]"
+        aria-hidden="true"
+      >
+        <defs>
+          <path id="alwaha-ring" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+        </defs>
+        <circle cx="100" cy="100" r="96" fill="none" stroke={INK} strokeWidth="2" />
+        <circle cx="100" cy="100" r="60" fill="none" stroke={INK} strokeWidth="1" strokeDasharray="2 4" />
+        <text
+          fontSize="15"
+          fontWeight="700"
+          fill={INK}
+          letterSpacing="3"
+          direction="ltr"
+          style={{ fontFamily: "Tajawal, Cairo, sans-serif", direction: "ltr", unicodeBidi: "isolate" }}
+        >
+          <textPath href="#alwaha-ring" startOffset="0">
+            QUARTERS • ALWAHA • QUARTERS • ALWAHA •
+          </textPath>
+        </text>
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <span className="font-changa font-bold leading-none text-[30px] sm:text-[40px]" style={{ color: CLAY }} dir="ltr">
+          {opened ? "✓" : "11.11"}
+        </span>
+        <span className="font-tajawal text-[10px] sm:text-xs tracking-[0.2em]" style={{ color: INK }}>
+          {opened ? "افتتحنا" : "فرع الواحة"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const TICKER = "افتتاح فرع الواحة  ✦  11 نوفمبر 2026  ✦  QUARTERS ALWAHA  ✦  قهوتكم تقترب  ✦  ";
 
 export default function AlwahaOpeningPage() {
-  const { days, hours, minutes, seconds, total, mounted } = useCountdown();
+  const { days, hours, minutes, seconds, total, mounted, now } = useCountdown();
   const opened = mounted && total <= 0;
 
-  // العنوان ووسوم المشاركة على العميل (تصدير meta لا يُعرض في هذا القالب).
+  const progress = useMemo(() => {
+    const span = OPENING_AT - ANNOUNCED_AT;
+    const done = Math.min(Math.max(now - ANNOUNCED_AT, 0), span);
+    return span > 0 ? done / span : 1;
+  }, [now]);
+
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.title = PAGE_TITLE;
@@ -151,26 +163,14 @@ export default function AlwahaOpeningPage() {
     };
     upsert("name", "description", "العد التنازلي لافتتاح فرع الواحة — كوارترز، 11 نوفمبر 2026.");
     upsert("property", "og:title", PAGE_TITLE);
-    upsert("property", "og:description", "نلتقيكم في 11 نوفمبر 2026. تابعوا العد التنازلي.");
+    upsert("property", "og:description", "نلتقيكم في 11 نوفمبر 2026.");
     upsert("property", "og:image", BRAND_LOGO);
     upsert("property", "og:url", PAGE_URL);
-    upsert("name", "theme-color", "#07110e");
+    upsert("name", "theme-color", PAPER);
   }, []);
 
-  // نسبة التقدم من تاريخ الإعلان (1 سبتمبر 2026) إلى الافتتاح — للحلقة.
-  const progress = useMemo(() => {
-    const start = new Date("2026-09-01T00:00:00+03:00").getTime();
-    const span = OPENING_AT - start;
-    const done = Math.min(Math.max(Date.now() - start, 0), span);
-    return span > 0 ? done / span : 1;
-  }, [seconds]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const share = async () => {
-    const data = {
-      title: "افتتاح فرع الواحة — Quarters",
-      text: "نلتقيكم في افتتاح فرع الواحة 11 نوفمبر 2026 ☕",
-      url: PAGE_URL,
-    };
+    const data = { title: PAGE_TITLE, text: "افتتاح فرع الواحة — 11 نوفمبر 2026", url: PAGE_URL };
     try {
       if (navigator.share) await navigator.share(data);
       else {
@@ -178,183 +178,170 @@ export default function AlwahaOpeningPage() {
         alert("تم نسخ الرابط");
       }
     } catch {
-      // المستخدم ألغى المشاركة
+      // أُلغيت المشاركة
     }
   };
-
-  // أرقام بالعربية الهندية للتاريخ فقط (العداد يبقى بأرقام لاتينية للوضوح).
-  const arabicDate = "١١ نوفمبر ٢٠٢٦".replace(/[0-9]/g, (d) => AR_DIGITS[d]);
 
   return (
     <main
       dir="rtl"
-      className="relative min-h-[100svh] overflow-hidden bg-[#07110e] text-white font-cairo selection:bg-amber-300/30"
+      className="relative min-h-[100svh] overflow-hidden font-tajawal"
+      style={{ backgroundColor: PAPER, color: INK }}
     >
-      {/* خلفية: تدرّج زمردي داكن + هالات ذهبية متحركة + حبيبات */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(14,122,95,0.35),transparent_55%),radial-gradient(ellipse_at_bottom,rgba(120,80,20,0.25),transparent_60%)]" />
-        <div className="absolute -top-32 -right-24 w-[420px] h-[420px] sm:w-[640px] sm:h-[640px] rounded-full bg-amber-400/15 blur-[120px] animate-[alwahaFloat_14s_ease-in-out_infinite]" />
-        <div className="absolute -bottom-40 -left-32 w-[460px] h-[460px] sm:w-[700px] sm:h-[700px] rounded-full bg-emerald-500/15 blur-[130px] animate-[alwahaFloat_18s_ease-in-out_infinite_reverse]" />
-        <div
-          className="absolute inset-0 opacity-[0.07]"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
-          }}
-        />
-        {/* نجيمات ذهبية */}
-        {[...Array(18)].map((_, i) => (
-          <span
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-amber-200/70 animate-[alwahaTwinkle_4s_ease-in-out_infinite]"
-            style={{
-              top: `${(i * 53) % 100}%`,
-              left: `${(i * 37 + 11) % 100}%`,
-              animationDelay: `${(i % 7) * 0.6}s`,
-              opacity: 0.35 + ((i * 13) % 50) / 100,
-            }}
-          />
-        ))}
-      </div>
-
       <style>{`
-        @keyframes alwahaFloat { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(-30px,40px) scale(1.08);} }
-        @keyframes alwahaTwinkle { 0%,100% { opacity: .15; transform: scale(.8);} 50% { opacity: .9; transform: scale(1.3);} }
-        @keyframes alwahaRise { from { opacity: 0; transform: translateY(18px);} to { opacity: 1; transform: translateY(0);} }
-        .alwaha-rise { animation: alwahaRise .9s cubic-bezier(.2,.8,.2,1) both; }
+        @keyframes alwahaSpin { to { transform: rotate(360deg); } }
+        @keyframes alwahaTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes alwahaBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .15; } }
+        @keyframes alwahaIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        .alwaha-in { animation: alwahaIn .8s cubic-bezier(.2,.7,.2,1) both; }
+        @media (prefers-reduced-motion: reduce) {
+          .alwaha-in, [class*="animate-["] { animation: none !important; }
+        }
       `}</style>
 
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col items-center justify-between px-5 py-8 sm:px-8 sm:py-10">
-        {/* الترويسة */}
-        <header className="alwaha-rise flex w-full items-center justify-between">
+      {/* حبيبات ورق خفيفة + بقعة فنجان قهوة (حلقة) في الزاوية */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-multiply"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+        }}
+      />
+      <svg
+        className="pointer-events-none absolute top-[38%] left-[22%] w-[260px] h-[260px] sm:w-[420px] sm:h-[420px] opacity-[0.08]"
+        viewBox="0 0 200 200"
+        aria-hidden="true"
+      >
+        <circle cx="100" cy="100" r="82" fill="none" stroke="#5a3a24" strokeWidth="9" strokeDasharray="230 40 120 30" strokeLinecap="round" />
+        <circle cx="103" cy="97" r="76" fill="none" stroke="#5a3a24" strokeWidth="3" strokeDasharray="60 90 200 20" />
+      </svg>
+
+      {/* الترويسة — خط رفيع أعلى وأسفل كصحيفة */}
+      <header className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="alwaha-in flex items-center justify-between py-4 border-b" style={{ borderColor: `${INK}33` }}>
           <a href="https://quarters.sa" className="flex items-center gap-3">
-            <img
-              src={BRAND_LOGO}
-              alt="Quarters"
-              className="h-10 w-10 sm:h-12 sm:w-12 rounded-2xl object-cover ring-1 ring-white/15"
-            />
-            <span className="text-base sm:text-lg font-bold tracking-wide text-white/90">
-              Quarters
-            </span>
+            <img src={BRAND_LOGO} alt="Quarters" className="h-9 w-9 sm:h-10 sm:w-10 rounded-full object-cover" />
+            <span className="font-changa font-bold text-lg sm:text-xl leading-none">Quarters</span>
           </a>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1.5 text-[11px] sm:text-xs font-bold text-amber-200">
-            <MapPin className="h-3.5 w-3.5" />
-            قريبًا — الواحة
-          </span>
-        </header>
-
-        {/* المحتوى */}
-        <section className="flex w-full flex-col items-center text-center">
-          <div
-            className="alwaha-rise inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs sm:text-sm text-white/70"
-            style={{ animationDelay: ".1s" }}
-          >
-            <Sparkles className="h-4 w-4 text-amber-300" />
-            {opened ? "افتتحنا أبوابنا" : "نستعد لاستقبالكم"}
+          <div className="hidden sm:block text-xs tracking-[0.3em]" style={{ color: `${INK}99` }}>
+            الرياض — حي الواحة
           </div>
+          <div className="text-xs sm:text-sm font-bold">
+            {opened ? "افتتحنا" : "قريبًا"}
+          </div>
+        </div>
+      </header>
 
-          <h1
-            className="alwaha-rise mt-5 text-[34px] leading-[1.15] sm:text-6xl md:text-7xl font-black"
-            style={{ animationDelay: ".2s" }}
-          >
-            افتتاح{" "}
-            <span className="bg-gradient-to-l from-amber-200 via-amber-300 to-yellow-100 bg-clip-text text-transparent">
-              فرع الواحة
-            </span>
-          </h1>
-
-          <p
-            className="alwaha-rise mt-4 max-w-xl text-sm sm:text-lg text-white/65 leading-relaxed"
-            style={{ animationDelay: ".3s" }}
-          >
-            {opened
-              ? "فرع الواحة يفتح أبوابه اليوم — نتشرف بزيارتكم."
-              : "قهوتكم المفضلة تقترب من الواحة. نلتقيكم يوم"}
-            {!opened ? (
-              <span className="block mt-1 text-amber-200 font-bold text-base sm:text-xl" dir="rtl">
-                الأربعاء {arabicDate}
+      {/* المحتوى */}
+      <section className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 pt-8 sm:pt-12">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] items-end gap-6 md:gap-10">
+          <div className="alwaha-in" style={{ animationDelay: ".1s" }}>
+            <p className="text-sm sm:text-base font-bold tracking-[0.2em]" style={{ color: CLAY }}>
+              نستعد لافتتاح
+            </p>
+            <h1 className="mt-1 font-changa font-bold leading-[0.95] text-[72px] sm:text-[120px] md:text-[150px] lg:text-[190px]">
+              <span className="block text-[0.32em] font-tajawal font-medium tracking-wide" style={{ color: `${INK}B3` }}>
+                فرع
               </span>
-            ) : null}
-          </p>
-
-          {/* العدّاد */}
-          <div
-            className="alwaha-rise mt-8 sm:mt-12 flex items-start justify-center gap-2.5 sm:gap-4 md:gap-5"
-            style={{ animationDelay: ".4s" }}
-            role="timer"
-            aria-live="off"
-          >
-            {opened ? (
-              <div className="rounded-3xl border border-amber-300/40 bg-amber-300/10 px-8 py-6 text-2xl sm:text-4xl font-black text-amber-200">
-                🎉 أهلًا بكم في فرع الواحة
-              </div>
-            ) : (
-              <>
-                <Unit value={pad2(days)} label="يوم" accent />
-                <Separator />
-                <Unit value={pad2(hours)} label="ساعة" />
-                <Separator />
-                <Unit value={pad2(minutes)} label="دقيقة" />
-                <Separator />
-                <Unit value={pad2(seconds)} label="ثانية" />
-              </>
-            )}
+              الواحة
+            </h1>
           </div>
+          <div className="alwaha-in justify-self-start md:justify-self-end md:mb-4" style={{ animationDelay: ".25s" }}>
+            <Stamp opened={opened} />
+          </div>
+        </div>
 
-          {/* شريط التقدم */}
-          {!opened ? (
-            <div
-              className="alwaha-rise mt-8 w-full max-w-md"
-              style={{ animationDelay: ".5s" }}
-            >
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-gradient-to-l from-amber-300 to-emerald-400 transition-[width] duration-1000"
-                  style={{ width: `${Math.round(progress * 100)}%` }}
-                />
-              </div>
-              <div className="mt-2 flex justify-between text-[11px] text-white/40">
-                <span>الإعلان</span>
-                <span>الافتتاح</span>
+        {/* سطر التاريخ */}
+        <div
+          className="alwaha-in mt-6 sm:mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1 border-y py-3"
+          style={{ borderColor: `${INK}33`, animationDelay: ".35s" }}
+        >
+          <span className="text-xs sm:text-sm tracking-[0.25em]" style={{ color: `${INK}99` }}>
+            موعد الافتتاح
+          </span>
+          <span className="font-changa font-bold text-2xl sm:text-4xl leading-none">
+            الأربعاء ١١ نوفمبر ٢٠٢٦
+          </span>
+          <span className="mr-auto font-changa text-base sm:text-xl" dir="ltr" style={{ color: CLAY }}>
+            11 / 11 / 2026
+          </span>
+        </div>
+
+        {/* العدّاد */}
+        <div className="alwaha-in mt-6 sm:mt-10" style={{ animationDelay: ".45s" }} role="timer" aria-live="off">
+          {opened ? (
+            <div className="py-10 text-center">
+              <div className="font-changa font-bold text-5xl sm:text-7xl">أهلًا بكم في فرع الواحة</div>
+              <div className="mt-3 text-base sm:text-lg" style={{ color: `${INK}B3` }}>
+                أبوابنا مفتوحة من اليوم — نتشرف بزيارتكم.
               </div>
             </div>
-          ) : null}
+          ) : (
+            <div className="grid grid-cols-2 sm:flex sm:justify-between sm:items-stretch">
+              <Digit value={pad2(days)} label="يوم" />
+              <Digit value={pad2(hours)} label="ساعة" />
+              <Digit value={pad2(minutes)} label="دقيقة" />
+              <Digit value={pad2(seconds)} label="ثانية" last />
+            </div>
+          )}
+        </div>
 
-          {/* الأزرار */}
-          <div
-            className="alwaha-rise mt-8 flex flex-wrap items-center justify-center gap-3"
-            style={{ animationDelay: ".6s" }}
-          >
+        {/* شريط التقدم + الأزرار */}
+        <div
+          className="alwaha-in mt-6 sm:mt-10 grid grid-cols-1 md:grid-cols-[1fr_auto] items-center gap-6 border-t pt-6"
+          style={{ borderColor: `${INK}33`, animationDelay: ".55s" }}
+        >
+          <div className="max-w-xl">
+            <div className="flex items-center justify-between text-[11px] sm:text-xs tracking-[0.2em] mb-2" style={{ color: `${INK}99` }}>
+              <span>الإعلان</span>
+              <span>{Math.round(progress * 100)}٪</span>
+              <span>الافتتاح</span>
+            </div>
+            <div className="h-[6px] w-full" style={{ backgroundColor: `${INK}1A` }}>
+              <div
+                className="h-full transition-[width] duration-1000"
+                style={{ width: `${Math.round(progress * 100)}%`, backgroundColor: INK }}
+              />
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-3">
             <a
               href={calendarHref()}
               download="alwaha-opening.ics"
-              className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-l from-amber-300 to-yellow-200 px-5 py-3 text-sm font-bold text-[#1a1305] shadow-[0_10px_30px_-10px_rgba(251,191,36,0.6)] transition hover:brightness-105 active:scale-[0.98]"
+              className="inline-flex items-center justify-center px-6 py-3.5 text-sm font-bold transition hover:opacity-90 active:translate-y-px"
+              style={{ backgroundColor: INK, color: PAPER }}
             >
-              <CalendarPlus className="h-4 w-4" />
               أضف الموعد إلى التقويم
             </a>
             <button
               type="button"
               onClick={share}
-              className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.05] px-5 py-3 text-sm font-bold text-white/85 backdrop-blur transition hover:bg-white/[0.09] active:scale-[0.98]"
+              className="inline-flex items-center justify-center px-6 py-3.5 text-sm font-bold border-2 transition hover:bg-black/5 active:translate-y-px"
+              style={{ borderColor: INK, color: INK }}
             >
-              <Share2 className="h-4 w-4" />
-              شارك الصفحة
+              شارك
             </button>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* التذييل */}
-        <footer
-          className="alwaha-rise mt-10 flex w-full flex-col items-center gap-1 text-center text-[11px] sm:text-xs text-white/35"
-          style={{ animationDelay: ".7s" }}
+      {/* شريط متحرك أسفل الصفحة */}
+      <div className="relative z-10 mt-10 sm:mt-14 overflow-hidden border-y" style={{ backgroundColor: INK, borderColor: INK }} dir="ltr">
+        <div
+          className="flex w-max whitespace-nowrap py-3 font-changa text-sm sm:text-lg tracking-wide animate-[alwahaTicker_40s_linear_infinite]"
+          style={{ color: PAPER }}
+          dir="ltr"
+          aria-hidden="true"
         >
-          <span>Quarters · كوارترز</span>
-          <a href="https://quarters.sa" className="hover:text-white/60 transition">
-            quarters.sa
-          </a>
-        </footer>
+          <span className="px-4">{TICKER.repeat(4)}</span>
+          <span className="px-4">{TICKER.repeat(4)}</span>
+        </div>
       </div>
+
+      <footer className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 py-6 flex items-center justify-between text-[11px] sm:text-xs tracking-[0.2em]" style={{ color: `${INK}80` }}>
+        <span>QUARTERS · كوارترز</span>
+        <a href="https://quarters.sa" className="hover:opacity-70">quarters.sa</a>
+      </footer>
     </main>
   );
 }
