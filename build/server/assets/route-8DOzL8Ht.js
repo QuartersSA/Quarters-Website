@@ -1,14 +1,14 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { createPurchaseInvoice } from './route-CU6b0Pr9.js';
+import { createPurchaseInvoice } from './route-IAzHqeiX.js';
+import { a as reserveIds, i as insertLineStatement } from './coffeeInvoices-BHb-fnV5.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './accountsTree-BiYqjwch.js';
-import './purchaseAutomation-DG3aaNSa.js';
+import './purchaseAutomation-DTnaRPvo.js';
 import './wasender-DykD1wlV.js';
 import './waNotify-CtLfIpXX.js';
-import './coffeeInvoices-tatr7e1X.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
@@ -16,8 +16,9 @@ import './branchVisibility-CPqSH5sT.js';
 // فاتورة مشتريات مسير الرواتب: عند تقفيل شهر الرواتب تُنشأ فاتورة تحت
 // حساب «رواتب وأجور» (5201) بتاريخ آخر يوم في الشهر المقفل، بند لكل
 // موظف (الوصف = اسم الموظف، السعر = الراتب الصافي)، وتكون مدفوعة.
-// عند فتح الشهر تُوقف الفاتورة (إيقاف لا حذف) حتى يُعاد إنشاؤها عند
-// التقفيل التالي.
+// عند فتح الشهر تُوقف الفاتورة (إيقاف لا حذف)، وعند التقفيل مجددًا تُعاد
+// الفاتورة نفسها إلى النشاط وتُحدَّث بنودها وإجماليها من آخر بيانات
+// الشهر المقفل (نفس الرقم والمعرّف — لا نسخة جديدة).
 
 const SALARIES_CODE = "5201";
 const SALARIES_NAME = "رواتب وأجور";
@@ -120,11 +121,78 @@ async function syncPayrollInvoice({
   const invoiceDate = lastDayOfMonth(month);
   const number = payrollInvoiceNumber(month);
 
-  // تقفيل متكرر لنفس الشهر: تُوقف السابقة وتُنشأ نسخة جديدة بنفس الرقم.
-  await deactivatePayrollInvoices(month, actor, "أُعيد إنشاؤها عند تقفيل الشهر مجددًا");
+  // تقفيل متكرر لنفس الشهر: الفاتورة القائمة (ولو موقوفة) تُحدَّث في
+  // مكانها — بنودها وإجماليها ودفعتها — وتعود نشطة.
+  const [existing] = await sql`
+    SELECT id, is_active FROM accounting_purchase_invoices
+    WHERE invoice_number = ${number} AND invoice_kind = 'purchase'
+    ORDER BY is_active DESC, id DESC
+    LIMIT 1
+  `;
+  const supplierName = `مسير الرواتب — ${month}`;
+  const notes = `فاتورة مسير الرواتب لشهر ${month} — أُنشئت تلقائيًا عند تقفيل الشهر (${items.length} موظف).`;
+  const actorId = actor?.id ? Number(actor.id) : null;
+  const actorName = actor?.name ? String(actor.name) : null;
+  if (existing) {
+    const invoiceId = Number(existing.id);
+    const lineIds = await reserveIds("accounting_purchase_invoice_items", items.length);
+    const lines = items.map((line, index) => ({
+      position: index,
+      description: line.description,
+      accountId: accountId,
+      quantity: 1,
+      unitPrice: line.unit_price,
+      amount: line.unit_price,
+      taxRate: 0,
+      includesTax: false,
+      subtotal: line.unit_price,
+      tax: 0,
+      total: line.unit_price,
+      lineDiscount: 0,
+      lineNet: line.unit_price,
+      coffee: null
+    }));
+    await sql.transaction([sql`
+        UPDATE accounting_purchase_invoices
+        SET supplier_name = ${supplierName}, contact_id = NULL,
+            expense_account_id = ${accountId},
+            invoice_date = ${invoiceDate}, due_date = ${invoiceDate}, currency = 'SAR',
+            subtotal_amount = ${total}, discount_amount = 0, tax_amount = 0,
+            total_amount = ${total}, paid_amount = ${total},
+            workflow_status = 'pending_payment', notes = ${notes},
+            is_active = TRUE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+        WHERE id = ${invoiceId}
+      `, sql`DELETE FROM accounting_purchase_invoice_items WHERE invoice_id = ${invoiceId}`, ...lines.map((line, index) => insertLineStatement(lineIds[index], invoiceId, line)), sql`DELETE FROM accounting_purchase_invoice_payments WHERE invoice_id = ${invoiceId}`, sql`
+        INSERT INTO accounting_purchase_invoice_payments (
+          invoice_id, amount, payment_date, bank_account_id, receipt_url, notes,
+          created_by_employee_id, created_by_employee_name
+        )
+        VALUES (
+          ${invoiceId}, ${total}, ${invoiceDate}, NULL, NULL,
+          'دفعة مسير الرواتب — تُحدَّث مع تقفيل الشهر',
+          ${actorId}, ${actorName}
+        )
+      `]);
+    await logPurchaseAudit({
+      entityType: "invoice",
+      entityId: invoiceId,
+      action: "updated",
+      summary: `تحديث فاتورة الرواتب ${number} عند تقفيل الشهر مجددًا: ${items.length} موظف، الإجمالي ${total.toFixed(2)}${existing.is_active === false ? " — أُعيد تفعيلها" : ""}`,
+      actor
+    });
+    return {
+      ok: true,
+      invoice_id: invoiceId,
+      invoice_number: number,
+      invoice_date: invoiceDate,
+      total,
+      count: items.length,
+      updated: true
+    };
+  }
   const result = await createPurchaseInvoice({
     invoice_number: number,
-    supplier_name: `مسير الرواتب — ${month}`,
+    supplier_name: supplierName,
     expense_account_id: accountId,
     invoice_date: invoiceDate,
     due_date: invoiceDate,
@@ -136,7 +204,7 @@ async function syncPayrollInvoice({
     total_amount: total,
     paid_amount: total,
     workflow_status: "pending_payment",
-    notes: `فاتورة مسير الرواتب لشهر ${month} — أُنشئت تلقائيًا عند تقفيل الشهر (${items.length} موظف).`
+    notes
   }, actor);
   if (!result?.ok) {
     return {

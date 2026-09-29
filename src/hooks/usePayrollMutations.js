@@ -113,7 +113,7 @@ export function usePayrollClose(month) {
       const inv = data?.payroll_invoice;
       const msg = data?.run?.is_closed
         ? inv?.invoice_number
-          ? `تم تقفيل الشهر — وأُنشئت فاتورة الرواتب ${inv.invoice_number} (${Number(inv.total || 0).toFixed(2)} ر.س، ${inv.count} موظف)`
+          ? `تم تقفيل الشهر — ${inv.updated ? "وحُدّثت" : "وأُنشئت"} فاتورة الرواتب ${inv.invoice_number} (${Number(inv.total || 0).toFixed(2)} ر.س، ${inv.count} موظف)`
           : "تم تقفيل الشهر بنجاح"
         : "تم فتح الشهر بنجاح";
       toast.success(msg);
