@@ -1,5 +1,9 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
+import {
+  syncPayrollInvoice,
+  deactivatePayrollInvoices,
+} from "@/app/api/utils/payrollInvoice";
 
 const PAYROLL_CATEGORY_NAME = "رواتب";
 const PAYROLL_TEMPLATE_NAME = "رواتب الموظفين";
@@ -222,11 +226,36 @@ export async function POST(request) {
       payrollSyncError = syncErr?.message || String(syncErr);
     }
 
+    // فاتورة مشتريات الرواتب تحت «رواتب وأجور» بتاريخ آخر يوم في الشهر:
+    // بند لكل موظف بصافي راتبه، مدفوعة. تُوقف عند فتح الشهر. فشلها لا
+    // يمنع التقفيل — يُعاد للواجهة كتحذير.
+    let payrollInvoice = null;
+    let payrollInvoiceError = null;
+    try {
+      if (newIsClosed) {
+        const result = await syncPayrollInvoice({
+          runId: run.id,
+          month: monthRaw,
+          actor: auth.user,
+        });
+        if (result.ok) payrollInvoice = result;
+        else payrollInvoiceError = result.error;
+      } else {
+        const count = await deactivatePayrollInvoices(monthRaw, auth.user, "فُتح شهر الرواتب");
+        payrollInvoice = { deactivated: count };
+      }
+    } catch (invoiceErr) {
+      console.error("payroll close → purchase invoice sync failed", invoiceErr);
+      payrollInvoiceError = invoiceErr?.message || String(invoiceErr);
+    }
+
     return Response.json({
       ok: true,
       run: updated,
       payroll_sync: payrollSync,
       payroll_sync_error: payrollSyncError,
+      payroll_invoice: payrollInvoice,
+      payroll_invoice_error: payrollInvoiceError,
     });
   } catch (error) {
     console.error("payroll close POST error", error);

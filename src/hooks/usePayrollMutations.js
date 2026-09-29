@@ -107,10 +107,19 @@ export function usePayrollClose(month) {
       await queryClient.invalidateQueries({
         queryKey: queryKeys.employeeLoans(),
       });
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices(),
+      });
+      const inv = data?.payroll_invoice;
       const msg = data?.run?.is_closed
-        ? "تم تقفيل الشهر بنجاح"
+        ? inv?.invoice_number
+          ? `تم تقفيل الشهر — وأُنشئت فاتورة الرواتب ${inv.invoice_number} (${Number(inv.total || 0).toFixed(2)} ر.س، ${inv.count} موظف)`
+          : "تم تقفيل الشهر بنجاح"
         : "تم فتح الشهر بنجاح";
       toast.success(msg);
+      if (data?.payroll_invoice_error) {
+        toast.warning(`لم تُنشأ فاتورة الرواتب: ${data.payroll_invoice_error}`, { duration: 8000 });
+      }
     },
     onError: (error) => {
       console.error(error);
