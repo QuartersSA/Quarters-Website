@@ -29,6 +29,7 @@ import {
   contractStatus,
   generateSchedule,
   installmentAmounts,
+  installmentWithFixed,
   isDateKey,
   round2,
 } from "@/utils/leaseMath";
@@ -81,6 +82,11 @@ function newCustomRow(overrides = {}) {
     status: "pending",
     ...overrides,
   };
+}
+
+function newFixedRow(overrides = {}) {
+  rowKeySeq += 1;
+  return { key: `fixed-${Date.now()}-${rowKeySeq}`, label: "", amount: "", ...overrides };
 }
 
 function statusPillClass(status) {
@@ -145,6 +151,8 @@ export default function LeaseContractModal({
   const [vatRate, setVatRate] = useState(String(DEFAULT_VAT_RATE));
   const [firstDueDate, setFirstDueDate] = useState("");
   const [customRows, setCustomRows] = useState([]);
+  // المبالغ الثابتة لكل دفعة (قبل الضريبة): {key, label, amount}
+  const [fixedRows, setFixedRows] = useState([]);
   const [notes, setNotes] = useState("");
   const [terminated, setTerminated] = useState(false);
   const [regenerate, setRegenerate] = useState(false);
@@ -212,6 +220,16 @@ export default function LeaseContractModal({
       setIncludesVat(enteredIncl && freq !== "custom");
       setVatRate(String(storedRate));
       setFirstDueDate(contract.first_due_date || "");
+      const storedFixed = Array.isArray(contract.fixed_charges) ? contract.fixed_charges : [];
+      setFixedRows(
+        storedFixed.length
+          ? storedFixed.map((c) =>
+              newFixedRow({ label: c.label || "", amount: moneyValue(c.amount).toFixed(2) }),
+            )
+          : moneyValue(contract.fixed_amount) > 0
+            ? [newFixedRow({ label: "مبالغ ثابتة", amount: moneyValue(contract.fixed_amount).toFixed(2) })]
+            : [],
+      );
       const payments = Array.isArray(contract.payments) ? contract.payments : [];
       setCustomRows(
         freq === "custom"
@@ -220,7 +238,7 @@ export default function LeaseContractModal({
               .map((p) =>
                 newCustomRow({
                   due_date: p.due_date || "",
-                  amount: moneyValue(p.amount_excl).toFixed(2),
+                  amount: Math.max(moneyValue(p.amount_excl) - moneyValue(p.fixed_excl), 0).toFixed(2),
                   description: p.notes || "",
                   status: p.status || "pending",
                 }),
@@ -249,6 +267,7 @@ export default function LeaseContractModal({
       setVatRate(String(DEFAULT_VAT_RATE));
       setFirstDueDate("");
       setCustomRows([]);
+      setFixedRows([]);
       setNotes("");
       setTerminated(false);
       setAttachmentUrl("");
@@ -302,6 +321,10 @@ export default function LeaseContractModal({
   // ---------- المعاينة الحية ----------
 
   const vatRateValue = Math.min(Math.max(moneyValue(vatRate), 0), 100);
+  const fixedTotal = useMemo(
+    () => round2(fixedRows.reduce((sum, row) => sum + Math.max(moneyValue(row.amount), 0), 0)),
+    [fixedRows],
+  );
 
   const previewRows = useMemo(() => {
     if (frequency === "custom") {
@@ -316,8 +339,9 @@ export default function LeaseContractModal({
           period_end: null,
           description: row.description || "",
           status: row.status || "pending",
-          ...installmentAmounts({
+          ...installmentWithFixed({
             amount: row.amount,
+            fixedAmount: fixedTotal,
             vatRate: vatRateValue,
             amountIncludesVat: includesVat,
           }),
@@ -328,6 +352,7 @@ export default function LeaseContractModal({
       endDate,
       frequency,
       amount,
+      fixedAmount: fixedTotal,
       vatRate: vatRateValue,
       amountIncludesVat: includesVat,
       firstDueDate: isDateKey(firstDueDate) ? firstDueDate : null,
@@ -335,6 +360,7 @@ export default function LeaseContractModal({
   }, [
     frequency,
     customRows,
+    fixedTotal,
     startDate,
     endDate,
     amount,
@@ -357,12 +383,13 @@ export default function LeaseContractModal({
 
   const installment = useMemo(
     () =>
-      installmentAmounts({
+      installmentWithFixed({
         amount,
+        fixedAmount: fixedTotal,
         vatRate: vatRateValue,
         amountIncludesVat: includesVat,
       }),
-    [amount, vatRateValue, includesVat],
+    [amount, fixedTotal, vatRateValue, includesVat],
   );
 
   const today = useMemo(() => todayRiyadh(), []);
@@ -383,7 +410,7 @@ export default function LeaseContractModal({
     if (!isEditing || frequency !== "custom") return false;
     const saved = (Array.isArray(contract?.payments) ? contract.payments : [])
       .filter((p) => p.status !== "cancelled")
-      .map((p) => `${p.due_date}|${moneyValue(p.amount_excl).toFixed(2)}`)
+      .map((p) => `${p.due_date}|${Math.max(moneyValue(p.amount_excl) - moneyValue(p.fixed_excl), 0).toFixed(2)}`)
       .sort();
     const current = customRows
       .filter((row) => row.due_date || moneyValue(row.amount) > 0)
@@ -406,7 +433,8 @@ export default function LeaseContractModal({
       endDate !== (contract.end_date || "") ||
       frequency !== (contract.payment_frequency || "monthly") ||
       (frequency !== "custom" &&
-        Math.abs(installment.amount_excl - moneyValue(contract.installment_amount)) > 0.005) ||
+        Math.abs(installment.rent_excl - moneyValue(contract.installment_amount)) > 0.005) ||
+      Math.abs(fixedTotal - moneyValue(contract.fixed_amount)) > 0.005 ||
       Math.abs(vatRateValue - moneyValue(contract.vat_rate ?? DEFAULT_VAT_RATE)) > 0.005 ||
       (firstDueDate || "") !== (contract.first_due_date || "") ||
       (frequency === "custom" && customRowsChanged));
@@ -425,7 +453,7 @@ export default function LeaseContractModal({
       if (previewRows.length === 0)
         list.push("أضف دفعة واحدة على الأقل بتاريخ استحقاق ومبلغ أكبر من صفر.");
     } else {
-      if (!(installment.amount_excl > 0)) list.push("قيمة الدفعة مطلوبة.");
+      if (!(installment.rent_excl > 0)) list.push("قيمة الدفعة مطلوبة.");
       else if (isDateKey(startDate) && isDateKey(endDate) && previewRows.length === 0)
         list.push("لا تنتج أي دفعة — تحقق من أول استحقاق (يجب ألا يتجاوز نهاية العقد).");
     }
@@ -437,7 +465,7 @@ export default function LeaseContractModal({
     vatRateValue,
     frequency,
     previewRows.length,
-    installment.amount_excl,
+    installment.rent_excl,
   ]);
 
   const canSubmit = errors.length === 0 && !isSubmitting && !uploading && !scanBusy;
@@ -460,6 +488,9 @@ export default function LeaseContractModal({
       installment_amount: frequency === "custom" ? 0 : moneyValue(amount),
       vat_rate: vatRateValue,
       amount_includes_vat: !!includesVat,
+      fixed_charges: fixedRows
+        .filter((row) => moneyValue(row.amount) > 0 || row.label.trim())
+        .map((row) => ({ label: row.label.trim() || "مبلغ ثابت", amount: moneyValue(row.amount) })),
       first_due_date:
         frequency === "custom" ? null : isDateKey(firstDueDate) ? firstDueDate : null,
       notes: notes.trim() || null,
@@ -474,7 +505,7 @@ export default function LeaseContractModal({
         .filter((row) => row.status !== "paid")
         .map((row) => ({
           due_date: row.due_date,
-          amount_excl: row.amount_excl,
+          amount_excl: row.rent_excl ?? row.amount_excl,
           vat_rate: row.vat_rate,
           description: row.description || null,
         }));
@@ -591,6 +622,19 @@ export default function LeaseContractModal({
     ) {
       setIncludesVat(false);
       owned.add("includesVat");
+    }
+    const analysedFixed = Array.isArray(analysis.fixed_charges)
+      ? analysis.fixed_charges.filter((c) => moneyValue(c?.amount) > 0)
+      : [];
+    const fixedEmpty = fixedRows.every((row) => !row.label.trim() && !moneyValue(row.amount));
+    if (analysedFixed.length > 0 && canFill("fixed", fixedEmpty)) {
+      setFixedRows(
+        analysedFixed.map((c) =>
+          newFixedRow({ label: c.label || "مبلغ ثابت", amount: moneyValue(c.amount).toFixed(2) }),
+        ),
+      );
+      owned.add("fixed");
+      filled.push(`المبالغ الثابتة (${analysedFixed.length})`);
     }
     if (ISO_DATE.test(analysis.first_due_date || "") && canFill("firstDue", !firstDueDate)) {
       setFirstDueDate(analysis.first_due_date);
@@ -1145,6 +1189,85 @@ export default function LeaseContractModal({
                   </div>
                 </div>
 
+                <div className={`${ws.glassSoft} ${ws.card} p-3 space-y-2`}>
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <FieldLabel hint="رسوم خدمات، صيانة، حراسة… تُضاف إلى كل دفعة قبل الضريبة">
+                      المبالغ الثابتة لكل دفعة
+                    </FieldLabel>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        autoFilledRef.current.delete("fixed");
+                        setFixedRows((rows) => [...rows, newFixedRow()]);
+                      }}
+                      className={`${ws.btnNeutral} px-2.5 py-1.5 text-xs`}
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      إضافة مبلغ ثابت
+                    </button>
+                  </div>
+                  {fixedRows.length === 0 ? (
+                    <div className="text-[11px] text-slate-500 dark:text-white/45">
+                      لا مبالغ ثابتة — الدفعة = الأجرة فقط.
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {fixedRows.map((row) => (
+                        <div key={row.key} className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={row.label}
+                            onChange={(event) => {
+                              autoFilledRef.current.delete("fixed");
+                              const value = event.target.value;
+                              setFixedRows((rows) =>
+                                rows.map((r) => (r.key === row.key ? { ...r, label: value } : r)),
+                              );
+                            }}
+                            className={`${ws.input} px-3 py-2 text-sm flex-1 min-w-0`}
+                            placeholder="مثال: رسوم خدمات"
+                          />
+                          <input
+                            type="number"
+                            value={row.amount}
+                            min="0"
+                            step="0.01"
+                            onChange={(event) => {
+                              autoFilledRef.current.delete("fixed");
+                              const value = event.target.value;
+                              setFixedRows((rows) =>
+                                rows.map((r) => (r.key === row.key ? { ...r, amount: value } : r)),
+                              );
+                            }}
+                            className={`${ws.input} px-3 py-2 text-sm text-right w-32`}
+                            placeholder="0.00"
+                            dir="ltr"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              autoFilledRef.current.delete("fixed");
+                              setFixedRows((rows) => rows.filter((r) => r.key !== row.key));
+                            }}
+                            className={ws.iconButton}
+                            title="حذف"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between text-xs pt-1 border-t border-[#e2e7e4] dark:border-white/10">
+                        <span className="text-slate-500 dark:text-white/45">
+                          مجموع المبالغ الثابتة لكل دفعة (قبل الضريبة)
+                        </span>
+                        <span className="font-bold tabular-nums" dir="ltr">
+                          {formatMoney(fixedTotal)}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {frequency !== "custom" ? (
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div>
@@ -1161,6 +1284,22 @@ export default function LeaseContractModal({
                       />
                     </div>
                     <div className={`${ws.glassSoft} ${ws.card} p-3 text-xs space-y-1`}>
+                      {fixedTotal > 0 ? (
+                        <>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-slate-500 dark:text-white/45">الأجرة</span>
+                            <span className="tabular-nums" dir="ltr">
+                              {formatMoney(installment.rent_excl)}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-slate-500 dark:text-white/45">مبالغ ثابتة</span>
+                            <span className="tabular-nums" dir="ltr">
+                              {formatMoney(installment.fixed_excl)}
+                            </span>
+                          </div>
+                        </>
+                      ) : null}
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-slate-500 dark:text-white/45">قبل الضريبة</span>
                         <span className="font-bold tabular-nums" dir="ltr">

@@ -63,7 +63,8 @@ export async function POST(request) {
         contract_number, lessor_name, lessor_contact_id, lessor_vat_number,
         location, branch_id, start_date, end_date,
         notice_period_days, notice_period_text,
-        payment_frequency, installment_amount, vat_rate, amount_includes_vat, first_due_date,
+        payment_frequency, installment_amount, vat_rate, amount_includes_vat,
+        fixed_charges, fixed_amount, first_due_date,
         total_value, status, notes, attachment_url, attachment_name, analysis_json,
         created_by_employee_id, created_by_employee_name
       )
@@ -71,7 +72,8 @@ export async function POST(request) {
         ${value.contract_number}, ${value.lessor_name}, ${value.lessor_contact_id}, ${value.lessor_vat_number},
         ${value.location}, ${value.branch_id}, ${value.start_date}, ${value.end_date},
         ${value.notice_period_days}, ${value.notice_period_text},
-        ${value.payment_frequency}, ${value.installment_amount}, ${value.vat_rate}, ${value.amount_includes_vat}, ${value.first_due_date},
+        ${value.payment_frequency}, ${value.installment_amount}, ${value.vat_rate}, ${value.amount_includes_vat},
+        ${JSON.stringify(value.fixed_charges || [])}::jsonb, ${value.fixed_amount || 0}, ${value.first_due_date},
         0, ${value.status || "active"}, ${value.notes}, ${value.attachment_url}, ${value.attachment_name},
         ${value.analysis_json ? JSON.stringify(value.analysis_json) : null}::jsonb,
         ${actorId}, ${actorName}

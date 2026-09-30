@@ -1,8 +1,8 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureLeaseSchema, R as REQUIRE_LEASE } from './leaseContracts-D_U8xvPU.js';
+import { e as ensureLeaseSchema, R as REQUIRE_LEASE } from './leaseContracts-DG6L4did.js';
 import Anthropic from '@anthropic-ai/sdk';
 import sql from './sql-CSDV1lSC.js';
-import { L as LEASE_FREQUENCIES } from './leaseMath-E5QDwIUO.js';
+import { L as LEASE_FREQUENCIES, F as FREQUENCY_MONTHS } from './leaseMath-rcRs1QEf.js';
 import 'crypto';
 import '@neondatabase/serverless';
 
@@ -21,7 +21,7 @@ const MAX_FILE_BASE64 = 4 * 1024 * 1024;
 const LEASE_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["contract_number", "lessor_name", "lessor_vat_number", "lessor_contact_id", "tenant_name", "location", "start_date", "end_date", "notice_period_days", "notice_period_text", "payment_frequency", "installment_amount", "vat_rate", "amount_includes_vat", "total_contract_value", "first_due_date", "payments", "currency", "operator_note"],
+  required: ["contract_number", "lessor_name", "lessor_vat_number", "lessor_contact_id", "tenant_name", "location", "start_date", "end_date", "notice_period_days", "notice_period_text", "payment_frequency", "installment_amount", "vat_rate", "amount_includes_vat", "total_contract_value", "first_due_date", "fixed_charges", "payments", "currency", "operator_note"],
   properties: {
     contract_number: {
       type: "string",
@@ -87,6 +87,30 @@ const LEASE_SCHEMA = {
     first_due_date: {
       type: "string",
       description: "تاريخ أول استحقاق YYYY-MM-DD إن ذُكر صراحة، وإلا \"\""
+    },
+    fixed_charges: {
+      type: "array",
+      description: "المبالغ الثابتة المذكورة في العقد إضافةً إلى الأجرة (رسوم خدمات، صيانة، حراسة، مواقف، تأمين، إدارة…) — تُدفع مع الدفعات. مصفوفة فارغة إن لم تُذكر",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["description", "amount", "period"],
+        properties: {
+          description: {
+            type: "string",
+            description: "اسم المبلغ الثابت كما طُبع"
+          },
+          amount: {
+            type: "number",
+            description: "المبلغ قبل الضريبة كما طُبع"
+          },
+          period: {
+            type: "string",
+            enum: ["annual", "per_installment", "monthly", "total"],
+            description: "أساس المبلغ كما طُبع: annual سنوي، per_installment لكل دفعة، monthly شهري، total لكامل مدة العقد"
+          }
+        }
+      }
     },
     payments: {
       type: "array",
@@ -190,8 +214,9 @@ const SYSTEM_PROMPT = `أنت خبير عقود وعقارات سعودي متخ
 7. الدفعات: حدّد التكرار من نص العقد — «شهري» monthly، «كل ثلاثة أشهر/ربع سنوي» quarterly، «على دفعتين/نصف سنوي» semi_annual، «دفعة واحدة سنويًا» annual. إذا ذُكر إيجار سنوي «يُدفع على دفعتين» فالتكرار semi_annual وقيمة الدفعة = السنوي ÷ 2؛ «على أربع دفعات» quarterly والدفعة = السنوي ÷ 4؛ وهكذا. installment_amount = قيمة الدفعة الواحدة قبل الضريبة.
 8. الضريبة: إذا ذُكرت ضريبة القيمة المضافة منفصلة (15%) فـ amount_includes_vat=false وvat_rate=15. إذا نصّ العقد أن المبلغ «شامل ضريبة القيمة المضافة» فـ amount_includes_vat=true. إذا لم تُذكر الضريبة إطلاقًا فاترك vat_rate=15 وamount_includes_vat=false واذكر ذلك في operator_note.
 9. إذا طبع العقد جدول دفعات صريحًا (تواريخ ومبالغ لكل دفعة) فأعده كاملًا في payments بترتيب التاريخ، وإذا كانت المبالغ أو الفترات غير منتظمة فاجعل payment_frequency="custom". إن لم يُطبع جدول فاترك payments مصفوفة فارغة وأعد first_due_date (غالبًا تاريخ البداية أو تاريخ توقيع العقد).
-10. total_contract_value = إجمالي قيمة العقد كما طُبع (لكل المدة) إن ذُكر، وإلا null. لا تحسبه من عندك.
-11. لا تخترع أرقامًا أو تواريخ لا يدعمها المستند. أرقام السجل التجاري والهواتف والصكوك ورقم الوحدة ليست مبالغ. عند أي شك أو تعارض بين صفحات العقد اذكره باختصار في operator_note.
+10. المبالغ الثابتة: عقود «إيجار» الموحدة تفصل «الأجرة» عن «المبالغ الثابتة» (رسوم خدمات، صيانة، حراسة، مواقف، نظافة، تأمين، إدارة، مساهمة مرافق…) وتجمعهما في إجمالي الدفعة. أعد كل مبلغ ثابت في fixed_charges باسمه ومبلغه قبل الضريبة وأساسه (سنوي/لكل دفعة/شهري/لكامل المدة) كما طُبع دون تحويل. installment_amount = الأجرة وحدها لكل دفعة (بلا المبالغ الثابتة) — النظام يجمعهما. مبلغ التأمين المسترد (الضمان) ليس مبلغًا ثابتًا.
+11. total_contract_value = إجمالي قيمة العقد كما طُبع (لكل المدة) إن ذُكر، وإلا null. لا تحسبه من عندك.
+12. لا تخترع أرقامًا أو تواريخ لا يدعمها المستند. أرقام السجل التجاري والهواتف والصكوك ورقم الوحدة ليست مبالغ. عند أي شك أو تعارض بين صفحات العقد اذكره باختصار في operator_note.
 
 أرجع JSON فقط حسب المخطط.`;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -367,6 +392,27 @@ async function runLeaseContractAnalysis({
   const frequency = LEASE_FREQUENCIES.includes(raw.payment_frequency) ? raw.payment_frequency : payments.length > 0 ? "custom" : "monthly";
   const vatRateRaw = Number(raw.vat_rate);
   const vatRate = Number.isFinite(vatRateRaw) && vatRateRaw >= 0 && vatRateRaw <= 100 ? Math.round(vatRateRaw * 100) / 100 : null;
+
+  // المبالغ الثابتة → نصيب كل دفعة قبل الضريبة حسب التكرار.
+  const monthsPerInstallment = FREQUENCY_MONTHS[frequency] || null;
+  const startKey = cleanDate(raw.start_date);
+  const endKey = cleanDate(raw.end_date);
+  const contractMonths = startKey && endKey && endKey > startKey ? Math.max((Number(endKey.slice(0, 4)) - Number(startKey.slice(0, 4))) * 12 + (Number(endKey.slice(5, 7)) - Number(startKey.slice(5, 7))) + 1, 1) : null;
+  const installmentsTotal = monthsPerInstallment ? Math.max(Math.round((contractMonths || monthsPerInstallment) / monthsPerInstallment), 1) : payments.length || 1;
+  const installmentsPerYear = monthsPerInstallment ? 12 / monthsPerInstallment : contractMonths ? Math.max((payments.length || 1) / Math.max(contractMonths / 12, 1), 1) : payments.length || 1;
+  const fixedCharges = Array.isArray(raw.fixed_charges) ? raw.fixed_charges.map(entry => {
+    const printed = cleanAmount(entry?.amount) ?? 0;
+    const period = String(entry?.period || "per_installment");
+    let perInstallment = printed;
+    if (period === "annual") perInstallment = printed / installmentsPerYear;else if (period === "monthly") perInstallment = printed * (monthsPerInstallment || 12 / installmentsPerYear);else if (period === "total") perInstallment = printed / installmentsTotal;
+    return {
+      label: cleanText(entry?.description, 200) || "مبلغ ثابت",
+      amount: Math.round(perInstallment * 100) / 100,
+      printed_amount: printed,
+      period
+    };
+  }).filter(entry => entry.amount > 0) : [];
+  const fixedAmount = Math.round(fixedCharges.reduce((sum, c) => sum + c.amount, 0) * 100) / 100;
   const analysis = {
     contract_number: cleanText(raw.contract_number, 120),
     lessor_name: cleanText(raw.lessor_name, 300),
@@ -384,6 +430,8 @@ async function runLeaseContractAnalysis({
     amount_includes_vat: raw.amount_includes_vat === true,
     total_contract_value: cleanAmount(raw.total_contract_value),
     first_due_date: cleanDate(raw.first_due_date),
+    fixed_charges: fixedCharges,
+    fixed_amount: fixedAmount,
     payments,
     currency: cleanText(raw.currency, 8)?.toUpperCase() || "SAR",
     operator_note: cleanText(raw.operator_note, 1000)

@@ -1,10 +1,10 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { e as ensureLeaseSchema, l as loadContract, p as parseContractInput, s as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-D_U8xvPU.js';
+import { e as ensureLeaseSchema, l as loadContract, p as parseContractInput, s as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-DG6L4did.js';
 import '@neondatabase/serverless';
 import 'crypto';
-import './leaseMath-E5QDwIUO.js';
+import './leaseMath-rcRs1QEf.js';
 
 // عقد تأجيري واحد: عرض / تعديل / إيقاف أو حذف.
 // GET    /api/accounting/lease-contracts/[id]
@@ -158,6 +158,8 @@ async function PUT(request, {
           installment_amount = ${value.installment_amount},
           vat_rate = ${value.vat_rate},
           amount_includes_vat = ${value.amount_includes_vat},
+          fixed_charges = ${JSON.stringify(value.fixed_charges || [])}::jsonb,
+          fixed_amount = ${value.fixed_amount || 0},
           first_due_date = ${value.first_due_date},
           status = COALESCE(${value.status}, status),
           notes = ${value.notes},

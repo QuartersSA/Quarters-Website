@@ -4,6 +4,7 @@ import {
   contractStatus,
   generateSchedule,
   installmentAmounts,
+  installmentWithFixed,
   monthDiff,
   reserveForPayment,
   suggestedReserve,
@@ -146,5 +147,30 @@ describe("lease math — self-correcting suggestion", () => {
     expect(suggestedReserve({ ...base, asOfMonth: "2027-06", reservedBefore: 0 }).suggested).toBe(69000);
     expect(suggestedReserve({ ...base, asOfMonth: "2026-08", reservedBefore: 0 }).suggested).toBe(0);
     expect(suggestedReserve({ ...base, asOfMonth: "2027-03", reservedBefore: 69000 }).suggested).toBe(0);
+  });
+});
+
+describe("lease math — fixed charges", () => {
+  it("adds per-installment fixed charges to the rent before VAT", () => {
+    const rows = generateSchedule({
+      startDate: "2026-10-01",
+      endDate: "2027-09-30",
+      frequency: "semi_annual",
+      amount: 60000,
+      fixedAmount: 2500,
+      vatRate: 15,
+    });
+    expect(rows).toHaveLength(2);
+    expect(rows[0].rent_excl).toBe(60000);
+    expect(rows[0].fixed_excl).toBe(2500);
+    expect(rows[0].amount_excl).toBe(62500);
+    expect(rows[0].vat_amount).toBe(9375);
+    expect(rows[0].amount_incl).toBe(71875);
+  });
+  it("unpacks a VAT-inclusive rent before adding fixed charges", () => {
+    const money = installmentWithFixed({ amount: 69000, fixedAmount: 1000, vatRate: 15, amountIncludesVat: true });
+    expect(money.rent_excl).toBe(60000);
+    expect(money.amount_excl).toBe(61000);
+    expect(money.amount_incl).toBe(70150);
   });
 });

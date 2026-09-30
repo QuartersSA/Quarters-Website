@@ -107,6 +107,20 @@ export function installmentAmounts({ amount, vatRate = DEFAULT_VAT_RATE, amountI
   };
 }
 
+// مبلغ الدفعة = الأجرة (قبل الضريبة، تُفكّ إن كانت شاملة) + المبالغ الثابتة
+// لكل دفعة (رسوم خدمات/صيانة… قبل الضريبة دائمًا)، ثم الضريبة على المجموع.
+export function installmentWithFixed({
+  amount,
+  fixedAmount = 0,
+  vatRate = DEFAULT_VAT_RATE,
+  amountIncludesVat = false,
+}) {
+  const rent = installmentAmounts({ amount, vatRate, amountIncludesVat }).amount_excl;
+  const fixed = round2(Math.max(Number(fixedAmount) || 0, 0));
+  const total = installmentAmounts({ amount: rent + fixed, vatRate, amountIncludesVat: false });
+  return { rent_excl: rent, fixed_excl: fixed, ...total };
+}
+
 // توليد جدول الدفعات. يعيد [] عند نقص المدخلات.
 // firstDueDate: أول استحقاق (افتراضيًا تاريخ البداية). الدفعات تتوالى
 // كل N شهر حتى (وليس بعد) تاريخ النهاية. فترة كل دفعة = [الاستحقاق،
@@ -118,14 +132,15 @@ export function generateSchedule({
   amount,
   vatRate = DEFAULT_VAT_RATE,
   amountIncludesVat = false,
+  fixedAmount = 0,
   firstDueDate = null,
   maxInstallments = 240,
 }) {
   const months = FREQUENCY_MONTHS[frequency];
   if (!months || !isDateKey(startDate) || !isDateKey(endDate)) return [];
   if (compareDateKeys(endDate, startDate) < 0) return [];
-  const money = installmentAmounts({ amount, vatRate, amountIncludesVat });
-  if (!(money.amount_excl > 0)) return [];
+  const money = installmentWithFixed({ amount, fixedAmount, vatRate, amountIncludesVat });
+  if (!(money.rent_excl > 0)) return [];
   const first = isDateKey(firstDueDate) ? firstDueDate : startDate;
   const rows = [];
   let due = first;
