@@ -113,6 +113,39 @@ const LEASE_SCHEMA = {
   },
 };
 
+const PRIMARY_MODEL = "claude-opus-5-5";
+const FALLBACK_MODEL = "claude-opus-4-8";
+
+// 404 على النموذج أو 400 يذكر النموذج = غير متاح لهذا المفتاح.
+function isModelUnavailable(error) {
+  const status = Number(error?.status);
+  const message = String(error?.message || "").toLowerCase();
+  if (status === 404) return true;
+  return status === 400 && /model/.test(message);
+}
+
+function mapSdkError(error) {
+  const status = Number(error?.status);
+  const message = String(error?.message || "خطأ غير معروف").slice(0, 300);
+  console.error("lease analysis API error", status, message);
+  if (status === 401 || status === 403) {
+    return { ok: false, status: 503, error: "مفتاح التحليل الذكي مرفوض من المزوّد — تحقق من ANTHROPIC_API_KEY" };
+  }
+  if (status === 429) {
+    return { ok: false, status: 429, error: "المحلل مشغول حاليًا (حد الطلبات) — أعد المحاولة بعد قليل" };
+  }
+  if (status === 413) {
+    return { ok: false, status: 413, error: "المستند أكبر مما يقبله المحلل — صغّر الملف أو أرسل صفحات أقل" };
+  }
+  if (status === 400) {
+    return { ok: false, status: 422, error: `المزوّد رفض الطلب: ${message}` };
+  }
+  if (status >= 500 || status === 529) {
+    return { ok: false, status: 502, error: "خدمة التحليل غير متاحة مؤقتًا — أعد المحاولة" };
+  }
+  return { ok: false, status: 502, error: `تعذر الاتصال بالمحلل: ${message}` };
+}
+
 const SYSTEM_PROMPT = `أنت خبير عقود وعقارات سعودي متخصص في قراءة عقود الإيجار التجاري (عقود إيجار، عقود «إيجار» الموحدة، اتفاقيات تأجير محلات ومستودعات ومكاتب).
 
 يصلك مستند العقد نفسه (PDF أو صورة — قد يكون ممسوحًا بجودة ضعيفة أو متعدد الصفحات)، وأحيانًا معه نص مستخرج آليًا قد يكون مشوهًا (عربي معكوس الحروف أو مفصولها، أرقام ناقصة الفاصلة). اقرأ المستند أنت بصريًا — هو المصدر الأساسي؛ النص المستخرج مساعد ثانوي.
@@ -211,8 +244,8 @@ export async function runLeaseContractAnalysis({
   `;
 
   const client = new Anthropic();
-  const response = await client.messages.create({
-    model: "claude-opus-5-5",
+  const request = (model) => ({
+    model,
     max_tokens: 16000,
     thinking: { type: "adaptive" },
     output_config: {
@@ -260,10 +293,34 @@ export async function runLeaseContractAnalysis({
     ],
   });
 
+  // النموذج الأحدث أولًا؛ إن لم يكن متاحًا على هذا المفتاح نعود إلى
+  // نموذج تحليل الفواتير المجرَّب. أخطاء الـ SDK تُترجم إلى حالة ورسالة
+  // واضحة بدل 500 عام.
+  let response;
+  try {
+    try {
+      response = await client.messages.create(request(PRIMARY_MODEL));
+    } catch (error) {
+      if (isModelUnavailable(error)) {
+        console.warn(
+          `lease analysis: ${PRIMARY_MODEL} unavailable (${error?.status}) — falling back to ${FALLBACK_MODEL}`,
+        );
+        response = await client.messages.create(request(FALLBACK_MODEL));
+      } else {
+        throw error;
+      }
+    }
+  } catch (error) {
+    return mapSdkError(error);
+  }
+
   if (response.stop_reason === "refusal") {
     return { ok: false, status: 422, error: "تعذر تحليل هذا المستند" };
   }
 
+  if (response.stop_reason === "max_tokens") {
+    return { ok: false, status: 502, error: "رد المحلل انقطع قبل اكتماله — أعد المحاولة" };
+  }
   const textBlock = response.content.find((block) => block.type === "text");
   if (!textBlock?.text) {
     return { ok: false, status: 502, error: "رد فارغ من المحلل" };
