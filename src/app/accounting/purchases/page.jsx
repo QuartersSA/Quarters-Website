@@ -5,14 +5,17 @@ import { useSearchParams } from "react-router";
 import {
   BarChart3,
   Building,
+  CalendarClock,
   CloudUpload,
   Contact,
   FileText,
   HandCoins,
   LayoutDashboard,
   ListTree,
+  PiggyBank,
   Plus,
   Receipt,
+  ScrollText,
   Search,
   ShoppingCart,
   Users,
@@ -36,6 +39,7 @@ import PurchasesInvoicesPanel from "@/components/Accounting/PurchasesInvoicesPan
 import BulkInvoiceUploadPanel from "@/components/Accounting/BulkInvoiceUploadPanel";
 import PurchasesReportsPanel from "@/components/Accounting/PurchasesReportsPanel";
 import ExpensesPanel from "@/components/Accounting/ExpensesPanel";
+import LeaseContractsPanel from "@/components/Accounting/LeaseContractsPanel";
 import {
   useAccountingContacts,
   useCreateAccountingContact,
@@ -69,6 +73,28 @@ import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
  * The active tab (and vendor sub-tab) live in the URL query string so
  * refresh / back / deep links land on the same view.
  */
+
+// العقود التأجيرية: العقود / سداد المستحق / استقطاع شهري.
+const LEASE_SUBTABS = [
+  {
+    key: "contracts",
+    label: "العقود",
+    Icon: ScrollText,
+    description: "إضافة العقود وتحليلها ذكيًا وعرضها مرتبة.",
+  },
+  {
+    key: "due",
+    label: "سداد المستحق",
+    Icon: CalendarClock,
+    description: "الدفعات الواجب سدادها حسب تاريخ الاستحقاق حسب العقد.",
+  },
+  {
+    key: "reserve",
+    label: "استقطاع شهري",
+    Icon: PiggyBank,
+    description: "استقطاع شهري من الإيرادات حتى تاريخ الاستحقاق لسداد الدفعة المطلوبة.",
+  },
+];
 
 const VENDOR_SUBTABS = [
   {
@@ -139,6 +165,15 @@ const TABS = [
       "تسجيل وإدارة المصروفات الشهرية — الثابتة والمتغيّرة، المراجعة والبنود.",
   },
   {
+    key: "leases",
+    label: "العقود التأجيرية",
+    shortLabel: "عقود",
+    Icon: ScrollText,
+    description:
+      "عقود إيجار الفروع: التحليل الذكي للعقد، جدول الدفعات، سداد المستحق، والاستقطاع الشهري من الإيرادات.",
+    subTabs: LEASE_SUBTABS,
+  },
+  {
     key: "reports",
     label: "التقارير",
     shortLabel: "تقارير",
@@ -150,6 +185,7 @@ const TABS = [
 
 const TAB_KEYS = new Set(TABS.map((tab) => tab.key));
 const VENDOR_KEYS = new Set(VENDOR_SUBTABS.map((sub) => sub.key));
+const LEASE_KEYS = new Set(LEASE_SUBTABS.map((sub) => sub.key));
 
 function PurchasesMobileHeader({ activeTab, actions = null }) {
   return (
@@ -425,6 +461,7 @@ export default function PurchasesPage() {
       : "overview";
   const rawSub = searchParams.get("sub") || "contacts";
   const vendorSubKey = VENDOR_KEYS.has(rawSub) ? rawSub : "contacts";
+  const leaseSubKey = LEASE_KEYS.has(rawSub) ? rawSub : "contracts";
 
   // "invoices:add" style intents let the overview's quick actions land
   // on a tab with its create modal already open.
@@ -437,11 +474,14 @@ export default function PurchasesPage() {
       if (tabKey === "vendors") {
         next.set("sub", extras.sub || vendorSubKey);
       }
+      if (tabKey === "leases") {
+        next.set("sub", extras.sub || leaseSubKey);
+      }
       if (extras.intent) next.set("intent", extras.intent);
       if (extras.status) next.set("status", extras.status);
       setSearchParams(next, { replace: false });
     },
-    [setSearchParams, vendorSubKey],
+    [setSearchParams, vendorSubKey, leaseSubKey],
   );
 
   const clearIntent = useCallback(() => {
@@ -454,6 +494,8 @@ export default function PurchasesPage() {
   const activeTab = TABS.find((tab) => tab.key === activeTabKey) || TABS[0];
   const activeVendorSub =
     VENDOR_SUBTABS.find((sub) => sub.key === vendorSubKey) || VENDOR_SUBTABS[0];
+  const activeLeaseSub =
+    LEASE_SUBTABS.find((sub) => sub.key === leaseSubKey) || LEASE_SUBTABS[0];
 
   // Restore scroll to the top when switching tabs — long tables
   // otherwise leave the next tab starting mid-page.
@@ -511,17 +553,19 @@ export default function PurchasesPage() {
           </div>
         </div>
 
-        {activeTabKey === "vendors" ? (
+        {activeTabKey === "vendors" || activeTabKey === "leases" ? (
           <div className={`${ws.glassSoft} ${ws.card} p-2 overflow-x-auto`}>
             <div className="flex items-center gap-1 min-w-max">
-              {VENDOR_SUBTABS.map((sub) => {
-                const isActive = sub.key === activeVendorSub.key;
+              {(activeTabKey === "leases" ? LEASE_SUBTABS : VENDOR_SUBTABS).map((sub) => {
+                const isActive =
+                  sub.key ===
+                  (activeTabKey === "leases" ? activeLeaseSub.key : activeVendorSub.key);
                 const Icon = sub.Icon;
                 return (
                   <button
                     key={sub.key}
                     type="button"
-                    onClick={() => setTab("vendors", { sub: sub.key })}
+                    onClick={() => setTab(activeTabKey, { sub: sub.key })}
                     className={`${ws.segBtn} ${
                       isActive ? ws.segActive : ws.segInactive
                     } flex items-center gap-2 whitespace-nowrap text-sm`}
@@ -561,6 +605,15 @@ export default function PurchasesPage() {
           <PurchasesBankAccountsPanel employeeId={employeeId} isAdmin={isAdmin} />
         ) : activeTabKey === "expenses" ? (
           <ExpensesPanel employeeId={employeeId} isAdmin={isAdmin} />
+        ) : activeTabKey === "leases" ? (
+          <LeaseContractsPanel
+            employeeId={employeeId}
+            isAdmin={isAdmin}
+            sub={activeLeaseSub.key}
+            onSubChange={(sub) => setTab("leases", { sub })}
+            autoOpenAdd={intent === "add"}
+            onIntentConsumed={clearIntent}
+          />
         ) : (
           <PurchasesReportsPanel employeeId={employeeId} isAdmin={isAdmin} />
         )}

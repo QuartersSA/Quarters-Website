@@ -7,20 +7,21 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { useButton } from '@react-aria/button';
 import * as React from 'react';
 import React__default, { useState, useEffect, Component, useRef, useCallback, useMemo, useLayoutEffect } from 'react';
-import { f as fetchWithHeaders } from './index-BexJoc0s.js';
+import { f as fetchWithHeaders } from './index-BMwDwiTl.js';
 import { SessionProvider } from '@hono/auth-js/react';
 import { toPng, getFontEmbedCSS } from 'html-to-image';
 import { serializeError } from 'serialize-error';
 import { Toaster, toast } from 'sonner';
 import { useIdleTimer } from 'react-idle-timer';
 import { QueryClientProvider, QueryClient, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { WifiOff, Shield, ClipboardList, Calculator, Trash2, ReceiptText, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, ShoppingCart, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, Copy, Download, FileText, Pencil, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, Minus, RotateCcw, Filter, Info, User, DollarSign, Percent, Lock, CheckCircle2, Clock, Ban, MessageSquare, Send, Unlock, Gift, Loader2, Sparkles, Flame, BadgeCheck, Repeat, Paperclip, ExternalLink, ScanLine, Building, Landmark, Wand2, Contact, ListTree, Unlink, Link, MapPin, Hash, ScanEye, TrendingDown, CalendarClock, Clock3, Bell, FileSpreadsheet, ChevronsUpDown, ChevronsDownUp, BookOpen, CreditCard, FileUp, MoreVertical, PackageCheck, Undo2, CloudUpload, ChevronRight, ArrowRight, BarChart3, Tag, Anchor, ArrowDownWideNarrow, ArrowDownRight, ArrowUpRight, Layers, Trophy, Circle, Receipt, ListChecks, Power, PieChart, ClipboardCheck, Boxes, Coins, StickyNote, Briefcase, Truck, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, MessageCircle, ClipboardX, MinusSquare, EyeOff, Ruler, CornerDownLeft, Star, LineChart as LineChart$1, CalendarCheck, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, HeartPulse, FileWarning, ScrollText, CalendarOff, Infinity, AlertOctagon, Settings, Upload, MailCheck, QrCode, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Flag, Tags, User2, Link2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
+import { WifiOff, Shield, ClipboardList, Calculator, Trash2, ReceiptText, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, ShoppingCart, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, Copy, Download, FileText, Pencil, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, Minus, RotateCcw, Filter, Info, User, DollarSign, Percent, Lock, CheckCircle2, Clock, Ban, MessageSquare, Send, Unlock, Gift, Loader2, Sparkles, Flame, BadgeCheck, Repeat, Paperclip, ExternalLink, ScanLine, Building, Landmark, Wand2, Contact, ListTree, Unlink, Link, MapPin, Hash, ScanEye, TrendingDown, CalendarClock, Clock3, Bell, FileSpreadsheet, ChevronsUpDown, ChevronsDownUp, BookOpen, CreditCard, FileUp, MoreVertical, PackageCheck, Undo2, CloudUpload, ChevronRight, ArrowRight, BarChart3, Tag, Anchor, ArrowDownWideNarrow, ArrowDownRight, ArrowUpRight, Layers, Trophy, Circle, Receipt, ListChecks, Power, PieChart, ClipboardCheck, ScrollText, Upload, PiggyBank, Boxes, Coins, StickyNote, Briefcase, Truck, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, MessageCircle, ClipboardX, MinusSquare, EyeOff, Ruler, CornerDownLeft, Star, LineChart as LineChart$1, CalendarCheck, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, HeartPulse, FileWarning, CalendarOff, Infinity, AlertOctagon, Settings, MailCheck, QrCode, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Flag, Tags, User2, Link2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, c as currentRiyadhMonthKey, b as riyadhMonthKeyFromOffset, d as formatDateTime$4, t as todayRiyadhDateKey, L as LOCALE, f as formatRiyadhDateForInput, e as formatDateForInput, g as currentRiyadhHour, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$3 } from './dateUtils-CVVwj6xk.js';
+import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, c as currentRiyadhMonthKey, b as riyadhMonthKeyFromOffset, d as formatDateTime$4, t as todayRiyadhDateKey, L as LOCALE, f as formatRiyadhDateForInput, e as formatDateForInput, g as currentRiyadhHour, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$4 } from './dateUtils-CVVwj6xk.js';
 import _JSXStyle from 'styled-jsx/style.js';
-import { u as allocateDiscount, v as numOrNull, D as DEFAULT_ROAST_PER_KG, w as computeCoffeeLine, R as RAW_PRICE_MIN, x as RAW_PRICE_MAX, y as wasteFlag, t as guessKgPerSack, W as WASTE_CONFIRM, z as coffeeLineStatus } from './coffeeInvoices-BHb-fnV5.js';
+import { u as allocateDiscount, v as numOrNull, D as DEFAULT_ROAST_PER_KG, w as computeCoffeeLine, R as RAW_PRICE_MIN, x as RAW_PRICE_MAX, y as wasteFlag, t as guessKgPerSack, W as WASTE_CONFIRM, z as coffeeLineStatus } from './coffeeInvoices-tatr7e1X.js';
 import { c as computeDraftTotals } from './invoiceDraftMath-C8Db36NO.js';
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, PieChart as PieChart$1, Pie, Cell, BarChart, Bar, ReferenceDot } from 'recharts';
+import { D as DEFAULT_VAT_RATE, L as LEASE_FREQUENCIES, b as isDateKey, c as compareDateKeys, i as installmentAmounts, g as generateSchedule, r as round2$4, a as contractStatus, e as addDays$2, C as CONTRACT_STATUS_LABELS, F as FREQUENCY_LABELS, m as monthKey, j as daysInMonth, d as daysBetween } from './leaseMath-E5QDwIUO.js';
 import { getDefaultClassNames, DayPicker } from 'react-day-picker';
 import { enUS, arSA } from 'date-fns/locale';
 import { createRoot } from 'react-dom/client';
@@ -46,7 +47,7 @@ import '@hono/node-server';
 import '@hono/node-server/serve-static';
 import 'hono/logger';
 import 'ws';
-import './purchaseAutomation-DTnaRPvo.js';
+import './purchaseAutomation-DG3aaNSa.js';
 import './sql-CSDV1lSC.js';
 import './wasender-DykD1wlV.js';
 import './purchaseAudit-CVdAiEPz.js';
@@ -2156,6 +2157,10 @@ const queryKeys = Object.freeze({
   itemCategories: createKey("item-categories"),
   itemHistory: createKey("item-history"),
   itemTimeline: createKey("item-timeline"),
+  leaseContract: createKey("lease-contract"),
+  leaseContracts: createKey("lease-contracts"),
+  leasePayments: createKey("lease-payments"),
+  leaseReserve: createKey("lease-reserve"),
   items: createKey("items"),
   itemsSummary: createKey("items-summary"),
   lowStock: createKey("low-stock-items"),
@@ -2215,7 +2220,7 @@ function invalidateWorkspaceTaskQueries(queryClient) {
   return invalidateGroup(queryClient, [queryKeys.workspaceTasks(), queryKeys.workspaceSummary(), queryKeys.workspaceOverdueTasks(), queryKeys.workspaceTaskUpdates(), queryKeys.workspaceTaskHistory(), queryKeys.workspaceTaskAttachments(), queryKeys.workspaceTaskChecklist(), queryKeys.workspaceSubtasks()]);
 }
 
-function formatMoney$f(value) {
+function formatMoney$i(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
@@ -2338,9 +2343,9 @@ function AccountingDashboardPage() {
   } else if (!latestClosing) {
     shiftHighlightsBody = /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60", children: "لا يوجد سجلات بعد." });
   } else {
-    const totalDiffText = formatMoney$f(latestClosingTotalDiff);
-    const cashDiffText = formatMoney$f(latestClosingCashDiff);
-    const cardDiffText = formatMoney$f(latestClosingCardDiff);
+    const totalDiffText = formatMoney$i(latestClosingTotalDiff);
+    const cashDiffText = formatMoney$i(latestClosingCashDiff);
+    const cardDiffText = formatMoney$i(latestClosingCardDiff);
     shiftHighlightsBody = /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 flex-wrap", children: [
         /* @__PURE__ */ jsxs("div", { className: "text-slate-800 dark:text-white/80", children: [
@@ -2764,7 +2769,7 @@ const DENOMINATIONS = [{
   label: "1",
   value: 1
 }];
-function formatMoney$e(value) {
+function formatMoney$h(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
@@ -3078,7 +3083,7 @@ function CashCalculatorPage() {
                     ] })
                   ] }) }),
                   /* @__PURE__ */ jsx("td", { className: "py-3 px-3", children: /* @__PURE__ */ jsx("input", { type: "number", min: "0", value: counts[d.key] === 0 ? "" : counts[d.key], onChange: (e) => handleCountChange(d.key, e.target.value), placeholder: "0", className: `${ws$1.input} px-4 py-2.5 max-w-[160px] text-center tabular-nums` }) }),
-                  /* @__PURE__ */ jsx("td", { className: "py-3 px-3", children: /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold tabular-nums", children: formatMoney$e(total) }) })
+                  /* @__PURE__ */ jsx("td", { className: "py-3 px-3", children: /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold tabular-nums", children: formatMoney$h(total) }) })
                 ] }, d.key);
               }) }),
               /* @__PURE__ */ jsx("tfoot", { children: /* @__PURE__ */ jsxs("tr", { className: "border-t-2 border-emerald-400/20", children: [
@@ -3087,7 +3092,7 @@ function CashCalculatorPage() {
                   totalNotes,
                   " ورقة"
                 ] }) }),
-                /* @__PURE__ */ jsx("td", { className: "py-4 px-3", children: /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums", children: formatMoney$e(denomTotals.grand) }) })
+                /* @__PURE__ */ jsx("td", { className: "py-4 px-3", children: /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums", children: formatMoney$h(denomTotals.grand) }) })
               ] }) })
             ] }) }),
             /* @__PURE__ */ jsxs("div", { className: "sm:hidden space-y-3", children: [
@@ -3102,7 +3107,7 @@ function CashCalculatorPage() {
                         " ريال"
                       ] })
                     ] }),
-                    /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold tabular-nums", children: formatMoney$e(total) })
+                    /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold tabular-nums", children: formatMoney$h(total) })
                   ] }),
                   /* @__PURE__ */ jsx("input", { type: "number", min: "0", value: counts[d.key] === 0 ? "" : counts[d.key], onChange: (e) => handleCountChange(d.key, e.target.value), placeholder: "0", className: `${ws$1.input} px-4 py-2.5 text-center tabular-nums` })
                 ] }, d.key);
@@ -3115,7 +3120,7 @@ function CashCalculatorPage() {
                     " ورقة"
                   ] })
                 ] }),
-                /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums", children: formatMoney$e(denomTotals.grand) })
+                /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums", children: formatMoney$h(denomTotals.grand) })
               ] }) })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "mt-5", children: [
@@ -3152,7 +3157,7 @@ function CashCalculatorPage() {
                     /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm tabular-nums", children: v })
                   ] }, d.key);
                 }) }),
-                /* @__PURE__ */ jsx("div", { className: "mt-2 text-left", children: /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums", children: formatMoney$e(vals.total_amount || 0) }) })
+                /* @__PURE__ */ jsx("div", { className: "mt-2 text-left", children: /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums", children: formatMoney$h(vals.total_amount || 0) }) })
               ] }, log.id);
             }) })
           ] }) : null,
@@ -3169,7 +3174,7 @@ function CashCalculatorPage() {
                 " ",
                 /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40", children: "×" })
               ] }),
-              /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums mt-1", children: formatMoney$e(t) })
+              /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums mt-1", children: formatMoney$h(t) })
             ] }, d.key);
           }) })
         ] })
@@ -3213,7 +3218,7 @@ const route4 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const VAT_RATE = 0.15;
-function formatMoney$d(value) {
+function formatMoney$g(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-nu-latn", {
@@ -3833,8 +3838,8 @@ function CalculatorForm({
       /* @__PURE__ */ jsxs("div", { className: "px-4", children: [
         /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو الخام", hint: "Excl. tax", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.01", inputMode: "decimal", value: draft.priceKgExclTax, onChange: handleChangePriceKgExclTax, placeholder: "مثال: 35" }) }),
         /* @__PURE__ */ jsx(FieldRow, { label: "حجم الخيشة", hint: "بالكيلو", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.001", inputMode: "decimal", value: draft.bagSizeKg, onChange: handleChangeBagSizeKg, placeholder: "مثال: 60" }) }),
-        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "غير شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$d(computed.bagCostExcl) }) }),
-        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$d(computed.bagCostIncl) }) }),
+        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "غير شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$g(computed.bagCostExcl) }) }),
+        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$g(computed.bagCostIncl) }) }),
         !isRegister ? /* @__PURE__ */ jsxs(Fragment, { children: [
           /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة التحميص", hint: "اختر الإدخال: غير شامل الضريبة أو شامل الضريبة", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-2", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex gap-2 flex-wrap", children: [
@@ -3863,11 +3868,11 @@ function CalculatorForm({
               ] })
             ] })
           ] }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الاجماليه للتحميص", hint: "حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$d(computed.roastTotalIncl) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الاجماليه للتحميص", hint: "حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$g(computed.roastTotalIncl) }) }),
           /* @__PURE__ */ jsx(FieldRow, { label: "الواصل بعد الهدر", hint: "مدخل (بالكيلو)", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.001", inputMode: "decimal", value: draft.receivedKg, onChange: handleChangeReceivedKg, placeholder: "مثال: 50" }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "نسبة الهدر", hint: "% (محسوبة تلقائيًا من الكمية الواصلة)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$d(computed.wastePercentDerived) }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "الإجمالي", hint: "شامل الضريبة", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$d(computed.totalIncl) }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو النهائي", hint: "(الإجمالي / الواصل بعد الهدر)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$d(computed.finalPricePerKg) }) })
+          /* @__PURE__ */ jsx(FieldRow, { label: "نسبة الهدر", hint: "% (محسوبة تلقائيًا من الكمية الواصلة)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$g(computed.wastePercentDerived) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "الإجمالي", hint: "شامل الضريبة", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$g(computed.totalIncl) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو النهائي", hint: "(الإجمالي / الواصل بعد الهدر)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$g(computed.finalPricePerKg) }) })
         ] }) : null,
         /* @__PURE__ */ jsx("div", { className: "py-4" })
       ] })
@@ -4504,7 +4509,7 @@ function formatDateTime$2(dateString) {
   });
 }
 
-function formatMoney$c(value) {
+function formatMoney$f(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-nu-latn", {
@@ -4565,7 +4570,7 @@ function todayISO$1() {
   return todayRiyadhDateKey();
 }
 
-function formatMoney$b(value) {
+function formatMoney$e(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-nu-latn", {
@@ -4669,7 +4674,7 @@ function OrdersList({
   }, {
     header: "سعر الكيلو (بدون ضريبة)",
     accessor: (r) => r.price_kg_excl_tax,
-    format: (v) => formatMoney$c(v)
+    format: (v) => formatMoney$f(v)
   }, {
     header: "حجم الخيشة (كغ)",
     accessor: (r) => r.bag_size_kg,
@@ -4677,15 +4682,15 @@ function OrdersList({
   }, {
     header: "تحميص/كغ (شامل)",
     accessor: (r) => r.roast_cost_incl_tax,
-    format: (v) => formatMoney$c(v)
+    format: (v) => formatMoney$f(v)
   }, {
     header: "تكلفة إضافية/كغ",
     accessor: (r) => r.extra_cost_per_kg,
-    format: (v) => formatMoney$c(v)
+    format: (v) => formatMoney$f(v)
   }, {
     header: "الهدر %",
     accessor: (r) => r.waste_percent,
-    format: (v) => formatMoney$c(v)
+    format: (v) => formatMoney$f(v)
   }, {
     header: "الواصل بعد الهدر (كغ)",
     accessor: (r) => r.computed_received_after_waste_kg,
@@ -4693,15 +4698,15 @@ function OrdersList({
   }, {
     header: "السعر الصافي/كغ",
     accessor: (r) => r.computed_final_price_per_kg,
-    format: (v) => formatMoney$c(v)
+    format: (v) => formatMoney$f(v)
   }, {
     header: "إجمالي الصنف (شامل)",
     accessor: (r) => r.computed_total_incl,
-    format: (v) => formatMoney$c(v)
+    format: (v) => formatMoney$f(v)
   }, {
     header: "إجمالي الطلب (شامل)",
     accessor: (r) => r.order_total_incl,
-    format: (v) => formatMoney$c(v)
+    format: (v) => formatMoney$f(v)
   }, {
     header: "ملاحظة",
     accessor: (r) => r.note
@@ -4878,7 +4883,7 @@ function OrdersList({
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: String(o.order_date || "—") }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: o.supplier_name || "—" }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: o.items_count ?? 0 }),
-            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-bold truncate", children: formatMoney$c(o.total_incl) })
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-bold truncate", children: formatMoney$f(o.total_incl) })
           ] }, o.id);
         }) })
       ] }),
@@ -5026,7 +5031,7 @@ function buildItemTableRow(group, idx) {
   const extraTotal = extraPerBag * bagCount;
   const extraCostKgText = extraKg !== null ? formatQty(extraKg) : "الكل";
   const bagCountText = String(bagCount);
-  return [String(idx + 1), beanName, bagCountText, formatMoney$c(price), formatMoney$c(priceInclTax), formatQty(bag), formatMoney$c(roastIncl), formatMoney$c(extraPerKg), extraCostKgText, formatMoney$c(waste), formatQty(group.totalReceived), formatMoney$c(beanCostIncl), formatMoney$c(roastTotal), formatMoney$c(extraTotal), formatMoney$c(group.totalCostIncl), formatMoney$c(it.computed_final_price_per_kg)];
+  return [String(idx + 1), beanName, bagCountText, formatMoney$f(price), formatMoney$f(priceInclTax), formatQty(bag), formatMoney$f(roastIncl), formatMoney$f(extraPerKg), extraCostKgText, formatMoney$f(waste), formatQty(group.totalReceived), formatMoney$f(beanCostIncl), formatMoney$f(roastTotal), formatMoney$f(extraTotal), formatMoney$f(group.totalCostIncl), formatMoney$f(it.computed_final_price_per_kg)];
 }
 function exportGreenBeanOrderExcel(order, items, totals) {
   const headers = buildItemTableHeaders();
@@ -5054,10 +5059,10 @@ function exportGreenBeanOrderExcel(order, items, totals) {
     <tr><td colspan="${colCount}" style="height:15px;border:none;"></td></tr>
     <tr><td colspan="${colCount}" style="font-weight:bold;font-size:14px;background:#1e293b;color:white;padding:10px;border:1px solid #94a3b8;">ملخص الطلب</td></tr>
     <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">عدد أنواع البن</td><td style="padding:6px;border:1px solid #ddd;">${totals.beanTypesCount}</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">عدد الخياش</td><td style="padding:6px;border:1px solid #ddd;">${totals.totalBags}</td><td colspan="${colCount - 6}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">مجموع الكيلوات</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">الواصل بعد الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalReceivedKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">كمية الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.wasteKg)} كغ (${formatMoney$c(totals.wastePercent)}%)</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة البن (شامل الضريبة)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalBeanCostIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة التحميص (شامل)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalRoastIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي التكلفة الإضافية</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$c(totals.totalExtra)} ر.س</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">متوسط السعر الصافي / كغ</td><td style="padding:6px;font-weight:bold;color:#059669;border:1px solid #ddd;">${formatMoney$c(totals.avgPricePerKg)} ر.س</td><td colspan="${colCount - 3}" style="border:1px solid #ddd;"></td></tr>
-    <tr style="background:#0f172a;"><td colspan="2" style="font-weight:bold;padding:10px;color:white;border:1px solid #94a3b8;">إجمالي الطلب (شامل)</td><td colspan="${colCount - 2}" style="padding:10px;font-weight:bold;font-size:16px;color:white;border:1px solid #94a3b8;">${formatMoney$c(totals.totalGrand)} ر.س</td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">مجموع الكيلوات</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">الواصل بعد الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalReceivedKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">كمية الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.wasteKg)} كغ (${formatMoney$f(totals.wastePercent)}%)</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة البن (شامل الضريبة)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalBeanCostIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة التحميص (شامل)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalRoastIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي التكلفة الإضافية</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalExtra)} ر.س</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">متوسط السعر الصافي / كغ</td><td style="padding:6px;font-weight:bold;color:#059669;border:1px solid #ddd;">${formatMoney$f(totals.avgPricePerKg)} ر.س</td><td colspan="${colCount - 3}" style="border:1px solid #ddd;"></td></tr>
+    <tr style="background:#0f172a;"><td colspan="2" style="font-weight:bold;padding:10px;color:white;border:1px solid #94a3b8;">إجمالي الطلب (شامل)</td><td colspan="${colCount - 2}" style="padding:10px;font-weight:bold;font-size:16px;color:white;border:1px solid #94a3b8;">${formatMoney$f(totals.totalGrand)} ر.س</td></tr>
   ` : "";
   const noteRow = note ? `<tr><td colspan="${colCount}" style="padding:6px;border:1px solid #ddd;"><b>ملاحظة:</b> ${note}</td></tr>` : "";
   const htmlContent = `
@@ -5153,36 +5158,36 @@ function exportGreenBeanOrderPDF(order, items, totals) {
         </div>
         <div class="summary-card">
           <div class="s-label">مجموع الكيلوات</div>
-          <div class="s-value">${formatMoney$c(totals.totalKg)} كغ</div>
+          <div class="s-value">${formatMoney$f(totals.totalKg)} كغ</div>
         </div>
         <div class="summary-card">
           <div class="s-label">الواصل بعد الهدر</div>
-          <div class="s-value">${formatMoney$c(totals.totalReceivedKg)} كغ</div>
+          <div class="s-value">${formatMoney$f(totals.totalReceivedKg)} كغ</div>
         </div>
         <div class="summary-card warn">
           <div class="s-label">كمية الهدر</div>
-          <div class="s-value">${formatMoney$c(totals.wasteKg)} كغ (${formatMoney$c(totals.wastePercent)}%)</div>
+          <div class="s-value">${formatMoney$f(totals.wasteKg)} كغ (${formatMoney$f(totals.wastePercent)}%)</div>
         </div>
         <div class="summary-card">
           <div class="s-label">تكلفة البن (شامل الضريبة)</div>
-          <div class="s-value">${formatMoney$c(totals.totalBeanCostIncl)} ر.س</div>
+          <div class="s-value">${formatMoney$f(totals.totalBeanCostIncl)} ر.س</div>
         </div>
         <div class="summary-card">
           <div class="s-label">تكلفة التحميص (شامل)</div>
-          <div class="s-value">${formatMoney$c(totals.totalRoastIncl)} ر.س</div>
+          <div class="s-value">${formatMoney$f(totals.totalRoastIncl)} ر.س</div>
         </div>
         <div class="summary-card">
           <div class="s-label">التكلفة الإضافية</div>
-          <div class="s-value">${formatMoney$c(totals.totalExtra)} ر.س</div>
+          <div class="s-value">${formatMoney$f(totals.totalExtra)} ر.س</div>
         </div>
         <div class="summary-card accent">
           <div class="s-label">متوسط السعر الصافي / كغ</div>
-          <div class="s-value">${formatMoney$c(totals.avgPricePerKg)} ر.س</div>
+          <div class="s-value">${formatMoney$f(totals.avgPricePerKg)} ر.س</div>
         </div>
       </div>
       <div class="grand-total-bar">
         <span>إجمالي الطلب (شامل)</span>
-        <span class="grand-total-value">${formatMoney$c(totals.totalGrand)} ر.س</span>
+        <span class="grand-total-value">${formatMoney$f(totals.totalGrand)} ر.س</span>
       </div>
     </div>
   ` : "";
@@ -5382,11 +5387,11 @@ function OrderDetailsTable({
             " خيشة"
           ] }) : null
         ] }) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$c(it.price_kg_excl_tax) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$c(it.waste_percent) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$f(it.price_kg_excl_tax) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$f(it.waste_percent) }),
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: extraCostKgText }),
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: totalReceivedDisplay }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-emerald-700 dark:text-emerald-200 font-extrabold", children: formatMoney$c(it.computed_final_price_per_kg) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-emerald-700 dark:text-emerald-200 font-extrabold", children: formatMoney$f(it.computed_final_price_per_kg) }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
           /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-3 py-2 w-[110px]`, type: "number", step: "0.001", inputMode: "decimal", value: receivedValue, "data-group-key": g.groupKey, onChange: handleReceivedInputChange, placeholder: showBagCount ? `إجمالي ${g.bagCount} خياشات` : "مثال: 58", disabled: isRowSaving, title: showBagCount ? `القيمة المُدخلة تُوزَّع بالتساوي على ${g.bagCount} خياشات` : "كمية الواصل بعد الهدر" }),
           /* @__PURE__ */ jsx("button", { type: "button", className: `${ws$1.btnPrimary} px-3 py-2`, "data-group-key": g.groupKey, onClick: handleSaveReceivedClick, disabled: isRowSaving, title: "حفظ الكمية الواصلة", children: /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }) })
@@ -5446,31 +5451,31 @@ function OrderSummary({
       color: "text-blue-700 dark:text-blue-200"
     }, {
       label: "مجموع الكيلوات",
-      value: `${formatMoney$c(totals.totalKg)} كغ`,
+      value: `${formatMoney$f(totals.totalKg)} كغ`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "مجموع الكيلوات الواصلة بعد الهدر",
-      value: `${formatMoney$c(totals.totalReceivedKg)} كغ`,
+      value: `${formatMoney$f(totals.totalReceivedKg)} كغ`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "كمية الهدر",
-      value: `${formatMoney$c(totals.wasteKg)} كغ (${formatMoney$c(totals.wastePercent)}%)`,
+      value: `${formatMoney$f(totals.wasteKg)} كغ (${formatMoney$f(totals.wastePercent)}%)`,
       color: "text-orange-700 dark:text-orange-200"
     }, {
       label: "إجمالي تكلفة البن (شامل الضريبة)",
-      value: `${formatMoney$c(totals.totalBeanCostIncl)} ر.س`,
+      value: `${formatMoney$f(totals.totalBeanCostIncl)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "إجمالي تكلفة التحميص (شامل الضريبة)",
-      value: `${formatMoney$c(totals.totalRoastIncl)} ر.س`,
+      value: `${formatMoney$f(totals.totalRoastIncl)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "إجمالي التكلفة الإضافية",
-      value: `${formatMoney$c(totals.totalExtra)} ر.س`,
+      value: `${formatMoney$f(totals.totalExtra)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "متوسط السعر الصافي / كغ",
-      value: `${formatMoney$c(totals.avgPricePerKg)} ر.س`,
+      value: `${formatMoney$f(totals.avgPricePerKg)} ر.س`,
       color: "text-emerald-700 dark:text-emerald-200"
     }];
     return /* @__PURE__ */ jsxs("div", { className: "mt-5 pt-4 border-t border-slate-200 dark:border-white/10", children: [
@@ -5486,7 +5491,7 @@ function OrderSummary({
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm mt-2 pt-3 border-t border-slate-200 dark:border-white/15", children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", children: "إجمالي الطلب (شامل):" }),
           /* @__PURE__ */ jsxs("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-base", children: [
-            formatMoney$c(totals.totalGrand),
+            formatMoney$f(totals.totalGrand),
             " ر.س"
           ] })
         ] })
@@ -6374,8 +6379,8 @@ function OrderBuilder({
       const line = row.line;
       const computed = row.computed;
       const qty = row.qty || 1;
-      const wasteText = Number.isFinite(computed?.wastePercent) ? `${formatMoney$c(computed.wastePercent)}%` : "—";
-      const finalPriceText = formatMoney$c(computed?.finalPricePerKg);
+      const wasteText = Number.isFinite(computed?.wastePercent) ? `${formatMoney$f(computed.wastePercent)}%` : "—";
+      const finalPriceText = formatMoney$f(computed?.finalPricePerKg);
       return /* @__PURE__ */ jsxs("tr", { className: "bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10", children: [
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-semibold truncate", children: row.beanName }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 justify-center", children: [
@@ -6395,13 +6400,13 @@ function OrderBuilder({
       ] }, beanIdText);
     });
   }, [hasItems, previewRows, handleItemChange, handleRemoveClick, handlePlusClick, handleMinusClick, isSaving]);
-  const totalBeanCostText = hasItems ? formatMoney$c(totals.totalBeanCostIncl) : "—";
-  const totalRoastText = hasItems ? formatMoney$c(totals.totalRoastIncl) : "—";
-  const totalExtraText = hasItems ? formatMoney$c(totals.totalExtra) : "—";
-  const grandTotalText = totals.ok ? formatMoney$c(totals.grandTotal) : "—";
+  const totalBeanCostText = hasItems ? formatMoney$f(totals.totalBeanCostIncl) : "—";
+  const totalRoastText = hasItems ? formatMoney$f(totals.totalRoastIncl) : "—";
+  const totalExtraText = hasItems ? formatMoney$f(totals.totalExtra) : "—";
+  const grandTotalText = totals.ok ? formatMoney$f(totals.grandTotal) : "—";
   const totalBagsText = hasItems ? String(totals.totalBags) : "—";
-  const totalKgText = hasItems ? formatMoney$c(totals.totalKg) : "—";
-  const totalReceivedKgText = hasItems ? formatMoney$c(totals.totalReceivedKg) : "—";
+  const totalKgText = hasItems ? formatMoney$f(totals.totalKg) : "—";
+  const totalReceivedKgText = hasItems ? formatMoney$f(totals.totalReceivedKg) : "—";
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
       /* @__PURE__ */ jsxs("div", { children: [
@@ -7204,7 +7209,7 @@ function LoanModal({
       ] }),
       monthly > 0 ? /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} px-3 py-2 flex items-center justify-between`, children: [
         /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/60", children: "قسط شهري متوقع" }),
-        /* @__PURE__ */ jsx("span", { className: "text-sm font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: formatMoney$b(monthly) })
+        /* @__PURE__ */ jsx("span", { className: "text-sm font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: formatMoney$e(monthly) })
       ] }) : null,
       isEditing ? /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-2 cursor-pointer select-none", children: [
         /* @__PURE__ */ jsx("input", { type: "checkbox", checked: isActive, onChange: (e) => setIsActive(e.target.checked), className: "accent-emerald-400" }),
@@ -7260,8 +7265,8 @@ function LoansList({
       const isActive = l.is_active !== false;
       return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]", children: [
         /* @__PURE__ */ jsx("td", { className: "py-3 px-3 font-semibold text-slate-900 dark:text-white whitespace-nowrap", children: l.employee_name || `#${l.employee_id}` }),
-        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(l.total_amount) }),
-        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(l.monthly_amount) }),
+        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(l.total_amount) }),
+        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(l.monthly_amount) }),
         /* @__PURE__ */ jsxs("td", { className: "py-3 px-3 text-slate-700 dark:text-white/75 whitespace-nowrap", children: [
           inst,
           " شهر"
@@ -7644,7 +7649,7 @@ function LoansPage() {
     const monthly = Number(loan.monthly_amount || 0);
     const confirmed = window.confirm(`حذف القرض نهائياً لـ ${loan.employee_name || "هذا الموظف"}؟
 
-سيُحذف من القائمة بالكامل، وتُمسح الاستقطاعات (${formatMoney$b(monthly)}/شهر) من مسير الرواتب لأي شهر لم يُقفل بعد.
+سيُحذف من القائمة بالكامل، وتُمسح الاستقطاعات (${formatMoney$e(monthly)}/شهر) من مسير الرواتب لأي شهر لم يُقفل بعد.
 الأشهر المُقفلة تحتفظ بقيمها كما هي.`);
     if (!confirmed) return;
     deleteMutation.mutate({
@@ -7673,12 +7678,12 @@ function LoansPage() {
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-4`, children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الخصم الشهري" }),
-          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-emerald-700 dark:text-emerald-200 mt-1", dir: "ltr", children: formatMoney$b(totals.monthly) }),
+          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-emerald-700 dark:text-emerald-200 mt-1", dir: "ltr", children: formatMoney$e(totals.monthly) }),
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40 mt-1", children: "يُطرح من المسير" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-4 col-span-2`, children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "المتبقي للسداد" }),
-          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$b(totals.outstanding) }),
+          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$e(totals.outstanding) }),
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40 mt-1", children: "للقروض النشطة فقط" })
         ] })
       ] }),
@@ -8519,34 +8524,34 @@ function PayrollTotals({
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-8 gap-3 w-full md:w-auto", children: [
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الرواتب" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalSalary) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalSalary) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي البونص" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalBonuses) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalBonuses) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "أوفر تايم" }),
-        /* @__PURE__ */ jsx("div", { className: "text-sky-700 dark:text-sky-200 font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalOvertime) })
+        /* @__PURE__ */ jsx("div", { className: "text-sky-700 dark:text-sky-200 font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalOvertime) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الخصميات" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalDeductions) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalDeductions) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "قسط السلف" }),
-        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$b(totals.totalLoanDeductions) })
+        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalLoanDeductions) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "الصافي" }),
-        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$b(totals.net) })
+        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$e(totals.net) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-xs text-slate-600 dark:text-white/55", children: [
           /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3 text-emerald-700 dark:text-emerald-400" }),
           "تم الدفع"
         ] }),
-        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$b(paymentStats.totalPaid) }),
+        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$e(paymentStats.totalPaid) }),
         /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/40 mt-0.5", children: [
           paymentStats.paidCount,
           " / ",
@@ -8558,7 +8563,7 @@ function PayrollTotals({
           /* @__PURE__ */ jsx(Clock, { className: "w-3 h-3 text-amber-700 dark:text-amber-400" }),
           "متبقي"
         ] }),
-        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$b(paymentStats.totalUnpaid) }),
+        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$e(paymentStats.totalUnpaid) }),
         /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/40 mt-0.5", children: [
           paymentStats.unpaidCount,
           " موظف"
@@ -8661,17 +8666,17 @@ function PaymentRow({
   const employeeName = entry.employee_name || "—";
   const branchName = entry.branch_name || "—";
   const isSuspended = !!entry.is_suspended;
-  const baseSalary = formatMoney$b(entry.base_salary);
-  const otherAllowances = formatMoney$b(entry.other_allowances);
-  const totalSalary = formatMoney$b(entry.total_salary);
-  const totalBonuses = formatMoney$b(entry.total_bonuses);
-  const totalDeductions = formatMoney$b(entry.total_deductions);
-  const loanDeduction = formatMoney$b(entry.loan_deduction);
+  const baseSalary = formatMoney$e(entry.base_salary);
+  const otherAllowances = formatMoney$e(entry.other_allowances);
+  const totalSalary = formatMoney$e(entry.total_salary);
+  const totalBonuses = formatMoney$e(entry.total_bonuses);
+  const totalDeductions = formatMoney$e(entry.total_deductions);
+  const loanDeduction = formatMoney$e(entry.loan_deduction);
   const hasLoan = Number(entry.loan_deduction || 0) > 0;
-  const totalOvertime = formatMoney$b(entry.total_overtime);
+  const totalOvertime = formatMoney$e(entry.total_overtime);
   const hasOvertime = Number(entry.total_overtime || 0) > 0;
   const overtimeDays = Number(entry.overtime_days || 0);
-  const formattedNet = formatMoney$b(entry.net_salary);
+  const formattedNet = formatMoney$e(entry.net_salary);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] ${isSuspended ? "opacity-70" : ""}`, children: [
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis", style: {
@@ -8695,7 +8700,7 @@ function PaymentRow({
       /* @__PURE__ */ jsx("td", { className: `py-2 px-1.5 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", title: hasLoan ? "قسط شهري لقرض / سلفة نشطة" : "", children: hasLoan ? loanDeduction : "—" }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formattedNet }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", children: METHOD_LABELS[paymentMethod] || "—" }) : /* @__PURE__ */ jsx(GlassSelect, { value: paymentMethod, onChange: handleMethodChange, options: PAYMENT_METHOD_OPTIONS, placeholder: "اختر", disabled: isClosed, buttonClassName: "text-xs py-1 px-2 !rounded-lg" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$b(paidAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (e) => handleAmountChange(e.target.value), disabled: isClosed, className: `${ws$1.input} text-xs py-1 px-1 rounded-lg w-[50px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(netSalary), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$e(paidAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (e) => handleAmountChange(e.target.value), disabled: isClosed, className: `${ws$1.input} text-xs py-1 px-1 rounded-lg w-[50px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(netSalary), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleTogglePaid, disabled: isClosed || isLocked, "aria-label": isPaid ? "إلغاء حالة الدفع" : "تحديد الراتب كمدفوع", title: isPaid ? "إلغاء حالة الدفع" : "تم الدفع", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isPaid ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isClosed || isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isPaid ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
         isPaid && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), disabled: isClosed, className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${paymentNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
@@ -8867,7 +8872,7 @@ function formatBonusMonth(value) {
   if (s.length >= 7) return s.slice(0, 7);
   return s;
 }
-function formatMoney$a(value) {
+function formatMoney$d(value) {
   if (value === null || value === void 0 || value === "") return "-";
   const n = Number(value);
   if (!Number.isFinite(n)) return "-";
@@ -8933,7 +8938,7 @@ function HRBonusesTable({
   return tableShell(bonuses.map((b) => {
     const employeeName = b.employee_name || "—";
     const monthValue = formatBonusMonth(b.bonus_date);
-    const amountValue = formatMoney$a(b.amount);
+    const amountValue = formatMoney$d(b.amount);
     const sourceValue = b.source || b.created_by_employee_name || "—";
     const isPercent = b.amount_mode === "percent" || b.amount_mode === "Percent" || b.amount_percent !== null && b.amount_percent !== void 0;
     const percentValue = isPercent ? `${formatPercent(b.amount_percent)}%` : null;
@@ -9198,11 +9203,14 @@ const ws = {
   input: "w-full appearance-none rounded-[10px] bg-[#fafbfa] border border-[#e2e7e4] text-[#1a2332] placeholder:text-[#8a94a4] " + "transition-colors transition-shadow " + "hover:border-[#c9d3ce] hover:bg-white " + "focus:outline-none focus:border-[#0e7a5f] focus:ring-2 focus:ring-[#0e7a5f]/15 focus:bg-white " + "disabled:opacity-50 disabled:cursor-not-allowed " + "dark:bg-[#132044]/55 dark:supports-[backdrop-filter]:bg-[#132044]/35 dark:border-white/10 dark:text-white dark:placeholder:text-white/35 " + "dark:shadow-none dark:hover:border-white/15 dark:hover:bg-[#132044]/55 dark:focus:border-white/20 dark:focus:ring-emerald-400/10 dark:focus:bg-[#132044]/55 " + "[&:-webkit-autofill]:shadow-[0_0_0_1000px_white_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:#1a2332] " + "dark:[&:-webkit-autofill]:shadow-[0_0_0_1000px_rgba(19,32,68,0.55)_inset] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)]",
   btnPrimary: "inline-flex items-center gap-2 rounded-[10px] " + "bg-[#0e7a5f] text-white border border-[#0e7a5f] font-bold " + "shadow-[0_2px_6px_rgba(14,122,95,0.22)] " + "transition-colors transition-shadow " + "hover:bg-[#0c6950] hover:border-[#0c6950] hover:shadow-[0_4px_12px_rgba(14,122,95,0.28)] " + "active:bg-[#0b3d31] active:border-[#0b3d31] " + "dark:bg-emerald-400/15 dark:text-emerald-200 dark:border-emerald-400/25 dark:shadow-none " + "dark:hover:bg-emerald-400/20 dark:hover:shadow-none dark:active:bg-emerald-400/25",
   btnNeutral: "inline-flex items-center gap-2 rounded-[10px] " + "bg-white text-[#4a5568] border border-[#e2e7e4] font-semibold " + "transition-colors " + "hover:bg-[#f6f8f7] hover:border-[#c9d3ce] hover:text-[#1a2332] " + "active:bg-[#eef1ef] " + "dark:bg-white/[0.05] dark:text-white/85 dark:border-white/10 dark:shadow-none " + "dark:hover:bg-white/[0.07] dark:hover:border-white/10 dark:hover:text-white/85 dark:active:bg-white/[0.09]",
+  btnDanger: "inline-flex items-center gap-2 rounded-[10px] " + "bg-[#f9ebe9] text-[#b5443c] border border-[#e8c4bf] font-semibold " + "transition-colors " + "hover:bg-[#f4ded9] hover:border-[#ddaba4] active:bg-[#eed1cb] " + "dark:bg-red-500/15 dark:text-red-200 dark:border-red-500/25 dark:shadow-none " + "dark:hover:bg-red-500/20 dark:hover:border-red-500/25 dark:active:bg-red-500/25",
   pill: "inline-flex px-3 py-1 rounded-full text-xs font-bold border " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
   card: "rounded-[10px]",
   divider: "border-[#e2e7e4] dark:border-white/10",
+  sectionHeader: "px-4 py-3 bg-[#fafbfa] border-b border-[#e2e7e4] " + "dark:bg-white/[0.03] dark:border-white/10",
   iconBox: "w-11 h-11 rounded-[10px] " + "bg-[#e7f2ee] border border-[#d3e5dd] " + "flex items-center justify-center " + "dark:bg-white/[0.05] dark:bg-none dark:border-white/10 " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
   iconButton: "inline-flex items-center justify-center w-11 h-11 rounded-[10px] touch-manipulation " + "bg-white text-[#4a5568] border border-[#e2e7e4] " + "transition-colors " + "hover:bg-[#f6f8f7] hover:border-[#c9d3ce] hover:text-[#1a2332] " + "dark:bg-white/[0.03] dark:text-white dark:border-white/10 dark:shadow-none " + "dark:hover:bg-white/[0.06] dark:hover:border-white/10",
+  chip: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full " + "bg-white border border-[#e2e7e4] text-xs font-semibold text-[#4a5568] " + "dark:bg-white/[0.04] dark:border-white/10 dark:text-white/70 dark:shadow-none",
   segWrap: "bg-[#eef1ef] border border-[#e2e7e4] rounded-[10px] p-1 " + "inline-flex items-center gap-1 " + "dark:bg-white/[0.03] dark:border-white/10",
   segBtn: "px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0e7a5f]/30",
   // الرقاقة النشطة بالأخضر العميق — حرفياً chip.on في المستند.
@@ -9624,7 +9632,7 @@ const CURRENCY_OPTIONS$1 = [{
   value: "OMR",
   label: "ريال عماني - OMR"
 }];
-function todayRiyadh$4() {
+function todayRiyadh$7() {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Riyadh",
     year: "numeric",
@@ -10129,15 +10137,15 @@ function moneyInput$2(value) {
   if (!Number.isFinite(number)) return "";
   return (Math.round(number * 100) / 100).toFixed(2);
 }
-function moneyValue$7(value) {
+function moneyValue$a(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
 }
 function round2$1(value) {
   return Math.round(value * 100) / 100;
 }
-const MAX_SMART_FILE_BYTES = 3 * 1024 * 1024;
-async function fileToBase64(file) {
+const MAX_SMART_FILE_BYTES$1 = 3 * 1024 * 1024;
+async function fileToBase64$1(file) {
   const bytes = new Uint8Array(await file.arrayBuffer());
   let binary = "";
   const chunk = 32768;
@@ -10154,10 +10162,10 @@ async function analyzeInvoiceRemotely({
     const payload = {
       text: text || ""
     };
-    if (file && file.size > 0 && file.size <= MAX_SMART_FILE_BYTES) {
+    if (file && file.size > 0 && file.size <= MAX_SMART_FILE_BYTES$1) {
       const mediaType = file.type || (/\.pdf$/i.test(file.name || "") ? "application/pdf" : "");
       if (/^(application\/pdf|image\/(jpeg|png|webp|gif))$/.test(mediaType)) {
-        payload.file_base64 = await fileToBase64(file);
+        payload.file_base64 = await fileToBase64$1(file);
         payload.media_type = mediaType;
       }
     }
@@ -10196,9 +10204,9 @@ async function analyzeInvoiceRemotely({
     };
   }
 }
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-function formatMoney$9(value, currency = "SAR") {
-  return `${moneyValue$7(value).toLocaleString("en-US", {
+const ISO_DATE$1 = /^\d{4}-\d{2}-\d{2}$/;
+function formatMoney$c(value, currency = "SAR") {
+  return `${moneyValue$a(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })} ${currency}`;
@@ -10208,11 +10216,11 @@ function computedStatus({
   paidAmount,
   dueDate
 }) {
-  const total = moneyValue$7(totalAmount);
-  const paid = moneyValue$7(paidAmount);
+  const total = moneyValue$a(totalAmount);
+  const paid = moneyValue$a(paidAmount);
   const balance = Math.max(total - paid, 0);
   if (total > 0 && paid >= total) return "paid";
-  if (dueDate && dueDate < todayRiyadh$4() && balance > 0) return "overdue";
+  if (dueDate && dueDate < todayRiyadh$7() && balance > 0) return "overdue";
   if (paid > 0) return "partial_paid";
   return "pending_payment";
 }
@@ -10379,14 +10387,14 @@ function coffeeInput(value, digits = 3) {
   return String(Math.round(n * 10 ** digits) / 10 ** digits);
 }
 function lineAmount(line) {
-  const quantity = moneyValue$7(line.quantity);
-  const price = moneyValue$7(line.unit_price);
+  const quantity = moneyValue$a(line.quantity);
+  const price = moneyValue$a(line.unit_price);
   if (quantity <= 0 || price <= 0) return 0;
   return round2$1(quantity * price);
 }
 function lineMath(line) {
   const amount = lineAmount(line);
-  const rate = Math.min(Math.max(moneyValue$7(line.tax_rate), 0), 100);
+  const rate = Math.min(Math.max(moneyValue$a(line.tax_rate), 0), 100);
   if (amount <= 0) return {
     amount: 0,
     subtotal: 0,
@@ -10419,8 +10427,8 @@ function linesFromInvoice(invoice) {
   const stored = Array.isArray(invoice?.items) ? invoice.items : [];
   if (stored.length > 0) {
     return stored.map((item) => {
-      const quantity = moneyValue$7(item.quantity);
-      const price = moneyValue$7(item.unit_price);
+      const quantity = moneyValue$a(item.quantity);
+      const price = moneyValue$a(item.unit_price);
       const roast = !!item.roast_enabled;
       return newLine({
         id: item.id || null,
@@ -10428,7 +10436,7 @@ function linesFromInvoice(invoice) {
         account_id: item.account_id ? String(item.account_id) : "",
         quantity: quantity > 0 ? String(quantity) : roast ? "0" : "1",
         unit_price: price > 0 ? priceInput(price) : moneyInput$2(item.amount) || "",
-        tax_rate: String(moneyValue$7(item.tax_rate)),
+        tax_rate: String(moneyValue$a(item.tax_rate)),
         amount_includes_tax: !!item.amount_includes_tax,
         roast_enabled: roast,
         quantity_unit: item.quantity_unit === "kg" ? "kg" : "sack",
@@ -10455,9 +10463,9 @@ function linesFromInvoice(invoice) {
       });
     });
   }
-  const total = moneyValue$7(invoice?.total_amount);
+  const total = moneyValue$a(invoice?.total_amount);
   if (total > 0) {
-    const tax = moneyValue$7(invoice?.tax_amount);
+    const tax = moneyValue$a(invoice?.tax_amount);
     const subtotal = Math.max(total - tax, 0);
     const rate = subtotal > 0 ? round2$1(tax / subtotal * 100) : 15;
     return [newLine({
@@ -10594,7 +10602,7 @@ function CoffeeLineRow({
       ] }) : null,
       allowArrival && !deposited ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60", children: [
         /* @__PURE__ */ jsx("span", { children: "تاريخ الوصول:" }),
-        /* @__PURE__ */ jsx("input", { type: "date", value: line.arrival_date || todayRiyadh$4(), max: todayRiyadh$4(), onChange: (event) => updateLine(line.key, {
+        /* @__PURE__ */ jsx("input", { type: "date", value: line.arrival_date || todayRiyadh$7(), max: todayRiyadh$7(), onChange: (event) => updateLine(line.key, {
           arrival_date: event.target.value
         }), className: `${ws.input} px-2 py-1 text-xs w-40` })
       ] }) : null,
@@ -10620,12 +10628,12 @@ function CoffeeLineRow({
     ] }) : null
   ] }) });
 }
-function SectionTitle({
+function SectionTitle$1({
   children
 }) {
   return /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white tracking-tight", children });
 }
-function FieldLabel({
+function FieldLabel$1({
   children,
   required
 }) {
@@ -10654,7 +10662,7 @@ function PurchaseInvoiceModal({
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [contactId, setContactId] = useState("");
   const [supplierName, setSupplierName] = useState("");
-  const [invoiceDate, setInvoiceDate] = useState(todayRiyadh$4());
+  const [invoiceDate, setInvoiceDate] = useState(todayRiyadh$7());
   const [dueDate, setDueDate] = useState("");
   const [currency, setCurrency] = useState("SAR");
   const [lines, setLines] = useState(() => [newLine()]);
@@ -10745,7 +10753,7 @@ function PurchaseInvoiceModal({
     setInvoiceNumber(invoice?.invoice_number || "");
     setContactId(invoice?.contact_id ? String(invoice.contact_id) : "");
     setSupplierName(invoice?.supplier_name || "");
-    setInvoiceDate(invoice?.invoice_date || todayRiyadh$4());
+    setInvoiceDate(invoice?.invoice_date || todayRiyadh$7());
     setDueDate(invoice?.due_date || "");
     setCurrency(invoice?.currency || "SAR");
     setLines(linesFromInvoice(invoice));
@@ -10833,7 +10841,7 @@ function PurchaseInvoiceModal({
       rawSubtotal += math.subtotal;
       rawTax += math.tax;
     }
-    const applied = Math.min(Math.max(moneyValue$7(discount), 0), rawSubtotal);
+    const applied = Math.min(Math.max(moneyValue$a(discount), 0), rawSubtotal);
     const factor = rawSubtotal > 0 ? (rawSubtotal - applied) / rawSubtotal : 1;
     const subtotal = rawSubtotal - applied;
     const tax = rawTax * factor;
@@ -10856,7 +10864,7 @@ function PurchaseInvoiceModal({
     };
     const subtotals = lines.map((line) => lineMath(line).subtotal);
     const rawSubtotal = subtotals.reduce((s, v) => s + v, 0);
-    const applied = Math.min(Math.max(moneyValue$7(discount), 0), rawSubtotal);
+    const applied = Math.min(Math.max(moneyValue$a(discount), 0), rawSubtotal);
     const shares = allocateDiscount(subtotals, applied);
     const factor = rawSubtotal > 0 ? (rawSubtotal - applied) / rawSubtotal : 1;
     let roastTotal = 0;
@@ -10869,7 +10877,7 @@ function PurchaseInvoiceModal({
       const math = lineMath(line);
       const roastRate = numOrNull(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG;
       const c = computeCoffeeLine({
-        quantity: moneyValue$7(line.quantity),
+        quantity: moneyValue$a(line.quantity),
         quantityUnit: line.quantity_unit,
         kgPerSack: numOrNull(line.kg_per_sack) ?? bean.bag_size_kg,
         rawKg: numOrNull(line.raw_kg),
@@ -10879,7 +10887,7 @@ function PurchaseInvoiceModal({
         discountFactor: factor,
         roastPerKg: roastRate,
         roastTaxRate: bean.roast_tax_rate ?? 0,
-        extraCost: moneyValue$7(line.extra_cost),
+        extraCost: moneyValue$a(line.extra_cost),
         // إدخال «الواصل بعد الهدر» = الوصول مكتمل (الجزئي من نافذة الوصول).
         receivedKg: numOrNull(line.arrival_received_kg),
         arrivalComplete: numOrNull(line.arrival_received_kg) > 0
@@ -10944,7 +10952,7 @@ function PurchaseInvoiceModal({
     paidAmount,
     dueDate
   });
-  const balance = Math.max(totals.total - moneyValue$7(paidAmount), 0);
+  const balance = Math.max(totals.total - moneyValue$a(paidAmount), 0);
   const hasFreeSampleLine = lines.some((line) => line.roast_enabled && line.free_sample && lineBean(line));
   const unconfirmedUnusual = coffee.unusual.some((key) => !lines.find((line) => line.key === key)?.confirm_unusual_price);
   const unconfirmedWaste = lines.some((line) => {
@@ -10952,7 +10960,7 @@ function PurchaseInvoiceModal({
     return c?.arrivalComplete && wasteFlag(c.wastePercent) === "confirm" && !line.confirm_high_waste;
   });
   const missingRawKg = lines.some((line) => line.roast_enabled && lineBean(line) && !(numOrNull(line.raw_kg) > 0));
-  const canSubmit = !isSubmitting && (!!supplierName.trim() || !!contactId) && (totals.total > 0 || hasFreeSampleLine) && moneyValue$7(paidAmount) <= totals.total && !unconfirmedUnusual && !unconfirmedWaste && !missingRawKg;
+  const canSubmit = !isSubmitting && (!!supplierName.trim() || !!contactId) && (totals.total > 0 || hasFreeSampleLine) && moneyValue$a(paidAmount) <= totals.total && !unconfirmedUnusual && !unconfirmedWaste && !missingRawKg;
   const updateLine = (key, patch) => {
     autoFilledRef.current.delete("lines");
     setLines((prev) => prev.map((line) => {
@@ -11002,10 +11010,10 @@ function PurchaseInvoiceModal({
         id: line.id || void 0,
         description: line.description.trim() || null,
         account_id: line.account_id || null,
-        quantity: moneyValue$7(line.quantity),
-        unit_price: moneyValue$7(line.unit_price),
+        quantity: moneyValue$a(line.quantity),
+        unit_price: moneyValue$a(line.unit_price),
         amount: lineAmount(line),
-        tax_rate: moneyValue$7(line.tax_rate),
+        tax_rate: moneyValue$a(line.tax_rate),
         amount_includes_tax: roast ? false : !!line.amount_includes_tax
       };
       if (isRoastInvoice) return base;
@@ -11016,7 +11024,7 @@ function PurchaseInvoiceModal({
         kg_per_sack: roast ? numOrNull(line.kg_per_sack) ?? bean.bag_size_kg ?? null : null,
         raw_kg: roast ? numOrNull(line.raw_kg) : null,
         roast_per_kg: roast ? numOrNull(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG : null,
-        extra_cost: roast ? moneyValue$7(line.extra_cost) : 0,
+        extra_cost: roast ? moneyValue$a(line.extra_cost) : 0,
         free_sample: roast && !!line.free_sample,
         confirm_unusual_price: roast && !!line.confirm_unusual_price
       };
@@ -11034,7 +11042,7 @@ function PurchaseInvoiceModal({
           index,
           id: line.id || void 0,
           received_kg: received,
-          arrival_date: line.arrival_date || todayRiyadh$4(),
+          arrival_date: line.arrival_date || todayRiyadh$7(),
           arrival_complete: received !== null && received > 0,
           confirm_high_waste: !!line.confirm_high_waste
         });
@@ -11051,7 +11059,7 @@ function PurchaseInvoiceModal({
       }
     }
     const forApproval = sendToApproval && !isEditing;
-    const effectivePaid = forApproval ? 0 : moneyValue$7(paidAmount);
+    const effectivePaid = forApproval ? 0 : moneyValue$a(paidAmount);
     const payload = {
       invoice_number: invoiceNumber.trim() || void 0,
       contact_id: contactId || null,
@@ -11176,7 +11184,7 @@ function PurchaseInvoiceModal({
         warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة."
       });
       let scanFile = file;
-      if (isImage && file.size > MAX_SMART_FILE_BYTES) {
+      if (isImage && file.size > MAX_SMART_FILE_BYTES$1) {
         try {
           const {
             compressImage
@@ -11185,7 +11193,7 @@ function PurchaseInvoiceModal({
         } catch {
         }
       }
-      const fileEligible = scanFile.size <= MAX_SMART_FILE_BYTES;
+      const fileEligible = scanFile.size <= MAX_SMART_FILE_BYTES$1;
       let analysis = null;
       let smartNote = null;
       if (fileEligible) {
@@ -11313,17 +11321,17 @@ function PurchaseInvoiceModal({
           if (Number.isFinite(tax)) filled.push("الضريبة");
         }
         const scanDiscount = Number(analysis.discount);
-        if (Number.isFinite(scanDiscount) && scanDiscount > 0 && canFill("discount", moneyValue$7(discount) === 0)) {
+        if (Number.isFinite(scanDiscount) && scanDiscount > 0 && canFill("discount", moneyValue$a(discount) === 0)) {
           setDiscount(scanDiscount.toFixed(2));
           owned.add("discount");
           filled.push("الخصم");
         }
-        if (ISO_DATE.test(analysis.invoice_date || "") && canFill("date", false)) {
+        if (ISO_DATE$1.test(analysis.invoice_date || "") && canFill("date", false)) {
           setInvoiceDate(analysis.invoice_date);
           owned.add("date");
           filled.push("تاريخ الفاتورة");
         }
-        if (ISO_DATE.test(analysis.due_date || "") && canFill("dueDate", !dueDate)) {
+        if (ISO_DATE$1.test(analysis.due_date || "") && canFill("dueDate", !dueDate)) {
           setDueDate(analysis.due_date);
           owned.add("dueDate");
           filled.push("تاريخ الاستحقاق");
@@ -11507,15 +11515,15 @@ function PurchaseInvoiceModal({
           ] }),
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/55 leading-relaxed", children: "تعديل البنود هنا يجعل هذه الفاتورة المرجع: تكلفة التحميص في فاتورة البن تُحدَّث منها وتُعاد حساب تكلفة الصنف." }),
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx(FieldLabel, { children: "رقم فاتورة المحمصة الحقيقي" }),
+            /* @__PURE__ */ jsx(FieldLabel$1, { children: "رقم فاتورة المحمصة الحقيقي" }),
             /* @__PURE__ */ jsx("input", { type: "text", value: roasterReference, onChange: (event) => setRoasterReference(event.target.value), className: `${ws.input} px-3 py-2 text-sm`, placeholder: "رقم الفاتورة كما ورد من المحمصة", dir: "ltr" })
           ] })
         ] }) : null,
         /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
-          /* @__PURE__ */ jsx(SectionTitle, { children: "معلومات الفاتورة" }),
+          /* @__PURE__ */ jsx(SectionTitle$1, { children: "معلومات الفاتورة" }),
           /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { children: "رقم الفاتورة" }),
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "رقم الفاتورة" }),
               /* @__PURE__ */ jsx("input", { type: "text", value: invoiceNumber, onChange: (event) => {
                 autoFilledRef.current.delete("number");
                 setInvoiceNumber(event.target.value);
@@ -11529,18 +11537,18 @@ function PurchaseInvoiceModal({
                   " ",
                   "بمبلغ",
                   " ",
-                  /* @__PURE__ */ jsx("span", { dir: "ltr", children: moneyValue$7(duplicateInvoice.total_amount).toFixed(2) }),
+                  /* @__PURE__ */ jsx("span", { dir: "ltr", children: moneyValue$a(duplicateInvoice.total_amount).toFixed(2) }),
                   " ",
                   "SAR. تأكد أنها ليست فاتورة مكررة."
                 ] })
               ] }) : null
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { children: "العملة" }),
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "العملة" }),
               /* @__PURE__ */ jsx(GlassSelect, { value: currency, onChange: setCurrency, options: CURRENCY_OPTIONS$1, placeholder: "اختر العملة", buttonClassName: "text-sm py-2.5 px-3" })
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { required: true, children: "المورد" }),
+              /* @__PURE__ */ jsx(FieldLabel$1, { required: true, children: "المورد" }),
               /* @__PURE__ */ jsx(GlassSelect, { value: contactId, onChange: handleContactChange, options: contactOptions, placeholder: "اختر المورد", buttonClassName: "text-sm py-2.5 px-3" }),
               /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap mt-1.5", children: [
                 scanSupplier && !contactId ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setConfirmSupplier({
@@ -11565,28 +11573,28 @@ function PurchaseInvoiceModal({
               ] })
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { children: "اسم المورد (كما في الفاتورة)" }),
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "اسم المورد (كما في الفاتورة)" }),
               /* @__PURE__ */ jsx("input", { type: "text", value: supplierName, onChange: (event) => {
                 autoFilledRef.current.delete("contact");
                 setSupplierName(event.target.value);
               }, className: `${ws.input} px-3 py-2.5`, placeholder: "مثال: مؤسسة عمق المذاق" })
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { children: "تاريخ الفاتورة" }),
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "تاريخ الفاتورة" }),
               /* @__PURE__ */ jsx("input", { type: "date", value: invoiceDate, onChange: (event) => {
                 autoFilledRef.current.delete("date");
                 setInvoiceDate(event.target.value);
               }, className: `${ws.input} px-3 py-2.5` })
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { children: "تاريخ الاستحقاق" }),
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "تاريخ الاستحقاق" }),
               /* @__PURE__ */ jsx("input", { type: "date", value: dueDate, onChange: (event) => {
                 autoFilledRef.current.delete("dueDate");
                 setDueDate(event.target.value);
               }, className: `${ws.input} px-3 py-2.5` })
             ] }),
             branches.length > 0 ? /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { children: "الفرع" }),
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "الفرع" }),
               /* @__PURE__ */ jsx(GlassSelect, { value: branchId, onChange: setBranchId, options: [{
                 value: "",
                 label: "بدون تحديد فرع"
@@ -11600,7 +11608,7 @@ function PurchaseInvoiceModal({
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
           /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
-            /* @__PURE__ */ jsx(SectionTitle, { children: "بنود الفاتورة" }),
+            /* @__PURE__ */ jsx(SectionTitle$1, { children: "بنود الفاتورة" }),
             /* @__PURE__ */ jsxs("button", { type: "button", onClick: addLine, className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: [
               /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
               "إضافة بند"
@@ -11661,11 +11669,11 @@ function PurchaseInvoiceModal({
           ] }) })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
-          /* @__PURE__ */ jsx(SectionTitle, { children: "الإجماليات والدفع" }),
+          /* @__PURE__ */ jsx(SectionTitle$1, { children: "الإجماليات والدفع" }),
           /* @__PURE__ */ jsxs("div", { className: "space-y-1.5 text-sm", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
               /* @__PURE__ */ jsx("span", { children: "مجموع البنود (قبل الضريبة)" }),
-              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$9(totals.rawSubtotal, currency) })
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$c(totals.rawSubtotal, currency) })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 text-slate-600 dark:text-white/60", children: [
               /* @__PURE__ */ jsx("span", { children: "الخصم (قبل الضريبة)" }),
@@ -11676,15 +11684,15 @@ function PurchaseInvoiceModal({
             ] }),
             totals.discount > 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
               /* @__PURE__ */ jsx("span", { children: "الصافي بعد الخصم" }),
-              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$9(totals.subtotal, currency) })
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$c(totals.subtotal, currency) })
             ] }) : null,
             /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
               /* @__PURE__ */ jsx("span", { children: "إجمالي ضريبة القيمة المضافة" }),
-              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$9(totals.tax, currency) })
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$c(totals.tax, currency) })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: `flex items-center justify-between font-bold text-slate-900 dark:text-white pt-2 border-t ${ws.divider}`, children: [
               /* @__PURE__ */ jsx("span", { children: "المجموع" }),
-              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$9(totals.total, currency) })
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$c(totals.total, currency) })
             ] })
           ] }),
           hasCoffeeLine ? /* @__PURE__ */ jsxs("div", { className: "rounded-xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2", children: [
@@ -11697,14 +11705,14 @@ function PurchaseInvoiceModal({
                 coffee.count === 1 ? "بند" : "بنود",
                 ")"
               ] }),
-              /* @__PURE__ */ jsx("span", { className: "text-sm font-bold tabular-nums text-amber-800 dark:text-amber-200", dir: "ltr", children: formatMoney$9(coffee.roastTotal + coffee.roastTax, currency) })
+              /* @__PURE__ */ jsx("span", { className: "text-sm font-bold tabular-nums text-amber-800 dark:text-amber-200", dir: "ltr", children: formatMoney$c(coffee.roastTotal + coffee.roastTax, currency) })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-600 dark:text-white/55 leading-relaxed", children: [
               "خارج إجمالي فاتورة المورد وخارج الإقرار الضريبي.",
               coffee.roastTotal + coffee.roastTax > 0 ? ` تُنشأ تلقائيًا فاتورة تحميص مستقلة على «${effectiveRoasterName}» بحالة «بانتظار الدفع» واستحقاق بعد 15 يومًا من تاريخ الفاتورة.` : " تحميص بقيمة 0 — لا تُنشأ فاتورة تحميص."
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { children: "المحمصة (جهة اتصال)" }),
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "المحمصة (جهة اتصال)" }),
               /* @__PURE__ */ jsx(GlassSelect, { value: roasterContactId, onChange: setRoasterContactId, options: [{
                 value: "",
                 label: `الافتراضية — ${effectiveRoasterName}`
@@ -11760,27 +11768,27 @@ function PurchaseInvoiceModal({
           !(sendToApproval && !isEditing) ? /* @__PURE__ */ jsxs(Fragment, { children: [
             /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1", children: [
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx(FieldLabel, { children: "المبلغ المدفوع" }),
+                /* @__PURE__ */ jsx(FieldLabel$1, { children: "المبلغ المدفوع" }),
                 /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
                   /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (event) => setPaidAmount(event.target.value), className: `${ws.input} px-3 py-2.5 text-right flex-1`, step: "0.01", min: "0", dir: "ltr" }),
                   /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPaidAmount(totals.total > 0 ? totals.total.toFixed(2) : "0.00"), disabled: totals.total <= 0, className: `${ws.btnNeutral} px-3 py-2.5 text-xs shrink-0 whitespace-nowrap disabled:opacity-50`, title: "تعبئة المدفوع بكامل مبلغ الفاتورة", children: "مدفوعة بالكامل" })
                 ] }),
-                moneyValue$7(paidAmount) > totals.total ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-700 dark:text-rose-300 mt-1", children: "المبلغ المدفوع لا يمكن أن يتجاوز مبلغ الفاتورة." }) : null
+                moneyValue$a(paidAmount) > totals.total ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-700 dark:text-rose-300 mt-1", children: "المبلغ المدفوع لا يمكن أن يتجاوز مبلغ الفاتورة." }) : null
               ] }),
               /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-center justify-between gap-2`, children: [
                 /* @__PURE__ */ jsxs("div", { children: [
                   /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "الرصيد المتبقي" }),
-                  /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-0.5", dir: "ltr", children: formatMoney$9(balance, currency) })
+                  /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-0.5", dir: "ltr", children: formatMoney$c(balance, currency) })
                 ] }),
                 /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold ${purchaseInvoiceStatusClass(status)}`, children: purchaseInvoiceStatusLabel(status) })
               ] })
             ] }),
-            moneyValue$7(paidAmount) > 0 && bankAccountOptions.length > 1 ? /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel, { children: "الحساب البنكي المدفوع منه" }),
+            moneyValue$a(paidAmount) > 0 && bankAccountOptions.length > 1 ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "الحساب البنكي المدفوع منه" }),
               /* @__PURE__ */ jsx(GlassSelect, { value: paidBankAccountId, onChange: setPaidBankAccountId, options: bankAccountOptions, placeholder: "بدون تحديد حساب", buttonClassName: "text-sm py-2.5 px-3" })
             ] }) : null,
-            moneyValue$7(paidAmount) > 0 ? /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsxs(FieldLabel, { children: [
+            moneyValue$a(paidAmount) > 0 ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsxs(FieldLabel$1, { children: [
                 "إيصال الدفع",
                 " ",
                 /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "(اختياري)" })
@@ -11809,7 +11817,7 @@ function PurchaseInvoiceModal({
           ] }) : null
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-2`, children: [
-          /* @__PURE__ */ jsx(SectionTitle, { children: "ملاحظات" }),
+          /* @__PURE__ */ jsx(SectionTitle$1, { children: "ملاحظات" }),
           /* @__PURE__ */ jsx("textarea", { value: notes, onChange: (event) => setNotes(event.target.value), className: `${ws.input} px-3 py-2.5 min-h-[80px] resize-none`, placeholder: "اختياري" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
@@ -11839,14 +11847,14 @@ function PurchaseInvoiceModal({
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx(FieldLabel, { required: true, children: "اسم المنشأة" }),
+          /* @__PURE__ */ jsx(FieldLabel$1, { required: true, children: "اسم المنشأة" }),
           /* @__PURE__ */ jsx("input", { type: "text", value: confirmSupplier.name, onChange: (event) => setConfirmSupplier({
             ...confirmSupplier,
             name: event.target.value
           }), className: `${ws.input} px-3 py-2.5`, autoFocus: true })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx(FieldLabel, { children: "الرقم الضريبي" }),
+          /* @__PURE__ */ jsx(FieldLabel$1, { children: "الرقم الضريبي" }),
           /* @__PURE__ */ jsx("input", { type: "text", value: confirmSupplier.vat, onChange: (event) => setConfirmSupplier({
             ...confirmSupplier,
             vat: event.target.value.replace(/\D/g, "")
@@ -12995,14 +13003,14 @@ function useAccountingPurchaseInvoices({
 
 // خطأ يحمل كود الخادم (stale_invoice / roast_paid / unusual_price /
 // deposited_line / high_waste …) حتى تتصرف الواجهة بحسبه.
-function apiError(data, fallback, status) {
+function apiError$1(data, fallback, status) {
   const error = new Error(data?.error || fallback);
   error.code = data?.code || null;
   error.status = status || null;
   error.data = data || null;
   return error;
 }
-function showWarnings(data) {
+function showWarnings$1(data) {
   const warnings = Array.isArray(data?.warnings) ? data.warnings : [];
   for (const warning of warnings) toast.warning(warning, {
     duration: 8000
@@ -13021,7 +13029,7 @@ function useCreateAccountingPurchaseInvoice() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw apiError(data, "فشل إضافة فاتورة المشتريات", res.status);
+        throw apiError$1(data, "فشل إضافة فاتورة المشتريات", res.status);
       }
       return data;
     },
@@ -13037,7 +13045,7 @@ function useCreateAccountingPurchaseInvoice() {
         queryKey: queryKeys.purchaseReceipts()
       });
       toast.success(data?.roast?.invoice_number ? `تم إضافة الفاتورة — وفاتورة التحميص ${data.roast.invoice_number}` : "تم إضافة فاتورة المشتريات");
-      showWarnings(data);
+      showWarnings$1(data);
     },
     onError: error => {
       console.error(error);
@@ -13058,7 +13066,7 @@ function useUpdateAccountingPurchaseInvoice() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw apiError(data, "فشل تعديل فاتورة المشتريات", res.status);
+        throw apiError$1(data, "فشل تعديل فاتورة المشتريات", res.status);
       }
       return data;
     },
@@ -13070,7 +13078,7 @@ function useUpdateAccountingPurchaseInvoice() {
         queryKey: queryKeys.items()
       });
       toast.success("تم حفظ فاتورة المشتريات");
-      showWarnings(data);
+      showWarnings$1(data);
     },
     onError: error => {
       console.error(error);
@@ -13246,7 +13254,7 @@ function useDeleteAccountingPurchaseInvoice() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw apiError(data, "فشل إيقاف الفاتورة", res.status);
+        throw apiError$1(data, "فشل إيقاف الفاتورة", res.status);
       }
       return data;
     },
@@ -13284,7 +13292,7 @@ function useRecordCoffeeArrival() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw apiError(data, "فشل تسجيل الوصول", res.status);
+        throw apiError$1(data, "فشل تسجيل الوصول", res.status);
       }
       return data;
     },
@@ -13431,7 +13439,7 @@ function useDeleteAccountingAccount() {
 
 const MONTH_SHORT$1 = ["ينا", "فبر", "مار", "أبر", "ماي", "يون", "يول", "أغس", "سبت", "أكت", "نوف", "ديس"];
 const DONUT_COLORS = ["#0e7a5f", "#0e7490", "#b7791f", "#2569a8", "#8b5cf6"];
-function todayRiyadh$3() {
+function todayRiyadh$6() {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Riyadh",
     year: "numeric",
@@ -13453,12 +13461,12 @@ function shiftMonth(yyyyMm, delta) {
   const nm = total % 12 + 1;
   return `${ny}-${String(nm).padStart(2, "0")}`;
 }
-function moneyValue$6(value) {
+function moneyValue$9(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
 }
-function formatMoney$8(value, currency = "SAR") {
-  return `${moneyValue$6(value).toLocaleString("en-US", {
+function formatMoney$b(value, currency = "SAR") {
+  return `${moneyValue$9(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })} ${currency}`;
@@ -13497,7 +13505,7 @@ function PurchasesOverviewPanel({
   });
   const invoices = useMemo(() => (invoicesQuery.data || []).filter((invoice) => invoice.is_active !== false), [invoicesQuery.data]);
   const accounts = accountsQuery.data || [];
-  const today = todayRiyadh$3();
+  const today = todayRiyadh$6();
   const thisMonth = today.slice(0, 7);
   const lastMonth = shiftMonth(thisMonth, -1);
   const weekAhead = addDays$1(today, 7);
@@ -13513,8 +13521,8 @@ function PurchasesOverviewPanel({
     let pendingCount = 0;
     for (const invoice of invoices) {
       const month = (invoice.invoice_date || "").slice(0, 7);
-      const total = moneyValue$6(invoice.total_amount);
-      const balance = moneyValue$6(invoice.balance_due);
+      const total = moneyValue$9(invoice.total_amount);
+      const balance = moneyValue$9(invoice.balance_due);
       if (month === thisMonth) {
         monthTotal += total;
         monthCount += 1;
@@ -13555,7 +13563,7 @@ function PurchasesOverviewPanel({
     for (const invoice of invoices) {
       const month = (invoice.invoice_date || "").slice(0, 7);
       if (totals.has(month)) {
-        totals.set(month, totals.get(month) + moneyValue$6(invoice.total_amount));
+        totals.set(month, totals.get(month) + moneyValue$9(invoice.total_amount));
       }
     }
     const max = Math.max(...totals.values(), 1);
@@ -13577,14 +13585,14 @@ function PurchasesOverviewPanel({
       const items = Array.isArray(invoice.items) ? invoice.items : [];
       if (items.length === 0) {
         const key = invoice.expense_account_id || "none";
-        byAccount.set(key, (byAccount.get(key) || 0) + moneyValue$6(invoice.total_amount));
-        total += moneyValue$6(invoice.total_amount);
+        byAccount.set(key, (byAccount.get(key) || 0) + moneyValue$9(invoice.total_amount));
+        total += moneyValue$9(invoice.total_amount);
         continue;
       }
       for (const item of items) {
         const key = item.account_id || "none";
-        byAccount.set(key, (byAccount.get(key) || 0) + moneyValue$6(item.line_total));
-        total += moneyValue$6(item.line_total);
+        byAccount.set(key, (byAccount.get(key) || 0) + moneyValue$9(item.line_total));
+        total += moneyValue$9(item.line_total);
       }
     }
     if (total <= 0) return null;
@@ -13622,15 +13630,15 @@ function PurchasesOverviewPanel({
     if (stats.overdueCount > 0) {
       items.push({
         tone: "rose",
-        text: `${stats.overdueCount} فاتورة متأخرة بمجموع ${formatMoney$8(stats.overdueBalance)} — أقدمها منذ ${stats.oldestOverdueDays} يوماً. سدّد أو جدوِل.`
+        text: `${stats.overdueCount} فاتورة متأخرة بمجموع ${formatMoney$b(stats.overdueBalance)} — أقدمها منذ ${stats.oldestOverdueDays} يوماً. سدّد أو جدوِل.`
       });
     }
-    const dueSoon = invoices.filter((invoice) => moneyValue$6(invoice.balance_due) > 0 && invoice.due_date && invoice.due_date >= today && invoice.due_date <= weekAhead);
+    const dueSoon = invoices.filter((invoice) => moneyValue$9(invoice.balance_due) > 0 && invoice.due_date && invoice.due_date >= today && invoice.due_date <= weekAhead);
     if (dueSoon.length > 0) {
-      const sum = dueSoon.reduce((acc, invoice) => acc + moneyValue$6(invoice.balance_due), 0);
+      const sum = dueSoon.reduce((acc, invoice) => acc + moneyValue$9(invoice.balance_due), 0);
       items.push({
         tone: "amber",
-        text: `${dueSoon.length} فاتورة تستحق خلال ٧ أيام بمجموع ${formatMoney$8(sum)}.`
+        text: `${dueSoon.length} فاتورة تستحق خلال ٧ أيام بمجموع ${formatMoney$b(sum)}.`
       });
     }
     if (stats.pendingCount > 0) {
@@ -13664,18 +13672,18 @@ function PurchasesOverviewPanel({
   } : {});
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3", children: [
-      /* @__PURE__ */ jsx(KpiCard$1, { label: `مشتريات الشهر (${stats.monthCount} فاتورة)`, value: formatMoney$8(stats.monthTotal), delta: stats.deltaPct === null ? null : {
+      /* @__PURE__ */ jsx(KpiCard$1, { label: `مشتريات الشهر (${stats.monthCount} فاتورة)`, value: formatMoney$b(stats.monthTotal), delta: stats.deltaPct === null ? null : {
         direction: stats.deltaPct >= 0 ? "up" : "down",
         text: `${Math.abs(stats.deltaPct)}% عن الشهر الماضي`
       }, onClick: () => goInvoices() }),
-      /* @__PURE__ */ jsx(KpiCard$1, { label: "مستحق غير مدفوع", value: formatMoney$8(stats.openBalance), sub: `على ${stats.openCount} فاتورة`, tone: "amber", onClick: () => goInvoices() }),
-      /* @__PURE__ */ jsx(KpiCard$1, { label: "متأخر عن الاستحقاق", value: formatMoney$8(stats.overdueBalance), sub: stats.overdueCount ? `${stats.overdueCount} فاتورة — أقدمها ${stats.oldestOverdueDays} يوماً` : "لا متأخرات 👌", tone: stats.overdueCount ? "rose" : "emerald", onClick: () => goInvoices("overdue") }),
+      /* @__PURE__ */ jsx(KpiCard$1, { label: "مستحق غير مدفوع", value: formatMoney$b(stats.openBalance), sub: `على ${stats.openCount} فاتورة`, tone: "amber", onClick: () => goInvoices() }),
+      /* @__PURE__ */ jsx(KpiCard$1, { label: "متأخر عن الاستحقاق", value: formatMoney$b(stats.overdueBalance), sub: stats.overdueCount ? `${stats.overdueCount} فاتورة — أقدمها ${stats.oldestOverdueDays} يوماً` : "لا متأخرات 👌", tone: stats.overdueCount ? "rose" : "emerald", onClick: () => goInvoices("overdue") }),
       /* @__PURE__ */ jsx(KpiCard$1, { label: "بانتظار الاعتماد", value: String(stats.pendingCount), sub: "فواتير بلا أي سداد", tone: stats.pendingCount ? "amber" : "emerald", onClick: () => goInvoices("pending_payment") })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-5 gap-3", children: [
       /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 lg:col-span-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white mb-3", children: "المشتريات الشهرية — آخر ٨ أشهر" }),
-        /* @__PURE__ */ jsx("div", { className: "flex items-end gap-2 h-36 border-b border-slate-200 dark:border-white/10", children: monthlyBars.map((bar) => /* @__PURE__ */ jsx("div", { className: "flex-1 flex flex-col justify-end h-full", title: `${bar.label}: ${formatMoney$8(bar.value)}`, children: /* @__PURE__ */ jsx("div", { className: `rounded-t ${bar.isCurrent ? "bg-[#0e7a5f] dark:bg-emerald-400" : "bg-[#e7f2ee] dark:bg-emerald-400/20"}`, style: {
+        /* @__PURE__ */ jsx("div", { className: "flex items-end gap-2 h-36 border-b border-slate-200 dark:border-white/10", children: monthlyBars.map((bar) => /* @__PURE__ */ jsx("div", { className: "flex-1 flex flex-col justify-end h-full", title: `${bar.label}: ${formatMoney$b(bar.value)}`, children: /* @__PURE__ */ jsx("div", { className: `rounded-t ${bar.isCurrent ? "bg-[#0e7a5f] dark:bg-emerald-400" : "bg-[#e7f2ee] dark:bg-emerald-400/20"}`, style: {
           height: `${Math.max(bar.pct, bar.value > 0 ? 4 : 0)}%`
         } }) }, bar.month)) }),
         /* @__PURE__ */ jsx("div", { className: "flex gap-2 mt-1.5", children: monthlyBars.map((bar) => /* @__PURE__ */ jsx("span", { className: `flex-1 text-center text-[10.5px] ${bar.isCurrent ? "font-bold text-[#0e7a5f] dark:text-emerald-300" : "text-slate-400 dark:text-white/35"}`, children: bar.label }, bar.month)) })
@@ -13716,7 +13724,7 @@ function PurchasesOverviewPanel({
             /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 mx-2", children: invoice.contact_name || invoice.supplier_name || "بدون مورد" })
           ] }),
           /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-bold shrink-0 ${purchaseInvoiceStatusClass(invoice.computed_status)}`, children: purchaseInvoiceStatusLabel(invoice.computed_status) }),
-          /* @__PURE__ */ jsx("span", { className: "font-bold tabular-nums shrink-0", dir: "ltr", children: formatMoney$8(invoice.total_amount, invoice.currency) })
+          /* @__PURE__ */ jsx("span", { className: "font-bold tabular-nums shrink-0", dir: "ltr", children: formatMoney$b(invoice.total_amount, invoice.currency) })
         ] }, invoice.id))
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 lg:col-span-2`, children: [
@@ -13755,7 +13763,7 @@ function PurchasesOverviewPanel({
   ] });
 }
 
-function todayRiyadh$2() {
+function todayRiyadh$5() {
   return (/* @__PURE__ */ new Date()).toLocaleDateString("en-CA", {
     timeZone: "Asia/Riyadh"
   });
@@ -13765,12 +13773,12 @@ function addDays(iso, days) {
   date.setUTCDate(date.getUTCDate() + days);
   return date.toISOString().slice(0, 10);
 }
-function moneyValue$5(value) {
+function moneyValue$8(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
 }
 function money$5(value) {
-  return moneyValue$5(value).toLocaleString("en-US", {
+  return moneyValue$8(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
@@ -13808,7 +13816,7 @@ function PurchasesNotificationsBell({
   });
   const invoices = invoicesQuery.data || [];
   const groups = useMemo(() => {
-    const today = todayRiyadh$2();
+    const today = todayRiyadh$5();
     const soonLimit = addDays(today, 7);
     const active = invoices.filter((invoice) => invoice.is_active !== false);
     const overdue = active.filter((invoice) => invoice.computed_status === "overdue");
@@ -13825,7 +13833,7 @@ function PurchasesNotificationsBell({
       const key = `${String(invoice.invoice_number || "").trim().toLowerCase()}|${invoice.contact_id || invoice.supplier_name || ""}`;
       return dupKeys.has(key);
     });
-    const balanceOf = (list) => list.reduce((acc, invoice) => acc + moneyValue$5(invoice.balance_due), 0);
+    const balanceOf = (list) => list.reduce((acc, invoice) => acc + moneyValue$8(invoice.balance_due), 0);
     return {
       overdue,
       dueSoon,
@@ -13949,17 +13957,17 @@ function PurchasesNotificationsBell({
 }
 
 const MONTH_SHORT = ["ينا", "فبر", "مار", "أبر", "ماي", "يون", "يول", "أغس", "سبت", "أكت", "نوف", "ديس"];
-function moneyValue$4(value) {
+function moneyValue$7(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
 }
 function money$4(value) {
-  return moneyValue$4(value).toLocaleString("en-US", {
+  return moneyValue$7(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
 }
-function todayRiyadh$1() {
+function todayRiyadh$4() {
   return (/* @__PURE__ */ new Date()).toLocaleDateString("en-CA", {
     timeZone: "Asia/Riyadh"
   });
@@ -13996,12 +14004,12 @@ function Supplier360Modal({
     let overdueBalance = 0;
     let overdueCount = 0;
     for (const invoice of supplierInvoices) {
-      total += moneyValue$4(invoice.total_amount);
-      paid += moneyValue$4(invoice.paid_amount);
-      balance += moneyValue$4(invoice.balance_due);
+      total += moneyValue$7(invoice.total_amount);
+      paid += moneyValue$7(invoice.paid_amount);
+      balance += moneyValue$7(invoice.balance_due);
       if (invoice.computed_status === "overdue") {
         overdueCount += 1;
-        overdueBalance += moneyValue$4(invoice.balance_due);
+        overdueBalance += moneyValue$7(invoice.balance_due);
       }
     }
     const count = supplierInvoices.length;
@@ -14018,7 +14026,7 @@ function Supplier360Modal({
     };
   }, [supplierInvoices]);
   const trend = useMemo(() => {
-    const today = todayRiyadh$1();
+    const today = todayRiyadh$4();
     let [y, m] = today.split("-").map(Number);
     const months = [];
     for (let i = 0; i < 6; i += 1) {
@@ -14037,7 +14045,7 @@ function Supplier360Modal({
     for (const invoice of supplierInvoices) {
       const key = String(invoice.invoice_date || "").slice(0, 7);
       const bucket = byKey.get(key);
-      if (bucket) bucket.total += moneyValue$4(invoice.total_amount);
+      if (bucket) bucket.total += moneyValue$7(invoice.total_amount);
     }
     const peak = Math.max(...months.map((entry) => entry.total), 1);
     return {
@@ -14126,7 +14134,7 @@ function Supplier360Modal({
           ] }),
           /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold shrink-0 ${purchaseInvoiceStatusClass(invoice.computed_status)}`, children: purchaseInvoiceStatusLabel(invoice.computed_status) }),
           /* @__PURE__ */ jsx("div", { className: "text-xs font-bold tabular-nums shrink-0", dir: "ltr", children: money$4(invoice.total_amount) }),
-          moneyValue$4(invoice.balance_due) > 0 ? /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-amber-700 dark:text-amber-300 tabular-nums shrink-0 inline-flex items-center gap-1", dir: "ltr", children: [
+          moneyValue$7(invoice.balance_due) > 0 ? /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-amber-700 dark:text-amber-300 tabular-nums shrink-0 inline-flex items-center gap-1", dir: "ltr", children: [
             /* @__PURE__ */ jsx(Banknote, { className: "w-3 h-3" }),
             money$4(invoice.balance_due)
           ] }) : null
@@ -14164,7 +14172,7 @@ function typeMeta(type) {
 function normalize(value) {
   return String(value || "").trim().toLowerCase();
 }
-function formatMoney$7(value) {
+function formatMoney$a(value) {
   return Number(value || 0).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
@@ -14442,7 +14450,7 @@ function PurchasesAccountsTreePanel({
     accessor: (row) => row.account.invoice_count || 0
   }, {
     header: "إجمالي المشتريات (SAR)",
-    accessor: (row) => row.total > 0 ? formatMoney$7(row.total) : ""
+    accessor: (row) => row.total > 0 ? formatMoney$a(row.total) : ""
   }, {
     header: "الحالة",
     accessor: (row) => row.account.is_active === false ? "موقوف" : "نشط"
@@ -14503,7 +14511,7 @@ function PurchasesAccountsTreePanel({
           account.name_en ? /* @__PURE__ */ jsx("span", { className: "hidden md:inline text-[11px] text-slate-400 dark:text-white/35 truncate", dir: "ltr", children: account.name_en }) : null
         ] }) }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 shrink-0", children: [
-          rolledTotals.get(account.id) > 0 ? /* @__PURE__ */ jsx("span", { className: "hidden md:inline text-xs font-bold text-slate-700 dark:text-white/70 tabular-nums", dir: "ltr", title: "إجمالي المشتريات المصنّفة على الحساب وفروعه", children: formatMoney$7(rolledTotals.get(account.id)) }) : null,
+          rolledTotals.get(account.id) > 0 ? /* @__PURE__ */ jsx("span", { className: "hidden md:inline text-xs font-bold text-slate-700 dark:text-white/70 tabular-nums", dir: "ltr", title: "إجمالي المشتريات المصنّفة على الحساب وفروعه", children: formatMoney$a(rolledTotals.get(account.id)) }) : null,
           depth === 0 ? /* @__PURE__ */ jsx("span", { className: `${ws.pill} ${meta.pill} hidden sm:inline-flex`, children: meta.label }) : null,
           account.is_postable === false ? /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-slate-100 dark:bg-white/[0.05] text-slate-600 dark:text-white/55 border-slate-200 dark:border-white/10 hidden sm:inline-flex`, children: "تجميعي" }) : null,
           account.is_system ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-slate-100 dark:bg-white/[0.05] text-slate-500 dark:text-white/45 border-slate-200 dark:border-white/10 inline-flex items-center gap-1`, title: "حساب نظام أساسي", children: [
@@ -14913,7 +14921,7 @@ function accountTypeIcon(value) {
   if (value === "petty_cash") return Wallet;
   return Building2;
 }
-function formatMoney$6(value, currency = "SAR") {
+function formatMoney$9(value, currency = "SAR") {
   const number = Number(value || 0);
   const safe = Number.isFinite(number) ? number : 0;
   return `${safe.toLocaleString("en-US", {
@@ -14921,7 +14929,7 @@ function formatMoney$6(value, currency = "SAR") {
     maximumFractionDigits: 2
   })} ${currency}`;
 }
-function moneyValue$3(value) {
+function moneyValue$6(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
 }
@@ -14934,8 +14942,8 @@ function buildUpdatePayload(account, overrides = {}) {
     bank_name: account.bank_name || null,
     iban: account.iban || null,
     account_number: account.account_number || null,
-    book_balance: moneyValue$3(account.book_balance),
-    statement_balance: moneyValue$3(account.statement_balance),
+    book_balance: moneyValue$6(account.book_balance),
+    statement_balance: moneyValue$6(account.statement_balance),
     notes: account.notes || null,
     ...overrides
   };
@@ -14946,10 +14954,10 @@ function StatementBalanceModal({
   onClose,
   onSubmit
 }) {
-  const [statementBalance, setStatementBalance] = useState(account ? String(moneyValue$3(account.statement_balance).toFixed(2)) : "0.00");
+  const [statementBalance, setStatementBalance] = useState(account ? String(moneyValue$6(account.statement_balance).toFixed(2)) : "0.00");
   useEffect(() => {
     if (!account) return;
-    setStatementBalance(String(moneyValue$3(account.statement_balance).toFixed(2)));
+    setStatementBalance(String(moneyValue$6(account.statement_balance).toFixed(2)));
   }, [account]);
   if (!account) return null;
   return /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1000] flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-sm p-0 sm:p-4", dir: "rtl", onMouseDown: (event) => {
@@ -15003,9 +15011,9 @@ function PurchasesBankAccountsPanel({
   const deleteMut = useDeleteAccountingBankAccount();
   const totals = useMemo(() => {
     return accounts.reduce((acc, account) => {
-      acc.book += moneyValue$3(account.book_balance);
-      acc.statement += moneyValue$3(account.statement_balance);
-      acc.diff += moneyValue$3(account.difference);
+      acc.book += moneyValue$6(account.book_balance);
+      acc.statement += moneyValue$6(account.statement_balance);
+      acc.diff += moneyValue$6(account.difference);
       return acc;
     }, {
       book: 0,
@@ -15084,21 +15092,21 @@ function PurchasesBankAccountsPanel({
       /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: "إجمالي رصيد الدفتر" }),
-          /* @__PURE__ */ jsx("div", { className: "text-xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$6(totals.book, "SAR") })
+          /* @__PURE__ */ jsx("div", { className: "text-xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$9(totals.book, "SAR") })
         ] }),
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-sky-700 dark:text-sky-200`, children: /* @__PURE__ */ jsx(BookOpen, { className: "w-5 h-5" }) })
       ] }) }),
       /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: "إجمالي كشف الحساب" }),
-          /* @__PURE__ */ jsx("div", { className: "text-xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$6(totals.statement, "SAR") })
+          /* @__PURE__ */ jsx("div", { className: "text-xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$9(totals.statement, "SAR") })
         ] }),
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Banknote, { className: "w-5 h-5" }) })
       ] }) }),
       /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: "إجمالي الفرق" }),
-          /* @__PURE__ */ jsx("div", { className: `text-xl font-bold mt-1 ${Math.abs(totals.diff) > 9e-3 ? "text-amber-700 dark:text-amber-200" : "text-slate-900 dark:text-white"}`, dir: "ltr", children: formatMoney$6(totals.diff, "SAR") })
+          /* @__PURE__ */ jsx("div", { className: `text-xl font-bold mt-1 ${Math.abs(totals.diff) > 9e-3 ? "text-amber-700 dark:text-amber-200" : "text-slate-900 dark:text-white"}`, dir: "ltr", children: formatMoney$9(totals.diff, "SAR") })
         ] }),
         /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-amber-700 dark:text-amber-200`, children: /* @__PURE__ */ jsx(CreditCard, { className: "w-5 h-5" }) })
       ] }) })
@@ -15114,7 +15122,7 @@ function PurchasesBankAccountsPanel({
     ] }) : /* @__PURE__ */ jsx("div", { className: "space-y-4", children: accounts.map((account) => {
       const Icon = accountTypeIcon(account.account_type);
       const isActive = account.is_active !== false;
-      const diff = moneyValue$3(account.difference);
+      const diff = moneyValue$6(account.difference);
       return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 sm:p-5 max-w-5xl mx-auto`, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex flex-col md:flex-row md:items-start justify-between gap-4", children: [
           /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3 min-w-0 md:order-2", children: [
@@ -15145,18 +15153,18 @@ function PurchasesBankAccountsPanel({
             /* @__PURE__ */ jsx(BookOpen, { className: "w-4 h-4" }),
             "رصيد الدفتر"
           ] }),
-          /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white text-left", dir: "ltr", children: formatMoney$6(account.book_balance, account.currency || "SAR") }),
+          /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white text-left", dir: "ltr", children: formatMoney$9(account.book_balance, account.currency || "SAR") }),
           /* @__PURE__ */ jsxs("div", { className: "text-sm text-slate-700 dark:text-white/70 flex items-center gap-2", children: [
             /* @__PURE__ */ jsx(Banknote, { className: "w-4 h-4" }),
             "رصيد كشف الحساب"
           ] }),
-          /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white text-left", dir: "ltr", children: formatMoney$6(account.statement_balance, account.currency || "SAR") }),
+          /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white text-left", dir: "ltr", children: formatMoney$9(account.statement_balance, account.currency || "SAR") }),
           /* @__PURE__ */ jsx("div", { className: `border-t ${ws.divider} sm:col-span-2 my-1` }),
           /* @__PURE__ */ jsxs("div", { className: "text-sm text-slate-700 dark:text-white/70 flex items-center gap-2", children: [
             /* @__PURE__ */ jsx(CreditCard, { className: "w-4 h-4" }),
             "الفرق"
           ] }),
-          /* @__PURE__ */ jsx("div", { className: `text-sm font-bold text-left ${Math.abs(diff) > 9e-3 ? "text-amber-700 dark:text-amber-200" : "text-slate-900 dark:text-white"}`, dir: "ltr", children: formatMoney$6(diff, account.currency || "SAR") })
+          /* @__PURE__ */ jsx("div", { className: `text-sm font-bold text-left ${Math.abs(diff) > 9e-3 ? "text-amber-700 dark:text-amber-200" : "text-slate-900 dark:text-white"}`, dir: "ltr", children: formatMoney$9(diff, account.currency || "SAR") })
         ] }),
         !isActive ? /* @__PURE__ */ jsx("div", { className: "mt-4", children: /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-slate-100 dark:bg-white/[0.04] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10`, children: "موقوف" }) }) : null
       ] }, account.id);
@@ -15562,12 +15570,12 @@ function useDeleteAccountingContact() {
 }
 
 const RECURRING_KEY = queryKeys.recurringPurchaseInvoices();
-function moneyValue$2(value) {
+function moneyValue$5(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
 }
 function money$3(value) {
-  return moneyValue$2(value).toLocaleString("en-US", {
+  return moneyValue$5(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
@@ -15672,7 +15680,7 @@ function RecurringInvoicesModal({
       branch_id: template.branch_id ? String(template.branch_id) : "",
       expense_account_id: template.expense_account_id ? String(template.expense_account_id) : "",
       description: template.description || "",
-      amount: String(moneyValue$2(template.amount) || ""),
+      amount: String(moneyValue$5(template.amount) || ""),
       tax_rate: String(Number(template.tax_rate ?? 15)),
       amount_includes_tax: template.amount_includes_tax !== false,
       day_of_month: String(template.day_of_month || 1),
@@ -15689,7 +15697,7 @@ function RecurringInvoicesModal({
       branch_id: form.branch_id || null,
       expense_account_id: form.expense_account_id || null,
       description: form.description || null,
-      amount: moneyValue$2(form.amount),
+      amount: moneyValue$5(form.amount),
       tax_rate: Number(form.tax_rate) || 0,
       amount_includes_tax: form.amount_includes_tax,
       day_of_month: Number(form.day_of_month) || 1,
@@ -15875,18 +15883,18 @@ const STATUS_FILTER_OPTIONS = [{
   label: "كل الحالات"
 }, ...PURCHASE_INVOICE_STATUS_OPTIONS];
 const countBadgeClass = "inline-flex min-w-5 items-center justify-center rounded-full bg-slate-200 px-1.5 py-0.5 text-[11px] font-bold text-slate-700 dark:bg-white/10 dark:text-white/75";
-function moneyValue$1(value) {
+function moneyValue$4(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
 }
-function formatMoney$5(value, currency = "SAR") {
-  const number = moneyValue$1(value);
+function formatMoney$8(value, currency = "SAR") {
+  const number = moneyValue$4(value);
   return `${number.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   })} ${currency || "SAR"}`;
 }
-function formatDate$2(value) {
+function formatDate$3(value) {
   if (!value) return "—";
   return String(value);
 }
@@ -15940,7 +15948,7 @@ function statusIcon(status) {
   if (status === "pending_payment") return Clock3;
   return FileText;
 }
-function SummaryCard({
+function SummaryCard$1({
   label,
   value,
   icon: Icon,
@@ -15957,7 +15965,7 @@ function SummaryCard({
     /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 shrink-0 ${toneClass}`, children: /* @__PURE__ */ jsx(Icon, { className: "w-5 h-5" }) })
   ] }) });
 }
-function StatusPill$2({
+function StatusPill$3({
   status
 }) {
   const Icon = statusIcon(status);
@@ -15974,7 +15982,7 @@ function OverdueHint({
     timeZone: "Asia/Riyadh"
   });
   const days = Math.max(Math.floor((/* @__PURE__ */ new Date(`${today}T12:00:00Z`) - /* @__PURE__ */ new Date(`${invoice.due_date}T12:00:00Z`)) / 864e5), 1);
-  const origin = moneyValue$1(invoice.paid_amount) > 0 ? "مدفوعة جزئياً" : "بانتظار الاعتماد";
+  const origin = moneyValue$4(invoice.paid_amount) > 0 ? "مدفوعة جزئياً" : "بانتظار الاعتماد";
   return /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-rose-600 dark:text-rose-300/80 mt-1 whitespace-nowrap", children: [
     origin,
     " · تأخرت ",
@@ -15991,7 +15999,7 @@ function RecordPaymentModal({
   onClose,
   onSubmit
 }) {
-  const balance = Math.max(moneyValue$1(invoice?.total_amount) - moneyValue$1(invoice?.paid_amount), 0);
+  const balance = Math.max(moneyValue$4(invoice?.total_amount) - moneyValue$4(invoice?.paid_amount), 0);
   const [amount, setAmount] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [notes, setNotes] = useState("");
@@ -16053,7 +16061,7 @@ function RecordPaymentModal({
     label: account.bank_name ? `${account.name} — ${account.bank_name}` : account.name
   }))], [bankAccounts]);
   if (!invoice || typeof document === "undefined") return null;
-  const paymentValue = moneyValue$1(amount);
+  const paymentValue = moneyValue$4(amount);
   const valid = paymentValue > 0 && paymentValue <= balance + 5e-3;
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -16083,15 +16091,15 @@ function RecordPaymentModal({
     /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 mb-4 grid grid-cols-3 gap-2 text-center`, children: [
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المبلغ" }),
-        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white mt-0.5", dir: "ltr", children: formatMoney$5(invoice.total_amount, invoice.currency) })
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white mt-0.5", dir: "ltr", children: formatMoney$8(invoice.total_amount, invoice.currency) })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المدفوع" }),
-        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-[#0e7a5f] dark:text-emerald-200 mt-0.5", dir: "ltr", children: formatMoney$5(invoice.paid_amount, invoice.currency) })
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-[#0e7a5f] dark:text-emerald-200 mt-0.5", dir: "ltr", children: formatMoney$8(invoice.paid_amount, invoice.currency) })
       ] }),
       /* @__PURE__ */ jsxs("div", { children: [
         /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المتبقي" }),
-        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-amber-700 dark:text-amber-200 mt-0.5", dir: "ltr", children: formatMoney$5(balance, invoice.currency) })
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-amber-700 dark:text-amber-200 mt-0.5", dir: "ltr", children: formatMoney$8(balance, invoice.currency) })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 mb-4`, children: [
@@ -16197,7 +16205,7 @@ function BulkPayModal({
   const currency = rows[0]?.currency || "SAR";
   const supplier = rows[0]?.contact_name || rows[0]?.supplier_name || "—";
   const supplierContactId = rows[0]?.contact_id || null;
-  const total = rows.reduce((sum, invoice) => sum + moneyValue$1(invoice.balance_due), 0);
+  const total = rows.reduce((sum, invoice) => sum + moneyValue$4(invoice.balance_due), 0);
   const supplierBeneficiaries = useMemo(() => {
     if (!supplierContactId) return [];
     return beneficiaries.filter((beneficiary) => beneficiary.is_active !== false && Number(beneficiary.contact_id) === Number(supplierContactId));
@@ -16272,11 +16280,11 @@ function BulkPayModal({
       /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 space-y-1.5`, children: [
         rows.map((invoice) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 text-xs border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0 last:pb-0", children: [
           /* @__PURE__ */ jsx("span", { className: "font-mono text-slate-700 dark:text-white/70", dir: "ltr", children: invoice.invoice_number }),
-          /* @__PURE__ */ jsx("span", { className: "font-bold text-slate-900 dark:text-white", dir: "ltr", children: formatMoney$5(invoice.balance_due, currency) })
+          /* @__PURE__ */ jsx("span", { className: "font-bold text-slate-900 dark:text-white", dir: "ltr", children: formatMoney$8(invoice.balance_due, currency) })
         ] }, invoice.id)),
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 pt-2 font-bold text-slate-900 dark:text-white", children: [
           /* @__PURE__ */ jsx("span", { children: "الإجمالي" }),
-          /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$5(total, currency) })
+          /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$8(total, currency) })
         ] }),
         /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "كل فاتورة تُسدَّد بكامل رصيدها المتبقي وتتحول إلى «مدفوعة»." })
       ] }),
@@ -16348,7 +16356,7 @@ function BulkPayModal({
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 pt-1", children: [
         /* @__PURE__ */ jsxs("button", { type: "submit", disabled: isSubmitting || receiptUploading, className: `${ws.btnPrimary} px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed`, children: [
           /* @__PURE__ */ jsx(HandCoins, { className: "w-4 h-4" }),
-          isSubmitting ? "جاري التسجيل…" : `سداد ${rows.length} فاتورة — ${formatMoney$5(total, currency)}`
+          isSubmitting ? "جاري التسجيل…" : `سداد ${rows.length} فاتورة — ${formatMoney$8(total, currency)}`
         ] }),
         /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2`, children: "إلغاء" })
       ] })
@@ -16650,13 +16658,13 @@ function PurchasesInvoicesPanel({
       accessor: (row) => row.currency || "SAR"
     }, {
       header: "المبلغ",
-      accessor: (row) => moneyValue$1(row.total_amount).toFixed(2)
+      accessor: (row) => moneyValue$4(row.total_amount).toFixed(2)
     }, {
       header: "المدفوع",
-      accessor: (row) => moneyValue$1(row.paid_amount).toFixed(2)
+      accessor: (row) => moneyValue$4(row.paid_amount).toFixed(2)
     }, {
       header: "الرصيد",
-      accessor: (row) => moneyValue$1(row.balance_due).toFixed(2)
+      accessor: (row) => moneyValue$4(row.balance_due).toFixed(2)
     }];
     const title = rowsOverride ? `فواتير المشتريات — المحدد (${rows.length})` : "فواتير المشتريات";
     if (kind === "excel") {
@@ -16670,7 +16678,7 @@ function PurchasesInvoicesPanel({
     if (rows.length === 0) return;
     handleExport(kind, rows);
   };
-  const bulkPayRows = useMemo(() => filtered.filter((invoice) => selected.has(invoice.id) && invoice.is_active !== false && moneyValue$1(invoice.balance_due) > 0), [filtered, selected]);
+  const bulkPayRows = useMemo(() => filtered.filter((invoice) => selected.has(invoice.id) && invoice.is_active !== false && moneyValue$4(invoice.balance_due) > 0), [filtered, selected]);
   const bulkPayEligibility = useMemo(() => {
     if (bulkPayRows.length === 0) {
       return {
@@ -16697,14 +16705,14 @@ function PurchasesInvoicesPanel({
       reason: ""
     };
   }, [bulkPayRows]);
-  const bulkPayTotal = useMemo(() => bulkPayRows.reduce((sum, invoice) => sum + moneyValue$1(invoice.balance_due), 0), [bulkPayRows]);
+  const bulkPayTotal = useMemo(() => bulkPayRows.reduce((sum, invoice) => sum + moneyValue$4(invoice.balance_due), 0), [bulkPayRows]);
   const totals = useMemo(() => {
     return filtered.reduce((acc, invoice) => {
-      acc.total += moneyValue$1(invoice.total_amount);
-      acc.paid += moneyValue$1(invoice.paid_amount);
-      acc.balance += moneyValue$1(invoice.balance_due);
+      acc.total += moneyValue$4(invoice.total_amount);
+      acc.paid += moneyValue$4(invoice.paid_amount);
+      acc.balance += moneyValue$4(invoice.balance_due);
       if (invoice.computed_status === "overdue") {
-        acc.overdue += moneyValue$1(invoice.balance_due);
+        acc.overdue += moneyValue$4(invoice.balance_due);
       }
       return acc;
     }, {
@@ -16843,10 +16851,10 @@ function PurchasesInvoicesPanel({
       ] }, option.value))
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-4 gap-3", children: [
-      /* @__PURE__ */ jsx(SummaryCard, { label: "إجمالي الفواتير", value: formatMoney$5(totals.total, "SAR"), icon: FileText }),
-      /* @__PURE__ */ jsx(SummaryCard, { label: "المدفوع", value: formatMoney$5(totals.paid, "SAR"), icon: CheckCircle2, tone: "emerald" }),
-      /* @__PURE__ */ jsx(SummaryCard, { label: "الرصيد المتبقي", value: formatMoney$5(totals.balance, "SAR"), icon: Banknote, tone: "amber" }),
-      /* @__PURE__ */ jsx(SummaryCard, { label: "متأخر", value: formatMoney$5(totals.overdue, "SAR"), icon: AlertTriangle, tone: "rose", suffix: `${counts.overdue || 0} فاتورة` })
+      /* @__PURE__ */ jsx(SummaryCard$1, { label: "إجمالي الفواتير", value: formatMoney$8(totals.total, "SAR"), icon: FileText }),
+      /* @__PURE__ */ jsx(SummaryCard$1, { label: "المدفوع", value: formatMoney$8(totals.paid, "SAR"), icon: CheckCircle2, tone: "emerald" }),
+      /* @__PURE__ */ jsx(SummaryCard$1, { label: "الرصيد المتبقي", value: formatMoney$8(totals.balance, "SAR"), icon: Banknote, tone: "amber" }),
+      /* @__PURE__ */ jsx(SummaryCard$1, { label: "متأخر", value: formatMoney$8(totals.overdue, "SAR"), icon: AlertTriangle, tone: "rose", suffix: `${counts.overdue || 0} فاتورة` })
     ] }),
     invoicesQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60 text-sm`, children: "جاري تحميل فواتير المشتريات…" }) : invoicesQuery.error ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-red-700 dark:text-red-300 text-sm`, children: "فشل تحميل فواتير المشتريات. حاول مرة أخرى." }) : filtered.length === 0 ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center`, children: [
       /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-14 h-14 mx-auto mb-3`, children: /* @__PURE__ */ jsx(FileText, { className: "w-6 h-6 text-slate-500 dark:text-white/50" }) }),
@@ -16886,17 +16894,17 @@ function PurchasesInvoicesPanel({
           ] }) }),
           /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/70", children: invoice.supplier_name || "—" }),
           /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: invoice.expense_account_id ? /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25 whitespace-nowrap`, title: invoice.expense_account_code, children: invoice.expense_account_name }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35 text-xs", children: "غير مصنّفة" }) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65", dir: "ltr", children: formatDate$2(invoice.invoice_date) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65", dir: "ltr", children: formatDate$2(invoice.due_date) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65", dir: "ltr", children: formatDate$3(invoice.invoice_date) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65", dir: "ltr", children: formatDate$3(invoice.due_date) }),
           /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
-            /* @__PURE__ */ jsx(StatusPill$2, { status: invoice.computed_status }),
+            /* @__PURE__ */ jsx(StatusPill$3, { status: invoice.computed_status }),
             /* @__PURE__ */ jsx(OverdueHint, { invoice })
           ] }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left font-bold text-slate-900 dark:text-white", dir: "ltr", children: formatMoney$5(invoice.total_amount, invoice.currency) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$5(invoice.paid_amount, invoice.currency) }),
-          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left font-bold text-slate-900 dark:text-white", dir: "ltr", children: formatMoney$5(invoice.balance_due, invoice.currency) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left font-bold text-slate-900 dark:text-white", dir: "ltr", children: formatMoney$8(invoice.total_amount, invoice.currency) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$8(invoice.paid_amount, invoice.currency) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left font-bold text-slate-900 dark:text-white", dir: "ltr", children: formatMoney$8(invoice.balance_due, invoice.currency) }),
           /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
-            moneyValue$1(invoice.balance_due) > 0 && invoice.is_active !== false ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPaying(invoice), className: `${ws.iconButton} w-9 h-9 hover:bg-[#e7f2ee] dark:hover:bg-emerald-500/15 hover:border-[#c9e2d8] dark:hover:border-emerald-500/30 hover:text-[#0e7a5f] dark:hover:text-emerald-200`, title: "تسجيل دفعة", children: /* @__PURE__ */ jsx(HandCoins, { className: "w-4 h-4" }) }) : null,
+            moneyValue$4(invoice.balance_due) > 0 && invoice.is_active !== false ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPaying(invoice), className: `${ws.iconButton} w-9 h-9 hover:bg-[#e7f2ee] dark:hover:bg-emerald-500/15 hover:border-[#c9e2d8] dark:hover:border-emerald-500/30 hover:text-[#0e7a5f] dark:hover:text-emerald-200`, title: "تسجيل دفعة", children: /* @__PURE__ */ jsx(HandCoins, { className: "w-4 h-4" }) }) : null,
             /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditing(invoice), className: `${ws.iconButton} w-9 h-9`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }) }),
             /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleDelete(invoice), className: `${ws.iconButton} w-9 h-9 hover:bg-red-50 dark:hover:bg-red-500/15 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-700 dark:hover:text-red-200`, title: "إيقاف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
           ] }) })
@@ -16910,30 +16918,30 @@ function PurchasesInvoicesPanel({
             invoice.expense_account_id ? /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25 mt-2 inline-flex`, children: invoice.expense_account_name }) : null
           ] }),
           /* @__PURE__ */ jsxs("div", { className: "text-left", children: [
-            /* @__PURE__ */ jsx(StatusPill$2, { status: invoice.computed_status }),
+            /* @__PURE__ */ jsx(StatusPill$3, { status: invoice.computed_status }),
             /* @__PURE__ */ jsx(OverdueHint, { invoice })
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "mt-4 grid grid-cols-2 gap-3 text-sm", children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45", children: "التاريخ" }),
-            /* @__PURE__ */ jsx("div", { className: "font-semibold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatDate$2(invoice.invoice_date) })
+            /* @__PURE__ */ jsx("div", { className: "font-semibold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatDate$3(invoice.invoice_date) })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45", children: "الاستحقاق" }),
-            /* @__PURE__ */ jsx("div", { className: "font-semibold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatDate$2(invoice.due_date) })
+            /* @__PURE__ */ jsx("div", { className: "font-semibold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatDate$3(invoice.due_date) })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45", children: "المبلغ" }),
-            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$5(invoice.total_amount, invoice.currency) })
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$8(invoice.total_amount, invoice.currency) })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45", children: "الرصيد" }),
-            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$5(invoice.balance_due, invoice.currency) })
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$8(invoice.balance_due, invoice.currency) })
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `flex items-center gap-2 mt-4 pt-3 border-t ${ws.divider}`, children: [
-          moneyValue$1(invoice.balance_due) > 0 && invoice.is_active !== false ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setPaying(invoice), className: `${ws.btnPrimary} px-3 py-2 text-xs`, children: [
+          moneyValue$4(invoice.balance_due) > 0 && invoice.is_active !== false ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setPaying(invoice), className: `${ws.btnPrimary} px-3 py-2 text-xs`, children: [
             /* @__PURE__ */ jsx(HandCoins, { className: "w-4 h-4" }),
             "تسجيل دفعة"
           ] }) : null,
@@ -16973,7 +16981,7 @@ function PurchasesInvoicesPanel({
       ] }),
       /* @__PURE__ */ jsxs("button", { type: "button", disabled: !bulkPayEligibility.ok, onClick: () => bulkPayEligibility.ok && setBulkPaying(bulkPayRows), className: `${ws.btnPrimary} px-3 py-1.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed`, title: bulkPayEligibility.ok ? `سداد ${bulkPayRows.length} فاتورة دفعة واحدة` : bulkPayEligibility.reason, children: [
         /* @__PURE__ */ jsx(HandCoins, { className: "w-3.5 h-3.5" }),
-        bulkPayEligibility.ok ? `دفع المحدد — ${formatMoney$5(bulkPayTotal, bulkPayRows[0]?.currency)}` : "دفع المحدد"
+        bulkPayEligibility.ok ? `دفع المحدد — ${formatMoney$8(bulkPayTotal, bulkPayRows[0]?.currency)}` : "دفع المحدد"
       ] }),
       /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => exportSelected("excel"), className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: [
         /* @__PURE__ */ jsx(FileSpreadsheet, { className: "w-3.5 h-3.5" }),
@@ -17003,7 +17011,7 @@ function PurchasesInvoicesPanel({
           ] }),
           /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 shrink-0", children: [
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(StatusPill$2, { status: drawerRow.computed_status }),
+              /* @__PURE__ */ jsx(StatusPill$3, { status: drawerRow.computed_status }),
               /* @__PURE__ */ jsx(OverdueHint, { invoice: drawerRow })
             ] }),
             /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPreview(null), className: `${ws.iconButton} w-9 h-9`, "aria-label": "إغلاق المعاينة", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
@@ -17031,15 +17039,15 @@ function PurchasesInvoicesPanel({
           /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 grid grid-cols-3 gap-2 text-center`, children: [
             /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المبلغ" }),
-              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums", dir: "ltr", children: formatMoney$5(drawerRow.total_amount, drawerRow.currency) })
+              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums", dir: "ltr", children: formatMoney$8(drawerRow.total_amount, drawerRow.currency) })
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المدفوع" }),
-              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums text-[#0e7a5f] dark:text-emerald-200", dir: "ltr", children: formatMoney$5(drawerRow.paid_amount, drawerRow.currency) })
+              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums text-[#0e7a5f] dark:text-emerald-200", dir: "ltr", children: formatMoney$8(drawerRow.paid_amount, drawerRow.currency) })
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المتبقي" }),
-              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums text-amber-700 dark:text-amber-200", dir: "ltr", children: formatMoney$5(drawerRow.balance_due, drawerRow.currency) })
+              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums text-amber-700 dark:text-amber-200", dir: "ltr", children: formatMoney$8(drawerRow.balance_due, drawerRow.currency) })
             ] })
           ] }),
           Array.isArray(drawerRow.items) && drawerRow.items.length > 0 ? /* @__PURE__ */ jsxs("div", { children: [
@@ -17051,11 +17059,11 @@ function PurchasesInvoicesPanel({
             /* @__PURE__ */ jsx("div", { className: "space-y-1.5", children: drawerRow.items.map((item) => /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 text-xs border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0", children: [
               /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/75 truncate", children: item.description || "بند" }),
               /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/45 shrink-0", dir: "ltr", children: [
-                moneyValue$1(item.quantity),
+                moneyValue$4(item.quantity),
                 " × ",
-                moneyValue$1(item.unit_price).toFixed(2)
+                moneyValue$4(item.unit_price).toFixed(2)
               ] }),
-              /* @__PURE__ */ jsx("span", { className: "font-bold tabular-nums shrink-0", dir: "ltr", children: moneyValue$1(item.line_total).toFixed(2) })
+              /* @__PURE__ */ jsx("span", { className: "font-bold tabular-nums shrink-0", dir: "ltr", children: moneyValue$4(item.line_total).toFixed(2) })
             ] }, item.id)) })
           ] }) : null,
           (() => {
@@ -17100,35 +17108,35 @@ function PurchasesInvoicesPanel({
                   /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-x-3 gap-y-0.5 flex-wrap text-slate-600 dark:text-white/55", dir: "ltr", children: [
                     /* @__PURE__ */ jsxs("span", { children: [
                       "خام ",
-                      moneyValue$1(line.raw_kg),
+                      moneyValue$4(line.raw_kg),
                       " كغ"
                     ] }),
                     line.received_kg != null ? /* @__PURE__ */ jsxs("span", { children: [
                       "واصل ",
-                      moneyValue$1(line.received_kg),
+                      moneyValue$4(line.received_kg),
                       " كغ"
                     ] }) : line.arrival_reported_kg != null ? /* @__PURE__ */ jsxs("span", { children: [
                       "بلاغ ",
-                      moneyValue$1(line.arrival_reported_kg),
+                      moneyValue$4(line.arrival_reported_kg),
                       " كغ"
                     ] }) : null,
                     line.waste_percent != null ? /* @__PURE__ */ jsxs("span", { children: [
                       "هدر ",
-                      moneyValue$1(line.waste_percent),
+                      moneyValue$4(line.waste_percent),
                       "%"
                     ] }) : null,
                     /* @__PURE__ */ jsxs("span", { children: [
                       "تحميص ",
-                      moneyValue$1(line.roast_total_net).toFixed(2)
+                      moneyValue$4(line.roast_total_net).toFixed(2)
                     ] }),
                     line.net_incl_per_kg != null ? /* @__PURE__ */ jsxs("span", { className: "font-bold text-slate-800 dark:text-white/85", children: [
                       "صافي ",
-                      moneyValue$1(line.net_incl_per_kg).toFixed(2),
+                      moneyValue$4(line.net_incl_per_kg).toFixed(2),
                       "/كغ"
                     ] }) : null,
-                    line.deposited_kg != null && moneyValue$1(line.deposited_kg) > 0 ? /* @__PURE__ */ jsxs("span", { className: "text-sky-700 dark:text-sky-200", children: [
+                    line.deposited_kg != null && moneyValue$4(line.deposited_kg) > 0 ? /* @__PURE__ */ jsxs("span", { className: "text-sky-700 dark:text-sky-200", children: [
                       "مودَع ",
-                      moneyValue$1(line.deposited_kg),
+                      moneyValue$4(line.deposited_kg),
                       " كغ"
                     ] }) : null
                   ] })
@@ -17137,9 +17145,9 @@ function PurchasesInvoicesPanel({
               roast ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] pt-1 border-t border-dashed border-amber-200/70 dark:border-amber-400/15", children: [
                 /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "فاتورة التحميص:" }),
                 /* @__PURE__ */ jsx("button", { type: "button", onClick: () => roastRow && setPreview(roastRow), disabled: !roastRow, className: "font-mono text-[#0e7a5f] dark:text-emerald-300 hover:underline disabled:no-underline disabled:opacity-60", dir: "ltr", children: roast.invoice_number }),
-                /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: formatMoney$5(roast.total_amount, drawerRow.currency) }),
+                /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: formatMoney$8(roast.total_amount, drawerRow.currency) }),
                 /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/45", children: [
-                  roast.is_active === false ? "موقوفة" : moneyValue$1(roast.paid_amount) >= moneyValue$1(roast.total_amount) ? "مدفوعة" : `بانتظار الدفع — استحقاق ${roast.due_date || "—"}`,
+                  roast.is_active === false ? "موقوفة" : moneyValue$4(roast.paid_amount) >= moneyValue$4(roast.total_amount) ? "مدفوعة" : `بانتظار الدفع — استحقاق ${roast.due_date || "—"}`,
                   roast.roaster_name ? ` · ${roast.roaster_name}` : ""
                 ] })
               ] }) : /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "لا فاتورة تحميص (التحميص 0)." })
@@ -17147,8 +17155,8 @@ function PurchasesInvoicesPanel({
           })(),
           (() => {
             const payments = Array.isArray(drawerRow.payments) ? drawerRow.payments : [];
-            const recorded = payments.reduce((acc, payment) => acc + moneyValue$1(payment.amount), 0);
-            const legacy = Math.round((moneyValue$1(drawerRow.paid_amount) - recorded) * 100) / 100;
+            const recorded = payments.reduce((acc, payment) => acc + moneyValue$4(payment.amount), 0);
+            const legacy = Math.round((moneyValue$4(drawerRow.paid_amount) - recorded) * 100) / 100;
             if (payments.length === 0 && legacy <= 0) return null;
             return /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsxs("div", { className: "text-xs font-bold text-slate-700 dark:text-white/70 mb-2", children: [
@@ -17169,9 +17177,9 @@ function PurchasesInvoicesPanel({
                     payment.created_by_employee_name ? ` (${payment.created_by_employee_name})` : ""
                   ] }),
                   payment.receipt_url ? /* @__PURE__ */ jsx("a", { href: payment.receipt_url, target: "_blank", rel: "noreferrer", className: "text-slate-400 hover:text-[#0e7a5f] dark:text-white/40 dark:hover:text-emerald-300 shrink-0", title: "إيصال الدفعة", children: /* @__PURE__ */ jsx(Paperclip, { className: "w-3 h-3" }) }) : null,
-                  /* @__PURE__ */ jsx("span", { className: `font-bold tabular-nums shrink-0 ${moneyValue$1(payment.amount) < 0 ? "text-rose-700 dark:text-rose-300" : ""}`, dir: "ltr", children: moneyValue$1(payment.amount).toFixed(2) }),
+                  /* @__PURE__ */ jsx("span", { className: `font-bold tabular-nums shrink-0 ${moneyValue$4(payment.amount) < 0 ? "text-rose-700 dark:text-rose-300" : ""}`, dir: "ltr", children: moneyValue$4(payment.amount).toFixed(2) }),
                   /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-                    if (window.confirm(`حذف الدفعة ${moneyValue$1(payment.amount).toFixed(2)} بتاريخ ${payment.payment_date}؟ سيُخصم من مدفوع الفاتورة.`)) {
+                    if (window.confirm(`حذف الدفعة ${moneyValue$4(payment.amount).toFixed(2)} بتاريخ ${payment.payment_date}؟ سيُخصم من مدفوع الفاتورة.`)) {
                       deletePaymentMut.mutate({
                         id: payment.id
                       });
@@ -17230,7 +17238,7 @@ function PurchasesInvoicesPanel({
                     rows.push({
                       id: `pay-${payment.id}`,
                       url: payment.receipt_url,
-                      label: `إيصال دفعة ${formatMoney$5(payment.amount)} — ${payment.payment_date || ""}`,
+                      label: `إيصال دفعة ${formatMoney$8(payment.amount)} — ${payment.payment_date || ""}`,
                       primary: true
                     });
                   }
@@ -17306,7 +17314,7 @@ function PurchasesInvoicesPanel({
             ] }, entry.id)) })
           ] }) : null,
           /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap pt-2", children: [
-            moneyValue$1(drawerRow.balance_due) > 0 ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => {
+            moneyValue$4(drawerRow.balance_due) > 0 ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => {
               setPaying(drawerRow);
               setPreview(null);
             }, className: `${ws.btnPrimary} px-4 py-2 text-sm`, children: [
@@ -17335,7 +17343,7 @@ function PurchasesInvoicesPanel({
 // لحظة — يحترم حدود الخادم ويجعل فشل أي بند معزولاً عن إخوته،
 // والتقدم محفوظ في القاعدة فيُستأنف بعد مغادرة الصفحة.
 
-async function readJson(response, fallbackError) {
+async function readJson$1(response, fallbackError) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
     const error = new Error(data?.error || fallbackError);
@@ -17353,7 +17361,7 @@ function useInvoiceBatches({
     enabled,
     queryFn: async () => {
       const response = await authedFetch("/api/accounting/purchase-invoice-batches");
-      const data = await readJson(response, "فشل تحميل الدفعات");
+      const data = await readJson$1(response, "فشل تحميل الدفعات");
       return Array.isArray(data?.batches) ? data.batches : [];
     }
   });
@@ -17373,7 +17381,7 @@ function useInvoiceBatchDetail(batchId, {
     },
     queryFn: async () => {
       const response = await authedFetch(`/api/accounting/purchase-invoice-batches/${batchId}`);
-      return readJson(response, "فشل تحميل الدفعة");
+      return readJson$1(response, "فشل تحميل الدفعة");
     }
   });
 }
@@ -17390,7 +17398,7 @@ function useCreateInvoiceBatch() {
           items
         })
       });
-      return readJson(response, "فشل إنشاء الدفعة");
+      return readJson$1(response, "فشل إنشاء الدفعة");
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -17431,7 +17439,7 @@ function useBatchItemAction(batchId) {
           } : {})
         })
       });
-      return readJson(response, "فشل تنفيذ الإجراء");
+      return readJson$1(response, "فشل تنفيذ الإجراء");
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({
@@ -17464,7 +17472,7 @@ function useSubmitBatchItem(batchId) {
           action: "submit"
         })
       });
-      const data = await readJson(response, "فشل الإرسال");
+      const data = await readJson$1(response, "فشل الإرسال");
       return {
         invoiceId: data?.invoice_id || null
       };
@@ -17494,7 +17502,7 @@ function useDeleteBatchItem(batchId) {
       const response = await authedFetch(url, {
         method: "DELETE"
       });
-      return readJson(response, "فشل الحذف");
+      return readJson$1(response, "فشل الحذف");
     },
     onSettled: async () => {
       await queryClient.invalidateQueries({
@@ -17566,7 +17574,7 @@ const money$2 = (value) => (Number(value) || 0).toLocaleString("en-US", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2
 });
-function StatusPill$1({
+function StatusPill$2({
   status
 }) {
   const meta = STATUS_META[status] || STATUS_META.uploaded;
@@ -17888,7 +17896,7 @@ function BulkInvoiceUploadPanel({
           const reviewable = ["ready", "needs_attention", "approved"].includes(item.status);
           return /* @__PURE__ */ jsxs("tr", { className: "border-b border-[#f0f3f1] dark:border-white/5 hover:bg-[#fafbfa] dark:hover:bg-white/[0.03]", children: [
             /* @__PURE__ */ jsx("td", { className: "px-4 py-3 max-w-[220px]", children: /* @__PURE__ */ jsx("div", { className: "truncate font-semibold text-xs", dir: "ltr", children: item.file_name || `ملف ${item.id}` }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx(StatusPill$1, { status: item.status }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx(StatusPill$2, { status: item.status }) }),
             /* @__PURE__ */ jsx("td", { className: "px-4 py-3 font-mono text-xs", dir: "ltr", children: draft.invoice_number || "—" }),
             /* @__PURE__ */ jsx("td", { className: "px-4 py-3 max-w-[180px]", children: /* @__PURE__ */ jsx("div", { className: "truncate text-xs", children: contactName || "—" }) }),
             /* @__PURE__ */ jsx("td", { className: "px-4 py-3 font-mono text-xs", dir: "ltr", children: draft.invoice_date || "—" }),
@@ -18073,7 +18081,7 @@ function BulkReviewModal({
     onClose();
   }, children: /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} w-full max-w-[1200px] max-h-[92svh] flex flex-col overflow-hidden`, onClick: (event) => event.stopPropagation(), dir: "rtl", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-4 py-3 border-b border-[#e2e7e4] dark:border-white/10 shrink-0", children: [
-      /* @__PURE__ */ jsx(StatusPill$1, { status: item.status }),
+      /* @__PURE__ */ jsx(StatusPill$2, { status: item.status }),
       /* @__PURE__ */ jsx("div", { className: `${ws.title} text-sm truncate flex-1`, dir: "ltr", children: item.file_name }),
       navigable ? /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx("button", { type: "button", onClick: async () => {
@@ -18672,7 +18680,7 @@ const REPORTS = [{
   Icon: History,
   description: "سجل تدقيق قسم المشتريات: من أنشأ أو عدّل أو سدد أو أوقف — ومتى."
 }];
-function todayRiyadh() {
+function todayRiyadh$3() {
   return (/* @__PURE__ */ new Date()).toLocaleDateString("en-CA", {
     timeZone: "Asia/Riyadh"
   });
@@ -18683,7 +18691,7 @@ function money$1(value) {
     maximumFractionDigits: 2
   });
 }
-function moneyValue(value) {
+function moneyValue$3(value) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? number : 0;
 }
@@ -18710,20 +18718,20 @@ function bucketInvoicesByAccount(invoices, accountById) {
     const items = Array.isArray(invoice.items) ? invoice.items : [];
     if (items.length === 0) {
       const bucket = bucketFor(invoice.expense_account_id ? Number(invoice.expense_account_id) : null);
-      bucket.net += moneyValue(invoice.subtotal_amount);
-      bucket.tax += moneyValue(invoice.tax_amount);
-      bucket.total += moneyValue(invoice.total_amount);
+      bucket.net += moneyValue$3(invoice.subtotal_amount);
+      bucket.tax += moneyValue$3(invoice.tax_amount);
+      bucket.total += moneyValue$3(invoice.total_amount);
       bucket.count += 1;
       bucket.invoices.add(invoice.invoice_number);
       continue;
     }
     for (const item of items) {
       const bucket = bucketFor(item.account_id ? Number(item.account_id) : null);
-      bucket.net += moneyValue(item.line_subtotal);
-      bucket.tax += moneyValue(item.line_tax);
-      bucket.total += moneyValue(item.line_total);
+      bucket.net += moneyValue$3(item.line_subtotal);
+      bucket.tax += moneyValue$3(item.line_tax);
+      bucket.total += moneyValue$3(item.line_total);
       bucket.count += 1;
-      bucket.qty += moneyValue(item.quantity);
+      bucket.qty += moneyValue$3(item.quantity);
       bucket.invoices.add(invoice.invoice_number);
     }
   }
@@ -18764,7 +18772,7 @@ function round2(value) {
   return Math.round(value * 100) / 100;
 }
 function resolvePeriod(preset, customFrom, customTo) {
-  const today = todayRiyadh();
+  const today = todayRiyadh$3();
   const [y, m] = today.split("-").map(Number);
   const pad = (n) => String(n).padStart(2, "0");
   const monthStart = (yy, mm) => `${yy}-${pad(mm)}-01`;
@@ -18939,7 +18947,7 @@ function PurchasesReportsPanel({
   const [coffeeBasis, setCoffeeBasis] = useState("invoice");
   const [coffeeItem, setCoffeeItem] = useState("");
   const [coffeeStatus, setCoffeeStatus] = useState("");
-  const currentMonthKey = todayRiyadh().slice(0, 7);
+  const currentMonthKey = todayRiyadh$3().slice(0, 7);
   const [vatMode, setVatMode] = useState("month");
   const [vatMonth, setVatMonth] = useState(currentMonthKey);
   const [vatQuarter, setVatQuarter] = useState(Math.ceil(Number(currentMonthKey.slice(5, 7)) / 3));
@@ -19060,16 +19068,16 @@ function PurchasesReportsPanel({
     const bySupplier = /* @__PURE__ */ new Map();
     for (const invoice of prevInvoices) {
       const supplierKey = invoice.contact_id ? `c${invoice.contact_id}` : `n:${invoice.supplier_name || "بدون مورد"}`;
-      bySupplier.set(supplierKey, (bySupplier.get(supplierKey) || 0) + moneyValue(invoice.total_amount));
+      bySupplier.set(supplierKey, (bySupplier.get(supplierKey) || 0) + moneyValue$3(invoice.total_amount));
       const items = Array.isArray(invoice.items) ? invoice.items : [];
       if (items.length === 0) {
         const key = invoice.expense_account_id ? Number(invoice.expense_account_id) : "none";
-        byAccount.set(key, (byAccount.get(key) || 0) + moneyValue(invoice.total_amount));
+        byAccount.set(key, (byAccount.get(key) || 0) + moneyValue$3(invoice.total_amount));
         continue;
       }
       for (const item of items) {
         const key = item.account_id ? Number(item.account_id) : "none";
-        byAccount.set(key, (byAccount.get(key) || 0) + moneyValue(item.line_total));
+        byAccount.set(key, (byAccount.get(key) || 0) + moneyValue$3(item.line_total));
       }
     }
     return {
@@ -19098,17 +19106,17 @@ function PurchasesReportsPanel({
     for (const invoice of invoices) {
       if (invoice.is_active === false) continue;
       if (!matchesBranch(invoice)) continue;
-      const total = moneyValue(invoice.total_amount);
+      const total = moneyValue$3(invoice.total_amount);
       if (total <= 0) continue;
       const payments = Array.isArray(invoice.payments) ? invoice.payments : [];
       let recorded = 0;
       let inPeriod = 0;
       for (const payment of payments) {
-        const amount = moneyValue(payment.amount);
+        const amount = moneyValue$3(payment.amount);
         recorded += amount;
         if (inRange(payment.payment_date || "")) inPeriod += amount;
       }
-      const legacy = Math.round((moneyValue(invoice.paid_amount) - recorded) * 100) / 100;
+      const legacy = Math.round((moneyValue$3(invoice.paid_amount) - recorded) * 100) / 100;
       if (legacy > 4e-3 && inRange(invoice.invoice_date || "")) {
         inPeriod += legacy;
       }
@@ -19134,21 +19142,21 @@ function PurchasesReportsPanel({
     } of vatEntries) {
       const items = Array.isArray(invoice.items) ? invoice.items : [];
       if (items.length === 0) {
-        const base = moneyValue(invoice.subtotal_amount) * ratio;
-        const vat = moneyValue(invoice.tax_amount) * ratio;
+        const base = moneyValue$3(invoice.subtotal_amount) * ratio;
+        const vat = moneyValue$3(invoice.tax_amount) * ratio;
         if (vat > 0) {
           standardBase += base;
           standardVat += vat;
         }
         continue;
       }
-      const linesBase = items.reduce((acc, item) => acc + moneyValue(item.line_subtotal), 0);
-      const headerBase = moneyValue(invoice.subtotal_amount);
+      const linesBase = items.reduce((acc, item) => acc + moneyValue$3(item.line_subtotal), 0);
+      const headerBase = moneyValue$3(invoice.subtotal_amount);
       const factor = (linesBase > 0 && headerBase > 0 ? headerBase / linesBase : 1) * ratio;
       for (const item of items) {
-        const base = moneyValue(item.line_subtotal) * factor;
-        const vat = moneyValue(item.line_tax) * factor;
-        if (moneyValue(item.tax_rate) > 0) {
+        const base = moneyValue$3(item.line_subtotal) * factor;
+        const vat = moneyValue$3(item.line_tax) * factor;
+        if (moneyValue$3(item.tax_rate) > 0) {
           standardBase += base;
           standardVat += vat;
         }
@@ -19243,16 +19251,16 @@ function PurchasesReportsPanel({
     });
   };
   const computeSalesEntry = (entry) => {
-    const entered = moneyValue(entry?.r1);
+    const entered = moneyValue$3(entry?.r1);
     const r1Base = entry?.r1IncludesTax ? entered / 1.15 : entered;
     const r1Vat = entry?.r1IncludesTax ? entered - r1Base : entered * 0.15;
     return {
       r1Base,
       r1Vat,
-      r2: moneyValue(entry?.r2),
-      r3: moneyValue(entry?.r3),
-      r4: moneyValue(entry?.r4),
-      r5: moneyValue(entry?.r5)
+      r2: moneyValue$3(entry?.r2),
+      r3: moneyValue$3(entry?.r3),
+      r4: moneyValue$3(entry?.r4),
+      r5: moneyValue$3(entry?.r5)
     };
   };
   const salesComputed = useMemo(() => {
@@ -19378,11 +19386,11 @@ function PurchasesReportsPanel({
       }
       const bucket = map.get(key);
       bucket.count += 1;
-      bucket.net += moneyValue(invoice.subtotal_amount);
-      bucket.tax += moneyValue(invoice.tax_amount);
-      bucket.total += moneyValue(invoice.total_amount);
-      bucket.paid += moneyValue(invoice.paid_amount);
-      bucket.balance += moneyValue(invoice.balance_due);
+      bucket.net += moneyValue$3(invoice.subtotal_amount);
+      bucket.tax += moneyValue$3(invoice.tax_amount);
+      bucket.total += moneyValue$3(invoice.total_amount);
+      bucket.paid += moneyValue$3(invoice.paid_amount);
+      bucket.balance += moneyValue$3(invoice.balance_due);
     }
     const rows = [...map.values()].sort((a, b) => b.total - a.total);
     const totals = rows.reduce((acc, row) => {
@@ -19408,17 +19416,17 @@ function PurchasesReportsPanel({
     };
     const rows = periodInvoices.filter((invoice) => String(invoice.contact_id) === supplierId).sort((a, b) => String(a.invoice_date).localeCompare(String(b.invoice_date))).map((invoice) => {
       const items = Array.isArray(invoice.items) ? invoice.items : [];
-      const linesTotal = items.length === 0 ? moneyValue(invoice.total_amount) : items.reduce((sum, item) => sum + moneyValue(item.line_total), 0);
+      const linesTotal = items.length === 0 ? moneyValue$3(invoice.total_amount) : items.reduce((sum, item) => sum + moneyValue$3(item.line_total), 0);
       return {
         ...invoice,
         lines_total: linesTotal,
-        lines_diff: moneyValue(invoice.total_amount) - linesTotal
+        lines_diff: moneyValue$3(invoice.total_amount) - linesTotal
       };
     });
     const totals = rows.reduce((acc, invoice) => {
-      acc.total += moneyValue(invoice.total_amount);
-      acc.paid += moneyValue(invoice.paid_amount);
-      acc.balance += moneyValue(invoice.balance_due);
+      acc.total += moneyValue$3(invoice.total_amount);
+      acc.paid += moneyValue$3(invoice.paid_amount);
+      acc.balance += moneyValue$3(invoice.balance_due);
       return acc;
     }, {
       total: 0,
@@ -19433,13 +19441,13 @@ function PurchasesReportsPanel({
     };
   }, [periodInvoices, supplierId, accountById]);
   const agingReport = useMemo(() => {
-    const today = todayRiyadh();
+    const today = todayRiyadh$3();
     const msPerDay = 24 * 60 * 60 * 1e3;
     const buckets = ["current", "b30", "b60", "b90", "b90plus"];
     const map = /* @__PURE__ */ new Map();
     for (const invoice of invoices) {
       if (invoice.is_active === false) continue;
-      const balance = moneyValue(invoice.balance_due);
+      const balance = moneyValue$3(invoice.balance_due);
       if (balance <= 0) continue;
       const due = invoice.due_date || invoice.invoice_date;
       const days = Math.floor((new Date(today).getTime() - new Date(due).getTime()) / msPerDay);
@@ -19500,12 +19508,12 @@ function PurchasesReportsPanel({
       const payments = Array.isArray(invoice.payments) ? invoice.payments : [];
       let recorded = 0;
       for (const payment of payments) {
-        const amount = moneyValue(payment.amount);
+        const amount = moneyValue$3(payment.amount);
         recorded += amount;
         if (!inRange(payment.payment_date || "")) continue;
         add(payment.bank_account_id ? Number(payment.bank_account_id) : null, payment.bank_name, amount);
       }
-      const legacy = Math.round((moneyValue(invoice.paid_amount) - recorded) * 100) / 100;
+      const legacy = Math.round((moneyValue$3(invoice.paid_amount) - recorded) * 100) / 100;
       if (legacy > 4e-3 && inRange(invoice.invoice_date || "")) {
         add(invoice.paid_bank_account_id ? Number(invoice.paid_bank_account_id) : null, invoice.paid_bank_name, legacy);
       }
@@ -19544,19 +19552,19 @@ function PurchasesReportsPanel({
           item_id: item.item_id ? Number(item.item_id) : null,
           bean: item.bean_name || item.description || "بن",
           status,
-          sacks: moneyValue(item.sacks),
-          raw_kg: moneyValue(item.raw_kg),
-          received_kg: item.received_kg != null ? moneyValue(item.received_kg) : null,
+          sacks: moneyValue$3(item.sacks),
+          raw_kg: moneyValue$3(item.raw_kg),
+          received_kg: item.received_kg != null ? moneyValue$3(item.received_kg) : null,
           arrival_date: item.arrival_date || null,
-          waste_percent: item.waste_percent != null ? moneyValue(item.waste_percent) : null,
-          bean_cost_excl: moneyValue(item.bean_cost_excl),
-          bean_cost_incl: moneyValue(item.bean_cost_incl),
-          raw_cost_per_kg: item.raw_cost_per_kg != null ? moneyValue(item.raw_cost_per_kg) : null,
-          roast_total: moneyValue(item.roast_total_net) + moneyValue(item.roast_tax_amount),
-          extra_cost: moneyValue(item.extra_cost),
-          landed_incl: moneyValue(item.landed_incl),
-          net_incl_per_kg: item.net_incl_per_kg != null ? moneyValue(item.net_incl_per_kg) : null,
-          deposited_kg: item.deposited_kg != null ? moneyValue(item.deposited_kg) : null,
+          waste_percent: item.waste_percent != null ? moneyValue$3(item.waste_percent) : null,
+          bean_cost_excl: moneyValue$3(item.bean_cost_excl),
+          bean_cost_incl: moneyValue$3(item.bean_cost_incl),
+          raw_cost_per_kg: item.raw_cost_per_kg != null ? moneyValue$3(item.raw_cost_per_kg) : null,
+          roast_total: moneyValue$3(item.roast_total_net) + moneyValue$3(item.roast_tax_amount),
+          extra_cost: moneyValue$3(item.extra_cost),
+          landed_incl: moneyValue$3(item.landed_incl),
+          net_incl_per_kg: item.net_incl_per_kg != null ? moneyValue$3(item.net_incl_per_kg) : null,
+          deposited_kg: item.deposited_kg != null ? moneyValue$3(item.deposited_kg) : null,
           roast_invoice: invoice.roast_invoice || null
         });
       }
@@ -19617,7 +19625,7 @@ function PurchasesReportsPanel({
       seen.add(l.invoice_id);
       const computed = round2(lines.filter((x) => x.invoice_id === l.invoice_id).reduce((s, x) => s + x.roast_total, 0));
       const roast = l.roast_invoice;
-      const actual = roast && roast.is_active !== false ? moneyValue(roast.total_amount) : 0;
+      const actual = roast && roast.is_active !== false ? moneyValue$3(roast.total_amount) : 0;
       const diff = round2(actual - computed);
       reconcile.push({
         invoice_number: l.invoice_number,
@@ -19626,7 +19634,7 @@ function PurchasesReportsPanel({
         computed,
         actual,
         diff,
-        paid: roast ? moneyValue(roast.paid_amount) : 0,
+        paid: roast ? moneyValue$3(roast.paid_amount) : 0,
         note: !roast && computed > 0 ? "لا فاتورة تحميص" : roast?.is_active === false ? "فاتورة التحميص موقوفة" : roast?.roast_link_state === "detached" ? "مفكوكة الارتباط" : roast?.roast_confirmed ? "مؤكدة يدويًا" : Math.abs(diff) >= 0.01 ? "فرق" : ""
       });
     }
@@ -20102,7 +20110,7 @@ function PurchasesReportsPanel({
               /* @__PURE__ */ jsx("input", { type: "number", value: sales[field.key], onChange: (event) => updateSales({
                 [field.key]: event.target.value
               }), className: `${ws.input} px-2.5 py-2 text-sm text-left`, step: "0.01", min: "0", dir: "ltr", placeholder: "0.00" }),
-              field.key === "r1" && moneyValue(sales.r1) > 0 ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1", dir: "ltr", children: [
+              field.key === "r1" && moneyValue$3(sales.r1) > 0 ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1", dir: "ltr", children: [
                 "الخاضع ",
                 money$1(salesComputed.r1Base),
                 " + ضريبة ",
@@ -20746,7 +20754,7 @@ function PendingFixedRow({
   };
   const typeName = pending.expense_type_name || "—";
   const expenseName = pending.expense_name || "—";
-  const defaultFormatted = formatMoney$b(pending.default_amount);
+  const defaultFormatted = formatMoney$e(pending.default_amount);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] bg-emerald-400/[0.03]", children: [
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm", style: {
@@ -20842,7 +20850,7 @@ function ExpenseRow({
   };
   const typeName = expense.expense_type_name || "—";
   const expenseName = expense.expense_name || "—";
-  const formattedAmount = formatMoney$b(expense.amount);
+  const formattedAmount = formatMoney$e(expense.amount);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]", children: [
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm", style: {
@@ -20852,7 +20860,7 @@ function ExpenseRow({
         maxWidth: 200
       }, children: expenseName }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm", dir: "ltr", children: formattedAmount }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: isConfirmed ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$b(confirmedAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => handleAmountChange(e.target.value), className: `${ws$1.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: isConfirmed ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$e(confirmedAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => handleAmountChange(e.target.value), className: `${ws$1.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleToggleConfirmed, disabled: isLocked, "aria-label": isConfirmed ? "إلغاء تأكيد المصروف" : "تأكيد المصروف", title: isConfirmed ? "إلغاء التأكيد" : "تأكيد المصروف", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isConfirmed ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isConfirmed ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
         isConfirmed && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${confirmedNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
@@ -20910,7 +20918,7 @@ function PendingFixedCard({
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "text-left shrink-0", children: [
         /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-500 dark:text-white/40", children: "الافتراضي" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/70 text-sm font-semibold", dir: "ltr", children: formatMoney$b(pending.default_amount) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/70 text-sm font-semibold", dir: "ltr", children: formatMoney$e(pending.default_amount) })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mt-3", children: [
@@ -20983,7 +20991,7 @@ function ExpenseCard({
         /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-semibold truncate", children: expense.expense_name || "—" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-end gap-1 shrink-0", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 text-sm font-bold", dir: "ltr", children: formatMoney$b(expense.amount) }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 text-sm font-bold", dir: "ltr", children: formatMoney$e(expense.amount) }),
         /* @__PURE__ */ jsx(StatusBadge, { confirmed: isConfirmed })
       ] })
     ] }),
@@ -20997,7 +21005,7 @@ function ExpenseCard({
     isConfirmed && isLocked && /* @__PURE__ */ jsxs("div", { className: "mt-1.5 text-[11px] text-slate-500 dark:text-white/45", children: [
       "المبلغ المؤكد:",
       " ",
-      /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$b(confirmedAmount) })
+      /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$e(confirmedAmount) })
     ] }),
     showNote && isConfirmed && /* @__PURE__ */ jsx("div", { className: "mt-2", children: isLocked ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/60", children: confirmedNote || "—" }) : /* @__PURE__ */ jsx("input", { type: "text", value: confirmedNote, onChange: (e) => {
       setConfirmedNote(e.target.value);
@@ -21060,14 +21068,14 @@ function ExpenseTable({
       /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
         "إجمالي المصروفات:",
         " ",
-        /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-slate-800 dark:text-white/80 font-semibold", children: formatMoney$b(totalOriginal) })
+        /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-slate-800 dark:text-white/80 font-semibold", children: formatMoney$e(totalOriginal) })
       ] }),
       confirmedCount > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/40", children: "|" }),
         /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
           "إجمالي المؤكد:",
           " ",
-          /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-emerald-700 dark:text-emerald-200 font-semibold", children: formatMoney$b(totalConfirmed) })
+          /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-emerald-700 dark:text-emerald-200 font-semibold", children: formatMoney$e(totalConfirmed) })
         ] })
       ] })
     ] }),
@@ -21188,11 +21196,11 @@ function buildColumns$1() {
   }, {
     header: "المبلغ الأصلي",
     accessor: (i) => i.amount,
-    format: (v) => formatMoney$b(v)
+    format: (v) => formatMoney$e(v)
   }, {
     header: "المبلغ المؤكد",
     accessor: (i) => confirmedValue(i),
-    format: (v) => v === null || v === void 0 ? "-" : formatMoney$b(v)
+    format: (v) => v === null || v === void 0 ? "-" : formatMoney$e(v)
   }, {
     header: "الحالة",
     accessor: (i) => i.is_confirmed,
@@ -21341,20 +21349,20 @@ function ExpensesAnalytics({
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold text-2xl", dir: "ltr", children: formatMoney$b(monthTotal) }),
+      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold text-2xl", dir: "ltr", children: formatMoney$e(monthTotal) }),
       trendQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "جاري التحميل…" }) : delta === null ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "لا يوجد شهر سابق للمقارنة —" }) : /* @__PURE__ */ jsxs("div", { className: "mt-3", children: [
         /* @__PURE__ */ jsxs("div", { className: `inline-flex items-center gap-1.5 text-sm font-bold ${deltaColor}`, children: [
           /* @__PURE__ */ jsx(DeltaIcon, { className: "w-4 h-4" }),
           /* @__PURE__ */ jsxs("span", { dir: "ltr", children: [
             delta > 0 ? "+" : "",
-            formatMoney$b(delta),
+            formatMoney$e(delta),
             pct !== null ? ` (${pct > 0 ? "+" : ""}${Math.round(pct)}%)` : ""
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1.5", children: [
           "الشهر السابق:",
           " ",
-          /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$b(prevMonthTotal) })
+          /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$e(prevMonthTotal) })
         ] }),
         /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-400 dark:text-white/35 mt-1", children: down ? "انخفض الإنفاق عن الشهر السابق" : up ? "ارتفع الإنفاق عن الشهر السابق" : "لا تغيير عن الشهر السابق" })
       ] })
@@ -21388,7 +21396,7 @@ function ExpensesAnalytics({
               ] })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 shrink-0", children: [
-              /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$b(c.total) }),
+              /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$e(c.total) }),
               /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/40 text-[10px]", dir: "ltr", children: [
                 Math.round(p),
                 "%"
@@ -21414,7 +21422,7 @@ function ExpensesAnalytics({
           "."
         ] }),
         /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80", children: c.name }),
-        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$b(c.total) })
+        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$e(c.total) })
       ] }, c.name)) })
     ] })
   ] });
@@ -21576,15 +21584,15 @@ function FixedPanel({
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs flex-wrap", children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الإجمالي: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$b(totals.total) })
+            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$e(totals.total) })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مؤكد: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$b(totals.paid) })
+            /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$e(totals.paid) })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "بانتظار: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$b(totals.pending) })
+            /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$e(totals.pending) })
           ] }),
           /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowAdd(true), className: `${ws$1.btnPrimary} px-3 py-2 text-sm`, children: [
             /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
@@ -21619,13 +21627,13 @@ function FixedPanel({
               })()
             ] }),
             /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-sm", dir: "ltr", children: [
-              /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-semibold", children: formatMoney$b(perMonthAmount(t.default_amount, t.frequency)) }),
+              /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-semibold", children: formatMoney$e(perMonthAmount(t.default_amount, t.frequency)) }),
               (FREQ_CYCLE_MONTHS[t.frequency] || 1) > 1 ? /* @__PURE__ */ jsxs("div", { className: "text-slate-500 dark:text-white/40 text-[10px] mt-0.5", children: [
                 "إجمالي: ",
-                formatMoney$b(t.default_amount)
+                formatMoney$e(t.default_amount)
               ] }) : null
             ] }),
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: paid ? /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$b(paidInfo.amount) }) : /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: overrideAmount[t.id] ?? "", onChange: (e) => setOverrideAmount((prev) => ({
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: paid ? /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$e(paidInfo.amount) }) : /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: overrideAmount[t.id] ?? "", onChange: (e) => setOverrideAmount((prev) => ({
               ...prev,
               [t.id]: e.target.value
             })), className: `${ws$1.input} px-2 py-1.5 text-sm w-28`, placeholder: String(perMonthAmount(t.default_amount, t.frequency)), dir: "ltr" }) }),
@@ -22049,15 +22057,15 @@ function VariableGrid({
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs flex-wrap", children: [
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الإجمالي: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$b(totals.total) })
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$e(totals.total) })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مؤكد: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$b(totals.paid) })
+          /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$e(totals.paid) })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "بانتظار: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$b(totals.pending) })
+          /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$e(totals.pending) })
         ] }),
         addCta
       ] })
@@ -22199,7 +22207,7 @@ function VariableTemplateModal({
         " ",
         /* @__PURE__ */ jsx("span", { dir: "ltr", children: historyHint.month }),
         " (",
-        /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$b(historyHint.amount) }),
+        /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$e(historyHint.amount) }),
         ")"
       ] }) : /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5", children: "يستخدم كقيمة افتراضية كل شهر — يمكن تغييرها لاحقاً." })
     ] }),
@@ -22516,7 +22524,7 @@ function TooltipBox({
       ] }),
       /* @__PURE__ */ jsx("span", { className: "font-bold", style: {
         color: valueColor
-      }, dir: "ltr", children: formatMoney$b(p.value) })
+      }, dir: "ltr", children: formatMoney$e(p.value) })
     ] }, i))
   ] });
 }
@@ -22776,9 +22784,9 @@ function ReviewTabContent({
   const confirmationPct = stats.totalCount > 0 ? Math.round(stats.confirmedCount / stats.totalCount * 100) : 0;
   return /* @__PURE__ */ jsxs("div", { className: "space-y-5", children: [
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-4 gap-3", children: [
-      /* @__PURE__ */ jsx(HeroStat, { label: "إجمالي المصروفات", value: formatMoney$b(stats.totalAmount), sub: `${stats.totalCount} مصروف`, icon: Banknote, accent: "emerald", momDelta, momPct }),
-      /* @__PURE__ */ jsx(HeroStat, { label: "تم التأكيد", value: formatMoney$b(stats.confirmedAmount), sub: `${stats.confirmedCount} / ${stats.totalCount}`, icon: CheckCircle2, accent: "emerald" }),
-      /* @__PURE__ */ jsx(HeroStat, { label: "بانتظار التأكيد", value: formatMoney$b(stats.pendingAmount), sub: `${stats.pendingCount} مصروف`, icon: Clock, accent: "amber" }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "إجمالي المصروفات", value: formatMoney$e(stats.totalAmount), sub: `${stats.totalCount} مصروف`, icon: Banknote, accent: "emerald", momDelta, momPct }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "تم التأكيد", value: formatMoney$e(stats.confirmedAmount), sub: `${stats.confirmedCount} / ${stats.totalCount}`, icon: CheckCircle2, accent: "emerald" }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "بانتظار التأكيد", value: formatMoney$e(stats.pendingAmount), sub: `${stats.pendingCount} مصروف`, icon: Clock, accent: "amber" }),
       /* @__PURE__ */ jsx(HeroStat, { label: "نسبة التأكيد", value: `${confirmationPct}%`, sub: /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-200 dark:bg-white/10 rounded-full h-1.5 mt-2", children: /* @__PURE__ */ jsx("div", { className: "bg-emerald-400 h-1.5 rounded-full transition-all", style: {
         width: `${confirmationPct}%`
       } }) }), icon: TrendingUp, accent: "sky" })
@@ -22803,7 +22811,7 @@ function ReviewTabContent({
                 ] }),
                 /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold truncate", children: t.name })
               ] }),
-              /* @__PURE__ */ jsx("div", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$b(t.total) })
+              /* @__PURE__ */ jsx("div", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$e(t.total) })
             ] }),
             /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-100 dark:bg-white/[0.04] rounded-full h-1.5 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "bg-gradient-to-r from-emerald-400/70 to-sky-400/70 h-full rounded-full", style: {
               width: `${pct}%`
@@ -22888,7 +22896,7 @@ function HeroStat({
       momDelta > 0 ? /* @__PURE__ */ jsx(ArrowUpRight, { className: "w-3 h-3 text-red-700 dark:text-red-300" }) : momDelta < 0 ? /* @__PURE__ */ jsx(ArrowDownRight, { className: "w-3 h-3 text-emerald-700 dark:text-emerald-300" }) : /* @__PURE__ */ jsx(Minus, { className: "w-3 h-3 text-slate-500 dark:text-white/40" }),
       /* @__PURE__ */ jsxs("span", { className: momDelta > 0 ? "text-red-700 dark:text-red-300" : momDelta < 0 ? "text-emerald-700 dark:text-emerald-300" : "text-slate-500 dark:text-white/40", dir: "ltr", children: [
         momDelta > 0 ? "+" : "",
-        formatMoney$b(momDelta),
+        formatMoney$e(momDelta),
         momPct !== null && momPct !== void 0 ? ` (${momPct > 0 ? "+" : ""}${Math.round(momPct)}%)` : ""
       ] }),
       /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "عن الشهر السابق" })
@@ -23438,6 +23446,2831 @@ function ExpensesPanel({
   ] });
 }
 
+// العقود التأجيرية — الاستعلامات والطفرات. كل طفرة تُبطل كاش العقود
+// والدفعات والاستقطاع (والفواتير بعد السداد/التراجع لأن السداد ينشئ
+// فاتورة مشتريات تحت حساب «إيجارات»).
+
+const BASE = "/api/accounting/lease-contracts";
+
+// خطأ يحمل كود الخادم (stale_contract / has_paid / already_paid /
+// paid_row / invoice_exists …) حتى تتصرف الواجهة بحسبه.
+function apiError(data, fallback, status) {
+  const error = new Error(data?.error || fallback);
+  error.code = data?.code || null;
+  error.status = status || null;
+  error.data = data || null;
+  return error;
+}
+async function readJson(res) {
+  return res.json().catch(() => ({}));
+}
+function showWarnings(data) {
+  const warnings = Array.isArray(data?.warnings) ? data.warnings : [];
+  for (const warning of warnings) toast.warning(warning, {
+    duration: 8000
+  });
+}
+function invalidateLeaseQueries(queryClient, {
+  invoices = false
+} = {}) {
+  const tasks = [queryClient.invalidateQueries({
+    queryKey: queryKeys.leaseContracts()
+  }), queryClient.invalidateQueries({
+    queryKey: queryKeys.leaseContract()
+  }), queryClient.invalidateQueries({
+    queryKey: queryKeys.leasePayments()
+  }), queryClient.invalidateQueries({
+    queryKey: queryKeys.leaseReserve()
+  })];
+  if (invoices) {
+    tasks.push(queryClient.invalidateQueries({
+      queryKey: queryKeys.accountingPurchaseInvoices()
+    }));
+  }
+  return Promise.all(tasks);
+}
+
+// ---------- الاستعلامات ----------
+
+function useLeaseContracts({
+  employeeId,
+  isAdmin,
+  includeInactive,
+  q
+} = {}) {
+  return useQuery({
+    queryKey: queryKeys.leaseContracts(!!includeInactive, q || ""),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const qs = new URLSearchParams();
+      if (includeInactive) qs.set("includeInactive", "1");
+      if (q) qs.set("q", q);
+      const url = qs.toString() ? `${BASE}?${qs.toString()}` : BASE;
+      const res = await adminFetch(url);
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل تحميل العقود التأجيرية", res.status);
+      return Array.isArray(data?.contracts) ? data.contracts : [];
+    }
+  });
+}
+
+// عقد واحد مع جدول دفعاته — للدرج ونافذة التعديل.
+function useLeaseContract(id) {
+  return useQuery({
+    queryKey: queryKeys.leaseContract(id ? Number(id) : null),
+    enabled: !!id,
+    queryFn: async () => {
+      const res = await adminFetch(`${BASE}/${id}`);
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل تحميل العقد", res.status);
+      return data?.contract || null;
+    }
+  });
+}
+function useLeasePayments({
+  employeeId,
+  isAdmin,
+  status,
+  from,
+  to,
+  contractId
+} = {}) {
+  return useQuery({
+    queryKey: queryKeys.leasePayments(status || "pending", from || "", to || "", contractId ? Number(contractId) : null),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const qs = new URLSearchParams();
+      qs.set("status", status || "pending");
+      if (from) qs.set("from", from);
+      if (to) qs.set("to", to);
+      if (contractId) qs.set("contract_id", String(contractId));
+      const res = await adminFetch(`${BASE}/payments?${qs.toString()}`);
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل تحميل دفعات العقود", res.status);
+      return Array.isArray(data?.payments) ? data.payments : [];
+    }
+  });
+}
+function useLeaseReserve({
+  employeeId,
+  isAdmin,
+  month,
+  branchId
+} = {}) {
+  return useQuery({
+    queryKey: queryKeys.leaseReserve(month || "", branchId || ""),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const qs = new URLSearchParams();
+      if (month) qs.set("month", month);
+      if (branchId) qs.set("branch_id", String(branchId));
+      const url = qs.toString() ? `${BASE}/reserve?${qs.toString()}` : `${BASE}/reserve`;
+      const res = await adminFetch(url);
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل تحميل الاستقطاع الشهري", res.status);
+      return data || null;
+    }
+  });
+}
+
+// ---------- الطفرات ----------
+
+function useCreateLeaseContract() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch(BASE, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل إضافة العقد", res.status);
+      return data;
+    },
+    onSuccess: async data => {
+      await invalidateLeaseQueries(queryClient);
+      const count = data?.contract?.payments_total ?? data?.contract?.payments?.length;
+      toast.success(count ? `تم إضافة العقد — ${count} دفعة في الجدول` : "تم إضافة العقد");
+      showWarnings(data);
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإضافة: ${error.message}`);
+    }
+  });
+}
+function useUpdateLeaseContract() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      ...payload
+    }) => {
+      const res = await adminFetch(`${BASE}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل تعديل العقد", res.status);
+      return data;
+    },
+    onSuccess: async data => {
+      await invalidateLeaseQueries(queryClient);
+      toast.success("تم حفظ العقد");
+      showWarnings(data);
+    },
+    onError: error => {
+      console.error(error);
+      if (error.code === "stale_contract") {
+        toast.error("تم تعديل هذا العقد من جهاز آخر أثناء التحرير — أغلق النافذة وأعد فتحه ثم كرر التعديل.", {
+          duration: 9000
+        });
+        return;
+      }
+      toast.error(`فشل التعديل: ${error.message}`);
+    }
+  });
+}
+
+// إعادة تفعيل عقد موقوف (PUT مختصر { reactivate: true }).
+function useReactivateLeaseContract() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id
+    }) => {
+      const res = await adminFetch(`${BASE}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          reactivate: true
+        })
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل إعادة تفعيل العقد", res.status);
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateLeaseQueries(queryClient);
+      toast.success("تمت إعادة تفعيل العقد");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل إعادة التفعيل: ${error.message}`);
+    }
+  });
+}
+function useDeleteLeaseContract() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      force = false
+    }) => {
+      const url = force ? `${BASE}/${id}?force=1` : `${BASE}/${id}`;
+      const res = await adminFetch(url, {
+        method: "DELETE"
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل إيقاف العقد", res.status);
+      return data;
+    },
+    onSuccess: async data => {
+      await invalidateLeaseQueries(queryClient);
+      toast.success(data?.hard ? "تم حذف العقد نهائياً" : "تم إيقاف العقد");
+    },
+    onError: error => {
+      console.error(error);
+      if (error.code === "has_paid") {
+        toast.error("لا يمكن الحذف النهائي: للعقد دفعات مسددة. أوقفه بدلاً من ذلك.");
+        return;
+      }
+      toast.error(`فشل الإيقاف: ${error.message}`);
+    }
+  });
+}
+
+// تعديل دفعة معلّقة/ملغاة (تاريخ الاستحقاق، المبلغ، الضريبة، ملاحظة،
+// أو الحالة pending|cancelled). الدفعات المسددة لا تُعدَّل (409 paid_row).
+function useUpdateLeasePayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      ...payload
+    }) => {
+      const res = await adminFetch(`${BASE}/payments/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل تعديل الدفعة", res.status);
+      return data;
+    },
+    onSuccess: async (data, variables) => {
+      await invalidateLeaseQueries(queryClient);
+      if (variables?.status === "cancelled") toast.success("تم إلغاء الدفعة");else if (variables?.status === "pending" && Object.keys(variables).length === 2) toast.success("تمت إعادة الدفعة إلى المعلّقة");else toast.success("تم حفظ الدفعة");
+    },
+    onError: error => {
+      console.error(error);
+      if (error.code === "paid_row") {
+        toast.error("الدفعة مسددة — تراجع عن السداد أولاً ثم عدّلها.");
+        return;
+      }
+      toast.error(`فشل تعديل الدفعة: ${error.message}`);
+    }
+  });
+}
+
+// سداد دفعة: ينشئ فاتورة مشتريات مدفوعة تحت حساب «إيجارات» ويعلّم
+// الدفعة مسددة.
+function usePayLeasePayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      ...payload
+    }) => {
+      const res = await adminFetch(`${BASE}/payments/${id}/pay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل تسجيل السداد", res.status);
+      return data;
+    },
+    onSuccess: async data => {
+      await invalidateLeaseQueries(queryClient, {
+        invoices: true
+      });
+      toast.success(data?.invoice?.invoice_number ? `تم السداد — وأُنشئت فاتورة ${data.invoice.invoice_number}` : "تم تسجيل السداد");
+      showWarnings(data);
+    },
+    onError: error => {
+      console.error(error);
+      if (error.code === "already_paid") {
+        toast.error("هذه الدفعة مسددة مسبقاً.");
+        return;
+      }
+      if (error.code === "invoice_exists") {
+        toast.error("توجد فاتورة نشطة بنفس رقم الدفعة — أوقفها من فواتير المشتريات ثم أعد السداد.", {
+          duration: 9000
+        });
+        return;
+      }
+      toast.error(`فشل السداد: ${error.message}`);
+    }
+  });
+}
+
+// التراجع عن السداد: تعود الدفعة معلّقة وتُوقف الفاتورة المرتبطة.
+function useUnpayLeasePayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id
+    }) => {
+      const res = await adminFetch(`${BASE}/payments/${id}/unpay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل التراجع عن السداد", res.status);
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateLeaseQueries(queryClient, {
+        invoices: true
+      });
+      toast.success("تم التراجع عن السداد وإيقاف الفاتورة المرتبطة");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل التراجع: ${error.message}`);
+    }
+  });
+}
+
+// تأكيد الاستقطاع الشهري لدفعة (سجل ما حُجز فعليًا). amount = 0 يحذف
+// صف الشهر. يُبطل كاش الاستقطاع فقط.
+function useConfirmLeaseReserve() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      payment_id,
+      month,
+      amount,
+      note,
+      suggested_amount,
+      revenue_basis
+    }) => {
+      const res = await adminFetch(`${BASE}/reserve/confirm`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          payment_id,
+          month,
+          amount,
+          note: note || null,
+          suggested_amount: suggested_amount ?? null,
+          revenue_basis: revenue_basis ?? null
+        })
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل تأكيد الاستقطاع", res.status);
+      return data;
+    },
+    onSuccess: async (data, variables) => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.leaseReserve()
+      });
+      if (variables?.silent) return;
+      toast.success(data?.removed || Number(variables?.amount) === 0 ? "أُلغي استقطاع هذا الشهر" : "تم تأكيد الاستقطاع");
+    },
+    onError: error => {
+      console.error(error);
+      if (error.code === "future_month") {
+        toast.error("لا يمكن تأكيد استقطاع لشهر مستقبلي — إيراداته لم تتحقق بعد.");
+        return;
+      }
+      if (error.code === "paid_row") {
+        toast.error("الدفعة مسددة — لا يُعدَّل استقطاعها.");
+        return;
+      }
+      toast.error(`فشل تأكيد الاستقطاع: ${error.message}`);
+    }
+  });
+}
+
+// التحليل الذكي لملف العقد — يعيد analysis فقط؛ النافذة تتولى العرض
+// والتعبئة، ولا توست عند النجاح.
+function useAnalyzeLeaseContract() {
+  return useMutation({
+    mutationFn: async ({
+      file_base64,
+      media_type,
+      text
+    } = {}) => {
+      const res = await adminFetch(`${BASE}/analyze`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          file_base64: file_base64 || null,
+          media_type: media_type || null,
+          text: text || ""
+        })
+      });
+      const data = await readJson(res);
+      if (!res.ok) {
+        const fallback = res.status === 503 ? "التحليل الذكي غير مفعّل على الخادم (ANTHROPIC_API_KEY)" : res.status === 413 ? "الملف أكبر من الحد المسموح للتحليل" : "تعذر تحليل المستند";
+        throw apiError(data, fallback, res.status);
+      }
+      return data?.analysis || null;
+    }
+  });
+}
+
+const MAX_SMART_FILE_BYTES = 3 * 1024 * 1024;
+const ANALYZABLE_MEDIA_RE = /^(application\/pdf|image\/(jpeg|png|webp))$/;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+function todayRiyadh$2() {
+  return (/* @__PURE__ */ new Date()).toLocaleDateString("en-CA", {
+    timeZone: "Asia/Riyadh"
+  });
+}
+async function fileToBase64(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = "";
+  const chunk = 32768;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+function moneyValue$2(value) {
+  const number = Number(value || 0);
+  return Number.isFinite(number) ? number : 0;
+}
+function formatMoney$7(value) {
+  return moneyValue$2(value).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+function intOrNull(raw) {
+  if (raw === null || raw === void 0 || raw === "") return null;
+  const n = Math.trunc(Number(raw));
+  return Number.isFinite(n) && n >= 0 ? n : null;
+}
+let rowKeySeq = 0;
+function newCustomRow(overrides = {}) {
+  rowKeySeq += 1;
+  return {
+    key: `row-${Date.now()}-${rowKeySeq}`,
+    due_date: "",
+    amount: "",
+    description: "",
+    status: "pending",
+    ...overrides
+  };
+}
+function statusPillClass(status) {
+  if (status === "active") return "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25";
+  if (status === "notice") return "bg-amber-100 dark:bg-amber-400/10 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25";
+  if (status === "upcoming") return "bg-sky-100 dark:bg-sky-400/10 text-sky-800 dark:text-sky-200 border-sky-200 dark:border-sky-400/25";
+  if (status === "ended") return "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10";
+  return "bg-rose-100 dark:bg-rose-400/10 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-400/25";
+}
+function SectionTitle({
+  children,
+  icon: Icon
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white tracking-tight", children: [
+    Icon ? /* @__PURE__ */ jsx(Icon, { className: "w-4 h-4 text-[#0e7a5f] dark:text-emerald-300" }) : null,
+    children
+  ] });
+}
+function FieldLabel({
+  children,
+  required,
+  hint
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: [
+    children,
+    required ? /* @__PURE__ */ jsx("span", { className: "text-rose-700 dark:text-rose-300", children: " *" }) : null,
+    hint ? /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/35", children: [
+      " (",
+      hint,
+      ")"
+    ] }) : null
+  ] });
+}
+function LeaseContractModal({
+  open,
+  contract,
+  contacts = [],
+  branches = [],
+  isSubmitting,
+  onClose,
+  onSubmit
+}) {
+  const isEditing = !!contract?.id;
+  const [contractNumber, setContractNumber] = useState("");
+  const [contactId, setContactId] = useState("");
+  const [lessorName, setLessorName] = useState("");
+  const [lessorVat, setLessorVat] = useState("");
+  const [location, setLocation] = useState("");
+  const [branchId, setBranchId] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [noticeDays, setNoticeDays] = useState("");
+  const [noticeText, setNoticeText] = useState("");
+  const [frequency, setFrequency] = useState("monthly");
+  const [amount, setAmount] = useState("");
+  const [includesVat, setIncludesVat] = useState(false);
+  const [vatRate, setVatRate] = useState(String(DEFAULT_VAT_RATE));
+  const [firstDueDate, setFirstDueDate] = useState("");
+  const [customRows, setCustomRows] = useState([]);
+  const [notes, setNotes] = useState("");
+  const [terminated, setTerminated] = useState(false);
+  const [regenerate, setRegenerate] = useState(false);
+  const [attachmentUrl, setAttachmentUrl] = useState("");
+  const [attachmentName, setAttachmentName] = useState("");
+  const [analysisJson, setAnalysisJson] = useState(null);
+  const [analysisFile, setAnalysisFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [scanBusy, setScanBusy] = useState(false);
+  const [scanSummary, setScanSummary] = useState(null);
+  const fileInputRef = useRef(null);
+  const autoFilledRef = useRef(/* @__PURE__ */ new Set());
+  const touchedRef = useRef(/* @__PURE__ */ new Set());
+  const [upload] = useUpload();
+  const analyzeMut = useAnalyzeLeaseContract();
+  useEffect(() => {
+    if (!open) return;
+    autoFilledRef.current = /* @__PURE__ */ new Set();
+    touchedRef.current = /* @__PURE__ */ new Set();
+    setScanSummary(null);
+    setAnalysisFile(null);
+    setUploading(false);
+    setScanBusy(false);
+    setRegenerate(false);
+    if (contract?.id) {
+      setContractNumber(contract.contract_number || "");
+      setContactId(contract.lessor_contact_id ? String(contract.lessor_contact_id) : "");
+      setLessorName(contract.lessor_name || "");
+      setLessorVat(contract.lessor_vat_number || "");
+      setLocation(contract.location || "");
+      setBranchId(contract.branch_id ? String(contract.branch_id) : "");
+      setStartDate(contract.start_date || "");
+      setEndDate(contract.end_date || "");
+      setNoticeDays(contract.notice_period_days === null || contract.notice_period_days === void 0 ? "" : String(contract.notice_period_days));
+      setNoticeText(contract.notice_period_text || "");
+      const freq = LEASE_FREQUENCIES.includes(contract.payment_frequency) ? contract.payment_frequency : "monthly";
+      setFrequency(freq);
+      const storedExcl = moneyValue$2(contract.installment_amount);
+      const storedRate = moneyValue$2(contract.vat_rate ?? DEFAULT_VAT_RATE);
+      const enteredIncl = contract.amount_includes_vat === true;
+      setAmount(storedExcl > 0 ? (enteredIncl ? Math.round(storedExcl * (1 + storedRate / 100) * 100) / 100 : storedExcl).toFixed(2) : "");
+      setIncludesVat(enteredIncl && freq !== "custom");
+      setVatRate(String(storedRate));
+      setFirstDueDate(contract.first_due_date || "");
+      const payments = Array.isArray(contract.payments) ? contract.payments : [];
+      setCustomRows(freq === "custom" ? payments.filter((p) => p.status !== "cancelled").map((p) => newCustomRow({
+        due_date: p.due_date || "",
+        amount: moneyValue$2(p.amount_excl).toFixed(2),
+        description: p.notes || "",
+        status: p.status || "pending"
+      })) : []);
+      setNotes(contract.notes || "");
+      setTerminated(contract.status === "terminated");
+      setAttachmentUrl(contract.attachment_url || "");
+      setAttachmentName(contract.attachment_name || "");
+      setAnalysisJson(contract.analysis_json || null);
+    } else {
+      setContractNumber("");
+      setContactId("");
+      setLessorName("");
+      setLessorVat("");
+      setLocation("");
+      setBranchId("");
+      setStartDate("");
+      setEndDate("");
+      setNoticeDays("");
+      setNoticeText("");
+      setFrequency("monthly");
+      setAmount("");
+      setIncludesVat(false);
+      setVatRate(String(DEFAULT_VAT_RATE));
+      setFirstDueDate("");
+      setCustomRows([]);
+      setNotes("");
+      setTerminated(false);
+      setAttachmentUrl("");
+      setAttachmentName("");
+      setAnalysisJson(null);
+    }
+  }, [open, contract?.id]);
+  const contactOptions = useMemo(() => [{
+    value: "",
+    label: "بدون ربط بجهة اتصال"
+  }, ...contacts.filter((c) => c.is_active !== false || String(c.id) === contactId).map((c) => ({
+    value: String(c.id),
+    label: c.vat_number ? `${c.name} — ${c.vat_number}` : c.name
+  }))], [contacts, contactId]);
+  const branchOptions = useMemo(() => [{
+    value: "",
+    label: "بدون فرع"
+  }, ...branches.map((b) => ({
+    value: String(b.id),
+    label: b.name
+  }))], [branches]);
+  const handleContactChange = (value) => {
+    setContactId(value);
+    autoFilledRef.current.delete("contact");
+    const contact = contacts.find((c) => String(c.id) === String(value));
+    if (contact) {
+      setLessorName(contact.name || "");
+      setLessorVat(contact.vat_number || "");
+      autoFilledRef.current.delete("lessor");
+      autoFilledRef.current.delete("vat");
+    }
+  };
+  const touch = (field) => {
+    touchedRef.current.add(field);
+    autoFilledRef.current.delete(field);
+  };
+  const vatRateValue = Math.min(Math.max(moneyValue$2(vatRate), 0), 100);
+  const previewRows = useMemo(() => {
+    if (frequency === "custom") {
+      return customRows.filter((row) => isDateKey(row.due_date) && moneyValue$2(row.amount) > 0).slice().sort((a, b) => compareDateKeys(a.due_date, b.due_date)).map((row, index) => ({
+        seq: index + 1,
+        due_date: row.due_date,
+        period_start: null,
+        period_end: null,
+        description: row.description || "",
+        status: row.status || "pending",
+        ...installmentAmounts({
+          amount: row.amount,
+          vatRate: vatRateValue,
+          amountIncludesVat: includesVat
+        })
+      }));
+    }
+    return generateSchedule({
+      startDate,
+      endDate,
+      frequency,
+      amount,
+      vatRate: vatRateValue,
+      amountIncludesVat: includesVat,
+      firstDueDate: isDateKey(firstDueDate) ? firstDueDate : null
+    });
+  }, [frequency, customRows, startDate, endDate, amount, vatRateValue, includesVat, firstDueDate]);
+  const totals = useMemo(() => {
+    let excl = 0;
+    let vat = 0;
+    let incl = 0;
+    for (const row of previewRows) {
+      excl += moneyValue$2(row.amount_excl);
+      vat += moneyValue$2(row.vat_amount);
+      incl += moneyValue$2(row.amount_incl);
+    }
+    return {
+      excl: round2$4(excl),
+      vat: round2$4(vat),
+      incl: round2$4(incl)
+    };
+  }, [previewRows]);
+  const installment = useMemo(() => installmentAmounts({
+    amount,
+    vatRate: vatRateValue,
+    amountIncludesVat: includesVat
+  }), [amount, vatRateValue, includesVat]);
+  const today = useMemo(() => todayRiyadh$2(), []);
+  const computedStatus = contractStatus({
+    status: terminated ? "terminated" : "active",
+    startDate,
+    endDate,
+    noticePeriodDays: intOrNull(noticeDays),
+    today
+  });
+  const noticeStartsOn = isDateKey(endDate) && intOrNull(noticeDays) > 0 ? addDays$2(endDate, -intOrNull(noticeDays)) : null;
+  const customRowsChanged = useMemo(() => {
+    if (!isEditing || frequency !== "custom") return false;
+    const saved = (Array.isArray(contract?.payments) ? contract.payments : []).filter((p) => p.status !== "cancelled").map((p) => `${p.due_date}|${moneyValue$2(p.amount_excl).toFixed(2)}`).sort();
+    const current = customRows.filter((row) => row.due_date || moneyValue$2(row.amount) > 0).map((row) => {
+      const money = installmentAmounts({
+        amount: moneyValue$2(row.amount),
+        vatRate: vatRateValue,
+        amountIncludesVat: includesVat
+      });
+      return `${row.due_date}|${money.amount_excl.toFixed(2)}`;
+    }).sort();
+    return saved.join(",") !== current.join(",");
+  }, [isEditing, frequency, contract, customRows, vatRateValue, includesVat]);
+  const scheduleChanged = isEditing && (startDate !== (contract.start_date || "") || endDate !== (contract.end_date || "") || frequency !== (contract.payment_frequency || "monthly") || frequency !== "custom" && Math.abs(installment.amount_excl - moneyValue$2(contract.installment_amount)) > 5e-3 || Math.abs(vatRateValue - moneyValue$2(contract.vat_rate ?? DEFAULT_VAT_RATE)) > 5e-3 || (firstDueDate || "") !== (contract.first_due_date || "") || frequency === "custom" && customRowsChanged);
+  const errors = useMemo(() => {
+    const list = [];
+    if (!lessorName.trim()) list.push("اسم المؤجر مطلوب.");
+    if (!isDateKey(startDate)) list.push("تاريخ البداية مطلوب.");
+    if (!isDateKey(endDate)) list.push("تاريخ الانتهاء مطلوب.");
+    if (isDateKey(startDate) && isDateKey(endDate) && compareDateKeys(endDate, startDate) < 0) list.push("تاريخ الانتهاء قبل تاريخ البداية.");
+    if (!(vatRateValue >= 0 && vatRateValue <= 100)) list.push("نسبة الضريبة بين 0 و100.");
+    if (frequency === "custom") {
+      if (previewRows.length === 0) list.push("أضف دفعة واحدة على الأقل بتاريخ استحقاق ومبلغ أكبر من صفر.");
+    } else {
+      if (!(installment.amount_excl > 0)) list.push("قيمة الدفعة مطلوبة.");
+      else if (isDateKey(startDate) && isDateKey(endDate) && previewRows.length === 0) list.push("لا تنتج أي دفعة — تحقق من أول استحقاق (يجب ألا يتجاوز نهاية العقد).");
+    }
+    return list;
+  }, [lessorName, startDate, endDate, vatRateValue, frequency, previewRows.length, installment.amount_excl]);
+  const canSubmit = errors.length === 0 && !isSubmitting && !uploading && !scanBusy;
+  const handleSubmit = (event) => {
+    event?.preventDefault?.();
+    if (!canSubmit) return;
+    const payload = {
+      contract_number: contractNumber.trim() || null,
+      lessor_name: lessorName.trim(),
+      lessor_contact_id: contactId ? Number(contactId) : null,
+      lessor_vat_number: lessorVat.trim() || null,
+      location: location.trim() || null,
+      branch_id: branchId ? Number(branchId) : null,
+      start_date: startDate,
+      end_date: endDate,
+      notice_period_days: intOrNull(noticeDays),
+      notice_period_text: noticeText.trim() || null,
+      payment_frequency: frequency,
+      installment_amount: frequency === "custom" ? 0 : moneyValue$2(amount),
+      vat_rate: vatRateValue,
+      amount_includes_vat: !!includesVat,
+      first_due_date: frequency === "custom" ? null : isDateKey(firstDueDate) ? firstDueDate : null,
+      notes: notes.trim() || null,
+      attachment_url: attachmentUrl || null,
+      attachment_name: attachmentName || null,
+      analysis_json: analysisJson || null,
+      status: terminated ? "terminated" : "active"
+    };
+    if (frequency === "custom") {
+      payload.payments = previewRows.filter((row) => row.status !== "paid").map((row) => ({
+        due_date: row.due_date,
+        amount_excl: row.amount_excl,
+        vat_rate: row.vat_rate,
+        description: row.description || null
+      }));
+    }
+    if (isEditing) {
+      payload.id = contract.id;
+      payload.expected_updated_at = contract.updated_at || null;
+      payload.regenerate_schedule = !!regenerate;
+    }
+    onSubmit(payload);
+  };
+  const applyAnalysis = (analysis) => {
+    const owned = autoFilledRef.current;
+    const touched = touchedRef.current;
+    const canFill = (field, isEmpty) => isEmpty || owned.has(field);
+    const canFillDefault = (field) => !touched.has(field) || owned.has(field);
+    const filled = [];
+    if (analysis.contract_number && canFill("number", !contractNumber.trim())) {
+      setContractNumber(String(analysis.contract_number));
+      owned.add("number");
+      filled.push("رقم العقد");
+    }
+    const matched = analysis.lessor_contact_id ? contacts.find((c) => Number(c.id) === Number(analysis.lessor_contact_id)) : null;
+    if (matched && canFill("contact", !contactId)) {
+      setContactId(String(matched.id));
+      setLessorName(matched.name || analysis.lessor_name || "");
+      setLessorVat(matched.vat_number || analysis.lessor_vat_number || "");
+      owned.add("contact");
+      owned.add("lessor");
+      owned.add("vat");
+      filled.push("المؤجر (جهة اتصال مسجلة)");
+    } else {
+      if (analysis.lessor_name && canFill("lessor", !lessorName.trim())) {
+        setLessorName(String(analysis.lessor_name));
+        owned.add("lessor");
+        filled.push("اسم المؤجر");
+      }
+      if (analysis.lessor_vat_number && canFill("vat", !lessorVat.trim())) {
+        setLessorVat(String(analysis.lessor_vat_number));
+        owned.add("vat");
+        filled.push("الرقم الضريبي");
+      }
+    }
+    if (analysis.location && canFill("location", !location.trim())) {
+      setLocation(String(analysis.location));
+      owned.add("location");
+      filled.push("الموقع");
+    }
+    if (ISO_DATE.test(analysis.start_date || "") && canFill("start", !startDate)) {
+      setStartDate(analysis.start_date);
+      owned.add("start");
+      filled.push("تاريخ البداية");
+    }
+    if (ISO_DATE.test(analysis.end_date || "") && canFill("end", !endDate)) {
+      setEndDate(analysis.end_date);
+      owned.add("end");
+      filled.push("تاريخ الانتهاء");
+    }
+    const days = intOrNull(analysis.notice_period_days);
+    if (days !== null && days > 0 && canFill("noticeDays", !noticeDays)) {
+      setNoticeDays(String(days));
+      owned.add("noticeDays");
+      filled.push("فترة الإشعار");
+    }
+    if (analysis.notice_period_text && canFill("noticeText", !noticeText.trim())) {
+      setNoticeText(String(analysis.notice_period_text));
+      owned.add("noticeText");
+    }
+    const freq = LEASE_FREQUENCIES.includes(analysis.payment_frequency) ? analysis.payment_frequency : null;
+    const payments = Array.isArray(analysis.payments) ? analysis.payments.filter((p) => ISO_DATE.test(p?.due_date || "") && moneyValue$2(p?.amount) > 0) : [];
+    if (freq && canFillDefault("frequency")) {
+      setFrequency(freq);
+      owned.add("frequency");
+      filled.push(`التكرار (${FREQUENCY_LABELS[freq]})`);
+    }
+    if (moneyValue$2(analysis.installment_amount) > 0 && canFill("amount", !moneyValue$2(amount))) {
+      setAmount(moneyValue$2(analysis.installment_amount).toFixed(2));
+      owned.add("amount");
+      filled.push("قيمة الدفعة");
+    }
+    if (analysis.vat_rate !== null && analysis.vat_rate !== void 0 && Number.isFinite(Number(analysis.vat_rate)) && canFillDefault("vatRate")) {
+      setVatRate(String(moneyValue$2(analysis.vat_rate)));
+      owned.add("vatRate");
+    }
+    if (moneyValue$2(analysis.installment_amount) > 0 && owned.has("amount") && canFillDefault("includesVat")) {
+      setIncludesVat(false);
+      owned.add("includesVat");
+    }
+    if (ISO_DATE.test(analysis.first_due_date || "") && canFill("firstDue", !firstDueDate)) {
+      setFirstDueDate(analysis.first_due_date);
+      owned.add("firstDue");
+      filled.push("أول استحقاق");
+    }
+    const rowsEmpty = customRows.every((row) => !row.due_date && !moneyValue$2(row.amount));
+    if (payments.length > 0 && (freq === "custom" || !freq) && canFill("customRows", rowsEmpty)) {
+      setCustomRows(payments.map((p) => newCustomRow({
+        due_date: p.due_date,
+        amount: moneyValue$2(p.amount).toFixed(2),
+        description: p.description || ""
+      })));
+      owned.add("customRows");
+      if (!freq) {
+        setFrequency("custom");
+        owned.add("frequency");
+      }
+      filled.push(`جدول الدفعات (${payments.length})`);
+    }
+    setAnalysisJson(analysis);
+    const notesParts = [];
+    if (analysis.operator_note) notesParts.push(String(analysis.operator_note));
+    if (!matched && (analysis.lessor_name || analysis.lessor_vat_number)) {
+      notesParts.push("ما لقيت مؤجراً مطابقاً في جهات الاتصال — يمكنك ربطه لاحقاً من قائمة «جهة اتصال مسجلة».");
+    }
+    if (moneyValue$2(analysis.total_contract_value) > 0) {
+      notesParts.push(`إجمالي العقد حسب المستند: ${formatMoney$7(analysis.total_contract_value)} — قارنه بإجمالي المعاينة.`);
+    }
+    setScanSummary({
+      filled,
+      smart: true,
+      warning: notesParts.length ? notesParts.join(" • ") : null
+    });
+  };
+  const runAnalysis = async (fileArg) => {
+    const file = fileArg || analysisFile;
+    if (!file) return;
+    const mediaType = file.type || (/\.pdf$/i.test(file.name || "") ? "application/pdf" : "");
+    if (!ANALYZABLE_MEDIA_RE.test(mediaType)) {
+      setScanSummary({
+        filled: [],
+        warning: "صيغة الملف غير مدعومة للتحليل (PDF / JPG / PNG / WebP) — تم إرفاقه فقط."
+      });
+      return;
+    }
+    let scanFile = file;
+    if (mediaType.startsWith("image/") && file.size > MAX_SMART_FILE_BYTES) {
+      try {
+        const {
+          compressImage
+        } = await Promise.resolve().then(() => compressImage$1);
+        scanFile = await compressImage(file);
+      } catch {
+      }
+    }
+    if (scanFile.size > MAX_SMART_FILE_BYTES) {
+      setScanSummary({
+        filled: [],
+        warning: "الملف أكبر من 3MB — تم إرفاقه دون تحليل. صغّره أو أدخل البيانات يدوياً."
+      });
+      return;
+    }
+    setScanBusy(true);
+    setScanSummary({
+      filled: [],
+      warning: "جاري التحليل الذكي للعقد… ثوانٍ معدودة."
+    });
+    try {
+      const analysis = await analyzeMut.mutateAsync({
+        file_base64: await fileToBase64(scanFile),
+        media_type: scanFile.type || mediaType
+      });
+      if (!analysis) {
+        setScanSummary({
+          filled: [],
+          warning: "لم يُرجع التحليل أي بيانات — عبّئ الحقول يدوياً."
+        });
+        return;
+      }
+      applyAnalysis(analysis);
+    } catch (error) {
+      setScanSummary({
+        filled: [],
+        warning: `التحليل الذكي فشل: ${error?.message || "خطأ غير معروف"} — تم إرفاق الملف، عبّئ الحقول يدوياً.`
+      });
+    } finally {
+      setScanBusy(false);
+    }
+  };
+  const handleFilePicked = async (fileArg) => {
+    if (!fileArg) return;
+    setAnalysisFile(fileArg);
+    setUploading(true);
+    try {
+      const result = await upload({
+        file: fileArg,
+        unoptimized: true
+      });
+      if (result?.error) {
+        setScanSummary({
+          filled: [],
+          warning: `فشل رفع الملف: ${result.error}`
+        });
+        return;
+      }
+      setAttachmentUrl(result.url || "");
+      setAttachmentName(fileArg.name || "");
+    } catch (error) {
+      setScanSummary({
+        filled: [],
+        warning: `فشل رفع الملف: ${error?.message || "خطأ غير معروف"}`
+      });
+      return;
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+    if (!isEditing) await runAnalysis(fileArg);
+  };
+  const updateCustomRow = (key, patch) => {
+    autoFilledRef.current.delete("customRows");
+    setCustomRows((rows) => rows.map((row) => row.key === key ? {
+      ...row,
+      ...patch
+    } : row));
+  };
+  const removeCustomRow = (key) => {
+    autoFilledRef.current.delete("customRows");
+    setCustomRows((rows) => rows.filter((row) => row.key !== key));
+  };
+  const addCustomRow = () => {
+    autoFilledRef.current.delete("customRows");
+    setCustomRows((rows) => {
+      const last = rows[rows.length - 1];
+      return [...rows, newCustomRow({
+        due_date: "",
+        amount: last?.amount || ""
+      })];
+    });
+  };
+  if (!open || typeof document === "undefined") return null;
+  const analysisEligible = !!analysisFile && ANALYZABLE_MEDIA_RE.test(analysisFile.type || (/\.pdf$/i.test(analysisFile.name || "") ? "application/pdf" : ""));
+  return createPortal(/* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1000] flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-sm p-0 sm:p-4", dir: "rtl", onMouseDown: (event) => {
+    if (event.target === event.currentTarget) onClose();
+  }, children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full sm:max-w-5xl rounded-t-3xl sm:rounded-3xl max-h-[94svh] flex flex-col overflow-hidden`, children: [
+    /* @__PURE__ */ jsxs("div", { className: `px-4 sm:px-6 py-3 flex items-center gap-3 border-b ${ws.divider} shrink-0`, children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 text-[#0e7a5f] dark:text-emerald-200 shrink-0`, children: /* @__PURE__ */ jsx(ScrollText, { className: "w-4 h-4" }) }),
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+        /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight truncate", children: isEditing ? "تعديل عقد إيجار" : "عقد إيجار جديد" }),
+        /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 truncate", children: "جدول الدفعات يُولَّد تلقائياً من المدة والتكرار — راجع المعاينة قبل الحفظ." })
+      ] }),
+      /* @__PURE__ */ jsx("span", { className: `hidden sm:inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold shrink-0 ${statusPillClass(computedStatus)}`, children: CONTRACT_STATUS_LABELS[computedStatus] || computedStatus }),
+      /* @__PURE__ */ jsxs("button", { type: "submit", form: "lease-contract-form", disabled: !canSubmit, className: `${ws.btnPrimary} px-4 py-2 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed`, children: [
+        isSubmitting ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+        isEditing ? "حفظ التعديلات" : "حفظ العقد"
+      ] }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.iconButton} w-9 h-9 shrink-0`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+    ] }),
+    /* @__PURE__ */ jsx("input", { ref: fileInputRef, type: "file", accept: "application/pdf,image/jpeg,image/png,image/webp,image/*", onChange: (event) => handleFilePicked(event?.target?.files?.[0]), className: "hidden" }),
+    /* @__PURE__ */ jsx("div", { className: "flex-1 min-h-0 overflow-y-auto p-4 sm:p-6", children: /* @__PURE__ */ jsxs("form", { id: "lease-contract-form", onSubmit: handleSubmit, className: "grid lg:grid-cols-[minmax(0,1fr)_340px] gap-4 items-start", children: [
+      /* @__PURE__ */ jsxs("div", { className: "space-y-4 min-w-0", children: [
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsx(SectionTitle, { icon: Sparkles, children: "رفع العقد وتحليله ذكياً" }),
+          /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 leading-relaxed", children: "ارفع نسخة العقد (PDF أو صورة). الملفات حتى 3MB تُحلَّل وتُعبَّأ الحقول الفارغة تلقائياً: رقم العقد، المؤجر، الموقع، المدة، فترة الإشعار، والدفعات — ما كتبته بنفسك لا يُستبدل." }),
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+            /* @__PURE__ */ jsxs("button", { type: "button", disabled: uploading || scanBusy, onClick: () => fileInputRef.current?.click(), className: `${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`, children: [
+              uploading ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ jsx(Upload, { className: "w-3.5 h-3.5" }),
+              uploading ? "جاري الرفع…" : attachmentUrl ? "استبدال الملف" : "رفع ملف العقد"
+            ] }),
+            /* @__PURE__ */ jsxs("button", { type: "button", disabled: !analysisEligible || uploading || scanBusy, onClick: () => runAnalysis(), className: `${ws.btnPrimary} px-3 py-2 text-xs disabled:opacity-50 disabled:cursor-not-allowed`, title: analysisEligible ? "تحليل الملف المرفوع وتعبئة الحقول الفارغة" : "ارفع ملف PDF أو صورة أولاً", children: [
+              scanBusy ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ jsx(Sparkles, { className: "w-3.5 h-3.5" }),
+              scanBusy ? "جاري التحليل…" : "تحليل ذكي"
+            ] }),
+            attachmentUrl ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 text-xs text-slate-700 dark:text-white/70 min-w-0", children: [
+              /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5 shrink-0" }),
+              /* @__PURE__ */ jsx("span", { className: "truncate max-w-[220px]", dir: "ltr", children: attachmentName || "ملف مرفق" }),
+              /* @__PURE__ */ jsxs("a", { href: attachmentUrl, target: "_blank", rel: "noreferrer", className: "text-[#0e7a5f] dark:text-emerald-300 hover:underline inline-flex items-center gap-1", children: [
+                /* @__PURE__ */ jsx(ExternalLink, { className: "w-3 h-3" }),
+                "فتح"
+              ] }),
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+                setAttachmentUrl("");
+                setAttachmentName("");
+                setAnalysisFile(null);
+              }, className: "text-slate-400 hover:text-red-600 dark:text-white/40 dark:hover:text-red-300", title: "إزالة المرفق", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+            ] }) : null
+          ] }),
+          scanSummary ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 space-y-1.5`, children: [
+            scanSummary.filled.length > 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-xs text-[#0b3d31] dark:text-emerald-200", children: [
+              /* @__PURE__ */ jsx(Sparkles, { className: "w-3.5 h-3.5 shrink-0" }),
+              /* @__PURE__ */ jsx("span", { children: "تحليل ذكي — تمت تعبئة:" }),
+              scanSummary.filled.map((label) => /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`, children: label }, label))
+            ] }) : null,
+            scanSummary.warning ? /* @__PURE__ */ jsx("div", { className: "text-xs text-amber-700 dark:text-amber-200 leading-relaxed", children: scanSummary.warning }) : null
+          ] }) : null
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsx(SectionTitle, { icon: ScrollText, children: "بيانات العقد" }),
+          /* @__PURE__ */ jsxs("div", { className: "grid sm:grid-cols-2 gap-3", children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { children: "رقم العقد" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: contractNumber, onChange: (event) => {
+                setContractNumber(event.target.value);
+                autoFilledRef.current.delete("number");
+              }, className: `${ws.input} px-3 py-2 text-sm`, placeholder: "مثال: C-2026-01", dir: "ltr" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { hint: "اختياري", children: "جهة اتصال مسجلة" }),
+              /* @__PURE__ */ jsx(GlassSelect, { value: contactId, onChange: handleContactChange, options: contactOptions, placeholder: "بدون ربط بجهة اتصال", searchable: true, searchPlaceholder: "ابحث بالاسم أو الرقم الضريبي…", buttonClassName: "text-sm py-2 px-3" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { required: true, children: "اسم المؤجر" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: lessorName, onChange: (event) => {
+                setLessorName(event.target.value);
+                autoFilledRef.current.delete("lessor");
+              }, className: `${ws.input} px-3 py-2 text-sm`, placeholder: "اسم المالك أو الشركة المؤجرة" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { children: "الرقم الضريبي للمؤجر" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: lessorVat, onChange: (event) => {
+                setLessorVat(event.target.value);
+                autoFilledRef.current.delete("vat");
+              }, className: `${ws.input} px-3 py-2 text-sm font-mono`, placeholder: "3xxxxxxxxxxxxx3", dir: "ltr" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { children: "الموقع" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: location, onChange: (event) => {
+                setLocation(event.target.value);
+                autoFilledRef.current.delete("location");
+              }, className: `${ws.input} px-3 py-2 text-sm`, placeholder: "المدينة — الحي — وصف العين المؤجرة" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { children: "الفرع" }),
+              /* @__PURE__ */ jsx(GlassSelect, { value: branchId, onChange: setBranchId, options: branchOptions, placeholder: "بدون فرع", buttonClassName: "text-sm py-2 px-3" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsx(SectionTitle, { icon: CalendarClock, children: "المدة وفترة الإشعار" }),
+          /* @__PURE__ */ jsxs("div", { className: "grid sm:grid-cols-2 gap-3", children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { required: true, children: "تاريخ البداية" }),
+              /* @__PURE__ */ jsx("input", { type: "date", value: startDate, onChange: (event) => {
+                setStartDate(event.target.value);
+                autoFilledRef.current.delete("start");
+              }, className: `${ws.input} px-3 py-2 text-sm`, dir: "ltr" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { required: true, children: "تاريخ الانتهاء" }),
+              /* @__PURE__ */ jsx("input", { type: "date", value: endDate, min: startDate || void 0, onChange: (event) => {
+                setEndDate(event.target.value);
+                autoFilledRef.current.delete("end");
+              }, className: `${ws.input} px-3 py-2 text-sm`, dir: "ltr" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { hint: "أيام قبل الانتهاء", children: "فترة الإشعار" }),
+              /* @__PURE__ */ jsx("input", { type: "number", value: noticeDays, min: "0", step: "1", onChange: (event) => {
+                setNoticeDays(event.target.value);
+                autoFilledRef.current.delete("noticeDays");
+              }, className: `${ws.input} px-3 py-2 text-sm`, placeholder: "مثال: 90", dir: "ltr" }),
+              noticeStartsOn ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1", children: [
+                "تبدأ فترة الإشعار في",
+                " ",
+                /* @__PURE__ */ jsx("span", { dir: "ltr", className: "font-mono", children: noticeStartsOn })
+              ] }) : null
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { hint: "نص من العقد", children: "صيغة الإشعار" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: noticeText, onChange: (event) => {
+                setNoticeText(event.target.value);
+                autoFilledRef.current.delete("noticeText");
+              }, className: `${ws.input} px-3 py-2 text-sm`, placeholder: "مثال: إشعار كتابي قبل 90 يوماً من الانتهاء" })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsx(SectionTitle, { icon: CalendarClock, children: "الدفعات" }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx(FieldLabel, { children: "التكرار" }),
+            /* @__PURE__ */ jsx("div", { className: `${ws.segWrap} flex-wrap`, children: LEASE_FREQUENCIES.map((key) => /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+              setFrequency(key);
+              touch("frequency");
+            }, className: `${ws.segBtn} text-xs px-3 py-1.5 ${frequency === key ? ws.segActive : ws.segInactive}`, children: FREQUENCY_LABELS[key] }, key)) })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "grid sm:grid-cols-3 gap-3", children: [
+            frequency !== "custom" ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { required: true, children: "قيمة الدفعة" }),
+              /* @__PURE__ */ jsx("input", { type: "number", value: amount, min: "0", step: "0.01", onChange: (event) => {
+                setAmount(event.target.value);
+                autoFilledRef.current.delete("amount");
+              }, className: `${ws.input} px-3 py-2 text-sm text-right`, placeholder: "0.00", dir: "ltr" })
+            ] }) : null,
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { children: "نسبة الضريبة %" }),
+              /* @__PURE__ */ jsx("input", { type: "number", value: vatRate, min: "0", max: "100", step: "0.01", onChange: (event) => {
+                setVatRate(event.target.value);
+                touch("vatRate");
+              }, className: `${ws.input} px-3 py-2 text-sm text-right`, dir: "ltr" })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "flex items-end pb-1", children: /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75", children: [
+              /* @__PURE__ */ jsx("input", { type: "checkbox", checked: includesVat, onChange: (event) => {
+                setIncludesVat(event.target.checked);
+                touch("includesVat");
+              }, className: "accent-[#0e7a5f]" }),
+              "المبلغ شامل الضريبة"
+            ] }) })
+          ] }),
+          frequency !== "custom" ? /* @__PURE__ */ jsxs("div", { className: "grid sm:grid-cols-2 gap-3", children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { hint: "افتراضياً تاريخ البداية", children: "أول استحقاق" }),
+              /* @__PURE__ */ jsx("input", { type: "date", value: firstDueDate, onChange: (event) => {
+                setFirstDueDate(event.target.value);
+                touch("firstDue");
+              }, className: `${ws.input} px-3 py-2 text-sm`, dir: "ltr" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 text-xs space-y-1`, children: [
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+                /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "قبل الضريبة" }),
+                /* @__PURE__ */ jsx("span", { className: "font-bold tabular-nums", dir: "ltr", children: formatMoney$7(installment.amount_excl) })
+              ] }),
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+                /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/45", children: [
+                  "الضريبة ",
+                  vatRateValue,
+                  "%"
+                ] }),
+                /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: formatMoney$7(installment.vat_amount) })
+              ] }),
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+                /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "شامل الضريبة" }),
+                /* @__PURE__ */ jsx("span", { className: "font-bold tabular-nums text-[#0e7a5f] dark:text-emerald-200", dir: "ltr", children: formatMoney$7(installment.amount_incl) })
+              ] })
+            ] })
+          ] }) : /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
+            /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: [
+              "أدخل كل دفعة بتاريخها ومبلغها",
+              " ",
+              includesVat ? "(شامل الضريبة)" : "(قبل الضريبة)",
+              " — تُرتَّب تلقائياً حسب التاريخ.",
+              isEditing ? " الدفعات المسددة تبقى كما هي في الخادم حتى لو حُذفت هنا." : ""
+            ] }),
+            customRows.length === 0 ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-3 text-xs text-slate-500 dark:text-white/45 text-center`, children: "لا دفعات بعد — أضف الدفعة الأولى." }) : null,
+            customRows.map((row, index) => /* @__PURE__ */ jsxs("div", { className: `grid grid-cols-[auto_1fr_1fr_auto] sm:grid-cols-[auto_150px_130px_1fr_auto] gap-2 items-center ${row.status === "paid" ? "opacity-70" : ""}`, children: [
+              /* @__PURE__ */ jsx("span", { className: "text-[11px] text-slate-400 dark:text-white/35 w-5 text-center", children: index + 1 }),
+              /* @__PURE__ */ jsx("input", { type: "date", value: row.due_date, disabled: row.status === "paid", onChange: (event) => updateCustomRow(row.key, {
+                due_date: event.target.value
+              }), className: `${ws.input} px-2 py-1.5 text-xs`, dir: "ltr" }),
+              /* @__PURE__ */ jsx("input", { type: "number", value: row.amount, min: "0", step: "0.01", disabled: row.status === "paid", onChange: (event) => updateCustomRow(row.key, {
+                amount: event.target.value
+              }), className: `${ws.input} px-2 py-1.5 text-xs text-right`, placeholder: "0.00", dir: "ltr" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: row.description, onChange: (event) => updateCustomRow(row.key, {
+                description: event.target.value
+              }), className: `${ws.input} px-2 py-1.5 text-xs col-span-4 sm:col-span-1`, placeholder: row.status === "paid" ? "مسددة" : "وصف (اختياري)" }),
+              /* @__PURE__ */ jsx("button", { type: "button", disabled: row.status === "paid", onClick: () => removeCustomRow(row.key), className: `${ws.iconButton} w-8 h-8 hover:text-red-700 dark:hover:text-red-200 disabled:opacity-40 col-start-4 sm:col-start-auto row-start-1 sm:row-start-auto`, title: "حذف الدفعة", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+            ] }, row.key)),
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: addCustomRow, className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: [
+              /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
+              "إضافة دفعة"
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx(FieldLabel, { children: "ملاحظات" }),
+            /* @__PURE__ */ jsx("textarea", { value: notes, onChange: (event) => setNotes(event.target.value), rows: 3, className: `${ws.input} px-3 py-2 text-sm resize-y`, placeholder: "شروط خاصة، بيانات التواصل مع المؤجر، ملاحظات التجديد…" })
+          ] }),
+          isEditing ? /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
+            /* @__PURE__ */ jsxs("label", { className: "flex items-start gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75", children: [
+              /* @__PURE__ */ jsx("input", { type: "checkbox", checked: regenerate, onChange: (event) => setRegenerate(event.target.checked), className: "accent-[#0e7a5f] mt-1" }),
+              /* @__PURE__ */ jsxs("span", { children: [
+                "إعادة توليد جدول الدفعات (تبقى المسددة كما هي)",
+                /* @__PURE__ */ jsx("span", { className: "block text-[11px] text-slate-500 dark:text-white/45", children: "تُحذف الدفعات المعلّقة/الملغاة وتُستبدل بالجدول الظاهر في المعاينة؛ الدفعات المسددة لا تُمس." })
+              ] })
+            ] }),
+            scheduleChanged && !regenerate ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-amber-700 dark:text-amber-200", children: "غيّرت إعدادات الدفعات — فعّل «إعادة توليد الجدول» ليتحدّث جدول الدفعات، وإلا يُحفظ رأس العقد فقط." }) : null,
+            /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-2 cursor-pointer select-none text-sm text-rose-700 dark:text-rose-300", children: [
+              /* @__PURE__ */ jsx("input", { type: "checkbox", checked: terminated, onChange: (event) => setTerminated(event.target.checked), className: "accent-[#b5443c]" }),
+              "إنهاء العقد (مُنهى قبل موعده)"
+            ] })
+          ] }) : null
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("aside", { className: "space-y-3 lg:sticky lg:top-0", children: [
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsx(SectionTitle, { icon: CalendarClock, children: "معاينة جدول الدفعات" }),
+          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 gap-2 text-xs", children: [
+            /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-2.5`, children: [
+              /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "عدد الدفعات" }),
+              /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-0.5 tabular-nums", dir: "ltr", children: previewRows.length })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-2.5`, children: [
+              /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "إجمالي شامل الضريبة" }),
+              /* @__PURE__ */ jsx("div", { className: "font-bold text-[#0e7a5f] dark:text-emerald-200 mt-0.5 tabular-nums", dir: "ltr", children: formatMoney$7(totals.incl) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-2.5`, children: [
+              /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "قبل الضريبة" }),
+              /* @__PURE__ */ jsx("div", { className: "font-semibold text-slate-800 dark:text-white/85 mt-0.5 tabular-nums", dir: "ltr", children: formatMoney$7(totals.excl) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-2.5`, children: [
+              /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "الضريبة" }),
+              /* @__PURE__ */ jsx("div", { className: "font-semibold text-slate-800 dark:text-white/85 mt-0.5 tabular-nums", dir: "ltr", children: formatMoney$7(totals.vat) })
+            ] })
+          ] }),
+          previewRows.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 text-center py-4", children: "أكمل المدة والتكرار وقيمة الدفعة لعرض الجدول." }) : /* @__PURE__ */ jsx("div", { className: "max-h-[46vh] overflow-y-auto rounded-[10px] border border-[#e2e7e4] dark:border-white/10", children: /* @__PURE__ */ jsxs("table", { className: "w-full text-[11px]", children: [
+            /* @__PURE__ */ jsx("thead", { className: "bg-[#fafbfa] dark:bg-white/[0.03] text-slate-500 dark:text-white/50 sticky top-0", children: /* @__PURE__ */ jsxs("tr", { children: [
+              /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-2 py-1.5", children: "#" }),
+              /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-2 py-1.5", children: "الاستحقاق" }),
+              /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-2 py-1.5", children: "الفترة" }),
+              /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-2 py-1.5", children: "شامل" })
+            ] }) }),
+            /* @__PURE__ */ jsx("tbody", { className: "divide-y divide-slate-100 dark:divide-white/5", children: previewRows.map((row) => /* @__PURE__ */ jsxs("tr", { className: row.status === "paid" ? "opacity-60" : "", children: [
+              /* @__PURE__ */ jsx("td", { className: "px-2 py-1.5 text-slate-500 dark:text-white/45", children: row.seq }),
+              /* @__PURE__ */ jsx("td", { className: "px-2 py-1.5 font-mono text-slate-800 dark:text-white/85", dir: "ltr", children: row.due_date }),
+              /* @__PURE__ */ jsx("td", { className: "px-2 py-1.5 font-mono text-slate-500 dark:text-white/45 whitespace-nowrap", dir: "ltr", children: row.period_start && row.period_end ? `${row.period_start} → ${row.period_end}` : row.description || "—" }),
+              /* @__PURE__ */ jsx("td", { className: "px-2 py-1.5 text-left font-bold tabular-nums text-slate-900 dark:text-white", dir: "ltr", children: formatMoney$7(row.amount_incl) })
+            ] }, row.seq)) })
+          ] }) }),
+          previewRows.length >= 240 ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-amber-700 dark:text-amber-200", children: "وصل الجدول إلى الحد الأقصى (240 دفعة) — راجع المدة والتكرار." }) : null
+        ] }),
+        errors.length > 0 ? /* @__PURE__ */ jsx("div", { className: "rounded-[10px] border border-rose-200 dark:border-rose-400/25 bg-rose-50/70 dark:bg-rose-400/[0.06] p-3 text-[11px] text-rose-800 dark:text-rose-200 space-y-1", children: errors.map((message) => /* @__PURE__ */ jsxs("div", { children: [
+          "• ",
+          message
+        ] }, message)) }) : null,
+        /* @__PURE__ */ jsxs("button", { type: "submit", disabled: !canSubmit, className: `${ws.btnPrimary} w-full justify-center px-4 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed`, children: [
+          isSubmitting ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+          isEditing ? "حفظ التعديلات" : "حفظ العقد"
+        ] })
+      ] })
+    ] }) })
+  ] }) }), document.body);
+}
+
+function moneyValue$1(value) {
+  const number = Number(value || 0);
+  return Number.isFinite(number) ? number : 0;
+}
+function formatMoney$6(value) {
+  return `${moneyValue$1(value).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })} SAR`;
+}
+function todayRiyadh$1() {
+  return (/* @__PURE__ */ new Date()).toLocaleDateString("en-CA", {
+    timeZone: "Asia/Riyadh"
+  });
+}
+function LeasePayModal({
+  payment,
+  bankAccounts = [],
+  isSubmitting,
+  onClose,
+  onSubmit
+}) {
+  const [paidDate, setPaidDate] = useState(() => todayRiyadh$1());
+  const [bankAccountId, setBankAccountId] = useState("");
+  const [notes, setNotes] = useState("");
+  const [receiptUrl, setReceiptUrl] = useState("");
+  const [receiptName, setReceiptName] = useState("");
+  const [receiptUploading, setReceiptUploading] = useState(false);
+  const receiptInputRef = useRef(null);
+  const [upload] = useUpload();
+  useEffect(() => {
+    if (!payment) return;
+    setPaidDate(todayRiyadh$1());
+    setBankAccountId(payment.bank_account_id ? String(payment.bank_account_id) : "");
+    setNotes("");
+    setReceiptUrl("");
+    setReceiptName("");
+    setReceiptUploading(false);
+  }, [payment?.id]);
+  const bankOptions = useMemo(() => [{
+    value: "",
+    label: "بدون تحديد حساب"
+  }, ...bankAccounts.filter((account) => account.is_active !== false).map((account) => ({
+    value: String(account.id),
+    label: account.bank_name ? `${account.name} — ${account.bank_name}` : account.name
+  }))], [bankAccounts]);
+  const handleReceiptPicked = async (fileArg) => {
+    if (!fileArg) return;
+    setReceiptUploading(true);
+    try {
+      const result = await upload({
+        file: fileArg,
+        unoptimized: true
+      });
+      if (result?.error) {
+        toast.error(`فشل رفع الإيصال: ${result.error}`);
+        return;
+      }
+      setReceiptUrl(result.url || "");
+      setReceiptName(fileArg.name || "");
+    } catch (error) {
+      toast.error(`فشل رفع الإيصال: ${error?.message || "خطأ غير معروف"}`);
+    } finally {
+      setReceiptUploading(false);
+      if (receiptInputRef.current) receiptInputRef.current.value = "";
+    }
+  };
+  if (!payment || typeof document === "undefined") return null;
+  const paymentValue = moneyValue$1(payment.amount_incl);
+  const valid = paymentValue >= 0.01 && /^\d{4}-\d{2}-\d{2}$/.test(paidDate);
+  const period = payment.period_start && payment.period_end ? `${payment.period_start} → ${payment.period_end}` : null;
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!valid || isSubmitting) return;
+    onSubmit({
+      id: payment.id,
+      paid_date: paidDate,
+      paid_amount: Math.round(paymentValue * 100) / 100,
+      bank_account_id: bankAccountId ? Number(bankAccountId) : null,
+      receipt_url: receiptUrl || null,
+      notes: notes.trim() || null
+    });
+  };
+  return createPortal(/* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1100] flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-sm p-0 sm:p-4", dir: "rtl", onMouseDown: (event) => {
+    if (event.target === event.currentTarget) onClose();
+  }, children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 max-h-[92svh] overflow-y-auto`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3 mb-4", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+        /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(HandCoins, { className: "w-5 h-5" }) }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white", children: "سداد دفعة إيجار" }),
+          /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-0.5", children: [
+            "الدفعة #",
+            payment.seq,
+            payment.contract_number ? /* @__PURE__ */ jsxs(Fragment, { children: [
+              " ",
+              "· عقد",
+              " ",
+              /* @__PURE__ */ jsx("span", { dir: "ltr", className: "font-mono", children: payment.contract_number })
+            ] }) : null
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.iconButton} w-9 h-9`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 mb-4 space-y-1.5 text-xs`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "المؤجر" }),
+        /* @__PURE__ */ jsx("span", { className: "font-semibold text-slate-800 dark:text-white/85 truncate", children: payment.lessor_name || "—" })
+      ] }),
+      payment.location ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "الموقع" }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 truncate", children: payment.location })
+      ] }) : null,
+      period ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "الفترة" }),
+        /* @__PURE__ */ jsx("span", { className: "font-mono text-slate-700 dark:text-white/70", dir: "ltr", children: period })
+      ] }) : null,
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "تاريخ الاستحقاق" }),
+        /* @__PURE__ */ jsx("span", { className: "font-mono text-slate-700 dark:text-white/70", dir: "ltr", children: payment.due_date || "—" })
+      ] }),
+      payment.payment_frequency ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "التكرار" }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70", children: FREQUENCY_LABELS[payment.payment_frequency] || payment.payment_frequency })
+      ] }) : null
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 mb-4 grid grid-cols-3 gap-2 text-center`, children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "قبل الضريبة" }),
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white mt-0.5 tabular-nums", dir: "ltr", children: formatMoney$6(payment.amount_excl) })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: [
+          "الضريبة ",
+          moneyValue$1(payment.vat_rate),
+          "%"
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-700 dark:text-white/75 mt-0.5 tabular-nums", dir: "ltr", children: formatMoney$6(payment.vat_amount) })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "شامل الضريبة" }),
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-[#0e7a5f] dark:text-emerald-200 mt-0.5 tabular-nums", dir: "ltr", children: formatMoney$6(payment.amount_incl) })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-2 rounded-[10px] border border-sky-200 dark:border-sky-400/25 bg-sky-50/70 dark:bg-sky-400/[0.06] px-3 py-2 mb-4 text-[11px] text-sky-800 dark:text-sky-200 leading-relaxed", children: [
+      /* @__PURE__ */ jsx(Receipt, { className: "w-3.5 h-3.5 shrink-0 mt-0.5" }),
+      /* @__PURE__ */ jsxs("span", { children: [
+        "ستُنشأ فاتورة مشتريات مدفوعة تحت حساب «إيجارات» برقم",
+        " ",
+        /* @__PURE__ */ jsxs("span", { dir: "ltr", className: "font-mono", children: [
+          "LEASE-",
+          payment.contract_id,
+          "-",
+          payment.seq
+        ] }),
+        " ",
+        "وتظهر في فواتير المشتريات."
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, children: [
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: "المبلغ المسدد" }),
+      /* @__PURE__ */ jsx("div", { className: `${ws.input} px-3 py-2.5 text-right font-bold tabular-nums bg-slate-50 dark:bg-white/[0.04]`, dir: "ltr", children: formatMoney$6(paymentValue) }),
+      /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1", children: "كامل قيمة الدفعة شامل الضريبة — لا يُدعم السداد الجزئي؛ لتقسيمها عدّل جدول الدفعات من تفاصيل العقد." }),
+      /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1 mt-3", children: [
+        "تاريخ السداد ",
+        /* @__PURE__ */ jsx("span", { className: "text-rose-700 dark:text-rose-300", children: "*" })
+      ] }),
+      /* @__PURE__ */ jsx("input", { type: "date", value: paidDate, onChange: (event) => setPaidDate(event.target.value), className: `${ws.input} px-3 py-2.5`, dir: "ltr" }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1 mt-3", children: "الحساب البنكي المدفوع منه" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: bankAccountId, onChange: setBankAccountId, options: bankOptions, placeholder: "بدون تحديد حساب", buttonClassName: "text-sm py-2.5 px-3" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1 mt-3", children: [
+        "إيصال السداد",
+        " ",
+        /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "(اختياري)" })
+      ] }),
+      receiptUrl ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} px-3 py-2 flex items-center justify-between gap-2`, children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0 text-xs text-slate-700 dark:text-white/70", children: [
+          /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5 shrink-0" }),
+          /* @__PURE__ */ jsx("span", { className: "truncate", dir: "ltr", children: receiptName || "إيصال مرفق" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 shrink-0", children: [
+          /* @__PURE__ */ jsxs("a", { href: receiptUrl, target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-2.5 py-1.5 text-[11px]`, children: [
+            /* @__PURE__ */ jsx(ExternalLink, { className: "w-3 h-3" }),
+            "فتح"
+          ] }),
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+            setReceiptUrl("");
+            setReceiptName("");
+          }, className: `${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`, title: "إزالة الإيصال", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+        ] })
+      ] }) : /* @__PURE__ */ jsxs("button", { type: "button", disabled: receiptUploading, onClick: () => receiptInputRef.current?.click(), className: `${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`, children: [
+        receiptUploading ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5" }),
+        receiptUploading ? "جاري الرفع…" : "إرفاق إيصال السداد"
+      ] }),
+      /* @__PURE__ */ jsx("input", { ref: receiptInputRef, type: "file", accept: "application/pdf,image/*", onChange: (event) => handleReceiptPicked(event?.target?.files?.[0]), className: "hidden" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1 mt-3", children: [
+        "ملاحظة",
+        " ",
+        /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "(اختياري)" })
+      ] }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: notes, onChange: (event) => setNotes(event.target.value), placeholder: "مثال: تحويل بنكي — دفعة النصف الأول", className: `${ws.input} px-3 py-2` }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mt-4", children: [
+        /* @__PURE__ */ jsxs("button", { type: "submit", disabled: !valid || isSubmitting || receiptUploading, className: `${ws.btnPrimary} px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed`, children: [
+          isSubmitting ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+          "تسجيل السداد"
+        ] }),
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-3 py-2 text-xs mr-auto`, children: "إلغاء" })
+      ] })
+    ] })
+  ] }) }), document.body);
+}
+
+function moneyValue(value) {
+  const number = Number(value || 0);
+  return Number.isFinite(number) ? number : 0;
+}
+function formatMoney$5(value, withCurrency = true) {
+  const text = moneyValue(value).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  return withCurrency ? `${text} SAR` : text;
+}
+function formatDate$2(value) {
+  if (!value) return "—";
+  return String(value).slice(0, 10);
+}
+function todayRiyadh() {
+  return (/* @__PURE__ */ new Date()).toLocaleDateString("en-CA", {
+    timeZone: "Asia/Riyadh"
+  });
+}
+function daysWord(n) {
+  const abs = Math.abs(n);
+  if (abs === 1) return "يوم";
+  if (abs === 2) return "يومين";
+  if (abs <= 10) return "أيام";
+  return "يوماً";
+}
+function contractStatusClass(status) {
+  if (status === "active") return "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25";
+  if (status === "notice") return "bg-amber-100 dark:bg-amber-400/10 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25";
+  if (status === "upcoming") return "bg-sky-100 dark:bg-sky-400/10 text-sky-800 dark:text-sky-200 border-sky-200 dark:border-sky-400/25";
+  if (status === "ended") return "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10";
+  return "bg-rose-100 dark:bg-rose-400/10 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-400/25";
+}
+function contractStatusIcon(status) {
+  if (status === "active") return CheckCircle2;
+  if (status === "notice") return AlertTriangle;
+  if (status === "upcoming") return Clock;
+  if (status === "ended") return Ban;
+  return X;
+}
+function StatusPill$1({
+  status,
+  inactive = false
+}) {
+  const Icon = contractStatusIcon(status);
+  return /* @__PURE__ */ jsxs("span", { className: "inline-flex flex-col items-start gap-1", children: [
+    /* @__PURE__ */ jsxs("span", { className: `inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold ${contractStatusClass(status)}`, children: [
+      /* @__PURE__ */ jsx(Icon, { className: "w-3.5 h-3.5" }),
+      CONTRACT_STATUS_LABELS[status] || status || "—"
+    ] }),
+    inactive ? /* @__PURE__ */ jsx("span", { className: "text-[10px] text-slate-400 dark:text-white/35", children: "موقوف" }) : null
+  ] });
+}
+function PaymentPill({
+  payment,
+  today
+}) {
+  const overdue = payment.status === "pending" && (payment.overdue || payment.due_date && compareDateKeys(payment.due_date, today) < 0);
+  const cls = payment.status === "paid" ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25" : payment.status === "cancelled" ? "bg-slate-100 dark:bg-white/[0.06] text-slate-500 dark:text-white/50 border-slate-200 dark:border-white/10" : overdue ? "bg-rose-100 dark:bg-rose-400/10 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-400/25" : "bg-amber-100 dark:bg-amber-400/10 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25";
+  const label = payment.status === "paid" ? "مسددة" : payment.status === "cancelled" ? "ملغاة" : overdue ? "متأخرة" : "معلّقة";
+  return /* @__PURE__ */ jsx("span", { className: `${ws.pill} whitespace-nowrap ${cls}`, children: label });
+}
+function DueBadge({
+  dueDate,
+  today
+}) {
+  const n = daysBetween(today, dueDate);
+  if (n === null) return null;
+  if (n < 0) {
+    return /* @__PURE__ */ jsxs("span", { className: "text-[11px] font-bold text-rose-700 dark:text-rose-300 whitespace-nowrap", children: [
+      "متأخرة ",
+      -n,
+      " ",
+      daysWord(n)
+    ] });
+  }
+  if (n === 0) {
+    return /* @__PURE__ */ jsx("span", { className: "text-[11px] font-bold text-amber-700 dark:text-amber-200 whitespace-nowrap", children: "تستحق اليوم" });
+  }
+  return /* @__PURE__ */ jsxs("span", { className: `text-[11px] whitespace-nowrap ${n <= 7 ? "font-bold text-amber-700 dark:text-amber-200" : "text-slate-500 dark:text-white/50"}`, children: [
+    "بعد ",
+    n,
+    " ",
+    daysWord(n)
+  ] });
+}
+function SummaryCard({
+  label,
+  value,
+  icon: Icon,
+  tone = "slate",
+  suffix
+}) {
+  const toneClass = tone === "rose" ? "text-rose-700 dark:text-rose-200" : tone === "emerald" ? "text-[#0e7a5f] dark:text-emerald-200" : tone === "amber" ? "text-amber-700 dark:text-amber-200" : tone === "sky" ? "text-sky-700 dark:text-sky-200" : "text-slate-700 dark:text-white/80";
+  return /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
+    /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: label }),
+      /* @__PURE__ */ jsx("div", { className: `text-xl font-bold mt-1 tabular-nums ${toneClass}`, dir: "ltr", children: value }),
+      suffix ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1", children: suffix }) : null
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 shrink-0 ${toneClass}`, children: /* @__PURE__ */ jsx(Icon, { className: "w-5 h-5" }) })
+  ] }) });
+}
+function EmptyState({
+  icon: Icon,
+  title,
+  hint,
+  action
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center`, children: [
+    /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mx-auto text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Icon, { className: "w-5 h-5" }) }),
+    /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-3", children: title }),
+    hint ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-500 dark:text-white/50 mt-1", children: hint }) : null,
+    action ? /* @__PURE__ */ jsx("div", { className: "mt-4", children: action }) : null
+  ] });
+}
+function ExportButtons({
+  onExport,
+  disabled
+}) {
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("button", { type: "button", disabled, onClick: () => onExport("excel"), className: `${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`, children: [
+      /* @__PURE__ */ jsx(FileSpreadsheet, { className: "w-3.5 h-3.5" }),
+      "Excel"
+    ] }),
+    /* @__PURE__ */ jsxs("button", { type: "button", disabled, onClick: () => onExport("pdf"), className: `${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`, children: [
+      /* @__PURE__ */ jsx(Download, { className: "w-3.5 h-3.5" }),
+      "PDF"
+    ] })
+  ] });
+}
+function monthEndDate(month) {
+  const m = /^(\d{4})-(\d{2})$/.exec(String(month || ""));
+  if (!m) return "";
+  return `${m[1]}-${m[2]}-${String(daysInMonth(Number(m[1]), Number(m[2]))).padStart(2, "0")}`;
+}
+function contractInstallmentIncl(contract) {
+  if (contract.payment_frequency === "custom") return null;
+  return installmentAmounts({
+    amount: contract.installment_amount,
+    vatRate: contract.vat_rate,
+    amountIncludesVat: false
+  }).amount_incl;
+}
+const DUE_CHIPS = [{
+  key: "overdue",
+  label: "المتأخرة"
+}, {
+  key: "30",
+  label: "خلال 30 يوماً"
+}, {
+  key: "month",
+  label: "هذا الشهر"
+}, {
+  key: "all",
+  label: "الكل"
+}];
+function LeaseContractsPanel({
+  employeeId,
+  isAdmin,
+  sub = "contracts",
+  onSubChange,
+  autoOpenAdd = false,
+  onIntentConsumed
+}) {
+  const today = useMemo(() => todayRiyadh(), []);
+  const currentMonth = useMemo(() => currentRiyadhMonthKey(), []);
+  const [q, setQ] = useState("");
+  const [includeInactive, setIncludeInactive] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [previewId, setPreviewId] = useState(null);
+  const [editingPayment, setEditingPayment] = useState(null);
+  const [dueChip, setDueChip] = useState("30");
+  const [dueFrom, setDueFrom] = useState("");
+  const [dueTo, setDueTo] = useState("");
+  const [showPaid, setShowPaid] = useState(false);
+  const [paying, setPaying] = useState(null);
+  const [reserveMonth, setReserveMonth] = useState(currentMonth);
+  const [reserveBranch, setReserveBranch] = useState("");
+  const [reserveDrafts, setReserveDrafts] = useState({});
+  const [confirmingAll, setConfirmingAll] = useState(false);
+  useEffect(() => {
+    if (!autoOpenAdd) return;
+    setShowAdd(true);
+    onIntentConsumed?.();
+  }, [autoOpenAdd]);
+  useEffect(() => {
+    setEditingPayment(null);
+  }, [previewId]);
+  const contractsQuery = useLeaseContracts({
+    employeeId,
+    isAdmin,
+    includeInactive
+  });
+  const contactsQuery = useAccountingContacts({
+    employeeId,
+    isAdmin
+  });
+  const bankAccountsQuery = useAccountingBankAccounts({
+    employeeId,
+    isAdmin
+  });
+  const branchesQuery = useQuery({
+    queryKey: queryKeys.branches(),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const response = await adminFetch("/api/branches");
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل الفروع");
+      return Array.isArray(data) ? data : Array.isArray(data?.branches) ? data.branches : [];
+    }
+  });
+  const pendingPaymentsQuery = useLeasePayments({
+    employeeId,
+    isAdmin,
+    status: "pending"
+  });
+  const duePaymentsQuery = useLeasePayments({
+    employeeId,
+    isAdmin,
+    status: showPaid ? "all" : "pending",
+    from: dueFrom ? `${dueFrom}-01` : "",
+    to: dueTo ? monthEndDate(dueTo) : ""
+  });
+  const detailQuery = useLeaseContract(previewId);
+  const editDetailQuery = useLeaseContract(editingId);
+  const reserveQuery = useLeaseReserve({
+    employeeId,
+    isAdmin,
+    month: reserveMonth,
+    branchId: reserveBranch
+  });
+  const contracts = contractsQuery.data || [];
+  const contacts = contactsQuery.data || [];
+  const bankAccounts = bankAccountsQuery.data || [];
+  const branches = branchesQuery.data || [];
+  const pendingPayments = pendingPaymentsQuery.data || [];
+  const duePayments = duePaymentsQuery.data || [];
+  const reserve = reserveQuery.data || null;
+  const createMut = useCreateLeaseContract();
+  const updateMut = useUpdateLeaseContract();
+  const deleteMut = useDeleteLeaseContract();
+  const reactivateMut = useReactivateLeaseContract();
+  const confirmReserveMut = useConfirmLeaseReserve();
+  const updatePaymentMut = useUpdateLeasePayment();
+  const payMut = usePayLeasePayment();
+  const unpayMut = useUnpayLeasePayment();
+  const drawerContract = previewId ? detailQuery.data || contracts.find((c) => c.id === previewId) || null : null;
+  const drawerPayments = Array.isArray(detailQuery.data?.payments) ? detailQuery.data.payments : [];
+  const filteredContracts = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    if (!needle) return contracts;
+    return contracts.filter((c) => [c.contract_number, c.lessor_name, c.location, c.branch_name, c.lessor_vat_number].filter(Boolean).some((value) => String(value).toLowerCase().includes(needle)));
+  }, [contracts, q]);
+  const contractsKpi = useMemo(() => {
+    const live = contracts.filter((c) => c.is_active !== false);
+    const activeCount = live.filter((c) => ["active", "notice"].includes(c.computed_status)).length;
+    const noticeCount = live.filter((c) => c.computed_status === "notice").length;
+    const horizon = addDays$2(today, 30);
+    const due30 = pendingPayments.filter((p) => p.due_date && compareDateKeys(p.due_date, horizon) <= 0).reduce((acc, p) => acc + moneyValue(p.amount_incl), 0);
+    const due30Count = pendingPayments.filter((p) => p.due_date && compareDateKeys(p.due_date, horizon) <= 0).length;
+    const remaining = live.filter((c) => c.computed_status !== "terminated").reduce((acc, c) => acc + moneyValue(c.pending_total), 0);
+    return {
+      activeCount,
+      noticeCount,
+      due30,
+      due30Count,
+      remaining
+    };
+  }, [contracts, pendingPayments, today]);
+  const exportContracts = (kind) => {
+    const columns = [{
+      header: "رقم العقد",
+      accessor: (row) => row.contract_number || ""
+    }, {
+      header: "المؤجر",
+      accessor: (row) => row.lessor_name || ""
+    }, {
+      header: "الموقع",
+      accessor: (row) => row.location || ""
+    }, {
+      header: "الفرع",
+      accessor: (row) => row.branch_name || ""
+    }, {
+      header: "البداية",
+      accessor: (row) => row.start_date || ""
+    }, {
+      header: "الانتهاء",
+      accessor: (row) => row.end_date || ""
+    }, {
+      header: "فترة الإشعار",
+      accessor: (row) => row.notice_period_days ? `${row.notice_period_days} يوم` : row.notice_period_text || ""
+    }, {
+      header: "التكرار",
+      accessor: (row) => FREQUENCY_LABELS[row.payment_frequency] || row.payment_frequency
+    }, {
+      header: "الدفعة شامل الضريبة",
+      accessor: (row) => {
+        const incl = contractInstallmentIncl(row);
+        return incl === null ? "" : incl.toFixed(2);
+      }
+    }, {
+      header: "المدفوع",
+      accessor: (row) => moneyValue(row.paid_total).toFixed(2)
+    }, {
+      header: "المتبقي",
+      accessor: (row) => moneyValue(row.pending_total).toFixed(2)
+    }, {
+      header: "الإجمالي",
+      accessor: (row) => moneyValue(row.total_value).toFixed(2)
+    }, {
+      header: "الاستحقاق القادم",
+      accessor: (row) => row.next_due_date || ""
+    }, {
+      header: "الحالة",
+      accessor: (row) => CONTRACT_STATUS_LABELS[row.computed_status] || row.computed_status
+    }];
+    const title = "العقود التأجيرية";
+    if (kind === "excel") exportToExcelHTML(filteredContracts, "lease-contracts", columns, title);
+    else exportToPDF(filteredContracts, "lease-contracts", columns, title);
+  };
+  const handleSubmitContract = (payload) => {
+    if (payload.id) {
+      updateMut.mutate(payload, {
+        onSuccess: () => setEditingId(null)
+      });
+    } else {
+      createMut.mutate(payload, {
+        onSuccess: (data) => {
+          setShowAdd(false);
+          if (data?.contract?.id) setPreviewId(data.contract.id);
+        }
+      });
+    }
+  };
+  const handleDeleteContract = (contract) => {
+    if (!contract) return;
+    if (contract.is_active === false) {
+      const ok2 = window.confirm(`حذف العقد "${contract.contract_number || contract.lessor_name}" نهائياً؟ لا يمكن التراجع. يُرفض الحذف إن كانت له دفعات مسددة.`);
+      if (!ok2) return;
+      deleteMut.mutate({
+        id: contract.id,
+        force: true
+      }, {
+        onSuccess: () => setPreviewId(null)
+      });
+      return;
+    }
+    const ok = window.confirm(`إيقاف العقد "${contract.contract_number || contract.lessor_name}"؟ تختفي دفعاته من سداد المستحق والاستقطاع، ويمكنك عرضه لاحقاً من «عرض الموقوفة».`);
+    if (!ok) return;
+    deleteMut.mutate({
+      id: contract.id,
+      force: false
+    }, {
+      onSuccess: () => setPreviewId(null)
+    });
+  };
+  const openPayFromDrawer = (payment) => {
+    if (!drawerContract) return;
+    setPaying({
+      ...payment,
+      contract_id: drawerContract.id,
+      contract_number: drawerContract.contract_number,
+      lessor_name: drawerContract.lessor_name,
+      location: drawerContract.location,
+      payment_frequency: drawerContract.payment_frequency
+    });
+  };
+  const handleUnpay = (payment) => {
+    const ok = window.confirm(`التراجع عن سداد الدفعة #${payment.seq} (${formatMoney$5(payment.paid_amount ?? payment.amount_incl)})؟ تعود معلّقة وتُوقف الفاتورة ${payment.invoice_number || "المرتبطة"}.`);
+    if (!ok) return;
+    unpayMut.mutate({
+      id: payment.id
+    });
+  };
+  const handleCancelPayment = (payment) => {
+    const ok = window.confirm(`إلغاء الدفعة #${payment.seq} المستحقة في ${payment.due_date}؟ تُستبعد من المستحقات والاستقطاع ويمكن استرجاعها لاحقاً.`);
+    if (!ok) return;
+    updatePaymentMut.mutate({
+      id: payment.id,
+      status: "cancelled"
+    });
+  };
+  const handleRestorePayment = (payment) => {
+    updatePaymentMut.mutate({
+      id: payment.id,
+      status: "pending"
+    });
+  };
+  const startEditPayment = (payment) => {
+    setEditingPayment({
+      id: payment.id,
+      seq: payment.seq,
+      due_date: payment.due_date || "",
+      amount_excl: moneyValue(payment.amount_excl).toFixed(2),
+      vat_rate: String(moneyValue(payment.vat_rate)),
+      notes: payment.notes || ""
+    });
+  };
+  const saveEditPayment = () => {
+    if (!editingPayment) return;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(editingPayment.due_date)) {
+      window.alert("تاريخ الاستحقاق غير صالح.");
+      return;
+    }
+    if (!(moneyValue(editingPayment.amount_excl) > 0)) {
+      window.alert("المبلغ يجب أن يكون أكبر من صفر.");
+      return;
+    }
+    updatePaymentMut.mutate({
+      id: editingPayment.id,
+      due_date: editingPayment.due_date,
+      amount_excl: moneyValue(editingPayment.amount_excl),
+      vat_rate: Math.min(Math.max(moneyValue(editingPayment.vat_rate), 0), 100),
+      notes: editingPayment.notes.trim() || null
+    }, {
+      onSuccess: () => setEditingPayment(null)
+    });
+  };
+  const dueRows = useMemo(() => {
+    const horizon = addDays$2(today, 30);
+    return duePayments.filter((p) => {
+      if (p.status === "cancelled") return false;
+      if (!showPaid && p.status === "paid") return false;
+      const isPending = p.status === "pending";
+      if (dueFrom || dueTo) return true;
+      if (dueChip === "overdue") return isPending && compareDateKeys(p.due_date, today) < 0;
+      if (dueChip === "30") return compareDateKeys(p.due_date, horizon) <= 0;
+      if (dueChip === "month") return monthKey(p.due_date) === currentMonth;
+      return true;
+    });
+  }, [duePayments, dueChip, dueFrom, dueTo, showPaid, today, currentMonth]);
+  const dueGroups = useMemo(() => {
+    const map = /* @__PURE__ */ new Map();
+    for (const row of dueRows) {
+      const key = monthKey(row.due_date) || "—";
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(row);
+    }
+    return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([key, rows]) => ({
+      key,
+      rows,
+      total: rows.filter((r) => r.status === "pending").reduce((acc, r) => acc + moneyValue(r.amount_incl), 0),
+      paid: rows.filter((r) => r.status === "paid").reduce((acc, r) => acc + moneyValue(r.paid_amount ?? r.amount_incl), 0)
+    }));
+  }, [dueRows]);
+  const dueSummary = useMemo(() => {
+    const pending = dueRows.filter((r) => r.status === "pending");
+    const overdue = pending.filter((r) => compareDateKeys(r.due_date, today) < 0);
+    return {
+      count: pending.length,
+      total: pending.reduce((acc, r) => acc + moneyValue(r.amount_incl), 0),
+      overdueCount: overdue.length,
+      overdueTotal: overdue.reduce((acc, r) => acc + moneyValue(r.amount_incl), 0)
+    };
+  }, [dueRows, today]);
+  const exportDue = (kind) => {
+    const columns = [{
+      header: "الاستحقاق",
+      accessor: (row) => row.due_date || ""
+    }, {
+      header: "رقم العقد",
+      accessor: (row) => row.contract_number || ""
+    }, {
+      header: "المؤجر",
+      accessor: (row) => row.lessor_name || ""
+    }, {
+      header: "الموقع",
+      accessor: (row) => row.location || ""
+    }, {
+      header: "الدفعة",
+      accessor: (row) => `#${row.seq}`
+    }, {
+      header: "الفترة",
+      accessor: (row) => row.period_start && row.period_end ? `${row.period_start} → ${row.period_end}` : ""
+    }, {
+      header: "قبل الضريبة",
+      accessor: (row) => moneyValue(row.amount_excl).toFixed(2)
+    }, {
+      header: "الضريبة",
+      accessor: (row) => moneyValue(row.vat_amount).toFixed(2)
+    }, {
+      header: "شامل الضريبة",
+      accessor: (row) => moneyValue(row.amount_incl).toFixed(2)
+    }, {
+      header: "الحالة",
+      accessor: (row) => row.status === "paid" ? `مسددة ${row.paid_date || ""}` : compareDateKeys(row.due_date, today) < 0 ? "متأخرة" : "معلّقة"
+    }, {
+      header: "الفاتورة",
+      accessor: (row) => row.invoice_number || ""
+    }];
+    const title = "دفعات الإيجار المستحقة";
+    if (kind === "excel") exportToExcelHTML(dueRows, "lease-due-payments", columns, title);
+    else exportToPDF(dueRows, "lease-due-payments", columns, title);
+  };
+  const reserveMonthOptions = useMemo(() => {
+    const future = [];
+    for (let i = 12; i >= 1; i -= 1) {
+      const value = riyadhMonthKeyFromOffset(i);
+      future.push({
+        value,
+        label: monthLabel$1(value)
+      });
+    }
+    const recent = buildRecentMonthOptions$1(12).filter((option) => option.value);
+    return [...future, ...recent];
+  }, []);
+  const branchFilterOptions = useMemo(() => [{
+    value: "",
+    label: "كل الفروع"
+  }, ...branches.map((branch) => ({
+    value: String(branch.id),
+    label: branch.name
+  }))], [branches]);
+  const reserveRows = Array.isArray(reserve?.rows) ? reserve.rows : [];
+  const reserveTotals = reserve?.totals || {};
+  const reserveRevenue = reserve?.revenue || {};
+  const canConfirmReserve = reserve ? reserve.can_confirm !== false : reserveMonth <= currentMonth;
+  useEffect(() => {
+    setReserveDrafts({});
+  }, [reserveMonth, reserveBranch]);
+  const reserveDraftValue = (row) => {
+    const draft = reserveDrafts[row.id];
+    if (draft !== void 0) return draft;
+    return moneyValue(row.confirmed_amount ?? row.suggested_amount).toFixed(2);
+  };
+  const confirmReserveRow = (row, amountOverride) => {
+    const raw = amountOverride !== void 0 ? amountOverride : reserveDraftValue(row);
+    const amount = Math.round(moneyValue(raw) * 100) / 100;
+    if (amount < 0) return;
+    confirmReserveMut.mutate({
+      payment_id: row.id,
+      month: reserveMonth,
+      amount,
+      suggested_amount: moneyValue(row.suggested_amount),
+      revenue_basis: moneyValue(reserveRevenue.total)
+    }, {
+      onSuccess: () => setReserveDrafts((drafts) => {
+        const next = {
+          ...drafts
+        };
+        delete next[row.id];
+        return next;
+      })
+    });
+  };
+  const clearReserveRow = (row) => {
+    if (row.confirmed_amount === null || row.confirmed_amount === void 0) return;
+    const ok = window.confirm(`إلغاء استقطاع ${monthLabel$1(reserveMonth)} عن الدفعة #${row.seq} (${formatMoney$5(row.confirmed_amount)})؟`);
+    if (!ok) return;
+    confirmReserveRow(row, 0);
+  };
+  const confirmAllSuggested = async () => {
+    const targets = reserveRows.filter((row) => (row.confirmed_amount === null || row.confirmed_amount === void 0) && moneyValue(row.suggested_amount) > 0);
+    if (!targets.length) return;
+    const ok = window.confirm(`تأكيد استقطاع ${monthLabel$1(reserveMonth)} لـ ${targets.length} دفعة بالمبالغ المقترحة (إجمالي ${formatMoney$5(targets.reduce((acc, row) => acc + moneyValue(row.suggested_amount), 0))})؟`);
+    if (!ok) return;
+    setConfirmingAll(true);
+    let done = 0;
+    try {
+      for (const row of targets) {
+        try {
+          await confirmReserveMut.mutateAsync({
+            payment_id: row.id,
+            month: reserveMonth,
+            amount: Math.round(moneyValue(row.suggested_amount) * 100) / 100,
+            suggested_amount: moneyValue(row.suggested_amount),
+            revenue_basis: moneyValue(reserveRevenue.total),
+            silent: true
+          });
+          done += 1;
+        } catch {
+        }
+      }
+    } finally {
+      setConfirmingAll(false);
+      setReserveDrafts({});
+    }
+    if (done > 0) toast.success(`تم تأكيد الاستقطاع لـ ${done} دفعة`);
+  };
+  const exportReserve = (kind) => {
+    const columns = [{
+      header: "رقم العقد",
+      accessor: (row) => row.contract_number || ""
+    }, {
+      header: "المؤجر",
+      accessor: (row) => row.lessor_name || ""
+    }, {
+      header: "الدفعة",
+      accessor: (row) => `#${row.seq}`
+    }, {
+      header: "الاستحقاق",
+      accessor: (row) => row.due_date || ""
+    }, {
+      header: "المبلغ شامل",
+      accessor: (row) => moneyValue(row.amount_incl).toFixed(2)
+    }, {
+      header: "نافذة الادخار",
+      accessor: (row) => `${row.reserve_start || ""} → ${row.due_date || ""} (${row.months_total} أشهر)`
+    }, {
+      header: "الاستقطاع الشهري",
+      accessor: (row) => moneyValue(row.monthly_reserve).toFixed(2)
+    }, {
+      header: "حصة هذا الشهر",
+      accessor: (row) => moneyValue(row.this_month_share).toFixed(2)
+    }, {
+      header: "المُدَّخر بالخطة",
+      accessor: (row) => moneyValue(row.reserved_to_date).toFixed(2)
+    }, {
+      header: "المؤكد فعلياً",
+      accessor: (row) => moneyValue(row.reserved_actual).toFixed(2)
+    }, {
+      header: "المقترح لهذا الشهر",
+      accessor: (row) => moneyValue(row.suggested_amount).toFixed(2)
+    }, {
+      header: "المؤكد هذا الشهر",
+      accessor: (row) => row.confirmed_amount === null || row.confirmed_amount === void 0 ? "" : moneyValue(row.confirmed_amount).toFixed(2)
+    }, {
+      header: "المتبقي",
+      accessor: (row) => moneyValue(row.remaining_actual ?? row.remaining).toFixed(2)
+    }, {
+      header: "الحالة",
+      accessor: (row) => row.overdue ? "متأخرة" : row.due_this_month ? "تستحق هذا الشهر" : "جارية"
+    }];
+    const title = `الاستقطاع الشهري للإيجارات — ${monthLabel$1(reserveMonth)}`;
+    if (kind === "excel") exportToExcelHTML(reserveRows, "lease-reserve", columns, title);
+    else exportToPDF(reserveRows, "lease-reserve", columns, title);
+  };
+  const addButton = /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowAdd(true), className: `${ws.btnPrimary} px-4 py-2`, children: [
+    /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+    "عقد جديد"
+  ] });
+  const renderContracts = () => /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 xl:grid-cols-4 gap-3", children: [
+      /* @__PURE__ */ jsx(SummaryCard, { label: "عقود سارية", value: contractsKpi.activeCount, icon: ScrollText, tone: "emerald", suffix: `من ${contracts.filter((c) => c.is_active !== false).length} عقد` }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "داخل فترة الإشعار", value: contractsKpi.noticeCount, icon: AlertTriangle, tone: contractsKpi.noticeCount > 0 ? "amber" : "slate", suffix: "راجع التجديد أو الإنهاء" }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "مستحق خلال 30 يوماً", value: formatMoney$5(contractsKpi.due30), icon: CalendarClock, tone: contractsKpi.due30 > 0 ? "rose" : "slate", suffix: `${contractsKpi.due30Count} دفعة (شامل المتأخرة)` }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "إجمالي المتبقي", value: formatMoney$5(contractsKpi.remaining), icon: Wallet, tone: "sky", suffix: "الدفعات المعلّقة للعقود السارية" })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
+      /* @__PURE__ */ jsxs("div", { className: "relative flex-1 min-w-[220px]", children: [
+        /* @__PURE__ */ jsx(Search, { className: "w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/40 pointer-events-none" }),
+        /* @__PURE__ */ jsx("input", { type: "text", value: q, onChange: (event) => setQ(event.target.value), placeholder: "ابحث برقم العقد أو المؤجر أو الموقع", className: `${ws.input} px-3 py-2 pr-9` })
+      ] }),
+      /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75 shrink-0", children: [
+        /* @__PURE__ */ jsx("input", { type: "checkbox", checked: includeInactive, onChange: (event) => setIncludeInactive(event.target.checked), className: "accent-[#0e7a5f]" }),
+        "عرض الموقوفة"
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex-1" }),
+      /* @__PURE__ */ jsx(ExportButtons, { onExport: exportContracts, disabled: filteredContracts.length === 0 }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => contractsQuery.refetch(), className: `${ws.btnNeutral} px-3 py-2`, title: "تحديث", children: /* @__PURE__ */ jsx(RefreshCw, { className: `w-4 h-4 ${contractsQuery.isFetching ? "animate-spin" : ""}` }) }),
+      addButton
+    ] }) }),
+    contractsQuery.isLoading ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center text-slate-500 dark:text-white/50`, children: [
+      /* @__PURE__ */ jsx(Loader2, { className: "w-5 h-5 animate-spin mx-auto" }),
+      /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm", children: "جاري تحميل العقود…" })
+    ] }) : contractsQuery.isError ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-center text-rose-700 dark:text-rose-300 text-sm`, children: contractsQuery.error?.message || "فشل تحميل العقود" }) : filteredContracts.length === 0 ? /* @__PURE__ */ jsx(EmptyState, { icon: ScrollText, title: q ? "لا نتائج مطابقة" : "لا عقود تأجيرية بعد", hint: q ? "جرّب كلمة أخرى أو امسح البحث." : "أضف أول عقد وارفع نسخته ليُحلَّل ذكياً ويُولَّد جدول دفعاته.", action: q ? null : addButton }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx("div", { className: `hidden lg:block ${ws.glass} ${ws.card} overflow-hidden`, children: /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full text-sm", children: [
+        /* @__PURE__ */ jsx("thead", { className: "bg-[#fafbfa] dark:bg-white/[0.03] text-slate-600 dark:text-white/60", children: /* @__PURE__ */ jsxs("tr", { children: [
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "رقم العقد" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "المؤجر" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "الموقع / الفرع" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "البداية" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "الانتهاء" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "الإشعار" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "التكرار" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-4 py-3", children: "الدفعة (شامل)" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-4 py-3", children: "المدفوع / الإجمالي" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "الاستحقاق القادم" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "الحالة" }),
+          /* @__PURE__ */ jsx("th", { className: "text-center font-semibold px-4 py-3", children: "إجراء" })
+        ] }) }),
+        /* @__PURE__ */ jsx("tbody", { className: "divide-y divide-slate-200 dark:divide-white/10", children: filteredContracts.map((contract) => {
+          const incl = contractInstallmentIncl(contract);
+          return /* @__PURE__ */ jsxs("tr", { onClick: (event) => {
+            if (event.target.closest("button, a, input")) return;
+            setPreviewId(contract.id);
+          }, className: `cursor-pointer hover:bg-slate-50 dark:hover:bg-white/[0.03] ${contract.is_active === false ? "opacity-60" : ""} ${previewId === contract.id ? "bg-[#e7f2ee]/70 dark:bg-emerald-400/[0.06]" : ""}`, children: [
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 font-semibold text-slate-900 dark:text-white", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5", dir: "ltr", children: [
+              /* @__PURE__ */ jsx("span", { className: "font-mono", children: contract.contract_number || `#${contract.id}` }),
+              contract.attachment_url ? /* @__PURE__ */ jsx("a", { href: contract.attachment_url, target: "_blank", rel: "noreferrer", className: "text-slate-400 hover:text-[#0e7a5f] dark:text-white/40 dark:hover:text-emerald-300", title: "عرض العقد المرفق", onClick: (event) => event.stopPropagation(), children: /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5" }) }) : null
+            ] }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/70", children: contract.lessor_name || "—" }),
+            /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 text-slate-700 dark:text-white/70", children: [
+              /* @__PURE__ */ jsx("div", { className: "truncate max-w-[220px]", children: contract.location || "—" }),
+              contract.branch_name ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: contract.branch_name }) : null
+            ] }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65 font-mono", dir: "ltr", children: formatDate$2(contract.start_date) }),
+            /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 font-mono", dir: "ltr", children: [
+              /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/65", children: formatDate$2(contract.end_date) }),
+              Number.isFinite(Number(contract.days_to_end)) && contract.days_to_end >= 0 ? /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-slate-400 dark:text-white/35", dir: "rtl", children: [
+                "بعد ",
+                contract.days_to_end,
+                " ",
+                daysWord(contract.days_to_end)
+              ] }) : null
+            ] }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65", children: contract.notice_period_days ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: contract.notice_period_days }),
+              " يوم",
+              contract.notice_starts_on ? /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-400 dark:text-white/35 font-mono", dir: "ltr", children: contract.notice_starts_on }) : null
+            ] }) : contract.notice_period_text || "—" }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/65 whitespace-nowrap", children: FREQUENCY_LABELS[contract.payment_frequency] || contract.payment_frequency }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left font-bold text-slate-900 dark:text-white tabular-nums", dir: "ltr", children: incl === null ? /* @__PURE__ */ jsx("span", { className: "text-xs font-normal text-slate-500 dark:text-white/45", children: "مخصص" }) : formatMoney$5(incl, false) }),
+            /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 text-left tabular-nums", dir: "ltr", children: [
+              /* @__PURE__ */ jsx("span", { className: "font-bold text-[#0e7a5f] dark:text-emerald-200", children: formatMoney$5(contract.paid_total, false) }),
+              /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: " / " }),
+              /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70", children: formatMoney$5(contract.total_value, false) }),
+              /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-slate-400 dark:text-white/35", dir: "rtl", children: [
+                contract.payments_paid || 0,
+                " من ",
+                contract.payments_total || 0,
+                " دفعة"
+              ] })
+            ] }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: contract.next_due_date ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "font-mono text-slate-800 dark:text-white/85", dir: "ltr", children: contract.next_due_date }),
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 tabular-nums", dir: "ltr", children: formatMoney$5(contract.next_due_amount, false) }),
+              contract.overdue_count > 0 ? /* @__PURE__ */ jsxs("div", { className: "text-[10px] font-bold text-rose-700 dark:text-rose-300", children: [
+                contract.overdue_count,
+                " متأخرة"
+              ] }) : null
+            ] }) : /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-400 dark:text-white/35", children: "—" }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx(StatusPill$1, { status: contract.computed_status, inactive: contract.is_active === false }) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditingId(contract.id), className: `${ws.iconButton} w-9 h-9`, title: "تعديل العقد", children: /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }) }),
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleDeleteContract(contract), className: `${ws.iconButton} w-9 h-9 hover:bg-red-50 dark:hover:bg-red-500/15 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-700 dark:hover:text-red-200`, title: contract.is_active === false ? "حذف نهائي" : "إيقاف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
+            ] }) })
+          ] }, contract.id);
+        }) })
+      ] }) }) }),
+      /* @__PURE__ */ jsx("div", { className: "lg:hidden space-y-3", children: filteredContracts.map((contract) => {
+        const incl = contractInstallmentIncl(contract);
+        return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 ${contract.is_active === false ? "opacity-60" : ""}`, onClick: (event) => {
+          if (event.target.closest("button, a")) return;
+          setPreviewId(contract.id);
+        }, children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3", children: [
+            /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+              /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white font-mono truncate", dir: "ltr", children: contract.contract_number || `#${contract.id}` }),
+              /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-700 dark:text-white/70 mt-1 truncate", children: contract.lessor_name }),
+              /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 truncate", children: [contract.location, contract.branch_name].filter(Boolean).join(" · ") || "—" })
+            ] }),
+            /* @__PURE__ */ jsx(StatusPill$1, { status: contract.computed_status, inactive: contract.is_active === false })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "mt-3 grid grid-cols-2 gap-3 text-sm", children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45", children: "المدة" }),
+              /* @__PURE__ */ jsxs("div", { className: "font-mono text-slate-900 dark:text-white mt-0.5 text-xs", dir: "ltr", children: [
+                formatDate$2(contract.start_date),
+                " → ",
+                formatDate$2(contract.end_date)
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45", children: FREQUENCY_LABELS[contract.payment_frequency] || "الدفعة" }),
+              /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-0.5 tabular-nums", dir: "ltr", children: incl === null ? "مخصص" : formatMoney$5(incl) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45", children: "المدفوع / الإجمالي" }),
+              /* @__PURE__ */ jsxs("div", { className: "mt-0.5 tabular-nums text-xs", dir: "ltr", children: [
+                /* @__PURE__ */ jsx("span", { className: "font-bold text-[#0e7a5f] dark:text-emerald-200", children: formatMoney$5(contract.paid_total, false) }),
+                " ",
+                "/ ",
+                formatMoney$5(contract.total_value, false)
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45", children: "الاستحقاق القادم" }),
+              /* @__PURE__ */ jsx("div", { className: "font-mono text-slate-900 dark:text-white mt-0.5 text-xs", dir: "ltr", children: contract.next_due_date || "—" })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: `flex items-center gap-2 mt-3 pt-3 border-t ${ws.divider}`, children: [
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPreviewId(contract.id), className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: "التفاصيل والدفعات" }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditingId(contract.id), className: `${ws.iconButton} w-8 h-8 mr-auto`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) })
+          ] })
+        ] }, contract.id);
+      }) })
+    ] })
+  ] });
+  const renderDue = () => /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 xl:grid-cols-4 gap-3", children: [
+      /* @__PURE__ */ jsx(SummaryCard, { label: "دفعات معلّقة (في العرض)", value: dueSummary.count, icon: CalendarClock, tone: "slate" }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "إجمالي المعلّق", value: formatMoney$5(dueSummary.total), icon: Wallet, tone: "amber" }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "المتأخرة", value: dueSummary.overdueCount, icon: AlertTriangle, tone: dueSummary.overdueCount > 0 ? "rose" : "slate", suffix: dueSummary.overdueCount > 0 ? formatMoney$5(dueSummary.overdueTotal) : "لا متأخرات" }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "الدفعة القادمة", value: dueRows.find((r) => r.status === "pending")?.due_date || pendingPayments[0]?.due_date || "—", icon: Clock, tone: "sky", suffix: dueRows.find((r) => r.status === "pending") ? formatMoney$5(dueRows.find((r) => r.status === "pending").amount_incl) : null })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.segWrap} flex-wrap`, children: DUE_CHIPS.map((chip) => /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setDueChip(chip.key), className: `${ws.segBtn} text-xs px-3 py-1.5 ${dueChip === chip.key ? ws.segActive : ws.segInactive}`, children: chip.label }, chip.key)) }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "من" }),
+        /* @__PURE__ */ jsx("input", { type: "month", value: dueFrom, onChange: (event) => setDueFrom(event.target.value), className: `${ws.input} px-3 py-1.5 text-sm w-auto`, dir: "ltr" }),
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/55", children: "إلى" }),
+        /* @__PURE__ */ jsx("input", { type: "month", value: dueTo, onChange: (event) => setDueTo(event.target.value), className: `${ws.input} px-3 py-1.5 text-sm w-auto`, dir: "ltr" }),
+        dueFrom || dueTo ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+          setDueFrom("");
+          setDueTo("");
+        }, className: "text-xs text-slate-500 hover:text-red-600 dark:text-white/50 dark:hover:text-red-300", children: "مسح" }) : null
+      ] }),
+      /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75 shrink-0", children: [
+        /* @__PURE__ */ jsx("input", { type: "checkbox", checked: showPaid, onChange: (event) => setShowPaid(event.target.checked), className: "accent-[#0e7a5f]" }),
+        "عرض المسددة"
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex-1" }),
+      /* @__PURE__ */ jsx(ExportButtons, { onExport: exportDue, disabled: dueRows.length === 0 }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => duePaymentsQuery.refetch(), className: `${ws.btnNeutral} px-3 py-2`, title: "تحديث", children: /* @__PURE__ */ jsx(RefreshCw, { className: `w-4 h-4 ${duePaymentsQuery.isFetching ? "animate-spin" : ""}` }) })
+    ] }) }),
+    duePaymentsQuery.isLoading ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center text-slate-500 dark:text-white/50`, children: [
+      /* @__PURE__ */ jsx(Loader2, { className: "w-5 h-5 animate-spin mx-auto" }),
+      /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm", children: "جاري تحميل الدفعات…" })
+    ] }) : dueGroups.length === 0 ? /* @__PURE__ */ jsx(EmptyState, { icon: CalendarClock, title: "لا دفعات في هذا النطاق", hint: "غيّر الفلتر أو نطاق الأشهر، أو أضف عقداً جديداً من قسم العقود." }) : /* @__PURE__ */ jsx("div", { className: "space-y-4", children: dueGroups.map((group) => /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: [
+      /* @__PURE__ */ jsxs("div", { className: `${ws.sectionHeader} flex items-center justify-between gap-3 flex-wrap`, children: [
+        /* @__PURE__ */ jsxs("div", { className: "font-bold text-slate-900 dark:text-white text-sm", children: [
+          group.key === currentMonth ? "هذا الشهر — " : "",
+          monthLabel$1(group.key),
+          /* @__PURE__ */ jsxs("span", { className: "text-xs font-normal text-slate-500 dark:text-white/45 mr-2", children: [
+            group.rows.length,
+            " دفعة"
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "text-xs tabular-nums flex items-center gap-3", dir: "ltr", children: [
+          group.total > 0 ? /* @__PURE__ */ jsx("span", { className: "font-bold text-amber-700 dark:text-amber-200", children: formatMoney$5(group.total) }) : null,
+          group.paid > 0 ? /* @__PURE__ */ jsxs("span", { className: "text-[#0e7a5f] dark:text-emerald-200", children: [
+            formatMoney$5(group.paid),
+            " ",
+            /* @__PURE__ */ jsx("span", { dir: "rtl", children: "مسدد" })
+          ] }) : null
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full text-sm", children: [
+        /* @__PURE__ */ jsx("thead", { className: "text-slate-500 dark:text-white/50 text-xs", children: /* @__PURE__ */ jsxs("tr", { children: [
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-2", children: "الاستحقاق" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-2", children: "العقد / المؤجر" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-2", children: "الدفعة / الفترة" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-4 py-2", children: "المبلغ شامل" }),
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-2", children: "الحالة" }),
+          /* @__PURE__ */ jsx("th", { className: "text-center font-semibold px-4 py-2", children: "إجراء" })
+        ] }) }),
+        /* @__PURE__ */ jsx("tbody", { className: "divide-y divide-slate-200 dark:divide-white/10", children: group.rows.map((row) => /* @__PURE__ */ jsxs("tr", { className: row.status === "paid" ? "opacity-75" : "", children: [
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 whitespace-nowrap", children: [
+            /* @__PURE__ */ jsx("div", { className: "font-mono text-slate-900 dark:text-white", dir: "ltr", children: row.due_date }),
+            row.status === "pending" ? /* @__PURE__ */ jsx(DueBadge, { dueDate: row.due_date, today }) : row.paid_date ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 font-mono", dir: "ltr", children: [
+              "سُدد ",
+              row.paid_date
+            ] }) : null
+          ] }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPreviewId(row.contract_id), className: "font-semibold text-slate-900 dark:text-white hover:text-[#0e7a5f] dark:hover:text-emerald-300 text-right", children: row.lessor_name || "—" }),
+            /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 truncate max-w-[260px]", children: [
+              /* @__PURE__ */ jsx("span", { className: "font-mono", dir: "ltr", children: row.contract_number || `#${row.contract_id}` }),
+              row.location ? ` · ${row.location}` : "",
+              row.branch_name ? ` · ${row.branch_name}` : ""
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+            /* @__PURE__ */ jsxs("div", { className: "text-slate-800 dark:text-white/85", children: [
+              "الدفعة #",
+              row.seq
+            ] }),
+            row.period_start && row.period_end ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 font-mono whitespace-nowrap", dir: "ltr", children: [
+              row.period_start,
+              " → ",
+              row.period_end
+            ] }) : row.notes ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 truncate max-w-[200px]", children: row.notes }) : null
+          ] }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 text-left tabular-nums", dir: "ltr", children: [
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white", children: formatMoney$5(row.amount_incl) }),
+            /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: [
+              formatMoney$5(row.amount_excl, false),
+              " + ",
+              formatMoney$5(row.vat_amount, false),
+              " ",
+              /* @__PURE__ */ jsxs("span", { dir: "rtl", children: [
+                "ضريبة ",
+                moneyValue(row.vat_rate),
+                "%"
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+            /* @__PURE__ */ jsx(PaymentPill, { payment: row, today }),
+            row.status === "paid" && row.invoice_number ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 font-mono mt-1", dir: "ltr", children: row.invoice_number }) : null,
+            row.status === "paid" && row.bank_name ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: row.bank_name }) : null
+          ] }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center gap-2", children: row.status === "pending" ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setPaying(row), className: `${ws.btnPrimary} px-3 py-1.5 text-xs`, children: [
+            /* @__PURE__ */ jsx(HandCoins, { className: "w-3.5 h-3.5" }),
+            "سداد"
+          ] }) : row.status === "paid" ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleUnpay(row), disabled: unpayMut.isPending, className: `${ws.btnNeutral} px-3 py-1.5 text-xs disabled:opacity-50`, title: "التراجع عن السداد وإيقاف الفاتورة", children: [
+            /* @__PURE__ */ jsx(Undo2, { className: "w-3.5 h-3.5" }),
+            "تراجع"
+          ] }) : null }) })
+        ] }, row.id)) })
+      ] }) })
+    ] }, group.key)) })
+  ] });
+  const renderReserve = () => /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "الشهر" }),
+      /* @__PURE__ */ jsx("div", { className: "w-44", children: /* @__PURE__ */ jsx(GlassSelect, { value: reserveMonth, onChange: setReserveMonth, options: reserveMonthOptions, placeholder: "اختر الشهر", buttonClassName: "text-sm py-2 px-3" }) }),
+      branches.length > 0 ? /* @__PURE__ */ jsx("div", { className: "w-44", children: /* @__PURE__ */ jsx(GlassSelect, { value: reserveBranch, onChange: setReserveBranch, options: branchFilterOptions, placeholder: "كل الفروع", buttonClassName: "text-sm py-2 px-3" }) }) : null,
+      reserveMonth !== currentMonth ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setReserveMonth(currentMonth), className: "text-xs text-[#0e7a5f] dark:text-emerald-300 hover:underline", children: "الشهر الحالي" }) : null,
+      /* @__PURE__ */ jsx("div", { className: "flex-1" }),
+      reserveRows.length > 0 ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: confirmAllSuggested, disabled: !canConfirmReserve || confirmingAll || confirmReserveMut.isPending || moneyValue(reserveTotals.unconfirmed_count) === 0, className: `${ws.btnPrimary} px-3 py-2 text-xs disabled:opacity-50`, title: canConfirmReserve ? "تأكيد استقطاع كل الدفعات غير المؤكدة بالمبالغ المقترحة" : "لا يمكن تأكيد استقطاع لشهر مستقبلي", children: [
+        confirmingAll ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3.5 h-3.5" }),
+        "تأكيد الكل بالمقترح",
+        moneyValue(reserveTotals.unconfirmed_count) > 0 ? ` (${reserveTotals.unconfirmed_count})` : ""
+      ] }) : null,
+      /* @__PURE__ */ jsx(ExportButtons, { onExport: exportReserve, disabled: reserveRows.length === 0 }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => reserveQuery.refetch(), className: `${ws.btnNeutral} px-3 py-2`, title: "تحديث", children: /* @__PURE__ */ jsx(RefreshCw, { className: `w-4 h-4 ${reserveQuery.isFetching ? "animate-spin" : ""}` }) })
+    ] }) }),
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 xl:grid-cols-6 gap-3", children: [
+      /* @__PURE__ */ jsx(SummaryCard, { label: "إيرادات الشهر من التقفيلات", value: formatMoney$5(reserveRevenue.total), icon: Wallet, tone: "sky", suffix: reserveRevenue.shifts ? `${reserveRevenue.shifts} تقفيلة · نقد ${formatMoney$5(reserveRevenue.cash, false)} · شبكة ${formatMoney$5(reserveRevenue.card, false)}` : "لا تقفيلات مسجلة لهذا الشهر" }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "الاستقطاع المقترح هذا الشهر", value: formatMoney$5(reserveTotals.suggested_this_month), icon: PiggyBank, tone: "emerald", suffix: `بالخطة الأصلية ${formatMoney$5(reserveTotals.this_month_share, false)} · الشهري الكلي ${formatMoney$5(reserveTotals.monthly_reserve, false)}` }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "نسبته من الإيرادات", value: reserveTotals.suggested_share_of_revenue_pct === null || reserveTotals.suggested_share_of_revenue_pct === void 0 ? "—" : `${moneyValue(reserveTotals.suggested_share_of_revenue_pct).toFixed(1)}%`, icon: Info, tone: moneyValue(reserveTotals.suggested_share_of_revenue_pct) > 30 ? "rose" : moneyValue(reserveTotals.suggested_share_of_revenue_pct) > 15 ? "amber" : "slate", suffix: reserveTotals.suggested_share_of_revenue_pct === null || reserveTotals.suggested_share_of_revenue_pct === void 0 ? "لا إيرادات مسجلة للمقارنة" : "من إيرادات التقفيلات" }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "المؤكد هذا الشهر", value: formatMoney$5(reserveTotals.confirmed_this_month), icon: CheckCircle2, tone: moneyValue(reserveTotals.unconfirmed_count) > 0 && canConfirmReserve ? "amber" : "emerald", suffix: moneyValue(reserveTotals.unconfirmed_count) > 0 ? `${reserveTotals.unconfirmed_count} دفعة بانتظار التأكيد` : moneyValue(reserveTotals.confirmed_count) > 0 ? `${reserveTotals.confirmed_count} دفعة مؤكدة` : "لم يُؤكد شيء بعد" }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "المُدَّخر فعلياً حتى الآن", value: formatMoney$5(reserveTotals.reserved_actual), icon: Wallet, tone: moneyValue(reserveTotals.behind_plan) > 0 ? "amber" : "emerald", suffix: moneyValue(reserveTotals.behind_plan) > 0 ? `متأخر عن الخطة بـ ${formatMoney$5(reserveTotals.behind_plan, false)} (الخطة ${formatMoney$5(reserveTotals.reserved_to_date, false)})` : `بالخطة ${formatMoney$5(reserveTotals.reserved_to_date, false)}` }),
+      /* @__PURE__ */ jsx(SummaryCard, { label: "المتبقي حتى الاستحقاق", value: formatMoney$5(reserveTotals.remaining_actual ?? reserveTotals.remaining), icon: CalendarClock, tone: "amber", suffix: `من ${formatMoney$5(reserveTotals.pending_amount, false)} دفعات معلّقة` })
+    ] }),
+    !canConfirmReserve ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} px-4 py-3 text-xs text-slate-600 dark:text-white/60 flex items-center gap-2`, children: [
+      /* @__PURE__ */ jsx(Info, { className: "w-4 h-4 shrink-0 text-sky-700 dark:text-sky-200" }),
+      "هذا شهر مستقبلي: الأرقام تقديرية للتخطيط، والتأكيد يُتاح عند حلول الشهر بعد تسجيل إيراداته."
+    ] }) : null,
+    reserveQuery.isLoading ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center text-slate-500 dark:text-white/50`, children: [
+      /* @__PURE__ */ jsx(Loader2, { className: "w-5 h-5 animate-spin mx-auto" }),
+      /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm", children: "جاري حساب الاستقطاع…" })
+    ] }) : reserveQuery.isError ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-center text-rose-700 dark:text-rose-300 text-sm`, children: reserveQuery.error?.message || "فشل تحميل الاستقطاع" }) : reserveRows.length === 0 ? /* @__PURE__ */ jsx(EmptyState, { icon: PiggyBank, title: "لا دفعات معلّقة تحتاج استقطاعاً", hint: "كل دفعات العقود السارية مسددة، أو لا عقود سارية في هذا الفرع." }) : /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: /* @__PURE__ */ jsx("div", { className: "overflow-x-auto", children: /* @__PURE__ */ jsxs("table", { className: "w-full text-sm", children: [
+      /* @__PURE__ */ jsx("thead", { className: "bg-[#fafbfa] dark:bg-white/[0.03] text-slate-600 dark:text-white/60 text-xs", children: /* @__PURE__ */ jsxs("tr", { children: [
+        /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "العقد / المؤجر" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "الدفعة والاستحقاق" }),
+        /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-4 py-3", children: "المبلغ شامل" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "نافذة الادخار" }),
+        /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-4 py-3", children: "الاستقطاع الشهري" }),
+        /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-4 py-3", children: "المُدَّخر فعلياً" }),
+        /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-4 py-3", children: "المقترح لهذا الشهر" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "تأكيد الاستقطاع" }),
+        /* @__PURE__ */ jsx("th", { className: "text-left font-semibold px-4 py-3", children: "المتبقي" }),
+        /* @__PURE__ */ jsx("th", { className: "text-right font-semibold px-4 py-3", children: "الحالة" })
+      ] }) }),
+      /* @__PURE__ */ jsx("tbody", { className: "divide-y divide-slate-200 dark:divide-white/10", children: reserveRows.map((row) => {
+        const pct = row.months_total > 0 ? Math.min(100, Math.round(row.months_elapsed / row.months_total * 100)) : 0;
+        return /* @__PURE__ */ jsxs("tr", { className: "hover:bg-slate-50 dark:hover:bg-white/[0.03]", children: [
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPreviewId(row.contract_id), className: "font-semibold text-slate-900 dark:text-white hover:text-[#0e7a5f] dark:hover:text-emerald-300 text-right", children: row.lessor_name || "—" }),
+            /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 truncate max-w-[220px]", children: [
+              /* @__PURE__ */ jsx("span", { className: "font-mono", dir: "ltr", children: row.contract_number || `#${row.contract_id}` }),
+              row.location ? ` · ${row.location}` : "",
+              row.branch_name ? ` · ${row.branch_name}` : ""
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 whitespace-nowrap", children: [
+            /* @__PURE__ */ jsxs("div", { className: "text-slate-800 dark:text-white/85", children: [
+              "الدفعة #",
+              row.seq
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "font-mono text-slate-600 dark:text-white/55 text-xs", dir: "ltr", children: row.due_date })
+          ] }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left font-bold tabular-nums text-slate-900 dark:text-white", dir: "ltr", children: formatMoney$5(row.amount_incl, false) }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+            /* @__PURE__ */ jsxs("div", { className: "font-mono text-xs text-slate-700 dark:text-white/70 whitespace-nowrap", dir: "ltr", children: [
+              row.reserve_start || "—",
+              " → ",
+              row.due_date
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: [
+              row.months_total,
+              " ",
+              row.months_total === 1 ? "شهر" : row.months_total === 2 ? "شهران" : row.months_total <= 10 ? "أشهر" : "شهراً",
+              " · ",
+              "انقضى ",
+              row.months_elapsed,
+              " / ",
+              row.months_total
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "h-1 rounded-full bg-slate-200 dark:bg-white/10 mt-1 overflow-hidden w-32", children: /* @__PURE__ */ jsx("div", { className: `h-full ${row.overdue ? "bg-rose-500" : "bg-[#0e7a5f] dark:bg-emerald-400"}`, style: {
+              width: `${pct}%`
+            } }) })
+          ] }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left tabular-nums text-slate-800 dark:text-white/85", dir: "ltr", children: formatMoney$5(row.monthly_reserve, false) }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 text-left tabular-nums", dir: "ltr", children: [
+            /* @__PURE__ */ jsx("div", { className: "text-slate-800 dark:text-white/85", children: formatMoney$5(row.reserved_actual, false) }),
+            /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-slate-500 dark:text-white/40 whitespace-nowrap", children: [
+              "بالخطة ",
+              formatMoney$5(row.reserved_to_date, false)
+            ] }),
+            moneyValue(row.behind_plan) > 0 ? /* @__PURE__ */ jsxs("div", { className: "text-[10px] font-bold text-amber-700 dark:text-amber-200 whitespace-nowrap", children: [
+              "متأخر عن الخطة −",
+              formatMoney$5(row.behind_plan, false)
+            ] }) : null
+          ] }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 text-left tabular-nums font-bold", dir: "ltr", children: [
+            /* @__PURE__ */ jsx("span", { className: moneyValue(row.suggested_amount) > 0 ? "text-[#0e7a5f] dark:text-emerald-200" : "text-slate-400 dark:text-white/35", children: formatMoney$5(row.suggested_amount, false) }),
+            row.months_left > 0 && moneyValue(row.suggested_amount) > 0 ? /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-slate-500 dark:text-white/40 whitespace-nowrap", children: [
+              "على ",
+              row.months_left,
+              " ",
+              row.months_left === 1 ? "شهر" : row.months_left === 2 ? "شهرين" : row.months_left <= 10 ? "أشهر" : "شهراً"
+            ] }) : null
+          ] }),
+          /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+            (() => {
+              const confirmed = row.confirmed_amount !== null && row.confirmed_amount !== void 0;
+              const draft = reserveDraftValue(row);
+              const draftValue = moneyValue(draft);
+              const dirty = confirmed && Math.abs(draftValue - moneyValue(row.confirmed_amount)) > 5e-3;
+              const busy = confirmingAll || confirmReserveMut.isPending && confirmReserveMut.variables?.payment_id === row.id;
+              if (!canConfirmReserve) {
+                return /* @__PURE__ */ jsx("span", { className: "text-[11px] text-slate-400 dark:text-white/35 whitespace-nowrap", children: "شهر مستقبلي" });
+              }
+              return /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 flex-nowrap", children: [
+                /* @__PURE__ */ jsx("input", { type: "number", value: draft, min: "0", step: "0.01", dir: "ltr", onChange: (event) => setReserveDrafts((drafts) => ({
+                  ...drafts,
+                  [row.id]: event.target.value
+                })), className: `${ws.input} w-28 px-2 py-1.5 text-xs text-right tabular-nums ${confirmed && !dirty ? "border-[#c9e2d8] dark:border-emerald-400/30" : ""}` }),
+                /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => confirmReserveRow(row), disabled: busy || confirmed && !dirty || draftValue < 0, className: `${confirmed && !dirty ? ws.btnNeutral : ws.btnPrimary} px-2.5 py-1.5 text-[11px] whitespace-nowrap disabled:opacity-50`, title: confirmed ? "حفظ المبلغ المعدّل" : "تأكيد استقطاع هذا الشهر", children: [
+                  busy ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3.5 h-3.5" }),
+                  confirmed ? dirty ? "حفظ" : "مؤكد" : "تأكيد"
+                ] }),
+                confirmed ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => clearReserveRow(row), disabled: busy, className: `${ws.iconButton} disabled:opacity-50`, title: "إلغاء استقطاع هذا الشهر", children: /* @__PURE__ */ jsx(Undo2, { className: "w-3.5 h-3.5" }) }) : null
+              ] });
+            })(),
+            row.confirmed_by ? /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-slate-400 dark:text-white/35 mt-1 whitespace-nowrap", children: [
+              "أكده ",
+              row.confirmed_by
+            ] }) : null
+          ] }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-left tabular-nums font-bold text-amber-700 dark:text-amber-200", dir: "ltr", children: formatMoney$5(row.remaining_actual ?? row.remaining, false) }),
+          /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx("span", { className: `${ws.pill} whitespace-nowrap ${row.overdue ? "bg-rose-100 dark:bg-rose-400/10 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-400/25" : row.due_this_month ? "bg-amber-100 dark:bg-amber-400/10 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25" : "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"}`, children: row.overdue ? "متأخرة" : row.due_this_month ? "تستحق هذا الشهر" : "جارية" }) })
+        ] }, row.id);
+      }) })
+    ] }) }) }),
+    Array.isArray(reserveRevenue.by_branch) && reserveRevenue.by_branch.length > 1 && !reserveBranch ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-4`, children: [
+      /* @__PURE__ */ jsx("div", { className: "text-xs font-bold text-slate-700 dark:text-white/70 mb-2", children: "إيرادات الشهر حسب الفرع" }),
+      /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-2", children: reserveRevenue.by_branch.map((b) => /* @__PURE__ */ jsxs("span", { className: ws.chip, children: [
+        b.branch_name || "بدون فرع",
+        /* @__PURE__ */ jsx("span", { className: "tabular-nums font-bold", dir: "ltr", children: formatMoney$5(b.total, false) })
+      ] }, b.branch_id ?? "none")) })
+    ] }) : null,
+    /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3", children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 shrink-0`, children: /* @__PURE__ */ jsx(Info, { className: "w-5 h-5 text-sky-700 dark:text-sky-200" }) }),
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0 text-sm text-slate-600 dark:text-white/60 leading-7", children: [
+        /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: "كيف يُحسب الاستقطاع؟" }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          "لكل دفعة معلّقة: ",
+          /* @__PURE__ */ jsx("b", { children: "الاستقطاع الشهري" }),
+          " = المبلغ شامل الضريبة ÷ عدد أشهر نافذة الادخار، والنافذة تبدأ من استحقاق الدفعة السابقة (أو بداية العقد / تاريخ إضافته إن كان بعدها) وتنتهي بالشهر السابق لشهر الاستحقاق — فالدفعة النصف سنوية تُدَّخر على 6 أشهر ثم تُسدَّد عند استحقاقها."
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("b", { children: "المقترح لهذا الشهر" }),
+          " يصحّح نفسه: (المبلغ − المؤكد فعلياً في الأشهر السابقة) ÷ الأشهر المتبقية حتى الشهر السابق للاستحقاق — إذا فات شهر بلا استقطاع ارتفع المقترح تلقائياً، وإذا استُقطع أكثر انخفض. عدّل المبلغ إن لزم ثم اضغط «تأكيد» ليُسجَّل ما حُجز فعلياً من إيرادات الشهر."
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("b", { children: "حصة هذا الشهر بالخطة" }),
+          " هي ما يُستقطع من إيرادات تقفيلات الشهر المختار (آخر شهر في النافذة يحمل الباقي حتى يكتمل المبلغ)، و",
+          /* @__PURE__ */ jsx("b", { children: "المُدَّخر المفترض" }),
+          " = الاستقطاع الشهري × الأشهر المنقضية، و",
+          /* @__PURE__ */ jsx("b", { children: "المتبقي" }),
+          " = المبلغ − المُدَّخر. الدفعات المتأخرة انتهت نافذتها: حصتها هذا الشهر صفر ويُعدّ ادخارها مكتملاً بالخطة، وتبقى ضمن الدفعات المعلّقة حتى تُسدَّد من «سداد المستحق»."
+        ] })
+      ] })
+    ] }) })
+  ] });
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("div", { className: "space-y-4", children: sub === "due" ? renderDue() : sub === "reserve" ? renderReserve() : renderContracts() }),
+    /* @__PURE__ */ jsx(LeaseContractModal, { open: showAdd, contract: null, contacts, branches, isSubmitting: createMut.isPending, onClose: () => setShowAdd(false), onSubmit: handleSubmitContract }),
+    /* @__PURE__ */ jsx(LeaseContractModal, { open: !!editingId && !!editDetailQuery.data, contract: editDetailQuery.data || null, contacts, branches, isSubmitting: updateMut.isPending, onClose: () => setEditingId(null), onSubmit: handleSubmitContract }),
+    editingId && !editDetailQuery.data && typeof document !== "undefined" ? createPortal(/* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1000] flex items-center justify-center bg-black/40", dir: "rtl", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-5 py-4 flex items-center gap-3 text-sm`, children: editDetailQuery.isError ? /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx("span", { className: "text-rose-700 dark:text-rose-300", children: editDetailQuery.error?.message || "فشل تحميل العقد" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditingId(null), className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: "إغلاق" })
+    ] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }),
+      "جاري تحميل العقد…"
+    ] }) }) }), document.body) : null,
+    paying ? /* @__PURE__ */ jsx(LeasePayModal, { payment: paying, bankAccounts, isSubmitting: payMut.isPending, onClose: () => setPaying(null), onSubmit: (payload) => payMut.mutate(payload, {
+      onSuccess: () => setPaying(null)
+    }) }) : null,
+    drawerContract && typeof document !== "undefined" ? createPortal(/* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[950]", dir: "rtl", onMouseDown: (event) => {
+      if (event.target === event.currentTarget) setPreviewId(null);
+    }, children: [
+      /* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-black/40 backdrop-blur-[2px]", onMouseDown: () => setPreviewId(null), "aria-hidden": "true" }),
+      /* @__PURE__ */ jsxs("aside", { className: "absolute inset-y-0 left-0 w-full sm:w-[520px] bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-white/10 shadow-2xl overflow-y-auto", children: [
+        /* @__PURE__ */ jsxs("div", { className: `sticky top-0 z-10 bg-white dark:bg-slate-950 px-5 py-4 border-b ${ws.divider} flex items-center justify-between gap-3`, children: [
+          /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white font-mono", dir: "ltr", children: drawerContract.contract_number || `#${drawerContract.id}` }),
+            /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/50 truncate mt-0.5", children: [
+              drawerContract.lessor_name,
+              drawerContract.lessor_vat_number ? /* @__PURE__ */ jsxs("span", { className: "font-mono", dir: "ltr", children: [
+                " ",
+                "· ",
+                drawerContract.lessor_vat_number
+              ] }) : null
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 shrink-0", children: [
+            /* @__PURE__ */ jsx(StatusPill$1, { status: drawerContract.computed_status, inactive: drawerContract.is_active === false }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPreviewId(null), className: `${ws.iconButton} w-9 h-9`, "aria-label": "إغلاق المعاينة", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "p-5 space-y-4", children: [
+          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 gap-3 text-sm", children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "الموقع" }),
+              /* @__PURE__ */ jsx("div", { className: "font-semibold", children: drawerContract.location || "—" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "الفرع" }),
+              /* @__PURE__ */ jsx("div", { className: "font-semibold", children: drawerContract.branch_name || "—" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "البداية" }),
+              /* @__PURE__ */ jsx("div", { className: "font-semibold font-mono", dir: "ltr", children: formatDate$2(drawerContract.start_date) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "الانتهاء" }),
+              /* @__PURE__ */ jsx("div", { className: "font-semibold font-mono", dir: "ltr", children: formatDate$2(drawerContract.end_date) }),
+              Number.isFinite(Number(drawerContract.days_to_end)) ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: drawerContract.days_to_end >= 0 ? `بعد ${drawerContract.days_to_end} ${daysWord(drawerContract.days_to_end)}` : `انتهى قبل ${-drawerContract.days_to_end} ${daysWord(drawerContract.days_to_end)}` }) : null
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "فترة الإشعار" }),
+              /* @__PURE__ */ jsx("div", { className: "font-semibold", children: drawerContract.notice_period_days ? `${drawerContract.notice_period_days} يوم` : "—" }),
+              drawerContract.notice_starts_on ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: [
+                "تبدأ",
+                " ",
+                /* @__PURE__ */ jsx("span", { className: "font-mono", dir: "ltr", children: drawerContract.notice_starts_on })
+              ] }) : null,
+              drawerContract.notice_period_text ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: drawerContract.notice_period_text }) : null
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "التكرار" }),
+              /* @__PURE__ */ jsx("div", { className: "font-semibold", children: FREQUENCY_LABELS[drawerContract.payment_frequency] || drawerContract.payment_frequency }),
+              drawerContract.payment_frequency !== "custom" ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 tabular-nums", dir: "ltr", children: [
+                formatMoney$5(drawerContract.installment_amount, false),
+                " + VAT",
+                " ",
+                moneyValue(drawerContract.vat_rate),
+                "% =",
+                " ",
+                formatMoney$5(contractInstallmentIncl(drawerContract), false)
+              ] }) : null
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 grid grid-cols-3 gap-2 text-center`, children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "إجمالي العقد" }),
+              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums", dir: "ltr", children: formatMoney$5(drawerContract.total_value, false) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المدفوع" }),
+              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums text-[#0e7a5f] dark:text-emerald-200", dir: "ltr", children: formatMoney$5(drawerContract.paid_total, false) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "المتبقي" }),
+              /* @__PURE__ */ jsx("div", { className: "text-sm font-bold tabular-nums text-amber-700 dark:text-amber-200", dir: "ltr", children: formatMoney$5(drawerContract.pending_total, false) })
+            ] })
+          ] }),
+          drawerContract.attachment_url ? /* @__PURE__ */ jsxs("a", { href: drawerContract.attachment_url, target: "_blank", rel: "noreferrer", className: `${ws.glassSoft} ${ws.card} px-3 py-2 flex items-center gap-2 text-xs text-slate-700 dark:text-white/70 hover:text-[#0e7a5f] dark:hover:text-emerald-300`, children: [
+            /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5 shrink-0" }),
+            /* @__PURE__ */ jsx("span", { className: "truncate flex-1", dir: "ltr", children: drawerContract.attachment_name || "نسخة العقد" }),
+            /* @__PURE__ */ jsx(ExternalLink, { className: "w-3.5 h-3.5 shrink-0" })
+          ] }) : null,
+          drawerContract.notes ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/60 leading-relaxed whitespace-pre-wrap", children: drawerContract.notes }) : null,
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 mb-2", children: [
+              /* @__PURE__ */ jsxs("div", { className: "text-xs font-bold text-slate-700 dark:text-white/70", children: [
+                "جدول الدفعات (",
+                drawerPayments.length,
+                ")"
+              ] }),
+              detailQuery.isFetching ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin text-slate-400" }) : null
+            ] }),
+            detailQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 py-3 text-center", children: "جاري تحميل الدفعات…" }) : drawerPayments.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 py-3 text-center", children: "لا دفعات مسجلة لهذا العقد." }) : /* @__PURE__ */ jsx("div", { className: "space-y-1.5", children: drawerPayments.map((payment) => {
+              const isEditingRow = editingPayment?.id === payment.id;
+              return /* @__PURE__ */ jsx("div", { className: `rounded-[10px] border p-2.5 text-[11px] ${payment.status === "cancelled" ? "border-dashed border-slate-200 dark:border-white/10 opacity-60" : "border-[#e2e7e4] dark:border-white/10"}`, children: isEditingRow ? /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
+                /* @__PURE__ */ jsxs("div", { className: "font-bold text-slate-800 dark:text-white/85", children: [
+                  "تعديل الدفعة #",
+                  payment.seq
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-3 gap-2", children: [
+                  /* @__PURE__ */ jsxs("div", { children: [
+                    /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 mb-0.5", children: "الاستحقاق" }),
+                    /* @__PURE__ */ jsx("input", { type: "date", value: editingPayment.due_date, onChange: (event) => setEditingPayment((s) => ({
+                      ...s,
+                      due_date: event.target.value
+                    })), className: `${ws.input} px-2 py-1.5 text-xs`, dir: "ltr" })
+                  ] }),
+                  /* @__PURE__ */ jsxs("div", { children: [
+                    /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 mb-0.5", children: "قبل الضريبة" }),
+                    /* @__PURE__ */ jsx("input", { type: "number", step: "0.01", min: "0", value: editingPayment.amount_excl, onChange: (event) => setEditingPayment((s) => ({
+                      ...s,
+                      amount_excl: event.target.value
+                    })), className: `${ws.input} px-2 py-1.5 text-xs text-right`, dir: "ltr" })
+                  ] }),
+                  /* @__PURE__ */ jsxs("div", { children: [
+                    /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45 mb-0.5", children: "الضريبة %" }),
+                    /* @__PURE__ */ jsx("input", { type: "number", step: "0.01", min: "0", max: "100", value: editingPayment.vat_rate, onChange: (event) => setEditingPayment((s) => ({
+                      ...s,
+                      vat_rate: event.target.value
+                    })), className: `${ws.input} px-2 py-1.5 text-xs text-right`, dir: "ltr" })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsx("input", { type: "text", value: editingPayment.notes, onChange: (event) => setEditingPayment((s) => ({
+                  ...s,
+                  notes: event.target.value
+                })), placeholder: "ملاحظة (اختياري)", className: `${ws.input} px-2 py-1.5 text-xs` }),
+                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/45 tabular-nums", dir: "ltr", children: [
+                    "= ",
+                    formatMoney$5(installmentAmounts({
+                      amount: editingPayment.amount_excl,
+                      vatRate: editingPayment.vat_rate,
+                      amountIncludesVat: false
+                    }).amount_incl)
+                  ] }),
+                  /* @__PURE__ */ jsx("div", { className: "flex-1" }),
+                  /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditingPayment(null), className: `${ws.btnNeutral} px-2.5 py-1 text-[11px]`, children: "إلغاء" }),
+                  /* @__PURE__ */ jsxs("button", { type: "button", disabled: updatePaymentMut.isPending, onClick: saveEditPayment, className: `${ws.btnPrimary} px-2.5 py-1 text-[11px] disabled:opacity-50`, children: [
+                    updatePaymentMut.isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-3 h-3 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-3 h-3" }),
+                    "حفظ"
+                  ] })
+                ] })
+              ] }) : /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+                /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/35 w-6 shrink-0 font-mono", children: [
+                  "#",
+                  payment.seq
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0", children: [
+                  /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+                    /* @__PURE__ */ jsx("span", { className: "font-mono text-slate-800 dark:text-white/85", dir: "ltr", children: payment.due_date }),
+                    /* @__PURE__ */ jsx(PaymentPill, { payment, today }),
+                    payment.status === "pending" ? /* @__PURE__ */ jsx(DueBadge, { dueDate: payment.due_date, today }) : null
+                  ] }),
+                  /* @__PURE__ */ jsxs("div", { className: "text-slate-500 dark:text-white/45 truncate", children: [
+                    payment.period_start && payment.period_end ? /* @__PURE__ */ jsxs("span", { className: "font-mono", dir: "ltr", children: [
+                      payment.period_start,
+                      " → ",
+                      payment.period_end
+                    ] }) : null,
+                    payment.status === "paid" ? /* @__PURE__ */ jsxs(Fragment, { children: [
+                      payment.period_start ? " · " : "",
+                      "سُدد ",
+                      payment.paid_date || "—",
+                      payment.invoice_number ? /* @__PURE__ */ jsxs("span", { className: "font-mono", dir: "ltr", children: [
+                        " ",
+                        "· ",
+                        payment.invoice_number
+                      ] }) : null,
+                      payment.bank_name ? ` · ${payment.bank_name}` : ""
+                    ] }) : null,
+                    payment.notes ? ` · ${payment.notes}` : ""
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "text-left shrink-0 tabular-nums", dir: "ltr", children: [
+                  /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white", children: formatMoney$5(payment.amount_incl, false) }),
+                  /* @__PURE__ */ jsxs("div", { className: "text-[10px] text-slate-400 dark:text-white/35", children: [
+                    formatMoney$5(payment.amount_excl, false),
+                    " + ",
+                    moneyValue(payment.vat_rate),
+                    "%"
+                  ] })
+                ] }),
+                payment.receipt_url ? /* @__PURE__ */ jsx("a", { href: payment.receipt_url, target: "_blank", rel: "noreferrer", className: "text-slate-400 hover:text-[#0e7a5f] dark:text-white/40 dark:hover:text-emerald-300 shrink-0", title: "إيصال السداد", children: /* @__PURE__ */ jsx(Paperclip, { className: "w-3 h-3" }) }) : null,
+                /* @__PURE__ */ jsx("div", { className: "flex items-center gap-1 shrink-0", children: payment.status === "pending" && drawerContract.is_active !== false ? /* @__PURE__ */ jsxs(Fragment, { children: [
+                  /* @__PURE__ */ jsx("button", { type: "button", onClick: () => openPayFromDrawer(payment), className: `${ws.iconButton} w-7 h-7 hover:bg-[#e7f2ee] dark:hover:bg-emerald-500/15 hover:text-[#0e7a5f] dark:hover:text-emerald-200`, title: "سداد", children: /* @__PURE__ */ jsx(HandCoins, { className: "w-3.5 h-3.5" }) }),
+                  /* @__PURE__ */ jsx("button", { type: "button", onClick: () => startEditPayment(payment), className: `${ws.iconButton} w-7 h-7`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
+                  /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleCancelPayment(payment), className: `${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`, title: "إلغاء الدفعة", children: /* @__PURE__ */ jsx(Ban, { className: "w-3.5 h-3.5" }) })
+                ] }) : payment.status === "paid" ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleUnpay(payment), disabled: unpayMut.isPending, className: `${ws.iconButton} w-7 h-7 disabled:opacity-50`, title: "التراجع عن السداد", children: /* @__PURE__ */ jsx(Undo2, { className: "w-3.5 h-3.5" }) }) : payment.status === "cancelled" ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleRestorePayment(payment), disabled: updatePaymentMut.isPending, className: `${ws.btnNeutral} px-2 py-1 text-[10px] disabled:opacity-50`, title: "إعادة الدفعة إلى المعلّقة", children: "استرجاع" }) : null })
+              ] }) }, payment.id);
+            }) })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-400 dark:text-white/35", children: [
+            "أُضيف بواسطة ",
+            drawerContract.created_by_employee_name || "—",
+            drawerContract.created_at ? /* @__PURE__ */ jsxs("span", { className: "font-mono", dir: "ltr", children: [
+              " ",
+              "· ",
+              String(drawerContract.created_at).slice(0, 10)
+            ] }) : null
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: `flex items-center gap-2 pt-3 border-t ${ws.divider} flex-wrap`, children: [
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setEditingId(drawerContract.id), className: `${ws.btnPrimary} px-3 py-2 text-xs`, children: [
+              /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }),
+              "تعديل العقد"
+            ] }),
+            drawerContract.computed_status !== "terminated" && drawerContract.is_active !== false ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onSubChange?.("due"), className: `${ws.btnNeutral} px-3 py-2 text-xs`, title: "الانتقال إلى سداد المستحق", children: [
+              /* @__PURE__ */ jsx(CalendarClock, { className: "w-3.5 h-3.5" }),
+              "سداد المستحق"
+            ] }) : null,
+            /* @__PURE__ */ jsx("div", { className: "flex-1" }),
+            drawerContract.is_active === false ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => reactivateMut.mutate({
+              id: drawerContract.id
+            }), disabled: reactivateMut.isPending, className: `${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`, title: "إعادة العقد الموقوف إلى العقود النشطة", children: [
+              /* @__PURE__ */ jsx(RefreshCw, { className: "w-3.5 h-3.5" }),
+              "إعادة تفعيل"
+            ] }) : null,
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleDeleteContract(drawerContract), disabled: deleteMut.isPending, className: `${ws.btnDanger} px-3 py-2 text-xs disabled:opacity-50`, children: [
+              /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }),
+              drawerContract.is_active === false ? "حذف نهائي" : "إيقاف"
+            ] })
+          ] })
+        ] })
+      ] })
+    ] }), document.body) : null
+  ] });
+}
+
+const LEASE_SUBTABS = [{
+  key: "contracts",
+  label: "العقود",
+  Icon: ScrollText,
+  description: "إضافة العقود وتحليلها ذكيًا وعرضها مرتبة."
+}, {
+  key: "due",
+  label: "سداد المستحق",
+  Icon: CalendarClock,
+  description: "الدفعات الواجب سدادها حسب تاريخ الاستحقاق حسب العقد."
+}, {
+  key: "reserve",
+  label: "استقطاع شهري",
+  Icon: PiggyBank,
+  description: "استقطاع شهري من الإيرادات حتى تاريخ الاستحقاق لسداد الدفعة المطلوبة."
+}];
 const VENDOR_SUBTABS = [{
   key: "contacts",
   label: "جهات الاتصال",
@@ -23493,6 +26326,13 @@ const TABS = [{
   Icon: Receipt,
   description: "تسجيل وإدارة المصروفات الشهرية — الثابتة والمتغيّرة، المراجعة والبنود."
 }, {
+  key: "leases",
+  label: "العقود التأجيرية",
+  shortLabel: "عقود",
+  Icon: ScrollText,
+  description: "عقود إيجار الفروع: التحليل الذكي للعقد، جدول الدفعات، سداد المستحق، والاستقطاع الشهري من الإيرادات.",
+  subTabs: LEASE_SUBTABS
+}, {
   key: "reports",
   label: "التقارير",
   shortLabel: "تقارير",
@@ -23501,6 +26341,7 @@ const TABS = [{
 }];
 const TAB_KEYS = new Set(TABS.map((tab) => tab.key));
 const VENDOR_KEYS = new Set(VENDOR_SUBTABS.map((sub) => sub.key));
+const LEASE_KEYS = new Set(LEASE_SUBTABS.map((sub) => sub.key));
 function PurchasesMobileHeader({
   activeTab,
   actions = null
@@ -23680,6 +26521,7 @@ function PurchasesPage() {
   const activeTabKey = TAB_KEYS.has(rawTab) && (rawTab !== "expenses" || canManageAccounting) ? rawTab : "overview";
   const rawSub = searchParams.get("sub") || "contacts";
   const vendorSubKey = VENDOR_KEYS.has(rawSub) ? rawSub : "contacts";
+  const leaseSubKey = LEASE_KEYS.has(rawSub) ? rawSub : "contracts";
   const intent = searchParams.get("intent") || "";
   const setTab = useCallback((tabKey, extras = {}) => {
     const next = new URLSearchParams();
@@ -23687,12 +26529,15 @@ function PurchasesPage() {
     if (tabKey === "vendors") {
       next.set("sub", extras.sub || vendorSubKey);
     }
+    if (tabKey === "leases") {
+      next.set("sub", extras.sub || leaseSubKey);
+    }
     if (extras.intent) next.set("intent", extras.intent);
     if (extras.status) next.set("status", extras.status);
     setSearchParams(next, {
       replace: false
     });
-  }, [setSearchParams, vendorSubKey]);
+  }, [setSearchParams, vendorSubKey, leaseSubKey]);
   const clearIntent = useCallback(() => {
     if (!intent) return;
     const next = new URLSearchParams(searchParams);
@@ -23703,6 +26548,7 @@ function PurchasesPage() {
   }, [intent, searchParams, setSearchParams]);
   const activeTab = TABS.find((tab) => tab.key === activeTabKey) || TABS[0];
   const activeVendorSub = VENDOR_SUBTABS.find((sub) => sub.key === vendorSubKey) || VENDOR_SUBTABS[0];
+  const activeLeaseSub = LEASE_SUBTABS.find((sub) => sub.key === leaseSubKey) || LEASE_SUBTABS[0];
   useEffect(() => {
     window.scrollTo({
       top: 0
@@ -23726,17 +26572,19 @@ function PurchasesPage() {
           /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: tab.shortLabel })
         ] }, tab.key);
       }) }) }),
-      activeTabKey === "vendors" ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-2 overflow-x-auto`, children: /* @__PURE__ */ jsx("div", { className: "flex items-center gap-1 min-w-max", children: VENDOR_SUBTABS.map((sub) => {
-        const isActive = sub.key === activeVendorSub.key;
+      activeTabKey === "vendors" || activeTabKey === "leases" ? /* @__PURE__ */ jsx("div", { className: `${ws.glassSoft} ${ws.card} p-2 overflow-x-auto`, children: /* @__PURE__ */ jsx("div", { className: "flex items-center gap-1 min-w-max", children: (activeTabKey === "leases" ? LEASE_SUBTABS : VENDOR_SUBTABS).map((sub) => {
+        const isActive = sub.key === (activeTabKey === "leases" ? activeLeaseSub.key : activeVendorSub.key);
         const Icon = sub.Icon;
-        return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setTab("vendors", {
+        return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setTab(activeTabKey, {
           sub: sub.key
         }), className: `${ws.segBtn} ${isActive ? ws.segActive : ws.segInactive} flex items-center gap-2 whitespace-nowrap text-sm`, children: [
           /* @__PURE__ */ jsx(Icon, { className: "w-4 h-4" }),
           /* @__PURE__ */ jsx("span", { children: sub.label })
         ] }, sub.key);
       }) }) }) : null,
-      activeTabKey === "overview" ? /* @__PURE__ */ jsx(PurchasesOverviewPanel, { employeeId, isAdmin, onNavigate: setTab }) : activeTabKey === "invoices" ? /* @__PURE__ */ jsx(PurchasesInvoicesPanel, { employeeId, isAdmin, autoOpenAdd: intent === "add", initialStatus: searchParams.get("status") || "", onIntentConsumed: clearIntent }) : activeTabKey === "bulk" ? /* @__PURE__ */ jsx(BulkInvoiceUploadPanel, { employeeId, isAdmin }) : activeTabKey === "vendors" && activeVendorSub.key === "contacts" ? /* @__PURE__ */ jsx(ContactsPanel, { employeeId, isAdmin }) : activeTabKey === "vendors" ? /* @__PURE__ */ jsx(BeneficiariesPanel, { employeeId, isAdmin }) : activeTabKey === "accounts" ? /* @__PURE__ */ jsx(PurchasesAccountsTreePanel, { employeeId, isAdmin }) : activeTabKey === "banks" ? /* @__PURE__ */ jsx(PurchasesBankAccountsPanel, { employeeId, isAdmin }) : activeTabKey === "expenses" ? /* @__PURE__ */ jsx(ExpensesPanel, { employeeId, isAdmin }) : /* @__PURE__ */ jsx(PurchasesReportsPanel, { employeeId, isAdmin })
+      activeTabKey === "overview" ? /* @__PURE__ */ jsx(PurchasesOverviewPanel, { employeeId, isAdmin, onNavigate: setTab }) : activeTabKey === "invoices" ? /* @__PURE__ */ jsx(PurchasesInvoicesPanel, { employeeId, isAdmin, autoOpenAdd: intent === "add", initialStatus: searchParams.get("status") || "", onIntentConsumed: clearIntent }) : activeTabKey === "bulk" ? /* @__PURE__ */ jsx(BulkInvoiceUploadPanel, { employeeId, isAdmin }) : activeTabKey === "vendors" && activeVendorSub.key === "contacts" ? /* @__PURE__ */ jsx(ContactsPanel, { employeeId, isAdmin }) : activeTabKey === "vendors" ? /* @__PURE__ */ jsx(BeneficiariesPanel, { employeeId, isAdmin }) : activeTabKey === "accounts" ? /* @__PURE__ */ jsx(PurchasesAccountsTreePanel, { employeeId, isAdmin }) : activeTabKey === "banks" ? /* @__PURE__ */ jsx(PurchasesBankAccountsPanel, { employeeId, isAdmin }) : activeTabKey === "expenses" ? /* @__PURE__ */ jsx(ExpensesPanel, { employeeId, isAdmin }) : activeTabKey === "leases" ? /* @__PURE__ */ jsx(LeaseContractsPanel, { employeeId, isAdmin, sub: activeLeaseSub.key, onSubChange: (sub) => setTab("leases", {
+        sub
+      }), autoOpenAdd: intent === "add", onIntentConsumed: clearIntent }) : /* @__PURE__ */ jsx(PurchasesReportsPanel, { employeeId, isAdmin })
     ] });
   }
   const bell = ready && employeeId && isAdmin ? /* @__PURE__ */ jsx(PurchasesNotificationsBell, { employeeId, isAdmin, onNavigate: setTab }) : null;
@@ -24412,7 +27260,7 @@ function ReasonBreakdownCard({
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsxs("div", { className: "text-lg font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-        formatMoney$b(cost),
+        formatMoney$e(cost),
         " ر.س"
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-0.5", children: [
@@ -24456,7 +27304,7 @@ function WasteOperationCard({
         /* @__PURE__ */ jsxs("div", { className: "text-left", children: [
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40", children: "التكلفة" }),
           /* @__PURE__ */ jsxs("div", { className: "text-base font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-            formatMoney$b(op.total_cost),
+            formatMoney$e(op.total_cost),
             " ر.س"
           ] })
         ] }),
@@ -24479,15 +27327,15 @@ function WasteOperationCard({
         ] }) }),
         /* @__PURE__ */ jsx("tbody", { children: items.length === 0 ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 6, className: "px-3 py-4 text-center text-slate-500 dark:text-white/45", children: "لا توجد أصناف" }) }) : items.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-b border-slate-200/60 dark:border-white/[0.06] last:border-0", children: [
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-800 dark:text-white/85", children: it.item_name || "—" }),
-          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$b(it.quantity) }),
+          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$e(it.quantity) }),
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx(ReasonBadge, { reason: it.reason }) }),
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-600 dark:text-white/60", children: it.note ? it.note : "—" }),
           /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: [
-            formatMoney$b(it.unit_cost),
+            formatMoney$e(it.unit_cost),
             " ر.س"
           ] }),
           /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-left font-semibold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-            formatMoney$b(it.cost),
+            formatMoney$e(it.cost),
             " ر.س"
           ] })
         ] }, it.id)) })
@@ -24620,7 +27468,7 @@ function WastePage$1() {
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3", children: [
         /* @__PURE__ */ jsx(StatCard$4, { icon: Layers, label: "عدد عمليات الهدر", value: Number(summary.operations_count || 0) }),
         /* @__PURE__ */ jsx(StatCard$4, { icon: Boxes, label: "عدد أصناف الهدر", value: Number(summary.items_count || 0) }),
-        /* @__PURE__ */ jsx(StatCard$4, { icon: Coins, label: "إجمالي تكلفة الهدر", value: formatMoney$b(summary.total_cost), suffix: "ر.س", emerald: true })
+        /* @__PURE__ */ jsx(StatCard$4, { icon: Coins, label: "إجمالي تكلفة الهدر", value: formatMoney$e(summary.total_cost), suffix: "ر.س", emerald: true })
       ] }),
       wasteQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-6 text-slate-600 dark:text-white/60`, children: "جاري التحميل…" }) : wasteQuery.isError ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-6 text-red-600 dark:text-red-300`, children: wasteQuery.error?.message || "حدث خطأ أثناء تحميل البيانات." }) : operations.length === 0 ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-10 text-center text-slate-500 dark:text-white/50`, children: "لا توجد عمليات هدر" }) : /* @__PURE__ */ jsxs(Fragment, { children: [
         visibleReasons.length > 0 ? /* @__PURE__ */ jsxs("section", { className: "space-y-3", children: [
@@ -24645,9 +27493,9 @@ function WastePage$1() {
             /* @__PURE__ */ jsx("tbody", { children: topItems.slice(0, 10).map((it, idx) => /* @__PURE__ */ jsxs("tr", { className: "border-b border-slate-200/60 dark:border-white/[0.06] last:border-0 hover:bg-slate-50 dark:hover:bg-white/[0.03]", children: [
               /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-slate-400 dark:text-white/40 font-semibold", dir: "ltr", children: idx + 1 }),
               /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-slate-800 dark:text-white/85 font-medium", children: it.item_name || "—" }),
-              /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$b(it.total_quantity) }),
+              /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$e(it.total_quantity) }),
               /* @__PURE__ */ jsxs("td", { className: "px-4 py-2.5 text-left font-semibold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-                formatMoney$b(it.total_cost),
+                formatMoney$e(it.total_cost),
                 " ر.س"
               ] })
             ] }, it.item_id ?? idx)) })
@@ -43860,8 +46708,8 @@ function HROvertimePage() {
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 font-semibold text-slate-900 dark:text-white", children: r.employee_name || `#${r.employee_id}` }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-700 dark:text-white/75", children: monthLabel$1(String(r.month).slice(0, 7)) }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 text-right", dir: "ltr", children: Number(r.days || 0) }),
-          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/55 text-right", dir: "ltr", children: formatMoney$b(r.base_salary) }),
-          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold text-right", dir: "ltr", children: formatMoney$b(r.amount) }),
+          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/55 text-right", dir: "ltr", children: formatMoney$e(r.base_salary) }),
+          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold text-right", dir: "ltr", children: formatMoney$e(r.amount) }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/60 text-xs", style: {
             maxWidth: 240
           }, children: /* @__PURE__ */ jsx("div", { className: "truncate", title: r.reason || "", children: r.reason || "—" }) }),
@@ -43928,11 +46776,11 @@ function HRPayrollTable({
           ] }) : null
         ] }) }),
         /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap", children: e.branch_name || "—" }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-600 dark:text-white/55 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(e.other_allowances) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/75 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(e.total_salary) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-red-700 dark:text-red-300/80 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(e.total_deductions) }),
-        /* @__PURE__ */ jsx("td", { className: `py-2 px-2 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", children: hasLoan ? formatMoney$b(e.loan_deduction) : "—" }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$b(hrNet) })
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-600 dark:text-white/55 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(e.other_allowances) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/75 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(e.total_salary) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-red-700 dark:text-red-300/80 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(e.total_deductions) }),
+        /* @__PURE__ */ jsx("td", { className: `py-2 px-2 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", children: hasLoan ? formatMoney$e(e.loan_deduction) : "—" }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(hrNet) })
       ] }, e.id);
     }) })
   ] }) }) });
@@ -50664,7 +53512,7 @@ function WorkspaceTasksPage() {
     }
     const rows = overdueTasks.map((t) => {
       const title = t.title || "—";
-      const due = t.due_date ? formatDate$3(t.due_date) : "—";
+      const due = t.due_date ? formatDate$4(t.due_date) : "—";
       const completed = t.completed_at ? formatDateTime$4(t.completed_at) : "—";
       const assignees = safeArray(t.assignees).map((a) => a?.name).filter(Boolean);
       const assigneesText = assignees.length ? assignees.join("، ") : "—";
@@ -51296,7 +54144,7 @@ const route51 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: notFound
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-CrhP6QRF.js','imports':['/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/client-wSjAenBr.js','/assets/index-mDHkYRn_.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-B1Q_zCtY.js','imports':['/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/client-wSjAenBr.js','/assets/index-mDHkYRn_.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-B074vRgA.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-4SkMEtEa.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CeZeDVQE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/shield-Bi8S1a_E.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/trash-2-BZEabRjj.js','/assets/receipt-text-CMEEYSTK.js','/assets/languages-BblGVubv.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-5irJBJ7X.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollCalculations-DszFSuBE.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/layout-dashboard-CfTv19L-.js','/assets/calculator-CuHKkksc.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-up-vm2aXccZ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CS3wpwEb.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/GlassSelect-mulBuSBB.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/banknote-Cwn5eNTq.js','/assets/building-2-C4-avAoH.js','/assets/calendar-days-ZP49EuZ8.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/history-BZpeAbA6.js','/assets/save-j3TblwGW.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D4tW3-av.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-zXpRBdim.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/ui-Dlez-q8v.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollCalculations-DszFSuBE.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/GlassSelect-mulBuSBB.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/plus-DDJwKK4q.js','/assets/save-j3TblwGW.js','/assets/copy-CDBDUCCU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CqnjMj8U.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/ui-Dlez-q8v.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/arrow-left-DHUuVIZy.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/index-B074vRgA.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/exportUtils-B52DYAkn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/useMutation-YPPwjwxZ.js','/assets/trash-2-BZEabRjj.js','/assets/package-eQR-e_-7.js','/assets/pencil-D8aHAzD8.js','/assets/eye-CiT1BuH_.js','/assets/save-j3TblwGW.js','/assets/circle-check-big-Da9qNVxV.js','/assets/triangle-alert-Boaua5py.js','/assets/x-CJMV-H_W.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/square-check-big-QOWBUAjV.js','/assets/square-DlbVPQ1P.js','/assets/minus-BxIOy9AD.js','/assets/plus-DDJwKK4q.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BI7Z7560.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/index-mDHkYRn_.js','/assets/dateUtils-B35lzzJe.js','/assets/wallet-Bj0CEyHo.js','/assets/x-CJMV-H_W.js','/assets/save-j3TblwGW.js','/assets/pencil-D8aHAzD8.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/trash-2-BZEabRjj.js','/assets/useEmployeeLoans-BHDnWMf1.js','/assets/filter-DGpiaYIH.js','/assets/plus-DDJwKK4q.js','/assets/info-BGxn2qxB.js','/assets/index-B074vRgA.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-CAjtJlc8.js','/assets/useMutation-YPPwjwxZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ZIJ04axD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/x-CJMV-H_W.js','/assets/user-TAYO6wFz.js','/assets/file-text-BsXVEDDb.js','/assets/dollar-sign-CPOiC5y3.js','/assets/percent-Drb7mxOw.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-DCvya28J.js','/assets/apiAuth-CTxhwd0t.js','/assets/index-B074vRgA.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/payrollCalculations-DszFSuBE.js','/assets/info-BGxn2qxB.js','/assets/lock-CTGO69Da.js','/assets/circle-check-DYVsyltl.js','/assets/clock-BLQV2p7w.js','/assets/style-C-BeU7vR.js','/assets/ban-HVmbf0Bi.js','/assets/message-square-CQ1_CnCg.js','/assets/pencil-D8aHAzD8.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/send-NBZit5sF.js','/assets/gift-DDoKzxfU.js','/assets/trash-2-BZEabRjj.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/wallet-Bj0CEyHo.js','/assets/dateUtils-B35lzzJe.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ClNRhDG1.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/uiPurchases-DpGbPQKd.js','/assets/BulkInvoiceUploadPanel-vx4Nb5r3.js','/assets/map-pin-Dqo7hI9m.js','/assets/circle-check-DYVsyltl.js','/assets/hash-CBHDgDQ3.js','/assets/ui-Dlez-q8v.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/hand-coins-BQvnxKbd.js','/assets/link-DaxFi8fV.js','/assets/index-B074vRgA.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/triangle-alert-Boaua5py.js','/assets/plus-DDJwKK4q.js','/assets/trending-up-vm2aXccZ.js','/assets/trending-down-4D7R8o0Y.js','/assets/copy-CDBDUCCU.js','/assets/bell-BOrsd0dI.js','/assets/loader-circle-cj3OShwt.js','/assets/send-NBZit5sF.js','/assets/index-mDHkYRn_.js','/assets/user-TAYO6wFz.js','/assets/percent-Drb7mxOw.js','/assets/x-CJMV-H_W.js','/assets/banknote-Cwn5eNTq.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/file-spreadsheet-DHsESvwd.js','/assets/chevron-left-vtV8fD67.js','/assets/lock-CTGO69Da.js','/assets/save-j3TblwGW.js','/assets/building-2-C4-avAoH.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/info-BGxn2qxB.js','/assets/credit-card-BsVUxoTE.js','/assets/wallet-Bj0CEyHo.js','/assets/useUpload-Bl3Az-8u.js','/assets/unlink-DVXDxYhm.js','/assets/external-link-BX9iGKtf.js','/assets/users-VA8LPGTJ.js','/assets/history-BZpeAbA6.js','/assets/calendar-days-ZP49EuZ8.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/style-C-BeU7vR.js','/assets/message-square-CQ1_CnCg.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/arrow-up-right-BF8vhYZS.js','/assets/minus-BxIOy9AD.js','/assets/layers-9Vc-tcAx.js','/assets/trophy-B8rv-fXg.js','/assets/circle-B23E5JJ9.js','/assets/LineChart-DzXBW_Q3.js','/assets/PieChart-CInDFe0c.js','/assets/clock-BLQV2p7w.js','/assets/clipboard-check-CFfW7iHf.js','/assets/layout-dashboard-CfTv19L-.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/sparkles-DbziavYF.js','/assets/badge-check-pQujwjvV.js','/assets/chevron-right-CXLYWaqy.js','/assets/arrow-right-BDl4ebOl.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B20K6cXG.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/calculator-CuHKkksc.js','/assets/building-2-C4-avAoH.js','/assets/info-BGxn2qxB.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D73rO6zy.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/layers-9Vc-tcAx.js','/assets/boxes-D8lzOFTO.js','/assets/trophy-B8rv-fXg.js','/assets/trash-2-BZEabRjj.js','/assets/building-2-C4-avAoH.js','/assets/user-TAYO6wFz.js','/assets/clock-BLQV2p7w.js','/assets/chevron-down-DC34JNfT.js','/assets/sticky-note-eE2tkwJ8.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-l-KhM3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-bRSZRRpo.js','/assets/ui-Dlez-q8v.js','/assets/trending-up-vm2aXccZ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/circle-check-big-Da9qNVxV.js','/assets/clock-BLQV2p7w.js','/assets/building-2-C4-avAoH.js','/assets/calendar-days-ZP49EuZ8.js','/assets/dateUtils-B35lzzJe.js','/assets/sparkles-DbziavYF.js','/assets/trending-down-4D7R8o0Y.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/x-CJMV-H_W.js','/assets/info-BGxn2qxB.js','/assets/circle-alert-DIs_K0Qw.js','/assets/triangle-alert-Boaua5py.js','/assets/package-plus-Dq8M9Bmt.js','/assets/truck-BhEhG7v1.js','/assets/calendar-DSqa1Jk6.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/LineChart-DzXBW_Q3.js','/assets/PieChart-CInDFe0c.js','/assets/activity-Wj1gkxln.js','/assets/dollar-sign-CPOiC5y3.js','/assets/package-eQR-e_-7.js','/assets/exportUtils-B52DYAkn.js','/assets/file-text-BsXVEDDb.js','/assets/search-C-xwzjou.js','/assets/download-_6wEJoMR.js','/assets/printer-B2EnO-MI.js','/assets/users-VA8LPGTJ.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/layers-9Vc-tcAx.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BGkz3U1p.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-bRSZRRpo.js','/assets/ui-Dlez-q8v.js','/assets/exportUtils-B52DYAkn.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Breadcrumb-B14MMdPF.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/building-2-C4-avAoH.js','/assets/map-pin-Dqo7hI9m.js','/assets/clipboard-list-DPrO7lZd.js','/assets/search-C-xwzjou.js','/assets/plus-DDJwKK4q.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/x-CJMV-H_W.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js','/assets/file-text-BsXVEDDb.js','/assets/banknote-Cwn5eNTq.js','/assets/dateUtils-B35lzzJe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ba2o9CSi.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-bRSZRRpo.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/employeeUtils-BedSPahl.js','/assets/users-VA8LPGTJ.js','/assets/shield-Bi8S1a_E.js','/assets/user-TAYO6wFz.js','/assets/search-C-xwzjou.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/circle-check-DYVsyltl.js','/assets/circle-x-C5HLpfHG.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/briefcase-BJs6GZ4-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/x-CJMV-H_W.js','/assets/mail-6uMJqDb0.js','/assets/lock-CTGO69Da.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/receipt-text-CMEEYSTK.js','/assets/truck-BhEhG7v1.js','/assets/bell-BOrsd0dI.js','/assets/building-2-C4-avAoH.js','/assets/loader-circle-cj3OShwt.js','/assets/send-NBZit5sF.js','/assets/Breadcrumb-B14MMdPF.js','/assets/plus-DDJwKK4q.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/trending-down-4D7R8o0Y.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B7sieaUh.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/layers-9Vc-tcAx.js','/assets/x-CJMV-H_W.js','/assets/languages-BblGVubv.js','/assets/plus-DDJwKK4q.js','/assets/link-DaxFi8fV.js','/assets/pencil-D8aHAzD8.js','/assets/ban-HVmbf0Bi.js','/assets/Sidebar-bRSZRRpo.js','/assets/package-eQR-e_-7.js','/assets/circle-check-big-Da9qNVxV.js','/assets/triangle-alert-Boaua5py.js','/assets/circle-x-C5HLpfHG.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/search-C-xwzjou.js','/assets/filter-DGpiaYIH.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/dateUtils-B35lzzJe.js','/assets/eye-CiT1BuH_.js','/assets/building-2-C4-avAoH.js','/assets/trash-2-BZEabRjj.js','/assets/square-check-big-QOWBUAjV.js','/assets/clipboard-check-CFfW7iHf.js','/assets/square-DlbVPQ1P.js','/assets/eye-off-6jceujNo.js','/assets/index-mDHkYRn_.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/boxes-D8lzOFTO.js','/assets/clipboard-list-DPrO7lZd.js','/assets/circle-alert-DIs_K0Qw.js','/assets/exportUtils-B52DYAkn.js','/assets/Breadcrumb-B14MMdPF.js','/assets/index-B074vRgA.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B37VkxnR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/Sidebar-bRSZRRpo.js','/assets/Breadcrumb-B14MMdPF.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/package-eQR-e_-7.js','/assets/building-2-C4-avAoH.js','/assets/trending-down-4D7R8o0Y.js','/assets/circle-x-C5HLpfHG.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/hash-CBHDgDQ3.js','/assets/calendar-DSqa1Jk6.js','/assets/user-TAYO6wFz.js','/assets/file-text-BsXVEDDb.js','/assets/triangle-alert-Boaua5py.js','/assets/circle-check-big-Da9qNVxV.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/trending-up-vm2aXccZ.js','/assets/x-CJMV-H_W.js','/assets/LineChart-DzXBW_Q3.js','/assets/package-plus-Dq8M9Bmt.js','/assets/clipboard-list-DPrO7lZd.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DJdUI6LX.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/shield-Bi8S1a_E.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/circle-alert-DIs_K0Qw.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BTf0Z-6o.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/Sidebar-bRSZRRpo.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-down-4D7R8o0Y.js','/assets/circle-x-C5HLpfHG.js','/assets/triangle-alert-Boaua5py.js','/assets/building-2-C4-avAoH.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/package-eQR-e_-7.js','/assets/circle-check-big-Da9qNVxV.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMKtpUqA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/dateUtils-B35lzzJe.js','/assets/Sidebar-bRSZRRpo.js','/assets/ui-Dlez-q8v.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calendar-check-B4g7Zyf7.js','/assets/package-plus-Dq8M9Bmt.js','/assets/clock-BLQV2p7w.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/filter-DGpiaYIH.js','/assets/x-CJMV-H_W.js','/assets/search-C-xwzjou.js','/assets/exportUtils-B52DYAkn.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/printer-B2EnO-MI.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/square-check-big-QOWBUAjV.js','/assets/trash-2-BZEabRjj.js','/assets/square-DlbVPQ1P.js','/assets/building-2-C4-avAoH.js','/assets/eye-CiT1BuH_.js','/assets/pencil-D8aHAzD8.js','/assets/calendar-DSqa1Jk6.js','/assets/arrow-up-right-BF8vhYZS.js','/assets/user-TAYO6wFz.js','/assets/trending-down-4D7R8o0Y.js','/assets/sticky-note-eE2tkwJ8.js','/assets/hash-CBHDgDQ3.js','/assets/circle-check-big-Da9qNVxV.js','/assets/percent-Drb7mxOw.js','/assets/package-eQR-e_-7.js','/assets/circle-alert-DIs_K0Qw.js','/assets/circle-check-DYVsyltl.js','/assets/plus-DDJwKK4q.js','/assets/send-NBZit5sF.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-check-CFfW7iHf.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/Breadcrumb-B14MMdPF.js','/assets/truck-BhEhG7v1.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-nt3oRhvt.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-bRSZRRpo.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/dateUtils-B35lzzJe.js','/assets/truck-BhEhG7v1.js','/assets/calendar-DSqa1Jk6.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/package-eQR-e_-7.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/building-2-C4-avAoH.js','/assets/layout-dashboard-CfTv19L-.js','/assets/trending-down-4D7R8o0Y.js','/assets/file-text-BsXVEDDb.js','/assets/banknote-Cwn5eNTq.js','/assets/GlassPopover-Bgi0qw9-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CPYP0RU-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/Sidebar-bRSZRRpo.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/banknote-Cwn5eNTq.js','/assets/building-2-C4-avAoH.js','/assets/package-eQR-e_-7.js','/assets/triangle-alert-Boaua5py.js','/assets/trending-up-vm2aXccZ.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/arrow-up-down-BN0uTm5Y.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/circle-alert-DIs_K0Qw.js','/assets/layers-9Vc-tcAx.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DpwCYt_h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-bRSZRRpo.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-down-4D7R8o0Y.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/trending-up-vm2aXccZ.js','/assets/triangle-alert-Boaua5py.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-DSqa1Jk6.js','/assets/exportUtils-B52DYAkn.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/building-2-C4-avAoH.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'alwaha/page':{'id':'alwaha/page','parentId':'root','path':'alwaha','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DyShLahY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BmJBAGQ2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-check-big-Da9qNVxV.js','/assets/package-eQR-e_-7.js','/assets/search-C-xwzjou.js','/assets/save-j3TblwGW.js','/assets/trending-up-vm2aXccZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/layers-9Vc-tcAx.js','/assets/filter-DGpiaYIH.js','/assets/circle-alert-DIs_K0Qw.js','/assets/zap-zUoAUmkJ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-KDfcuTjv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/building-2-C4-avAoH.js','/assets/circle-check-DYVsyltl.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/page':{'id':'employee/purchase-invoice/page','parentId':'root','path':'employee/purchase-invoice','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CzmWS5wI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/uiPurchases-DpGbPQKd.js','/assets/BulkInvoiceUploadPanel-vx4Nb5r3.js','/assets/apiAuth-CTxhwd0t.js','/assets/arrow-right-BDl4ebOl.js','/assets/receipt-text-CMEEYSTK.js','/assets/loader-circle-cj3OShwt.js','/assets/circle-check-DYVsyltl.js','/assets/plus-DDJwKK4q.js','/assets/truck-BhEhG7v1.js','/assets/search-C-xwzjou.js','/assets/pencil-D8aHAzD8.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/hand-coins-BQvnxKbd.js','/assets/x-CJMV-H_W.js','/assets/save-j3TblwGW.js','/assets/percent-Drb7mxOw.js','/assets/unlink-DVXDxYhm.js','/assets/link-DaxFi8fV.js','/assets/useUpload-Bl3Az-8u.js','/assets/file-text-BsXVEDDb.js','/assets/sparkles-DbziavYF.js','/assets/badge-check-pQujwjvV.js','/assets/trash-2-BZEabRjj.js','/assets/external-link-BX9iGKtf.js','/assets/triangle-alert-Boaua5py.js','/assets/chevron-right-CXLYWaqy.js','/assets/copy-CDBDUCCU.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/arrow-left-DHUuVIZy.js','/assets/send-NBZit5sF.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/login/page':{'id':'employee/purchase-invoice/login/page','parentId':'root','path':'employee/purchase-invoice/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CL5FNBnS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/uiPurchases-DpGbPQKd.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/receipt-text-CMEEYSTK.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BiBNhA_a.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-check-big-Da9qNVxV.js','/assets/trash-2-BZEabRjj.js','/assets/search-C-xwzjou.js','/assets/save-j3TblwGW.js','/assets/trending-up-vm2aXccZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/layers-9Vc-tcAx.js','/assets/filter-DGpiaYIH.js','/assets/circle-alert-DIs_K0Qw.js','/assets/zap-zUoAUmkJ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CYzAs3kQ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/building-2-C4-avAoH.js','/assets/circle-check-DYVsyltl.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-QjTb9RKB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/Sidebar-DwapdFNi.js','/assets/users-VA8LPGTJ.js','/assets/arrow-left-DHUuVIZy.js','/assets/dollar-sign-CPOiC5y3.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/apiAuth-CTxhwd0t.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/wallet-Bj0CEyHo.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Y8KE8gKj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/gift-DDoKzxfU.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-KrtnmUbc.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/Sidebar-DwapdFNi.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/users-VA8LPGTJ.js','/assets/dollar-sign-CPOiC5y3.js','/assets/image-DQ7nR7FM.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/useUpload-Bl3Az-8u.js','/assets/x-CJMV-H_W.js','/assets/user-TAYO6wFz.js','/assets/calendar-DSqa1Jk6.js','/assets/file-text-BsXVEDDb.js','/assets/loader-circle-cj3OShwt.js','/assets/dateUtils-B35lzzJe.js','/assets/plus-DDJwKK4q.js','/assets/send-NBZit5sF.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/wallet-Bj0CEyHo.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BsIn3yv8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/Sidebar-DwapdFNi.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/employeeUtils-BedSPahl.js','/assets/search-C-xwzjou.js','/assets/users-VA8LPGTJ.js','/assets/wallet-Bj0CEyHo.js','/assets/credit-card-BsVUxoTE.js','/assets/heart-pulse-0LKG09CU.js','/assets/GlassSelect-mulBuSBB.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/user-TAYO6wFz.js','/assets/ban-HVmbf0Bi.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/badge-check-pQujwjvV.js','/assets/x-CJMV-H_W.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/dateUtils-B35lzzJe.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/calendar-DSqa1Jk6.js','/assets/circle-check-DYVsyltl.js','/assets/briefcase-BJs6GZ4-.js','/assets/building-2-C4-avAoH.js','/assets/calendar-check-B4g7Zyf7.js','/assets/circle-x-C5HLpfHG.js','/assets/dollar-sign-CPOiC5y3.js','/assets/index-mDHkYRn_.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/save-j3TblwGW.js','/assets/plus-DDJwKK4q.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-GNWjtY2l.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/index-B074vRgA.js','/assets/Sidebar-DwapdFNi.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/dateUtils-B35lzzJe.js','/assets/useEmployeeLoans-BHDnWMf1.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/plus-DDJwKK4q.js','/assets/clock-BLQV2p7w.js','/assets/trash-2-BZEabRjj.js','/assets/info-BGxn2qxB.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/wallet-Bj0CEyHo.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DB6pbdIs.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/index-B074vRgA.js','/assets/Sidebar-DwapdFNi.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-DCvya28J.js','/assets/users-VA8LPGTJ.js','/assets/ban-HVmbf0Bi.js','/assets/dateUtils-B35lzzJe.js','/assets/lock-CTGO69Da.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/send-NBZit5sF.js','/assets/info-BGxn2qxB.js','/assets/wallet-Bj0CEyHo.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/clock-BLQV2p7w.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-CAjtJlc8.js','/assets/useMutation-YPPwjwxZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B5h2VyaB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B8_3X-KA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DWHJwJxJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/index-mDHkYRn_.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/client-wSjAenBr.js','/assets/_commonjs-dynamic-modules-TDtrdbi3.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-BZvVbjy8.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/image-DQ7nR7FM.js','/assets/chevron-down-DC34JNfT.js','/assets/file-spreadsheet-DHsESvwd.js','/assets/download-_6wEJoMR.js','/assets/useMutation-YPPwjwxZ.js','/assets/upload-CS5AK87H.js','/assets/x-CJMV-H_W.js','/assets/circle-alert-DIs_K0Qw.js','/assets/circle-check-DYVsyltl.js','/assets/useAdminAuth-CweZcdIg.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/clock-BLQV2p7w.js','/assets/send-NBZit5sF.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/index-B074vRgA.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B06m48LI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/BloggerInvitationCard-BZvVbjy8.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/arrow-right-BDl4ebOl.js','/assets/external-link-BX9iGKtf.js','/assets/printer-B2EnO-MI.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-cRcBY32j.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/coffee-CEdfpW0U.js','/assets/plus-DDJwKK4q.js','/assets/x-CJMV-H_W.js','/assets/eye-off-6jceujNo.js','/assets/eye-CiT1BuH_.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-nH7gByAs.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/save-j3TblwGW.js','/assets/coffee-CEdfpW0U.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CEAxEIfZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/shield-Bi8S1a_E.js','/assets/globe-CkB3LEXs.js','/assets/eye-CiT1BuH_.js','/assets/lock-CTGO69Da.js','/assets/trash-2-BZEabRjj.js','/assets/mail-6uMJqDb0.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DfNcx1F5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/apiAuth-CTxhwd0t.js','/assets/languages-BblGVubv.js','/assets/useMutation-YPPwjwxZ.js','/assets/calculator-CuHKkksc.js','/assets/building-2-C4-avAoH.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/info-BGxn2qxB.js','/assets/search-C-xwzjou.js','/assets/send-NBZit5sF.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/x-CJMV-H_W.js','/assets/chevron-right-CXLYWaqy.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D---gW7h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/globe-CkB3LEXs.js','/assets/mail-6uMJqDb0.js','/assets/external-link-BX9iGKtf.js','/assets/shield-Bi8S1a_E.js','/assets/file-text-BsXVEDDb.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-sOePSuDx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-alert-DIs_K0Qw.js','/assets/lock-CTGO69Da.js','/assets/sparkles-DbziavYF.js','/assets/coffee-CEdfpW0U.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CQroKKoV.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/ui-Dlez-q8v.js','/assets/PriorityPill-CkCrMdCY.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/calendar-days-ZP49EuZ8.js','/assets/loader-circle-cj3OShwt.js','/assets/circle-check-DYVsyltl.js','/assets/message-square-CQ1_CnCg.js','/assets/triangle-alert-Boaua5py.js','/assets/chevron-left-vtV8fD67.js','/assets/activity-Wj1gkxln.js','/assets/circle-B23E5JJ9.js','/assets/heart-pulse-0LKG09CU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CetJMvRq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/message-square-CQ1_CnCg.js','/assets/plus-DDJwKK4q.js','/assets/search-C-xwzjou.js','/assets/chevron-left-vtV8fD67.js','/assets/send-NBZit5sF.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-qtHcB61p.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/useUpload-Bl3Az-8u.js','/assets/ui-Dlez-q8v.js','/assets/circle-B23E5JJ9.js','/assets/x-CJMV-H_W.js','/assets/arrow-right-BDl4ebOl.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/flag-C6AJZwul.js','/assets/calendar-days-ZP49EuZ8.js','/assets/upload-CS5AK87H.js','/assets/trash-2-BZEabRjj.js','/assets/unlink-DVXDxYhm.js','/assets/file-text-BsXVEDDb.js','/assets/clock-BLQV2p7w.js','/assets/PriorityPill-CkCrMdCY.js','/assets/loader-circle-cj3OShwt.js','/assets/plus-DDJwKK4q.js','/assets/circle-check-DYVsyltl.js','/assets/search-C-xwzjou.js','/assets/SidebarShell-Cc_hZim7.js','/assets/triangle-alert-Boaua5py.js','/assets/activity-Wj1gkxln.js','/assets/chevron-left-vtV8fD67.js','/assets/arrow-up-down-BN0uTm5Y.js','/assets/square-check-big-QOWBUAjV.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/home-C0l_z9P_.js','/assets/users-VA8LPGTJ.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/chevron-right-CXLYWaqy.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-W_qqf2Rw.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BXit5J4M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-CAjtJlc8.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/file-text-BsXVEDDb.js','/assets/plus-DDJwKK4q.js','/assets/trash-2-BZEabRjj.js','/assets/flag-C6AJZwul.js','/assets/square-check-big-QOWBUAjV.js','/assets/loader-circle-cj3OShwt.js','/assets/copy-CDBDUCCU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/home-C0l_z9P_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CRFiXC_M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/ui-Dlez-q8v.js','/assets/arrow-right-BDl4ebOl.js','/assets/home-C0l_z9P_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-a22e3779.js','version':'a22e3779','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-CrhP6QRF.js','imports':['/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/client-wSjAenBr.js','/assets/index-mDHkYRn_.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-CvvRtdJC.js','imports':['/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/client-wSjAenBr.js','/assets/index-mDHkYRn_.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-B074vRgA.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-BxoZcfE1.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CeZeDVQE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/shield-Bi8S1a_E.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/trash-2-BZEabRjj.js','/assets/receipt-text-CMEEYSTK.js','/assets/languages-BblGVubv.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CL0D4Ojl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollCalculations-DszFSuBE.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/layout-dashboard-CfTv19L-.js','/assets/calculator-CuHKkksc.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-up-vm2aXccZ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-sq7mvS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/GlassSelect-mulBuSBB.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/banknote-Cwn5eNTq.js','/assets/building-2-C4-avAoH.js','/assets/calendar-days-ZP49EuZ8.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/history-BZpeAbA6.js','/assets/save-j3TblwGW.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D4tW3-av.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BBt2zRQS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/ui-Dlez-q8v.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollCalculations-DszFSuBE.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/GlassSelect-mulBuSBB.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/plus-DDJwKK4q.js','/assets/save-j3TblwGW.js','/assets/copy-CDBDUCCU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CJQ3OJcg.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/ui-Dlez-q8v.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/arrow-left-DHUuVIZy.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/index-B074vRgA.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/exportUtils-B52DYAkn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/useMutation-YPPwjwxZ.js','/assets/trash-2-BZEabRjj.js','/assets/package-eQR-e_-7.js','/assets/pencil-D8aHAzD8.js','/assets/eye-CiT1BuH_.js','/assets/save-j3TblwGW.js','/assets/circle-check-big-Da9qNVxV.js','/assets/triangle-alert-Boaua5py.js','/assets/x-CJMV-H_W.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/square-check-big-QOWBUAjV.js','/assets/square-DlbVPQ1P.js','/assets/minus-BxIOy9AD.js','/assets/plus-DDJwKK4q.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CUnXSIY5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/index-mDHkYRn_.js','/assets/dateUtils-B35lzzJe.js','/assets/wallet-Bj0CEyHo.js','/assets/x-CJMV-H_W.js','/assets/save-j3TblwGW.js','/assets/pencil-D8aHAzD8.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/trash-2-BZEabRjj.js','/assets/useEmployeeLoans-CdvLxZet.js','/assets/filter-DGpiaYIH.js','/assets/plus-DDJwKK4q.js','/assets/info-BGxn2qxB.js','/assets/index-B074vRgA.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-q3vF3Onq.js','/assets/useMutation-YPPwjwxZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bx1aM5JR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/x-CJMV-H_W.js','/assets/user-TAYO6wFz.js','/assets/file-text-BsXVEDDb.js','/assets/dollar-sign-CPOiC5y3.js','/assets/percent-Drb7mxOw.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-CvuConHt.js','/assets/apiAuth-CTxhwd0t.js','/assets/index-B074vRgA.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/payrollCalculations-DszFSuBE.js','/assets/info-BGxn2qxB.js','/assets/lock-CTGO69Da.js','/assets/circle-check-DYVsyltl.js','/assets/clock-BLQV2p7w.js','/assets/style-C-BeU7vR.js','/assets/ban-HVmbf0Bi.js','/assets/message-square-CQ1_CnCg.js','/assets/pencil-D8aHAzD8.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/send-NBZit5sF.js','/assets/gift-DDoKzxfU.js','/assets/trash-2-BZEabRjj.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/wallet-Bj0CEyHo.js','/assets/dateUtils-B35lzzJe.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-p_50nQMi.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/uiPurchases-C33rLZvt.js','/assets/BulkInvoiceUploadPanel-cafjvr8z.js','/assets/map-pin-Dqo7hI9m.js','/assets/circle-check-DYVsyltl.js','/assets/hash-CBHDgDQ3.js','/assets/ui-Dlez-q8v.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/hand-coins-BQvnxKbd.js','/assets/link-DaxFi8fV.js','/assets/index-B074vRgA.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/triangle-alert-Boaua5py.js','/assets/plus-DDJwKK4q.js','/assets/trending-up-vm2aXccZ.js','/assets/trending-down-4D7R8o0Y.js','/assets/copy-CDBDUCCU.js','/assets/bell-BOrsd0dI.js','/assets/loader-circle-cj3OShwt.js','/assets/send-NBZit5sF.js','/assets/index-mDHkYRn_.js','/assets/user-TAYO6wFz.js','/assets/percent-Drb7mxOw.js','/assets/x-CJMV-H_W.js','/assets/banknote-Cwn5eNTq.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/file-spreadsheet-DHsESvwd.js','/assets/chevron-left-vtV8fD67.js','/assets/lock-CTGO69Da.js','/assets/save-j3TblwGW.js','/assets/building-2-C4-avAoH.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/info-BGxn2qxB.js','/assets/scroll-text-POw0Obrx.js','/assets/wallet-Bj0CEyHo.js','/assets/useUpload-Bl3Az-8u.js','/assets/unlink-DVXDxYhm.js','/assets/external-link-BX9iGKtf.js','/assets/users-VA8LPGTJ.js','/assets/history-BZpeAbA6.js','/assets/calendar-days-ZP49EuZ8.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/style-C-BeU7vR.js','/assets/message-square-CQ1_CnCg.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/arrow-up-right-BF8vhYZS.js','/assets/minus-BxIOy9AD.js','/assets/layers-9Vc-tcAx.js','/assets/trophy-B8rv-fXg.js','/assets/circle-B23E5JJ9.js','/assets/LineChart-DzXBW_Q3.js','/assets/PieChart-CInDFe0c.js','/assets/clock-BLQV2p7w.js','/assets/clipboard-check-CFfW7iHf.js','/assets/sparkles-DbziavYF.js','/assets/upload-CS5AK87H.js','/assets/ban-HVmbf0Bi.js','/assets/layout-dashboard-CfTv19L-.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/badge-check-pQujwjvV.js','/assets/chevron-right-CXLYWaqy.js','/assets/arrow-right-BDl4ebOl.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BLVPFfNS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/calculator-CuHKkksc.js','/assets/building-2-C4-avAoH.js','/assets/info-BGxn2qxB.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CbU36qt5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/layers-9Vc-tcAx.js','/assets/boxes-D8lzOFTO.js','/assets/trophy-B8rv-fXg.js','/assets/trash-2-BZEabRjj.js','/assets/building-2-C4-avAoH.js','/assets/user-TAYO6wFz.js','/assets/clock-BLQV2p7w.js','/assets/chevron-down-DC34JNfT.js','/assets/sticky-note-eE2tkwJ8.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DWMxnsZR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-xWb4k-Rz.js','/assets/ui-Dlez-q8v.js','/assets/trending-up-vm2aXccZ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/circle-check-big-Da9qNVxV.js','/assets/clock-BLQV2p7w.js','/assets/building-2-C4-avAoH.js','/assets/calendar-days-ZP49EuZ8.js','/assets/dateUtils-B35lzzJe.js','/assets/sparkles-DbziavYF.js','/assets/trending-down-4D7R8o0Y.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/x-CJMV-H_W.js','/assets/info-BGxn2qxB.js','/assets/circle-alert-DIs_K0Qw.js','/assets/triangle-alert-Boaua5py.js','/assets/package-plus-Dq8M9Bmt.js','/assets/truck-BhEhG7v1.js','/assets/calendar-DSqa1Jk6.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/LineChart-DzXBW_Q3.js','/assets/PieChart-CInDFe0c.js','/assets/activity-Wj1gkxln.js','/assets/dollar-sign-CPOiC5y3.js','/assets/package-eQR-e_-7.js','/assets/exportUtils-B52DYAkn.js','/assets/file-text-BsXVEDDb.js','/assets/search-C-xwzjou.js','/assets/download-_6wEJoMR.js','/assets/printer-B2EnO-MI.js','/assets/users-VA8LPGTJ.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/layers-9Vc-tcAx.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-clByvD7f.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-xWb4k-Rz.js','/assets/ui-Dlez-q8v.js','/assets/exportUtils-B52DYAkn.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Breadcrumb-B14MMdPF.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/building-2-C4-avAoH.js','/assets/map-pin-Dqo7hI9m.js','/assets/clipboard-list-DPrO7lZd.js','/assets/search-C-xwzjou.js','/assets/plus-DDJwKK4q.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/x-CJMV-H_W.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js','/assets/file-text-BsXVEDDb.js','/assets/banknote-Cwn5eNTq.js','/assets/dateUtils-B35lzzJe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BXmH9G_W.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-xWb4k-Rz.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/employeeUtils-BedSPahl.js','/assets/users-VA8LPGTJ.js','/assets/shield-Bi8S1a_E.js','/assets/user-TAYO6wFz.js','/assets/search-C-xwzjou.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/circle-check-DYVsyltl.js','/assets/circle-x-C5HLpfHG.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/briefcase-BJs6GZ4-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/x-CJMV-H_W.js','/assets/mail-6uMJqDb0.js','/assets/lock-CTGO69Da.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/receipt-text-CMEEYSTK.js','/assets/truck-BhEhG7v1.js','/assets/bell-BOrsd0dI.js','/assets/building-2-C4-avAoH.js','/assets/loader-circle-cj3OShwt.js','/assets/send-NBZit5sF.js','/assets/Breadcrumb-B14MMdPF.js','/assets/plus-DDJwKK4q.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/trending-down-4D7R8o0Y.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-dFKhJqbx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/layers-9Vc-tcAx.js','/assets/x-CJMV-H_W.js','/assets/languages-BblGVubv.js','/assets/plus-DDJwKK4q.js','/assets/link-DaxFi8fV.js','/assets/pencil-D8aHAzD8.js','/assets/ban-HVmbf0Bi.js','/assets/Sidebar-xWb4k-Rz.js','/assets/package-eQR-e_-7.js','/assets/circle-check-big-Da9qNVxV.js','/assets/triangle-alert-Boaua5py.js','/assets/circle-x-C5HLpfHG.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/search-C-xwzjou.js','/assets/filter-DGpiaYIH.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/dateUtils-B35lzzJe.js','/assets/eye-CiT1BuH_.js','/assets/building-2-C4-avAoH.js','/assets/trash-2-BZEabRjj.js','/assets/square-check-big-QOWBUAjV.js','/assets/clipboard-check-CFfW7iHf.js','/assets/square-DlbVPQ1P.js','/assets/eye-off-6jceujNo.js','/assets/index-mDHkYRn_.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/boxes-D8lzOFTO.js','/assets/clipboard-list-DPrO7lZd.js','/assets/circle-alert-DIs_K0Qw.js','/assets/exportUtils-B52DYAkn.js','/assets/Breadcrumb-B14MMdPF.js','/assets/index-B074vRgA.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CbWfflzv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/package-eQR-e_-7.js','/assets/building-2-C4-avAoH.js','/assets/trending-down-4D7R8o0Y.js','/assets/circle-x-C5HLpfHG.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/hash-CBHDgDQ3.js','/assets/calendar-DSqa1Jk6.js','/assets/user-TAYO6wFz.js','/assets/file-text-BsXVEDDb.js','/assets/triangle-alert-Boaua5py.js','/assets/circle-check-big-Da9qNVxV.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/trending-up-vm2aXccZ.js','/assets/x-CJMV-H_W.js','/assets/LineChart-DzXBW_Q3.js','/assets/package-plus-Dq8M9Bmt.js','/assets/clipboard-list-DPrO7lZd.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DJdUI6LX.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/shield-Bi8S1a_E.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/circle-alert-DIs_K0Qw.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-mcrVqYjq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-down-4D7R8o0Y.js','/assets/circle-x-C5HLpfHG.js','/assets/triangle-alert-Boaua5py.js','/assets/building-2-C4-avAoH.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/package-eQR-e_-7.js','/assets/circle-check-big-Da9qNVxV.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C6-RLoER.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/dateUtils-B35lzzJe.js','/assets/Sidebar-xWb4k-Rz.js','/assets/ui-Dlez-q8v.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calendar-check-B4g7Zyf7.js','/assets/package-plus-Dq8M9Bmt.js','/assets/clock-BLQV2p7w.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/filter-DGpiaYIH.js','/assets/x-CJMV-H_W.js','/assets/search-C-xwzjou.js','/assets/exportUtils-B52DYAkn.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/printer-B2EnO-MI.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/square-check-big-QOWBUAjV.js','/assets/trash-2-BZEabRjj.js','/assets/square-DlbVPQ1P.js','/assets/building-2-C4-avAoH.js','/assets/eye-CiT1BuH_.js','/assets/pencil-D8aHAzD8.js','/assets/calendar-DSqa1Jk6.js','/assets/arrow-up-right-BF8vhYZS.js','/assets/user-TAYO6wFz.js','/assets/trending-down-4D7R8o0Y.js','/assets/sticky-note-eE2tkwJ8.js','/assets/hash-CBHDgDQ3.js','/assets/circle-check-big-Da9qNVxV.js','/assets/percent-Drb7mxOw.js','/assets/package-eQR-e_-7.js','/assets/circle-alert-DIs_K0Qw.js','/assets/circle-check-DYVsyltl.js','/assets/plus-DDJwKK4q.js','/assets/send-NBZit5sF.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-check-CFfW7iHf.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/Breadcrumb-B14MMdPF.js','/assets/truck-BhEhG7v1.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CM3t50aZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/dateUtils-B35lzzJe.js','/assets/truck-BhEhG7v1.js','/assets/calendar-DSqa1Jk6.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/package-eQR-e_-7.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/building-2-C4-avAoH.js','/assets/layout-dashboard-CfTv19L-.js','/assets/trending-down-4D7R8o0Y.js','/assets/file-text-BsXVEDDb.js','/assets/banknote-Cwn5eNTq.js','/assets/GlassPopover-Bgi0qw9-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dvoe42oU.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/banknote-Cwn5eNTq.js','/assets/building-2-C4-avAoH.js','/assets/package-eQR-e_-7.js','/assets/triangle-alert-Boaua5py.js','/assets/trending-up-vm2aXccZ.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/arrow-up-down-BN0uTm5Y.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/circle-alert-DIs_K0Qw.js','/assets/layers-9Vc-tcAx.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cje3vJr-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-down-4D7R8o0Y.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/trending-up-vm2aXccZ.js','/assets/triangle-alert-Boaua5py.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-DSqa1Jk6.js','/assets/exportUtils-B52DYAkn.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/building-2-C4-avAoH.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'alwaha/page':{'id':'alwaha/page','parentId':'root','path':'alwaha','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DyShLahY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ddf4WBut.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-check-big-Da9qNVxV.js','/assets/package-eQR-e_-7.js','/assets/search-C-xwzjou.js','/assets/save-j3TblwGW.js','/assets/trending-up-vm2aXccZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/layers-9Vc-tcAx.js','/assets/filter-DGpiaYIH.js','/assets/circle-alert-DIs_K0Qw.js','/assets/zap-zUoAUmkJ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-KDfcuTjv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/building-2-C4-avAoH.js','/assets/circle-check-DYVsyltl.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/page':{'id':'employee/purchase-invoice/page','parentId':'root','path':'employee/purchase-invoice','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CE_eFKfW.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/uiPurchases-C33rLZvt.js','/assets/BulkInvoiceUploadPanel-cafjvr8z.js','/assets/apiAuth-CTxhwd0t.js','/assets/arrow-right-BDl4ebOl.js','/assets/receipt-text-CMEEYSTK.js','/assets/loader-circle-cj3OShwt.js','/assets/circle-check-DYVsyltl.js','/assets/plus-DDJwKK4q.js','/assets/truck-BhEhG7v1.js','/assets/search-C-xwzjou.js','/assets/pencil-D8aHAzD8.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/hand-coins-BQvnxKbd.js','/assets/x-CJMV-H_W.js','/assets/save-j3TblwGW.js','/assets/percent-Drb7mxOw.js','/assets/unlink-DVXDxYhm.js','/assets/link-DaxFi8fV.js','/assets/useUpload-Bl3Az-8u.js','/assets/file-text-BsXVEDDb.js','/assets/sparkles-DbziavYF.js','/assets/badge-check-pQujwjvV.js','/assets/trash-2-BZEabRjj.js','/assets/external-link-BX9iGKtf.js','/assets/triangle-alert-Boaua5py.js','/assets/chevron-right-CXLYWaqy.js','/assets/copy-CDBDUCCU.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/arrow-left-DHUuVIZy.js','/assets/send-NBZit5sF.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/login/page':{'id':'employee/purchase-invoice/login/page','parentId':'root','path':'employee/purchase-invoice/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dw24MlC4.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/uiPurchases-C33rLZvt.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/receipt-text-CMEEYSTK.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CNjnIC8t.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-check-big-Da9qNVxV.js','/assets/trash-2-BZEabRjj.js','/assets/search-C-xwzjou.js','/assets/save-j3TblwGW.js','/assets/trending-up-vm2aXccZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/layers-9Vc-tcAx.js','/assets/filter-DGpiaYIH.js','/assets/circle-alert-DIs_K0Qw.js','/assets/zap-zUoAUmkJ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CYzAs3kQ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/building-2-C4-avAoH.js','/assets/circle-check-DYVsyltl.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-QjTb9RKB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/Sidebar-DwapdFNi.js','/assets/users-VA8LPGTJ.js','/assets/arrow-left-DHUuVIZy.js','/assets/dollar-sign-CPOiC5y3.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/apiAuth-CTxhwd0t.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/wallet-Bj0CEyHo.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Y8KE8gKj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/gift-DDoKzxfU.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CCjStTlF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/Sidebar-DwapdFNi.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/users-VA8LPGTJ.js','/assets/dollar-sign-CPOiC5y3.js','/assets/image-DQ7nR7FM.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/useUpload-Bl3Az-8u.js','/assets/x-CJMV-H_W.js','/assets/user-TAYO6wFz.js','/assets/calendar-DSqa1Jk6.js','/assets/file-text-BsXVEDDb.js','/assets/loader-circle-cj3OShwt.js','/assets/dateUtils-B35lzzJe.js','/assets/plus-DDJwKK4q.js','/assets/send-NBZit5sF.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/wallet-Bj0CEyHo.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-tcscf09c.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/Sidebar-DwapdFNi.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/employeeUtils-BedSPahl.js','/assets/search-C-xwzjou.js','/assets/users-VA8LPGTJ.js','/assets/wallet-Bj0CEyHo.js','/assets/scroll-text-POw0Obrx.js','/assets/heart-pulse-0LKG09CU.js','/assets/GlassSelect-mulBuSBB.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/user-TAYO6wFz.js','/assets/ban-HVmbf0Bi.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/badge-check-pQujwjvV.js','/assets/x-CJMV-H_W.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/dateUtils-B35lzzJe.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/calendar-DSqa1Jk6.js','/assets/circle-check-DYVsyltl.js','/assets/briefcase-BJs6GZ4-.js','/assets/building-2-C4-avAoH.js','/assets/calendar-check-B4g7Zyf7.js','/assets/circle-x-C5HLpfHG.js','/assets/dollar-sign-CPOiC5y3.js','/assets/index-mDHkYRn_.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/save-j3TblwGW.js','/assets/plus-DDJwKK4q.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cn3RxOhp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/index-B074vRgA.js','/assets/Sidebar-DwapdFNi.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/dateUtils-B35lzzJe.js','/assets/useEmployeeLoans-CdvLxZet.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/plus-DDJwKK4q.js','/assets/clock-BLQV2p7w.js','/assets/trash-2-BZEabRjj.js','/assets/info-BGxn2qxB.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/wallet-Bj0CEyHo.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BjN3qhGL.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/index-B074vRgA.js','/assets/Sidebar-DwapdFNi.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-CvuConHt.js','/assets/users-VA8LPGTJ.js','/assets/ban-HVmbf0Bi.js','/assets/dateUtils-B35lzzJe.js','/assets/lock-CTGO69Da.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/send-NBZit5sF.js','/assets/info-BGxn2qxB.js','/assets/wallet-Bj0CEyHo.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/clock-BLQV2p7w.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-q3vF3Onq.js','/assets/useMutation-YPPwjwxZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B5h2VyaB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B8_3X-KA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-GYvhVHQ8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/index-mDHkYRn_.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/client-wSjAenBr.js','/assets/_commonjs-dynamic-modules-TDtrdbi3.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-BZvVbjy8.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/image-DQ7nR7FM.js','/assets/chevron-down-DC34JNfT.js','/assets/file-spreadsheet-DHsESvwd.js','/assets/download-_6wEJoMR.js','/assets/useMutation-YPPwjwxZ.js','/assets/upload-CS5AK87H.js','/assets/x-CJMV-H_W.js','/assets/circle-alert-DIs_K0Qw.js','/assets/circle-check-DYVsyltl.js','/assets/useAdminAuth-CweZcdIg.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/clock-BLQV2p7w.js','/assets/send-NBZit5sF.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/index-B074vRgA.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CqkCOOnn.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/BloggerInvitationCard-BZvVbjy8.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/arrow-right-BDl4ebOl.js','/assets/external-link-BX9iGKtf.js','/assets/printer-B2EnO-MI.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-efFaVA4K.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/coffee-CEdfpW0U.js','/assets/plus-DDJwKK4q.js','/assets/x-CJMV-H_W.js','/assets/eye-off-6jceujNo.js','/assets/eye-CiT1BuH_.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BLoGDlFe.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/save-j3TblwGW.js','/assets/coffee-CEdfpW0U.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CEAxEIfZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/shield-Bi8S1a_E.js','/assets/globe-CkB3LEXs.js','/assets/eye-CiT1BuH_.js','/assets/lock-CTGO69Da.js','/assets/trash-2-BZEabRjj.js','/assets/mail-6uMJqDb0.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DfNcx1F5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/apiAuth-CTxhwd0t.js','/assets/languages-BblGVubv.js','/assets/useMutation-YPPwjwxZ.js','/assets/calculator-CuHKkksc.js','/assets/building-2-C4-avAoH.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/info-BGxn2qxB.js','/assets/search-C-xwzjou.js','/assets/send-NBZit5sF.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/x-CJMV-H_W.js','/assets/chevron-right-CXLYWaqy.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D---gW7h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/globe-CkB3LEXs.js','/assets/mail-6uMJqDb0.js','/assets/external-link-BX9iGKtf.js','/assets/shield-Bi8S1a_E.js','/assets/file-text-BsXVEDDb.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BFZcjU5-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-alert-DIs_K0Qw.js','/assets/lock-CTGO69Da.js','/assets/sparkles-DbziavYF.js','/assets/coffee-CEdfpW0U.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cl-QxOff.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/ui-Dlez-q8v.js','/assets/PriorityPill-CkCrMdCY.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/calendar-days-ZP49EuZ8.js','/assets/loader-circle-cj3OShwt.js','/assets/circle-check-DYVsyltl.js','/assets/message-square-CQ1_CnCg.js','/assets/triangle-alert-Boaua5py.js','/assets/chevron-left-vtV8fD67.js','/assets/activity-Wj1gkxln.js','/assets/circle-B23E5JJ9.js','/assets/heart-pulse-0LKG09CU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CEFSnt-X.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/message-square-CQ1_CnCg.js','/assets/plus-DDJwKK4q.js','/assets/search-C-xwzjou.js','/assets/chevron-left-vtV8fD67.js','/assets/send-NBZit5sF.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BqOnurHf.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/useUpload-Bl3Az-8u.js','/assets/ui-Dlez-q8v.js','/assets/circle-B23E5JJ9.js','/assets/x-CJMV-H_W.js','/assets/arrow-right-BDl4ebOl.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/flag-C6AJZwul.js','/assets/calendar-days-ZP49EuZ8.js','/assets/upload-CS5AK87H.js','/assets/trash-2-BZEabRjj.js','/assets/unlink-DVXDxYhm.js','/assets/file-text-BsXVEDDb.js','/assets/clock-BLQV2p7w.js','/assets/PriorityPill-CkCrMdCY.js','/assets/loader-circle-cj3OShwt.js','/assets/plus-DDJwKK4q.js','/assets/circle-check-DYVsyltl.js','/assets/search-C-xwzjou.js','/assets/SidebarShell-Cc_hZim7.js','/assets/triangle-alert-Boaua5py.js','/assets/activity-Wj1gkxln.js','/assets/chevron-left-vtV8fD67.js','/assets/arrow-up-down-BN0uTm5Y.js','/assets/square-check-big-QOWBUAjV.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/home-C0l_z9P_.js','/assets/users-VA8LPGTJ.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/chevron-right-CXLYWaqy.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CYjm14fp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D5w5QH3z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/file-text-BsXVEDDb.js','/assets/plus-DDJwKK4q.js','/assets/trash-2-BZEabRjj.js','/assets/flag-C6AJZwul.js','/assets/square-check-big-QOWBUAjV.js','/assets/loader-circle-cj3OShwt.js','/assets/copy-CDBDUCCU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/home-C0l_z9P_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CRFiXC_M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/ui-Dlez-q8v.js','/assets/arrow-right-BDl4ebOl.js','/assets/home-C0l_z9P_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-6eddff5f.js','version':'6eddff5f','sri':undefined};
 
 const assetsBuildDirectory = "build/client";
       const basename = "/";
