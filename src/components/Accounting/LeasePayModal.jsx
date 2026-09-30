@@ -236,11 +236,8 @@ export default function LeasePayModal({
         <div className="flex items-start gap-2 rounded-[10px] border border-sky-200 dark:border-sky-400/25 bg-sky-50/70 dark:bg-sky-400/[0.06] px-3 py-2 mb-4 text-[11px] text-sky-800 dark:text-sky-200 leading-relaxed">
           <Receipt className="w-3.5 h-3.5 shrink-0 mt-0.5" />
           <span>
-            ستُنشأ فاتورة مشتريات مدفوعة تحت حساب «إيجارات» برقم{" "}
-            <span dir="ltr" className="font-mono">
-              LEASE-{payment.contract_id}-{payment.seq}
-            </span>{" "}
-            وتظهر في فواتير المشتريات.
+            تُسجَّل الدفعة كمسددة في «سداد المستحق» وتُتابع من النظام (التاريخ،
+            الحساب البنكي، الإيصال) — بلا إنشاء فاتورة مشتريات.
           </span>
         </div>
 
