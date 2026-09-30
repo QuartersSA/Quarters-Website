@@ -9,6 +9,7 @@ import {
   buildScheduleRows,
   replaceSchedule,
   sameInstant,
+  deactivateSetAsideInvoicesForPayments,
 } from "@/app/api/utils/leaseContracts";
 
 // عقد تأجيري واحد: عرض / تعديل / إيقاف أو حذف.
@@ -213,7 +214,9 @@ export async function DELETE(request, { params } = {}) {
           { status: 409 },
         );
       }
-      // الدفعات تُحذف تتابعًا (ON DELETE CASCADE).
+      // فواتير الاستقطاع غير المسددة تُوقف، ثم الدفعات تُحذف تتابعًا (CASCADE).
+      const paymentRows = await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${id}`;
+      await deactivateSetAsideInvoicesForPayments(paymentRows.map((r) => r.id), auth.user, "حُذف العقد");
       await sql`DELETE FROM accounting_lease_contracts WHERE id = ${id}`;
       await logPurchaseAudit({
         entityType: "lease_contract",
@@ -230,6 +233,8 @@ export async function DELETE(request, { params } = {}) {
       SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
     `;
+    const paymentRows = await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${id}`;
+    await deactivateSetAsideInvoicesForPayments(paymentRows.map((r) => r.id), auth.user, "أُوقف العقد");
     await logPurchaseAudit({
       entityType: "lease_contract",
       entityId: id,

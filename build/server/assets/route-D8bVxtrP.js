@@ -1,10 +1,18 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as round2 } from './leaseMath-Cz-hbKbu.js';
-import { e as ensureLeaseSchema, t as todayRiyadh, c as parseMoney, h as loadReservesByPayment, R as REQUIRE_LEASE } from './leaseContracts-Bu-QS9oc.js';
+import { e as ensureLeaseSchema, g as round2, t as todayRiyadh, m as parseMoney, u as loadReservesByPayment, R as REQUIRE_LEASE } from './leaseContracts-5fHmsgHE.js';
+import { b as resetSetAsideInvoice, m as markSetAsideInvoicePaid } from './leaseSetAsideInvoices-BIZpvJrr.js';
 import '@neondatabase/serverless';
 import 'crypto';
+import './wasender-DykD1wlV.js';
+import './waNotify-CtLfIpXX.js';
+import './coffeeInvoices-DsQXXppv.js';
+import './accountsTree-BiYqjwch.js';
+import './inventoryUnitSnapshots-B5krAOBv.js';
+import './employeeDisplayName-CwZGtUC2.js';
+import './branchVisibility-CPqSH5sT.js';
+import './route-BUl4vftO.js';
 
 // تأكيد الاستقطاع الشهري لدفعة: تسجيل المبلغ المحوَّل إلى حساب الاستقطاع
 // عن شهر معيّن لدفعة معلّقة (سجل accounting_lease_reserves؛ صف لكل دفعة/شهر).
@@ -143,9 +151,15 @@ async function POST(request) {
           actor: auth.user
         });
       }
+      const resetInvoice = await resetSetAsideInvoice({
+        paymentId,
+        month,
+        actor: auth.user
+      }).catch(() => null);
       return Response.json({
         ok: true,
         removed: deleted.length > 0,
+        invoice: resetInvoice,
         reserves: (await loadReservesByPayment([paymentId]))[paymentId] || []
       });
     }
@@ -178,11 +192,25 @@ async function POST(request) {
       summary: `${saved?.inserted ? "تأكيد" : "تعديل"} استقطاع شهر ${month} عن ${label}: ${amount.toFixed(2)} SAR${suggested !== null && Math.abs(suggested - amount) > 0.005 ? ` (المقترح ${suggested.toFixed(2)})` : ""}`,
       actor: auth.user
     });
+    // فاتورة الاستقطاع لهذا الشهر تصبح مسددة.
+    const bankIdRaw = Number(body.bank_account_id);
+    const bankAccountId = Number.isInteger(bankIdRaw) && bankIdRaw > 0 ? bankIdRaw : null;
+    const invoice = await markSetAsideInvoicePaid({
+      paymentId,
+      month,
+      amount,
+      bankAccountId,
+      actor: auth.user
+    }).catch(error => {
+      console.error("set-aside invoice pay failed", error?.message);
+      return null;
+    });
     const reserves = (await loadReservesByPayment([paymentId]))[paymentId] || [];
     return Response.json({
       ok: true,
       reserve: reserves.find(e => e.month === month) || null,
       reserves,
+      invoice,
       reserved_total: round2(reserves.reduce((acc, e) => acc + e.amount, 0))
     });
   } catch (error) {
@@ -238,6 +266,11 @@ async function DELETE(request) {
       WHERE payment_id = ${paymentId} AND month = ${month}
       RETURNING id, amount
     `;
+    await resetSetAsideInvoice({
+      paymentId,
+      month,
+      actor: auth.user
+    }).catch(() => null);
     if (deleted.length) {
       await logPurchaseAudit({
         entityType: "lease_payment",

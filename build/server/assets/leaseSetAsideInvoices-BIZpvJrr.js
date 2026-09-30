@@ -2,7 +2,9 @@ import sql from './sql-CSDV1lSC.js';
 import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-DykD1wlV.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-CtLfIpXX.js';
-import { a as anyCoffeeAccount } from './coffeeInvoices-D2MJxjAS.js';
+import { q as anyCoffeeAccount } from './coffeeInvoices-DsQXXppv.js';
+import { createPurchaseInvoice } from './route-BUl4vftO.js';
+import { e as ensureLeaseSchema, a as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, c as listPayments, f as setAsideSchedule, g as round2$1, h as CONTRACT_TYPE_LABELS, i as getLeaseExpenseAccountId, j as FREQUENCY_LABELS } from './leaseContracts-5fHmsgHE.js';
 
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
@@ -749,6 +751,12 @@ async function runPurchaseAutomation() {
     await ensureRecurringSchema();
     await ensureScheduledReportsSchema();
     await generateRecurringInvoices();
+    // فواتير الاستقطاع الشهري للإيجارات (شهر حلّ = فاتورة غير مسددة).
+    try {
+      await generateSetAsideInvoices();
+    } catch (error) {
+      console.error("lease set-aside invoices failed", error?.message);
+    }
     await sendDueScheduledReports();
     await sendOverdueDigest();
     // رسائل فشلت أثناء انقطاع الواتساب — أعد إرسالها بعد عودته.
@@ -778,4 +786,251 @@ function startPurchaseAutomationTimer() {
   console.log(`purchase automation timer started (every ${TIMER_INTERVAL_MS / 60000} min, sends after ${SEND_HOUR_RIYADH}:00 Riyadh)`);
 }
 
-export { syncRecurringTemplateFromInvoice as a, ensureScheduledReportsSchema as b, createRecurringTemplateFromInvoice as c, buildPurchasesSummaryText as d, ensureRecurringSchema as e, runPurchaseAutomation as r, startPurchaseAutomationTimer as s };
+// فواتير الاستقطاع الشهري للإيجارات: لكل دفعة معلّقة ولكل شهر من أشهر
+// استقطاعها (حتى الشهر الحالي) فاتورة مشتريات غير مسددة تحت حساب
+// «إيجار فرع / مستودع» أو «إيجار سكن»، مرتبطة بالعقد والدفعة والشهر
+// (lease_contract_id / lease_payment_id / lease_month) وتظهر في فواتير
+// المشتريات. «تأكيد التحويل» في الاستقطاع يجعلها مسددة، وإلغاؤه يعيدها.
+
+function setAsideInvoiceNumber(contractId, seq, month) {
+  return `LEASE-${contractId}-${seq}-${String(month).replace("-", "")}`;
+}
+function lastDayOfMonth(month) {
+  const [y, m] = String(month).split("-").map(Number);
+  const last = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  return `${y}-${String(m).padStart(2, "0")}-${String(last).padStart(2, "0")}`;
+}
+
+// فواتير الاستقطاع النشطة لمجموعة دفعات: { [payment_id]: { [month]: inv } }.
+async function loadSetAsideInvoices(paymentIds) {
+  const ids = [...new Set((paymentIds || []).map(Number).filter(n => Number.isInteger(n) && n > 0))];
+  if (!ids.length) return {};
+  const linked = await ensureLeaseInvoiceLinkColumns();
+  if (!linked) return {};
+  const rows = await sql`
+    SELECT id, invoice_number, lease_payment_id, lease_month, total_amount, paid_amount,
+           workflow_status, is_active
+    FROM accounting_purchase_invoices
+    WHERE lease_payment_id = ANY(${ids}) AND is_active = TRUE
+    ORDER BY id ASC
+  `;
+  const map = {};
+  for (const row of rows) {
+    const pid = Number(row.lease_payment_id);
+    if (!map[pid]) map[pid] = {};
+    const total = Number(row.total_amount) || 0;
+    const paid = Number(row.paid_amount) || 0;
+    map[pid][row.lease_month] = {
+      id: Number(row.id),
+      invoice_number: row.invoice_number,
+      total_amount: round2$1(total),
+      paid_amount: round2$1(paid),
+      status: total > 0 && paid >= total ? "paid" : paid > 0 ? "partial_paid" : "pending_payment"
+    };
+  }
+  return map;
+}
+
+// إنشاء الفواتير الناقصة لكل أشهر الاستقطاع التي حلّت (≤ upToMonth).
+// تعيد عدد الفواتير المنشأة. أخطاء فاتورة واحدة لا توقف البقية.
+async function generateSetAsideInvoices({
+  upToMonth = null,
+  actor = null
+} = {}) {
+  await ensureLeaseSchema();
+  const linked = await ensureLeaseInvoiceLinkColumns();
+  if (!linked) return {
+    created: 0,
+    skipped: 0
+  };
+  const limitMonth = upToMonth || todayRiyadh$1().slice(0, 7);
+  const pending = await listPayments({
+    status: "pending",
+    excludeTerminated: true
+  });
+  if (!pending.length) return {
+    created: 0,
+    skipped: 0
+  };
+  const existing = await loadSetAsideInvoices(pending.map(p => p.id));
+  const accountCache = new Map();
+  let created = 0;
+  let skipped = 0;
+  for (const payment of pending) {
+    const schedule = setAsideSchedule({
+      amountIncl: payment.amount_incl,
+      dueDate: payment.due_date,
+      windowMonths: payment.window_months
+    });
+    const n = schedule.length;
+    if (!n) continue;
+    // نصيب الشهر من الأجرة الخاضعة (شامل الضريبة) ومن الثابت المعفى.
+    const exempt = Math.min(Math.max(Number(payment.fixed_exempt_excl) || 0, 0), payment.amount_incl);
+    const taxableIncl = round2$1(payment.amount_incl - exempt);
+    const taxableMonthly = round2$1(taxableIncl / n);
+    const exemptMonthly = round2$1(exempt / n);
+    const label = `${payment.contract_number || `#${payment.contract_id}`}`;
+    const typeLabel = CONTRACT_TYPE_LABELS[payment.contract_type] || "";
+    for (const item of schedule) {
+      if (item.month > limitMonth) continue;
+      if (existing[payment.id]?.[item.month]) {
+        skipped += 1;
+        continue;
+      }
+      try {
+        const type = payment.contract_type || "branch";
+        if (!accountCache.has(type)) accountCache.set(type, await getLeaseExpenseAccountId(type));
+        const accountId = accountCache.get(type);
+        if (!accountId) continue;
+        const last = item.seq === n;
+        const taxableShare = last ? round2$1(taxableIncl - round2$1(taxableMonthly * (n - 1))) : taxableMonthly;
+        const exemptShare = last ? round2$1(exempt - round2$1(exemptMonthly * (n - 1))) : exemptMonthly;
+        const monthDate = lastDayOfMonth(item.month);
+        const period = payment.period_start && payment.period_end ? ` (فترة ${payment.period_start} → ${payment.period_end})` : "";
+        const items = [];
+        if (taxableShare > 0) {
+          items.push({
+            description: `استقطاع ${item.seq}/${n} لشهر ${item.month} — الدفعة ${payment.seq} المستحقة ${payment.due_date} — إيجار ${payment.location || label}${period}`,
+            account_id: accountId,
+            quantity: 1,
+            unit_price: taxableShare,
+            tax_rate: Number(payment.vat_rate) || 0,
+            amount_includes_tax: true
+          });
+        }
+        if (exemptShare > 0) {
+          items.push({
+            description: `مبالغ ثابتة (بلا ضريبة) — استقطاع ${item.seq}/${n} لشهر ${item.month} — الدفعة ${payment.seq}`,
+            account_id: accountId,
+            quantity: 1,
+            unit_price: exemptShare,
+            tax_rate: 0,
+            amount_includes_tax: false
+          });
+        }
+        if (!items.length) continue;
+        const invoiceNumber = setAsideInvoiceNumber(payment.contract_id, payment.seq, item.month);
+        const result = await createPurchaseInvoice({
+          invoice_number: invoiceNumber,
+          contact_id: payment.lessor_contact_id || null,
+          supplier_name: payment.lessor_name,
+          expense_account_id: accountId,
+          invoice_date: monthDate,
+          due_date: monthDate,
+          currency: "SAR",
+          items,
+          paid_amount: 0,
+          workflow_status: "pending_payment",
+          branch_id: payment.branch_id || null,
+          notes: `استقطاع شهري للإيجار — عقد ${label}${typeLabel ? ` (${typeLabel})` : ""} — ${payment.lessor_name}` + `${payment.location ? ` — ${payment.location}` : ""}\n` + `الدفعة ${payment.seq}${payment.payment_frequency ? ` (${FREQUENCY_LABELS[payment.payment_frequency] || payment.payment_frequency})` : ""} تستحق ${payment.due_date} بقيمة ${round2$1(payment.amount_incl).toFixed(2)} SAR شامل الضريبة، ` + `مقسومة على ${n} أشهر: هذا استقطاع الشهر ${item.seq} من ${n} (${item.month}). ` + `تُعلَّم مسددة عند تأكيد تحويل الاستقطاع إلى حساب الاستقطاع.`
+        }, actor);
+        if (!result?.ok) {
+          console.error("set-aside invoice create failed", invoiceNumber, result?.error);
+          continue;
+        }
+        await sql`
+          UPDATE accounting_purchase_invoices
+          SET lease_contract_id = ${Number(payment.contract_id)},
+              lease_payment_id = ${Number(payment.id)},
+              lease_month = ${item.month}
+          WHERE id = ${Number(result.invoice.id)}
+        `;
+        created += 1;
+      } catch (error) {
+        console.error("set-aside invoice error", payment.id, item.month, error?.message);
+      }
+    }
+  }
+  return {
+    created,
+    skipped
+  };
+}
+
+// تأكيد التحويل → الفاتورة مسددة (المدفوع = الإجمالي، وسطر دفعة بتاريخ اليوم).
+async function markSetAsideInvoicePaid({
+  paymentId,
+  month,
+  amount,
+  bankAccountId = null,
+  actor = null
+}) {
+  const linked = await ensureLeaseInvoiceLinkColumns();
+  if (!linked) return null;
+  const [inv] = await sql`
+    SELECT id, invoice_number, total_amount FROM accounting_purchase_invoices
+    WHERE lease_payment_id = ${Number(paymentId)} AND lease_month = ${month} AND is_active = TRUE
+    ORDER BY id DESC LIMIT 1
+  `;
+  if (!inv) return null;
+  const total = round2$1(Number(inv.total_amount) || 0);
+  // فرق تقريب صغير أو مبلغ أكبر = سداد كامل؛ أقل بوضوح = جزئي.
+  const paid = Math.abs(round2$1(amount) - total) <= 0.05 || round2$1(amount) > total ? total : round2$1(amount);
+  const today = todayRiyadh$1();
+  const actorId = actor?.id ? Number(actor.id) : null;
+  const actorName = actor?.name ? String(actor.name) : null;
+  await sql.transaction([sql`
+      UPDATE accounting_purchase_invoices
+      SET paid_amount = ${paid}, paid_bank_account_id = ${bankAccountId},
+          workflow_status = 'pending_payment',
+          updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+      WHERE id = ${Number(inv.id)}
+    `, sql`DELETE FROM accounting_purchase_invoice_payments WHERE invoice_id = ${Number(inv.id)}`, sql`
+      INSERT INTO accounting_purchase_invoice_payments (
+        invoice_id, amount, payment_date, bank_account_id, receipt_url, notes,
+        created_by_employee_id, created_by_employee_name
+      )
+      VALUES (
+        ${Number(inv.id)}, ${paid}, ${today}, ${bankAccountId}, NULL,
+        ${`تأكيد تحويل استقطاع شهر ${month} إلى حساب الاستقطاع`},
+        ${actorId}, ${actorName}
+      )
+    `]);
+  await logPurchaseAudit({
+    entityType: "invoice",
+    entityId: Number(inv.id),
+    action: "paid",
+    summary: `سداد فاتورة الاستقطاع ${inv.invoice_number} (${paid.toFixed(2)} SAR) — تأكيد تحويل شهر ${month}`,
+    actor
+  });
+  return {
+    id: Number(inv.id),
+    invoice_number: inv.invoice_number,
+    paid_amount: paid,
+    total_amount: total
+  };
+}
+
+// إلغاء التأكيد → الفاتورة تعود غير مسددة.
+async function resetSetAsideInvoice({
+  paymentId,
+  month,
+  actor = null
+}) {
+  const linked = await ensureLeaseInvoiceLinkColumns();
+  if (!linked) return null;
+  const [inv] = await sql`
+    SELECT id, invoice_number FROM accounting_purchase_invoices
+    WHERE lease_payment_id = ${Number(paymentId)} AND lease_month = ${month} AND is_active = TRUE
+    ORDER BY id DESC LIMIT 1
+  `;
+  if (!inv) return null;
+  await sql.transaction([sql`
+      UPDATE accounting_purchase_invoices
+      SET paid_amount = 0, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+      WHERE id = ${Number(inv.id)}
+    `, sql`DELETE FROM accounting_purchase_invoice_payments WHERE invoice_id = ${Number(inv.id)}`]);
+  await logPurchaseAudit({
+    entityType: "invoice",
+    entityId: Number(inv.id),
+    action: "updated",
+    summary: `إلغاء سداد فاتورة الاستقطاع ${inv.invoice_number} — أُلغي تأكيد تحويل شهر ${month}`,
+    actor
+  });
+  return {
+    id: Number(inv.id),
+    invoice_number: inv.invoice_number
+  };
+}
+
+export { startPurchaseAutomationTimer as a, resetSetAsideInvoice as b, createRecurringTemplateFromInvoice as c, ensureScheduledReportsSchema as d, ensureRecurringSchema as e, buildPurchasesSummaryText as f, generateSetAsideInvoices as g, loadSetAsideInvoices as l, markSetAsideInvoicePaid as m, runPurchaseAutomation as r, syncRecurringTemplateFromInvoice as s };

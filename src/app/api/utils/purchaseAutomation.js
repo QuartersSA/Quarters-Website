@@ -3,6 +3,7 @@ import { sendWhatsAppViaWasender, flushWaOutbox } from "@/app/api/utils/wasender
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
 import { notifyByPref, onceDaily } from "@/app/api/utils/waNotify";
 import { anyCoffeeAccount } from "@/app/api/utils/coffeeInvoices";
+import { generateSetAsideInvoices } from "@/app/api/utils/leaseSetAsideInvoices";
 
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
@@ -786,6 +787,12 @@ export async function runPurchaseAutomation() {
     await ensureRecurringSchema();
     await ensureScheduledReportsSchema();
     await generateRecurringInvoices();
+    // فواتير الاستقطاع الشهري للإيجارات (شهر حلّ = فاتورة غير مسددة).
+    try {
+      await generateSetAsideInvoices();
+    } catch (error) {
+      console.error("lease set-aside invoices failed", error?.message);
+    }
     await sendDueScheduledReports();
     await sendOverdueDigest();
     // رسائل فشلت أثناء انقطاع الواتساب — أعد إرسالها بعد عودته.

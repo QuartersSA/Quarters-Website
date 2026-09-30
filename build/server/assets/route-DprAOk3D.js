@@ -1,10 +1,9 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { e as ensureLeaseSchema, l as loadContract, p as parseContractInput, s as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-Bu-QS9oc.js';
+import { e as ensureLeaseSchema, d as deactivateSetAsideInvoicesForPayments, l as loadContract, p as parseContractInput, s as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-5fHmsgHE.js';
 import '@neondatabase/serverless';
 import 'crypto';
-import './leaseMath-Cz-hbKbu.js';
 
 // عقد تأجيري واحد: عرض / تعديل / إيقاف أو حذف.
 // GET    /api/accounting/lease-contracts/[id]
@@ -252,7 +251,9 @@ async function DELETE(request, {
           status: 409
         });
       }
-      // الدفعات تُحذف تتابعًا (ON DELETE CASCADE).
+      // فواتير الاستقطاع غير المسددة تُوقف، ثم الدفعات تُحذف تتابعًا (CASCADE).
+      const paymentRows = await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${id}`;
+      await deactivateSetAsideInvoicesForPayments(paymentRows.map(r => r.id), auth.user, "حُذف العقد");
       await sql`DELETE FROM accounting_lease_contracts WHERE id = ${id}`;
       await logPurchaseAudit({
         entityType: "lease_contract",
@@ -271,6 +272,8 @@ async function DELETE(request, {
       SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
     `;
+    const paymentRows = await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${id}`;
+    await deactivateSetAsideInvoicesForPayments(paymentRows.map(r => r.id), auth.user, "أُوقف العقد");
     await logPurchaseAudit({
       entityType: "lease_contract",
       entityId: id,

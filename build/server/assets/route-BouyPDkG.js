@@ -1,9 +1,18 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { j as setAsideSchedule, r as round2 } from './leaseMath-Cz-hbKbu.js';
-import { e as ensureLeaseSchema, t as todayRiyadh, g as listPayments, h as loadReservesByPayment, R as REQUIRE_LEASE } from './leaseContracts-Bu-QS9oc.js';
+import { e as ensureLeaseSchema, t as todayRiyadh, c as listPayments, u as loadReservesByPayment, f as setAsideSchedule, g as round2, R as REQUIRE_LEASE } from './leaseContracts-5fHmsgHE.js';
+import { g as generateSetAsideInvoices, l as loadSetAsideInvoices } from './leaseSetAsideInvoices-BIZpvJrr.js';
 import 'crypto';
 import './sql-CSDV1lSC.js';
 import '@neondatabase/serverless';
+import './purchaseAudit-CVdAiEPz.js';
+import './wasender-DykD1wlV.js';
+import './waNotify-CtLfIpXX.js';
+import './coffeeInvoices-DsQXXppv.js';
+import './accountsTree-BiYqjwch.js';
+import './inventoryUnitSnapshots-B5krAOBv.js';
+import './employeeDisplayName-CwZGtUC2.js';
+import './branchVisibility-CPqSH5sT.js';
+import './route-BUl4vftO.js';
 
 // الاستقطاع الشهري: كل دفعة معلّقة تُقسَّم على أشهر تكرارها (ربعي 3،
 // نصفي 6، سنوي 12) في الأشهر السابقة لشهر الاستحقاق؛ كل شهر يُحوَّل
@@ -31,12 +40,23 @@ async function GET(request) {
     const month = parseMonth(url.searchParams.get("month")) || currentMonth;
     const branchRaw = Number(url.searchParams.get("branch_id"));
     const branchId = Number.isInteger(branchRaw) && branchRaw > 0 ? branchRaw : null;
+
+    // فواتير الاستقطاع للأشهر التي حلّت تُنشأ هنا أيضًا (إضافة إلى الأتمتة).
+    try {
+      await generateSetAsideInvoices({
+        upToMonth: currentMonth,
+        actor: auth.user
+      });
+    } catch (error) {
+      console.error("set-aside invoice generation failed", error?.message);
+    }
     const pending = await listPayments({
       status: "pending",
       excludeTerminated: true
     });
     const filtered = branchId ? pending.filter(payment => Number(payment.branch_id) === branchId) : pending;
     const ledger = await loadReservesByPayment(filtered.map(payment => payment.id));
+    const invoices = await loadSetAsideInvoices(filtered.map(payment => payment.id));
     const canConfirm = month <= currentMonth;
     const rows = filtered.map(payment => {
       const entries = ledger[Number(payment.id)] || [];
@@ -56,10 +76,14 @@ async function GET(request) {
       }));
       const schedule = [...plan, ...extra].sort((a, b) => a.month.localeCompare(b.month)).map(item => {
         const confirmed = byMonth.get(item.month) || null;
+        const invoice = invoices[Number(payment.id)]?.[item.month] || null;
         return {
           month: item.month,
           seq: item.seq,
           planned_amount: round2(item.amount),
+          invoice_id: invoice ? invoice.id : null,
+          invoice_number: invoice ? invoice.invoice_number : null,
+          invoice_status: invoice ? invoice.status : null,
           confirmed_amount: confirmed ? confirmed.amount : null,
           confirmed_by: confirmed ? confirmed.created_by_employee_name : null,
           note: confirmed ? confirmed.note : null,
@@ -82,6 +106,9 @@ async function GET(request) {
         this_month_planned: thisMonth ? thisMonth.planned_amount : 0,
         confirmed_amount: thisMonth ? thisMonth.confirmed_amount : null,
         confirmed_by: thisMonth ? thisMonth.confirmed_by : null,
+        invoice_id: thisMonth ? thisMonth.invoice_id : null,
+        invoice_number: thisMonth ? thisMonth.invoice_number : null,
+        invoice_status: thisMonth ? thisMonth.invoice_status : null,
         in_window: !!thisMonth && !thisMonth.extra,
         reserved_total: reservedTotal,
         remaining_to_reserve: round2(Math.max(payment.amount_incl - reservedTotal, 0)),
