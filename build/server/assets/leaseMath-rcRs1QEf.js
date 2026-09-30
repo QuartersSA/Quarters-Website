@@ -104,6 +104,32 @@ function installmentAmounts({
   };
 }
 
+// مبلغ الدفعة = الأجرة (قبل الضريبة، تُفكّ إن كانت شاملة) + المبالغ الثابتة
+// لكل دفعة (رسوم خدمات/صيانة… قبل الضريبة دائمًا)، ثم الضريبة على المجموع.
+function installmentWithFixed({
+  amount,
+  fixedAmount = 0,
+  vatRate = DEFAULT_VAT_RATE,
+  amountIncludesVat = false
+}) {
+  const rent = installmentAmounts({
+    amount,
+    vatRate,
+    amountIncludesVat
+  }).amount_excl;
+  const fixed = round2(Math.max(Number(fixedAmount) || 0, 0));
+  const total = installmentAmounts({
+    amount: rent + fixed,
+    vatRate,
+    amountIncludesVat: false
+  });
+  return {
+    rent_excl: rent,
+    fixed_excl: fixed,
+    ...total
+  };
+}
+
 // توليد جدول الدفعات. يعيد [] عند نقص المدخلات.
 // firstDueDate: أول استحقاق (افتراضيًا تاريخ البداية). الدفعات تتوالى
 // كل N شهر حتى (وليس بعد) تاريخ النهاية. فترة كل دفعة = [الاستحقاق،
@@ -115,18 +141,20 @@ function generateSchedule({
   amount,
   vatRate = DEFAULT_VAT_RATE,
   amountIncludesVat = false,
+  fixedAmount = 0,
   firstDueDate = null,
   maxInstallments = 240
 }) {
   const months = FREQUENCY_MONTHS[frequency];
   if (!months || !isDateKey(startDate) || !isDateKey(endDate)) return [];
   if (compareDateKeys(endDate, startDate) < 0) return [];
-  const money = installmentAmounts({
+  const money = installmentWithFixed({
     amount,
+    fixedAmount,
     vatRate,
     amountIncludesVat
   });
-  if (!(money.amount_excl > 0)) return [];
+  if (!(money.rent_excl > 0)) return [];
   const first = isDateKey(firstDueDate) ? firstDueDate : startDate;
   const rows = [];
   let due = first;
@@ -263,4 +291,4 @@ function daysBetween(fromKey, toKey) {
   return Math.round((Date.UTC(b.y, b.m - 1, b.d) - Date.UTC(a.y, a.m - 1, a.d)) / 86400000);
 }
 
-export { CONTRACT_STATUS_LABELS as C, DEFAULT_VAT_RATE as D, FREQUENCY_LABELS as F, LEASE_FREQUENCIES as L, contractStatus as a, isDateKey as b, compareDateKeys as c, daysBetween as d, addDays as e, reserveForPayment as f, generateSchedule as g, addMonths as h, installmentAmounts as i, daysInMonth as j, monthKey as m, round2 as r, suggestedReserve as s };
+export { CONTRACT_STATUS_LABELS as C, DEFAULT_VAT_RATE as D, FREQUENCY_MONTHS as F, LEASE_FREQUENCIES as L, contractStatus as a, isDateKey as b, compareDateKeys as c, daysBetween as d, addDays as e, installmentAmounts as f, generateSchedule as g, reserveForPayment as h, installmentWithFixed as i, addMonths as j, FREQUENCY_LABELS as k, daysInMonth as l, monthKey as m, round2 as r, suggestedReserve as s };

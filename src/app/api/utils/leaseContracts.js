@@ -12,6 +12,7 @@ import {
   DEFAULT_VAT_RATE,
   generateSchedule,
   installmentAmounts,
+  installmentWithFixed,
   contractStatus,
   daysBetween,
   addDays,
@@ -160,6 +161,17 @@ async function doEnsureLeaseSchema() {
       UNIQUE (payment_id, month)
     )
   `;
+  // المبالغ الثابتة (رسوم خدمات/صيانة…) لكل دفعة قبل الضريبة: التفصيل
+  // JSON + المجموع؛ وعلى كل دفعة نصيبها ضمن amount_excl.
+  await sql`
+    ALTER TABLE accounting_lease_contracts
+      ADD COLUMN IF NOT EXISTS fixed_charges JSONB,
+      ADD COLUMN IF NOT EXISTS fixed_amount NUMERIC(14,2) NOT NULL DEFAULT 0
+  `;
+  await sql`
+    ALTER TABLE accounting_lease_payments
+      ADD COLUMN IF NOT EXISTS fixed_excl NUMERIC(14,2) NOT NULL DEFAULT 0
+  `;
   // هل أُدخلت قيمة الدفعة شاملة الضريبة؟ (تبقى installment_amount قبل
   // الضريبة؛ العلم يُعيد للمستخدم الرقم كما كتبه عند التعديل.)
   await sql`
@@ -230,6 +242,8 @@ export function computeContractFields(row, today = todayRiyadh()) {
     installment_amount: num(row.installment_amount),
     vat_rate: num(row.vat_rate, DEFAULT_VAT_RATE),
     amount_includes_vat: row.amount_includes_vat === true,
+    fixed_amount: num(row.fixed_amount),
+    fixed_charges: Array.isArray(row.fixed_charges) ? row.fixed_charges : [],
     total_value: row.total_value === null || row.total_value === undefined ? null : num(row.total_value),
     is_active: row.is_active !== false,
     computed_status: contractStatus({
@@ -261,6 +275,7 @@ const CONTRACT_SELECT = `
          TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
          c.notice_period_days, c.notice_period_text,
          c.payment_frequency, c.installment_amount, c.vat_rate, c.amount_includes_vat,
+         c.fixed_charges, c.fixed_amount,
          TO_CHAR(c.first_due_date, 'YYYY-MM-DD') AS first_due_date,
          c.total_value, c.status, c.notes, c.attachment_url, c.attachment_name,
          c.analysis_json, c.is_active, c.created_at, c.updated_at,
@@ -326,7 +341,7 @@ async function loadContractPayments(contractId) {
            TO_CHAR(p.due_date, 'YYYY-MM-DD') AS due_date,
            TO_CHAR(p.period_start, 'YYYY-MM-DD') AS period_start,
            TO_CHAR(p.period_end, 'YYYY-MM-DD') AS period_end,
-           p.amount_excl, p.vat_rate, p.vat_amount, p.amount_incl,
+           p.amount_excl, p.fixed_excl, p.vat_rate, p.vat_amount, p.amount_incl,
            p.status,
            TO_CHAR(p.paid_date, 'YYYY-MM-DD') AS paid_date,
            p.paid_amount, p.invoice_id, inv.invoice_number,
@@ -344,6 +359,7 @@ function normalizePaymentRow(row) {
   return {
     ...row,
     amount_excl: num(row.amount_excl),
+    fixed_excl: num(row.fixed_excl),
     vat_rate: num(row.vat_rate, DEFAULT_VAT_RATE),
     vat_amount: num(row.vat_amount),
     amount_incl: num(row.amount_incl),
@@ -417,7 +433,7 @@ export async function listPayments({
            TO_CHAR(w.due_date, 'YYYY-MM-DD') AS due_date,
            TO_CHAR(w.period_start, 'YYYY-MM-DD') AS period_start,
            TO_CHAR(w.period_end, 'YYYY-MM-DD') AS period_end,
-           w.amount_excl, w.vat_rate, w.vat_amount, w.amount_incl,
+           w.amount_excl, w.fixed_excl, w.vat_rate, w.vat_amount, w.amount_incl,
            w.status,
            TO_CHAR(w.paid_date, 'YYYY-MM-DD') AS paid_date,
            w.paid_amount, w.invoice_id, inv.invoice_number,
@@ -525,8 +541,9 @@ export function buildScheduleRows(input) {
       compareDateKeys(a.due_date, b.due_date),
     );
     return sorted.map((row, index) => {
-      const money = installmentAmounts({
+      const money = installmentWithFixed({
         amount: row.amount_excl,
+        fixedAmount: input.fixed_amount,
         vatRate: row.vat_rate ?? input.vat_rate,
         amountIncludesVat: false,
       });
@@ -545,6 +562,7 @@ export function buildScheduleRows(input) {
     endDate: input.end_date,
     frequency: input.payment_frequency,
     amount: input.installment_amount,
+    fixedAmount: input.fixed_amount,
     vatRate: input.vat_rate,
     amountIncludesVat: false,
     firstDueDate: input.first_due_date,
@@ -555,11 +573,11 @@ function insertPaymentStatement(contractId, row) {
   return sql`
     INSERT INTO accounting_lease_payments (
       contract_id, seq, due_date, period_start, period_end,
-      amount_excl, vat_rate, vat_amount, amount_incl, status, notes
+      amount_excl, fixed_excl, vat_rate, vat_amount, amount_incl, status, notes
     )
     VALUES (
       ${contractId}, ${row.seq}, ${row.due_date}, ${row.period_start || null}, ${row.period_end || null},
-      ${round2(row.amount_excl)}, ${num(row.vat_rate, DEFAULT_VAT_RATE)}, ${round2(row.vat_amount)}, ${round2(row.amount_incl)},
+      ${round2(row.amount_excl)}, ${round2(row.fixed_excl || 0)}, ${num(row.vat_rate, DEFAULT_VAT_RATE)}, ${round2(row.vat_amount)}, ${round2(row.amount_incl)},
       'pending', ${row.notes || null}
     )
   `;
@@ -702,6 +720,25 @@ export function parseContractInput(body = {}, { requireSchedule = true } = {}) {
     if (!(installmentAmount > 0)) return { ok: false, error: "قيمة الدفعة مطلوبة" };
   }
 
+  // المبالغ الثابتة لكل دفعة (قبل الضريبة): قائمة {label, amount} أو مجموع.
+  const fixedCharges = [];
+  if (Array.isArray(body.fixed_charges)) {
+    for (const entry of body.fixed_charges) {
+      const amount = parseMoney(entry?.amount, 0);
+      const label = textOrNull(entry?.label ?? entry?.description, 200);
+      if (!(amount > 0) && !label) continue;
+      if (amount < 0) return { ok: false, error: "مبلغ ثابت غير صحيح" };
+      fixedCharges.push({ label: label || "مبلغ ثابت", amount: round2(amount) });
+    }
+  }
+  let fixedAmount = round2(fixedCharges.reduce((sum, row) => sum + row.amount, 0));
+  if (!fixedCharges.length && body.fixed_amount !== undefined && body.fixed_amount !== null && body.fixed_amount !== "") {
+    fixedAmount = parseMoney(body.fixed_amount, 0);
+    if (fixedAmount < 0) return { ok: false, error: "مبلغ ثابت غير صحيح" };
+    fixedAmount = round2(fixedAmount);
+    if (fixedAmount > 0) fixedCharges.push({ label: "مبالغ ثابتة", amount: fixedAmount });
+  }
+
   const noticeDaysRaw = body.notice_period_days;
   let noticeDays = null;
   if (noticeDaysRaw !== undefined && noticeDaysRaw !== null && noticeDaysRaw !== "") {
@@ -743,6 +780,8 @@ export function parseContractInput(body = {}, { requireSchedule = true } = {}) {
       installment_amount: round2(installmentAmount),
       vat_rate: vatRate,
       amount_includes_vat: amountIncludesVat,
+      fixed_charges: fixedCharges,
+      fixed_amount: fixedAmount,
       first_due_date: firstDue,
       payments,
       notes: textOrNull(body.notes, 4000),

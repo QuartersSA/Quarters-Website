@@ -35,9 +35,9 @@ export async function POST(request, { params } = {}) {
              TO_CHAR(p.due_date, 'YYYY-MM-DD') AS due_date,
              TO_CHAR(p.period_start, 'YYYY-MM-DD') AS period_start,
              TO_CHAR(p.period_end, 'YYYY-MM-DD') AS period_end,
-             p.amount_excl, p.vat_rate, p.vat_amount, p.amount_incl, p.notes,
+             p.amount_excl, p.fixed_excl, p.vat_rate, p.vat_amount, p.amount_incl, p.notes,
              c.contract_number, c.lessor_name, c.lessor_contact_id, c.location,
-             c.branch_id, c.is_active AS contract_active
+             c.branch_id, c.is_active AS contract_active, c.fixed_charges
       FROM accounting_lease_payments p
       JOIN accounting_lease_contracts c ON c.id = p.contract_id
       WHERE p.id = ${id}
@@ -130,6 +130,36 @@ export async function POST(request, { params } = {}) {
 
     const period =
       row.period_start && row.period_end ? ` (${row.period_start} → ${row.period_end})` : "";
+    // بند الأجرة + بند المبالغ الثابتة (إن وُجدت) — كلاهما تحت «إيجارات».
+    const fixedExcl = Math.min(Math.max(Number(row.fixed_excl) || 0, 0), amountExcl);
+    const rentExcl = Math.round((amountExcl - fixedExcl) * 100) / 100;
+    const taxRate = Number(row.vat_rate) || 0;
+    const invoiceLines = [];
+    if (rentExcl > 0) {
+      invoiceLines.push({
+        description:
+          `إيجار ${row.location || row.contract_number || ""} — الدفعة ${row.seq}`.replace(/\s+/g, " ").trim() +
+          period,
+        account_id: rentAccountId,
+        quantity: 1,
+        unit_price: rentExcl,
+        tax_rate: taxRate,
+        amount_includes_tax: false,
+      });
+    }
+    if (fixedExcl > 0) {
+      const labels = Array.isArray(row.fixed_charges)
+        ? row.fixed_charges.map((c) => c?.label).filter(Boolean).join("، ")
+        : "";
+      invoiceLines.push({
+        description: `مبالغ ثابتة${labels ? ` (${labels})` : ""} — الدفعة ${row.seq}${period}`,
+        account_id: rentAccountId,
+        quantity: 1,
+        unit_price: fixedExcl,
+        tax_rate: taxRate,
+        amount_includes_tax: false,
+      });
+    }
     const result = await createPurchaseInvoice(
       {
         invoice_number: invoiceNumber,
@@ -139,18 +169,7 @@ export async function POST(request, { params } = {}) {
         invoice_date: paidDate,
         due_date: row.due_date,
         currency: "SAR",
-        items: [
-          {
-            description:
-              `إيجار ${row.location || row.contract_number || ""} — الدفعة ${row.seq}`.replace(/\s+/g, " ").trim() +
-              period,
-            account_id: rentAccountId,
-            quantity: 1,
-            unit_price: amountExcl,
-            tax_rate: Number(row.vat_rate) || 0,
-            amount_includes_tax: false,
-          },
-        ],
+        items: invoiceLines,
         subtotal_amount: amountExcl,
         discount_amount: 0,
         tax_amount: vatAmount,

@@ -271,7 +271,7 @@ function monthEndDate(month) {
 function contractInstallmentIncl(contract) {
   if (contract.payment_frequency === "custom") return null;
   return installmentAmounts({
-    amount: contract.installment_amount,
+    amount: moneyValue(contract.installment_amount) + moneyValue(contract.fixed_amount),
     vatRate: contract.vat_rate,
     amountIncludesVat: false,
   }).amount_incl;
@@ -1985,9 +1985,23 @@ export default function LeaseContractsPanel({
                       </div>
                       {drawerContract.payment_frequency !== "custom" ? (
                         <div className="text-[11px] text-slate-500 dark:text-white/45 tabular-nums" dir="ltr">
-                          {formatMoney(drawerContract.installment_amount, false)} + VAT{" "}
-                          {moneyValue(drawerContract.vat_rate)}% ={" "}
+                          {formatMoney(drawerContract.installment_amount, false)}
+                          {moneyValue(drawerContract.fixed_amount) > 0
+                            ? ` + ${formatMoney(drawerContract.fixed_amount, false)}`
+                            : ""}{" "}
+                          + VAT {moneyValue(drawerContract.vat_rate)}% ={" "}
                           {formatMoney(contractInstallmentIncl(drawerContract), false)}
+                        </div>
+                      ) : null}
+                      {moneyValue(drawerContract.fixed_amount) > 0 ? (
+                        <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                          مبالغ ثابتة لكل دفعة:{" "}
+                          {(Array.isArray(drawerContract.fixed_charges) && drawerContract.fixed_charges.length
+                            ? drawerContract.fixed_charges
+                            : [{ label: "مبالغ ثابتة", amount: drawerContract.fixed_amount }]
+                          )
+                            .map((c) => `${c.label} ${formatMoney(c.amount, false)}`)
+                            .join("، ")}
                         </div>
                       ) : null}
                     </div>
