@@ -1,8 +1,8 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureLeaseSchema, R as REQUIRE_LEASE } from './leaseContracts-DG6L4did.js';
+import { e as ensureLeaseSchema, R as REQUIRE_LEASE } from './leaseContracts-D5eH32Je.js';
 import Anthropic from '@anthropic-ai/sdk';
 import sql from './sql-CSDV1lSC.js';
-import { L as LEASE_FREQUENCIES, F as FREQUENCY_MONTHS } from './leaseMath-rcRs1QEf.js';
+import { L as LEASE_FREQUENCIES, F as FREQUENCY_MONTHS } from './leaseMath-DWUZXg5N.js';
 import 'crypto';
 import '@neondatabase/serverless';
 
@@ -94,7 +94,7 @@ const LEASE_SCHEMA = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["description", "amount", "period"],
+        required: ["description", "amount", "period", "taxable"],
         properties: {
           description: {
             type: "string",
@@ -102,7 +102,11 @@ const LEASE_SCHEMA = {
           },
           amount: {
             type: "number",
-            description: "المبلغ قبل الضريبة كما طُبع"
+            description: "المبلغ كما طُبع"
+          },
+          taxable: {
+            type: "boolean",
+            description: "true فقط إذا طبّق العقد ضريبة القيمة المضافة على هذا المبلغ صراحة؛ في جداول «إيجار» عمود المبالغ الثابتة/Services يُضاف بعد الضريبة → false"
           },
           period: {
             type: "string",
@@ -214,7 +218,7 @@ const SYSTEM_PROMPT = `أنت خبير عقود وعقارات سعودي متخ
 7. الدفعات: حدّد التكرار من نص العقد — «شهري» monthly، «كل ثلاثة أشهر/ربع سنوي» quarterly، «على دفعتين/نصف سنوي» semi_annual، «دفعة واحدة سنويًا» annual. إذا ذُكر إيجار سنوي «يُدفع على دفعتين» فالتكرار semi_annual وقيمة الدفعة = السنوي ÷ 2؛ «على أربع دفعات» quarterly والدفعة = السنوي ÷ 4؛ وهكذا. installment_amount = قيمة الدفعة الواحدة قبل الضريبة.
 8. الضريبة: إذا ذُكرت ضريبة القيمة المضافة منفصلة (15%) فـ amount_includes_vat=false وvat_rate=15. إذا نصّ العقد أن المبلغ «شامل ضريبة القيمة المضافة» فـ amount_includes_vat=true. إذا لم تُذكر الضريبة إطلاقًا فاترك vat_rate=15 وamount_includes_vat=false واذكر ذلك في operator_note.
 9. إذا طبع العقد جدول دفعات صريحًا (تواريخ ومبالغ لكل دفعة) فأعده كاملًا في payments بترتيب التاريخ، وإذا كانت المبالغ أو الفترات غير منتظمة فاجعل payment_frequency="custom". إن لم يُطبع جدول فاترك payments مصفوفة فارغة وأعد first_due_date (غالبًا تاريخ البداية أو تاريخ توقيع العقد).
-10. المبالغ الثابتة: عقود «إيجار» الموحدة تفصل «الأجرة» عن «المبالغ الثابتة» (رسوم خدمات، صيانة، حراسة، مواقف، نظافة، تأمين، إدارة، مساهمة مرافق…) وتجمعهما في إجمالي الدفعة. أعد كل مبلغ ثابت في fixed_charges باسمه ومبلغه قبل الضريبة وأساسه (سنوي/لكل دفعة/شهري/لكامل المدة) كما طُبع دون تحويل. installment_amount = الأجرة وحدها لكل دفعة (بلا المبالغ الثابتة) — النظام يجمعهما. مبلغ التأمين المسترد (الضمان) ليس مبلغًا ثابتًا.
+10. المبالغ الثابتة: عقود «إيجار» الموحدة تفصل «الأجرة» عن «المبالغ الثابتة» (رسوم خدمات، صيانة، حراسة، مواقف، نظافة، تأمين، إدارة، مساهمة مرافق…) وتجمعهما في إجمالي الدفعة. أعد كل مبلغ ثابت في fixed_charges باسمه ومبلغه قبل الضريبة وأساسه (سنوي/لكل دفعة/شهري/لكامل المدة) كما طُبع دون تحويل. installment_amount = الأجرة وحدها لكل دفعة (بلا المبالغ الثابتة) — النظام يجمعهما. في جدول دفعات «إيجار» الأعمدة: قيمة الإيجار، ضريبة القيمة المضافة (على الإيجار فقط)، قيمة المبالغ الثابتة/Services (بلا ضريبة)، إجمالي القيمة = مجموعها؛ فاجعل taxable=false ما لم يطبّق العقد الضريبة عليها صراحة. تحقق: الأجرة + ضريبتها + المبالغ الثابتة = إجمالي الدفعة المطبوع. مبلغ التأمين المسترد (الضمان) ليس مبلغًا ثابتًا.
 11. total_contract_value = إجمالي قيمة العقد كما طُبع (لكل المدة) إن ذُكر، وإلا null. لا تحسبه من عندك.
 12. لا تخترع أرقامًا أو تواريخ لا يدعمها المستند. أرقام السجل التجاري والهواتف والصكوك ورقم الوحدة ليست مبالغ. عند أي شك أو تعارض بين صفحات العقد اذكره باختصار في operator_note.
 
@@ -408,6 +412,7 @@ async function runLeaseContractAnalysis({
     return {
       label: cleanText(entry?.description, 200) || "مبلغ ثابت",
       amount: Math.round(perInstallment * 100) / 100,
+      taxable: entry?.taxable === true,
       printed_amount: printed,
       period
     };

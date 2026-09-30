@@ -2,7 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
 import { createPurchaseInvoice } from './route-CU6b0Pr9.js';
-import { e as ensureLeaseSchema, a as parseDate, t as todayRiyadh, c as parseMoney, g as getRentAccountId, d as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-DG6L4did.js';
+import { e as ensureLeaseSchema, a as parseDate, t as todayRiyadh, c as parseMoney, g as getRentAccountId, d as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-D5eH32Je.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './accountsTree-BiYqjwch.js';
@@ -13,7 +13,7 @@ import './coffeeInvoices-tatr7e1X.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
-import './leaseMath-rcRs1QEf.js';
+import './leaseMath-DWUZXg5N.js';
 
 // سداد دفعة إيجار: تُنشأ فاتورة مشتريات مدفوعة تحت حساب «إيجارات»
 // (رقمها LEASE-<العقد>-<التسلسل>) ثم تُعلَّم الدفعة مسددة وتُربط بها.
@@ -47,7 +47,7 @@ async function POST(request, {
              TO_CHAR(p.due_date, 'YYYY-MM-DD') AS due_date,
              TO_CHAR(p.period_start, 'YYYY-MM-DD') AS period_start,
              TO_CHAR(p.period_end, 'YYYY-MM-DD') AS period_end,
-             p.amount_excl, p.fixed_excl, p.vat_rate, p.vat_amount, p.amount_incl, p.notes,
+             p.amount_excl, p.fixed_excl, p.fixed_exempt_excl, p.vat_rate, p.vat_amount, p.amount_incl, p.notes,
              c.contract_number, c.lessor_name, c.lessor_contact_id, c.location,
              c.branch_id, c.is_active AS contract_active, c.fixed_charges
       FROM accounting_lease_payments p
@@ -152,10 +152,14 @@ async function POST(request, {
       });
     }
     const period = row.period_start && row.period_end ? ` (${row.period_start} → ${row.period_end})` : "";
-    // بند الأجرة + بند المبالغ الثابتة (إن وُجدت) — كلاهما تحت «إيجارات».
+    // بند الأجرة (خاضع) + المبالغ الثابتة الخاضعة (خاضع) + المعفاة (ضريبة 0)
+    // — كلها تحت «إيجارات». الإجمالي يُحسب من البنود بنفس تقريب الفواتير.
     const fixedExcl = Math.min(Math.max(Number(row.fixed_excl) || 0, 0), amountExcl);
+    const fixedExempt = Math.min(Math.max(Number(row.fixed_exempt_excl) || 0, 0), fixedExcl);
+    const fixedTaxable = Math.round((fixedExcl - fixedExempt) * 100) / 100;
     const rentExcl = Math.round((amountExcl - fixedExcl) * 100) / 100;
     const taxRate = Number(row.vat_rate) || 0;
+    const fixedLabels = Array.isArray(row.fixed_charges) ? row.fixed_charges.map(c => c?.label).filter(Boolean).join("، ") : "";
     const invoiceLines = [];
     if (rentExcl > 0) {
       invoiceLines.push({
@@ -167,17 +171,31 @@ async function POST(request, {
         amount_includes_tax: false
       });
     }
-    if (fixedExcl > 0) {
-      const labels = Array.isArray(row.fixed_charges) ? row.fixed_charges.map(c => c?.label).filter(Boolean).join("، ") : "";
+    if (fixedTaxable > 0) {
       invoiceLines.push({
-        description: `مبالغ ثابتة${labels ? ` (${labels})` : ""} — الدفعة ${row.seq}${period}`,
+        description: `مبالغ ثابتة خاضعة للضريبة${fixedLabels ? ` (${fixedLabels})` : ""} — الدفعة ${row.seq}${period}`,
         account_id: rentAccountId,
         quantity: 1,
-        unit_price: fixedExcl,
+        unit_price: fixedTaxable,
         tax_rate: taxRate,
         amount_includes_tax: false
       });
     }
+    if (fixedExempt > 0) {
+      invoiceLines.push({
+        description: `مبالغ ثابتة${fixedLabels ? ` (${fixedLabels})` : ""} — الدفعة ${row.seq}${period}`,
+        account_id: rentAccountId,
+        quantity: 1,
+        unit_price: fixedExempt,
+        tax_rate: 0,
+        amount_includes_tax: false
+      });
+    }
+    const linesSubtotal = Math.round(invoiceLines.reduce((sum, l) => sum + l.unit_price, 0) * 100) / 100;
+    const linesTax = Math.round(invoiceLines.reduce((sum, l) => sum + Math.round(l.unit_price * l.tax_rate / 100 * 100) / 100, 0) * 100) / 100;
+    const linesTotal = Math.round((linesSubtotal + linesTax) * 100) / 100;
+    // السداد الكامل = إجمالي الفاتورة كما تحسبه بنودها (فرق تقريب ≤ هللة).
+    const invoicePaid = Math.abs(paidAmount - amountIncl) <= 0.011 ? linesTotal : Math.min(paidAmount, linesTotal);
     const result = await createPurchaseInvoice({
       invoice_number: invoiceNumber,
       contact_id: row.lessor_contact_id || null,
@@ -187,11 +205,11 @@ async function POST(request, {
       due_date: row.due_date,
       currency: "SAR",
       items: invoiceLines,
-      subtotal_amount: amountExcl,
+      subtotal_amount: linesSubtotal,
       discount_amount: 0,
-      tax_amount: vatAmount,
-      total_amount: amountIncl,
-      paid_amount: paidAmount,
+      tax_amount: linesTax,
+      total_amount: linesTotal,
+      paid_amount: invoicePaid,
       paid_bank_account_id: bankAccountId || null,
       payment_receipt_url: receiptUrl || null,
       workflow_status: "pending_payment",

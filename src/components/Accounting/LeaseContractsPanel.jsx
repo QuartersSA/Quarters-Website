@@ -62,6 +62,8 @@ import {
   daysBetween,
   daysInMonth,
   installmentAmounts,
+  installmentWithFixed,
+  splitFixedCharges,
   monthKey,
 } from "@/utils/leaseMath";
 
@@ -270,8 +272,15 @@ function monthEndDate(month) {
 // القادم للعقود ذات الدفعات المخصصة.
 function contractInstallmentIncl(contract) {
   if (contract.payment_frequency === "custom") return null;
-  return installmentAmounts({
-    amount: moneyValue(contract.installment_amount) + moneyValue(contract.fixed_amount),
+  const fixed = splitFixedCharges(
+    Array.isArray(contract.fixed_charges) && contract.fixed_charges.length
+      ? contract.fixed_charges
+      : [{ amount: contract.fixed_amount, taxable: false }],
+  );
+  return installmentWithFixed({
+    amount: contract.installment_amount,
+    fixedAmount: fixed.exempt,
+    fixedTaxableAmount: fixed.taxable,
     vatRate: contract.vat_rate,
     amountIncludesVat: false,
   }).amount_incl;
@@ -1985,12 +1994,12 @@ export default function LeaseContractsPanel({
                       </div>
                       {drawerContract.payment_frequency !== "custom" ? (
                         <div className="text-[11px] text-slate-500 dark:text-white/45 tabular-nums" dir="ltr">
-                          {formatMoney(drawerContract.installment_amount, false)}
+                          {formatMoney(drawerContract.installment_amount, false)} + VAT{" "}
+                          {moneyValue(drawerContract.vat_rate)}%
                           {moneyValue(drawerContract.fixed_amount) > 0
                             ? ` + ${formatMoney(drawerContract.fixed_amount, false)}`
                             : ""}{" "}
-                          + VAT {moneyValue(drawerContract.vat_rate)}% ={" "}
-                          {formatMoney(contractInstallmentIncl(drawerContract), false)}
+                          = {formatMoney(contractInstallmentIncl(drawerContract), false)}
                         </div>
                       ) : null}
                       {moneyValue(drawerContract.fixed_amount) > 0 ? (
