@@ -9,6 +9,7 @@
 import sql from "@/app/api/utils/sql";
 import {
   LEASE_FREQUENCIES,
+  CONTRACT_TYPES,
   DEFAULT_VAT_RATE,
   generateSchedule,
   installmentAmounts,
@@ -174,6 +175,11 @@ async function doEnsureLeaseSchema() {
       ADD COLUMN IF NOT EXISTS fixed_excl NUMERIC(14,2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS fixed_exempt_excl NUMERIC(14,2) NOT NULL DEFAULT 0
   `;
+  // نوع العقد: branch | housing | warehouse (فرع / سكن / مستودع).
+  await sql`
+    ALTER TABLE accounting_lease_contracts
+      ADD COLUMN IF NOT EXISTS contract_type TEXT NOT NULL DEFAULT 'branch'
+  `;
   // هل أُدخلت قيمة الدفعة شاملة الضريبة؟ (تبقى installment_amount قبل
   // الضريبة؛ العلم يُعيد للمستخدم الرقم كما كتبه عند التعديل.)
   await sql`
@@ -236,6 +242,7 @@ export function computeContractFields(row, today = todayRiyadh()) {
   return {
     ...row,
     lessor_contact_id: row.lessor_contact_id ?? null,
+    contract_type: CONTRACT_TYPES.includes(row.contract_type) ? row.contract_type : "branch",
     branch_id: row.branch_id ?? null,
     branch_name: row.branch_name ?? null,
     notice_period_days: row.notice_period_days === null || row.notice_period_days === undefined
@@ -271,7 +278,7 @@ export function computeContractFields(row, today = todayRiyadh()) {
 // أعمدة رأس العقد + تجميعات الدفعات (المسدد مقابل المعلّق؛ الملغاة مستبعدة).
 // $1 = تاريخ اليوم بالرياض.
 const CONTRACT_SELECT = `
-  SELECT c.id, c.contract_number, c.lessor_name, c.lessor_contact_id, c.lessor_vat_number,
+  SELECT c.id, c.contract_number, c.contract_type, c.lessor_name, c.lessor_contact_id, c.lessor_vat_number,
          c.location, c.branch_id, b.name AS branch_name,
          TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
          TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
@@ -443,7 +450,7 @@ export async function listPayments({
            w.bank_account_id, bank.name AS bank_name,
            w.receipt_url, w.notes,
            TO_CHAR(w.prev_due_date, 'YYYY-MM-DD') AS prev_due_date,
-           c.contract_number, c.lessor_name, c.lessor_contact_id, c.location,
+           c.contract_number, c.contract_type, c.lessor_name, c.lessor_contact_id, c.location,
            c.branch_id, b.name AS branch_name,
            c.status AS contract_stored_status,
            TO_CHAR(c.start_date, 'YYYY-MM-DD') AS contract_start_date,
@@ -676,6 +683,11 @@ export function parseContractInput(body = {}, { requireSchedule = true } = {}) {
     return { ok: false, error: "تاريخ الانتهاء يجب أن يكون بعد تاريخ البداية أو يساويه" };
   }
 
+  const contractType = String(body.contract_type || "branch").trim();
+  if (!CONTRACT_TYPES.includes(contractType)) {
+    return { ok: false, error: "نوع العقد غير معروف (فرع / سكن / مستودع)" };
+  }
+
   const frequency = String(body.payment_frequency || "monthly").trim();
   if (!LEASE_FREQUENCIES.includes(frequency)) {
     return { ok: false, error: "تكرار الدفعات غير معروف" };
@@ -777,6 +789,7 @@ export function parseContractInput(body = {}, { requireSchedule = true } = {}) {
     ok: true,
     value: {
       contract_number: textOrNull(body.contract_number, 120),
+      contract_type: contractType,
       lessor_name: lessorName,
       lessor_contact_id: parseIntOrNull(body.lessor_contact_id),
       lessor_vat_number: textOrNull(body.lessor_vat_number, 40),

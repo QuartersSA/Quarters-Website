@@ -19,6 +19,14 @@ export const FREQUENCY_LABELS = {
 };
 export const DEFAULT_VAT_RATE = 15;
 
+// نوع العقد: ما هي العين المؤجرة.
+export const CONTRACT_TYPES = ["branch", "housing", "warehouse"];
+export const CONTRACT_TYPE_LABELS = {
+  branch: "فرع",
+  housing: "سكن",
+  warehouse: "مستودع",
+};
+
 export function round2(value) {
   const n = Number(value);
   return Number.isFinite(n) ? Math.round(n * 100) / 100 : 0;

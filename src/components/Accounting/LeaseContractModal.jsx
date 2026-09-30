@@ -21,6 +21,8 @@ import GlassSelect from "@/components/Workspace/GlassSelect";
 import { useAnalyzeLeaseContract } from "@/hooks/useLeaseContracts";
 import {
   CONTRACT_STATUS_LABELS,
+  CONTRACT_TYPES,
+  CONTRACT_TYPE_LABELS,
   DEFAULT_VAT_RATE,
   FREQUENCY_LABELS,
   LEASE_FREQUENCIES,
@@ -141,6 +143,7 @@ export default function LeaseContractModal({
   const [lessorName, setLessorName] = useState("");
   const [lessorVat, setLessorVat] = useState("");
   const [location, setLocation] = useState("");
+  const [contractType, setContractType] = useState("branch");
   const [branchId, setBranchId] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -192,6 +195,9 @@ export default function LeaseContractModal({
       setLessorName(contract.lessor_name || "");
       setLessorVat(contract.lessor_vat_number || "");
       setLocation(contract.location || "");
+      setContractType(
+        CONTRACT_TYPES.includes(contract.contract_type) ? contract.contract_type : "branch",
+      );
       setBranchId(contract.branch_id ? String(contract.branch_id) : "");
       setStartDate(contract.start_date || "");
       setEndDate(contract.end_date || "");
@@ -261,6 +267,7 @@ export default function LeaseContractModal({
       setLessorName("");
       setLessorVat("");
       setLocation("");
+      setContractType("branch");
       setBranchId("");
       setStartDate("");
       setEndDate("");
@@ -488,6 +495,7 @@ export default function LeaseContractModal({
       lessor_contact_id: contactId ? Number(contactId) : null,
       lessor_vat_number: lessorVat.trim() || null,
       location: location.trim() || null,
+      contract_type: contractType,
       branch_id: branchId ? Number(branchId) : null,
       start_date: startDate,
       end_date: endDate,
@@ -570,6 +578,11 @@ export default function LeaseContractModal({
       }
     }
 
+    if (CONTRACT_TYPES.includes(analysis.contract_type) && canFillDefault("contractType")) {
+      setContractType(analysis.contract_type);
+      owned.add("contractType");
+      filled.push(`نوع العقد (${CONTRACT_TYPE_LABELS[analysis.contract_type]})`);
+    }
     if (analysis.location && canFill("location", !location.trim())) {
       setLocation(String(analysis.location));
       owned.add("location");
@@ -1033,6 +1046,26 @@ export default function LeaseContractModal({
                       placeholder="3xxxxxxxxxxxxx3"
                       dir="ltr"
                     />
+                  </div>
+                  <div>
+                    <FieldLabel>نوع العقد</FieldLabel>
+                    <div className={`${ws.segWrap} flex-wrap`}>
+                      {CONTRACT_TYPES.map((key) => (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => {
+                            setContractType(key);
+                            touch("contractType");
+                          }}
+                          className={`${ws.segBtn} text-xs px-3 py-1.5 ${
+                            contractType === key ? ws.segActive : ws.segInactive
+                          }`}
+                        >
+                          {CONTRACT_TYPE_LABELS[key]}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <div>
                     <FieldLabel>الموقع</FieldLabel>

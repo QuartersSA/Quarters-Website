@@ -23,6 +23,14 @@ const FREQUENCY_LABELS = {
   custom: "دفعات مخصصة"
 };
 const DEFAULT_VAT_RATE = 15;
+
+// نوع العقد: ما هي العين المؤجرة.
+const CONTRACT_TYPES = ["branch", "housing", "warehouse"];
+const CONTRACT_TYPE_LABELS = {
+  branch: "فرع",
+  housing: "سكن",
+  warehouse: "مستودع"
+};
 function round2(value) {
   const n = Number(value);
   return Number.isFinite(n) ? Math.round(n * 100) / 100 : 0;
@@ -316,4 +324,4 @@ function daysBetween(fromKey, toKey) {
   return Math.round((Date.UTC(b.y, b.m - 1, b.d) - Date.UTC(a.y, a.m - 1, a.d)) / 86400000);
 }
 
-export { CONTRACT_STATUS_LABELS as C, DEFAULT_VAT_RATE as D, FREQUENCY_MONTHS as F, LEASE_FREQUENCIES as L, contractStatus as a, isDateKey as b, compareDateKeys as c, daysBetween as d, addDays as e, installmentAmounts as f, generateSchedule as g, reserveForPayment as h, installmentWithFixed as i, suggestedReserve as j, addMonths as k, FREQUENCY_LABELS as l, monthKey as m, daysInMonth as n, round2 as r, splitFixedCharges as s };
+export { CONTRACT_TYPES as C, DEFAULT_VAT_RATE as D, FREQUENCY_MONTHS as F, LEASE_FREQUENCIES as L, contractStatus as a, isDateKey as b, compareDateKeys as c, daysBetween as d, addDays as e, installmentAmounts as f, generateSchedule as g, reserveForPayment as h, installmentWithFixed as i, suggestedReserve as j, addMonths as k, CONTRACT_STATUS_LABELS as l, CONTRACT_TYPE_LABELS as m, FREQUENCY_LABELS as n, monthKey as o, daysInMonth as p, round2 as r, splitFixedCharges as s };

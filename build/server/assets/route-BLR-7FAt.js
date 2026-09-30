@@ -1,10 +1,10 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { e as ensureLeaseSchema, l as loadContract, p as parseContractInput, s as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-D5eH32Je.js';
+import { e as ensureLeaseSchema, l as loadContract, p as parseContractInput, s as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-Byir0b6W.js';
 import '@neondatabase/serverless';
 import 'crypto';
-import './leaseMath-DWUZXg5N.js';
+import './leaseMath-DalW0cI5.js';
 
 // عقد تأجيري واحد: عرض / تعديل / إيقاف أو حذف.
 // GET    /api/accounting/lease-contracts/[id]
@@ -145,6 +145,7 @@ async function PUT(request, {
     await sql`
       UPDATE accounting_lease_contracts
       SET contract_number = ${value.contract_number},
+          contract_type = ${value.contract_type},
           lessor_name = ${value.lessor_name},
           lessor_contact_id = ${value.lessor_contact_id},
           lessor_vat_number = ${value.lessor_vat_number},
