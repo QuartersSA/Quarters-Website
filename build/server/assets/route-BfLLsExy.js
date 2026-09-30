@@ -1,8 +1,7 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { h as installmentAmounts } from './leaseMath-Cz-hbKbu.js';
-import { e as ensureLeaseSchema, a as parseDate, c as parseMoney, f as recomputeContractTotal, d as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-Bu-QS9oc.js';
+import { e as ensureLeaseSchema, k as parseDate, m as parseMoney, d as deactivateSetAsideInvoicesForPayments, o as installmentAmounts, q as recomputeContractTotal, n as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-5fHmsgHE.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -101,6 +100,9 @@ async function PUT(request, {
         });
       }
       status = body.status;
+    }
+    if (status === "cancelled" && payment.status !== "cancelled") {
+      await deactivateSetAsideInvoicesForPayments([id], auth.user, "أُلغيت الدفعة");
     }
     const notes = body.notes === undefined ? payment.notes : body.notes ? String(body.notes).trim().slice(0, 2000) : null;
 

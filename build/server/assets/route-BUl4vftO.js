@@ -2,12 +2,14 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-BiYqjwch.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as runPurchaseAutomation, a as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './purchaseAutomation-CurltN51.js';
+import { e as ensureLeaseSchema } from './leaseContracts-5fHmsgHE.js';
+import { r as runPurchaseAutomation, s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './leaseSetAsideInvoices-BIZpvJrr.js';
 import { n as notifyByPref } from './waNotify-CtLfIpXX.js';
-import { c as loadRoastChild, d as loadInvoiceLines, f as recomputeItemCost, g as reverseDeposits, h as loadRoastLinks, j as applyCoffeeToItems, k as assertRoastSyncAllowed, s as syncRoastInvoice, m as reverseSyncRoastToBean, C as CoffeeError, n as resolveRoaster, o as getRoastingAccountId, b as reserveIds, i as insertLineStatement, p as recordArrival, e as ensureCoffeeSchema, L as LINE_SELECT_COLUMNS, q as planLineReconcile } from './coffeeInvoices-D2MJxjAS.js';
+import { l as loadRoastChild, a as loadInvoiceLines, r as recomputeItemCost, b as reverseDeposits, c as loadRoastLinks, d as applyCoffeeToItems, e as assertRoastSyncAllowed, s as syncRoastInvoice, f as reverseSyncRoastToBean, C as CoffeeError, g as resolveRoaster, h as getRoastingAccountId, i as reserveIds, j as insertLineStatement, k as recordArrival, L as LINE_SELECT_COLUMNS, p as planLineReconcile, m as ensureCoffeeSchema } from './coffeeInvoices-DsQXXppv.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-DykD1wlV.js';
+import './route-BUl4vftO.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
@@ -54,6 +56,11 @@ function todayRiyadh() {
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
 async function ensureSchema() {
+  await ensureSchemaBase();
+  // جداول العقود وأعمدة ربط فواتير الاستقطاع (الاستعلام يربط بجدول العقود).
+  await ensureLeaseSchema();
+}
+async function ensureSchemaBase() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_contacts (
       id SERIAL PRIMARY KEY,
@@ -590,6 +597,11 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.roast_confirmed,
         inv.roaster_reference,
         inv.workflow_status,
+        inv.lease_contract_id,
+        inv.lease_payment_id,
+        inv.lease_month,
+        lc.contract_number AS lease_contract_number,
+        lc.contract_type AS lease_contract_type,
         CASE
           WHEN inv.is_active = FALSE THEN 'inactive'
           WHEN inv.total_amount > 0 AND inv.paid_amount >= inv.total_amount THEN 'paid'
@@ -614,6 +626,7 @@ function selectInvoicesQuery(where, statusFilter) {
       LEFT JOIN branches br ON br.id = inv.branch_id
       LEFT JOIN accounting_purchase_invoices src ON src.id = inv.source_invoice_id
       LEFT JOIN accounting_contacts rc ON rc.id = inv.roaster_contact_id
+      LEFT JOIN accounting_lease_contracts lc ON lc.id = inv.lease_contract_id
       ${where.sql}
     )
     SELECT *

@@ -2,6 +2,7 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { ensureLeaseSchema } from "@/app/api/utils/leaseContracts";
 import {
   runPurchaseAutomation,
   createRecurringTemplateFromInvoice,
@@ -71,6 +72,12 @@ function todayRiyadh() {
 }
 
 async function ensureSchema() {
+  await ensureSchemaBase();
+  // جداول العقود وأعمدة ربط فواتير الاستقطاع (الاستعلام يربط بجدول العقود).
+  await ensureLeaseSchema();
+}
+
+async function ensureSchemaBase() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_contacts (
       id SERIAL PRIMARY KEY,
@@ -683,6 +690,11 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.roast_confirmed,
         inv.roaster_reference,
         inv.workflow_status,
+        inv.lease_contract_id,
+        inv.lease_payment_id,
+        inv.lease_month,
+        lc.contract_number AS lease_contract_number,
+        lc.contract_type AS lease_contract_type,
         CASE
           WHEN inv.is_active = FALSE THEN 'inactive'
           WHEN inv.total_amount > 0 AND inv.paid_amount >= inv.total_amount THEN 'paid'
@@ -707,6 +719,7 @@ function selectInvoicesQuery(where, statusFilter) {
       LEFT JOIN branches br ON br.id = inv.branch_id
       LEFT JOIN accounting_purchase_invoices src ON src.id = inv.source_invoice_id
       LEFT JOIN accounting_contacts rc ON rc.id = inv.roaster_contact_id
+      LEFT JOIN accounting_lease_contracts lc ON lc.id = inv.lease_contract_id
       ${where.sql}
     )
     SELECT *

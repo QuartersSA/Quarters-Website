@@ -9,6 +9,7 @@ import {
   parseDate,
   parseMoney,
   recomputeContractTotal,
+  deactivateSetAsideInvoicesForPayments,
 } from "@/app/api/utils/leaseContracts";
 
 // تعديل دفعة معلّقة/ملغاة (تاريخ الاستحقاق، المبلغ قبل الضريبة، نسبة
@@ -78,6 +79,9 @@ export async function PUT(request, { params } = {}) {
         return Response.json({ error: "حالة الدفعة غير صالحة" }, { status: 400 });
       }
       status = body.status;
+    }
+    if (status === "cancelled" && payment.status !== "cancelled") {
+      await deactivateSetAsideInvoicesForPayments([id], auth.user, "أُلغيت الدفعة");
     }
 
     const notes =

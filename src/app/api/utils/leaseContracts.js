@@ -7,6 +7,7 @@
 // src/utils/leaseMath.js — تُستخدم هنا وفي الواجهة بلا اختلاف.
 
 import sql from "@/app/api/utils/sql";
+import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
 import {
   LEASE_FREQUENCIES,
   CONTRACT_TYPES,
@@ -189,6 +190,25 @@ async function doEnsureLeaseSchema() {
     ALTER TABLE accounting_lease_contracts
       ADD COLUMN IF NOT EXISTS amount_includes_vat BOOLEAN NOT NULL DEFAULT FALSE
   `;
+  await ensureLeaseInvoiceLinkColumns();
+}
+
+// أعمدة ربط فواتير الاستقطاع بالعقد/الدفعة/الشهر على فواتير المشتريات —
+// تُضاف فقط إن كان جدول الفواتير موجودًا (يُنشئه مسار الفواتير).
+export async function ensureLeaseInvoiceLinkColumns() {
+  const [reg] = await sql`SELECT to_regclass('accounting_purchase_invoices') AS t`;
+  if (!reg?.t) return false;
+  await sql`
+    ALTER TABLE accounting_purchase_invoices
+      ADD COLUMN IF NOT EXISTS lease_contract_id INTEGER,
+      ADD COLUMN IF NOT EXISTS lease_payment_id INTEGER,
+      ADD COLUMN IF NOT EXISTS lease_month TEXT
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_purchase_invoices_lease
+      ON accounting_purchase_invoices (lease_payment_id, lease_month)
+  `;
+  return true;
 }
 
 export function ensureLeaseSchema() {
@@ -230,6 +250,72 @@ export async function getRentAccountId() {
     RETURNING id
   `;
   return Number(created.id);
+}
+
+// حساب مصروف الإيجار حسب نوع العقد تحت المجموعة 52: «إيجار فرع / مستودع»
+// أو «إيجار سكن» — بالاسم أولًا، وإلا يُنشأ برمز حر (5207/5208 إن كانا حرّين).
+const LEASE_ACCOUNTS = {
+  branch: { name: "إيجار فرع / مستودع", name_en: "Branch / Warehouse Rent", code: "5207" },
+  warehouse: { name: "إيجار فرع / مستودع", name_en: "Branch / Warehouse Rent", code: "5207" },
+  housing: { name: "إيجار سكن", name_en: "Housing Rent", code: "5208" },
+};
+
+async function freeChildCode(parentCode, preferred) {
+  const candidates = [preferred];
+  for (let n = 7; n <= 98; n += 1) candidates.push(`${parentCode}${String(n).padStart(2, "0")}`);
+  for (const code of candidates) {
+    const [taken] = await sql`SELECT 1 AS t FROM accounting_accounts WHERE code = ${code} LIMIT 1`;
+    if (!taken) return code;
+  }
+  return `${parentCode}${Date.now() % 1000}`;
+}
+
+export async function getLeaseExpenseAccountId(contractType) {
+  const spec = LEASE_ACCOUNTS[contractType] || LEASE_ACCOUNTS.branch;
+  const [parent] = await sql`
+    SELECT id, code FROM accounting_accounts
+    WHERE code = '52' AND is_system AND is_active
+    LIMIT 1
+  `;
+  if (!parent) return getRentAccountId();
+  const [byName] = await sql`
+    SELECT id FROM accounting_accounts
+    WHERE parent_id = ${parent.id} AND is_active AND account_type = 'expense'
+      AND TRIM(name) = ${spec.name}
+    LIMIT 1
+  `;
+  if (byName) return Number(byName.id);
+  const code = await freeChildCode(parent.code, spec.code);
+  const [created] = await sql`
+    INSERT INTO accounting_accounts (code, name, name_en, account_type, parent_id, is_postable, is_system)
+    VALUES (${code}, ${spec.name}, ${spec.name_en}, 'expense', ${parent.id}, TRUE, TRUE)
+    RETURNING id
+  `;
+  return Number(created.id);
+}
+
+// إيقاف فواتير الاستقطاع غير المسددة المرتبطة بدفعات (حذف/إلغاء/إعادة توليد).
+export async function deactivateSetAsideInvoicesForPayments(paymentIds, actor = null, reason = "") {
+  const ids = [...new Set((paymentIds || []).map(Number).filter((n) => Number.isInteger(n) && n > 0))];
+  if (!ids.length) return 0;
+  const linked = await ensureLeaseInvoiceLinkColumns();
+  if (!linked) return 0;
+  const rows = await sql`
+    UPDATE accounting_purchase_invoices
+    SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+    WHERE lease_payment_id = ANY(${ids}) AND is_active = TRUE AND paid_amount <= 0
+    RETURNING id, invoice_number
+  `;
+  for (const row of rows) {
+    await logPurchaseAudit({
+      entityType: "invoice",
+      entityId: Number(row.id),
+      action: "deactivated",
+      summary: `إيقاف فاتورة الاستقطاع ${row.invoice_number}${reason ? ` — ${reason}` : ""}`,
+      actor,
+    });
+  }
+  return rows.length;
 }
 
 // ---------------------------------------------------------------------------
@@ -640,6 +726,15 @@ export async function replaceSchedule(
   let paidSeqs = new Set();
   let paidKeys = new Set();
   let skipped = 0;
+  // فواتير الاستقطاع المرتبطة بالصفوف التي ستُحذف تُوقف (غير المسددة فقط).
+  const removable = keepPaid
+    ? await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${contractId} AND status <> 'paid'`
+    : await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${contractId}`;
+  await deactivateSetAsideInvoicesForPayments(
+    removable.map((r) => r.id),
+    null,
+    "أُعيد توليد جدول الدفعات",
+  );
   if (keepPaid) {
     const paidRows = await sql`
       SELECT seq, TO_CHAR(due_date, 'YYYY-MM-DD') AS due_date, amount_incl

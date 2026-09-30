@@ -466,6 +466,8 @@ export default function PurchasesPage() {
   // "invoices:add" style intents let the overview's quick actions land
   // on a tab with its create modal already open.
   const intent = searchParams.get("intent") || "";
+  // ?contract=ID (من فاتورة استقطاع مرتبطة) يفتح درج العقد مباشرة.
+  const openContractId = searchParams.get("contract") || "";
 
   const setTab = useCallback(
     (tabKey, extras = {}) => {
@@ -490,6 +492,13 @@ export default function PurchasesPage() {
     next.delete("intent");
     setSearchParams(next, { replace: true });
   }, [intent, searchParams, setSearchParams]);
+
+  const clearOpenContract = useCallback(() => {
+    if (!openContractId) return;
+    const next = new URLSearchParams(searchParams);
+    next.delete("contract");
+    setSearchParams(next, { replace: true });
+  }, [openContractId, searchParams, setSearchParams]);
 
   const activeTab = TABS.find((tab) => tab.key === activeTabKey) || TABS[0];
   const activeVendorSub =
@@ -613,6 +622,8 @@ export default function PurchasesPage() {
             onSubChange={(sub) => setTab("leases", { sub })}
             autoOpenAdd={intent === "add"}
             onIntentConsumed={clearIntent}
+            openContractId={openContractId}
+            onOpenContractConsumed={clearOpenContract}
           />
         ) : (
           <PurchasesReportsPanel employeeId={employeeId} isAdmin={isAdmin} />

@@ -9,6 +9,10 @@ import {
   parseMoney,
   todayRiyadh,
 } from "@/app/api/utils/leaseContracts";
+import {
+  markSetAsideInvoicePaid,
+  resetSetAsideInvoice,
+} from "@/app/api/utils/leaseSetAsideInvoices";
 
 // تأكيد الاستقطاع الشهري لدفعة: تسجيل المبلغ المحوَّل إلى حساب الاستقطاع
 // عن شهر معيّن لدفعة معلّقة (سجل accounting_lease_reserves؛ صف لكل دفعة/شهر).
@@ -122,7 +126,13 @@ export async function POST(request) {
           actor: auth.user,
         });
       }
-      return Response.json({ ok: true, removed: deleted.length > 0, reserves: (await loadReservesByPayment([paymentId]))[paymentId] || [] });
+      const resetInvoice = await resetSetAsideInvoice({ paymentId, month, actor: auth.user }).catch(() => null);
+      return Response.json({
+        ok: true,
+        removed: deleted.length > 0,
+        invoice: resetInvoice,
+        reserves: (await loadReservesByPayment([paymentId]))[paymentId] || [],
+      });
     }
 
     const suggested =
@@ -161,11 +171,25 @@ export async function POST(request) {
       summary: `${saved?.inserted ? "تأكيد" : "تعديل"} استقطاع شهر ${month} عن ${label}: ${amount.toFixed(2)} SAR${suggested !== null && Math.abs(suggested - amount) > 0.005 ? ` (المقترح ${suggested.toFixed(2)})` : ""}`,
       actor: auth.user,
     });
+    // فاتورة الاستقطاع لهذا الشهر تصبح مسددة.
+    const bankIdRaw = Number(body.bank_account_id);
+    const bankAccountId = Number.isInteger(bankIdRaw) && bankIdRaw > 0 ? bankIdRaw : null;
+    const invoice = await markSetAsideInvoicePaid({
+      paymentId,
+      month,
+      amount,
+      bankAccountId,
+      actor: auth.user,
+    }).catch((error) => {
+      console.error("set-aside invoice pay failed", error?.message);
+      return null;
+    });
     const reserves = (await loadReservesByPayment([paymentId]))[paymentId] || [];
     return Response.json({
       ok: true,
       reserve: reserves.find((e) => e.month === month) || null,
       reserves,
+      invoice,
       reserved_total: round2(reserves.reduce((acc, e) => acc + e.amount, 0)),
     });
   } catch (error) {
@@ -203,6 +227,7 @@ export async function DELETE(request) {
       WHERE payment_id = ${paymentId} AND month = ${month}
       RETURNING id, amount
     `;
+    await resetSetAsideInvoice({ paymentId, month, actor: auth.user }).catch(() => null);
     if (deleted.length) {
       await logPurchaseAudit({
         entityType: "lease_payment",

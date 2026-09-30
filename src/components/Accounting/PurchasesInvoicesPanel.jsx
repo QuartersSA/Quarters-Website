@@ -25,6 +25,7 @@ import {
   Repeat,
   Save,
   ScanEye,
+  ScrollText,
   Search,
   Trash2,
   X,
@@ -105,6 +106,25 @@ function coffeeSummary(invoice) {
     else pending += 1;
   }
   return { kind: "bean", beans, pending, received };
+}
+
+// شارة فاتورة استقطاع إيجار: مرتبطة بعقد — الضغط يفتح العقد في تبويب العقود.
+function LeaseBadge({ invoice, detailed = false }) {
+  if (!invoice?.lease_contract_id) return null;
+  const number = invoice.lease_contract_number || `#${invoice.lease_contract_id}`;
+  const href = `/accounting/purchases?tab=leases&sub=contracts&contract=${invoice.lease_contract_id}`;
+  return (
+    <a
+      href={href}
+      onClick={(event) => event.stopPropagation()}
+      className="inline-flex items-center gap-1 rounded-full border border-sky-200 dark:border-sky-400/25 bg-sky-50 dark:bg-sky-400/10 text-sky-800 dark:text-sky-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap hover:bg-sky-100 dark:hover:bg-sky-400/20"
+      title={`استقطاع إيجار${invoice.lease_month ? ` لشهر ${invoice.lease_month}` : ""} — مرتبط بعقد رقم ${number} — اضغط لفتح العقد`}
+      dir="rtl"
+    >
+      <ScrollText className="w-3 h-3" />
+      {detailed ? `استقطاع إيجار${invoice.lease_month ? ` ${invoice.lease_month}` : ""} · عقد رقم ${number}` : `عقد ${number}`}
+    </a>
+  );
 }
 
 function CoffeeBadge({ invoice }) {
@@ -1753,6 +1773,7 @@ export default function PurchasesInvoicesPanel({
                         <div className="flex items-center gap-1.5" dir="ltr">
                           <span>{invoice.invoice_number}</span>
                           <CoffeeBadge invoice={invoice} />
+                          <LeaseBadge invoice={invoice} />
                           {invoice.attachment_url ? (
                             <a
                               href={invoice.attachment_url}
@@ -2071,6 +2092,11 @@ export default function PurchasesInvoicesPanel({
                     <div className="font-bold text-slate-900 dark:text-white font-mono" dir="ltr">
                       {drawerRow.invoice_number}
                     </div>
+                    {drawerRow.lease_contract_id ? (
+                      <div className="mt-1">
+                        <LeaseBadge invoice={drawerRow} detailed />
+                      </div>
+                    ) : null}
                     {drawerRow.contact_id ? (
                       <button
                         type="button"

@@ -319,6 +319,8 @@ export default function LeaseContractsPanel({
   onSubChange,
   autoOpenAdd = false,
   onIntentConsumed,
+  openContractId = "",
+  onOpenContractConsumed,
 }) {
   const today = useMemo(() => todayRiyadh(), []);
   const currentMonth = useMemo(() => currentRiyadhMonthKey(), []);
@@ -350,6 +352,16 @@ export default function LeaseContractsPanel({
     onIntentConsumed?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoOpenAdd]);
+
+  // رابط ?contract=ID (من فاتورة استقطاع) يفتح درج العقد ويُزال من الرابط.
+  useEffect(() => {
+    const id = Number(openContractId);
+    if (!Number.isInteger(id) || id <= 0) return;
+    setPreviewId(id);
+    if (sub !== "contracts") onSubChange?.("contracts");
+    onOpenContractConsumed?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openContractId]);
 
   // إغلاق الدرج أو تبديل العقد يلغي أي تحرير دفعة جارٍ.
   useEffect(() => {
@@ -1442,7 +1454,7 @@ export default function LeaseContractsPanel({
         className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold whitespace-nowrap ${cls} ${
           item.is_current ? "ring-2 ring-offset-1 ring-[#0e7a5f]/40 dark:ring-emerald-300/40 dark:ring-offset-transparent" : ""
         }`}
-        title={`${monthLabel(item.month)} — ${confirmed ? `مؤكد ${formatMoney(item.confirmed_amount)}` : `مخطط ${formatMoney(item.planned_amount)}`}${item.overdue ? " — متأخر" : ""}`}
+        title={`${monthLabel(item.month)} — ${confirmed ? `مؤكد ${formatMoney(item.confirmed_amount)}` : `مخطط ${formatMoney(item.planned_amount)}`}${item.overdue ? " — متأخر" : ""}${item.invoice_number ? ` — فاتورة ${item.invoice_number}${item.invoice_status === "paid" ? " (مسددة)" : ""}` : ""}`}
       >
         {confirmed ? <CheckCircle2 className="w-3 h-3" /> : item.overdue ? <AlertTriangle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
         <span dir="ltr">{item.month.slice(2)}</span>
@@ -1746,6 +1758,19 @@ export default function LeaseContractsPanel({
                             أكده {row.confirmed_by}
                           </div>
                         ) : null}
+                        {row.invoice_number ? (
+                          <div
+                            className={`text-[10px] font-mono mt-1 whitespace-nowrap ${
+                              row.invoice_status === "paid"
+                                ? "text-[#0e7a5f] dark:text-emerald-300"
+                                : "text-slate-500 dark:text-white/45"
+                            }`}
+                            dir="ltr"
+                            title={row.invoice_status === "paid" ? "فاتورة الاستقطاع مسددة" : "فاتورة الاستقطاع غير مسددة — تُسدَّد عند تأكيد التحويل"}
+                          >
+                            {row.invoice_number} {row.invoice_status === "paid" ? "✓" : "○"}
+                          </div>
+                        ) : null}
                       </td>
                       <td className="px-4 py-3 text-left tabular-nums" dir="ltr">
                         <div className="font-bold text-sky-700 dark:text-sky-200">
@@ -1843,10 +1868,12 @@ export default function LeaseContractsPanel({
               قبل موعد السداد).
             </div>
             <div>
-              في نهاية كل شهر حوِّل نصيبه إلى حساب الاستقطاع المنفصل ثم اضغط{" "}
-              <b>«تأكيد التحويل»</b> — فيتجمع المبلغ ويظهر في «المتجمع». عند الاستحقاق
-              تُسدَّد الدفعة من «سداد المستحق» من المتجمع. شهر مضى بلا تأكيد يظهر
-              «متأخر» ويمكنك فتحه وتأكيده لاحقاً.
+              مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت
+              «إيجار فرع / مستودع» أو «إيجار سكن») تظهر في فواتير المشتريات مرتبطة برقم
+              العقد. حوِّل المبلغ إلى حساب الاستقطاع ثم اضغط <b>«تأكيد التحويل»</b> — فتصبح
+              الفاتورة مسددة ويتجمع المبلغ في «المتجمع». عند الاستحقاق تُسدَّد الدفعة من
+              «سداد المستحق» من المتجمع. شهر مضى بلا تأكيد يظهر «متأخر» ويمكنك فتحه
+              وتأكيده لاحقاً.
             </div>
           </div>
         </div>
