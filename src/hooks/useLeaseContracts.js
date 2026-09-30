@@ -414,7 +414,12 @@ export function useAnalyzeLeaseContract() {
             : res.status === 413
               ? "الملف أكبر من الحد المسموح للتحليل"
               : "تعذر تحليل المستند";
-        throw apiError(data, fallback, res.status);
+        const error = apiError(data, fallback, res.status);
+        // سبب الفشل الفعلي (details) يظهر للمشغّل بدل رسالة عامة.
+        if (data?.details && !String(error.message).includes(String(data.details))) {
+          error.message = `${error.message} — ${String(data.details).slice(0, 200)}`;
+        }
+        throw error;
       }
       return data?.analysis || null;
     },
