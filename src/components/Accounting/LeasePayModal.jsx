@@ -133,7 +133,7 @@ export default function LeasePayModal({
       }}
     >
       <div
-        className={`${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 max-h-[92svh] overflow-y-auto`}
+        className={`${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5 max-h-[92svh] overflow-y-auto overflow-x-hidden min-w-0`}
       >
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">

@@ -888,11 +888,13 @@ export default function LeaseContractModal({
         />
 
         {/* الجسم */}
-        <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6">
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4 sm:p-6">
+          {/* grid-cols-1 صراحةً: العمود الضمني (auto) يتمدد بعرض أطول سطر ويتجاوز
+              الشاشة على الجوال. */}
           <form
             id="lease-contract-form"
             onSubmit={handleSubmit}
-            className="grid lg:grid-cols-[minmax(0,1fr)_340px] gap-4 items-start"
+            className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] gap-4 items-start w-full max-w-full min-w-0"
           >
             <div className="space-y-4 min-w-0">
               {/* رفع العقد وتحليله */}
@@ -1263,7 +1265,7 @@ export default function LeaseContractModal({
                   ) : (
                     <div className="space-y-2">
                       {fixedRows.map((row) => (
-                        <div key={row.key} className="flex items-center gap-2">
+                        <div key={row.key} className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                           <input
                             type="text"
                             value={row.label}
@@ -1274,7 +1276,7 @@ export default function LeaseContractModal({
                                 rows.map((r) => (r.key === row.key ? { ...r, label: value } : r)),
                               );
                             }}
-                            className={`${ws.input} px-3 py-2 text-sm flex-1 min-w-0`}
+                            className={`${ws.input} px-3 py-2 text-sm flex-1 min-w-[10rem]`}
                             placeholder="مثال: رسوم خدمات"
                           />
                           <input
@@ -1525,7 +1527,7 @@ export default function LeaseContractModal({
             </div>
 
             {/* المعاينة الحية */}
-            <aside className="space-y-3 lg:sticky lg:top-0">
+            <aside className="space-y-3 lg:sticky lg:top-0 min-w-0">
               <div className={`${ws.glass} ${ws.card} p-4 space-y-3`}>
                 <SectionTitle icon={CalendarClock}>معاينة جدول الدفعات</SectionTitle>
                 <div className="grid grid-cols-2 gap-2 text-xs">
