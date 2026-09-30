@@ -15,14 +15,17 @@ const FILE_MEDIA_TYPES = new Set(["application/pdf", "image/jpeg", "image/png", 
 // حروف base64؛ ≈ 3MB من الملف الخام — الطلبات الأكبر تصطدم بحد الجسم
 // (4.5MB) على الخادم أصلًا.
 const MAX_FILE_BASE64 = 4 * 1024 * 1024;
+
+// الحد الأقصى للحقول ذات الأنواع المركّبة (nullable) في مخرجات JSON
+// المنظمة هو 16 — لذلك النصوص غير المعروفة "" لا null (التعقيم يحوّلها).
 const LEASE_SCHEMA = {
   type: "object",
   additionalProperties: false,
   required: ["contract_number", "lessor_name", "lessor_vat_number", "lessor_contact_id", "tenant_name", "location", "start_date", "end_date", "notice_period_days", "notice_period_text", "payment_frequency", "installment_amount", "vat_rate", "amount_includes_vat", "total_contract_value", "first_due_date", "payments", "currency", "operator_note"],
   properties: {
     contract_number: {
-      type: ["string", "null"],
-      description: "رقم العقد كما طُبع"
+      type: "string",
+      description: "رقم العقد كما طُبع، أو \"\" إن لم يوجد"
     },
     lessor_name: {
       type: ["string", "null"],
@@ -37,12 +40,12 @@ const LEASE_SCHEMA = {
       description: "id من قائمة الموردين/المؤجرين المرفقة عند المطابقة، وإلا null"
     },
     tenant_name: {
-      type: ["string", "null"],
-      description: "اسم المستأجر (الطرف الثاني)"
+      type: "string",
+      description: "اسم المستأجر (الطرف الثاني)، أو \"\""
     },
     location: {
-      type: ["string", "null"],
-      description: "موقع/عنوان العين المؤجرة"
+      type: "string",
+      description: "موقع/عنوان العين المؤجرة، أو \"\""
     },
     start_date: {
       type: ["string", "null"],
@@ -57,12 +60,13 @@ const LEASE_SCHEMA = {
       description: "فترة الإشعار بالأيام (ثلاثة أشهر = 90)"
     },
     notice_period_text: {
-      type: ["string", "null"],
-      description: "نص شرط الإشعار كما ورد في العقد باختصار"
+      type: "string",
+      description: "نص شرط الإشعار كما ورد في العقد باختصار، أو \"\" إن لم يوجد"
     },
     payment_frequency: {
-      type: ["string", "null"],
-      description: "تكرار الدفعات، إحدى القيم حرفيًا: monthly | quarterly | semi_annual | annual | custom — أو null"
+      type: "string",
+      enum: ["monthly", "quarterly", "semi_annual", "annual", "custom", "unknown"],
+      description: "تكرار الدفعات؛ unknown إن لم يتضح"
     },
     installment_amount: {
       type: ["number", "null"],
@@ -81,8 +85,8 @@ const LEASE_SCHEMA = {
       description: "إجمالي قيمة العقد كما طُبع (شامل الضريبة إن ذُكر)"
     },
     first_due_date: {
-      type: ["string", "null"],
-      description: "تاريخ أول استحقاق YYYY-MM-DD (افتراضيًا تاريخ البداية)"
+      type: "string",
+      description: "تاريخ أول استحقاق YYYY-MM-DD إن ذُكر صراحة، وإلا \"\""
     },
     payments: {
       type: "array",
@@ -101,7 +105,8 @@ const LEASE_SCHEMA = {
             description: "مبلغ الدفعة كما طُبع"
           },
           description: {
-            type: ["string", "null"]
+            type: "string",
+            description: "وصف الدفعة أو \"\""
           }
         }
       }
@@ -111,8 +116,8 @@ const LEASE_SCHEMA = {
       description: "رمز العملة ISO، افتراضيًا SAR"
     },
     operator_note: {
-      type: ["string", "null"],
-      description: "ملاحظة عربية قصيرة للمشغّل عند وجود شك أو تحويل تواريخ. null إن كان كل شيء واضحًا"
+      type: "string",
+      description: "ملاحظة عربية قصيرة للمشغّل عند وجود شك أو تحويل تواريخ. \"\" إن كان كل شيء واضحًا"
     }
   }
 };
@@ -176,12 +181,12 @@ const SYSTEM_PROMPT = `أنت خبير عقود وعقارات سعودي متخ
 يصلك مستند العقد نفسه (PDF أو صورة — قد يكون ممسوحًا بجودة ضعيفة أو متعدد الصفحات)، وأحيانًا معه نص مستخرج آليًا قد يكون مشوهًا (عربي معكوس الحروف أو مفصولها، أرقام ناقصة الفاصلة). اقرأ المستند أنت بصريًا — هو المصدر الأساسي؛ النص المستخرج مساعد ثانوي.
 
 مهمتك استخراج بيانات العقد بدقة لملء نموذج «عقد تأجيري» في نظام المشتريات:
-1. رقم العقد كما طُبع (رقم عقد إيجار/رقم المرجع)، وإلا null.
+1. رقم العقد كما طُبع (رقم عقد إيجار/رقم المرجع)، وإلا "". الحقول النصية غير المعروفة تُترك "" (سلسلة فارغة)، والرقمية والتواريخ null.
 2. المؤجر = الطرف الأول/المالك/من يستلم الأجرة. المستأجر = الطرف الثاني (غالبًا «مقهى ليلة وصباح / كوارتز» أو شركة المستخدم). لا تخلط بينهما. أعد اسم المؤجر مصححًا مقروءًا في lessor_name، ورقمه الضريبي المطبوع (أرقامًا فقط) في lessor_vat_number.
 3. طابق المؤجر مع القائمة المرفقة بالرقم الضريبي أولًا (مطابقة تامة)، ثم بالاسم بمرونة: تجاهل (ال) التعريف وكلمات شركة/مؤسسة/مكتب/عقارات وفروق الهمزات والتاء المربوطة والمسافات. طابق عند تشابه واضح فقط، وإلا اترك lessor_contact_id فارغًا.
 4. الموقع: عنوان/وصف العين المؤجرة (المدينة، الحي، رقم المحل/الوحدة) في سطر واحد.
 5. التواريخ: أعد تاريخي البداية والانتهاء بصيغة ميلادية YYYY-MM-DD. إن كان العقد بالتقويم الهجري فحوّله إلى الميلادي واذكر في operator_note أنك حوّلت تواريخ هجرية (مع الأصل). إن ذُكرت مدة العقد فقط (سنتان من تاريخ كذا) فاحسب تاريخ الانتهاء = البداية + المدة − يوم.
-6. فترة الإشعار: عبارات مثل «إشعار قبل 90 يومًا»، «قبل ثلاثة أشهر من انتهاء العقد»، «إخطار كتابي قبل شهرين» → notice_period_days بالأيام (شهر = 30، ثلاثة أشهر = 90، سنة = 365) وضع النص المختصر في notice_period_text. إن لم يوجد شرط إشعار اتركهما null.
+6. فترة الإشعار: عبارات مثل «إشعار قبل 90 يومًا»، «قبل ثلاثة أشهر من انتهاء العقد»، «إخطار كتابي قبل شهرين» → notice_period_days بالأيام (شهر = 30، ثلاثة أشهر = 90، سنة = 365) وضع النص المختصر في notice_period_text. إن لم يوجد شرط إشعار اترك الأيام null والنص "".
 7. الدفعات: حدّد التكرار من نص العقد — «شهري» monthly، «كل ثلاثة أشهر/ربع سنوي» quarterly، «على دفعتين/نصف سنوي» semi_annual، «دفعة واحدة سنويًا» annual. إذا ذُكر إيجار سنوي «يُدفع على دفعتين» فالتكرار semi_annual وقيمة الدفعة = السنوي ÷ 2؛ «على أربع دفعات» quarterly والدفعة = السنوي ÷ 4؛ وهكذا. installment_amount = قيمة الدفعة الواحدة قبل الضريبة.
 8. الضريبة: إذا ذُكرت ضريبة القيمة المضافة منفصلة (15%) فـ amount_includes_vat=false وvat_rate=15. إذا نصّ العقد أن المبلغ «شامل ضريبة القيمة المضافة» فـ amount_includes_vat=true. إذا لم تُذكر الضريبة إطلاقًا فاترك vat_rate=15 وamount_includes_vat=false واذكر ذلك في operator_note.
 9. إذا طبع العقد جدول دفعات صريحًا (تواريخ ومبالغ لكل دفعة) فأعده كاملًا في payments بترتيب التاريخ، وإذا كانت المبالغ أو الفترات غير منتظمة فاجعل payment_frequency="custom". إن لم يُطبع جدول فاترك payments مصفوفة فارغة وأعد first_due_date (غالبًا تاريخ البداية أو تاريخ توقيع العقد).
