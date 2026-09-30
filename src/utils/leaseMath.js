@@ -252,6 +252,30 @@ export function reserveForPayment({ amountIncl, dueDate, reserveStart, asOfMonth
   };
 }
 
+// جدول الاستقطاع الشهري لدفعة: N أشهر (N = أشهر التكرار: ربعي 3، نصفي 6،
+// سنوي 12) تنتهي بالشهر السابق لشهر الاستحقاق — لا استقطاع في شهر
+// الاستحقاق نفسه لأنه لا ينتهي قبل موعد السداد. المبلغ يُقسم بالتساوي
+// والشهر الأخير يحمل باقي التقريب. مثال: ربعي يستحق 2026-12-15 →
+// 2026-09، 2026-10، 2026-11.
+export function setAsideSchedule({ amountIncl, dueDate, windowMonths }) {
+  const amount = round2(amountIncl);
+  const dueMonth = monthKey(dueDate);
+  const n = Math.max(Math.round(Number(windowMonths) || 0), 1);
+  if (!dueMonth || !(amount > 0)) return [];
+  const monthly = round2(amount / n);
+  const rows = [];
+  for (let i = n; i >= 1; i -= 1) {
+    const month = monthKey(addMonths(`${dueMonth}-01`, -i));
+    const last = i === 1;
+    rows.push({
+      month,
+      seq: n - i + 1,
+      amount: last ? round2(amount - round2(monthly * (n - 1))) : monthly,
+    });
+  }
+  return rows;
+}
+
 // المقترح الذاتي التصحيح لاستقطاع شهر معيّن (سجل الاستقطاعات المؤكدة):
 // (المبلغ شامل الضريبة − المُدَّخر فعليًا قبل هذا الشهر) ÷ الأشهر المتبقية
 // من هذا الشهر حتى الشهر السابق للاستحقاق. إن فات شهر بلا استقطاع ارتفع

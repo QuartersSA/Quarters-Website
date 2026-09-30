@@ -240,6 +240,20 @@ export default function LeasePayModal({
             الحساب البنكي، الإيصال) — بلا إنشاء فاتورة مشتريات.
           </span>
         </div>
+        {payment.reserved_total !== undefined && payment.reserved_total !== null ? (
+          <div
+            className={`flex items-center justify-between gap-2 rounded-[10px] border px-3 py-2 mb-4 text-[11px] ${
+              moneyValue(payment.reserved_total) + 0.005 >= moneyValue(payment.amount_incl)
+                ? "border-[#c9e2d8] dark:border-emerald-400/25 bg-[#e7f2ee]/70 dark:bg-emerald-400/[0.06] text-[#0e7a5f] dark:text-emerald-200"
+                : "border-amber-200 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.06] text-amber-800 dark:text-amber-200"
+            }`}
+          >
+            <span>المتجمع في حساب الاستقطاع لهذه الدفعة</span>
+            <span className="font-bold tabular-nums" dir="ltr">
+              {formatMoney(payment.reserved_total)} / {formatMoney(payment.amount_incl)}
+            </span>
+          </div>
+        ) : null}
 
         <form onSubmit={handleSubmit}>
           <div className="text-xs text-slate-600 dark:text-white/55 mb-1">المبلغ المسدد</div>

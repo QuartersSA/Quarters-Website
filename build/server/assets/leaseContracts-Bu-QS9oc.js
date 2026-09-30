@@ -1,5 +1,5 @@
 import sql from './sql-CSDV1lSC.js';
-import { c as compareDateKeys, C as CONTRACT_TYPES, L as LEASE_FREQUENCIES, D as DEFAULT_VAT_RATE, r as round2, s as splitFixedCharges, i as installmentWithFixed, g as generateSchedule, d as daysBetween, a as contractStatus, b as isDateKey, e as addDays, f as installmentAmounts } from './leaseMath-DalW0cI5.js';
+import { c as compareDateKeys, C as CONTRACT_TYPES, L as LEASE_FREQUENCIES, D as DEFAULT_VAT_RATE, r as round2, s as splitFixedCharges, i as installmentWithFixed, g as generateSchedule, F as FREQUENCY_MONTHS, m as monthDiff, a as monthKey, d as daysBetween, b as contractStatus, e as isDateKey, f as addDays, h as installmentAmounts } from './leaseMath-Cz-hbKbu.js';
 
 // العقود التأجيرية — نواة الخادم المشتركة بين مسارات
 // /api/accounting/lease-contracts/*: المخطط، حساب «إيجارات»، تحميل
@@ -396,7 +396,10 @@ async function listPayments({
            w.bank_account_id, bank.name AS bank_name,
            w.receipt_url, w.notes,
            TO_CHAR(w.prev_due_date, 'YYYY-MM-DD') AS prev_due_date,
-           c.contract_number, c.contract_type, c.lessor_name, c.lessor_contact_id, c.location,
+           COALESCE((
+             SELECT SUM(r.amount) FROM accounting_lease_reserves r WHERE r.payment_id = w.id
+           ), 0) AS reserved_total,
+           c.contract_number, c.contract_type, c.payment_frequency, c.lessor_name, c.lessor_contact_id, c.location,
            c.branch_id, b.name AS branch_name,
            c.status AS contract_stored_status,
            TO_CHAR(c.start_date, 'YYYY-MM-DD') AS contract_start_date,
@@ -425,8 +428,14 @@ async function listPayments({
     const overdue = rest.status === "pending" && compareDateKeys(rest.due_date, today) < 0;
     const windowStart = prev_due_date || contract_start_date || rest.due_date;
     const reserveStart = contract_created_on && compareDateKeys(contract_created_on, windowStart) > 0 ? contract_created_on : windowStart;
+    // أشهر نافذة الاستقطاع: أشهر التكرار (ربعي 3، نصفي 6…)؛ للدفعات
+    // المخصصة الفاصل بين استحقاقها والدفعة السابقة (أو بداية العقد).
+    const freqMonths = FREQUENCY_MONTHS[rest.payment_frequency];
+    const windowMonths = freqMonths ? freqMonths : Math.max(monthDiff(monthKey(windowStart), monthKey(rest.due_date)), 1);
     return {
       ...normalizePaymentRow(rest),
+      reserved_total: num(rest.reserved_total),
+      window_months: windowMonths,
       contract_status: contractStatus({
         status: contract_stored_status,
         startDate: contract_start_date,

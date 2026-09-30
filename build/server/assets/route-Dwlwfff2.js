@@ -1,13 +1,13 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { r as round2 } from './leaseMath-DalW0cI5.js';
-import { e as ensureLeaseSchema, t as todayRiyadh, c as parseMoney, h as loadReservesByPayment, R as REQUIRE_LEASE } from './leaseContracts-m3240u00.js';
+import { r as round2 } from './leaseMath-Cz-hbKbu.js';
+import { e as ensureLeaseSchema, t as todayRiyadh, c as parseMoney, h as loadReservesByPayment, R as REQUIRE_LEASE } from './leaseContracts-Bu-QS9oc.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
-// تأكيد الاستقطاع الشهري لدفعة: يُسجَّل ما حُجز فعليًا من إيرادات شهر
-// معيّن لدفعة معلّقة (سجل accounting_lease_reserves؛ صف واحد لكل دفعة/شهر).
+// تأكيد الاستقطاع الشهري لدفعة: تسجيل المبلغ المحوَّل إلى حساب الاستقطاع
+// عن شهر معيّن لدفعة معلّقة (سجل accounting_lease_reserves؛ صف لكل دفعة/شهر).
 // POST   /api/accounting/lease-contracts/reserve/confirm
 //        { payment_id, month: "YYYY-MM", amount, note?, suggested_amount?, revenue_basis? }
 //        amount = 0 يحذف صف الشهر.
@@ -106,6 +106,15 @@ async function POST(request) {
       });
     }
     const amountIncl = Number(row.amount_incl) || 0;
+    // لا استقطاع في شهر الاستحقاق أو بعده — الشهر لا ينتهي قبل موعد السداد.
+    if (String(row.due_date || "").slice(0, 7) <= month && amount > 0) {
+      return Response.json({
+        error: `الاستقطاع يكون في الأشهر السابقة لشهر الاستحقاق (${String(row.due_date).slice(0, 7)})`,
+        code: "due_month"
+      }, {
+        status: 400
+      });
+    }
     const existing = (await loadReservesByPayment([paymentId]))[paymentId] || [];
     const othersTotal = round2(existing.filter(e => e.month !== month).reduce((acc, e) => acc + e.amount, 0));
     if (othersTotal + amount > amountIncl + 0.005) {
