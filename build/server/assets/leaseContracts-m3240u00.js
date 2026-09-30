@@ -20,8 +20,6 @@ const REQUIRE_LEASE = {
     permission: "can_manage_purchases"
   }]
 };
-const RENT_CODE = "5202";
-const RENT_NAME = "إيجارات";
 function todayRiyadh() {
   return new Date().toLocaleDateString("en-CA", {
     timeZone: "Asia/Riyadh"
@@ -180,37 +178,6 @@ function ensureLeaseSchema() {
     });
   }
   return ensurePromise;
-}
-
-// ---------------------------------------------------------------------------
-// حساب «إيجارات» (5202): بالرمز أولًا، ثم بالاسم تحت 52، وإلا يُنشأ.
-// ---------------------------------------------------------------------------
-async function getRentAccountId() {
-  const [byCode] = await sql`
-    SELECT id FROM accounting_accounts
-    WHERE code = ${RENT_CODE} AND account_type = 'expense' AND is_active
-    LIMIT 1
-  `;
-  if (byCode) return Number(byCode.id);
-  const [parent] = await sql`
-    SELECT id, code FROM accounting_accounts
-    WHERE code = '52' AND is_system AND is_active
-    LIMIT 1
-  `;
-  if (!parent) return null;
-  const [byName] = await sql`
-    SELECT id FROM accounting_accounts
-    WHERE parent_id = ${parent.id} AND is_active AND account_type = 'expense'
-      AND TRIM(name) = ${RENT_NAME}
-    LIMIT 1
-  `;
-  if (byName) return Number(byName.id);
-  const [created] = await sql`
-    INSERT INTO accounting_accounts (code, name, name_en, account_type, parent_id, is_postable, is_system)
-    VALUES (${RENT_CODE}, ${RENT_NAME}, 'Rent', 'expense', ${parent.id}, TRUE, TRUE)
-    RETURNING id
-  `;
-  return Number(created.id);
 }
 
 // ---------------------------------------------------------------------------
@@ -840,4 +807,4 @@ function sameInstant(a, b) {
   return Math.abs(ta - tb) < 1000;
 }
 
-export { REQUIRE_LEASE as R, parseDate as a, buildScheduleRows as b, parseMoney as c, loadPayment as d, ensureLeaseSchema as e, recomputeContractTotal as f, getRentAccountId as g, listPayments as h, loadReservesByPayment as i, listContracts as j, loadContract as l, parseContractInput as p, replaceSchedule as r, sameInstant as s, todayRiyadh as t };
+export { REQUIRE_LEASE as R, parseDate as a, buildScheduleRows as b, parseMoney as c, loadPayment as d, ensureLeaseSchema as e, recomputeContractTotal as f, listPayments as g, loadReservesByPayment as h, listContracts as i, loadContract as l, parseContractInput as p, replaceSchedule as r, sameInstant as s, todayRiyadh as t };

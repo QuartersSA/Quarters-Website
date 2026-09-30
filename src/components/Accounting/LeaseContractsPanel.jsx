@@ -535,7 +535,7 @@ export default function LeaseContractsPanel({
 
   const handleUnpay = (payment) => {
     const ok = window.confirm(
-      `التراجع عن سداد الدفعة #${payment.seq} (${formatMoney(payment.paid_amount ?? payment.amount_incl)})؟ تعود معلّقة وتُوقف الفاتورة ${payment.invoice_number || "المرتبطة"}.`,
+      `التراجع عن سداد الدفعة #${payment.seq} (${formatMoney(payment.paid_amount ?? payment.amount_incl)})؟ تعود معلّقة في سداد المستحق${payment.invoice_number ? ` وتُوقف الفاتورة ${payment.invoice_number}` : ""}.`,
     );
     if (!ok) return;
     unpayMut.mutate({ id: payment.id });
@@ -659,7 +659,8 @@ export default function LeaseContractsPanel({
               ? "متأخرة"
               : "معلّقة",
       },
-      { header: "الفاتورة", accessor: (row) => row.invoice_number || "" },
+      { header: "تاريخ السداد", accessor: (row) => row.paid_date || "" },
+      { header: "الحساب البنكي", accessor: (row) => row.bank_name || "" },
     ];
     const title = "دفعات الإيجار المستحقة";
     if (kind === "excel") exportToExcelHTML(dueRows, "lease-due-payments", columns, title);
@@ -1400,7 +1401,7 @@ export default function LeaseContractsPanel({
                                 onClick={() => handleUnpay(row)}
                                 disabled={unpayMut.isPending}
                                 className={`${ws.btnNeutral} px-3 py-1.5 text-xs disabled:opacity-50`}
-                                title="التراجع عن السداد وإيقاف الفاتورة"
+                                title="التراجع عن السداد"
                               >
                                 <Undo2 className="w-3.5 h-3.5" />
                                 تراجع

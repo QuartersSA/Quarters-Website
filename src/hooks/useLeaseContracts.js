@@ -279,8 +279,8 @@ export function useUpdateLeasePayment() {
   });
 }
 
-// سداد دفعة: ينشئ فاتورة مشتريات مدفوعة تحت حساب «إيجارات» ويعلّم
-// الدفعة مسددة.
+// سداد دفعة: يعلّم الدفعة مسددة (بلا فاتورة مشتريات) وتُتابع من
+// «سداد المستحق».
 export function usePayLeasePayment() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -296,11 +296,7 @@ export function usePayLeasePayment() {
     },
     onSuccess: async (data) => {
       await invalidateLeaseQueries(queryClient, { invoices: true });
-      toast.success(
-        data?.invoice?.invoice_number
-          ? `تم السداد — وأُنشئت فاتورة ${data.invoice.invoice_number}`
-          : "تم تسجيل السداد",
-      );
+      toast.success("تم تسجيل السداد");
       showWarnings(data);
     },
     onError: (error) => {
@@ -321,7 +317,7 @@ export function usePayLeasePayment() {
   });
 }
 
-// التراجع عن السداد: تعود الدفعة معلّقة وتُوقف الفاتورة المرتبطة.
+// التراجع عن السداد: تعود الدفعة معلّقة (وتُوقف فاتورة قديمة إن كانت مرتبطة).
 export function useUnpayLeasePayment() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -337,7 +333,7 @@ export function useUnpayLeasePayment() {
     },
     onSuccess: async () => {
       await invalidateLeaseQueries(queryClient, { invoices: true });
-      toast.success("تم التراجع عن السداد وإيقاف الفاتورة المرتبطة");
+      toast.success("تم التراجع عن السداد — عادت الدفعة معلّقة");
     },
     onError: (error) => {
       console.error(error);
