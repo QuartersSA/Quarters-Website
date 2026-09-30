@@ -8,6 +8,7 @@ import {
   splitFixedCharges,
   monthDiff,
   reserveForPayment,
+  setAsideSchedule,
   suggestedReserve,
 } from "@/utils/leaseMath";
 
@@ -182,5 +183,23 @@ describe("lease math — fixed charges", () => {
     expect(money.rent_excl).toBe(60000);
     expect(money.amount_excl).toBe(61000);
     expect(money.amount_incl).toBe(70000);
+  });
+});
+
+describe("lease math — set-aside schedule", () => {
+  it("splits a quarterly installment into the three months before the due month", () => {
+    const rows = setAsideSchedule({ amountIncl: 36100, dueDate: "2026-12-15", windowMonths: 3 });
+    expect(rows.map((r) => r.month)).toEqual(["2026-09", "2026-10", "2026-11"]);
+    expect(rows.map((r) => r.amount)).toEqual([12033.33, 12033.33, 12033.34]);
+    expect(rows.reduce((s, r) => s + r.amount, 0)).toBeCloseTo(36100, 2);
+  });
+  it("uses six months for a semi-annual installment and crosses the year boundary", () => {
+    const rows = setAsideSchedule({ amountIncl: 69000, dueDate: "2027-04-01", windowMonths: 6 });
+    expect(rows.map((r) => r.month)).toEqual(["2026-10", "2026-11", "2026-12", "2027-01", "2027-02", "2027-03"]);
+    expect(rows.every((r) => r.amount === 11500)).toBe(true);
+  });
+  it("never schedules a set-aside in the due month itself", () => {
+    const rows = setAsideSchedule({ amountIncl: 1000, dueDate: "2026-12-15", windowMonths: 1 });
+    expect(rows).toEqual([{ month: "2026-11", seq: 1, amount: 1000 }]);
   });
 });

@@ -15,6 +15,9 @@ import {
   installmentAmounts,
   installmentWithFixed,
   splitFixedCharges,
+  FREQUENCY_MONTHS,
+  monthDiff,
+  monthKey,
   contractStatus,
   daysBetween,
   addDays,
@@ -450,7 +453,10 @@ export async function listPayments({
            w.bank_account_id, bank.name AS bank_name,
            w.receipt_url, w.notes,
            TO_CHAR(w.prev_due_date, 'YYYY-MM-DD') AS prev_due_date,
-           c.contract_number, c.contract_type, c.lessor_name, c.lessor_contact_id, c.location,
+           COALESCE((
+             SELECT SUM(r.amount) FROM accounting_lease_reserves r WHERE r.payment_id = w.id
+           ), 0) AS reserved_total,
+           c.contract_number, c.contract_type, c.payment_frequency, c.lessor_name, c.lessor_contact_id, c.location,
            c.branch_id, b.name AS branch_name,
            c.status AS contract_stored_status,
            TO_CHAR(c.start_date, 'YYYY-MM-DD') AS contract_start_date,
@@ -482,8 +488,16 @@ export async function listPayments({
       contract_created_on && compareDateKeys(contract_created_on, windowStart) > 0
         ? contract_created_on
         : windowStart;
+    // أشهر نافذة الاستقطاع: أشهر التكرار (ربعي 3، نصفي 6…)؛ للدفعات
+    // المخصصة الفاصل بين استحقاقها والدفعة السابقة (أو بداية العقد).
+    const freqMonths = FREQUENCY_MONTHS[rest.payment_frequency];
+    const windowMonths = freqMonths
+      ? freqMonths
+      : Math.max(monthDiff(monthKey(windowStart), monthKey(rest.due_date)), 1);
     return {
       ...normalizePaymentRow(rest),
+      reserved_total: num(rest.reserved_total),
+      window_months: windowMonths,
       contract_status: contractStatus({
         status: contract_stored_status,
         startDate: contract_start_date,

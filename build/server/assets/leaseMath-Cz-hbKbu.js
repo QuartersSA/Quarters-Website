@@ -210,86 +210,32 @@ function generateSchedule({
   return rows;
 }
 
-// الاستقطاع الشهري لدفعة واحدة كما يُرى في شهر «asOfMonth» (YYYY-MM).
-// reserveStart: بداية نافذة الادخار (استحقاق الدفعة السابقة، أو بداية
-// العقد، أو تاريخ إضافة العقد إن كان بعدهما) — تُمرَّر من الخادم.
-function reserveForPayment({
+// جدول الاستقطاع الشهري لدفعة: N أشهر (N = أشهر التكرار: ربعي 3، نصفي 6،
+// سنوي 12) تنتهي بالشهر السابق لشهر الاستحقاق — لا استقطاع في شهر
+// الاستحقاق نفسه لأنه لا ينتهي قبل موعد السداد. المبلغ يُقسم بالتساوي
+// والشهر الأخير يحمل باقي التقريب. مثال: ربعي يستحق 2026-12-15 →
+// 2026-09، 2026-10، 2026-11.
+function setAsideSchedule({
   amountIncl,
   dueDate,
-  reserveStart,
-  asOfMonth
+  windowMonths
 }) {
   const amount = round2(amountIncl);
   const dueMonth = monthKey(dueDate);
-  const startMonth = monthKey(reserveStart) || dueMonth;
-  if (!dueMonth || !startMonth || !asOfMonth) {
-    return {
-      months_total: 1,
-      monthly_reserve: amount,
-      months_elapsed: 0,
-      months_remaining: 1,
-      reserved_to_date: 0,
-      remaining: amount,
-      overdue: false,
-      due_this_month: false
-    };
+  const n = Math.max(Math.round(Number(windowMonths) || 0), 1);
+  if (!dueMonth || !(amount > 0)) return [];
+  const monthly = round2(amount / n);
+  const rows = [];
+  for (let i = n; i >= 1; i -= 1) {
+    const month = monthKey(addMonths(`${dueMonth}-01`, -i));
+    const last = i === 1;
+    rows.push({
+      month,
+      seq: n - i + 1,
+      amount: last ? round2(amount - round2(monthly * (n - 1))) : monthly
+    });
   }
-  // نافذة الادخار: من شهر البداية إلى الشهر السابق لشهر الاستحقاق —
-  // يُدَّخر خلال الفترة ثم يُدفع عند الاستحقاق (نصف سنوي = 6 أشهر).
-  // دفعة تستحق في شهر البداية نفسه: نافذة شهر واحد (تُدفع فورًا).
-  const monthsTotal = Math.max(monthDiff(startMonth, dueMonth), 1);
-  const monthly = round2(amount / monthsTotal);
-  // الأشهر المنقضية حتى شهر «الآن» شاملًا (بلا تجاوز النافذة).
-  const elapsedRaw = monthDiff(startMonth, asOfMonth) + 1;
-  const monthsElapsed = Math.min(Math.max(elapsedRaw, 0), monthsTotal);
-  const monthsRemaining = Math.max(monthsTotal - monthsElapsed, 0);
-  // آخر شهر يحمل الباقي حتى يساوي المجموع المبلغ تمامًا.
-  const reservedToDate = monthsElapsed >= monthsTotal ? amount : round2(monthly * monthsElapsed);
-  const thisMonthShare = elapsedRaw <= 0 || elapsedRaw > monthsTotal ? 0 : elapsedRaw === monthsTotal ? round2(amount - round2(monthly * (monthsTotal - 1))) : monthly;
-  return {
-    months_total: monthsTotal,
-    monthly_reserve: monthly,
-    this_month_share: thisMonthShare,
-    months_elapsed: monthsElapsed,
-    months_remaining: monthsRemaining,
-    reserved_to_date: reservedToDate,
-    remaining: round2(amount - reservedToDate),
-    overdue: monthDiff(asOfMonth, dueMonth) < 0,
-    due_this_month: dueMonth === asOfMonth
-  };
-}
-
-// المقترح الذاتي التصحيح لاستقطاع شهر معيّن (سجل الاستقطاعات المؤكدة):
-// (المبلغ شامل الضريبة − المُدَّخر فعليًا قبل هذا الشهر) ÷ الأشهر المتبقية
-// من هذا الشهر حتى الشهر السابق للاستحقاق. إن فات شهر بلا استقطاع ارتفع
-// المقترح تلقائيًا؛ وفي شهر الاستحقاق (أو بعده) يُقترح كامل المتبقي.
-// قبل بداية النافذة (reserveStart) المقترح صفر.
-function suggestedReserve({
-  amountIncl,
-  dueDate,
-  reserveStart,
-  asOfMonth,
-  reservedBefore = 0
-}) {
-  const amount = round2(amountIncl);
-  const outstanding = round2(Math.max(amount - (Number(reservedBefore) || 0), 0));
-  const dueMonth = monthKey(dueDate);
-  if (!dueMonth || !asOfMonth) return {
-    suggested: outstanding,
-    months_left: 1
-  };
-  const startMonth = monthKey(reserveStart);
-  if (startMonth && monthDiff(startMonth, asOfMonth) < 0) {
-    return {
-      suggested: 0,
-      months_left: Math.max(monthDiff(asOfMonth, dueMonth), 1)
-    };
-  }
-  const monthsLeft = Math.max(monthDiff(asOfMonth, dueMonth), 1);
-  return {
-    suggested: round2(outstanding / monthsLeft),
-    months_left: monthsLeft
-  };
+  return rows;
 }
 
 // حالة العقد المعروضة من تواريخه وحالته المخزَّنة.
@@ -324,4 +270,4 @@ function daysBetween(fromKey, toKey) {
   return Math.round((Date.UTC(b.y, b.m - 1, b.d) - Date.UTC(a.y, a.m - 1, a.d)) / 86400000);
 }
 
-export { CONTRACT_TYPES as C, DEFAULT_VAT_RATE as D, FREQUENCY_MONTHS as F, LEASE_FREQUENCIES as L, contractStatus as a, isDateKey as b, compareDateKeys as c, daysBetween as d, addDays as e, installmentAmounts as f, generateSchedule as g, reserveForPayment as h, installmentWithFixed as i, suggestedReserve as j, addMonths as k, CONTRACT_STATUS_LABELS as l, CONTRACT_TYPE_LABELS as m, FREQUENCY_LABELS as n, monthKey as o, daysInMonth as p, round2 as r, splitFixedCharges as s };
+export { CONTRACT_TYPES as C, DEFAULT_VAT_RATE as D, FREQUENCY_MONTHS as F, LEASE_FREQUENCIES as L, monthKey as a, contractStatus as b, compareDateKeys as c, daysBetween as d, isDateKey as e, addDays as f, generateSchedule as g, installmentAmounts as h, installmentWithFixed as i, setAsideSchedule as j, CONTRACT_STATUS_LABELS as k, CONTRACT_TYPE_LABELS as l, monthDiff as m, FREQUENCY_LABELS as n, daysInMonth as o, round2 as r, splitFixedCharges as s };
