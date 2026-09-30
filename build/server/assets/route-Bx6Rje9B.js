@@ -1,8 +1,8 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureLeaseSchema, R as REQUIRE_LEASE } from './leaseContracts-D5eH32Je.js';
+import { e as ensureLeaseSchema, R as REQUIRE_LEASE } from './leaseContracts-Byir0b6W.js';
 import Anthropic from '@anthropic-ai/sdk';
 import sql from './sql-CSDV1lSC.js';
-import { L as LEASE_FREQUENCIES, F as FREQUENCY_MONTHS } from './leaseMath-DWUZXg5N.js';
+import { L as LEASE_FREQUENCIES, C as CONTRACT_TYPES, F as FREQUENCY_MONTHS } from './leaseMath-DalW0cI5.js';
 import 'crypto';
 import '@neondatabase/serverless';
 
@@ -21,11 +21,16 @@ const MAX_FILE_BASE64 = 4 * 1024 * 1024;
 const LEASE_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["contract_number", "lessor_name", "lessor_vat_number", "lessor_contact_id", "tenant_name", "location", "start_date", "end_date", "notice_period_days", "notice_period_text", "payment_frequency", "installment_amount", "vat_rate", "amount_includes_vat", "total_contract_value", "first_due_date", "fixed_charges", "payments", "currency", "operator_note"],
+  required: ["contract_number", "contract_type", "lessor_name", "lessor_vat_number", "lessor_contact_id", "tenant_name", "location", "start_date", "end_date", "notice_period_days", "notice_period_text", "payment_frequency", "installment_amount", "vat_rate", "amount_includes_vat", "total_contract_value", "first_due_date", "fixed_charges", "payments", "currency", "operator_note"],
   properties: {
     contract_number: {
       type: "string",
       description: "رقم العقد كما طُبع، أو \"\" إن لم يوجد"
+    },
+    contract_type: {
+      type: "string",
+      enum: ["branch", "housing", "warehouse", "unknown"],
+      description: "نوع العين المؤجرة: branch محل/فرع تجاري (مقهى، معرض، مكتب)، housing سكن (شقة، فيلا، سكن عمال)، warehouse مستودع/مخزن، unknown إن لم يتضح"
     },
     lessor_name: {
       type: ["string", "null"],
@@ -212,7 +217,7 @@ const SYSTEM_PROMPT = `أنت خبير عقود وعقارات سعودي متخ
 1. رقم العقد كما طُبع (رقم عقد إيجار/رقم المرجع)، وإلا "". الحقول النصية غير المعروفة تُترك "" (سلسلة فارغة)، والرقمية والتواريخ null.
 2. المؤجر = الطرف الأول/المالك/من يستلم الأجرة. المستأجر = الطرف الثاني (غالبًا «مقهى ليلة وصباح / كوارتز» أو شركة المستخدم). لا تخلط بينهما. أعد اسم المؤجر مصححًا مقروءًا في lessor_name، ورقمه الضريبي المطبوع (أرقامًا فقط) في lessor_vat_number.
 3. طابق المؤجر مع القائمة المرفقة بالرقم الضريبي أولًا (مطابقة تامة)، ثم بالاسم بمرونة: تجاهل (ال) التعريف وكلمات شركة/مؤسسة/مكتب/عقارات وفروق الهمزات والتاء المربوطة والمسافات. طابق عند تشابه واضح فقط، وإلا اترك lessor_contact_id فارغًا.
-4. الموقع: عنوان/وصف العين المؤجرة (المدينة، الحي، رقم المحل/الوحدة) في سطر واحد.
+4. نوع العقد contract_type من وصف العين المؤجرة أو نوع الاستخدام: محل/معرض/مكتب/مقهى → branch، شقة/فيلا/سكن عمال/غرف → housing، مستودع/مخزن/هنجر → warehouse، وإلا unknown. الموقع: عنوان/وصف العين المؤجرة (المدينة، الحي، رقم المحل/الوحدة) في سطر واحد.
 5. التواريخ: أعد تاريخي البداية والانتهاء بصيغة ميلادية YYYY-MM-DD. إن كان العقد بالتقويم الهجري فحوّله إلى الميلادي واذكر في operator_note أنك حوّلت تواريخ هجرية (مع الأصل). إن ذُكرت مدة العقد فقط (سنتان من تاريخ كذا) فاحسب تاريخ الانتهاء = البداية + المدة − يوم.
 6. فترة الإشعار: عبارات مثل «إشعار قبل 90 يومًا»، «قبل ثلاثة أشهر من انتهاء العقد»، «إخطار كتابي قبل شهرين» → notice_period_days بالأيام (شهر = 30، ثلاثة أشهر = 90، سنة = 365) وضع النص المختصر في notice_period_text. إن لم يوجد شرط إشعار اترك الأيام null والنص "".
 7. الدفعات: حدّد التكرار من نص العقد — «شهري» monthly، «كل ثلاثة أشهر/ربع سنوي» quarterly، «على دفعتين/نصف سنوي» semi_annual، «دفعة واحدة سنويًا» annual. إذا ذُكر إيجار سنوي «يُدفع على دفعتين» فالتكرار semi_annual وقيمة الدفعة = السنوي ÷ 2؛ «على أربع دفعات» quarterly والدفعة = السنوي ÷ 4؛ وهكذا. installment_amount = قيمة الدفعة الواحدة قبل الضريبة.
@@ -420,6 +425,7 @@ async function runLeaseContractAnalysis({
   const fixedAmount = Math.round(fixedCharges.reduce((sum, c) => sum + c.amount, 0) * 100) / 100;
   const analysis = {
     contract_number: cleanText(raw.contract_number, 120),
+    contract_type: CONTRACT_TYPES.includes(raw.contract_type) ? raw.contract_type : null,
     lessor_name: cleanText(raw.lessor_name, 300),
     lessor_vat_number: digitsOnly(raw.lessor_vat_number) || null,
     lessor_contact_id: Number.isInteger(raw.lessor_contact_id) ? raw.lessor_contact_id : null,

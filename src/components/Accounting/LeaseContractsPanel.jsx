@@ -56,6 +56,7 @@ import LeaseContractModal from "@/components/Accounting/LeaseContractModal";
 import LeasePayModal from "@/components/Accounting/LeasePayModal";
 import {
   CONTRACT_STATUS_LABELS,
+  CONTRACT_TYPE_LABELS,
   FREQUENCY_LABELS,
   addDays,
   compareDateKeys,
@@ -132,6 +133,22 @@ function StatusPill({ status, inactive = false }) {
       {inactive ? (
         <span className="text-[10px] text-slate-400 dark:text-white/35">موقوف</span>
       ) : null}
+    </span>
+  );
+}
+
+function TypePill({ type }) {
+  const label = CONTRACT_TYPE_LABELS[type];
+  if (!label) return null;
+  const cls =
+    type === "housing"
+      ? "bg-violet-100 dark:bg-violet-400/10 text-violet-800 dark:text-violet-200 border-violet-200 dark:border-violet-400/25"
+      : type === "warehouse"
+        ? "bg-orange-100 dark:bg-orange-400/10 text-orange-800 dark:text-orange-200 border-orange-200 dark:border-orange-400/25"
+        : "bg-sky-100 dark:bg-sky-400/10 text-sky-800 dark:text-sky-200 border-sky-200 dark:border-sky-400/25";
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold whitespace-nowrap ${cls}`}>
+      {label}
     </span>
   );
 }
@@ -405,7 +422,7 @@ export default function LeaseContractsPanel({
     const needle = q.trim().toLowerCase();
     if (!needle) return contracts;
     return contracts.filter((c) =>
-      [c.contract_number, c.lessor_name, c.location, c.branch_name, c.lessor_vat_number]
+      [c.contract_number, c.lessor_name, c.location, c.branch_name, c.lessor_vat_number, CONTRACT_TYPE_LABELS[c.contract_type]]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(needle)),
     );
@@ -434,6 +451,7 @@ export default function LeaseContractsPanel({
     const columns = [
       { header: "رقم العقد", accessor: (row) => row.contract_number || "" },
       { header: "المؤجر", accessor: (row) => row.lessor_name || "" },
+      { header: "النوع", accessor: (row) => CONTRACT_TYPE_LABELS[row.contract_type] || "" },
       { header: "الموقع", accessor: (row) => row.location || "" },
       { header: "الفرع", accessor: (row) => row.branch_name || "" },
       { header: "البداية", accessor: (row) => row.start_date || "" },
@@ -948,7 +966,10 @@ export default function LeaseContractsPanel({
                           {contract.lessor_name || "—"}
                         </td>
                         <td className="px-4 py-3 text-slate-700 dark:text-white/70">
-                          <div className="truncate max-w-[220px]">{contract.location || "—"}</div>
+                          <div className="flex items-center gap-1.5">
+                            <TypePill type={contract.contract_type} />
+                            <div className="truncate max-w-[200px]">{contract.location || "—"}</div>
+                          </div>
                           {contract.branch_name ? (
                             <div className="text-[11px] text-slate-500 dark:text-white/45">
                               {contract.branch_name}
@@ -1076,8 +1097,11 @@ export default function LeaseContractsPanel({
                       <div className="text-sm text-slate-700 dark:text-white/70 mt-1 truncate">
                         {contract.lessor_name}
                       </div>
-                      <div className="text-xs text-slate-500 dark:text-white/45 truncate">
-                        {[contract.location, contract.branch_name].filter(Boolean).join(" · ") || "—"}
+                      <div className="text-xs text-slate-500 dark:text-white/45 truncate flex items-center gap-1.5">
+                        <TypePill type={contract.contract_type} />
+                        <span className="truncate">
+                          {[contract.location, contract.branch_name].filter(Boolean).join(" · ") || "—"}
+                        </span>
                       </div>
                     </div>
                     <StatusPill status={contract.computed_status} inactive={contract.is_active === false} />
@@ -1938,6 +1962,12 @@ export default function LeaseContractsPanel({
 
                 <div className="p-5 space-y-4 text-slate-900 dark:text-white">
                   <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">نوع العقد</div>
+                      <div className="font-semibold">
+                        {CONTRACT_TYPE_LABELS[drawerContract.contract_type] || "—"}
+                      </div>
+                    </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">الموقع</div>
                       <div className="font-semibold">{drawerContract.location || "—"}</div>

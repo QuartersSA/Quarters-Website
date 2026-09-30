@@ -1,10 +1,10 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-CVdAiEPz.js';
-import { j as listContracts, e as ensureLeaseSchema, p as parseContractInput, b as buildScheduleRows, r as replaceSchedule, l as loadContract, R as REQUIRE_LEASE } from './leaseContracts-D5eH32Je.js';
+import { j as listContracts, e as ensureLeaseSchema, p as parseContractInput, b as buildScheduleRows, r as replaceSchedule, l as loadContract, R as REQUIRE_LEASE } from './leaseContracts-Byir0b6W.js';
 import '@neondatabase/serverless';
 import 'crypto';
-import './leaseMath-DWUZXg5N.js';
+import './leaseMath-DalW0cI5.js';
 
 // العقود التأجيرية — القائمة والإضافة.
 // GET  /api/accounting/lease-contracts?includeInactive=1&q=
@@ -73,7 +73,7 @@ async function POST(request) {
     const actorName = auth.user?.name ? String(auth.user.name) : null;
     const [created] = await sql`
       INSERT INTO accounting_lease_contracts (
-        contract_number, lessor_name, lessor_contact_id, lessor_vat_number,
+        contract_number, contract_type, lessor_name, lessor_contact_id, lessor_vat_number,
         location, branch_id, start_date, end_date,
         notice_period_days, notice_period_text,
         payment_frequency, installment_amount, vat_rate, amount_includes_vat,
@@ -82,7 +82,7 @@ async function POST(request) {
         created_by_employee_id, created_by_employee_name
       )
       VALUES (
-        ${value.contract_number}, ${value.lessor_name}, ${value.lessor_contact_id}, ${value.lessor_vat_number},
+        ${value.contract_number}, ${value.contract_type}, ${value.lessor_name}, ${value.lessor_contact_id}, ${value.lessor_vat_number},
         ${value.location}, ${value.branch_id}, ${value.start_date}, ${value.end_date},
         ${value.notice_period_days}, ${value.notice_period_text},
         ${value.payment_frequency}, ${value.installment_amount}, ${value.vat_rate}, ${value.amount_includes_vat},
