@@ -1936,7 +1936,7 @@ export default function LeaseContractsPanel({
                   </div>
                 </div>
 
-                <div className="p-5 space-y-4">
+                <div className="p-5 space-y-4 text-slate-900 dark:text-white">
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">الموقع</div>
@@ -2019,7 +2019,7 @@ export default function LeaseContractsPanel({
                   <div className={`${ws.glassSoft} ${ws.card} p-3 grid grid-cols-3 gap-2 text-center`}>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">إجمالي العقد</div>
-                      <div className="text-sm font-bold tabular-nums" dir="ltr">
+                      <div className="text-sm font-bold tabular-nums text-slate-900 dark:text-white" dir="ltr">
                         {formatMoney(drawerContract.total_value, false)}
                       </div>
                     </div>
@@ -2083,7 +2083,7 @@ export default function LeaseContractsPanel({
                           return (
                             <div
                               key={payment.id}
-                              className={`rounded-[10px] border p-2.5 text-[11px] ${
+                              className={`rounded-[10px] border p-2.5 text-[11px] text-slate-800 dark:text-white/85 ${
                                 payment.status === "cancelled"
                                   ? "border-dashed border-slate-200 dark:border-white/10 opacity-60"
                                   : "border-[#e2e7e4] dark:border-white/10"

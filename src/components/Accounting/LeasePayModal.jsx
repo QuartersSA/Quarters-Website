@@ -247,7 +247,7 @@ export default function LeasePayModal({
         <form onSubmit={handleSubmit}>
           <div className="text-xs text-slate-600 dark:text-white/55 mb-1">المبلغ المسدد</div>
           <div
-            className={`${ws.input} px-3 py-2.5 text-right font-bold tabular-nums bg-slate-50 dark:bg-white/[0.04]`}
+            className={`${ws.input} px-3 py-2.5 text-right font-bold tabular-nums text-slate-900 dark:text-white bg-slate-50 dark:bg-white/[0.04]`}
             dir="ltr"
           >
             {formatMoney(paymentValue)}

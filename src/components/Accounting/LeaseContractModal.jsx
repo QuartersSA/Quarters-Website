@@ -1296,7 +1296,7 @@ export default function LeaseContractModal({
                           مجموع المبالغ الثابتة لكل دفعة
                           {fixedSplit.taxable > 0 ? ` (منها ${formatMoney(fixedSplit.taxable)} خاضع للضريبة)` : " (معفاة من الضريبة)"}
                         </span>
-                        <span className="font-bold tabular-nums" dir="ltr">
+                        <span className="font-bold tabular-nums text-slate-900 dark:text-white" dir="ltr">
                           {formatMoney(fixedTotal)}
                         </span>
                       </div>
@@ -1324,7 +1324,7 @@ export default function LeaseContractModal({
                         <>
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-slate-500 dark:text-white/45">الأجرة</span>
-                            <span className="tabular-nums" dir="ltr">
+                            <span className="tabular-nums text-slate-800 dark:text-white/85" dir="ltr">
                               {formatMoney(installment.rent_excl)}
                             </span>
                           </div>
@@ -1332,7 +1332,7 @@ export default function LeaseContractModal({
                             <span className="text-slate-500 dark:text-white/45">
                               مبالغ ثابتة{installment.fixed_exempt_excl > 0 ? " (بلا ضريبة)" : ""}
                             </span>
-                            <span className="tabular-nums" dir="ltr">
+                            <span className="tabular-nums text-slate-800 dark:text-white/85" dir="ltr">
                               {formatMoney(installment.fixed_excl)}
                             </span>
                           </div>
@@ -1340,7 +1340,7 @@ export default function LeaseContractModal({
                       ) : null}
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-slate-500 dark:text-white/45">قبل الضريبة</span>
-                        <span className="font-bold tabular-nums" dir="ltr">
+                        <span className="font-bold tabular-nums text-slate-900 dark:text-white" dir="ltr">
                           {formatMoney(installment.amount_excl)}
                         </span>
                       </div>
