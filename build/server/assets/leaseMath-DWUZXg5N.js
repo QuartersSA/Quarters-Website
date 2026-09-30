@@ -104,11 +104,29 @@ function installmentAmounts({
   };
 }
 
+// تقسيم قائمة المبالغ الثابتة [{label, amount, taxable}] إلى خاضع للضريبة
+// ومعفى (عقود «إيجار» تطبّق الضريبة على الأجرة فقط غالبًا).
+function splitFixedCharges(list) {
+  let exempt = 0;
+  let taxable = 0;
+  for (const row of Array.isArray(list) ? list : []) {
+    const amount = Math.max(Number(row?.amount) || 0, 0);
+    if (row?.taxable === true) taxable += amount;else exempt += amount;
+  }
+  return {
+    exempt: round2(exempt),
+    taxable: round2(taxable),
+    total: round2(exempt + taxable)
+  };
+}
+
 // مبلغ الدفعة = الأجرة (قبل الضريبة، تُفكّ إن كانت شاملة) + المبالغ الثابتة
-// لكل دفعة (رسوم خدمات/صيانة… قبل الضريبة دائمًا)، ثم الضريبة على المجموع.
+// لكل دفعة. الضريبة على (الأجرة + الثابت الخاضع) فقط؛ الثابت المعفى يُضاف
+// بعد الضريبة — فتطابق الدفعة جدول العقد (أجرة + ضريبتها + خدمات).
 function installmentWithFixed({
   amount,
   fixedAmount = 0,
+  fixedTaxableAmount = 0,
   vatRate = DEFAULT_VAT_RATE,
   amountIncludesVat = false
 }) {
@@ -117,16 +135,21 @@ function installmentWithFixed({
     vatRate,
     amountIncludesVat
   }).amount_excl;
-  const fixed = round2(Math.max(Number(fixedAmount) || 0, 0));
-  const total = installmentAmounts({
-    amount: rent + fixed,
+  const exempt = round2(Math.max(Number(fixedAmount) || 0, 0));
+  const taxable = round2(Math.max(Number(fixedTaxableAmount) || 0, 0));
+  const taxed = installmentAmounts({
+    amount: rent + taxable,
     vatRate,
     amountIncludesVat: false
   });
   return {
     rent_excl: rent,
-    fixed_excl: fixed,
-    ...total
+    fixed_excl: round2(exempt + taxable),
+    fixed_exempt_excl: exempt,
+    amount_excl: round2(taxed.amount_excl + exempt),
+    vat_rate: taxed.vat_rate,
+    vat_amount: taxed.vat_amount,
+    amount_incl: round2(taxed.amount_incl + exempt)
   };
 }
 
@@ -142,6 +165,7 @@ function generateSchedule({
   vatRate = DEFAULT_VAT_RATE,
   amountIncludesVat = false,
   fixedAmount = 0,
+  fixedTaxableAmount = 0,
   firstDueDate = null,
   maxInstallments = 240
 }) {
@@ -151,6 +175,7 @@ function generateSchedule({
   const money = installmentWithFixed({
     amount,
     fixedAmount,
+    fixedTaxableAmount,
     vatRate,
     amountIncludesVat
   });
@@ -291,4 +316,4 @@ function daysBetween(fromKey, toKey) {
   return Math.round((Date.UTC(b.y, b.m - 1, b.d) - Date.UTC(a.y, a.m - 1, a.d)) / 86400000);
 }
 
-export { CONTRACT_STATUS_LABELS as C, DEFAULT_VAT_RATE as D, FREQUENCY_MONTHS as F, LEASE_FREQUENCIES as L, contractStatus as a, isDateKey as b, compareDateKeys as c, daysBetween as d, addDays as e, installmentAmounts as f, generateSchedule as g, reserveForPayment as h, installmentWithFixed as i, addMonths as j, FREQUENCY_LABELS as k, daysInMonth as l, monthKey as m, round2 as r, suggestedReserve as s };
+export { CONTRACT_STATUS_LABELS as C, DEFAULT_VAT_RATE as D, FREQUENCY_MONTHS as F, LEASE_FREQUENCIES as L, contractStatus as a, isDateKey as b, compareDateKeys as c, daysBetween as d, addDays as e, installmentAmounts as f, generateSchedule as g, reserveForPayment as h, installmentWithFixed as i, suggestedReserve as j, addMonths as k, FREQUENCY_LABELS as l, monthKey as m, daysInMonth as n, round2 as r, splitFixedCharges as s };

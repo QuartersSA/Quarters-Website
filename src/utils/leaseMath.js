@@ -107,18 +107,42 @@ export function installmentAmounts({ amount, vatRate = DEFAULT_VAT_RATE, amountI
   };
 }
 
+// تقسيم قائمة المبالغ الثابتة [{label, amount, taxable}] إلى خاضع للضريبة
+// ومعفى (عقود «إيجار» تطبّق الضريبة على الأجرة فقط غالبًا).
+export function splitFixedCharges(list) {
+  let exempt = 0;
+  let taxable = 0;
+  for (const row of Array.isArray(list) ? list : []) {
+    const amount = Math.max(Number(row?.amount) || 0, 0);
+    if (row?.taxable === true) taxable += amount;
+    else exempt += amount;
+  }
+  return { exempt: round2(exempt), taxable: round2(taxable), total: round2(exempt + taxable) };
+}
+
 // مبلغ الدفعة = الأجرة (قبل الضريبة، تُفكّ إن كانت شاملة) + المبالغ الثابتة
-// لكل دفعة (رسوم خدمات/صيانة… قبل الضريبة دائمًا)، ثم الضريبة على المجموع.
+// لكل دفعة. الضريبة على (الأجرة + الثابت الخاضع) فقط؛ الثابت المعفى يُضاف
+// بعد الضريبة — فتطابق الدفعة جدول العقد (أجرة + ضريبتها + خدمات).
 export function installmentWithFixed({
   amount,
   fixedAmount = 0,
+  fixedTaxableAmount = 0,
   vatRate = DEFAULT_VAT_RATE,
   amountIncludesVat = false,
 }) {
   const rent = installmentAmounts({ amount, vatRate, amountIncludesVat }).amount_excl;
-  const fixed = round2(Math.max(Number(fixedAmount) || 0, 0));
-  const total = installmentAmounts({ amount: rent + fixed, vatRate, amountIncludesVat: false });
-  return { rent_excl: rent, fixed_excl: fixed, ...total };
+  const exempt = round2(Math.max(Number(fixedAmount) || 0, 0));
+  const taxable = round2(Math.max(Number(fixedTaxableAmount) || 0, 0));
+  const taxed = installmentAmounts({ amount: rent + taxable, vatRate, amountIncludesVat: false });
+  return {
+    rent_excl: rent,
+    fixed_excl: round2(exempt + taxable),
+    fixed_exempt_excl: exempt,
+    amount_excl: round2(taxed.amount_excl + exempt),
+    vat_rate: taxed.vat_rate,
+    vat_amount: taxed.vat_amount,
+    amount_incl: round2(taxed.amount_incl + exempt),
+  };
 }
 
 // توليد جدول الدفعات. يعيد [] عند نقص المدخلات.
@@ -133,13 +157,20 @@ export function generateSchedule({
   vatRate = DEFAULT_VAT_RATE,
   amountIncludesVat = false,
   fixedAmount = 0,
+  fixedTaxableAmount = 0,
   firstDueDate = null,
   maxInstallments = 240,
 }) {
   const months = FREQUENCY_MONTHS[frequency];
   if (!months || !isDateKey(startDate) || !isDateKey(endDate)) return [];
   if (compareDateKeys(endDate, startDate) < 0) return [];
-  const money = installmentWithFixed({ amount, fixedAmount, vatRate, amountIncludesVat });
+  const money = installmentWithFixed({
+    amount,
+    fixedAmount,
+    fixedTaxableAmount,
+    vatRate,
+    amountIncludesVat,
+  });
   if (!(money.rent_excl > 0)) return [];
   const first = isDateKey(firstDueDate) ? firstDueDate : startDate;
   const rows = [];

@@ -30,7 +30,7 @@ export async function PUT(request, { params } = {}) {
     const [payment] = await sql`
       SELECT p.id, p.contract_id, p.seq, p.status,
              TO_CHAR(p.due_date, 'YYYY-MM-DD') AS due_date,
-             p.amount_excl, p.vat_rate, p.notes,
+             p.amount_excl, p.fixed_exempt_excl, p.vat_rate, p.notes,
              c.contract_number, c.lessor_name
       FROM accounting_lease_payments p
       JOIN accounting_lease_contracts c ON c.id = p.contract_id
@@ -87,7 +87,19 @@ export async function PUT(request, { params } = {}) {
           ? String(body.notes).trim().slice(0, 2000)
           : null;
 
-    const money = installmentAmounts({ amount: amountExcl, vatRate, amountIncludesVat: false });
+    // الضريبة على (المبلغ − الثابت المعفى) فقط؛ المعفى يُضاف بعدها.
+    const exemptFixed = Math.min(Math.max(Number(payment.fixed_exempt_excl) || 0, 0), amountExcl);
+    const taxed = installmentAmounts({
+      amount: amountExcl - exemptFixed,
+      vatRate,
+      amountIncludesVat: false,
+    });
+    const money = {
+      amount_excl: Math.round((taxed.amount_excl + exemptFixed) * 100) / 100,
+      vat_rate: taxed.vat_rate,
+      vat_amount: taxed.vat_amount,
+      amount_incl: Math.round((taxed.amount_incl + exemptFixed) * 100) / 100,
+    };
     await sql`
       UPDATE accounting_lease_payments
       SET due_date = ${dueDate},

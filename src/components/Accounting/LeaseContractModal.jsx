@@ -30,6 +30,7 @@ import {
   generateSchedule,
   installmentAmounts,
   installmentWithFixed,
+  splitFixedCharges,
   isDateKey,
   round2,
 } from "@/utils/leaseMath";
@@ -86,7 +87,7 @@ function newCustomRow(overrides = {}) {
 
 function newFixedRow(overrides = {}) {
   rowKeySeq += 1;
-  return { key: `fixed-${Date.now()}-${rowKeySeq}`, label: "", amount: "", ...overrides };
+  return { key: `fixed-${Date.now()}-${rowKeySeq}`, label: "", amount: "", taxable: false, ...overrides };
 }
 
 function statusPillClass(status) {
@@ -224,7 +225,11 @@ export default function LeaseContractModal({
       setFixedRows(
         storedFixed.length
           ? storedFixed.map((c) =>
-              newFixedRow({ label: c.label || "", amount: moneyValue(c.amount).toFixed(2) }),
+              newFixedRow({
+                label: c.label || "",
+                amount: moneyValue(c.amount).toFixed(2),
+                taxable: c.taxable === true,
+              }),
             )
           : moneyValue(contract.fixed_amount) > 0
             ? [newFixedRow({ label: "مبالغ ثابتة", amount: moneyValue(contract.fixed_amount).toFixed(2) })]
@@ -321,10 +326,11 @@ export default function LeaseContractModal({
   // ---------- المعاينة الحية ----------
 
   const vatRateValue = Math.min(Math.max(moneyValue(vatRate), 0), 100);
-  const fixedTotal = useMemo(
-    () => round2(fixedRows.reduce((sum, row) => sum + Math.max(moneyValue(row.amount), 0), 0)),
+  const fixedSplit = useMemo(
+    () => splitFixedCharges(fixedRows.map((row) => ({ amount: moneyValue(row.amount), taxable: row.taxable }))),
     [fixedRows],
   );
+  const fixedTotal = fixedSplit.total;
 
   const previewRows = useMemo(() => {
     if (frequency === "custom") {
@@ -341,7 +347,8 @@ export default function LeaseContractModal({
           status: row.status || "pending",
           ...installmentWithFixed({
             amount: row.amount,
-            fixedAmount: fixedTotal,
+            fixedAmount: fixedSplit.exempt,
+            fixedTaxableAmount: fixedSplit.taxable,
             vatRate: vatRateValue,
             amountIncludesVat: includesVat,
           }),
@@ -352,7 +359,8 @@ export default function LeaseContractModal({
       endDate,
       frequency,
       amount,
-      fixedAmount: fixedTotal,
+      fixedAmount: fixedSplit.exempt,
+      fixedTaxableAmount: fixedSplit.taxable,
       vatRate: vatRateValue,
       amountIncludesVat: includesVat,
       firstDueDate: isDateKey(firstDueDate) ? firstDueDate : null,
@@ -360,7 +368,7 @@ export default function LeaseContractModal({
   }, [
     frequency,
     customRows,
-    fixedTotal,
+    fixedSplit,
     startDate,
     endDate,
     amount,
@@ -385,11 +393,12 @@ export default function LeaseContractModal({
     () =>
       installmentWithFixed({
         amount,
-        fixedAmount: fixedTotal,
+        fixedAmount: fixedSplit.exempt,
+        fixedTaxableAmount: fixedSplit.taxable,
         vatRate: vatRateValue,
         amountIncludesVat: includesVat,
       }),
-    [amount, fixedTotal, vatRateValue, includesVat],
+    [amount, fixedSplit, vatRateValue, includesVat],
   );
 
   const today = useMemo(() => todayRiyadh(), []);
@@ -490,7 +499,11 @@ export default function LeaseContractModal({
       amount_includes_vat: !!includesVat,
       fixed_charges: fixedRows
         .filter((row) => moneyValue(row.amount) > 0 || row.label.trim())
-        .map((row) => ({ label: row.label.trim() || "مبلغ ثابت", amount: moneyValue(row.amount) })),
+        .map((row) => ({
+          label: row.label.trim() || "مبلغ ثابت",
+          amount: moneyValue(row.amount),
+          taxable: row.taxable === true,
+        })),
       first_due_date:
         frequency === "custom" ? null : isDateKey(firstDueDate) ? firstDueDate : null,
       notes: notes.trim() || null,
@@ -630,7 +643,11 @@ export default function LeaseContractModal({
     if (analysedFixed.length > 0 && canFill("fixed", fixedEmpty)) {
       setFixedRows(
         analysedFixed.map((c) =>
-          newFixedRow({ label: c.label || "مبلغ ثابت", amount: moneyValue(c.amount).toFixed(2) }),
+          newFixedRow({
+            label: c.label || "مبلغ ثابت",
+            amount: moneyValue(c.amount).toFixed(2),
+            taxable: c.taxable === true,
+          }),
         ),
       );
       owned.add("fixed");
@@ -1191,7 +1208,7 @@ export default function LeaseContractModal({
 
                 <div className={`${ws.glassSoft} ${ws.card} p-3 space-y-2`}>
                   <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <FieldLabel hint="رسوم خدمات، صيانة، حراسة… تُضاف إلى كل دفعة قبل الضريبة">
+                    <FieldLabel hint="رسوم خدمات، صيانة، حراسة… تُضاف إلى كل دفعة بعد الضريبة (الضريبة على الأجرة فقط) ما لم تُعلَّم «خاضع»">
                       المبالغ الثابتة لكل دفعة
                     </FieldLabel>
                     <button
@@ -1243,6 +1260,24 @@ export default function LeaseContractModal({
                             placeholder="0.00"
                             dir="ltr"
                           />
+                          <label
+                            className="flex items-center gap-1 text-[11px] text-slate-600 dark:text-white/60 whitespace-nowrap cursor-pointer select-none"
+                            title="تُطبَّق ضريبة القيمة المضافة على هذا المبلغ"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={row.taxable === true}
+                              onChange={(event) => {
+                                autoFilledRef.current.delete("fixed");
+                                const checked = event.target.checked;
+                                setFixedRows((rows) =>
+                                  rows.map((r) => (r.key === row.key ? { ...r, taxable: checked } : r)),
+                                );
+                              }}
+                              className="accent-[#0e7a5f]"
+                            />
+                            خاضع
+                          </label>
                           <button
                             type="button"
                             onClick={() => {
@@ -1258,7 +1293,8 @@ export default function LeaseContractModal({
                       ))}
                       <div className="flex items-center justify-between text-xs pt-1 border-t border-[#e2e7e4] dark:border-white/10">
                         <span className="text-slate-500 dark:text-white/45">
-                          مجموع المبالغ الثابتة لكل دفعة (قبل الضريبة)
+                          مجموع المبالغ الثابتة لكل دفعة
+                          {fixedSplit.taxable > 0 ? ` (منها ${formatMoney(fixedSplit.taxable)} خاضع للضريبة)` : " (معفاة من الضريبة)"}
                         </span>
                         <span className="font-bold tabular-nums" dir="ltr">
                           {formatMoney(fixedTotal)}
@@ -1293,7 +1329,9 @@ export default function LeaseContractModal({
                             </span>
                           </div>
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-slate-500 dark:text-white/45">مبالغ ثابتة</span>
+                            <span className="text-slate-500 dark:text-white/45">
+                              مبالغ ثابتة{installment.fixed_exempt_excl > 0 ? " (بلا ضريبة)" : ""}
+                            </span>
                             <span className="tabular-nums" dir="ltr">
                               {formatMoney(installment.fixed_excl)}
                             </span>

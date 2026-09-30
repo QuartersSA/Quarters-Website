@@ -5,6 +5,7 @@ import {
   generateSchedule,
   installmentAmounts,
   installmentWithFixed,
+  splitFixedCharges,
   monthDiff,
   reserveForPayment,
   suggestedReserve,
@@ -151,26 +152,35 @@ describe("lease math — self-correcting suggestion", () => {
 });
 
 describe("lease math — fixed charges", () => {
-  it("adds per-installment fixed charges to the rent before VAT", () => {
+  it("adds VAT-exempt fixed charges after tax so the row matches the Ejar table", () => {
+    // عقد: أجرة 30,000 + ضريبة 4,500 + مبالغ ثابتة 1,600 = 36,100
     const rows = generateSchedule({
-      startDate: "2026-10-01",
-      endDate: "2027-09-30",
-      frequency: "semi_annual",
-      amount: 60000,
-      fixedAmount: 2500,
+      startDate: "2026-08-01",
+      endDate: "2028-07-31",
+      frequency: "quarterly",
+      amount: 30000,
+      fixedAmount: 1600,
       vatRate: 15,
+      firstDueDate: "2026-08-11",
     });
-    expect(rows).toHaveLength(2);
-    expect(rows[0].rent_excl).toBe(60000);
-    expect(rows[0].fixed_excl).toBe(2500);
-    expect(rows[0].amount_excl).toBe(62500);
-    expect(rows[0].vat_amount).toBe(9375);
-    expect(rows[0].amount_incl).toBe(71875);
+    expect(rows).toHaveLength(8);
+    expect(rows[0].rent_excl).toBe(30000);
+    expect(rows[0].fixed_excl).toBe(1600);
+    expect(rows[0].fixed_exempt_excl).toBe(1600);
+    expect(rows[0].amount_excl).toBe(31600);
+    expect(rows[0].vat_amount).toBe(4500);
+    expect(rows[0].amount_incl).toBe(36100);
+  });
+  it("taxes fixed charges only when flagged taxable", () => {
+    const money = installmentWithFixed({ amount: 30000, fixedTaxableAmount: 1600, vatRate: 15 });
+    expect(money.vat_amount).toBe(4740);
+    expect(money.amount_incl).toBe(36340);
+    expect(splitFixedCharges([{ amount: 1600 }, { amount: 400, taxable: true }])).toEqual({ exempt: 1600, taxable: 400, total: 2000 });
   });
   it("unpacks a VAT-inclusive rent before adding fixed charges", () => {
     const money = installmentWithFixed({ amount: 69000, fixedAmount: 1000, vatRate: 15, amountIncludesVat: true });
     expect(money.rent_excl).toBe(60000);
     expect(money.amount_excl).toBe(61000);
-    expect(money.amount_incl).toBe(70150);
+    expect(money.amount_incl).toBe(70000);
   });
 });
