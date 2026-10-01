@@ -388,6 +388,34 @@ export function useConfirmLeaseReserve() {
   });
 }
 
+// إنشاء فاتورة استقطاع لشهر واحد (بعد حذفها مثلًا).
+export function useCreateLeaseSetAsideInvoice() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ payment_id, month }) => {
+      const res = await adminFetch(`${BASE}/reserve/invoice`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ payment_id, month }),
+      });
+      const data = await readJson(res);
+      if (!res.ok) throw apiError(data, "فشل إنشاء فاتورة الاستقطاع", res.status);
+      return data;
+    },
+    onSuccess: async (data) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.leaseReserve() }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.accountingPurchaseInvoices() }),
+      ]);
+      toast.success(data?.invoice?.invoice_number ? `أُنشئت الفاتورة ${data.invoice.invoice_number}` : "أُنشئت فاتورة الاستقطاع");
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(error.message);
+    },
+  });
+}
+
 // التحليل الذكي لملف العقد — يعيد analysis فقط؛ النافذة تتولى العرض
 // والتعبئة، ولا توست عند النجاح.
 export function useAnalyzeLeaseContract() {

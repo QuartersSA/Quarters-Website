@@ -4,7 +4,7 @@ import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { q as anyCoffeeAccount } from './coffeeInvoices-CYk167p4.js';
 import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
-import { createPurchaseInvoice } from './route-CYCTCGhF.js';
+import { createPurchaseInvoice } from './route-laJPHr2R.js';
 import { e as ensureLeaseSchema, c as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, f as listPayments, g as loadSetAsideSkips, h as setAsideSchedule, i as round2$1, j as CONTRACT_TYPE_LABELS, k as getLeaseExpenseAccountId, m as FREQUENCY_LABELS } from './leaseContracts-CF8g7tmp.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
@@ -838,9 +838,12 @@ async function loadSetAsideInvoices(paymentIds) {
 
 // إنشاء الفواتير الناقصة لكل أشهر الاستقطاع التي حلّت (≤ upToMonth).
 // تعيد عدد الفواتير المنشأة. أخطاء فاتورة واحدة لا توقف البقية.
+// only: { paymentId, month } يولّد فاتورة شهر واحد لدفعة واحدة متجاهلًا
+// قائمة الاستثناء (إعادة إنشاء فاتورة حُذفت يدويًا).
 async function generateSetAsideInvoices({
   upToMonth = null,
-  actor = null
+  actor = null,
+  only = null
 } = {}) {
   await ensureLeaseSchema();
   const linked = await ensureLeaseInvoiceLinkColumns();
@@ -849,16 +852,17 @@ async function generateSetAsideInvoices({
     skipped: 0
   };
   const limitMonth = upToMonth || todayRiyadh$1().slice(0, 7);
-  const pending = await listPayments({
+  let pending = await listPayments({
     status: "pending",
     excludeTerminated: true
   });
+  if (only?.paymentId) pending = pending.filter(p => Number(p.id) === Number(only.paymentId));
   if (!pending.length) return {
     created: 0,
     skipped: 0
   };
   const existing = await loadSetAsideInvoices(pending.map(p => p.id));
-  const skips = await loadSetAsideSkips(pending.map(p => p.id));
+  const skips = only ? new Set() : await loadSetAsideSkips(pending.map(p => p.id));
   const accountCache = new Map();
   let created = 0;
   let skipped = 0;
@@ -891,6 +895,7 @@ async function generateSetAsideInvoices({
     const site = payment.display_name || payment.location || label;
     const typeLabel = CONTRACT_TYPE_LABELS[payment.contract_type] || "";
     for (const item of schedule) {
+      if (only?.month && item.month !== only.month) continue;
       if (item.month > limitMonth) continue;
       if (skips.has(`${payment.id}|${item.month}`)) continue;
       if (existing[payment.id]?.[item.month]) {
