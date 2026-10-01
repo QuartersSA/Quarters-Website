@@ -248,7 +248,7 @@ export default function LeasePayModal({
             الحساب البنكي، الإيصال) — بلا إنشاء فاتورة مشتريات.
           </span>
         </div>
-        {payment.reserved_total !== undefined && payment.reserved_total !== null ? (
+        {payment.reserved_total !== undefined && payment.reserved_total !== null && Number(payment.seq) !== 1 ? (
           <div
             className={`flex items-center justify-between gap-2 rounded-[10px] border px-3 py-2 mb-4 text-[11px] ${
               moneyValue(payment.reserved_total) + 0.005 >= moneyValue(payment.amount_incl)

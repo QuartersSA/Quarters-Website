@@ -43,9 +43,10 @@ export async function GET(request) {
       console.error("set-aside invoice generation failed", error?.message);
     }
     const pending = await listPayments({ status: "pending", excludeTerminated: true });
-    const filtered = branchId
-      ? pending.filter((payment) => Number(payment.branch_id) === branchId)
-      : pending;
+    // قاعدة المالك: الدفعة الأولى في كل عقد تُسدَّد مباشرة بلا استقطاع شهري.
+    const filtered = pending.filter(
+      (payment) => Number(payment.seq) !== 1 && (!branchId || Number(payment.branch_id) === branchId),
+    );
     const ledger = await loadReservesByPayment(filtered.map((payment) => payment.id));
     const invoices = await loadSetAsideInvoices(filtered.map((payment) => payment.id));
     const canConfirm = month <= currentMonth;
@@ -59,9 +60,7 @@ export async function GET(request) {
         windowMonths: payment.window_months,
       });
       const planMonths = new Set(plan.map((p) => p.month));
-      // أشهر سبقت إضافة العقد للنظام: خارج الاستقطاع (لا متأخرة ولا تُؤكَّد)
-      // إلا إن كان لها تأكيد مسجَّل.
-      const floorMonth = payment.setaside_floor_month || null;
+
       // أشهر مؤكدة خارج الخطة (تحويل إضافي/تعويضي) تُعرض أيضًا.
       const extra = entries
         .filter((e) => !planMonths.has(e.month))
@@ -71,7 +70,7 @@ export async function GET(request) {
         .map((item) => {
           const confirmed = byMonth.get(item.month) || null;
           const invoice = invoices[Number(payment.id)]?.[item.month] || null;
-          const skipped = !confirmed && !!floorMonth && item.month < floorMonth && !item.extra;
+          const skipped = false;
           return {
             month: item.month,
             seq: item.seq,
