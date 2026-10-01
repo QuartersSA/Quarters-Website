@@ -179,6 +179,15 @@ async function doEnsureLeaseSchema() {
       ADD COLUMN IF NOT EXISTS fixed_excl NUMERIC(14,2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS fixed_exempt_excl NUMERIC(14,2) NOT NULL DEFAULT 0
   `;
+  // أشهر استقطاع حُذفت فواتيرها نهائيًا — لا يُعاد توليدها.
+  await sql`
+    CREATE TABLE IF NOT EXISTS accounting_lease_setaside_skips (
+      payment_id INTEGER NOT NULL,
+      month TEXT NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      PRIMARY KEY (payment_id, month)
+    )
+  `;
   // الاسم المعرِّف: اسم مختصر يظهر في الجداول (مثل اسم الفرع) بجانب النوع.
   await sql`
     ALTER TABLE accounting_lease_contracts
@@ -297,6 +306,25 @@ export async function getLeaseExpenseAccountId(contractType) {
     RETURNING id
   `;
   return Number(created.id);
+}
+
+// فاتورة استقطاع حُذفت نهائيًا: لا يُعاد إنشاؤها لنفس الدفعة/الشهر.
+export async function suppressSetAsideInvoice(paymentId, month) {
+  await ensureLeaseSchema();
+  await sql`
+    INSERT INTO accounting_lease_setaside_skips (payment_id, month)
+    VALUES (${Number(paymentId)}, ${String(month)})
+    ON CONFLICT DO NOTHING
+  `;
+}
+
+export async function loadSetAsideSkips(paymentIds) {
+  const ids = [...new Set((paymentIds || []).map(Number).filter((n) => Number.isInteger(n) && n > 0))];
+  if (!ids.length) return new Set();
+  const rows = await sql`
+    SELECT payment_id, month FROM accounting_lease_setaside_skips WHERE payment_id = ANY(${ids})
+  `;
+  return new Set(rows.map((r) => `${r.payment_id}|${r.month}`));
 }
 
 // إيقاف فواتير الاستقطاع غير المسددة المرتبطة بدفعات (حذف/إلغاء/إعادة توليد).

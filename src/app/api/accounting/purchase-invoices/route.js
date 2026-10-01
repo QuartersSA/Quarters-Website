@@ -2,7 +2,7 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
-import { ensureLeaseSchema } from "@/app/api/utils/leaseContracts";
+import { ensureLeaseSchema, suppressSetAsideInvoice } from "@/app/api/utils/leaseContracts";
 import {
   runPurchaseAutomation,
   createRecurringTemplateFromInvoice,
@@ -1257,38 +1257,33 @@ export async function DELETE(request) {
     const child = isRoast ? null : await loadRoastChild(id);
 
     if (force) {
-      // الحذف النهائي محروس: لا حذف لفاتورة (أو نظيرتها) لها دفعات أو إيداع.
-      const guardIds = [id, ...(child ? [Number(child.id)] : [])];
-      const [pay] = await sql`
-        SELECT COUNT(*)::int AS count FROM accounting_purchase_invoice_payments
-        WHERE invoice_id = ANY(${guardIds})
-      `;
-      if (Number(pay?.count) > 0 || Number(invoice.paid_amount) > 0) {
-        return Response.json(
-          { error: "لا يمكن الحذف النهائي لفاتورة لها دفعات (أو فاتورة تحميص مرتبطة لها دفعات) — أوقفها بدل حذفها", code: "has_payments" },
-          { status: 409 },
-        );
-      }
-      const [dep] = await sql`
-        SELECT COUNT(*)::int AS count FROM accounting_purchase_invoice_items
-        WHERE invoice_id = ${id} AND receipt_batch_id IS NOT NULL
-      `;
-      if (Number(dep?.count) > 0) {
-        return Response.json(
-          { error: "الفاتورة مودَعة في المخزون — ألغِ الإيداع من نافذة تسجيل الوصول قبل الحذف", code: "deposited" },
-          { status: 409 },
-        );
-      }
-      const itemIds = (await loadInvoiceLines(id)).map((l) => l.item_id).filter(Boolean);
-      const statements = [];
+      // الحذف النهائي (قرار المالك): إزالة كاملة من النظام — الدفعات
+      // والبنود والمرفقات والفاتورة، ومعها فاتورة التحميص المرتبطة إن
+      // وُجدت، بعد عكس أي إيداع مخزون. فاتورة استقطاع إيجار محذوفة لا
+      // يُعاد توليدها (تُسجَّل في قائمة الاستثناء).
+      const lines = await loadInvoiceLines(id);
+      const itemIds = lines.map((l) => l.item_id).filter(Boolean);
+      const reversed = isRoast ? 0 : await reverseDeposits(id, auth.user);
+      const ids = [id, ...(child ? [Number(child.id)] : [])];
+      const [leaseLink] = await sql`
+        SELECT lease_payment_id, lease_month FROM accounting_purchase_invoices WHERE id = ${id}
+      `.catch(() => [null]);
+      const statements = [
+        sql`DELETE FROM accounting_purchase_invoice_payments WHERE invoice_id = ANY(${ids})`,
+        sql`DELETE FROM accounting_purchase_invoice_items WHERE invoice_id = ANY(${ids})`,
+        sql`DELETE FROM accounting_purchase_invoice_attachments WHERE invoice_id = ANY(${ids})`,
+      ];
       if (child) statements.push(sql`DELETE FROM accounting_purchase_invoices WHERE id = ${child.id}`);
       statements.push(sql`DELETE FROM accounting_purchase_invoices WHERE id = ${id}`);
       await sql.transaction(statements);
+      if (leaseLink?.lease_payment_id && leaseLink?.lease_month) {
+        await suppressSetAsideInvoice(leaseLink.lease_payment_id, leaseLink.lease_month).catch(() => {});
+      }
       await logPurchaseAudit({
         entityType: "invoice",
         entityId: id,
         action: "deleted",
-        summary: `حذف نهائي للفاتورة ${invoice.invoice_number}${child ? ` وفاتورة التحميص ${child.invoice_number}` : ""}`,
+        summary: `حذف نهائي للفاتورة ${invoice.invoice_number}${Number(invoice.paid_amount) > 0 ? ` (كانت مدفوعة ${Number(invoice.paid_amount).toFixed(2)})` : ""}${child ? ` وفاتورة التحميص ${child.invoice_number}` : ""}${reversed ? ` — عُكس إيداع ${reversed} بند` : ""}`,
         actor: auth.user,
       });
       for (const itemId of new Set(itemIds.map(Number))) await recomputeItemCost(itemId, auth.user);

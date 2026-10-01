@@ -13,6 +13,7 @@ import {
   ensureLeaseInvoiceLinkColumns,
   getLeaseExpenseAccountId,
   listPayments,
+  loadSetAsideSkips,
   todayRiyadh,
 } from "@/app/api/utils/leaseContracts";
 
@@ -66,6 +67,7 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null 
   const pending = await listPayments({ status: "pending", excludeTerminated: true });
   if (!pending.length) return { created: 0, skipped: 0 };
   const existing = await loadSetAsideInvoices(pending.map((p) => p.id));
+  const skips = await loadSetAsideSkips(pending.map((p) => p.id));
   const accountCache = new Map();
   let created = 0;
   let skipped = 0;
@@ -111,6 +113,7 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null 
     const typeLabel = CONTRACT_TYPE_LABELS[payment.contract_type] || "";
     for (const item of schedule) {
       if (item.month > limitMonth) continue;
+      if (skips.has(`${payment.id}|${item.month}`)) continue;
       if (existing[payment.id]?.[item.month]) {
         skipped += 1;
         continue;

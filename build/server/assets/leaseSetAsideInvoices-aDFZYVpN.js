@@ -2,9 +2,9 @@ import sql from './sql-CSDV1lSC.js';
 import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-vtNAxFgq.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
-import { q as anyCoffeeAccount } from './coffeeInvoices-B899v71-.js';
-import { createPurchaseInvoice } from './route-CTEIy0gy.js';
-import { e as ensureLeaseSchema, a as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, c as listPayments, f as setAsideSchedule, g as round2$1, h as CONTRACT_TYPE_LABELS, i as getLeaseExpenseAccountId, j as FREQUENCY_LABELS } from './leaseContracts-BiO6UUmk.js';
+import { q as anyCoffeeAccount } from './coffeeInvoices-D-eyzPd0.js';
+import { createPurchaseInvoice } from './route-BCvw4bsy.js';
+import { e as ensureLeaseSchema, c as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, f as listPayments, g as loadSetAsideSkips, h as setAsideSchedule, i as round2$1, j as CONTRACT_TYPE_LABELS, k as getLeaseExpenseAccountId, m as FREQUENCY_LABELS } from './leaseContracts-kh-CVUhD.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
 const ensureRecurringSchema = ensureOnce(ensureRecurringSchemaImpl);
@@ -857,6 +857,7 @@ async function generateSetAsideInvoices({
     skipped: 0
   };
   const existing = await loadSetAsideInvoices(pending.map(p => p.id));
+  const skips = await loadSetAsideSkips(pending.map(p => p.id));
   const accountCache = new Map();
   let created = 0;
   let skipped = 0;
@@ -901,6 +902,7 @@ async function generateSetAsideInvoices({
     const typeLabel = CONTRACT_TYPE_LABELS[payment.contract_type] || "";
     for (const item of schedule) {
       if (item.month > limitMonth) continue;
+      if (skips.has(`${payment.id}|${item.month}`)) continue;
       if (existing[payment.id]?.[item.month]) {
         skipped += 1;
         continue;

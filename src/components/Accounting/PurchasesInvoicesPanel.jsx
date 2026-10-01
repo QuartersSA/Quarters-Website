@@ -1421,25 +1421,27 @@ export default function PurchasesInvoicesPanel({
     }
   };
 
+  // الحذف = إزالة كاملة من النظام (قرار المالك): الفاتورة ودفعاتها وبنودها
+  // ومرفقاتها، ومعها فاتورة التحميص المرتبطة، مع عكس أي إيداع مخزون.
   const handleDelete = (invoice) => {
-    if (invoice.invoice_kind === "roast" && invoice.roast_link_state !== "detached") {
-      const ok = window.confirm(
-        `فاتورة "${invoice.invoice_number}" فاتورة تحميص مرتبطة بفاتورة البن ${invoice.source_invoice_number || ""}.\n` +
-          "إيقافها يفك الارتباط: لن تُزامَن مع فاتورة البن بعد ذلك. للإيقاف مع بقاء الربط صفّر تكلفة التحميص من فاتورة البن.\n\nفك الارتباط والإيقاف؟",
-      );
-      if (!ok) return;
-      deleteMut.mutate({ id: invoice.id, force: false, detach: true });
-      return;
-    }
+    const paidNote =
+      Number(invoice.paid_amount) > 0
+        ? `\nالفاتورة عليها دفعات مسجلة (${Number(invoice.paid_amount).toLocaleString("en-US", { minimumFractionDigits: 2 })}) ستُحذف معها.`
+        : "";
     const roastNote =
       invoice.roast_invoice && invoice.roast_invoice.is_active !== false
-        ? ` تُوقف معها فاتورة التحميص ${invoice.roast_invoice.invoice_number} (أو تُفك إن كانت مسددة)، ويُعكس أي إيداع مخزون.`
-        : "";
+        ? `\nتُحذف معها فاتورة التحميص ${invoice.roast_invoice.invoice_number}، ويُعكس أي إيداع مخزون.`
+        : invoice.invoice_kind === "roast"
+          ? "\nهذه فاتورة تحميص مرتبطة بفاتورة بن — حذفها لا يحذف فاتورة البن."
+          : "";
+    const leaseNote = invoice.lease_contract_id
+      ? "\nفاتورة استقطاع إيجار: لن يُعاد إنشاؤها لهذا الشهر."
+      : "";
     const ok = window.confirm(
-      `إيقاف فاتورة "${invoice.invoice_number}"؟ يمكنك عرضها لاحقاً من خيار عرض الموقوفة.${roastNote}`,
+      `حذف الفاتورة "${invoice.invoice_number}" نهائياً من النظام؟ لا يمكن التراجع.${paidNote}${roastNote}${leaseNote}`,
     );
     if (!ok) return;
-    deleteMut.mutate({ id: invoice.id, force: false });
+    deleteMut.mutate({ id: invoice.id, force: true });
   };
 
   return (
@@ -1851,7 +1853,7 @@ export default function PurchasesInvoicesPanel({
                             type="button"
                             onClick={() => handleDelete(invoice)}
                             className={`${ws.iconButton} w-9 h-9 hover:bg-red-50 dark:hover:bg-red-500/15 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-700 dark:hover:text-red-200`}
-                            title="إيقاف"
+                            title="حذف نهائي"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
