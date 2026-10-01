@@ -842,6 +842,9 @@ async function listPayments({
       ...normalizePaymentRow(rest),
       reserved_total: num(rest.reserved_total),
       window_months: windowMonths,
+      // بداية الاستقطاع الفعلي = شهر إضافة العقد للنظام (لا استقطاع رجعي).
+      contract_created_on: contract_created_on || null,
+      setaside_floor_month: contract_created_on ? contract_created_on.slice(0, 7) : null,
       contract_status: contractStatus({
         status: contract_stored_status,
         startDate: contract_start_date,

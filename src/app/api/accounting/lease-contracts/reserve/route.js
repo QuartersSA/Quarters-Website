@@ -59,6 +59,9 @@ export async function GET(request) {
         windowMonths: payment.window_months,
       });
       const planMonths = new Set(plan.map((p) => p.month));
+      // أشهر سبقت إضافة العقد للنظام: خارج الاستقطاع (لا متأخرة ولا تُؤكَّد)
+      // إلا إن كان لها تأكيد مسجَّل.
+      const floorMonth = payment.setaside_floor_month || null;
       // أشهر مؤكدة خارج الخطة (تحويل إضافي/تعويضي) تُعرض أيضًا.
       const extra = entries
         .filter((e) => !planMonths.has(e.month))
@@ -68,9 +71,11 @@ export async function GET(request) {
         .map((item) => {
           const confirmed = byMonth.get(item.month) || null;
           const invoice = invoices[Number(payment.id)]?.[item.month] || null;
+          const skipped = !confirmed && !!floorMonth && item.month < floorMonth && !item.extra;
           return {
             month: item.month,
             seq: item.seq,
+            skipped,
             planned_amount: round2(item.amount),
             invoice_id: invoice ? invoice.id : null,
             invoice_number: invoice ? invoice.invoice_number : null,
@@ -80,19 +85,20 @@ export async function GET(request) {
             note: confirmed ? confirmed.note : null,
             extra: item.extra === true,
             is_current: item.month === month,
-            // متأخر: شهر مضى بلا تحويل
-            overdue: !confirmed && item.month < currentMonth && !item.extra,
-            confirmable: item.month <= currentMonth,
+            // متأخر: شهر مضى بلا تحويل (بعد إضافة العقد)
+            overdue: !confirmed && !skipped && item.month < currentMonth && !item.extra,
+            confirmable: item.month <= currentMonth && !skipped,
           };
         });
       const reservedTotal = round2(entries.reduce((acc, e) => acc + e.amount, 0));
-      const thisMonth = schedule.find((item) => item.month === month) || null;
+      const thisMonth = schedule.find((item) => item.month === month && !item.skipped) || null;
       const overdueItems = schedule.filter((item) => item.overdue);
       const dueMonth = String(payment.due_date || "").slice(0, 7);
       return {
         ...payment,
         schedule,
         months_total: plan.length,
+        months_skipped: schedule.filter((item) => item.skipped).length,
         months_confirmed: schedule.filter((item) => item.confirmed_amount !== null && !item.extra).length,
         this_month_planned: thisMonth ? thisMonth.planned_amount : 0,
         confirmed_amount: thisMonth ? thisMonth.confirmed_amount : null,

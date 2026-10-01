@@ -1483,6 +1483,17 @@ export default function LeaseContractsPanel({
 
   const renderSetAsideCell = (row, item) => {
     const confirmed = item.confirmed_amount !== null && item.confirmed_amount !== undefined;
+    if (item.skipped) {
+      return (
+        <span
+          key={item.month}
+          className="inline-flex items-center gap-1 rounded-full border border-dashed border-slate-200 dark:border-white/10 px-2 py-0.5 text-[10px] text-slate-400 dark:text-white/30 whitespace-nowrap line-through"
+          title={`${monthLabel(item.month)} — قبل إضافة العقد للنظام (بلا استقطاع)`}
+        >
+          <span dir="ltr">{item.month.slice(2)}</span>
+        </span>
+      );
+    }
     const cls = confirmed
       ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25"
       : item.overdue
@@ -1725,7 +1736,8 @@ export default function LeaseContractsPanel({
                         </div>
                         <div className="text-[10px] text-slate-500 dark:text-white/40 mt-1">
                           {row.months_total} {row.months_total === 1 ? "شهر" : row.months_total === 2 ? "شهران" : row.months_total <= 10 ? "أشهر" : "شهراً"}
-                          {" · "}مؤكد {row.months_confirmed} / {row.months_total}
+                          {" · "}مؤكد {row.months_confirmed} / {row.months_total - (row.months_skipped || 0)}
+                          {row.months_skipped ? ` · ${row.months_skipped} قبل الإضافة` : ""}
                         </div>
                       </td>
                       <td className="px-4 py-3 text-left tabular-nums font-bold" dir="ltr">
@@ -1906,7 +1918,8 @@ export default function LeaseContractsPanel({
               قبل موعد السداد).
             </div>
             <div>
-              مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت
+              الاستقطاع يبدأ من شهر إضافة العقد للنظام؛ الأشهر التي سبقته تظهر مشطوبة بلا
+              فواتير. مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت
               «إيجار فرع / مستودع» أو «إيجار سكن») تظهر في فواتير المشتريات مرتبطة برقم
               العقد. حوِّل المبلغ إلى حساب الاستقطاع ثم اضغط <b>«تأكيد التحويل»</b> — فتصبح
               الفاتورة مسددة ويتجمع المبلغ في «المتجمع». عند الاستحقاق تُسدَّد الدفعة من

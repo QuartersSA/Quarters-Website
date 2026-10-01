@@ -8,6 +8,7 @@ import {
   parseDate,
   parseMoney,
   todayRiyadh,
+  deactivateSetAsideInvoicesForPayments,
 } from "@/app/api/utils/leaseContracts";
 
 // سداد دفعة إيجار: تُعلَّم الدفعة مسددة (تاريخ، مبلغ، حساب بنكي، إيصال)
@@ -113,6 +114,9 @@ export async function POST(request, { params } = {}) {
           updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
     `;
+
+    // فواتير الاستقطاع غير المسددة لهذه الدفعة لم تعد لازمة بعد سدادها.
+    await deactivateSetAsideInvoicesForPayments([id], auth.user, "سُدِّدت الدفعة");
 
     await logPurchaseAudit({
       entityType: "lease_payment",
