@@ -121,6 +121,7 @@ export async function PUT(request, { params } = {}) {
       SET contract_number = ${value.contract_number},
           contract_type = ${value.contract_type},
           display_name = ${value.display_name},
+          is_renewal = ${value.is_renewal},
           lessor_name = ${value.lessor_name},
           lessor_contact_id = ${value.lessor_contact_id},
           lessor_vat_number = ${value.lessor_vat_number},

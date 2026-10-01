@@ -31,7 +31,7 @@ async function loadPendingPayment(paymentId) {
   const [row] = await sql`
     SELECT p.id, p.contract_id, p.seq, p.status, p.amount_incl,
            TO_CHAR(p.due_date, 'YYYY-MM-DD') AS due_date,
-           c.contract_number, c.lessor_name
+           c.contract_number, c.lessor_name, c.is_renewal
     FROM accounting_lease_payments p
     JOIN accounting_lease_contracts c ON c.id = p.contract_id
     WHERE p.id = ${paymentId}
@@ -83,9 +83,9 @@ export async function POST(request) {
       return Response.json({ error: guard.error, code: guard.code }, { status: guard.status });
     }
     const amountIncl = Number(row.amount_incl) || 0;
-    if (Number(row.seq) === 1 && amount > 0) {
+    if (Number(row.seq) === 1 && row.is_renewal !== true && amount > 0) {
       return Response.json(
-        { error: "الدفعة الأولى في العقد بلا استقطاع شهري — تُسدَّد مباشرة من سداد المستحق", code: "first_installment" },
+        { error: "الدفعة الأولى في العقد الجديد بلا استقطاع شهري — تُسدَّد مباشرة من سداد المستحق (فعّل «عقد مجدد» إن كان كذلك)", code: "first_installment" },
         { status: 400 },
       );
     }

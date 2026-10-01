@@ -160,6 +160,7 @@ export default function LeaseContractModal({
   const [fixedRows, setFixedRows] = useState([]);
   const [notes, setNotes] = useState("");
   const [terminated, setTerminated] = useState(false);
+  const [isRenewal, setIsRenewal] = useState(false);
   const [regenerate, setRegenerate] = useState(false);
   const [attachmentUrl, setAttachmentUrl] = useState("");
   const [attachmentName, setAttachmentName] = useState("");
@@ -260,6 +261,7 @@ export default function LeaseContractModal({
       );
       setNotes(contract.notes || "");
       setTerminated(contract.status === "terminated");
+      setIsRenewal(contract.is_renewal === true);
       setAttachmentUrl(contract.attachment_url || "");
       setAttachmentName(contract.attachment_name || "");
       setAnalysisJson(contract.analysis_json || null);
@@ -285,6 +287,7 @@ export default function LeaseContractModal({
       setFixedRows([]);
       setNotes("");
       setTerminated(false);
+      setIsRenewal(false);
       setAttachmentUrl("");
       setAttachmentName("");
       setAnalysisJson(null);
@@ -495,6 +498,7 @@ export default function LeaseContractModal({
     const payload = {
       contract_number: contractNumber.trim() || null,
       display_name: displayName.trim() || null,
+      is_renewal: !!isRenewal,
       lessor_name: lessorName.trim(),
       lessor_contact_id: contactId ? Number(contactId) : null,
       lessor_vat_number: lessorVat.trim() || null,
@@ -1203,6 +1207,29 @@ export default function LeaseContractModal({
                         {FREQUENCY_LABELS[key]}
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                <div className={`${ws.glassSoft} ${ws.card} p-3 space-y-1.5`}>
+                  <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-slate-800 dark:text-white/85">
+                    <input
+                      type="checkbox"
+                      checked={isRenewal}
+                      onChange={(event) => setIsRenewal(event.target.checked)}
+                      className="accent-[#0e7a5f]"
+                    />
+                    عقد مجدد
+                  </label>
+                  <div
+                    className={`text-[11px] leading-relaxed ${
+                      isRenewal
+                        ? "text-[#0e7a5f] dark:text-emerald-200"
+                        : "text-amber-700 dark:text-amber-200"
+                    }`}
+                  >
+                    {isRenewal
+                      ? "عقد مجدد: الدفعة الأولى لها استقطاع شهري كبقية الدفعات (أشهر استقطاعها تقع ضمن مدة العقد السابق)، وتُنشأ لها فواتير الاستقطاع."
+                      : "عقد جديد: الدفعة الأولى تُسدَّد مباشرة عند التوقيع من «سداد المستحق» بلا استقطاع شهري وبلا فواتير استقطاع؛ الاستقطاع يبدأ من الدفعة الثانية."}
                   </div>
                 </div>
 

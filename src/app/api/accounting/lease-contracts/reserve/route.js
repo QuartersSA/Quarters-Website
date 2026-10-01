@@ -43,9 +43,10 @@ export async function GET(request) {
       console.error("set-aside invoice generation failed", error?.message);
     }
     const pending = await listPayments({ status: "pending", excludeTerminated: true });
-    // قاعدة المالك: الدفعة الأولى في كل عقد تُسدَّد مباشرة بلا استقطاع شهري.
+    // قاعدة المالك: الدفعة الأولى في العقد الجديد تُسدَّد مباشرة بلا استقطاع
+    // (العقد المجدد: الدفعة الأولى كبقية الدفعات).
     const filtered = pending.filter(
-      (payment) => Number(payment.seq) !== 1 && (!branchId || Number(payment.branch_id) === branchId),
+      (payment) => !payment.setaside_exempt && (!branchId || Number(payment.branch_id) === branchId),
     );
     const ledger = await loadReservesByPayment(filtered.map((payment) => payment.id));
     const invoices = await loadSetAsideInvoices(filtered.map((payment) => payment.id));

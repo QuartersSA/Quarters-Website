@@ -573,6 +573,7 @@ export default function LeaseContractsPanel({
       contract_number: drawerContract.contract_number,
       display_name: drawerContract.display_name,
       contract_type: drawerContract.contract_type,
+      setaside_exempt: Number(payment.seq) === 1 && drawerContract.is_renewal !== true,
       lessor_name: drawerContract.lessor_name,
       location: drawerContract.location,
       payment_frequency: drawerContract.payment_frequency,
@@ -1418,7 +1419,7 @@ export default function LeaseContractsPanel({
                             {formatMoney(row.amount_excl, false)} + {formatMoney(row.vat_amount, false)}{" "}
                             <span dir="rtl">ضريبة {moneyValue(row.vat_rate)}%</span>
                           </div>
-                          {row.status === "pending" && Number(row.seq) !== 1 ? (
+                          {row.status === "pending" && !row.setaside_exempt ? (
                             <div
                               className={`text-[11px] whitespace-nowrap ${
                                 moneyValue(row.reserved_total) + 0.005 >= moneyValue(row.amount_incl)
@@ -1917,8 +1918,9 @@ export default function LeaseContractsPanel({
               قبل موعد السداد).
             </div>
             <div>
-              <b>الدفعة الأولى في كل عقد بلا استقطاع</b> — تُسدَّد مباشرة من «سداد المستحق»؛
-              الاستقطاع يبدأ من الدفعة الثانية. مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت
+              <b>الدفعة الأولى في العقد الجديد بلا استقطاع</b> — تُسدَّد مباشرة من «سداد المستحق»
+              ويبدأ الاستقطاع من الدفعة الثانية؛ أما <b>العقد المجدد</b> (خيار عند الإضافة) فدفعته
+              الأولى لها استقطاع كبقية الدفعات. مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت
               «إيجار فرع / مستودع» أو «إيجار سكن») تظهر في فواتير المشتريات مرتبطة برقم
               العقد. حوِّل المبلغ إلى حساب الاستقطاع ثم اضغط <b>«تأكيد التحويل»</b> — فتصبح
               الفاتورة مسددة ويتجمع المبلغ في «المتجمع». عند الاستحقاق تُسدَّد الدفعة من
@@ -2062,6 +2064,16 @@ export default function LeaseContractsPanel({
                       <div className="text-[11px] text-slate-500 dark:text-white/45">نوع العقد</div>
                       <div className="font-semibold">
                         {CONTRACT_TYPE_LABELS[drawerContract.contract_type] || "—"}
+                        {drawerContract.is_renewal ? (
+                          <span className="mr-1.5 inline-flex items-center rounded-full border border-[#c9e2d8] dark:border-emerald-400/25 bg-[#e7f2ee] dark:bg-emerald-400/10 px-2 py-0.5 text-[10px] font-bold text-[#0e7a5f] dark:text-emerald-200">
+                            عقد مجدد
+                          </span>
+                        ) : null}
+                      </div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">
+                        {drawerContract.is_renewal
+                          ? "الدفعة الأولى لها استقطاع كبقية الدفعات"
+                          : "الدفعة الأولى بلا استقطاع — تُسدَّد مباشرة"}
                       </div>
                     </div>
                     <div>
