@@ -10,7 +10,10 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
-async function ensureSchema() {
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
+async function ensureSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_variable_templates (
       id SERIAL PRIMARY KEY,

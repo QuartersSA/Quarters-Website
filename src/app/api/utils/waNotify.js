@@ -1,6 +1,9 @@
 import sql from "@/app/api/utils/sql";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+export const ensureWaPrefsColumn = ensureOnce(ensureWaPrefsColumnImpl);
+
 // إشعارات واتساب حسب تفضيلات الموظف — عمود wa_prefs (JSONB) على
 // جدول employees يحمل مفاتيح الأحداث التي اشترك فيها الموظف من
 // نافذة الموظف في /admin/employees. الإرسال «أطلق وانسَ»: لا يؤخر
@@ -14,7 +17,7 @@ import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 //   الجرد:    inv_stocktake | inv_transfer | inv_receipt
 //             inv_low_stock (صنف بلغ حده الأدنى بعد عملية)
 
-export async function ensureWaPrefsColumn() {
+async function ensureWaPrefsColumnImpl() {
   await sql`
     ALTER TABLE employees
       ADD COLUMN IF NOT EXISTS wa_prefs JSONB DEFAULT '[]'::jsonb

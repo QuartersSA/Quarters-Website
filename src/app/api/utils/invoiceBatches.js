@@ -1,5 +1,8 @@
 import sql from "@/app/api/utils/sql";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+export const ensureInvoiceBatchSchema = ensureOnce(ensureInvoiceBatchSchemaImpl);
+
 // دفعات الرفع الجماعي لفواتير المشتريات: الدفعة أم، وكل فاتورة
 // مرفوعة بند فيها يحمل حالته ونتيجة تحليله ومسودته القابلة للتعديل.
 //
@@ -28,7 +31,7 @@ export const BATCH_ITEM_STATUSES = new Set([
 
 export const MAX_BATCH_ITEMS = 50;
 
-export async function ensureInvoiceBatchSchema() {
+async function ensureInvoiceBatchSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_invoice_batches (
       id SERIAL PRIMARY KEY,

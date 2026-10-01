@@ -2,6 +2,9 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureHrSchema = ensureOnce(ensureHrSchemaImpl);
+
 async function safeInsertHrEmployeeLog({
   employeeId,
   employeeName,
@@ -60,7 +63,7 @@ function toSortedBranches(branches) {
 // Idempotent. Adds the start_date column when missing so older
 // schemas keep working without a manual migration. Cheap because of
 // IF NOT EXISTS.
-async function ensureHrSchema() {
+async function ensureHrSchemaImpl() {
   await ensureEmployeeDisplayNameSchema();
   await sql`
     ALTER TABLE employees

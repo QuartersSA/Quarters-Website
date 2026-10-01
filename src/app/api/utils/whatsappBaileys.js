@@ -1,5 +1,8 @@
 import sql from "@/app/api/utils/sql";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureAuthTable = ensureOnce(ensureAuthTableImpl);
+
 // واتساب مستضاف ذاتياً عبر Baileys — بلا وسيط ولا اشتراك:
 // الخادم نفسه «جهاز مرتبط» بحساب واتساب الرقم المخصص، متصل بسيرفرات
 // واتساب مباشرة عبر WebSocket (بلا متصفح).
@@ -62,7 +65,7 @@ const retryCounterCache = {
   },
 };
 
-async function ensureAuthTable() {
+async function ensureAuthTableImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS whatsapp_auth_state (
       key TEXT PRIMARY KEY,

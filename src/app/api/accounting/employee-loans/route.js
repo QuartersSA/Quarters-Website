@@ -7,7 +7,10 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
-async function ensureSchema() {
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
+async function ensureSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_employee_loans (
       id SERIAL PRIMARY KEY,

@@ -16,9 +16,12 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 const REQUIRE_HR = { role: "Admin", permission: "can_access_hr" };
 
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await ensureEmployeeDisplayNameSchema();
   await sql`
     CREATE TABLE IF NOT EXISTS hr_employee_overtime (

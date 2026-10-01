@@ -30,6 +30,10 @@ import {
   LINE_SELECT_COLUMNS,
 } from "@/app/api/utils/coffeeInvoices";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+const ensureSchemaBase = ensureOnce(ensureSchemaBaseImpl);
+
 // Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
   anyOf: [
@@ -71,13 +75,13 @@ function todayRiyadh() {
   return `${get("year")}-${get("month")}-${get("day")}`;
 }
 
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await ensureSchemaBase();
   // جداول العقود وأعمدة ربط فواتير الاستقطاع (الاستعلام يربط بجدول العقود).
   await ensureLeaseSchema();
 }
 
-async function ensureSchemaBase() {
+async function ensureSchemaBaseImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_contacts (
       id SERIAL PRIMARY KEY,

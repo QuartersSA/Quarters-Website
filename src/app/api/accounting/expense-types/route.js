@@ -1,13 +1,16 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // Idempotent: scope tells the UI whether this category belongs in the
 // fixed-expenses panel, the variable-expenses panel, or both. is_active
 // soft-toggles a category so it disappears from the entry surfaces
 // without breaking historical accounting_expenses rows that still
 // reference it. Existing rows default to scope='both', is_active=true
 // so nothing disappears after the migration.
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await sql`
     ALTER TABLE accounting_expense_types
     ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'both'

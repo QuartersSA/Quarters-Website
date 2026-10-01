@@ -2,6 +2,9 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // التقارير الضريبية الشهرية المحفوظة — لقطة معتمدة لكل شهر ميلادي:
 // مدخلات المبيعات اليدوية + أرقام المشتريات المحسوبة لحظة الحفظ.
 // عرض «الربع» يجمع الأشهر المحفوظة فيقرأ منها المبيعات بدل إعادة
@@ -16,7 +19,7 @@ const REQUIRE_ACCOUNTING = {
 
 const PERIOD_RE = /^\d{4}-\d{2}$/;
 
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_vat_reports (
       id SERIAL PRIMARY KEY,
