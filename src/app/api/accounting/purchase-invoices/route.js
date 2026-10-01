@@ -655,6 +655,15 @@ function validatePayload(payload) {
   return null;
 }
 
+// تشغيل الأتمتة في الخلفية مع خنق: لا أكثر من مرة كل 5 دقائق لكل عملية.
+let lastAutomationKick = 0;
+function kickPurchaseAutomation() {
+  const now = Date.now();
+  if (now - lastAutomationKick < 5 * 60 * 1000) return;
+  lastAutomationKick = now;
+  runPurchaseAutomation().catch(() => {});
+}
+
 function selectInvoicesQuery(where, statusFilter) {
   const statusWhere = statusFilter
     ? "WHERE computed_status = $" + (where.values.length + 2)
@@ -741,9 +750,10 @@ export async function GET(request) {
 
   try {
     await ensureSchema();
-    // كسول بدل cron: توليد الفواتير المتكررة المستحقة وإرسال
-    // التقارير المجدولة عند أول تحميل بعد الموعد. أخطاؤها مبتلعة.
-    await runPurchaseAutomation();
+    // كسول بدل cron: توليد الفواتير المتكررة وإرسال التقارير المجدولة —
+    // في الخلفية وبحد أقصى مرة كل 5 دقائق حتى لا يتأخر تحميل القائمة
+    // (المؤقّت الداخلي يغطي البقية). أخطاؤها مبتلعة.
+    kickPurchaseAutomation();
     const url = new URL(request.url);
     const includeInactive = url.searchParams.get("includeInactive") === "1";
     const q = (url.searchParams.get("q") || "").trim();
@@ -772,15 +782,20 @@ export async function GET(request) {
     const today = todayRiyadh();
     const query = selectInvoicesQuery(where, status);
     const rows = await sql(query, status ? [...values, today, status] : [...values, today]);
-    const withItems = await attachItems(rows);
-    const withPayments = await attachPayments(withItems);
-    const withAttachments = await attachExtraAttachments(withPayments);
-    // ملخص فاتورة التحميص المرتبطة بكل فاتورة بن (للدرج والتقرير).
-    const roastLinks = await loadRoastLinks(
-      withAttachments.filter((row) => row.invoice_kind !== "roast").map((row) => row.id),
-    );
-    const invoices = withAttachments.map((row) => ({
+    // البنود والدفعات والمرفقات وروابط التحميص مستقلة عن بعضها — تُجلب
+    // بالتوازي (أربع رحلات شبكة في زمن واحدة) ثم تُدمج بالترتيب.
+    const [withItems, withPayments, withAttachments, roastLinks] = await Promise.all([
+      attachItems(rows),
+      attachPayments(rows),
+      attachExtraAttachments(rows),
+      // ملخص فاتورة التحميص المرتبطة بكل فاتورة بن (للدرج والتقرير).
+      loadRoastLinks(rows.filter((row) => row.invoice_kind !== "roast").map((row) => row.id)),
+    ]);
+    const invoices = rows.map((row, index) => ({
       ...row,
+      items: withItems[index]?.items || [],
+      payments: withPayments[index]?.payments || [],
+      attachments: withAttachments[index]?.attachments || [],
       roast_invoice: roastLinks.get(Number(row.id)) || null,
     }));
 
