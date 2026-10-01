@@ -144,6 +144,7 @@ export default function LeaseContractModal({
   const [lessorVat, setLessorVat] = useState("");
   const [location, setLocation] = useState("");
   const [contractType, setContractType] = useState("branch");
+  const [displayName, setDisplayName] = useState("");
   const [branchId, setBranchId] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -191,6 +192,7 @@ export default function LeaseContractModal({
     setRegenerate(false);
     if (contract?.id) {
       setContractNumber(contract.contract_number || "");
+      setDisplayName(contract.display_name || "");
       setContactId(contract.lessor_contact_id ? String(contract.lessor_contact_id) : "");
       setLessorName(contract.lessor_name || "");
       setLessorVat(contract.lessor_vat_number || "");
@@ -263,6 +265,7 @@ export default function LeaseContractModal({
       setAnalysisJson(contract.analysis_json || null);
     } else {
       setContractNumber("");
+      setDisplayName("");
       setContactId("");
       setLessorName("");
       setLessorVat("");
@@ -491,6 +494,7 @@ export default function LeaseContractModal({
     if (!canSubmit) return;
     const payload = {
       contract_number: contractNumber.trim() || null,
+      display_name: displayName.trim() || null,
       lessor_name: lessorName.trim(),
       lessor_contact_id: contactId ? Number(contactId) : null,
       lessor_vat_number: lessorVat.trim() || null,
@@ -1008,6 +1012,18 @@ export default function LeaseContractModal({
                       className={`${ws.input} px-3 py-2 text-sm`}
                       placeholder="مثال: C-2026-01"
                       dir="ltr"
+                    />
+                  </div>
+                  <div>
+                    <FieldLabel hint="اسم مختصر يظهر في الجداول بجانب النوع — مثل اسم الفرع">
+                      الاسم المعرِّف
+                    </FieldLabel>
+                    <input
+                      type="text"
+                      value={displayName}
+                      onChange={(event) => setDisplayName(event.target.value)}
+                      className={`${ws.input} px-3 py-2 text-sm`}
+                      placeholder="مثال: فرع العزيزية"
                     />
                   </div>
                   <div>

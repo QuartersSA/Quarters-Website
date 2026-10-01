@@ -179,6 +179,11 @@ async function doEnsureLeaseSchema() {
       ADD COLUMN IF NOT EXISTS fixed_excl NUMERIC(14,2) NOT NULL DEFAULT 0,
       ADD COLUMN IF NOT EXISTS fixed_exempt_excl NUMERIC(14,2) NOT NULL DEFAULT 0
   `;
+  // الاسم المعرِّف: اسم مختصر يظهر في الجداول (مثل اسم الفرع) بجانب النوع.
+  await sql`
+    ALTER TABLE accounting_lease_contracts
+      ADD COLUMN IF NOT EXISTS display_name TEXT
+  `;
   // نوع العقد: branch | housing | warehouse (فرع / سكن / مستودع).
   await sql`
     ALTER TABLE accounting_lease_contracts
@@ -332,6 +337,7 @@ export function computeContractFields(row, today = todayRiyadh()) {
     ...row,
     lessor_contact_id: row.lessor_contact_id ?? null,
     contract_type: CONTRACT_TYPES.includes(row.contract_type) ? row.contract_type : "branch",
+    display_name: row.display_name ?? null,
     branch_id: row.branch_id ?? null,
     branch_name: row.branch_name ?? null,
     notice_period_days: row.notice_period_days === null || row.notice_period_days === undefined
@@ -367,7 +373,7 @@ export function computeContractFields(row, today = todayRiyadh()) {
 // أعمدة رأس العقد + تجميعات الدفعات (المسدد مقابل المعلّق؛ الملغاة مستبعدة).
 // $1 = تاريخ اليوم بالرياض.
 const CONTRACT_SELECT = `
-  SELECT c.id, c.contract_number, c.contract_type, c.lessor_name, c.lessor_contact_id, c.lessor_vat_number,
+  SELECT c.id, c.contract_number, c.display_name, c.contract_type, c.lessor_name, c.lessor_contact_id, c.lessor_vat_number,
          c.location, c.branch_id, b.name AS branch_name,
          TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
          TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
@@ -417,7 +423,7 @@ export async function listContracts({ includeInactive = false, q = "" } = {}) {
     params.push(`%${search}%`);
     const n = params.length;
     where.push(
-      `(c.contract_number ILIKE $${n} OR c.lessor_name ILIKE $${n} OR c.location ILIKE $${n} OR b.name ILIKE $${n})`,
+      `(c.contract_number ILIKE $${n} OR c.display_name ILIKE $${n} OR c.lessor_name ILIKE $${n} OR c.location ILIKE $${n} OR b.name ILIKE $${n})`,
     );
   }
   const text = `
@@ -542,7 +548,7 @@ export async function listPayments({
            COALESCE((
              SELECT SUM(r.amount) FROM accounting_lease_reserves r WHERE r.payment_id = w.id
            ), 0) AS reserved_total,
-           c.contract_number, c.contract_type, c.payment_frequency, c.lessor_name, c.lessor_contact_id, c.location,
+           c.contract_number, c.display_name, c.contract_type, c.payment_frequency, c.lessor_name, c.lessor_contact_id, c.location,
            c.branch_id, b.name AS branch_name,
            c.status AS contract_stored_status,
            TO_CHAR(c.start_date, 'YYYY-MM-DD') AS contract_start_date,
@@ -899,6 +905,7 @@ export function parseContractInput(body = {}, { requireSchedule = true } = {}) {
     value: {
       contract_number: textOrNull(body.contract_number, 120),
       contract_type: contractType,
+      display_name: textOrNull(body.display_name, 120),
       lessor_name: lessorName,
       lessor_contact_id: parseIntOrNull(body.lessor_contact_id),
       lessor_vat_number: textOrNull(body.lessor_vat_number, 40),

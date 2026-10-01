@@ -172,6 +172,14 @@ export default function LeasePayModal({
 
         {/* سياق الدفعة: المؤجر، الموقع، الفترة، الاستحقاق */}
         <div className={`${ws.glassSoft} ${ws.card} p-3 mb-4 space-y-1.5 text-xs`}>
+          {payment.display_name ? (
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-slate-500 dark:text-white/45">العقد</span>
+              <span className="font-bold text-slate-900 dark:text-white truncate">
+                {payment.display_name}
+              </span>
+            </div>
+          ) : null}
           <div className="flex items-center justify-between gap-2">
             <span className="text-slate-500 dark:text-white/45">المؤجر</span>
             <span className="font-semibold text-slate-800 dark:text-white/85 truncate">

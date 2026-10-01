@@ -708,6 +708,7 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.lease_month,
         lc.contract_number AS lease_contract_number,
         lc.contract_type AS lease_contract_type,
+        lc.display_name AS lease_display_name,
         CASE
           WHEN inv.is_active = FALSE THEN 'inactive'
           WHEN inv.total_amount > 0 AND inv.paid_amount >= inv.total_amount THEN 'paid'

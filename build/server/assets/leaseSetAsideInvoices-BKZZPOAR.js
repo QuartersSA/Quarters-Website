@@ -3,8 +3,8 @@ import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-vtN
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { q as anyCoffeeAccount } from './coffeeInvoices-B899v71-.js';
-import { createPurchaseInvoice } from './route-7bHol63F.js';
-import { e as ensureLeaseSchema, a as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, c as listPayments, f as setAsideSchedule, g as round2$1, h as CONTRACT_TYPE_LABELS, i as getLeaseExpenseAccountId, j as FREQUENCY_LABELS } from './leaseContracts-DL4_HPeB.js';
+import { createPurchaseInvoice } from './route-CjYVzyz3.js';
+import { e as ensureLeaseSchema, a as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, c as listPayments, f as setAsideSchedule, g as round2$1, h as CONTRACT_TYPE_LABELS, i as getLeaseExpenseAccountId, j as FREQUENCY_LABELS } from './leaseContracts-BDNTyzro.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
 const ensureRecurringSchema = ensureOnce(ensureRecurringSchemaImpl);
@@ -874,6 +874,7 @@ async function generateSetAsideInvoices({
     const taxableMonthly = round2$1(taxableIncl / n);
     const exemptMonthly = round2$1(exempt / n);
     const label = `${payment.contract_number || `#${payment.contract_id}`}`;
+    const site = payment.display_name || payment.location || label;
     const typeLabel = CONTRACT_TYPE_LABELS[payment.contract_type] || "";
     for (const item of schedule) {
       if (item.month > limitMonth) continue;
@@ -894,7 +895,7 @@ async function generateSetAsideInvoices({
         const items = [];
         if (taxableShare > 0) {
           items.push({
-            description: `استقطاع ${item.seq}/${n} لشهر ${item.month} — الدفعة ${payment.seq} المستحقة ${payment.due_date} — إيجار ${payment.location || label}${period}`,
+            description: `استقطاع ${item.seq}/${n} لشهر ${item.month} — الدفعة ${payment.seq} المستحقة ${payment.due_date} — إيجار ${site}${period}`,
             account_id: accountId,
             quantity: 1,
             unit_price: taxableShare,
@@ -926,7 +927,7 @@ async function generateSetAsideInvoices({
           paid_amount: 0,
           workflow_status: "pending_payment",
           branch_id: payment.branch_id || null,
-          notes: `استقطاع شهري للإيجار — عقد ${label}${typeLabel ? ` (${typeLabel})` : ""} — ${payment.lessor_name}` + `${payment.location ? ` — ${payment.location}` : ""}\n` + `الدفعة ${payment.seq}${payment.payment_frequency ? ` (${FREQUENCY_LABELS[payment.payment_frequency] || payment.payment_frequency})` : ""} تستحق ${payment.due_date} بقيمة ${round2$1(payment.amount_incl).toFixed(2)} SAR شامل الضريبة، ` + `مقسومة على ${n} أشهر: هذا استقطاع الشهر ${item.seq} من ${n} (${item.month}). ` + `تُعلَّم مسددة عند تأكيد تحويل الاستقطاع إلى حساب الاستقطاع.`
+          notes: `استقطاع شهري للإيجار — ${payment.display_name ? `${payment.display_name} — ` : ""}عقد ${label}${typeLabel ? ` (${typeLabel})` : ""} — ${payment.lessor_name}` + `${payment.location ? ` — ${payment.location}` : ""}\n` + `الدفعة ${payment.seq}${payment.payment_frequency ? ` (${FREQUENCY_LABELS[payment.payment_frequency] || payment.payment_frequency})` : ""} تستحق ${payment.due_date} بقيمة ${round2$1(payment.amount_incl).toFixed(2)} SAR شامل الضريبة، ` + `مقسومة على ${n} أشهر: هذا استقطاع الشهر ${item.seq} من ${n} (${item.month}). ` + `تُعلَّم مسددة عند تأكيد تحويل الاستقطاع إلى حساب الاستقطاع.`
         }, actor);
         if (!result?.ok) {
           console.error("set-aside invoice create failed", invoiceNumber, result?.error);

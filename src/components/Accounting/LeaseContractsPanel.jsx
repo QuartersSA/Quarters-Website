@@ -153,6 +153,37 @@ function TypePill({ type }) {
   );
 }
 
+// هوية العقد في الجداول: الاسم المعرِّف (إن وُجد) + شارة النوع، ثم المؤجر.
+function ContractIdentity({ row, onOpen, nameClass = "" }) {
+  const title = row.display_name || row.lessor_name || "—";
+  const inner = (
+    <span className="inline-flex items-center gap-1.5 flex-wrap">
+      <span className={nameClass}>{title}</span>
+      <TypePill type={row.contract_type} />
+    </span>
+  );
+  return (
+    <>
+      {onOpen ? (
+        <button
+          type="button"
+          onClick={onOpen}
+          className="font-semibold text-slate-900 dark:text-white hover:text-[#0e7a5f] dark:hover:text-emerald-300 text-right"
+        >
+          {inner}
+        </button>
+      ) : (
+        <div className="font-semibold text-slate-900 dark:text-white">{inner}</div>
+      )}
+      {row.display_name && row.lessor_name ? (
+        <div className="text-[11px] text-slate-600 dark:text-white/55 truncate max-w-[260px]">
+          {row.lessor_name}
+        </div>
+      ) : null}
+    </>
+  );
+}
+
 function PaymentPill({ payment, today }) {
   const overdue =
     payment.status === "pending" &&
@@ -434,7 +465,7 @@ export default function LeaseContractsPanel({
     const needle = q.trim().toLowerCase();
     if (!needle) return contracts;
     return contracts.filter((c) =>
-      [c.contract_number, c.lessor_name, c.location, c.branch_name, c.lessor_vat_number, CONTRACT_TYPE_LABELS[c.contract_type]]
+      [c.contract_number, c.display_name, c.lessor_name, c.location, c.branch_name, c.lessor_vat_number, CONTRACT_TYPE_LABELS[c.contract_type]]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(needle)),
     );
@@ -462,6 +493,7 @@ export default function LeaseContractsPanel({
   const exportContracts = (kind) => {
     const columns = [
       { header: "رقم العقد", accessor: (row) => row.contract_number || "" },
+      { header: "الاسم المعرِّف", accessor: (row) => row.display_name || "" },
       { header: "المؤجر", accessor: (row) => row.lessor_name || "" },
       { header: "النوع", accessor: (row) => CONTRACT_TYPE_LABELS[row.contract_type] || "" },
       { header: "الموقع", accessor: (row) => row.location || "" },
@@ -539,6 +571,8 @@ export default function LeaseContractsPanel({
       ...payment,
       contract_id: drawerContract.id,
       contract_number: drawerContract.contract_number,
+      display_name: drawerContract.display_name,
+      contract_type: drawerContract.contract_type,
       lessor_name: drawerContract.lessor_name,
       location: drawerContract.location,
       payment_frequency: drawerContract.payment_frequency,
@@ -651,6 +685,8 @@ export default function LeaseContractsPanel({
     const columns = [
       { header: "الاستحقاق", accessor: (row) => row.due_date || "" },
       { header: "رقم العقد", accessor: (row) => row.contract_number || "" },
+      { header: "الاسم المعرِّف", accessor: (row) => row.display_name || "" },
+      { header: "النوع", accessor: (row) => CONTRACT_TYPE_LABELS[row.contract_type] || "" },
       { header: "المؤجر", accessor: (row) => row.lessor_name || "" },
       { header: "الموقع", accessor: (row) => row.location || "" },
       { header: "الدفعة", accessor: (row) => `#${row.seq}` },
@@ -789,6 +825,8 @@ export default function LeaseContractsPanel({
   const exportReserve = (kind) => {
     const columns = [
       { header: "رقم العقد", accessor: (row) => row.contract_number || "" },
+      { header: "الاسم المعرِّف", accessor: (row) => row.display_name || "" },
+      { header: "النوع", accessor: (row) => CONTRACT_TYPE_LABELS[row.contract_type] || "" },
       { header: "المؤجر", accessor: (row) => row.lessor_name || "" },
       { header: "الدفعة", accessor: (row) => `#${row.seq}` },
       { header: "الاستحقاق", accessor: (row) => row.due_date || "" },
@@ -951,7 +989,13 @@ export default function LeaseContractsPanel({
                         } ${previewId === contract.id ? "bg-[#e7f2ee]/70 dark:bg-emerald-400/[0.06]" : ""}`}
                       >
                         <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">
-                          <div className="flex items-center gap-1.5" dir="ltr">
+                          {contract.display_name ? (
+                            <div className="flex items-center gap-1.5 mb-0.5">
+                              <span>{contract.display_name}</span>
+                              <TypePill type={contract.contract_type} />
+                            </div>
+                          ) : null}
+                          <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-white/60" dir="ltr">
                             <span className="font-mono">{contract.contract_number || `#${contract.id}`}</span>
                             {contract.attachment_url ? (
                               <a
@@ -1096,7 +1140,13 @@ export default function LeaseContractsPanel({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="font-bold text-slate-900 dark:text-white font-mono truncate" dir="ltr">
+                      {contract.display_name ? (
+                        <div className="font-bold text-slate-900 dark:text-white truncate flex items-center gap-1.5">
+                          <span className="truncate">{contract.display_name}</span>
+                          <TypePill type={contract.contract_type} />
+                        </div>
+                      ) : null}
+                      <div className={`${contract.display_name ? "text-xs text-slate-600 dark:text-white/60" : "font-bold text-slate-900 dark:text-white"} font-mono truncate`} dir="ltr">
                         {contract.contract_number || `#${contract.id}`}
                       </div>
                       <div className="text-sm text-slate-700 dark:text-white/70 mt-1 truncate">
@@ -1339,13 +1389,7 @@ export default function LeaseContractsPanel({
                           ) : null}
                         </td>
                         <td className="px-4 py-3">
-                          <button
-                            type="button"
-                            onClick={() => setPreviewId(row.contract_id)}
-                            className="font-semibold text-slate-900 dark:text-white hover:text-[#0e7a5f] dark:hover:text-emerald-300 text-right"
-                          >
-                            {row.lessor_name || "—"}
-                          </button>
+                          <ContractIdentity row={row} onOpen={() => setPreviewId(row.contract_id)} />
                           <div className="text-[11px] text-slate-500 dark:text-white/45 truncate max-w-[260px]">
                             <span className="font-mono" dir="ltr">
                               {row.contract_number || `#${row.contract_id}`}
@@ -1647,13 +1691,7 @@ export default function LeaseContractsPanel({
                   return (
                     <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.03]">
                       <td className="px-4 py-3">
-                        <button
-                          type="button"
-                          onClick={() => setPreviewId(row.contract_id)}
-                          className="font-semibold text-slate-900 dark:text-white hover:text-[#0e7a5f] dark:hover:text-emerald-300 text-right"
-                        >
-                          {row.lessor_name || "—"}
-                        </button>
+                        <ContractIdentity row={row} onOpen={() => setPreviewId(row.contract_id)} />
                         <div className="text-[11px] text-slate-500 dark:text-white/45 truncate max-w-[220px]">
                           <span className="font-mono" dir="ltr">
                             {row.contract_number || `#${row.contract_id}`}
@@ -1819,7 +1857,7 @@ export default function LeaseContractsPanel({
                 {reserveAllRows.map((row) => (
                   <tr key={`all-${row.id}`} className="hover:bg-slate-50 dark:hover:bg-white/[0.03]">
                     <td className="px-4 py-2">
-                      <div className="font-semibold text-slate-900 dark:text-white">{row.lessor_name || "—"}</div>
+                      <ContractIdentity row={row} />
                       <div className="text-[11px] text-slate-500 dark:text-white/45 font-mono" dir="ltr">
                         {row.contract_number || `#${row.contract_id}`}
                       </div>
@@ -1967,7 +2005,13 @@ export default function LeaseContractsPanel({
                   className={`sticky top-0 z-10 bg-white dark:bg-slate-950 px-5 py-4 border-b ${ws.divider} flex items-center justify-between gap-3`}
                 >
                   <div className="min-w-0">
-                    <div className="font-bold text-slate-900 dark:text-white font-mono" dir="ltr">
+                    {drawerContract.display_name ? (
+                      <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <span className="truncate">{drawerContract.display_name}</span>
+                        <TypePill type={drawerContract.contract_type} />
+                      </div>
+                    ) : null}
+                    <div className={`${drawerContract.display_name ? "text-xs text-slate-600 dark:text-white/60" : "font-bold text-slate-900 dark:text-white"} font-mono`} dir="ltr">
                       {drawerContract.contract_number || `#${drawerContract.id}`}
                     </div>
                     <div className="text-xs text-slate-500 dark:text-white/50 truncate mt-0.5">
@@ -1998,6 +2042,10 @@ export default function LeaseContractsPanel({
 
                 <div className="p-5 space-y-4 text-slate-900 dark:text-white">
                   <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <div className="text-[11px] text-slate-500 dark:text-white/45">الاسم المعرِّف</div>
+                      <div className="font-semibold">{drawerContract.display_name || "—"}</div>
+                    </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-white/45">نوع العقد</div>
                       <div className="font-semibold">

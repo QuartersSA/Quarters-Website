@@ -1,7 +1,7 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { e as ensureLeaseSchema, d as deactivateSetAsideInvoicesForPayments, l as loadContract, p as parseContractInput, s as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-DL4_HPeB.js';
+import { e as ensureLeaseSchema, d as deactivateSetAsideInvoicesForPayments, l as loadContract, p as parseContractInput, s as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-BDNTyzro.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
@@ -146,6 +146,7 @@ async function PUT(request, {
       UPDATE accounting_lease_contracts
       SET contract_number = ${value.contract_number},
           contract_type = ${value.contract_type},
+          display_name = ${value.display_name},
           lessor_name = ${value.lessor_name},
           lessor_contact_id = ${value.lessor_contact_id},
           lessor_vat_number = ${value.lessor_vat_number},
