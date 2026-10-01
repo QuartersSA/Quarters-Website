@@ -1,6 +1,6 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { m as ensureCoffeeSchema } from './coffeeInvoices-B899v71-.js';
+import { m as ensureCoffeeSchema } from './coffeeInvoices-D-eyzPd0.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 import '@neondatabase/serverless';
 import 'crypto';

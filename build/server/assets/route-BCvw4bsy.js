@@ -2,15 +2,15 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-RnDnF4VP.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { e as ensureLeaseSchema } from './leaseContracts-BiO6UUmk.js';
-import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-CzeQ3Age.js';
+import { s as suppressSetAsideInvoice, e as ensureLeaseSchema } from './leaseContracts-kh-CVUhD.js';
+import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-aDFZYVpN.js';
 import { n as notifyByPref } from './waNotify-BPFQhIP4.js';
-import { l as loadRoastChild, a as loadInvoiceLines, r as recomputeItemCost, b as reverseDeposits, c as loadRoastLinks, d as applyCoffeeToItems, e as assertRoastSyncAllowed, s as syncRoastInvoice, f as reverseSyncRoastToBean, C as CoffeeError, g as resolveRoaster, h as getRoastingAccountId, i as reserveIds, j as insertLineStatement, k as recordArrival, L as LINE_SELECT_COLUMNS, p as planLineReconcile, m as ensureCoffeeSchema } from './coffeeInvoices-B899v71-.js';
+import { l as loadRoastChild, a as loadInvoiceLines, r as reverseDeposits, b as recomputeItemCost, c as loadRoastLinks, d as applyCoffeeToItems, e as assertRoastSyncAllowed, s as syncRoastInvoice, f as reverseSyncRoastToBean, C as CoffeeError, g as resolveRoaster, h as getRoastingAccountId, i as reserveIds, j as insertLineStatement, k as recordArrival, L as LINE_SELECT_COLUMNS, p as planLineReconcile, m as ensureCoffeeSchema } from './coffeeInvoices-D-eyzPd0.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-vtNAxFgq.js';
-import './route-CTEIy0gy.js';
+import './route-BCvw4bsy.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
@@ -1216,42 +1216,29 @@ async function DELETE(request) {
     const isRoast = invoice.invoice_kind === "roast";
     const child = isRoast ? null : await loadRoastChild(id);
     if (force) {
-      // الحذف النهائي محروس: لا حذف لفاتورة (أو نظيرتها) لها دفعات أو إيداع.
-      const guardIds = [id, ...(child ? [Number(child.id)] : [])];
-      const [pay] = await sql`
-        SELECT COUNT(*)::int AS count FROM accounting_purchase_invoice_payments
-        WHERE invoice_id = ANY(${guardIds})
-      `;
-      if (Number(pay?.count) > 0 || Number(invoice.paid_amount) > 0) {
-        return Response.json({
-          error: "لا يمكن الحذف النهائي لفاتورة لها دفعات (أو فاتورة تحميص مرتبطة لها دفعات) — أوقفها بدل حذفها",
-          code: "has_payments"
-        }, {
-          status: 409
-        });
-      }
-      const [dep] = await sql`
-        SELECT COUNT(*)::int AS count FROM accounting_purchase_invoice_items
-        WHERE invoice_id = ${id} AND receipt_batch_id IS NOT NULL
-      `;
-      if (Number(dep?.count) > 0) {
-        return Response.json({
-          error: "الفاتورة مودَعة في المخزون — ألغِ الإيداع من نافذة تسجيل الوصول قبل الحذف",
-          code: "deposited"
-        }, {
-          status: 409
-        });
-      }
-      const itemIds = (await loadInvoiceLines(id)).map(l => l.item_id).filter(Boolean);
-      const statements = [];
+      // الحذف النهائي (قرار المالك): إزالة كاملة من النظام — الدفعات
+      // والبنود والمرفقات والفاتورة، ومعها فاتورة التحميص المرتبطة إن
+      // وُجدت، بعد عكس أي إيداع مخزون. فاتورة استقطاع إيجار محذوفة لا
+      // يُعاد توليدها (تُسجَّل في قائمة الاستثناء).
+      const lines = await loadInvoiceLines(id);
+      const itemIds = lines.map(l => l.item_id).filter(Boolean);
+      const reversed = isRoast ? 0 : await reverseDeposits(id, auth.user);
+      const ids = [id, ...(child ? [Number(child.id)] : [])];
+      const [leaseLink] = await sql`
+        SELECT lease_payment_id, lease_month FROM accounting_purchase_invoices WHERE id = ${id}
+      `.catch(() => [null]);
+      const statements = [sql`DELETE FROM accounting_purchase_invoice_payments WHERE invoice_id = ANY(${ids})`, sql`DELETE FROM accounting_purchase_invoice_items WHERE invoice_id = ANY(${ids})`, sql`DELETE FROM accounting_purchase_invoice_attachments WHERE invoice_id = ANY(${ids})`];
       if (child) statements.push(sql`DELETE FROM accounting_purchase_invoices WHERE id = ${child.id}`);
       statements.push(sql`DELETE FROM accounting_purchase_invoices WHERE id = ${id}`);
       await sql.transaction(statements);
+      if (leaseLink?.lease_payment_id && leaseLink?.lease_month) {
+        await suppressSetAsideInvoice(leaseLink.lease_payment_id, leaseLink.lease_month).catch(() => {});
+      }
       await logPurchaseAudit({
         entityType: "invoice",
         entityId: id,
         action: "deleted",
-        summary: `حذف نهائي للفاتورة ${invoice.invoice_number}${child ? ` وفاتورة التحميص ${child.invoice_number}` : ""}`,
+        summary: `حذف نهائي للفاتورة ${invoice.invoice_number}${Number(invoice.paid_amount) > 0 ? ` (كانت مدفوعة ${Number(invoice.paid_amount).toFixed(2)})` : ""}${child ? ` وفاتورة التحميص ${child.invoice_number}` : ""}${reversed ? ` — عُكس إيداع ${reversed} بند` : ""}`,
         actor: auth.user
       });
       for (const itemId of new Set(itemIds.map(Number))) await recomputeItemCost(itemId, auth.user);
