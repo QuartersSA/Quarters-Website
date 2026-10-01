@@ -3,10 +3,13 @@ import { hash } from "argon2";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureWasteColumn = ensureOnce(ensureWasteColumnImpl);
+
 // Idempotent: ensure the waste-logging permission column exists.
 // Cheap (IF NOT EXISTS) and lets the employee form persist the flag
 // without a manual migration.
-async function ensureWasteColumn() {
+async function ensureWasteColumnImpl() {
   try {
     await ensureEmployeeDisplayNameSchema();
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_log_waste BOOLEAN DEFAULT false`;

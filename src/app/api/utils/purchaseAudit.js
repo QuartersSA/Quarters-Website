@@ -1,10 +1,13 @@
 import sql from "@/app/api/utils/sql";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+export const ensurePurchaseAuditSchema = ensureOnce(ensurePurchaseAuditSchemaImpl);
+
 // سجل تدقيق قسم المشتريات: من فعل ماذا ومتى. الكتابة تتم من مسارات
 // الفواتير/الأتمتة، والقراءة من /api/accounting/purchase-audit-log.
 // Failures here must NEVER break the operation being logged.
 
-export async function ensurePurchaseAuditSchema() {
+async function ensurePurchaseAuditSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_purchase_audit_log (
       id SERIAL PRIMARY KEY,

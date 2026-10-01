@@ -4,6 +4,9 @@ import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureShiftClosingsUniqueIndex = ensureOnce(ensureShiftClosingsUniqueIndexImpl);
+
 /**
  * Idempotent guard: ensure the (branch_id, shift_date, shift_label) combo
  * is unique, so two concurrent submissions for the same shift can't both
@@ -14,7 +17,7 @@ import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplay
  * two cashiers both closing the same shift; only the first wins.
  */
 let _ensureShiftIdxAttempted = false;
-async function ensureShiftClosingsUniqueIndex() {
+async function ensureShiftClosingsUniqueIndexImpl() {
   if (_ensureShiftIdxAttempted) return;
   _ensureShiftIdxAttempted = true;
   try {

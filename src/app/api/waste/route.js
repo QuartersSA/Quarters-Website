@@ -2,6 +2,9 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // Waste / spoilage logging (تسجيل الهدر).
 //
 //   waste_operations — one submission (branch + employee + time + note)
@@ -14,7 +17,7 @@ import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplay
 // default inventory unit, same as the inventory flow). unit_cost is
 // the default inventory unit cost snapshot, so cost = quantity × unit_cost.
 
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await ensureEmployeeDisplayNameSchema();
 
   try {

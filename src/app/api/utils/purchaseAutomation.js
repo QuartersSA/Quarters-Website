@@ -5,6 +5,10 @@ import { notifyByPref, onceDaily } from "@/app/api/utils/waNotify";
 import { anyCoffeeAccount } from "@/app/api/utils/coffeeInvoices";
 import { generateSetAsideInvoices } from "@/app/api/utils/leaseSetAsideInvoices";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+export const ensureRecurringSchema = ensureOnce(ensureRecurringSchemaImpl);
+export const ensureScheduledReportsSchema = ensureOnce(ensureScheduledReportsSchemaImpl);
+
 // أتمتة قسم المشتريات بدون مجدول خارجي — بمسارين متكاملين:
 //
 //   1. مؤقّت داخل عملية الخادم (startPurchaseAutomationTimer يُستدعى
@@ -46,7 +50,7 @@ function round2(value) {
   return Math.round(value * 100) / 100;
 }
 
-export async function ensureRecurringSchema() {
+async function ensureRecurringSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_recurring_purchase_invoices (
       id SERIAL PRIMARY KEY,
@@ -94,7 +98,7 @@ export async function ensureRecurringSchema() {
   }
 }
 
-export async function ensureScheduledReportsSchema() {
+async function ensureScheduledReportsSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_scheduled_purchase_reports (
       id SERIAL PRIMARY KEY,

@@ -1,6 +1,9 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
   anyOf: [
@@ -11,7 +14,7 @@ const REQUIRE_ACCOUNTING = {
 
 const ACCOUNT_TYPES = new Set(["bank", "credit_card", "petty_cash"]);
 
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_bank_accounts (
       id SERIAL PRIMARY KEY,

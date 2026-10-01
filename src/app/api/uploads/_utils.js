@@ -1,10 +1,13 @@
 import sql from "@/app/api/utils/sql";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+export const ensureUploadTables = ensureOnce(ensureUploadTablesImpl);
+
 export const MAX_UPLOAD_BYTES = 90 * 1024 * 1024; // 90MB
 export const MAX_UPLOAD_CHUNKS = 1_000;
 export const MAX_CHUNK_BYTES = 256 * 1024;
 
-export async function ensureUploadTables() {
+async function ensureUploadTablesImpl() {
   // sessions
   await sql`
     CREATE TABLE IF NOT EXISTS upload_sessions (

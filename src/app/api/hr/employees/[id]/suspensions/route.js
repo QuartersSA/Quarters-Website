@@ -13,7 +13,10 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
-async function ensureSuspensionsSchema() {
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSuspensionsSchema = ensureOnce(ensureSuspensionsSchemaImpl);
+
+async function ensureSuspensionsSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS employee_suspensions (
       id SERIAL PRIMARY KEY,

@@ -1,5 +1,8 @@
 import sql from "@/app/api/utils/sql";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+export const ensureAccountsSchema = ensureOnce(ensureAccountsSchemaImpl);
+
 // Chart of accounts (شجرة الحسابات) — shared schema + seed.
 //
 // The purchases module is built ON TOP of this tree: purchase invoices
@@ -89,7 +92,7 @@ const SEED = [
   ["5299", "مصروفات أخرى", "Other Expenses", "expense", "52", true],
 ];
 
-export async function ensureAccountsSchema() {
+async function ensureAccountsSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_accounts (
       id SERIAL PRIMARY KEY,

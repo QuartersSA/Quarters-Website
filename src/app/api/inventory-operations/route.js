@@ -12,6 +12,9 @@ import {
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 import { parseBusinessTimestamp } from "@/utils/dateUtils";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 /**
  * Parse user-supplied operation_date.
  * Preserves local wall-clock time so DB and UI agree on the calendar day.
@@ -28,7 +31,7 @@ function parseOperationDate(value) {
 // Idempotent schema migrations applied on every request.
 // Postgres ALTER COLUMN to widen INTEGER → NUMERIC is non-blocking and preserves
 // all existing data. Wrapped in try/catch so concurrent requests don't error.
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await ensureEmployeeDisplayNameSchema();
   try {
     await sql`

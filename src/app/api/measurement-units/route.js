@@ -1,13 +1,16 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // Catalog of reusable measurement units (شدة / كرتون / كيلو / ...).
 // Shared across every item — items reference these via the
 // item_units join table. Names are stored bilingually (Arabic
 // required, English optional) so list rendering can pick the right
 // label based on the operator's UI language.
 
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   try {
     await sql`
       CREATE TABLE IF NOT EXISTS measurement_units (

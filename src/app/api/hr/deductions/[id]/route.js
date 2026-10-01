@@ -2,6 +2,9 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureDeductionImagesColumn = ensureOnce(ensureDeductionImagesColumnImpl);
+
 function safeNumber(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return null;
@@ -16,7 +19,7 @@ function normalizeIsoDate(value) {
 }
 
 let deductionImagesColumnEnsured = false;
-async function ensureDeductionImagesColumn() {
+async function ensureDeductionImagesColumnImpl() {
   if (deductionImagesColumnEnsured) return;
   try {
     await sql`ALTER TABLE hr_employee_deductions ADD COLUMN IF NOT EXISTS images JSONB`;

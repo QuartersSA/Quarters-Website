@@ -4,6 +4,9 @@ import { notifyByPref } from "@/app/api/utils/waNotify";
 import { sendWhatsAppViaWasender } from "@/app/api/utils/wasender";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureDeductionImagesColumn = ensureOnce(ensureDeductionImagesColumnImpl);
+
 function safeNumber(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return null;
@@ -19,7 +22,7 @@ function safeInt(value) {
 }
 
 let deductionImagesColumnEnsured = false;
-async function ensureDeductionImagesColumn() {
+async function ensureDeductionImagesColumnImpl() {
   if (deductionImagesColumnEnsured) return;
   try {
     await sql`ALTER TABLE hr_employee_deductions ADD COLUMN IF NOT EXISTS images JSONB`;

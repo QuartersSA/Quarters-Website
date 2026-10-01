@@ -5,6 +5,9 @@ import {
   nextChildCode,
 } from "@/app/api/utils/accountsTree";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // Full accounting admins OR admins limited to قسم المشتريات only
 // (البنوك is a tab inside the purchases section).
 const REQUIRE_ACCOUNTING = {
@@ -60,7 +63,7 @@ async function linkBankAccountToTree(bankAccount) {
   }
 }
 
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_bank_accounts (
       id SERIAL PRIMARY KEY,

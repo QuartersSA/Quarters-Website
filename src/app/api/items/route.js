@@ -3,8 +3,11 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
 import { ensureCoffeeSchema } from "@/app/api/utils/coffeeInvoices";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // Idempotent schema additions; runs cheaply on every request.
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   try {
     await sql`ALTER TABLE items ADD COLUMN IF NOT EXISTS max_stock_threshold NUMERIC(12, 3)`;
     await sql`ALTER TABLE items ALTER COLUMN min_stock_threshold TYPE NUMERIC(12, 3) USING min_stock_threshold::numeric`;

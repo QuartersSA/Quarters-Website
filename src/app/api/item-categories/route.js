@@ -2,7 +2,10 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureCoffeeSchema } from "@/app/api/utils/coffeeInvoices";
 
-async function ensureSchema() {
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
+async function ensureSchemaImpl() {
   try {
     await sql`
       ALTER TABLE item_categories

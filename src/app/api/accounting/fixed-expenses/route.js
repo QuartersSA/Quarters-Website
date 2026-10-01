@@ -1,8 +1,11 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // Idempotent schema bootstrap. Runs on every request; cheap thanks to IF NOT EXISTS.
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   await sql`
     CREATE TABLE IF NOT EXISTS accounting_fixed_expenses (
       id SERIAL PRIMARY KEY,

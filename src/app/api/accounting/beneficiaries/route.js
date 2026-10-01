@@ -6,6 +6,9 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureSchema = ensureOnce(ensureSchemaImpl);
+
 // Full accounting admins OR admins limited to قسم المشتريات only.
 const REQUIRE_ACCOUNTING = {
   anyOf: [
@@ -24,7 +27,7 @@ const REQUIRE_SUPPLIERS_WRITE = {
   ],
 };
 
-async function ensureSchema() {
+async function ensureSchemaImpl() {
   // accounting_contacts is created by /api/accounting/contacts on
   // first call; bootstrap the FK target here too so the
   // beneficiaries route can be the first one hit.

@@ -1,6 +1,9 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+import { ensureOnce } from "@/app/api/utils/ensureOnce";
+const ensureTable = ensureOnce(ensureTableImpl);
+
 // Per-branch visibility for a single item.
 //   GET  /api/items/[id]/branch-visibility
 //     → { disabled_branches: [branch_id, ...] }
@@ -13,7 +16,7 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 // at that branch. Absence = default behaviour (item visible). New rows
 // are recorded with the acting admin's id + name for an audit trail.
 
-async function ensureTable() {
+async function ensureTableImpl() {
   try {
     await sql`
       CREATE TABLE IF NOT EXISTS item_branch_disabled (
