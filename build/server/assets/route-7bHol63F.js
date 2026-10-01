@@ -3,14 +3,14 @@ import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-RnDnF4VP.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { e as ensureLeaseSchema } from './leaseContracts-DL4_HPeB.js';
-import { r as runPurchaseAutomation, s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice } from './leaseSetAsideInvoices-Dc-C2fbX.js';
+import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-BUgUK9kD.js';
 import { n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { l as loadRoastChild, a as loadInvoiceLines, r as recomputeItemCost, b as reverseDeposits, c as loadRoastLinks, d as applyCoffeeToItems, e as assertRoastSyncAllowed, s as syncRoastInvoice, f as reverseSyncRoastToBean, C as CoffeeError, g as resolveRoaster, h as getRoastingAccountId, i as reserveIds, j as insertLineStatement, k as recordArrival, L as LINE_SELECT_COLUMNS, p as planLineReconcile, m as ensureCoffeeSchema } from './coffeeInvoices-B899v71-.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-vtNAxFgq.js';
-import './route-BoCEtWp8.js';
+import './route-7bHol63F.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
@@ -564,6 +564,15 @@ function validatePayload(payload) {
   }
   return null;
 }
+
+// تشغيل الأتمتة في الخلفية مع خنق: لا أكثر من مرة كل 5 دقائق لكل عملية.
+let lastAutomationKick = 0;
+function kickPurchaseAutomation() {
+  const now = Date.now();
+  if (now - lastAutomationKick < 5 * 60 * 1000) return;
+  lastAutomationKick = now;
+  runPurchaseAutomation().catch(() => {});
+}
 function selectInvoicesQuery(where, statusFilter) {
   const statusWhere = statusFilter ? "WHERE computed_status = $" + (where.values.length + 2) : "";
   return `
@@ -650,9 +659,10 @@ async function GET(request) {
   }
   try {
     await ensureSchema();
-    // كسول بدل cron: توليد الفواتير المتكررة المستحقة وإرسال
-    // التقارير المجدولة عند أول تحميل بعد الموعد. أخطاؤها مبتلعة.
-    await runPurchaseAutomation();
+    // كسول بدل cron: توليد الفواتير المتكررة وإرسال التقارير المجدولة —
+    // في الخلفية وبحد أقصى مرة كل 5 دقائق حتى لا يتأخر تحميل القائمة
+    // (المؤقّت الداخلي يغطي البقية). أخطاؤها مبتلعة.
+    kickPurchaseAutomation();
     const url = new URL(request.url);
     const includeInactive = url.searchParams.get("includeInactive") === "1";
     const q = (url.searchParams.get("q") || "").trim();
@@ -676,13 +686,16 @@ async function GET(request) {
     const today = todayRiyadh();
     const query = selectInvoicesQuery(where, status);
     const rows = await sql(query, status ? [...values, today, status] : [...values, today]);
-    const withItems = await attachItems(rows);
-    const withPayments = await attachPayments(withItems);
-    const withAttachments = await attachExtraAttachments(withPayments);
+    // البنود والدفعات والمرفقات وروابط التحميص مستقلة عن بعضها — تُجلب
+    // بالتوازي (أربع رحلات شبكة في زمن واحدة) ثم تُدمج بالترتيب.
+    const [withItems, withPayments, withAttachments, roastLinks] = await Promise.all([attachItems(rows), attachPayments(rows), attachExtraAttachments(rows),
     // ملخص فاتورة التحميص المرتبطة بكل فاتورة بن (للدرج والتقرير).
-    const roastLinks = await loadRoastLinks(withAttachments.filter(row => row.invoice_kind !== "roast").map(row => row.id));
-    const invoices = withAttachments.map(row => ({
+    loadRoastLinks(rows.filter(row => row.invoice_kind !== "roast").map(row => row.id))]);
+    const invoices = rows.map((row, index) => ({
       ...row,
+      items: withItems[index]?.items || [],
+      payments: withPayments[index]?.payments || [],
+      attachments: withAttachments[index]?.attachments || [],
       roast_invoice: roastLinks.get(Number(row.id)) || null
     }));
     return Response.json({
