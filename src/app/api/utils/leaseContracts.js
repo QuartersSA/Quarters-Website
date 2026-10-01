@@ -189,6 +189,12 @@ async function doEnsureLeaseSchema() {
       PRIMARY KEY (payment_id, month)
     )
   `;
+  // عقد مجدد: الدفعة الأولى لها استقطاع كبقية الدفعات (في العقد الجديد
+  // تُسدَّد الدفعة الأولى مباشرة بلا استقطاع).
+  await sql`
+    ALTER TABLE accounting_lease_contracts
+      ADD COLUMN IF NOT EXISTS is_renewal BOOLEAN NOT NULL DEFAULT FALSE
+  `;
   // الاسم المعرِّف: اسم مختصر يظهر في الجداول (مثل اسم الفرع) بجانب النوع.
   await sql`
     ALTER TABLE accounting_lease_contracts
@@ -361,6 +367,7 @@ export function computeContractFields(row, today = todayRiyadh()) {
     lessor_contact_id: row.lessor_contact_id ?? null,
     contract_type: CONTRACT_TYPES.includes(row.contract_type) ? row.contract_type : "branch",
     display_name: row.display_name ?? null,
+    is_renewal: row.is_renewal === true,
     branch_id: row.branch_id ?? null,
     branch_name: row.branch_name ?? null,
     notice_period_days: row.notice_period_days === null || row.notice_period_days === undefined
@@ -396,7 +403,7 @@ export function computeContractFields(row, today = todayRiyadh()) {
 // أعمدة رأس العقد + تجميعات الدفعات (المسدد مقابل المعلّق؛ الملغاة مستبعدة).
 // $1 = تاريخ اليوم بالرياض.
 const CONTRACT_SELECT = `
-  SELECT c.id, c.contract_number, c.display_name, c.contract_type, c.lessor_name, c.lessor_contact_id, c.lessor_vat_number,
+  SELECT c.id, c.contract_number, c.display_name, c.contract_type, c.is_renewal, c.lessor_name, c.lessor_contact_id, c.lessor_vat_number,
          c.location, c.branch_id, b.name AS branch_name,
          TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
          TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
@@ -571,7 +578,7 @@ export async function listPayments({
            COALESCE((
              SELECT SUM(r.amount) FROM accounting_lease_reserves r WHERE r.payment_id = w.id
            ), 0) AS reserved_total,
-           c.contract_number, c.display_name, c.contract_type, c.payment_frequency, c.lessor_name, c.lessor_contact_id, c.location,
+           c.contract_number, c.display_name, c.contract_type, c.is_renewal, c.payment_frequency, c.lessor_name, c.lessor_contact_id, c.location,
            c.branch_id, b.name AS branch_name,
            c.status AS contract_stored_status,
            TO_CHAR(c.start_date, 'YYYY-MM-DD') AS contract_start_date,
@@ -613,6 +620,9 @@ export async function listPayments({
       ...normalizePaymentRow(rest),
       reserved_total: num(rest.reserved_total),
       window_months: windowMonths,
+      is_renewal: rest.is_renewal === true,
+      // الدفعة الأولى في عقد جديد: بلا استقطاع (تُسدَّد مباشرة).
+      setaside_exempt: Number(rest.seq) === 1 && rest.is_renewal !== true,
       contract_created_on: contract_created_on || null,
       contract_status: contractStatus({
         status: contract_stored_status,
@@ -930,6 +940,7 @@ export function parseContractInput(body = {}, { requireSchedule = true } = {}) {
       contract_number: textOrNull(body.contract_number, 120),
       contract_type: contractType,
       display_name: textOrNull(body.display_name, 120),
+      is_renewal: body.is_renewal === true,
       lessor_name: lessorName,
       lessor_contact_id: parseIntOrNull(body.lessor_contact_id),
       lessor_vat_number: textOrNull(body.lessor_vat_number, 40),

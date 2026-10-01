@@ -1,8 +1,8 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { e as ensureLeaseSchema, i as round2, t as todayRiyadh, o as parseMoney, w as loadReservesByPayment, R as REQUIRE_LEASE } from './leaseContracts-BKxI_7YM.js';
-import { b as resetSetAsideInvoice, m as markSetAsideInvoicePaid } from './leaseSetAsideInvoices-DH_e2jVc.js';
+import { e as ensureLeaseSchema, i as round2, t as todayRiyadh, o as parseMoney, w as loadReservesByPayment, R as REQUIRE_LEASE } from './leaseContracts-CF8g7tmp.js';
+import { b as resetSetAsideInvoice, m as markSetAsideInvoicePaid } from './leaseSetAsideInvoices-CD_jwfSJ.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
@@ -14,7 +14,7 @@ import './accountsTree-RnDnF4VP.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
-import './route-BtBPyhQx.js';
+import './route-CYCTCGhF.js';
 
 // تأكيد الاستقطاع الشهري لدفعة: تسجيل المبلغ المحوَّل إلى حساب الاستقطاع
 // عن شهر معيّن لدفعة معلّقة (سجل accounting_lease_reserves؛ صف لكل دفعة/شهر).
@@ -32,7 +32,7 @@ async function loadPendingPayment(paymentId) {
   const [row] = await sql`
     SELECT p.id, p.contract_id, p.seq, p.status, p.amount_incl,
            TO_CHAR(p.due_date, 'YYYY-MM-DD') AS due_date,
-           c.contract_number, c.lessor_name
+           c.contract_number, c.lessor_name, c.is_renewal
     FROM accounting_lease_payments p
     JOIN accounting_lease_contracts c ON c.id = p.contract_id
     WHERE p.id = ${paymentId}
@@ -116,9 +116,9 @@ async function POST(request) {
       });
     }
     const amountIncl = Number(row.amount_incl) || 0;
-    if (Number(row.seq) === 1 && amount > 0) {
+    if (Number(row.seq) === 1 && row.is_renewal !== true && amount > 0) {
       return Response.json({
-        error: "الدفعة الأولى في العقد بلا استقطاع شهري — تُسدَّد مباشرة من سداد المستحق",
+        error: "الدفعة الأولى في العقد الجديد بلا استقطاع شهري — تُسدَّد مباشرة من سداد المستحق (فعّل «عقد مجدد» إن كان كذلك)",
         code: "first_installment"
       }, {
         status: 400

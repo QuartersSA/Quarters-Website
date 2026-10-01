@@ -4,8 +4,8 @@ import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { q as anyCoffeeAccount } from './coffeeInvoices-CYk167p4.js';
 import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
-import { createPurchaseInvoice } from './route-BtBPyhQx.js';
-import { e as ensureLeaseSchema, c as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, f as listPayments, g as loadSetAsideSkips, h as setAsideSchedule, i as round2$1, j as CONTRACT_TYPE_LABELS, k as getLeaseExpenseAccountId, m as FREQUENCY_LABELS } from './leaseContracts-BKxI_7YM.js';
+import { createPurchaseInvoice } from './route-CYCTCGhF.js';
+import { e as ensureLeaseSchema, c as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, f as listPayments, g as loadSetAsideSkips, h as setAsideSchedule, i as round2$1, j as CONTRACT_TYPE_LABELS, k as getLeaseExpenseAccountId, m as FREQUENCY_LABELS } from './leaseContracts-CF8g7tmp.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
 const ensureRecurringSchema = ensureOnce(ensureRecurringSchemaImpl);
@@ -863,13 +863,14 @@ async function generateSetAsideInvoices({
   let created = 0;
   let skipped = 0;
   for (const payment of pending) {
-    // قاعدة المالك: الدفعة الأولى في العقد بلا استقطاع شهري وبلا فواتير.
-    if (Number(payment.seq) === 1) {
+    // قاعدة المالك: الدفعة الأولى في العقد الجديد بلا استقطاع شهري وبلا فواتير
+    // (العقد المجدد مستثنى من القاعدة).
+    if (payment.setaside_exempt) {
       const stale = Object.values(existing[payment.id] || {}).filter(inv => inv.status === "pending_payment");
       if (stale.length) {
         await hardDeletePurchaseInvoices(stale.map(inv => inv.id), {
           actor,
-          reason: "الدفعة الأولى بلا استقطاع"
+          reason: "الدفعة الأولى في عقد جديد بلا استقطاع"
         }).catch(error => console.error("first-installment invoice delete failed", error?.message));
       }
       continue;

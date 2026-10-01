@@ -74,13 +74,14 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null 
   let skipped = 0;
 
   for (const payment of pending) {
-    // قاعدة المالك: الدفعة الأولى في العقد بلا استقطاع شهري وبلا فواتير.
-    if (Number(payment.seq) === 1) {
+    // قاعدة المالك: الدفعة الأولى في العقد الجديد بلا استقطاع شهري وبلا فواتير
+    // (العقد المجدد مستثنى من القاعدة).
+    if (payment.setaside_exempt) {
       const stale = Object.values(existing[payment.id] || {}).filter((inv) => inv.status === "pending_payment");
       if (stale.length) {
         await hardDeletePurchaseInvoices(
           stale.map((inv) => inv.id),
-          { actor, reason: "الدفعة الأولى بلا استقطاع" },
+          { actor, reason: "الدفعة الأولى في عقد جديد بلا استقطاع" },
         ).catch((error) => console.error("first-installment invoice delete failed", error?.message));
       }
       continue;
