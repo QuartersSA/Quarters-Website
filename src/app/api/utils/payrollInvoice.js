@@ -7,6 +7,7 @@
 
 import sql from "@/app/api/utils/sql";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { hardDeletePurchaseInvoices } from "@/app/api/utils/purchaseInvoiceDelete";
 import { createPurchaseInvoice } from "@/app/api/accounting/purchase-invoices/route";
 import { insertLineStatement, reserveIds } from "@/app/api/utils/coffeeInvoices";
 
@@ -54,24 +55,18 @@ export async function getSalariesAccountId() {
 }
 
 // إيقاف فواتير الرواتب النشطة لهذا الشهر (فتح الشهر أو قبل إعادة الإنشاء).
+// (لا إيقاف للفواتير — قرار المالك: فتح الشهر يحذف فاتورته نهائيًا، والتقفيل
+// مجددًا ينشئها من جديد بنفس الرقم.)
 export async function deactivatePayrollInvoices(month, actor, reason) {
   const number = payrollInvoiceNumber(month);
   const rows = await sql`
-    UPDATE accounting_purchase_invoices
-    SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-    WHERE invoice_number = ${number} AND is_active = TRUE
-    RETURNING id
+    SELECT id FROM accounting_purchase_invoices WHERE invoice_number = ${number}
   `;
-  for (const row of rows) {
-    await logPurchaseAudit({
-      entityType: "invoice",
-      entityId: Number(row.id),
-      action: "deactivated",
-      summary: `إيقاف فاتورة الرواتب ${number} — ${reason}`,
-      actor,
-    });
-  }
-  return rows.length;
+  const deleted = await hardDeletePurchaseInvoices(
+    rows.map((r) => r.id),
+    { actor, reason: `فاتورة الرواتب ${number} — ${reason}` },
+  );
+  return deleted.length;
 }
 
 // إنشاء فاتورة الرواتب لشهر مقفل. تعيد { ok, invoice_number, total, count }
@@ -108,8 +103,8 @@ export async function syncPayrollInvoice({ runId, month, actor }) {
   // مكانها — بنودها وإجماليها ودفعتها — وتعود نشطة.
   const [existing] = await sql`
     SELECT id, is_active FROM accounting_purchase_invoices
-    WHERE invoice_number = ${number} AND invoice_kind = 'purchase'
-    ORDER BY is_active DESC, id DESC
+    WHERE invoice_number = ${number} AND invoice_kind = 'purchase' AND is_active = TRUE
+    ORDER BY id DESC
     LIMIT 1
   `;
   const supplierName = `مسير الرواتب — ${month}`;

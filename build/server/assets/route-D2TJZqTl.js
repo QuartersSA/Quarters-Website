@@ -1,13 +1,14 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-B5krAOBv.js';
-import { m as ensureCoffeeSchema } from './coffeeInvoices-D-eyzPd0.js';
+import { m as ensureCoffeeSchema } from './coffeeInvoices-CYk167p4.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './employeeDisplayName-CwZGtUC2.js';
 import './accountsTree-RnDnF4VP.js';
 import './purchaseAudit-DZMMDeLJ.js';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 import './branchVisibility-CPqSH5sT.js';
 
 const ensureSchema = ensureOnce(ensureSchemaImpl);

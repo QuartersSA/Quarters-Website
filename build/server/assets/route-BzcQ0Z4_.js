@@ -1,7 +1,8 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { e as ensureLeaseSchema, q as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-kh-CVUhD.js';
+import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
+import { e as ensureLeaseSchema, q as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-BKxI_7YM.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
@@ -54,21 +55,10 @@ async function POST(request, {
       });
     }
     if (row.invoice_id) {
-      const deactivated = await sql`
-        UPDATE accounting_purchase_invoices
-        SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-        WHERE id = ${Number(row.invoice_id)}
-        RETURNING id, invoice_number
-      `;
-      for (const inv of deactivated) {
-        await logPurchaseAudit({
-          entityType: "invoice",
-          entityId: Number(inv.id),
-          action: "deactivated",
-          summary: `إيقاف فاتورة الإيجار ${inv.invoice_number} — تراجع عن سداد الدفعة ${row.seq} لعقد ${row.contract_number || `#${row.contract_id}`}`,
-          actor: auth.user
-        });
-      }
+      await hardDeletePurchaseInvoices([Number(row.invoice_id)], {
+        actor: auth.user,
+        reason: `تراجع عن سداد الدفعة ${row.seq} لعقد ${row.contract_number || `#${row.contract_id}`}`
+      });
     }
     await sql`
       UPDATE accounting_lease_payments

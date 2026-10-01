@@ -1,14 +1,15 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { createPurchaseInvoice } from './route-BCvw4bsy.js';
-import { i as reserveIds, j as insertLineStatement } from './coffeeInvoices-D-eyzPd0.js';
+import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
+import { createPurchaseInvoice } from './route-BtBPyhQx.js';
+import { i as reserveIds, j as insertLineStatement } from './coffeeInvoices-CYk167p4.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
 import './accountsTree-RnDnF4VP.js';
-import './leaseContracts-kh-CVUhD.js';
-import './leaseSetAsideInvoices-aDFZYVpN.js';
+import './leaseContracts-BKxI_7YM.js';
+import './leaseSetAsideInvoices-DH_e2jVc.js';
 import './wasender-vtNAxFgq.js';
 import './waNotify-BPFQhIP4.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
@@ -65,24 +66,18 @@ async function getSalariesAccountId() {
 }
 
 // إيقاف فواتير الرواتب النشطة لهذا الشهر (فتح الشهر أو قبل إعادة الإنشاء).
+// (لا إيقاف للفواتير — قرار المالك: فتح الشهر يحذف فاتورته نهائيًا، والتقفيل
+// مجددًا ينشئها من جديد بنفس الرقم.)
 async function deactivatePayrollInvoices(month, actor, reason) {
   const number = payrollInvoiceNumber(month);
   const rows = await sql`
-    UPDATE accounting_purchase_invoices
-    SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-    WHERE invoice_number = ${number} AND is_active = TRUE
-    RETURNING id
+    SELECT id FROM accounting_purchase_invoices WHERE invoice_number = ${number}
   `;
-  for (const row of rows) {
-    await logPurchaseAudit({
-      entityType: "invoice",
-      entityId: Number(row.id),
-      action: "deactivated",
-      summary: `إيقاف فاتورة الرواتب ${number} — ${reason}`,
-      actor
-    });
-  }
-  return rows.length;
+  const deleted = await hardDeletePurchaseInvoices(rows.map(r => r.id), {
+    actor,
+    reason: `فاتورة الرواتب ${number} — ${reason}`
+  });
+  return deleted.length;
 }
 
 // إنشاء فاتورة الرواتب لشهر مقفل. تعيد { ok, invoice_number, total, count }
@@ -127,8 +122,8 @@ async function syncPayrollInvoice({
   // مكانها — بنودها وإجماليها ودفعتها — وتعود نشطة.
   const [existing] = await sql`
     SELECT id, is_active FROM accounting_purchase_invoices
-    WHERE invoice_number = ${number} AND invoice_kind = 'purchase'
-    ORDER BY is_active DESC, id DESC
+    WHERE invoice_number = ${number} AND invoice_kind = 'purchase' AND is_active = TRUE
+    ORDER BY id DESC
     LIMIT 1
   `;
   const supplierName = `مسير الرواتب — ${month}`;

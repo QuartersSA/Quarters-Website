@@ -1,19 +1,20 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { d as ensureScheduledReportsSchema, f as buildPurchasesSummaryText } from './leaseSetAsideInvoices-aDFZYVpN.js';
+import { d as ensureScheduledReportsSchema, f as buildPurchasesSummaryText } from './leaseSetAsideInvoices-DH_e2jVc.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { s as sendWhatsAppViaWasender, n as normalizeWasenderPhone } from './wasender-vtNAxFgq.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './waNotify-BPFQhIP4.js';
 import './ensureOnce-D_53iNPN.js';
-import './coffeeInvoices-D-eyzPd0.js';
+import './coffeeInvoices-CYk167p4.js';
 import './accountsTree-RnDnF4VP.js';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
-import './route-BCvw4bsy.js';
-import './leaseContracts-kh-CVUhD.js';
+import './route-BtBPyhQx.js';
+import './leaseContracts-BKxI_7YM.js';
 
 const REQUIRE_ACCOUNTING = {
   anyOf: [{

@@ -1,5 +1,5 @@
 import sql from './sql-CSDV1lSC.js';
-import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
+import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
 
 // حسابات العقود التأجيرية — مشتركة بين الخادم (مصدر الحقيقة) والواجهة
 // (المعاينة الحية) بنفس المعادلات.
@@ -594,22 +594,16 @@ async function deactivateSetAsideInvoicesForPayments(paymentIds, actor = null, r
   if (!ids.length) return 0;
   const linked = await ensureLeaseInvoiceLinkColumns();
   if (!linked) return 0;
+  // غير المسددة فقط تُحذف نهائيًا؛ المسددة سجل مالي يبقى.
   const rows = await sql`
-    UPDATE accounting_purchase_invoices
-    SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-    WHERE lease_payment_id = ANY(${ids}) AND is_active = TRUE AND paid_amount <= 0
-    RETURNING id, invoice_number
+    SELECT id FROM accounting_purchase_invoices
+    WHERE lease_payment_id = ANY(${ids}) AND paid_amount <= 0
   `;
-  for (const row of rows) {
-    await logPurchaseAudit({
-      entityType: "invoice",
-      entityId: Number(row.id),
-      action: "deactivated",
-      summary: `إيقاف فاتورة الاستقطاع ${row.invoice_number}${reason ? ` — ${reason}` : ""}`,
-      actor
-    });
-  }
-  return rows.length;
+  const deleted = await hardDeletePurchaseInvoices(rows.map(r => r.id), {
+    actor,
+    reason: `فاتورة استقطاع${reason ? ` — ${reason}` : ""}`
+  });
+  return deleted.length;
 }
 
 // ---------------------------------------------------------------------------

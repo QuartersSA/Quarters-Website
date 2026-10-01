@@ -977,7 +977,8 @@ export default function PurchasesInvoicesPanel({
   const [branchFilter, setBranchFilter] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
-  const [includeInactive, setIncludeInactive] = useState(false);
+  // لا فواتير موقوفة (كل حذف نهائي) — تبقى القيمة ثابتة للتوافق مع الهوك.
+  const includeInactive = false;
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState(null);
   const [paying, setPaying] = useState(null);
@@ -1495,15 +1496,6 @@ export default function PurchasesInvoicesPanel({
               />
             </div>
           ) : null}
-          <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-slate-700 dark:text-white/75 shrink-0">
-            <input
-              type="checkbox"
-              checked={includeInactive}
-              onChange={(event) => setIncludeInactive(event.target.checked)}
-              className="accent-[#0e7a5f]"
-            />
-            عرض الموقوفة
-          </label>
           <div className="flex-1" />
           <button
             type="button"

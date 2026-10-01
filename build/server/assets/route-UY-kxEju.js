@@ -1,10 +1,11 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { e as ensureLeaseSchema, d as deactivateSetAsideInvoicesForPayments, l as loadContract, p as parseContractInput, a as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-kh-CVUhD.js';
+import { e as ensureLeaseSchema, d as deactivateSetAsideInvoicesForPayments, l as loadContract, p as parseContractInput, a as sameInstant, b as buildScheduleRows, r as replaceSchedule, R as REQUIRE_LEASE } from './leaseContracts-BKxI_7YM.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 
 // عقد تأجيري واحد: عرض / تعديل / إيقاف أو حذف.
 // GET    /api/accounting/lease-contracts/[id]

@@ -2,15 +2,16 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-RnDnF4VP.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { s as suppressSetAsideInvoice, e as ensureLeaseSchema } from './leaseContracts-kh-CVUhD.js';
-import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-aDFZYVpN.js';
+import { s as suppressSetAsideInvoice, e as ensureLeaseSchema } from './leaseContracts-BKxI_7YM.js';
+import { p as purgeInactivePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
+import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-DH_e2jVc.js';
 import { n as notifyByPref } from './waNotify-BPFQhIP4.js';
-import { l as loadRoastChild, a as loadInvoiceLines, r as reverseDeposits, b as recomputeItemCost, c as loadRoastLinks, d as applyCoffeeToItems, e as assertRoastSyncAllowed, s as syncRoastInvoice, f as reverseSyncRoastToBean, C as CoffeeError, g as resolveRoaster, h as getRoastingAccountId, i as reserveIds, j as insertLineStatement, k as recordArrival, L as LINE_SELECT_COLUMNS, p as planLineReconcile, m as ensureCoffeeSchema } from './coffeeInvoices-D-eyzPd0.js';
+import { l as loadRoastChild, a as loadInvoiceLines, r as reverseDeposits, b as recomputeItemCost, c as loadRoastLinks, d as applyCoffeeToItems, e as assertRoastSyncAllowed, s as syncRoastInvoice, f as reverseSyncRoastToBean, C as CoffeeError, g as resolveRoaster, h as getRoastingAccountId, i as reserveIds, j as insertLineStatement, k as recordArrival, L as LINE_SELECT_COLUMNS, p as planLineReconcile, m as ensureCoffeeSchema } from './coffeeInvoices-CYk167p4.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-vtNAxFgq.js';
-import './route-BCvw4bsy.js';
+import './route-BtBPyhQx.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
@@ -63,6 +64,13 @@ async function ensureSchemaImpl() {
   await ensureSchemaBase();
   // جداول العقود وأعمدة ربط فواتير الاستقطاع (الاستعلام يربط بجدول العقود).
   await ensureLeaseSchema();
+  // إلغاء خاصية الإيقاف: ما بقي موقوفًا من فواتير قديمة يُحذف نهائيًا.
+  try {
+    const purged = await purgeInactivePurchaseInvoices();
+    if (purged) console.log(`purged ${purged} inactive purchase invoices`);
+  } catch (error) {
+    console.error("purge inactive invoices failed", error?.message);
+  }
 }
 async function ensureSchemaBaseImpl() {
   await sql`
@@ -672,9 +680,9 @@ async function GET(request) {
     const conditions = [];
     const values = [];
     let idx = 1;
-    if (!includeInactive) {
-      conditions.push("inv.is_active = TRUE");
-    }
+
+    // لا فواتير موقوفة بعد الآن — القائمة نشطة دائمًا.
+    conditions.push("inv.is_active = TRUE");
     if (q) {
       conditions.push(`(LOWER(inv.invoice_number) LIKE $${idx} OR LOWER(COALESCE(inv.supplier_name,'')) LIKE $${idx} OR LOWER(COALESCE(c.name,'')) LIKE $${idx})`);
       values.push(`%${q.toLowerCase()}%`);
@@ -1193,8 +1201,8 @@ async function DELETE(request) {
     await ensureSchema();
     const url = new URL(request.url);
     const id = Number(url.searchParams.get("id"));
-    const force = url.searchParams.get("force") === "1";
-    const detach = url.searchParams.get("detach") === "1";
+    // قرار المالك: لا إيقاف للفواتير — الحذف دائمًا نهائي.
+    const force = true;
     if (!Number.isInteger(id) || id <= 0) {
       return Response.json({
         error: "معرف الفاتورة غير صحيح"
@@ -1247,85 +1255,16 @@ async function DELETE(request) {
         hard: true
       });
     }
-    if (isRoast) {
-      // إيقاف فاتورة تحميص مباشرة: فقط بفك الارتباط الصريح — وإلا من
-      // فاتورة البن (صفّر التحميص فتتوقف تلقائيًا).
-      if (!detach) {
-        return Response.json({
-          error: "أوقف فاتورة التحميص من فاتورة البن (صفّر تكلفة التحميص) أو استخدم «فك الارتباط»",
-          code: "roast_linked"
-        }, {
-          status: 409
-        });
-      }
-      await sql`
-        UPDATE accounting_purchase_invoices
-        SET is_active = FALSE, roast_link_state = 'detached', updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-        WHERE id = ${id}
-      `;
-      await logPurchaseAudit({
-        entityType: "invoice",
-        entityId: id,
-        action: "deactivated",
-        summary: `إيقاف فاتورة التحميص ${invoice.invoice_number} مع فك ارتباطها بفاتورة البن`,
-        actor: auth.user
-      });
-      return Response.json({
-        ok: true,
-        hard: false
-      });
-    }
-
-    // إيقاف فاتورة بن: عكس الإيداع، ثم الطفل (يتوقف إن كان بلا دفعات،
-    // وإلا يبقى مفصولًا)، ثم إعادة حساب تكلفة الأصناف.
-    const lines = await loadInvoiceLines(id);
-    const itemIds = new Set(lines.map(l => l.item_id).filter(Boolean).map(Number));
-    const reversed = await reverseDeposits(id, auth.user);
-    let childNote = "";
-    if (child) {
-      if (Number(child.paid_amount) > 0) {
-        await sql`
-          UPDATE accounting_purchase_invoices
-          SET roast_link_state = 'detached', updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-          WHERE id = ${child.id}
-        `;
-        childNote = ` — فاتورة التحميص ${child.invoice_number} عليها دفعات فبقيت نشطة مفصولة`;
-      } else {
-        await sql`
-          UPDATE accounting_purchase_invoices
-          SET is_active = FALSE, roast_link_state = 'detached', updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-          WHERE id = ${child.id}
-        `;
-        childNote = ` — أُوقفت فاتورة التحميص ${child.invoice_number} معها`;
-      }
-    }
-    const [updated] = await sql`
-      UPDATE accounting_purchase_invoices
-      SET
-        is_active = FALSE,
-        updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-      WHERE id = ${id}
-      RETURNING id, invoice_number
-    `;
-    await logPurchaseAudit({
-      entityType: "invoice",
-      entityId: id,
-      action: "deactivated",
-      summary: `إيقاف الفاتورة ${updated.invoice_number}${reversed ? ` — عُكس إيداع ${reversed} بند من المخزون` : ""}${childNote}`,
-      actor: auth.user
-    });
-    for (const itemId of itemIds) await recomputeItemCost(itemId, auth.user);
     return Response.json({
       ok: true,
-      hard: false,
-      detached_roast: !!(child && Number(child.paid_amount) > 0)
+      hard: true
     });
   } catch (error) {
     const coffee = coffeeErrorResponse(error);
     if (coffee) return coffee;
     console.error("purchase invoices DELETE error", error);
     return Response.json({
-      error: "فشل إيقاف فاتورة المشتريات",
+      error: "فشل حذف فاتورة المشتريات",
       details: error.message
     }, {
       status: 500

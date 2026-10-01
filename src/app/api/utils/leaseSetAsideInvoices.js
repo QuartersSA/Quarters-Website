@@ -6,6 +6,7 @@
 
 import sql from "@/app/api/utils/sql";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { hardDeletePurchaseInvoices } from "@/app/api/utils/purchaseInvoiceDelete";
 import { createPurchaseInvoice } from "@/app/api/accounting/purchase-invoices/route";
 import { setAsideSchedule, round2, CONTRACT_TYPE_LABELS, FREQUENCY_LABELS } from "@/utils/leaseMath";
 import {
@@ -76,23 +77,11 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null 
     // قاعدة المالك: الدفعة الأولى في العقد بلا استقطاع شهري وبلا فواتير.
     if (Number(payment.seq) === 1) {
       const stale = Object.values(existing[payment.id] || {}).filter((inv) => inv.status === "pending_payment");
-      for (const inv of stale) {
-        try {
-          await sql`
-            UPDATE accounting_purchase_invoices
-            SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-            WHERE id = ${inv.id} AND paid_amount <= 0
-          `;
-          await logPurchaseAudit({
-            entityType: "invoice",
-            entityId: inv.id,
-            action: "deactivated",
-            summary: `إيقاف فاتورة الاستقطاع ${inv.invoice_number} — الدفعة الأولى بلا استقطاع`,
-            actor,
-          });
-        } catch (error) {
-          console.error("first-installment invoice deactivate failed", inv.id, error?.message);
-        }
+      if (stale.length) {
+        await hardDeletePurchaseInvoices(
+          stale.map((inv) => inv.id),
+          { actor, reason: "الدفعة الأولى بلا استقطاع" },
+        ).catch((error) => console.error("first-installment invoice delete failed", error?.message));
       }
       continue;
     }
