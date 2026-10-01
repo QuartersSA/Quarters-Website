@@ -3,8 +3,8 @@ import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-vtN
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { q as anyCoffeeAccount } from './coffeeInvoices-B899v71-.js';
-import { createPurchaseInvoice } from './route-CjYVzyz3.js';
-import { e as ensureLeaseSchema, a as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, c as listPayments, f as setAsideSchedule, g as round2$1, h as CONTRACT_TYPE_LABELS, i as getLeaseExpenseAccountId, j as FREQUENCY_LABELS } from './leaseContracts-BDNTyzro.js';
+import { createPurchaseInvoice } from './route-Om8Cyxyb.js';
+import { e as ensureLeaseSchema, a as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, c as listPayments, f as setAsideSchedule, g as round2$1, h as CONTRACT_TYPE_LABELS, i as getLeaseExpenseAccountId, j as FREQUENCY_LABELS } from './leaseContracts-u8_xCSsS.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
 const ensureRecurringSchema = ensureOnce(ensureRecurringSchemaImpl);
@@ -876,8 +876,34 @@ async function generateSetAsideInvoices({
     const label = `${payment.contract_number || `#${payment.contract_id}`}`;
     const site = payment.display_name || payment.location || label;
     const typeLabel = CONTRACT_TYPE_LABELS[payment.contract_type] || "";
+    // لا فواتير لأشهر سبقت إضافة العقد للنظام — الاستقطاع يبدأ من شهر الإضافة.
+    // وما أُنشئ سابقًا لتلك الأشهر (غير مسدد) يُوقف تلقائيًا.
+    const floorMonth = payment.setaside_floor_month || null;
+    if (floorMonth) {
+      const stale = Object.entries(existing[payment.id] || {}).filter(([month, inv]) => month < floorMonth && inv.status === "pending_payment");
+      for (const [month, inv] of stale) {
+        try {
+          await sql`
+            UPDATE accounting_purchase_invoices
+            SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+            WHERE id = ${inv.id} AND paid_amount <= 0
+          `;
+          await logPurchaseAudit({
+            entityType: "invoice",
+            entityId: inv.id,
+            action: "deactivated",
+            summary: `إيقاف فاتورة الاستقطاع ${inv.invoice_number} — شهر ${month} سبق إضافة العقد للنظام`,
+            actor
+          });
+          delete existing[payment.id][month];
+        } catch (error) {
+          console.error("stale set-aside invoice deactivate failed", inv.id, error?.message);
+        }
+      }
+    }
     for (const item of schedule) {
       if (item.month > limitMonth) continue;
+      if (floorMonth && item.month < floorMonth) continue;
       if (existing[payment.id]?.[item.month]) {
         skipped += 1;
         continue;

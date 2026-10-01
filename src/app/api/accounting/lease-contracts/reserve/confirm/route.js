@@ -31,6 +31,7 @@ async function loadPendingPayment(paymentId) {
   const [row] = await sql`
     SELECT p.id, p.contract_id, p.seq, p.status, p.amount_incl,
            TO_CHAR(p.due_date, 'YYYY-MM-DD') AS due_date,
+           TO_CHAR(c.created_at, 'YYYY-MM') AS floor_month,
            c.contract_number, c.lessor_name
     FROM accounting_lease_payments p
     JOIN accounting_lease_contracts c ON c.id = p.contract_id
@@ -83,6 +84,15 @@ export async function POST(request) {
       return Response.json({ error: guard.error, code: guard.code }, { status: guard.status });
     }
     const amountIncl = Number(row.amount_incl) || 0;
+    if (row.floor_month && month < row.floor_month && amount > 0) {
+      return Response.json(
+        {
+          error: `الاستقطاع يبدأ من شهر إضافة العقد للنظام (${row.floor_month}) — لا استقطاع رجعي`,
+          code: "before_floor",
+        },
+        { status: 400 },
+      );
+    }
     // لا استقطاع في شهر الاستحقاق أو بعده — الشهر لا ينتهي قبل موعد السداد.
     if (String(row.due_date || "").slice(0, 7) <= month && amount > 0) {
       return Response.json(

@@ -1,7 +1,7 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { e as ensureLeaseSchema, k as parseDate, t as todayRiyadh, m as parseMoney, n as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-BDNTyzro.js';
+import { e as ensureLeaseSchema, k as parseDate, t as todayRiyadh, m as parseMoney, d as deactivateSetAsideInvoicesForPayments, n as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-u8_xCSsS.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
@@ -131,6 +131,9 @@ async function POST(request, {
           updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
     `;
+
+    // فواتير الاستقطاع غير المسددة لهذه الدفعة لم تعد لازمة بعد سدادها.
+    await deactivateSetAsideInvoicesForPayments([id], auth.user, "سُدِّدت الدفعة");
     await logPurchaseAudit({
       entityType: "lease_payment",
       entityId: id,
