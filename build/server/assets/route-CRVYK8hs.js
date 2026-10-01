@@ -1,8 +1,9 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureLeaseSchema, L as LEASE_FREQUENCIES, C as CONTRACT_TYPES, F as FREQUENCY_MONTHS, R as REQUIRE_LEASE } from './leaseContracts-kh-CVUhD.js';
+import { e as ensureLeaseSchema, L as LEASE_FREQUENCIES, C as CONTRACT_TYPES, F as FREQUENCY_MONTHS, R as REQUIRE_LEASE } from './leaseContracts-BKxI_7YM.js';
 import Anthropic from '@anthropic-ai/sdk';
 import sql from './sql-CSDV1lSC.js';
 import 'crypto';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 import './purchaseAudit-DZMMDeLJ.js';
 import './ensureOnce-D_53iNPN.js';
 import '@neondatabase/serverless';

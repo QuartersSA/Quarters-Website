@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { hardDeletePurchaseInvoices } from "@/app/api/utils/purchaseInvoiceDelete";
 import {
   REQUIRE_LEASE,
   ensureLeaseSchema,
@@ -40,21 +41,10 @@ export async function POST(request, { params } = {}) {
     }
 
     if (row.invoice_id) {
-      const deactivated = await sql`
-        UPDATE accounting_purchase_invoices
-        SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-        WHERE id = ${Number(row.invoice_id)}
-        RETURNING id, invoice_number
-      `;
-      for (const inv of deactivated) {
-        await logPurchaseAudit({
-          entityType: "invoice",
-          entityId: Number(inv.id),
-          action: "deactivated",
-          summary: `إيقاف فاتورة الإيجار ${inv.invoice_number} — تراجع عن سداد الدفعة ${row.seq} لعقد ${row.contract_number || `#${row.contract_id}`}`,
-          actor: auth.user,
-        });
-      }
+      await hardDeletePurchaseInvoices([Number(row.invoice_id)], {
+        actor: auth.user,
+        reason: `تراجع عن سداد الدفعة ${row.seq} لعقد ${row.contract_number || `#${row.contract_id}`}`,
+      });
     }
 
     await sql`

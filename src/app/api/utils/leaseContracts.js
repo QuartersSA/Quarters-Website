@@ -8,6 +8,7 @@
 
 import sql from "@/app/api/utils/sql";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { hardDeletePurchaseInvoices } from "@/app/api/utils/purchaseInvoiceDelete";
 import {
   LEASE_FREQUENCIES,
   CONTRACT_TYPES,
@@ -333,22 +334,16 @@ export async function deactivateSetAsideInvoicesForPayments(paymentIds, actor = 
   if (!ids.length) return 0;
   const linked = await ensureLeaseInvoiceLinkColumns();
   if (!linked) return 0;
+  // غير المسددة فقط تُحذف نهائيًا؛ المسددة سجل مالي يبقى.
   const rows = await sql`
-    UPDATE accounting_purchase_invoices
-    SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-    WHERE lease_payment_id = ANY(${ids}) AND is_active = TRUE AND paid_amount <= 0
-    RETURNING id, invoice_number
+    SELECT id FROM accounting_purchase_invoices
+    WHERE lease_payment_id = ANY(${ids}) AND paid_amount <= 0
   `;
-  for (const row of rows) {
-    await logPurchaseAudit({
-      entityType: "invoice",
-      entityId: Number(row.id),
-      action: "deactivated",
-      summary: `إيقاف فاتورة الاستقطاع ${row.invoice_number}${reason ? ` — ${reason}` : ""}`,
-      actor,
-    });
-  }
-  return rows.length;
+  const deleted = await hardDeletePurchaseInvoices(
+    rows.map((r) => r.id),
+    { actor, reason: `فاتورة استقطاع${reason ? ` — ${reason}` : ""}` },
+  );
+  return deleted.length;
 }
 
 // ---------------------------------------------------------------------------

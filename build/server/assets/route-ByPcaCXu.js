@@ -1,11 +1,12 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { m as ensureCoffeeSchema, a as loadInvoiceLines, r as reverseDeposits, b as recomputeItemCost, k as recordArrival, C as CoffeeError } from './coffeeInvoices-D-eyzPd0.js';
+import { m as ensureCoffeeSchema, a as loadInvoiceLines, r as reverseDeposits, b as recomputeItemCost, k as recordArrival, C as CoffeeError } from './coffeeInvoices-CYk167p4.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './accountsTree-RnDnF4VP.js';
 import './ensureOnce-D_53iNPN.js';
 import './purchaseAudit-DZMMDeLJ.js';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';

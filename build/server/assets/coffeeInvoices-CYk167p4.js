@@ -1,6 +1,7 @@
 import sql from './sql-CSDV1lSC.js';
 import { e as ensureAccountsSchema, n as nextChildCode } from './accountsTree-RnDnF4VP.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
+import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
 import { g as getDefaultInventoryUnitSnapshots, s as snapshotForItem, e as ensureInventoryUnitSnapshotSchema } from './inventoryUnitSnapshots-B5krAOBv.js';
 import { a as assertItemsEnabledAtBranch } from './branchVisibility-CPqSH5sT.js';
 
@@ -951,21 +952,13 @@ async function syncRoastInvoice(bean, beanLines, actor, {
     });
   }
   if (!desired.length) {
-    // لم يبقَ تحميص: إيقاف الطفل (بلا دفعات — تحقق أعلاه).
-    await sql`
-      UPDATE accounting_purchase_invoices
-      SET is_active = FALSE, roast_link_state = 'detached', updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-      WHERE id = ${child.id}
-    `;
-    await logPurchaseAudit({
-      entityType: "invoice",
-      entityId: child.id,
-      action: "deactivated",
-      summary: `إيقاف فاتورة التحميص ${child.invoice_number} — لم يبقَ تحميص في فاتورة البن ${bean.invoice_number}`,
-      actor
+    // لم يبقَ تحميص: حذف الطفل نهائيًا (بلا دفعات — تحقق أعلاه).
+    await hardDeletePurchaseInvoices([child.id], {
+      actor,
+      reason: `لم يبقَ تحميص في فاتورة البن ${bean.invoice_number}`
     });
     return {
-      action: "deactivated",
+      action: "deleted",
       roastInvoiceId: child.id
     };
   }

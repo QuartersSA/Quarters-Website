@@ -1,21 +1,22 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { t as guessKgPerSack } from './coffeeInvoices-D-eyzPd0.js';
+import { t as guessKgPerSack } from './coffeeInvoices-CYk167p4.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { e as ensureInvoiceBatchSchema, r as readUploadBase64 } from './invoiceBatches-YVAWFcIV.js';
 import { F as FILE_MEDIA_TYPES, r as runInvoiceAnalysis } from './invoiceAnalysis-B9uDIlPL.js';
 import { c as computeDraftTotals, r as round2 } from './invoiceDraftMath-C8Db36NO.js';
-import { createPurchaseInvoice } from './route-BCvw4bsy.js';
+import { createPurchaseInvoice } from './route-BtBPyhQx.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './accountsTree-RnDnF4VP.js';
 import './ensureOnce-D_53iNPN.js';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
 import '@anthropic-ai/sdk';
-import './leaseContracts-kh-CVUhD.js';
-import './leaseSetAsideInvoices-aDFZYVpN.js';
+import './leaseContracts-BKxI_7YM.js';
+import './leaseSetAsideInvoices-DH_e2jVc.js';
 import './wasender-vtNAxFgq.js';
 import './waNotify-BPFQhIP4.js';
 

@@ -2,9 +2,10 @@ import sql from './sql-CSDV1lSC.js';
 import { f as flushWaOutbox, s as sendWhatsAppViaWasender } from './wasender-vtNAxFgq.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
-import { q as anyCoffeeAccount } from './coffeeInvoices-D-eyzPd0.js';
-import { createPurchaseInvoice } from './route-BCvw4bsy.js';
-import { e as ensureLeaseSchema, c as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, f as listPayments, g as loadSetAsideSkips, h as setAsideSchedule, i as round2$1, j as CONTRACT_TYPE_LABELS, k as getLeaseExpenseAccountId, m as FREQUENCY_LABELS } from './leaseContracts-kh-CVUhD.js';
+import { q as anyCoffeeAccount } from './coffeeInvoices-CYk167p4.js';
+import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
+import { createPurchaseInvoice } from './route-BtBPyhQx.js';
+import { e as ensureLeaseSchema, c as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, f as listPayments, g as loadSetAsideSkips, h as setAsideSchedule, i as round2$1, j as CONTRACT_TYPE_LABELS, k as getLeaseExpenseAccountId, m as FREQUENCY_LABELS } from './leaseContracts-BKxI_7YM.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
 const ensureRecurringSchema = ensureOnce(ensureRecurringSchemaImpl);
@@ -865,23 +866,11 @@ async function generateSetAsideInvoices({
     // قاعدة المالك: الدفعة الأولى في العقد بلا استقطاع شهري وبلا فواتير.
     if (Number(payment.seq) === 1) {
       const stale = Object.values(existing[payment.id] || {}).filter(inv => inv.status === "pending_payment");
-      for (const inv of stale) {
-        try {
-          await sql`
-            UPDATE accounting_purchase_invoices
-            SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
-            WHERE id = ${inv.id} AND paid_amount <= 0
-          `;
-          await logPurchaseAudit({
-            entityType: "invoice",
-            entityId: inv.id,
-            action: "deactivated",
-            summary: `إيقاف فاتورة الاستقطاع ${inv.invoice_number} — الدفعة الأولى بلا استقطاع`,
-            actor
-          });
-        } catch (error) {
-          console.error("first-installment invoice deactivate failed", inv.id, error?.message);
-        }
+      if (stale.length) {
+        await hardDeletePurchaseInvoices(stale.map(inv => inv.id), {
+          actor,
+          reason: "الدفعة الأولى بلا استقطاع"
+        }).catch(error => console.error("first-installment invoice delete failed", error?.message));
       }
       continue;
     }

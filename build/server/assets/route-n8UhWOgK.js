@@ -1,10 +1,11 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { x as listContracts, e as ensureLeaseSchema, p as parseContractInput, b as buildScheduleRows, r as replaceSchedule, l as loadContract, R as REQUIRE_LEASE } from './leaseContracts-kh-CVUhD.js';
+import { x as listContracts, e as ensureLeaseSchema, p as parseContractInput, b as buildScheduleRows, r as replaceSchedule, l as loadContract, R as REQUIRE_LEASE } from './leaseContracts-BKxI_7YM.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 
 // العقود التأجيرية — القائمة والإضافة.
 // GET  /api/accounting/lease-contracts?includeInactive=1&q=

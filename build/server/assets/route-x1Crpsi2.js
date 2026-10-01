@@ -1,10 +1,11 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { e as ensureLeaseSchema, n as parseDate, t as todayRiyadh, o as parseMoney, d as deactivateSetAsideInvoicesForPayments, q as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-kh-CVUhD.js';
+import { e as ensureLeaseSchema, n as parseDate, t as todayRiyadh, o as parseMoney, d as deactivateSetAsideInvoicesForPayments, q as loadPayment, R as REQUIRE_LEASE } from './leaseContracts-BKxI_7YM.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 
 // سداد دفعة إيجار: تُعلَّم الدفعة مسددة (تاريخ، مبلغ، حساب بنكي، إيصال)
 // وتُتابع من «سداد المستحق» — بلا إنشاء فاتورة مشتريات (قرار المالك).
