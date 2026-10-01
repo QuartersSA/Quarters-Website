@@ -2,15 +2,15 @@ import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureAccountsSchema } from './accountsTree-RnDnF4VP.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { e as ensureLeaseSchema } from './leaseContracts-DL4_HPeB.js';
-import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-BUgUK9kD.js';
+import { e as ensureLeaseSchema } from './leaseContracts-BDNTyzro.js';
+import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-BKZZPOAR.js';
 import { n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { l as loadRoastChild, a as loadInvoiceLines, r as recomputeItemCost, b as reverseDeposits, c as loadRoastLinks, d as applyCoffeeToItems, e as assertRoastSyncAllowed, s as syncRoastInvoice, f as reverseSyncRoastToBean, C as CoffeeError, g as resolveRoaster, h as getRoastingAccountId, i as reserveIds, j as insertLineStatement, k as recordArrival, L as LINE_SELECT_COLUMNS, p as planLineReconcile, m as ensureCoffeeSchema } from './coffeeInvoices-B899v71-.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './wasender-vtNAxFgq.js';
-import './route-7bHol63F.js';
+import './route-CjYVzyz3.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
@@ -615,6 +615,7 @@ function selectInvoicesQuery(where, statusFilter) {
         inv.lease_month,
         lc.contract_number AS lease_contract_number,
         lc.contract_type AS lease_contract_type,
+        lc.display_name AS lease_display_name,
         CASE
           WHEN inv.is_active = FALSE THEN 'inactive'
           WHEN inv.total_amount > 0 AND inv.paid_amount >= inv.total_amount THEN 'paid'

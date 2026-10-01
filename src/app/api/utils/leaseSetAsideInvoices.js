@@ -84,6 +84,7 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null 
     const taxableMonthly = round2(taxableIncl / n);
     const exemptMonthly = round2(exempt / n);
     const label = `${payment.contract_number || `#${payment.contract_id}`}`;
+    const site = payment.display_name || payment.location || label;
     const typeLabel = CONTRACT_TYPE_LABELS[payment.contract_type] || "";
     for (const item of schedule) {
       if (item.month > limitMonth) continue;
@@ -107,7 +108,7 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null 
         const items = [];
         if (taxableShare > 0) {
           items.push({
-            description: `استقطاع ${item.seq}/${n} لشهر ${item.month} — الدفعة ${payment.seq} المستحقة ${payment.due_date} — إيجار ${payment.location || label}${period}`,
+            description: `استقطاع ${item.seq}/${n} لشهر ${item.month} — الدفعة ${payment.seq} المستحقة ${payment.due_date} — إيجار ${site}${period}`,
             account_id: accountId,
             quantity: 1,
             unit_price: taxableShare,
@@ -141,7 +142,7 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null 
             workflow_status: "pending_payment",
             branch_id: payment.branch_id || null,
             notes:
-              `استقطاع شهري للإيجار — عقد ${label}${typeLabel ? ` (${typeLabel})` : ""} — ${payment.lessor_name}` +
+              `استقطاع شهري للإيجار — ${payment.display_name ? `${payment.display_name} — ` : ""}عقد ${label}${typeLabel ? ` (${typeLabel})` : ""} — ${payment.lessor_name}` +
               `${payment.location ? ` — ${payment.location}` : ""}\n` +
               `الدفعة ${payment.seq}${payment.payment_frequency ? ` (${FREQUENCY_LABELS[payment.payment_frequency] || payment.payment_frequency})` : ""} تستحق ${payment.due_date} بقيمة ${round2(payment.amount_incl).toFixed(2)} SAR شامل الضريبة، ` +
               `مقسومة على ${n} أشهر: هذا استقطاع الشهر ${item.seq} من ${n} (${item.month}). ` +

@@ -122,7 +122,9 @@ function LeaseBadge({ invoice, detailed = false }) {
       dir="rtl"
     >
       <ScrollText className="w-3 h-3" />
-      {detailed ? `استقطاع إيجار${invoice.lease_month ? ` ${invoice.lease_month}` : ""} · عقد رقم ${number}` : `عقد ${number}`}
+      {detailed
+        ? `استقطاع إيجار${invoice.lease_month ? ` ${invoice.lease_month}` : ""} · ${invoice.lease_display_name ? `${invoice.lease_display_name} · ` : ""}عقد رقم ${number}`
+        : invoice.lease_display_name || `عقد ${number}`}
     </a>
   );
 }
