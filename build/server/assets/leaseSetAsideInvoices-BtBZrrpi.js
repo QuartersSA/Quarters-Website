@@ -4,7 +4,7 @@ import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { q as anyCoffeeAccount } from './coffeeInvoices-CYk167p4.js';
 import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
-import { createPurchaseInvoice } from './route-laJPHr2R.js';
+import { createPurchaseInvoice } from './route-dJGGy3uD.js';
 import { e as ensureLeaseSchema, c as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, f as listPayments, g as loadSetAsideSkips, h as setAsideSchedule, i as round2$1, j as CONTRACT_TYPE_LABELS, k as getLeaseExpenseAccountId, m as FREQUENCY_LABELS } from './leaseContracts-CF8g7tmp.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
@@ -866,6 +866,8 @@ async function generateSetAsideInvoices({
   const accountCache = new Map();
   let created = 0;
   let skipped = 0;
+  // أسباب فشل الإنشاء تُعاد للواجهة بدل ابتلاعها في السجل فقط.
+  const errors = [];
   for (const payment of pending) {
     // قاعدة المالك: الدفعة الأولى في العقد الجديد بلا استقطاع شهري وبلا فواتير
     // (العقد المجدد مستثنى من القاعدة).
@@ -906,7 +908,14 @@ async function generateSetAsideInvoices({
         const type = payment.contract_type || "branch";
         if (!accountCache.has(type)) accountCache.set(type, await getLeaseExpenseAccountId(type));
         const accountId = accountCache.get(type);
-        if (!accountId) continue;
+        if (!accountId) {
+          errors.push({
+            payment_id: Number(payment.id),
+            month: item.month,
+            error: "حساب مصروف الإيجار غير موجود (المجموعة 52 مفقودة)"
+          });
+          continue;
+        }
         const last = item.seq === n;
         const taxableShare = last ? round2$1(taxableIncl - round2$1(taxableMonthly * (n - 1))) : taxableMonthly;
         const exemptShare = last ? round2$1(exempt - round2$1(exemptMonthly * (n - 1))) : exemptMonthly;
@@ -951,6 +960,11 @@ async function generateSetAsideInvoices({
         }, actor);
         if (!result?.ok) {
           console.error("set-aside invoice create failed", invoiceNumber, result?.error);
+          errors.push({
+            payment_id: Number(payment.id),
+            month: item.month,
+            error: result?.error || "خطأ غير معروف"
+          });
           continue;
         }
         await sql`
@@ -963,12 +977,18 @@ async function generateSetAsideInvoices({
         created += 1;
       } catch (error) {
         console.error("set-aside invoice error", payment.id, item.month, error?.message);
+        errors.push({
+          payment_id: Number(payment.id),
+          month: item.month,
+          error: error?.message || "خطأ غير معروف"
+        });
       }
     }
   }
   return {
     created,
-    skipped
+    skipped,
+    errors
   };
 }
 

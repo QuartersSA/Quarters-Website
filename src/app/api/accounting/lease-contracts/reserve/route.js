@@ -5,6 +5,7 @@ import {
   ensureLeaseSchema,
   listPayments,
   loadReservesByPayment,
+  loadSetAsideSkips,
   todayRiyadh,
 } from "@/app/api/utils/leaseContracts";
 import {
@@ -37,12 +38,15 @@ export async function GET(request) {
     const branchId = Number.isInteger(branchRaw) && branchRaw > 0 ? branchRaw : null;
 
     // فواتير الاستقطاع للأشهر التي حلّت تُنشأ هنا أيضًا (إضافة إلى الأتمتة).
+    const invoiceErrors = new Map();
     try {
-      await generateSetAsideInvoices({ upToMonth: currentMonth, actor: auth.user });
+      const gen = await generateSetAsideInvoices({ upToMonth: currentMonth, actor: auth.user });
+      for (const e of gen?.errors || []) invoiceErrors.set(`${e.payment_id}|${e.month}`, e.error);
     } catch (error) {
       console.error("set-aside invoice generation failed", error?.message);
     }
     const pending = await listPayments({ status: "pending", excludeTerminated: true });
+    const skipsAll = await loadSetAsideSkips(pending.map((payment) => payment.id)).catch(() => new Set());
     // قاعدة المالك: الدفعة الأولى في العقد الجديد تُسدَّد مباشرة بلا استقطاع
     // (العقد المجدد: الدفعة الأولى كبقية الدفعات).
     const filtered = pending.filter(
@@ -80,6 +84,9 @@ export async function GET(request) {
             invoice_id: invoice ? invoice.id : null,
             invoice_number: invoice ? invoice.invoice_number : null,
             invoice_status: invoice ? invoice.status : null,
+            // لماذا لا فاتورة؟ حُذفت يدويًا (skip) أو فشل الإنشاء (error).
+            invoice_error: invoiceErrors.get(`${payment.id}|${item.month}`) || null,
+            invoice_deleted: skipsAll.has(`${payment.id}|${item.month}`),
             confirmed_amount: confirmed ? confirmed.amount : null,
             confirmed_by: confirmed ? confirmed.created_by_employee_name : null,
             note: confirmed ? confirmed.note : null,
@@ -106,6 +113,8 @@ export async function GET(request) {
         invoice_id: thisMonth ? thisMonth.invoice_id : null,
         invoice_number: thisMonth ? thisMonth.invoice_number : null,
         invoice_status: thisMonth ? thisMonth.invoice_status : null,
+        invoice_error: thisMonth ? thisMonth.invoice_error : null,
+        invoice_deleted: thisMonth ? thisMonth.invoice_deleted : false,
         in_window: !!thisMonth && !thisMonth.extra,
         reserved_total: reservedTotal,
         remaining_to_reserve: round2(Math.max(payment.amount_incl - reservedTotal, 0)),

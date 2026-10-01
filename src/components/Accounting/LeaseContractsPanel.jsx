@@ -1810,6 +1810,13 @@ export default function LeaseContractsPanel({
                             أكده {row.confirmed_by}
                           </div>
                         ) : null}
+                        {!row.invoice_number && (row.invoice_error || row.invoice_deleted) ? (
+                          <div className="text-[10px] mt-1 text-rose-700 dark:text-rose-300 max-w-[220px]">
+                            {row.invoice_deleted
+                              ? "حُذفت فاتورة هذا الشهر يدوياً"
+                              : `تعذر إنشاء الفاتورة: ${row.invoice_error}`}
+                          </div>
+                        ) : null}
                         {!row.invoice_number && canConfirmReserve && moneyValue(row.this_month_planned) > 0 ? (
                           <button
                             type="button"
