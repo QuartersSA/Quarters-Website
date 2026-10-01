@@ -48,6 +48,7 @@ import {
   useDeleteLeaseContract,
   useReactivateLeaseContract,
   useConfirmLeaseReserve,
+  useCreateLeaseSetAsideInvoice,
   useUpdateLeasePayment,
   usePayLeasePayment,
   useUnpayLeasePayment,
@@ -447,6 +448,7 @@ export default function LeaseContractsPanel({
   const deleteMut = useDeleteLeaseContract();
   const reactivateMut = useReactivateLeaseContract();
   const confirmReserveMut = useConfirmLeaseReserve();
+  const createSetAsideInvoiceMut = useCreateLeaseSetAsideInvoice();
   const updatePaymentMut = useUpdateLeasePayment();
   const payMut = usePayLeasePayment();
   const unpayMut = useUnpayLeasePayment();
@@ -1807,6 +1809,22 @@ export default function LeaseContractsPanel({
                           <div className="text-[10px] text-slate-400 dark:text-white/35 mt-1 whitespace-nowrap">
                             أكده {row.confirmed_by}
                           </div>
+                        ) : null}
+                        {!row.invoice_number && canConfirmReserve && moneyValue(row.this_month_planned) > 0 ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              createSetAsideInvoiceMut.mutate({ payment_id: row.id, month: reserveMonth })
+                            }
+                            disabled={createSetAsideInvoiceMut.isPending}
+                            className="text-[10px] mt-1 text-sky-700 dark:text-sky-200 hover:underline disabled:opacity-50 whitespace-nowrap"
+                            title="لا فاتورة استقطاع لهذا الشهر (حُذفت أو لم تُنشأ) — إنشاؤها الآن"
+                          >
+                            {createSetAsideInvoiceMut.isPending &&
+                            createSetAsideInvoiceMut.variables?.payment_id === row.id
+                              ? "جاري الإنشاء…"
+                              : "+ إنشاء فاتورة الاستقطاع"}
+                          </button>
                         ) : null}
                         {row.invoice_number ? (
                           <div

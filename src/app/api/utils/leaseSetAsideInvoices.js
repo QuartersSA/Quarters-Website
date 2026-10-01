@@ -60,15 +60,18 @@ export async function loadSetAsideInvoices(paymentIds) {
 
 // إنشاء الفواتير الناقصة لكل أشهر الاستقطاع التي حلّت (≤ upToMonth).
 // تعيد عدد الفواتير المنشأة. أخطاء فاتورة واحدة لا توقف البقية.
-export async function generateSetAsideInvoices({ upToMonth = null, actor = null } = {}) {
+// only: { paymentId, month } يولّد فاتورة شهر واحد لدفعة واحدة متجاهلًا
+// قائمة الاستثناء (إعادة إنشاء فاتورة حُذفت يدويًا).
+export async function generateSetAsideInvoices({ upToMonth = null, actor = null, only = null } = {}) {
   await ensureLeaseSchema();
   const linked = await ensureLeaseInvoiceLinkColumns();
   if (!linked) return { created: 0, skipped: 0 };
   const limitMonth = upToMonth || todayRiyadh().slice(0, 7);
-  const pending = await listPayments({ status: "pending", excludeTerminated: true });
+  let pending = await listPayments({ status: "pending", excludeTerminated: true });
+  if (only?.paymentId) pending = pending.filter((p) => Number(p.id) === Number(only.paymentId));
   if (!pending.length) return { created: 0, skipped: 0 };
   const existing = await loadSetAsideInvoices(pending.map((p) => p.id));
-  const skips = await loadSetAsideSkips(pending.map((p) => p.id));
+  const skips = only ? new Set() : await loadSetAsideSkips(pending.map((p) => p.id));
   const accountCache = new Map();
   let created = 0;
   let skipped = 0;
@@ -102,6 +105,7 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null 
     const site = payment.display_name || payment.location || label;
     const typeLabel = CONTRACT_TYPE_LABELS[payment.contract_type] || "";
     for (const item of schedule) {
+      if (only?.month && item.month !== only.month) continue;
       if (item.month > limitMonth) continue;
       if (skips.has(`${payment.id}|${item.month}`)) continue;
       if (existing[payment.id]?.[item.month]) {
