@@ -1,7 +1,7 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { t as todayRiyadh, e as ensureLeaseSchema, R as REQUIRE_LEASE } from './leaseContracts-CF8g7tmp.js';
-import { g as generateSetAsideInvoices, l as loadSetAsideInvoices } from './leaseSetAsideInvoices-BN7cC4SE.js';
+import { g as generateSetAsideInvoices, l as loadSetAsideInvoices } from './leaseSetAsideInvoices-BtBZrrpi.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './purchaseInvoiceDelete-RdBVQHRn.js';
@@ -14,7 +14,7 @@ import './accountsTree-RnDnF4VP.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
-import './route-laJPHr2R.js';
+import './route-dJGGy3uD.js';
 
 // إنشاء فاتورة استقطاع شهر واحد لدفعة واحدة (مثلًا بعد حذفها يدويًا):
 // يُزال الشهر من قائمة الاستثناء ثم تُولَّد الفاتورة إن لم تكن موجودة.

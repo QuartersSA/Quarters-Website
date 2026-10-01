@@ -75,6 +75,8 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null,
   const accountCache = new Map();
   let created = 0;
   let skipped = 0;
+  // أسباب فشل الإنشاء تُعاد للواجهة بدل ابتلاعها في السجل فقط.
+  const errors = [];
 
   for (const payment of pending) {
     // قاعدة المالك: الدفعة الأولى في العقد الجديد بلا استقطاع شهري وبلا فواتير
@@ -116,7 +118,10 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null,
         const type = payment.contract_type || "branch";
         if (!accountCache.has(type)) accountCache.set(type, await getLeaseExpenseAccountId(type));
         const accountId = accountCache.get(type);
-        if (!accountId) continue;
+        if (!accountId) {
+          errors.push({ payment_id: Number(payment.id), month: item.month, error: "حساب مصروف الإيجار غير موجود (المجموعة 52 مفقودة)" });
+          continue;
+        }
         const last = item.seq === n;
         const taxableShare = last ? round2(taxableIncl - round2(taxableMonthly * (n - 1))) : taxableMonthly;
         const exemptShare = last ? round2(exempt - round2(exemptMonthly * (n - 1))) : exemptMonthly;
@@ -172,6 +177,7 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null,
         );
         if (!result?.ok) {
           console.error("set-aside invoice create failed", invoiceNumber, result?.error);
+          errors.push({ payment_id: Number(payment.id), month: item.month, error: result?.error || "خطأ غير معروف" });
           continue;
         }
         await sql`
@@ -184,10 +190,11 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null,
         created += 1;
       } catch (error) {
         console.error("set-aside invoice error", payment.id, item.month, error?.message);
+        errors.push({ payment_id: Number(payment.id), month: item.month, error: error?.message || "خطأ غير معروف" });
       }
     }
   }
-  return { created, skipped };
+  return { created, skipped, errors };
 }
 
 // تأكيد التحويل → الفاتورة مسددة (المدفوع = الإجمالي، وسطر دفعة بتاريخ اليوم).
