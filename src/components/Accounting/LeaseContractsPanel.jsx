@@ -1418,7 +1418,7 @@ export default function LeaseContractsPanel({
                             {formatMoney(row.amount_excl, false)} + {formatMoney(row.vat_amount, false)}{" "}
                             <span dir="rtl">ضريبة {moneyValue(row.vat_rate)}%</span>
                           </div>
-                          {row.status === "pending" ? (
+                          {row.status === "pending" && Number(row.seq) !== 1 ? (
                             <div
                               className={`text-[11px] whitespace-nowrap ${
                                 moneyValue(row.reserved_total) + 0.005 >= moneyValue(row.amount_incl)
@@ -1736,8 +1736,7 @@ export default function LeaseContractsPanel({
                         </div>
                         <div className="text-[10px] text-slate-500 dark:text-white/40 mt-1">
                           {row.months_total} {row.months_total === 1 ? "شهر" : row.months_total === 2 ? "شهران" : row.months_total <= 10 ? "أشهر" : "شهراً"}
-                          {" · "}مؤكد {row.months_confirmed} / {row.months_total - (row.months_skipped || 0)}
-                          {row.months_skipped ? ` · ${row.months_skipped} قبل الإضافة` : ""}
+                          {" · "}مؤكد {row.months_confirmed} / {row.months_total}
                         </div>
                       </td>
                       <td className="px-4 py-3 text-left tabular-nums font-bold" dir="ltr">
@@ -1918,8 +1917,8 @@ export default function LeaseContractsPanel({
               قبل موعد السداد).
             </div>
             <div>
-              الاستقطاع يبدأ من شهر إضافة العقد للنظام؛ الأشهر التي سبقته تظهر مشطوبة بلا
-              فواتير. مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت
+              <b>الدفعة الأولى في كل عقد بلا استقطاع</b> — تُسدَّد مباشرة من «سداد المستحق»؛
+              الاستقطاع يبدأ من الدفعة الثانية. مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت
               «إيجار فرع / مستودع» أو «إيجار سكن») تظهر في فواتير المشتريات مرتبطة برقم
               العقد. حوِّل المبلغ إلى حساب الاستقطاع ثم اضغط <b>«تأكيد التحويل»</b> — فتصبح
               الفاتورة مسددة ويتجمع المبلغ في «المتجمع». عند الاستحقاق تُسدَّد الدفعة من

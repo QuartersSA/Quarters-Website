@@ -1,6 +1,6 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
-import { e as ensureLeaseSchema, t as todayRiyadh, c as listPayments, u as loadReservesByPayment, f as setAsideSchedule, g as round2, R as REQUIRE_LEASE } from './leaseContracts-u8_xCSsS.js';
-import { g as generateSetAsideInvoices, l as loadSetAsideInvoices } from './leaseSetAsideInvoices-CtUB9Caz.js';
+import { e as ensureLeaseSchema, t as todayRiyadh, c as listPayments, u as loadReservesByPayment, f as setAsideSchedule, g as round2, R as REQUIRE_LEASE } from './leaseContracts-BiO6UUmk.js';
+import { g as generateSetAsideInvoices, l as loadSetAsideInvoices } from './leaseSetAsideInvoices-CzeQ3Age.js';
 import 'crypto';
 import './sql-CSDV1lSC.js';
 import '@neondatabase/serverless';
@@ -13,7 +13,7 @@ import './accountsTree-RnDnF4VP.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
-import './route-Om8Cyxyb.js';
+import './route-CTEIy0gy.js';
 
 // الاستقطاع الشهري: كل دفعة معلّقة تُقسَّم على أشهر تكرارها (ربعي 3،
 // نصفي 6، سنوي 12) في الأشهر السابقة لشهر الاستحقاق؛ كل شهر يُحوَّل
@@ -55,7 +55,8 @@ async function GET(request) {
       status: "pending",
       excludeTerminated: true
     });
-    const filtered = branchId ? pending.filter(payment => Number(payment.branch_id) === branchId) : pending;
+    // قاعدة المالك: الدفعة الأولى في كل عقد تُسدَّد مباشرة بلا استقطاع شهري.
+    const filtered = pending.filter(payment => Number(payment.seq) !== 1 && (!branchId || Number(payment.branch_id) === branchId));
     const ledger = await loadReservesByPayment(filtered.map(payment => payment.id));
     const invoices = await loadSetAsideInvoices(filtered.map(payment => payment.id));
     const canConfirm = month <= currentMonth;
@@ -68,9 +69,7 @@ async function GET(request) {
         windowMonths: payment.window_months
       });
       const planMonths = new Set(plan.map(p => p.month));
-      // أشهر سبقت إضافة العقد للنظام: خارج الاستقطاع (لا متأخرة ولا تُؤكَّد)
-      // إلا إن كان لها تأكيد مسجَّل.
-      const floorMonth = payment.setaside_floor_month || null;
+
       // أشهر مؤكدة خارج الخطة (تحويل إضافي/تعويضي) تُعرض أيضًا.
       const extra = entries.filter(e => !planMonths.has(e.month)).map(e => ({
         month: e.month,
@@ -81,7 +80,7 @@ async function GET(request) {
       const schedule = [...plan, ...extra].sort((a, b) => a.month.localeCompare(b.month)).map(item => {
         const confirmed = byMonth.get(item.month) || null;
         const invoice = invoices[Number(payment.id)]?.[item.month] || null;
-        const skipped = !confirmed && !!floorMonth && item.month < floorMonth && !item.extra;
+        const skipped = false;
         return {
           month: item.month,
           seq: item.seq,
