@@ -315,6 +315,37 @@ export async function getLeaseExpenseAccountId(contractType) {
   return Number(created.id);
 }
 
+export function leaseExpenseAccountName(contractType) {
+  return (LEASE_ACCOUNTS[contractType] || LEASE_ACCOUNTS.branch).name;
+}
+
+// تغيّر نوع العقد (فرع/مستودع ↔ سكن): تُحوَّل كل فواتير الاستقطاع المرتبطة
+// بالعقد (وبنودها) إلى حساب المصروف المطابق للنوع الجديد.
+export async function repointLeaseInvoiceAccounts(contractId, contractType) {
+  const id = Number(contractId);
+  if (!Number.isInteger(id) || id <= 0) return { updated: 0, account_id: null, account_name: null };
+  const hasTable = await ensureLeaseInvoiceLinkColumns();
+  if (!hasTable) return { updated: 0, account_id: null, account_name: null };
+  const accountId = await getLeaseExpenseAccountId(contractType);
+  const rows = await sql`
+    UPDATE accounting_purchase_invoices
+    SET expense_account_id = ${accountId},
+        updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+    WHERE lease_contract_id = ${id}
+      AND (expense_account_id IS DISTINCT FROM ${accountId})
+    RETURNING id
+  `;
+  const ids = rows.map((r) => Number(r.id));
+  if (ids.length) {
+    await sql`
+      UPDATE accounting_purchase_invoice_items
+      SET account_id = ${accountId}
+      WHERE invoice_id = ANY(${ids})
+    `;
+  }
+  return { updated: ids.length, account_id: accountId, account_name: leaseExpenseAccountName(contractType) };
+}
+
 // فاتورة استقطاع حُذفت نهائيًا: لا يُعاد إنشاؤها لنفس الدفعة/الشهر.
 export async function suppressSetAsideInvoice(paymentId, month) {
   await ensureLeaseSchema();
