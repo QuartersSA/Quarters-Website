@@ -11,7 +11,7 @@ import 'hono/cors';
 import 'hono/proxy';
 import 'hono/body-limit';
 import 'hono/request-id';
-export { i as default } from './assets/index-MyAqu_Ss.js';
+export { i as default } from './assets/index-C0qjc8cV.js';
 import 'serialize-error';
 import 'ws';
 import './assets/leaseSetAsideInvoices-6CGBRghB.js';

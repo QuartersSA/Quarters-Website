@@ -1,34 +1,34 @@
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { PassThrough } from 'node:stream';
 import { createReadableStreamFromReadable } from '@react-router/node';
-import { ServerRouter, UNSAFE_withComponentProps, Outlet, useNavigate, useLocation, Meta, Links, ScrollRestoration, Scripts, useRouteError, useAsyncError, Navigate, useSearchParams, useParams, Link as Link$1 } from 'react-router';
+import { ServerRouter, UNSAFE_withComponentProps, Outlet, useNavigate, useLocation, Meta, Links, ScrollRestoration, Scripts, useRouteError, useAsyncError, Link, useParams, useSearchParams, Navigate } from 'react-router';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 import { useButton } from '@react-aria/button';
 import * as React from 'react';
 import React__default, { useState, useEffect, Component, useRef, useCallback, useMemo, useLayoutEffect } from 'react';
-import { f as fetchWithHeaders } from './index-MyAqu_Ss.js';
+import { f as fetchWithHeaders } from './index-C0qjc8cV.js';
 import { SessionProvider } from '@hono/auth-js/react';
 import { toPng, getFontEmbedCSS } from 'html-to-image';
 import { serializeError } from 'serialize-error';
 import { Toaster, toast } from 'sonner';
 import { useIdleTimer } from 'react-idle-timer';
 import { QueryClientProvider, QueryClient, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { WifiOff, Shield, ClipboardList, Calculator, Trash2, ReceiptText, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, ShoppingCart, TrendingUp, ChevronDown, Check, Building2, CalendarDays, RefreshCw, History, Save, Plus, Copy, Download, FileText, Pencil, Eye, CheckCircle, AlertTriangle, CheckSquare, Square, Minus, RotateCcw, Filter, Info, User, DollarSign, Percent, Lock, CheckCircle2, Clock, Ban, MessageSquare, Send, Unlock, Gift, Loader2, Sparkles, Flame, BadgeCheck, Repeat, Paperclip, ExternalLink, ScanLine, Building, Landmark, Wand2, Contact, ListTree, Unlink, Link, MapPin, Hash, ScanEye, TrendingDown, CalendarClock, Clock3, Bell, FileSpreadsheet, ChevronsUpDown, ChevronsDownUp, BookOpen, CreditCard, FileUp, MoreVertical, PackageCheck, Undo2, ScrollText, CloudUpload, ChevronRight, ArrowRight, BarChart3, Tag, Anchor, ArrowDownWideNarrow, ArrowDownRight, ArrowUpRight, Layers, Trophy, Circle, Receipt, ListChecks, Power, PieChart, ClipboardCheck, Upload, PiggyBank, Boxes, Coins, StickyNote, Briefcase, Truck, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, MessageCircle, ClipboardX, MinusSquare, EyeOff, Ruler, CornerDownLeft, Star, LineChart as LineChart$1, CalendarCheck, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, HeartPulse, FileWarning, CalendarOff, Infinity, AlertOctagon, Settings, MailCheck, QrCode, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Flag, Tags, User2, Link2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
+import { WifiOff, Shield, ClipboardList, Calculator, Trash2, ReceiptText, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, ShoppingCart, Building2, TrendingUp, Clock, CalendarDays, ChevronRight, LayoutTemplate, Loader2, Save, MapPin, UserRound, ScrollText, CalendarCheck, Pencil, PartyPopper, Info, Receipt, Plus, AlertTriangle, Flag, Bell, CheckCircle2, MessageSquareText, Camera, ChevronDown, Check, Layers, ArrowUp, ArrowDown, HardHat, Table2, Download, PieChart, FileSpreadsheet, FileText, ImagePlus, Send, Upload, Paperclip, File as File$1, PenTool, FileBadge, FileSignature, ExternalLink, ToggleLeft, ListChecks, Settings2, ArrowRight, RefreshCw, History, Copy, Eye, CheckCircle, CheckSquare, Square, Minus, RotateCcw, Filter, User, DollarSign, Percent, Lock, Ban, MessageSquare, Unlock, Gift, Sparkles, Flame, BadgeCheck, Repeat, ScanLine, Building, Landmark, Wand2, Contact, ListTree, Unlink, Link as Link$1, Hash, ScanEye, TrendingDown, CalendarClock, Clock3, ChevronsUpDown, ChevronsDownUp, BookOpen, CreditCard, FileUp, MoreVertical, PackageCheck, Undo2, CloudUpload, BarChart3, Tag, Anchor, ArrowDownWideNarrow, ArrowDownRight, ArrowUpRight, Trophy, Circle, Power, ClipboardCheck, PiggyBank, Boxes, Coins, StickyNote, Briefcase, Truck, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, MessageCircle, ClipboardX, MinusSquare, EyeOff, Ruler, CornerDownLeft, Star, LineChart as LineChart$1, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, HeartPulse, FileWarning, CalendarOff, Infinity, AlertOctagon, Settings, MailCheck, QrCode, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Tags, User2, Link2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, c as currentRiyadhMonthKey, b as riyadhMonthKeyFromOffset, d as formatDateTime$4, t as todayRiyadhDateKey, L as LOCALE, f as formatRiyadhDateForInput, e as formatDateForInput, g as currentRiyadhHour, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$4 } from './dateUtils-CVVwj6xk.js';
-import _JSXStyle from 'styled-jsx/style.js';
-import { u as allocateDiscount, v as numOrNull, D as DEFAULT_ROAST_PER_KG, w as computeCoffeeLine, R as RAW_PRICE_MIN, x as RAW_PRICE_MAX, y as wasteFlag, t as guessKgPerSack, W as WASTE_CONFIRM, z as coffeeLineStatus } from './coffeeInvoices-CYk167p4.js';
-import { c as computeDraftTotals } from './invoiceDraftMath-C8Db36NO.js';
-import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, PieChart as PieChart$1, Pie, Cell, BarChart, Bar, ReferenceDot } from 'recharts';
-import { D as DEFAULT_VAT_RATE, C as CONTRACT_TYPES, L as LEASE_FREQUENCIES, B as splitFixedCharges, E as isDateKey, G as compareDateKeys, H as installmentWithFixed, I as generateSchedule, k as round2$4, J as contractStatus, K as addDays$2, x as installmentAmounts, M as CONTRACT_STATUS_LABELS, m as CONTRACT_TYPE_LABELS, o as FREQUENCY_LABELS, N as monthKey, O as daysInMonth, P as daysBetween } from './leaseContracts-M1M5QWMp.js';
+import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, t as todayRiyadhDateKey, b as formatDateForInput, d as currentRiyadhHour, f as formatRiyadhDateForInput, L as LOCALE, c as currentRiyadhMonthKey, e as riyadhMonthKeyFromOffset, g as formatDateTime$5, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$5 } from './dateUtils-Bvji1KrH.js';
 import { getDefaultClassNames, DayPicker } from 'react-day-picker';
 import { enUS, arSA } from 'date-fns/locale';
+import { ResponsiveContainer, PieChart as PieChart$1, Pie, Cell, Tooltip, LineChart, CartesianGrid, XAxis, YAxis, Legend, Line, BarChart, Bar, ReferenceDot } from 'recharts';
+import { useParams as useParams$1 } from 'react-router-dom';
+import _JSXStyle from 'styled-jsx/style.js';
+import { u as allocateDiscount, v as numOrNull$1, D as DEFAULT_ROAST_PER_KG, w as computeCoffeeLine, R as RAW_PRICE_MIN, x as RAW_PRICE_MAX, y as wasteFlag, t as guessKgPerSack, W as WASTE_CONFIRM, z as coffeeLineStatus } from './coffeeInvoices-CYk167p4.js';
+import { c as computeDraftTotals } from './invoiceDraftMath-C8Db36NO.js';
+import { D as DEFAULT_VAT_RATE, C as CONTRACT_TYPES, L as LEASE_FREQUENCIES, B as splitFixedCharges, E as isDateKey$1, G as compareDateKeys$1, H as installmentWithFixed, I as generateSchedule, k as round2$5, J as contractStatus, K as addDays$3, x as installmentAmounts, M as CONTRACT_STATUS_LABELS, m as CONTRACT_TYPE_LABELS, o as FREQUENCY_LABELS, N as monthKey, O as daysInMonth, P as daysBetween$1 } from './leaseContracts-M1M5QWMp.js';
 import { createRoot } from 'react-dom/client';
 import JSZip from 'jszip';
 import { QRCodeSVG } from 'qrcode.react';
 import Papa from 'papaparse';
-import { useParams as useParams$1 } from 'react-router-dom';
 import 'node:async_hooks';
 import 'node:console';
 import '@auth/core';
@@ -877,7 +877,7 @@ function HomePage() {
   ] }) });
 }
 
-const page$N = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$P = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(HomePage, {
       ...props
@@ -887,7 +887,7 @@ const page$N = UNSAFE_withComponentProps(function WrappedPage(props) {
 
 const route1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$N
+  default: page$P
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const ADMIN_TOKEN_KEY = "adminToken";
@@ -1818,6 +1818,7 @@ const PAGE_TITLES$4 = {
   payroll: "مسير الرواتب",
   loans: "السلف والقروض",
   purchases: "المشتريات",
+  "branch-projects": "تأسيس الفروع",
   waste: "الهدر"
 };
 const NAV_CONFIG$2 = [{
@@ -1868,6 +1869,12 @@ const NAV_CONFIG$2 = [{
   href: "/accounting/purchases",
   icon: ShoppingCart,
   label: "المشتريات"
+}, {
+  kind: "row",
+  key: "branch-projects",
+  href: "/accounting/branch-projects",
+  icon: Building2,
+  label: "تأسيس الفروع"
 }, {
   kind: "row",
   key: "waste",
@@ -2140,6 +2147,8 @@ const queryKeys = Object.freeze({
   accountingVariableTemplates: createKey("accounting_variable_templates"),
   accountingWaste: createKey("accounting-waste"),
   accountingWasteBranches: createKey("accounting-waste-branches"),
+  branchProject: createKey("branchProject"),
+  branchProjects: createKey("branchProjects"),
   branchStockAt: createKey("branch-stock-at"),
   branches: createKey("branches"),
   branchesForDeposit: createKey("branches-for-deposit"),
@@ -2225,7 +2234,7 @@ function invalidateWorkspaceTaskQueries(queryClient) {
   return invalidateGroup(queryClient, [queryKeys.workspaceTasks(), queryKeys.workspaceSummary(), queryKeys.workspaceOverdueTasks(), queryKeys.workspaceTaskUpdates(), queryKeys.workspaceTaskHistory(), queryKeys.workspaceTaskAttachments(), queryKeys.workspaceTaskChecklist(), queryKeys.workspaceSubtasks()]);
 }
 
-function formatMoney$i(value) {
+function formatMoney$j(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
@@ -2348,9 +2357,9 @@ function AccountingDashboardPage() {
   } else if (!latestClosing) {
     shiftHighlightsBody = /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60", children: "لا يوجد سجلات بعد." });
   } else {
-    const totalDiffText = formatMoney$i(latestClosingTotalDiff);
-    const cashDiffText = formatMoney$i(latestClosingCashDiff);
-    const cardDiffText = formatMoney$i(latestClosingCardDiff);
+    const totalDiffText = formatMoney$j(latestClosingTotalDiff);
+    const cashDiffText = formatMoney$j(latestClosingCashDiff);
+    const cardDiffText = formatMoney$j(latestClosingCardDiff);
     shiftHighlightsBody = /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 flex-wrap", children: [
         /* @__PURE__ */ jsxs("div", { className: "text-slate-800 dark:text-white/80", children: [
@@ -2465,7 +2474,7 @@ function AccountingDashboardPage() {
   ] });
 }
 
-const page$M = UNSAFE_withComponentProps(function WrappedPage(props) {
+const page$O = UNSAFE_withComponentProps(function WrappedPage(props) {
   return /* @__PURE__ */jsx(RootLayout, {
     children: /* @__PURE__ */jsx(AccountingLayout, {
       children: /* @__PURE__ */jsx(AccountingDashboardPage, {
@@ -2477,8 +2486,1952 @@ const page$M = UNSAFE_withComponentProps(function WrappedPage(props) {
 
 const route2 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: page$M
+  default: page$O
 }, Symbol.toStringTag, { value: 'Module' }));
+
+// ثيم قسم المشتريات — تطبيق حرفي للوحة مستند «مفهوم واجهة نظام
+// المشتريات»: أرضية #F6F8F7، سطوح بيضاء بحدود #E2E7E4، حبر #1A2332،
+// أخضر كوارترز #0E7A5F للأزرار الرئيسية والأخضر العميق #0B3D31
+// للحالات النشطة، وزوايا 10px بدل 24px.
+//
+// نفس مفاتيح `ws` في Workspace/ui.js حتى يكون التحويل تبديل استيراد
+// فقط. قيم الوضع الفاتح وحدها تغيّرت — كل سلاسل dark: منسوخة حرفياً
+// من الثيم الأصلي فيبقى الوضع الداكن مطابقاً لبقية النظام.
+//
+// النطاق: صفحات وقوالب المشتريات فقط (بما فيها صفحة الموظف الميدانية
+// وقوائم الموردين/المستفيدين المستخدمة داخل القسم حصراً). GlassSelect
+// وأخواتها مشتركة نظاماً فتبقى على الثيم العام — سطوحها بيضاء أصلاً
+// فتمتزج بلا نشاز.
+
+const ws = {
+  appBg: "[color-scheme:light] dark:[color-scheme:dark] " + "bg-[#f6f8f7] text-[#1a2332] font-inter " + "dark:from-[#1a2540] dark:via-[#1f2c52] dark:to-[#16203a] dark:text-white " + "dark:bg-gradient-to-b",
+  glass: "bg-white border border-[#e2e7e4] " + "shadow-[0_1px_2px_rgba(26,35,50,0.04),0_12px_32px_rgba(26,35,50,0.07)] " + "dark:bg-[#132044]/70 dark:supports-[backdrop-filter]:bg-[#132044]/50 dark:border-white/10 " + "dark:backdrop-blur-xl " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_18px_50px_rgba(0,0,0,0.35)]",
+  glassSoft: "bg-[#fafbfa] border border-[#e2e7e4] " + "dark:bg-[#132044]/55 dark:supports-[backdrop-filter]:bg-[#132044]/40 dark:border-white/10 " + "dark:backdrop-blur-xl " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]",
+  popover: "bg-white border border-[#e2e7e4] " + "shadow-[0_8px_24px_-4px_rgba(26,35,50,0.12),0_32px_72px_-16px_rgba(26,35,50,0.18)] " + "dark:bg-[#132044]/92 dark:supports-[backdrop-filter]:bg-[#132044]/75 dark:border-white/15 " + "dark:backdrop-blur-2xl " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_20px_70px_rgba(0,0,0,0.55)]",
+  topBar: "bg-white/90 supports-[backdrop-filter]:bg-white/80 border-b border-[#e2e7e4] backdrop-blur-xl " + "dark:bg-[#132044]/55 dark:border-white/10",
+  title: "text-[#1a2332] dark:text-white font-bold tracking-tight",
+  muted: "text-[#4a5568] dark:text-white/60",
+  input: "w-full appearance-none rounded-[10px] bg-[#fafbfa] border border-[#e2e7e4] text-[#1a2332] placeholder:text-[#8a94a4] " + "transition-colors transition-shadow " + "hover:border-[#c9d3ce] hover:bg-white " + "focus:outline-none focus:border-[#0e7a5f] focus:ring-2 focus:ring-[#0e7a5f]/15 focus:bg-white " + "disabled:opacity-50 disabled:cursor-not-allowed " + "dark:bg-[#132044]/55 dark:supports-[backdrop-filter]:bg-[#132044]/35 dark:border-white/10 dark:text-white dark:placeholder:text-white/35 " + "dark:shadow-none dark:hover:border-white/15 dark:hover:bg-[#132044]/55 dark:focus:border-white/20 dark:focus:ring-emerald-400/10 dark:focus:bg-[#132044]/55 " + "[&:-webkit-autofill]:shadow-[0_0_0_1000px_white_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:#1a2332] " + "dark:[&:-webkit-autofill]:shadow-[0_0_0_1000px_rgba(19,32,68,0.55)_inset] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)]",
+  btnPrimary: "inline-flex items-center gap-2 rounded-[10px] " + "bg-[#0e7a5f] text-white border border-[#0e7a5f] font-bold " + "shadow-[0_2px_6px_rgba(14,122,95,0.22)] " + "transition-colors transition-shadow " + "hover:bg-[#0c6950] hover:border-[#0c6950] hover:shadow-[0_4px_12px_rgba(14,122,95,0.28)] " + "active:bg-[#0b3d31] active:border-[#0b3d31] " + "dark:bg-emerald-400/15 dark:text-emerald-200 dark:border-emerald-400/25 dark:shadow-none " + "dark:hover:bg-emerald-400/20 dark:hover:shadow-none dark:active:bg-emerald-400/25",
+  btnNeutral: "inline-flex items-center gap-2 rounded-[10px] " + "bg-white text-[#4a5568] border border-[#e2e7e4] font-semibold " + "transition-colors " + "hover:bg-[#f6f8f7] hover:border-[#c9d3ce] hover:text-[#1a2332] " + "active:bg-[#eef1ef] " + "dark:bg-white/[0.05] dark:text-white/85 dark:border-white/10 dark:shadow-none " + "dark:hover:bg-white/[0.07] dark:hover:border-white/10 dark:hover:text-white/85 dark:active:bg-white/[0.09]",
+  btnDanger: "inline-flex items-center gap-2 rounded-[10px] " + "bg-[#f9ebe9] text-[#b5443c] border border-[#e8c4bf] font-semibold " + "transition-colors " + "hover:bg-[#f4ded9] hover:border-[#ddaba4] active:bg-[#eed1cb] " + "dark:bg-red-500/15 dark:text-red-200 dark:border-red-500/25 dark:shadow-none " + "dark:hover:bg-red-500/20 dark:hover:border-red-500/25 dark:active:bg-red-500/25",
+  pill: "inline-flex px-3 py-1 rounded-full text-xs font-bold border " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
+  card: "rounded-[10px]",
+  divider: "border-[#e2e7e4] dark:border-white/10",
+  innerCard: "rounded-[10px] bg-[#fafbfa] border border-[#e2e7e4] " + "dark:bg-white/[0.03] dark:border-white/10 dark:shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]",
+  sectionHeader: "px-4 py-3 bg-[#fafbfa] border-b border-[#e2e7e4] " + "dark:bg-white/[0.03] dark:border-white/10",
+  iconBox: "w-11 h-11 rounded-[10px] " + "bg-[#e7f2ee] border border-[#d3e5dd] " + "flex items-center justify-center " + "dark:bg-white/[0.05] dark:bg-none dark:border-white/10 " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
+  iconButton: "inline-flex items-center justify-center w-11 h-11 rounded-[10px] touch-manipulation " + "bg-white text-[#4a5568] border border-[#e2e7e4] " + "transition-colors " + "hover:bg-[#f6f8f7] hover:border-[#c9d3ce] hover:text-[#1a2332] " + "dark:bg-white/[0.03] dark:text-white dark:border-white/10 dark:shadow-none " + "dark:hover:bg-white/[0.06] dark:hover:border-white/10",
+  chip: "inline-flex items-center gap-2 px-3 py-1.5 rounded-full " + "bg-white border border-[#e2e7e4] text-xs font-semibold text-[#4a5568] " + "dark:bg-white/[0.04] dark:border-white/10 dark:text-white/70 dark:shadow-none",
+  segWrap: "bg-[#eef1ef] border border-[#e2e7e4] rounded-[10px] p-1 " + "inline-flex items-center gap-1 " + "dark:bg-white/[0.03] dark:border-white/10",
+  segBtn: "px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0e7a5f]/30",
+  // الرقاقة النشطة بالأخضر العميق — حرفياً chip.on في المستند.
+  segActive: "bg-[#0b3d31] text-white border border-[#0b3d31] " + "dark:bg-white/10 dark:text-white dark:border-white/20 " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
+  segInactive: "bg-transparent text-[#4a5568] hover:text-[#1a2332] hover:bg-white " + "dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white/70"
+};
+
+// حسابات مشاريع تأسيس الفروع — دوال نقية بلا React، مشتركة بين الصفحات
+// والمخزن المحلي (mock) ولاحقاً الخادم.
+//
+// التواريخ مفاتيح نصية `YYYY-MM-DD` وتُحسب بـ UTC حتى لا تتأثر بمنطقة
+// المتصفح الزمنية. المبالغ أرقام (ريال).
+
+const PROJECT_STATUS_LABELS = {
+  planning: "تخطيط",
+  in_progress: "قيد التنفيذ",
+  on_hold: "متوقف",
+  opened: "افتُتح",
+  cancelled: "ملغى"
+};
+const PHASE_STATUSES = ["not_started", "in_progress", "done", "blocked"];
+const PHASE_STATUS_LABELS = {
+  not_started: "لم يبدأ",
+  in_progress: "جارٍ",
+  done: "مكتمل",
+  blocked: "متعثر"
+};
+const TASK_STATUSES = ["todo", "in_progress", "done", "blocked"];
+const TASK_STATUS_LABELS = {
+  todo: "لم تبدأ",
+  in_progress: "جارية",
+  done: "منجزة",
+  blocked: "متعثرة"
+};
+const ATTACHMENT_KINDS = ["contract", "permit", "design", "quote", "photo", "other"];
+const ATTACHMENT_KIND_LABELS = {
+  contract: "عقد",
+  permit: "ترخيص",
+  design: "مخطط",
+  quote: "عرض سعر",
+  photo: "صورة",
+  other: "أخرى"
+};
+const HEALTH_LABELS = {
+  done: "مكتمل",
+  on_track: "في المسار",
+  at_risk: "في خطر",
+  late: "متأخر",
+  not_started: "لم يبدأ"
+};
+
+// ترتيب السوء: الأعلى أسوأ — يُستخدم لاختيار أسوأ صحة في المشروع.
+const HEALTH_RANK = {
+  late: 4,
+  at_risk: 3,
+  on_track: 2,
+  not_started: 1,
+  done: 0
+};
+const INVOICE_STATUS_LABELS = {
+  pending_payment: "بانتظار السداد",
+  partial_paid: "مسدد جزئياً",
+  paid: "مسدد",
+  overdue: "متأخر"
+};
+
+// حسابات مصروفات التأسيس (مجموعة 53).
+const ESTABLISHMENT_ACCOUNTS = [{
+  code: "5301",
+  name: "إيجار ما قبل الافتتاح"
+}, {
+  code: "5302",
+  name: "تراخيص ورسوم حكومية"
+}, {
+  code: "5303",
+  name: "تصميم واستشارات"
+}, {
+  code: "5304",
+  name: "ديكور وتشطيب"
+}, {
+  code: "5305",
+  name: "كهرباء وسباكة وتكييف"
+}, {
+  code: "5306",
+  name: "معدات"
+}, {
+  code: "5307",
+  name: "أثاث ولوحات"
+}, {
+  code: "5308",
+  name: "أنظمة وتقنية"
+}, {
+  code: "5309",
+  name: "رواتب وتدريب ما قبل الافتتاح"
+}, {
+  code: "5310",
+  name: "تسويق الافتتاح"
+}, {
+  code: "5399",
+  name: "أخرى"
+}];
+function accountName$1(code) {
+  return ESTABLISHMENT_ACCOUNTS.find(a => a.code === String(code || ""))?.name || "";
+}
+
+// قالب الأقسام الافتراضي لفرع قهوة مختصة. كل قسم بلون مميز وحساب
+// مصروف افتراضي ومهام جاهزة؛ المعالم الخمسة موزّعة على أقسامها.
+const DEFAULT_PHASE_TEMPLATE = [{
+  key: "contract",
+  name: "العقد والإيجار",
+  color: "#0ea5e9",
+  default_account_code: "5301",
+  tasks: [{
+    title: "توقيع عقد الإيجار وتوثيقه في إيجار",
+    is_milestone: false
+  }, {
+    title: "سداد دفعة الإيجار الأولى والتأمين",
+    is_milestone: false
+  }, {
+    title: "تسليم الموقع",
+    is_milestone: true
+  }, {
+    title: "تصوير الموقع وتوثيق حالته عند الاستلام",
+    is_milestone: false
+  }]
+}, {
+  key: "licenses",
+  name: "التراخيص والتصاريح",
+  color: "#f59e0b",
+  default_account_code: "5302",
+  tasks: [{
+    title: "إصدار سجل تجاري للفرع",
+    is_milestone: false
+  }, {
+    title: "رخصة بلدية (بلدي)",
+    is_milestone: false
+  }, {
+    title: "فسح الدفاع المدني (سلامة)",
+    is_milestone: false
+  }, {
+    title: "شهادات صحية للعاملين",
+    is_milestone: false
+  }, {
+    title: "تصريح لوحة الواجهة",
+    is_milestone: false
+  }]
+}, {
+  key: "design",
+  name: "التصميم والمخططات",
+  color: "#8b5cf6",
+  default_account_code: "5303",
+  tasks: [{
+    title: "رفع مساحي للموقع",
+    is_milestone: false
+  }, {
+    title: "المخطط المعماري وتوزيع الفراغات",
+    is_milestone: false
+  }, {
+    title: "تصميم البار ومسار الخدمة",
+    is_milestone: false
+  }, {
+    title: "مخططات الكهرباء والسباكة والتكييف",
+    is_milestone: false
+  }, {
+    title: "اعتماد التصميم النهائي",
+    is_milestone: false
+  }]
+}, {
+  key: "fitout",
+  name: "الديكور والتشطيب",
+  color: "#ef4444",
+  default_account_code: "5304",
+  tasks: [{
+    title: "التعاقد مع مقاول التشطيب",
+    is_milestone: false
+  }, {
+    title: "أعمال الهدم والجبس والأسقف",
+    is_milestone: false
+  }, {
+    title: "الأرضيات والدهانات وتكسية الجدران",
+    is_milestone: false
+  }, {
+    title: "تنفيذ البار والمغاسل",
+    is_milestone: false
+  }, {
+    title: "الواجهة واللوحة الخارجية",
+    is_milestone: false
+  }, {
+    title: "اكتمال التشطيب",
+    is_milestone: true
+  }]
+}, {
+  key: "mep",
+  name: "الكهرباء والسباكة والتكييف",
+  color: "#f97316",
+  default_account_code: "5305",
+  tasks: [{
+    title: "لوحة الكهرباء ونقاط المعدات",
+    is_milestone: false
+  }, {
+    title: "تمديدات السباكة والصرف للبار",
+    is_milestone: false
+  }, {
+    title: "تركيب وحدات التكييف والتهوية",
+    is_milestone: false
+  }, {
+    title: "تركيب فلتر مياه مركزي",
+    is_milestone: false
+  }, {
+    title: "فحص واختبار التمديدات",
+    is_milestone: false
+  }]
+}, {
+  key: "equipment",
+  name: "المعدات",
+  color: "#14b8a6",
+  default_account_code: "5306",
+  tasks: [{
+    title: "شراء ماكينة إسبريسو وطواحين",
+    is_milestone: false
+  }, {
+    title: "ثلاجات ومجمدات ومبرد عرض",
+    is_milestone: false
+  }, {
+    title: "ماكينة ثلج وغلايات وأدوات التحضير",
+    is_milestone: false
+  }, {
+    title: "تركيب المعدات",
+    is_milestone: true
+  }, {
+    title: "معايرة الماكينة والطواحين",
+    is_milestone: false
+  }]
+}, {
+  key: "furniture",
+  name: "الأثاث واللوحات",
+  color: "#a16207",
+  default_account_code: "5307",
+  tasks: [{
+    title: "طاولات وكراسي الصالة والجلسات الخارجية",
+    is_milestone: false
+  }, {
+    title: "رفوف العرض وخزائن التخزين",
+    is_milestone: false
+  }, {
+    title: "لوحة القائمة واللوحات الداخلية",
+    is_milestone: false
+  }, {
+    title: "الإضاءة الديكورية والنباتات",
+    is_milestone: false
+  }]
+}, {
+  key: "systems",
+  name: "الأنظمة (POS وكاميرات وإنترنت)",
+  color: "#2563eb",
+  default_account_code: "5308",
+  tasks: [{
+    title: "اشتراك إنترنت وشبكة داخلية",
+    is_milestone: false
+  }, {
+    title: "تركيب نظام نقاط البيع POS",
+    is_milestone: false
+  }, {
+    title: "كاميرات المراقبة ونظام الإنذار",
+    is_milestone: false
+  }, {
+    title: "شاشات القائمة الرقمية والصوتيات",
+    is_milestone: false
+  }, {
+    title: "ربط الفرع بتطبيقات التوصيل",
+    is_milestone: false
+  }]
+}, {
+  key: "hiring",
+  name: "التوظيف والتدريب",
+  color: "#db2777",
+  default_account_code: "5309",
+  tasks: [{
+    title: "التعاقد مع مدير الفرع",
+    is_milestone: false
+  }, {
+    title: "توظيف الباريستا والكاشير",
+    is_milestone: false
+  }, {
+    title: "تدريب على التحضير وخدمة العملاء",
+    is_milestone: false
+  }, {
+    title: "تدريب على نظام POS والإغلاق اليومي",
+    is_milestone: false
+  }]
+}, {
+  key: "inventory",
+  name: "المخزون الافتتاحي",
+  color: "#65a30d",
+  default_account_code: "5399",
+  tasks: [{
+    title: "طلب البن المحمص والمشروبات",
+    is_milestone: false
+  }, {
+    title: "الحليب والمواد الاستهلاكية والتغليف",
+    is_milestone: false
+  }, {
+    title: "الأكواب والعبوات بشعار الفرع",
+    is_milestone: false
+  }, {
+    title: "جرد افتتاحي وتسجيله في المخزون",
+    is_milestone: false
+  }]
+}, {
+  key: "launch",
+  name: "التسويق والافتتاح",
+  color: "#059669",
+  default_account_code: "5310",
+  tasks: [{
+    title: "حملة ما قبل الافتتاح على وسائل التواصل",
+    is_milestone: false
+  }, {
+    title: "تسجيل الفرع في خرائط Google",
+    is_milestone: false
+  }, {
+    title: "الافتتاح التجريبي",
+    is_milestone: true
+  }, {
+    title: "معالجة ملاحظات التجريبي",
+    is_milestone: false
+  }, {
+    title: "الافتتاح",
+    is_milestone: true
+  }]
+}];
+
+// ---------- مساعدات التاريخ ----------
+
+const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+const MONTHS_AR = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+function isDateKey(value) {
+  return DATE_RE.test(String(value || ""));
+}
+function parts(key) {
+  const m = DATE_RE.exec(String(key || ""));
+  if (!m) return null;
+  return {
+    y: Number(m[1]),
+    m: Number(m[2]),
+    d: Number(m[3])
+  };
+}
+function pad2$3(n) {
+  return String(n).padStart(2, "0");
+}
+function utcToKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+function todayRiyadh$8() {
+  return todayRiyadhDateKey();
+}
+function addDays$2(key, n) {
+  const p = parts(key);
+  if (!p) return null;
+  const d = new Date(Date.UTC(p.y, p.m - 1, p.d));
+  d.setUTCDate(d.getUTCDate() + Math.trunc(Number(n) || 0));
+  return utcToKey(d);
+}
+
+// b − a بالأيام (موجب إذا كان b بعد a). null عند مدخل غير صالح.
+function daysBetween(a, b) {
+  const pa = parts(a);
+  const pb = parts(b);
+  if (!pa || !pb) return null;
+  return Math.round((Date.UTC(pb.y, pb.m - 1, pb.d) - Date.UTC(pa.y, pa.m - 1, pa.d)) / 86400000);
+}
+function compareDateKeys(a, b) {
+  return String(a || "").localeCompare(String(b || ""));
+}
+function monthStart(key) {
+  const p = parts(key);
+  return p ? `${p.y}-${pad2$3(p.m)}-01` : null;
+}
+function monthEnd(key) {
+  const p = parts(key);
+  if (!p) return null;
+  const last = new Date(Date.UTC(p.y, p.m, 0)).getUTCDate();
+  return `${p.y}-${pad2$3(p.m)}-${pad2$3(last)}`;
+}
+function minKey(keys) {
+  const valid = keys.filter(isDateKey);
+  return valid.length ? valid.reduce((a, b) => compareDateKeys(a, b) <= 0 ? a : b) : null;
+}
+function maxKey(keys) {
+  const valid = keys.filter(isDateKey);
+  return valid.length ? valid.reduce((a, b) => compareDateKeys(a, b) >= 0 ? a : b) : null;
+}
+
+// ---------- أرقام ----------
+
+function round2$4(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? Math.round(n * 100) / 100 : 0;
+}
+function num$1(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+function clampPct$1(value) {
+  return Math.min(Math.max(Math.round(num$1(value)), 0), 100);
+}
+function listOf(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+// ---------- التقدم ----------
+
+function phaseTasks(project, phaseId) {
+  const pid = Number(phaseId);
+  return listOf(project?.tasks).filter(t => Number(t?.phase_id) === pid).sort((a, b) => num$1(a?.sort_order) - num$1(b?.sort_order) || num$1(a?.id) - num$1(b?.id));
+}
+
+// تقدم القسم: override أولاً؛ وإلا المنجز/الكل؛ بلا مهام يُستنتج من الحالة.
+function phaseProgress(phase, tasks) {
+  const override = phase?.progress_override;
+  if (override !== null && override !== undefined && override !== "" && Number.isFinite(Number(override))) {
+    return clampPct$1(override);
+  }
+  const list = listOf(tasks);
+  if (list.length > 0) {
+    const done = list.filter(t => t?.status === "done").length;
+    return clampPct$1(done / list.length * 100);
+  }
+  if (phase?.status === "done") return 100;
+  if (phase?.status === "in_progress") return 50;
+  return 0;
+}
+
+// تقدم المشروع مرجّح بوزن كل قسم (الافتراضي 1).
+function projectProgress(project) {
+  const phases = listOf(project?.phases);
+  if (!phases.length) return project?.status === "opened" ? 100 : 0;
+  let weighted = 0;
+  let weights = 0;
+  for (const phase of phases) {
+    const w = phase?.weight == null || phase.weight === "" ? 1 : Math.max(num$1(phase.weight), 0);
+    weighted += phaseProgress(phase, phaseTasks(project, phase?.id)) * w;
+    weights += w;
+  }
+  return weights > 0 ? clampPct$1(weighted / weights) : 0;
+}
+
+// ---------- الصحة ----------
+
+function phaseHealth(phase, tasks, today) {
+  const day = isDateKey(today) ? today : todayRiyadh$8();
+  if (phase?.status === "done") return "done";
+  const progress = phaseProgress(phase, tasks);
+  const start = phase?.planned_start;
+  const end = phase?.planned_end;
+  if (isDateKey(end) && compareDateKeys(end, day) < 0) return "late";
+  if (phase?.status === "blocked") return "at_risk";
+  if (isDateKey(start) && isDateKey(end)) {
+    const duration = daysBetween(start, end) + 1;
+    const remaining = daysBetween(day, end) + 1;
+    if (duration > 0 && remaining / duration < 0.2 && progress < 60) return "at_risk";
+  }
+  if (phase?.status === "not_started" && progress === 0) return "not_started";
+  if (!phase?.status && progress === 0 && !phase?.actual_start) return "not_started";
+  return "on_track";
+}
+
+// أسوأ صحة بين الأقسام غير المكتملة؛ 'done' إن افتُتح أو اكتملت كل الأقسام.
+function projectHealth(project, today) {
+  if (project?.status === "opened") return "done";
+  const phases = listOf(project?.phases);
+  if (!phases.length) return "not_started";
+  let worst = "done";
+  for (const phase of phases) {
+    const health = phaseHealth(phase, phaseTasks(project, phase?.id), today);
+    if (HEALTH_RANK[health] > HEALTH_RANK[worst]) worst = health;
+  }
+  return worst;
+}
+
+// الأيام المتبقية للافتتاح المستهدف (سالب = تجاوز). null بلا موعد.
+function daysToOpening(project, today) {
+  const target = project?.target_opening_date;
+  if (!isDateKey(target)) return null;
+  const day = isDateKey(today) ? today : todayRiyadh$8();
+  return daysBetween(day, target);
+}
+
+// ---------- الميزانية ----------
+
+function sumInvoices(invoices) {
+  let committed = 0;
+  let paid = 0;
+  for (const inv of listOf(invoices)) {
+    committed += num$1(inv?.total_amount);
+    paid += num$1(inv?.paid_amount);
+  }
+  return {
+    committed: round2$4(committed),
+    paid: round2$4(paid)
+  };
+}
+function pctOf(part, whole) {
+  if (whole > 0) return Math.max(Math.round(part / whole * 100), 0);
+  return part > 0 ? 100 : 0;
+}
+
+// فواتير القسم تُرشَّح بـ phase_id (يمكن تمرير كل فواتير المشروع).
+function phaseBudget(phase, invoices) {
+  const pid = Number(phase?.id);
+  const own = listOf(invoices).filter(inv => Number(inv?.phase_id) === pid);
+  const budget = round2$4(Math.max(num$1(phase?.budget), 0));
+  const {
+    committed,
+    paid
+  } = sumInvoices(own);
+  return {
+    budget,
+    committed,
+    paid,
+    remaining: round2$4(budget - committed),
+    over: round2$4(Math.max(committed - budget, 0)),
+    pct: pctOf(committed, budget)
+  };
+}
+function projectBudget(project) {
+  const budgetTotal = round2$4(Math.max(num$1(project?.budget_total), 0));
+  const phasesBudget = round2$4(listOf(project?.phases).reduce((s, p) => s + Math.max(num$1(p?.budget), 0), 0));
+  const {
+    committed,
+    paid
+  } = sumInvoices(project?.invoices);
+  return {
+    budget_total: budgetTotal,
+    phases_budget: phasesBudget,
+    unallocated: round2$4(budgetTotal - phasesBudget),
+    committed,
+    paid,
+    remaining: round2$4(budgetTotal - committed),
+    over: round2$4(Math.max(committed - budgetTotal, 0)),
+    pct: pctOf(committed, budgetTotal)
+  };
+}
+
+// حالة الفاتورة من المسدد/الإجمالي/الاستحقاق.
+function invoiceStatus(inv, today) {
+  const total = num$1(inv?.total_amount);
+  const paid = num$1(inv?.paid_amount);
+  if (paid >= total && (total > 0 || paid > 0)) return "paid";
+  const day = isDateKey(today) ? today : todayRiyadh$8();
+  if (isDateKey(inv?.due_date) && compareDateKeys(inv.due_date, day) < 0) return "overdue";
+  if (paid > 0) return "partial_paid";
+  return "pending_payment";
+}
+
+// ---------- الخط الزمني ----------
+
+// موضع شريط داخل نطاق (نسب مئوية). الأيام شاملة الطرفين؛ يُقصّ على النطاق.
+function barPosition(start, end, rangeStart, rangeEnd) {
+  const zero = {
+    left_pct: 0,
+    width_pct: 0
+  };
+  if (!isDateKey(rangeStart) || !isDateKey(rangeEnd)) return zero;
+  const total = daysBetween(rangeStart, rangeEnd) + 1;
+  if (!(total > 0)) return zero;
+  let s = isDateKey(start) ? start : null;
+  let e = isDateKey(end) ? end : null;
+  if (!s && !e) return zero;
+  if (!s) s = e;
+  if (!e) e = s;
+  if (compareDateKeys(s, rangeStart) < 0) s = rangeStart;
+  if (compareDateKeys(e, rangeEnd) > 0) e = rangeEnd;
+  if (compareDateKeys(e, s) < 0) return zero;
+  const left = daysBetween(rangeStart, s) / total * 100;
+  const width = (daysBetween(s, e) + 1) / total * 100;
+  return {
+    left_pct: Math.min(Math.max(round2$4(left), 0), 100),
+    width_pct: Math.min(Math.max(round2$4(width), 0), 100 - round2$4(left))
+  };
+}
+
+// نطاق الخط الزمني: من أول شهر فيه حدث إلى آخر شهر، بأعمدة أشهر وخط اليوم.
+function timelineRange(project, today) {
+  const day = isDateKey(today) ? today : todayRiyadh$8();
+  const phases = listOf(project?.phases);
+  const tasks = listOf(project?.tasks);
+  const startCandidates = [project?.contract_signed_date, ...phases.map(p => p?.planned_start), ...phases.map(p => p?.actual_start)];
+  const endCandidates = [project?.target_opening_date, project?.actual_opening_date, ...phases.map(p => p?.planned_end), ...phases.map(p => p?.actual_end), ...tasks.filter(t => t?.is_milestone).map(t => t?.due_date)];
+  let start = minKey(startCandidates);
+  let end = maxKey(endCandidates);
+  if (!start && !end) {
+    start = day;
+    end = addDays$2(day, 150);
+  } else if (!start) {
+    start = addDays$2(end, -150);
+  } else if (!end) {
+    end = addDays$2(start, 150);
+  }
+  if (compareDateKeys(end, start) < 0) end = start;
+  start = monthStart(start);
+  end = monthEnd(end);
+  const total = daysBetween(start, end) + 1;
+  const months = [];
+  let cursor = start;
+  let guard = 0;
+  while (compareDateKeys(cursor, end) <= 0 && guard < 120) {
+    const mEnd = monthEnd(cursor);
+    const p = parts(cursor);
+    const pos = barPosition(cursor, mEnd, start, end);
+    months.push({
+      key: `${p.y}-${pad2$3(p.m)}`,
+      label: `${MONTHS_AR[p.m - 1]} ${p.y}`,
+      left_pct: pos.left_pct,
+      width_pct: pos.width_pct
+    });
+    cursor = addDays$2(mEnd, 1);
+    guard += 1;
+  }
+  const todayInRange = compareDateKeys(day, start) >= 0 && compareDateKeys(day, end) <= 0;
+  const today_pct = todayInRange ? round2$4((daysBetween(start, day) + 0.5) / total * 100) : null;
+  return {
+    start,
+    end,
+    months,
+    today_pct
+  };
+}
+
+// ---------- القالب والأكواد ----------
+
+// أقسام بلا id من القالب، موزّعة بالتساوي بين توقيع العقد والافتتاح
+// (القسم الأخير ينتهي يوم الافتتاح). كل قسم يحمل `tasks` جاهزة للإدراج.
+function buildPhasesFromTemplate(template, contractDate, targetOpening) {
+  const list = listOf(template);
+  const n = list.length;
+  const hasDates = isDateKey(contractDate) && isDateKey(targetOpening) && compareDateKeys(targetOpening, contractDate) >= 0;
+  // المدة شاملة الطرفين (يوم العقد ويوم الافتتاح) حتى تتساوى الأقسام.
+  const span = hasDates ? daysBetween(contractDate, targetOpening) + 1 : 0;
+  const boundary = i => {
+    if (!hasDates) return null;
+    const key = addDays$2(contractDate, Math.round(span * i / n));
+    return compareDateKeys(key, targetOpening) > 0 ? targetOpening : key;
+  };
+  return list.map((tpl, i) => {
+    const planned_start = boundary(i);
+    let planned_end = null;
+    if (hasDates) {
+      planned_end = i === n - 1 ? targetOpening : addDays$2(boundary(i + 1), -1);
+      // مدد قصيرة جداً: لا تنتهي قبل بدايتها.
+      if (compareDateKeys(planned_end, planned_start) < 0) planned_end = planned_start;
+    }
+    return {
+      name: tpl?.name || `القسم ${i + 1}`,
+      sort_order: i + 1,
+      planned_start,
+      planned_end,
+      actual_start: null,
+      actual_end: null,
+      status: "not_started",
+      budget: 0,
+      weight: 1,
+      progress_override: null,
+      owner_employee_id: null,
+      owner_name: "",
+      contractor_contact_id: null,
+      contractor_name: "",
+      color: tpl?.color || "#64748b",
+      notes: "",
+      template_key: tpl?.key || null,
+      default_account_code: tpl?.default_account_code || null,
+      tasks: listOf(tpl?.tasks).map((t, j) => ({
+        title: t?.title || "",
+        status: "todo",
+        is_milestone: !!t?.is_milestone,
+        due_date: planned_end,
+        done_at: null,
+        assignee_employee_id: null,
+        assignee_name: "",
+        sort_order: j + 1,
+        notes: ""
+      }))
+    };
+  });
+}
+function nextProjectCode(projects) {
+  let max = 0;
+  for (const p of listOf(projects)) {
+    const m = /^BP-(\d+)$/.exec(String(p?.code || "").trim());
+    if (m) max = Math.max(max, Number(m[1]));
+  }
+  return `BP-${String(max + 1).padStart(3, "0")}`;
+}
+
+// ---------- الملخص ----------
+
+const ACTIVE_STATUSES = new Set(["planning", "in_progress", "on_hold"]);
+function summarizeProjects(projects, today) {
+  const day = isDateKey(today) ? today : todayRiyadh$8();
+  const list = listOf(projects);
+  let active_count = 0;
+  let budget_total = 0;
+  let committed_total = 0;
+  let paid_total = 0;
+  let late_phases = 0;
+  let nearest = null;
+  for (const project of list) {
+    if (project?.status === "cancelled") continue;
+    const money = projectBudget(project);
+    budget_total += money.budget_total;
+    committed_total += money.committed;
+    paid_total += money.paid;
+    if (!ACTIVE_STATUSES.has(project?.status)) continue;
+    active_count += 1;
+    for (const phase of listOf(project?.phases)) {
+      if (phaseHealth(phase, phaseTasks(project, phase?.id), day) === "late") late_phases += 1;
+    }
+    const days = daysToOpening(project, day);
+    if (days !== null && days >= 0 && (!nearest || days < nearest.days)) {
+      nearest = {
+        project_id: project.id,
+        name: project.name,
+        days
+      };
+    }
+  }
+  return {
+    active_count,
+    budget_total: round2$4(budget_total),
+    committed_total: round2$4(committed_total),
+    paid_total: round2$4(paid_total),
+    nearest_opening: nearest,
+    late_phases
+  };
+}
+
+// المعالم غير المنجزة — تُستخدم قبل تأكيد الافتتاح.
+function pendingMilestones(project) {
+  return listOf(project?.tasks).filter(t => t?.is_milestone && t?.status !== "done");
+}
+
+// مخزن محلي مؤقت لمشاريع تأسيس الفروع — يحاكي واجهة
+// `/api/accounting/branch-projects` في localStorage حتى تُربط الخلفية.
+//
+// كل الدوال async وتعيد نسخاً عميقة؛ المعرّفات أعداد صحيحة متزايدة لكل
+// مجموعة. كل وصول إلى localStorage محروس بـ try/catch مع نسخة في الذاكرة
+// حتى لا ينهار SSR أو نافذة التصفح الخاص.
+
+const BRANCH_PROJECTS_STORAGE_KEY = "branchProjects.mock.v1";
+const COLLECTIONS = ["project", "phase", "task", "invoice", "update", "attachment"];
+const DEFAULT_AUTHOR = "الإدارة";
+let memoryStore = null;
+
+// ---------- التخزين ----------
+
+function clone(value) {
+  if (value === undefined) return value;
+  if (typeof structuredClone === "function") {
+    try {
+      return structuredClone(value);
+    } catch {
+      // سقوط إلى JSON
+    }
+  }
+  return JSON.parse(JSON.stringify(value));
+}
+function nowIso() {
+  return new Date().toISOString();
+}
+function readStorage() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(BRANCH_PROJECTS_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && Array.isArray(parsed.projects) && parsed.seq ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+function writeStorage(store) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(BRANCH_PROJECTS_STORAGE_KEY, JSON.stringify(store));
+  } catch {
+    // تخزين ممنوع (خاص/ممتلئ) — تبقى النسخة في الذاكرة.
+  }
+}
+function loadStore() {
+  if (memoryStore) return memoryStore;
+  memoryStore = readStorage() || buildSeed();
+  writeStorage(memoryStore);
+  return memoryStore;
+}
+function persist(store) {
+  memoryStore = store;
+  writeStorage(store);
+}
+function nextId(store, collection) {
+  const current = Number(store.seq[collection]) || 0;
+  store.seq[collection] = current + 1;
+  return current + 1;
+}
+
+// ---------- مساعدات ----------
+
+function delay(ms = 60) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+function numOrNull(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+function numOr0(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+function str(value) {
+  return value === null || value === undefined ? "" : String(value);
+}
+function dateOrNull(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(value || "")) ? String(value) : null;
+}
+function notFound$1(what = "المشروع") {
+  const error = new Error(`${what} غير موجود`);
+  error.code = "not_found";
+  error.status = 404;
+  return error;
+}
+function findProject(store, id) {
+  const project = store.projects.find(p => p.id === Number(id));
+  if (!project) throw notFound$1();
+  return project;
+}
+function touch(project) {
+  project.updated_at = nowIso();
+}
+function maxSort(list) {
+  return list.reduce((m, row) => Math.max(m, numOr0(row.sort_order)), 0);
+}
+function normalizePhaseInput(input, existing) {
+  const base = existing || {};
+  return {
+    name: str(input.name ?? base.name),
+    planned_start: dateOrNull(input.planned_start ?? base.planned_start),
+    planned_end: dateOrNull(input.planned_end ?? base.planned_end),
+    actual_start: dateOrNull(input.actual_start ?? base.actual_start),
+    actual_end: dateOrNull(input.actual_end ?? base.actual_end),
+    status: str(input.status ?? base.status ?? "not_started") || "not_started",
+    budget: numOr0(input.budget ?? base.budget),
+    weight: input.weight == null || input.weight === "" ? numOr0(base.weight) || 1 : numOr0(input.weight) || 1,
+    progress_override: input.progress_override === undefined ? base.progress_override ?? null : numOrNull(input.progress_override),
+    owner_employee_id: numOrNull(input.owner_employee_id ?? base.owner_employee_id),
+    owner_name: str(input.owner_name ?? base.owner_name),
+    contractor_contact_id: numOrNull(input.contractor_contact_id ?? base.contractor_contact_id),
+    contractor_name: str(input.contractor_name ?? base.contractor_name),
+    color: str(input.color ?? base.color) || "#64748b",
+    notes: str(input.notes ?? base.notes),
+    template_key: input.template_key ?? base.template_key ?? null,
+    default_account_code: input.default_account_code ?? base.default_account_code ?? null
+  };
+}
+function normalizeTaskInput(input, existing) {
+  const base = existing || {};
+  const status = str(input.status ?? base.status ?? "todo") || "todo";
+  let done_at = input.done_at === undefined ? base.done_at ?? null : dateOrNull(input.done_at);
+  if (status === "done" && !done_at) done_at = todayRiyadh$8();
+  if (status !== "done") done_at = null;
+  return {
+    phase_id: numOrNull(input.phase_id ?? base.phase_id),
+    title: str(input.title ?? base.title),
+    status,
+    is_milestone: input.is_milestone === undefined ? !!base.is_milestone : !!input.is_milestone,
+    due_date: input.due_date === undefined ? base.due_date ?? null : dateOrNull(input.due_date),
+    done_at,
+    assignee_employee_id: numOrNull(input.assignee_employee_id ?? base.assignee_employee_id),
+    assignee_name: str(input.assignee_name ?? base.assignee_name),
+    notes: str(input.notes ?? base.notes)
+  };
+}
+const PROJECT_FIELDS = ["name", "city", "district", "address", "area_sqm", "status", "contract_signed_date", "target_opening_date", "actual_opening_date", "budget_total", "manager_employee_id", "manager_name", "lease_contract_id", "lease_contract_number", "notes", "cover_url"];
+function applyProjectFields(project, body) {
+  for (const key of PROJECT_FIELDS) {
+    if (!(key in body)) continue;
+    const value = body[key];
+    switch (key) {
+      case "area_sqm":
+      case "manager_employee_id":
+      case "lease_contract_id":
+        project[key] = numOrNull(value);
+        break;
+      case "budget_total":
+        project[key] = numOr0(value);
+        break;
+      case "contract_signed_date":
+      case "target_opening_date":
+      case "actual_opening_date":
+        project[key] = dateOrNull(value);
+        break;
+      case "cover_url":
+        project[key] = value ? String(value) : null;
+        break;
+      default:
+        project[key] = str(value);
+    }
+  }
+}
+
+// إدراج أقسام (مع مهامها) من القالب في مشروع.
+function insertTemplatePhases(store, project, phases) {
+  for (const built of phases) {
+    const {
+      tasks,
+      ...phaseFields
+    } = built;
+    const phase = {
+      id: nextId(store, "phase"),
+      project_id: project.id,
+      ...phaseFields
+    };
+    project.phases.push(phase);
+    for (const t of tasks || []) {
+      project.tasks.push({
+        id: nextId(store, "task"),
+        project_id: project.id,
+        phase_id: phase.id,
+        ...t
+      });
+    }
+  }
+}
+function newProject(store, body) {
+  const id = nextId(store, "project");
+  const ts = nowIso();
+  const project = {
+    id,
+    code: nextProjectCode(store.projects),
+    name: "",
+    city: "",
+    district: "",
+    address: "",
+    area_sqm: null,
+    status: "planning",
+    contract_signed_date: null,
+    target_opening_date: null,
+    actual_opening_date: null,
+    budget_total: 0,
+    manager_employee_id: null,
+    manager_name: "",
+    lease_contract_id: null,
+    lease_contract_number: "",
+    notes: "",
+    cover_url: null,
+    created_at: ts,
+    updated_at: ts,
+    phases: [],
+    tasks: [],
+    invoices: [],
+    updates: [],
+    attachments: []
+  };
+  applyProjectFields(project, body || {});
+  if (!project.name) project.name = `مشروع ${project.code}`;
+  return project;
+}
+
+// ---------- بيانات العيّنة ----------
+
+function buildSeed() {
+  const store = {
+    projects: [],
+    seq: Object.fromEntries(COLLECTIONS.map(c => [c, 0]))
+  };
+
+  // (1) فرع الواحة — الدمام، قيد التنفيذ.
+  const oasis = newProject(store, {
+    name: "فرع الواحة",
+    city: "الدمام",
+    district: "حي الواحة",
+    address: "شارع الأمير محمد بن فهد، مجمع الواحة التجاري",
+    area_sqm: 140,
+    status: "in_progress",
+    contract_signed_date: "2026-06-01",
+    target_opening_date: "2026-11-11",
+    budget_total: 650000,
+    manager_name: "فهد العتيبي",
+    lease_contract_number: "LC-2026-004",
+    notes: "موقع على زاوية بواجهتين؛ المقاول ملتزم بتسليم التشطيب قبل منتصف أكتوبر."
+  });
+  const schedule = [{
+    planned_start: "2026-06-01",
+    planned_end: "2026-06-15",
+    actual_start: "2026-06-01",
+    actual_end: "2026-06-14",
+    status: "done",
+    budget: 60000,
+    owner_name: "فهد العتيبي"
+  }, {
+    planned_start: "2026-06-16",
+    planned_end: "2026-07-15",
+    actual_start: "2026-06-16",
+    actual_end: "2026-07-20",
+    status: "done",
+    budget: 25000,
+    owner_name: "سارة القحطاني"
+  }, {
+    planned_start: "2026-07-01",
+    planned_end: "2026-07-31",
+    actual_start: "2026-07-05",
+    actual_end: "2026-08-02",
+    status: "done",
+    budget: 40000,
+    contractor_name: "استوديو خط للتصميم"
+  }, {
+    planned_start: "2026-08-01",
+    planned_end: "2026-10-10",
+    actual_start: "2026-08-03",
+    actual_end: null,
+    status: "in_progress",
+    budget: 180000,
+    contractor_name: "مؤسسة البناء الحديث للمقاولات",
+    owner_name: "فهد العتيبي"
+  }, {
+    planned_start: "2026-09-15",
+    planned_end: "2026-10-15",
+    status: "not_started",
+    budget: 70000,
+    contractor_name: "شركة التيار للكهرباء والتكييف"
+  }, {
+    planned_start: "2026-10-10",
+    planned_end: "2026-10-25",
+    status: "not_started",
+    budget: 120000
+  }, {
+    planned_start: "2026-10-15",
+    planned_end: "2026-10-28",
+    status: "not_started",
+    budget: 45000
+  }, {
+    planned_start: "2026-10-20",
+    planned_end: "2026-10-31",
+    status: "not_started",
+    budget: 25000
+  }, {
+    planned_start: "2026-10-01",
+    planned_end: "2026-11-05",
+    status: "not_started",
+    budget: 15000,
+    owner_name: "سارة القحطاني"
+  }, {
+    planned_start: "2026-11-01",
+    planned_end: "2026-11-08",
+    status: "not_started",
+    budget: 10000
+  }, {
+    planned_start: "2026-10-25",
+    planned_end: "2026-11-11",
+    status: "not_started",
+    budget: 10000
+  }];
+  const built = buildPhasesFromTemplate(DEFAULT_PHASE_TEMPLATE, oasis.contract_signed_date, oasis.target_opening_date).map((phase, i) => {
+    const over = schedule[i] || {};
+    const merged = {
+      ...phase,
+      ...over
+    };
+    merged.tasks = phase.tasks.map(t => ({
+      ...t,
+      due_date: merged.planned_end
+    }));
+    if (merged.status === "done") {
+      merged.tasks = merged.tasks.map(t => ({
+        ...t,
+        status: "done",
+        done_at: merged.actual_end
+      }));
+    }
+    return merged;
+  });
+  // القسم 4 جارٍ: نصف المهام منجزة.
+  built[3].tasks = built[3].tasks.map((t, j) => j < 3 ? {
+    ...t,
+    status: "done",
+    done_at: addDays$2("2026-08-20", j * 12)
+  } : j === 3 ? {
+    ...t,
+    status: "in_progress"
+  } : t);
+  insertTemplatePhases(store, oasis, built);
+  const phaseId = i => oasis.phases[i].id;
+  const invoiceRows = [{
+    invoice_number: "LEASE-LC-2026-004-01",
+    invoice_date: "2026-06-01",
+    due_date: "2026-06-01",
+    supplier_name: "شركة الواحة العقارية",
+    phase_id: phaseId(0),
+    expense_account_code: "5301",
+    total_amount: 57500,
+    paid_amount: 57500,
+    source: "lease"
+  }, {
+    invoice_number: "BLD-1042",
+    invoice_date: "2026-06-20",
+    due_date: "2026-07-05",
+    supplier_name: "أمانة المنطقة الشرقية",
+    phase_id: phaseId(1),
+    expense_account_code: "5302",
+    total_amount: 8500,
+    paid_amount: 8500
+  }, {
+    invoice_number: "DS-2026-17",
+    invoice_date: "2026-07-10",
+    due_date: "2026-08-10",
+    supplier_name: "استوديو خط للتصميم",
+    phase_id: phaseId(2),
+    expense_account_code: "5303",
+    total_amount: 38000,
+    paid_amount: 38000
+  }, {
+    invoice_number: "CT-0088",
+    invoice_date: "2026-08-15",
+    due_date: "2026-09-15",
+    supplier_name: "مؤسسة البناء الحديث للمقاولات",
+    phase_id: phaseId(3),
+    expense_account_code: "5304",
+    total_amount: 95000,
+    paid_amount: 60000
+  }, {
+    invoice_number: "CT-0091",
+    invoice_date: "2026-09-25",
+    due_date: "2026-10-25",
+    supplier_name: "مؤسسة البناء الحديث للمقاولات",
+    phase_id: phaseId(3),
+    expense_account_code: "5304",
+    total_amount: 70000,
+    paid_amount: 0
+  }, {
+    invoice_number: "EL-554",
+    invoice_date: "2026-09-28",
+    due_date: "2026-10-28",
+    supplier_name: "شركة التيار للكهرباء والتكييف",
+    phase_id: phaseId(4),
+    expense_account_code: "5305",
+    total_amount: 32000,
+    paid_amount: 16000
+  }, {
+    invoice_number: "EQ-2026-301",
+    invoice_date: "2026-09-20",
+    due_date: "2026-10-20",
+    supplier_name: "بن الحجاز لمعدات القهوة",
+    phase_id: phaseId(5),
+    expense_account_code: "5306",
+    total_amount: 98000,
+    paid_amount: 49000
+  }, {
+    invoice_number: "FR-77",
+    invoice_date: "2026-10-01",
+    due_date: "2026-10-31",
+    supplier_name: "مصنع الخشب الذهبي للأثاث",
+    phase_id: phaseId(6),
+    expense_account_code: "5307",
+    total_amount: 30000,
+    paid_amount: 0
+  }, {
+    invoice_number: "SYS-19",
+    invoice_date: "2026-10-03",
+    due_date: "2026-11-02",
+    supplier_name: "فودكس لأنظمة نقاط البيع",
+    phase_id: phaseId(7),
+    expense_account_code: "5308",
+    total_amount: 18500,
+    paid_amount: 0
+  }];
+  for (const row of invoiceRows) {
+    oasis.invoices.push({
+      id: nextId(store, "invoice"),
+      project_id: oasis.id,
+      source: "manual",
+      ...row,
+      expense_account_name: accountName$1(row.expense_account_code),
+      status: invoiceStatus(row, "2026-10-05")
+    });
+  }
+  const updateRows = [{
+    phase_id: phaseId(1),
+    body: "صدرت رخصة البلدية وفسح الدفاع المدني بعد تعديل مخرج الطوارئ.",
+    created_at: "2026-07-20T09:30:00.000Z",
+    created_by_name: "سارة القحطاني"
+  }, {
+    phase_id: phaseId(3),
+    body: "اكتملت أعمال الجبس والأسقف، وبدأ تنفيذ البار. المقاول يتوقع تسليم الدهانات خلال أسبوعين.",
+    created_at: "2026-09-18T14:05:00.000Z",
+    created_by_name: "فهد العتيبي"
+  }, {
+    phase_id: phaseId(5),
+    body: "تم تأكيد طلب ماكينة الإسبريسو والطواحين — الوصول المتوقع 15 أكتوبر.",
+    created_at: "2026-09-22T11:40:00.000Z",
+    created_by_name: "فهد العتيبي"
+  }];
+  for (const row of updateRows) {
+    oasis.updates.push({
+      id: nextId(store, "update"),
+      project_id: oasis.id,
+      photos: [],
+      ...row
+    });
+  }
+  const attachmentRows = [{
+    phase_id: phaseId(0),
+    url: "#",
+    label: "عقد إيجار الموقع",
+    kind: "contract",
+    created_by_name: "فهد العتيبي",
+    created_at: "2026-06-02T08:00:00.000Z"
+  }, {
+    phase_id: phaseId(1),
+    url: "#",
+    label: "رخصة البلدية",
+    kind: "permit",
+    created_by_name: "سارة القحطاني",
+    created_at: "2026-07-20T10:00:00.000Z"
+  }, {
+    phase_id: phaseId(2),
+    url: "#",
+    label: "المخطط المعماري المعتمد",
+    kind: "design",
+    created_by_name: "فهد العتيبي",
+    created_at: "2026-08-02T12:00:00.000Z"
+  }];
+  for (const row of attachmentRows) {
+    oasis.attachments.push({
+      id: nextId(store, "attachment"),
+      project_id: oasis.id,
+      ...row
+    });
+  }
+  oasis.created_at = "2026-06-01T06:00:00.000Z";
+  oasis.updated_at = "2026-10-03T07:15:00.000Z";
+  store.projects.push(oasis);
+
+  // (2) فرع الملقا — الرياض، تخطيط.
+  const malqa = newProject(store, {
+    name: "فرع الملقا",
+    city: "الرياض",
+    district: "حي الملقا",
+    address: "طريق أنس بن مالك",
+    area_sqm: 110,
+    status: "planning",
+    contract_signed_date: "2026-10-01",
+    target_opening_date: "2027-03-15",
+    budget_total: 500000,
+    manager_name: "نورة الشهري",
+    notes: "بانتظار اعتماد التصميم قبل التعاقد مع المقاول."
+  });
+  insertTemplatePhases(store, malqa, buildPhasesFromTemplate(DEFAULT_PHASE_TEMPLATE, malqa.contract_signed_date, malqa.target_opening_date));
+  malqa.updates.push({
+    id: nextId(store, "update"),
+    project_id: malqa.id,
+    phase_id: malqa.phases[0].id,
+    body: "تم توقيع عقد الإيجار؛ تسليم الموقع المتوقع بداية نوفمبر.",
+    photos: [],
+    created_by_name: "نورة الشهري",
+    created_at: "2026-10-02T09:00:00.000Z"
+  });
+  malqa.created_at = "2026-10-01T06:00:00.000Z";
+  malqa.updated_at = "2026-10-02T09:00:00.000Z";
+  store.projects.push(malqa);
+  return store;
+}
+
+// ---------- الواجهة ----------
+
+const mockApi = {
+  async list() {
+    await delay();
+    const store = loadStore();
+    return clone(store.projects);
+  },
+  async get(id) {
+    await delay();
+    const store = loadStore();
+    return clone(findProject(store, id));
+  },
+  async create(body = {}) {
+    await delay();
+    const store = loadStore();
+    const project = newProject(store, body);
+    const template = body.template === "empty" ? [] : DEFAULT_PHASE_TEMPLATE;
+    if (template.length) {
+      insertTemplatePhases(store, project, buildPhasesFromTemplate(template, project.contract_signed_date, project.target_opening_date));
+    }
+    store.projects.push(project);
+    persist(store);
+    return clone(project);
+  },
+  async update(id, body = {}) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, id);
+    applyProjectFields(project, body);
+    touch(project);
+    persist(store);
+    return clone(project);
+  },
+  async remove(id) {
+    await delay();
+    const store = loadStore();
+    const index = store.projects.findIndex(p => p.id === Number(id));
+    if (index === -1) throw notFound$1();
+    store.projects.splice(index, 1);
+    persist(store);
+    return {
+      ok: true,
+      id: Number(id)
+    };
+  },
+  async open(id, body = {}) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, id);
+    const pending = pendingMilestones(project);
+    if (pending.length && !body.force) {
+      const error = new Error("توجد معالم غير مكتملة قبل تأكيد الافتتاح");
+      error.code = "milestones_pending";
+      error.status = 409;
+      error.pending = pending.map(t => t.title);
+      throw error;
+    }
+    project.status = "opened";
+    project.actual_opening_date = dateOrNull(body.actual_opening_date) || todayRiyadh$8();
+    touch(project);
+    persist(store);
+    return clone(project);
+  },
+  async savePhase({
+    project_id,
+    id,
+    ...fields
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    let phase;
+    if (id) {
+      phase = project.phases.find(p => p.id === Number(id));
+      if (!phase) throw notFound$1("القسم");
+      Object.assign(phase, normalizePhaseInput(fields, phase));
+      if (fields.sort_order !== undefined) phase.sort_order = numOr0(fields.sort_order);
+    } else {
+      phase = {
+        id: nextId(store, "phase"),
+        project_id: project.id,
+        sort_order: maxSort(project.phases) + 1,
+        ...normalizePhaseInput(fields, null)
+      };
+      project.phases.push(phase);
+    }
+    touch(project);
+    persist(store);
+    return clone(phase);
+  },
+  async deletePhase({
+    project_id,
+    id
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    const pid = Number(id);
+    if (!project.phases.some(p => p.id === pid)) throw notFound$1("القسم");
+    project.phases = project.phases.filter(p => p.id !== pid);
+    project.tasks = project.tasks.filter(t => t.phase_id !== pid);
+    for (const list of [project.invoices, project.updates, project.attachments]) {
+      for (const row of list) if (row.phase_id === pid) row.phase_id = null;
+    }
+    touch(project);
+    persist(store);
+    return {
+      ok: true,
+      id: pid
+    };
+  },
+  async reorderPhases({
+    project_id,
+    ids
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    const order = (Array.isArray(ids) ? ids : []).map(Number);
+    let sort = 1;
+    for (const pid of order) {
+      const phase = project.phases.find(p => p.id === pid);
+      if (phase) phase.sort_order = sort++;
+    }
+    for (const phase of project.phases) {
+      if (!order.includes(phase.id)) phase.sort_order = sort++;
+    }
+    project.phases.sort((a, b) => a.sort_order - b.sort_order);
+    touch(project);
+    persist(store);
+    return clone(project.phases);
+  },
+  async saveTask({
+    project_id,
+    id,
+    ...fields
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    let task;
+    if (id) {
+      task = project.tasks.find(t => t.id === Number(id));
+      if (!task) throw notFound$1("المهمة");
+      Object.assign(task, normalizeTaskInput(fields, task));
+      if (fields.sort_order !== undefined) task.sort_order = numOr0(fields.sort_order);
+    } else {
+      const normalized = normalizeTaskInput(fields, null);
+      task = {
+        id: nextId(store, "task"),
+        project_id: project.id,
+        sort_order: maxSort(project.tasks.filter(t => t.phase_id === normalized.phase_id)) + 1,
+        ...normalized
+      };
+      project.tasks.push(task);
+    }
+    touch(project);
+    persist(store);
+    return clone(task);
+  },
+  async deleteTask({
+    project_id,
+    id
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    const tid = Number(id);
+    if (!project.tasks.some(t => t.id === tid)) throw notFound$1("المهمة");
+    project.tasks = project.tasks.filter(t => t.id !== tid);
+    touch(project);
+    persist(store);
+    return {
+      ok: true,
+      id: tid
+    };
+  },
+  async addUpdate({
+    project_id,
+    phase_id,
+    body,
+    photos,
+    created_by_name
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    const update = {
+      id: nextId(store, "update"),
+      project_id: project.id,
+      phase_id: numOrNull(phase_id),
+      body: str(body),
+      photos: Array.isArray(photos) ? photos.filter(Boolean).map(String) : [],
+      created_by_name: str(created_by_name) || DEFAULT_AUTHOR,
+      created_at: nowIso()
+    };
+    project.updates.unshift(update);
+    touch(project);
+    persist(store);
+    return clone(update);
+  },
+  async deleteUpdate({
+    project_id,
+    id
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    const uid = Number(id);
+    if (!project.updates.some(u => u.id === uid)) throw notFound$1("التطور");
+    project.updates = project.updates.filter(u => u.id !== uid);
+    touch(project);
+    persist(store);
+    return {
+      ok: true,
+      id: uid
+    };
+  },
+  async addAttachment({
+    project_id,
+    phase_id,
+    url,
+    label,
+    kind,
+    created_by_name
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    const attachment = {
+      id: nextId(store, "attachment"),
+      project_id: project.id,
+      phase_id: numOrNull(phase_id),
+      url: str(url),
+      label: str(label),
+      kind: str(kind) || "other",
+      created_by_name: str(created_by_name) || DEFAULT_AUTHOR,
+      created_at: nowIso()
+    };
+    project.attachments.push(attachment);
+    touch(project);
+    persist(store);
+    return clone(attachment);
+  },
+  async deleteAttachment({
+    project_id,
+    id
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    const aid = Number(id);
+    if (!project.attachments.some(a => a.id === aid)) throw notFound$1("المرفق");
+    project.attachments = project.attachments.filter(a => a.id !== aid);
+    touch(project);
+    persist(store);
+    return {
+      ok: true,
+      id: aid
+    };
+  },
+  async saveInvoice({
+    project_id,
+    id,
+    ...fields
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    let invoice;
+    if (id) {
+      invoice = project.invoices.find(inv => inv.id === Number(id));
+      if (!invoice) throw notFound$1("الفاتورة");
+    } else {
+      invoice = {
+        id: nextId(store, "invoice"),
+        project_id: project.id,
+        source: "manual"
+      };
+      project.invoices.push(invoice);
+    }
+    const code = str(fields.expense_account_code ?? invoice.expense_account_code);
+    Object.assign(invoice, {
+      invoice_number: str(fields.invoice_number ?? invoice.invoice_number),
+      invoice_date: dateOrNull(fields.invoice_date ?? invoice.invoice_date),
+      due_date: dateOrNull(fields.due_date ?? invoice.due_date),
+      supplier_name: str(fields.supplier_name ?? invoice.supplier_name),
+      phase_id: numOrNull(fields.phase_id ?? invoice.phase_id),
+      expense_account_code: code,
+      expense_account_name: accountName$1(code),
+      total_amount: numOr0(fields.total_amount ?? invoice.total_amount),
+      paid_amount: numOr0(fields.paid_amount ?? invoice.paid_amount)
+    });
+    invoice.status = invoiceStatus(invoice, todayRiyadh$8());
+    touch(project);
+    persist(store);
+    return clone(invoice);
+  },
+  async deleteInvoice({
+    project_id,
+    id
+  }) {
+    await delay();
+    const store = loadStore();
+    const project = findProject(store, project_id);
+    const iid = Number(id);
+    if (!project.invoices.some(inv => inv.id === iid)) throw notFound$1("الفاتورة");
+    project.invoices = project.invoices.filter(inv => inv.id !== iid);
+    touch(project);
+    persist(store);
+    return {
+      ok: true,
+      id: iid
+    };
+  }
+};
+
+// مشاريع تأسيس الفروع — الاستعلامات والطفرات.
+//
+// المرحلة 1 واجهة فقط: `BRANCH_PROJECTS_MOCK = true` يوجّه كل الطلبات إلى
+// المخزن المحلي (`branchProjectsMock`). عند ربط الخلفية يُقلب الثابت إلى
+// false فتذهب الطلبات إلى `/api/accounting/branch-projects` بنفس الأشكال.
+
+const BASE$1 = "/api/accounting/branch-projects";
+
+// خطأ يحمل كود الخادم (milestones_pending / not_found …) حتى تتصرف
+// الواجهة بحسبه.
+function apiError$2(data, fallback, status) {
+  const error = new Error(data?.error || fallback);
+  error.code = data?.code || null;
+  error.status = status || null;
+  error.data = data || null;
+  if (Array.isArray(data?.pending)) error.pending = data.pending;
+  return error;
+}
+async function readJson$2(res) {
+  return res.json().catch(() => ({}));
+}
+async function request(method, path, body, fallback) {
+  const init = {
+    method
+  };
+  if (body !== undefined) {
+    init.headers = {
+      "Content-Type": "application/json"
+    };
+    init.body = JSON.stringify(body);
+  }
+  const res = await adminFetch(`${BASE$1}${path}`, init);
+  const data = await readJson$2(res);
+  if (!res.ok) throw apiError$2(data, fallback, res.status);
+  return data;
+}
+function unwrapProject(data) {
+  return data?.project ?? data ?? null;
+}
+function invalidateBranchProjectQueries(queryClient, id) {
+  const tasks = [queryClient.invalidateQueries({
+    queryKey: queryKeys.branchProjects()
+  })];
+  if (id !== undefined && id !== null && id !== "") {
+    tasks.push(queryClient.invalidateQueries({
+      queryKey: queryKeys.branchProject(Number(id))
+    }));
+  } else {
+    tasks.push(queryClient.invalidateQueries({
+      queryKey: queryKeys.branchProject()
+    }));
+  }
+  return Promise.all(tasks);
+}
+
+// ---------- الاستعلامات ----------
+
+function useBranchProjects({
+  employeeId,
+  isAdmin
+} = {}) {
+  return useQuery({
+    queryKey: queryKeys.branchProjects(),
+    enabled: !!employeeId && !!isAdmin,
+    queryFn: async () => {
+      return mockApi.list();
+    }
+  });
+}
+function useBranchProject(id) {
+  return useQuery({
+    queryKey: queryKeys.branchProject(id ? Number(id) : null),
+    enabled: !!id,
+    queryFn: async () => {
+      return mockApi.get(id);
+    }
+  });
+}
+
+// ---------- الطفرات ----------
+
+// مصنع طفرة موحّد: ينفّذ mock أو الخادم، يبطل الكاش، ويعرض التوست.
+function useProjectMutation({
+  mock,
+  real,
+  successMessage,
+  errorPrefix,
+  onErrorCode
+}) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async variables => mock(variables) ,
+    onSuccess: async (data, variables) => {
+      const id = variables?.project_id ?? variables?.id ?? data?.id ?? null;
+      await invalidateBranchProjectQueries(queryClient, id);
+      const message = typeof successMessage === "function" ? successMessage(data, variables) : successMessage;
+      if (message) toast.success(message);
+    },
+    onError: error => {
+      console.error(error);
+      if (onErrorCode && error?.code && onErrorCode(error)) return;
+      toast.error(`${errorPrefix}: ${error?.message || "خطأ غير متوقع"}`);
+    }
+  });
+}
+function useCreateBranchProject() {
+  return useProjectMutation({
+    mock: body => mockApi.create(body),
+    real: async body => unwrapProject(await request("POST", "", body, "فشل إنشاء المشروع")),
+    successMessage: project => project?.code ? `تم إنشاء المشروع ${project.code}` : "تم إنشاء المشروع",
+    errorPrefix: "فشل إنشاء المشروع"
+  });
+}
+function useUpdateBranchProject() {
+  return useProjectMutation({
+    mock: ({
+      id,
+      ...fields
+    }) => mockApi.update(id, fields),
+    real: async ({
+      id,
+      ...fields
+    }) => unwrapProject(await request("PUT", `/${id}`, fields, "فشل حفظ المشروع")),
+    successMessage: "تم حفظ المشروع",
+    errorPrefix: "فشل حفظ المشروع"
+  });
+}
+function useDeleteBranchProject() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id
+    }) => mockApi.remove(id) ,
+    onSuccess: async (_data, variables) => {
+      // يُزال استعلام التفاصيل بدل إعادة جلبه (404) قبل الانتقال للقائمة.
+      queryClient.removeQueries({
+        queryKey: queryKeys.branchProject(Number(variables?.id))
+      });
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.branchProjects()
+      });
+      toast.success("تم حذف المشروع");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل حذف المشروع: ${error?.message || "خطأ غير متوقع"}`);
+    }
+  });
+}
+function useOpenBranchProject() {
+  return useProjectMutation({
+    mock: ({
+      id,
+      actual_opening_date,
+      force
+    }) => mockApi.open(id, {
+      actual_opening_date,
+      force: !!force
+    }),
+    real: async ({
+      id,
+      actual_opening_date,
+      force
+    }) => unwrapProject(await request("POST", `/${id}/open`, {
+      actual_opening_date,
+      force: !!force
+    }, "فشل تأكيد الافتتاح")),
+    successMessage: "تم تأكيد افتتاح الفرع",
+    errorPrefix: "فشل تأكيد الافتتاح",
+    onErrorCode: error => {
+      if (error.code !== "milestones_pending") return false;
+      const pending = Array.isArray(error.pending) ? error.pending : [];
+      toast.warning(pending.length ? `معالم غير مكتملة: ${pending.join("، ")} — أكملها أو أكّد الافتتاح رغم ذلك.` : "توجد معالم غير مكتملة — أكملها أو أكّد الافتتاح رغم ذلك.", {
+        duration: 9000
+      });
+      return true;
+    }
+  });
+}
+
+// ---------- الأقسام ----------
+
+function useSaveBranchProjectPhase() {
+  return useProjectMutation({
+    mock: vars => mockApi.savePhase(vars),
+    real: ({
+      project_id,
+      id,
+      ...fields
+    }) => id ? request("PUT", `/${project_id}/phases/${id}`, fields, "فشل حفظ القسم") : request("POST", `/${project_id}/phases`, fields, "فشل حفظ القسم"),
+    successMessage: (_data, vars) => vars?.id ? "تم حفظ القسم" : "تمت إضافة القسم",
+    errorPrefix: "فشل حفظ القسم"
+  });
+}
+function useDeleteBranchProjectPhase() {
+  return useProjectMutation({
+    mock: vars => mockApi.deletePhase(vars),
+    real: ({
+      project_id,
+      id
+    }) => request("DELETE", `/${project_id}/phases/${id}`, undefined, "فشل حذف القسم"),
+    successMessage: "تم حذف القسم",
+    errorPrefix: "فشل حذف القسم"
+  });
+}
+function useReorderBranchProjectPhases() {
+  return useProjectMutation({
+    mock: vars => mockApi.reorderPhases(vars),
+    real: ({
+      project_id,
+      ids
+    }) => request("POST", `/${project_id}/phases/reorder`, {
+      ids
+    }, "فشل إعادة ترتيب الأقسام"),
+    successMessage: "تم تحديث ترتيب الأقسام",
+    errorPrefix: "فشل إعادة ترتيب الأقسام"
+  });
+}
+
+// ---------- المهام ----------
+
+function useSaveBranchProjectTask() {
+  return useProjectMutation({
+    mock: vars => mockApi.saveTask(vars),
+    real: ({
+      project_id,
+      id,
+      ...fields
+    }) => id ? request("PUT", `/${project_id}/tasks/${id}`, fields, "فشل حفظ المهمة") : request("POST", `/${project_id}/tasks`, fields, "فشل حفظ المهمة"),
+    successMessage: (_data, vars) => vars?.id ? "تم حفظ المهمة" : "تمت إضافة المهمة",
+    errorPrefix: "فشل حفظ المهمة"
+  });
+}
+function useDeleteBranchProjectTask() {
+  return useProjectMutation({
+    mock: vars => mockApi.deleteTask(vars),
+    real: ({
+      project_id,
+      id
+    }) => request("DELETE", `/${project_id}/tasks/${id}`, undefined, "فشل حذف المهمة"),
+    successMessage: "تم حذف المهمة",
+    errorPrefix: "فشل حذف المهمة"
+  });
+}
+
+// ---------- التطورات ----------
+
+function useAddBranchProjectUpdate() {
+  return useProjectMutation({
+    mock: vars => mockApi.addUpdate(vars),
+    real: ({
+      project_id,
+      ...fields
+    }) => request("POST", `/${project_id}/updates`, fields, "فشل إضافة التطور"),
+    successMessage: "تمت إضافة التطور",
+    errorPrefix: "فشل إضافة التطور"
+  });
+}
+function useDeleteBranchProjectUpdate() {
+  return useProjectMutation({
+    mock: vars => mockApi.deleteUpdate(vars),
+    real: ({
+      project_id,
+      id
+    }) => request("DELETE", `/${project_id}/updates/${id}`, undefined, "فشل حذف التطور"),
+    successMessage: "تم حذف التطور",
+    errorPrefix: "فشل حذف التطور"
+  });
+}
+
+// ---------- المرفقات ----------
+
+function useAddBranchProjectAttachment() {
+  return useProjectMutation({
+    mock: vars => mockApi.addAttachment(vars),
+    real: ({
+      project_id,
+      ...fields
+    }) => request("POST", `/${project_id}/attachments`, fields, "فشل إضافة المرفق"),
+    successMessage: "تمت إضافة المرفق",
+    errorPrefix: "فشل إضافة المرفق"
+  });
+}
+function useDeleteBranchProjectAttachment() {
+  return useProjectMutation({
+    mock: vars => mockApi.deleteAttachment(vars),
+    real: ({
+      project_id,
+      id
+    }) => request("DELETE", `/${project_id}/attachments/${id}`, undefined, "فشل حذف المرفق"),
+    successMessage: "تم حذف المرفق",
+    errorPrefix: "فشل حذف المرفق"
+  });
+}
+
+// ---------- الفواتير (mock فقط حالياً — تُستبدل بنافذة فاتورة المشتريات) ----------
+
+function useSaveBranchProjectInvoice() {
+  return useProjectMutation({
+    mock: vars => mockApi.saveInvoice(vars),
+    real: ({
+      project_id,
+      id,
+      ...fields
+    }) => id ? request("PUT", `/${project_id}/invoices/${id}`, fields, "فشل حفظ الفاتورة") : request("POST", `/${project_id}/invoices`, fields, "فشل حفظ الفاتورة"),
+    successMessage: (_data, vars) => vars?.id ? "تم حفظ الفاتورة" : "تمت إضافة الفاتورة",
+    errorPrefix: "فشل حفظ الفاتورة"
+  });
+}
+function useDeleteBranchProjectInvoice() {
+  return useProjectMutation({
+    mock: vars => mockApi.deleteInvoice(vars),
+    real: ({
+      project_id,
+      id
+    }) => request("DELETE", `/${project_id}/invoices/${id}`, undefined, "فشل حذف الفاتورة"),
+    successMessage: "تم حذف الفاتورة",
+    errorPrefix: "فشل حذف الفاتورة"
+  });
+}
 
 function GlassPopover({
   open,
@@ -2603,6 +4556,1317 @@ function GlassPopover({
       e.stopPropagation();
     }, children })
   ] }), document.body);
+}
+
+function safeParseISODate(value) {
+  if (!value) return null;
+  const dateOnly = value.includes("T") ? value.split("T")[0] : value;
+  const d = /* @__PURE__ */ new Date(`${dateOnly}T00:00:00`);
+  if (Number.isNaN(d.getTime())) return null;
+  return d;
+}
+function extractTime(value) {
+  if (!value || !value.includes("T")) return {
+    hour: "",
+    minute: ""
+  };
+  const timePart = value.split("T")[1] || "";
+  const [h, m] = timePart.split(":");
+  return {
+    hour: h || "",
+    minute: m || ""
+  };
+}
+function buildDateTimeValue(dateStr, hour, minute) {
+  if (!dateStr) return "";
+  const dateOnly = dateStr.includes("T") ? dateStr.split("T")[0] : dateStr;
+  const h = String(hour || "0").padStart(2, "0");
+  const m = String(minute || "0").padStart(2, "0");
+  return `${dateOnly}T${h}:${m}`;
+}
+function GlassDatePicker({
+  value,
+  onChange,
+  placeholder = "اختر التاريخ",
+  className = "",
+  buttonClassName = "",
+  allowClear = true,
+  dir = "rtl",
+  displayLocale = "ar-SA-u-ca-gregory-nu-latn",
+  showTime = false
+}) {
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
+  const selected = useMemo(() => safeParseISODate(value), [value]);
+  const currentTime = useMemo(() => extractTime(value), [value]);
+  const dayPickerLocale = dir === "ltr" ? enUS : arSA;
+  const latnLocale = dir === "ltr" ? "en-US" : "ar-SA-u-ca-gregory-nu-latn";
+  const displayLabel = useMemo(() => {
+    if (!selected) return placeholder;
+    try {
+      const dateLabel = selected.toLocaleDateString(latnLocale, {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+      if (showTime && currentTime.hour !== "") {
+        const h = String(currentTime.hour).padStart(2, "0");
+        const m = String(currentTime.minute).padStart(2, "0");
+        return `${dateLabel}  ${h}:${m}`;
+      }
+      return dateLabel;
+    } catch {
+      return value;
+    }
+  }, [placeholder, selected, value, latnLocale, showTime, currentTime]);
+  const setValue = useCallback((next) => {
+    onChange?.(next);
+  }, [onChange]);
+  const handleSelect = useCallback((day) => {
+    if (!day) {
+      setValue("");
+      if (!showTime) setOpen(false);
+      return;
+    }
+    const dateStr = formatDateForInput(day);
+    if (showTime) {
+      const h = currentTime.hour !== "" ? currentTime.hour : currentRiyadhHour();
+      const m = currentTime.minute !== "" ? currentTime.minute : "0";
+      setValue(buildDateTimeValue(dateStr, h, m));
+    } else {
+      setValue(dateStr);
+      setOpen(false);
+    }
+  }, [setValue, showTime, currentTime]);
+  const handleTimeChange = useCallback((type, val) => {
+    const dateOnly = value ? value.includes("T") ? value.split("T")[0] : value : "";
+    if (!dateOnly) return;
+    const h = type === "hour" ? val : currentTime.hour || "0";
+    const m = type === "minute" ? val : currentTime.minute || "0";
+    setValue(buildDateTimeValue(dateOnly, h, m));
+  }, [value, currentTime, setValue]);
+  const handleTimeDone = useCallback(() => {
+    setOpen(false);
+  }, []);
+  const clear = useCallback((e) => {
+    e?.stopPropagation?.();
+    setValue("");
+    setOpen(false);
+  }, [setValue]);
+  const buttonTextClass = value ? "text-slate-900 dark:text-slate-900 dark:text-white" : "text-slate-400 dark:text-slate-400 dark:text-white/35";
+  const defaultClassNames = useMemo(() => getDefaultClassNames(), []);
+  const dayPickerClassNames = useMemo(() => {
+    const navBtn = `${ws$1.iconButton} w-8 h-8 rounded-xl flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed`;
+    return {
+      ...defaultClassNames,
+      root: `${defaultClassNames.root} select-none`,
+      months: `${defaultClassNames.months} flex flex-col`,
+      month: `${defaultClassNames.month} space-y-2`,
+      month_caption: `${defaultClassNames.month_caption} flex items-center justify-between px-2 py-1`,
+      caption_label: `${defaultClassNames.caption_label || ""} text-slate-900 dark:text-white/90 text-sm font-semibold`,
+      nav: `${defaultClassNames.nav} flex items-center gap-1`,
+      button_previous: `${defaultClassNames.button_previous} ${navBtn}`,
+      button_next: `${defaultClassNames.button_next} ${navBtn}`,
+      chevron: `${defaultClassNames.chevron} text-slate-700 dark:text-slate-700 dark:text-white/70`,
+      month_grid: `${defaultClassNames.month_grid} w-full border-collapse table-fixed`,
+      weekdays: `${defaultClassNames.weekdays} `,
+      weekday: `${defaultClassNames.weekday} p-1 text-center text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 font-semibold`,
+      weeks: `${defaultClassNames.weeks} `,
+      week: `${defaultClassNames.week} `,
+      // In v9: `day` is the cell, and `day_button` is the clickable button.
+      day: `${defaultClassNames.day} p-1 text-center`,
+      day_button: `${defaultClassNames.day_button} h-8 w-8 rounded-xl mx-auto text-slate-800 dark:text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-emerald-400/20 flex items-center justify-center`,
+      today: `${defaultClassNames.today} text-sky-700 dark:text-sky-700 dark:text-sky-200`,
+      outside: `${defaultClassNames.outside} text-slate-400 dark:text-slate-400 dark:text-white/25`,
+      disabled: `${defaultClassNames.disabled} text-slate-400 dark:text-slate-400 dark:text-white/25 line-through`,
+      selected: `${defaultClassNames.selected} bg-emerald-400/20 text-emerald-100 border border-emerald-400/30`
+    };
+  }, [defaultClassNames]);
+  const hourOptions = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < 24; i++) {
+      arr.push(i);
+    }
+    return arr;
+  }, []);
+  const minuteOptions = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < 60; i += 5) {
+      arr.push(i);
+    }
+    return arr;
+  }, []);
+  return /* @__PURE__ */ jsxs("div", { className, dir, children: [
+    /* @__PURE__ */ jsxs("div", { className: "relative", children: [
+      /* @__PURE__ */ jsxs("button", { ref: anchorRef, type: "button", onClick: () => setOpen((s) => !s), className: `${ws$1.select} flex items-center justify-between gap-3 ${buttonClassName}`, "aria-expanded": open, children: [
+        /* @__PURE__ */ jsx("span", { className: `truncate ${buttonTextClass}`, children: displayLabel }),
+        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.03] flex-shrink-0`, "aria-hidden": "true", children: showTime ? /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/65" }) : /* @__PURE__ */ jsx(CalendarDays, { className: "w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/65" }) })
+      ] }),
+      allowClear && value ? /* @__PURE__ */ jsx("button", { type: "button", onClick: clear, className: `absolute left-2 top-1/2 -translate-y-1/2 ${ws$1.iconButton} w-9 h-9 rounded-xl flex items-center justify-center`, "aria-label": "مسح التاريخ", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70" }) }) : null
+    ] }),
+    /* @__PURE__ */ jsx(GlassPopover, { open, anchorRef, onClose: () => setOpen(false), style: {
+      width: 320
+    }, children: /* @__PURE__ */ jsxs("div", { className: "p-3", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 px-1 pb-2", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-800 dark:text-white/80", children: "التاريخ" }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+            const today = formatRiyadhDateForInput(/* @__PURE__ */ new Date());
+            if (showTime) {
+              const h = currentTime.hour !== "" ? currentTime.hour : currentRiyadhHour();
+              const m = currentTime.minute !== "" ? currentTime.minute : "0";
+              setValue(buildDateTimeValue(today, h, m));
+            } else {
+              setValue(today);
+              setOpen(false);
+            }
+          }, className: `${ws$1.btnNeutral} px-3 py-2 text-xs justify-center`, children: "اليوم" }),
+          allowClear ? /* @__PURE__ */ jsx("button", { type: "button", onClick: clear, className: `${ws$1.btnDanger} px-3 py-2 text-xs justify-center`, children: "مسح" }) : null
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 dark:border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.02] p-2 overflow-hidden", children: /* @__PURE__ */ jsx(
+        DayPicker,
+        {
+          mode: "single",
+          captionLayout: "label",
+          selected: selected || void 0,
+          onSelect: handleSelect,
+          showOutsideDays: true,
+          fixedWeeks: true,
+          locale: dayPickerLocale,
+          dir,
+          classNames: dayPickerClassNames,
+          formatters: {
+            // Force Latin digits in the calendar while keeping Arabic month/weekday names.
+            formatCaption: (date) => {
+              try {
+                return date.toLocaleDateString(latnLocale, {
+                  month: "long",
+                  year: "numeric"
+                });
+              } catch {
+                return "";
+              }
+            },
+            formatDay: (date) => {
+              try {
+                return new Intl.NumberFormat(latnLocale, {
+                  useGrouping: false
+                }).format(date.getDate());
+              } catch {
+                return String(date.getDate());
+              }
+            }
+          },
+          components: {
+            Chevron: (props) => {
+              const className2 = props?.className || "";
+              if (dir === "rtl") {
+                if (props.orientation === "left") {
+                  return /* @__PURE__ */ jsx(ChevronRight, { className: `${className2} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70` });
+                }
+                return /* @__PURE__ */ jsx(ChevronLeft, { className: `${className2} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70` });
+              }
+              if (props.orientation === "left") {
+                return /* @__PURE__ */ jsx(ChevronLeft, { className: `${className2} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70` });
+              }
+              return /* @__PURE__ */ jsx(ChevronRight, { className: `${className2} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70` });
+            }
+          },
+          styles: {
+            month_grid: {
+              width: "100%"
+            }
+          }
+        }
+      ) }),
+      showTime ? /* @__PURE__ */ jsxs("div", { className: "mt-3 pt-3 border-t border-slate-200 dark:border-slate-200 dark:border-white/10", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
+          /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4 text-slate-500 dark:text-slate-500 dark:text-white/50" }),
+          /* @__PURE__ */ jsx("span", { className: "text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-white/70", children: "الوقت" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 mb-1", children: "الساعة" }),
+            /* @__PURE__ */ jsxs("select", { value: currentTime.hour !== "" ? Number(currentTime.hour) : "", onChange: (e) => handleTimeChange("hour", e.target.value), className: `${ws$1.input} px-3 py-2.5 text-center text-sm w-full`, style: {
+              appearance: "none",
+              WebkitAppearance: "none"
+            }, children: [
+              /* @__PURE__ */ jsx("option", { value: "", disabled: true, children: "--" }),
+              hourOptions.map((h) => /* @__PURE__ */ jsx("option", { value: h, children: String(h).padStart(2, "0") }, h))
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:text-white/50 text-lg font-bold mt-4", children: ":" }),
+          /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
+            /* @__PURE__ */ jsx("label", { className: "block text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 mb-1", children: "الدقيقة" }),
+            /* @__PURE__ */ jsxs("select", { value: currentTime.minute !== "" ? Number(currentTime.minute) : "", onChange: (e) => handleTimeChange("minute", e.target.value), className: `${ws$1.input} px-3 py-2.5 text-center text-sm w-full`, style: {
+              appearance: "none",
+              WebkitAppearance: "none"
+            }, children: [
+              /* @__PURE__ */ jsx("option", { value: "", disabled: true, children: "--" }),
+              minuteOptions.map((m) => /* @__PURE__ */ jsx("option", { value: m, children: String(m).padStart(2, "0") }, m))
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: handleTimeDone, className: `${ws$1.btnPrimary} px-4 py-2.5 text-sm justify-center mt-4`, children: "تم" })
+        ] })
+      ] }) : null,
+      /* @__PURE__ */ jsx("div", { className: "pt-2 text-xs text-slate-500 dark:text-slate-500 dark:text-white/45", children: showTime ? "* اختر التاريخ والوقت" : "* اختيار تاريخ بنمط Workspace (بدون واجهة المتصفح البيضاء)" })
+    ] }) })
+  ] });
+}
+
+function moneyValue$b(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+function formatMoney$i(value, withCurrency = true) {
+  const n = moneyValue$b(value);
+  const text = n.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  return withCurrency ? `${text} SAR` : text;
+}
+function formatDate$4(value) {
+  if (!value) return "—";
+  return String(value).slice(0, 10);
+}
+const TONE_TEXT$2 = {
+  rose: "text-rose-700 dark:text-rose-200",
+  emerald: "text-[#0e7a5f] dark:text-emerald-200",
+  amber: "text-amber-700 dark:text-amber-200",
+  sky: "text-sky-700 dark:text-sky-200",
+  slate: "text-slate-700 dark:text-white/80"
+};
+const TONE_BAR = {
+  rose: "bg-rose-500 dark:bg-rose-400",
+  emerald: "bg-[#0e7a5f] dark:bg-emerald-400",
+  amber: "bg-amber-500 dark:bg-amber-300",
+  sky: "bg-sky-500 dark:bg-sky-400",
+  slate: "bg-slate-400 dark:bg-white/40"
+};
+function toneText(tone = "slate") {
+  return TONE_TEXT$2[tone] || TONE_TEXT$2.slate;
+}
+function SummaryCard$2({
+  label,
+  value,
+  icon: Icon,
+  tone = "slate",
+  suffix
+}) {
+  const toneClass = toneText(tone);
+  return /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-4`, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
+    /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50", children: label }),
+      /* @__PURE__ */ jsx("div", { className: `text-xl font-bold mt-1 tabular-nums ${toneClass}`, dir: "ltr", children: value }),
+      suffix ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1", children: suffix }) : null
+    ] }),
+    Icon ? /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 shrink-0 ${toneClass}`, children: /* @__PURE__ */ jsx(Icon, { className: "w-5 h-5" }) }) : null
+  ] }) });
+}
+function EmptyState$1({
+  icon: Icon,
+  title,
+  hint,
+  action
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center`, children: [
+    Icon ? /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mx-auto text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Icon, { className: "w-5 h-5" }) }) : null,
+    /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-3", children: title }),
+    hint ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-500 dark:text-white/50 mt-1", children: hint }) : null,
+    action ? /* @__PURE__ */ jsx("div", { className: "mt-4", children: action }) : null
+  ] });
+}
+const PROJECT_STATUS_CLASS = {
+  planning: "bg-sky-100 dark:bg-sky-400/15 text-sky-800 dark:text-sky-200 border-sky-200 dark:border-sky-400/25",
+  in_progress: "bg-amber-100 dark:bg-amber-400/15 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25",
+  on_hold: "bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/15",
+  opened: "bg-[#e7f2ee] dark:bg-emerald-400/15 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25",
+  cancelled: "bg-rose-100 dark:bg-rose-400/15 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-400/25"
+};
+function StatusPill$4({
+  status
+}) {
+  const cls = PROJECT_STATUS_CLASS[status] || PROJECT_STATUS_CLASS.on_hold;
+  return /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold whitespace-nowrap ${cls}`, children: PROJECT_STATUS_LABELS[status] || status });
+}
+const PHASE_STATUS_CLASS = {
+  not_started: PROJECT_STATUS_CLASS.on_hold,
+  in_progress: PROJECT_STATUS_CLASS.in_progress,
+  done: PROJECT_STATUS_CLASS.opened,
+  blocked: PROJECT_STATUS_CLASS.cancelled
+};
+function PhaseStatusPill({
+  status
+}) {
+  const cls = PHASE_STATUS_CLASS[status] || PHASE_STATUS_CLASS.not_started;
+  return /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold whitespace-nowrap ${cls}`, children: PHASE_STATUS_LABELS[status] || status });
+}
+const HEALTH_CLASS = {
+  done: PROJECT_STATUS_CLASS.opened,
+  on_track: PROJECT_STATUS_CLASS.opened,
+  at_risk: PROJECT_STATUS_CLASS.in_progress,
+  late: PROJECT_STATUS_CLASS.cancelled,
+  not_started: PROJECT_STATUS_CLASS.on_hold
+};
+function HealthPill({
+  health
+}) {
+  const cls = HEALTH_CLASS[health] || HEALTH_CLASS.not_started;
+  return /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold whitespace-nowrap ${cls}`, children: HEALTH_LABELS[health] || health });
+}
+function healthTone(health) {
+  if (health === "late") return "rose";
+  if (health === "at_risk") return "amber";
+  if (health === "done" || health === "on_track") return "emerald";
+  return "slate";
+}
+function ProgressBar({
+  pct,
+  tone = "emerald",
+  className = ""
+}) {
+  const width = Math.max(0, Math.min(100, Math.round(moneyValue$b(pct))));
+  return /* @__PURE__ */ jsx("div", { className: `h-2 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden ${className}`, children: /* @__PURE__ */ jsx("div", { className: `h-full transition-all ${TONE_BAR[tone] || TONE_BAR.slate}`, style: {
+    width: `${width}%`
+  } }) });
+}
+function ProgressRing({
+  pct,
+  size = 56,
+  tone = "emerald",
+  label
+}) {
+  const value = Math.max(0, Math.min(100, Math.round(moneyValue$b(pct))));
+  const stroke = 6;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const colors = {
+    emerald: "#0e7a5f",
+    amber: "#d97706",
+    rose: "#e11d48",
+    sky: "#0284c7",
+    slate: "#94a3b8"
+  };
+  return /* @__PURE__ */ jsxs("div", { className: "relative shrink-0", style: {
+    width: size,
+    height: size
+  }, title: `${value}%`, children: [
+    /* @__PURE__ */ jsxs("svg", { width: size, height: size, className: "-rotate-90", children: [
+      /* @__PURE__ */ jsx("circle", { cx: size / 2, cy: size / 2, r, stroke: "currentColor", strokeWidth: stroke, fill: "none", className: "text-slate-200 dark:text-white/10" }),
+      /* @__PURE__ */ jsx("circle", { cx: size / 2, cy: size / 2, r, stroke: colors[tone] || colors.emerald, strokeWidth: stroke, fill: "none", strokeLinecap: "round", strokeDasharray: c, strokeDashoffset: c - c * value / 100 })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "absolute inset-0 flex items-center justify-center text-[11px] font-bold tabular-nums text-slate-900 dark:text-white", dir: "ltr", children: label ?? `${value}%` })
+  ] });
+}
+function SectionCard({
+  title,
+  icon: Icon,
+  description,
+  action,
+  children,
+  className = ""
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden ${className}`, children: [
+    title ? /* @__PURE__ */ jsxs("div", { className: `px-4 py-3 border-b ${ws.divider} flex items-center gap-2 flex-wrap`, children: [
+      Icon ? /* @__PURE__ */ jsx(Icon, { className: "w-4 h-4 text-[#0e7a5f] dark:text-emerald-200 shrink-0" }) : null,
+      /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white", children: title }),
+      description ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: description }) : null,
+      /* @__PURE__ */ jsx("div", { className: "flex-1" }),
+      action
+    ] }) : null,
+    /* @__PURE__ */ jsx("div", { className: "p-4", children })
+  ] });
+}
+function ModalShell({
+  open,
+  title,
+  description,
+  onClose,
+  children,
+  footer,
+  width = "max-w-2xl"
+}) {
+  if (!open || typeof document === "undefined") return null;
+  return createPortal(/* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1000] flex items-end sm:items-center justify-center bg-black/40 p-0 sm:p-4", dir: "rtl", onClick: onClose, children: /* @__PURE__ */ jsxs("div", { className: `${ws.popover} ${ws.card} w-full ${width} max-h-[92svh] flex flex-col rounded-b-none sm:rounded-b-[10px]`, onClick: (event) => event.stopPropagation(), role: "dialog", "aria-modal": "true", children: [
+    /* @__PURE__ */ jsxs("div", { className: `px-5 py-4 border-b ${ws.divider} flex items-start gap-3`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+        /* @__PURE__ */ jsx("div", { className: "text-base font-bold text-slate-900 dark:text-white", children: title }),
+        description ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-0.5", children: description }) : null
+      ] }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: ws.iconButton, title: "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "px-5 py-4 overflow-y-auto flex-1 min-h-0", children }),
+    footer ? /* @__PURE__ */ jsx("div", { className: `px-5 py-3 border-t ${ws.divider} flex items-center justify-end gap-2 flex-wrap`, children: footer }) : null
+  ] }) }), document.body);
+}
+function FieldLabel$2({
+  children,
+  hint
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: "text-xs font-semibold text-slate-700 dark:text-white/70 mb-1 flex items-center gap-2", children: [
+    children,
+    hint ? /* @__PURE__ */ jsx("span", { className: "text-[10px] font-normal text-slate-400 dark:text-white/35", children: hint }) : null
+  ] });
+}
+
+const inputCls$4 = `${ws.input} px-3 py-2 text-sm`;
+function numberOrNull$2(raw) {
+  if (raw === null || raw === void 0 || String(raw).trim() === "") return null;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : null;
+}
+function buildInitial$3(project) {
+  return {
+    name: project?.name || "",
+    city: project?.city || "",
+    district: project?.district || "",
+    address: project?.address || "",
+    area_sqm: project?.area_sqm != null ? String(project.area_sqm) : "",
+    contract_signed_date: project?.contract_signed_date || "",
+    target_opening_date: project?.target_opening_date || "",
+    budget_total: project?.budget_total != null ? String(project.budget_total) : "",
+    manager_name: project?.manager_name || "",
+    lease_contract_number: project?.lease_contract_number || "",
+    notes: project?.notes || "",
+    template: "default"
+  };
+}
+function ProjectModal({
+  open,
+  project,
+  onClose
+}) {
+  const isEditing = !!project?.id;
+  const navigate = useNavigate();
+  const createMut = useCreateBranchProject();
+  const updateMut = useUpdateBranchProject();
+  const isPending = createMut.isPending || updateMut.isPending;
+  const [form, setForm] = useState(() => buildInitial$3(project));
+  const [errors, setErrors] = useState({});
+  useEffect(() => {
+    if (open) {
+      setForm(buildInitial$3(project));
+      setErrors({});
+    }
+  }, [open, project?.id]);
+  const templateNames = useMemo(() => Array.isArray(DEFAULT_PHASE_TEMPLATE) ? DEFAULT_PHASE_TEMPLATE.map((t) => t?.name).filter(Boolean) : [], []);
+  const set = (key) => (value) => setForm((prev) => ({
+    ...prev,
+    [key]: value
+  }));
+  const setInput = (key) => (event) => set(key)(event.target.value);
+  function validate() {
+    const next = {};
+    if (!form.name.trim()) next.name = "اسم المشروع مطلوب";
+    if (!form.city.trim()) next.city = "المدينة مطلوبة";
+    if (!form.contract_signed_date) next.contract_signed_date = "تاريخ توقيع العقد مطلوب";
+    if (!form.target_opening_date) next.target_opening_date = "موعد الافتتاح المستهدف مطلوب";
+    if (form.contract_signed_date && form.target_opening_date && form.target_opening_date < form.contract_signed_date) {
+      next.target_opening_date = "موعد الافتتاح يجب أن يكون بعد توقيع العقد";
+    }
+    const area = numberOrNull$2(form.area_sqm);
+    if (form.area_sqm !== "" && (area === null || area < 0)) next.area_sqm = "المساحة رقم غير صالح";
+    const budget = numberOrNull$2(form.budget_total);
+    if (form.budget_total !== "" && (budget === null || budget < 0)) next.budget_total = "الميزانية رقم غير صالح";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  }
+  function handleSubmit(event) {
+    event?.preventDefault?.();
+    if (isPending) return;
+    if (!validate()) return;
+    const fields = {
+      name: form.name.trim(),
+      city: form.city.trim(),
+      district: form.district.trim(),
+      address: form.address.trim(),
+      area_sqm: numberOrNull$2(form.area_sqm),
+      contract_signed_date: form.contract_signed_date,
+      target_opening_date: form.target_opening_date,
+      budget_total: numberOrNull$2(form.budget_total) ?? 0,
+      manager_name: form.manager_name.trim(),
+      lease_contract_id: project?.lease_contract_id ?? null,
+      lease_contract_number: form.lease_contract_number.trim(),
+      notes: form.notes
+    };
+    if (isEditing) {
+      updateMut.mutate({
+        id: project.id,
+        ...fields
+      }, {
+        onSuccess: () => onClose?.()
+      });
+      return;
+    }
+    createMut.mutate({
+      ...fields,
+      template: form.template
+    }, {
+      onSuccess: (created) => {
+        onClose?.();
+        if (created?.id != null) navigate(`/accounting/branch-projects/${created.id}`);
+      }
+    });
+  }
+  const errorText = (key) => errors[key] ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-600 dark:text-rose-300 mt-1", children: errors[key] }) : null;
+  return /* @__PURE__ */ jsx(ModalShell, { open, title: isEditing ? "تعديل بيانات المشروع" : "مشروع تأسيس جديد", description: isEditing ? project?.code : "الفرع يُنشأ لاحقاً من صفحة الفروع بعد الافتتاح", onClose, footer: /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2 text-sm`, children: "إلغاء" }),
+    /* @__PURE__ */ jsxs("button", { type: "submit", form: "branch-project-form", disabled: isPending, className: `${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`, children: [
+      isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+      isEditing ? "حفظ التعديلات" : "إنشاء المشروع"
+    ] })
+  ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-project-form", onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "الاسم *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.name, onChange: setInput("name"), className: inputCls$4, placeholder: "مثال: فرع الملقا" }),
+      errorText("name")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "المدينة *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.city, onChange: setInput("city"), className: inputCls$4, placeholder: "الرياض" }),
+      errorText("city")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "الحي" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.district, onChange: setInput("district"), className: inputCls$4, placeholder: "الحي" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "العنوان" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.address, onChange: setInput("address"), className: inputCls$4, placeholder: "الشارع / المجمع" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "المساحة (م²)" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.1", value: form.area_sqm, onChange: setInput("area_sqm"), className: inputCls$4, placeholder: "0", dir: "ltr" }),
+      errorText("area_sqm")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "SAR", children: "الميزانية الإجمالية" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.budget_total, onChange: setInput("budget_total"), className: inputCls$4, placeholder: "0.00", dir: "ltr" }),
+      errorText("budget_total")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "تاريخ توقيع العقد *" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.contract_signed_date, onChange: (v) => set("contract_signed_date")(v || ""), placeholder: "اختر التاريخ", allowClear: false }),
+      errorText("contract_signed_date")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "موعد الافتتاح المستهدف *" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.target_opening_date, onChange: (v) => set("target_opening_date")(v || ""), placeholder: "اختر التاريخ", allowClear: false }),
+      errorText("target_opening_date")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "مدير المشروع" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.manager_name, onChange: setInput("manager_name"), className: inputCls$4, placeholder: "اسم المدير" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "رقم عقد الإيجار" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.lease_contract_number, onChange: setInput("lease_contract_number"), className: inputCls$4, placeholder: "C-2026-01", dir: "ltr" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "ملاحظات" }),
+      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$4} resize-y`, placeholder: "ملاحظات اختيارية" })
+    ] }),
+    !isEditing ? /* @__PURE__ */ jsxs("div", { className: `sm:col-span-2 ${ws.innerCard} p-3`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
+        /* @__PURE__ */ jsx(LayoutTemplate, { className: "w-4 h-4 text-[#0e7a5f] dark:text-emerald-200" }),
+        /* @__PURE__ */ jsx(FieldLabel$2, { children: "قالب الأقسام" })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: `${ws.segWrap} flex-wrap`, children: [{
+        value: "default",
+        label: `افتراضي (${templateNames.length || 11} قسماً)`
+      }, {
+        value: "empty",
+        label: "فارغ"
+      }].map((opt) => /* @__PURE__ */ jsx("button", { type: "button", onClick: () => set("template")(opt.value), className: `${ws.segBtn} text-xs ${form.template === opt.value ? ws.segActive : ws.segInactive}`, children: opt.label }, opt.value)) }),
+      form.template === "default" && templateNames.length ? /* @__PURE__ */ jsx("div", { className: "mt-2 flex flex-wrap gap-1.5", children: templateNames.map((name, index) => /* @__PURE__ */ jsxs("span", { className: `${ws.chip} px-2 py-0.5 text-[11px]`, children: [
+        /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35 tabular-nums", dir: "ltr", children: index + 1 }),
+        name
+      ] }, name)) }) : form.template === "empty" ? /* @__PURE__ */ jsx("div", { className: "mt-2 text-[11px] text-slate-500 dark:text-white/45", children: "يُنشأ المشروع بلا أقسام وتضيفها يدوياً." }) : null,
+      /* @__PURE__ */ jsx("div", { className: "mt-2 text-[11px] text-slate-500 dark:text-white/45", children: "تُوزَّع مواعيد الأقسام بالتساوي بين توقيع العقد وموعد الافتتاح." })
+    ] }) : null
+  ] }) });
+}
+
+function daysWord$2(n) {
+  const abs = Math.abs(n);
+  if (abs === 1) return "يوم";
+  if (abs === 2) return "يومين";
+  if (abs <= 10) return "أيام";
+  return "يوماً";
+}
+function countdownText(project, today) {
+  if (project?.status === "opened") {
+    return {
+      text: `افتُتح في ${formatDate$4(project.actual_opening_date || project.target_opening_date)}`,
+      tone: "emerald"
+    };
+  }
+  if (project?.status === "cancelled") return {
+    text: "مشروع ملغى",
+    tone: "slate"
+  };
+  const days = daysToOpening(project, today);
+  if (!Number.isFinite(days)) return {
+    text: "بلا موعد افتتاح",
+    tone: "slate"
+  };
+  if (days === 0) return {
+    text: "الافتتاح اليوم",
+    tone: "amber"
+  };
+  if (days < 0) return {
+    text: `تجاوز الموعد بـ ${Math.abs(days)} ${daysWord$2(days)}`,
+    tone: "rose"
+  };
+  return {
+    text: `باقي ${days} ${daysWord$2(days)} للافتتاح`,
+    tone: days <= 14 ? "amber" : "slate"
+  };
+}
+const TONE_TEXT$1 = {
+  rose: "text-rose-700 dark:text-rose-200",
+  emerald: "text-[#0e7a5f] dark:text-emerald-200",
+  amber: "text-amber-700 dark:text-amber-200",
+  sky: "text-sky-700 dark:text-sky-200",
+  slate: "text-slate-600 dark:text-white/60"
+};
+function MiniStat({
+  label,
+  value,
+  tone = "slate"
+}) {
+  const toneClass = tone === "slate" ? "text-slate-900 dark:text-white" : TONE_TEXT$1[tone] || TONE_TEXT$1.slate;
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.innerCard} px-3 py-2`, children: [
+    /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/50", children: label }),
+    /* @__PURE__ */ jsx("div", { className: `text-sm font-bold tabular-nums mt-0.5 ${toneClass}`, dir: "ltr", children: value })
+  ] });
+}
+function ProjectHeader({
+  project,
+  onEdit,
+  onOpen
+}) {
+  const today = useMemo(() => todayRiyadh$8(), []);
+  const progress = projectProgress(project);
+  const health = projectHealth(project, today);
+  const budget = projectBudget(project);
+  const countdown = countdownText(project, today);
+  const place = [project.city, project.district].filter(Boolean).join(" · ");
+  const overBudget = budget.over > 0;
+  const budgetPct = budget.budget_total > 0 ? Math.round(budget.committed / budget.budget_total * 100) : 0;
+  const isOpened = project.status === "opened";
+  const canOpen = project.status !== "opened" && project.status !== "cancelled";
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "p-4 sm:p-5 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-start", children: [
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+          /* @__PURE__ */ jsx("h2", { className: "text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight", children: project.name }),
+          /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold text-slate-500 dark:text-white/45 tabular-nums", dir: "ltr", children: project.code }),
+          /* @__PURE__ */ jsx(StatusPill$4, { status: project.status }),
+          /* @__PURE__ */ jsx(HealthPill, { health })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-x-4 gap-y-1 flex-wrap mt-2 text-xs text-slate-600 dark:text-white/60", children: [
+          place ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+            /* @__PURE__ */ jsx(MapPin, { className: "w-3.5 h-3.5 shrink-0" }),
+            place
+          ] }) : null,
+          project.manager_name ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+            /* @__PURE__ */ jsx(UserRound, { className: "w-3.5 h-3.5 shrink-0" }),
+            project.manager_name
+          ] }) : null,
+          project.lease_contract_number ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+            /* @__PURE__ */ jsx(ScrollText, { className: "w-3.5 h-3.5 shrink-0" }),
+            "عقد إيجار",
+            /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: project.lease_contract_number })
+          ] }) : null,
+          /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+            /* @__PURE__ */ jsx(CalendarCheck, { className: "w-3.5 h-3.5 shrink-0" }),
+            "الافتتاح المستهدف ",
+            formatDate$4(project.target_opening_date)
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap mt-4", children: [
+          /* @__PURE__ */ jsxs("button", { type: "button", onClick: onEdit, className: `${ws.btnNeutral} px-3 py-2 text-sm`, children: [
+            /* @__PURE__ */ jsx(Pencil, { className: "w-4 h-4" }),
+            "تعديل"
+          ] }),
+          canOpen ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: onOpen, className: `${ws.btnPrimary} px-3 py-2 text-sm`, children: [
+            /* @__PURE__ */ jsx(PartyPopper, { className: "w-4 h-4" }),
+            "تأكيد الافتتاح"
+          ] }) : null,
+          isOpened ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold bg-[#e7f2ee] dark:bg-emerald-400/15 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25", children: [
+            /* @__PURE__ */ jsx(PartyPopper, { className: "w-3.5 h-3.5" }),
+            "افتُتح في",
+            /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: formatDate$4(project.actual_opening_date) })
+          ] }) : null
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 lg:flex-col lg:items-end lg:text-left", children: [
+        /* @__PURE__ */ jsx(ProgressRing, { pct: progress, size: 72, tone: healthTone(health) }),
+        /* @__PURE__ */ jsx("div", { className: `text-xs font-semibold ${TONE_TEXT$1[countdown.tone] || TONE_TEXT$1.slate}`, children: countdown.text })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `border-t ${ws.divider} px-4 sm:px-5 py-4`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 lg:grid-cols-4 gap-2", children: [
+        /* @__PURE__ */ jsx(MiniStat, { label: "الميزانية", value: formatMoney$i(budget.budget_total) }),
+        /* @__PURE__ */ jsx(MiniStat, { label: "الملتزم به", value: formatMoney$i(budget.committed), tone: overBudget ? "rose" : "amber" }),
+        /* @__PURE__ */ jsx(MiniStat, { label: "المسدد", value: formatMoney$i(budget.paid), tone: "emerald" }),
+        /* @__PURE__ */ jsx(MiniStat, { label: overBudget ? "التجاوز" : "المتبقي", value: formatMoney$i(overBudget ? budget.over : budget.remaining), tone: overBudget ? "rose" : "sky" })
+      ] }),
+      /* @__PURE__ */ jsx(ProgressBar, { pct: budgetPct, tone: overBudget ? "rose" : "emerald", className: "mt-3" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1 tabular-nums", children: [
+        "الملتزم به ",
+        budgetPct,
+        "% من الميزانية",
+        budget.unallocated > 0 ? ` · غير موزّع على الأقسام ${formatMoney$i(budget.unallocated, false)}` : ""
+      ] })
+    ] })
+  ] });
+}
+
+const STATUS_FILTERS = [{
+  key: "all",
+  label: "الكل"
+}, {
+  key: "planning",
+  label: "تخطيط"
+}, {
+  key: "in_progress",
+  label: "قيد التنفيذ"
+}, {
+  key: "on_hold",
+  label: "متوقف"
+}, {
+  key: "opened",
+  label: "افتُتح"
+}, {
+  key: "cancelled",
+  label: "ملغى"
+}];
+const TONE_TEXT = {
+  rose: "text-rose-700 dark:text-rose-200",
+  emerald: "text-[#0e7a5f] dark:text-emerald-200",
+  amber: "text-amber-700 dark:text-amber-200",
+  slate: "text-slate-600 dark:text-white/60"
+};
+function ProjectCard({
+  project,
+  today
+}) {
+  const progress = projectProgress(project);
+  const health = projectHealth(project, today);
+  const budget = projectBudget(project);
+  const countdown = countdownText(project, today);
+  const latePhases = (project.phases || []).filter((phase) => phaseHealth(phase, phaseTasks(project, phase.id), today) === "late").length;
+  const overBudget = budget.over > 0;
+  const budgetPct = budget.budget_total > 0 ? Math.round(budget.committed / budget.budget_total * 100) : 0;
+  const place = [project.city, project.district].filter(Boolean).join(" · ");
+  return /* @__PURE__ */ jsxs(Link, { to: `/accounting/branch-projects/${project.id}`, className: `${ws.glass} ${ws.card} p-4 flex flex-col gap-3 transition-colors hover:border-[#c9d3ce] dark:hover:border-white/20`, children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3", children: [
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+          /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white truncate", children: project.name }),
+          /* @__PURE__ */ jsx("span", { className: "text-[11px] font-semibold text-slate-500 dark:text-white/45 tabular-nums", dir: "ltr", children: project.code })
+        ] }),
+        place ? /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/50 mt-1 flex items-center gap-1", children: [
+          /* @__PURE__ */ jsx(MapPin, { className: "w-3.5 h-3.5 shrink-0" }),
+          /* @__PURE__ */ jsx("span", { className: "truncate", children: place })
+        ] }) : null,
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 flex-wrap mt-2", children: [
+          /* @__PURE__ */ jsx(StatusPill$4, { status: project.status }),
+          /* @__PURE__ */ jsx(HealthPill, { health })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx(ProgressRing, { pct: progress, size: 56, tone: healthTone(health) })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `text-xs font-semibold flex items-center gap-1.5 ${TONE_TEXT[countdown.tone] || TONE_TEXT.slate}`, children: [
+      project.status === "opened" ? /* @__PURE__ */ jsx(PartyPopper, { className: "w-3.5 h-3.5 shrink-0" }) : /* @__PURE__ */ jsx(CalendarCheck, { className: "w-3.5 h-3.5 shrink-0" }),
+      /* @__PURE__ */ jsx("span", { children: countdown.text })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 text-[11px] text-slate-500 dark:text-white/50", children: [
+        /* @__PURE__ */ jsx("span", { children: "الملتزم به / الميزانية" }),
+        /* @__PURE__ */ jsxs("span", { className: `tabular-nums font-semibold ${overBudget ? TONE_TEXT.rose : "text-slate-700 dark:text-white/80"}`, dir: "ltr", children: [
+          formatMoney$i(budget.committed, false),
+          " / ",
+          formatMoney$i(budget.budget_total, false)
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx(ProgressBar, { pct: budgetPct, tone: overBudget ? "rose" : "emerald", className: "mt-1.5" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 text-[11px]", children: [
+      /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/45", children: [
+        (project.phases || []).length,
+        " قسم"
+      ] }),
+      latePhases > 0 ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 font-semibold text-rose-700 dark:text-rose-200", children: [
+        /* @__PURE__ */ jsx(AlertTriangle, { className: "w-3.5 h-3.5" }),
+        latePhases,
+        " ",
+        latePhases === 1 ? "قسم متأخر" : "أقسام متأخرة"
+      ] }) : /* @__PURE__ */ jsx("span", { className: "text-[#0e7a5f] dark:text-emerald-200 font-semibold", children: "لا أقسام متأخرة" })
+    ] })
+  ] });
+}
+function ProjectsListPanel({
+  employeeId,
+  isAdmin
+}) {
+  const [status, setStatus] = useState("all");
+  const [q, setQ] = useState("");
+  const [showCreate, setShowCreate] = useState(false);
+  const today = useMemo(() => todayRiyadh$8(), []);
+  const projectsQuery = useBranchProjects({
+    employeeId,
+    isAdmin
+  });
+  const projects = projectsQuery.data || [];
+  const summary = useMemo(() => summarizeProjects(projects, today), [projects, today]);
+  const filtered = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    return projects.filter((project) => {
+      if (status !== "all" && project.status !== status) return false;
+      if (!needle) return true;
+      return [project.name, project.code, project.city, project.district, project.manager_name].filter(Boolean).some((value) => String(value).toLowerCase().includes(needle));
+    });
+  }, [projects, status, q]);
+  const counts = useMemo(() => {
+    const map = {
+      all: projects.length
+    };
+    for (const project of projects) {
+      map[project.status] = (map[project.status] || 0) + 1;
+    }
+    return map;
+  }, [projects]);
+  const nearest = summary.nearest_opening;
+  const nearestValue = nearest ? nearest.days < 0 ? `تجاوز بـ ${Math.abs(nearest.days)} ${daysWord$2(nearest.days)}` : nearest.days === 0 ? "اليوم" : `${nearest.days} ${daysWord$2(nearest.days)}` : "—";
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} px-4 py-2.5 flex items-center gap-2 text-xs text-slate-600 dark:text-white/60`, children: [
+      /* @__PURE__ */ jsx(Info, { className: "w-4 h-4 shrink-0 text-sky-700 dark:text-sky-200" }),
+      /* @__PURE__ */ jsx("span", { children: "وضع تجريبي: البيانات محفوظة في هذا المتصفح فقط حتى ربط الخلفية" })
+    ] }) ,
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3", children: [
+      /* @__PURE__ */ jsx(SummaryCard$2, { label: "مشاريع نشطة", value: summary.active_count, icon: Building2, tone: "emerald" }),
+      /* @__PURE__ */ jsx(SummaryCard$2, { label: "إجمالي الميزانيات", value: formatMoney$i(summary.budget_total), icon: Wallet, tone: "sky" }),
+      /* @__PURE__ */ jsx(SummaryCard$2, { label: "الملتزم به (الفواتير)", value: formatMoney$i(summary.committed_total), icon: Receipt, tone: summary.committed_total > summary.budget_total ? "rose" : "amber", suffix: `المسدد ${formatMoney$i(summary.paid_total, false)}` }),
+      /* @__PURE__ */ jsx(SummaryCard$2, { label: "أقرب افتتاح", value: nearestValue, icon: CalendarCheck, tone: nearest && nearest.days < 0 ? "rose" : "emerald", suffix: nearest ? nearest.name : "لا مشاريع قادمة" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { className: "relative flex-1 min-w-[220px]", children: [
+          /* @__PURE__ */ jsx(Search, { className: "w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/40 pointer-events-none" }),
+          /* @__PURE__ */ jsx("input", { type: "text", value: q, onChange: (e) => setQ(e.target.value), placeholder: "ابحث بالاسم أو الكود أو المدينة", className: `${ws.input} px-3 py-2 pr-9` })
+        ] }),
+        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowCreate(true), className: `${ws.btnPrimary} px-4 py-2`, children: [
+          /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+          "مشروع جديد"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex items-center gap-1.5 flex-wrap mt-3", children: STATUS_FILTERS.map((filter) => {
+        const isActive = filter.key === status;
+        const count = counts[filter.key] || 0;
+        return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setStatus(filter.key), className: `rounded-full border px-3 py-1 text-xs font-bold transition-colors ${isActive ? "bg-[#0b3d31] text-white border-[#0b3d31] dark:bg-white/10 dark:text-white dark:border-white/20" : "bg-white text-[#4a5568] border-[#e2e7e4] hover:bg-[#f6f8f7] dark:bg-white/[0.04] dark:text-white/70 dark:border-white/10 dark:hover:bg-white/[0.07]"}`, children: [
+          filter.label,
+          /* @__PURE__ */ jsx("span", { className: "tabular-nums opacity-70 mr-1", dir: "ltr", children: count })
+        ] }, filter.key);
+      }) })
+    ] }),
+    projectsQuery.isLoading ? /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center text-slate-500 dark:text-white/50`, children: [
+      /* @__PURE__ */ jsx(Loader2, { className: "w-5 h-5 animate-spin mx-auto" }),
+      /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm", children: "جاري تحميل المشاريع…" })
+    ] }) : projectsQuery.isError ? /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-center text-rose-700 dark:text-rose-300 text-sm`, children: projectsQuery.error?.message || "فشل تحميل المشاريع" }) : filtered.length === 0 ? /* @__PURE__ */ jsx(EmptyState$1, { icon: Building2, title: projects.length === 0 ? "لا مشاريع بعد" : "لا نتائج مطابقة", hint: projects.length === 0 ? "ابدأ بإنشاء مشروع لمتابعة تأسيس فرع جديد من العقد حتى الافتتاح." : "جرّب تغيير الفلتر أو كلمة البحث.", action: projects.length === 0 ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowCreate(true), className: `${ws.btnPrimary} px-4 py-2`, children: [
+      /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+      "مشروع جديد"
+    ] }) : null }) : /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4", children: filtered.map((project) => /* @__PURE__ */ jsx(ProjectCard, { project, today }, project.id)) }),
+    /* @__PURE__ */ jsx(ProjectModal, { open: showCreate, project: null, onClose: () => setShowCreate(false) })
+  ] });
+}
+
+const PAGE_TITLE$2 = "تأسيس الفروع";
+const PAGE_DESCRIPTION = "متابعة إنشاء الفروع الجديدة من توقيع العقد حتى الافتتاح: الأقسام، الخط الزمني، والتكاليف";
+function MobileHeader$3() {
+  return /* @__PURE__ */ jsxs("div", { className: `lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`, children: [
+    /* @__PURE__ */ jsx("div", { className: "w-9 h-9 rounded-2xl bg-slate-200 dark:bg-white/10 border border-slate-200 dark:border-white/10 flex items-center justify-center", children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5 text-[#0e7a5f] dark:text-emerald-200" }) }),
+    /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+      /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight", children: PAGE_TITLE$2 }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 truncate", children: "قائمة المشاريع" })
+    ] })
+  ] });
+}
+function DesktopHeader$3() {
+  return /* @__PURE__ */ jsxs("div", { className: "hidden lg:flex items-center gap-4", children: [
+    /* @__PURE__ */ jsx("div", { className: ws.iconBox, children: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6 text-[#0e7a5f] dark:text-emerald-200" }) }),
+    /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0", children: [
+      /* @__PURE__ */ jsx("h1", { className: "text-xl font-bold text-slate-900 dark:text-white tracking-tight", children: PAGE_TITLE$2 }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-sm mt-0.5", children: PAGE_DESCRIPTION })
+    ] })
+  ] });
+}
+function BranchProjectsPage() {
+  const {
+    ready,
+    employeeId,
+    user
+  } = useWorkspaceUser();
+  const isAdmin = user?.role === "Admin";
+  const canManageAccounting = user?.can_manage_accounting !== false;
+  let body = null;
+  if (!ready) {
+    body = /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60`, children: "جاري التحميل…" });
+  } else if (!employeeId) {
+    body = /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`, children: "الرجاء تسجيل الدخول." });
+  } else if (!isAdmin || !canManageAccounting) {
+    body = /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`, children: "هذا القسم متاح فقط لمستخدمي المحاسبة." });
+  } else {
+    body = /* @__PURE__ */ jsx(ProjectsListPanel, { employeeId, isAdmin });
+  }
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh] pb-24 lg:pb-0 bg-[#f6f8f7] text-[#1a2332] dark:bg-transparent dark:text-white", dir: "rtl", children: [
+    /* @__PURE__ */ jsx(AccountingSidebar, { active: "branch-projects" }),
+    /* @__PURE__ */ jsx(MobileHeader$3, {}),
+    /* @__PURE__ */ jsx("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto w-full space-y-5", children: [
+      /* @__PURE__ */ jsx(DesktopHeader$3, {}),
+      body
+    ] }) })
+  ] });
+}
+
+const page$N = UNSAFE_withComponentProps(function WrappedPage(props) {
+  return /* @__PURE__ */jsx(RootLayout, {
+    children: /* @__PURE__ */jsx(AccountingLayout, {
+      children: /* @__PURE__ */jsx(BranchProjectsPage, {
+        ...props
+      })
+    })
+  });
+});
+
+const route3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: page$N
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const DEFAULT_COLOR = "#0e7a5f";
+function normalizeHex(color) {
+  const raw = String(color || "").trim();
+  if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(raw)) return DEFAULT_COLOR;
+  if (raw.length === 4) {
+    return `#${raw[1]}${raw[1]}${raw[2]}${raw[2]}${raw[3]}${raw[3]}`;
+  }
+  return raw;
+}
+function withAlpha(color, alpha) {
+  const hex = normalizeHex(color);
+  const a = Math.round(Math.max(0, Math.min(1, alpha)) * 255).toString(16).padStart(2, "0");
+  return `${hex}${a}`;
+}
+function clampPct(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return 0;
+  return Math.max(0, Math.min(100, n));
+}
+function clampBar(pos) {
+  const left = clampPct(pos?.left_pct);
+  const width = Math.max(0, Math.min(100 - left, Number(pos?.width_pct) || 0));
+  return {
+    left,
+    width
+  };
+}
+function milestoneClass(task, today) {
+  if (task.status === "done") return "bg-[#0e7a5f] dark:bg-emerald-300 border-white dark:border-[#132044]";
+  if (task.due_date && task.due_date < today) return "bg-rose-500 dark:bg-rose-300 border-white dark:border-[#132044]";
+  return "bg-amber-500 dark:bg-amber-300 border-white dark:border-[#132044]";
+}
+function LegendItem({
+  swatch,
+  label
+}) {
+  return /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 text-[11px] text-slate-600 dark:text-white/60", children: [
+    swatch,
+    label
+  ] });
+}
+function ProjectTimeline({
+  project,
+  onSelectPhase,
+  selectedPhaseId = null
+}) {
+  const today = useMemo(() => todayRiyadh$8(), []);
+  const range = useMemo(() => timelineRange(project, today), [project, today]);
+  const phases = useMemo(() => [...project?.phases || []].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)), [project]);
+  const rows = useMemo(() => phases.map((phase) => {
+    const tasks = phaseTasks(project, phase.id);
+    const progress = phaseProgress(phase, tasks);
+    const health = phaseHealth(phase, tasks, today);
+    const planned = phase.planned_start && phase.planned_end ? clampBar(barPosition(phase.planned_start, phase.planned_end, range.start, range.end)) : null;
+    let actual = null;
+    if (phase.actual_start) {
+      const end = phase.actual_end || (phase.status === "done" ? phase.actual_start : today);
+      const safeEnd = end < phase.actual_start ? phase.actual_start : end;
+      actual = clampBar(barPosition(phase.actual_start, safeEnd, range.start, range.end));
+    }
+    const milestones = tasks.filter((task) => task.is_milestone && task.due_date).map((task) => ({
+      task,
+      pct: clampPct(barPosition(task.due_date, task.due_date, range.start, range.end).left_pct)
+    }));
+    return {
+      phase,
+      tasks,
+      progress,
+      health,
+      planned,
+      actual,
+      milestones,
+      color: normalizeHex(phase.color)
+    };
+  }), [phases, project, range, today]);
+  const todayPct = range.today_pct == null ? null : clampPct(range.today_pct);
+  if (phases.length === 0) {
+    return /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-center text-sm text-slate-500 dark:text-white/50`, children: "لا أقسام بعد — أضف أقساماً من تبويب «الأقسام» ليظهر الخط الزمني." });
+  }
+  const handleSelect = (phaseId) => {
+    if (typeof onSelectPhase === "function") onSelectPhase(phaseId);
+  };
+  return /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} overflow-hidden`, children: [
+    /* @__PURE__ */ jsxs("div", { className: `px-4 py-3 border-b ${ws.divider} flex items-center gap-2 flex-wrap`, children: [
+      /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white", children: "الخط الزمني" }),
+      /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 tabular-nums", dir: "ltr", children: [
+        formatDate$4(range.start),
+        " → ",
+        formatDate$4(range.end)
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "hidden md:block p-4 overflow-x-auto", children: /* @__PURE__ */ jsxs("div", { className: "flex min-w-[640px]", children: [
+      /* @__PURE__ */ jsxs("div", { className: "w-48 shrink-0 border-l border-[#e2e7e4] dark:border-white/10", children: [
+        /* @__PURE__ */ jsx("div", { className: "h-9" }),
+        rows.map(({
+          phase,
+          health
+        }) => {
+          const isSelected = selectedPhaseId != null && String(selectedPhaseId) === String(phase.id);
+          return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleSelect(phase.id), className: `h-12 w-full flex items-center justify-between gap-2 pl-3 pr-1 text-right transition-colors ${isSelected ? "bg-[#e7f2ee] dark:bg-emerald-400/10" : "hover:bg-[#f6f8f7] dark:hover:bg-white/[0.04]"}`, title: phase.name, children: [
+            /* @__PURE__ */ jsx("span", { className: "text-xs font-semibold text-slate-800 dark:text-white/85 truncate", children: phase.name }),
+            /* @__PURE__ */ jsx("span", { className: "scale-90 origin-left shrink-0", children: /* @__PURE__ */ jsx(HealthPill, { health }) })
+          ] }, phase.id);
+        })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex-1 relative min-w-0", children: [
+        /* @__PURE__ */ jsx("div", { className: "h-9 relative border-b border-[#e2e7e4] dark:border-white/10", children: range.months.map((month) => /* @__PURE__ */ jsx("div", { className: "absolute top-0 bottom-0 border-r border-[#e2e7e4] dark:border-white/10 text-[11px] font-semibold text-slate-600 dark:text-white/60 flex items-center justify-center overflow-hidden whitespace-nowrap", style: {
+          right: `${clampPct(month.left_pct)}%`,
+          width: `${clampPct(month.width_pct)}%`
+        }, title: month.label, children: /* @__PURE__ */ jsx("span", { className: "px-1 truncate", children: month.label }) }, month.key)) }),
+        rows.map(({
+          phase,
+          progress,
+          planned,
+          actual,
+          milestones,
+          color
+        }) => {
+          const isSelected = selectedPhaseId != null && String(selectedPhaseId) === String(phase.id);
+          return /* @__PURE__ */ jsxs("div", { role: "button", tabIndex: 0, onClick: () => handleSelect(phase.id), onKeyDown: (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              handleSelect(phase.id);
+            }
+          }, className: `h-12 relative border-b border-[#e2e7e4]/70 dark:border-white/[0.06] cursor-pointer transition-colors ${isSelected ? "bg-[#e7f2ee]/60 dark:bg-emerald-400/5" : "hover:bg-[#f6f8f7] dark:hover:bg-white/[0.03]"}`, children: [
+            range.months.map((month) => /* @__PURE__ */ jsx("div", { className: "absolute top-0 bottom-0 border-r border-[#e2e7e4]/60 dark:border-white/[0.05] pointer-events-none", style: {
+              right: `${clampPct(month.left_pct)}%`,
+              width: `${clampPct(month.width_pct)}%`
+            } }, month.key)),
+            planned ? /* @__PURE__ */ jsx("div", { className: "absolute top-2 h-5 rounded-md flex items-center justify-center overflow-hidden", style: {
+              right: `${planned.left}%`,
+              width: `${planned.width}%`,
+              backgroundColor: withAlpha(color, 0.3),
+              border: `1px solid ${withAlpha(color, 0.45)}`
+            }, title: `مخطط: ${formatDate$4(phase.planned_start)} → ${formatDate$4(phase.planned_end)} · التقدم ${progress}%`, children: planned.width >= 6 ? /* @__PURE__ */ jsxs("span", { className: "text-[10px] font-bold tabular-nums text-slate-800 dark:text-white/90", dir: "ltr", children: [
+              progress,
+              "%"
+            ] }) : null }) : null,
+            actual ? /* @__PURE__ */ jsx("div", { className: "absolute top-8 h-1.5 rounded-full", style: {
+              right: `${actual.left}%`,
+              width: `${Math.max(actual.width, 0.6)}%`,
+              backgroundColor: color
+            }, title: `فعلي: ${formatDate$4(phase.actual_start)} → ${phase.actual_end ? formatDate$4(phase.actual_end) : "مستمر"}` }) : null,
+            milestones.map(({
+              task,
+              pct
+            }) => /* @__PURE__ */ jsx("div", { className: `absolute top-[13px] w-2.5 h-2.5 border ${milestoneClass(task, today)} shadow-sm`, style: {
+              right: `${pct}%`,
+              transform: "translateX(50%) rotate(45deg)"
+            }, title: `${task.title} — ${formatDate$4(task.due_date)}` }, task.id))
+          ] }, phase.id);
+        }),
+        todayPct != null ? /* @__PURE__ */ jsx("div", { className: "absolute top-0 bottom-0 w-px bg-rose-500 dark:bg-rose-300 pointer-events-none z-10", style: {
+          right: `${todayPct}%`
+        }, title: `اليوم ${formatDate$4(today)}`, children: /* @__PURE__ */ jsx("span", { className: "absolute top-0 right-1 text-[10px] font-bold text-rose-600 dark:text-rose-200 whitespace-nowrap", children: "اليوم" }) }) : null
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsx("div", { className: "md:hidden p-4 space-y-2", children: rows.map(({
+      phase,
+      progress,
+      health,
+      color
+    }) => {
+      const isSelected = selectedPhaseId != null && String(selectedPhaseId) === String(phase.id);
+      return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleSelect(phase.id), className: `${ws.innerCard} w-full text-right p-3 ${isSelected ? "ring-2 ring-[#0e7a5f]/30 dark:ring-emerald-400/30" : ""}`, children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsx("span", { className: "w-2.5 h-2.5 rounded-full shrink-0", style: {
+            backgroundColor: color
+          } }),
+          /* @__PURE__ */ jsx("span", { className: "text-sm font-semibold text-slate-900 dark:text-white truncate flex-1", children: phase.name }),
+          /* @__PURE__ */ jsx(HealthPill, { health })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/50 mt-1 tabular-nums", dir: "ltr", children: [
+          formatDate$4(phase.planned_start),
+          " → ",
+          formatDate$4(phase.planned_end),
+          phase.actual_start ? ` · فعلي ${formatDate$4(phase.actual_start)}` : ""
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mt-2", children: [
+          /* @__PURE__ */ jsx(ProgressBar, { pct: progress, tone: healthTone(health), className: "flex-1" }),
+          /* @__PURE__ */ jsxs("span", { className: "text-[11px] font-bold tabular-nums text-slate-700 dark:text-white/80", dir: "ltr", children: [
+            progress,
+            "%"
+          ] })
+        ] })
+      ] }, phase.id);
+    }) }),
+    /* @__PURE__ */ jsxs("div", { className: `px-4 py-2.5 border-t ${ws.divider} flex items-center gap-4 flex-wrap`, children: [
+      /* @__PURE__ */ jsx(LegendItem, { swatch: /* @__PURE__ */ jsx("span", { className: "w-6 h-2.5 rounded-sm bg-[#0e7a5f]/30 border border-[#0e7a5f]/40" }), label: "مخطط" }),
+      /* @__PURE__ */ jsx(LegendItem, { swatch: /* @__PURE__ */ jsx("span", { className: "w-6 h-1.5 rounded-full bg-[#0e7a5f]" }), label: "فعلي" }),
+      /* @__PURE__ */ jsx(LegendItem, { swatch: /* @__PURE__ */ jsx("span", { className: "w-px h-3.5 bg-rose-500 dark:bg-rose-300" }), label: "اليوم" }),
+      /* @__PURE__ */ jsx(LegendItem, { swatch: /* @__PURE__ */ jsx("span", { className: "w-2 h-2 rotate-45 bg-amber-500 dark:bg-amber-300" }), label: "معلم" }),
+      /* @__PURE__ */ jsx(LegendItem, { swatch: /* @__PURE__ */ jsx(Flag, { className: "w-3 h-3 text-[#0e7a5f] dark:text-emerald-200" }), label: "معلم مكتمل بالأخضر، متأخر بالأحمر" })
+    ] })
+  ] });
+}
+
+const ALERT_TONE = {
+  rose: {
+    icon: "text-rose-700 dark:text-rose-200",
+    box: "bg-rose-50 dark:bg-rose-400/10 border-rose-200 dark:border-rose-400/25"
+  },
+  amber: {
+    icon: "text-amber-700 dark:text-amber-200",
+    box: "bg-amber-50 dark:bg-amber-400/10 border-amber-200 dark:border-amber-400/25"
+  },
+  sky: {
+    icon: "text-sky-700 dark:text-sky-200",
+    box: "bg-sky-50 dark:bg-sky-400/10 border-sky-200 dark:border-sky-400/25"
+  },
+  emerald: {
+    icon: "text-[#0e7a5f] dark:text-emerald-200",
+    box: "bg-[#e7f2ee] dark:bg-emerald-400/10 border-[#c9e2d8] dark:border-emerald-400/25"
+  }
+};
+function daysWord$1(n) {
+  const abs = Math.abs(n);
+  if (abs === 1) return "يوم";
+  if (abs === 2) return "يومين";
+  if (abs <= 10) return "أيام";
+  return "يوماً";
+}
+function truncate(text, max = 140) {
+  const value = String(text || "").trim();
+  if (value.length <= max) return value;
+  return `${value.slice(0, max).trimEnd()}…`;
+}
+function AlertLine({
+  icon: Icon,
+  tone = "amber",
+  title,
+  detail,
+  phaseId,
+  phaseName,
+  onSelectPhase
+}) {
+  const t = ALERT_TONE[tone] || ALERT_TONE.amber;
+  return /* @__PURE__ */ jsxs("div", { className: `rounded-[10px] border px-3 py-2 flex items-start gap-2 ${t.box}`, children: [
+    /* @__PURE__ */ jsx(Icon, { className: `w-4 h-4 shrink-0 mt-0.5 ${t.icon}` }),
+    /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-900 dark:text-white", children: title }),
+      detail ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/60 mt-0.5", children: detail }) : null
+    ] }),
+    phaseId != null ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onSelectPhase?.(phaseId), className: "text-[11px] font-bold text-[#0e7a5f] dark:text-emerald-200 hover:underline whitespace-nowrap shrink-0", title: phaseName ? `فتح قسم «${phaseName}»` : "فتح القسم", children: "عرض القسم" }) : null
+  ] });
+}
+function formatTimestampDay$1(value) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
+  return formatRiyadhDateForInput(d);
+}
+function OverviewTab({
+  project,
+  onSelectPhase,
+  selectedPhaseId = null
+}) {
+  const today = useMemo(() => todayRiyadh$8(), []);
+  const phases = project?.phases || [];
+  const tasks = project?.tasks || [];
+  const invoices = project?.invoices || [];
+  const phaseById = useMemo(() => new Map(phases.map((phase) => [phase.id, phase])), [phases]);
+  const latePhases = useMemo(() => phases.filter((phase) => phaseHealth(phase, phaseTasks(project, phase.id), today) === "late"), [phases, project, today]);
+  const overBudgetPhases = useMemo(() => phases.map((phase) => ({
+    phase,
+    budget: phaseBudget(phase, invoices)
+  })).filter(({
+    budget
+  }) => budget.over > 0), [phases, invoices]);
+  const weekLimit = useMemo(() => addDays$2(today, 7), [today]);
+  const dueSoon = useMemo(() => tasks.filter((task) => task.status !== "done" && task.due_date && task.due_date >= today && task.due_date <= weekLimit).sort((a, b) => String(a.due_date).localeCompare(String(b.due_date))), [tasks, today, weekLimit]);
+  const upcomingMilestones = useMemo(() => tasks.filter((task) => task.is_milestone && task.status !== "done" && task.due_date && task.due_date >= today).sort((a, b) => String(a.due_date).localeCompare(String(b.due_date))).slice(0, 3), [tasks, today]);
+  const latestUpdates = useMemo(() => [...project?.updates || []].sort((a, b) => String(b.created_at || "").localeCompare(String(a.created_at || ""))).slice(0, 5), [project]);
+  const extraMilestones = useMemo(() => upcomingMilestones.filter((task) => !dueSoon.some((due) => due.id === task.id)), [upcomingMilestones, dueSoon]);
+  const alertCount = latePhases.length + overBudgetPhases.length + dueSoon.length + extraMilestones.length;
+  return /* @__PURE__ */ jsxs("div", { className: "space-y-5", children: [
+    /* @__PURE__ */ jsx(ProjectTimeline, { project, onSelectPhase, selectedPhaseId }),
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-4", children: [
+      /* @__PURE__ */ jsx(SectionCard, { title: "تنبيهات", icon: Bell, description: alertCount > 0 ? `${alertCount} ${alertCount === 1 ? "تنبيه" : "تنبيهات"}` : "لا تنبيهات", children: alertCount === 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm text-[#0e7a5f] dark:text-emerald-200", children: [
+        /* @__PURE__ */ jsx(CheckCircle2, { className: "w-4 h-4" }),
+        "كل شيء في المسار — لا أقسام متأخرة ولا تجاوز في الميزانية."
+      ] }) : /* @__PURE__ */ jsxs("div", { className: "space-y-2", children: [
+        latePhases.map((phase) => {
+          const overdue = daysBetween(phase.planned_end, today);
+          return /* @__PURE__ */ jsx(AlertLine, { icon: AlertTriangle, tone: "rose", title: `القسم «${phase.name}» متأخر`, detail: `كان مقرراً أن ينتهي في ${formatDate$4(phase.planned_end)}${Number.isFinite(overdue) && overdue > 0 ? ` — تجاوز بـ ${overdue} ${daysWord$1(overdue)}` : ""}`, phaseId: phase.id, phaseName: phase.name, onSelectPhase }, `late-${phase.id}`);
+        }),
+        overBudgetPhases.map(({
+          phase,
+          budget
+        }) => /* @__PURE__ */ jsx(AlertLine, { icon: Wallet, tone: "rose", title: `تجاوز ميزانية «${phase.name}»`, detail: `الملتزم به ${formatMoney$i(budget.committed, false)} مقابل ميزانية ${formatMoney$i(budget.budget, false)} — تجاوز ${formatMoney$i(budget.over)}`, phaseId: phase.id, phaseName: phase.name, onSelectPhase }, `over-${phase.id}`)),
+        dueSoon.map((task) => {
+          const phase = phaseById.get(task.phase_id);
+          const left = daysBetween(today, task.due_date);
+          return /* @__PURE__ */ jsx(AlertLine, { icon: task.is_milestone ? Flag : Clock, tone: "amber", title: task.title, detail: `${task.is_milestone ? "معلم" : "مهمة"} مستحق${task.is_milestone ? "" : "ة"} في ${formatDate$4(task.due_date)}${Number.isFinite(left) ? left === 0 ? " (اليوم)" : ` (باقي ${left} ${daysWord$1(left)})` : ""}${phase ? ` · ${phase.name}` : ""}${task.assignee_name ? ` · ${task.assignee_name}` : ""}`, phaseId: task.phase_id, phaseName: phase?.name, onSelectPhase }, `due-${task.id}`);
+        }),
+        extraMilestones.map((task) => {
+          const phase = phaseById.get(task.phase_id);
+          const left = daysBetween(today, task.due_date);
+          return /* @__PURE__ */ jsx(AlertLine, { icon: Flag, tone: "sky", title: `معلم قادم: ${task.title}`, detail: `${formatDate$4(task.due_date)}${Number.isFinite(left) && left > 0 ? ` (باقي ${left} ${daysWord$1(left)})` : ""}${phase ? ` · ${phase.name}` : ""}`, phaseId: task.phase_id, phaseName: phase?.name, onSelectPhase }, `ms-${task.id}`);
+        })
+      ] }) }),
+      /* @__PURE__ */ jsx(SectionCard, { title: "آخر التطورات", icon: MessageSquareText, description: "أحدث 5 تطورات", children: latestUpdates.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-500 dark:text-white/50", children: "لا تطورات مسجلة بعد." }) : /* @__PURE__ */ jsx("div", { className: "space-y-2", children: latestUpdates.map((update) => {
+        const phase = update.phase_id != null ? phaseById.get(update.phase_id) : null;
+        const photoCount = Array.isArray(update.photos) ? update.photos.length : 0;
+        return /* @__PURE__ */ jsxs("div", { className: `${ws.innerCard} px-3 py-2`, children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] text-slate-500 dark:text-white/50", children: [
+            /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: formatTimestampDay$1(update.created_at) }),
+            phase ? /* @__PURE__ */ jsx("span", { className: "rounded-full border border-[#e2e7e4] dark:border-white/10 px-2 py-0.5 font-semibold text-slate-700 dark:text-white/75", children: phase.name }) : null,
+            update.created_by_name ? /* @__PURE__ */ jsx("span", { children: update.created_by_name }) : null,
+            photoCount > 0 ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 mr-auto", children: [
+              /* @__PURE__ */ jsx(Camera, { className: "w-3.5 h-3.5" }),
+              /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: photoCount })
+            ] }) : null
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-800 dark:text-white/85 mt-1 whitespace-pre-line", children: truncate(update.body) })
+        ] }, update.id);
+      }) }) })
+    ] })
+  ] });
 }
 
 let measureCtx$1 = null;
@@ -2741,6 +6005,2657 @@ function GlassSelect({
   ] });
 }
 
+const FALLBACK_COLORS = ["#0e7a5f", "#0284c7", "#7c3aed", "#d97706", "#e11d48", "#0891b2", "#65a30d", "#db2777", "#9333ea", "#ea580c", "#475569"];
+const inputCls$3 = `${ws.input} px-3 py-2 text-sm`;
+function numberOrNull$1(raw) {
+  if (raw === null || raw === void 0 || String(raw).trim() === "") return null;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : null;
+}
+function buildInitial$2(phase, project) {
+  const phases = Array.isArray(project?.phases) ? project.phases : [];
+  const presets = presetColors();
+  return {
+    name: phase?.name || "",
+    planned_start: phase?.planned_start || project?.contract_signed_date || "",
+    planned_end: phase?.planned_end || project?.target_opening_date || "",
+    actual_start: phase?.actual_start || "",
+    actual_end: phase?.actual_end || "",
+    status: phase?.status || "not_started",
+    budget: phase?.budget != null ? String(phase.budget) : "",
+    weight: phase?.weight != null ? String(phase.weight) : "1",
+    progress_override: phase?.progress_override != null ? String(phase.progress_override) : "",
+    owner_name: phase?.owner_name || "",
+    contractor_name: phase?.contractor_name || "",
+    color: phase?.color || presets[phases.length % presets.length] || presets[0],
+    notes: phase?.notes || ""
+  };
+}
+function presetColors() {
+  const fromTemplate = Array.isArray(DEFAULT_PHASE_TEMPLATE) ? DEFAULT_PHASE_TEMPLATE.map((t) => t?.color).filter(Boolean) : [];
+  return fromTemplate.length >= 11 ? fromTemplate.slice(0, 11) : FALLBACK_COLORS;
+}
+function PhaseModal({
+  open,
+  project,
+  phase,
+  onClose
+}) {
+  const isEditing = !!phase?.id;
+  const saveMut = useSaveBranchProjectPhase();
+  const [form, setForm] = useState(() => buildInitial$2(phase, project));
+  const [errors, setErrors] = useState({});
+  useEffect(() => {
+    if (open) {
+      setForm(buildInitial$2(phase, project));
+      setErrors({});
+    }
+  }, [open, phase?.id]);
+  const swatches = useMemo(() => {
+    const list = presetColors();
+    if (form.color && !list.includes(form.color)) return [...list, form.color];
+    return list;
+  }, [form.color]);
+  const statusOptions = useMemo(() => (Array.isArray(PHASE_STATUSES) ? PHASE_STATUSES : Object.keys(PHASE_STATUS_LABELS || {})).map((value) => ({
+    value,
+    label: PHASE_STATUS_LABELS?.[value] || value
+  })), []);
+  const set = (key) => (value) => setForm((prev) => ({
+    ...prev,
+    [key]: value
+  }));
+  const setInput = (key) => (event) => set(key)(event.target.value);
+  function validate() {
+    const next = {};
+    if (!form.name.trim()) next.name = "اسم القسم مطلوب";
+    if (!form.planned_start) next.planned_start = "تاريخ البداية المخطط مطلوب";
+    if (!form.planned_end) next.planned_end = "تاريخ النهاية المخطط مطلوب";
+    if (form.planned_start && form.planned_end && form.planned_end < form.planned_start) {
+      next.planned_end = "النهاية يجب أن تكون بعد البداية أو تساويها";
+    }
+    if (form.actual_start && form.actual_end && form.actual_end < form.actual_start) {
+      next.actual_end = "النهاية الفعلية قبل البداية الفعلية";
+    }
+    const budget = numberOrNull$1(form.budget);
+    if (form.budget !== "" && (budget === null || budget < 0)) next.budget = "الميزانية رقم غير صالح";
+    const weight = numberOrNull$1(form.weight);
+    if (weight === null || weight < 1 || weight > 5) next.weight = "الوزن بين 1 و5";
+    const override = numberOrNull$1(form.progress_override);
+    if (form.progress_override !== "" && (override === null || override < 0 || override > 100)) {
+      next.progress_override = "النسبة بين 0 و100";
+    }
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  }
+  function handleSubmit(event) {
+    event?.preventDefault?.();
+    if (!project?.id || saveMut.isPending) return;
+    if (!validate()) return;
+    const phases = Array.isArray(project.phases) ? project.phases : [];
+    const maxOrder = phases.reduce((m, p) => Math.max(m, Number(p?.sort_order) || 0), 0);
+    const payload = {
+      project_id: project.id,
+      ...isEditing ? {
+        id: phase.id
+      } : {},
+      name: form.name.trim(),
+      sort_order: isEditing ? phase.sort_order : maxOrder + 1,
+      planned_start: form.planned_start,
+      planned_end: form.planned_end,
+      actual_start: form.actual_start || null,
+      actual_end: form.actual_end || null,
+      status: form.status,
+      budget: numberOrNull$1(form.budget) ?? 0,
+      weight: numberOrNull$1(form.weight) ?? 1,
+      progress_override: numberOrNull$1(form.progress_override),
+      owner_employee_id: phase?.owner_employee_id ?? null,
+      owner_name: form.owner_name.trim(),
+      contractor_contact_id: phase?.contractor_contact_id ?? null,
+      contractor_name: form.contractor_name.trim(),
+      color: form.color,
+      notes: form.notes
+    };
+    saveMut.mutate(payload, {
+      onSuccess: () => onClose?.()
+    });
+  }
+  const errorText = (key) => errors[key] ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-600 dark:text-rose-300 mt-1", children: errors[key] }) : null;
+  return /* @__PURE__ */ jsx(ModalShell, { open, title: isEditing ? "تعديل القسم" : "قسم جديد", description: project?.name ? `المشروع: ${project.name}` : void 0, onClose, footer: /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2 text-sm`, children: "إلغاء" }),
+    /* @__PURE__ */ jsxs("button", { type: "submit", form: "branch-phase-form", disabled: saveMut.isPending, className: `${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`, children: [
+      saveMut.isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+      isEditing ? "حفظ التعديلات" : "إضافة القسم"
+    ] })
+  ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-phase-form", onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+    /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "اسم القسم *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.name, onChange: setInput("name"), className: inputCls$3, placeholder: "مثال: الديكور والتشطيب" }),
+      errorText("name")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "البداية المخططة *" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.planned_start, onChange: (v) => set("planned_start")(v || ""), placeholder: "اختر التاريخ", allowClear: false }),
+      errorText("planned_start")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "النهاية المخططة *" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.planned_end, onChange: (v) => set("planned_end")(v || ""), placeholder: "اختر التاريخ", allowClear: false }),
+      errorText("planned_end")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "البداية الفعلية" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.actual_start, onChange: (v) => set("actual_start")(v || ""), placeholder: "لم يبدأ بعد", allowClear: true })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "النهاية الفعلية" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.actual_end, onChange: (v) => set("actual_end")(v || ""), placeholder: "لم ينتهِ بعد", allowClear: true }),
+      errorText("actual_end")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "الحالة" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: form.status, onChange: set("status"), options: statusOptions, placeholder: "اختر الحالة", buttonClassName: "text-sm py-2 px-3" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "SAR", children: "الميزانية" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.budget, onChange: setInput("budget"), className: inputCls$3, placeholder: "0.00", dir: "ltr" }),
+      errorText("budget")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "1–5، يؤثر على تقدم المشروع", children: "الوزن" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "1", max: "5", step: "1", value: form.weight, onChange: setInput("weight"), className: inputCls$3, dir: "ltr" }),
+      errorText("weight")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اتركه فارغاً للحساب التلقائي من المهام", children: "تقدم يدوي %" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", max: "100", step: "1", value: form.progress_override, onChange: setInput("progress_override"), className: inputCls$3, placeholder: "تلقائي", dir: "ltr" }),
+      errorText("progress_override")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "المسؤول" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.owner_name, onChange: setInput("owner_name"), className: inputCls$3, placeholder: "اسم المسؤول" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "المقاول / المورد" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.contractor_name, onChange: setInput("contractor_name"), className: inputCls$3, placeholder: "اسم المقاول" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "اللون" }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap", children: [
+        swatches.map((color) => {
+          const active = form.color === color;
+          return /* @__PURE__ */ jsx("button", { type: "button", onClick: () => set("color")(color), className: `w-8 h-8 rounded-full border-2 flex items-center justify-center transition-transform ${active ? "border-slate-900 dark:border-white scale-110" : "border-transparent"}`, style: {
+            background: color
+          }, title: color, "aria-label": color, children: active ? /* @__PURE__ */ jsx(Check, { className: "w-4 h-4 text-white drop-shadow" }) : null }, color);
+        }),
+        /* @__PURE__ */ jsx("input", { type: "color", value: form.color || "#0e7a5f", onChange: setInput("color"), className: "w-8 h-8 rounded-full border border-slate-300 dark:border-white/20 bg-transparent cursor-pointer p-0", title: "لون مخصص" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "ملاحظات" }),
+      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$3} resize-y`, placeholder: "ملاحظات اختيارية" })
+    ] })
+  ] }) });
+}
+
+const inputCls$2 = `${ws.input} px-3 py-2 text-sm`;
+function buildInitial$1(task, phaseId) {
+  return {
+    title: task?.title || "",
+    phase_id: task?.phase_id != null ? String(task.phase_id) : phaseId != null ? String(phaseId) : "",
+    status: task?.status || "todo",
+    is_milestone: !!task?.is_milestone,
+    due_date: task?.due_date || "",
+    assignee_name: task?.assignee_name || "",
+    notes: task?.notes || ""
+  };
+}
+function TaskModal$1({
+  open,
+  project,
+  phaseId,
+  task,
+  onClose
+}) {
+  const isEditing = !!task?.id;
+  const saveMut = useSaveBranchProjectTask();
+  const [form, setForm] = useState(() => buildInitial$1(task, phaseId));
+  const [errors, setErrors] = useState({});
+  useEffect(() => {
+    if (open) {
+      setForm(buildInitial$1(task, phaseId));
+      setErrors({});
+    }
+  }, [open, task?.id, phaseId]);
+  const phaseOptions = useMemo(() => {
+    const phases = Array.isArray(project?.phases) ? [...project.phases] : [];
+    phases.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+    return phases.map((p) => ({
+      value: String(p.id),
+      label: p.name
+    }));
+  }, [project?.phases]);
+  const statusOptions = useMemo(() => (Array.isArray(TASK_STATUSES) ? TASK_STATUSES : Object.keys(TASK_STATUS_LABELS || {})).map((value) => ({
+    value,
+    label: TASK_STATUS_LABELS?.[value] || value
+  })), []);
+  const set = (key) => (value) => setForm((prev) => ({
+    ...prev,
+    [key]: value
+  }));
+  const setInput = (key) => (event) => set(key)(event.target.value);
+  function validate() {
+    const next = {};
+    if (!form.title.trim()) next.title = "عنوان المهمة مطلوب";
+    if (!form.phase_id) next.phase_id = "اختر القسم";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  }
+  function handleSubmit(event) {
+    event?.preventDefault?.();
+    if (!project?.id || saveMut.isPending) return;
+    if (!validate()) return;
+    const tasks = Array.isArray(project.tasks) ? project.tasks : [];
+    const phaseIdNum = Number(form.phase_id);
+    const siblings = tasks.filter((t) => Number(t?.phase_id) === phaseIdNum);
+    const maxOrder = siblings.reduce((m, t) => Math.max(m, Number(t?.sort_order) || 0), 0);
+    const isDone = form.status === "done";
+    const payload = {
+      project_id: project.id,
+      ...isEditing ? {
+        id: task.id
+      } : {},
+      phase_id: phaseIdNum,
+      title: form.title.trim(),
+      status: form.status,
+      is_milestone: form.is_milestone,
+      due_date: form.due_date || null,
+      done_at: isDone ? task?.done_at || todayRiyadh$8() : null,
+      assignee_employee_id: task?.assignee_employee_id ?? null,
+      assignee_name: form.assignee_name.trim(),
+      sort_order: isEditing ? task.sort_order : maxOrder + 1,
+      notes: form.notes
+    };
+    saveMut.mutate(payload, {
+      onSuccess: () => onClose?.()
+    });
+  }
+  const errorText = (key) => errors[key] ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-600 dark:text-rose-300 mt-1", children: errors[key] }) : null;
+  return /* @__PURE__ */ jsx(ModalShell, { open, title: isEditing ? "تعديل المهمة" : "مهمة جديدة", onClose, width: "max-w-xl", footer: /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2 text-sm`, children: "إلغاء" }),
+    /* @__PURE__ */ jsxs("button", { type: "submit", form: "branch-task-form", disabled: saveMut.isPending, className: `${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`, children: [
+      saveMut.isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+      isEditing ? "حفظ التعديلات" : "إضافة المهمة"
+    ] })
+  ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-task-form", onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+    /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "عنوان المهمة *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.title, onChange: setInput("title"), className: inputCls$2, placeholder: "مثال: تركيب اللوحة الخارجية" }),
+      errorText("title")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "القسم *" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: form.phase_id, onChange: set("phase_id"), options: phaseOptions, placeholder: "اختر القسم", buttonClassName: "text-sm py-2 px-3" }),
+      errorText("phase_id")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "الحالة" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: form.status, onChange: set("status"), options: statusOptions, placeholder: "اختر الحالة", buttonClassName: "text-sm py-2 px-3" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "تاريخ الاستحقاق" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.due_date, onChange: (v) => set("due_date")(v || ""), placeholder: "بدون مهلة", allowClear: true })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "المسؤول" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.assignee_name, onChange: setInput("assignee_name"), className: inputCls$2, placeholder: "اسم المسؤول" })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "sm:col-span-2", children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => set("is_milestone")(!form.is_milestone), className: `w-full flex items-center gap-3 ${ws.innerCard} px-3 py-2.5 text-right`, "aria-pressed": form.is_milestone, children: [
+      /* @__PURE__ */ jsx("span", { className: `inline-flex w-10 h-6 rounded-full p-0.5 transition-colors shrink-0 ${form.is_milestone ? "bg-[#0e7a5f] dark:bg-emerald-400/70" : "bg-slate-300 dark:bg-white/20"}`, children: /* @__PURE__ */ jsx("span", { className: `w-5 h-5 rounded-full bg-white shadow transition-transform ${form.is_milestone ? "-translate-x-4" : "translate-x-0"}` }) }),
+      /* @__PURE__ */ jsx(Flag, { className: `w-4 h-4 ${form.is_milestone ? "text-amber-600 dark:text-amber-300" : "text-slate-400 dark:text-white/40"}` }),
+      /* @__PURE__ */ jsxs("span", { className: "text-sm text-slate-900 dark:text-white", children: [
+        "معلم رئيسي",
+        /* @__PURE__ */ jsx("span", { className: "text-[11px] text-slate-500 dark:text-white/45 mr-2", children: "يظهر على الخط الزمني ويُشترط اكتماله قبل تأكيد الافتتاح" })
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "ملاحظات" }),
+      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$2} resize-y`, placeholder: "ملاحظات اختيارية" })
+    ] })
+  ] }) });
+}
+
+function sortedPhases(project) {
+  const phases = Array.isArray(project?.phases) ? [...project.phases] : [];
+  phases.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+  return phases;
+}
+function TaskRow({
+  task,
+  today,
+  onToggle,
+  onEdit,
+  onDelete,
+  busy
+}) {
+  const done = task.status === "done";
+  const overdue = !done && task.due_date && task.due_date < today;
+  return /* @__PURE__ */ jsxs("div", { className: `flex items-start gap-2.5 py-2 ${ws.innerCard} px-3`, children: [
+    /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onToggle(task), disabled: busy, className: `mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${done ? "bg-[#0e7a5f] border-[#0e7a5f] text-white dark:bg-emerald-400/80 dark:border-emerald-400/80" : "bg-white border-slate-300 dark:bg-white/[0.04] dark:border-white/25"}`, title: done ? "إعادة فتح" : "إكمال", "aria-pressed": done, children: done ? /* @__PURE__ */ jsx("svg", { viewBox: "0 0 16 16", className: "w-3 h-3", fill: "none", stroke: "currentColor", strokeWidth: "2.5", children: /* @__PURE__ */ jsx("path", { d: "M3 8.5l3 3 7-7", strokeLinecap: "round", strokeLinejoin: "round" }) }) : null }),
+    /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 flex-wrap", children: [
+        task.is_milestone ? /* @__PURE__ */ jsx(Flag, { className: "w-3.5 h-3.5 text-amber-600 dark:text-amber-300 shrink-0" }) : null,
+        /* @__PURE__ */ jsx("span", { className: `text-sm ${done ? "line-through text-slate-400 dark:text-white/40" : "text-slate-900 dark:text-white"}`, children: task.title }),
+        task.status === "blocked" ? /* @__PURE__ */ jsx("span", { className: "text-[10px] font-bold text-rose-700 dark:text-rose-200 bg-rose-100 dark:bg-rose-400/15 rounded-full px-1.5", children: "معلّقة" }) : task.status === "in_progress" ? /* @__PURE__ */ jsx("span", { className: "text-[10px] font-bold text-amber-700 dark:text-amber-200 bg-amber-100 dark:bg-amber-400/15 rounded-full px-1.5", children: "جارية" }) : null
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap text-[11px] mt-0.5", children: [
+        task.due_date ? /* @__PURE__ */ jsxs("span", { className: `inline-flex items-center gap-1 ${overdue ? "text-rose-600 dark:text-rose-300 font-semibold" : "text-slate-500 dark:text-white/45"}`, children: [
+          /* @__PURE__ */ jsx(CalendarDays, { className: "w-3 h-3" }),
+          /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatDate$4(task.due_date) }),
+          overdue ? "· متأخرة" : null
+        ] }) : null,
+        task.assignee_name ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-slate-500 dark:text-white/45", children: [
+          /* @__PURE__ */ jsx(UserRound, { className: "w-3 h-3" }),
+          task.assignee_name
+        ] }) : null,
+        done && task.done_at ? /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/35", dir: "ltr", children: [
+          "✓ ",
+          formatDate$4(task.done_at)
+        ] }) : null
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 shrink-0", children: [
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onEdit(task), className: `${ws.iconButton} w-8 h-8`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDelete(task), className: `${ws.iconButton} w-8 h-8 text-rose-600 dark:text-rose-300`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+    ] })
+  ] });
+}
+function PhaseCard({
+  project,
+  phase,
+  index,
+  count,
+  today,
+  selected,
+  onSelect,
+  onAddTask,
+  onEditTask,
+  onDeleteTask,
+  onToggleTask,
+  onEditPhase,
+  onDeletePhase,
+  onMove,
+  taskBusy,
+  reorderBusy
+}) {
+  const ref = useRef(null);
+  const tasks = useMemo(() => phaseTasks(project, phase.id) || [], [project, phase.id]);
+  const progress = phaseProgress(phase, tasks);
+  const health = phaseHealth(phase, tasks, today);
+  const budget = phaseBudget(phase, project?.invoices || []);
+  const invoiceCount = (project?.invoices || []).filter((inv) => Number(inv?.phase_id) === Number(phase.id)).length;
+  const doneCount = tasks.filter((t) => t.status === "done").length;
+  useEffect(() => {
+    if (selected && ref.current && typeof ref.current.scrollIntoView === "function") {
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  }, []);
+  return /* @__PURE__ */ jsxs("div", { ref, onClick: () => onSelect?.(phase.id), className: `${ws.glass} ${ws.card} overflow-hidden transition-shadow ${selected ? "ring-2 ring-[#0e7a5f]/60 dark:ring-emerald-400/50" : ""}`, children: [
+    /* @__PURE__ */ jsx("div", { className: "h-1", style: {
+      background: phase.color || "#0e7a5f"
+    } }),
+    /* @__PURE__ */ jsxs("div", { className: "p-4 space-y-3", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-3 flex-wrap", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0 flex-1", children: [
+          /* @__PURE__ */ jsx("span", { className: "w-3 h-3 rounded-full shrink-0", style: {
+            background: phase.color || "#0e7a5f"
+          } }),
+          /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+            /* @__PURE__ */ jsxs("div", { className: "font-bold text-slate-900 dark:text-white truncate", children: [
+              /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/35 tabular-nums ml-1", dir: "ltr", children: [
+                index + 1,
+                "."
+              ] }),
+              phase.name
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 mt-1 flex-wrap", children: [
+              /* @__PURE__ */ jsx(PhaseStatusPill, { status: phase.status }),
+              /* @__PURE__ */ jsx(HealthPill, { health })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 shrink-0", onClick: (e) => e.stopPropagation(), children: [
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onMove(index, -1), disabled: index === 0 || reorderBusy, className: `${ws.iconButton} w-8 h-8 disabled:opacity-40`, title: "تحريك لأعلى", children: /* @__PURE__ */ jsx(ArrowUp, { className: "w-3.5 h-3.5" }) }),
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onMove(index, 1), disabled: index === count - 1 || reorderBusy, className: `${ws.iconButton} w-8 h-8 disabled:opacity-40`, title: "تحريك لأسفل", children: /* @__PURE__ */ jsx(ArrowDown, { className: "w-3.5 h-3.5" }) }),
+          /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onEditPhase(phase), className: `${ws.btnNeutral} px-2.5 py-1.5 text-xs`, children: [
+            /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }),
+            "تعديل القسم"
+          ] }),
+          /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onDeletePhase(phase, invoiceCount), className: `${ws.btnDanger} px-2.5 py-1.5 text-xs`, children: [
+            /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }),
+            "حذف القسم"
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-xs", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "مخطط" }),
+          /* @__PURE__ */ jsxs("span", { className: "text-slate-900 dark:text-white tabular-nums", dir: "ltr", children: [
+            formatDate$4(phase.planned_start),
+            " → ",
+            formatDate$4(phase.planned_end)
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "فعلي" }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white tabular-nums", dir: "ltr", children: phase.actual_start || phase.actual_end ? `${formatDate$4(phase.actual_start)} → ${formatDate$4(phase.actual_end)}` : "—" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+          /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-slate-500 dark:text-white/45", children: [
+            /* @__PURE__ */ jsx(UserRound, { className: "w-3 h-3" }),
+            " المسؤول"
+          ] }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white", children: phase.owner_name || "—" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+          /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 text-slate-500 dark:text-white/45", children: [
+            /* @__PURE__ */ jsx(HardHat, { className: "w-3 h-3" }),
+            " المقاول"
+          ] }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white", children: phase.contractor_name || "—" })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-[11px] mb-1", children: [
+            /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45", children: "الميزانية مقابل الملتزم" }),
+            /* @__PURE__ */ jsxs("span", { className: `tabular-nums font-semibold ${budget.over ? "text-rose-600 dark:text-rose-300" : "text-slate-900 dark:text-white"}`, dir: "ltr", children: [
+              formatMoney$i(budget.committed, false),
+              " / ",
+              formatMoney$i(budget.budget, false)
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx(ProgressBar, { pct: budget.pct, tone: budget.over ? "rose" : "sky" }),
+          budget.over ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-rose-600 dark:text-rose-300 mt-1", children: [
+            "تجاوز بمقدار ",
+            formatMoney$i(Math.abs(budget.remaining))
+          ] }) : null
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-[11px] mb-1", children: [
+            /* @__PURE__ */ jsxs("span", { className: "text-slate-500 dark:text-white/45", children: [
+              "التقدم ",
+              phase.progress_override != null ? "(يدوي)" : `(${doneCount}/${tasks.length} مهام)`
+            ] }),
+            /* @__PURE__ */ jsxs("span", { className: "tabular-nums font-semibold text-slate-900 dark:text-white", dir: "ltr", children: [
+              Math.round(progress),
+              "%"
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx(ProgressBar, { pct: progress, tone: healthTone(health) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "space-y-1.5", onClick: (e) => e.stopPropagation(), children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+          /* @__PURE__ */ jsx("div", { className: "text-xs font-bold text-slate-700 dark:text-white/70", children: "المهام" }),
+          /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => onAddTask(phase), className: `${ws.btnPrimary} px-2.5 py-1.5 text-xs`, children: [
+            /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
+            "مهمة"
+          ] })
+        ] }),
+        tasks.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-400 dark:text-white/35 py-2", children: "لا مهام في هذا القسم بعد." }) : tasks.map((task) => /* @__PURE__ */ jsx(TaskRow, { task, today, busy: taskBusy, onToggle: onToggleTask, onEdit: onEditTask, onDelete: onDeleteTask }, task.id))
+      ] }),
+      phase.notes ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 whitespace-pre-line", children: phase.notes }) : null
+    ] })
+  ] });
+}
+function PhasesTab({
+  project,
+  selectedPhaseId,
+  onSelectPhase
+}) {
+  const today = useMemo(() => todayRiyadh$8(), []);
+  const phases = useMemo(() => sortedPhases(project), [project]);
+  const saveTask = useSaveBranchProjectTask();
+  const deleteTask = useDeleteBranchProjectTask();
+  const deletePhase = useDeleteBranchProjectPhase();
+  const reorder = useReorderBranchProjectPhases();
+  const [phaseModal, setPhaseModal] = useState({
+    open: false,
+    phase: null
+  });
+  const [taskModal, setTaskModal] = useState({
+    open: false,
+    phaseId: null,
+    task: null
+  });
+  const summary = useMemo(() => {
+    let done = 0;
+    let late = 0;
+    for (const phase of phases) {
+      const tasks = phaseTasks(project, phase.id) || [];
+      const health = phaseHealth(phase, tasks, today);
+      if (health === "done" || phase.status === "done") done += 1;
+      else if (health === "late") late += 1;
+    }
+    return {
+      total: phases.length,
+      done,
+      late
+    };
+  }, [phases, project, today]);
+  function handleToggleTask(task) {
+    if (!project?.id) return;
+    const nextDone = task.status !== "done";
+    saveTask.mutate({
+      project_id: project.id,
+      ...task,
+      id: task.id,
+      status: nextDone ? "done" : "todo",
+      done_at: nextDone ? todayRiyadh$8() : null
+    });
+  }
+  function handleDeleteTask(task) {
+    if (!project?.id) return;
+    if (!window.confirm(`حذف المهمة «${task.title}»؟`)) return;
+    deleteTask.mutate({
+      project_id: project.id,
+      id: task.id
+    });
+  }
+  function handleDeletePhase(phase, invoiceCount) {
+    if (!project?.id) return;
+    if (invoiceCount > 0) {
+      toast.error(`لا يمكن حذف «${phase.name}»: مرتبط بـ ${invoiceCount} فاتورة. انقل الفواتير أو احذفها أولاً.`);
+      return;
+    }
+    const taskCount = (phaseTasks(project, phase.id) || []).length;
+    const msg = taskCount > 0 ? `حذف القسم «${phase.name}» مع ${taskCount} مهمة؟` : `حذف القسم «${phase.name}»؟`;
+    if (!window.confirm(msg)) return;
+    deletePhase.mutate({
+      project_id: project.id,
+      id: phase.id
+    });
+  }
+  function handleMove(index, delta) {
+    if (!project?.id) return;
+    const target = index + delta;
+    if (target < 0 || target >= phases.length) return;
+    const ids = phases.map((p) => p.id);
+    [ids[index], ids[target]] = [ids[target], ids[index]];
+    reorder.mutate({
+      project_id: project.id,
+      ids
+    });
+  }
+  return /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm text-slate-700 dark:text-white/70", children: [
+        /* @__PURE__ */ jsx(Layers, { className: "w-4 h-4 text-[#0e7a5f] dark:text-emerald-200" }),
+        /* @__PURE__ */ jsxs("span", { className: "tabular-nums", children: [
+          summary.total,
+          " أقسام · ",
+          /* @__PURE__ */ jsxs("span", { className: "text-[#0e7a5f] dark:text-emerald-200", children: [
+            summary.done,
+            " مكتمل"
+          ] }),
+          " ·",
+          " ",
+          /* @__PURE__ */ jsxs("span", { className: summary.late > 0 ? "text-rose-600 dark:text-rose-300" : "", children: [
+            summary.late,
+            " متأخر"
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex-1" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setPhaseModal({
+        open: true,
+        phase: null
+      }), className: `${ws.btnPrimary} px-3 py-2 text-sm`, children: [
+        /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+        "قسم"
+      ] })
+    ] }),
+    phases.length === 0 ? /* @__PURE__ */ jsx(EmptyState$1, { icon: Layers, title: "لا أقسام بعد", hint: "أضف أقسام المشروع (العقد، التراخيص، التشطيب…) لتتبع التقدم والميزانية.", action: /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setPhaseModal({
+      open: true,
+      phase: null
+    }), className: `${ws.btnPrimary} px-4 py-2 text-sm`, children: [
+      /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+      "إضافة قسم"
+    ] }) }) : /* @__PURE__ */ jsx("div", { className: "space-y-3", children: phases.map((phase, index) => /* @__PURE__ */ jsx(PhaseCard, { project, phase, index, count: phases.length, today, selected: selectedPhaseId != null && String(selectedPhaseId) === String(phase.id), onSelect: onSelectPhase, onAddTask: (p) => setTaskModal({
+      open: true,
+      phaseId: p.id,
+      task: null
+    }), onEditTask: (task) => setTaskModal({
+      open: true,
+      phaseId: task.phase_id,
+      task
+    }), onDeleteTask: handleDeleteTask, onToggleTask: handleToggleTask, onEditPhase: (p) => setPhaseModal({
+      open: true,
+      phase: p
+    }), onDeletePhase: handleDeletePhase, onMove: handleMove, taskBusy: saveTask.isPending, reorderBusy: reorder.isPending }, phase.id)) }),
+    /* @__PURE__ */ jsx(PhaseModal, { open: phaseModal.open, project, phase: phaseModal.phase, onClose: () => setPhaseModal({
+      open: false,
+      phase: null
+    }) }),
+    /* @__PURE__ */ jsx(TaskModal$1, { open: taskModal.open, project, phaseId: taskModal.phaseId, task: taskModal.task, onClose: () => setTaskModal({
+      open: false,
+      phaseId: null,
+      task: null
+    }) })
+  ] });
+}
+
+/**
+ * Export utilities for Excel and PDF generation
+ * Supports Arabic RTL content
+ */
+
+/**
+ * Export to Excel with better formatting (uses HTML table trick)
+ * This creates a proper Excel file that can be opened in Excel
+ */
+function exportToExcelHTML(data, filename, columns, title) {
+  // Create HTML table
+  const headers = columns.map(col => col.header).join("</th><th>");
+  const rows = data.map(item => `<tr>${columns.map(col => {
+    const value = col.accessor(item);
+    const formatted = col.format ? col.format(value, item) : value;
+    return `<td>${formatted ?? ""}</td>`;
+  }).join("")}</tr>`).join("");
+  const now = new Date().toLocaleDateString(LOCALE, {
+    timeZone: "Asia/Riyadh"
+  });
+  const htmlContent = `
+    <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
+      <head>
+        <meta charset="UTF-8">
+        <style>
+          table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            font-family: Arial, sans-serif;
+            direction: rtl;
+          }
+          th { 
+            background-color: #0f172a; 
+            color: white; 
+            padding: 12px; 
+            text-align: right;
+            border: 1px solid #ddd;
+            font-weight: bold;
+          }
+          td { 
+            padding: 10px; 
+            border: 1px solid #ddd;
+            text-align: right;
+          }
+          tr:nth-child(even) { 
+            background-color: #f9f9f9; 
+          }
+          .header {
+            margin-bottom: 20px;
+            text-align: center;
+          }
+          .header h1 {
+            color: #0f172a;
+            margin: 10px 0;
+          }
+          .header p {
+            color: #666;
+            margin: 5px 0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>${title}</h1>
+          <p>تاريخ الإنشاء: ${now}</p>
+        </div>
+        <table>
+          <thead>
+            <tr><th>${headers}</th></tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `;
+  const blob = new Blob([htmlContent], {
+    type: "application/vnd.ms-excel;charset=utf-8;"
+  });
+  downloadBlob(blob, `${filename}.xls`);
+}
+
+/**
+ * Export data to PDF using print dialog
+ * Creates a formatted print-friendly page
+ */
+function exportToPDF(data, filename, columns, title) {
+  // Create a new window for printing
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    alert("الرجاء السماح بفتح النوافذ المنبثقة للتصدير");
+    return;
+  }
+  const headers = columns.map(col => col.header).join("</th><th>");
+  const rows = data.map(item => `<tr>${columns.map(col => {
+    const value = col.accessor(item);
+    const formatted = col.format ? col.format(value, item) : value;
+    return `<td>${formatted ?? ""}</td>`;
+  }).join("")}</tr>`).join("");
+  const now = new Date().toLocaleDateString(LOCALE, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh"
+  });
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html dir="rtl">
+      <head>
+        <meta charset="UTF-8">
+        <title>${title}</title>
+        <style>
+          @media print {
+            @page {
+              size: A4 landscape;
+              margin: 15mm;
+            }
+            body {
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            .no-print {
+              display: none !important;
+            }
+          }
+          
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+            direction: rtl;
+          }
+          
+          .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+          }
+          
+          .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: bold;
+          }
+          
+          .header p {
+            font-size: 14px;
+            opacity: 0.9;
+          }
+          
+          .stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+          }
+          
+          .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+          }
+          
+          .stat-card .label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+          }
+          
+          .stat-card .value {
+            font-size: 24px;
+            font-weight: bold;
+          }
+          
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          }
+          
+          thead {
+            background: #0f172a;
+            color: white;
+          }
+          
+          th {
+            padding: 15px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+            border-bottom: 2px solid #14b8a6;
+          }
+          
+          td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #f9fafb;
+          }
+          
+          tr:hover {
+            background-color: #f1f5f9;
+          }
+          
+          .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            padding: 20px;
+          }
+          
+          .print-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #14b8a6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+          }
+          
+          .print-button:hover {
+            background: #0d9488;
+          }
+          
+          @media print {
+            body {
+              background: white;
+              padding: 0;
+            }
+            .header {
+              border-radius: 0;
+            }
+            table {
+              box-shadow: none;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <button class="print-button no-print" onclick="window.print()">
+          🖨️ طباعة / حفظ PDF
+        </button>
+        
+        <div class="header">
+          <h1>${title}</h1>
+          <p>تاريخ الإنشاء: ${now}</p>
+          <div class="stats">
+            <div class="stat-card">
+              <div class="label">إجمالي السجلات</div>
+              <div class="value">${data.length}</div>
+            </div>
+          </div>
+        </div>
+        
+        <table>
+          <thead>
+            <tr><th>${headers}</th></tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+        
+        <div class="footer">
+          <p>تم الإنشاء بواسطة نظام إدارة المخزون</p>
+          <p>© ${new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    timeZone: "Asia/Riyadh"
+  })} - جميع الحقوق محفوظة</p>
+        </div>
+      </body>
+    </html>
+  `;
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+
+  // Auto print after content loads
+  printWindow.onload = () => {
+    setTimeout(() => {
+      printWindow.focus();
+    }, 250);
+  };
+}
+
+/**
+ * Helper function to download blob
+ */
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+/**
+ * Format inventory type for export
+ */
+function formatInventoryType(type) {
+  const typeMap = {
+    Daily: "يومي",
+    Weekly: "أسبوعي",
+    Transfer: "تحويل",
+    Receipt: "وارد",
+    Opening: "مخزون افتتاحي"
+  };
+  return typeMap[type] || type;
+}
+
+/**
+ * Format role for export
+ */
+function formatRole(role) {
+  const roleMap = {
+    Admin: "مدير",
+    Employee: "موظف"
+  };
+  return roleMap[role] || role;
+}
+
+/**
+ * Format date and time for export.
+ */
+function formatDateTime$4(dateString) {
+  if (!dateString) return "-";
+  // IMPORTANT: use toLocaleString (not toLocaleDateString) so time is always rendered
+  // across browsers (especially iOS/Safari) when hour/minute options are provided.
+  return new Date(dateString).toLocaleString(LOCALE, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Riyadh"
+  });
+}
+
+const inputCls$1 = `${ws.input} px-3 py-2 text-sm`;
+const DEFAULT_ACCOUNT = "5399";
+function numberOrNull(raw) {
+  if (raw === null || raw === void 0 || String(raw).trim() === "") return null;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : null;
+}
+function inferAccountForPhase(project, phaseId) {
+  if (!phaseId) return DEFAULT_ACCOUNT;
+  const phase = (project?.phases || []).find((p) => String(p?.id) === String(phaseId));
+  if (!phase) return DEFAULT_ACCOUNT;
+  if (phase.default_account_code) return String(phase.default_account_code);
+  const template = Array.isArray(DEFAULT_PHASE_TEMPLATE) ? DEFAULT_PHASE_TEMPLATE : [];
+  const match = template.find((t) => t?.name && phase.name && String(t.name).trim() === String(phase.name).trim());
+  if (match?.default_account_code) return String(match.default_account_code);
+  const byColor = template.find((t) => t?.color && phase.color && t.color === phase.color);
+  if (byColor?.default_account_code) return String(byColor.default_account_code);
+  return DEFAULT_ACCOUNT;
+}
+function buildInitial(invoice, project, defaultPhaseId) {
+  const phaseId = invoice?.phase_id != null ? String(invoice.phase_id) : defaultPhaseId != null ? String(defaultPhaseId) : "";
+  return {
+    invoice_number: invoice?.invoice_number || "",
+    invoice_date: invoice?.invoice_date || todayRiyadh$8(),
+    due_date: invoice?.due_date || "",
+    supplier_name: invoice?.supplier_name || "",
+    phase_id: phaseId,
+    expense_account_code: invoice?.expense_account_code ? String(invoice.expense_account_code) : inferAccountForPhase(project, phaseId),
+    total_amount: invoice?.total_amount != null ? String(invoice.total_amount) : "",
+    paid_amount: invoice?.paid_amount != null ? String(invoice.paid_amount) : "0"
+  };
+}
+function ExpenseModal({
+  open,
+  project,
+  invoice,
+  defaultPhaseId,
+  onClose
+}) {
+  const isEditing = !!invoice?.id;
+  const saveMut = useSaveBranchProjectInvoice();
+  const [form, setForm] = useState(() => buildInitial(invoice, project, defaultPhaseId));
+  const [errors, setErrors] = useState({});
+  const [accountTouched, setAccountTouched] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setForm(buildInitial(invoice, project, defaultPhaseId));
+      setErrors({});
+      setAccountTouched(!!invoice?.expense_account_code);
+    }
+  }, [open, invoice?.id, defaultPhaseId]);
+  const phaseOptions = useMemo(() => {
+    const phases = Array.isArray(project?.phases) ? [...project.phases] : [];
+    phases.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+    return [{
+      value: "",
+      label: "بلا قسم"
+    }, ...phases.map((p) => ({
+      value: String(p.id),
+      label: p.name
+    }))];
+  }, [project?.phases]);
+  const accountOptions = useMemo(() => (Array.isArray(ESTABLISHMENT_ACCOUNTS) ? ESTABLISHMENT_ACCOUNTS : []).map((a) => ({
+    value: String(a.code),
+    label: `${a.code} — ${a.name}`
+  })), []);
+  const set = (key) => (value) => setForm((prev) => ({
+    ...prev,
+    [key]: value
+  }));
+  const setInput = (key) => (event) => set(key)(event.target.value);
+  function handlePhaseChange(value) {
+    setForm((prev) => ({
+      ...prev,
+      phase_id: value,
+      expense_account_code: accountTouched ? prev.expense_account_code : inferAccountForPhase(project, value)
+    }));
+  }
+  function validate() {
+    const next = {};
+    if (!form.invoice_number.trim()) next.invoice_number = "رقم الفاتورة مطلوب";
+    if (!form.invoice_date) next.invoice_date = "تاريخ الفاتورة مطلوب";
+    if (!form.supplier_name.trim()) next.supplier_name = "اسم المورد مطلوب";
+    if (!form.expense_account_code) next.expense_account_code = "اختر الحساب";
+    const total2 = numberOrNull(form.total_amount);
+    if (total2 === null || total2 <= 0) next.total_amount = "الإجمالي يجب أن يكون أكبر من صفر";
+    const paid2 = numberOrNull(form.paid_amount) ?? 0;
+    if (paid2 < 0) next.paid_amount = "المسدد لا يكون سالباً";
+    else if (total2 !== null && paid2 > total2) next.paid_amount = "المسدد أكبر من الإجمالي";
+    if (form.due_date && form.invoice_date && form.due_date < form.invoice_date) {
+      next.due_date = "الاستحقاق قبل تاريخ الفاتورة";
+    }
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  }
+  function handleSubmit(event) {
+    event?.preventDefault?.();
+    if (!project?.id || saveMut.isPending) return;
+    if (!validate()) return;
+    const payload = {
+      project_id: project.id,
+      ...isEditing ? {
+        id: invoice.id
+      } : {},
+      invoice_number: form.invoice_number.trim(),
+      invoice_date: form.invoice_date,
+      due_date: form.due_date || null,
+      supplier_name: form.supplier_name.trim(),
+      phase_id: form.phase_id ? Number(form.phase_id) : null,
+      expense_account_code: form.expense_account_code,
+      total_amount: numberOrNull(form.total_amount) ?? 0,
+      paid_amount: numberOrNull(form.paid_amount) ?? 0
+    };
+    saveMut.mutate(payload, {
+      onSuccess: () => onClose?.()
+    });
+  }
+  const total = numberOrNull(form.total_amount) ?? 0;
+  const paid = numberOrNull(form.paid_amount) ?? 0;
+  const remaining = Math.max(0, total - paid);
+  const errorText = (key) => errors[key] ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-600 dark:text-rose-300 mt-1", children: errors[key] }) : null;
+  return /* @__PURE__ */ jsx(ModalShell, { open, title: isEditing ? "تعديل الفاتورة" : "فاتورة جديدة", description: "مؤقتاً تُسجَّل الفواتير هنا؛ عند ربط الخلفية تُنشأ من فواتير المشتريات مباشرة", onClose, footer: /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2 text-sm`, children: "إلغاء" }),
+    /* @__PURE__ */ jsxs("button", { type: "submit", form: "branch-expense-form", disabled: saveMut.isPending, className: `${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`, children: [
+      saveMut.isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+      isEditing ? "حفظ التعديلات" : "إضافة الفاتورة"
+    ] })
+  ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-expense-form", onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "رقم الفاتورة *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.invoice_number, onChange: setInput("invoice_number"), className: inputCls$1, placeholder: "INV-0001", dir: "ltr" }),
+      errorText("invoice_number")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "المورد *" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.supplier_name, onChange: setInput("supplier_name"), className: inputCls$1, placeholder: "اسم المورد" }),
+      errorText("supplier_name")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "تاريخ الفاتورة *" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.invoice_date, onChange: (v) => set("invoice_date")(v || ""), placeholder: "اختر التاريخ", allowClear: false }),
+      errorText("invoice_date")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "تاريخ الاستحقاق" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.due_date, onChange: (v) => set("due_date")(v || ""), placeholder: "بدون استحقاق", allowClear: true }),
+      errorText("due_date")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "القسم" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: form.phase_id, onChange: handlePhaseChange, options: phaseOptions, placeholder: "بلا قسم", buttonClassName: "text-sm py-2 px-3" })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "حساب المصروف *" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: form.expense_account_code, onChange: (v) => {
+        setAccountTouched(true);
+        set("expense_account_code")(v);
+      }, options: accountOptions, placeholder: "اختر الحساب", buttonClassName: "text-sm py-2 px-3", menuWidth: 320 }),
+      errorText("expense_account_code")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "SAR", children: "الإجمالي *" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.total_amount, onChange: setInput("total_amount"), className: inputCls$1, placeholder: "0.00", dir: "ltr" }),
+      errorText("total_amount")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "SAR", children: "المسدد" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.paid_amount, onChange: setInput("paid_amount"), className: inputCls$1, placeholder: "0.00", dir: "ltr" }),
+      errorText("paid_amount")
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: `sm:col-span-2 ${ws.innerCard} px-3 py-2 text-xs flex items-center justify-between gap-3 flex-wrap`, children: [
+      /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50", children: "المتبقي بعد السداد" }),
+      /* @__PURE__ */ jsx("span", { className: `font-bold tabular-nums ${remaining > 0 ? "text-amber-700 dark:text-amber-200" : "text-[#0e7a5f] dark:text-emerald-200"}`, dir: "ltr", children: formatMoney$i(remaining) })
+    ] })
+  ] }) });
+}
+
+const PIE_COLORS$1 = ["#0e7a5f", "#0284c7", "#7c3aed", "#d97706", "#e11d48", "#0891b2", "#65a30d", "#db2777", "#9333ea", "#ea580c", "#64748b"];
+const STATUS_CLASS = {
+  paid: "bg-[#e7f2ee] dark:bg-emerald-400/15 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25",
+  partial_paid: "bg-amber-100 dark:bg-amber-400/15 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25",
+  overdue: "bg-rose-100 dark:bg-rose-400/15 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-400/25",
+  pending_payment: "bg-slate-100 dark:bg-white/[0.08] text-slate-700 dark:text-white/70 border-slate-200 dark:border-white/15"
+};
+const STATUS_ORDER = ["pending_payment", "partial_paid", "paid", "overdue"];
+function InvoiceStatusPill({
+  status
+}) {
+  const cls = STATUS_CLASS[status] || STATUS_CLASS.pending_payment;
+  return /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold whitespace-nowrap ${cls}`, children: INVOICE_STATUS_LABELS?.[status] || status });
+}
+function accountName(code) {
+  const found = (ESTABLISHMENT_ACCOUNTS || []).find((a) => String(a.code) === String(code));
+  return found?.name || code || "—";
+}
+function PieTooltip({
+  active,
+  payload,
+  isDark,
+  total
+}) {
+  if (!active || !payload?.length) return null;
+  const item = payload[0];
+  const pct = total > 0 ? Math.round(moneyValue$b(item.value) / total * 100) : 0;
+  return /* @__PURE__ */ jsxs("div", { className: "text-xs px-3 py-2 rounded-xl shadow-lg", style: {
+    background: isDark ? "rgba(15, 23, 42, 0.96)" : "rgba(255, 255, 255, 0.98)",
+    border: `1px solid ${isDark ? "rgba(255,255,255,0.15)" : "rgba(15, 23, 42, 0.12)"}`,
+    color: isDark ? "#fff" : "rgb(15, 23, 42)",
+    minWidth: 140
+  }, dir: "rtl", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx("span", { className: "inline-block w-2.5 h-2.5 rounded-full", style: {
+        background: item.payload?.fill || item.color
+      } }),
+      /* @__PURE__ */ jsx("span", { style: {
+        color: isDark ? "rgba(255,255,255,0.7)" : "rgb(51, 65, 85)"
+      }, children: item.name })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "font-bold mt-1", dir: "ltr", children: [
+      formatMoney$i(item.value),
+      " · ",
+      pct,
+      "%"
+    ] })
+  ] });
+}
+function ExpensesTab({
+  project
+}) {
+  const {
+    isDark
+  } = useAdminTheme();
+  const today = useMemo(() => todayRiyadh$8(), []);
+  const deleteMut = useDeleteBranchProjectInvoice();
+  const [modal, setModal] = useState({
+    open: false,
+    invoice: null
+  });
+  const [phaseFilter, setPhaseFilter] = useState("all");
+  const [accountFilter, setAccountFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const phases = useMemo(() => {
+    const list = Array.isArray(project?.phases) ? [...project.phases] : [];
+    list.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+    return list;
+  }, [project?.phases]);
+  const invoices = useMemo(() => (Array.isArray(project?.invoices) ? project.invoices : []).map((inv) => ({
+    ...inv,
+    _status: invoiceStatus(inv, today) || inv.status || "pending_payment"
+  })), [project?.invoices, today]);
+  const budget = useMemo(() => projectBudget(project), [project]);
+  const phaseRows = useMemo(() => {
+    const rows = phases.map((phase) => ({
+      key: String(phase.id),
+      name: phase.name,
+      color: phase.color,
+      ...phaseBudget(phase, invoices)
+    }));
+    const orphan = invoices.filter((inv) => inv.phase_id == null);
+    if (orphan.length > 0) {
+      const committed = orphan.reduce((s, i) => s + moneyValue$b(i.total_amount), 0);
+      const paid = orphan.reduce((s, i) => s + moneyValue$b(i.paid_amount), 0);
+      rows.push({
+        key: "none",
+        name: "بلا قسم",
+        color: "#94a3b8",
+        budget: 0,
+        committed,
+        paid,
+        remaining: -committed,
+        over: committed,
+        pct: committed > 0 ? 100 : 0
+      });
+    }
+    return rows;
+  }, [phases, invoices]);
+  const pieData = useMemo(() => {
+    const map = /* @__PURE__ */ new Map();
+    for (const inv of invoices) {
+      const code = String(inv.expense_account_code || "5399");
+      map.set(code, (map.get(code) || 0) + moneyValue$b(inv.total_amount));
+    }
+    return [...map.entries()].map(([code, value], i) => ({
+      code,
+      name: accountName(code),
+      value,
+      fill: PIE_COLORS$1[i % PIE_COLORS$1.length]
+    })).filter((d) => d.value > 0).sort((a, b) => b.value - a.value).map((d, i) => ({
+      ...d,
+      fill: PIE_COLORS$1[i % PIE_COLORS$1.length]
+    }));
+  }, [invoices]);
+  const pieTotal = pieData.reduce((s, d) => s + d.value, 0);
+  const phaseOptions = useMemo(() => [{
+    value: "all",
+    label: "كل الأقسام"
+  }, {
+    value: "none",
+    label: "بلا قسم"
+  }, ...phases.map((p) => ({
+    value: String(p.id),
+    label: p.name
+  }))], [phases]);
+  const accountOptions = useMemo(() => [{
+    value: "all",
+    label: "كل الحسابات"
+  }, ...(ESTABLISHMENT_ACCOUNTS || []).map((a) => ({
+    value: String(a.code),
+    label: `${a.code} — ${a.name}`
+  }))], []);
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return invoices.filter((inv) => {
+      if (phaseFilter === "none" && inv.phase_id != null) return false;
+      if (phaseFilter !== "all" && phaseFilter !== "none" && String(inv.phase_id) !== phaseFilter) return false;
+      if (accountFilter !== "all" && String(inv.expense_account_code) !== accountFilter) return false;
+      if (statusFilter !== "all" && inv._status !== statusFilter) return false;
+      if (q) {
+        const hay = `${inv.invoice_number || ""} ${inv.supplier_name || ""}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    }).sort((a, b) => String(b.invoice_date || "").localeCompare(String(a.invoice_date || "")));
+  }, [invoices, phaseFilter, accountFilter, statusFilter, search]);
+  const phaseName = (id) => id == null ? "بلا قسم" : phases.find((p) => String(p.id) === String(id))?.name || "—";
+  const exportColumns = useMemo(
+    () => [{
+      header: "رقم الفاتورة",
+      accessor: (r) => r.invoice_number || ""
+    }, {
+      header: "التاريخ",
+      accessor: (r) => formatDate$4(r.invoice_date)
+    }, {
+      header: "الاستحقاق",
+      accessor: (r) => formatDate$4(r.due_date)
+    }, {
+      header: "المورد",
+      accessor: (r) => r.supplier_name || ""
+    }, {
+      header: "القسم",
+      accessor: (r) => phaseName(r.phase_id)
+    }, {
+      header: "الحساب",
+      accessor: (r) => `${r.expense_account_code || ""} ${accountName(r.expense_account_code)}`
+    }, {
+      header: "الإجمالي",
+      accessor: (r) => formatMoney$i(r.total_amount, false)
+    }, {
+      header: "المسدد",
+      accessor: (r) => formatMoney$i(r.paid_amount, false)
+    }, {
+      header: "المتبقي",
+      accessor: (r) => formatMoney$i(moneyValue$b(r.total_amount) - moneyValue$b(r.paid_amount), false)
+    }, {
+      header: "الحالة",
+      accessor: (r) => INVOICE_STATUS_LABELS?.[r._status] || r._status
+    }],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [phases]
+  );
+  const exportTitle = `مصروفات تأسيس — ${project?.name || ""}`;
+  const exportFile = `branch-project-${project?.code || project?.id || "expenses"}`;
+  function handleDelete(inv) {
+    if (!project?.id) return;
+    if (!window.confirm(`حذف الفاتورة «${inv.invoice_number}»؟`)) return;
+    deleteMut.mutate({
+      project_id: project.id,
+      id: inv.id
+    });
+  }
+  const statCards = [{
+    label: "الميزانية الإجمالية",
+    value: formatMoney$i(budget.budget_total, false),
+    icon: Wallet,
+    tone: "slate"
+  }, {
+    label: "مجموع ميزانيات الأقسام",
+    value: formatMoney$i(budget.phases_budget, false),
+    icon: Table2,
+    tone: budget.unallocated < 0 ? "rose" : "sky",
+    suffix: `غير موزَّع: ${formatMoney$i(budget.unallocated, false)}`
+  }, {
+    label: "الملتزم به",
+    value: formatMoney$i(budget.committed, false),
+    icon: Receipt,
+    tone: budget.over ? "rose" : "amber",
+    suffix: `${Math.round(budget.pct || 0)}% من الميزانية`
+  }, {
+    label: "المسدد",
+    value: formatMoney$i(budget.paid, false),
+    icon: Download,
+    tone: "emerald",
+    suffix: `متبقٍ: ${formatMoney$i(budget.remaining, false)}`
+  }];
+  return /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+    /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3", children: statCards.map((c) => /* @__PURE__ */ jsx(SummaryCard$2, { label: c.label, value: c.value, icon: c.icon, tone: c.tone, suffix: c.suffix }, c.label)) }),
+    budget.over ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm text-rose-700 dark:text-rose-200 bg-rose-50 dark:bg-rose-400/10 border border-rose-200 dark:border-rose-400/25 rounded-[10px] px-3 py-2", children: [
+      /* @__PURE__ */ jsx(AlertTriangle, { className: "w-4 h-4 shrink-0" }),
+      "الملتزم به تجاوز الميزانية الإجمالية بمقدار ",
+      formatMoney$i(Math.abs(budget.remaining)),
+      "."
+    ] }) : null,
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-4 items-start", children: [
+      /* @__PURE__ */ jsx(SectionCard, { title: "الميزانية مقابل الفعلي", icon: Table2, description: "لكل قسم", children: phaseRows.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-500 dark:text-white/45 py-4 text-center", children: "لا أقسام بعد." }) : /* @__PURE__ */ jsx("div", { className: "overflow-x-auto -mx-4 px-4", children: /* @__PURE__ */ jsxs("table", { className: "w-full text-xs min-w-[560px]", children: [
+        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-slate-500 dark:text-white/45", children: [
+          /* @__PURE__ */ jsx("th", { className: "text-right font-semibold py-2", children: "القسم" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left font-semibold py-2", children: "ميزانية" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left font-semibold py-2", children: "ملتزم" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left font-semibold py-2", children: "مسدد" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left font-semibold py-2", children: "متبقٍ" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left font-semibold py-2 w-[120px]", children: "%" })
+        ] }) }),
+        /* @__PURE__ */ jsx("tbody", { children: phaseRows.map((row) => /* @__PURE__ */ jsxs("tr", { className: `border-t ${ws.divider}`, children: [
+          /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white", children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-2", children: [
+            /* @__PURE__ */ jsx("span", { className: "w-2.5 h-2.5 rounded-full shrink-0", style: {
+              background: row.color || "#94a3b8"
+            } }),
+            row.name
+          ] }) }),
+          /* @__PURE__ */ jsx("td", { className: "py-2 text-left tabular-nums text-slate-700 dark:text-white/80", dir: "ltr", children: formatMoney$i(row.budget, false) }),
+          /* @__PURE__ */ jsx("td", { className: `py-2 text-left tabular-nums ${row.over ? "text-rose-600 dark:text-rose-300 font-semibold" : "text-slate-700 dark:text-white/80"}`, dir: "ltr", children: formatMoney$i(row.committed, false) }),
+          /* @__PURE__ */ jsx("td", { className: "py-2 text-left tabular-nums text-[#0e7a5f] dark:text-emerald-200", dir: "ltr", children: formatMoney$i(row.paid, false) }),
+          /* @__PURE__ */ jsx("td", { className: `py-2 text-left tabular-nums ${row.remaining < 0 ? "text-rose-600 dark:text-rose-300" : "text-slate-700 dark:text-white/80"}`, dir: "ltr", children: formatMoney$i(row.remaining, false) }),
+          /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+            /* @__PURE__ */ jsx(ProgressBar, { pct: row.pct, tone: row.over ? "rose" : "sky", className: "flex-1" }),
+            /* @__PURE__ */ jsxs("span", { className: "tabular-nums text-slate-500 dark:text-white/45 w-9 text-left", dir: "ltr", children: [
+              Math.round(row.pct || 0),
+              "%"
+            ] })
+          ] }) })
+        ] }, row.key)) })
+      ] }) }) }),
+      /* @__PURE__ */ jsx(SectionCard, { title: "التوزيع حسب الحساب", icon: PieChart, children: pieData.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-500 dark:text-white/45 py-8 text-center", children: "لا فواتير بعد." }) : /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-[180px_minmax(0,1fr)] gap-3 items-center", children: [
+        /* @__PURE__ */ jsx("div", { className: "h-[180px]", children: /* @__PURE__ */ jsx(ResponsiveContainer, { width: "100%", height: "100%", children: /* @__PURE__ */ jsxs(PieChart$1, { children: [
+          /* @__PURE__ */ jsx(Pie, { data: pieData, dataKey: "value", nameKey: "name", innerRadius: 48, outerRadius: 80, paddingAngle: 2, stroke: isDark ? "rgba(19,32,68,0.9)" : "#ffffff", strokeWidth: 2, children: pieData.map((d) => /* @__PURE__ */ jsx(Cell, { fill: d.fill }, d.code)) }),
+          /* @__PURE__ */ jsx(Tooltip, { content: /* @__PURE__ */ jsx(PieTooltip, { isDark, total: pieTotal }) })
+        ] }) }) }),
+        /* @__PURE__ */ jsx("ul", { className: "space-y-1.5 text-xs", children: pieData.map((d) => /* @__PURE__ */ jsxs("li", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsx("span", { className: "w-2.5 h-2.5 rounded-full shrink-0", style: {
+            background: d.fill
+          } }),
+          /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/80 flex-1 truncate", children: d.name }),
+          /* @__PURE__ */ jsx("span", { className: "tabular-nums text-slate-900 dark:text-white font-semibold", dir: "ltr", children: formatMoney$i(d.value, false) }),
+          /* @__PURE__ */ jsxs("span", { className: "tabular-nums text-slate-400 dark:text-white/35 w-9 text-left", dir: "ltr", children: [
+            pieTotal > 0 ? Math.round(d.value / pieTotal * 100) : 0,
+            "%"
+          ] })
+        ] }, d.code)) })
+      ] }) })
+    ] }),
+    /* @__PURE__ */ jsxs(SectionCard, { title: "الفواتير", icon: Receipt, description: `${filtered.length} من ${invoices.length}`, action: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 flex-wrap", children: [
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => exportToExcelHTML(filtered, exportFile, exportColumns, exportTitle), disabled: filtered.length === 0, className: `${ws.btnNeutral} px-2.5 py-1.5 text-xs disabled:opacity-50`, title: "تصدير Excel", children: [
+        /* @__PURE__ */ jsx(FileSpreadsheet, { className: "w-3.5 h-3.5" }),
+        "Excel"
+      ] }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => exportToPDF(filtered, exportFile, exportColumns, exportTitle), disabled: filtered.length === 0, className: `${ws.btnNeutral} px-2.5 py-1.5 text-xs disabled:opacity-50`, title: "تصدير PDF", children: [
+        /* @__PURE__ */ jsx(FileText, { className: "w-3.5 h-3.5" }),
+        "PDF"
+      ] }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setModal({
+        open: true,
+        invoice: null
+      }), className: `${ws.btnPrimary} px-3 py-1.5 text-xs`, children: [
+        /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
+        "فاتورة"
+      ] })
+    ] }), children: [
+      /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mb-3", children: "مؤقتاً تُسجَّل الفواتير هنا؛ عند ربط الخلفية تُنشأ من فواتير المشتريات مباشرة." }),
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3", children: [
+        /* @__PURE__ */ jsxs("div", { className: "relative", children: [
+          /* @__PURE__ */ jsx(Search, { className: "w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/35" }),
+          /* @__PURE__ */ jsx("input", { type: "text", value: search, onChange: (e) => setSearch(e.target.value), className: `${ws.input} pr-9 pl-3 py-2 text-sm`, placeholder: "بحث برقم الفاتورة أو المورد…" })
+        ] }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: phaseFilter, onChange: setPhaseFilter, options: phaseOptions, placeholder: "القسم", buttonClassName: "text-sm py-2 px-3" }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: accountFilter, onChange: setAccountFilter, options: accountOptions, placeholder: "الحساب", buttonClassName: "text-sm py-2 px-3", menuWidth: 300 })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex items-center gap-1.5 flex-wrap mb-3", children: [{
+        value: "all",
+        label: "الكل"
+      }, ...STATUS_ORDER.map((s) => ({
+        value: s,
+        label: INVOICE_STATUS_LABELS?.[s] || s
+      }))].map((opt) => {
+        const active = statusFilter === opt.value;
+        return /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setStatusFilter(opt.value), className: `${ws.chip} px-2.5 py-1 ${active ? "!bg-[#0b3d31] !text-white !border-[#0b3d31] dark:!bg-white/10 dark:!border-white/20" : ""}`, children: opt.label }, opt.value);
+      }) }),
+      filtered.length === 0 ? /* @__PURE__ */ jsx(EmptyState$1, { icon: Receipt, title: invoices.length === 0 ? "لا فواتير بعد" : "لا نتائج مطابقة", hint: invoices.length === 0 ? "سجّل أول فاتورة مصروف تأسيس لهذا المشروع." : "عدّل الفلاتر أو البحث." }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+        /* @__PURE__ */ jsx("div", { className: "hidden md:block overflow-x-auto -mx-4 px-4", children: /* @__PURE__ */ jsxs("table", { className: "w-full text-xs min-w-[760px]", children: [
+          /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-slate-500 dark:text-white/45", children: [
+            /* @__PURE__ */ jsx("th", { className: "text-right font-semibold py-2", children: "رقم" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right font-semibold py-2", children: "تاريخ" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right font-semibold py-2", children: "مورد" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right font-semibold py-2", children: "قسم" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right font-semibold py-2", children: "حساب" }),
+            /* @__PURE__ */ jsx("th", { className: "text-left font-semibold py-2", children: "إجمالي" }),
+            /* @__PURE__ */ jsx("th", { className: "text-left font-semibold py-2", children: "مسدد" }),
+            /* @__PURE__ */ jsx("th", { className: "text-right font-semibold py-2", children: "حالة" }),
+            /* @__PURE__ */ jsx("th", { className: "py-2" })
+          ] }) }),
+          /* @__PURE__ */ jsx("tbody", { children: filtered.map((inv) => /* @__PURE__ */ jsxs("tr", { className: `border-t ${ws.divider}`, children: [
+            /* @__PURE__ */ jsx("td", { className: "py-2 font-mono text-slate-900 dark:text-white", dir: "ltr", children: inv.invoice_number }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 tabular-nums text-slate-700 dark:text-white/80", dir: "ltr", children: formatDate$4(inv.invoice_date) }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white", children: inv.supplier_name }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/80", children: phaseName(inv.phase_id) }),
+            /* @__PURE__ */ jsxs("td", { className: "py-2 text-slate-700 dark:text-white/80", children: [
+              /* @__PURE__ */ jsx("span", { className: "font-mono text-slate-400 dark:text-white/35 ml-1", dir: "ltr", children: inv.expense_account_code }),
+              accountName(inv.expense_account_code)
+            ] }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-left tabular-nums text-slate-900 dark:text-white font-semibold", dir: "ltr", children: formatMoney$i(inv.total_amount, false) }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-left tabular-nums text-[#0e7a5f] dark:text-emerald-200", dir: "ltr", children: formatMoney$i(inv.paid_amount, false) }),
+            /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsx(InvoiceStatusPill, { status: inv._status }) }),
+            /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 justify-end", children: [
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setModal({
+                open: true,
+                invoice: inv
+              }), className: `${ws.iconButton} w-8 h-8`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleDelete(inv), className: `${ws.iconButton} w-8 h-8 text-rose-600 dark:text-rose-300`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+            ] }) })
+          ] }, inv.id)) })
+        ] }) }),
+        /* @__PURE__ */ jsx("div", { className: "md:hidden space-y-2", children: filtered.map((inv) => /* @__PURE__ */ jsxs("div", { className: `${ws.innerCard} p-3 space-y-2`, children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-2", children: [
+            /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+              /* @__PURE__ */ jsx("div", { className: "font-mono text-sm text-slate-900 dark:text-white", dir: "ltr", children: inv.invoice_number }),
+              /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-700 dark:text-white/80", children: inv.supplier_name })
+            ] }),
+            /* @__PURE__ */ jsx(InvoiceStatusPill, { status: inv._status })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]", children: [
+            /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "تاريخ" }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white tabular-nums text-left", dir: "ltr", children: formatDate$4(inv.invoice_date) }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "قسم" }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-left", children: phaseName(inv.phase_id) }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "حساب" }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-left", children: accountName(inv.expense_account_code) }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "إجمالي" }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white tabular-nums font-semibold text-left", dir: "ltr", children: formatMoney$i(inv.total_amount, false) }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "مسدد" }),
+            /* @__PURE__ */ jsx("div", { className: "text-[#0e7a5f] dark:text-emerald-200 tabular-nums text-left", dir: "ltr", children: formatMoney$i(inv.paid_amount, false) })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 justify-end", children: [
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setModal({
+              open: true,
+              invoice: inv
+            }), className: `${ws.btnNeutral} px-2.5 py-1.5 text-xs`, children: [
+              /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }),
+              "تعديل"
+            ] }),
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleDelete(inv), className: `${ws.btnDanger} px-2.5 py-1.5 text-xs`, children: [
+              /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }),
+              "حذف"
+            ] })
+          ] })
+        ] }, inv.id)) })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx(ExpenseModal, { open: modal.open, project, invoice: modal.invoice, defaultPhaseId: phaseFilter !== "all" && phaseFilter !== "none" ? Number(phaseFilter) : null, onClose: () => setModal({
+      open: false,
+      invoice: null
+    }) })
+  ] });
+}
+
+// Client-side image downscale + re-encode before upload.
+//
+// Phone cameras produce 3–12MB JPEGs at 4000px+. Our chunked
+// uploader pushes those in 128KB slices over sequential HTTP
+// round-trips, so a single receipt photo can take 30–60s. Receipts
+// and deduction attachments only need to be legible, not
+// full-resolution — downscaling the longest edge to ~1600px and
+// re-encoding as JPEG q≈0.72 typically cuts an 8MB photo to
+// ~250–450KB (a 20–40× reduction), which collapses the upload to a
+// 2–4 chunk round-trip.
+//
+// Non-image files, tiny images, and anything the browser can't
+// decode pass through UNTOUCHED — the caller still gets a valid
+// File back, so this is always safe to wrap an upload with.
+
+const DEFAULT_MAX_EDGE = 1600;
+const DEFAULT_QUALITY = 0.72;
+// Below this, compressing is pointless overhead — ship as-is.
+const SKIP_BELOW_BYTES = 400 * 1024; // 400KB
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise(resolve => {
+    if (canvas.toBlob) {
+      canvas.toBlob(blob => resolve(blob), type, quality);
+    } else {
+      // Very old browsers: fall back to dataURL → Blob.
+      try {
+        const dataUrl = canvas.toDataURL(type, quality);
+        const [meta, b64] = dataUrl.split(",");
+        const mime = (meta.match(/:(.*?);/) || [])[1] || type;
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i += 1) bytes[i] = bin.charCodeAt(i);
+        resolve(new Blob([bytes], {
+          type: mime
+        }));
+      } catch {
+        resolve(null);
+      }
+    }
+  });
+}
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("decode failed"));
+    };
+    img.src = url;
+  });
+}
+
+/**
+ * Returns a (possibly) smaller File. Always resolves to a usable
+ * File — never throws to the caller; on any failure it returns the
+ * original input untouched.
+ *
+ * @param {File} file
+ * @param {{maxEdge?: number, quality?: number}} [opts]
+ */
+async function compressImage(file, opts = {}) {
+  try {
+    if (typeof window === "undefined" || !file) return file;
+    const type = file.type || "";
+    // Only raster photos benefit. Skip SVG (vector — rasterizing
+    // would degrade it) and any non-image.
+    if (!type.startsWith("image/") || type === "image/svg+xml") {
+      return file;
+    }
+    // GIF may be animated; canvas re-encode would flatten to one
+    // frame. Leave it alone.
+    if (type === "image/gif") return file;
+    if (typeof file.size === "number" && file.size > 0 && file.size < SKIP_BELOW_BYTES) {
+      return file;
+    }
+    const maxEdge = opts.maxEdge || DEFAULT_MAX_EDGE;
+    const quality = opts.quality || DEFAULT_QUALITY;
+    const img = await loadImage(file);
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    if (!w || !h) return file;
+    const longest = Math.max(w, h);
+    const scale = longest > maxEdge ? maxEdge / longest : 1;
+    const targetW = Math.round(w * scale);
+    const targetH = Math.round(h * scale);
+    const canvas = document.createElement("canvas");
+    canvas.width = targetW;
+    canvas.height = targetH;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return file;
+    ctx.drawImage(img, 0, 0, targetW, targetH);
+
+    // Always re-encode to JPEG — PNG photos balloon, and we don't
+    // need alpha on a receipt/attachment. Keeps the pipeline simple.
+    const blob = await canvasToBlob(canvas, "image/jpeg", quality);
+    if (!blob || !blob.size) return file;
+
+    // If compression somehow produced a bigger file (already-tiny
+    // or already-optimized source), keep the original.
+    if (typeof file.size === "number" && blob.size >= file.size) {
+      return file;
+    }
+    const baseName = (file.name || "image").replace(/\.[^.]+$/, "");
+    return new File([blob], `${baseName}.jpg`, {
+      type: "image/jpeg",
+      lastModified: Date.now()
+    });
+  } catch {
+    // Any failure → original file, upload still works.
+    return file;
+  }
+}
+
+const compressImage$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  compressImage,
+  default: compressImage
+}, Symbol.toStringTag, { value: 'Module' }));
+
+function useUpload() {
+  const [loading, setLoading] = React.useState(false);
+  const MAX_UPLOAD_BYTES = 90 * 1024 * 1024; // 90MB
+
+  const upload = React.useCallback(async input => {
+    try {
+      setLoading(true);
+      const readErrorMessage = async res => {
+        // Prefer JSON { error } but fall back to plain text.
+        // IMPORTANT: clone() the response because body streams can only be read once.
+        try {
+          const maybeJson = await res.clone().json();
+          if (maybeJson?.error) {
+            return String(maybeJson.error);
+          }
+        } catch {
+          // ignore
+        }
+        try {
+          const t = await res.clone().text();
+          if (t) {
+            return t;
+          }
+        } catch {
+          // ignore
+        }
+        return `Upload failed (${res.status} ${res.statusText})`;
+      };
+      const isNetworkLikeError = err => {
+        const msg = err instanceof Error ? err.message : String(err || "");
+        const lower = msg.toLowerCase();
+        // Browsers differ (Chrome: "Failed to fetch", Safari/iOS: "Load failed")
+        return lower.includes("failed to fetch") || lower.includes("load failed") || lower.includes("networkerror") || lower.includes("network error") || lower.includes("the network connection");
+      };
+      const uploadChunked = async file => {
+        // Keep chunks VERY small because Anything Functions can reject bigger payloads
+        // with FUNCTION_PAYLOAD_TOO_LARGE (varies by environment).
+        const CHUNK_SIZE = 128 * 1024; // 128KB (safer across environments)
+        const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+        const initRes = await authedFetch("/api/uploads/init", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            fileName: file.name,
+            mimeType: file.type || null,
+            sizeBytes: file.size,
+            totalChunks
+          })
+        });
+        if (!initRes.ok) {
+          const msg = await readErrorMessage(initRes);
+          throw new Error(msg || `When POSTing /api/uploads/init, the response was [${initRes.status}] ${initRes.statusText}`);
+        }
+        const initData = await initRes.json().catch(() => ({}));
+        const uploadId = initData?.uploadId;
+        if (!uploadId) {
+          throw new Error("فشل بدء رفع الملف");
+        }
+        try {
+          // Upload chunks with bounded concurrency instead of one
+          // strictly-sequential round-trip at a time. Each chunk is
+          // tiny (128KB) but the per-request latency dominates over
+          // a phone connection, so firing several in parallel cuts
+          // wall-clock roughly N-fold. Cap kept modest so we don't
+          // overwhelm the function/DB or trip rate limits.
+          const CONCURRENCY = 6;
+          const uploadOneChunk = async i => {
+            const start = i * CHUNK_SIZE;
+            const end = Math.min(file.size, start + CHUNK_SIZE);
+            const slice = file.slice(start, end);
+            const arrayBuffer = await slice.arrayBuffer();
+            const chunkRes = await authedFetch(`/api/uploads/${uploadId}/chunk?index=${i}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/octet-stream"
+              },
+              body: arrayBuffer
+            });
+            if (!chunkRes.ok) {
+              const msg = await readErrorMessage(chunkRes);
+              throw new Error(msg || `When POSTing a chunk, the response was [${chunkRes.status}] ${chunkRes.statusText}`);
+            }
+          };
+          for (let base = 0; base < totalChunks; base += CONCURRENCY) {
+            const batch = [];
+            for (let i = base; i < Math.min(base + CONCURRENCY, totalChunks); i += 1) {
+              batch.push(uploadOneChunk(i));
+            }
+            // If any chunk in the batch fails, the whole upload aborts
+            // (the catch below cleans up the session).
+            await Promise.all(batch);
+          }
+          const completeRes = await authedFetch(`/api/uploads/${uploadId}/complete`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              totalChunks
+            })
+          });
+          if (!completeRes.ok) {
+            const msg = await readErrorMessage(completeRes);
+            throw new Error(msg || `When POSTing /api/uploads/${uploadId}/complete, the response was [${completeRes.status}] ${completeRes.statusText}`);
+          }
+          const completeData = await completeRes.json().catch(() => ({}));
+          return {
+            url: completeData?.url,
+            mimeType: completeData?.mimeType || file.type || null
+          };
+        } catch (e) {
+          // best-effort cleanup
+          try {
+            await authedFetch(`/api/uploads/${uploadId}`, {
+              method: "DELETE"
+            });
+          } catch {
+            // ignore
+          }
+          throw e;
+        }
+      };
+      if ("file" in input && input.file) {
+        // Downscale + re-encode photos before chunking. A receipt
+        // shot at 8MB becomes ~300KB, turning a 60-chunk sequential
+        // upload into a 2–3 chunk one. No-op for non-images, tiny
+        // images, or anything the browser can't decode. `unoptimized`
+        // lets a caller opt out (e.g. originals that must stay exact).
+        const file = input.unoptimized ? input.file : await compressImage(input.file);
+        if (typeof file?.size === "number" && file.size > MAX_UPLOAD_BYTES) {
+          throw new Error(`Upload failed: File too large. الحد الأقصى ${Math.round(MAX_UPLOAD_BYTES / (1024 * 1024))}MB`);
+        }
+
+        // Always use chunked upload through our own /api/uploads/* endpoints.
+        const chunked = await uploadChunked(file);
+        return {
+          url: chunked.url,
+          mimeType: chunked.mimeType || null
+        };
+      } else if ("url" in input) {
+        // Fetch the remote URL and convert to a File, then chunked upload.
+        const remoteRes = await fetch(input.url);
+        if (!remoteRes.ok) {
+          throw new Error(`تعذر تحميل الرابط (${remoteRes.status})`);
+        }
+        const blob = await remoteRes.blob();
+        const fileName = (input.url.split("/").pop() || "file").split("?")[0] || "file";
+        const file = new File([blob], fileName, {
+          type: blob.type || "application/octet-stream"
+        });
+        const chunked = await uploadChunked(file);
+        return {
+          url: chunked.url,
+          mimeType: chunked.mimeType || null
+        };
+      } else if ("base64" in input) {
+        // Decode base64 (with optional data: prefix) into a File, then upload.
+        const raw = String(input.base64 || "");
+        let mime = "application/octet-stream";
+        let b64Body = raw;
+        const m = raw.match(/^data:([^;]+);base64,(.*)$/);
+        if (m) {
+          mime = m[1];
+          b64Body = m[2];
+        }
+        const binary = atob(b64Body);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i += 1) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        const file = new File([bytes], "upload.bin", {
+          type: mime
+        });
+        const chunked = await uploadChunked(file);
+        return {
+          url: chunked.url,
+          mimeType: chunked.mimeType || null
+        };
+      } else {
+        // Raw buffer
+        const buf = input.buffer;
+        const file = new File([buf], "upload.bin", {
+          type: "application/octet-stream"
+        });
+        const chunked = await uploadChunked(file);
+        return {
+          url: chunked.url,
+          mimeType: chunked.mimeType || null
+        };
+      }
+    } catch (uploadError) {
+      const msg = uploadError instanceof Error ? uploadError.message : null;
+      const msgLower = msg ? msg.toLowerCase() : "";
+      if (msgLower.includes("failed to fetch") || msgLower.includes("load failed")) {
+        return {
+          error: "فشل الاتصال بخدمة رفع الملفات. تأكد من الإنترنت ثم جرّب مرة ثانية."
+        };
+      }
+      if (uploadError instanceof Error) {
+        return {
+          error: uploadError.message
+        };
+      }
+      if (typeof uploadError === "string") {
+        return {
+          error: uploadError
+        };
+      }
+      return {
+        error: "Upload failed"
+      };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  return [upload, {
+    loading
+  }];
+}
+
+function UpdateComposer({
+  project,
+  onDone
+}) {
+  const [upload, {
+    loading: uploading
+  }] = useUpload();
+  const addMut = useAddBranchProjectUpdate();
+  const fileInputRef = useRef(null);
+  const [body, setBody] = useState("");
+  const [phaseId, setPhaseId] = useState("");
+  const [photos, setPhotos] = useState([]);
+  const [error, setError] = useState("");
+  const phaseOptions = useMemo(() => {
+    const phases = Array.isArray(project?.phases) ? [...project.phases] : [];
+    phases.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+    return [{
+      value: "",
+      label: "عام (بلا قسم)"
+    }, ...phases.map((p) => ({
+      value: String(p.id),
+      label: p.name
+    }))];
+  }, [project?.phases]);
+  async function handleFiles(fileList) {
+    const files = Array.from(fileList || []).filter((f) => f && /^image\//.test(f.type || ""));
+    if (files.length === 0) return;
+    for (const file of files) {
+      const result = await upload({
+        file
+      });
+      if (result?.error) {
+        toast.error(`فشل رفع ${file.name}: ${result.error}`);
+        continue;
+      }
+      if (result?.url) setPhotos((prev) => [...prev, result.url]);
+    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+  function handleSubmit(event) {
+    event?.preventDefault?.();
+    if (!project?.id || addMut.isPending || uploading) return;
+    if (!body.trim() && photos.length === 0) {
+      setError("اكتب نصاً أو أرفق صورة");
+      return;
+    }
+    setError("");
+    addMut.mutate({
+      project_id: project.id,
+      phase_id: phaseId ? Number(phaseId) : null,
+      body: body.trim(),
+      photos
+    }, {
+      onSuccess: () => {
+        setBody("");
+        setPhotos([]);
+        setPhaseId("");
+        onDone?.();
+      }
+    });
+  }
+  const busy = addMut.isPending || uploading;
+  return /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx(FieldLabel$2, { children: "تطوّر جديد" }),
+      /* @__PURE__ */ jsx("textarea", { value: body, onChange: (e) => setBody(e.target.value), rows: 3, className: `${ws.input} px-3 py-2 text-sm resize-y`, placeholder: "ماذا حدث اليوم في الموقع؟" }),
+      error ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-600 dark:text-rose-300 mt-1", children: error }) : null
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3 items-end", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "القسم" }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: phaseId, onChange: setPhaseId, options: phaseOptions, placeholder: "عام", buttonClassName: "text-sm py-2 px-3" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx("input", { ref: fileInputRef, type: "file", accept: "image/*", multiple: true, className: "hidden", onChange: (e) => handleFiles(e.target.files) }),
+        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => fileInputRef.current?.click(), disabled: busy, className: `${ws.btnNeutral} px-3 py-2 text-sm w-full justify-center disabled:opacity-60`, children: [
+          uploading ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(ImagePlus, { className: "w-4 h-4" }),
+          uploading ? "جاري الرفع…" : "إضافة صور"
+        ] })
+      ] })
+    ] }),
+    photos.length > 0 ? /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-2", children: photos.map((url, index) => /* @__PURE__ */ jsxs("div", { className: "relative w-20 h-20 rounded-[10px] overflow-hidden border border-slate-200 dark:border-white/10", children: [
+      /* @__PURE__ */ jsx("img", { src: url, alt: "", className: "w-full h-full object-cover" }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPhotos((prev) => prev.filter((_, i) => i !== index)), className: "absolute top-1 left-1 w-6 h-6 rounded-full bg-black/60 text-white flex items-center justify-center", title: "إزالة", children: /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) })
+    ] }, `${url}-${index}`)) }) : null,
+    /* @__PURE__ */ jsx("div", { className: "flex items-center justify-end", children: /* @__PURE__ */ jsxs("button", { type: "submit", disabled: busy, className: `${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`, children: [
+      addMut.isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Send, { className: "w-4 h-4" }),
+      "نشر"
+    ] }) })
+  ] });
+}
+
+function formatDateTime$3(value) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value).slice(0, 16).replace("T", " ");
+  return d.toLocaleString("en-GB", {
+    timeZone: "Asia/Riyadh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+}
+function UpdatesTab({
+  project
+}) {
+  const deleteMut = useDeleteBranchProjectUpdate();
+  const [phaseFilter, setPhaseFilter] = useState("all");
+  const phases = useMemo(() => {
+    const list = Array.isArray(project?.phases) ? [...project.phases] : [];
+    list.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+    return list;
+  }, [project?.phases]);
+  const phaseById = useMemo(() => new Map(phases.map((p) => [String(p.id), p])), [phases]);
+  const filterOptions = useMemo(() => [{
+    value: "all",
+    label: "كل التطورات"
+  }, {
+    value: "none",
+    label: "عام (بلا قسم)"
+  }, ...phases.map((p) => ({
+    value: String(p.id),
+    label: p.name
+  }))], [phases]);
+  const updates = useMemo(() => {
+    const list = Array.isArray(project?.updates) ? [...project.updates] : [];
+    list.sort((a, b) => String(b.created_at || "").localeCompare(String(a.created_at || "")));
+    return list.filter((u) => {
+      if (phaseFilter === "all") return true;
+      if (phaseFilter === "none") return u.phase_id == null;
+      return String(u.phase_id) === phaseFilter;
+    });
+  }, [project?.updates, phaseFilter]);
+  function handleDelete(update) {
+    if (!project?.id) return;
+    if (!window.confirm("حذف هذا التطوّر؟")) return;
+    deleteMut.mutate({
+      project_id: project.id,
+      id: update.id
+    });
+  }
+  return /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+    /* @__PURE__ */ jsx(UpdateComposer, { project }),
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3 flex-wrap", children: [
+      /* @__PURE__ */ jsxs("div", { className: "text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2", children: [
+        /* @__PURE__ */ jsx(MessageSquareText, { className: "w-4 h-4 text-[#0e7a5f] dark:text-emerald-200" }),
+        "الخط الزمني",
+        /* @__PURE__ */ jsxs("span", { className: "text-xs font-normal text-slate-500 dark:text-white/45 tabular-nums", children: [
+          "(",
+          updates.length,
+          ")"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex-1" }),
+      /* @__PURE__ */ jsx("div", { className: "w-full sm:w-56", children: /* @__PURE__ */ jsx(GlassSelect, { value: phaseFilter, onChange: setPhaseFilter, options: filterOptions, placeholder: "القسم", buttonClassName: "text-sm py-2 px-3" }) })
+    ] }),
+    updates.length === 0 ? /* @__PURE__ */ jsx(EmptyState$1, { icon: MessageSquareText, title: "لا تطورات بعد", hint: "سجّل أول تحديث من الموقع أعلاه." }) : /* @__PURE__ */ jsx("ol", { className: "relative space-y-3 pr-4 before:absolute before:right-[7px] before:top-2 before:bottom-2 before:w-px before:bg-slate-200 dark:before:bg-white/10", children: updates.map((update) => {
+      const phase = update.phase_id != null ? phaseById.get(String(update.phase_id)) : null;
+      const photos = Array.isArray(update.photos) ? update.photos : [];
+      return /* @__PURE__ */ jsxs("li", { className: "relative", children: [
+        /* @__PURE__ */ jsx("span", { className: "absolute -right-4 top-4 w-3.5 h-3.5 rounded-full border-2 border-white dark:border-[#132044]", style: {
+          background: phase?.color || "#94a3b8"
+        } }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-2`, children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-2 flex-wrap", children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] text-slate-500 dark:text-white/45 min-w-0 flex-1", children: [
+              /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: formatDateTime$3(update.created_at) }),
+              update.created_by_name ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+                /* @__PURE__ */ jsx(UserRound, { className: "w-3 h-3" }),
+                update.created_by_name
+              ] }) : null,
+              phase ? /* @__PURE__ */ jsxs("span", { className: `${ws.chip} px-2 py-0.5 text-[11px]`, children: [
+                /* @__PURE__ */ jsx("span", { className: "w-2 h-2 rounded-full", style: {
+                  background: phase.color || "#94a3b8"
+                } }),
+                phase.name
+              ] }) : /* @__PURE__ */ jsx("span", { className: `${ws.chip} px-2 py-0.5 text-[11px]`, children: "عام" })
+            ] }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleDelete(update), className: `${ws.iconButton} w-8 h-8 text-rose-600 dark:text-rose-300`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+          ] }),
+          update.body ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-900 dark:text-white whitespace-pre-line leading-relaxed", children: update.body }) : null,
+          photos.length > 0 ? /* @__PURE__ */ jsx("div", { className: "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2", children: photos.map((url, index) => /* @__PURE__ */ jsx("a", { href: url, target: "_blank", rel: "noreferrer", className: "block aspect-square rounded-[10px] overflow-hidden border border-slate-200 dark:border-white/10", children: /* @__PURE__ */ jsx("img", { src: url, alt: "", className: "w-full h-full object-cover", loading: "lazy" }) }, `${url}-${index}`)) }) : null
+        ] })
+      ] }, update.id);
+    }) })
+  ] });
+}
+
+const KIND_ICONS = {
+  contract: FileSignature,
+  permit: FileBadge,
+  design: PenTool,
+  quote: ReceiptText,
+  photo: Camera,
+  other: File$1
+};
+const inputCls = `${ws.input} px-3 py-2 text-sm`;
+function kindsList() {
+  if (Array.isArray(ATTACHMENT_KINDS) && ATTACHMENT_KINDS.length) return ATTACHMENT_KINDS;
+  return Object.keys(ATTACHMENT_KIND_LABELS || {});
+}
+function formatTimestampDay(value) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
+  return formatRiyadhDateForInput(d);
+}
+function AttachmentsTab({
+  project
+}) {
+  const [upload, {
+    loading: uploading
+  }] = useUpload();
+  const addMut = useAddBranchProjectAttachment();
+  const deleteMut = useDeleteBranchProjectAttachment();
+  const fileInputRef = useRef(null);
+  const [file, setFile] = useState(null);
+  const [label, setLabel] = useState("");
+  const [kind, setKind] = useState("other");
+  const [phaseId, setPhaseId] = useState("");
+  const [error, setError] = useState("");
+  const phases = useMemo(() => {
+    const list = Array.isArray(project?.phases) ? [...project.phases] : [];
+    list.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+    return list;
+  }, [project?.phases]);
+  const phaseById = useMemo(() => new Map(phases.map((p) => [String(p.id), p])), [phases]);
+  const kindOptions = useMemo(() => kindsList().map((k) => ({
+    value: k,
+    label: ATTACHMENT_KIND_LABELS?.[k] || k
+  })), []);
+  const phaseOptions = useMemo(() => [{
+    value: "",
+    label: "عام (بلا قسم)"
+  }, ...phases.map((p) => ({
+    value: String(p.id),
+    label: p.name
+  }))], [phases]);
+  const groups = useMemo(() => {
+    const items = Array.isArray(project?.attachments) ? project.attachments : [];
+    const map = /* @__PURE__ */ new Map();
+    for (const k of kindsList()) map.set(k, []);
+    for (const item of items) {
+      const k = map.has(item.kind) ? item.kind : "other";
+      if (!map.has(k)) map.set(k, []);
+      map.get(k).push(item);
+    }
+    return [...map.entries()].filter(([, list]) => list.length > 0).map(([k, list]) => ({
+      kind: k,
+      label: ATTACHMENT_KIND_LABELS?.[k] || k,
+      items: list.slice().sort((a, b) => String(b.created_at || "").localeCompare(String(a.created_at || "")))
+    }));
+  }, [project?.attachments]);
+  const total = (project?.attachments || []).length;
+  function handlePick(picked) {
+    if (!picked) return;
+    setFile(picked);
+    if (!label.trim()) setLabel(picked.name.replace(/\.[^.]+$/, ""));
+    if (/^image\//.test(picked.type || "") && kind === "other") setKind("photo");
+  }
+  async function handleSubmit(event) {
+    event?.preventDefault?.();
+    if (!project?.id || uploading || addMut.isPending) return;
+    if (!file) {
+      setError("اختر ملفاً أولاً");
+      return;
+    }
+    if (!label.trim()) {
+      setError("التسمية مطلوبة");
+      return;
+    }
+    setError("");
+    const result = await upload({
+      file,
+      unoptimized: !/^image\//.test(file.type || "")
+    });
+    if (result?.error || !result?.url) {
+      toast.error(`فشل رفع الملف: ${result?.error || "خطأ غير معروف"}`);
+      return;
+    }
+    addMut.mutate({
+      project_id: project.id,
+      phase_id: phaseId ? Number(phaseId) : null,
+      url: result.url,
+      label: label.trim(),
+      kind
+    }, {
+      onSuccess: () => {
+        setFile(null);
+        setLabel("");
+        setKind("other");
+        setPhaseId("");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      }
+    });
+  }
+  function handleDelete(item) {
+    if (!project?.id) return;
+    if (!window.confirm(`حذف المرفق «${item.label}»؟`)) return;
+    deleteMut.mutate({
+      project_id: project.id,
+      id: item.id
+    });
+  }
+  const busy = uploading || addMut.isPending;
+  return /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+    /* @__PURE__ */ jsx(SectionCard, { title: "إضافة مرفق", icon: Plus, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+      /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
+        /* @__PURE__ */ jsx("input", { ref: fileInputRef, type: "file", className: "hidden", onChange: (e) => handlePick(e.target.files?.[0]) }),
+        /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => fileInputRef.current?.click(), className: `${ws.innerCard} w-full px-3 py-3 flex items-center gap-3 text-right hover:border-[#c9d3ce] dark:hover:border-white/20 transition-colors`, children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 shrink-0 text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Upload, { className: "w-4 h-4" }) }),
+          /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+            /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-900 dark:text-white truncate", children: file ? file.name : "اختر ملفاً" }),
+            /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: file ? `${(file.size / 1024).toFixed(0)} KB` : "PDF، صور، مستندات — حتى 90MB" })
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(FieldLabel$2, { children: "التسمية *" }),
+        /* @__PURE__ */ jsx("input", { type: "text", value: label, onChange: (e) => setLabel(e.target.value), className: inputCls, placeholder: "مثال: رخصة البلدية" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(FieldLabel$2, { children: "النوع" }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: kind, onChange: setKind, options: kindOptions, placeholder: "النوع", buttonClassName: "text-sm py-2 px-3" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "القسم" }),
+        /* @__PURE__ */ jsx(GlassSelect, { value: phaseId, onChange: setPhaseId, options: phaseOptions, placeholder: "عام", buttonClassName: "text-sm py-2 px-3" })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "flex items-end", children: /* @__PURE__ */ jsxs("button", { type: "submit", disabled: busy, className: `${ws.btnPrimary} px-4 py-2 text-sm w-full justify-center disabled:opacity-60`, children: [
+        busy ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Paperclip, { className: "w-4 h-4" }),
+        uploading ? "جاري الرفع…" : "إضافة"
+      ] }) }),
+      error ? /* @__PURE__ */ jsx("div", { className: "sm:col-span-2 text-[11px] text-rose-600 dark:text-rose-300", children: error }) : null
+    ] }) }),
+    total === 0 ? /* @__PURE__ */ jsx(EmptyState$1, { icon: Paperclip, title: "لا مرفقات بعد", hint: "أرفق العقود والتراخيص والمخططات وعروض الأسعار لتبقى في مكان واحد." }) : groups.map((group) => {
+      const Icon = KIND_ICONS[group.kind] || File$1;
+      return /* @__PURE__ */ jsx(SectionCard, { title: group.label, icon: Icon, description: `${group.items.length}`, children: /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-2", children: group.items.map((item) => {
+        const phase = item.phase_id != null ? phaseById.get(String(item.phase_id)) : null;
+        const isImage = group.kind === "photo" || /\.(png|jpe?g|webp|gif)(\?|$)/i.test(item.url || "");
+        return /* @__PURE__ */ jsxs("div", { className: `${ws.innerCard} p-3 flex items-start gap-3`, children: [
+          isImage ? /* @__PURE__ */ jsx("a", { href: item.url, target: "_blank", rel: "noreferrer", className: "w-12 h-12 rounded-[10px] overflow-hidden border border-slate-200 dark:border-white/10 shrink-0", children: /* @__PURE__ */ jsx("img", { src: item.url, alt: "", className: "w-full h-full object-cover", loading: "lazy" }) }) : /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-12 h-12 shrink-0 text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Icon, { className: "w-5 h-5" }) }),
+          /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+            /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-900 dark:text-white truncate", children: item.label }),
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] text-slate-500 dark:text-white/45 mt-0.5", children: [
+              phase ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+                /* @__PURE__ */ jsx("span", { className: "w-2 h-2 rounded-full", style: {
+                  background: phase.color || "#94a3b8"
+                } }),
+                phase.name
+              ] }) : /* @__PURE__ */ jsx("span", { children: "عام" }),
+              /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: formatTimestampDay(item.created_at) }),
+              item.created_by_name ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
+                /* @__PURE__ */ jsx(UserRound, { className: "w-3 h-3" }),
+                item.created_by_name
+              ] }) : null
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 shrink-0", children: [
+            /* @__PURE__ */ jsxs("a", { href: item.url, target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-2.5 py-1.5 text-xs`, children: [
+              /* @__PURE__ */ jsx(ExternalLink, { className: "w-3.5 h-3.5" }),
+              "فتح"
+            ] }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleDelete(item), className: `${ws.iconButton} w-8 h-8 text-rose-600 dark:text-rose-300`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+          ] })
+        ] }, item.id);
+      }) }) }, group.kind);
+    })
+  ] });
+}
+
+const EDITABLE_STATUSES = ["planning", "in_progress", "on_hold", "cancelled"];
+function InfoRow({
+  label,
+  value,
+  ltr
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 py-1.5 text-sm", children: [
+    /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/45 shrink-0", children: label }),
+    /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white text-left truncate", dir: ltr ? "ltr" : void 0, children: value || "—" })
+  ] });
+}
+function SettingsTab({
+  project
+}) {
+  const navigate = useNavigate();
+  const updateMut = useUpdateBranchProject();
+  const deleteMut = useDeleteBranchProject();
+  const [editOpen, setEditOpen] = useState(false);
+  const isOpened = project?.status === "opened";
+  function handleStatus(status) {
+    if (!project?.id || isOpened || status === project.status || updateMut.isPending) return;
+    if (status === "cancelled" && !window.confirm("إلغاء المشروع؟ يمكنك إعادته لاحقاً من هنا.")) return;
+    updateMut.mutate({
+      id: project.id,
+      status
+    });
+  }
+  function handleDelete() {
+    if (!project?.id || deleteMut.isPending) return;
+    const ok = window.confirm(`حذف المشروع «${project.name}» نهائياً مع كل أقسامه ومهامه وفواتيره ومرفقاته؟ لا يمكن التراجع.`);
+    if (!ok) return;
+    deleteMut.mutate({
+      id: project.id
+    }, {
+      onSuccess: () => navigate("/accounting/branch-projects")
+    });
+  }
+  return /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+    /* @__PURE__ */ jsxs(SectionCard, { title: "بيانات المشروع", icon: Building2, action: /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setEditOpen(true), className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: [
+      /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }),
+      "تعديل"
+    ] }), children: [
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-x-8", children: [
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx(InfoRow, { label: "الكود", value: project?.code, ltr: true }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "الاسم", value: project?.name }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "المدينة", value: project?.city }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "الحي", value: project?.district }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "العنوان", value: project?.address }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "المساحة", value: project?.area_sqm != null ? `${project.area_sqm} م²` : "" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx(InfoRow, { label: "توقيع العقد", value: formatDate$4(project?.contract_signed_date), ltr: true }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "الافتتاح المستهدف", value: formatDate$4(project?.target_opening_date), ltr: true }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "الافتتاح الفعلي", value: project?.actual_opening_date ? formatDate$4(project.actual_opening_date) : "", ltr: true }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "الميزانية الإجمالية", value: formatMoney$i(project?.budget_total), ltr: true }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "مدير المشروع", value: project?.manager_name }),
+          /* @__PURE__ */ jsx(InfoRow, { label: "رقم عقد الإيجار", value: project?.lease_contract_number, ltr: true })
+        ] })
+      ] }),
+      project?.notes ? /* @__PURE__ */ jsx("div", { className: `mt-3 ${ws.innerCard} px-3 py-2 text-xs text-slate-700 dark:text-white/70 whitespace-pre-line`, children: project.notes }) : null
+    ] }),
+    /* @__PURE__ */ jsx(SectionCard, { title: "الحالة", icon: ToggleLeft, action: /* @__PURE__ */ jsx(StatusPill$4, { status: project?.status }), children: isOpened ? /* @__PURE__ */ jsxs("div", { className: "text-sm text-slate-600 dark:text-white/60", children: [
+      "المشروع مُفتتح منذ ",
+      /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: formatDate$4(project?.actual_opening_date) }),
+      ". الحالة نهائية ولا تُعدَّل من هنا؛ الافتتاح يُؤكَّد عبر زر «تأكيد الافتتاح» في رأس الصفحة."
+    ] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.segWrap} flex-wrap`, children: EDITABLE_STATUSES.map((status) => {
+        const active = project?.status === status;
+        return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleStatus(status), disabled: updateMut.isPending, className: `${ws.segBtn} text-xs disabled:opacity-60 ${active ? ws.segActive : ws.segInactive}`, children: [
+          updateMut.isPending && updateMut.variables?.status === status ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin inline-block ml-1" }) : null,
+          PROJECT_STATUS_LABELS?.[status] || status
+        ] }, status);
+      }) }),
+      /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-2", children: "حالة «مُفتتح» لا تُختار يدوياً — استخدم زر «تأكيد الافتتاح» في رأس الصفحة بعد اكتمال المعالم." })
+    ] }) }),
+    /* @__PURE__ */ jsx(SectionCard, { title: "منطقة الخطر", icon: AlertTriangle, className: "border-rose-200 dark:border-rose-400/25", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 flex-wrap", children: [
+      /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-700 dark:text-white/70", children: "حذف المشروع يزيل كل الأقسام والمهام والفواتير والتطورات والمرفقات المرتبطة به." }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleDelete, disabled: deleteMut.isPending, className: `${ws.btnDanger} px-4 py-2 text-sm disabled:opacity-60`, children: [
+        deleteMut.isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }),
+        "حذف المشروع"
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsx(ProjectModal, { open: editOpen, project, onClose: () => setEditOpen(false) })
+  ] });
+}
+
+const PAGE_TITLE$1 = "تأسيس الفروع";
+const LIST_PATH = "/accounting/branch-projects";
+const TABS$1 = [{
+  key: "overview",
+  label: "نظرة عامة",
+  Icon: LayoutDashboard,
+  description: "الخط الزمني، التنبيهات، وآخر التطورات."
+}, {
+  key: "phases",
+  label: "الأقسام",
+  Icon: ListChecks,
+  description: "أقسام المشروع ومهامها ومعالمها."
+}, {
+  key: "expenses",
+  label: "المصاريف",
+  Icon: Receipt,
+  description: "الميزانية مقابل الفعلي وفواتير التأسيس."
+}, {
+  key: "updates",
+  label: "التطورات",
+  Icon: MessageSquareText,
+  description: "سجل التطورات والصور من الموقع."
+}, {
+  key: "attachments",
+  label: "المرفقات",
+  Icon: Paperclip,
+  description: "العقود والتراخيص والتصاميم وعروض الأسعار."
+}, {
+  key: "settings",
+  label: "الإعدادات",
+  Icon: Settings2,
+  description: "بيانات المشروع وحالته وحذفه."
+}];
+const TAB_KEYS$1 = new Set(TABS$1.map((tab) => tab.key));
+function MobileHeader$2({
+  project,
+  activeTab
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: `lg:hidden sticky top-0 z-30 ${ws.topBar} px-4 py-3 flex items-center gap-3`, children: [
+    /* @__PURE__ */ jsx(Link, { to: LIST_PATH, className: `${ws.iconButton} shrink-0`, title: "العودة إلى القائمة", children: /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4" }) }),
+    /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+      /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight truncate", children: project?.name || PAGE_TITLE$1 }),
+      /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/50 truncate", children: activeTab?.label || "" })
+    ] })
+  ] });
+}
+function DesktopHeader$2({
+  project,
+  activeTab
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: "hidden lg:flex items-center gap-4", children: [
+    /* @__PURE__ */ jsx("div", { className: ws.iconBox, children: /* @__PURE__ */ jsx(Building2, { className: "w-6 h-6 text-[#0e7a5f] dark:text-emerald-200" }) }),
+    /* @__PURE__ */ jsxs("div", { className: "flex-1 min-w-0", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-xs text-slate-500 dark:text-white/50", children: [
+        /* @__PURE__ */ jsxs(Link, { to: LIST_PATH, className: "inline-flex items-center gap-1 hover:text-[#0e7a5f] dark:hover:text-emerald-200", children: [
+          /* @__PURE__ */ jsx(ArrowRight, { className: "w-3.5 h-3.5" }),
+          PAGE_TITLE$1
+        ] }),
+        project ? /* @__PURE__ */ jsxs(Fragment, { children: [
+          /* @__PURE__ */ jsx("span", { children: "/" }),
+          /* @__PURE__ */ jsx("span", { className: "tabular-nums", dir: "ltr", children: project.code })
+        ] }) : null
+      ] }),
+      /* @__PURE__ */ jsx("h1", { className: "text-xl font-bold text-slate-900 dark:text-white tracking-tight truncate", children: project?.name || "مشروع" }),
+      /* @__PURE__ */ jsx("p", { className: "text-slate-500 dark:text-white/50 text-sm mt-0.5", children: activeTab?.description || "" })
+    ] })
+  ] });
+}
+function pendingMilestonesOf(project) {
+  return (project?.tasks || []).filter((task) => task.is_milestone && task.status !== "done");
+}
+function OpenConfirmModal({
+  open,
+  project,
+  onClose
+}) {
+  const [date, setDate] = useState(() => todayRiyadh$8());
+  const [pending, setPending] = useState(null);
+  const openMut = useOpenBranchProject();
+  useEffect(() => {
+    if (!open) return;
+    setDate(todayRiyadh$8());
+    setPending(null);
+  }, [open]);
+  const submit = (force) => {
+    if (!project || !date) return;
+    openMut.mutate({
+      id: project.id,
+      actual_opening_date: date,
+      force: !!force
+    }, {
+      onSuccess: () => onClose?.(),
+      onError: (error) => {
+        if (error?.code === "milestones_pending") {
+          const fromError = error.milestones || error.pending || error.details?.milestones;
+          const list = Array.isArray(fromError) && fromError.length > 0 ? fromError : pendingMilestonesOf(project);
+          setPending(list.map((item) => typeof item === "string" ? item : item?.title || "").filter(Boolean));
+        }
+      }
+    });
+  };
+  const busy = openMut.isPending;
+  return /* @__PURE__ */ jsx(ModalShell, { open, title: "تأكيد افتتاح الفرع", description: project ? `${project.name} · ${project.code}` : "", onClose: busy ? () => {
+  } : onClose, width: "max-w-md", footer: /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, disabled: busy, className: `${ws.btnNeutral} px-4 py-2 text-sm disabled:opacity-50`, children: "إلغاء" }),
+    pending ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => submit(true), disabled: busy || !date, className: `${ws.btnDanger} px-4 py-2 text-sm disabled:opacity-50`, children: [
+      busy ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(AlertTriangle, { className: "w-4 h-4" }),
+      "تأكيد رغم ذلك"
+    ] }) : /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => submit(false), disabled: busy || !date, className: `${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-50`, children: [
+      busy ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(PartyPopper, { className: "w-4 h-4" }),
+      "تأكيد الافتتاح"
+    ] })
+  ] }), children: /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+    /* @__PURE__ */ jsxs("div", { children: [
+      /* @__PURE__ */ jsx("div", { className: "text-xs font-semibold text-slate-700 dark:text-white/70 mb-1", children: "تاريخ الافتتاح الفعلي" }),
+      /* @__PURE__ */ jsx(GlassDatePicker, { value: date, onChange: setDate, placeholder: "اختر التاريخ", allowClear: false }),
+      /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1", children: [
+        "الموعد المستهدف كان ",
+        formatDate$4(project?.target_opening_date),
+        ". سيتحول المشروع إلى حالة «افتُتح»."
+      ] })
+    ] }),
+    pending ? /* @__PURE__ */ jsxs("div", { className: "rounded-[10px] border border-amber-200 dark:border-amber-400/25 bg-amber-50 dark:bg-amber-400/10 px-3 py-3", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-sm font-bold text-amber-800 dark:text-amber-100", children: [
+        /* @__PURE__ */ jsx(AlertTriangle, { className: "w-4 h-4 shrink-0" }),
+        "معالم لم تكتمل بعد"
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "text-[11px] text-amber-800/80 dark:text-amber-100/70 mt-1", children: "يمكنك التأكيد رغم ذلك، أو إغلاق النافذة وإكمال المعالم أولاً." }),
+      /* @__PURE__ */ jsx("ul", { className: "mt-2 space-y-1", children: pending.map((title, index) => /* @__PURE__ */ jsxs("li", { className: "flex items-center gap-2 text-sm text-slate-800 dark:text-white/85", children: [
+        /* @__PURE__ */ jsx(Flag, { className: "w-3.5 h-3.5 shrink-0 text-amber-700 dark:text-amber-200" }),
+        title
+      ] }, `${title}-${index}`)) })
+    ] }) : null
+  ] }) });
+}
+function BranchProjectDetailPage() {
+  const {
+    ready,
+    employeeId,
+    user
+  } = useWorkspaceUser();
+  const isAdmin = user?.role === "Admin";
+  const canManageAccounting = user?.can_manage_accounting !== false;
+  const params = useParams();
+  const projectId = Number(params?.id);
+  const validId = Number.isFinite(projectId) && projectId > 0;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const rawTab = searchParams.get("tab") || "overview";
+  const activeTabKey = TAB_KEYS$1.has(rawTab) ? rawTab : "overview";
+  const activeTab = TABS$1.find((tab) => tab.key === activeTabKey) || TABS$1[0];
+  const rawPhase = searchParams.get("phase");
+  const selectedPhaseId = useMemo(() => {
+    const n = Number(rawPhase);
+    return rawPhase && Number.isFinite(n) ? n : null;
+  }, [rawPhase]);
+  const setTab = useCallback((tabKey, extras = {}) => {
+    const next = new URLSearchParams();
+    next.set("tab", tabKey);
+    if (extras.phase != null) next.set("phase", String(extras.phase));
+    setSearchParams(next, {
+      replace: tabKey === activeTabKey
+    });
+  }, [setSearchParams, activeTabKey]);
+  const selectPhase = useCallback((phaseId) => {
+    if (phaseId == null) {
+      setTab("phases");
+      return;
+    }
+    setTab("phases", {
+      phase: phaseId
+    });
+  }, [setTab]);
+  useEffect(() => {
+    if (activeTabKey === "phases" && rawPhase) return;
+    window.scrollTo({
+      top: 0
+    });
+  }, [activeTabKey]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showOpen, setShowOpen] = useState(false);
+  const projectQuery = useBranchProject(validId ? projectId : null);
+  const project = projectQuery.data || null;
+  let body = null;
+  if (!ready) {
+    body = /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60`, children: "جاري التحميل…" });
+  } else if (!employeeId) {
+    body = /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`, children: "الرجاء تسجيل الدخول." });
+  } else if (!isAdmin || !canManageAccounting) {
+    body = /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`, children: "هذا القسم متاح فقط لمستخدمي المحاسبة." });
+  } else if (!validId) {
+    body = /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center`, children: [
+      /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white", children: "معرّف مشروع غير صالح" }),
+      /* @__PURE__ */ jsxs(Link, { to: LIST_PATH, className: `${ws.btnNeutral} px-4 py-2 text-sm mt-4`, children: [
+        /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4" }),
+        "العودة إلى القائمة"
+      ] })
+    ] });
+  } else if (projectQuery.isLoading) {
+    body = /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center text-slate-500 dark:text-white/50`, children: [
+      /* @__PURE__ */ jsx(Loader2, { className: "w-5 h-5 animate-spin mx-auto" }),
+      /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm", children: "جاري تحميل المشروع…" })
+    ] });
+  } else if (projectQuery.isError) {
+    body = /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center`, children: [
+      /* @__PURE__ */ jsx("div", { className: "text-sm text-rose-700 dark:text-rose-300", children: projectQuery.error?.message || "فشل تحميل المشروع" }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2 mt-4 flex-wrap", children: [
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => projectQuery.refetch(), className: `${ws.btnPrimary} px-4 py-2 text-sm`, children: "إعادة المحاولة" }),
+        /* @__PURE__ */ jsxs(Link, { to: LIST_PATH, className: `${ws.btnNeutral} px-4 py-2 text-sm`, children: [
+          /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4" }),
+          "العودة إلى القائمة"
+        ] })
+      ] })
+    ] });
+  } else if (!project) {
+    body = /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-10 text-center`, children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} mx-auto text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Building2, { className: "w-5 h-5" }) }),
+      /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-3", children: "المشروع غير موجود" }),
+      /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-500 dark:text-white/50 mt-1", children: "ربما حُذف أو أن الرابط غير صحيح." }),
+      /* @__PURE__ */ jsxs(Link, { to: LIST_PATH, className: `${ws.btnNeutral} px-4 py-2 text-sm mt-4`, children: [
+        /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4" }),
+        "العودة إلى القائمة"
+      ] })
+    ] });
+  } else {
+    body = /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx(ProjectHeader, { project, onEdit: () => setShowEdit(true), onOpen: () => setShowOpen(true) }),
+      /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} p-2 overflow-x-auto`, children: /* @__PURE__ */ jsx("div", { className: "flex items-center gap-1 min-w-max", children: TABS$1.map((tab) => {
+        const isActive = tab.key === activeTabKey;
+        const Icon = tab.Icon;
+        return /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setTab(tab.key, tab.key === "phases" && selectedPhaseId != null ? {
+          phase: selectedPhaseId
+        } : {}), className: `${ws.segBtn} ${isActive ? ws.segActive : ws.segInactive} flex items-center gap-2 whitespace-nowrap`, title: tab.description, children: [
+          /* @__PURE__ */ jsx(Icon, { className: "w-4 h-4" }),
+          /* @__PURE__ */ jsx("span", { children: tab.label })
+        ] }, tab.key);
+      }) }) }),
+      activeTabKey === "overview" ? /* @__PURE__ */ jsx(OverviewTab, { project, onSelectPhase: selectPhase, selectedPhaseId }) : activeTabKey === "phases" ? /* @__PURE__ */ jsx(PhasesTab, { project, selectedPhaseId, onSelectPhase: selectPhase }) : activeTabKey === "expenses" ? /* @__PURE__ */ jsx(ExpensesTab, { project }) : activeTabKey === "updates" ? /* @__PURE__ */ jsx(UpdatesTab, { project }) : activeTabKey === "attachments" ? /* @__PURE__ */ jsx(AttachmentsTab, { project }) : /* @__PURE__ */ jsx(SettingsTab, { project }),
+      /* @__PURE__ */ jsx(ProjectModal, { open: showEdit, project, onClose: () => setShowEdit(false) }),
+      /* @__PURE__ */ jsx(OpenConfirmModal, { open: showOpen, project, onClose: () => setShowOpen(false) })
+    ] });
+  }
+  return /* @__PURE__ */ jsxs("div", { className: "min-h-[100svh] pb-24 lg:pb-0 bg-[#f6f8f7] text-[#1a2332] dark:bg-transparent dark:text-white", dir: "rtl", children: [
+    /* @__PURE__ */ jsx(AccountingSidebar, { active: "branch-projects" }),
+    /* @__PURE__ */ jsx(MobileHeader$2, { project, activeTab }),
+    /* @__PURE__ */ jsx("main", { className: "mr-0 lg:mr-72 p-4 sm:p-6 lg:p-8", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto w-full space-y-5", children: [
+      /* @__PURE__ */ jsx(DesktopHeader$2, { project, activeTab }),
+      body
+    ] }) })
+  ] });
+}
+
+const page$M = UNSAFE_withComponentProps(function WrappedPage(props) {
+  const params = useParams$1();
+  return /* @__PURE__ */jsx(RootLayout, {
+    children: /* @__PURE__ */jsx(AccountingLayout, {
+      children: /* @__PURE__ */jsx(BranchProjectDetailPage, {
+        ...props,
+        id: params.id
+      })
+    })
+  });
+});
+
+const route4 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: page$M
+}, Symbol.toStringTag, { value: 'Module' }));
+
 const DENOMINATIONS = [{
   key: "d500",
   label: "500",
@@ -2809,8 +8724,8 @@ function generateMonthOptions() {
   }
   return opts;
 }
-function formatDateTime$3(dt) {
-  return formatDateTime$4(dt);
+function formatDateTime$2(dt) {
+  return formatDateTime$5(dt);
 }
 function CashCalculatorPage() {
   const {
@@ -3152,7 +9067,7 @@ function CashCalculatorPage() {
                     /* @__PURE__ */ jsx("span", { className: actionPill, children: actionText }),
                     /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 font-semibold text-sm", children: log.actor_name || "—" })
                   ] }),
-                  /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50 text-xs", children: formatDateTime$3(log.created_at) })
+                  /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50 text-xs", children: formatDateTime$2(log.created_at) })
                 ] }),
                 log.summary ? /* @__PURE__ */ jsx("div", { className: "text-slate-600 dark:text-white/60 text-sm mb-2", children: log.summary }) : null,
                 /* @__PURE__ */ jsx("div", { className: "grid grid-cols-4 sm:grid-cols-8 gap-2", children: DENOMINATIONS.map((d) => {
@@ -3198,7 +9113,7 @@ const page$L = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route5 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$L
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -3217,7 +9132,7 @@ const page$K = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route4 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route6 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$K
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -4025,7 +9940,7 @@ const page$J = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route5 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route7 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$J
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -4144,374 +10059,6 @@ function ExportMenu({
       ] })
     ] })
   ] });
-}
-
-/**
- * Export utilities for Excel and PDF generation
- * Supports Arabic RTL content
- */
-
-/**
- * Export to Excel with better formatting (uses HTML table trick)
- * This creates a proper Excel file that can be opened in Excel
- */
-function exportToExcelHTML(data, filename, columns, title) {
-  // Create HTML table
-  const headers = columns.map(col => col.header).join("</th><th>");
-  const rows = data.map(item => `<tr>${columns.map(col => {
-    const value = col.accessor(item);
-    const formatted = col.format ? col.format(value, item) : value;
-    return `<td>${formatted ?? ""}</td>`;
-  }).join("")}</tr>`).join("");
-  const now = new Date().toLocaleDateString(LOCALE, {
-    timeZone: "Asia/Riyadh"
-  });
-  const htmlContent = `
-    <html xmlns:x="urn:schemas-microsoft-com:office:excel" dir="rtl">
-      <head>
-        <meta charset="UTF-8">
-        <style>
-          table { 
-            border-collapse: collapse; 
-            width: 100%; 
-            font-family: Arial, sans-serif;
-            direction: rtl;
-          }
-          th { 
-            background-color: #0f172a; 
-            color: white; 
-            padding: 12px; 
-            text-align: right;
-            border: 1px solid #ddd;
-            font-weight: bold;
-          }
-          td { 
-            padding: 10px; 
-            border: 1px solid #ddd;
-            text-align: right;
-          }
-          tr:nth-child(even) { 
-            background-color: #f9f9f9; 
-          }
-          .header {
-            margin-bottom: 20px;
-            text-align: center;
-          }
-          .header h1 {
-            color: #0f172a;
-            margin: 10px 0;
-          }
-          .header p {
-            color: #666;
-            margin: 5px 0;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>${title}</h1>
-          <p>تاريخ الإنشاء: ${now}</p>
-        </div>
-        <table>
-          <thead>
-            <tr><th>${headers}</th></tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-      </body>
-    </html>
-  `;
-  const blob = new Blob([htmlContent], {
-    type: "application/vnd.ms-excel;charset=utf-8;"
-  });
-  downloadBlob(blob, `${filename}.xls`);
-}
-
-/**
- * Export data to PDF using print dialog
- * Creates a formatted print-friendly page
- */
-function exportToPDF(data, filename, columns, title) {
-  // Create a new window for printing
-  const printWindow = window.open("", "_blank");
-  if (!printWindow) {
-    alert("الرجاء السماح بفتح النوافذ المنبثقة للتصدير");
-    return;
-  }
-  const headers = columns.map(col => col.header).join("</th><th>");
-  const rows = data.map(item => `<tr>${columns.map(col => {
-    const value = col.accessor(item);
-    const formatted = col.format ? col.format(value, item) : value;
-    return `<td>${formatted ?? ""}</td>`;
-  }).join("")}</tr>`).join("");
-  const now = new Date().toLocaleDateString(LOCALE, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Riyadh"
-  });
-  const htmlContent = `
-    <!DOCTYPE html>
-    <html dir="rtl">
-      <head>
-        <meta charset="UTF-8">
-        <title>${title}</title>
-        <style>
-          @media print {
-            @page {
-              size: A4 landscape;
-              margin: 15mm;
-            }
-            body {
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
-            }
-            .no-print {
-              display: none !important;
-            }
-          }
-          
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
-          
-          body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
-            background: #f5f5f5;
-            direction: rtl;
-          }
-          
-          .header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-          }
-          
-          .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: bold;
-          }
-          
-          .header p {
-            font-size: 14px;
-            opacity: 0.9;
-          }
-          
-          .stats {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-          }
-          
-          .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px 25px;
-            border-radius: 8px;
-            text-align: center;
-          }
-          
-          .stat-card .label {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-bottom: 5px;
-          }
-          
-          .stat-card .value {
-            font-size: 24px;
-            font-weight: bold;
-          }
-          
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-          }
-          
-          thead {
-            background: #0f172a;
-            color: white;
-          }
-          
-          th {
-            padding: 15px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 14px;
-            border-bottom: 2px solid #14b8a6;
-          }
-          
-          td {
-            padding: 12px 15px;
-            text-align: right;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 13px;
-          }
-          
-          tr:nth-child(even) {
-            background-color: #f9fafb;
-          }
-          
-          tr:hover {
-            background-color: #f1f5f9;
-          }
-          
-          .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-            padding: 20px;
-          }
-          
-          .print-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #14b8a6;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 1000;
-          }
-          
-          .print-button:hover {
-            background: #0d9488;
-          }
-          
-          @media print {
-            body {
-              background: white;
-              padding: 0;
-            }
-            .header {
-              border-radius: 0;
-            }
-            table {
-              box-shadow: none;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <button class="print-button no-print" onclick="window.print()">
-          🖨️ طباعة / حفظ PDF
-        </button>
-        
-        <div class="header">
-          <h1>${title}</h1>
-          <p>تاريخ الإنشاء: ${now}</p>
-          <div class="stats">
-            <div class="stat-card">
-              <div class="label">إجمالي السجلات</div>
-              <div class="value">${data.length}</div>
-            </div>
-          </div>
-        </div>
-        
-        <table>
-          <thead>
-            <tr><th>${headers}</th></tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-        
-        <div class="footer">
-          <p>تم الإنشاء بواسطة نظام إدارة المخزون</p>
-          <p>© ${new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    timeZone: "Asia/Riyadh"
-  })} - جميع الحقوق محفوظة</p>
-        </div>
-      </body>
-    </html>
-  `;
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
-
-  // Auto print after content loads
-  printWindow.onload = () => {
-    setTimeout(() => {
-      printWindow.focus();
-    }, 250);
-  };
-}
-
-/**
- * Helper function to download blob
- */
-function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
-
-/**
- * Format inventory type for export
- */
-function formatInventoryType(type) {
-  const typeMap = {
-    Daily: "يومي",
-    Weekly: "أسبوعي",
-    Transfer: "تحويل",
-    Receipt: "وارد",
-    Opening: "مخزون افتتاحي"
-  };
-  return typeMap[type] || type;
-}
-
-/**
- * Format role for export
- */
-function formatRole(role) {
-  const roleMap = {
-    Admin: "مدير",
-    Employee: "موظف"
-  };
-  return roleMap[role] || role;
-}
-
-/**
- * Format date and time for export.
- */
-function formatDateTime$2(dateString) {
-  if (!dateString) return "-";
-  // IMPORTANT: use toLocaleString (not toLocaleDateString) so time is always rendered
-  // across browsers (especially iOS/Safari) when hour/minute options are provided.
-  return new Date(dateString).toLocaleString(LOCALE, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Riyadh"
-  });
 }
 
 function formatMoney$f(value) {
@@ -7074,7 +12621,7 @@ const page$I = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route6 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route8 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$I
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -7735,7 +13282,7 @@ const page$H = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route7 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route9 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$H
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -9179,395 +14726,10 @@ const page$G = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route8 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route10 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$G
 }, Symbol.toStringTag, { value: 'Module' }));
-
-// ثيم قسم المشتريات — تطبيق حرفي للوحة مستند «مفهوم واجهة نظام
-// المشتريات»: أرضية #F6F8F7، سطوح بيضاء بحدود #E2E7E4، حبر #1A2332،
-// أخضر كوارترز #0E7A5F للأزرار الرئيسية والأخضر العميق #0B3D31
-// للحالات النشطة، وزوايا 10px بدل 24px.
-//
-// نفس مفاتيح `ws` في Workspace/ui.js حتى يكون التحويل تبديل استيراد
-// فقط. قيم الوضع الفاتح وحدها تغيّرت — كل سلاسل dark: منسوخة حرفياً
-// من الثيم الأصلي فيبقى الوضع الداكن مطابقاً لبقية النظام.
-//
-// النطاق: صفحات وقوالب المشتريات فقط (بما فيها صفحة الموظف الميدانية
-// وقوائم الموردين/المستفيدين المستخدمة داخل القسم حصراً). GlassSelect
-// وأخواتها مشتركة نظاماً فتبقى على الثيم العام — سطوحها بيضاء أصلاً
-// فتمتزج بلا نشاز.
-
-const ws = {
-  appBg: "[color-scheme:light] dark:[color-scheme:dark] " + "bg-[#f6f8f7] text-[#1a2332] font-inter " + "dark:from-[#1a2540] dark:via-[#1f2c52] dark:to-[#16203a] dark:text-white " + "dark:bg-gradient-to-b",
-  glass: "bg-white border border-[#e2e7e4] " + "shadow-[0_1px_2px_rgba(26,35,50,0.04),0_12px_32px_rgba(26,35,50,0.07)] " + "dark:bg-[#132044]/70 dark:supports-[backdrop-filter]:bg-[#132044]/50 dark:border-white/10 " + "dark:backdrop-blur-xl " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset,0_18px_50px_rgba(0,0,0,0.35)]",
-  glassSoft: "bg-[#fafbfa] border border-[#e2e7e4] " + "dark:bg-[#132044]/55 dark:supports-[backdrop-filter]:bg-[#132044]/40 dark:border-white/10 " + "dark:backdrop-blur-xl " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.05)_inset]",
-  topBar: "bg-white/90 supports-[backdrop-filter]:bg-white/80 border-b border-[#e2e7e4] backdrop-blur-xl " + "dark:bg-[#132044]/55 dark:border-white/10",
-  title: "text-[#1a2332] dark:text-white font-bold tracking-tight",
-  muted: "text-[#4a5568] dark:text-white/60",
-  input: "w-full appearance-none rounded-[10px] bg-[#fafbfa] border border-[#e2e7e4] text-[#1a2332] placeholder:text-[#8a94a4] " + "transition-colors transition-shadow " + "hover:border-[#c9d3ce] hover:bg-white " + "focus:outline-none focus:border-[#0e7a5f] focus:ring-2 focus:ring-[#0e7a5f]/15 focus:bg-white " + "disabled:opacity-50 disabled:cursor-not-allowed " + "dark:bg-[#132044]/55 dark:supports-[backdrop-filter]:bg-[#132044]/35 dark:border-white/10 dark:text-white dark:placeholder:text-white/35 " + "dark:shadow-none dark:hover:border-white/15 dark:hover:bg-[#132044]/55 dark:focus:border-white/20 dark:focus:ring-emerald-400/10 dark:focus:bg-[#132044]/55 " + "[&:-webkit-autofill]:shadow-[0_0_0_1000px_white_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:#1a2332] " + "dark:[&:-webkit-autofill]:shadow-[0_0_0_1000px_rgba(19,32,68,0.55)_inset] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.95)]",
-  btnPrimary: "inline-flex items-center gap-2 rounded-[10px] " + "bg-[#0e7a5f] text-white border border-[#0e7a5f] font-bold " + "shadow-[0_2px_6px_rgba(14,122,95,0.22)] " + "transition-colors transition-shadow " + "hover:bg-[#0c6950] hover:border-[#0c6950] hover:shadow-[0_4px_12px_rgba(14,122,95,0.28)] " + "active:bg-[#0b3d31] active:border-[#0b3d31] " + "dark:bg-emerald-400/15 dark:text-emerald-200 dark:border-emerald-400/25 dark:shadow-none " + "dark:hover:bg-emerald-400/20 dark:hover:shadow-none dark:active:bg-emerald-400/25",
-  btnNeutral: "inline-flex items-center gap-2 rounded-[10px] " + "bg-white text-[#4a5568] border border-[#e2e7e4] font-semibold " + "transition-colors " + "hover:bg-[#f6f8f7] hover:border-[#c9d3ce] hover:text-[#1a2332] " + "active:bg-[#eef1ef] " + "dark:bg-white/[0.05] dark:text-white/85 dark:border-white/10 dark:shadow-none " + "dark:hover:bg-white/[0.07] dark:hover:border-white/10 dark:hover:text-white/85 dark:active:bg-white/[0.09]",
-  btnDanger: "inline-flex items-center gap-2 rounded-[10px] " + "bg-[#f9ebe9] text-[#b5443c] border border-[#e8c4bf] font-semibold " + "transition-colors " + "hover:bg-[#f4ded9] hover:border-[#ddaba4] active:bg-[#eed1cb] " + "dark:bg-red-500/15 dark:text-red-200 dark:border-red-500/25 dark:shadow-none " + "dark:hover:bg-red-500/20 dark:hover:border-red-500/25 dark:active:bg-red-500/25",
-  pill: "inline-flex px-3 py-1 rounded-full text-xs font-bold border " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
-  card: "rounded-[10px]",
-  divider: "border-[#e2e7e4] dark:border-white/10",
-  sectionHeader: "px-4 py-3 bg-[#fafbfa] border-b border-[#e2e7e4] " + "dark:bg-white/[0.03] dark:border-white/10",
-  iconBox: "w-11 h-11 rounded-[10px] " + "bg-[#e7f2ee] border border-[#d3e5dd] " + "flex items-center justify-center " + "dark:bg-white/[0.05] dark:bg-none dark:border-white/10 " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
-  iconButton: "inline-flex items-center justify-center w-11 h-11 rounded-[10px] touch-manipulation " + "bg-white text-[#4a5568] border border-[#e2e7e4] " + "transition-colors " + "hover:bg-[#f6f8f7] hover:border-[#c9d3ce] hover:text-[#1a2332] " + "dark:bg-white/[0.03] dark:text-white dark:border-white/10 dark:shadow-none " + "dark:hover:bg-white/[0.06] dark:hover:border-white/10",
-  segWrap: "bg-[#eef1ef] border border-[#e2e7e4] rounded-[10px] p-1 " + "inline-flex items-center gap-1 " + "dark:bg-white/[0.03] dark:border-white/10",
-  segBtn: "px-4 py-2 rounded-lg font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0e7a5f]/30",
-  // الرقاقة النشطة بالأخضر العميق — حرفياً chip.on في المستند.
-  segActive: "bg-[#0b3d31] text-white border border-[#0b3d31] " + "dark:bg-white/10 dark:text-white dark:border-white/20 " + "dark:shadow-[0_1px_0_rgba(255,255,255,0.06)_inset]",
-  segInactive: "bg-transparent text-[#4a5568] hover:text-[#1a2332] hover:bg-white " + "dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white/70"
-};
-
-// Client-side image downscale + re-encode before upload.
-//
-// Phone cameras produce 3–12MB JPEGs at 4000px+. Our chunked
-// uploader pushes those in 128KB slices over sequential HTTP
-// round-trips, so a single receipt photo can take 30–60s. Receipts
-// and deduction attachments only need to be legible, not
-// full-resolution — downscaling the longest edge to ~1600px and
-// re-encoding as JPEG q≈0.72 typically cuts an 8MB photo to
-// ~250–450KB (a 20–40× reduction), which collapses the upload to a
-// 2–4 chunk round-trip.
-//
-// Non-image files, tiny images, and anything the browser can't
-// decode pass through UNTOUCHED — the caller still gets a valid
-// File back, so this is always safe to wrap an upload with.
-
-const DEFAULT_MAX_EDGE = 1600;
-const DEFAULT_QUALITY = 0.72;
-// Below this, compressing is pointless overhead — ship as-is.
-const SKIP_BELOW_BYTES = 400 * 1024; // 400KB
-
-function canvasToBlob(canvas, type, quality) {
-  return new Promise(resolve => {
-    if (canvas.toBlob) {
-      canvas.toBlob(blob => resolve(blob), type, quality);
-    } else {
-      // Very old browsers: fall back to dataURL → Blob.
-      try {
-        const dataUrl = canvas.toDataURL(type, quality);
-        const [meta, b64] = dataUrl.split(",");
-        const mime = (meta.match(/:(.*?);/) || [])[1] || type;
-        const bin = atob(b64);
-        const bytes = new Uint8Array(bin.length);
-        for (let i = 0; i < bin.length; i += 1) bytes[i] = bin.charCodeAt(i);
-        resolve(new Blob([bytes], {
-          type: mime
-        }));
-      } catch {
-        resolve(null);
-      }
-    }
-  });
-}
-function loadImage(file) {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      resolve(img);
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      reject(new Error("decode failed"));
-    };
-    img.src = url;
-  });
-}
-
-/**
- * Returns a (possibly) smaller File. Always resolves to a usable
- * File — never throws to the caller; on any failure it returns the
- * original input untouched.
- *
- * @param {File} file
- * @param {{maxEdge?: number, quality?: number}} [opts]
- */
-async function compressImage(file, opts = {}) {
-  try {
-    if (typeof window === "undefined" || !file) return file;
-    const type = file.type || "";
-    // Only raster photos benefit. Skip SVG (vector — rasterizing
-    // would degrade it) and any non-image.
-    if (!type.startsWith("image/") || type === "image/svg+xml") {
-      return file;
-    }
-    // GIF may be animated; canvas re-encode would flatten to one
-    // frame. Leave it alone.
-    if (type === "image/gif") return file;
-    if (typeof file.size === "number" && file.size > 0 && file.size < SKIP_BELOW_BYTES) {
-      return file;
-    }
-    const maxEdge = opts.maxEdge || DEFAULT_MAX_EDGE;
-    const quality = opts.quality || DEFAULT_QUALITY;
-    const img = await loadImage(file);
-    const w = img.naturalWidth || img.width;
-    const h = img.naturalHeight || img.height;
-    if (!w || !h) return file;
-    const longest = Math.max(w, h);
-    const scale = longest > maxEdge ? maxEdge / longest : 1;
-    const targetW = Math.round(w * scale);
-    const targetH = Math.round(h * scale);
-    const canvas = document.createElement("canvas");
-    canvas.width = targetW;
-    canvas.height = targetH;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return file;
-    ctx.drawImage(img, 0, 0, targetW, targetH);
-
-    // Always re-encode to JPEG — PNG photos balloon, and we don't
-    // need alpha on a receipt/attachment. Keeps the pipeline simple.
-    const blob = await canvasToBlob(canvas, "image/jpeg", quality);
-    if (!blob || !blob.size) return file;
-
-    // If compression somehow produced a bigger file (already-tiny
-    // or already-optimized source), keep the original.
-    if (typeof file.size === "number" && blob.size >= file.size) {
-      return file;
-    }
-    const baseName = (file.name || "image").replace(/\.[^.]+$/, "");
-    return new File([blob], `${baseName}.jpg`, {
-      type: "image/jpeg",
-      lastModified: Date.now()
-    });
-  } catch {
-    // Any failure → original file, upload still works.
-    return file;
-  }
-}
-
-const compressImage$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  compressImage,
-  default: compressImage
-}, Symbol.toStringTag, { value: 'Module' }));
-
-function useUpload() {
-  const [loading, setLoading] = React.useState(false);
-  const MAX_UPLOAD_BYTES = 90 * 1024 * 1024; // 90MB
-
-  const upload = React.useCallback(async input => {
-    try {
-      setLoading(true);
-      const readErrorMessage = async res => {
-        // Prefer JSON { error } but fall back to plain text.
-        // IMPORTANT: clone() the response because body streams can only be read once.
-        try {
-          const maybeJson = await res.clone().json();
-          if (maybeJson?.error) {
-            return String(maybeJson.error);
-          }
-        } catch {
-          // ignore
-        }
-        try {
-          const t = await res.clone().text();
-          if (t) {
-            return t;
-          }
-        } catch {
-          // ignore
-        }
-        return `Upload failed (${res.status} ${res.statusText})`;
-      };
-      const isNetworkLikeError = err => {
-        const msg = err instanceof Error ? err.message : String(err || "");
-        const lower = msg.toLowerCase();
-        // Browsers differ (Chrome: "Failed to fetch", Safari/iOS: "Load failed")
-        return lower.includes("failed to fetch") || lower.includes("load failed") || lower.includes("networkerror") || lower.includes("network error") || lower.includes("the network connection");
-      };
-      const uploadChunked = async file => {
-        // Keep chunks VERY small because Anything Functions can reject bigger payloads
-        // with FUNCTION_PAYLOAD_TOO_LARGE (varies by environment).
-        const CHUNK_SIZE = 128 * 1024; // 128KB (safer across environments)
-        const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-        const initRes = await authedFetch("/api/uploads/init", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            fileName: file.name,
-            mimeType: file.type || null,
-            sizeBytes: file.size,
-            totalChunks
-          })
-        });
-        if (!initRes.ok) {
-          const msg = await readErrorMessage(initRes);
-          throw new Error(msg || `When POSTing /api/uploads/init, the response was [${initRes.status}] ${initRes.statusText}`);
-        }
-        const initData = await initRes.json().catch(() => ({}));
-        const uploadId = initData?.uploadId;
-        if (!uploadId) {
-          throw new Error("فشل بدء رفع الملف");
-        }
-        try {
-          // Upload chunks with bounded concurrency instead of one
-          // strictly-sequential round-trip at a time. Each chunk is
-          // tiny (128KB) but the per-request latency dominates over
-          // a phone connection, so firing several in parallel cuts
-          // wall-clock roughly N-fold. Cap kept modest so we don't
-          // overwhelm the function/DB or trip rate limits.
-          const CONCURRENCY = 6;
-          const uploadOneChunk = async i => {
-            const start = i * CHUNK_SIZE;
-            const end = Math.min(file.size, start + CHUNK_SIZE);
-            const slice = file.slice(start, end);
-            const arrayBuffer = await slice.arrayBuffer();
-            const chunkRes = await authedFetch(`/api/uploads/${uploadId}/chunk?index=${i}`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/octet-stream"
-              },
-              body: arrayBuffer
-            });
-            if (!chunkRes.ok) {
-              const msg = await readErrorMessage(chunkRes);
-              throw new Error(msg || `When POSTing a chunk, the response was [${chunkRes.status}] ${chunkRes.statusText}`);
-            }
-          };
-          for (let base = 0; base < totalChunks; base += CONCURRENCY) {
-            const batch = [];
-            for (let i = base; i < Math.min(base + CONCURRENCY, totalChunks); i += 1) {
-              batch.push(uploadOneChunk(i));
-            }
-            // If any chunk in the batch fails, the whole upload aborts
-            // (the catch below cleans up the session).
-            await Promise.all(batch);
-          }
-          const completeRes = await authedFetch(`/api/uploads/${uploadId}/complete`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              totalChunks
-            })
-          });
-          if (!completeRes.ok) {
-            const msg = await readErrorMessage(completeRes);
-            throw new Error(msg || `When POSTing /api/uploads/${uploadId}/complete, the response was [${completeRes.status}] ${completeRes.statusText}`);
-          }
-          const completeData = await completeRes.json().catch(() => ({}));
-          return {
-            url: completeData?.url,
-            mimeType: completeData?.mimeType || file.type || null
-          };
-        } catch (e) {
-          // best-effort cleanup
-          try {
-            await authedFetch(`/api/uploads/${uploadId}`, {
-              method: "DELETE"
-            });
-          } catch {
-            // ignore
-          }
-          throw e;
-        }
-      };
-      if ("file" in input && input.file) {
-        // Downscale + re-encode photos before chunking. A receipt
-        // shot at 8MB becomes ~300KB, turning a 60-chunk sequential
-        // upload into a 2–3 chunk one. No-op for non-images, tiny
-        // images, or anything the browser can't decode. `unoptimized`
-        // lets a caller opt out (e.g. originals that must stay exact).
-        const file = input.unoptimized ? input.file : await compressImage(input.file);
-        if (typeof file?.size === "number" && file.size > MAX_UPLOAD_BYTES) {
-          throw new Error(`Upload failed: File too large. الحد الأقصى ${Math.round(MAX_UPLOAD_BYTES / (1024 * 1024))}MB`);
-        }
-
-        // Always use chunked upload through our own /api/uploads/* endpoints.
-        const chunked = await uploadChunked(file);
-        return {
-          url: chunked.url,
-          mimeType: chunked.mimeType || null
-        };
-      } else if ("url" in input) {
-        // Fetch the remote URL and convert to a File, then chunked upload.
-        const remoteRes = await fetch(input.url);
-        if (!remoteRes.ok) {
-          throw new Error(`تعذر تحميل الرابط (${remoteRes.status})`);
-        }
-        const blob = await remoteRes.blob();
-        const fileName = (input.url.split("/").pop() || "file").split("?")[0] || "file";
-        const file = new File([blob], fileName, {
-          type: blob.type || "application/octet-stream"
-        });
-        const chunked = await uploadChunked(file);
-        return {
-          url: chunked.url,
-          mimeType: chunked.mimeType || null
-        };
-      } else if ("base64" in input) {
-        // Decode base64 (with optional data: prefix) into a File, then upload.
-        const raw = String(input.base64 || "");
-        let mime = "application/octet-stream";
-        let b64Body = raw;
-        const m = raw.match(/^data:([^;]+);base64,(.*)$/);
-        if (m) {
-          mime = m[1];
-          b64Body = m[2];
-        }
-        const binary = atob(b64Body);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i += 1) {
-          bytes[i] = binary.charCodeAt(i);
-        }
-        const file = new File([bytes], "upload.bin", {
-          type: mime
-        });
-        const chunked = await uploadChunked(file);
-        return {
-          url: chunked.url,
-          mimeType: chunked.mimeType || null
-        };
-      } else {
-        // Raw buffer
-        const buf = input.buffer;
-        const file = new File([buf], "upload.bin", {
-          type: "application/octet-stream"
-        });
-        const chunked = await uploadChunked(file);
-        return {
-          url: chunked.url,
-          mimeType: chunked.mimeType || null
-        };
-      }
-    } catch (uploadError) {
-      const msg = uploadError instanceof Error ? uploadError.message : null;
-      const msgLower = msg ? msg.toLowerCase() : "";
-      if (msgLower.includes("failed to fetch") || msgLower.includes("load failed")) {
-        return {
-          error: "فشل الاتصال بخدمة رفع الملفات. تأكد من الإنترنت ثم جرّب مرة ثانية."
-        };
-      }
-      if (uploadError instanceof Error) {
-        return {
-          error: uploadError.message
-        };
-      }
-      if (typeof uploadError === "string") {
-        return {
-          error: uploadError
-        };
-      }
-      return {
-        error: "Upload failed"
-      };
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-  return [upload, {
-    loading
-  }];
-}
 
 // كشف حسابات «المصروف الثابت» في شجرة الحسابات.
 //
@@ -10342,7 +15504,7 @@ function coffeeSeed(accounts, accountId, description, hints = {}) {
   const bean = beanForAccount$1(accounts, accountId);
   if (!bean) return {};
   const hintUnit = hints.quantity_unit === "kg" ? "kg" : hints.quantity_unit === "sack" ? "sack" : null;
-  const scanned = numOrNull(hints.pack_size_kg);
+  const scanned = numOrNull$1(hints.pack_size_kg);
   const fromText = scanned ? null : guessKgPerSack(description);
   const defaults = beanUnitDefaults(bean);
   const unit = hintUnit || (scanned || fromText ? "sack" : defaults.quantity_unit);
@@ -10370,7 +15532,7 @@ function withDerivedRaw(line, {
       raw_source: "quantity"
     };
   }
-  const kps = numOrNull(line.kg_per_sack);
+  const kps = numOrNull$1(line.kg_per_sack);
   if (kps && qty > 0) {
     return {
       ...line,
@@ -10455,14 +15617,14 @@ function linesFromInvoice(invoice) {
         arrival_date: roast ? item.arrival_date || "" : "",
         arrival_complete: roast ? !!item.arrival_complete : false,
         stored: roast ? {
-          raw_kg: numOrNull(item.raw_kg),
-          received_kg: numOrNull(item.received_kg),
+          raw_kg: numOrNull$1(item.raw_kg),
+          received_kg: numOrNull$1(item.received_kg),
           arrival_complete: !!item.arrival_complete,
           arrival_date: item.arrival_date || null,
-          waste_percent: numOrNull(item.waste_percent),
-          net_incl_per_kg: numOrNull(item.net_incl_per_kg),
-          deposited_kg: numOrNull(item.deposited_kg),
-          roast_tax_rate: numOrNull(item.roast_tax_rate)
+          waste_percent: numOrNull$1(item.waste_percent),
+          net_incl_per_kg: numOrNull$1(item.net_incl_per_kg),
+          deposited_kg: numOrNull$1(item.deposited_kg),
+          roast_tax_rate: numOrNull$1(item.roast_tax_rate)
         } : null
       });
     });
@@ -10536,8 +15698,8 @@ function CoffeeLineRow({
           /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "عدد الكيلوات (إجمالي الخام)" }),
           /* @__PURE__ */ jsx("input", { type: "number", value: line.raw_kg, onChange: (event) => updateLine(line.key, {
             raw_kg: event.target.value
-          }), className: `${fieldInput} ${!(numOrNull(line.raw_kg) > 0) ? "border-amber-400/70 dark:border-amber-400/50" : ""}`, step: "any", min: "0", dir: "ltr", placeholder: "أدخل إجمالي الكيلو" }),
-          /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-400 dark:text-white/35 mt-0.5 truncate", children: !(numOrNull(line.raw_kg) > 0) ? kgMode ? "= الكمية بالكيلو — أدخل الكمية" : "لم يُعرف وزن الخيشة — أدخل الإجمالي يدويًا" : line.raw_source === "quantity" ? "= الكمية في الفاتورة (بالكيلو)" : line.raw_source === "sacks" ? `= ${line.quantity || 0} خيشة × ${line.kg_per_sack} كغ${line.kg_source === "scan" ? " (من التحليل الذكي)" : line.kg_source === "description" ? " (من وصف البند)" : line.kg_source === "item" ? " (من الصنف)" : ""}` : line.raw_source === "stored" ? "المخزَّن — عدّله إن لزم" : "مُدخل يدويًا" })
+          }), className: `${fieldInput} ${!(numOrNull$1(line.raw_kg) > 0) ? "border-amber-400/70 dark:border-amber-400/50" : ""}`, step: "any", min: "0", dir: "ltr", placeholder: "أدخل إجمالي الكيلو" }),
+          /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-400 dark:text-white/35 mt-0.5 truncate", children: !(numOrNull$1(line.raw_kg) > 0) ? kgMode ? "= الكمية بالكيلو — أدخل الكمية" : "لم يُعرف وزن الخيشة — أدخل الإجمالي يدويًا" : line.raw_source === "quantity" ? "= الكمية في الفاتورة (بالكيلو)" : line.raw_source === "sacks" ? `= ${line.quantity || 0} خيشة × ${line.kg_per_sack} كغ${line.kg_source === "scan" ? " (من التحليل الذكي)" : line.kg_source === "description" ? " (من وصف البند)" : line.kg_source === "item" ? " (من الصنف)" : ""}` : line.raw_source === "stored" ? "المخزَّن — عدّله إن لزم" : "مُدخل يدويًا" })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "تحميص / كغ (ر.س)" }),
@@ -10879,12 +16041,12 @@ function PurchaseInvoiceModal({
       const bean = beanForAccount$1(accounts, line.account_id);
       if (!bean || !line.roast_enabled) return;
       const math = lineMath(line);
-      const roastRate = numOrNull(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG;
+      const roastRate = numOrNull$1(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG;
       const c = computeCoffeeLine({
         quantity: moneyValue$a(line.quantity),
         quantityUnit: line.quantity_unit,
-        kgPerSack: numOrNull(line.kg_per_sack) ?? bean.bag_size_kg,
-        rawKg: numOrNull(line.raw_kg),
+        kgPerSack: numOrNull$1(line.kg_per_sack) ?? bean.bag_size_kg,
+        rawKg: numOrNull$1(line.raw_kg),
         lineSubtotal: math.subtotal,
         lineTax: math.tax,
         lineDiscount: shares[index] || 0,
@@ -10893,8 +16055,8 @@ function PurchaseInvoiceModal({
         roastTaxRate: bean.roast_tax_rate ?? 0,
         extraCost: moneyValue$a(line.extra_cost),
         // إدخال «الواصل بعد الهدر» = الوصول مكتمل (الجزئي من نافذة الوصول).
-        receivedKg: numOrNull(line.arrival_received_kg),
-        arrivalComplete: numOrNull(line.arrival_received_kg) > 0
+        receivedKg: numOrNull$1(line.arrival_received_kg),
+        arrivalComplete: numOrNull$1(line.arrival_received_kg) > 0
       });
       const unusualPrice = !line.free_sample && c.rawCostPerKg !== null && (c.rawCostPerKg < RAW_PRICE_MIN || c.rawCostPerKg > RAW_PRICE_MAX);
       if (unusualPrice) unusual.push(line.key);
@@ -10927,12 +16089,12 @@ function PurchaseInvoiceModal({
     return "محمصة درر";
   }, [roasterContactId, contacts, createdContacts, coffee.perLine]);
   const arrivalChanged = (line) => {
-    const received = numOrNull(line.arrival_received_kg);
+    const received = numOrNull$1(line.arrival_received_kg);
     const stored = line.stored?.received_kg ?? null;
     if (received === null) return stored !== null;
     return stored === null || Math.abs(received - stored) > 5e-4;
   };
-  const anyArrivalComplete = allowArrival && lines.some((line) => line.roast_enabled && numOrNull(line.arrival_received_kg) > 0 && arrivalChanged(line));
+  const anyArrivalComplete = allowArrival && lines.some((line) => line.roast_enabled && numOrNull$1(line.arrival_received_kg) > 0 && arrivalChanged(line));
   const contactTransactionCount = useMemo(() => {
     if (!contactId || !contactStats) return null;
     const count = contactStats[contactId];
@@ -10963,7 +16125,7 @@ function PurchaseInvoiceModal({
     const c = coffee.perLine.get(line.key);
     return c?.arrivalComplete && wasteFlag(c.wastePercent) === "confirm" && !line.confirm_high_waste;
   });
-  const missingRawKg = lines.some((line) => line.roast_enabled && lineBean(line) && !(numOrNull(line.raw_kg) > 0));
+  const missingRawKg = lines.some((line) => line.roast_enabled && lineBean(line) && !(numOrNull$1(line.raw_kg) > 0));
   const canSubmit = !isSubmitting && (!!supplierName.trim() || !!contactId) && (totals.total > 0 || hasFreeSampleLine) && moneyValue$a(paidAmount) <= totals.total && !unconfirmedUnusual && !unconfirmedWaste && !missingRawKg;
   const updateLine = (key, patch) => {
     autoFilledRef.current.delete("lines");
@@ -11025,9 +16187,9 @@ function PurchaseInvoiceModal({
         ...base,
         roast_enabled: roast,
         quantity_unit: roast ? line.quantity_unit : null,
-        kg_per_sack: roast ? numOrNull(line.kg_per_sack) ?? bean.bag_size_kg ?? null : null,
-        raw_kg: roast ? numOrNull(line.raw_kg) : null,
-        roast_per_kg: roast ? numOrNull(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG : null,
+        kg_per_sack: roast ? numOrNull$1(line.kg_per_sack) ?? bean.bag_size_kg ?? null : null,
+        raw_kg: roast ? numOrNull$1(line.raw_kg) : null,
+        roast_per_kg: roast ? numOrNull$1(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG : null,
         extra_cost: roast ? moneyValue$a(line.extra_cost) : 0,
         free_sample: roast && !!line.free_sample,
         confirm_unusual_price: roast && !!line.confirm_unusual_price
@@ -11039,7 +16201,7 @@ function PurchaseInvoiceModal({
       kept.forEach((line, index) => {
         if (!line.roast_enabled || !lineBean(line)) return;
         if (!arrivalChanged(line)) return;
-        const received = numOrNull(line.arrival_received_kg);
+        const received = numOrNull$1(line.arrival_received_kg);
         if (!isEditing && (received === null || received <= 0)) return;
         if (line.stored?.deposited_kg > 0) return;
         arrivalLines.push({
@@ -12421,7 +17583,7 @@ function BeneficiariesPanel$1({
       /* @__PURE__ */ jsxs("div", { className: "flex-1 flex items-center gap-2", children: [
         /* @__PURE__ */ jsx("div", { className: "flex-1 min-w-0", children: /* @__PURE__ */ jsx(GlassSelect, { value: linkValue, onChange: setLinkValue, options: unattachedOptions, placeholder: unattached.length === 0 ? "لا يوجد مستفيدون غير مربوطين" : "اختر مستفيداً قائماً للربط", disabled: unattached.length === 0, buttonClassName: "text-sm py-2.5 px-3" }) }),
         /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleLink, disabled: !linkValue || updateMut.isPending, className: `${ws.btnNeutral} px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed shrink-0`, title: "ربط مستفيد قائم بهذه الجهة", children: [
-          /* @__PURE__ */ jsx(Link, { className: "w-4 h-4" }),
+          /* @__PURE__ */ jsx(Link$1, { className: "w-4 h-4" }),
           "ربط"
         ] })
       ] }),
@@ -12743,7 +17905,7 @@ function ContactsExportMenu({
   }, {
     header: "تاريخ الإضافة",
     accessor: (c) => c.created_at,
-    format: (v) => formatDateTime$2(v)
+    format: (v) => formatDateTime$4(v)
   }];
   const pdfColumns = [{
     header: "اسم المنشأة",
@@ -12840,7 +18002,7 @@ function BeneficiariesList({
       return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]", children: [
         /* @__PURE__ */ jsx("td", { className: "py-3 px-3 font-semibold text-slate-900 dark:text-white whitespace-nowrap", children: b.name }),
         /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap", children: b.contact_name ? /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1", children: [
-          /* @__PURE__ */ jsx(Link, { className: "w-3 h-3 text-[#0e7a5f] dark:text-emerald-300" }),
+          /* @__PURE__ */ jsx(Link$1, { className: "w-3 h-3 text-[#0e7a5f] dark:text-emerald-300" }),
           b.contact_name
         ] }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/40", children: "— مستقل —" }) }),
         /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-700 dark:text-white/70 whitespace-nowrap font-mono text-xs", dir: "ltr", children: isGovernment ? b.account_number || "—" : formatIban$1(b.iban) }),
@@ -12917,7 +18079,7 @@ function BeneficiariesExportMenu({
   }, {
     header: "تاريخ الإضافة",
     accessor: (b) => b.created_at,
-    format: (v) => formatDateTime$2(v)
+    format: (v) => formatDateTime$4(v)
   }];
   const pdfColumns = [{
     header: "اسم المستفيد",
@@ -15195,20 +20357,20 @@ function rowsFromInvoice(invoice) {
   return items.filter((item) => item.roast_enabled).map((item) => ({
     id: item.id,
     name: item.bean_name || item.description || `بند #${item.id}`,
-    raw_kg: numOrNull(item.raw_kg) ?? 0,
-    sacks: numOrNull(item.sacks),
+    raw_kg: numOrNull$1(item.raw_kg) ?? 0,
+    sacks: numOrNull$1(item.sacks),
     quantity_unit: item.quantity_unit,
     line_subtotal: Number(item.line_subtotal) || 0,
     line_tax: Number(item.line_tax) || 0,
     line_discount: Number(item.line_discount) || 0,
     line_net: Number(item.line_net) || 0,
     quantity: Number(item.quantity) || 0,
-    kg_per_sack: numOrNull(item.kg_per_sack),
-    roast_per_kg: numOrNull(item.roast_per_kg) ?? 0,
-    roast_tax_rate: numOrNull(item.roast_tax_rate) ?? 0,
-    extra_cost: numOrNull(item.extra_cost) ?? 0,
-    deposited_kg: numOrNull(item.deposited_kg),
-    reported_kg: numOrNull(item.arrival_reported_kg),
+    kg_per_sack: numOrNull$1(item.kg_per_sack),
+    roast_per_kg: numOrNull$1(item.roast_per_kg) ?? 0,
+    roast_tax_rate: numOrNull$1(item.roast_tax_rate) ?? 0,
+    extra_cost: numOrNull$1(item.extra_cost) ?? 0,
+    deposited_kg: numOrNull$1(item.deposited_kg),
+    reported_kg: numOrNull$1(item.arrival_reported_kg),
     reported_by: item.arrival_reported_by || null,
     // حقول النموذج
     received_kg: item.received_kg != null ? String(Number(item.received_kg)) : item.arrival_reported_kg != null ? String(Number(item.arrival_reported_kg)) : "",
@@ -15254,7 +20416,7 @@ function CoffeeArrivalModal({
   const calcs = useMemo(() => {
     const map = /* @__PURE__ */ new Map();
     for (const row of rows) {
-      const received = numOrNull(row.received_kg);
+      const received = numOrNull$1(row.received_kg);
       map.set(row.id, computeCoffeeLine({
         quantity: row.quantity,
         quantityUnit: row.quantity_unit,
@@ -15273,7 +20435,7 @@ function CoffeeArrivalModal({
     }
     return map;
   }, [rows]);
-  const anyComplete = rows.some((row) => row.arrival_complete && numOrNull(row.received_kg) > 0);
+  const anyComplete = rows.some((row) => row.arrival_complete && numOrNull$1(row.received_kg) > 0);
   const anyDeposited = rows.some((row) => (row.deposited_kg || 0) > 0);
   const needsHighWasteConfirm = rows.some((row) => {
     const c = calcs.get(row.id);
@@ -15284,7 +20446,7 @@ function CoffeeArrivalModal({
     setError(null);
     const lines = [];
     for (const row of rows) {
-      const received = numOrNull(row.received_kg);
+      const received = numOrNull$1(row.received_kg);
       if (received === null && !row.was_received) continue;
       if (received !== null && received > row.raw_kg + 5e-4) {
         setError(`«${row.name}»: الواصل (${received} كغ) أكبر من الكيلو الخام (${row.raw_kg} كغ)`);
@@ -15343,7 +20505,7 @@ function CoffeeArrivalModal({
       rows.map((row) => {
         const c = calcs.get(row.id);
         const flag = c ? wasteFlag(c.wastePercent) : null;
-        const received = numOrNull(row.received_kg);
+        const received = numOrNull$1(row.received_kg);
         return /* @__PURE__ */ jsxs("div", { className: "rounded-xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2", children: [
           /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 flex-wrap", children: [
             /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white truncate", children: row.name }),
@@ -24194,7 +29356,7 @@ function LeaseContractModal({
   const fixedTotal = fixedSplit.total;
   const previewRows = useMemo(() => {
     if (frequency === "custom") {
-      return customRows.filter((row) => isDateKey(row.due_date) && moneyValue$2(row.amount) > 0).slice().sort((a, b) => compareDateKeys(a.due_date, b.due_date)).map((row, index) => ({
+      return customRows.filter((row) => isDateKey$1(row.due_date) && moneyValue$2(row.amount) > 0).slice().sort((a, b) => compareDateKeys$1(a.due_date, b.due_date)).map((row, index) => ({
         seq: index + 1,
         due_date: row.due_date,
         period_start: null,
@@ -24219,7 +29381,7 @@ function LeaseContractModal({
       fixedTaxableAmount: fixedSplit.taxable,
       vatRate: vatRateValue,
       amountIncludesVat: includesVat,
-      firstDueDate: isDateKey(firstDueDate) ? firstDueDate : null
+      firstDueDate: isDateKey$1(firstDueDate) ? firstDueDate : null
     });
   }, [frequency, customRows, fixedSplit, startDate, endDate, amount, vatRateValue, includesVat, firstDueDate]);
   const totals = useMemo(() => {
@@ -24232,9 +29394,9 @@ function LeaseContractModal({
       incl += moneyValue$2(row.amount_incl);
     }
     return {
-      excl: round2$4(excl),
-      vat: round2$4(vat),
-      incl: round2$4(incl)
+      excl: round2$5(excl),
+      vat: round2$5(vat),
+      incl: round2$5(incl)
     };
   }, [previewRows]);
   const installment = useMemo(() => installmentWithFixed({
@@ -24252,7 +29414,7 @@ function LeaseContractModal({
     noticePeriodDays: intOrNull(noticeDays),
     today
   });
-  const noticeStartsOn = isDateKey(endDate) && intOrNull(noticeDays) > 0 ? addDays$2(endDate, -intOrNull(noticeDays)) : null;
+  const noticeStartsOn = isDateKey$1(endDate) && intOrNull(noticeDays) > 0 ? addDays$3(endDate, -intOrNull(noticeDays)) : null;
   const customRowsChanged = useMemo(() => {
     if (!isEditing || frequency !== "custom") return false;
     const saved = (Array.isArray(contract?.payments) ? contract.payments : []).filter((p) => p.status !== "cancelled").map((p) => `${p.due_date}|${Math.max(moneyValue$2(p.amount_excl) - moneyValue$2(p.fixed_excl), 0).toFixed(2)}`).sort();
@@ -24270,15 +29432,15 @@ function LeaseContractModal({
   const errors = useMemo(() => {
     const list = [];
     if (!lessorName.trim()) list.push("اسم المؤجر مطلوب.");
-    if (!isDateKey(startDate)) list.push("تاريخ البداية مطلوب.");
-    if (!isDateKey(endDate)) list.push("تاريخ الانتهاء مطلوب.");
-    if (isDateKey(startDate) && isDateKey(endDate) && compareDateKeys(endDate, startDate) < 0) list.push("تاريخ الانتهاء قبل تاريخ البداية.");
+    if (!isDateKey$1(startDate)) list.push("تاريخ البداية مطلوب.");
+    if (!isDateKey$1(endDate)) list.push("تاريخ الانتهاء مطلوب.");
+    if (isDateKey$1(startDate) && isDateKey$1(endDate) && compareDateKeys$1(endDate, startDate) < 0) list.push("تاريخ الانتهاء قبل تاريخ البداية.");
     if (!(vatRateValue >= 0 && vatRateValue <= 100)) list.push("نسبة الضريبة بين 0 و100.");
     if (frequency === "custom") {
       if (previewRows.length === 0) list.push("أضف دفعة واحدة على الأقل بتاريخ استحقاق ومبلغ أكبر من صفر.");
     } else {
       if (!(installment.rent_excl > 0)) list.push("قيمة الدفعة مطلوبة.");
-      else if (isDateKey(startDate) && isDateKey(endDate) && previewRows.length === 0) list.push("لا تنتج أي دفعة — تحقق من أول استحقاق (يجب ألا يتجاوز نهاية العقد).");
+      else if (isDateKey$1(startDate) && isDateKey$1(endDate) && previewRows.length === 0) list.push("لا تنتج أي دفعة — تحقق من أول استحقاق (يجب ألا يتجاوز نهاية العقد).");
     }
     return list;
   }, [lessorName, startDate, endDate, vatRateValue, frequency, previewRows.length, installment.rent_excl]);
@@ -24309,7 +29471,7 @@ function LeaseContractModal({
         amount: moneyValue$2(row.amount),
         taxable: row.taxable === true
       })),
-      first_due_date: frequency === "custom" ? null : isDateKey(firstDueDate) ? firstDueDate : null,
+      first_due_date: frequency === "custom" ? null : isDateKey$1(firstDueDate) ? firstDueDate : null,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
       attachment_name: attachmentName || null,
@@ -25236,7 +30398,7 @@ function PaymentPill({
   payment,
   today
 }) {
-  const overdue = payment.status === "pending" && (payment.overdue || payment.due_date && compareDateKeys(payment.due_date, today) < 0);
+  const overdue = payment.status === "pending" && (payment.overdue || payment.due_date && compareDateKeys$1(payment.due_date, today) < 0);
   const cls = payment.status === "paid" ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25" : payment.status === "cancelled" ? "bg-slate-100 dark:bg-white/[0.06] text-slate-500 dark:text-white/50 border-slate-200 dark:border-white/10" : overdue ? "bg-rose-100 dark:bg-rose-400/10 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-400/25" : "bg-amber-100 dark:bg-amber-400/10 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25";
   const label = payment.status === "paid" ? "مسددة" : payment.status === "cancelled" ? "ملغاة" : overdue ? "متأخرة" : "معلّقة";
   return /* @__PURE__ */ jsx("span", { className: `${ws.pill} whitespace-nowrap ${cls}`, children: label });
@@ -25245,7 +30407,7 @@ function DueBadge({
   dueDate,
   today
 }) {
-  const n = daysBetween(today, dueDate);
+  const n = daysBetween$1(today, dueDate);
   if (n === null) return null;
   if (n < 0) {
     return /* @__PURE__ */ jsxs("span", { className: "text-[11px] font-bold text-rose-700 dark:text-rose-300 whitespace-nowrap", children: [
@@ -25492,9 +30654,9 @@ function LeaseContractsPanel({
     const live = contracts.filter((c) => c.is_active !== false);
     const activeCount = live.filter((c) => ["active", "notice"].includes(c.computed_status)).length;
     const noticeCount = live.filter((c) => c.computed_status === "notice").length;
-    const horizon = addDays$2(today, 30);
-    const due30 = pendingPayments.filter((p) => p.due_date && compareDateKeys(p.due_date, horizon) <= 0).reduce((acc, p) => acc + moneyValue(p.amount_incl), 0);
-    const due30Count = pendingPayments.filter((p) => p.due_date && compareDateKeys(p.due_date, horizon) <= 0).length;
+    const horizon = addDays$3(today, 30);
+    const due30 = pendingPayments.filter((p) => p.due_date && compareDateKeys$1(p.due_date, horizon) <= 0).reduce((acc, p) => acc + moneyValue(p.amount_incl), 0);
+    const due30Count = pendingPayments.filter((p) => p.due_date && compareDateKeys$1(p.due_date, horizon) <= 0).length;
     const remaining = live.filter((c) => c.computed_status !== "terminated").reduce((acc, c) => acc + moneyValue(c.pending_total), 0);
     return {
       activeCount,
@@ -25663,14 +30825,14 @@ function LeaseContractsPanel({
     });
   };
   const dueRows = useMemo(() => {
-    const horizon = addDays$2(today, 30);
+    const horizon = addDays$3(today, 30);
     return duePayments.filter((p) => {
       if (p.status === "cancelled") return false;
       if (!showPaid && p.status === "paid") return false;
       const isPending = p.status === "pending";
       if (dueFrom || dueTo) return true;
-      if (dueChip === "overdue") return isPending && compareDateKeys(p.due_date, today) < 0;
-      if (dueChip === "30") return compareDateKeys(p.due_date, horizon) <= 0;
+      if (dueChip === "overdue") return isPending && compareDateKeys$1(p.due_date, today) < 0;
+      if (dueChip === "30") return compareDateKeys$1(p.due_date, horizon) <= 0;
       if (dueChip === "month") return monthKey(p.due_date) === currentMonth;
       return true;
     });
@@ -25691,7 +30853,7 @@ function LeaseContractsPanel({
   }, [dueRows]);
   const dueSummary = useMemo(() => {
     const pending = dueRows.filter((r) => r.status === "pending");
-    const overdue = pending.filter((r) => compareDateKeys(r.due_date, today) < 0);
+    const overdue = pending.filter((r) => compareDateKeys$1(r.due_date, today) < 0);
     return {
       count: pending.length,
       total: pending.reduce((acc, r) => acc + moneyValue(r.amount_incl), 0),
@@ -25735,7 +30897,7 @@ function LeaseContractsPanel({
       accessor: (row) => moneyValue(row.amount_incl).toFixed(2)
     }, {
       header: "الحالة",
-      accessor: (row) => row.status === "paid" ? `مسددة ${row.paid_date || ""}` : compareDateKeys(row.due_date, today) < 0 ? "متأخرة" : "معلّقة"
+      accessor: (row) => row.status === "paid" ? `مسددة ${row.paid_date || ""}` : compareDateKeys$1(row.due_date, today) < 0 ? "متأخرة" : "معلّقة"
     }, {
       header: "تاريخ السداد",
       accessor: (row) => row.paid_date || ""
@@ -27139,267 +32301,10 @@ const page$F = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route9 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route11 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$F
 }, Symbol.toStringTag, { value: 'Module' }));
-
-function safeParseISODate(value) {
-  if (!value) return null;
-  const dateOnly = value.includes("T") ? value.split("T")[0] : value;
-  const d = /* @__PURE__ */ new Date(`${dateOnly}T00:00:00`);
-  if (Number.isNaN(d.getTime())) return null;
-  return d;
-}
-function extractTime(value) {
-  if (!value || !value.includes("T")) return {
-    hour: "",
-    minute: ""
-  };
-  const timePart = value.split("T")[1] || "";
-  const [h, m] = timePart.split(":");
-  return {
-    hour: h || "",
-    minute: m || ""
-  };
-}
-function buildDateTimeValue(dateStr, hour, minute) {
-  if (!dateStr) return "";
-  const dateOnly = dateStr.includes("T") ? dateStr.split("T")[0] : dateStr;
-  const h = String(hour || "0").padStart(2, "0");
-  const m = String(minute || "0").padStart(2, "0");
-  return `${dateOnly}T${h}:${m}`;
-}
-function GlassDatePicker({
-  value,
-  onChange,
-  placeholder = "اختر التاريخ",
-  className = "",
-  buttonClassName = "",
-  allowClear = true,
-  dir = "rtl",
-  displayLocale = "ar-SA-u-ca-gregory-nu-latn",
-  showTime = false
-}) {
-  const [open, setOpen] = useState(false);
-  const anchorRef = useRef(null);
-  const selected = useMemo(() => safeParseISODate(value), [value]);
-  const currentTime = useMemo(() => extractTime(value), [value]);
-  const dayPickerLocale = dir === "ltr" ? enUS : arSA;
-  const latnLocale = dir === "ltr" ? "en-US" : "ar-SA-u-ca-gregory-nu-latn";
-  const displayLabel = useMemo(() => {
-    if (!selected) return placeholder;
-    try {
-      const dateLabel = selected.toLocaleDateString(latnLocale, {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      });
-      if (showTime && currentTime.hour !== "") {
-        const h = String(currentTime.hour).padStart(2, "0");
-        const m = String(currentTime.minute).padStart(2, "0");
-        return `${dateLabel}  ${h}:${m}`;
-      }
-      return dateLabel;
-    } catch {
-      return value;
-    }
-  }, [placeholder, selected, value, latnLocale, showTime, currentTime]);
-  const setValue = useCallback((next) => {
-    onChange?.(next);
-  }, [onChange]);
-  const handleSelect = useCallback((day) => {
-    if (!day) {
-      setValue("");
-      if (!showTime) setOpen(false);
-      return;
-    }
-    const dateStr = formatDateForInput(day);
-    if (showTime) {
-      const h = currentTime.hour !== "" ? currentTime.hour : currentRiyadhHour();
-      const m = currentTime.minute !== "" ? currentTime.minute : "0";
-      setValue(buildDateTimeValue(dateStr, h, m));
-    } else {
-      setValue(dateStr);
-      setOpen(false);
-    }
-  }, [setValue, showTime, currentTime]);
-  const handleTimeChange = useCallback((type, val) => {
-    const dateOnly = value ? value.includes("T") ? value.split("T")[0] : value : "";
-    if (!dateOnly) return;
-    const h = type === "hour" ? val : currentTime.hour || "0";
-    const m = type === "minute" ? val : currentTime.minute || "0";
-    setValue(buildDateTimeValue(dateOnly, h, m));
-  }, [value, currentTime, setValue]);
-  const handleTimeDone = useCallback(() => {
-    setOpen(false);
-  }, []);
-  const clear = useCallback((e) => {
-    e?.stopPropagation?.();
-    setValue("");
-    setOpen(false);
-  }, [setValue]);
-  const buttonTextClass = value ? "text-slate-900 dark:text-slate-900 dark:text-white" : "text-slate-400 dark:text-slate-400 dark:text-white/35";
-  const defaultClassNames = useMemo(() => getDefaultClassNames(), []);
-  const dayPickerClassNames = useMemo(() => {
-    const navBtn = `${ws$1.iconButton} w-8 h-8 rounded-xl flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed`;
-    return {
-      ...defaultClassNames,
-      root: `${defaultClassNames.root} select-none`,
-      months: `${defaultClassNames.months} flex flex-col`,
-      month: `${defaultClassNames.month} space-y-2`,
-      month_caption: `${defaultClassNames.month_caption} flex items-center justify-between px-2 py-1`,
-      caption_label: `${defaultClassNames.caption_label || ""} text-slate-900 dark:text-white/90 text-sm font-semibold`,
-      nav: `${defaultClassNames.nav} flex items-center gap-1`,
-      button_previous: `${defaultClassNames.button_previous} ${navBtn}`,
-      button_next: `${defaultClassNames.button_next} ${navBtn}`,
-      chevron: `${defaultClassNames.chevron} text-slate-700 dark:text-slate-700 dark:text-white/70`,
-      month_grid: `${defaultClassNames.month_grid} w-full border-collapse table-fixed`,
-      weekdays: `${defaultClassNames.weekdays} `,
-      weekday: `${defaultClassNames.weekday} p-1 text-center text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 font-semibold`,
-      weeks: `${defaultClassNames.weeks} `,
-      week: `${defaultClassNames.week} `,
-      // In v9: `day` is the cell, and `day_button` is the clickable button.
-      day: `${defaultClassNames.day} p-1 text-center`,
-      day_button: `${defaultClassNames.day_button} h-8 w-8 rounded-xl mx-auto text-slate-800 dark:text-slate-800 dark:text-white/85 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-emerald-400/20 flex items-center justify-center`,
-      today: `${defaultClassNames.today} text-sky-700 dark:text-sky-700 dark:text-sky-200`,
-      outside: `${defaultClassNames.outside} text-slate-400 dark:text-slate-400 dark:text-white/25`,
-      disabled: `${defaultClassNames.disabled} text-slate-400 dark:text-slate-400 dark:text-white/25 line-through`,
-      selected: `${defaultClassNames.selected} bg-emerald-400/20 text-emerald-100 border border-emerald-400/30`
-    };
-  }, [defaultClassNames]);
-  const hourOptions = useMemo(() => {
-    const arr = [];
-    for (let i = 0; i < 24; i++) {
-      arr.push(i);
-    }
-    return arr;
-  }, []);
-  const minuteOptions = useMemo(() => {
-    const arr = [];
-    for (let i = 0; i < 60; i += 5) {
-      arr.push(i);
-    }
-    return arr;
-  }, []);
-  return /* @__PURE__ */ jsxs("div", { className, dir, children: [
-    /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-      /* @__PURE__ */ jsxs("button", { ref: anchorRef, type: "button", onClick: () => setOpen((s) => !s), className: `${ws$1.select} flex items-center justify-between gap-3 ${buttonClassName}`, "aria-expanded": open, children: [
-        /* @__PURE__ */ jsx("span", { className: `truncate ${buttonTextClass}`, children: displayLabel }),
-        /* @__PURE__ */ jsx("div", { className: `${ws$1.iconBox} w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.03] flex-shrink-0`, "aria-hidden": "true", children: showTime ? /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/65" }) : /* @__PURE__ */ jsx(CalendarDays, { className: "w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/65" }) })
-      ] }),
-      allowClear && value ? /* @__PURE__ */ jsx("button", { type: "button", onClick: clear, className: `absolute left-2 top-1/2 -translate-y-1/2 ${ws$1.iconButton} w-9 h-9 rounded-xl flex items-center justify-center`, "aria-label": "مسح التاريخ", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70" }) }) : null
-    ] }),
-    /* @__PURE__ */ jsx(GlassPopover, { open, anchorRef, onClose: () => setOpen(false), style: {
-      width: 320
-    }, children: /* @__PURE__ */ jsxs("div", { className: "p-3", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2 px-1 pb-2", children: [
-        /* @__PURE__ */ jsx("div", { className: "text-sm font-semibold text-slate-800 dark:text-white/80", children: "التاريخ" }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-            const today = formatRiyadhDateForInput(/* @__PURE__ */ new Date());
-            if (showTime) {
-              const h = currentTime.hour !== "" ? currentTime.hour : currentRiyadhHour();
-              const m = currentTime.minute !== "" ? currentTime.minute : "0";
-              setValue(buildDateTimeValue(today, h, m));
-            } else {
-              setValue(today);
-              setOpen(false);
-            }
-          }, className: `${ws$1.btnNeutral} px-3 py-2 text-xs justify-center`, children: "اليوم" }),
-          allowClear ? /* @__PURE__ */ jsx("button", { type: "button", onClick: clear, className: `${ws$1.btnDanger} px-3 py-2 text-xs justify-center`, children: "مسح" }) : null
-        ] })
-      ] }),
-      /* @__PURE__ */ jsx("div", { className: "rounded-2xl border border-slate-200 dark:border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-50 dark:bg-white/[0.02] p-2 overflow-hidden", children: /* @__PURE__ */ jsx(
-        DayPicker,
-        {
-          mode: "single",
-          captionLayout: "label",
-          selected: selected || void 0,
-          onSelect: handleSelect,
-          showOutsideDays: true,
-          fixedWeeks: true,
-          locale: dayPickerLocale,
-          dir,
-          classNames: dayPickerClassNames,
-          formatters: {
-            // Force Latin digits in the calendar while keeping Arabic month/weekday names.
-            formatCaption: (date) => {
-              try {
-                return date.toLocaleDateString(latnLocale, {
-                  month: "long",
-                  year: "numeric"
-                });
-              } catch {
-                return "";
-              }
-            },
-            formatDay: (date) => {
-              try {
-                return new Intl.NumberFormat(latnLocale, {
-                  useGrouping: false
-                }).format(date.getDate());
-              } catch {
-                return String(date.getDate());
-              }
-            }
-          },
-          components: {
-            Chevron: (props) => {
-              const className2 = props?.className || "";
-              if (dir === "rtl") {
-                if (props.orientation === "left") {
-                  return /* @__PURE__ */ jsx(ChevronRight, { className: `${className2} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70` });
-                }
-                return /* @__PURE__ */ jsx(ChevronLeft, { className: `${className2} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70` });
-              }
-              if (props.orientation === "left") {
-                return /* @__PURE__ */ jsx(ChevronLeft, { className: `${className2} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70` });
-              }
-              return /* @__PURE__ */ jsx(ChevronRight, { className: `${className2} w-4 h-4 text-slate-700 dark:text-slate-700 dark:text-white/70` });
-            }
-          },
-          styles: {
-            month_grid: {
-              width: "100%"
-            }
-          }
-        }
-      ) }),
-      showTime ? /* @__PURE__ */ jsxs("div", { className: "mt-3 pt-3 border-t border-slate-200 dark:border-slate-200 dark:border-white/10", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
-          /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4 text-slate-500 dark:text-slate-500 dark:text-white/50" }),
-          /* @__PURE__ */ jsx("span", { className: "text-sm font-semibold text-slate-700 dark:text-slate-700 dark:text-white/70", children: "الوقت" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 mb-1", children: "الساعة" }),
-            /* @__PURE__ */ jsxs("select", { value: currentTime.hour !== "" ? Number(currentTime.hour) : "", onChange: (e) => handleTimeChange("hour", e.target.value), className: `${ws$1.input} px-3 py-2.5 text-center text-sm w-full`, style: {
-              appearance: "none",
-              WebkitAppearance: "none"
-            }, children: [
-              /* @__PURE__ */ jsx("option", { value: "", disabled: true, children: "--" }),
-              hourOptions.map((h) => /* @__PURE__ */ jsx("option", { value: h, children: String(h).padStart(2, "0") }, h))
-            ] })
-          ] }),
-          /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:text-white/50 text-lg font-bold mt-4", children: ":" }),
-          /* @__PURE__ */ jsxs("div", { className: "flex-1", children: [
-            /* @__PURE__ */ jsx("label", { className: "block text-[11px] text-slate-500 dark:text-slate-500 dark:text-white/45 mb-1", children: "الدقيقة" }),
-            /* @__PURE__ */ jsxs("select", { value: currentTime.minute !== "" ? Number(currentTime.minute) : "", onChange: (e) => handleTimeChange("minute", e.target.value), className: `${ws$1.input} px-3 py-2.5 text-center text-sm w-full`, style: {
-              appearance: "none",
-              WebkitAppearance: "none"
-            }, children: [
-              /* @__PURE__ */ jsx("option", { value: "", disabled: true, children: "--" }),
-              minuteOptions.map((m) => /* @__PURE__ */ jsx("option", { value: m, children: String(m).padStart(2, "0") }, m))
-            ] })
-          ] }),
-          /* @__PURE__ */ jsx("button", { type: "button", onClick: handleTimeDone, className: `${ws$1.btnPrimary} px-4 py-2.5 text-sm justify-center mt-4`, children: "تم" })
-        ] })
-      ] }) : null,
-      /* @__PURE__ */ jsx("div", { className: "pt-2 text-xs text-slate-500 dark:text-slate-500 dark:text-white/45", children: showTime ? "* اختر التاريخ والوقت" : "* اختيار تاريخ بنمط Workspace (بدون واجهة المتصفح البيضاء)" })
-    ] }) })
-  ] });
-}
 
 function formatMoney$4(value) {
   const n = Number(value);
@@ -27668,7 +32573,7 @@ const page$E = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route10 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route12 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$E
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -28062,7 +32967,7 @@ const page$D = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route11 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route13 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$D
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -30500,7 +35405,7 @@ const page$C = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route12 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route14 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$C
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -30859,7 +35764,7 @@ function BranchesPage() {
               /* @__PURE__ */ jsx(MapPin, { className: "w-4 h-4 text-emerald-700 dark:text-emerald-700 dark:text-emerald-200" }),
               /* @__PURE__ */ jsx("span", { children: branch.location })
             ] }) : /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45 text-sm", children: "غير محدد" }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45 text-sm whitespace-nowrap", children: formatDateTime$2(branch.created_at) }),
+            /* @__PURE__ */ jsx("td", { className: "px-6 py-4 text-slate-500 dark:text-slate-500 dark:text-slate-500 dark:text-white/45 text-sm whitespace-nowrap", children: formatDateTime$4(branch.created_at) }),
             /* @__PURE__ */ jsx("td", { className: "px-6 py-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
               /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleOpenModal(branch), className: `${ws$1.iconButton} text-sky-700 dark:text-sky-700 dark:text-sky-200`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
               /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setDeleteConfirm(branch), className: `${ws$1.iconButton} text-red-700 dark:text-red-700 dark:text-red-200`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-4 h-4" }) })
@@ -30950,7 +35855,7 @@ const page$B = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route13 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route15 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$B
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -31282,7 +36187,7 @@ function EmployeeExportMenu({
     }, {
       header: "تاريخ الإضافة",
       accessor: (item) => item.created_at,
-      format: (value) => formatDateTime$2(value)
+      format: (value) => formatDateTime$4(value)
     }];
     exportToExcelHTML(employees, `قائمة_الموظفين_${todayRiyadhDateKey()}`, columns, "قائمة الموظفين - نظام إدارة المخزون");
     setShowExportMenu(false);
@@ -32248,7 +37153,7 @@ const page$A = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route14 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route16 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$A
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -33331,7 +38236,7 @@ function ItemsTable({
             /* @__PURE__ */ jsxs("td", { className: "px-6 py-4 whitespace-nowrap", children: [
               /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-slate-700 dark:text-slate-700 dark:text-white/75 font-medium", children: formatCost(displayCost) }),
               item?.linked_green_bean_name ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 mt-1", children: [
-                /* @__PURE__ */ jsx(Link, { className: "w-3 h-3 text-amber-700 dark:text-amber-700 dark:text-amber-300/50" }),
+                /* @__PURE__ */ jsx(Link$1, { className: "w-3 h-3 text-amber-700 dark:text-amber-700 dark:text-amber-300/50" }),
                 /* @__PURE__ */ jsxs("span", { className: "text-amber-700 dark:text-amber-700 dark:text-amber-200/50 text-[10px]", children: [
                   item.linked_green_bean_name,
                   item.last_order_date ? /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-slate-400 dark:text-slate-400 dark:text-white/30 mr-1", children: [
@@ -34477,7 +39382,7 @@ function ItemsPage() {
     }, {
       header: "تاريخ الإنشاء",
       accessor: (item) => item.created_at,
-      format: (value) => formatDateTime$2(value)
+      format: (value) => formatDateTime$4(value)
     }];
     exportToExcelHTML(filteredItems, `قائمة_الأصناف_${todayRiyadhDateKey()}`, columns, "قائمة الأصناف - نظام إدارة المخزون");
   };
@@ -34568,7 +39473,7 @@ const page$z = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route15 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route17 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$z
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -34759,7 +39664,7 @@ function exportItemsSummaryToExcel(filteredItems) {
         status: bQty === 0 ? "غير متوفر" : bQty < item.min_stock_threshold ? "منخفض" : "متوفر",
         inventory_number: branch.inventory_number || "-",
         inventory_type: branch.inventory_type ? formatInventoryType(branch.inventory_type) : "-",
-        operation_date: branch.operation_date ? formatDateTime$2(branch.operation_date) : "-",
+        operation_date: branch.operation_date ? formatDateTime$4(branch.operation_date) : "-",
         employee_name: branch.employee_name || "-",
         total_operations: branch.total_operations || 0
       });
@@ -34970,7 +39875,7 @@ function ItemBranchDetails({
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
         /* @__PURE__ */ jsx(Calendar, { className: "w-3 h-3 text-sky-700 dark:text-sky-700 dark:text-sky-200" }),
         /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-slate-600 dark:text-white/55", children: "التاريخ:" }),
-        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-900 dark:text-slate-900 dark:text-white whitespace-nowrap", children: formatDateTime$2(branch.operation_date) })
+        /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-900 dark:text-slate-900 dark:text-white whitespace-nowrap", children: formatDateTime$4(branch.operation_date) })
       ] }),
       branch.employee_name ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
         /* @__PURE__ */ jsx(User, { className: "w-3 h-3 text-sky-700 dark:text-sky-700 dark:text-sky-200" }),
@@ -35189,7 +40094,7 @@ function ItemTimelineModal({
     if (!events.length) return;
     const columns = [{
       header: "التاريخ",
-      accessor: (e) => formatDateTime$4(e.event_at)
+      accessor: (e) => formatDateTime$5(e.event_at)
     }, {
       header: "النوع",
       accessor: (e) => TYPE_LABEL[e.inventory_type] || e.inventory_type
@@ -35270,7 +40175,7 @@ function ItemTimelineModal({
             border: `1px solid ${tooltipBorder}`,
             borderRadius: 12,
             color: tooltipText
-          }, labelFormatter: (t) => formatDateTime$4(new Date(t).toISOString()), formatter: (value) => [`${value}`, "الرصيد"] }),
+          }, labelFormatter: (t) => formatDateTime$5(new Date(t).toISOString()), formatter: (value) => [`${value}`, "الرصيد"] }),
           /* @__PURE__ */ jsx(Line, { type: "monotone", dataKey: "balance", stroke: "#34d399", strokeWidth: 2, dot: false, isAnimationActive: false }),
           chartData.map((p) => /* @__PURE__ */ jsx(ReferenceDot, { x: p.ts, y: p.balance, r: 4, fill: TYPE_COLOR[p.type] || "#34d399", stroke: "rgba(0,0,0,0.4)", strokeWidth: 1, isFront: true }, `${p.idx}`))
         ] }) }),
@@ -35307,7 +40212,7 @@ function ItemTimelineModal({
                 ] }) : null
               ] }),
               /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-0.5 flex items-center gap-2 flex-wrap", children: [
-                /* @__PURE__ */ jsx("span", { children: formatDateTime$4(ev.event_at) }),
+                /* @__PURE__ */ jsx("span", { children: formatDateTime$5(ev.event_at) }),
                 ev.employee_name ? /* @__PURE__ */ jsxs("span", { children: [
                   "• ",
                   ev.employee_name
@@ -35485,7 +40390,7 @@ const page$y = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route16 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route18 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$y
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -35605,7 +40510,7 @@ const page$x = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route17 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route19 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$x
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -36146,7 +41051,7 @@ const page$w = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route18 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route20 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$w
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -37027,11 +41932,11 @@ function OperationsTable({
     }, {
       header: "تاريخ العملية",
       accessor: (item) => item.operation_date || item.created_at,
-      format: (value) => formatDateTime$2(value)
+      format: (value) => formatDateTime$4(value)
     }, {
       header: "تاريخ الإدخال",
       accessor: (item) => item.created_at,
-      format: (value) => formatDateTime$2(value)
+      format: (value) => formatDateTime$4(value)
     }];
     exportToExcelHTML(filteredOperations, `عمليات_المخزون_${todayRiyadhDateKey()}`, columns, "تقرير عمليات المخزون");
     setShowExportMenu(false);
@@ -37053,11 +41958,11 @@ function OperationsTable({
     }, {
       header: "تاريخ العملية",
       accessor: (item) => item.operation_date || item.created_at,
-      format: (value) => formatDateTime$2(value)
+      format: (value) => formatDateTime$4(value)
     }, {
       header: "تاريخ الإدخال",
       accessor: (item) => item.created_at,
-      format: (value) => formatDateTime$2(value)
+      format: (value) => formatDateTime$4(value)
     }];
     exportToPDF(filteredOperations, `عمليات_المخزون_${todayRiyadhDateKey()}`, columns, "تقرير عمليات المخزون");
     setShowExportMenu(false);
@@ -37384,14 +42289,14 @@ function OperationInfoGrid({
         /* @__PURE__ */ jsx(Clock, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: "تاريخ العملية" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-slate-900 dark:text-white font-semibold", children: formatDateTime$2(operationDateValue) })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-900 dark:text-slate-900 dark:text-white font-semibold", children: formatDateTime$4(operationDateValue) })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-slate-100 dark:bg-white/5 rounded-lg p-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
         /* @__PURE__ */ jsx(CalendarPlus, { className: "w-4 h-4" }),
         /* @__PURE__ */ jsx("span", { className: "text-sm", children: "تاريخ الإدخال" })
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "text-slate-700 dark:text-slate-700 dark:text-white/70 font-semibold", children: formatDateTime$2(selectedOperation.created_at) })
+      /* @__PURE__ */ jsx("p", { className: "text-slate-700 dark:text-slate-700 dark:text-white/70 font-semibold", children: formatDateTime$4(selectedOperation.created_at) })
     ] }),
     totalQuantity !== void 0 ? /* @__PURE__ */ jsxs("div", { className: "bg-slate-100 dark:bg-slate-100 dark:bg-white/5 rounded-lg p-4", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 text-gray-400 mb-2", children: [
@@ -37543,8 +42448,8 @@ function buildPrintHTML(selectedOperation, operationDetails, opStats) {
     timeZone: "Asia/Riyadh"
   });
   const operationDateValue = selectedOperation.operation_date || selectedOperation.created_at;
-  const operationDate = formatDateTime$2(operationDateValue);
-  const entryDate = formatDateTime$2(selectedOperation.created_at);
+  const operationDate = formatDateTime$4(operationDateValue);
+  const entryDate = formatDateTime$4(selectedOperation.created_at);
   const items = operationDetails?.items || [];
   const itemRows = items.map((item, idx) => {
     const qty = Number(item.quantity) || 0;
@@ -39739,7 +44644,7 @@ const page$v = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route19 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route21 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$v
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -39790,7 +44695,7 @@ function ReceiptsFilters({
 
 const sectionCard$2 = `${ws$1.glass} ${ws$1.card} overflow-hidden`;
 function formatDate$1(value) {
-  return formatDateTime$4(value);
+  return formatDateTime$5(value);
 }
 function formatNumber$2(n) {
   const num = Number(n);
@@ -40086,7 +44991,7 @@ const page$u = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route20 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route22 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$u
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -40647,7 +45552,7 @@ const page$t = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route21 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route23 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$t
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -41096,7 +46001,7 @@ const page$s = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route22 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route24 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$s
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -41392,7 +46297,7 @@ const page$r = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route23 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route25 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$r
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -42052,7 +46957,7 @@ const page$q = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route24 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route26 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$q
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -42258,7 +47163,7 @@ const page$p = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route25 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route27 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$p
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -42523,7 +47428,7 @@ const page$o = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route26 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route28 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$o
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -42667,7 +47572,7 @@ const page$n = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route27 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route29 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$n
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -43336,7 +48241,7 @@ const page$m = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route28 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route30 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$m
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -43542,7 +48447,7 @@ const page$l = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route29 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route31 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$l
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -43774,7 +48679,7 @@ const page$k = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route30 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route32 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$k
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -43836,7 +48741,7 @@ const page$j = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route31 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route33 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$j
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -44694,7 +49599,7 @@ const page$i = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route32 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route34 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$i
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -46912,7 +51817,7 @@ const page$h = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route33 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route35 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$h
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -47269,7 +52174,7 @@ const page$g = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route34 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route36 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$g
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -47479,7 +52384,7 @@ const page$f = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route35 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route37 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$f
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -47499,7 +52404,7 @@ const page$e = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route36 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route38 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$e
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -47519,7 +52424,7 @@ const page$d = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route37 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route39 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$d
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -48138,13 +53043,13 @@ function exportBloggersData(bloggers) {
     accessor: b => STATE_AR[b.state] || b.state || ""
   }, {
     header: "وقت التفعيل",
-    accessor: b => b.state === "active" && b.activated_at ? formatDateTime$4(b.activated_at) : ""
+    accessor: b => b.state === "active" && b.activated_at ? formatDateTime$5(b.activated_at) : ""
   }, {
     header: "فُعِّلت بواسطة",
     accessor: b => b.state === "active" ? b.activated_by_employee_name || "" : ""
   }, {
     header: "تاريخ الإنشاء",
-    accessor: b => b.created_at ? formatDateTime$4(b.created_at) : ""
+    accessor: b => b.created_at ? formatDateTime$5(b.created_at) : ""
   }, {
     header: "ملاحظة",
     accessor: b => b.note || ""
@@ -48860,16 +53765,16 @@ function BloggersPage() {
                 /* @__PURE__ */ jsx(MailCheck, { className: "w-3 h-3" }),
                 "تمت"
               ] }),
-              b.invited_at ? /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35 text-[10px] mt-0.5", children: formatDateTime$4(b.invited_at) }) : null
+              b.invited_at ? /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35 text-[10px] mt-0.5", children: formatDateTime$5(b.invited_at) }) : null
             ] }) : /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => markInvitedMut.mutate(b.id), disabled: markInvitedMut.isPending && markInvitedMut.variables === b.id, className: `${ws$1.btnNeutral} px-3 py-1.5 text-xs justify-center disabled:opacity-50`, children: [
               markInvitedMut.isPending && markInvitedMut.variables === b.id ? /* @__PURE__ */ jsx("div", { className: "w-3 h-3 border-2 border-slate-400 dark:border-white/40 border-t-transparent rounded-full animate-spin" }) : /* @__PURE__ */ jsx(Send, { className: "w-3 h-3" }),
               /* @__PURE__ */ jsx("span", { children: "تمت الدعوة" })
             ] }) }),
             /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-xs", children: b.activated_at ? /* @__PURE__ */ jsxs(Fragment, { children: [
-              /* @__PURE__ */ jsx("div", { children: formatDateTime$4(b.activated_at) }),
+              /* @__PURE__ */ jsx("div", { children: formatDateTime$5(b.activated_at) }),
               b.activated_by_employee_name ? /* @__PURE__ */ jsx("div", { className: "text-slate-400 dark:text-white/35 mt-0.5", children: b.activated_by_employee_name }) : null
             ] }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "—" }) }),
-            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-xs", children: formatDateTime$4(b.created_at) }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-600 dark:text-white/55 text-xs", children: formatDateTime$5(b.created_at) }),
             /* @__PURE__ */ jsx("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2", children: [
               /* @__PURE__ */ jsx("a", { href: `/marketing/bloggers/${b.id}/card`, className: `${ws$1.btnPrimary} px-3 py-1.5 text-sm justify-center`, title: "عرض بطاقة الدعوة", children: /* @__PURE__ */ jsx(QrCode, { className: "w-4 h-4" }) }),
               /* @__PURE__ */ jsx("button", { onClick: () => openEdit(b), className: `${ws$1.btnNeutral} px-3 py-1.5 text-sm justify-center`, title: "تعديل", children: /* @__PURE__ */ jsx(Edit, { className: "w-4 h-4" }) }),
@@ -48893,7 +53798,7 @@ const page$c = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route38 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route40 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$c
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -48983,7 +53888,7 @@ const page$b = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route39 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route41 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$b
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -49273,7 +54178,7 @@ const page$a = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route40 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route42 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$a
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -49489,7 +54394,7 @@ const page$9 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route41 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route43 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$9
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -49638,7 +54543,7 @@ const page$8 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route42 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route44 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$8
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -50226,7 +55131,7 @@ const page$7 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route43 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route45 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$7
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -50317,7 +55222,7 @@ const page$6 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route44 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route46 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$6
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -50932,7 +55837,7 @@ const page$5 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route45 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route47 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$5
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -51476,7 +56381,7 @@ const page$4 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route46 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route48 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$4
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -51845,7 +56750,7 @@ const page$3 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route47 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route49 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$3
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -54043,8 +58948,8 @@ function WorkspaceTasksPage() {
     }
     const rows = overdueTasks.map((t) => {
       const title = t.title || "—";
-      const due = t.due_date ? formatDate$4(t.due_date) : "—";
-      const completed = t.completed_at ? formatDateTime$4(t.completed_at) : "—";
+      const due = t.due_date ? formatDate$5(t.due_date) : "—";
+      const completed = t.completed_at ? formatDateTime$5(t.completed_at) : "—";
       const assignees = safeArray(t.assignees).map((a) => a?.name).filter(Boolean);
       const assigneesText = assignees.length ? assignees.join("، ") : "—";
       const isCurrentlyOverdue = !!t.is_currently_overdue;
@@ -54148,7 +59053,7 @@ const page$2 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route48 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route50 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$2
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -54306,7 +59211,7 @@ const page$1 = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route49 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route51 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$1
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -54620,7 +59525,7 @@ const page = UNSAFE_withComponentProps(function WrappedPage(props) {
   });
 });
 
-const route50 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route52 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page
 }, Symbol.toStringTag, { value: 'Module' }));
@@ -54657,7 +59562,7 @@ const notFound = UNSAFE_withComponentProps(function NotFoundPage() {
             className: "w-4 h-4",
             "aria-hidden": "true"
           }), "رجوع"]
-        }), /* @__PURE__ */jsxs(Link$1, {
+        }), /* @__PURE__ */jsxs(Link, {
           to: "/",
           className: `${ws$1.btnPrimary} min-h-11 px-5 py-2.5 justify-center`,
           children: [/* @__PURE__ */jsx(Home, {
@@ -54670,12 +59575,12 @@ const notFound = UNSAFE_withComponentProps(function NotFoundPage() {
   });
 });
 
-const route51 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+const route53 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: notFound
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-CrhP6QRF.js','imports':['/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/client-wSjAenBr.js','/assets/index-mDHkYRn_.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-s7ubb0eI.js','imports':['/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/client-wSjAenBr.js','/assets/index-mDHkYRn_.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-B074vRgA.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-B1gQqVWE.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CeZeDVQE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/shield-Bi8S1a_E.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/trash-2-BZEabRjj.js','/assets/receipt-text-CMEEYSTK.js','/assets/languages-BblGVubv.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CL0D4Ojl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollCalculations-DszFSuBE.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/layout-dashboard-CfTv19L-.js','/assets/calculator-CuHKkksc.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-up-vm2aXccZ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-sq7mvS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/GlassSelect-mulBuSBB.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/banknote-Cwn5eNTq.js','/assets/building-2-C4-avAoH.js','/assets/calendar-days-ZP49EuZ8.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/history-BZpeAbA6.js','/assets/save-j3TblwGW.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D4tW3-av.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BBt2zRQS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/ui-Dlez-q8v.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollCalculations-DszFSuBE.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/GlassSelect-mulBuSBB.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/plus-DDJwKK4q.js','/assets/save-j3TblwGW.js','/assets/copy-CDBDUCCU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CJQ3OJcg.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/ui-Dlez-q8v.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/arrow-left-DHUuVIZy.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/index-B074vRgA.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/exportUtils-B52DYAkn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/useMutation-YPPwjwxZ.js','/assets/trash-2-BZEabRjj.js','/assets/package-eQR-e_-7.js','/assets/pencil-D8aHAzD8.js','/assets/eye-CiT1BuH_.js','/assets/save-j3TblwGW.js','/assets/circle-check-big-Da9qNVxV.js','/assets/triangle-alert-Boaua5py.js','/assets/x-CJMV-H_W.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/square-check-big-QOWBUAjV.js','/assets/square-DlbVPQ1P.js','/assets/minus-BxIOy9AD.js','/assets/plus-DDJwKK4q.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CUnXSIY5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/index-mDHkYRn_.js','/assets/dateUtils-B35lzzJe.js','/assets/wallet-Bj0CEyHo.js','/assets/x-CJMV-H_W.js','/assets/save-j3TblwGW.js','/assets/pencil-D8aHAzD8.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/trash-2-BZEabRjj.js','/assets/useEmployeeLoans-CdvLxZet.js','/assets/filter-DGpiaYIH.js','/assets/plus-DDJwKK4q.js','/assets/info-BGxn2qxB.js','/assets/index-B074vRgA.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-q3vF3Onq.js','/assets/useMutation-YPPwjwxZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bx1aM5JR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/x-CJMV-H_W.js','/assets/user-TAYO6wFz.js','/assets/file-text-BsXVEDDb.js','/assets/dollar-sign-CPOiC5y3.js','/assets/percent-Drb7mxOw.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-CvuConHt.js','/assets/apiAuth-CTxhwd0t.js','/assets/index-B074vRgA.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/payrollCalculations-DszFSuBE.js','/assets/info-BGxn2qxB.js','/assets/lock-CTGO69Da.js','/assets/circle-check-DYVsyltl.js','/assets/clock-BLQV2p7w.js','/assets/style-C-BeU7vR.js','/assets/ban-HVmbf0Bi.js','/assets/message-square-CQ1_CnCg.js','/assets/pencil-D8aHAzD8.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/send-NBZit5sF.js','/assets/gift-DDoKzxfU.js','/assets/trash-2-BZEabRjj.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/wallet-Bj0CEyHo.js','/assets/dateUtils-B35lzzJe.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-WsvkT7Jl.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/uiPurchases-DJoYPqsC.js','/assets/BulkInvoiceUploadPanel-C8jQodBt.js','/assets/map-pin-Dqo7hI9m.js','/assets/circle-check-DYVsyltl.js','/assets/hash-CBHDgDQ3.js','/assets/ui-Dlez-q8v.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/hand-coins-BQvnxKbd.js','/assets/link-DaxFi8fV.js','/assets/index-B074vRgA.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/triangle-alert-Boaua5py.js','/assets/plus-DDJwKK4q.js','/assets/trending-up-vm2aXccZ.js','/assets/trending-down-4D7R8o0Y.js','/assets/copy-CDBDUCCU.js','/assets/bell-BOrsd0dI.js','/assets/loader-circle-cj3OShwt.js','/assets/send-NBZit5sF.js','/assets/index-mDHkYRn_.js','/assets/user-TAYO6wFz.js','/assets/percent-Drb7mxOw.js','/assets/x-CJMV-H_W.js','/assets/banknote-Cwn5eNTq.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/file-spreadsheet-DHsESvwd.js','/assets/chevron-left-vtV8fD67.js','/assets/lock-CTGO69Da.js','/assets/save-j3TblwGW.js','/assets/building-2-C4-avAoH.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/info-BGxn2qxB.js','/assets/scroll-text-POw0Obrx.js','/assets/wallet-Bj0CEyHo.js','/assets/useUpload-Bl3Az-8u.js','/assets/unlink-DVXDxYhm.js','/assets/external-link-BX9iGKtf.js','/assets/users-VA8LPGTJ.js','/assets/history-BZpeAbA6.js','/assets/calendar-days-ZP49EuZ8.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/style-C-BeU7vR.js','/assets/message-square-CQ1_CnCg.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/arrow-up-right-BF8vhYZS.js','/assets/minus-BxIOy9AD.js','/assets/layers-9Vc-tcAx.js','/assets/trophy-B8rv-fXg.js','/assets/circle-B23E5JJ9.js','/assets/LineChart-DzXBW_Q3.js','/assets/PieChart-CInDFe0c.js','/assets/clock-BLQV2p7w.js','/assets/clipboard-check-CFfW7iHf.js','/assets/sparkles-DbziavYF.js','/assets/upload-CS5AK87H.js','/assets/ban-HVmbf0Bi.js','/assets/chevron-right-CXLYWaqy.js','/assets/layout-dashboard-CfTv19L-.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/badge-check-pQujwjvV.js','/assets/arrow-right-BDl4ebOl.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BLVPFfNS.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/calculator-CuHKkksc.js','/assets/building-2-C4-avAoH.js','/assets/info-BGxn2qxB.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/trash-2-BZEabRjj.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CbU36qt5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DoExRVlh.js','/assets/Sidebar-7JKGpjp4.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/layers-9Vc-tcAx.js','/assets/boxes-D8lzOFTO.js','/assets/trophy-B8rv-fXg.js','/assets/trash-2-BZEabRjj.js','/assets/building-2-C4-avAoH.js','/assets/user-TAYO6wFz.js','/assets/clock-BLQV2p7w.js','/assets/chevron-down-DC34JNfT.js','/assets/sticky-note-eE2tkwJ8.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/wallet-Bj0CEyHo.js','/assets/hand-coins-BQvnxKbd.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DWMxnsZR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-xWb4k-Rz.js','/assets/ui-Dlez-q8v.js','/assets/trending-up-vm2aXccZ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/circle-check-big-Da9qNVxV.js','/assets/clock-BLQV2p7w.js','/assets/building-2-C4-avAoH.js','/assets/calendar-days-ZP49EuZ8.js','/assets/dateUtils-B35lzzJe.js','/assets/sparkles-DbziavYF.js','/assets/trending-down-4D7R8o0Y.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/x-CJMV-H_W.js','/assets/info-BGxn2qxB.js','/assets/circle-alert-DIs_K0Qw.js','/assets/triangle-alert-Boaua5py.js','/assets/package-plus-Dq8M9Bmt.js','/assets/truck-BhEhG7v1.js','/assets/calendar-DSqa1Jk6.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/LineChart-DzXBW_Q3.js','/assets/PieChart-CInDFe0c.js','/assets/activity-Wj1gkxln.js','/assets/dollar-sign-CPOiC5y3.js','/assets/package-eQR-e_-7.js','/assets/exportUtils-B52DYAkn.js','/assets/file-text-BsXVEDDb.js','/assets/search-C-xwzjou.js','/assets/download-_6wEJoMR.js','/assets/printer-B2EnO-MI.js','/assets/users-VA8LPGTJ.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/layers-9Vc-tcAx.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-clByvD7f.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-xWb4k-Rz.js','/assets/ui-Dlez-q8v.js','/assets/exportUtils-B52DYAkn.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Breadcrumb-B14MMdPF.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/building-2-C4-avAoH.js','/assets/map-pin-Dqo7hI9m.js','/assets/clipboard-list-DPrO7lZd.js','/assets/search-C-xwzjou.js','/assets/plus-DDJwKK4q.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/x-CJMV-H_W.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js','/assets/file-text-BsXVEDDb.js','/assets/banknote-Cwn5eNTq.js','/assets/dateUtils-B35lzzJe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BXmH9G_W.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/Sidebar-xWb4k-Rz.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/employeeUtils-BedSPahl.js','/assets/users-VA8LPGTJ.js','/assets/shield-Bi8S1a_E.js','/assets/user-TAYO6wFz.js','/assets/search-C-xwzjou.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/circle-check-DYVsyltl.js','/assets/circle-x-C5HLpfHG.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/briefcase-BJs6GZ4-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/x-CJMV-H_W.js','/assets/mail-6uMJqDb0.js','/assets/lock-CTGO69Da.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/receipt-text-CMEEYSTK.js','/assets/truck-BhEhG7v1.js','/assets/bell-BOrsd0dI.js','/assets/building-2-C4-avAoH.js','/assets/loader-circle-cj3OShwt.js','/assets/send-NBZit5sF.js','/assets/Breadcrumb-B14MMdPF.js','/assets/plus-DDJwKK4q.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/trending-down-4D7R8o0Y.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-dFKhJqbx.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/layers-9Vc-tcAx.js','/assets/x-CJMV-H_W.js','/assets/languages-BblGVubv.js','/assets/plus-DDJwKK4q.js','/assets/link-DaxFi8fV.js','/assets/pencil-D8aHAzD8.js','/assets/ban-HVmbf0Bi.js','/assets/Sidebar-xWb4k-Rz.js','/assets/package-eQR-e_-7.js','/assets/circle-check-big-Da9qNVxV.js','/assets/triangle-alert-Boaua5py.js','/assets/circle-x-C5HLpfHG.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/search-C-xwzjou.js','/assets/filter-DGpiaYIH.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/dateUtils-B35lzzJe.js','/assets/eye-CiT1BuH_.js','/assets/building-2-C4-avAoH.js','/assets/trash-2-BZEabRjj.js','/assets/square-check-big-QOWBUAjV.js','/assets/clipboard-check-CFfW7iHf.js','/assets/square-DlbVPQ1P.js','/assets/eye-off-6jceujNo.js','/assets/index-mDHkYRn_.js','/assets/shopping-cart-Twgj6Y4b.js','/assets/boxes-D8lzOFTO.js','/assets/clipboard-list-DPrO7lZd.js','/assets/circle-alert-DIs_K0Qw.js','/assets/exportUtils-B52DYAkn.js','/assets/Breadcrumb-B14MMdPF.js','/assets/index-B074vRgA.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CbWfflzv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/package-eQR-e_-7.js','/assets/building-2-C4-avAoH.js','/assets/trending-down-4D7R8o0Y.js','/assets/circle-x-C5HLpfHG.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/hash-CBHDgDQ3.js','/assets/calendar-DSqa1Jk6.js','/assets/user-TAYO6wFz.js','/assets/file-text-BsXVEDDb.js','/assets/triangle-alert-Boaua5py.js','/assets/circle-check-big-Da9qNVxV.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/trending-up-vm2aXccZ.js','/assets/x-CJMV-H_W.js','/assets/LineChart-DzXBW_Q3.js','/assets/package-plus-Dq8M9Bmt.js','/assets/clipboard-list-DPrO7lZd.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DJdUI6LX.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/shield-Bi8S1a_E.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/circle-alert-DIs_K0Qw.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-mcrVqYjq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-down-4D7R8o0Y.js','/assets/circle-x-C5HLpfHG.js','/assets/triangle-alert-Boaua5py.js','/assets/building-2-C4-avAoH.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/package-eQR-e_-7.js','/assets/circle-check-big-Da9qNVxV.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C6-RLoER.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/dateUtils-B35lzzJe.js','/assets/Sidebar-xWb4k-Rz.js','/assets/ui-Dlez-q8v.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calendar-check-B4g7Zyf7.js','/assets/package-plus-Dq8M9Bmt.js','/assets/clock-BLQV2p7w.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/filter-DGpiaYIH.js','/assets/x-CJMV-H_W.js','/assets/search-C-xwzjou.js','/assets/exportUtils-B52DYAkn.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/printer-B2EnO-MI.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/square-check-big-QOWBUAjV.js','/assets/trash-2-BZEabRjj.js','/assets/square-DlbVPQ1P.js','/assets/building-2-C4-avAoH.js','/assets/eye-CiT1BuH_.js','/assets/pencil-D8aHAzD8.js','/assets/calendar-DSqa1Jk6.js','/assets/arrow-up-right-BF8vhYZS.js','/assets/user-TAYO6wFz.js','/assets/trending-down-4D7R8o0Y.js','/assets/sticky-note-eE2tkwJ8.js','/assets/hash-CBHDgDQ3.js','/assets/circle-check-big-Da9qNVxV.js','/assets/percent-Drb7mxOw.js','/assets/package-eQR-e_-7.js','/assets/circle-alert-DIs_K0Qw.js','/assets/circle-check-DYVsyltl.js','/assets/plus-DDJwKK4q.js','/assets/send-NBZit5sF.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-check-CFfW7iHf.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/Breadcrumb-B14MMdPF.js','/assets/truck-BhEhG7v1.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/banknote-Cwn5eNTq.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CM3t50aZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/dateUtils-B35lzzJe.js','/assets/truck-BhEhG7v1.js','/assets/calendar-DSqa1Jk6.js','/assets/chevron-up-DdECODy5.js','/assets/chevron-down-DC34JNfT.js','/assets/package-eQR-e_-7.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/triangle-alert-Boaua5py.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/building-2-C4-avAoH.js','/assets/layout-dashboard-CfTv19L-.js','/assets/trending-down-4D7R8o0Y.js','/assets/file-text-BsXVEDDb.js','/assets/banknote-Cwn5eNTq.js','/assets/GlassPopover-Bgi0qw9-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Dvoe42oU.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/banknote-Cwn5eNTq.js','/assets/building-2-C4-avAoH.js','/assets/package-eQR-e_-7.js','/assets/triangle-alert-Boaua5py.js','/assets/trending-up-vm2aXccZ.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/arrow-up-down-BN0uTm5Y.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/circle-alert-DIs_K0Qw.js','/assets/layers-9Vc-tcAx.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/trending-down-4D7R8o0Y.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cje3vJr-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-DuZUdCcE.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-xWb4k-Rz.js','/assets/Breadcrumb-B14MMdPF.js','/assets/ui-Dlez-q8v.js','/assets/arrow-left-DHUuVIZy.js','/assets/trending-down-4D7R8o0Y.js','/assets/GlassSelect-mulBuSBB.js','/assets/search-C-xwzjou.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/trending-up-vm2aXccZ.js','/assets/triangle-alert-Boaua5py.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/dateUtils-B35lzzJe.js','/assets/calendar-DSqa1Jk6.js','/assets/exportUtils-B52DYAkn.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/clipboard-list-DPrO7lZd.js','/assets/briefcase-BJs6GZ4-.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/building-2-C4-avAoH.js','/assets/layout-dashboard-CfTv19L-.js','/assets/truck-BhEhG7v1.js','/assets/banknote-Cwn5eNTq.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'alwaha/page':{'id':'alwaha/page','parentId':'root','path':'alwaha','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DyShLahY.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Ddf4WBut.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-check-big-Da9qNVxV.js','/assets/package-eQR-e_-7.js','/assets/search-C-xwzjou.js','/assets/save-j3TblwGW.js','/assets/trending-up-vm2aXccZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/layers-9Vc-tcAx.js','/assets/filter-DGpiaYIH.js','/assets/circle-alert-DIs_K0Qw.js','/assets/zap-zUoAUmkJ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-KDfcuTjv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/building-2-C4-avAoH.js','/assets/circle-check-DYVsyltl.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/page':{'id':'employee/purchase-invoice/page','parentId':'root','path':'employee/purchase-invoice','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DbQ0T3H4.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/uiPurchases-DJoYPqsC.js','/assets/BulkInvoiceUploadPanel-C8jQodBt.js','/assets/apiAuth-CTxhwd0t.js','/assets/arrow-right-BDl4ebOl.js','/assets/receipt-text-CMEEYSTK.js','/assets/loader-circle-cj3OShwt.js','/assets/circle-check-DYVsyltl.js','/assets/plus-DDJwKK4q.js','/assets/truck-BhEhG7v1.js','/assets/search-C-xwzjou.js','/assets/pencil-D8aHAzD8.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/hand-coins-BQvnxKbd.js','/assets/x-CJMV-H_W.js','/assets/save-j3TblwGW.js','/assets/percent-Drb7mxOw.js','/assets/unlink-DVXDxYhm.js','/assets/link-DaxFi8fV.js','/assets/useUpload-Bl3Az-8u.js','/assets/file-text-BsXVEDDb.js','/assets/sparkles-DbziavYF.js','/assets/badge-check-pQujwjvV.js','/assets/trash-2-BZEabRjj.js','/assets/external-link-BX9iGKtf.js','/assets/triangle-alert-Boaua5py.js','/assets/chevron-right-CXLYWaqy.js','/assets/copy-CDBDUCCU.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/arrow-left-DHUuVIZy.js','/assets/send-NBZit5sF.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/login/page':{'id':'employee/purchase-invoice/login/page','parentId':'root','path':'employee/purchase-invoice/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C86hxp9O.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/uiPurchases-DJoYPqsC.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/receipt-text-CMEEYSTK.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CNjnIC8t.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-check-big-Da9qNVxV.js','/assets/trash-2-BZEabRjj.js','/assets/search-C-xwzjou.js','/assets/save-j3TblwGW.js','/assets/trending-up-vm2aXccZ.js','/assets/arrow-left-DHUuVIZy.js','/assets/layers-9Vc-tcAx.js','/assets/filter-DGpiaYIH.js','/assets/circle-alert-DIs_K0Qw.js','/assets/zap-zUoAUmkJ.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CYzAs3kQ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CkB3LEXs.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/building-2-C4-avAoH.js','/assets/circle-check-DYVsyltl.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-QjTb9RKB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/Sidebar-DwapdFNi.js','/assets/users-VA8LPGTJ.js','/assets/arrow-left-DHUuVIZy.js','/assets/dollar-sign-CPOiC5y3.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/apiAuth-CTxhwd0t.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/wallet-Bj0CEyHo.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Y8KE8gKj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/gift-DDoKzxfU.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CCjStTlF.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/Sidebar-DwapdFNi.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/users-VA8LPGTJ.js','/assets/dollar-sign-CPOiC5y3.js','/assets/image-DQ7nR7FM.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/useUpload-Bl3Az-8u.js','/assets/x-CJMV-H_W.js','/assets/user-TAYO6wFz.js','/assets/calendar-DSqa1Jk6.js','/assets/file-text-BsXVEDDb.js','/assets/loader-circle-cj3OShwt.js','/assets/dateUtils-B35lzzJe.js','/assets/plus-DDJwKK4q.js','/assets/send-NBZit5sF.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/index-mDHkYRn_.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/wallet-Bj0CEyHo.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-tcscf09c.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/ui-Dlez-q8v.js','/assets/Sidebar-DwapdFNi.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/index-B074vRgA.js','/assets/useMutation-YPPwjwxZ.js','/assets/employeeUtils-BedSPahl.js','/assets/search-C-xwzjou.js','/assets/users-VA8LPGTJ.js','/assets/wallet-Bj0CEyHo.js','/assets/scroll-text-POw0Obrx.js','/assets/heart-pulse-0LKG09CU.js','/assets/GlassSelect-mulBuSBB.js','/assets/filter-DGpiaYIH.js','/assets/rotate-ccw-BwZrpLBK.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/exportUtils-B52DYAkn.js','/assets/download-_6wEJoMR.js','/assets/chevron-down-DC34JNfT.js','/assets/file-text-BsXVEDDb.js','/assets/user-TAYO6wFz.js','/assets/ban-HVmbf0Bi.js','/assets/pencil-D8aHAzD8.js','/assets/trash-2-BZEabRjj.js','/assets/badge-check-pQujwjvV.js','/assets/x-CJMV-H_W.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/dateUtils-B35lzzJe.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/calendar-DSqa1Jk6.js','/assets/circle-check-DYVsyltl.js','/assets/briefcase-BJs6GZ4-.js','/assets/building-2-C4-avAoH.js','/assets/calendar-check-B4g7Zyf7.js','/assets/circle-x-C5HLpfHG.js','/assets/dollar-sign-CPOiC5y3.js','/assets/index-mDHkYRn_.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/save-j3TblwGW.js','/assets/plus-DDJwKK4q.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/chevron-right-CXLYWaqy.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cn3RxOhp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/index-B074vRgA.js','/assets/Sidebar-DwapdFNi.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassMultiSelect-1LK4EVYt.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/dateUtils-B35lzzJe.js','/assets/useEmployeeLoans-CdvLxZet.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/plus-DDJwKK4q.js','/assets/clock-BLQV2p7w.js','/assets/trash-2-BZEabRjj.js','/assets/info-BGxn2qxB.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/wallet-Bj0CEyHo.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BjN3qhGL.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/layout-BUtfaJG6.js','/assets/index-B074vRgA.js','/assets/Sidebar-DwapdFNi.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/payrollFormatters-D2eKL4m7.js','/assets/usePayrollMutations-CvuConHt.js','/assets/users-VA8LPGTJ.js','/assets/ban-HVmbf0Bi.js','/assets/dateUtils-B35lzzJe.js','/assets/lock-CTGO69Da.js','/assets/refresh-cw-Vf8hDH8S.js','/assets/send-NBZit5sF.js','/assets/info-BGxn2qxB.js','/assets/wallet-Bj0CEyHo.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/useQuery-BMP4uPG6.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/layout-dashboard-CfTv19L-.js','/assets/dollar-sign-CPOiC5y3.js','/assets/clock-BLQV2p7w.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/queryKeys-q3vF3Onq.js','/assets/useMutation-YPPwjwxZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B5h2VyaB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B8_3X-KA.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-GYvhVHQ8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/index-mDHkYRn_.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/client-wSjAenBr.js','/assets/_commonjs-dynamic-modules-TDtrdbi3.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-BZvVbjy8.js','/assets/exportUtils-B52DYAkn.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/image-DQ7nR7FM.js','/assets/chevron-down-DC34JNfT.js','/assets/file-spreadsheet-DHsESvwd.js','/assets/download-_6wEJoMR.js','/assets/useMutation-YPPwjwxZ.js','/assets/upload-CS5AK87H.js','/assets/x-CJMV-H_W.js','/assets/circle-alert-DIs_K0Qw.js','/assets/circle-check-DYVsyltl.js','/assets/useAdminAuth-CweZcdIg.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/clock-BLQV2p7w.js','/assets/send-NBZit5sF.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/index-B074vRgA.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CqkCOOnn.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/BloggerInvitationCard-BZvVbjy8.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/arrow-right-BDl4ebOl.js','/assets/external-link-BX9iGKtf.js','/assets/printer-B2EnO-MI.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-efFaVA4K.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/coffee-CEdfpW0U.js','/assets/plus-DDJwKK4q.js','/assets/x-CJMV-H_W.js','/assets/eye-off-6jceujNo.js','/assets/eye-CiT1BuH_.js','/assets/square-pen-B7TI7_mp.js','/assets/trash-2-BZEabRjj.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BLoGDlFe.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-YtezCeBf.js','/assets/ui-Dlez-q8v.js','/assets/useAdminAuth-CweZcdIg.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/save-j3TblwGW.js','/assets/coffee-CEdfpW0U.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/AdminThemeToggle-zMVeFtj4.js','/assets/useMediaQuery-BPmNQ6pJ.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CEAxEIfZ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/shield-Bi8S1a_E.js','/assets/globe-CkB3LEXs.js','/assets/eye-CiT1BuH_.js','/assets/lock-CTGO69Da.js','/assets/trash-2-BZEabRjj.js','/assets/mail-6uMJqDb0.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DfNcx1F5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/apiAuth-CTxhwd0t.js','/assets/languages-BblGVubv.js','/assets/useMutation-YPPwjwxZ.js','/assets/calculator-CuHKkksc.js','/assets/building-2-C4-avAoH.js','/assets/user-TAYO6wFz.js','/assets/lock-CTGO69Da.js','/assets/info-BGxn2qxB.js','/assets/search-C-xwzjou.js','/assets/send-NBZit5sF.js','/assets/arrow-left-DHUuVIZy.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/dateUtils-B35lzzJe.js','/assets/clock-BLQV2p7w.js','/assets/calendar-days-ZP49EuZ8.js','/assets/x-CJMV-H_W.js','/assets/chevron-right-CXLYWaqy.js','/assets/chevron-left-vtV8fD67.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D---gW7h.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/ui-Dlez-q8v.js','/assets/globe-CkB3LEXs.js','/assets/mail-6uMJqDb0.js','/assets/external-link-BX9iGKtf.js','/assets/shield-Bi8S1a_E.js','/assets/file-text-BsXVEDDb.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BFZcjU5-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/circle-alert-DIs_K0Qw.js','/assets/lock-CTGO69Da.js','/assets/sparkles-DbziavYF.js','/assets/coffee-CEdfpW0U.js','/assets/ui-Dlez-q8v.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cl-QxOff.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/ui-Dlez-q8v.js','/assets/PriorityPill-CkCrMdCY.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/calendar-days-ZP49EuZ8.js','/assets/loader-circle-cj3OShwt.js','/assets/circle-check-DYVsyltl.js','/assets/message-square-CQ1_CnCg.js','/assets/triangle-alert-Boaua5py.js','/assets/chevron-left-vtV8fD67.js','/assets/activity-Wj1gkxln.js','/assets/circle-B23E5JJ9.js','/assets/heart-pulse-0LKG09CU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CEFSnt-X.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/message-square-CQ1_CnCg.js','/assets/plus-DDJwKK4q.js','/assets/search-C-xwzjou.js','/assets/chevron-left-vtV8fD67.js','/assets/send-NBZit5sF.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BqOnurHf.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-B35lzzJe.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/useUpload-Bl3Az-8u.js','/assets/ui-Dlez-q8v.js','/assets/circle-B23E5JJ9.js','/assets/x-CJMV-H_W.js','/assets/arrow-right-BDl4ebOl.js','/assets/GlassSelect-mulBuSBB.js','/assets/GlassDatePicker-L02e3L1F.js','/assets/flag-C6AJZwul.js','/assets/calendar-days-ZP49EuZ8.js','/assets/upload-CS5AK87H.js','/assets/trash-2-BZEabRjj.js','/assets/unlink-DVXDxYhm.js','/assets/file-text-BsXVEDDb.js','/assets/clock-BLQV2p7w.js','/assets/PriorityPill-CkCrMdCY.js','/assets/loader-circle-cj3OShwt.js','/assets/plus-DDJwKK4q.js','/assets/circle-check-DYVsyltl.js','/assets/search-C-xwzjou.js','/assets/SidebarShell-Cc_hZim7.js','/assets/triangle-alert-Boaua5py.js','/assets/activity-Wj1gkxln.js','/assets/chevron-left-vtV8fD67.js','/assets/arrow-up-down-BN0uTm5Y.js','/assets/square-check-big-QOWBUAjV.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/home-C0l_z9P_.js','/assets/users-VA8LPGTJ.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js','/assets/chevron-right-CXLYWaqy.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CYjm14fp.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/users-VA8LPGTJ.js','/assets/plus-DDJwKK4q.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/home-C0l_z9P_.js','/assets/square-check-big-QOWBUAjV.js','/assets/file-text-BsXVEDDb.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D5w5QH3z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/layout-BqzIg0QX.js','/assets/Sidebar-DLVM2K02.js','/assets/useWorkspaceUser-BADvmjOn.js','/assets/ui-Dlez-q8v.js','/assets/GlassSelect-mulBuSBB.js','/assets/dateUtils-B35lzzJe.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-q3vF3Onq.js','/assets/useQuery-BMP4uPG6.js','/assets/useMutation-YPPwjwxZ.js','/assets/file-text-BsXVEDDb.js','/assets/plus-DDJwKK4q.js','/assets/trash-2-BZEabRjj.js','/assets/flag-C6AJZwul.js','/assets/square-check-big-QOWBUAjV.js','/assets/loader-circle-cj3OShwt.js','/assets/copy-CDBDUCCU.js','/assets/index-B074vRgA.js','/assets/index-mDHkYRn_.js','/assets/SidebarShell-Cc_hZim7.js','/assets/clipboard-list-DPrO7lZd.js','/assets/calculator-CuHKkksc.js','/assets/users-VA8LPGTJ.js','/assets/useAdminTheme-CTmNtvuc.js','/assets/search-C-xwzjou.js','/assets/x-CJMV-H_W.js','/assets/package-eQR-e_-7.js','/assets/arrow-left-DHUuVIZy.js','/assets/globe-CkB3LEXs.js','/assets/chevron-left-vtV8fD67.js','/assets/home-C0l_z9P_.js','/assets/GlassPopover-Bgi0qw9-.js','/assets/chevron-down-DC34JNfT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CRFiXC_M.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-Vb3YDAty.js','/assets/ui-Dlez-q8v.js','/assets/arrow-right-BDl4ebOl.js','/assets/home-C0l_z9P_.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-8ac0be4d.js','version':'8ac0be4d','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-BVKYnbLA.js','imports':['/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/client-FOCTwQOd.js','/assets/index-kTENV4G-.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-BKNjowSG.js','imports':['/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/client-FOCTwQOd.js','/assets/index-kTENV4G-.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-CpTUohiU.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-CAtPIhkL.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DGfbh85A.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/shield-CRmwDkGB.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/trash-2-BSB_ZFB-.js','/assets/receipt-text-CK3HzO4A.js','/assets/languages-D_0Kt5KC.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CuKJ-f-i.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/calculator-BLO6hCZt.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-up-TCOMGAmf.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/branch-projects/page':{'id':'accounting/branch-projects/page','parentId':'root','path':'accounting/branch-projects','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C7-DTG7p.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/ProjectHeader-cIeS33lp.js','/assets/info-tq43-kUD.js','/assets/building-2-C_M1-kbw.js','/assets/wallet-D6A-w725.js','/assets/receipt-CegkV8OW.js','/assets/calendar-check-CsrP3rFe.js','/assets/search-DWr5r7iP.js','/assets/plus-D_Lc2mQu.js','/assets/loader-circle-CNuax1Pi.js','/assets/map-pin-BeheONbm.js','/assets/triangle-alert-GjVGMM7V.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/apiAuth-CTxhwd0t.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/GlassPopover-CSAIKahT.js','/assets/dateUtils-BM4UzEKk.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js','/assets/save-CdgxGSL7.js','/assets/user-round-ppaa1dNY.js','/assets/scroll-text-De-ug1Mv.js','/assets/pencil-C-4qNeNs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/branch-projects/[id]/page':{'id':'accounting/branch-projects/[id]/page','parentId':'root','path':'accounting/branch-projects/:id','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-qG96FhUK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/ProjectHeader-cIeS33lp.js','/assets/dateUtils-BM4UzEKk.js','/assets/flag-DKrimwZC.js','/assets/bell-BvWZRMmo.js','/assets/circle-check-CBpMRAci.js','/assets/triangle-alert-GjVGMM7V.js','/assets/wallet-D6A-w725.js','/assets/clock-BBJ5kuC7.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/GlassSelect-DHOHWEHv.js','/assets/loader-circle-CNuax1Pi.js','/assets/save-CdgxGSL7.js','/assets/layers-BBygtpt5.js','/assets/plus-D_Lc2mQu.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/user-round-ppaa1dNY.js','/assets/calendar-days-DwVXTI-7.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/exportUtils-D25Tf_wA.js','/assets/receipt-CegkV8OW.js','/assets/download-a6tJjTYj.js','/assets/pie-chart-CbR6y7XW.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/PieChart-JFHDih7P.js','/assets/search-DWr5r7iP.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/file-text-BmTOHQAR.js','/assets/useUpload-DbCzhcGv.js','/assets/x-oADfqCtd.js','/assets/send-BK5a11KH.js','/assets/upload-uEoJzZYc.js','/assets/paperclip-QfeO3S3a.js','/assets/receipt-text-CK3HzO4A.js','/assets/external-link-G3Sb2e-t.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/arrow-right-DAxcNvoe.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/apiAuth-CTxhwd0t.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-right-B2S7cpJT.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js','/assets/map-pin-BeheONbm.js','/assets/scroll-text-De-ug1Mv.js','/assets/calendar-check-CsrP3rFe.js','/assets/chevron-down-DIQs3av0.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B642E8ey.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/GlassSelect-DHOHWEHv.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/banknote-Dg-cEOrL.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-days-DwVXTI-7.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/history-CrK9quJN.js','/assets/save-CdgxGSL7.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DShStih8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-7v02bBp3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/ui-KgqU6EwG.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/arrow-left-tRfo0eTs.js','/assets/GlassSelect-DHOHWEHv.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/plus-D_Lc2mQu.js','/assets/save-CdgxGSL7.js','/assets/copy-BbSEJx-C.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BgCdxF1Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/ui-KgqU6EwG.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/arrow-left-tRfo0eTs.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/index-CpTUohiU.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/exportUtils-D25Tf_wA.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/useMutation-BbLiwCC1.js','/assets/trash-2-BSB_ZFB-.js','/assets/package-DBl047za.js','/assets/pencil-C-4qNeNs.js','/assets/eye-BtfjA8Xg.js','/assets/save-CdgxGSL7.js','/assets/circle-check-big-Wl95uI6-.js','/assets/triangle-alert-GjVGMM7V.js','/assets/x-oADfqCtd.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/square-check-big-BBx4eJw3.js','/assets/square-CT3vFa__.js','/assets/minus-DgN2e5-e.js','/assets/plus-D_Lc2mQu.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-WQUxCVYJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/index-kTENV4G-.js','/assets/dateUtils-BM4UzEKk.js','/assets/wallet-D6A-w725.js','/assets/x-oADfqCtd.js','/assets/save-CdgxGSL7.js','/assets/pencil-C-4qNeNs.js','/assets/rotate-ccw-CfybkmW1.js','/assets/trash-2-BSB_ZFB-.js','/assets/useEmployeeLoans-CRd2MNxs.js','/assets/filter-DGeJl-lq.js','/assets/plus-D_Lc2mQu.js','/assets/info-tq43-kUD.js','/assets/index-CpTUohiU.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-tyNnHtm7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/x-oADfqCtd.js','/assets/user-BQg6aB1K.js','/assets/file-text-BmTOHQAR.js','/assets/dollar-sign-D9J1U_LA.js','/assets/percent-CVu8oowM.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/usePayrollMutations-Vjj5qY0S.js','/assets/apiAuth-CTxhwd0t.js','/assets/index-CpTUohiU.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/info-tq43-kUD.js','/assets/lock-B--TmCy_.js','/assets/circle-check-CBpMRAci.js','/assets/clock-BBJ5kuC7.js','/assets/style-Dds8TAUA.js','/assets/ban-C8QJdV95.js','/assets/message-square-dcIMhRBP.js','/assets/pencil-C-4qNeNs.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/send-BK5a11KH.js','/assets/gift-0IfMvbWn.js','/assets/trash-2-BSB_ZFB-.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/wallet-D6A-w725.js','/assets/dateUtils-BM4UzEKk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DgUnfMvh.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/BulkInvoiceUploadPanel-FGap178N.js','/assets/map-pin-BeheONbm.js','/assets/circle-check-CBpMRAci.js','/assets/hash-7pJWHBVv.js','/assets/ui-KgqU6EwG.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/hand-coins-DMmMLecd.js','/assets/link-D54RdVcw.js','/assets/index-CpTUohiU.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/arrow-left-tRfo0eTs.js','/assets/triangle-alert-GjVGMM7V.js','/assets/plus-D_Lc2mQu.js','/assets/trending-up-TCOMGAmf.js','/assets/trending-down-BbiDJvzt.js','/assets/copy-BbSEJx-C.js','/assets/bell-BvWZRMmo.js','/assets/loader-circle-CNuax1Pi.js','/assets/send-BK5a11KH.js','/assets/index-kTENV4G-.js','/assets/user-BQg6aB1K.js','/assets/percent-CVu8oowM.js','/assets/x-oADfqCtd.js','/assets/banknote-Dg-cEOrL.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/chevron-left-BvLNMgLZ.js','/assets/lock-B--TmCy_.js','/assets/save-CdgxGSL7.js','/assets/building-2-C_M1-kbw.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/info-tq43-kUD.js','/assets/credit-card-DjeI3m8h.js','/assets/wallet-D6A-w725.js','/assets/useUpload-DbCzhcGv.js','/assets/paperclip-QfeO3S3a.js','/assets/scroll-text-De-ug1Mv.js','/assets/external-link-G3Sb2e-t.js','/assets/users-DNKaMBFk.js','/assets/history-CrK9quJN.js','/assets/calendar-days-DwVXTI-7.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/style-Dds8TAUA.js','/assets/message-square-dcIMhRBP.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/arrow-up-right-C5iYVzxK.js','/assets/minus-DgN2e5-e.js','/assets/layers-BBygtpt5.js','/assets/trophy-BJ4fclRr.js','/assets/circle-RFIGtrVu.js','/assets/receipt-CegkV8OW.js','/assets/pie-chart-CbR6y7XW.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/LineChart-CEs72hat.js','/assets/PieChart-JFHDih7P.js','/assets/BarChart-CQvdXm8D.js','/assets/clock-BBJ5kuC7.js','/assets/clipboard-check-HrIvHDbw.js','/assets/sparkles-CJzlAEkM.js','/assets/upload-uEoJzZYc.js','/assets/ban-C8QJdV95.js','/assets/chevron-right-B2S7cpJT.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/unlink-Pm8LcbTV.js','/assets/badge-check-CcaO09Ay.js','/assets/arrow-right-DAxcNvoe.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D7X1DKEE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/calculator-BLO6hCZt.js','/assets/building-2-C_M1-kbw.js','/assets/info-tq43-kUD.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/dateUtils-BM4UzEKk.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CWvvwsVC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/layers-BBygtpt5.js','/assets/boxes-Dz-EPieR.js','/assets/receipt-CegkV8OW.js','/assets/trophy-BJ4fclRr.js','/assets/trash-2-BSB_ZFB-.js','/assets/building-2-C_M1-kbw.js','/assets/user-BQg6aB1K.js','/assets/clock-BBJ5kuC7.js','/assets/chevron-down-DIQs3av0.js','/assets/sticky-note-DEZam0gt.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/GlassPopover-CSAIKahT.js','/assets/dateUtils-BM4UzEKk.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMALXRfI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/trending-up-TCOMGAmf.js','/assets/clipboard-list-9aP7s25o.js','/assets/circle-check-big-Wl95uI6-.js','/assets/clock-BBJ5kuC7.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-days-DwVXTI-7.js','/assets/dateUtils-BM4UzEKk.js','/assets/sparkles-CJzlAEkM.js','/assets/trending-down-BbiDJvzt.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/x-oADfqCtd.js','/assets/info-tq43-kUD.js','/assets/circle-alert-C38v-ZIg.js','/assets/triangle-alert-GjVGMM7V.js','/assets/package-plus-B_-K8GyX.js','/assets/truck-ChnZnUAV.js','/assets/calendar-DvSjuM8r.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/BarChart-CQvdXm8D.js','/assets/LineChart-CEs72hat.js','/assets/activity-Dd6Je2eD.js','/assets/PieChart-JFHDih7P.js','/assets/dollar-sign-D9J1U_LA.js','/assets/package-DBl047za.js','/assets/exportUtils-D25Tf_wA.js','/assets/file-text-BmTOHQAR.js','/assets/search-DWr5r7iP.js','/assets/download-a6tJjTYj.js','/assets/printer-CAZnI1rX.js','/assets/users-DNKaMBFk.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/layers-BBygtpt5.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CCHv0-Oq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/exportUtils-D25Tf_wA.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/building-2-C_M1-kbw.js','/assets/map-pin-BeheONbm.js','/assets/clipboard-list-9aP7s25o.js','/assets/search-DWr5r7iP.js','/assets/plus-D_Lc2mQu.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/x-oADfqCtd.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js','/assets/file-text-BmTOHQAR.js','/assets/banknote-Dg-cEOrL.js','/assets/dateUtils-BM4UzEKk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BYUJTqBw.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/employeeUtils-B-C4mLB2.js','/assets/users-DNKaMBFk.js','/assets/shield-CRmwDkGB.js','/assets/user-BQg6aB1K.js','/assets/search-DWr5r7iP.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/circle-check-CBpMRAci.js','/assets/circle-x-UtzWpuJv.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/briefcase-ba7l8C4x.js','/assets/dollar-sign-D9J1U_LA.js','/assets/x-oADfqCtd.js','/assets/mail-BaTAwGpw.js','/assets/lock-B--TmCy_.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/receipt-text-CK3HzO4A.js','/assets/truck-ChnZnUAV.js','/assets/bell-BvWZRMmo.js','/assets/building-2-C_M1-kbw.js','/assets/loader-circle-CNuax1Pi.js','/assets/send-BK5a11KH.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/plus-D_Lc2mQu.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/trending-down-BbiDJvzt.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B-ZzNyJH.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/layers-BBygtpt5.js','/assets/x-oADfqCtd.js','/assets/languages-D_0Kt5KC.js','/assets/plus-D_Lc2mQu.js','/assets/link-D54RdVcw.js','/assets/pencil-C-4qNeNs.js','/assets/ban-C8QJdV95.js','/assets/Sidebar-CgQ6OIMb.js','/assets/package-DBl047za.js','/assets/circle-check-big-Wl95uI6-.js','/assets/triangle-alert-GjVGMM7V.js','/assets/circle-x-UtzWpuJv.js','/assets/GlassPopover-CSAIKahT.js','/assets/search-DWr5r7iP.js','/assets/filter-DGeJl-lq.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/dateUtils-BM4UzEKk.js','/assets/eye-BtfjA8Xg.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js','/assets/square-check-big-BBx4eJw3.js','/assets/clipboard-check-HrIvHDbw.js','/assets/square-CT3vFa__.js','/assets/eye-off-CgiG__BY.js','/assets/index-kTENV4G-.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/boxes-Dz-EPieR.js','/assets/clipboard-list-9aP7s25o.js','/assets/circle-alert-C38v-ZIg.js','/assets/exportUtils-D25Tf_wA.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/index-CpTUohiU.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B1H7z16U.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/package-DBl047za.js','/assets/building-2-C_M1-kbw.js','/assets/trending-down-BbiDJvzt.js','/assets/circle-x-UtzWpuJv.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/hash-7pJWHBVv.js','/assets/calendar-DvSjuM8r.js','/assets/user-BQg6aB1K.js','/assets/file-text-BmTOHQAR.js','/assets/triangle-alert-GjVGMM7V.js','/assets/circle-check-big-Wl95uI6-.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/trending-up-TCOMGAmf.js','/assets/x-oADfqCtd.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/LineChart-CEs72hat.js','/assets/package-plus-B_-K8GyX.js','/assets/clipboard-list-9aP7s25o.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-a1gCl9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/useMediaQuery-Be-eWih8.js','/assets/shield-CRmwDkGB.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/circle-alert-C38v-ZIg.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BLi_-ByB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-down-BbiDJvzt.js','/assets/circle-x-UtzWpuJv.js','/assets/triangle-alert-GjVGMM7V.js','/assets/building-2-C_M1-kbw.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/package-DBl047za.js','/assets/circle-check-big-Wl95uI6-.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ENCaeCUD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/dateUtils-BM4UzEKk.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/clipboard-list-9aP7s25o.js','/assets/calendar-check-CsrP3rFe.js','/assets/package-plus-B_-K8GyX.js','/assets/clock-BBJ5kuC7.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/filter-DGeJl-lq.js','/assets/x-oADfqCtd.js','/assets/search-DWr5r7iP.js','/assets/exportUtils-D25Tf_wA.js','/assets/GlassPopover-CSAIKahT.js','/assets/printer-CAZnI1rX.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/square-check-big-BBx4eJw3.js','/assets/trash-2-BSB_ZFB-.js','/assets/square-CT3vFa__.js','/assets/building-2-C_M1-kbw.js','/assets/eye-BtfjA8Xg.js','/assets/pencil-C-4qNeNs.js','/assets/calendar-DvSjuM8r.js','/assets/arrow-up-right-C5iYVzxK.js','/assets/user-BQg6aB1K.js','/assets/trending-down-BbiDJvzt.js','/assets/sticky-note-DEZam0gt.js','/assets/hash-7pJWHBVv.js','/assets/circle-check-big-Wl95uI6-.js','/assets/percent-CVu8oowM.js','/assets/package-DBl047za.js','/assets/circle-alert-C38v-ZIg.js','/assets/circle-check-CBpMRAci.js','/assets/plus-D_Lc2mQu.js','/assets/send-BK5a11KH.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-check-HrIvHDbw.js','/assets/rotate-ccw-CfybkmW1.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/truck-ChnZnUAV.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bq_us6bg.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/dateUtils-BM4UzEKk.js','/assets/truck-ChnZnUAV.js','/assets/calendar-DvSjuM8r.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/package-DBl047za.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/trending-down-BbiDJvzt.js','/assets/file-text-BmTOHQAR.js','/assets/banknote-Dg-cEOrL.js','/assets/GlassPopover-CSAIKahT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C6CB83Uo.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/banknote-Dg-cEOrL.js','/assets/building-2-C_M1-kbw.js','/assets/package-DBl047za.js','/assets/triangle-alert-GjVGMM7V.js','/assets/trending-up-TCOMGAmf.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/arrow-up-down-Bi-g--AF.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/circle-alert-C38v-ZIg.js','/assets/layers-BBygtpt5.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-rLgkhMI3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-down-BbiDJvzt.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/trending-up-TCOMGAmf.js','/assets/triangle-alert-GjVGMM7V.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/dateUtils-BM4UzEKk.js','/assets/calendar-DvSjuM8r.js','/assets/exportUtils-D25Tf_wA.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'alwaha/page':{'id':'alwaha/page','parentId':'root','path':'alwaha','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CZROkpMM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CcBNDFKh.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-check-big-Wl95uI6-.js','/assets/package-DBl047za.js','/assets/search-DWr5r7iP.js','/assets/save-CdgxGSL7.js','/assets/trending-up-TCOMGAmf.js','/assets/arrow-left-tRfo0eTs.js','/assets/layers-BBygtpt5.js','/assets/filter-DGeJl-lq.js','/assets/circle-alert-C38v-ZIg.js','/assets/zap-BrcnJvn1.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DiX0Rwla.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/building-2-C_M1-kbw.js','/assets/circle-check-CBpMRAci.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/page':{'id':'employee/purchase-invoice/page','parentId':'root','path':'employee/purchase-invoice','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D3mO5u75.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/uiPurchases-D-qaUyof.js','/assets/BulkInvoiceUploadPanel-FGap178N.js','/assets/apiAuth-CTxhwd0t.js','/assets/arrow-right-DAxcNvoe.js','/assets/receipt-text-CK3HzO4A.js','/assets/loader-circle-CNuax1Pi.js','/assets/circle-check-CBpMRAci.js','/assets/plus-D_Lc2mQu.js','/assets/truck-ChnZnUAV.js','/assets/search-DWr5r7iP.js','/assets/pencil-C-4qNeNs.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/hand-coins-DMmMLecd.js','/assets/x-oADfqCtd.js','/assets/save-CdgxGSL7.js','/assets/percent-CVu8oowM.js','/assets/unlink-Pm8LcbTV.js','/assets/link-D54RdVcw.js','/assets/useUpload-DbCzhcGv.js','/assets/file-text-BmTOHQAR.js','/assets/sparkles-CJzlAEkM.js','/assets/badge-check-CcaO09Ay.js','/assets/trash-2-BSB_ZFB-.js','/assets/paperclip-QfeO3S3a.js','/assets/external-link-G3Sb2e-t.js','/assets/triangle-alert-GjVGMM7V.js','/assets/chevron-right-B2S7cpJT.js','/assets/copy-BbSEJx-C.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/arrow-left-tRfo0eTs.js','/assets/send-BK5a11KH.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/login/page':{'id':'employee/purchase-invoice/login/page','parentId':'root','path':'employee/purchase-invoice/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-kURqpxQ5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/uiPurchases-D-qaUyof.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/receipt-text-CK3HzO4A.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BDGiIO9F.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-check-big-Wl95uI6-.js','/assets/trash-2-BSB_ZFB-.js','/assets/search-DWr5r7iP.js','/assets/save-CdgxGSL7.js','/assets/trending-up-TCOMGAmf.js','/assets/arrow-left-tRfo0eTs.js','/assets/layers-BBygtpt5.js','/assets/filter-DGeJl-lq.js','/assets/circle-alert-C38v-ZIg.js','/assets/zap-BrcnJvn1.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cr6VqTgC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/building-2-C_M1-kbw.js','/assets/circle-check-CBpMRAci.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Du_7FGO_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/Sidebar-AOwtw_Aj.js','/assets/users-DNKaMBFk.js','/assets/arrow-left-tRfo0eTs.js','/assets/dollar-sign-D9J1U_LA.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/apiAuth-CTxhwd0t.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/wallet-D6A-w725.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-zqe8qOBc.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/gift-0IfMvbWn.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DBQlQI0w.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/users-DNKaMBFk.js','/assets/dollar-sign-D9J1U_LA.js','/assets/image-CWZANUqp.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/useUpload-DbCzhcGv.js','/assets/x-oADfqCtd.js','/assets/user-BQg6aB1K.js','/assets/calendar-DvSjuM8r.js','/assets/file-text-BmTOHQAR.js','/assets/loader-circle-CNuax1Pi.js','/assets/dateUtils-BM4UzEKk.js','/assets/plus-D_Lc2mQu.js','/assets/send-BK5a11KH.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/wallet-D6A-w725.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DYk69G52.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/employeeUtils-B-C4mLB2.js','/assets/search-DWr5r7iP.js','/assets/users-DNKaMBFk.js','/assets/wallet-D6A-w725.js','/assets/credit-card-DjeI3m8h.js','/assets/heart-pulse-Df9itl3a.js','/assets/GlassSelect-DHOHWEHv.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/user-BQg6aB1K.js','/assets/scroll-text-De-ug1Mv.js','/assets/ban-C8QJdV95.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/badge-check-CcaO09Ay.js','/assets/x-oADfqCtd.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/dateUtils-BM4UzEKk.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/calendar-DvSjuM8r.js','/assets/circle-check-CBpMRAci.js','/assets/briefcase-ba7l8C4x.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-check-CsrP3rFe.js','/assets/circle-x-UtzWpuJv.js','/assets/dollar-sign-D9J1U_LA.js','/assets/index-kTENV4G-.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/save-CdgxGSL7.js','/assets/plus-D_Lc2mQu.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CaPgOuH5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/index-CpTUohiU.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/dateUtils-BM4UzEKk.js','/assets/useEmployeeLoans-CRd2MNxs.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/plus-D_Lc2mQu.js','/assets/clock-BBJ5kuC7.js','/assets/trash-2-BSB_ZFB-.js','/assets/info-tq43-kUD.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/dollar-sign-D9J1U_LA.js','/assets/wallet-D6A-w725.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DtRS5L6T.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/index-CpTUohiU.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/usePayrollMutations-Vjj5qY0S.js','/assets/users-DNKaMBFk.js','/assets/ban-C8QJdV95.js','/assets/dateUtils-BM4UzEKk.js','/assets/lock-B--TmCy_.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/send-BK5a11KH.js','/assets/info-tq43-kUD.js','/assets/wallet-D6A-w725.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/dollar-sign-D9J1U_LA.js','/assets/clock-BBJ5kuC7.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BEnbJfE5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-F-vL43DT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CrYi22_Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/index-kTENV4G-.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/client-FOCTwQOd.js','/assets/_commonjs-dynamic-modules-TDtrdbi3.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-DQbYCoV-.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/image-CWZANUqp.js','/assets/chevron-down-DIQs3av0.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/download-a6tJjTYj.js','/assets/useMutation-BbLiwCC1.js','/assets/upload-uEoJzZYc.js','/assets/x-oADfqCtd.js','/assets/circle-alert-C38v-ZIg.js','/assets/circle-check-CBpMRAci.js','/assets/useAdminAuth-COQBaEHh.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/clock-BBJ5kuC7.js','/assets/send-BK5a11KH.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/index-CpTUohiU.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BDOLEftj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/BloggerInvitationCard-DQbYCoV-.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/arrow-right-DAxcNvoe.js','/assets/external-link-G3Sb2e-t.js','/assets/printer-CAZnI1rX.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMFVDHvb.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/coffee-C0FSh_qh.js','/assets/plus-D_Lc2mQu.js','/assets/x-oADfqCtd.js','/assets/eye-off-CgiG__BY.js','/assets/eye-BtfjA8Xg.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DWvHYFOR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/save-CdgxGSL7.js','/assets/coffee-C0FSh_qh.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BrItPtHg.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/shield-CRmwDkGB.js','/assets/globe-CcBG-loe.js','/assets/eye-BtfjA8Xg.js','/assets/lock-B--TmCy_.js','/assets/trash-2-BSB_ZFB-.js','/assets/mail-BaTAwGpw.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DTMfHXrO.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/apiAuth-CTxhwd0t.js','/assets/languages-D_0Kt5KC.js','/assets/useMutation-BbLiwCC1.js','/assets/calculator-BLO6hCZt.js','/assets/building-2-C_M1-kbw.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/info-tq43-kUD.js','/assets/search-DWr5r7iP.js','/assets/send-BK5a11KH.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/dateUtils-BM4UzEKk.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/x-oADfqCtd.js','/assets/chevron-right-B2S7cpJT.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BryC0Wrv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/globe-CcBG-loe.js','/assets/mail-BaTAwGpw.js','/assets/external-link-G3Sb2e-t.js','/assets/shield-CRmwDkGB.js','/assets/file-text-BmTOHQAR.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CiUA49rN.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-alert-C38v-ZIg.js','/assets/lock-B--TmCy_.js','/assets/sparkles-CJzlAEkM.js','/assets/coffee-C0FSh_qh.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DVh_z8lj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/ui-KgqU6EwG.js','/assets/PriorityPill-C8oUxMKE.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/calendar-days-DwVXTI-7.js','/assets/loader-circle-CNuax1Pi.js','/assets/circle-check-CBpMRAci.js','/assets/message-square-dcIMhRBP.js','/assets/triangle-alert-GjVGMM7V.js','/assets/chevron-left-BvLNMgLZ.js','/assets/activity-Dd6Je2eD.js','/assets/circle-RFIGtrVu.js','/assets/heart-pulse-Df9itl3a.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-vGjjpM2J.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/dateUtils-BM4UzEKk.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/message-square-dcIMhRBP.js','/assets/plus-D_Lc2mQu.js','/assets/search-DWr5r7iP.js','/assets/chevron-left-BvLNMgLZ.js','/assets/send-BK5a11KH.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Z_hlOCN2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/useUpload-DbCzhcGv.js','/assets/ui-KgqU6EwG.js','/assets/circle-RFIGtrVu.js','/assets/x-oADfqCtd.js','/assets/arrow-right-DAxcNvoe.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/flag-DKrimwZC.js','/assets/calendar-days-DwVXTI-7.js','/assets/user-round-ppaa1dNY.js','/assets/upload-uEoJzZYc.js','/assets/trash-2-BSB_ZFB-.js','/assets/paperclip-QfeO3S3a.js','/assets/file-text-BmTOHQAR.js','/assets/clock-BBJ5kuC7.js','/assets/PriorityPill-C8oUxMKE.js','/assets/loader-circle-CNuax1Pi.js','/assets/plus-D_Lc2mQu.js','/assets/unlink-Pm8LcbTV.js','/assets/circle-check-CBpMRAci.js','/assets/search-DWr5r7iP.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/triangle-alert-GjVGMM7V.js','/assets/activity-Dd6Je2eD.js','/assets/chevron-left-BvLNMgLZ.js','/assets/arrow-up-down-Bi-g--AF.js','/assets/square-check-big-BBx4eJw3.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/home-DWTNOdmk.js','/assets/users-DNKaMBFk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/chevron-right-B2S7cpJT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-eznbZ8zT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DIU59fky.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/dateUtils-BM4UzEKk.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/file-text-BmTOHQAR.js','/assets/plus-D_Lc2mQu.js','/assets/trash-2-BSB_ZFB-.js','/assets/flag-DKrimwZC.js','/assets/square-check-big-BBx4eJw3.js','/assets/loader-circle-CNuax1Pi.js','/assets/copy-BbSEJx-C.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/home-DWTNOdmk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CVUqQi_Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/ui-KgqU6EwG.js','/assets/arrow-right-DAxcNvoe.js','/assets/home-DWTNOdmk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-3f2adb00.js','version':'3f2adb00','sri':undefined};
 
 const assetsBuildDirectory = "build/client";
       const basename = "/";
@@ -54711,13 +59616,29 @@ const assetsBuildDirectory = "build/client";
           caseSensitive: undefined,
           module: route2
         },
+  "accounting/branch-projects/page": {
+          id: "accounting/branch-projects/page",
+          parentId: "root",
+          path: "accounting/branch-projects",
+          index: undefined,
+          caseSensitive: undefined,
+          module: route3
+        },
+  "accounting/branch-projects/[id]/page": {
+          id: "accounting/branch-projects/[id]/page",
+          parentId: "root",
+          path: "accounting/branch-projects/:id",
+          index: undefined,
+          caseSensitive: undefined,
+          module: route4
+        },
   "accounting/cash-calculator/page": {
           id: "accounting/cash-calculator/page",
           parentId: "root",
           path: "accounting/cash-calculator",
           index: undefined,
           caseSensitive: undefined,
-          module: route3
+          module: route5
         },
   "accounting/expenses/page": {
           id: "accounting/expenses/page",
@@ -54725,7 +59646,7 @@ const assetsBuildDirectory = "build/client";
           path: "accounting/expenses",
           index: undefined,
           caseSensitive: undefined,
-          module: route4
+          module: route6
         },
   "accounting/green-bean-calculator/page": {
           id: "accounting/green-bean-calculator/page",
@@ -54733,7 +59654,7 @@ const assetsBuildDirectory = "build/client";
           path: "accounting/green-bean-calculator",
           index: undefined,
           caseSensitive: undefined,
-          module: route5
+          module: route7
         },
   "accounting/green-bean-orders/page": {
           id: "accounting/green-bean-orders/page",
@@ -54741,7 +59662,7 @@ const assetsBuildDirectory = "build/client";
           path: "accounting/green-bean-orders",
           index: undefined,
           caseSensitive: undefined,
-          module: route6
+          module: route8
         },
   "accounting/loans/page": {
           id: "accounting/loans/page",
@@ -54749,7 +59670,7 @@ const assetsBuildDirectory = "build/client";
           path: "accounting/loans",
           index: undefined,
           caseSensitive: undefined,
-          module: route7
+          module: route9
         },
   "accounting/payroll/page": {
           id: "accounting/payroll/page",
@@ -54757,7 +59678,7 @@ const assetsBuildDirectory = "build/client";
           path: "accounting/payroll",
           index: undefined,
           caseSensitive: undefined,
-          module: route8
+          module: route10
         },
   "accounting/purchases/page": {
           id: "accounting/purchases/page",
@@ -54765,7 +59686,7 @@ const assetsBuildDirectory = "build/client";
           path: "accounting/purchases",
           index: undefined,
           caseSensitive: undefined,
-          module: route9
+          module: route11
         },
   "accounting/shift-close/page": {
           id: "accounting/shift-close/page",
@@ -54773,7 +59694,7 @@ const assetsBuildDirectory = "build/client";
           path: "accounting/shift-close",
           index: undefined,
           caseSensitive: undefined,
-          module: route10
+          module: route12
         },
   "accounting/waste/page": {
           id: "accounting/waste/page",
@@ -54781,7 +59702,7 @@ const assetsBuildDirectory = "build/client";
           path: "accounting/waste",
           index: undefined,
           caseSensitive: undefined,
-          module: route11
+          module: route13
         },
   "admin/page": {
           id: "admin/page",
@@ -54789,7 +59710,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin",
           index: undefined,
           caseSensitive: undefined,
-          module: route12
+          module: route14
         },
   "admin/branches/page": {
           id: "admin/branches/page",
@@ -54797,7 +59718,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/branches",
           index: undefined,
           caseSensitive: undefined,
-          module: route13
+          module: route15
         },
   "admin/employees/page": {
           id: "admin/employees/page",
@@ -54805,7 +59726,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/employees",
           index: undefined,
           caseSensitive: undefined,
-          module: route14
+          module: route16
         },
   "admin/items/page": {
           id: "admin/items/page",
@@ -54813,7 +59734,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/items",
           index: undefined,
           caseSensitive: undefined,
-          module: route15
+          module: route17
         },
   "admin/items-summary/page": {
           id: "admin/items-summary/page",
@@ -54821,7 +59742,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/items-summary",
           index: undefined,
           caseSensitive: undefined,
-          module: route16
+          module: route18
         },
   "admin/login/page": {
           id: "admin/login/page",
@@ -54829,7 +59750,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/login",
           index: undefined,
           caseSensitive: undefined,
-          module: route17
+          module: route19
         },
   "admin/low-stock/page": {
           id: "admin/low-stock/page",
@@ -54837,7 +59758,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/low-stock",
           index: undefined,
           caseSensitive: undefined,
-          module: route18
+          module: route20
         },
   "admin/operations/page": {
           id: "admin/operations/page",
@@ -54845,7 +59766,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/operations",
           index: undefined,
           caseSensitive: undefined,
-          module: route19
+          module: route21
         },
   "admin/receipts/page": {
           id: "admin/receipts/page",
@@ -54853,7 +59774,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/receipts",
           index: undefined,
           caseSensitive: undefined,
-          module: route20
+          module: route22
         },
   "admin/stock-value/page": {
           id: "admin/stock-value/page",
@@ -54861,7 +59782,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/stock-value",
           index: undefined,
           caseSensitive: undefined,
-          module: route21
+          module: route23
         },
   "admin/variance/page": {
           id: "admin/variance/page",
@@ -54869,7 +59790,7 @@ const assetsBuildDirectory = "build/client";
           path: "admin/variance",
           index: undefined,
           caseSensitive: undefined,
-          module: route22
+          module: route24
         },
   "alwaha/page": {
           id: "alwaha/page",
@@ -54877,7 +59798,7 @@ const assetsBuildDirectory = "build/client";
           path: "alwaha",
           index: undefined,
           caseSensitive: undefined,
-          module: route23
+          module: route25
         },
   "employee/inventory/page": {
           id: "employee/inventory/page",
@@ -54885,7 +59806,7 @@ const assetsBuildDirectory = "build/client";
           path: "employee/inventory",
           index: undefined,
           caseSensitive: undefined,
-          module: route24
+          module: route26
         },
   "employee/login/page": {
           id: "employee/login/page",
@@ -54893,7 +59814,7 @@ const assetsBuildDirectory = "build/client";
           path: "employee/login",
           index: undefined,
           caseSensitive: undefined,
-          module: route25
+          module: route27
         },
   "employee/purchase-invoice/page": {
           id: "employee/purchase-invoice/page",
@@ -54901,7 +59822,7 @@ const assetsBuildDirectory = "build/client";
           path: "employee/purchase-invoice",
           index: undefined,
           caseSensitive: undefined,
-          module: route26
+          module: route28
         },
   "employee/purchase-invoice/login/page": {
           id: "employee/purchase-invoice/login/page",
@@ -54909,7 +59830,7 @@ const assetsBuildDirectory = "build/client";
           path: "employee/purchase-invoice/login",
           index: undefined,
           caseSensitive: undefined,
-          module: route27
+          module: route29
         },
   "employee/waste/page": {
           id: "employee/waste/page",
@@ -54917,7 +59838,7 @@ const assetsBuildDirectory = "build/client";
           path: "employee/waste",
           index: undefined,
           caseSensitive: undefined,
-          module: route28
+          module: route30
         },
   "employee/waste/login/page": {
           id: "employee/waste/login/page",
@@ -54925,7 +59846,7 @@ const assetsBuildDirectory = "build/client";
           path: "employee/waste/login",
           index: undefined,
           caseSensitive: undefined,
-          module: route29
+          module: route31
         },
   "hr/page": {
           id: "hr/page",
@@ -54933,7 +59854,7 @@ const assetsBuildDirectory = "build/client";
           path: "hr",
           index: undefined,
           caseSensitive: undefined,
-          module: route30
+          module: route32
         },
   "hr/bonuses/page": {
           id: "hr/bonuses/page",
@@ -54941,7 +59862,7 @@ const assetsBuildDirectory = "build/client";
           path: "hr/bonuses",
           index: undefined,
           caseSensitive: undefined,
-          module: route31
+          module: route33
         },
   "hr/deductions/page": {
           id: "hr/deductions/page",
@@ -54949,7 +59870,7 @@ const assetsBuildDirectory = "build/client";
           path: "hr/deductions",
           index: undefined,
           caseSensitive: undefined,
-          module: route32
+          module: route34
         },
   "hr/employees/page": {
           id: "hr/employees/page",
@@ -54957,7 +59878,7 @@ const assetsBuildDirectory = "build/client";
           path: "hr/employees",
           index: undefined,
           caseSensitive: undefined,
-          module: route33
+          module: route35
         },
   "hr/overtime/page": {
           id: "hr/overtime/page",
@@ -54965,7 +59886,7 @@ const assetsBuildDirectory = "build/client";
           path: "hr/overtime",
           index: undefined,
           caseSensitive: undefined,
-          module: route34
+          module: route36
         },
   "hr/payroll/page": {
           id: "hr/payroll/page",
@@ -54973,7 +59894,7 @@ const assetsBuildDirectory = "build/client";
           path: "hr/payroll",
           index: undefined,
           caseSensitive: undefined,
-          module: route35
+          module: route37
         },
   "inventory/page": {
           id: "inventory/page",
@@ -54981,7 +59902,7 @@ const assetsBuildDirectory = "build/client";
           path: "inventory",
           index: undefined,
           caseSensitive: undefined,
-          module: route36
+          module: route38
         },
   "inventory/login/page": {
           id: "inventory/login/page",
@@ -54989,7 +59910,7 @@ const assetsBuildDirectory = "build/client";
           path: "inventory/login",
           index: undefined,
           caseSensitive: undefined,
-          module: route37
+          module: route39
         },
   "marketing/bloggers/page": {
           id: "marketing/bloggers/page",
@@ -54997,7 +59918,7 @@ const assetsBuildDirectory = "build/client";
           path: "marketing/bloggers",
           index: undefined,
           caseSensitive: undefined,
-          module: route38
+          module: route40
         },
   "marketing/bloggers/[id]/card/page": {
           id: "marketing/bloggers/[id]/card/page",
@@ -55005,7 +59926,7 @@ const assetsBuildDirectory = "build/client";
           path: "marketing/bloggers/:id/card",
           index: undefined,
           caseSensitive: undefined,
-          module: route39
+          module: route41
         },
   "marketing/menu/page": {
           id: "marketing/menu/page",
@@ -55013,7 +59934,7 @@ const assetsBuildDirectory = "build/client";
           path: "marketing/menu",
           index: undefined,
           caseSensitive: undefined,
-          module: route40
+          module: route42
         },
   "marketing/settings/page": {
           id: "marketing/settings/page",
@@ -55021,7 +59942,7 @@ const assetsBuildDirectory = "build/client";
           path: "marketing/settings",
           index: undefined,
           caseSensitive: undefined,
-          module: route41
+          module: route43
         },
   "privacy-policy/page": {
           id: "privacy-policy/page",
@@ -55029,7 +59950,7 @@ const assetsBuildDirectory = "build/client";
           path: "privacy-policy",
           index: undefined,
           caseSensitive: undefined,
-          module: route42
+          module: route44
         },
   "shift-close/login/page": {
           id: "shift-close/login/page",
@@ -55037,7 +59958,7 @@ const assetsBuildDirectory = "build/client";
           path: "shift-close/login",
           index: undefined,
           caseSensitive: undefined,
-          module: route43
+          module: route45
         },
   "support/page": {
           id: "support/page",
@@ -55045,7 +59966,7 @@ const assetsBuildDirectory = "build/client";
           path: "support",
           index: undefined,
           caseSensitive: undefined,
-          module: route44
+          module: route46
         },
   "welcome/[slug]/page": {
           id: "welcome/[slug]/page",
@@ -55053,7 +59974,7 @@ const assetsBuildDirectory = "build/client";
           path: "welcome/:slug",
           index: undefined,
           caseSensitive: undefined,
-          module: route45
+          module: route47
         },
   "workspace/page": {
           id: "workspace/page",
@@ -55061,7 +59982,7 @@ const assetsBuildDirectory = "build/client";
           path: "workspace",
           index: undefined,
           caseSensitive: undefined,
-          module: route46
+          module: route48
         },
   "workspace/inbox/page": {
           id: "workspace/inbox/page",
@@ -55069,7 +59990,7 @@ const assetsBuildDirectory = "build/client";
           path: "workspace/inbox",
           index: undefined,
           caseSensitive: undefined,
-          module: route47
+          module: route49
         },
   "workspace/tasks/page": {
           id: "workspace/tasks/page",
@@ -55077,7 +59998,7 @@ const assetsBuildDirectory = "build/client";
           path: "workspace/tasks",
           index: undefined,
           caseSensitive: undefined,
-          module: route48
+          module: route50
         },
   "workspace/team/page": {
           id: "workspace/team/page",
@@ -55085,7 +60006,7 @@ const assetsBuildDirectory = "build/client";
           path: "workspace/team",
           index: undefined,
           caseSensitive: undefined,
-          module: route49
+          module: route51
         },
   "workspace/templates/page": {
           id: "workspace/templates/page",
@@ -55093,7 +60014,7 @@ const assetsBuildDirectory = "build/client";
           path: "workspace/templates",
           index: undefined,
           caseSensitive: undefined,
-          module: route50
+          module: route52
         },
   "__create/not-found": {
           id: "__create/not-found",
@@ -55101,7 +60022,7 @@ const assetsBuildDirectory = "build/client";
           path: "*?",
           index: undefined,
           caseSensitive: undefined,
-          module: route51
+          module: route53
         }
       };
       
