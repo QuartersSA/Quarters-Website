@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { hardDeletePurchaseInvoices } from "@/app/api/utils/purchaseInvoiceDelete";
 import {
   REQUIRE_LEASE,
   ensureLeaseSchema,
@@ -102,6 +103,24 @@ export async function PUT(request, { params } = {}) {
         },
         { status: 409 },
       );
+    }
+
+    if (value.contract_number) {
+      const [dup] = await sql`
+        SELECT id, display_name, lessor_name FROM accounting_lease_contracts
+        WHERE is_active = TRUE AND TRIM(contract_number) = ${value.contract_number} AND id <> ${id}
+        LIMIT 1
+      `;
+      if (dup) {
+        return Response.json(
+          {
+            error: `يوجد عقد نشط آخر بنفس الرقم (${value.contract_number}) — ${dup.display_name || dup.lessor_name}`,
+            code: "duplicate_contract",
+            existing_id: Number(dup.id),
+          },
+          { status: 409 },
+        );
+      }
     }
 
     const warnings = [];
@@ -216,9 +235,15 @@ export async function DELETE(request, { params } = {}) {
           { status: 409 },
         );
       }
-      // فواتير الاستقطاع غير المسددة تُوقف، ثم الدفعات تُحذف تتابعًا (CASCADE).
-      const paymentRows = await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${id}`;
-      await deactivateSetAsideInvoicesForPayments(paymentRows.map((r) => r.id), auth.user, "حُذف العقد");
+      // حذف العقد نهائيًا يحذف كل فواتير استقطاعه (حتى المسددة — لا يبقى
+      // أثر لعقد مكرر)، ثم الدفعات تُحذف تتابعًا (CASCADE).
+      const invoiceRows = await sql`
+        SELECT id FROM accounting_purchase_invoices WHERE lease_contract_id = ${id}
+      `.catch(() => []);
+      await hardDeletePurchaseInvoices(invoiceRows.map((r) => r.id), {
+        actor: auth.user,
+        reason: `حُذف العقد ${label} نهائيًا`,
+      });
       await sql`DELETE FROM accounting_lease_contracts WHERE id = ${id}`;
       await logPurchaseAudit({
         entityType: "lease_contract",
