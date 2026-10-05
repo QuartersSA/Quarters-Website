@@ -11,6 +11,7 @@ import {
   replaceSchedule,
   sameInstant,
   deactivateSetAsideInvoicesForPayments,
+  repointLeaseInvoiceAccounts,
 } from "@/app/api/utils/leaseContracts";
 
 // عقد تأجيري واحد: عرض / تعديل / إيقاف أو حذف.
@@ -60,7 +61,7 @@ export async function PUT(request, { params } = {}) {
     }
     const body = await request.json().catch(() => ({}));
     const [existing] = await sql`
-      SELECT id, contract_number, lessor_name, updated_at, is_active
+      SELECT id, contract_number, lessor_name, updated_at, is_active, contract_type
       FROM accounting_lease_contracts WHERE id = ${id}
     `;
     if (!existing) {
@@ -178,6 +179,15 @@ export async function PUT(request, { params } = {}) {
         );
       }
       summary += ` — أُعيد توليد الجدول (${result.inserted} دفعة جديدة، الإجمالي ${result.total_value.toFixed(2)} SAR)`;
+    }
+
+    const prevType = existing.contract_type || "branch";
+    if (value.contract_type && value.contract_type !== prevType) {
+      const moved = await repointLeaseInvoiceAccounts(id, value.contract_type);
+      if (moved.updated > 0) {
+        warnings.push(`حُوِّلت ${moved.updated} فاتورة استقطاع إلى حساب «${moved.account_name}»`);
+        summary += ` — نُقلت ${moved.updated} فاتورة استقطاع إلى حساب «${moved.account_name}»`;
+      }
     }
 
     await logPurchaseAudit({

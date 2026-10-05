@@ -575,6 +575,48 @@ async function getLeaseExpenseAccountId(contractType) {
   `;
   return Number(created.id);
 }
+function leaseExpenseAccountName(contractType) {
+  return (LEASE_ACCOUNTS[contractType] || LEASE_ACCOUNTS.branch).name;
+}
+
+// تغيّر نوع العقد (فرع/مستودع ↔ سكن): تُحوَّل كل فواتير الاستقطاع المرتبطة
+// بالعقد (وبنودها) إلى حساب المصروف المطابق للنوع الجديد.
+async function repointLeaseInvoiceAccounts(contractId, contractType) {
+  const id = Number(contractId);
+  if (!Number.isInteger(id) || id <= 0) return {
+    updated: 0,
+    account_id: null,
+    account_name: null
+  };
+  const hasTable = await ensureLeaseInvoiceLinkColumns();
+  if (!hasTable) return {
+    updated: 0,
+    account_id: null,
+    account_name: null
+  };
+  const accountId = await getLeaseExpenseAccountId(contractType);
+  const rows = await sql`
+    UPDATE accounting_purchase_invoices
+    SET expense_account_id = ${accountId},
+        updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+    WHERE lease_contract_id = ${id}
+      AND (expense_account_id IS DISTINCT FROM ${accountId})
+    RETURNING id
+  `;
+  const ids = rows.map(r => Number(r.id));
+  if (ids.length) {
+    await sql`
+      UPDATE accounting_purchase_invoice_items
+      SET account_id = ${accountId}
+      WHERE invoice_id = ANY(${ids})
+    `;
+  }
+  return {
+    updated: ids.length,
+    account_id: accountId,
+    account_name: leaseExpenseAccountName(contractType)
+  };
+}
 
 // فاتورة استقطاع حُذفت نهائيًا: لا يُعاد إنشاؤها لنفس الدفعة/الشهر.
 async function suppressSetAsideInvoice(paymentId, month) {
@@ -1259,4 +1301,4 @@ function sameInstant(a, b) {
   return Math.abs(ta - tb) < 1000;
 }
 
-export { compareDateKeys as A, installmentWithFixed as B, CONTRACT_TYPES as C, DEFAULT_VAT_RATE as D, generateSchedule as E, FREQUENCY_MONTHS as F, contractStatus as G, addDays as H, CONTRACT_STATUS_LABELS as I, monthKey as J, daysInMonth as K, LEASE_FREQUENCIES as L, daysBetween as M, REQUIRE_LEASE as R, sameInstant as a, buildScheduleRows as b, ensureLeaseInvoiceLinkColumns as c, deactivateSetAsideInvoicesForPayments as d, ensureLeaseSchema as e, listPayments as f, loadSetAsideSkips as g, setAsideSchedule as h, round2 as i, CONTRACT_TYPE_LABELS as j, getLeaseExpenseAccountId as k, loadContract as l, FREQUENCY_LABELS as m, parseDate as n, parseMoney as o, parseContractInput as p, loadPayment as q, replaceSchedule as r, suppressSetAsideInvoice as s, todayRiyadh as t, installmentAmounts as u, recomputeContractTotal as v, loadReservesByPayment as w, listContracts as x, splitFixedCharges as y, isDateKey as z };
+export { isDateKey as A, compareDateKeys as B, CONTRACT_TYPES as C, DEFAULT_VAT_RATE as D, installmentWithFixed as E, FREQUENCY_MONTHS as F, generateSchedule as G, contractStatus as H, addDays as I, CONTRACT_STATUS_LABELS as J, monthKey as K, LEASE_FREQUENCIES as L, daysInMonth as M, daysBetween as N, REQUIRE_LEASE as R, sameInstant as a, buildScheduleRows as b, repointLeaseInvoiceAccounts as c, deactivateSetAsideInvoicesForPayments as d, ensureLeaseSchema as e, ensureLeaseInvoiceLinkColumns as f, listPayments as g, loadSetAsideSkips as h, setAsideSchedule as i, round2 as j, CONTRACT_TYPE_LABELS as k, loadContract as l, getLeaseExpenseAccountId as m, FREQUENCY_LABELS as n, parseDate as o, parseContractInput as p, parseMoney as q, replaceSchedule as r, suppressSetAsideInvoice as s, todayRiyadh as t, loadPayment as u, installmentAmounts as v, recomputeContractTotal as w, loadReservesByPayment as x, listContracts as y, splitFixedCharges as z };
