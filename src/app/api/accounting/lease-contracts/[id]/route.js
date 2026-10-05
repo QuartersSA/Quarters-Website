@@ -1,7 +1,6 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
-import { hardDeletePurchaseInvoices } from "@/app/api/utils/purchaseInvoiceDelete";
 import {
   REQUIRE_LEASE,
   ensureLeaseSchema,
@@ -10,7 +9,7 @@ import {
   buildScheduleRows,
   replaceSchedule,
   sameInstant,
-  deactivateSetAsideInvoicesForPayments,
+  deleteAllLeaseContractInvoices,
   repointLeaseInvoiceAccounts,
 } from "@/app/api/utils/leaseContracts";
 
@@ -245,24 +244,22 @@ export async function DELETE(request, { params } = {}) {
           { status: 409 },
         );
       }
-      // حذف العقد نهائيًا يحذف كل فواتير استقطاعه (حتى المسددة — لا يبقى
-      // أثر لعقد مكرر)، ثم الدفعات تُحذف تتابعًا (CASCADE).
-      const invoiceRows = await sql`
-        SELECT id FROM accounting_purchase_invoices WHERE lease_contract_id = ${id}
-      `.catch(() => []);
-      await hardDeletePurchaseInvoices(invoiceRows.map((r) => r.id), {
-        actor: auth.user,
-        reason: `حُذف العقد ${label} نهائيًا`,
-      });
+      // حذف العقد نهائيًا يحذف كل فواتيره (حتى المسددة — لا يبقى أثر)،
+      // ثم الدفعات تُحذف تتابعًا (CASCADE).
+      const deletedInvoices = await deleteAllLeaseContractInvoices(
+        id,
+        auth.user,
+        `حُذف العقد ${label} نهائيًا`,
+      );
       await sql`DELETE FROM accounting_lease_contracts WHERE id = ${id}`;
       await logPurchaseAudit({
         entityType: "lease_contract",
         entityId: id,
         action: "deleted",
-        summary: `حذف نهائي لعقد الإيجار ${label} — ${contract.lessor_name}`,
+        summary: `حذف نهائي لعقد الإيجار ${label} — ${contract.lessor_name}${deletedInvoices ? ` — حُذفت ${deletedInvoices} فاتورة مرتبطة` : ""}`,
         actor: auth.user,
       });
-      return Response.json({ ok: true, hard: true });
+      return Response.json({ ok: true, hard: true, deleted_invoices: deletedInvoices });
     }
 
     await sql`
@@ -270,16 +267,16 @@ export async function DELETE(request, { params } = {}) {
       SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
     `;
-    const paymentRows = await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${id}`;
-    await deactivateSetAsideInvoicesForPayments(paymentRows.map((r) => r.id), auth.user, "أُوقف العقد");
+    // إيقاف العقد يحذف كل فواتيره المرتبطة نهائيًا — حتى المسددة (قرار المالك).
+    const deletedInvoices = await deleteAllLeaseContractInvoices(id, auth.user, `أُوقف العقد ${label}`);
     await logPurchaseAudit({
       entityType: "lease_contract",
       entityId: id,
       action: "deactivated",
-      summary: `إيقاف عقد الإيجار ${label} — ${contract.lessor_name}`,
+      summary: `إيقاف عقد الإيجار ${label} — ${contract.lessor_name}${deletedInvoices ? ` — حُذفت ${deletedInvoices} فاتورة مرتبطة` : ""}`,
       actor: auth.user,
     });
-    return Response.json({ ok: true, hard: false });
+    return Response.json({ ok: true, hard: false, deleted_invoices: deletedInvoices });
   } catch (error) {
     console.error("lease contract DELETE error", error);
     return Response.json(

@@ -16,6 +16,7 @@ import {
   listPayments,
   loadSetAsideSkips,
   todayRiyadh,
+  purgeOrphanLeaseInvoices,
 } from "@/app/api/utils/leaseContracts";
 
 export function setAsideInvoiceNumber(contractId, seq, month) {
@@ -66,6 +67,10 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null,
   await ensureLeaseSchema();
   const linked = await ensureLeaseInvoiceLinkColumns();
   if (!linked) return { created: 0, skipped: 0 };
+  // فواتير عقود محذوفة/موقوفة لا تبقى في النظام.
+  await purgeOrphanLeaseInvoices().catch((error) =>
+    console.error("purgeOrphanLeaseInvoices failed", error),
+  );
   const limitMonth = upToMonth || todayRiyadh().slice(0, 7);
   let pending = await listPayments({ status: "pending", excludeTerminated: true });
   if (only?.paymentId) pending = pending.filter((p) => Number(p.id) === Number(only.paymentId));

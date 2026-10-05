@@ -4,8 +4,8 @@ import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { q as anyCoffeeAccount } from './coffeeInvoices-CYk167p4.js';
 import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
-import { createPurchaseInvoice } from './route-Ck-PfaWJ.js';
-import { e as ensureLeaseSchema, f as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, g as listPayments, h as loadSetAsideSkips, i as setAsideSchedule, j as round2$1, k as CONTRACT_TYPE_LABELS, m as getLeaseExpenseAccountId, n as FREQUENCY_LABELS } from './leaseContracts-CNjeVKpu.js';
+import { createPurchaseInvoice } from './route-CU8h1SHA.js';
+import { e as ensureLeaseSchema, f as ensureLeaseInvoiceLinkColumns, g as purgeOrphanLeaseInvoices, t as todayRiyadh$1, h as listPayments, i as loadSetAsideSkips, j as setAsideSchedule, k as round2$1, m as CONTRACT_TYPE_LABELS, n as getLeaseExpenseAccountId, o as FREQUENCY_LABELS } from './leaseContracts-M1M5QWMp.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
 const ensureRecurringSchema = ensureOnce(ensureRecurringSchemaImpl);
@@ -851,6 +851,8 @@ async function generateSetAsideInvoices({
     created: 0,
     skipped: 0
   };
+  // فواتير عقود محذوفة/موقوفة لا تبقى في النظام.
+  await purgeOrphanLeaseInvoices().catch(error => console.error("purgeOrphanLeaseInvoices failed", error));
   const limitMonth = upToMonth || todayRiyadh$1().slice(0, 7);
   let pending = await listPayments({
     status: "pending",
