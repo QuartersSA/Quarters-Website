@@ -11,6 +11,7 @@ import {
 import {
   generateSetAsideInvoices,
   loadSetAsideInvoices,
+  reconcileSetAside,
 } from "@/app/api/utils/leaseSetAsideInvoices";
 
 // الاستقطاع الشهري: كل دفعة معلّقة تُقسَّم على أشهر تكرارها (ربعي 3،
@@ -54,6 +55,8 @@ export async function GET(request) {
     );
     const ledger = await loadReservesByPayment(filtered.map((payment) => payment.id));
     const invoices = await loadSetAsideInvoices(filtered.map((payment) => payment.id));
+    // تأكيد بلا فاتورة مسددة أو فاتورة مسددة بلا تأكيد → مطابقة فورية.
+    await reconcileSetAside({ ledger, invoices, actor: auth.user });
     const canConfirm = month <= currentMonth;
 
     const rows = filtered.map((payment) => {

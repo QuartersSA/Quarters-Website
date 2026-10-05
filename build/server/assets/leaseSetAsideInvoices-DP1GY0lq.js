@@ -4,7 +4,7 @@ import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { o as onceDaily, n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { q as anyCoffeeAccount } from './coffeeInvoices-CYk167p4.js';
 import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
-import { createPurchaseInvoice } from './route-dJGGy3uD.js';
+import { createPurchaseInvoice } from './route-B8V9g_I9.js';
 import { e as ensureLeaseSchema, c as ensureLeaseInvoiceLinkColumns, t as todayRiyadh$1, f as listPayments, g as loadSetAsideSkips, h as setAsideSchedule, i as round2$1, j as CONTRACT_TYPE_LABELS, k as getLeaseExpenseAccountId, m as FREQUENCY_LABELS } from './leaseContracts-CF8g7tmp.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 
@@ -975,6 +975,20 @@ async function generateSetAsideInvoices({
           WHERE id = ${Number(result.invoice.id)}
         `;
         created += 1;
+        // شهر مؤكَّد تحويله مسبقًا (أُنشئت فاتورته لاحقًا) → تصبح مسددة فورًا.
+        const [confirmedRow] = await sql`
+          SELECT amount FROM accounting_lease_reserves
+          WHERE payment_id = ${Number(payment.id)} AND month = ${item.month}
+          LIMIT 1
+        `;
+        if (confirmedRow && Number(confirmedRow.amount) > 0) {
+          await markSetAsideInvoicePaid({
+            paymentId: payment.id,
+            month: item.month,
+            amount: Number(confirmedRow.amount),
+            actor
+          }).catch(error => console.error("set-aside invoice sync-paid failed", error?.message));
+        }
       } catch (error) {
         console.error("set-aside invoice error", payment.id, item.month, error?.message);
         errors.push({
@@ -1078,4 +1092,53 @@ async function resetSetAsideInvoice({
   };
 }
 
-export { startPurchaseAutomationTimer as a, resetSetAsideInvoice as b, createRecurringTemplateFromInvoice as c, ensureScheduledReportsSchema as d, ensureRecurringSchema as e, buildPurchasesSummaryText as f, generateSetAsideInvoices as g, loadSetAsideInvoices as l, markSetAsideInvoicePaid as m, runPurchaseAutomation as r, syncRecurringTemplateFromInvoice as s };
+// مطابقة السجل مع الفواتير: شهر مؤكَّد وفاتورته غير مسددة → تُسدَّد؛ فاتورة
+// مسددة (من فواتير المشتريات مثلًا) بلا تأكيد في السجل → يُسجَّل التأكيد.
+async function reconcileSetAside({
+  ledger,
+  invoices,
+  actor = null
+}) {
+  let fixed = 0;
+  for (const [paymentIdKey, byMonth] of Object.entries(invoices || {})) {
+    const paymentId = Number(paymentIdKey);
+    const entries = ledger?.[paymentId] || [];
+    for (const [month, inv] of Object.entries(byMonth)) {
+      const confirmed = entries.find(e => e.month === month && Number(e.amount) > 0) || null;
+      try {
+        if (confirmed && inv.status !== "paid") {
+          await markSetAsideInvoicePaid({
+            paymentId,
+            month,
+            amount: confirmed.amount,
+            actor
+          });
+          inv.status = "paid";
+          inv.paid_amount = inv.total_amount;
+          fixed += 1;
+        } else if (!confirmed && inv.status === "paid" && inv.paid_amount > 0) {
+          await sql`
+            INSERT INTO accounting_lease_reserves (payment_id, contract_id, month, amount, note)
+            SELECT ${paymentId}, p.contract_id, ${month}, ${inv.paid_amount},
+                   ${`سُدِّدت الفاتورة ${inv.invoice_number} من فواتير المشتريات`}
+            FROM accounting_lease_payments p WHERE p.id = ${paymentId}
+            ON CONFLICT (payment_id, month) DO UPDATE SET amount = EXCLUDED.amount
+          `;
+          if (!ledger[paymentId]) ledger[paymentId] = [];
+          ledger[paymentId].push({
+            month,
+            amount: inv.paid_amount,
+            note: null,
+            created_by_employee_name: null
+          });
+          fixed += 1;
+        }
+      } catch (error) {
+        console.error("set-aside reconcile failed", paymentId, month, error?.message);
+      }
+    }
+  }
+  return fixed;
+}
+
+export { startPurchaseAutomationTimer as a, resetSetAsideInvoice as b, createRecurringTemplateFromInvoice as c, reconcileSetAside as d, ensureRecurringSchema as e, ensureScheduledReportsSchema as f, generateSetAsideInvoices as g, buildPurchasesSummaryText as h, loadSetAsideInvoices as l, markSetAsideInvoicePaid as m, runPurchaseAutomation as r, syncRecurringTemplateFromInvoice as s };
