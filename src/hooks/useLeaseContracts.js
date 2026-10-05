@@ -157,6 +157,10 @@ export function useCreateLeaseContract() {
     },
     onError: (error) => {
       console.error(error);
+      if (error.code === "duplicate_contract") {
+        toast.error(error.message, { duration: 10000 });
+        return;
+      }
       toast.error(`فشل الإضافة: ${error.message}`);
     },
   });

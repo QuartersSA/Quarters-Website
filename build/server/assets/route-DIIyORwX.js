@@ -62,6 +62,23 @@ async function POST(request) {
       });
     }
     const value = parsed.value;
+    // منع تكرار العقد: رقم عقد قائم على عقد نشط → 409 (يُفتح القائم بدل إنشاء نسخة).
+    if (value.contract_number) {
+      const [dup] = await sql`
+        SELECT id, display_name, lessor_name FROM accounting_lease_contracts
+        WHERE is_active = TRUE AND TRIM(contract_number) = ${value.contract_number}
+        LIMIT 1
+      `;
+      if (dup) {
+        return Response.json({
+          error: `يوجد عقد نشط بنفس الرقم (${value.contract_number}) — ${dup.display_name || dup.lessor_name}. افتحه من القائمة بدل إضافته مجددًا`,
+          code: "duplicate_contract",
+          existing_id: Number(dup.id)
+        }, {
+          status: 409
+        });
+      }
+    }
     const rows = buildScheduleRows(value);
     if (!rows.length) {
       return Response.json({
