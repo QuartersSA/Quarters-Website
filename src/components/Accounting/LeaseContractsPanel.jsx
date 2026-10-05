@@ -473,6 +473,33 @@ export default function LeaseContractsPanel({
     );
   }, [contracts, q]);
 
+  // عقود مكررة: نفس رقم العقد على أكثر من عقد نشط — تولّد فواتير استقطاع
+  // مكررة. تُعرض مع زر حذف نهائي للنسخ الأحدث.
+  const duplicateContracts = useMemo(() => {
+    const groups = new Map();
+    for (const c of contracts) {
+      if (c.is_active === false) continue;
+      const key = String(c.contract_number || "").trim();
+      if (!key) continue;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(c);
+    }
+    return Array.from(groups.entries())
+      .filter(([, list]) => list.length > 1)
+      .map(([number, list]) => {
+        const sorted = [...list].sort((a, b) => Number(a.id) - Number(b.id));
+        return { number, keep: sorted[0], extras: sorted.slice(1) };
+      });
+  }, [contracts]);
+
+  const handleDeleteDuplicate = (contract, keep) => {
+    const ok = window.confirm(
+      `حذف النسخة المكررة "${contract.display_name || contract.contract_number}" (عقد #${contract.id}) نهائياً مع كل فواتير استقطاعها؟\nيبقى العقد الأصلي #${keep.id}. لا يمكن التراجع.`,
+    );
+    if (!ok) return;
+    deleteMut.mutate({ id: contract.id, force: true }, { onSuccess: () => setPreviewId(null) });
+  };
+
   const contractsKpi = useMemo(() => {
     const live = contracts.filter((c) => c.is_active !== false);
     const activeCount = live.filter((c) =>
@@ -870,6 +897,43 @@ export default function LeaseContractsPanel({
 
   const renderContracts = () => (
     <>
+      {duplicateContracts.length > 0 ? (
+        <div className="rounded-[10px] border border-rose-200 dark:border-rose-400/25 bg-rose-50/70 dark:bg-rose-400/[0.06] p-4 space-y-2">
+          <div className="flex items-center gap-2 text-sm font-bold text-rose-800 dark:text-rose-200">
+            <AlertTriangle className="w-4 h-4" />
+            عقود مكررة — نفس رقم العقد مضاف أكثر من مرة (يسبب تكرار فواتير الاستقطاع)
+          </div>
+          {duplicateContracts.map((group) => (
+            <div key={group.number} className="text-xs text-rose-900 dark:text-rose-100 space-y-1">
+              <div>
+                رقم العقد <span className="font-mono" dir="ltr">{group.number}</span> — يبقى العقد الأصلي{" "}
+                <button
+                  type="button"
+                  onClick={() => setPreviewId(group.keep.id)}
+                  className="font-bold underline"
+                >
+                  #{group.keep.id} {group.keep.display_name || group.keep.lessor_name}
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {group.extras.map((dup) => (
+                  <button
+                    key={dup.id}
+                    type="button"
+                    onClick={() => handleDeleteDuplicate(dup, group.keep)}
+                    disabled={deleteMut.isPending}
+                    className={`${ws.btnDanger} px-3 py-1.5 text-xs disabled:opacity-50`}
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    حذف النسخة المكررة #{dup.id} {dup.display_name || ""}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
         <SummaryCard
           label="عقود سارية"
