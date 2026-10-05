@@ -1,11 +1,11 @@
 import sql from './sql-CSDV1lSC.js';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
-import { h as hardDeletePurchaseInvoices } from './purchaseInvoiceDelete-RdBVQHRn.js';
-import { e as ensureLeaseSchema, d as deactivateSetAsideInvoicesForPayments, l as loadContract, p as parseContractInput, a as sameInstant, b as buildScheduleRows, r as replaceSchedule, c as repointLeaseInvoiceAccounts, R as REQUIRE_LEASE } from './leaseContracts-CNjeVKpu.js';
+import { e as ensureLeaseSchema, d as deleteAllLeaseContractInvoices, l as loadContract, p as parseContractInput, a as sameInstant, b as buildScheduleRows, r as replaceSchedule, c as repointLeaseInvoiceAccounts, R as REQUIRE_LEASE } from './leaseContracts-M1M5QWMp.js';
 import '@neondatabase/serverless';
 import 'crypto';
 import './ensureOnce-D_53iNPN.js';
+import './purchaseInvoiceDelete-RdBVQHRn.js';
 
 // عقد تأجيري واحد: عرض / تعديل / إيقاف أو حذف.
 // GET    /api/accounting/lease-contracts/[id]
@@ -279,26 +279,21 @@ async function DELETE(request, {
           status: 409
         });
       }
-      // حذف العقد نهائيًا يحذف كل فواتير استقطاعه (حتى المسددة — لا يبقى
-      // أثر لعقد مكرر)، ثم الدفعات تُحذف تتابعًا (CASCADE).
-      const invoiceRows = await sql`
-        SELECT id FROM accounting_purchase_invoices WHERE lease_contract_id = ${id}
-      `.catch(() => []);
-      await hardDeletePurchaseInvoices(invoiceRows.map(r => r.id), {
-        actor: auth.user,
-        reason: `حُذف العقد ${label} نهائيًا`
-      });
+      // حذف العقد نهائيًا يحذف كل فواتيره (حتى المسددة — لا يبقى أثر)،
+      // ثم الدفعات تُحذف تتابعًا (CASCADE).
+      const deletedInvoices = await deleteAllLeaseContractInvoices(id, auth.user, `حُذف العقد ${label} نهائيًا`);
       await sql`DELETE FROM accounting_lease_contracts WHERE id = ${id}`;
       await logPurchaseAudit({
         entityType: "lease_contract",
         entityId: id,
         action: "deleted",
-        summary: `حذف نهائي لعقد الإيجار ${label} — ${contract.lessor_name}`,
+        summary: `حذف نهائي لعقد الإيجار ${label} — ${contract.lessor_name}${deletedInvoices ? ` — حُذفت ${deletedInvoices} فاتورة مرتبطة` : ""}`,
         actor: auth.user
       });
       return Response.json({
         ok: true,
-        hard: true
+        hard: true,
+        deleted_invoices: deletedInvoices
       });
     }
     await sql`
@@ -306,18 +301,19 @@ async function DELETE(request, {
       SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
       WHERE id = ${id}
     `;
-    const paymentRows = await sql`SELECT id FROM accounting_lease_payments WHERE contract_id = ${id}`;
-    await deactivateSetAsideInvoicesForPayments(paymentRows.map(r => r.id), auth.user, "أُوقف العقد");
+    // إيقاف العقد يحذف كل فواتيره المرتبطة نهائيًا — حتى المسددة (قرار المالك).
+    const deletedInvoices = await deleteAllLeaseContractInvoices(id, auth.user, `أُوقف العقد ${label}`);
     await logPurchaseAudit({
       entityType: "lease_contract",
       entityId: id,
       action: "deactivated",
-      summary: `إيقاف عقد الإيجار ${label} — ${contract.lessor_name}`,
+      summary: `إيقاف عقد الإيجار ${label} — ${contract.lessor_name}${deletedInvoices ? ` — حُذفت ${deletedInvoices} فاتورة مرتبطة` : ""}`,
       actor: auth.user
     });
     return Response.json({
       ok: true,
-      hard: false
+      hard: false,
+      deleted_invoices: deletedInvoices
     });
   } catch (error) {
     console.error("lease contract DELETE error", error);

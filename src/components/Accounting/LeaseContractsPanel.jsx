@@ -602,7 +602,7 @@ export default function LeaseContractsPanel({
       return;
     }
     const ok = window.confirm(
-      `إيقاف العقد "${contract.contract_number || contract.lessor_name}"؟ تختفي دفعاته من سداد المستحق والاستقطاع، ويمكنك عرضه لاحقاً من «عرض الموقوفة».`,
+      `إيقاف العقد "${contract.contract_number || contract.lessor_name}"؟ تختفي دفعاته من سداد المستحق والاستقطاع، وتُحذف كل فواتيره في المشتريات نهائياً (حتى المسددة). يمكنك عرضه لاحقاً من «عرض الموقوفة».`,
     );
     if (!ok) return;
     deleteMut.mutate({ id: contract.id, force: false }, { onSuccess: () => setPreviewId(null) });

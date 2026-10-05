@@ -383,6 +383,44 @@ export async function deactivateSetAsideInvoicesForPayments(paymentIds, actor = 
   return deleted.length;
 }
 
+// حذف/إيقاف العقد يحذف كل فواتيره نهائيًا (قرار المالك) — حتى المسددة:
+// المرتبطة بالعقد مباشرة أو بإحدى دفعاته.
+export async function deleteAllLeaseContractInvoices(contractId, actor = null, reason = "") {
+  const id = Number(contractId);
+  if (!Number.isInteger(id) || id <= 0) return 0;
+  const linked = await ensureLeaseInvoiceLinkColumns();
+  if (!linked) return 0;
+  const rows = await sql`
+    SELECT id FROM accounting_purchase_invoices
+    WHERE lease_contract_id = ${id}
+       OR lease_payment_id IN (SELECT id FROM accounting_lease_payments WHERE contract_id = ${id})
+  `;
+  const deleted = await hardDeletePurchaseInvoices(
+    rows.map((r) => r.id),
+    { actor, reason: `فاتورة استقطاع${reason ? ` — ${reason}` : ""}` },
+  );
+  return deleted.length;
+}
+
+// فواتير استقطاع يتيمة: عقدها موقوف أو محذوف — تُحذف نهائيًا (تنظيف
+// لما حُذف قبل اعتماد القاعدة).
+export async function purgeOrphanLeaseInvoices() {
+  const linked = await ensureLeaseInvoiceLinkColumns();
+  if (!linked) return 0;
+  const rows = await sql`
+    SELECT inv.id FROM accounting_purchase_invoices inv
+    LEFT JOIN accounting_lease_contracts lc ON lc.id = inv.lease_contract_id
+    WHERE inv.lease_contract_id IS NOT NULL
+      AND (lc.id IS NULL OR lc.is_active = FALSE)
+  `;
+  if (!rows.length) return 0;
+  const deleted = await hardDeletePurchaseInvoices(
+    rows.map((r) => r.id),
+    { reason: "فاتورة استقطاع لعقد محذوف أو موقوف" },
+  );
+  return deleted.length;
+}
+
 // ---------------------------------------------------------------------------
 // الحقول المحسوبة على رأس العقد.
 // ---------------------------------------------------------------------------
