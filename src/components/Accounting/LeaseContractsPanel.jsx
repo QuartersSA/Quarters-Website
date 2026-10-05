@@ -8,6 +8,9 @@ import {
   Ban,
   CalendarClock,
   CheckCircle2,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Download,
   ExternalLink,
@@ -319,6 +322,13 @@ function monthEndDate(month) {
 
 // حجم الدفعة الظاهر في القائمة: من قيمة الدفعة + الضريبة، أو الاستحقاق
 // القادم للعقود ذات الدفعات المخصصة.
+function shiftMonthKey(key, delta) {
+  const [y, m] = String(key || "").split("-").map(Number);
+  if (!y || !m) return key;
+  const d = new Date(Date.UTC(y, m - 1 + delta, 1));
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+}
+
 function contractInstallmentIncl(contract) {
   if (contract.payment_frequency === "custom") return null;
   const fixed = splitFixedCharges(
@@ -376,6 +386,10 @@ export default function LeaseContractsPanel({
   // مبالغ الاستقطاع المُدخلة قبل التأكيد: { [payment_id]: "1234.00" }
   const [reserveDrafts, setReserveDrafts] = useState({});
   const [confirmingAll, setConfirmingAll] = useState(false);
+  // صفوف الاستقطاع المفتوحة لتعديل المبلغ: { [payment_id]: true }
+  const [reserveEditing, setReserveEditing] = useState({});
+  const [showAllReserve, setShowAllReserve] = useState(false);
+  const [showReserveHelp, setShowReserveHelp] = useState(false);
 
   // رابط سريع (?intent=add) يفتح نافذة الإضافة مرة واحدة.
   useEffect(() => {
@@ -770,12 +784,23 @@ export default function LeaseContractsPanel({
   const reserveRows = Array.isArray(reserve?.month_rows) ? reserve.month_rows : [];
   const reserveAllRows = Array.isArray(reserve?.rows) ? reserve.rows : [];
   const reserveTotals = reserve?.totals || {};
+  // الأشهر الماضية التي لها استقطاع غير مؤكد — للقفز إليها من التنبيه.
+  const overdueReserveMonths = useMemo(() => {
+    const set = new Set();
+    for (const row of reserveAllRows) {
+      for (const item of row.schedule || []) {
+        if (item.overdue && !item.skipped) set.add(item.month);
+      }
+    }
+    return [...set].sort();
+  }, [reserveAllRows]);
   // التأكيد (التحويل) متاح للشهر الحالي وما قبله فقط.
   const canConfirmReserve = reserve ? reserve.can_confirm !== false : reserveMonth <= currentMonth;
 
   // تبديل الشهر يمسح المسودات.
   useEffect(() => {
     setReserveDrafts({});
+    setReserveEditing({});
   }, [reserveMonth, reserveBranch]);
 
   const reserveDraftValue = (row) => {
@@ -1584,443 +1609,569 @@ export default function LeaseContractsPanel({
     );
   };
 
-  const renderReserve = () => (
-    <>
-      <div className={`${ws.glass} ${ws.card} p-4`}>
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="text-xs text-slate-600 dark:text-white/55">الشهر</div>
-          <div className="w-44">
-            <GlassSelect
-              value={reserveMonth}
-              onChange={setReserveMonth}
-              options={reserveMonthOptions}
-              placeholder="اختر الشهر"
-              buttonClassName="text-sm py-2 px-3"
-            />
-          </div>
-          {branches.length > 0 ? (
-            <div className="w-44">
-              <GlassSelect
-                value={reserveBranch}
-                onChange={setReserveBranch}
-                options={branchFilterOptions}
-                placeholder="كل الفروع"
-                buttonClassName="text-sm py-2 px-3"
-              />
-            </div>
-          ) : null}
-          {reserveMonth !== currentMonth ? (
-            <button
-              type="button"
-              onClick={() => setReserveMonth(currentMonth)}
-              className="text-xs text-[#0e7a5f] dark:text-emerald-300 hover:underline"
-            >
-              الشهر الحالي
-            </button>
-          ) : null}
-          <div className="flex-1" />
-          {reserveRows.length > 0 ? (
-            <button
-              type="button"
-              onClick={confirmAllSuggested}
-              disabled={
-                !canConfirmReserve ||
-                confirmingAll ||
-                confirmReserveMut.isPending ||
-                moneyValue(reserveTotals.unconfirmed_count) === 0
-              }
-              className={`${ws.btnPrimary} px-3 py-2 text-xs disabled:opacity-50`}
-              title={
-                canConfirmReserve
-                  ? "تأكيد تحويل كل استقطاعات الشهر غير المؤكدة"
-                  : "لا يمكن تأكيد تحويل لشهر مستقبلي"
-              }
-            >
-              {confirmingAll ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              ) : (
-                <CheckCircle2 className="w-3.5 h-3.5" />
-              )}
-              تأكيد تحويل الكل
-              {moneyValue(reserveTotals.unconfirmed_count) > 0
-                ? ` (${reserveTotals.unconfirmed_count})`
-                : ""}
-            </button>
-          ) : null}
-          <ExportButtons onExport={exportReserve} disabled={reserveRows.length === 0} />
-          <button
-            type="button"
-            onClick={() => reserveQuery.refetch()}
-            className={`${ws.btnNeutral} px-3 py-2`}
-            title="تحديث"
-          >
-            <RefreshCw className={`w-4 h-4 ${reserveQuery.isFetching ? "animate-spin" : ""}`} />
-          </button>
-        </div>
-      </div>
+  const renderReserve = () => {
+    const monthPlanned = moneyValue(reserveTotals.month_planned);
+    const monthConfirmed = moneyValue(reserveTotals.month_confirmed);
+    const monthUnconfirmed = moneyValue(reserveTotals.month_unconfirmed);
+    const unconfirmedCount = moneyValue(reserveTotals.unconfirmed_count);
+    const confirmedCount = moneyValue(reserveTotals.confirmed_count);
+    const monthPct = monthPlanned > 0 ? Math.min(100, Math.round((monthConfirmed / monthPlanned) * 100)) : 0;
+    const overdueCount = moneyValue(reserveTotals.overdue_setaside_count);
+    const overdueAmount = moneyValue(reserveTotals.overdue_setaside_amount);
+    const allDone = reserveRows.length > 0 && unconfirmedCount === 0;
+    const isFuture = !canConfirmReserve;
 
-      <div className="grid grid-cols-2 xl:grid-cols-5 gap-3">
-        <SummaryCard
-          label={`استقطاعات ${monthLabel(reserveMonth)}`}
-          value={formatMoney(reserveTotals.month_planned)}
-          icon={PiggyBank}
-          tone="emerald"
-          suffix={`${moneyValue(reserveTotals.month_rows)} دفعة لها استقطاع هذا الشهر`}
-        />
-        <SummaryCard
-          label="المحوَّل (مؤكد) هذا الشهر"
-          value={formatMoney(reserveTotals.month_confirmed)}
-          icon={CheckCircle2}
-          tone="emerald"
-          suffix={
-            moneyValue(reserveTotals.confirmed_count) > 0
-              ? `${reserveTotals.confirmed_count} دفعة مؤكدة`
-              : "لم يُؤكد تحويل بعد"
-          }
-        />
-        <SummaryCard
-          label="بانتظار التحويل هذا الشهر"
-          value={formatMoney(reserveTotals.month_unconfirmed)}
-          icon={Clock}
-          tone={moneyValue(reserveTotals.month_unconfirmed) > 0 && canConfirmReserve ? "amber" : "slate"}
-          suffix={
-            moneyValue(reserveTotals.unconfirmed_count) > 0
-              ? `${reserveTotals.unconfirmed_count} دفعة`
-              : "لا شيء معلّق"
-          }
-        />
-        <SummaryCard
-          label="المتجمع في حساب الاستقطاع"
-          value={formatMoney(reserveTotals.reserved_total)}
-          icon={Wallet}
-          tone="sky"
-          suffix={`من ${formatMoney(reserveTotals.pending_amount, false)} دفعات معلّقة`}
-        />
-        <SummaryCard
-          label="استقطاعات متأخرة"
-          value={formatMoney(reserveTotals.overdue_setaside_amount)}
-          icon={AlertTriangle}
-          tone={moneyValue(reserveTotals.overdue_setaside_amount) > 0 ? "rose" : "slate"}
-          suffix={
-            moneyValue(reserveTotals.overdue_setaside_count) > 0
-              ? `${reserveTotals.overdue_setaside_count} شهر مضى بلا تحويل — افتح الشهر وأكّده`
-              : "كل الأشهر الماضية محوَّلة"
-          }
-        />
-      </div>
-
-      {!canConfirmReserve ? (
-        <div className={`${ws.glassSoft} ${ws.card} px-4 py-3 text-xs text-slate-600 dark:text-white/60 flex items-center gap-2`}>
-          <Info className="w-4 h-4 shrink-0 text-sky-700 dark:text-sky-200" />
-          هذا شهر مستقبلي: الأرقام للتخطيط، والتأكيد يُتاح عند حلول الشهر.
-        </div>
-      ) : null}
-
-      {reserveQuery.isLoading ? (
-        <div className={`${ws.glass} ${ws.card} p-10 text-center text-slate-500 dark:text-white/50`}>
-          <Loader2 className="w-5 h-5 animate-spin mx-auto" />
-          <div className="mt-2 text-sm">جاري حساب الاستقطاع…</div>
-        </div>
-      ) : reserveQuery.isError ? (
-        <div className={`${ws.glass} ${ws.card} p-6 text-center text-rose-700 dark:text-rose-300 text-sm`}>
-          {reserveQuery.error?.message || "فشل تحميل الاستقطاع"}
-        </div>
-      ) : reserveRows.length === 0 ? (
-        <EmptyState
-          icon={PiggyBank}
-          title={`لا استقطاعات في ${monthLabel(reserveMonth)}`}
-          hint={
-            reserveAllRows.length
-              ? "لا دفعة معلّقة يقع هذا الشهر ضمن أشهر استقطاعها — راجع ملخص الدفعات أدناه."
-              : "لا دفعات معلّقة على العقود السارية."
-          }
-        />
-      ) : (
+    return (
+      <>
+        {/* رأس الصفحة: الشهر + التقدّم + الإجراء الرئيسي */}
         <div className={`${ws.glass} ${ws.card} overflow-hidden`}>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-[#fafbfa] dark:bg-white/[0.03] text-slate-600 dark:text-white/60 text-xs">
-                <tr>
-                  <th className="text-right font-semibold px-4 py-3">العقد / المؤجر</th>
-                  <th className="text-right font-semibold px-4 py-3">الدفعة والاستحقاق</th>
-                  <th className="text-left font-semibold px-4 py-3">المبلغ شامل</th>
-                  <th className="text-right font-semibold px-4 py-3">أشهر الاستقطاع</th>
-                  <th className="text-left font-semibold px-4 py-3">استقطاع هذا الشهر</th>
-                  <th className="text-right font-semibold px-4 py-3">تأكيد التحويل</th>
-                  <th className="text-left font-semibold px-4 py-3">المتجمع / المتبقي</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 dark:divide-white/10">
-                {reserveRows.map((row) => {
-                  const pct =
-                    moneyValue(row.amount_incl) > 0
-                      ? Math.min(100, Math.round((moneyValue(row.reserved_total) / moneyValue(row.amount_incl)) * 100))
-                      : 0;
-                  const confirmed =
-                    row.confirmed_amount !== null && row.confirmed_amount !== undefined;
-                  const draft = reserveDraftValue(row);
-                  const draftValue = moneyValue(draft);
-                  const dirty =
-                    confirmed && Math.abs(draftValue - moneyValue(row.confirmed_amount)) > 0.005;
-                  const busy =
-                    confirmingAll ||
-                    (confirmReserveMut.isPending &&
-                      confirmReserveMut.variables?.payment_id === row.id);
-                  return (
-                    <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.03]">
-                      <td className="px-4 py-3">
-                        <ContractIdentity row={row} onOpen={() => setPreviewId(row.contract_id)} />
-                        <div className="text-[11px] text-slate-500 dark:text-white/45 truncate max-w-[220px]">
-                          <span className="font-mono" dir="ltr">
-                            {row.contract_number || `#${row.contract_id}`}
-                          </span>
-                          {row.location ? ` · ${row.location}` : ""}
-                          {row.branch_name ? ` · ${row.branch_name}` : ""}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        <div className="text-slate-800 dark:text-white/85">
+          <div className="p-4 flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setReserveMonth(shiftMonthKey(reserveMonth, -1))}
+                className={ws.iconButton}
+                title="الشهر السابق"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              <div className="w-40">
+                <GlassSelect
+                  value={reserveMonth}
+                  onChange={setReserveMonth}
+                  options={reserveMonthOptions}
+                  placeholder="اختر الشهر"
+                  buttonClassName="text-sm py-2 px-3 font-bold"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setReserveMonth(shiftMonthKey(reserveMonth, 1))}
+                className={ws.iconButton}
+                title="الشهر التالي"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            </div>
+            {reserveMonth !== currentMonth ? (
+              <button
+                type="button"
+                onClick={() => setReserveMonth(currentMonth)}
+                className="text-xs font-semibold text-[#0e7a5f] dark:text-emerald-300 hover:underline"
+              >
+                الشهر الحالي
+              </button>
+            ) : null}
+            {branches.length > 0 ? (
+              <div className="w-40">
+                <GlassSelect
+                  value={reserveBranch}
+                  onChange={setReserveBranch}
+                  options={branchFilterOptions}
+                  placeholder="كل الفروع"
+                  buttonClassName="text-sm py-2 px-3"
+                />
+              </div>
+            ) : null}
+            <div className="flex-1" />
+            <div className="flex items-center gap-1">
+              <ExportButtons onExport={exportReserve} disabled={reserveRows.length === 0} />
+              <button
+                type="button"
+                onClick={() => reserveQuery.refetch()}
+                className={ws.iconButton}
+                title="تحديث"
+              >
+                <RefreshCw className={`w-4 h-4 ${reserveQuery.isFetching ? "animate-spin" : ""}`} />
+              </button>
+            </div>
+          </div>
+
+          <div className={`border-t ${ws.divider} px-4 py-4 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-center`}>
+            <div className="min-w-0">
+              <div className="flex items-end justify-between gap-3 flex-wrap">
+                <div>
+                  <div className="text-xs text-slate-500 dark:text-white/50">
+                    استقطاعات {monthLabel(reserveMonth)}
+                  </div>
+                  <div className="text-2xl font-bold tabular-nums text-slate-900 dark:text-white mt-0.5" dir="ltr">
+                    {formatMoney(monthPlanned)}
+                  </div>
+                </div>
+                <div className="text-xs text-slate-600 dark:text-white/60 flex items-center gap-3 flex-wrap">
+                  <span className="inline-flex items-center gap-1 text-[#0e7a5f] dark:text-emerald-200 font-semibold">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    محوَّل {formatMoney(monthConfirmed, false)}
+                    {confirmedCount > 0 ? ` (${confirmedCount})` : ""}
+                  </span>
+                  <span
+                    className={`inline-flex items-center gap-1 font-semibold ${
+                      monthUnconfirmed > 0 && !isFuture
+                        ? "text-amber-700 dark:text-amber-200"
+                        : "text-slate-500 dark:text-white/45"
+                    }`}
+                  >
+                    <Clock className="w-3.5 h-3.5" />
+                    بانتظار {formatMoney(monthUnconfirmed, false)}
+                    {unconfirmedCount > 0 ? ` (${unconfirmedCount})` : ""}
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-sky-700 dark:text-sky-200 font-semibold">
+                    <Wallet className="w-3.5 h-3.5" />
+                    المتجمع {formatMoney(reserveTotals.reserved_total, false)}
+                  </span>
+                </div>
+              </div>
+              <div className="h-2 rounded-full bg-slate-200 dark:bg-white/10 mt-3 overflow-hidden">
+                <div
+                  className={`h-full transition-all ${allDone ? "bg-[#0e7a5f] dark:bg-emerald-400" : "bg-[#0e7a5f]/80 dark:bg-emerald-400/80"}`}
+                  style={{ width: `${monthPct}%` }}
+                />
+              </div>
+              <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                {isFuture
+                  ? "شهر مستقبلي — الأرقام للتخطيط، والتأكيد يُتاح عند حلول الشهر."
+                  : allDone
+                    ? "كل استقطاعات هذا الشهر محوَّلة ✓"
+                    : reserveRows.length === 0
+                      ? "لا استقطاعات في هذا الشهر."
+                      : `${moneyValue(reserveTotals.month_rows)} دفعة لها استقطاع هذا الشهر — حوِّل المبالغ إلى حساب الاستقطاع ثم أكّد.`}
+              </div>
+            </div>
+            {reserveRows.length > 0 && !isFuture ? (
+              <button
+                type="button"
+                onClick={confirmAllSuggested}
+                disabled={confirmingAll || confirmReserveMut.isPending || unconfirmedCount === 0}
+                className={`${allDone ? ws.btnNeutral : ws.btnPrimary} px-4 py-2.5 text-sm disabled:opacity-50 whitespace-nowrap`}
+                title="تأكيد تحويل كل استقطاعات الشهر غير المؤكدة بمبالغها المخططة"
+              >
+                {confirmingAll ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="w-4 h-4" />
+                )}
+                {allDone ? "الكل محوَّل" : `تأكيد تحويل الكل${unconfirmedCount > 0 ? ` (${unconfirmedCount})` : ""}`}
+              </button>
+            ) : null}
+          </div>
+        </div>
+
+        {/* تنبيه الأشهر المتأخرة */}
+        {overdueCount > 0 ? (
+          <div className="rounded-[10px] border border-rose-200 dark:border-rose-400/25 bg-rose-50 dark:bg-rose-400/10 px-4 py-3 flex items-center gap-3 flex-wrap">
+            <AlertTriangle className="w-4 h-4 shrink-0 text-rose-700 dark:text-rose-200" />
+            <div className="text-sm text-rose-800 dark:text-rose-100 flex-1 min-w-[200px]">
+              <b>{overdueCount}</b> {overdueCount === 1 ? "شهر مضى" : "أشهر مضت"} بلا تحويل
+              <span className="tabular-nums" dir="ltr"> ({formatMoney(overdueAmount)})</span>
+            </div>
+            <div className="flex items-center gap-1 flex-wrap">
+              {overdueReserveMonths.map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setReserveMonth(m)}
+                  className={`rounded-full border px-2.5 py-1 text-[11px] font-bold whitespace-nowrap ${
+                    m === reserveMonth
+                      ? "bg-rose-700 text-white border-rose-700 dark:bg-rose-300 dark:text-rose-950 dark:border-rose-300"
+                      : "bg-white dark:bg-transparent text-rose-800 dark:text-rose-100 border-rose-300 dark:border-rose-300/40 hover:bg-rose-100 dark:hover:bg-rose-400/15"
+                  }`}
+                >
+                  {monthLabel(m)}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {/* قائمة الاستقطاعات */}
+        {reserveQuery.isLoading ? (
+          <div className={`${ws.glass} ${ws.card} p-10 text-center text-slate-500 dark:text-white/50`}>
+            <Loader2 className="w-5 h-5 animate-spin mx-auto" />
+            <div className="mt-2 text-sm">جاري حساب الاستقطاع…</div>
+          </div>
+        ) : reserveQuery.isError ? (
+          <div className={`${ws.glass} ${ws.card} p-6 text-center text-rose-700 dark:text-rose-300 text-sm`}>
+            {reserveQuery.error?.message || "فشل تحميل الاستقطاع"}
+          </div>
+        ) : reserveRows.length === 0 ? (
+          <EmptyState
+            icon={PiggyBank}
+            title={`لا استقطاعات في ${monthLabel(reserveMonth)}`}
+            hint={
+              reserveAllRows.length
+                ? "لا دفعة معلّقة يقع هذا الشهر ضمن أشهر استقطاعها."
+                : "لا دفعات معلّقة على العقود السارية."
+            }
+          />
+        ) : (
+          <div className="space-y-2">
+            {reserveRows.map((row) => {
+              const pct =
+                moneyValue(row.amount_incl) > 0
+                  ? Math.min(100, Math.round((moneyValue(row.reserved_total) / moneyValue(row.amount_incl)) * 100))
+                  : 0;
+              const confirmed = row.confirmed_amount !== null && row.confirmed_amount !== undefined;
+              const draft = reserveDraftValue(row);
+              const draftValue = moneyValue(draft);
+              const editing = !!reserveEditing[row.id];
+              const dirty = confirmed && Math.abs(draftValue - moneyValue(row.confirmed_amount)) > 0.005;
+              const busy =
+                confirmingAll ||
+                (confirmReserveMut.isPending && confirmReserveMut.variables?.payment_id === row.id);
+              const rowOverdue = !confirmed && !isFuture && reserveMonth < currentMonth;
+              const stateClass = confirmed
+                ? "border-r-4 border-r-[#0e7a5f] dark:border-r-emerald-400"
+                : rowOverdue
+                  ? "border-r-4 border-r-rose-500 dark:border-r-rose-400"
+                  : "border-r-4 border-r-amber-400 dark:border-r-amber-300";
+              const stopEditing = () => {
+                setReserveEditing((prev) => {
+                  const next = { ...prev };
+                  delete next[row.id];
+                  return next;
+                });
+                setReserveDrafts((drafts) => {
+                  const next = { ...drafts };
+                  delete next[row.id];
+                  return next;
+                });
+              };
+              return (
+                <div key={row.id} className={`${ws.glass} ${ws.card} ${stateClass} p-4`}>
+                  <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_auto] gap-4 items-center">
+                    {/* العقد والدفعة */}
+                    <div className="min-w-0">
+                      <ContractIdentity row={row} onOpen={() => setPreviewId(row.contract_id)} />
+                      <div className="text-[11px] text-slate-500 dark:text-white/45 truncate mt-0.5">
+                        <span className="font-mono" dir="ltr">
+                          {row.contract_number || `#${row.contract_id}`}
+                        </span>
+                        {row.branch_name ? ` · ${row.branch_name}` : row.location ? ` · ${row.location}` : ""}
+                      </div>
+                      <div className="text-xs text-slate-700 dark:text-white/75 mt-1.5 flex items-center gap-2 flex-wrap">
+                        <span>
                           الدفعة #{row.seq}
-                          <span className="text-[11px] text-slate-500 dark:text-white/45">
+                          <span className="text-slate-500 dark:text-white/45">
                             {" "}· {FREQUENCY_LABELS[row.payment_frequency] || ""}
                           </span>
-                        </div>
-                        <div className="font-mono text-slate-600 dark:text-white/55 text-xs" dir="ltr">
-                          {row.due_date}
-                        </div>
-                        {row.overdue ? (
-                          <div className="text-[10px] font-bold text-rose-700 dark:text-rose-300">متأخرة السداد</div>
-                        ) : row.due_this_month ? (
-                          <div className="text-[10px] font-bold text-amber-700 dark:text-amber-200">تستحق هذا الشهر</div>
-                        ) : null}
-                      </td>
-                      <td className="px-4 py-3 text-left font-bold tabular-nums text-slate-900 dark:text-white" dir="ltr">
-                        {formatMoney(row.amount_incl, false)}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex flex-wrap gap-1 max-w-[260px]">
-                          {row.schedule.map((item) => renderSetAsideCell(row, item))}
-                        </div>
-                        <div className="text-[10px] text-slate-500 dark:text-white/40 mt-1">
-                          {row.months_total} {row.months_total === 1 ? "شهر" : row.months_total === 2 ? "شهران" : row.months_total <= 10 ? "أشهر" : "شهراً"}
-                          {" · "}مؤكد {row.months_confirmed} / {row.months_total}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-left tabular-nums font-bold" dir="ltr">
-                        <span
-                          className={
-                            moneyValue(row.this_month_planned) > 0
-                              ? "text-[#0e7a5f] dark:text-emerald-200"
-                              : "text-slate-400 dark:text-white/35"
-                          }
-                        >
-                          {formatMoney(row.this_month_planned, false)}
                         </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        {!canConfirmReserve ? (
-                          <span className="text-[11px] text-slate-400 dark:text-white/35 whitespace-nowrap">
-                            شهر مستقبلي
+                        <span className="text-slate-500 dark:text-white/45">
+                          تستحق{" "}
+                          <span className="font-mono" dir="ltr">
+                            {row.due_date}
                           </span>
-                        ) : (
-                          <div className="flex items-center gap-1.5 flex-nowrap">
-                            <input
-                              type="number"
-                              value={draft}
-                              min="0"
-                              step="0.01"
-                              dir="ltr"
-                              onChange={(event) =>
-                                setReserveDrafts((drafts) => ({
-                                  ...drafts,
-                                  [row.id]: event.target.value,
-                                }))
-                              }
-                              className={`${ws.input} w-28 px-2 py-1.5 text-xs text-right tabular-nums ${
-                                confirmed && !dirty
-                                  ? "border-[#c9e2d8] dark:border-emerald-400/30"
-                                  : ""
-                              }`}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => confirmReserveRow(row)}
-                              disabled={busy || (confirmed && !dirty) || draftValue < 0}
-                              className={`${confirmed && !dirty ? ws.btnNeutral : ws.btnPrimary} px-2.5 py-1.5 text-[11px] whitespace-nowrap disabled:opacity-50`}
-                              title={confirmed ? "حفظ المبلغ المعدّل" : "تأكيد تحويل استقطاع هذا الشهر إلى حساب الاستقطاع"}
-                            >
-                              {busy ? (
-                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                              ) : (
-                                <CheckCircle2 className="w-3.5 h-3.5" />
-                              )}
-                              {confirmed ? (dirty ? "حفظ" : "محوَّل") : "تأكيد التحويل"}
-                            </button>
-                            {confirmed ? (
-                              <button
-                                type="button"
-                                onClick={() => clearReserveRow(row)}
-                                disabled={busy}
-                                className={`${ws.iconButton} disabled:opacity-50`}
-                                title="إلغاء تأكيد هذا الشهر"
-                              >
-                                <Undo2 className="w-3.5 h-3.5" />
-                              </button>
-                            ) : null}
-                          </div>
-                        )}
-                        {row.confirmed_by ? (
-                          <div className="text-[10px] text-slate-400 dark:text-white/35 mt-1 whitespace-nowrap">
-                            أكده {row.confirmed_by}
-                          </div>
+                        </span>
+                        <span className="font-bold tabular-nums text-slate-900 dark:text-white" dir="ltr">
+                          {formatMoney(row.amount_incl, false)}
+                        </span>
+                        {row.overdue ? (
+                          <span className="rounded-full bg-rose-100 dark:bg-rose-400/15 text-rose-700 dark:text-rose-200 px-2 py-0.5 text-[10px] font-bold">
+                            متأخرة السداد
+                          </span>
+                        ) : row.due_this_month ? (
+                          <span className="rounded-full bg-amber-100 dark:bg-amber-400/15 text-amber-700 dark:text-amber-200 px-2 py-0.5 text-[10px] font-bold">
+                            تستحق هذا الشهر
+                          </span>
                         ) : null}
-                        {!row.invoice_number && (row.invoice_error || row.invoice_deleted) ? (
-                          <div className="text-[10px] mt-1 text-rose-700 dark:text-rose-300 max-w-[220px]">
-                            {row.invoice_deleted
-                              ? "حُذفت فاتورة هذا الشهر يدوياً"
-                              : `تعذر إنشاء الفاتورة: ${row.invoice_error}`}
-                          </div>
-                        ) : null}
-                        {!row.invoice_number && canConfirmReserve && moneyValue(row.this_month_planned) > 0 ? (
+                      </div>
+                    </div>
+
+                    {/* أشهر الاستقطاع + المتجمع */}
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap gap-1">
+                        {row.schedule.map((item) => renderSetAsideCell(row, item))}
+                      </div>
+                      <div className="flex items-center gap-2 mt-2">
+                        <div className="h-1.5 flex-1 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+                          <div className="h-full bg-sky-500 dark:bg-sky-400" style={{ width: `${pct}%` }} />
+                        </div>
+                        <div className="text-[10px] text-slate-500 dark:text-white/45 whitespace-nowrap tabular-nums">
+                          متجمع{" "}
+                          <span className="font-bold text-sky-700 dark:text-sky-200" dir="ltr">
+                            {formatMoney(row.reserved_total, false)}
+                          </span>{" "}
+                          · مؤكد {row.months_confirmed}/{row.months_total}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* المبلغ والإجراء */}
+                    <div className="md:text-left md:min-w-[200px]">
+                      <div className="text-[11px] text-slate-500 dark:text-white/50">استقطاع هذا الشهر</div>
+                      {editing ? (
+                        <div className="flex items-center gap-1.5 mt-1 md:justify-end">
+                          <input
+                            type="number"
+                            value={draft}
+                            min="0"
+                            step="0.01"
+                            dir="ltr"
+                            autoFocus
+                            onChange={(event) =>
+                              setReserveDrafts((drafts) => ({ ...drafts, [row.id]: event.target.value }))
+                            }
+                            className={`${ws.input} w-28 px-2 py-1.5 text-sm text-right tabular-nums`}
+                          />
                           <button
                             type="button"
-                            onClick={() =>
-                              createSetAsideInvoiceMut.mutate({ payment_id: row.id, month: reserveMonth })
-                            }
-                            disabled={createSetAsideInvoiceMut.isPending}
-                            className="text-[10px] mt-1 text-sky-700 dark:text-sky-200 hover:underline disabled:opacity-50 whitespace-nowrap"
-                            title="لا فاتورة استقطاع لهذا الشهر (حُذفت أو لم تُنشأ) — إنشاؤها الآن"
+                            onClick={() => {
+                              confirmReserveRow(row);
+                              setReserveEditing((prev) => {
+                                const next = { ...prev };
+                                delete next[row.id];
+                                return next;
+                              });
+                            }}
+                            disabled={busy || draftValue < 0 || (confirmed && !dirty)}
+                            className={`${ws.btnPrimary} px-3 py-1.5 text-xs disabled:opacity-50`}
                           >
-                            {createSetAsideInvoiceMut.isPending &&
-                            createSetAsideInvoiceMut.variables?.payment_id === row.id
-                              ? "جاري الإنشاء…"
-                              : "+ إنشاء فاتورة الاستقطاع"}
+                            {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                            {confirmed ? "حفظ" : "تأكيد"}
                           </button>
-                        ) : null}
-                        {row.invoice_number ? (
+                          <button type="button" onClick={stopEditing} className={ws.iconButton} title="إلغاء">
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
                           <div
-                            className={`text-[10px] font-mono mt-1 whitespace-nowrap ${
+                            className={`text-xl font-bold tabular-nums mt-0.5 ${
+                              confirmed
+                                ? "text-[#0e7a5f] dark:text-emerald-200"
+                                : moneyValue(row.this_month_planned) > 0
+                                  ? "text-slate-900 dark:text-white"
+                                  : "text-slate-400 dark:text-white/35"
+                            }`}
+                            dir="ltr"
+                          >
+                            {formatMoney(confirmed ? row.confirmed_amount : row.this_month_planned, false)}
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-1.5 flex-wrap md:justify-end">
+                            {isFuture ? (
+                              <span className="text-[11px] text-slate-400 dark:text-white/35">شهر مستقبلي</span>
+                            ) : confirmed ? (
+                              <>
+                                <span className="inline-flex items-center gap-1 rounded-full bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 px-2.5 py-1 text-[11px] font-bold">
+                                  <CheckCircle2 className="w-3.5 h-3.5" />
+                                  محوَّل{row.confirmed_by ? ` · ${row.confirmed_by}` : ""}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => setReserveEditing((prev) => ({ ...prev, [row.id]: true }))}
+                                  disabled={busy}
+                                  className={`${ws.iconButton} disabled:opacity-50`}
+                                  title="تعديل المبلغ المحوَّل"
+                                >
+                                  <Pencil className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => clearReserveRow(row)}
+                                  disabled={busy}
+                                  className={`${ws.iconButton} disabled:opacity-50`}
+                                  title="إلغاء تأكيد هذا الشهر"
+                                >
+                                  <Undo2 className="w-3.5 h-3.5" />
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => confirmReserveRow(row, row.this_month_planned)}
+                                  disabled={busy || moneyValue(row.this_month_planned) <= 0}
+                                  className={`${ws.btnPrimary} px-3 py-1.5 text-xs disabled:opacity-50 whitespace-nowrap`}
+                                  title="تأكيد تحويل استقطاع هذا الشهر إلى حساب الاستقطاع"
+                                >
+                                  {busy ? (
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  ) : (
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                  )}
+                                  تأكيد التحويل
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setReserveEditing((prev) => ({ ...prev, [row.id]: true }))}
+                                  disabled={busy}
+                                  className={`${ws.iconButton} disabled:opacity-50`}
+                                  title="تأكيد بمبلغ مختلف"
+                                >
+                                  <Pencil className="w-3.5 h-3.5" />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </>
+                      )}
+                      {/* فاتورة الاستقطاع */}
+                      <div className="mt-1.5 text-[10px] md:text-left">
+                        {row.invoice_number ? (
+                          <span
+                            className={`font-mono whitespace-nowrap ${
                               row.invoice_status === "paid"
                                 ? "text-[#0e7a5f] dark:text-emerald-300"
                                 : "text-slate-500 dark:text-white/45"
                             }`}
                             dir="ltr"
-                            title={row.invoice_status === "paid" ? "فاتورة الاستقطاع مسددة" : "فاتورة الاستقطاع غير مسددة — تُسدَّد عند تأكيد التحويل"}
+                            title={
+                              row.invoice_status === "paid"
+                                ? "فاتورة الاستقطاع مسددة"
+                                : "فاتورة الاستقطاع غير مسددة — تُسدَّد عند تأكيد التحويل"
+                            }
                           >
                             {row.invoice_number} {row.invoice_status === "paid" ? "✓" : "○"}
-                          </div>
+                          </span>
+                        ) : row.invoice_error || row.invoice_deleted ? (
+                          <span className="text-rose-700 dark:text-rose-300">
+                            {row.invoice_deleted ? "حُذفت فاتورة هذا الشهر" : `تعذر إنشاء الفاتورة: ${row.invoice_error}`}
+                            {!isFuture && moneyValue(row.this_month_planned) > 0 ? (
+                              <>
+                                {" · "}
+                                <button
+                                  type="button"
+                                  onClick={() => createSetAsideInvoiceMut.mutate({ payment_id: row.id, month: reserveMonth })}
+                                  disabled={createSetAsideInvoiceMut.isPending}
+                                  className="text-sky-700 dark:text-sky-200 hover:underline disabled:opacity-50"
+                                >
+                                  {createSetAsideInvoiceMut.isPending && createSetAsideInvoiceMut.variables?.payment_id === row.id
+                                    ? "جاري الإنشاء…"
+                                    : "إنشاء الفاتورة"}
+                                </button>
+                              </>
+                            ) : null}
+                          </span>
+                        ) : !isFuture && moneyValue(row.this_month_planned) > 0 ? (
+                          <button
+                            type="button"
+                            onClick={() => createSetAsideInvoiceMut.mutate({ payment_id: row.id, month: reserveMonth })}
+                            disabled={createSetAsideInvoiceMut.isPending}
+                            className="text-sky-700 dark:text-sky-200 hover:underline disabled:opacity-50 whitespace-nowrap"
+                            title="لا فاتورة استقطاع لهذا الشهر — إنشاؤها الآن"
+                          >
+                            {createSetAsideInvoiceMut.isPending && createSetAsideInvoiceMut.variables?.payment_id === row.id
+                              ? "جاري الإنشاء…"
+                              : "+ إنشاء فاتورة الاستقطاع"}
+                          </button>
                         ) : null}
-                      </td>
-                      <td className="px-4 py-3 text-left tabular-nums" dir="ltr">
-                        <div className="font-bold text-sky-700 dark:text-sky-200">
-                          {formatMoney(row.reserved_total, false)}
-                        </div>
-                        <div className="text-[10px] text-amber-700 dark:text-amber-200 whitespace-nowrap">
-                          متبقٍ {formatMoney(row.remaining_to_reserve, false)}
-                        </div>
-                        <div className="h-1 rounded-full bg-slate-200 dark:bg-white/10 mt-1 overflow-hidden w-28">
-                          <div className="h-full bg-sky-500 dark:bg-sky-400" style={{ width: `${pct}%` }} />
-                        </div>
-                      </td>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* كل الدفعات المعلّقة — مطوي افتراضياً */}
+        {reserveAllRows.length > 0 ? (
+          <div className={`${ws.glass} ${ws.card} overflow-hidden`}>
+            <button
+              type="button"
+              onClick={() => setShowAllReserve((v) => !v)}
+              className="w-full px-4 py-3 flex items-center gap-2 text-right hover:bg-slate-50 dark:hover:bg-white/[0.03]"
+            >
+              <Wallet className="w-4 h-4 text-sky-700 dark:text-sky-200 shrink-0" />
+              <span className="text-sm font-bold text-slate-900 dark:text-white">
+                كل الدفعات المعلّقة والمتجمع لها
+              </span>
+              <span className="text-[11px] text-slate-500 dark:text-white/45">
+                {reserveAllRows.length} دفعة · المتجمع {formatMoney(reserveTotals.reserved_total, false)} من{" "}
+                {formatMoney(reserveTotals.pending_amount, false)}
+              </span>
+              <span className="flex-1" />
+              <ChevronDown
+                className={`w-4 h-4 text-slate-500 dark:text-white/50 transition-transform ${showAllReserve ? "rotate-180" : ""}`}
+              />
+            </button>
+            {showAllReserve ? (
+              <div className={`border-t ${ws.divider} overflow-x-auto`}>
+                <table className="w-full text-sm">
+                  <thead className="bg-[#fafbfa] dark:bg-white/[0.03] text-slate-600 dark:text-white/60 text-xs">
+                    <tr>
+                      <th className="text-right font-semibold px-4 py-2">العقد</th>
+                      <th className="text-right font-semibold px-4 py-2">الدفعة</th>
+                      <th className="text-left font-semibold px-4 py-2">المبلغ</th>
+                      <th className="text-right font-semibold px-4 py-2">أشهر الاستقطاع</th>
+                      <th className="text-left font-semibold px-4 py-2">المتجمع</th>
+                      <th className="text-left font-semibold px-4 py-2">المتبقي</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 dark:divide-white/10">
+                    {reserveAllRows.map((row) => (
+                      <tr key={`all-${row.id}`} className="hover:bg-slate-50 dark:hover:bg-white/[0.03]">
+                        <td className="px-4 py-2">
+                          <ContractIdentity row={row} onOpen={() => setPreviewId(row.contract_id)} />
+                          <div className="text-[11px] text-slate-500 dark:text-white/45 font-mono" dir="ltr">
+                            {row.contract_number || `#${row.contract_id}`}
+                          </div>
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap text-slate-800 dark:text-white/85">
+                          #{row.seq}{" "}
+                          <span className="font-mono text-xs text-slate-600 dark:text-white/55" dir="ltr">
+                            {row.due_date}
+                          </span>
+                        </td>
+                        <td className="px-4 py-2 text-left tabular-nums font-bold text-slate-900 dark:text-white" dir="ltr">
+                          {formatMoney(row.amount_incl, false)}
+                        </td>
+                        <td className="px-4 py-2">
+                          <div className="flex flex-wrap gap-1 max-w-[280px]">
+                            {row.schedule.map((item) => renderSetAsideCell(row, item))}
+                          </div>
+                        </td>
+                        <td className="px-4 py-2 text-left tabular-nums font-bold text-sky-700 dark:text-sky-200" dir="ltr">
+                          {formatMoney(row.reserved_total, false)}
+                        </td>
+                        <td className="px-4 py-2 text-left tabular-nums text-amber-700 dark:text-amber-200" dir="ltr">
+                          {formatMoney(row.remaining_to_reserve, false)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : null}
           </div>
-        </div>
-      )}
+        ) : null}
 
-      {reserveAllRows.length > 0 ? (
-        <div className={`${ws.glass} ${ws.card} overflow-hidden`}>
-          <div className={`px-4 py-3 border-b ${ws.divider} flex items-center gap-2`}>
-            <Wallet className="w-4 h-4 text-sky-700 dark:text-sky-200" />
-            <div className="text-sm font-bold text-slate-900 dark:text-white">
-              ملخص المتجمع لكل دفعة معلّقة
+        {/* الشرح — مطوي افتراضياً */}
+        <div className={`${ws.glassSoft} ${ws.card} overflow-hidden`}>
+          <button
+            type="button"
+            onClick={() => setShowReserveHelp((v) => !v)}
+            className="w-full px-4 py-3 flex items-center gap-2 text-right"
+          >
+            <Info className="w-4 h-4 text-sky-700 dark:text-sky-200 shrink-0" />
+            <span className="text-sm font-bold text-slate-900 dark:text-white">كيف يعمل الاستقطاع الشهري؟</span>
+            <span className="flex-1" />
+            <ChevronDown
+              className={`w-4 h-4 text-slate-500 dark:text-white/50 transition-transform ${showReserveHelp ? "rotate-180" : ""}`}
+            />
+          </button>
+          {showReserveHelp ? (
+            <div className={`border-t ${ws.divider} px-4 py-3 text-sm text-slate-600 dark:text-white/60 leading-7 space-y-1`}>
+              <div>
+                كل دفعة معلّقة تُقسَّم بالتساوي على أشهر تكرارها قبل شهر الاستحقاق:{" "}
+                <b>ربع سنوي = 3 أشهر</b>، <b>نصف سنوي = 6</b>، <b>سنوي = 12</b>. دفعة ربعية تستحق 15/12 →
+                استقطاع في شهر 9 و10 و11.
+              </div>
+              <div>
+                <b>الدفعة الأولى في العقد الجديد بلا استقطاع</b> وتُسدَّد من «سداد المستحق»؛ أما <b>العقد المجدد</b>{" "}
+                فدفعته الأولى كبقية الدفعات.
+              </div>
+              <div>
+                مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت «إيجار فرع / مستودع» أو «إيجار
+                سكن») مرتبطة برقم العقد. حوِّل المبلغ إلى حساب الاستقطاع ثم اضغط <b>«تأكيد التحويل»</b> فتصبح الفاتورة
+                مسددة ويتجمع المبلغ. عند الاستحقاق تُسدَّد الدفعة من «سداد المستحق» من المتجمع. شهر مضى بلا تأكيد يظهر
+                «متأخر» ويمكنك فتحه وتأكيده لاحقاً.
+              </div>
             </div>
-            <div className="text-[11px] text-slate-500 dark:text-white/45">
-              ما حُوِّل إلى حساب الاستقطاع مقابل قيمة كل دفعة — يُسدَّد منه عند الاستحقاق
-            </div>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-[#fafbfa] dark:bg-white/[0.03] text-slate-600 dark:text-white/60 text-xs">
-                <tr>
-                  <th className="text-right font-semibold px-4 py-2">العقد / المؤجر</th>
-                  <th className="text-right font-semibold px-4 py-2">الدفعة والاستحقاق</th>
-                  <th className="text-left font-semibold px-4 py-2">المبلغ شامل</th>
-                  <th className="text-right font-semibold px-4 py-2">أشهر الاستقطاع</th>
-                  <th className="text-left font-semibold px-4 py-2">المتجمع</th>
-                  <th className="text-left font-semibold px-4 py-2">المتبقي للتحويل</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 dark:divide-white/10">
-                {reserveAllRows.map((row) => (
-                  <tr key={`all-${row.id}`} className="hover:bg-slate-50 dark:hover:bg-white/[0.03]">
-                    <td className="px-4 py-2">
-                      <ContractIdentity row={row} />
-                      <div className="text-[11px] text-slate-500 dark:text-white/45 font-mono" dir="ltr">
-                        {row.contract_number || `#${row.contract_id}`}
-                      </div>
-                    </td>
-                    <td className="px-4 py-2 whitespace-nowrap text-slate-800 dark:text-white/85">
-                      #{row.seq}{" "}
-                      <span className="font-mono text-xs text-slate-600 dark:text-white/55" dir="ltr">
-                        {row.due_date}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2 text-left tabular-nums font-bold text-slate-900 dark:text-white" dir="ltr">
-                      {formatMoney(row.amount_incl, false)}
-                    </td>
-                    <td className="px-4 py-2">
-                      <div className="flex flex-wrap gap-1 max-w-[280px]">
-                        {row.schedule.map((item) => renderSetAsideCell(row, item))}
-                      </div>
-                    </td>
-                    <td className="px-4 py-2 text-left tabular-nums font-bold text-sky-700 dark:text-sky-200" dir="ltr">
-                      {formatMoney(row.reserved_total, false)}
-                    </td>
-                    <td className="px-4 py-2 text-left tabular-nums text-amber-700 dark:text-amber-200" dir="ltr">
-                      {formatMoney(row.remaining_to_reserve, false)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          ) : null}
         </div>
-      ) : null}
-
-      <div className={`${ws.glassSoft} ${ws.card} p-4`}>
-        <div className="flex items-start gap-3">
-          <div className={`${ws.iconBox} w-10 h-10 shrink-0`}>
-            <Info className="w-5 h-5 text-sky-700 dark:text-sky-200" />
-          </div>
-          <div className="min-w-0 text-sm text-slate-600 dark:text-white/60 leading-7">
-            <div className="font-bold text-slate-900 dark:text-white tracking-tight">
-              كيف يعمل الاستقطاع الشهري؟
-            </div>
-            <div>
-              كل دفعة معلّقة تُقسَّم بالتساوي على أشهر تكرارها قبل شهر الاستحقاق:{" "}
-              <b>ربع سنوي = 3 أشهر</b>، <b>نصف سنوي = 6</b>، <b>سنوي = 12</b>. دفعة ربعية
-              تستحق 15/12 → استقطاع في شهر 9 و10 و11 (لا استقطاع في شهر 12 لأنه لا ينتهي
-              قبل موعد السداد).
-            </div>
-            <div>
-              <b>الدفعة الأولى في العقد الجديد بلا استقطاع</b> — تُسدَّد مباشرة من «سداد المستحق»
-              ويبدأ الاستقطاع من الدفعة الثانية؛ أما <b>العقد المجدد</b> (خيار عند الإضافة) فدفعته
-              الأولى لها استقطاع كبقية الدفعات. مع حلول كل شهر تُنشأ تلقائياً فاتورة مشتريات غير مسددة لنصيبه (تحت
-              «إيجار فرع / مستودع» أو «إيجار سكن») تظهر في فواتير المشتريات مرتبطة برقم
-              العقد. حوِّل المبلغ إلى حساب الاستقطاع ثم اضغط <b>«تأكيد التحويل»</b> — فتصبح
-              الفاتورة مسددة ويتجمع المبلغ في «المتجمع». عند الاستحقاق تُسدَّد الدفعة من
-              «سداد المستحق» من المتجمع. شهر مضى بلا تأكيد يظهر «متأخر» ويمكنك فتحه
-              وتأكيده لاحقاً.
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
+  };
 
   return (
     <>
