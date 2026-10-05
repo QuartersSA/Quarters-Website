@@ -37,6 +37,8 @@ export const queryKeys = Object.freeze({
   accountingVariableTemplates: createKey("accounting_variable_templates"),
   accountingWaste: createKey("accounting-waste"),
   accountingWasteBranches: createKey("accounting-waste-branches"),
+  branchProject: createKey("branchProject"),
+  branchProjects: createKey("branchProjects"),
   branchStockAt: createKey("branch-stock-at"),
   branches: createKey("branches"),
   branchesForDeposit: createKey("branches-for-deposit"),

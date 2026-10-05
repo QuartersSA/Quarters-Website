@@ -8,6 +8,7 @@ import {
   Leaf,
   ClipboardList,
   Banknote,
+  Building2,
   HandCoins,
   ShoppingCart,
   Trash2,
@@ -24,6 +25,7 @@ const PAGE_TITLES = {
   payroll: "مسير الرواتب",
   loans: "السلف والقروض",
   purchases: "المشتريات",
+  "branch-projects": "تأسيس الفروع",
   waste: "الهدر",
 };
 
@@ -36,6 +38,7 @@ const NAV_CONFIG = [
   { kind: "row", key: "payroll", href: "/accounting/payroll", icon: Wallet, label: "مسير الرواتب" },
   { kind: "row", key: "loans", href: "/accounting/loans", icon: HandCoins, label: "السلف والقروض" },
   { kind: "row", key: "purchases", href: "/accounting/purchases", icon: ShoppingCart, label: "المشتريات" },
+  { kind: "row", key: "branch-projects", href: "/accounting/branch-projects", icon: Building2, label: "تأسيس الفروع" },
   { kind: "row", key: "waste", href: "/accounting/waste", icon: Trash2, label: "الهدر" },
 ];
 
