@@ -1,6 +1,6 @@
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureLeaseSchema, t as todayRiyadh, f as listPayments, g as loadSetAsideSkips, w as loadReservesByPayment, h as setAsideSchedule, i as round2, R as REQUIRE_LEASE } from './leaseContracts-CF8g7tmp.js';
-import { g as generateSetAsideInvoices, l as loadSetAsideInvoices } from './leaseSetAsideInvoices-BtBZrrpi.js';
+import { g as generateSetAsideInvoices, l as loadSetAsideInvoices, d as reconcileSetAside } from './leaseSetAsideInvoices-DP1GY0lq.js';
 import 'crypto';
 import './sql-CSDV1lSC.js';
 import '@neondatabase/serverless';
@@ -14,7 +14,7 @@ import './accountsTree-RnDnF4VP.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
-import './route-dJGGy3uD.js';
+import './route-B8V9g_I9.js';
 
 // الاستقطاع الشهري: كل دفعة معلّقة تُقسَّم على أشهر تكرارها (ربعي 3،
 // نصفي 6، سنوي 12) في الأشهر السابقة لشهر الاستحقاق؛ كل شهر يُحوَّل
@@ -64,6 +64,12 @@ async function GET(request) {
     const filtered = pending.filter(payment => !payment.setaside_exempt && (!branchId || Number(payment.branch_id) === branchId));
     const ledger = await loadReservesByPayment(filtered.map(payment => payment.id));
     const invoices = await loadSetAsideInvoices(filtered.map(payment => payment.id));
+    // تأكيد بلا فاتورة مسددة أو فاتورة مسددة بلا تأكيد → مطابقة فورية.
+    await reconcileSetAside({
+      ledger,
+      invoices,
+      actor: auth.user
+    });
     const canConfirm = month <= currentMonth;
     const rows = filtered.map(payment => {
       const entries = ledger[Number(payment.id)] || [];
