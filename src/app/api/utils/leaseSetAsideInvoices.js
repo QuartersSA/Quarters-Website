@@ -29,6 +29,106 @@ function lastDayOfMonth(month) {
   return `${y}-${String(m).padStart(2, "0")}-${String(last).padStart(2, "0")}`;
 }
 
+// مشروع تأسيس الفرع المرتبط بالعقد (إن وُجد): حالته وشهر افتتاحه الفعلي
+// والقسم الذي تُنسب إليه فواتير الإيجار (template_key = 'lease' وإلا أول
+// قسم بالترتيب). null إن لم يوجد مشروع أو لم تُنشأ جداوله بعد.
+export async function loadProjectLeaseTarget(projectId) {
+  const id = Number(projectId);
+  if (!Number.isInteger(id) || id <= 0) return null;
+  try {
+    const [row] = await sql`
+      SELECT bp.id, bp.status,
+             TO_CHAR(bp.actual_opening_date, 'YYYYMM') AS opening_month,
+             (
+               SELECT ph.id FROM branch_project_phases ph
+               WHERE ph.project_id = bp.id
+               ORDER BY CASE WHEN ph.template_key IN ('lease', 'contract') THEN 0
+                             WHEN ph.default_account_code = '5301' THEN 1 ELSE 2 END ASC,
+                        ph.sort_order ASC, ph.id ASC
+               LIMIT 1
+             ) AS phase_id
+      FROM branch_projects bp
+      WHERE bp.id = ${id}
+    `;
+    if (!row) return null;
+    return {
+      id: Number(row.id),
+      status: row.status || "planning",
+      opening_month: row.opening_month || null,
+      phase_id: row.phase_id ? Number(row.phase_id) : null,
+    };
+  } catch (error) {
+    console.error("load project lease target failed", error?.message);
+    return null;
+  }
+}
+
+// هل تُحسب فاتورة شهر الاستقطاع ضمن المشروع؟ قبل الافتتاح دائمًا؛ وبعده
+// فقط الأشهر حتى شهر الافتتاح الفعلي.
+export function monthWithinProject(target, month) {
+  if (!target) return false;
+  if (target.status === "cancelled") return false;
+  if (target.status !== "opened") return true;
+  if (!target.opening_month) return true;
+  return String(month).replace("-", "") <= target.opening_month;
+}
+
+// ربط فاتورة الاستقطاع بالمشروع/القسم — لا يفشل التوليد أبدًا بسببه.
+async function linkSetAsideInvoiceToProject(invoiceId, target) {
+  if (!target) return;
+  try {
+    await sql`
+      UPDATE accounting_purchase_invoices
+      SET project_id = ${target.id}, project_phase_id = ${target.phase_id}
+      WHERE id = ${Number(invoiceId)}
+    `;
+  } catch (error) {
+    console.error("set-aside invoice project link failed", invoiceId, error?.message);
+  }
+}
+
+// تغيّر مشروع العقد: تُعاد نسبة فواتير استقطاعه الموجودة (ربط أو فك ربط)
+// حتى لا تبقى فواتير سابقة منسوبة لمشروع قديم أو بلا مشروع.
+export async function reconcileLeaseInvoicesProject(contractId, projectId) {
+  const cid = Number(contractId);
+  if (!Number.isInteger(cid) || cid <= 0) return 0;
+  try {
+    const linked = await ensureLeaseInvoiceLinkColumns();
+    if (!linked) return 0;
+    const [reg] = await sql`SELECT to_regclass('branch_projects') AS t`;
+    if (!reg?.t) return 0;
+    const target = projectId ? await loadProjectLeaseTarget(projectId) : null;
+    if (!target) {
+      const rows = await sql`
+        UPDATE accounting_purchase_invoices
+        SET project_id = NULL, project_phase_id = NULL
+        WHERE lease_contract_id = ${cid} AND project_id IS NOT NULL
+        RETURNING id
+      `;
+      return rows.length;
+    }
+    const rows = await sql`
+      SELECT id, lease_month FROM accounting_purchase_invoices
+      WHERE lease_contract_id = ${cid} AND is_active = TRUE
+    `;
+    let changed = 0;
+    for (const row of rows) {
+      const inside = monthWithinProject(target, row.lease_month || "");
+      await sql`
+        UPDATE accounting_purchase_invoices
+        SET project_id = ${inside ? target.id : null},
+            project_phase_id = ${inside ? target.phase_id : null}
+        WHERE id = ${Number(row.id)}
+      `;
+      changed += 1;
+    }
+    return changed;
+  } catch (error) {
+    console.error("reconcile lease invoices project failed", error?.message);
+    return 0;
+  }
+}
+
 // فواتير الاستقطاع النشطة لمجموعة دفعات: { [payment_id]: { [month]: inv } }.
 export async function loadSetAsideInvoices(paymentIds) {
   const ids = [...new Set((paymentIds || []).map(Number).filter((n) => Number.isInteger(n) && n > 0))];
@@ -78,6 +178,8 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null,
   const existing = await loadSetAsideInvoices(pending.map((p) => p.id));
   const skips = only ? new Set() : await loadSetAsideSkips(pending.map((p) => p.id));
   const accountCache = new Map();
+  // مشروع التأسيس لكل عقد (يُحمَّل مرة واحدة لكل مشروع).
+  const projectCache = new Map();
   let created = 0;
   let skipped = 0;
   // أسباب فشل الإنشاء تُعاد للواجهة بدل ابتلاعها في السجل فقط.
@@ -193,6 +295,15 @@ export async function generateSetAsideInvoices({ upToMonth = null, actor = null,
           WHERE id = ${Number(result.invoice.id)}
         `;
         created += 1;
+        // عقد مرتبط بمشروع تأسيس: إيجار ما قبل الافتتاح يُحسب ضمن المشروع.
+        if (payment.project_id) {
+          const key = Number(payment.project_id);
+          if (!projectCache.has(key)) projectCache.set(key, await loadProjectLeaseTarget(key));
+          const target = projectCache.get(key);
+          if (monthWithinProject(target, item.month)) {
+            await linkSetAsideInvoiceToProject(result.invoice.id, target);
+          }
+        }
         // شهر مؤكَّد تحويله مسبقًا (أُنشئت فاتورته لاحقًا) → تصبح مسددة فورًا.
         const [confirmedRow] = await sql`
           SELECT amount FROM accounting_lease_reserves

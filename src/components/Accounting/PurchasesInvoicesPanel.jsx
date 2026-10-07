@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import {
   AlertTriangle,
   Banknote,
+  Building2,
   CalendarDays,
   Check,
   CheckCircle2,
@@ -57,6 +58,7 @@ import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingBeneficiaries } from "@/hooks/useAccountingBeneficiaries";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
+import { useBranchProjects } from "@/hooks/useBranchProjects";
 import { useQuery } from "@tanstack/react-query";
 import { authedFetch } from "@/utils/apiAuth";
 import { queryKeys } from "@/utils/queryKeys";
@@ -125,6 +127,26 @@ function LeaseBadge({ invoice, detailed = false }) {
       {detailed
         ? `استقطاع إيجار${invoice.lease_month ? ` ${invoice.lease_month}` : ""} · ${invoice.lease_display_name ? `${invoice.lease_display_name} · ` : ""}عقد رقم ${number}`
         : invoice.lease_display_name || `عقد ${number}`}
+    </a>
+  );
+}
+
+// شارة مشروع تأسيس فرع: الفاتورة محسوبة ضمن تكاليف المشروع — الضغط
+// يفتح تبويب مصاريف المشروع.
+function ProjectBadge({ invoice }) {
+  if (!invoice?.project_id) return null;
+  const code = invoice.project_code || `#${invoice.project_id}`;
+  const href = `/accounting/branch-projects/${invoice.project_id}?tab=expenses`;
+  return (
+    <a
+      href={href}
+      onClick={(event) => event.stopPropagation()}
+      className="inline-flex items-center gap-1 rounded-full border border-violet-200 dark:border-violet-400/25 bg-violet-50 dark:bg-violet-400/10 text-violet-800 dark:text-violet-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap hover:bg-violet-100 dark:hover:bg-violet-400/20"
+      title={`مشروع تأسيس ${invoice.project_name || code}${invoice.project_phase_name ? ` — قسم ${invoice.project_phase_name}` : ""} — اضغط لفتح مصاريف المشروع`}
+      dir="rtl"
+    >
+      <Building2 className="w-3 h-3" />
+      {`مشروع ${code}${invoice.project_phase_name ? ` · ${invoice.project_phase_name}` : ""}`}
     </a>
   );
 }
@@ -975,6 +997,8 @@ export default function PurchasesInvoicesPanel({
   const [status, setStatus] = useState(initialStatus);
   const [accountFilter, setAccountFilter] = useState("");
   const [branchFilter, setBranchFilter] = useState("");
+  // فلتر مشروع التأسيس: "" الكل، "none" بلا مشروع، أو معرّف مشروع.
+  const [projectFilter, setProjectFilter] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   // لا فواتير موقوفة (كل حذف نهائي) — تبقى القيمة ثابتة للتوافق مع الهوك.
@@ -1018,14 +1042,14 @@ export default function PurchasesInvoicesPanel({
   };
 
   const hasActiveFilters =
-    !!q || !!status || !!accountFilter || !!branchFilter || !!dateFrom || !!dateTo;
+    !!q || !!status || !!accountFilter || !!branchFilter || !!projectFilter || !!dateFrom || !!dateTo;
 
   const saveCurrentFilter = () => {
     const name = window.prompt("اسم الفلتر المحفوظ:");
     if (!name || !name.trim()) return;
     const next = [
       ...savedFilters.filter((f) => f.name !== name.trim()),
-      { name: name.trim(), q, status, accountFilter, branchFilter, dateFrom, dateTo },
+      { name: name.trim(), q, status, accountFilter, branchFilter, projectFilter, dateFrom, dateTo },
     ];
     persistSavedFilters(next);
   };
@@ -1035,6 +1059,7 @@ export default function PurchasesInvoicesPanel({
     setStatus(filter.status || "");
     setAccountFilter(filter.accountFilter || "");
     setBranchFilter(filter.branchFilter || "");
+    setProjectFilter(filter.projectFilter || "");
     setDateFrom(filter.dateFrom || "");
     setDateTo(filter.dateTo || "");
   };
@@ -1082,12 +1107,16 @@ export default function PurchasesInvoicesPanel({
     },
   });
 
+  // مشاريع تأسيس الفروع — لحقلي المشروع/القسم في النافذة ولفلتر المشروع.
+  const projectsQuery = useBranchProjects({ employeeId, isAdmin });
+
   const invoices = invoicesQuery.data || [];
   const contacts = contactsQuery.data || [];
   const accounts = accountsQuery.data || [];
   const bankAccounts = bankAccountsQuery.data || [];
   const beneficiaries = beneficiariesQuery.data || [];
   const branches = branchesQuery.data || [];
+  const projects = projectsQuery.data || [];
 
   // الخط الزمني للفاتورة المعروضة في الدرج — من سجل التدقيق.
   const previewLogQuery = useQuery({
@@ -1222,6 +1251,13 @@ export default function PurchasesInvoicesPanel({
         (invoice) => String(invoice.branch_id || "") === branchFilter,
       );
     }
+    if (projectFilter === "none") {
+      list = list.filter((invoice) => !invoice.project_id);
+    } else if (projectFilter) {
+      list = list.filter(
+        (invoice) => String(invoice.project_id || "") === projectFilter,
+      );
+    }
     if (dateFrom) {
       list = list.filter(
         (invoice) => (invoice.invoice_date || "") >= dateFrom,
@@ -1231,7 +1267,7 @@ export default function PurchasesInvoicesPanel({
       list = list.filter((invoice) => (invoice.invoice_date || "") <= dateTo);
     }
     return list;
-  }, [invoices, status, accountFilter, branchFilter, dateFrom, dateTo]);
+  }, [invoices, status, accountFilter, branchFilter, projectFilter, dateFrom, dateTo]);
 
   // اختصارات لوحة المفاتيح (حسب المستند): N فاتورة جديدة، / بحث،
   // ↑↓ تنقل بين الصفوف، Enter معاينة، Esc يغلق المعاينة.
@@ -1493,6 +1529,25 @@ export default function PurchasesInvoicesPanel({
                 ]}
                 placeholder="كل الفروع"
                 buttonClassName="text-sm py-2 px-3"
+              />
+            </div>
+          ) : null}
+          {projects.length > 0 ? (
+            <div className="w-44 shrink-0">
+              <GlassSelect
+                value={projectFilter}
+                onChange={setProjectFilter}
+                options={[
+                  { value: "", label: "كل المشاريع" },
+                  { value: "none", label: "بلا مشروع" },
+                  ...projects.map((project) => ({
+                    value: String(project.id),
+                    label: `${project.code ? `${project.code} · ` : ""}${project.name}`,
+                  })),
+                ]}
+                placeholder="المشروع"
+                buttonClassName="text-sm py-2 px-3"
+                menuWidth={260}
               />
             </div>
           ) : null}
@@ -1770,6 +1825,7 @@ export default function PurchasesInvoicesPanel({
                           <span>{invoice.invoice_number}</span>
                           <CoffeeBadge invoice={invoice} />
                           <LeaseBadge invoice={invoice} />
+                          <ProjectBadge invoice={invoice} />
                           {invoice.attachment_url ? (
                             <a
                               href={invoice.attachment_url}
@@ -1953,6 +2009,7 @@ export default function PurchasesInvoicesPanel({
         bankAccounts={bankAccounts}
         branches={branches}
         contactStats={contactStats}
+        projects={projects}
         isSubmitting={createMut.isPending || updateMut.isPending}
         onClose={() => {
           setShowAdd(false);
@@ -2088,9 +2145,10 @@ export default function PurchasesInvoicesPanel({
                     <div className="font-bold text-slate-900 dark:text-white font-mono" dir="ltr">
                       {drawerRow.invoice_number}
                     </div>
-                    {drawerRow.lease_contract_id ? (
-                      <div className="mt-1">
+                    {drawerRow.lease_contract_id || drawerRow.project_id ? (
+                      <div className="mt-1 flex items-center gap-1.5 flex-wrap">
                         <LeaseBadge invoice={drawerRow} detailed />
+                        <ProjectBadge invoice={drawerRow} />
                       </div>
                     ) : null}
                     {drawerRow.contact_id ? (

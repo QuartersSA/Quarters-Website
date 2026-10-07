@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
+import { reconcileLeaseInvoicesProject } from "@/app/api/utils/leaseSetAsideInvoices";
 import {
   REQUIRE_LEASE,
   ensureLeaseSchema,
@@ -60,7 +61,7 @@ export async function PUT(request, { params } = {}) {
     }
     const body = await request.json().catch(() => ({}));
     const [existing] = await sql`
-      SELECT id, contract_number, lessor_name, updated_at, is_active, contract_type
+      SELECT id, contract_number, lessor_name, updated_at, is_active, contract_type, project_id
       FROM accounting_lease_contracts WHERE id = ${id}
     `;
     if (!existing) {
@@ -146,6 +147,8 @@ export async function PUT(request, { params } = {}) {
           lessor_vat_number = ${value.lessor_vat_number},
           location = ${value.location},
           branch_id = ${value.branch_id},
+          -- مشروع التأسيس يُكتب فقط إن أرسلته الحمولة.
+          project_id = CASE WHEN ${value.project_id !== undefined} THEN ${value.project_id ?? null} ELSE project_id END,
           start_date = ${value.start_date},
           end_date = ${value.end_date},
           notice_period_days = ${value.notice_period_days},
@@ -178,6 +181,11 @@ export async function PUT(request, { params } = {}) {
         );
       }
       summary += ` — أُعيد توليد الجدول (${result.inserted} دفعة جديدة، الإجمالي ${result.total_value.toFixed(2)} SAR)`;
+    }
+
+    if (value.project_id !== undefined && (value.project_id ?? null) !== (existing.project_id ?? null)) {
+      const moved = await reconcileLeaseInvoicesProject(id, value.project_id ?? null);
+      if (moved > 0) warnings.push(`أُعيدت نسبة ${moved} فاتورة استقطاع إلى مشروع التأسيس الجديد`);
     }
 
     const prevType = existing.contract_type || "branch";

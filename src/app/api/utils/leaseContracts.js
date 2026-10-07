@@ -211,6 +211,11 @@ async function doEnsureLeaseSchema() {
     ALTER TABLE accounting_lease_contracts
       ADD COLUMN IF NOT EXISTS amount_includes_vat BOOLEAN NOT NULL DEFAULT FALSE
   `;
+  // مشروع تأسيس الفرع المرتبط (إيجار ما قبل الافتتاح يُحسب ضمن المشروع).
+  await sql`
+    ALTER TABLE accounting_lease_contracts
+      ADD COLUMN IF NOT EXISTS project_id INTEGER
+  `;
   await ensureLeaseInvoiceLinkColumns();
 }
 
@@ -473,7 +478,7 @@ export function computeContractFields(row, today = todayRiyadh()) {
 // $1 = تاريخ اليوم بالرياض.
 const CONTRACT_SELECT = `
   SELECT c.id, c.contract_number, c.display_name, c.contract_type, c.is_renewal, c.lessor_name, c.lessor_contact_id, c.lessor_vat_number,
-         c.location, c.branch_id, b.name AS branch_name,
+         c.location, c.branch_id, b.name AS branch_name, c.project_id,
          TO_CHAR(c.start_date, 'YYYY-MM-DD') AS start_date,
          TO_CHAR(c.end_date, 'YYYY-MM-DD') AS end_date,
          c.notice_period_days, c.notice_period_text,
@@ -648,7 +653,7 @@ export async function listPayments({
              SELECT SUM(r.amount) FROM accounting_lease_reserves r WHERE r.payment_id = w.id
            ), 0) AS reserved_total,
            c.contract_number, c.display_name, c.contract_type, c.is_renewal, c.payment_frequency, c.lessor_name, c.lessor_contact_id, c.location,
-           c.branch_id, b.name AS branch_name,
+           c.branch_id, b.name AS branch_name, c.project_id,
            c.status AS contract_stored_status,
            TO_CHAR(c.start_date, 'YYYY-MM-DD') AS contract_start_date,
            TO_CHAR(c.end_date, 'YYYY-MM-DD') AS contract_end_date,
@@ -1015,6 +1020,8 @@ export function parseContractInput(body = {}, { requireSchedule = true } = {}) {
       lessor_vat_number: textOrNull(body.lessor_vat_number, 40),
       location: textOrNull(body.location, 300),
       branch_id: parseIntOrNull(body.branch_id),
+      // مشروع تأسيس فرع (اختياري). غياب المفتاح = أبقِ المخزَّن عند التعديل.
+      project_id: body.project_id === undefined ? undefined : parseIntOrNull(body.project_id),
       start_date: startDate,
       end_date: endDate,
       notice_period_days: noticeDays,

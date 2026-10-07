@@ -79,7 +79,7 @@ export async function POST(request) {
     const [created] = await sql`
       INSERT INTO accounting_lease_contracts (
         contract_number, display_name, contract_type, is_renewal, lessor_name, lessor_contact_id, lessor_vat_number,
-        location, branch_id, start_date, end_date,
+        location, branch_id, project_id, start_date, end_date,
         notice_period_days, notice_period_text,
         payment_frequency, installment_amount, vat_rate, amount_includes_vat,
         fixed_charges, fixed_amount, first_due_date,
@@ -88,7 +88,7 @@ export async function POST(request) {
       )
       VALUES (
         ${value.contract_number}, ${value.display_name}, ${value.contract_type}, ${value.is_renewal}, ${value.lessor_name}, ${value.lessor_contact_id}, ${value.lessor_vat_number},
-        ${value.location}, ${value.branch_id}, ${value.start_date}, ${value.end_date},
+        ${value.location}, ${value.branch_id}, ${value.project_id ?? null}, ${value.start_date}, ${value.end_date},
         ${value.notice_period_days}, ${value.notice_period_text},
         ${value.payment_frequency}, ${value.installment_amount}, ${value.vat_rate}, ${value.amount_includes_vat},
         ${JSON.stringify(value.fixed_charges || [])}::jsonb, ${value.fixed_amount || 0}, ${value.first_due_date},

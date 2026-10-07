@@ -1,16 +1,21 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import {
   AlertTriangle,
+  Check,
   Download,
   FileSpreadsheet,
   FileText,
+  Link2,
+  Loader2,
   Pencil,
   PieChart as PieIcon,
   Plus,
   Receipt,
+  ScrollText,
   Search,
   Table2,
   Trash2,
@@ -18,10 +23,27 @@ import {
 } from "lucide-react";
 import { ws } from "@/components/Workspace/uiPurchases";
 import GlassSelect from "@/components/Workspace/GlassSelect";
+import PurchaseInvoiceModal from "@/components/Accounting/PurchaseInvoiceModal";
 import useAdminTheme from "@/hooks/useAdminTheme";
-import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
-import { useDeleteBranchProjectInvoice } from "@/hooks/useBranchProjects";
+import useWorkspaceUser from "@/hooks/useWorkspaceUser";
+import { useAccountingContacts } from "@/hooks/useAccountingContacts";
+import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
+import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
 import {
+  useAccountingPurchaseInvoices,
+  useCreateAccountingPurchaseInvoice,
+} from "@/hooks/useAccountingPurchaseInvoices";
+import {
+  invalidateBranchProjectQueries,
+  useBranchProjects,
+  useDeleteBranchProjectInvoice,
+  useSaveBranchProjectInvoice,
+} from "@/hooks/useBranchProjects";
+import { authedFetch } from "@/utils/apiAuth";
+import { queryKeys } from "@/utils/queryKeys";
+import { exportToExcelHTML, exportToPDF } from "@/utils/exportUtils";
+import {
+  DEFAULT_PHASE_TEMPLATE,
   ESTABLISHMENT_ACCOUNTS,
   INVOICE_STATUS_LABELS,
   invoiceStatus,
@@ -29,10 +51,15 @@ import {
   projectBudget,
   todayRiyadh,
 } from "@/utils/branchProjectMath";
-import { EmptyState, ProgressBar, SectionCard, SummaryCard, formatDate, formatMoney, moneyValue } from "./shared";
+import { EmptyState, ModalShell, ProgressBar, SectionCard, SummaryCard, formatDate, formatMoney, moneyValue } from "./shared";
 import ExpenseModal from "./ExpenseModal";
 
 // تبويب المصروفات: ملخص الميزانية، جدول قسم/فعلي، رسم دائري، فواتير.
+// الفواتير فواتير مشتريات حقيقية مرتبطة بالمشروع (project_id/project_phase_id):
+// «+ فاتورة» يفتح نافذة فاتورة المشتريات بتعبئة مسبقة، «ربط فاتورة موجودة»
+// يربط فاتورة غير مرتبطة، التعديل هنا = القسم والحساب فقط، والحذف نهائي.
+
+const DEFAULT_ACCOUNT = "5399";
 
 const PIE_COLORS = [
   "#0e7a5f",
@@ -66,9 +93,37 @@ function InvoiceStatusPill({ status }) {
   );
 }
 
-function accountName(code) {
+// شارة فاتورة استقطاع إيجار (مصدرها العقد — لا تُحذف من هنا).
+function LeaseChip({ invoice }) {
+  if (invoice?.source !== "lease") return null;
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full border border-sky-200 dark:border-sky-400/25 bg-sky-50 dark:bg-sky-400/10 text-sky-800 dark:text-sky-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap"
+      title={`استقطاع إيجار${invoice.lease_month ? ` لشهر ${invoice.lease_month}` : ""} — يُدار من العقد`}
+    >
+      <ScrollText className="w-3 h-3" />
+      إيجار
+    </span>
+  );
+}
+
+function accountName(code, fallback) {
   const found = (ESTABLISHMENT_ACCOUNTS || []).find((a) => String(a.code) === String(code));
-  return found?.name || code || "—";
+  return found?.name || fallback || code || "—";
+}
+
+// الحساب الافتراضي للقسم: من القسم نفسه، وإلا من القالب إن طابق الاسم/اللون.
+function inferAccountForPhase(project, phaseId) {
+  if (!phaseId) return DEFAULT_ACCOUNT;
+  const phase = (project?.phases || []).find((p) => String(p?.id) === String(phaseId));
+  if (!phase) return DEFAULT_ACCOUNT;
+  if (phase.default_account_code) return String(phase.default_account_code);
+  const template = Array.isArray(DEFAULT_PHASE_TEMPLATE) ? DEFAULT_PHASE_TEMPLATE : [];
+  const match = template.find((t) => t?.name && phase.name && String(t.name).trim() === String(phase.name).trim());
+  if (match?.default_account_code) return String(match.default_account_code);
+  const byColor = template.find((t) => t?.color && phase.color && t.color === phase.color);
+  if (byColor?.default_account_code) return String(byColor.default_account_code);
+  return DEFAULT_ACCOUNT;
 }
 
 function PieTooltip({ active, payload, isDark, total }) {
@@ -97,12 +152,203 @@ function PieTooltip({ active, payload, isDark, total }) {
   );
 }
 
+// نافذة «ربط فاتورة موجودة»: فواتير المشتريات غير المرتبطة بأي مشروع،
+// بحث بالرقم/المورد، اختيار قسم، ثم POST {invoice_id, phase_id}.
+function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, isAdmin, onClose }) {
+  const queryClient = useQueryClient();
+  const saveMut = useSaveBranchProjectInvoice();
+  const [search, setSearch] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [phaseId, setPhaseId] = useState("");
+
+  React.useEffect(() => {
+    if (!open) return;
+    setSearch("");
+    setSelectedId(null);
+    setPhaseId(defaultPhaseId != null ? String(defaultPhaseId) : "");
+  }, [open, defaultPhaseId]);
+
+  // تُحمَّل فقط عند فتح النافذة (القائمة ثقيلة: بنود ودفعات ومرفقات).
+  const invoicesQuery = useAccountingPurchaseInvoices({
+    employeeId: open ? employeeId : null,
+    isAdmin: !!isAdmin,
+  });
+
+  const candidates = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return (invoicesQuery.data || [])
+      .filter((inv) => !inv.project_id && inv.is_active !== false)
+      .filter((inv) => {
+        if (!q) return true;
+        const hay = `${inv.invoice_number || ""} ${inv.supplier_name || ""} ${inv.contact_name || ""}`.toLowerCase();
+        return hay.includes(q);
+      })
+      .slice(0, 60);
+  }, [invoicesQuery.data, search]);
+
+  const phaseOptions = useMemo(
+    () => [{ value: "", label: "بلا قسم" }, ...phases.map((p) => ({ value: String(p.id), label: p.name }))],
+    [phases],
+  );
+
+  const selected = candidates.find((inv) => inv.id === selectedId) || null;
+
+  function handleConfirm() {
+    if (!project?.id || !selected || saveMut.isPending) return;
+    saveMut.mutate(
+      { project_id: project.id, invoice_id: selected.id, phase_id: phaseId ? Number(phaseId) : null },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: queryKeys.accountingPurchaseInvoices() });
+          onClose?.();
+        },
+      },
+    );
+  }
+
+  return (
+    <ModalShell
+      open={open}
+      title="ربط فاتورة موجودة"
+      description="فواتير المشتريات غير المرتبطة بأي مشروع تأسيس"
+      onClose={onClose}
+      footer={
+        <>
+          <button type="button" onClick={onClose} className={`${ws.btnNeutral} px-4 py-2 text-sm`}>
+            إلغاء
+          </button>
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={!selected || saveMut.isPending}
+            className={`${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`}
+          >
+            {saveMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4" />}
+            ربط بالمشروع
+          </button>
+        </>
+      }
+    >
+      <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="relative">
+            <Search className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/35" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={`${ws.input} pr-9 pl-3 py-2 text-sm`}
+              placeholder="بحث برقم الفاتورة أو المورد…"
+              autoFocus
+            />
+          </div>
+          <div>
+            <GlassSelect value={phaseId} onChange={setPhaseId} options={phaseOptions} placeholder="القسم" buttonClassName="text-sm py-2 px-3" />
+          </div>
+        </div>
+
+        {invoicesQuery.isLoading ? (
+          <div className="flex items-center justify-center gap-2 py-8 text-sm text-slate-500 dark:text-white/50">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            جاري تحميل الفواتير…
+          </div>
+        ) : invoicesQuery.isError ? (
+          <div className="text-sm text-rose-700 dark:text-rose-200 py-6 text-center">
+            {invoicesQuery.error?.message || "فشل تحميل فواتير المشتريات"}
+          </div>
+        ) : candidates.length === 0 ? (
+          <div className="text-sm text-slate-500 dark:text-white/45 py-8 text-center">
+            {search ? "لا فواتير مطابقة." : "لا فواتير غير مرتبطة."}
+          </div>
+        ) : (
+          <ul className={`divide-y ${ws.divider} max-h-[50svh] overflow-y-auto -mx-1 px-1`}>
+            {candidates.map((inv) => {
+              const active = inv.id === selectedId;
+              return (
+                <li key={inv.id}>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedId(inv.id)}
+                    className={`w-full text-right px-3 py-2.5 flex items-center gap-3 rounded-lg transition-colors ${
+                      active ? "bg-[#e7f2ee] dark:bg-emerald-400/15" : "hover:bg-slate-50 dark:hover:bg-white/5"
+                    }`}
+                  >
+                    <span
+                      className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
+                        active
+                          ? "bg-[#0e7a5f] border-[#0e7a5f] text-white"
+                          : "border-slate-300 dark:border-white/25 text-transparent"
+                      }`}
+                    >
+                      <Check className="w-3 h-3" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-mono text-sm text-slate-900 dark:text-white" dir="ltr">
+                        {inv.invoice_number}
+                      </span>
+                      <span className="block text-xs text-slate-600 dark:text-white/60 truncate">
+                        {inv.supplier_name || inv.contact_name || "—"} · {formatDate(inv.invoice_date)}
+                        {inv.lease_contract_id ? " · استقطاع إيجار" : ""}
+                      </span>
+                    </span>
+                    <span className="tabular-nums font-semibold text-sm text-slate-900 dark:text-white shrink-0" dir="ltr">
+                      {formatMoney(inv.total_amount, false)}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {selected ? (
+          <div className="text-[11px] text-slate-500 dark:text-white/45">
+            ستُحسب الفاتورة «{selected.invoice_number}» ضمن تكاليف تأسيس {project?.name || "المشروع"}
+            {phaseId ? ` — قسم ${phases.find((p) => String(p.id) === phaseId)?.name || ""}` : " بلا قسم"}.
+          </div>
+        ) : null}
+      </div>
+    </ModalShell>
+  );
+}
+
 export default function ExpensesTab({ project }) {
   const { isDark } = useAdminTheme();
+  const queryClient = useQueryClient();
+  const { employeeId, user } = useWorkspaceUser();
+  const isAdmin = user?.role === "Admin";
   const today = useMemo(() => todayRiyadh(), []);
   const deleteMut = useDeleteBranchProjectInvoice();
+  const createMut = useCreateAccountingPurchaseInvoice();
 
-  const [modal, setModal] = useState({ open: false, invoice: null });
+  // بيانات نافذة فاتورة المشتريات (نفس هوكس قائمة الفواتير).
+  const contactsQuery = useAccountingContacts({ employeeId, isAdmin });
+  const accountsQuery = useAccountingAccounts({ employeeId, isAdmin });
+  const bankAccountsQuery = useAccountingBankAccounts({ employeeId, isAdmin });
+  const projectsQuery = useBranchProjects({ employeeId, isAdmin });
+  const branchesQuery = useQuery({
+    queryKey: queryKeys.branches(),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const response = await authedFetch("/api/branches");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل الفروع");
+      return Array.isArray(data?.branches) ? data.branches : [];
+    },
+  });
+  const contacts = contactsQuery.data || [];
+  const accounts = accountsQuery.data || [];
+  const bankAccounts = bankAccountsQuery.data || [];
+  const branches = branchesQuery.data || [];
+  // المشروع الحالي دائماً ضمن القائمة حتى لو لم تُحمَّل بعد.
+  const projects = useMemo(() => {
+    const list = Array.isArray(projectsQuery.data) ? projectsQuery.data : [];
+    if (project?.id && !list.some((p) => Number(p?.id) === Number(project.id))) return [project, ...list];
+    return list;
+  }, [projectsQuery.data, project]);
+
+  const [invoiceModalOpen, setInvoiceModalOpen] = useState(false);
+  const [editInvoice, setEditInvoice] = useState(null);
+  const [linkOpen, setLinkOpen] = useState(false);
   const [phaseFilter, setPhaseFilter] = useState("all");
   const [accountFilter, setAccountFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -138,12 +384,14 @@ export default function ExpensesTab({ project }) {
 
   const pieData = useMemo(() => {
     const map = new Map();
+    const names = new Map();
     for (const inv of invoices) {
-      const code = String(inv.expense_account_code || "5399");
+      const code = String(inv.expense_account_code || DEFAULT_ACCOUNT);
       map.set(code, (map.get(code) || 0) + moneyValue(inv.total_amount));
+      if (inv.expense_account_name && !names.has(code)) names.set(code, inv.expense_account_name);
     }
     return [...map.entries()]
-      .map(([code, value], i) => ({ code, name: accountName(code), value, fill: PIE_COLORS[i % PIE_COLORS.length] }))
+      .map(([code, value]) => ({ code, name: accountName(code, names.get(code)), value }))
       .filter((d) => d.value > 0)
       .sort((a, b) => b.value - a.value)
       .map((d, i) => ({ ...d, fill: PIE_COLORS[i % PIE_COLORS.length] }));
@@ -185,7 +433,8 @@ export default function ExpensesTab({ project }) {
       { header: "الاستحقاق", accessor: (r) => formatDate(r.due_date) },
       { header: "المورد", accessor: (r) => r.supplier_name || "" },
       { header: "القسم", accessor: (r) => phaseName(r.phase_id) },
-      { header: "الحساب", accessor: (r) => `${r.expense_account_code || ""} ${accountName(r.expense_account_code)}` },
+      { header: "الحساب", accessor: (r) => `${r.expense_account_code || ""} ${accountName(r.expense_account_code, r.expense_account_name)}` },
+      { header: "المصدر", accessor: (r) => (r.source === "lease" ? "إيجار" : "مشتريات") },
       { header: "الإجمالي", accessor: (r) => formatMoney(r.total_amount, false) },
       { header: "المسدد", accessor: (r) => formatMoney(r.paid_amount, false) },
       { header: "المتبقي", accessor: (r) => formatMoney(moneyValue(r.total_amount) - moneyValue(r.paid_amount), false) },
@@ -198,10 +447,41 @@ export default function ExpensesTab({ project }) {
   const exportTitle = `مصروفات تأسيس — ${project?.name || ""}`;
   const exportFile = `branch-project-${project?.code || project?.id || "expenses"}`;
 
+  // القسم المختار في الفلتر يصير القسم الافتراضي للفاتورة الجديدة/المربوطة.
+  const defaultPhaseId = phaseFilter !== "all" && phaseFilter !== "none" ? Number(phaseFilter) : null;
+  const prefill = useMemo(
+    () => ({
+      project_id: project?.id ?? null,
+      project_phase_id: defaultPhaseId,
+      expense_account_code: defaultPhaseId ? inferAccountForPhase(project, defaultPhaseId) : null,
+    }),
+    [project, defaultPhaseId],
+  );
+
+  function handleCreate(payload) {
+    if (!project?.id || createMut.isPending) return;
+    createMut.mutate(
+      {
+        ...payload,
+        project_id: payload.project_id ?? project.id,
+        project_phase_id: payload.project_id ? (payload.project_phase_id ?? null) : null,
+      },
+      {
+        onSuccess: async () => {
+          setInvoiceModalOpen(false);
+          await invalidateBranchProjectQueries(queryClient, project.id);
+        },
+      },
+    );
+  }
+
   function handleDelete(inv) {
-    if (!project?.id) return;
-    if (!window.confirm(`حذف الفاتورة «${inv.invoice_number}»؟`)) return;
-    deleteMut.mutate({ project_id: project.id, id: inv.id });
+    if (!project?.id || inv.source === "lease") return;
+    if (!window.confirm(`حذف الفاتورة «${inv.invoice_number}» نهائياً من فواتير المشتريات؟`)) return;
+    deleteMut.mutate(
+      { project_id: project.id, id: inv.id },
+      { onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.accountingPurchaseInvoices() }) },
+    );
   }
 
   const statCards = [
@@ -327,17 +607,17 @@ export default function ExpensesTab({ project }) {
               <FileText className="w-3.5 h-3.5" />
               PDF
             </button>
-            <button type="button" onClick={() => setModal({ open: true, invoice: null })} className={`${ws.btnPrimary} px-3 py-1.5 text-xs`}>
+            <button type="button" onClick={() => setLinkOpen(true)} className={`${ws.btnNeutral} px-2.5 py-1.5 text-xs`} title="ربط فاتورة مشتريات موجودة بهذا المشروع">
+              <Link2 className="w-3.5 h-3.5" />
+              ربط فاتورة موجودة
+            </button>
+            <button type="button" onClick={() => setInvoiceModalOpen(true)} className={`${ws.btnPrimary} px-3 py-1.5 text-xs`}>
               <Plus className="w-3.5 h-3.5" />
               فاتورة
             </button>
           </div>
         }
       >
-        <div className="text-[11px] text-slate-500 dark:text-white/45 mb-3">
-          مؤقتاً تُسجَّل الفواتير هنا؛ عند ربط الخلفية تُنشأ من فواتير المشتريات مباشرة.
-        </div>
-
         {/* الفلاتر */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
           <div className="relative">
@@ -367,7 +647,7 @@ export default function ExpensesTab({ project }) {
           <EmptyState
             icon={Receipt}
             title={invoices.length === 0 ? "لا فواتير بعد" : "لا نتائج مطابقة"}
-            hint={invoices.length === 0 ? "سجّل أول فاتورة مصروف تأسيس لهذا المشروع." : "عدّل الفلاتر أو البحث."}
+            hint={invoices.length === 0 ? "أنشئ فاتورة مشتريات لهذا المشروع أو اربط فاتورة موجودة." : "عدّل الفلاتر أو البحث."}
           />
         ) : (
           <>
@@ -390,25 +670,32 @@ export default function ExpensesTab({ project }) {
                 <tbody>
                   {filtered.map((inv) => (
                     <tr key={inv.id} className={`border-t ${ws.divider}`}>
-                      <td className="py-2 font-mono text-slate-900 dark:text-white" dir="ltr">{inv.invoice_number}</td>
+                      <td className="py-2 text-slate-900 dark:text-white">
+                        <span className="inline-flex items-center gap-1.5" dir="ltr">
+                          <span className="font-mono">{inv.invoice_number}</span>
+                          <LeaseChip invoice={inv} />
+                        </span>
+                      </td>
                       <td className="py-2 tabular-nums text-slate-700 dark:text-white/80" dir="ltr">{formatDate(inv.invoice_date)}</td>
                       <td className="py-2 text-slate-900 dark:text-white">{inv.supplier_name}</td>
                       <td className="py-2 text-slate-700 dark:text-white/80">{phaseName(inv.phase_id)}</td>
                       <td className="py-2 text-slate-700 dark:text-white/80">
                         <span className="font-mono text-slate-400 dark:text-white/35 ml-1" dir="ltr">{inv.expense_account_code}</span>
-                        {accountName(inv.expense_account_code)}
+                        {accountName(inv.expense_account_code, inv.expense_account_name)}
                       </td>
                       <td className="py-2 text-left tabular-nums text-slate-900 dark:text-white font-semibold" dir="ltr">{formatMoney(inv.total_amount, false)}</td>
                       <td className="py-2 text-left tabular-nums text-[#0e7a5f] dark:text-emerald-200" dir="ltr">{formatMoney(inv.paid_amount, false)}</td>
                       <td className="py-2"><InvoiceStatusPill status={inv._status} /></td>
                       <td className="py-2">
                         <div className="flex items-center gap-1 justify-end">
-                          <button type="button" onClick={() => setModal({ open: true, invoice: inv })} className={`${ws.iconButton} w-8 h-8`} title="تعديل">
+                          <button type="button" onClick={() => setEditInvoice(inv)} className={`${ws.iconButton} w-8 h-8`} title="القسم والحساب">
                             <Pencil className="w-3.5 h-3.5" />
                           </button>
-                          <button type="button" onClick={() => handleDelete(inv)} className={`${ws.iconButton} w-8 h-8 text-rose-600 dark:text-rose-300`} title="حذف">
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                          {inv.source !== "lease" ? (
+                            <button type="button" onClick={() => handleDelete(inv)} className={`${ws.iconButton} w-8 h-8 text-rose-600 dark:text-rose-300`} title="حذف نهائي من فواتير المشتريات">
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          ) : null}
                         </div>
                       </td>
                     </tr>
@@ -423,7 +710,10 @@ export default function ExpensesTab({ project }) {
                 <div key={inv.id} className={`${ws.innerCard} p-3 space-y-2`}>
                   <div className="flex items-start gap-2">
                     <div className="min-w-0 flex-1">
-                      <div className="font-mono text-sm text-slate-900 dark:text-white" dir="ltr">{inv.invoice_number}</div>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-mono text-sm text-slate-900 dark:text-white" dir="ltr">{inv.invoice_number}</span>
+                        <LeaseChip invoice={inv} />
+                      </div>
                       <div className="text-xs text-slate-700 dark:text-white/80">{inv.supplier_name}</div>
                     </div>
                     <InvoiceStatusPill status={inv._status} />
@@ -434,21 +724,23 @@ export default function ExpensesTab({ project }) {
                     <div className="text-slate-500 dark:text-white/45">قسم</div>
                     <div className="text-slate-900 dark:text-white text-left">{phaseName(inv.phase_id)}</div>
                     <div className="text-slate-500 dark:text-white/45">حساب</div>
-                    <div className="text-slate-900 dark:text-white text-left">{accountName(inv.expense_account_code)}</div>
+                    <div className="text-slate-900 dark:text-white text-left">{accountName(inv.expense_account_code, inv.expense_account_name)}</div>
                     <div className="text-slate-500 dark:text-white/45">إجمالي</div>
                     <div className="text-slate-900 dark:text-white tabular-nums font-semibold text-left" dir="ltr">{formatMoney(inv.total_amount, false)}</div>
                     <div className="text-slate-500 dark:text-white/45">مسدد</div>
                     <div className="text-[#0e7a5f] dark:text-emerald-200 tabular-nums text-left" dir="ltr">{formatMoney(inv.paid_amount, false)}</div>
                   </div>
                   <div className="flex items-center gap-1.5 justify-end">
-                    <button type="button" onClick={() => setModal({ open: true, invoice: inv })} className={`${ws.btnNeutral} px-2.5 py-1.5 text-xs`}>
+                    <button type="button" onClick={() => setEditInvoice(inv)} className={`${ws.btnNeutral} px-2.5 py-1.5 text-xs`}>
                       <Pencil className="w-3.5 h-3.5" />
-                      تعديل
+                      القسم والحساب
                     </button>
-                    <button type="button" onClick={() => handleDelete(inv)} className={`${ws.btnDanger} px-2.5 py-1.5 text-xs`}>
-                      <Trash2 className="w-3.5 h-3.5" />
-                      حذف
-                    </button>
+                    {inv.source !== "lease" ? (
+                      <button type="button" onClick={() => handleDelete(inv)} className={`${ws.btnDanger} px-2.5 py-1.5 text-xs`}>
+                        <Trash2 className="w-3.5 h-3.5" />
+                        حذف
+                      </button>
+                    ) : null}
                   </div>
                 </div>
               ))}
@@ -457,13 +749,33 @@ export default function ExpensesTab({ project }) {
         )}
       </SectionCard>
 
-      <ExpenseModal
-        open={modal.open}
-        project={project}
-        invoice={modal.invoice}
-        defaultPhaseId={phaseFilter !== "all" && phaseFilter !== "none" ? Number(phaseFilter) : null}
-        onClose={() => setModal({ open: false, invoice: null })}
+      {/* فاتورة مشتريات جديدة مرتبطة بالمشروع */}
+      <PurchaseInvoiceModal
+        open={invoiceModalOpen}
+        invoice={null}
+        contacts={contacts}
+        accounts={accounts}
+        bankAccounts={bankAccounts}
+        branches={branches}
+        projects={projects}
+        prefill={prefill}
+        isSubmitting={createMut.isPending}
+        onClose={() => setInvoiceModalOpen(false)}
+        onSubmit={handleCreate}
+        allowArrival={false}
       />
+
+      <LinkInvoiceModal
+        open={linkOpen}
+        project={project}
+        phases={phases}
+        defaultPhaseId={defaultPhaseId}
+        employeeId={employeeId}
+        isAdmin={isAdmin}
+        onClose={() => setLinkOpen(false)}
+      />
+
+      <ExpenseModal open={!!editInvoice} project={project} invoice={editInvoice} onClose={() => setEditInvoice(null)} />
     </div>
   );
 }

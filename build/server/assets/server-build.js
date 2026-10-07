@@ -7,24 +7,25 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { useButton } from '@react-aria/button';
 import * as React from 'react';
 import React__default, { useState, useEffect, Component, useRef, useCallback, useMemo, useLayoutEffect } from 'react';
-import { f as fetchWithHeaders } from './index-C0qjc8cV.js';
+import { f as fetchWithHeaders } from './index-9AiyUjT_.js';
 import { SessionProvider } from '@hono/auth-js/react';
 import { toPng, getFontEmbedCSS } from 'html-to-image';
 import { serializeError } from 'serialize-error';
 import { Toaster, toast } from 'sonner';
 import { useIdleTimer } from 'react-idle-timer';
 import { QueryClientProvider, QueryClient, useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { WifiOff, Shield, ClipboardList, Calculator, Trash2, ReceiptText, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, ShoppingCart, Building2, TrendingUp, Clock, CalendarDays, ChevronRight, LayoutTemplate, Loader2, Save, MapPin, UserRound, ScrollText, CalendarCheck, Pencil, PartyPopper, Info, Receipt, Plus, AlertTriangle, Flag, Bell, CheckCircle2, MessageSquareText, Camera, ChevronDown, Check, Layers, ArrowUp, ArrowDown, HardHat, Table2, Download, PieChart, FileSpreadsheet, FileText, ImagePlus, Send, Upload, Paperclip, File as File$1, PenTool, FileBadge, FileSignature, ExternalLink, ToggleLeft, ListChecks, Settings2, ArrowRight, RefreshCw, History, Copy, Eye, CheckCircle, CheckSquare, Square, Minus, RotateCcw, Filter, User, DollarSign, Percent, Lock, Ban, MessageSquare, Unlock, Gift, Sparkles, Flame, BadgeCheck, Repeat, ScanLine, Building, Landmark, Wand2, Contact, ListTree, Unlink, Link as Link$1, Hash, ScanEye, TrendingDown, CalendarClock, Clock3, ChevronsUpDown, ChevronsDownUp, BookOpen, CreditCard, FileUp, MoreVertical, PackageCheck, Undo2, CloudUpload, BarChart3, Tag, Anchor, ArrowDownWideNarrow, ArrowDownRight, ArrowUpRight, Trophy, Circle, Power, ClipboardCheck, PiggyBank, Boxes, Coins, StickyNote, Briefcase, Truck, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, MessageCircle, ClipboardX, MinusSquare, EyeOff, Ruler, CornerDownLeft, Star, LineChart as LineChart$1, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, HeartPulse, FileWarning, CalendarOff, Infinity, AlertOctagon, Settings, MailCheck, QrCode, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Tags, User2, Link2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
+import { WifiOff, Shield, ClipboardList, Calculator, Trash2, ReceiptText, Languages, ArrowLeft, LayoutGrid, Users, Megaphone, Search, X, Package, Menu, PanelRightOpen, PanelRightClose, Globe, Sun, Moon, LogOut, ChevronLeft, LayoutDashboard, Leaf as Leaf$1, Banknote, Wallet, HandCoins, ShoppingCart, Building2, TrendingUp, Clock, CalendarDays, ChevronRight, LayoutTemplate, Loader2, Save, MapPin, UserRound, ScrollText, CalendarCheck, Pencil, PartyPopper, Receipt, Plus, AlertTriangle, Flag, Bell, CheckCircle2, MessageSquareText, Camera, ChevronDown, Check, Layers, ArrowUp, ArrowDown, HardHat, FileText, Sparkles, Flame, BadgeCheck, Repeat, Paperclip, ExternalLink, ScanLine, Table2, Download, PieChart, FileSpreadsheet, Link2, ImagePlus, Send, Upload, File as File$1, PenTool, FileBadge, FileSignature, ToggleLeft, ListChecks, Settings2, ArrowRight, RefreshCw, History, Copy, Eye, CheckCircle, CheckSquare, Square, Minus, RotateCcw, Filter, Info, User, DollarSign, Percent, Lock, Ban, MessageSquare, Unlock, Gift, Building, Landmark, Wand2, Contact, ListTree, Unlink, Link as Link$1, Hash, ScanEye, TrendingDown, CalendarClock, Clock3, ChevronsUpDown, ChevronsDownUp, BookOpen, CreditCard, FileUp, MoreVertical, PackageCheck, Undo2, CloudUpload, BarChart3, Tag, Anchor, ArrowDownWideNarrow, ArrowDownRight, ArrowUpRight, Trophy, Circle, Power, ClipboardCheck, PiggyBank, Boxes, Coins, StickyNote, Briefcase, Truck, ChevronUp, AlertCircle, PackagePlus, ArrowLeftRight, Calendar, Activity, Printer, Edit, XCircle, UserCog, Phone, Mail, MessageCircle, ClipboardX, MinusSquare, EyeOff, Ruler, CornerDownLeft, Star, LineChart as LineChart$1, FolderOpen, ArrowDownLeft, CalendarPlus, Warehouse, PlusCircle, ArrowUpDown, Edit2, Zap, Image as Image$1, FileImage, HeartPulse, FileWarning, CalendarOff, Infinity, AlertOctagon, Settings, MailCheck, QrCode, Coffee, Palette, HelpCircle, Home, Inbox, ListTodo, PlayCircle, CalendarRange, GitBranch, Users2, Tags, User2, SlidersHorizontal, List, FolderKanban, MapPinOff } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, t as todayRiyadhDateKey, b as formatDateForInput, d as currentRiyadhHour, f as formatRiyadhDateForInput, L as LOCALE, c as currentRiyadhMonthKey, e as riyadhMonthKeyFromOffset, g as formatDateTime$5, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$5 } from './dateUtils-Bvji1KrH.js';
+import { a as formatRiyadhDateTimeForInput, r as riyadhDateKeyFromOffset, b as formatDateForInput, d as currentRiyadhHour, f as formatRiyadhDateForInput, L as LOCALE, c as currentRiyadhMonthKey, e as riyadhMonthKeyFromOffset, g as formatDateTime$5, t as todayRiyadhDateKey, h as riyadhDateKeyFromMonthOffset, i as formatTime$2, j as formatDate$5 } from './dateUtils-Bvji1KrH.js';
+import { v as accountName$1, w as invoiceStatus, u as todayRiyadh$8, x as pendingMilestones, D as DEFAULT_PHASE_TEMPLATE, y as buildPhasesFromTemplate, z as nextProjectCode, B as addDays$2, P as PROJECT_STATUS_LABELS, H as HEALTH_LABELS, C as PHASE_STATUS_LABELS, F as projectProgress, G as projectHealth, I as projectBudget, J as daysToOpening, K as summarizeProjects, L as phaseHealth, M as phaseTasks, N as timelineRange, O as phaseProgress, Q as barPosition, S as phaseBudget, T as daysBetween, U as PHASE_STATUSES, V as TASK_STATUSES, W as TASK_STATUS_LABELS, E as ESTABLISHMENT_ACCOUNTS, X as INVOICE_STATUS_LABELS, d as ATTACHMENT_KIND_LABELS, A as ATTACHMENT_KINDS } from './branchProjects-D3H72PHO.js';
 import { getDefaultClassNames, DayPicker } from 'react-day-picker';
 import { enUS, arSA } from 'date-fns/locale';
 import { ResponsiveContainer, PieChart as PieChart$1, Pie, Cell, Tooltip, LineChart, CartesianGrid, XAxis, YAxis, Legend, Line, BarChart, Bar, ReferenceDot } from 'recharts';
+import { u as allocateDiscount, v as numOrNull$1, D as DEFAULT_ROAST_PER_KG, w as computeCoffeeLine, R as RAW_PRICE_MIN, x as RAW_PRICE_MAX, y as wasteFlag, t as guessKgPerSack, W as WASTE_CONFIRM, z as coffeeLineStatus } from './coffeeInvoices-CYk167p4.js';
 import { useParams as useParams$1 } from 'react-router-dom';
 import _JSXStyle from 'styled-jsx/style.js';
-import { u as allocateDiscount, v as numOrNull$1, D as DEFAULT_ROAST_PER_KG, w as computeCoffeeLine, R as RAW_PRICE_MIN, x as RAW_PRICE_MAX, y as wasteFlag, t as guessKgPerSack, W as WASTE_CONFIRM, z as coffeeLineStatus } from './coffeeInvoices-CYk167p4.js';
 import { c as computeDraftTotals } from './invoiceDraftMath-C8Db36NO.js';
-import { D as DEFAULT_VAT_RATE, C as CONTRACT_TYPES, L as LEASE_FREQUENCIES, B as splitFixedCharges, E as isDateKey$1, G as compareDateKeys$1, H as installmentWithFixed, I as generateSchedule, k as round2$5, J as contractStatus, K as addDays$3, x as installmentAmounts, M as CONTRACT_STATUS_LABELS, m as CONTRACT_TYPE_LABELS, o as FREQUENCY_LABELS, N as monthKey, O as daysInMonth, P as daysBetween$1 } from './leaseContracts-M1M5QWMp.js';
+import { D as DEFAULT_VAT_RATE, n as CONTRACT_TYPES, L as LEASE_FREQUENCIES, B as splitFixedCharges, E as isDateKey, G as compareDateKeys, H as installmentWithFixed, I as generateSchedule, r as round2$4, J as contractStatus, K as addDays$3, x as installmentAmounts, M as CONTRACT_STATUS_LABELS, C as CONTRACT_TYPE_LABELS, F as FREQUENCY_LABELS, N as monthKey, O as daysInMonth, P as daysBetween$1 } from './leaseContracts-CiucmYFP.js';
 import { createRoot } from 'react-dom/client';
 import JSZip from 'jszip';
 import { QRCodeSVG } from 'qrcode.react';
@@ -47,14 +48,14 @@ import '@hono/node-server';
 import '@hono/node-server/serve-static';
 import 'hono/logger';
 import 'ws';
-import './leaseSetAsideInvoices-6CGBRghB.js';
+import './leaseSetAsideInvoices-TfdFUbE3.js';
 import './sql-CSDV1lSC.js';
 import './wasender-vtNAxFgq.js';
 import './purchaseAudit-DZMMDeLJ.js';
 import './ensureOnce-D_53iNPN.js';
 import './waNotify-BPFQhIP4.js';
 import './purchaseInvoiceDelete-RdBVQHRn.js';
-import './route-CU8h1SHA.js';
+import './route-OABtNaJh.js';
 import './sessionToken-DDNn6nuk.js';
 import 'crypto';
 import './accountsTree-RnDnF4VP.js';
@@ -2530,740 +2531,6 @@ const ws = {
   segInactive: "bg-transparent text-[#4a5568] hover:text-[#1a2332] hover:bg-white " + "dark:text-white/70 dark:hover:bg-white/[0.05] dark:hover:text-white/70"
 };
 
-// حسابات مشاريع تأسيس الفروع — دوال نقية بلا React، مشتركة بين الصفحات
-// والمخزن المحلي (mock) ولاحقاً الخادم.
-//
-// التواريخ مفاتيح نصية `YYYY-MM-DD` وتُحسب بـ UTC حتى لا تتأثر بمنطقة
-// المتصفح الزمنية. المبالغ أرقام (ريال).
-
-const PROJECT_STATUS_LABELS = {
-  planning: "تخطيط",
-  in_progress: "قيد التنفيذ",
-  on_hold: "متوقف",
-  opened: "افتُتح",
-  cancelled: "ملغى"
-};
-const PHASE_STATUSES = ["not_started", "in_progress", "done", "blocked"];
-const PHASE_STATUS_LABELS = {
-  not_started: "لم يبدأ",
-  in_progress: "جارٍ",
-  done: "مكتمل",
-  blocked: "متعثر"
-};
-const TASK_STATUSES = ["todo", "in_progress", "done", "blocked"];
-const TASK_STATUS_LABELS = {
-  todo: "لم تبدأ",
-  in_progress: "جارية",
-  done: "منجزة",
-  blocked: "متعثرة"
-};
-const ATTACHMENT_KINDS = ["contract", "permit", "design", "quote", "photo", "other"];
-const ATTACHMENT_KIND_LABELS = {
-  contract: "عقد",
-  permit: "ترخيص",
-  design: "مخطط",
-  quote: "عرض سعر",
-  photo: "صورة",
-  other: "أخرى"
-};
-const HEALTH_LABELS = {
-  done: "مكتمل",
-  on_track: "في المسار",
-  at_risk: "في خطر",
-  late: "متأخر",
-  not_started: "لم يبدأ"
-};
-
-// ترتيب السوء: الأعلى أسوأ — يُستخدم لاختيار أسوأ صحة في المشروع.
-const HEALTH_RANK = {
-  late: 4,
-  at_risk: 3,
-  on_track: 2,
-  not_started: 1,
-  done: 0
-};
-const INVOICE_STATUS_LABELS = {
-  pending_payment: "بانتظار السداد",
-  partial_paid: "مسدد جزئياً",
-  paid: "مسدد",
-  overdue: "متأخر"
-};
-
-// حسابات مصروفات التأسيس (مجموعة 53).
-const ESTABLISHMENT_ACCOUNTS = [{
-  code: "5301",
-  name: "إيجار ما قبل الافتتاح"
-}, {
-  code: "5302",
-  name: "تراخيص ورسوم حكومية"
-}, {
-  code: "5303",
-  name: "تصميم واستشارات"
-}, {
-  code: "5304",
-  name: "ديكور وتشطيب"
-}, {
-  code: "5305",
-  name: "كهرباء وسباكة وتكييف"
-}, {
-  code: "5306",
-  name: "معدات"
-}, {
-  code: "5307",
-  name: "أثاث ولوحات"
-}, {
-  code: "5308",
-  name: "أنظمة وتقنية"
-}, {
-  code: "5309",
-  name: "رواتب وتدريب ما قبل الافتتاح"
-}, {
-  code: "5310",
-  name: "تسويق الافتتاح"
-}, {
-  code: "5399",
-  name: "أخرى"
-}];
-function accountName$1(code) {
-  return ESTABLISHMENT_ACCOUNTS.find(a => a.code === String(code || ""))?.name || "";
-}
-
-// قالب الأقسام الافتراضي لفرع قهوة مختصة. كل قسم بلون مميز وحساب
-// مصروف افتراضي ومهام جاهزة؛ المعالم الخمسة موزّعة على أقسامها.
-const DEFAULT_PHASE_TEMPLATE = [{
-  key: "contract",
-  name: "العقد والإيجار",
-  color: "#0ea5e9",
-  default_account_code: "5301",
-  tasks: [{
-    title: "توقيع عقد الإيجار وتوثيقه في إيجار",
-    is_milestone: false
-  }, {
-    title: "سداد دفعة الإيجار الأولى والتأمين",
-    is_milestone: false
-  }, {
-    title: "تسليم الموقع",
-    is_milestone: true
-  }, {
-    title: "تصوير الموقع وتوثيق حالته عند الاستلام",
-    is_milestone: false
-  }]
-}, {
-  key: "licenses",
-  name: "التراخيص والتصاريح",
-  color: "#f59e0b",
-  default_account_code: "5302",
-  tasks: [{
-    title: "إصدار سجل تجاري للفرع",
-    is_milestone: false
-  }, {
-    title: "رخصة بلدية (بلدي)",
-    is_milestone: false
-  }, {
-    title: "فسح الدفاع المدني (سلامة)",
-    is_milestone: false
-  }, {
-    title: "شهادات صحية للعاملين",
-    is_milestone: false
-  }, {
-    title: "تصريح لوحة الواجهة",
-    is_milestone: false
-  }]
-}, {
-  key: "design",
-  name: "التصميم والمخططات",
-  color: "#8b5cf6",
-  default_account_code: "5303",
-  tasks: [{
-    title: "رفع مساحي للموقع",
-    is_milestone: false
-  }, {
-    title: "المخطط المعماري وتوزيع الفراغات",
-    is_milestone: false
-  }, {
-    title: "تصميم البار ومسار الخدمة",
-    is_milestone: false
-  }, {
-    title: "مخططات الكهرباء والسباكة والتكييف",
-    is_milestone: false
-  }, {
-    title: "اعتماد التصميم النهائي",
-    is_milestone: false
-  }]
-}, {
-  key: "fitout",
-  name: "الديكور والتشطيب",
-  color: "#ef4444",
-  default_account_code: "5304",
-  tasks: [{
-    title: "التعاقد مع مقاول التشطيب",
-    is_milestone: false
-  }, {
-    title: "أعمال الهدم والجبس والأسقف",
-    is_milestone: false
-  }, {
-    title: "الأرضيات والدهانات وتكسية الجدران",
-    is_milestone: false
-  }, {
-    title: "تنفيذ البار والمغاسل",
-    is_milestone: false
-  }, {
-    title: "الواجهة واللوحة الخارجية",
-    is_milestone: false
-  }, {
-    title: "اكتمال التشطيب",
-    is_milestone: true
-  }]
-}, {
-  key: "mep",
-  name: "الكهرباء والسباكة والتكييف",
-  color: "#f97316",
-  default_account_code: "5305",
-  tasks: [{
-    title: "لوحة الكهرباء ونقاط المعدات",
-    is_milestone: false
-  }, {
-    title: "تمديدات السباكة والصرف للبار",
-    is_milestone: false
-  }, {
-    title: "تركيب وحدات التكييف والتهوية",
-    is_milestone: false
-  }, {
-    title: "تركيب فلتر مياه مركزي",
-    is_milestone: false
-  }, {
-    title: "فحص واختبار التمديدات",
-    is_milestone: false
-  }]
-}, {
-  key: "equipment",
-  name: "المعدات",
-  color: "#14b8a6",
-  default_account_code: "5306",
-  tasks: [{
-    title: "شراء ماكينة إسبريسو وطواحين",
-    is_milestone: false
-  }, {
-    title: "ثلاجات ومجمدات ومبرد عرض",
-    is_milestone: false
-  }, {
-    title: "ماكينة ثلج وغلايات وأدوات التحضير",
-    is_milestone: false
-  }, {
-    title: "تركيب المعدات",
-    is_milestone: true
-  }, {
-    title: "معايرة الماكينة والطواحين",
-    is_milestone: false
-  }]
-}, {
-  key: "furniture",
-  name: "الأثاث واللوحات",
-  color: "#a16207",
-  default_account_code: "5307",
-  tasks: [{
-    title: "طاولات وكراسي الصالة والجلسات الخارجية",
-    is_milestone: false
-  }, {
-    title: "رفوف العرض وخزائن التخزين",
-    is_milestone: false
-  }, {
-    title: "لوحة القائمة واللوحات الداخلية",
-    is_milestone: false
-  }, {
-    title: "الإضاءة الديكورية والنباتات",
-    is_milestone: false
-  }]
-}, {
-  key: "systems",
-  name: "الأنظمة (POS وكاميرات وإنترنت)",
-  color: "#2563eb",
-  default_account_code: "5308",
-  tasks: [{
-    title: "اشتراك إنترنت وشبكة داخلية",
-    is_milestone: false
-  }, {
-    title: "تركيب نظام نقاط البيع POS",
-    is_milestone: false
-  }, {
-    title: "كاميرات المراقبة ونظام الإنذار",
-    is_milestone: false
-  }, {
-    title: "شاشات القائمة الرقمية والصوتيات",
-    is_milestone: false
-  }, {
-    title: "ربط الفرع بتطبيقات التوصيل",
-    is_milestone: false
-  }]
-}, {
-  key: "hiring",
-  name: "التوظيف والتدريب",
-  color: "#db2777",
-  default_account_code: "5309",
-  tasks: [{
-    title: "التعاقد مع مدير الفرع",
-    is_milestone: false
-  }, {
-    title: "توظيف الباريستا والكاشير",
-    is_milestone: false
-  }, {
-    title: "تدريب على التحضير وخدمة العملاء",
-    is_milestone: false
-  }, {
-    title: "تدريب على نظام POS والإغلاق اليومي",
-    is_milestone: false
-  }]
-}, {
-  key: "inventory",
-  name: "المخزون الافتتاحي",
-  color: "#65a30d",
-  default_account_code: "5399",
-  tasks: [{
-    title: "طلب البن المحمص والمشروبات",
-    is_milestone: false
-  }, {
-    title: "الحليب والمواد الاستهلاكية والتغليف",
-    is_milestone: false
-  }, {
-    title: "الأكواب والعبوات بشعار الفرع",
-    is_milestone: false
-  }, {
-    title: "جرد افتتاحي وتسجيله في المخزون",
-    is_milestone: false
-  }]
-}, {
-  key: "launch",
-  name: "التسويق والافتتاح",
-  color: "#059669",
-  default_account_code: "5310",
-  tasks: [{
-    title: "حملة ما قبل الافتتاح على وسائل التواصل",
-    is_milestone: false
-  }, {
-    title: "تسجيل الفرع في خرائط Google",
-    is_milestone: false
-  }, {
-    title: "الافتتاح التجريبي",
-    is_milestone: true
-  }, {
-    title: "معالجة ملاحظات التجريبي",
-    is_milestone: false
-  }, {
-    title: "الافتتاح",
-    is_milestone: true
-  }]
-}];
-
-// ---------- مساعدات التاريخ ----------
-
-const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
-const MONTHS_AR = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-function isDateKey(value) {
-  return DATE_RE.test(String(value || ""));
-}
-function parts(key) {
-  const m = DATE_RE.exec(String(key || ""));
-  if (!m) return null;
-  return {
-    y: Number(m[1]),
-    m: Number(m[2]),
-    d: Number(m[3])
-  };
-}
-function pad2$3(n) {
-  return String(n).padStart(2, "0");
-}
-function utcToKey(date) {
-  return date.toISOString().slice(0, 10);
-}
-function todayRiyadh$8() {
-  return todayRiyadhDateKey();
-}
-function addDays$2(key, n) {
-  const p = parts(key);
-  if (!p) return null;
-  const d = new Date(Date.UTC(p.y, p.m - 1, p.d));
-  d.setUTCDate(d.getUTCDate() + Math.trunc(Number(n) || 0));
-  return utcToKey(d);
-}
-
-// b − a بالأيام (موجب إذا كان b بعد a). null عند مدخل غير صالح.
-function daysBetween(a, b) {
-  const pa = parts(a);
-  const pb = parts(b);
-  if (!pa || !pb) return null;
-  return Math.round((Date.UTC(pb.y, pb.m - 1, pb.d) - Date.UTC(pa.y, pa.m - 1, pa.d)) / 86400000);
-}
-function compareDateKeys(a, b) {
-  return String(a || "").localeCompare(String(b || ""));
-}
-function monthStart(key) {
-  const p = parts(key);
-  return p ? `${p.y}-${pad2$3(p.m)}-01` : null;
-}
-function monthEnd(key) {
-  const p = parts(key);
-  if (!p) return null;
-  const last = new Date(Date.UTC(p.y, p.m, 0)).getUTCDate();
-  return `${p.y}-${pad2$3(p.m)}-${pad2$3(last)}`;
-}
-function minKey(keys) {
-  const valid = keys.filter(isDateKey);
-  return valid.length ? valid.reduce((a, b) => compareDateKeys(a, b) <= 0 ? a : b) : null;
-}
-function maxKey(keys) {
-  const valid = keys.filter(isDateKey);
-  return valid.length ? valid.reduce((a, b) => compareDateKeys(a, b) >= 0 ? a : b) : null;
-}
-
-// ---------- أرقام ----------
-
-function round2$4(value) {
-  const n = Number(value);
-  return Number.isFinite(n) ? Math.round(n * 100) / 100 : 0;
-}
-function num$1(value) {
-  const n = Number(value);
-  return Number.isFinite(n) ? n : 0;
-}
-function clampPct$1(value) {
-  return Math.min(Math.max(Math.round(num$1(value)), 0), 100);
-}
-function listOf(value) {
-  return Array.isArray(value) ? value : [];
-}
-
-// ---------- التقدم ----------
-
-function phaseTasks(project, phaseId) {
-  const pid = Number(phaseId);
-  return listOf(project?.tasks).filter(t => Number(t?.phase_id) === pid).sort((a, b) => num$1(a?.sort_order) - num$1(b?.sort_order) || num$1(a?.id) - num$1(b?.id));
-}
-
-// تقدم القسم: override أولاً؛ وإلا المنجز/الكل؛ بلا مهام يُستنتج من الحالة.
-function phaseProgress(phase, tasks) {
-  const override = phase?.progress_override;
-  if (override !== null && override !== undefined && override !== "" && Number.isFinite(Number(override))) {
-    return clampPct$1(override);
-  }
-  const list = listOf(tasks);
-  if (list.length > 0) {
-    const done = list.filter(t => t?.status === "done").length;
-    return clampPct$1(done / list.length * 100);
-  }
-  if (phase?.status === "done") return 100;
-  if (phase?.status === "in_progress") return 50;
-  return 0;
-}
-
-// تقدم المشروع مرجّح بوزن كل قسم (الافتراضي 1).
-function projectProgress(project) {
-  const phases = listOf(project?.phases);
-  if (!phases.length) return project?.status === "opened" ? 100 : 0;
-  let weighted = 0;
-  let weights = 0;
-  for (const phase of phases) {
-    const w = phase?.weight == null || phase.weight === "" ? 1 : Math.max(num$1(phase.weight), 0);
-    weighted += phaseProgress(phase, phaseTasks(project, phase?.id)) * w;
-    weights += w;
-  }
-  return weights > 0 ? clampPct$1(weighted / weights) : 0;
-}
-
-// ---------- الصحة ----------
-
-function phaseHealth(phase, tasks, today) {
-  const day = isDateKey(today) ? today : todayRiyadh$8();
-  if (phase?.status === "done") return "done";
-  const progress = phaseProgress(phase, tasks);
-  const start = phase?.planned_start;
-  const end = phase?.planned_end;
-  if (isDateKey(end) && compareDateKeys(end, day) < 0) return "late";
-  if (phase?.status === "blocked") return "at_risk";
-  if (isDateKey(start) && isDateKey(end)) {
-    const duration = daysBetween(start, end) + 1;
-    const remaining = daysBetween(day, end) + 1;
-    if (duration > 0 && remaining / duration < 0.2 && progress < 60) return "at_risk";
-  }
-  if (phase?.status === "not_started" && progress === 0) return "not_started";
-  if (!phase?.status && progress === 0 && !phase?.actual_start) return "not_started";
-  return "on_track";
-}
-
-// أسوأ صحة بين الأقسام غير المكتملة؛ 'done' إن افتُتح أو اكتملت كل الأقسام.
-function projectHealth(project, today) {
-  if (project?.status === "opened") return "done";
-  const phases = listOf(project?.phases);
-  if (!phases.length) return "not_started";
-  let worst = "done";
-  for (const phase of phases) {
-    const health = phaseHealth(phase, phaseTasks(project, phase?.id), today);
-    if (HEALTH_RANK[health] > HEALTH_RANK[worst]) worst = health;
-  }
-  return worst;
-}
-
-// الأيام المتبقية للافتتاح المستهدف (سالب = تجاوز). null بلا موعد.
-function daysToOpening(project, today) {
-  const target = project?.target_opening_date;
-  if (!isDateKey(target)) return null;
-  const day = isDateKey(today) ? today : todayRiyadh$8();
-  return daysBetween(day, target);
-}
-
-// ---------- الميزانية ----------
-
-function sumInvoices(invoices) {
-  let committed = 0;
-  let paid = 0;
-  for (const inv of listOf(invoices)) {
-    committed += num$1(inv?.total_amount);
-    paid += num$1(inv?.paid_amount);
-  }
-  return {
-    committed: round2$4(committed),
-    paid: round2$4(paid)
-  };
-}
-function pctOf(part, whole) {
-  if (whole > 0) return Math.max(Math.round(part / whole * 100), 0);
-  return part > 0 ? 100 : 0;
-}
-
-// فواتير القسم تُرشَّح بـ phase_id (يمكن تمرير كل فواتير المشروع).
-function phaseBudget(phase, invoices) {
-  const pid = Number(phase?.id);
-  const own = listOf(invoices).filter(inv => Number(inv?.phase_id) === pid);
-  const budget = round2$4(Math.max(num$1(phase?.budget), 0));
-  const {
-    committed,
-    paid
-  } = sumInvoices(own);
-  return {
-    budget,
-    committed,
-    paid,
-    remaining: round2$4(budget - committed),
-    over: round2$4(Math.max(committed - budget, 0)),
-    pct: pctOf(committed, budget)
-  };
-}
-function projectBudget(project) {
-  const budgetTotal = round2$4(Math.max(num$1(project?.budget_total), 0));
-  const phasesBudget = round2$4(listOf(project?.phases).reduce((s, p) => s + Math.max(num$1(p?.budget), 0), 0));
-  const {
-    committed,
-    paid
-  } = sumInvoices(project?.invoices);
-  return {
-    budget_total: budgetTotal,
-    phases_budget: phasesBudget,
-    unallocated: round2$4(budgetTotal - phasesBudget),
-    committed,
-    paid,
-    remaining: round2$4(budgetTotal - committed),
-    over: round2$4(Math.max(committed - budgetTotal, 0)),
-    pct: pctOf(committed, budgetTotal)
-  };
-}
-
-// حالة الفاتورة من المسدد/الإجمالي/الاستحقاق.
-function invoiceStatus(inv, today) {
-  const total = num$1(inv?.total_amount);
-  const paid = num$1(inv?.paid_amount);
-  if (paid >= total && (total > 0 || paid > 0)) return "paid";
-  const day = isDateKey(today) ? today : todayRiyadh$8();
-  if (isDateKey(inv?.due_date) && compareDateKeys(inv.due_date, day) < 0) return "overdue";
-  if (paid > 0) return "partial_paid";
-  return "pending_payment";
-}
-
-// ---------- الخط الزمني ----------
-
-// موضع شريط داخل نطاق (نسب مئوية). الأيام شاملة الطرفين؛ يُقصّ على النطاق.
-function barPosition(start, end, rangeStart, rangeEnd) {
-  const zero = {
-    left_pct: 0,
-    width_pct: 0
-  };
-  if (!isDateKey(rangeStart) || !isDateKey(rangeEnd)) return zero;
-  const total = daysBetween(rangeStart, rangeEnd) + 1;
-  if (!(total > 0)) return zero;
-  let s = isDateKey(start) ? start : null;
-  let e = isDateKey(end) ? end : null;
-  if (!s && !e) return zero;
-  if (!s) s = e;
-  if (!e) e = s;
-  if (compareDateKeys(s, rangeStart) < 0) s = rangeStart;
-  if (compareDateKeys(e, rangeEnd) > 0) e = rangeEnd;
-  if (compareDateKeys(e, s) < 0) return zero;
-  const left = daysBetween(rangeStart, s) / total * 100;
-  const width = (daysBetween(s, e) + 1) / total * 100;
-  return {
-    left_pct: Math.min(Math.max(round2$4(left), 0), 100),
-    width_pct: Math.min(Math.max(round2$4(width), 0), 100 - round2$4(left))
-  };
-}
-
-// نطاق الخط الزمني: من أول شهر فيه حدث إلى آخر شهر، بأعمدة أشهر وخط اليوم.
-function timelineRange(project, today) {
-  const day = isDateKey(today) ? today : todayRiyadh$8();
-  const phases = listOf(project?.phases);
-  const tasks = listOf(project?.tasks);
-  const startCandidates = [project?.contract_signed_date, ...phases.map(p => p?.planned_start), ...phases.map(p => p?.actual_start)];
-  const endCandidates = [project?.target_opening_date, project?.actual_opening_date, ...phases.map(p => p?.planned_end), ...phases.map(p => p?.actual_end), ...tasks.filter(t => t?.is_milestone).map(t => t?.due_date)];
-  let start = minKey(startCandidates);
-  let end = maxKey(endCandidates);
-  if (!start && !end) {
-    start = day;
-    end = addDays$2(day, 150);
-  } else if (!start) {
-    start = addDays$2(end, -150);
-  } else if (!end) {
-    end = addDays$2(start, 150);
-  }
-  if (compareDateKeys(end, start) < 0) end = start;
-  start = monthStart(start);
-  end = monthEnd(end);
-  const total = daysBetween(start, end) + 1;
-  const months = [];
-  let cursor = start;
-  let guard = 0;
-  while (compareDateKeys(cursor, end) <= 0 && guard < 120) {
-    const mEnd = monthEnd(cursor);
-    const p = parts(cursor);
-    const pos = barPosition(cursor, mEnd, start, end);
-    months.push({
-      key: `${p.y}-${pad2$3(p.m)}`,
-      label: `${MONTHS_AR[p.m - 1]} ${p.y}`,
-      left_pct: pos.left_pct,
-      width_pct: pos.width_pct
-    });
-    cursor = addDays$2(mEnd, 1);
-    guard += 1;
-  }
-  const todayInRange = compareDateKeys(day, start) >= 0 && compareDateKeys(day, end) <= 0;
-  const today_pct = todayInRange ? round2$4((daysBetween(start, day) + 0.5) / total * 100) : null;
-  return {
-    start,
-    end,
-    months,
-    today_pct
-  };
-}
-
-// ---------- القالب والأكواد ----------
-
-// أقسام بلا id من القالب، موزّعة بالتساوي بين توقيع العقد والافتتاح
-// (القسم الأخير ينتهي يوم الافتتاح). كل قسم يحمل `tasks` جاهزة للإدراج.
-function buildPhasesFromTemplate(template, contractDate, targetOpening) {
-  const list = listOf(template);
-  const n = list.length;
-  const hasDates = isDateKey(contractDate) && isDateKey(targetOpening) && compareDateKeys(targetOpening, contractDate) >= 0;
-  // المدة شاملة الطرفين (يوم العقد ويوم الافتتاح) حتى تتساوى الأقسام.
-  const span = hasDates ? daysBetween(contractDate, targetOpening) + 1 : 0;
-  const boundary = i => {
-    if (!hasDates) return null;
-    const key = addDays$2(contractDate, Math.round(span * i / n));
-    return compareDateKeys(key, targetOpening) > 0 ? targetOpening : key;
-  };
-  return list.map((tpl, i) => {
-    const planned_start = boundary(i);
-    let planned_end = null;
-    if (hasDates) {
-      planned_end = i === n - 1 ? targetOpening : addDays$2(boundary(i + 1), -1);
-      // مدد قصيرة جداً: لا تنتهي قبل بدايتها.
-      if (compareDateKeys(planned_end, planned_start) < 0) planned_end = planned_start;
-    }
-    return {
-      name: tpl?.name || `القسم ${i + 1}`,
-      sort_order: i + 1,
-      planned_start,
-      planned_end,
-      actual_start: null,
-      actual_end: null,
-      status: "not_started",
-      budget: 0,
-      weight: 1,
-      progress_override: null,
-      owner_employee_id: null,
-      owner_name: "",
-      contractor_contact_id: null,
-      contractor_name: "",
-      color: tpl?.color || "#64748b",
-      notes: "",
-      template_key: tpl?.key || null,
-      default_account_code: tpl?.default_account_code || null,
-      tasks: listOf(tpl?.tasks).map((t, j) => ({
-        title: t?.title || "",
-        status: "todo",
-        is_milestone: !!t?.is_milestone,
-        due_date: planned_end,
-        done_at: null,
-        assignee_employee_id: null,
-        assignee_name: "",
-        sort_order: j + 1,
-        notes: ""
-      }))
-    };
-  });
-}
-function nextProjectCode(projects) {
-  let max = 0;
-  for (const p of listOf(projects)) {
-    const m = /^BP-(\d+)$/.exec(String(p?.code || "").trim());
-    if (m) max = Math.max(max, Number(m[1]));
-  }
-  return `BP-${String(max + 1).padStart(3, "0")}`;
-}
-
-// ---------- الملخص ----------
-
-const ACTIVE_STATUSES = new Set(["planning", "in_progress", "on_hold"]);
-function summarizeProjects(projects, today) {
-  const day = isDateKey(today) ? today : todayRiyadh$8();
-  const list = listOf(projects);
-  let active_count = 0;
-  let budget_total = 0;
-  let committed_total = 0;
-  let paid_total = 0;
-  let late_phases = 0;
-  let nearest = null;
-  for (const project of list) {
-    if (project?.status === "cancelled") continue;
-    const money = projectBudget(project);
-    budget_total += money.budget_total;
-    committed_total += money.committed;
-    paid_total += money.paid;
-    if (!ACTIVE_STATUSES.has(project?.status)) continue;
-    active_count += 1;
-    for (const phase of listOf(project?.phases)) {
-      if (phaseHealth(phase, phaseTasks(project, phase?.id), day) === "late") late_phases += 1;
-    }
-    const days = daysToOpening(project, day);
-    if (days !== null && days >= 0 && (!nearest || days < nearest.days)) {
-      nearest = {
-        project_id: project.id,
-        name: project.name,
-        days
-      };
-    }
-  }
-  return {
-    active_count,
-    budget_total: round2$4(budget_total),
-    committed_total: round2$4(committed_total),
-    paid_total: round2$4(paid_total),
-    nearest_opening: nearest,
-    late_phases
-  };
-}
-
-// المعالم غير المنجزة — تُستخدم قبل تأكيد الافتتاح.
-function pendingMilestones(project) {
-  return listOf(project?.tasks).filter(t => t?.is_milestone && t?.status !== "done");
-}
-
 // مخزن محلي مؤقت لمشاريع تأسيس الفروع — يحاكي واجهة
 // `/api/accounting/branch-projects` في localStorage حتى تُربط الخلفية.
 //
@@ -4114,9 +3381,9 @@ const mockApi = {
 
 // مشاريع تأسيس الفروع — الاستعلامات والطفرات.
 //
-// المرحلة 1 واجهة فقط: `BRANCH_PROJECTS_MOCK = true` يوجّه كل الطلبات إلى
-// المخزن المحلي (`branchProjectsMock`). عند ربط الخلفية يُقلب الثابت إلى
-// false فتذهب الطلبات إلى `/api/accounting/branch-projects` بنفس الأشكال.
+// الخلفية مربوطة: `BRANCH_PROJECTS_MOCK = false` فتذهب الطلبات إلى
+// `/api/accounting/branch-projects`. قلبه إلى true يعيد المخزن المحلي
+// (`branchProjectsMock`) للتجربة بلا خادم بنفس الأشكال.
 
 const BASE$1 = "/api/accounting/branch-projects";
 
@@ -4177,7 +3444,8 @@ function useBranchProjects({
     queryKey: queryKeys.branchProjects(),
     enabled: !!employeeId && !!isAdmin,
     queryFn: async () => {
-      return mockApi.list();
+      const data = await request("GET", "", undefined, "فشل تحميل مشاريع التأسيس");
+      return Array.isArray(data?.projects) ? data.projects : Array.isArray(data) ? data : [];
     }
   });
 }
@@ -4186,7 +3454,8 @@ function useBranchProject(id) {
     queryKey: queryKeys.branchProject(id ? Number(id) : null),
     enabled: !!id,
     queryFn: async () => {
-      return mockApi.get(id);
+      const data = await request("GET", `/${id}`, undefined, "فشل تحميل المشروع");
+      return unwrapProject(data);
     }
   });
 }
@@ -4203,7 +3472,7 @@ function useProjectMutation({
 }) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async variables => mock(variables) ,
+    mutationFn: async variables => real(variables),
     onSuccess: async (data, variables) => {
       const id = variables?.project_id ?? variables?.id ?? data?.id ?? null;
       await invalidateBranchProjectQueries(queryClient, id);
@@ -4244,7 +3513,7 @@ function useDeleteBranchProject() {
   return useMutation({
     mutationFn: async ({
       id
-    }) => mockApi.remove(id) ,
+    }) => request("DELETE", `/${id}`, undefined, "فشل حذف المشروع"),
     onSuccess: async (_data, variables) => {
       // يُزال استعلام التفاصيل بدل إعادة جلبه (404) قبل الانتقال للقائمة.
       queryClient.removeQueries({
@@ -4407,7 +3676,11 @@ function useDeleteBranchProjectAttachment() {
   });
 }
 
-// ---------- الفواتير (mock فقط حالياً — تُستبدل بنافذة فاتورة المشتريات) ----------
+// ---------- الفواتير ----------
+// الفواتير الفعلية تُنشأ من نافذة فاتورة المشتريات (`project_id`/
+// `project_phase_id` في حمولتها). هنا: ربط فاتورة موجودة بالمشروع
+// (POST `{invoice_id, phase_id}`) وتعديل القسم/الحساب (PUT
+// `{phase_id, expense_account_code}`) والحذف النهائي.
 
 function useSaveBranchProjectInvoice() {
   return useProjectMutation({
@@ -4415,9 +3688,21 @@ function useSaveBranchProjectInvoice() {
     real: ({
       project_id,
       id,
+      invoice_id,
       ...fields
-    }) => id ? request("PUT", `/${project_id}/invoices/${id}`, fields, "فشل حفظ الفاتورة") : request("POST", `/${project_id}/invoices`, fields, "فشل حفظ الفاتورة"),
-    successMessage: (_data, vars) => vars?.id ? "تم حفظ الفاتورة" : "تمت إضافة الفاتورة",
+    }) => {
+      if (id) {
+        return request("PUT", `/${project_id}/invoices/${id}`, fields, "فشل حفظ الفاتورة");
+      }
+      if (invoice_id) {
+        return request("POST", `/${project_id}/invoices`, {
+          invoice_id: Number(invoice_id),
+          phase_id: fields.phase_id ?? null
+        }, "فشل ربط الفاتورة بالمشروع");
+      }
+      return request("POST", `/${project_id}/invoices`, fields, "فشل حفظ الفاتورة");
+    },
+    successMessage: (_data, vars) => vars?.id ? "تم حفظ الفاتورة" : vars?.invoice_id ? "تم ربط الفاتورة بالمشروع" : "تمت إضافة الفاتورة",
     errorPrefix: "فشل حفظ الفاتورة"
   });
 }
@@ -5011,13 +4296,13 @@ function FieldLabel$2({
   ] });
 }
 
-const inputCls$4 = `${ws.input} px-3 py-2 text-sm`;
-function numberOrNull$2(raw) {
+const inputCls$3 = `${ws.input} px-3 py-2 text-sm`;
+function numberOrNull$1(raw) {
   if (raw === null || raw === void 0 || String(raw).trim() === "") return null;
   const n = Number(raw);
   return Number.isFinite(n) ? n : null;
 }
-function buildInitial$3(project) {
+function buildInitial$2(project) {
   return {
     name: project?.name || "",
     city: project?.city || "",
@@ -5043,11 +4328,11 @@ function ProjectModal({
   const createMut = useCreateBranchProject();
   const updateMut = useUpdateBranchProject();
   const isPending = createMut.isPending || updateMut.isPending;
-  const [form, setForm] = useState(() => buildInitial$3(project));
+  const [form, setForm] = useState(() => buildInitial$2(project));
   const [errors, setErrors] = useState({});
   useEffect(() => {
     if (open) {
-      setForm(buildInitial$3(project));
+      setForm(buildInitial$2(project));
       setErrors({});
     }
   }, [open, project?.id]);
@@ -5066,9 +4351,9 @@ function ProjectModal({
     if (form.contract_signed_date && form.target_opening_date && form.target_opening_date < form.contract_signed_date) {
       next.target_opening_date = "موعد الافتتاح يجب أن يكون بعد توقيع العقد";
     }
-    const area = numberOrNull$2(form.area_sqm);
+    const area = numberOrNull$1(form.area_sqm);
     if (form.area_sqm !== "" && (area === null || area < 0)) next.area_sqm = "المساحة رقم غير صالح";
-    const budget = numberOrNull$2(form.budget_total);
+    const budget = numberOrNull$1(form.budget_total);
     if (form.budget_total !== "" && (budget === null || budget < 0)) next.budget_total = "الميزانية رقم غير صالح";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -5082,10 +4367,10 @@ function ProjectModal({
       city: form.city.trim(),
       district: form.district.trim(),
       address: form.address.trim(),
-      area_sqm: numberOrNull$2(form.area_sqm),
+      area_sqm: numberOrNull$1(form.area_sqm),
       contract_signed_date: form.contract_signed_date,
       target_opening_date: form.target_opening_date,
-      budget_total: numberOrNull$2(form.budget_total) ?? 0,
+      budget_total: numberOrNull$1(form.budget_total) ?? 0,
       manager_name: form.manager_name.trim(),
       lease_contract_id: project?.lease_contract_id ?? null,
       lease_contract_number: form.lease_contract_number.trim(),
@@ -5120,30 +4405,30 @@ function ProjectModal({
   ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-project-form", onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "الاسم *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.name, onChange: setInput("name"), className: inputCls$4, placeholder: "مثال: فرع الملقا" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.name, onChange: setInput("name"), className: inputCls$3, placeholder: "مثال: فرع الملقا" }),
       errorText("name")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "المدينة *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.city, onChange: setInput("city"), className: inputCls$4, placeholder: "الرياض" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.city, onChange: setInput("city"), className: inputCls$3, placeholder: "الرياض" }),
       errorText("city")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "الحي" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.district, onChange: setInput("district"), className: inputCls$4, placeholder: "الحي" })
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.district, onChange: setInput("district"), className: inputCls$3, placeholder: "الحي" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "العنوان" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.address, onChange: setInput("address"), className: inputCls$4, placeholder: "الشارع / المجمع" })
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.address, onChange: setInput("address"), className: inputCls$3, placeholder: "الشارع / المجمع" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "المساحة (م²)" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.1", value: form.area_sqm, onChange: setInput("area_sqm"), className: inputCls$4, placeholder: "0", dir: "ltr" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.1", value: form.area_sqm, onChange: setInput("area_sqm"), className: inputCls$3, placeholder: "0", dir: "ltr" }),
       errorText("area_sqm")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { hint: "SAR", children: "الميزانية الإجمالية" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.budget_total, onChange: setInput("budget_total"), className: inputCls$4, placeholder: "0.00", dir: "ltr" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.budget_total, onChange: setInput("budget_total"), className: inputCls$3, placeholder: "0.00", dir: "ltr" }),
       errorText("budget_total")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
@@ -5158,15 +4443,15 @@ function ProjectModal({
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "مدير المشروع" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.manager_name, onChange: setInput("manager_name"), className: inputCls$4, placeholder: "اسم المدير" })
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.manager_name, onChange: setInput("manager_name"), className: inputCls$3, placeholder: "اسم المدير" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "رقم عقد الإيجار" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.lease_contract_number, onChange: setInput("lease_contract_number"), className: inputCls$4, placeholder: "C-2026-01", dir: "ltr" })
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.lease_contract_number, onChange: setInput("lease_contract_number"), className: inputCls$3, placeholder: "C-2026-01", dir: "ltr" })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "ملاحظات" }),
-      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$4} resize-y`, placeholder: "ملاحظات اختيارية" })
+      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$3} resize-y`, placeholder: "ملاحظات اختيارية" })
     ] }),
     !isEditing ? /* @__PURE__ */ jsxs("div", { className: `sm:col-span-2 ${ws.innerCard} p-3`, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mb-2", children: [
@@ -5444,10 +4729,7 @@ function ProjectsListPanel({
   const nearest = summary.nearest_opening;
   const nearestValue = nearest ? nearest.days < 0 ? `تجاوز بـ ${Math.abs(nearest.days)} ${daysWord$2(nearest.days)}` : nearest.days === 0 ? "اليوم" : `${nearest.days} ${daysWord$2(nearest.days)}` : "—";
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} px-4 py-2.5 flex items-center gap-2 text-xs text-slate-600 dark:text-white/60`, children: [
-      /* @__PURE__ */ jsx(Info, { className: "w-4 h-4 shrink-0 text-sky-700 dark:text-sky-200" }),
-      /* @__PURE__ */ jsx("span", { children: "وضع تجريبي: البيانات محفوظة في هذا المتصفح فقط حتى ربط الخلفية" })
-    ] }) ,
+    null,
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3", children: [
       /* @__PURE__ */ jsx(SummaryCard$2, { label: "مشاريع نشطة", value: summary.active_count, icon: Building2, tone: "emerald" }),
       /* @__PURE__ */ jsx(SummaryCard$2, { label: "إجمالي الميزانيات", value: formatMoney$i(summary.budget_total), icon: Wallet, tone: "sky" }),
@@ -6006,13 +5288,13 @@ function GlassSelect({
 }
 
 const FALLBACK_COLORS = ["#0e7a5f", "#0284c7", "#7c3aed", "#d97706", "#e11d48", "#0891b2", "#65a30d", "#db2777", "#9333ea", "#ea580c", "#475569"];
-const inputCls$3 = `${ws.input} px-3 py-2 text-sm`;
-function numberOrNull$1(raw) {
+const inputCls$2 = `${ws.input} px-3 py-2 text-sm`;
+function numberOrNull(raw) {
   if (raw === null || raw === void 0 || String(raw).trim() === "") return null;
   const n = Number(raw);
   return Number.isFinite(n) ? n : null;
 }
-function buildInitial$2(phase, project) {
+function buildInitial$1(phase, project) {
   const phases = Array.isArray(project?.phases) ? project.phases : [];
   const presets = presetColors();
   return {
@@ -6043,11 +5325,11 @@ function PhaseModal({
 }) {
   const isEditing = !!phase?.id;
   const saveMut = useSaveBranchProjectPhase();
-  const [form, setForm] = useState(() => buildInitial$2(phase, project));
+  const [form, setForm] = useState(() => buildInitial$1(phase, project));
   const [errors, setErrors] = useState({});
   useEffect(() => {
     if (open) {
-      setForm(buildInitial$2(phase, project));
+      setForm(buildInitial$1(phase, project));
       setErrors({});
     }
   }, [open, phase?.id]);
@@ -6076,11 +5358,11 @@ function PhaseModal({
     if (form.actual_start && form.actual_end && form.actual_end < form.actual_start) {
       next.actual_end = "النهاية الفعلية قبل البداية الفعلية";
     }
-    const budget = numberOrNull$1(form.budget);
+    const budget = numberOrNull(form.budget);
     if (form.budget !== "" && (budget === null || budget < 0)) next.budget = "الميزانية رقم غير صالح";
-    const weight = numberOrNull$1(form.weight);
+    const weight = numberOrNull(form.weight);
     if (weight === null || weight < 1 || weight > 5) next.weight = "الوزن بين 1 و5";
-    const override = numberOrNull$1(form.progress_override);
+    const override = numberOrNull(form.progress_override);
     if (form.progress_override !== "" && (override === null || override < 0 || override > 100)) {
       next.progress_override = "النسبة بين 0 و100";
     }
@@ -6105,9 +5387,9 @@ function PhaseModal({
       actual_start: form.actual_start || null,
       actual_end: form.actual_end || null,
       status: form.status,
-      budget: numberOrNull$1(form.budget) ?? 0,
-      weight: numberOrNull$1(form.weight) ?? 1,
-      progress_override: numberOrNull$1(form.progress_override),
+      budget: numberOrNull(form.budget) ?? 0,
+      weight: numberOrNull(form.weight) ?? 1,
+      progress_override: numberOrNull(form.progress_override),
       owner_employee_id: phase?.owner_employee_id ?? null,
       owner_name: form.owner_name.trim(),
       contractor_contact_id: phase?.contractor_contact_id ?? null,
@@ -6129,7 +5411,7 @@ function PhaseModal({
   ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-phase-form", onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
     /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "اسم القسم *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.name, onChange: setInput("name"), className: inputCls$3, placeholder: "مثال: الديكور والتشطيب" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.name, onChange: setInput("name"), className: inputCls$2, placeholder: "مثال: الديكور والتشطيب" }),
       errorText("name")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
@@ -6157,26 +5439,26 @@ function PhaseModal({
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { hint: "SAR", children: "الميزانية" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.budget, onChange: setInput("budget"), className: inputCls$3, placeholder: "0.00", dir: "ltr" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.budget, onChange: setInput("budget"), className: inputCls$2, placeholder: "0.00", dir: "ltr" }),
       errorText("budget")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { hint: "1–5، يؤثر على تقدم المشروع", children: "الوزن" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "1", max: "5", step: "1", value: form.weight, onChange: setInput("weight"), className: inputCls$3, dir: "ltr" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "1", max: "5", step: "1", value: form.weight, onChange: setInput("weight"), className: inputCls$2, dir: "ltr" }),
       errorText("weight")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اتركه فارغاً للحساب التلقائي من المهام", children: "تقدم يدوي %" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "0", max: "100", step: "1", value: form.progress_override, onChange: setInput("progress_override"), className: inputCls$3, placeholder: "تلقائي", dir: "ltr" }),
+      /* @__PURE__ */ jsx("input", { type: "number", min: "0", max: "100", step: "1", value: form.progress_override, onChange: setInput("progress_override"), className: inputCls$2, placeholder: "تلقائي", dir: "ltr" }),
       errorText("progress_override")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "المسؤول" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.owner_name, onChange: setInput("owner_name"), className: inputCls$3, placeholder: "اسم المسؤول" })
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.owner_name, onChange: setInput("owner_name"), className: inputCls$2, placeholder: "اسم المسؤول" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "المقاول / المورد" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.contractor_name, onChange: setInput("contractor_name"), className: inputCls$3, placeholder: "اسم المقاول" })
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.contractor_name, onChange: setInput("contractor_name"), className: inputCls$2, placeholder: "اسم المقاول" })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "اللون" }),
@@ -6192,13 +5474,13 @@ function PhaseModal({
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "ملاحظات" }),
-      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$3} resize-y`, placeholder: "ملاحظات اختيارية" })
+      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$2} resize-y`, placeholder: "ملاحظات اختيارية" })
     ] })
   ] }) });
 }
 
-const inputCls$2 = `${ws.input} px-3 py-2 text-sm`;
-function buildInitial$1(task, phaseId) {
+const inputCls$1 = `${ws.input} px-3 py-2 text-sm`;
+function buildInitial(task, phaseId) {
   return {
     title: task?.title || "",
     phase_id: task?.phase_id != null ? String(task.phase_id) : phaseId != null ? String(phaseId) : "",
@@ -6218,11 +5500,11 @@ function TaskModal$1({
 }) {
   const isEditing = !!task?.id;
   const saveMut = useSaveBranchProjectTask();
-  const [form, setForm] = useState(() => buildInitial$1(task, phaseId));
+  const [form, setForm] = useState(() => buildInitial(task, phaseId));
   const [errors, setErrors] = useState({});
   useEffect(() => {
     if (open) {
-      setForm(buildInitial$1(task, phaseId));
+      setForm(buildInitial(task, phaseId));
       setErrors({});
     }
   }, [open, task?.id, phaseId]);
@@ -6289,7 +5571,7 @@ function TaskModal$1({
   ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-task-form", onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
     /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "عنوان المهمة *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.title, onChange: setInput("title"), className: inputCls$2, placeholder: "مثال: تركيب اللوحة الخارجية" }),
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.title, onChange: setInput("title"), className: inputCls$1, placeholder: "مثال: تركيب اللوحة الخارجية" }),
       errorText("title")
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
@@ -6307,7 +5589,7 @@ function TaskModal$1({
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "المسؤول" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.assignee_name, onChange: setInput("assignee_name"), className: inputCls$2, placeholder: "اسم المسؤول" })
+      /* @__PURE__ */ jsx("input", { type: "text", value: form.assignee_name, onChange: setInput("assignee_name"), className: inputCls$1, placeholder: "اسم المسؤول" })
     ] }),
     /* @__PURE__ */ jsx("div", { className: "sm:col-span-2", children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => set("is_milestone")(!form.is_milestone), className: `w-full flex items-center gap-3 ${ws.innerCard} px-3 py-2.5 text-right`, "aria-pressed": form.is_milestone, children: [
       /* @__PURE__ */ jsx("span", { className: `inline-flex w-10 h-6 rounded-full p-0.5 transition-colors shrink-0 ${form.is_milestone ? "bg-[#0e7a5f] dark:bg-emerald-400/70" : "bg-slate-300 dark:bg-white/20"}`, children: /* @__PURE__ */ jsx("span", { className: `w-5 h-5 rounded-full bg-white shadow transition-transform ${form.is_milestone ? "-translate-x-4" : "translate-x-0"}` }) }),
@@ -6319,7 +5601,7 @@ function TaskModal$1({
     ] }) }),
     /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "ملاحظات" }),
-      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$2} resize-y`, placeholder: "ملاحظات اختيارية" })
+      /* @__PURE__ */ jsx("textarea", { value: form.notes, onChange: setInput("notes"), rows: 3, className: `${inputCls$1} resize-y`, placeholder: "ملاحظات اختيارية" })
     ] })
   ] }) });
 }
@@ -6646,6 +5928,3449 @@ function PhasesTab({
       task: null
     }) })
   ] });
+}
+
+// Client-side image downscale + re-encode before upload.
+//
+// Phone cameras produce 3–12MB JPEGs at 4000px+. Our chunked
+// uploader pushes those in 128KB slices over sequential HTTP
+// round-trips, so a single receipt photo can take 30–60s. Receipts
+// and deduction attachments only need to be legible, not
+// full-resolution — downscaling the longest edge to ~1600px and
+// re-encoding as JPEG q≈0.72 typically cuts an 8MB photo to
+// ~250–450KB (a 20–40× reduction), which collapses the upload to a
+// 2–4 chunk round-trip.
+//
+// Non-image files, tiny images, and anything the browser can't
+// decode pass through UNTOUCHED — the caller still gets a valid
+// File back, so this is always safe to wrap an upload with.
+
+const DEFAULT_MAX_EDGE = 1600;
+const DEFAULT_QUALITY = 0.72;
+// Below this, compressing is pointless overhead — ship as-is.
+const SKIP_BELOW_BYTES = 400 * 1024; // 400KB
+
+function canvasToBlob(canvas, type, quality) {
+  return new Promise(resolve => {
+    if (canvas.toBlob) {
+      canvas.toBlob(blob => resolve(blob), type, quality);
+    } else {
+      // Very old browsers: fall back to dataURL → Blob.
+      try {
+        const dataUrl = canvas.toDataURL(type, quality);
+        const [meta, b64] = dataUrl.split(",");
+        const mime = (meta.match(/:(.*?);/) || [])[1] || type;
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i += 1) bytes[i] = bin.charCodeAt(i);
+        resolve(new Blob([bytes], {
+          type: mime
+        }));
+      } catch {
+        resolve(null);
+      }
+    }
+  });
+}
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("decode failed"));
+    };
+    img.src = url;
+  });
+}
+
+/**
+ * Returns a (possibly) smaller File. Always resolves to a usable
+ * File — never throws to the caller; on any failure it returns the
+ * original input untouched.
+ *
+ * @param {File} file
+ * @param {{maxEdge?: number, quality?: number}} [opts]
+ */
+async function compressImage(file, opts = {}) {
+  try {
+    if (typeof window === "undefined" || !file) return file;
+    const type = file.type || "";
+    // Only raster photos benefit. Skip SVG (vector — rasterizing
+    // would degrade it) and any non-image.
+    if (!type.startsWith("image/") || type === "image/svg+xml") {
+      return file;
+    }
+    // GIF may be animated; canvas re-encode would flatten to one
+    // frame. Leave it alone.
+    if (type === "image/gif") return file;
+    if (typeof file.size === "number" && file.size > 0 && file.size < SKIP_BELOW_BYTES) {
+      return file;
+    }
+    const maxEdge = opts.maxEdge || DEFAULT_MAX_EDGE;
+    const quality = opts.quality || DEFAULT_QUALITY;
+    const img = await loadImage(file);
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    if (!w || !h) return file;
+    const longest = Math.max(w, h);
+    const scale = longest > maxEdge ? maxEdge / longest : 1;
+    const targetW = Math.round(w * scale);
+    const targetH = Math.round(h * scale);
+    const canvas = document.createElement("canvas");
+    canvas.width = targetW;
+    canvas.height = targetH;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return file;
+    ctx.drawImage(img, 0, 0, targetW, targetH);
+
+    // Always re-encode to JPEG — PNG photos balloon, and we don't
+    // need alpha on a receipt/attachment. Keeps the pipeline simple.
+    const blob = await canvasToBlob(canvas, "image/jpeg", quality);
+    if (!blob || !blob.size) return file;
+
+    // If compression somehow produced a bigger file (already-tiny
+    // or already-optimized source), keep the original.
+    if (typeof file.size === "number" && blob.size >= file.size) {
+      return file;
+    }
+    const baseName = (file.name || "image").replace(/\.[^.]+$/, "");
+    return new File([blob], `${baseName}.jpg`, {
+      type: "image/jpeg",
+      lastModified: Date.now()
+    });
+  } catch {
+    // Any failure → original file, upload still works.
+    return file;
+  }
+}
+
+const compressImage$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  compressImage,
+  default: compressImage
+}, Symbol.toStringTag, { value: 'Module' }));
+
+function useUpload() {
+  const [loading, setLoading] = React.useState(false);
+  const MAX_UPLOAD_BYTES = 90 * 1024 * 1024; // 90MB
+
+  const upload = React.useCallback(async input => {
+    try {
+      setLoading(true);
+      const readErrorMessage = async res => {
+        // Prefer JSON { error } but fall back to plain text.
+        // IMPORTANT: clone() the response because body streams can only be read once.
+        try {
+          const maybeJson = await res.clone().json();
+          if (maybeJson?.error) {
+            return String(maybeJson.error);
+          }
+        } catch {
+          // ignore
+        }
+        try {
+          const t = await res.clone().text();
+          if (t) {
+            return t;
+          }
+        } catch {
+          // ignore
+        }
+        return `Upload failed (${res.status} ${res.statusText})`;
+      };
+      const isNetworkLikeError = err => {
+        const msg = err instanceof Error ? err.message : String(err || "");
+        const lower = msg.toLowerCase();
+        // Browsers differ (Chrome: "Failed to fetch", Safari/iOS: "Load failed")
+        return lower.includes("failed to fetch") || lower.includes("load failed") || lower.includes("networkerror") || lower.includes("network error") || lower.includes("the network connection");
+      };
+      const uploadChunked = async file => {
+        // Keep chunks VERY small because Anything Functions can reject bigger payloads
+        // with FUNCTION_PAYLOAD_TOO_LARGE (varies by environment).
+        const CHUNK_SIZE = 128 * 1024; // 128KB (safer across environments)
+        const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+        const initRes = await authedFetch("/api/uploads/init", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            fileName: file.name,
+            mimeType: file.type || null,
+            sizeBytes: file.size,
+            totalChunks
+          })
+        });
+        if (!initRes.ok) {
+          const msg = await readErrorMessage(initRes);
+          throw new Error(msg || `When POSTing /api/uploads/init, the response was [${initRes.status}] ${initRes.statusText}`);
+        }
+        const initData = await initRes.json().catch(() => ({}));
+        const uploadId = initData?.uploadId;
+        if (!uploadId) {
+          throw new Error("فشل بدء رفع الملف");
+        }
+        try {
+          // Upload chunks with bounded concurrency instead of one
+          // strictly-sequential round-trip at a time. Each chunk is
+          // tiny (128KB) but the per-request latency dominates over
+          // a phone connection, so firing several in parallel cuts
+          // wall-clock roughly N-fold. Cap kept modest so we don't
+          // overwhelm the function/DB or trip rate limits.
+          const CONCURRENCY = 6;
+          const uploadOneChunk = async i => {
+            const start = i * CHUNK_SIZE;
+            const end = Math.min(file.size, start + CHUNK_SIZE);
+            const slice = file.slice(start, end);
+            const arrayBuffer = await slice.arrayBuffer();
+            const chunkRes = await authedFetch(`/api/uploads/${uploadId}/chunk?index=${i}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/octet-stream"
+              },
+              body: arrayBuffer
+            });
+            if (!chunkRes.ok) {
+              const msg = await readErrorMessage(chunkRes);
+              throw new Error(msg || `When POSTing a chunk, the response was [${chunkRes.status}] ${chunkRes.statusText}`);
+            }
+          };
+          for (let base = 0; base < totalChunks; base += CONCURRENCY) {
+            const batch = [];
+            for (let i = base; i < Math.min(base + CONCURRENCY, totalChunks); i += 1) {
+              batch.push(uploadOneChunk(i));
+            }
+            // If any chunk in the batch fails, the whole upload aborts
+            // (the catch below cleans up the session).
+            await Promise.all(batch);
+          }
+          const completeRes = await authedFetch(`/api/uploads/${uploadId}/complete`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              totalChunks
+            })
+          });
+          if (!completeRes.ok) {
+            const msg = await readErrorMessage(completeRes);
+            throw new Error(msg || `When POSTing /api/uploads/${uploadId}/complete, the response was [${completeRes.status}] ${completeRes.statusText}`);
+          }
+          const completeData = await completeRes.json().catch(() => ({}));
+          return {
+            url: completeData?.url,
+            mimeType: completeData?.mimeType || file.type || null
+          };
+        } catch (e) {
+          // best-effort cleanup
+          try {
+            await authedFetch(`/api/uploads/${uploadId}`, {
+              method: "DELETE"
+            });
+          } catch {
+            // ignore
+          }
+          throw e;
+        }
+      };
+      if ("file" in input && input.file) {
+        // Downscale + re-encode photos before chunking. A receipt
+        // shot at 8MB becomes ~300KB, turning a 60-chunk sequential
+        // upload into a 2–3 chunk one. No-op for non-images, tiny
+        // images, or anything the browser can't decode. `unoptimized`
+        // lets a caller opt out (e.g. originals that must stay exact).
+        const file = input.unoptimized ? input.file : await compressImage(input.file);
+        if (typeof file?.size === "number" && file.size > MAX_UPLOAD_BYTES) {
+          throw new Error(`Upload failed: File too large. الحد الأقصى ${Math.round(MAX_UPLOAD_BYTES / (1024 * 1024))}MB`);
+        }
+
+        // Always use chunked upload through our own /api/uploads/* endpoints.
+        const chunked = await uploadChunked(file);
+        return {
+          url: chunked.url,
+          mimeType: chunked.mimeType || null
+        };
+      } else if ("url" in input) {
+        // Fetch the remote URL and convert to a File, then chunked upload.
+        const remoteRes = await fetch(input.url);
+        if (!remoteRes.ok) {
+          throw new Error(`تعذر تحميل الرابط (${remoteRes.status})`);
+        }
+        const blob = await remoteRes.blob();
+        const fileName = (input.url.split("/").pop() || "file").split("?")[0] || "file";
+        const file = new File([blob], fileName, {
+          type: blob.type || "application/octet-stream"
+        });
+        const chunked = await uploadChunked(file);
+        return {
+          url: chunked.url,
+          mimeType: chunked.mimeType || null
+        };
+      } else if ("base64" in input) {
+        // Decode base64 (with optional data: prefix) into a File, then upload.
+        const raw = String(input.base64 || "");
+        let mime = "application/octet-stream";
+        let b64Body = raw;
+        const m = raw.match(/^data:([^;]+);base64,(.*)$/);
+        if (m) {
+          mime = m[1];
+          b64Body = m[2];
+        }
+        const binary = atob(b64Body);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i += 1) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        const file = new File([bytes], "upload.bin", {
+          type: mime
+        });
+        const chunked = await uploadChunked(file);
+        return {
+          url: chunked.url,
+          mimeType: chunked.mimeType || null
+        };
+      } else {
+        // Raw buffer
+        const buf = input.buffer;
+        const file = new File([buf], "upload.bin", {
+          type: "application/octet-stream"
+        });
+        const chunked = await uploadChunked(file);
+        return {
+          url: chunked.url,
+          mimeType: chunked.mimeType || null
+        };
+      }
+    } catch (uploadError) {
+      const msg = uploadError instanceof Error ? uploadError.message : null;
+      const msgLower = msg ? msg.toLowerCase() : "";
+      if (msgLower.includes("failed to fetch") || msgLower.includes("load failed")) {
+        return {
+          error: "فشل الاتصال بخدمة رفع الملفات. تأكد من الإنترنت ثم جرّب مرة ثانية."
+        };
+      }
+      if (uploadError instanceof Error) {
+        return {
+          error: uploadError.message
+        };
+      }
+      if (typeof uploadError === "string") {
+        return {
+          error: uploadError
+        };
+      }
+      return {
+        error: "Upload failed"
+      };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  return [upload, {
+    loading
+  }];
+}
+
+// كشف حسابات «المصروف الثابت» في شجرة الحسابات.
+//
+// الحساب يعتبر مصروفاً ثابتاً إذا كان اسمه (أو اسم أي أب في سلسلة
+// آبائه) يجمع كلمتي «مصروف/مصاريف/مصروفات» و«ثابت» — يغطي التسميات
+// الشائعة: «مصروف ثابت»، «المصروفات الثابتة»، «مصاريف ثابتة»…
+// الفحص بالاسم لا بالكود لأن الشجرة قابلة للتعديل من المستخدم.
+
+const normalizeArabic = value => String(value || "").replace(/[أإآ]/g, "ا");
+function isFixedExpenseName(name) {
+  const normalized = normalizeArabic(name);
+  return /(مصروف|مصاريف)/.test(normalized) && /ثابت/.test(normalized);
+}
+
+// هل الحساب نفسه أو أحد آبائه «مصروف ثابت»؟ يمشي سلسلة parent_id
+// بسقف عمق يمنع الدوران لو فسدت الشجرة.
+function isFixedExpenseAccountId(accountId, accounts = []) {
+  const id = Number(accountId);
+  if (!Number.isInteger(id) || id <= 0) return false;
+  const byId = new Map(accounts.map(account => [Number(account.id), account]));
+  let current = byId.get(id);
+  let depth = 0;
+  while (current && depth < 20) {
+    if (isFixedExpenseName(current.name)) return true;
+    current = current.parent_id ? byId.get(Number(current.parent_id)) : null;
+    depth += 1;
+  }
+  return false;
+}
+
+const PURCHASE_INVOICE_STATUS_OPTIONS = [{
+  value: "pending_payment",
+  label: "بانتظار الاعتماد"
+}, {
+  value: "partial_paid",
+  label: "مدفوعة جزئياً"
+}, {
+  value: "paid",
+  label: "مدفوعة"
+}, {
+  value: "overdue",
+  label: "متأخرة"
+}];
+const CURRENCY_OPTIONS$1 = [{
+  value: "SAR",
+  label: "ريال سعودي - SAR"
+}, {
+  value: "USD",
+  label: "دولار أمريكي - USD"
+}, {
+  value: "EUR",
+  label: "يورو - EUR"
+}, {
+  value: "AED",
+  label: "درهم إماراتي - AED"
+}, {
+  value: "KWD",
+  label: "دينار كويتي - KWD"
+}, {
+  value: "BHD",
+  label: "دينار بحريني - BHD"
+}, {
+  value: "QAR",
+  label: "ريال قطري - QAR"
+}, {
+  value: "OMR",
+  label: "ريال عماني - OMR"
+}];
+function todayRiyadh$7() {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Riyadh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(/* @__PURE__ */ new Date());
+  const get = (type) => parts.find((part) => part.type === type)?.value || "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+function normalizeDigits(text) {
+  return String(text || "").replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d))).replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/٫/g, ".").replace(/٬/g, ",");
+}
+const MONEY_RE = /(\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?|\d+\.\d{1,2}|\d{2,})/;
+function parseMoneyToken(token) {
+  const number = Number(String(token).replace(/,/g, ""));
+  return Number.isFinite(number) && number > 0 ? number : null;
+}
+function moneyAfterKeyword(text, keywords, windowAfter = 60, windowBefore = 30) {
+  for (const keyword of keywords) {
+    const re = new RegExp(keyword, "gi");
+    let match;
+    while ((match = re.exec(text)) !== null) {
+      const start = match.index + match[0].length;
+      const after = text.slice(start, start + windowAfter);
+      const forward = after.match(MONEY_RE);
+      if (forward) {
+        const value = parseMoneyToken(forward[1]);
+        if (value !== null) return value;
+      }
+      const before = text.slice(Math.max(0, match.index - windowBefore), match.index);
+      const backwardAll = [...before.matchAll(new RegExp(MONEY_RE.source, "g"))];
+      if (backwardAll.length > 0) {
+        const value = parseMoneyToken(backwardAll[backwardAll.length - 1][1]);
+        if (value !== null) return value;
+      }
+    }
+  }
+  return null;
+}
+function detectInvoiceNumber(text) {
+  const patterns = [/(?:رقم\s*الفاتورة|الفاتورة\s*رقم|فاتورة\s*(?:ضريبية\s*)?(?:رقم|#)|المرجع)\s*[:#]?\s*([A-Za-z0-9\-\/_.]{2,30})/gi, /invoice\s*(?:no|number|num|#)?\.?\s*[:#]?\s*([A-Za-z0-9\-\/_.]{2,30})/gi, /\b(INV[-\/]?[A-Za-z0-9][A-Za-z0-9\-]{2,24})\b/g];
+  for (const re of patterns) {
+    for (const match of text.matchAll(re)) {
+      const token = match[1].replace(/[.:،,]+$/, "");
+      if (/^(date|no|number|تاريخ)$/i.test(token)) continue;
+      if (!/\d/.test(token)) continue;
+      return token;
+    }
+  }
+  return null;
+}
+function detectTotal(text) {
+  const value = moneyAfterKeyword(text, ["المبلغ\\s*المستحق", "الإجمالي\\s*المستحق", "الاجمالي\\s*المستحق", "قحتسملا\\s*غلبملا", "عومجملا", "المجموع\\s*الكلي", "الإجمالي\\s*(?:شامل|مع)\\s*الضريبة", "الاجمالي\\s*(?:شامل|مع)\\s*الضريبة", "grand\\s*total", "total\\s*(?:due|amount)", "amount\\s*due", "المجموع", "الإجمالي", "الاجمالي", "total"]) ?? null;
+  if (value !== null) return value;
+  let max = null;
+  const re = new RegExp(MONEY_RE.source, "g");
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    if (!match[1].includes(".") && !match[1].includes(",")) continue;
+    const parsed = parseMoneyToken(match[1]);
+    if (parsed === null || parsed > 1e7) continue;
+    if (max === null || parsed > max) max = parsed;
+  }
+  return max;
+}
+function detectTax(text) {
+  return moneyAfterKeyword(text, ["إجمالي\\s*الضريبة", "اجمالي\\s*الضريبة", "ضريبة\\s*القيمة\\s*المضافة\\s*(?:\\(?\\s*15\\s*%?\\s*\\)?)?", "قيمة\\s*الضريبة", "vat\\s*(?:\\(?\\s*15\\s*%?\\s*\\)?)?\\s*(?:amount)?", "tax\\s*amount"]);
+}
+const DATE_TOKEN_RE = /(\d{4}-\d{2}-\d{2}|\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/;
+function normalizeDateToken(raw) {
+  if (!raw) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+  const parts = raw.split(/[\/\-.]/).map(Number);
+  if (parts.length !== 3) return null;
+  let [day, month, year] = parts;
+  if (parts[0] > 1900) {
+    [year, month, day] = parts;
+  }
+  if (year < 100) year += 2e3;
+  if (!day || !month || !year || month > 12 || day > 31) return null;
+  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+function compactArabic(text) {
+  return String(text).normalize("NFKC").replace(/(?<=[؀-ۿ])\s+(?=[؀-ۿ])/g, "");
+}
+function dateNearKeyword(text, keywords) {
+  for (const keyword of keywords) {
+    const re = new RegExp(keyword, "gi");
+    let match;
+    while ((match = re.exec(text)) !== null) {
+      const start = match.index + match[0].length;
+      const after = text.slice(start, start + 40).match(DATE_TOKEN_RE);
+      if (after) {
+        const value = normalizeDateToken(after[1]);
+        if (value) return value;
+      }
+      const before = text.slice(Math.max(0, match.index - 40), match.index);
+      const backwardAll = [...before.matchAll(new RegExp(DATE_TOKEN_RE.source, "g"))];
+      if (backwardAll.length > 0) {
+        const value = normalizeDateToken(backwardAll[backwardAll.length - 1][1]);
+        if (value) return value;
+      }
+    }
+  }
+  return null;
+}
+function detectInvoiceDate(text) {
+  const compact = compactArabic(text);
+  const keyworded = dateNearKeyword(compact, ["تاريخ\\s*الفاتورة", "تاريخ\\s*الإصدار", "تاريخ\\s*الاصدار", "رادصلإا\\s*خيرات", "رادصالا\\s*خيرات", "ةروتافلا\\s*خيرات", "invoice\\s*date", "issue\\s*date", "التاريخ", "date"]);
+  if (keyworded) return keyworded;
+  for (const match of compact.matchAll(new RegExp(DATE_TOKEN_RE.source, "g"))) {
+    const value = normalizeDateToken(match[1]);
+    if (value && value >= "2015-01-01" && value <= "2035-12-31") {
+      return value;
+    }
+  }
+  return null;
+}
+function detectDueDate(text) {
+  const compact = compactArabic(text);
+  return dateNearKeyword(compact, ["تاريخ\\s*الاستحقاق", "تاريخ\\s*الإستحقاق", "قاقحتسلاا\\s*خيرات", "قاقحتسالا\\s*خيرات", "due\\s*date", "payment\\s*due"]);
+}
+function normalizeVat(value) {
+  return String(value || "").replace(/[^0-9]/g, "");
+}
+function extractVatNumbers(text) {
+  const found = /* @__PURE__ */ new Set();
+  const keywordRe = /(?:الرقم\s*الضريبي|رقم\s*(?:التسجيل\s*)?الضريبي|السجل\s*الضريبي|vat\s*(?:reg(?:istration)?)?\s*(?:no|number|num|#)?|tax\s*(?:reg(?:istration)?)?\s*(?:no|number|num|#)|trn)\s*[.:#]?\s*([0-9][0-9\s\-]{5,25})/gi;
+  for (const match of text.matchAll(keywordRe)) {
+    const digits = normalizeVat(match[1]);
+    if (digits.length >= 7) found.add(digits);
+  }
+  for (const match of text.matchAll(/\b3\d{13}3\b/g)) {
+    found.add(match[0]);
+  }
+  return [...found];
+}
+function detectContact(text, contacts) {
+  const vatNumbers = extractVatNumbers(text);
+  if (vatNumbers.length > 0) {
+    for (const contact of contacts) {
+      if (contact.is_active === false) continue;
+      const contactVat = normalizeVat(contact.vat_number);
+      if (contactVat.length >= 7 && vatNumbers.includes(contactVat)) {
+        return {
+          contact,
+          matchedBy: "vat"
+        };
+      }
+    }
+  }
+  const lower = text.toLowerCase();
+  let best = null;
+  for (const contact of contacts) {
+    if (contact.is_active === false) continue;
+    const name = String(contact.name || "").trim();
+    if (name.length >= 3 && lower.includes(name.toLowerCase())) {
+      if (!best || name.length > String(best.name).length) best = contact;
+    }
+  }
+  return best ? {
+    contact: best,
+    matchedBy: "name"
+  } : null;
+}
+const SUMMARY_LINE_RE = /(المجموع|الإجمالي|الاجمالي|إجمالي|اجمالي|المبلغ\s*المستحق|المستحق|عومجملا|يلامجلإا|يلامجلاا|يلامجا|قحتسملا|غلبملا|sub\s*-?\s*total|grand\s*total|total\s*(?:due|amount|before)|amount\s*due|balance)/i;
+function isSummaryLine(line) {
+  if (SUMMARY_LINE_RE.test(line)) return true;
+  const compact = String(line).replace(/(?<=[؀-ۿ])\s+(?=[؀-ۿ])/g, "");
+  return SUMMARY_LINE_RE.test(compact);
+}
+const LINE_NUM_RE = /(\d{1,3}(?:,\d{3})+(?:\.\d{1,4})?|\d+\.\d{1,4}|\d{1,6})/g;
+function lineNumbers(line) {
+  const scrubbed = String(line).replace(/\d{7,}/g, " ");
+  const values = [];
+  for (const match of scrubbed.matchAll(LINE_NUM_RE)) {
+    const value = Number(String(match[1]).replace(/,/g, ""));
+    if (Number.isFinite(value)) values.push(value);
+  }
+  return values;
+}
+function findLineTriplet(values) {
+  let best = null;
+  for (let i = 0; i < values.length; i += 1) {
+    for (let j = 0; j < values.length; j += 1) {
+      if (i === j) continue;
+      const net = values[i];
+      const tax = values[j];
+      if (net <= 0 || tax <= 0 || net < tax) continue;
+      const total = net + tax;
+      const hit = values.find((candidate) => Math.abs(candidate - total) <= 0.03);
+      if (hit === void 0) continue;
+      if (!best || hit > best.total) {
+        best = {
+          net: round2$3(net),
+          tax: round2$3(tax),
+          total: round2$3(hit)
+        };
+      }
+    }
+  }
+  return best;
+}
+const AR_INVOICE_WORDS = new Set("كيك وحدة قطعة صينية صينة علبة كرتون حبة شدة كوب أكواب اكواب حليب قهوة بن سكر شاي ماء مياه عصير شوكولاته شوكولاتة شكلاته كراميل فانيلا فانيليا توت فراولة مانجو ليمون جبن جبنة زبدة كريمة عسل تمر كعك خبز مخبوزات حلويات بسكويت دونات كرواسون معمول تراميسو تشيز لوز فستق بندق جوز كاجو مندي كوكيز مافن براونيز كوكونت بيري راز كرانشي لاتيه موكا كابتشينو اسبريسو سموذي ميلك شيك وافل بانكيك سينابون".split(" "));
+function arabicDirectionScore(text) {
+  let score = 0;
+  for (const word of text.split(/\s+/)) {
+    if (!/[؀-ۿ]/.test(word)) continue;
+    if (AR_INVOICE_WORDS.has(word)) score += 3;
+    if (/^ال./.test(word)) score += 2;
+    if (/.[ةى]$/.test(word)) score += 2;
+    if (/^[ةى]/.test(word)) score -= 3;
+    if (/.ال$/.test(word)) score -= 2;
+  }
+  return score;
+}
+function mergeSingleLetterRuns(text) {
+  const tokens = String(text).split(/\s+/).filter(Boolean);
+  const out = [];
+  let buffer = [];
+  const flush = () => {
+    const singles = buffer.filter((token) => token.length === 1).length;
+    if (buffer.length >= 3 || buffer.length === 2 && singles === 2) {
+      out.push(buffer.join(""));
+    } else {
+      out.push(...buffer);
+    }
+    buffer = [];
+  };
+  for (const token of tokens) {
+    if (/^[؀-ۿ]{1,2}$/.test(token)) {
+      buffer.push(token);
+    } else {
+      flush();
+      out.push(token);
+    }
+  }
+  flush();
+  return out.join(" ");
+}
+function mirrorArabic(run) {
+  const LAM_ALEF_MARK = "";
+  return [...run.split("لا").join(LAM_ALEF_MARK)].reverse().join("").split(LAM_ALEF_MARK).join("لا");
+}
+const AR_WORDS_BY_LENGTH = [...AR_INVOICE_WORDS].sort((a, b) => b.length - a.length);
+function segmentByLexicon(block) {
+  const out = [];
+  let unknown = "";
+  let i = 0;
+  while (i < block.length) {
+    let hit = null;
+    for (const word of AR_WORDS_BY_LENGTH) {
+      if (block.startsWith(word, i)) {
+        hit = word;
+        break;
+      }
+    }
+    if (hit) {
+      if (unknown) {
+        out.push(unknown);
+        unknown = "";
+      }
+      out.push(hit);
+      i += hit.length;
+    } else {
+      unknown += block[i];
+      i += 1;
+    }
+  }
+  if (unknown) out.push(unknown);
+  return out;
+}
+function expandGluedWords(text) {
+  return text.split(/\s+/).flatMap((word) => /^[؀-ۿ]{6,}$/.test(word) ? segmentByLexicon(word) : [word]).join(" ");
+}
+function fixArabicText(text) {
+  return mergeSingleLetterRuns(text).replace(/[؀-ۿ][؀-ۿs]*[؀-ۿ]/g, (run) => {
+    const forward = expandGluedWords(run);
+    const backward = expandGluedWords(mirrorArabic(run));
+    const lexiconHits = (s) => s.split(/\s+/).filter((w) => AR_INVOICE_WORDS.has(w)).length;
+    const score = (s) => arabicDirectionScore(s) + lexiconHits(s) * 2;
+    return score(backward) > score(forward) ? backward : forward;
+  });
+}
+function cleanItemDescription(line) {
+  const cleaned = line.replace(/\b\d{7,}\b/g, " ").replace(new RegExp(MONEY_RE.source, "g"), " ").replace(/\d+(?:\.\d+)?\s*%/g, " ").replace(/[%#|]/g, " ").replace(/\s{2,}/g, " ").replace(/^\s*\d+\s+/, "").trim();
+  return fixArabicText(cleaned);
+}
+function decimalsOf(value) {
+  return (String(value).split(".")[1] || "").length;
+}
+function findQtyPrice(values, net, total) {
+  const clean = values.filter((value) => value > 0 && value <= 1e6);
+  let best = null;
+  for (const [basis, base] of [["net", net], ["gross", total]]) {
+    if (!base || base <= 0) continue;
+    for (const q of clean) {
+      if (q > 1e5) continue;
+      const impliedPrice = base / q;
+      if (!Number.isFinite(impliedPrice) || impliedPrice <= 0) continue;
+      for (const p of clean) {
+        if (p === q && clean.filter((v) => v === q).length < 2) {
+          if (Math.abs(q * q - base) > 0.02) continue;
+        }
+        const diff = Math.abs(p - impliedPrice);
+        if (diff > Math.max(0.02, impliedPrice * 3e-3)) continue;
+        const trivial = q === 1 || p === 1 ? 1 : 0;
+        const qtyIsCountLike = decimalsOf(q) <= 1 ? 1 : 0;
+        const candidate = {
+          diff,
+          trivial,
+          qtyIsCountLike,
+          basisIsNet: basis === "net" ? 1 : 0,
+          quantity: q,
+          unitPrice: p,
+          basis
+        };
+        if (!best || candidate.trivial < best.trivial || candidate.trivial === best.trivial && (candidate.qtyIsCountLike > best.qtyIsCountLike || candidate.qtyIsCountLike === best.qtyIsCountLike && (candidate.basisIsNet > best.basisIsNet || candidate.basisIsNet === best.basisIsNet && candidate.diff < best.diff))) {
+          best = candidate;
+        }
+      }
+    }
+  }
+  return best;
+}
+function itemFromLine(line) {
+  if (isSummaryLine(line)) return null;
+  const values = lineNumbers(line);
+  if (values.length < 3) return null;
+  const triplet = findLineTriplet(values);
+  if (!triplet) return null;
+  const rate = triplet.net > 0 ? round2$3(triplet.tax / triplet.net * 100) : 15;
+  if (rate <= 0 || rate > 50) return null;
+  const qtyPrice = findQtyPrice(values, triplet.net, triplet.total);
+  return {
+    description: cleanItemDescription(line),
+    net: triplet.net,
+    total: triplet.total,
+    rate,
+    quantity: qtyPrice?.quantity ?? null,
+    unitPrice: qtyPrice?.unitPrice ?? null,
+    priceIncludesTax: qtyPrice?.basis === "gross"
+  };
+}
+const HEADER_WORD_RE = /^(vat|qty|unit|price|amount|total|discount|before|tax|products?|#|الوصف|المنتج|الكمية|السعر|الخصم|الضريبة)$/i;
+function isDescriptionLine(line) {
+  if (isSummaryLine(line)) return false;
+  const numbers = lineNumbers(line);
+  if (numbers.length > 2) return false;
+  if (numbers.some((value) => value >= 1e3)) return false;
+  const cleaned = cleanItemDescription(line);
+  if (cleaned.length < 3) return false;
+  const words = cleaned.split(/\s+/);
+  if (words.every((word) => HEADER_WORD_RE.test(word))) return false;
+  return true;
+}
+function dedupeDescription(description) {
+  const segments = description.split(/\s+-\s+|^-\s+|\s+-$/).map((segment) => segment.trim()).filter(Boolean);
+  const seen = /* @__PURE__ */ new Set();
+  const unique = [];
+  for (const segment of segments) {
+    const key = segment.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(segment);
+  }
+  let result = unique.join(" - ") || description.trim();
+  for (let pass = 0; pass < 2; pass += 1) {
+    result = result.replace(/(.{4,}?)\s*[-–]?\s*\1/gu, "$1");
+  }
+  return result.replace(/\s{2,}/g, " ").trim();
+}
+function itemsFromRows(rows) {
+  const normalized = rows.map((row) => normalizeDigits(row));
+  const items = [];
+  const consumed = /* @__PURE__ */ new Set();
+  let i = 0;
+  while (i < normalized.length) {
+    if (isSummaryLine(normalized[i])) {
+      i += 1;
+      continue;
+    }
+    let best = null;
+    let merged = "";
+    for (let k = 1; k <= 4 && i + k <= normalized.length; k += 1) {
+      const next = normalized[i + k - 1];
+      if (k > 1 && isSummaryLine(next)) break;
+      merged = merged ? `${merged} ${next}` : next;
+      const item = itemFromLine(merged);
+      if (!item) continue;
+      if (!best) best = {
+        item,
+        k
+      };
+      if (item.quantity !== null) {
+        best = {
+          item,
+          k
+        };
+        break;
+      }
+    }
+    if (!best) {
+      i += 1;
+      continue;
+    }
+    const descParts = [];
+    for (let back = i - 1; back >= 0 && back >= i - 2; back -= 1) {
+      if (consumed.has(back)) break;
+      if (!isDescriptionLine(normalized[back])) break;
+      descParts.unshift(cleanItemDescription(normalized[back]));
+      consumed.add(back);
+    }
+    const description = dedupeDescription([...descParts, best.item.description].join(" ").replace(/\s{2,}/g, " ").trim());
+    items.push({
+      ...best.item,
+      description
+    });
+    for (let c = 0; c < best.k; c += 1) consumed.add(i + c);
+    i += best.k;
+  }
+  return items;
+}
+function itemsSumMatches(items, grandTotal) {
+  if (items.length === 0) return false;
+  if (grandTotal === null || grandTotal === void 0) return items.length >= 2;
+  const sum = round2$3(items.reduce((acc, item) => acc + item.total, 0));
+  return Math.abs(sum - grandTotal) <= Math.max(1, grandTotal * 0.015);
+}
+function receiptItemsFromRows(rows) {
+  const items = [];
+  const consumed = /* @__PURE__ */ new Set();
+  const normalized = rows.map((row) => normalizeDigits(row));
+  for (let i = 0; i < normalized.length; i += 1) {
+    const line = normalized[i];
+    if (isSummaryLine(line)) continue;
+    if (!/\d{8,}/.test(line)) continue;
+    const values = lineNumbers(line);
+    const quantities = values.filter((value) => value > 0 && value <= 999 && decimalsOf(value) <= 1);
+    const amounts = values.filter((value) => value > 0 && decimalsOf(value) === 2);
+    if (quantities.length === 0 || amounts.length === 0) continue;
+    const total = Math.max(...amounts);
+    const quantity = quantities[0];
+    if (total <= 0 || quantity <= 0) continue;
+    let description = cleanItemDescription(line);
+    for (const neighbor of [i + 1, i - 1]) {
+      if (description.length >= 4) break;
+      if (neighbor < 0 || neighbor >= normalized.length) continue;
+      if (consumed.has(neighbor)) continue;
+      if (!isDescriptionLine(normalized[neighbor])) continue;
+      description = cleanItemDescription(normalized[neighbor]);
+      consumed.add(neighbor);
+    }
+    consumed.add(i);
+    items.push({
+      description,
+      net: round2$3(total / 1.15),
+      total: round2$3(total),
+      rate: 15,
+      quantity,
+      unitPrice: round2$3(total / quantity * 1e4) / 1e4,
+      priceIncludesTax: true
+    });
+  }
+  return items;
+}
+function parseInvoiceLineItems(rowGroups, grandTotal) {
+  const groups = (Array.isArray(rowGroups) ? rowGroups : []).filter((rows) => Array.isArray(rows) && rows.length > 0);
+  if (groups.length === 0) return null;
+  for (const rows of groups) {
+    const items = itemsFromRows(rows);
+    if (itemsSumMatches(items, grandTotal)) {
+      return items;
+    }
+  }
+  for (const rows of groups) {
+    const items = receiptItemsFromRows(rows);
+    if (itemsSumMatches(items, grandTotal)) {
+      return items;
+    }
+  }
+  return null;
+}
+function parseInvoiceText(rawText, contacts = []) {
+  const text = normalizeDigits(String(rawText).normalize("NFKC")).replace(/\s+/g, " ");
+  const total = detectTotal(text);
+  const tax = detectTax(text);
+  const contactMatch = detectContact(text, contacts);
+  return {
+    invoiceNumber: detectInvoiceNumber(text),
+    total,
+    tax: tax !== null && total !== null && tax >= total ? null : tax,
+    invoiceDate: detectInvoiceDate(text),
+    dueDate: detectDueDate(text),
+    contact: contactMatch?.contact || null,
+    contactMatchedBy: contactMatch?.matchedBy || null
+  };
+}
+function moneyInput$2(value) {
+  if (value === null || value === void 0 || value === "") return "";
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "";
+  return (Math.round(number * 100) / 100).toFixed(2);
+}
+function moneyValue$a(value) {
+  const number = Number(value || 0);
+  return Number.isFinite(number) ? number : 0;
+}
+function round2$3(value) {
+  return Math.round(value * 100) / 100;
+}
+const MAX_SMART_FILE_BYTES$1 = 3 * 1024 * 1024;
+async function fileToBase64$1(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = "";
+  const chunk = 32768;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+async function analyzeInvoiceRemotely({
+  file,
+  text
+} = {}) {
+  try {
+    const payload = {
+      text: text || ""
+    };
+    if (file && file.size > 0 && file.size <= MAX_SMART_FILE_BYTES$1) {
+      const mediaType = file.type || (/\.pdf$/i.test(file.name || "") ? "application/pdf" : "");
+      if (/^(application\/pdf|image\/(jpeg|png|webp|gif))$/.test(mediaType)) {
+        payload.file_base64 = await fileToBase64$1(file);
+        payload.media_type = mediaType;
+      }
+    }
+    if (!payload.file_base64 && !(payload.text || "").trim()) {
+      return {
+        analysis: null,
+        note: null
+      };
+    }
+    const response = await authedFetch("/api/accounting/purchase-invoices/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+      console.info("[invoice-scan] smart analysis unavailable:", response.status);
+      const data2 = await response.json().catch(() => ({}));
+      const note = response.status === 503 ? "التحليل الذكي غير مفعّل على الخادم (ANTHROPIC_API_KEY) — استخدمت القراءة المحلية." : `التحليل الذكي فشل (${response.status}${data2?.error ? `: ${data2.error}` : ""}) — استخدمت القراءة المحلية.`;
+      return {
+        analysis: null,
+        note
+      };
+    }
+    const data = await response.json().catch(() => null);
+    return {
+      analysis: data?.ok && data.analysis ? data.analysis : null,
+      note: null
+    };
+  } catch (error) {
+    console.error("smart invoice analysis failed", error);
+    return {
+      analysis: null,
+      note: "تعذر الاتصال بالتحليل الذكي — استخدمت القراءة المحلية."
+    };
+  }
+}
+const ISO_DATE$1 = /^\d{4}-\d{2}-\d{2}$/;
+function formatMoney$h(value, currency = "SAR") {
+  return `${moneyValue$a(value).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })} ${currency}`;
+}
+function computedStatus({
+  totalAmount,
+  paidAmount,
+  dueDate
+}) {
+  const total = moneyValue$a(totalAmount);
+  const paid = moneyValue$a(paidAmount);
+  const balance = Math.max(total - paid, 0);
+  if (total > 0 && paid >= total) return "paid";
+  if (dueDate && dueDate < todayRiyadh$7() && balance > 0) return "overdue";
+  if (paid > 0) return "partial_paid";
+  return "pending_payment";
+}
+function purchaseInvoiceStatusLabel(value) {
+  if (value === "new") return "بانتظار الاعتماد";
+  return PURCHASE_INVOICE_STATUS_OPTIONS.find((option) => option.value === value)?.label || "بانتظار الاعتماد";
+}
+function purchaseInvoiceStatusClass(value) {
+  if (value === "paid") {
+    return "bg-[#e6f4ec] dark:bg-emerald-500/15 text-[#178a5b] dark:text-emerald-200 border-[#b7ddc7] dark:border-emerald-500/25";
+  }
+  if (value === "partial_paid") {
+    return "bg-[#e4f2f5] dark:bg-indigo-500/15 text-[#0e7490] dark:text-indigo-200 border-[#b4dde5] dark:border-indigo-500/25";
+  }
+  if (value === "overdue") {
+    return "bg-[#f9ebe9] dark:bg-rose-500/15 text-[#b5443c] dark:text-rose-200 border-[#e8c4bf] dark:border-rose-500/25";
+  }
+  return "bg-[#faf3e3] dark:bg-amber-500/15 text-[#b7791f] dark:text-amber-200 border-[#ecd9ab] dark:border-amber-500/25";
+}
+function buildExpenseAccountOptions(accounts = []) {
+  const active = accounts.filter((account) => account.is_active !== false);
+  const byId = new Map(active.map((account) => [account.id, account]));
+  const byCode = (a, b) => String(a.code).localeCompare(String(b.code), "en", {
+    numeric: true
+  });
+  const childrenOf = (id) => active.filter((account) => account.parent_id === id).sort(byCode);
+  const options = [{
+    value: "",
+    label: "غير مصنّفة"
+  }];
+  const INDENT = " ";
+  const walk = (node, depth) => {
+    if (node.account_type !== "expense") return;
+    const prefix = INDENT.repeat(depth);
+    if (node.is_postable !== false) {
+      options.push({
+        value: String(node.id),
+        label: `${prefix}${node.code} — ${node.name}`
+      });
+    } else {
+      options.push({
+        value: `group-${node.id}`,
+        label: `${prefix}${node.code} ${node.name}`,
+        isGroupLabel: true
+      });
+    }
+    for (const child of childrenOf(node.id)) {
+      walk(child, depth + 1);
+    }
+  };
+  const roots = active.filter((account) => account.account_type === "expense" && (account.parent_id == null || !byId.has(account.parent_id))).sort(byCode);
+  for (const root of roots) {
+    if (root.parent_id == null) {
+      for (const child of childrenOf(root.id)) walk(child, 0);
+    } else {
+      walk(root, 0);
+    }
+  }
+  return options;
+}
+function findAccountIdByCode(accounts, code) {
+  const wanted = String(code || "").trim();
+  if (!wanted) return "";
+  const match = (accounts || []).find((account) => String(account?.code || "").trim() === wanted && account?.is_active !== false && account?.is_postable !== false);
+  return match ? String(match.id) : "";
+}
+let lineKeyCounter = 0;
+function newLine(overrides = {}) {
+  lineKeyCounter += 1;
+  return {
+    key: `line-${lineKeyCounter}`,
+    description: "",
+    account_id: "",
+    quantity: "1",
+    unit_price: "",
+    tax_rate: "15",
+    amount_includes_tax: false,
+    // معرّف البند المخزَّن (التعديل يطابق بالمعرّف لا يستبدل)
+    id: null,
+    // بند بن محمّص: «إضافة قيمة تحميص» + افتراضاته
+    roast_enabled: false,
+    quantity_unit: "sack",
+    kg_per_sack: "",
+    roast_per_kg: "",
+    extra_cost: "",
+    free_sample: false,
+    confirm_unusual_price: false,
+    // مصدر «كيلو/خيشة»: scan | description | item | null (يدوي)
+    kg_source: null,
+    // إجمالي الكيلو الخام (المدخل الفعلي للحسابات) ومصدره:
+    // quantity (الكمية بالكيلو) | sacks (خِيَش × كيلو/خيشة) | stored | manual | null
+    raw_kg: "",
+    raw_source: null,
+    // الوصول عند الإنشاء (للمعتمِدين فقط)
+    arrival_received_kg: "",
+    arrival_date: "",
+    arrival_complete: false,
+    confirm_high_waste: false,
+    // بيانات يملكها الخادم — للعرض فقط عند التعديل
+    stored: null,
+    ...overrides
+  };
+}
+function beanForAccount$1(accounts, accountId) {
+  if (!accountId) return null;
+  const account = accounts.find((a) => String(a.id) === String(accountId));
+  return account?.bean || null;
+}
+function beanUnitDefaults(bean) {
+  const unitKg = Number(bean?.purchase_unit_kg) || null;
+  if (unitKg && unitKg <= 1.0005) return {
+    quantity_unit: "kg",
+    kg_per_sack: ""
+  };
+  return {
+    quantity_unit: "sack",
+    kg_per_sack: coffeeInput(unitKg && unitKg > 1 ? unitKg : bean?.bag_size_kg, 3)
+  };
+}
+function coffeeSeed(accounts, accountId, description, hints = {}) {
+  const bean = beanForAccount$1(accounts, accountId);
+  if (!bean) return {};
+  const hintUnit = hints.quantity_unit === "kg" ? "kg" : hints.quantity_unit === "sack" ? "sack" : null;
+  const scanned = numOrNull$1(hints.pack_size_kg);
+  const fromText = scanned ? null : guessKgPerSack(description);
+  const defaults = beanUnitDefaults(bean);
+  const unit = hintUnit || (scanned || fromText ? "sack" : defaults.quantity_unit);
+  const kg = unit === "kg" ? "" : scanned ? coffeeInput(scanned, 3) : fromText ? coffeeInput(fromText, 3) : defaults.kg_per_sack;
+  return {
+    roast_enabled: true,
+    amount_includes_tax: false,
+    quantity_unit: unit,
+    kg_per_sack: kg,
+    kg_source: unit === "kg" ? null : scanned ? "scan" : fromText ? "description" : kg ? "item" : null,
+    roast_per_kg: bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : ""
+  };
+}
+function withDerivedRaw(line, {
+  quantityChanged = false
+} = {}) {
+  if (!line.roast_enabled) return line;
+  if (line.raw_source === "manual") return line;
+  if (line.raw_source === "stored" && !quantityChanged) return line;
+  const qty = Number(line.quantity) || 0;
+  if (line.quantity_unit === "kg") {
+    return {
+      ...line,
+      raw_kg: qty > 0 ? coffeeInput(qty, 3) : "",
+      raw_source: "quantity"
+    };
+  }
+  const kps = numOrNull$1(line.kg_per_sack);
+  if (kps && qty > 0) {
+    return {
+      ...line,
+      raw_kg: coffeeInput(qty * kps, 3),
+      raw_source: "sacks"
+    };
+  }
+  if (line.raw_source === "stored") return line;
+  return {
+    ...line,
+    raw_kg: line.raw_source ? "" : line.raw_kg,
+    raw_source: null
+  };
+}
+function coffeeInput(value, digits = 3) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return "";
+  return String(Math.round(n * 10 ** digits) / 10 ** digits);
+}
+function lineAmount(line) {
+  const quantity = moneyValue$a(line.quantity);
+  const price = moneyValue$a(line.unit_price);
+  if (quantity <= 0 || price <= 0) return 0;
+  return round2$3(quantity * price);
+}
+function lineMath(line) {
+  const amount = lineAmount(line);
+  const rate = Math.min(Math.max(moneyValue$a(line.tax_rate), 0), 100);
+  if (amount <= 0) return {
+    amount: 0,
+    subtotal: 0,
+    tax: 0,
+    total: 0
+  };
+  if (line.amount_includes_tax) {
+    const subtotal = amount / (1 + rate / 100);
+    return {
+      amount,
+      subtotal: round2$3(subtotal),
+      tax: round2$3(amount - subtotal),
+      total: round2$3(amount)
+    };
+  }
+  const tax = amount * rate / 100;
+  return {
+    amount,
+    subtotal: round2$3(amount),
+    tax: round2$3(tax),
+    total: round2$3(amount + tax)
+  };
+}
+function priceInput(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number) || number <= 0) return "";
+  return String(Math.round(number * 1e4) / 1e4);
+}
+function linesFromInvoice(invoice) {
+  const stored = Array.isArray(invoice?.items) ? invoice.items : [];
+  if (stored.length > 0) {
+    return stored.map((item) => {
+      const quantity = moneyValue$a(item.quantity);
+      const price = moneyValue$a(item.unit_price);
+      const roast = !!item.roast_enabled;
+      return newLine({
+        id: item.id || null,
+        description: item.description || "",
+        account_id: item.account_id ? String(item.account_id) : "",
+        quantity: quantity > 0 ? String(quantity) : roast ? "0" : "1",
+        unit_price: price > 0 ? priceInput(price) : moneyInput$2(item.amount) || "",
+        tax_rate: String(moneyValue$a(item.tax_rate)),
+        amount_includes_tax: !!item.amount_includes_tax,
+        roast_enabled: roast,
+        quantity_unit: item.quantity_unit === "kg" ? "kg" : "sack",
+        kg_per_sack: coffeeInput(item.kg_per_sack, 3),
+        raw_kg: coffeeInput(item.raw_kg, 3),
+        raw_source: item.raw_kg != null ? "stored" : null,
+        roast_per_kg: item.roast_per_kg != null ? String(Number(item.roast_per_kg)) : "",
+        extra_cost: coffeeInput(item.extra_cost, 2),
+        free_sample: !!item.free_sample,
+        // الواصل بعد الهدر المخزَّن — يُعرض ويُعدَّل من نفس الصف.
+        arrival_received_kg: roast && item.received_kg != null ? String(Number(item.received_kg)) : "",
+        arrival_date: roast ? item.arrival_date || "" : "",
+        arrival_complete: roast ? !!item.arrival_complete : false,
+        stored: roast ? {
+          raw_kg: numOrNull$1(item.raw_kg),
+          received_kg: numOrNull$1(item.received_kg),
+          arrival_complete: !!item.arrival_complete,
+          arrival_date: item.arrival_date || null,
+          waste_percent: numOrNull$1(item.waste_percent),
+          net_incl_per_kg: numOrNull$1(item.net_incl_per_kg),
+          deposited_kg: numOrNull$1(item.deposited_kg),
+          roast_tax_rate: numOrNull$1(item.roast_tax_rate)
+        } : null
+      });
+    });
+  }
+  const total = moneyValue$a(invoice?.total_amount);
+  if (total > 0) {
+    const tax = moneyValue$a(invoice?.tax_amount);
+    const subtotal = Math.max(total - tax, 0);
+    const rate = subtotal > 0 ? round2$3(tax / subtotal * 100) : 15;
+    return [newLine({
+      description: "",
+      account_id: invoice?.expense_account_id ? String(invoice.expense_account_id) : "",
+      quantity: "1",
+      unit_price: moneyInput$2(total),
+      tax_rate: String(rate || 0),
+      amount_includes_tax: true
+    })];
+  }
+  return [newLine()];
+}
+function CoffeeLineRow({
+  line,
+  bean,
+  calc,
+  updateLine,
+  isEditing,
+  allowArrival,
+  currency
+}) {
+  const on = !!line.roast_enabled;
+  const tile = "rounded-lg bg-white/70 dark:bg-white/[0.04] border border-amber-200/60 dark:border-amber-400/15 px-2 py-1.5 min-w-0";
+  const tileLabel = "text-[10px] text-slate-500 dark:text-white/45 truncate";
+  const tileValue = "text-sm font-bold tabular-nums text-slate-800 dark:text-white/85";
+  const stored = line.stored;
+  const flag = calc ? wasteFlag(calc.wastePercent) : null;
+  const kgMode = line.quantity_unit === "kg";
+  const rawInclPerKg = calc && calc.rawKg > 0 ? round2$3(calc.beanCostIncl / calc.rawKg) : null;
+  const deposited = (stored?.deposited_kg || 0) > 0;
+  const fieldLabel = "text-[10px] text-slate-500 dark:text-white/45 mb-0.5";
+  const fieldInput = `${ws.input} px-2 py-1.5 text-sm text-center`;
+  return /* @__PURE__ */ jsx("div", { className: "px-2 pb-2 -mt-1", children: /* @__PURE__ */ jsxs("div", { className: `rounded-xl border px-3 py-2 space-y-2 ${on ? "border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05]" : "border-dashed border-slate-200 dark:border-white/10"}`, children: [
+    /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between gap-2 flex-wrap", children: /* @__PURE__ */ jsxs("label", { className: "inline-flex items-center gap-2 text-xs font-bold text-amber-800 dark:text-amber-200 cursor-pointer select-none", children: [
+      /* @__PURE__ */ jsx("input", { type: "checkbox", checked: on, onChange: (event) => updateLine(line.key, {
+        roast_enabled: event.target.checked,
+        amount_includes_tax: false,
+        ...line.kg_per_sack || line.quantity_unit === "kg" ? {} : (() => {
+          const seed = coffeeSeed([{
+            id: "x",
+            bean
+          }], "x", line.description);
+          return {
+            quantity_unit: seed.quantity_unit,
+            kg_per_sack: seed.kg_per_sack,
+            kg_source: seed.kg_source
+          };
+        })(),
+        // إعادة اشتقاق إجمالي الكيلو بعد التفعيل (updateLine)
+        raw_source: line.raw_source === "manual" ? "manual" : null,
+        roast_per_kg: line.roast_per_kg || (bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : "")
+      }), className: "accent-amber-500" }),
+      /* @__PURE__ */ jsx(Flame, { className: "w-3.5 h-3.5" }),
+      "إضافة قيمة تحميص",
+      /* @__PURE__ */ jsxs("span", { className: "font-normal text-slate-500 dark:text-white/45", children: [
+        "— ",
+        bean.item_name
+      ] })
+    ] }) }),
+    on ? /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-4 gap-2", children: [
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "عدد الكيلوات (إجمالي الخام)" }),
+          /* @__PURE__ */ jsx("input", { type: "number", value: line.raw_kg, onChange: (event) => updateLine(line.key, {
+            raw_kg: event.target.value
+          }), className: `${fieldInput} ${!(numOrNull$1(line.raw_kg) > 0) ? "border-amber-400/70 dark:border-amber-400/50" : ""}`, step: "any", min: "0", dir: "ltr", placeholder: "أدخل إجمالي الكيلو" }),
+          /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-400 dark:text-white/35 mt-0.5 truncate", children: !(numOrNull$1(line.raw_kg) > 0) ? kgMode ? "= الكمية بالكيلو — أدخل الكمية" : "لم يُعرف وزن الخيشة — أدخل الإجمالي يدويًا" : line.raw_source === "quantity" ? "= الكمية في الفاتورة (بالكيلو)" : line.raw_source === "sacks" ? `= ${line.quantity || 0} خيشة × ${line.kg_per_sack} كغ${line.kg_source === "scan" ? " (من التحليل الذكي)" : line.kg_source === "description" ? " (من وصف البند)" : line.kg_source === "item" ? " (من الصنف)" : ""}` : line.raw_source === "stored" ? "المخزَّن — عدّله إن لزم" : "مُدخل يدويًا" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "تحميص / كغ (ر.س)" }),
+          /* @__PURE__ */ jsx("input", { type: "number", value: line.roast_per_kg, onChange: (event) => updateLine(line.key, {
+            roast_per_kg: event.target.value
+          }), className: fieldInput, step: "any", min: "0", dir: "ltr", placeholder: String(bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "تكاليف إضافية (شحن…)" }),
+          /* @__PURE__ */ jsx("input", { type: "number", value: line.extra_cost, onChange: (event) => updateLine(line.key, {
+            extra_cost: event.target.value
+          }), className: fieldInput, step: "0.01", min: "0", dir: "ltr", placeholder: "0.00" })
+        ] }),
+        allowArrival ? /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "الواصل بعد الهدر (كغ)" }),
+          /* @__PURE__ */ jsx("input", { type: "number", value: line.arrival_received_kg, disabled: deposited, onChange: (event) => updateLine(line.key, {
+            arrival_received_kg: event.target.value
+          }), className: `${fieldInput} disabled:opacity-40`, step: "any", min: "0", dir: "ltr", placeholder: "لم يصل بعد" })
+        ] }) : /* @__PURE__ */ jsxs("div", { className: tile, children: [
+          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "الكيلو الخام" }),
+          /* @__PURE__ */ jsx("div", { className: tileValue, dir: "ltr", children: calc && calc.rawKg > 0 ? `${calc.rawKg} كغ` : "—" })
+        ] })
+      ] }),
+      calc ? /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-4 gap-2", children: [
+        /* @__PURE__ */ jsxs("div", { className: `${tile} ${calc.unusualPrice ? "border-rose-300 dark:border-rose-400/40" : ""}`, children: [
+          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "سعر الكيلو الخام (غير شامل الضريبة)" }),
+          /* @__PURE__ */ jsx("div", { className: tileValue, dir: "ltr", children: calc.rawCostPerKg !== null ? calc.rawCostPerKg.toFixed(2) : "—" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: tile, children: [
+          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "سعر الكيلو الخام (شامل الضريبة)" }),
+          /* @__PURE__ */ jsx("div", { className: tileValue, dir: "ltr", children: rawInclPerKg !== null ? rawInclPerKg.toFixed(2) : "—" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: tile, children: [
+          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "نسبة الهدر" }),
+          /* @__PURE__ */ jsx("div", { className: `${tileValue} ${flag === "high" || flag === "confirm" || flag === "over" ? "text-rose-700 dark:text-rose-200" : flag === "low" ? "text-amber-700 dark:text-amber-200" : ""}`, dir: "ltr", children: calc.arrivalComplete ? `${calc.wastePercent}%` : "—" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${tile} border-[#c9e2d8] dark:border-emerald-400/25`, children: [
+          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "السعر الصافي / كغ (شامل الضريبة)" }),
+          /* @__PURE__ */ jsx("div", { className: `${tileValue} text-[#0e7a5f] dark:text-emerald-200`, dir: "ltr", children: calc.arrivalComplete && calc.netInclPerKg != null ? calc.netInclPerKg.toFixed(2) : "—" })
+        ] })
+      ] }) : null,
+      calc?.unusualPrice ? /* @__PURE__ */ jsxs("label", { className: "flex items-start gap-2 text-[11px] text-rose-700 dark:text-rose-200 cursor-pointer select-none", children: [
+        /* @__PURE__ */ jsx("input", { type: "checkbox", checked: !!line.confirm_unusual_price, onChange: (event) => updateLine(line.key, {
+          confirm_unusual_price: event.target.checked
+        }), className: "accent-rose-500 mt-0.5" }),
+        /* @__PURE__ */ jsxs("span", { children: [
+          "سعر الكيلو الخام ",
+          calc.rawCostPerKg?.toFixed(2),
+          " ر.س غير معتاد (المتوقع ",
+          RAW_PRICE_MIN,
+          "–",
+          RAW_PRICE_MAX,
+          ") — تحقق من وحدة الكمية (خيشة/كغ) أو أكّد السعر هنا."
+        ] })
+      ] }) : null,
+      calc?.arrivalComplete && flag === "over" ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-700 dark:text-rose-200", children: "الواصل أكبر من الكيلو الخام — تحقق من كيلو/خيشة أو الواصل." }) : null,
+      calc?.arrivalComplete && flag === "confirm" ? /* @__PURE__ */ jsxs("label", { className: "flex items-start gap-2 text-[11px] text-rose-700 dark:text-rose-200 cursor-pointer select-none", children: [
+        /* @__PURE__ */ jsx("input", { type: "checkbox", checked: !!line.confirm_high_waste, onChange: (event) => updateLine(line.key, {
+          confirm_high_waste: event.target.checked
+        }), className: "accent-rose-500 mt-0.5" }),
+        /* @__PURE__ */ jsxs("span", { children: [
+          "هدر ",
+          calc.wastePercent,
+          "% غير اعتيادي (أكثر من 60%) — أكّده."
+        ] })
+      ] }) : null,
+      allowArrival && !deposited ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60", children: [
+        /* @__PURE__ */ jsx("span", { children: "تاريخ الوصول:" }),
+        /* @__PURE__ */ jsx("input", { type: "date", value: line.arrival_date || todayRiyadh$7(), max: todayRiyadh$7(), onChange: (event) => updateLine(line.key, {
+          arrival_date: event.target.value
+        }), className: `${ws.input} px-2 py-1 text-xs w-40` })
+      ] }) : null,
+      isEditing && stored ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60", children: [
+        stored.arrival_complete ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`, children: [
+          "مسجَّل: وصل ",
+          stored.received_kg,
+          " كغ — هدر ",
+          stored.waste_percent ?? 0,
+          "%",
+          stored.arrival_date ? ` — ${stored.arrival_date}` : ""
+        ] }) : stored.received_kg ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25`, children: [
+          "وصول جزئي مسجَّل ",
+          stored.received_kg,
+          " كغ"
+        ] }) : null,
+        deposited ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-400/25`, children: [
+          "مودَع ",
+          stored.deposited_kg,
+          " كغ — التعديل من نافذة «تسجيل الوصول»"
+        ] }) : null
+      ] }) : null
+    ] }) : null
+  ] }) });
+}
+function SectionTitle$1({
+  children
+}) {
+  return /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white tracking-tight", children });
+}
+function FieldLabel$1({
+  children,
+  required
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: [
+    children,
+    required ? /* @__PURE__ */ jsx("span", { className: "text-rose-700 dark:text-rose-300", children: " *" }) : null
+  ] });
+}
+function PurchaseInvoiceModal({
+  open,
+  invoice,
+  contacts = [],
+  accounts = [],
+  bankAccounts = [],
+  branches = [],
+  contactStats = null,
+  // مشاريع تأسيس الفروع (من `useBranchProjects`) — الحقلان يظهران فقط
+  // إن وُجد مشروع نشط (غير مفتتح/ملغى).
+  projects = [],
+  // تعبئة مسبقة عند الإنشاء من تبويب مصاريف المشروع:
+  // { project_id, project_phase_id, expense_account_code }.
+  prefill = null,
+  isSubmitting,
+  onClose,
+  onSubmit,
+  // المعتمِد (إدارة محاسبة/مشتريات/مخزون): يسجّل الوصول والإيداع
+  // مباشرة عند إنشاء فاتورة بن. موظف الإدخال الميداني لا يراها.
+  allowArrival = false
+}) {
+  const isEditing = !!invoice;
+  const isRoastInvoice = invoice?.invoice_kind === "roast";
+  const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [contactId, setContactId] = useState("");
+  const [supplierName, setSupplierName] = useState("");
+  const [invoiceDate, setInvoiceDate] = useState(todayRiyadh$7());
+  const [dueDate, setDueDate] = useState("");
+  const [currency, setCurrency] = useState("SAR");
+  const [lines, setLines] = useState(() => [newLine()]);
+  const [discount, setDiscount] = useState("0.00");
+  const [paidAmount, setPaidAmount] = useState("0.00");
+  const [paidBankAccountId, setPaidBankAccountId] = useState("");
+  const [sendToApproval, setSendToApproval] = useState(false);
+  const [recurringMonthly, setRecurringMonthly] = useState(false);
+  const [roasterContactId, setRoasterContactId] = useState("");
+  const [roasterReference, setRoasterReference] = useState("");
+  const [depositOnArrival, setDepositOnArrival] = useState(true);
+  const [depositBranchId, setDepositBranchId] = useState("");
+  const [paymentReceiptUrl, setPaymentReceiptUrl] = useState("");
+  const [paymentReceiptName, setPaymentReceiptName] = useState("");
+  const [receiptUploading, setReceiptUploading] = useState(false);
+  const [branchId, setBranchId] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [projectPhaseId, setProjectPhaseId] = useState("");
+  const [notes, setNotes] = useState("");
+  const [attachmentUrl, setAttachmentUrl] = useState("");
+  const [attachmentName, setAttachmentName] = useState("");
+  const [attachmentMime, setAttachmentMime] = useState("");
+  const [attachmentKind, setAttachmentKind] = useState("");
+  const [vatMatched, setVatMatched] = useState(false);
+  const [scanSupplier, setScanSupplier] = useState(null);
+  const [confirmSupplier, setConfirmSupplier] = useState(null);
+  const [creatingSupplier, setCreatingSupplier] = useState(false);
+  const [createdContacts, setCreatedContacts] = useState([]);
+  const [scanBusy, setScanBusy] = useState(false);
+  const [ocrProgress, setOcrProgress] = useState(null);
+  const [scanSummary, setScanSummary] = useState(null);
+  const [mobilePane, setMobilePane] = useState("form");
+  const fileInputRef = useRef(null);
+  const receiptInputRef = useRef(null);
+  const [upload, {
+    loading: uploading
+  }] = useUpload();
+  const handleReceiptPicked = async (fileArg) => {
+    if (!fileArg) return;
+    setReceiptUploading(true);
+    try {
+      const result = await upload({
+        file: fileArg,
+        unoptimized: true
+      });
+      if (result?.error) {
+        alert(`فشل رفع الإيصال: ${result.error}`);
+        return;
+      }
+      setPaymentReceiptUrl(result.url || "");
+      setPaymentReceiptName(fileArg.name || "");
+    } finally {
+      setReceiptUploading(false);
+      if (receiptInputRef.current) receiptInputRef.current.value = "";
+    }
+  };
+  const [duplicateInvoice, setDuplicateInvoice] = useState(null);
+  useEffect(() => {
+    if (!open) return void 0;
+    const number = invoiceNumber.trim();
+    if (!number || !contactId) {
+      setDuplicateInvoice(null);
+      return void 0;
+    }
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      try {
+        const params = new URLSearchParams({
+          number,
+          contact_id: contactId
+        });
+        if (invoice?.id) params.set("exclude_id", String(invoice.id));
+        const response = await authedFetch(`/api/accounting/purchase-invoices/check-number?${params}`);
+        const data = await response.json().catch(() => null);
+        if (!cancelled) {
+          setDuplicateInvoice(data?.duplicate ? data.invoice : null);
+        }
+      } catch {
+        if (!cancelled) setDuplicateInvoice(null);
+      }
+    }, 500);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [open, invoiceNumber, contactId, invoice?.id]);
+  const autoFilledRef = useRef(/* @__PURE__ */ new Set());
+  const prefillRef = useRef(prefill);
+  prefillRef.current = prefill;
+  const accountsRef = useRef(accounts);
+  accountsRef.current = accounts;
+  useEffect(() => {
+    if (!open) return;
+    const seed = isEditing ? null : prefillRef.current;
+    setInvoiceNumber(invoice?.invoice_number || "");
+    setContactId(invoice?.contact_id ? String(invoice.contact_id) : "");
+    setSupplierName(invoice?.supplier_name || "");
+    setInvoiceDate(invoice?.invoice_date || todayRiyadh$7());
+    setDueDate(invoice?.due_date || "");
+    setCurrency(invoice?.currency || "SAR");
+    const seededLines = linesFromInvoice(invoice);
+    const seedAccountId = seed?.expense_account_code ? findAccountIdByCode(accountsRef.current, seed.expense_account_code) : "";
+    setLines(seedAccountId && seededLines.length > 0 && !seededLines[0].account_id ? [{
+      ...seededLines[0],
+      account_id: seedAccountId
+    }, ...seededLines.slice(1)] : seededLines);
+    setProjectId(invoice?.project_id ? String(invoice.project_id) : seed?.project_id ? String(seed.project_id) : "");
+    setProjectPhaseId(invoice?.project_phase_id ? String(invoice.project_phase_id) : seed?.project_id && seed?.project_phase_id ? String(seed.project_phase_id) : "");
+    setDiscount(moneyInput$2(invoice?.discount_amount) || "0.00");
+    setPaidAmount(moneyInput$2(invoice?.paid_amount) || "0.00");
+    setPaidBankAccountId(invoice?.paid_bank_account_id ? String(invoice.paid_bank_account_id) : "");
+    setSendToApproval(false);
+    setRecurringMonthly(false);
+    setRoasterContactId(invoice?.roaster_contact_id ? String(invoice.roaster_contact_id) : "");
+    setRoasterReference(invoice?.roaster_reference || "");
+    setDepositOnArrival(true);
+    setDepositBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
+    setScanSupplier(null);
+    setConfirmSupplier(null);
+    setCreatingSupplier(false);
+    setCreatedContacts([]);
+    setPaymentReceiptUrl(invoice?.payment_receipt_url || "");
+    setPaymentReceiptName("");
+    setReceiptUploading(false);
+    setBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
+    setNotes(invoice?.notes || "");
+    setAttachmentUrl(invoice?.attachment_url || "");
+    setAttachmentKind(invoice?.attachment_kind || "");
+    setAttachmentName("");
+    setAttachmentMime(invoice?.attachment_url && /\.pdf(\?|$)/i.test(invoice.attachment_url) ? "application/pdf" : "");
+    setVatMatched(false);
+    setScanBusy(false);
+    setScanSummary(null);
+    setMobilePane("form");
+    autoFilledRef.current = new Set(isEditing ? [] : ["date"]);
+  }, [open, invoice, isEditing]);
+  useEffect(() => {
+    if (!open || !attachmentUrl || attachmentMime) return void 0;
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch(attachmentUrl);
+        const type = (response.headers.get("content-type") || "").split(";")[0].trim();
+        try {
+          response.body?.cancel?.();
+        } catch {
+        }
+        if (!cancelled && type) setAttachmentMime(type);
+      } catch {
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [open, attachmentUrl, attachmentMime]);
+  useEffect(() => {
+    if (!open || typeof document === "undefined") return void 0;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+  const contactOptions = useMemo(() => {
+    const activeContacts = [...contacts, ...createdContacts].filter((contact) => contact.is_active !== false).map((contact) => ({
+      value: String(contact.id),
+      label: contact.name
+    }));
+    activeContacts.sort((a, b) => a.label.localeCompare(b.label, "ar"));
+    return [{
+      value: "",
+      label: "بدون جهة اتصال / مورد يدوي"
+    }, ...activeContacts];
+  }, [contacts, createdContacts]);
+  const accountOptions = useMemo(() => buildExpenseAccountOptions(accounts), [accounts]);
+  const lineBean = (line) => isRoastInvoice ? null : beanForAccount$1(accounts, line.account_id);
+  const hasCoffeeLine = useMemo(() => !isRoastInvoice && lines.some((line) => line.roast_enabled && beanForAccount$1(accounts, line.account_id)), [lines, accounts, isRoastInvoice]);
+  const bankAccountOptions = useMemo(() => [{
+    value: "",
+    label: "بدون تحديد حساب"
+  }, ...bankAccounts.filter((account) => account.is_active !== false).map((account) => ({
+    value: String(account.id),
+    label: account.bank_name ? `${account.name} — ${account.bank_name}` : account.name
+  }))], [bankAccounts]);
+  const totals = useMemo(() => {
+    let rawSubtotal = 0;
+    let rawTax = 0;
+    for (const line of lines) {
+      const math = lineMath(line);
+      rawSubtotal += math.subtotal;
+      rawTax += math.tax;
+    }
+    const applied = Math.min(Math.max(moneyValue$a(discount), 0), rawSubtotal);
+    const factor = rawSubtotal > 0 ? (rawSubtotal - applied) / rawSubtotal : 1;
+    const subtotal = rawSubtotal - applied;
+    const tax = rawTax * factor;
+    return {
+      rawSubtotal: round2$3(rawSubtotal),
+      discount: round2$3(applied),
+      subtotal: round2$3(subtotal),
+      tax: round2$3(tax),
+      total: round2$3(subtotal + tax)
+    };
+  }, [lines, discount]);
+  const coffee = useMemo(() => {
+    const perLine = /* @__PURE__ */ new Map();
+    if (isRoastInvoice) return {
+      perLine,
+      roastTotal: 0,
+      roastTax: 0,
+      count: 0,
+      unusual: []
+    };
+    const subtotals = lines.map((line) => lineMath(line).subtotal);
+    const rawSubtotal = subtotals.reduce((s, v) => s + v, 0);
+    const applied = Math.min(Math.max(moneyValue$a(discount), 0), rawSubtotal);
+    const shares = allocateDiscount(subtotals, applied);
+    const factor = rawSubtotal > 0 ? (rawSubtotal - applied) / rawSubtotal : 1;
+    let roastTotal = 0;
+    let roastTax = 0;
+    let count = 0;
+    const unusual = [];
+    lines.forEach((line, index) => {
+      const bean = beanForAccount$1(accounts, line.account_id);
+      if (!bean || !line.roast_enabled) return;
+      const math = lineMath(line);
+      const roastRate = numOrNull$1(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG;
+      const c = computeCoffeeLine({
+        quantity: moneyValue$a(line.quantity),
+        quantityUnit: line.quantity_unit,
+        kgPerSack: numOrNull$1(line.kg_per_sack) ?? bean.bag_size_kg,
+        rawKg: numOrNull$1(line.raw_kg),
+        lineSubtotal: math.subtotal,
+        lineTax: math.tax,
+        lineDiscount: shares[index] || 0,
+        discountFactor: factor,
+        roastPerKg: roastRate,
+        roastTaxRate: bean.roast_tax_rate ?? 0,
+        extraCost: moneyValue$a(line.extra_cost),
+        // إدخال «الواصل بعد الهدر» = الوصول مكتمل (الجزئي من نافذة الوصول).
+        receivedKg: numOrNull$1(line.arrival_received_kg),
+        arrivalComplete: numOrNull$1(line.arrival_received_kg) > 0
+      });
+      const unusualPrice = !line.free_sample && c.rawCostPerKg !== null && (c.rawCostPerKg < RAW_PRICE_MIN || c.rawCostPerKg > RAW_PRICE_MAX);
+      if (unusualPrice) unusual.push(line.key);
+      perLine.set(line.key, {
+        ...c,
+        roastRate,
+        unusualPrice,
+        bean
+      });
+      roastTotal += c.roastTotalNet;
+      roastTax += c.roastTaxAmount;
+      count += 1;
+    });
+    return {
+      perLine,
+      roastTotal: round2$3(roastTotal),
+      roastTax: round2$3(roastTax),
+      count,
+      unusual
+    };
+  }, [lines, discount, accounts, isRoastInvoice]);
+  const effectiveRoasterName = useMemo(() => {
+    if (roasterContactId) {
+      const c = [...contacts, ...createdContacts].find((contact) => String(contact.id) === roasterContactId);
+      if (c) return c.name;
+    }
+    for (const entry of coffee.perLine.values()) {
+      if (entry.bean?.roaster_name) return entry.bean.roaster_name;
+    }
+    return "محمصة درر";
+  }, [roasterContactId, contacts, createdContacts, coffee.perLine]);
+  const arrivalChanged = (line) => {
+    const received = numOrNull$1(line.arrival_received_kg);
+    const stored = line.stored?.received_kg ?? null;
+    if (received === null) return stored !== null;
+    return stored === null || Math.abs(received - stored) > 5e-4;
+  };
+  const anyArrivalComplete = allowArrival && lines.some((line) => line.roast_enabled && numOrNull$1(line.arrival_received_kg) > 0 && arrivalChanged(line));
+  const contactTransactionCount = useMemo(() => {
+    if (!contactId || !contactStats) return null;
+    const count = contactStats[contactId];
+    return Number.isFinite(count) ? count : null;
+  }, [contactId, contactStats]);
+  const contactDefaultAccountId = useMemo(() => {
+    const selected = contacts.find((contact) => String(contact.id) === contactId);
+    return selected?.default_account_id ? String(selected.default_account_id) : "";
+  }, [contacts, contactId]);
+  const applyDefaultAccount = (accountId) => {
+    if (!accountId) return;
+    setLines((prev) => prev.map((line) => line.account_id ? line : {
+      ...line,
+      account_id: accountId
+    }));
+  };
+  const projectOptions = useMemo(() => {
+    const list = Array.isArray(projects) ? projects : [];
+    const active = list.filter((project) => project && project.is_active !== false && project.status !== "opened" && project.status !== "cancelled");
+    if (projectId && !active.some((project) => String(project.id) === projectId)) {
+      const current = list.find((project) => String(project?.id) === projectId);
+      if (current) active.push(current);
+    }
+    return active.map((project) => ({
+      value: String(project.id),
+      label: `${project.code ? `${project.code} · ` : ""}${project.name || ""}`
+    }));
+  }, [projects, projectId]);
+  const selectedProject = useMemo(() => projectId ? (projects || []).find((project) => String(project?.id) === projectId) || null : null, [projects, projectId]);
+  const projectPhaseOptions = useMemo(() => {
+    const phases = Array.isArray(selectedProject?.phases) ? [...selectedProject.phases] : [];
+    phases.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+    return [{
+      value: "",
+      label: "بلا قسم"
+    }, ...phases.map((phase) => ({
+      value: String(phase.id),
+      label: phase.name
+    }))];
+  }, [selectedProject]);
+  const showProjectFields = projectOptions.length > 0;
+  const handleProjectChange = (value) => {
+    setProjectId(value);
+    setProjectPhaseId("");
+  };
+  const handleProjectPhaseChange = (value) => {
+    setProjectPhaseId(value);
+    const phase = (selectedProject?.phases || []).find((item) => String(item?.id) === String(value));
+    const accountId = phase?.default_account_code ? findAccountIdByCode(accounts, phase.default_account_code) : "";
+    if (!accountId) return;
+    const fallbackId = findAccountIdByCode(accounts, "5399");
+    setLines((prev) => prev.length > 0 && (!prev[0].account_id || String(prev[0].account_id) === String(fallbackId)) ? [{
+      ...prev[0],
+      account_id: accountId
+    }, ...prev.slice(1)] : prev);
+  };
+  const hasFixedExpenseLine = useMemo(() => lines.some((line) => isFixedExpenseAccountId(line.account_id, accounts)), [lines, accounts]);
+  const isRecurringLinked = !!invoice?.recurring_template_id || /^REC-\d{6}-\d+$/.test(invoice?.invoice_number || "");
+  const status = computedStatus({
+    totalAmount: totals.total,
+    paidAmount,
+    dueDate
+  });
+  const balance = Math.max(totals.total - moneyValue$a(paidAmount), 0);
+  const hasFreeSampleLine = lines.some((line) => line.roast_enabled && line.free_sample && lineBean(line));
+  const unconfirmedUnusual = coffee.unusual.some((key) => !lines.find((line) => line.key === key)?.confirm_unusual_price);
+  const unconfirmedWaste = lines.some((line) => {
+    const c = coffee.perLine.get(line.key);
+    return c?.arrivalComplete && wasteFlag(c.wastePercent) === "confirm" && !line.confirm_high_waste;
+  });
+  const missingRawKg = lines.some((line) => line.roast_enabled && lineBean(line) && !(numOrNull$1(line.raw_kg) > 0));
+  const canSubmit = !isSubmitting && (!!supplierName.trim() || !!contactId) && (totals.total > 0 || hasFreeSampleLine) && moneyValue$a(paidAmount) <= totals.total && !unconfirmedUnusual && !unconfirmedWaste && !missingRawKg;
+  const updateLine = (key, patch) => {
+    autoFilledRef.current.delete("lines");
+    setLines((prev) => prev.map((line) => {
+      if (line.key !== key) return line;
+      const next = {
+        ...line,
+        ...patch
+      };
+      if (patch.account_id !== void 0 && patch.account_id !== line.account_id) {
+        const bean = isRoastInvoice ? null : beanForAccount$1(accounts, patch.account_id);
+        if (bean && !line.id) {
+          Object.assign(next, coffeeSeed(accounts, patch.account_id, next.description));
+          if (!next.description.trim() && bean.item_name) next.description = bean.item_name;
+        } else if (!bean) {
+          next.roast_enabled = false;
+          next.free_sample = false;
+        }
+      }
+      if (next.roast_enabled) next.amount_includes_tax = false;
+      if (patch.raw_kg !== void 0) {
+        next.raw_source = next.raw_kg === "" ? null : "manual";
+        return next;
+      }
+      return withDerivedRaw(next, {
+        quantityChanged: patch.quantity !== void 0 || patch.kg_per_sack !== void 0
+      });
+    }));
+  };
+  const removeLine = (key) => {
+    autoFilledRef.current.delete("lines");
+    setLines((prev) => prev.length <= 1 ? prev : prev.filter((line) => line.key !== key));
+  };
+  const addLine = () => {
+    autoFilledRef.current.delete("lines");
+    setLines((prev) => [...prev, newLine({
+      account_id: contactDefaultAccountId || ""
+    })]);
+  };
+  const handleSubmit = (event) => {
+    event?.preventDefault?.();
+    if (!canSubmit) return;
+    const kept = lines.filter((line) => lineAmount(line) > 0 || line.roast_enabled && line.free_sample && !!lineBean(line));
+    const items = kept.map((line) => {
+      const bean = lineBean(line);
+      const roast = !!bean && !!line.roast_enabled;
+      const base = {
+        id: line.id || void 0,
+        description: line.description.trim() || null,
+        account_id: line.account_id || null,
+        quantity: moneyValue$a(line.quantity),
+        unit_price: moneyValue$a(line.unit_price),
+        amount: lineAmount(line),
+        tax_rate: moneyValue$a(line.tax_rate),
+        amount_includes_tax: roast ? false : !!line.amount_includes_tax
+      };
+      if (isRoastInvoice) return base;
+      return {
+        ...base,
+        roast_enabled: roast,
+        quantity_unit: roast ? line.quantity_unit : null,
+        kg_per_sack: roast ? numOrNull$1(line.kg_per_sack) ?? bean.bag_size_kg ?? null : null,
+        raw_kg: roast ? numOrNull$1(line.raw_kg) : null,
+        roast_per_kg: roast ? numOrNull$1(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG : null,
+        extra_cost: roast ? moneyValue$a(line.extra_cost) : 0,
+        free_sample: roast && !!line.free_sample,
+        confirm_unusual_price: roast && !!line.confirm_unusual_price
+      };
+    });
+    let arrival = null;
+    if (allowArrival && !isRoastInvoice) {
+      const arrivalLines = [];
+      kept.forEach((line, index) => {
+        if (!line.roast_enabled || !lineBean(line)) return;
+        if (!arrivalChanged(line)) return;
+        const received = numOrNull$1(line.arrival_received_kg);
+        if (!isEditing && (received === null || received <= 0)) return;
+        if (line.stored?.deposited_kg > 0) return;
+        arrivalLines.push({
+          index,
+          id: line.id || void 0,
+          received_kg: received,
+          arrival_date: line.arrival_date || todayRiyadh$7(),
+          arrival_complete: received !== null && received > 0,
+          confirm_high_waste: !!line.confirm_high_waste
+        });
+      });
+      if (arrivalLines.length > 0) {
+        const depositBranch = depositBranchId || branchId || "";
+        arrival = {
+          lines: arrivalLines,
+          deposit: depositOnArrival && depositBranch ? {
+            enabled: true,
+            branch_id: Number(depositBranch)
+          } : null
+        };
+      }
+    }
+    const forApproval = sendToApproval && !isEditing;
+    const effectivePaid = forApproval ? 0 : moneyValue$a(paidAmount);
+    const payload = {
+      invoice_number: invoiceNumber.trim() || void 0,
+      contact_id: contactId || null,
+      supplier_name: supplierName.trim() || null,
+      invoice_date: invoiceDate,
+      due_date: dueDate || null,
+      currency,
+      items,
+      subtotal_amount: totals.subtotal,
+      discount_amount: totals.discount,
+      tax_amount: totals.tax,
+      total_amount: totals.total,
+      paid_amount: effectivePaid,
+      paid_bank_account_id: effectivePaid > 0 ? paidBankAccountId || null : null,
+      payment_receipt_url: effectivePaid > 0 ? paymentReceiptUrl || null : null,
+      submit_for_approval: forApproval,
+      // قالب فاتورة متكررة شهرياً — الخادم يعيد التحقق من شرط
+      // «مصروف ثابت» قبل الإنشاء.
+      recurring_monthly: recurringMonthly && hasFixedExpenseLine && !isEditing && !hasCoffeeLine,
+      // القيمة الثابتة المتبقية — الحالة الفعلية تُحسب من المبالغ.
+      workflow_status: "pending_payment",
+      branch_id: branchId || null,
+      // ربط مشروع تأسيس الفرع وقسمه (null يفك الربط عند التعديل).
+      project_id: projectId ? Number(projectId) : null,
+      project_phase_id: projectId && projectPhaseId ? Number(projectPhaseId) : null,
+      notes: notes.trim() || null,
+      attachment_url: attachmentUrl || null,
+      attachment_kind: attachmentUrl ? attachmentKind || null : null,
+      // البن: المحمصة لفاتورة التحميص المولّدة + الوصول عند الإنشاء.
+      roaster_contact_id: hasCoffeeLine && roasterContactId ? Number(roasterContactId) : null,
+      arrival
+    };
+    if (isRoastInvoice) payload.roaster_reference = roasterReference.trim() || null;
+    if (isEditing) {
+      payload.id = invoice.id;
+      payload.expected_updated_at = invoice.updated_at || void 0;
+    }
+    onSubmit(payload);
+  };
+  const quickAddScannedSupplier = async () => {
+    if (!confirmSupplier || creatingSupplier) return;
+    const name = confirmSupplier.name.trim();
+    const vat = confirmSupplier.vat.trim();
+    if (!name) return;
+    setCreatingSupplier(true);
+    try {
+      const response = await authedFetch("/api/accounting/contacts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          country: "SA",
+          vat_registered: !!vat,
+          vat_number: vat || null,
+          default_tax_rate: vat ? 15 : 0,
+          notes: "أُنشئ تلقائياً من السكان الذكي لفاتورة مشتريات"
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.error || "فشل إضافة المورد");
+      }
+      const created = data.contact;
+      setCreatedContacts((prev) => [...prev, created]);
+      setContactId(String(created.id));
+      setSupplierName(created.name || name);
+      setVatMatched(!!vat);
+      setScanSupplier(null);
+      setConfirmSupplier(null);
+    } catch (error) {
+      alert(error.message || "فشل إضافة المورد");
+    } finally {
+      setCreatingSupplier(false);
+    }
+  };
+  const handleContactChange = (nextContactId) => {
+    autoFilledRef.current.delete("contact");
+    setContactId(nextContactId);
+    setVatMatched(false);
+    if (!nextContactId) return;
+    const selected = contacts.find((contact) => String(contact.id) === nextContactId);
+    if (selected?.name) {
+      setSupplierName(selected.name);
+    }
+    if (selected?.default_account_id) {
+      applyDefaultAccount(String(selected.default_account_id));
+    }
+  };
+  const handleFilePicked = async (fileArg) => {
+    const file = fileArg;
+    if (!file) return;
+    setScanSummary(null);
+    const result = await upload({
+      file,
+      unoptimized: true
+    });
+    if (result?.error) {
+      setScanSummary({
+        filled: [],
+        warning: `فشل رفع الملف: ${result.error}`
+      });
+      return;
+    }
+    setAttachmentUrl(result.url || "");
+    setAttachmentName(file.name || "");
+    setAttachmentMime(file.type || "");
+    const isPdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name || "");
+    const isImage = /^image\/(jpeg|png|webp|gif)$/i.test(file.type || "");
+    if (!isPdf && !isImage) {
+      setScanSummary({
+        filled: [],
+        warning: "تم إرفاق الملف. الفحص التلقائي يدعم PDF والصور فقط."
+      });
+      return;
+    }
+    setScanBusy(true);
+    try {
+      const filled = [];
+      const owned = autoFilledRef.current;
+      const canFill = (field, isEmpty) => isEmpty || owned.has(field);
+      setScanSummary({
+        filled: [],
+        warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة."
+      });
+      let scanFile = file;
+      if (isImage && file.size > MAX_SMART_FILE_BYTES$1) {
+        try {
+          const {
+            compressImage
+          } = await Promise.resolve().then(() => compressImage$1);
+          scanFile = await compressImage(file);
+        } catch {
+        }
+      }
+      const fileEligible = scanFile.size <= MAX_SMART_FILE_BYTES$1;
+      let analysis = null;
+      let smartNote = null;
+      if (fileEligible) {
+        const smart = await analyzeInvoiceRemotely({
+          file: scanFile
+        });
+        analysis = smart.analysis;
+        smartNote = smart.note;
+      }
+      if (!analysis && isImage) {
+        setScanSummary({
+          filled: [],
+          warning: smartNote || "ما قدرت أحلل الصورة تلقائياً — تم إرفاقها، عبّي الحقول يدوياً."
+        });
+        return;
+      }
+      let details = null;
+      if (!analysis) {
+        const {
+          extractPdfDetails,
+          ocrPdfDetails
+        } = await import('./pdfjs-Dh-rJueC.js');
+        details = await extractPdfDetails(file);
+        if (!details || details.text.trim().length < 10) {
+          setScanSummary({
+            filled: [],
+            warning: "الفاتورة صورة ممسوحة — جاري التعرف الضوئي (OCR)، قد يستغرق دقيقة…"
+          });
+          setOcrProgress(0);
+          details = await ocrPdfDetails(file, (progress) => setOcrProgress(progress));
+          setOcrProgress(null);
+        }
+        if (!details?.text || details.text.trim().length < 10) {
+          setScanSummary({
+            filled: [],
+            warning: "تم إرفاق الفاتورة لكن ما قدرت أقرأ نصها حتى بالتعرف الضوئي. عبّي الحقول يدوياً."
+          });
+          return;
+        }
+        if (!fileEligible) {
+          setScanSummary({
+            filled: [],
+            warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة."
+          });
+          const smart = await analyzeInvoiceRemotely({
+            text: (details?.pageLines || []).flat().join("\n") || details.text
+          });
+          analysis = smart.analysis;
+          smartNote = smart.note;
+        }
+      }
+      if (analysis) {
+        if (analysis.document_type) {
+          setAttachmentKind(String(analysis.document_type));
+          const kindLabel = {
+            quote: "عرض سعر",
+            tax_invoice: "فاتورة ضريبية",
+            payment_receipt: "سند سداد"
+          }[analysis.document_type];
+          if (kindLabel) filled.push(`نوع المستند: ${kindLabel}`);
+        }
+        if (analysis.invoice_number && canFill("number", !invoiceNumber.trim())) {
+          setInvoiceNumber(String(analysis.invoice_number));
+          owned.add("number");
+          filled.push("رقم الفاتورة");
+        }
+        const matchedContact = analysis.contact_id ? contacts.find((contact) => contact.id === analysis.contact_id) : null;
+        if (matchedContact && canFill("contact", !contactId)) {
+          setContactId(String(matchedContact.id));
+          setSupplierName(matchedContact.name);
+          setVatMatched(analysis.contact_matched_by === "vat");
+          setScanSupplier(null);
+          owned.add("contact");
+          filled.push(analysis.contact_matched_by === "vat" ? "جهة الاتصال (تطابق الرقم الضريبي)" : "جهة الاتصال (تطابق الاسم)");
+        } else if (!matchedContact && analysis.supplier_name) {
+          if (!supplierName.trim()) {
+            setSupplierName(String(analysis.supplier_name));
+            filled.push("اسم المورد");
+          }
+          setScanSupplier({
+            name: String(analysis.supplier_name).trim(),
+            vat: analysis.supplier_vat_number ? String(analysis.supplier_vat_number).replace(/\D/g, "") : ""
+          });
+        }
+        const fallbackAccount = matchedContact?.default_account_id ? String(matchedContact.default_account_id) : contactDefaultAccountId;
+        const items = (Array.isArray(analysis.items) ? analysis.items : []).filter((item) => Number(item?.quantity) > 0 && Number(item?.unit_price) > 0);
+        const hasAmounts2 = lines.some((line) => lineAmount(line) > 0);
+        if (items.length > 0 && canFill("lines", !hasAmounts2)) {
+          setLines(items.map((item) => {
+            const accountId = item.account_id ? String(item.account_id) : fallbackAccount;
+            return newLine({
+              description: String(item.description || ""),
+              account_id: accountId,
+              quantity: String(Number(item.quantity)),
+              unit_price: priceInput(Number(item.unit_price)),
+              tax_rate: String(Number.isFinite(Number(item.tax_rate)) ? Number(item.tax_rate) : 15),
+              amount_includes_tax: !!item.amount_includes_tax,
+              // بند بن: التحميص + كيلو/خيشة من التحليل الذكي أو الوصف.
+              ...isRoastInvoice ? {} : coffeeSeed(accounts, accountId, String(item.description || ""), {
+                pack_size_kg: item.pack_size_kg,
+                quantity_unit: item.quantity_unit
+              })
+            });
+          }).map((line) => withDerivedRaw(line)));
+          owned.add("lines");
+          filled.push(`بنود الفاتورة (${items.length})`);
+          if (items.some((item) => item.account_id)) {
+            filled.push("تصنيف البنود على شجرة الحسابات");
+          }
+        } else if (items.length === 0 && Number(analysis.total) > 0 && canFill("lines", !hasAmounts2)) {
+          const total = Number(analysis.total);
+          const tax = Number(analysis.tax);
+          const subtotal = Number.isFinite(tax) && tax >= 0 ? total - tax : null;
+          const rate = subtotal !== null && subtotal > 0 ? round2$3(tax / subtotal * 100) : 15;
+          setLines([newLine({
+            description: "",
+            account_id: fallbackAccount,
+            quantity: "1",
+            unit_price: total.toFixed(2),
+            tax_rate: String(rate),
+            amount_includes_tax: true
+          })]);
+          owned.add("lines");
+          filled.push("مبلغ الفاتورة");
+          if (Number.isFinite(tax)) filled.push("الضريبة");
+        }
+        const scanDiscount = Number(analysis.discount);
+        if (Number.isFinite(scanDiscount) && scanDiscount > 0 && canFill("discount", moneyValue$a(discount) === 0)) {
+          setDiscount(scanDiscount.toFixed(2));
+          owned.add("discount");
+          filled.push("الخصم");
+        }
+        if (ISO_DATE$1.test(analysis.invoice_date || "") && canFill("date", false)) {
+          setInvoiceDate(analysis.invoice_date);
+          owned.add("date");
+          filled.push("تاريخ الفاتورة");
+        }
+        if (ISO_DATE$1.test(analysis.due_date || "") && canFill("dueDate", !dueDate)) {
+          setDueDate(analysis.due_date);
+          owned.add("dueDate");
+          filled.push("تاريخ الاستحقاق");
+        }
+        setScanSummary({
+          filled,
+          smart: true,
+          warning: analysis.operator_note || (!matchedContact ? "ما لقيت مورداً مطابقاً في جهات الاتصال — اضغط زر الإضافة السريعة تحت حقل المورد لإنشائه بالاسم والرقم الضريبي من الفاتورة." : null)
+        });
+        setMobilePane("form");
+        return;
+      }
+      const text = details.text;
+      const linesText = (details?.pageLines || []).flat().join("\n");
+      const parsed = parseInvoiceText(linesText || text, contacts);
+      if (parsed.invoiceNumber && canFill("number", !invoiceNumber.trim())) {
+        setInvoiceNumber(parsed.invoiceNumber);
+        owned.add("number");
+        filled.push("رقم الفاتورة");
+      }
+      const contactLabel = parsed.contactMatchedBy === "vat" ? "جهة الاتصال (تطابق الرقم الضريبي)" : "جهة الاتصال (تطابق الاسم)";
+      if (parsed.contact && canFill("contact", !contactId)) {
+        setContactId(String(parsed.contact.id));
+        setSupplierName(parsed.contact.name);
+        setVatMatched(parsed.contactMatchedBy === "vat");
+        owned.add("contact");
+        filled.push(contactLabel);
+      } else if (parsed.contact && !supplierName.trim()) {
+        setSupplierName(parsed.contact.name);
+        filled.push("اسم المورد");
+      }
+      const scanDefaultAccount = parsed.contact?.default_account_id ? String(parsed.contact.default_account_id) : contactDefaultAccountId;
+      const hasAmounts = lines.some((line) => lineAmount(line) > 0);
+      if (canFill("lines", !hasAmounts)) {
+        const rowGroups = [...Array.isArray(details?.pageLines) ? details.pageLines : [], details?.lines];
+        const tableItems = parseInvoiceLineItems(rowGroups, parsed.total);
+        console.info("[invoice-scan] total:", parsed.total, "items:", JSON.stringify(tableItems), "lines:", JSON.stringify(details?.pageLines?.[0]?.slice(0, 40) || []));
+        if (tableItems) {
+          setLines(tableItems.map((item) => withDerivedRaw(item.quantity !== null && item.unitPrice !== null ? (
+            // Quantity × unit price recovered from the row —
+            // entered exactly like the invoice quotes it (net or
+            // tax-inclusive unit prices both supported).
+            newLine({
+              description: item.description,
+              account_id: scanDefaultAccount,
+              quantity: String(item.quantity),
+              unit_price: priceInput(item.unitPrice),
+              tax_rate: String(item.rate),
+              amount_includes_tax: !!item.priceIncludesTax,
+              ...isRoastInvoice ? {} : coffeeSeed(accounts, scanDefaultAccount, item.description)
+            })
+          ) : newLine({
+            description: item.description,
+            account_id: scanDefaultAccount,
+            quantity: "1",
+            unit_price: item.total.toFixed(2),
+            tax_rate: String(item.rate),
+            amount_includes_tax: true
+          }))));
+          owned.add("lines");
+          filled.push(`بنود الفاتورة (${tableItems.length})`);
+          if (scanDefaultAccount) {
+            filled.push("حساب المورد الافتراضي");
+          }
+        } else if (parsed.total !== null) {
+          const tax = parsed.tax ?? null;
+          const subtotal = tax !== null ? parsed.total - tax : null;
+          const rate = tax !== null && subtotal > 0 ? round2$3(tax / subtotal * 100) : 15;
+          setLines([newLine({
+            description: "",
+            account_id: scanDefaultAccount,
+            quantity: "1",
+            unit_price: parsed.total.toFixed(2),
+            tax_rate: String(rate),
+            amount_includes_tax: true
+          })]);
+          owned.add("lines");
+          filled.push("مبلغ الفاتورة");
+          if (tax !== null) filled.push("الضريبة");
+        }
+      }
+      if (parsed.invoiceDate && canFill("date", false)) {
+        setInvoiceDate(parsed.invoiceDate);
+        owned.add("date");
+        filled.push("تاريخ الفاتورة");
+      }
+      if (parsed.dueDate && canFill("dueDate", !dueDate)) {
+        setDueDate(parsed.dueDate);
+        owned.add("dueDate");
+        filled.push("تاريخ الاستحقاق");
+      }
+      const ocrLimitNote = details?.viaOcr && !filled.some((f) => f.startsWith("بنود")) ? "المسح الضوئي التقط الإجماليات لكن جدول الأصناف غير واضح بما يكفي — للبنود التفصيلية اطلب PDF رقمياً من المورد أو صوّر بإضاءة أوضح." : null;
+      const heuristicsNote = filled.length === 0 ? "قرأت الملف لكن ما تعرفت على الحقول — تأكد منها يدوياً." : !parsed.contact ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو اكتب اسم المورد." : ocrLimitNote;
+      setScanSummary({
+        filled,
+        // smartNote explains why the AI pass was skipped — without it
+        // the operator can't tell a server problem from a weak scan.
+        warning: [smartNote, heuristicsNote].filter(Boolean).join(" ")
+      });
+      setMobilePane("form");
+    } catch (error) {
+      console.error("invoice scan failed", error);
+      const staleDeploy = /dynamically imported module|module script failed|ChunkLoadError|Loading chunk/i.test(String(error?.message || error));
+      setScanSummary({
+        filled: [],
+        warning: staleDeploy ? "تم تحديث النظام أثناء فتح الصفحة — حدّث الصفحة (Ctrl+F5) ثم أعد إرفاق الفاتورة." : `تعذّر فحص الملف — تم إرفاقه فقط. (${String(error?.message || error).slice(0, 100)})`
+      });
+    } finally {
+      setScanBusy(false);
+      setOcrProgress(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+  const isPdfAttachment = /pdf/i.test(attachmentMime) || /\.pdf(\?|$)/i.test(attachmentUrl);
+  const isImageAttachment = /^image\//i.test(attachmentMime);
+  if (!open || typeof document === "undefined") return null;
+  const previewPane = /* @__PURE__ */ jsx("div", { className: "h-full flex flex-col", children: attachmentUrl ? /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("div", { className: `px-4 py-2.5 border-b ${ws.divider} flex items-center justify-between gap-2`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0 text-xs text-slate-600 dark:text-white/60", children: [
+        /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5 shrink-0" }),
+        /* @__PURE__ */ jsx("span", { className: "truncate", dir: "ltr", children: attachmentName || "الفاتورة المرفقة" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 shrink-0", children: [
+        /* @__PURE__ */ jsxs("a", { href: attachmentUrl, target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-2.5 py-1.5 text-[11px]`, children: [
+          /* @__PURE__ */ jsx(ExternalLink, { className: "w-3 h-3" }),
+          "فتح"
+        ] }),
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => fileInputRef.current?.click(), disabled: uploading || scanBusy, className: `${ws.btnNeutral} px-2.5 py-1.5 text-[11px] disabled:opacity-50`, children: "استبدال" }),
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+          setAttachmentUrl("");
+          setAttachmentName("");
+          setAttachmentMime("");
+          setScanSummary(null);
+        }, className: `${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`, title: "إزالة المرفق", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "flex-1 min-h-0 bg-slate-200/70 dark:bg-black/40", children: isPdfAttachment ? /* @__PURE__ */ jsx("iframe", { src: attachmentUrl, title: "معاينة الفاتورة", className: "w-full h-full border-0" }) : isImageAttachment ? /* @__PURE__ */ jsx("div", { className: "w-full h-full overflow-auto p-3", children: /* @__PURE__ */ jsx("img", { src: attachmentUrl, alt: "الفاتورة المرفقة", className: "max-w-full h-auto rounded-xl mx-auto" }) }) : /* @__PURE__ */ jsx("div", { className: "h-full flex items-center justify-center text-sm text-slate-500 dark:text-white/50 p-6 text-center", children: "لا يمكن معاينة هذا النوع — استخدم زر «فتح»." }) })
+  ] }) : /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => fileInputRef.current?.click(), disabled: uploading || scanBusy, className: "flex-1 m-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 hover:border-[#0e7a5f] dark:hover:border-emerald-400/50 hover:bg-[#e7f2ee]/40 dark:hover:bg-emerald-500/[0.04] transition-colors flex flex-col items-center justify-center gap-3 p-8 text-center disabled:opacity-50", children: [
+    uploading || scanBusy ? /* @__PURE__ */ jsx(Loader2, { className: "w-10 h-10 text-[#0e7a5f] dark:text-emerald-300 animate-spin" }) : /* @__PURE__ */ jsx(ScanLine, { className: "w-10 h-10 text-slate-400 dark:text-white/35" }),
+    /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-800 dark:text-white/85", children: uploading ? "جاري الرفع…" : ocrProgress !== null ? `تعرف ضوئي (OCR)… ${Math.round(ocrProgress * 100)}%` : scanBusy ? "جاري فحص الفاتورة…" : "أرفق الفاتورة (PDF)" }),
+    /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 max-w-[260px] leading-relaxed", children: "تُعرض هنا جنب النموذج، وتُفحص وتُعبّأ الحقول تلقائياً — رقم الفاتورة، المورد (بالرقم الضريبي)، المبلغ والضريبة والتاريخ." })
+  ] }) });
+  return createPortal(/* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[1000] flex flex-col bg-slate-100 dark:bg-slate-950", dir: "rtl", children: [
+    /* @__PURE__ */ jsxs("div", { className: `${ws.topBar} px-4 sm:px-6 py-3 flex items-center gap-3 border-b ${ws.divider} shrink-0`, children: [
+      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 text-[#0e7a5f] dark:text-emerald-200 shrink-0`, children: /* @__PURE__ */ jsx(FileText, { className: "w-4.5 h-4.5" }) }),
+      /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
+        /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight truncate", children: isEditing ? "تعديل فاتورة مشتريات" : "تسجيل فاتورة مشتريات" }),
+        /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 truncate", children: "الحالة تُحسب تلقائياً من المبلغ والمدفوع وتاريخ الاستحقاق." })
+      ] }),
+      /* @__PURE__ */ jsx("span", { className: `hidden sm:inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold shrink-0 ${purchaseInvoiceStatusClass(status)}`, children: purchaseInvoiceStatusLabel(status) }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleSubmit, disabled: !canSubmit, className: `${ws.btnPrimary} px-4 py-2 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed`, children: [
+        isSubmitting ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+        "حفظ الفاتورة"
+      ] }),
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.iconButton} w-9 h-9 shrink-0`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: `lg:hidden px-4 pt-3 shrink-0`, children: /* @__PURE__ */ jsxs("div", { className: `${ws.segWrap}`, children: [
+      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setMobilePane("form"), className: `${ws.segBtn} text-xs flex-1 ${mobilePane === "form" ? ws.segActive : ws.segInactive}`, children: "النموذج" }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setMobilePane("preview"), className: `${ws.segBtn} text-xs flex-1 ${mobilePane === "preview" ? ws.segActive : ws.segInactive}`, children: [
+        "المرفق ",
+        attachmentUrl ? "•" : ""
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsx("input", { ref: fileInputRef, type: "file", accept: "application/pdf,image/*", onChange: (event) => handleFilePicked(event?.target?.files?.[0]), className: "hidden" }),
+    /* @__PURE__ */ jsxs("div", { className: "flex-1 min-h-0 flex", children: [
+      /* @__PURE__ */ jsx("div", { className: `flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 ${mobilePane === "preview" ? "hidden lg:block" : ""}`, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "max-w-4xl mx-auto space-y-4 pb-16", children: [
+        scanSummary ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 space-y-1.5`, children: [
+          scanSummary.filled.length > 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-xs text-[#0b3d31] dark:text-emerald-200", children: [
+            /* @__PURE__ */ jsx(Sparkles, { className: "w-3.5 h-3.5 shrink-0" }),
+            /* @__PURE__ */ jsx("span", { children: scanSummary.smart ? "تحليل ذكي — تمت تعبئة:" : "تمت تعبئة:" }),
+            scanSummary.filled.map((label) => /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`, children: label }, label))
+          ] }) : null,
+          scanSummary.warning ? /* @__PURE__ */ jsx("div", { className: "text-xs text-amber-700 dark:text-amber-200", children: scanSummary.warning }) : null
+        ] }) : null,
+        isRoastInvoice ? /* @__PURE__ */ jsxs("div", { className: "rounded-xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2", children: [
+          /* @__PURE__ */ jsxs("div", { className: "inline-flex items-center gap-1.5 text-sm font-bold text-amber-800 dark:text-amber-200", children: [
+            /* @__PURE__ */ jsx(Flame, { className: "w-4 h-4" }),
+            "فاتورة تحميص مولّدة من فاتورة البن",
+            " ",
+            /* @__PURE__ */ jsx("span", { dir: "ltr", className: "font-mono", children: invoice?.source_invoice_number || `#${invoice?.source_invoice_id}` })
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/55 leading-relaxed", children: "تعديل البنود هنا يجعل هذه الفاتورة المرجع: تكلفة التحميص في فاتورة البن تُحدَّث منها وتُعاد حساب تكلفة الصنف." }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx(FieldLabel$1, { children: "رقم فاتورة المحمصة الحقيقي" }),
+            /* @__PURE__ */ jsx("input", { type: "text", value: roasterReference, onChange: (event) => setRoasterReference(event.target.value), className: `${ws.input} px-3 py-2 text-sm`, placeholder: "رقم الفاتورة كما ورد من المحمصة", dir: "ltr" })
+          ] })
+        ] }) : null,
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsx(SectionTitle$1, { children: "معلومات الفاتورة" }),
+          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "رقم الفاتورة" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: invoiceNumber, onChange: (event) => {
+                autoFilledRef.current.delete("number");
+                setInvoiceNumber(event.target.value);
+              }, className: `${ws.input} px-3 py-2.5 ${duplicateInvoice ? "border-amber-400 dark:border-amber-400/60" : ""}`, placeholder: "فارغ = رقم تلقائي", dir: "ltr" }),
+              duplicateInvoice ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-amber-700 dark:text-amber-300 mt-1 flex items-start gap-1", children: [
+                /* @__PURE__ */ jsx("span", { className: "shrink-0", children: "⚠️" }),
+                /* @__PURE__ */ jsxs("span", { children: [
+                  "رقم الفاتورة مسجّل سابقاً لنفس المورد — فاتورة بتاريخ",
+                  " ",
+                  /* @__PURE__ */ jsx("span", { dir: "ltr", children: duplicateInvoice.invoice_date }),
+                  " ",
+                  "بمبلغ",
+                  " ",
+                  /* @__PURE__ */ jsx("span", { dir: "ltr", children: moneyValue$a(duplicateInvoice.total_amount).toFixed(2) }),
+                  " ",
+                  "SAR. تأكد أنها ليست فاتورة مكررة."
+                ] })
+              ] }) : null
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "العملة" }),
+              /* @__PURE__ */ jsx(GlassSelect, { value: currency, onChange: setCurrency, options: CURRENCY_OPTIONS$1, placeholder: "اختر العملة", buttonClassName: "text-sm py-2.5 px-3" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { required: true, children: "المورد" }),
+              /* @__PURE__ */ jsx(GlassSelect, { value: contactId, onChange: handleContactChange, options: contactOptions, placeholder: "اختر المورد", buttonClassName: "text-sm py-2.5 px-3" }),
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap mt-1.5", children: [
+                scanSupplier && !contactId ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setConfirmSupplier({
+                  ...scanSupplier
+                }), disabled: creatingSupplier, className: `${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0b3d31] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25 inline-flex items-center gap-1.5 hover:bg-[#d8ebe2] dark:hover:bg-emerald-400/15 disabled:opacity-60`, title: scanSupplier.vat ? `إضافة المورد بالرقم الضريبي ${scanSupplier.vat}` : "إضافة المورد كجهة اتصال جديدة", children: [
+                  creatingSupplier ? /* @__PURE__ */ jsx(Loader2, { className: "w-3 h-3 animate-spin" }) : /* @__PURE__ */ jsx(Plus, { className: "w-3 h-3" }),
+                  scanSupplier.name,
+                  /* @__PURE__ */ jsx(Sparkles, { className: "w-3 h-3" })
+                ] }) : null,
+                scanSupplier && !contactId && scanSupplier.vat ? /* @__PURE__ */ jsxs("span", { className: "text-[11px] text-slate-500 dark:text-white/45 font-mono", dir: "ltr", children: [
+                  "VAT: ",
+                  scanSupplier.vat
+                ] }) : null,
+                vatMatched ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-fuchsia-100 dark:bg-fuchsia-400/10 text-fuchsia-700 dark:text-fuchsia-200 border-fuchsia-200 dark:border-fuchsia-400/25 inline-flex items-center gap-1`, children: [
+                  /* @__PURE__ */ jsx(BadgeCheck, { className: "w-3 h-3" }),
+                  "مطابق حسب الرقم الضريبي"
+                ] }) : null,
+                contactTransactionCount !== null ? /* @__PURE__ */ jsxs("span", { className: "text-[11px] text-sky-700 dark:text-sky-300", children: [
+                  contactTransactionCount,
+                  " معاملة سابقة"
+                ] }) : null
+              ] })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "اسم المورد (كما في الفاتورة)" }),
+              /* @__PURE__ */ jsx("input", { type: "text", value: supplierName, onChange: (event) => {
+                autoFilledRef.current.delete("contact");
+                setSupplierName(event.target.value);
+              }, className: `${ws.input} px-3 py-2.5`, placeholder: "مثال: مؤسسة عمق المذاق" })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "تاريخ الفاتورة" }),
+              /* @__PURE__ */ jsx("input", { type: "date", value: invoiceDate, onChange: (event) => {
+                autoFilledRef.current.delete("date");
+                setInvoiceDate(event.target.value);
+              }, className: `${ws.input} px-3 py-2.5` })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "تاريخ الاستحقاق" }),
+              /* @__PURE__ */ jsx("input", { type: "date", value: dueDate, onChange: (event) => {
+                autoFilledRef.current.delete("dueDate");
+                setDueDate(event.target.value);
+              }, className: `${ws.input} px-3 py-2.5` })
+            ] }),
+            branches.length > 0 ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "الفرع" }),
+              /* @__PURE__ */ jsx(GlassSelect, { value: branchId, onChange: setBranchId, options: [{
+                value: "",
+                label: "بدون تحديد فرع"
+              }, ...branches.map((branch) => ({
+                value: String(branch.id),
+                label: branch.name
+              }))], placeholder: "بدون تحديد فرع", buttonClassName: "text-sm py-2.5 px-3" })
+            ] }) : null,
+            showProjectFields ? /* @__PURE__ */ jsxs(Fragment, { children: [
+              /* @__PURE__ */ jsxs("div", { children: [
+                /* @__PURE__ */ jsx(FieldLabel$1, { children: "مشروع تأسيس" }),
+                /* @__PURE__ */ jsx(GlassSelect, { value: projectId, onChange: handleProjectChange, options: [{
+                  value: "",
+                  label: "بدون مشروع"
+                }, ...projectOptions], placeholder: "بدون مشروع", buttonClassName: "text-sm py-2.5 px-3" }),
+                /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1", children: "تُحسب الفاتورة ضمن تكاليف تأسيس الفرع." })
+              ] }),
+              /* @__PURE__ */ jsxs("div", { children: [
+                /* @__PURE__ */ jsx(FieldLabel$1, { children: "القسم" }),
+                /* @__PURE__ */ jsx(GlassSelect, { value: projectPhaseId, onChange: handleProjectPhaseChange, options: projectPhaseOptions, placeholder: "بلا قسم", disabled: !projectId, buttonClassName: "text-sm py-2.5 px-3" })
+              ] })
+            ] }) : null,
+            /* @__PURE__ */ jsx("div", { className: "sm:col-span-2 text-[11px] text-slate-500 dark:text-white/45", children: "الحالة تلقائية بالكامل: بدون دفع «بانتظار الاعتماد»، وبعد السداد «مدفوعة جزئياً» أو «مدفوعة»، و«متأخرة» عند تجاوز الاستحقاق." })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+            /* @__PURE__ */ jsx(SectionTitle$1, { children: "بنود الفاتورة" }),
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: addLine, className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: [
+              /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
+              "إضافة بند"
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "overflow-x-auto -mx-1 px-1", children: /* @__PURE__ */ jsxs("div", { className: "min-w-[840px]", children: [
+            /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-[minmax(190px,1.5fr)_minmax(160px,1fr)_72px_100px_64px_76px_92px_32px] gap-2 items-center px-2 py-2 rounded-xl bg-slate-100/80 dark:bg-white/[0.05] text-[11px] font-bold text-slate-600 dark:text-white/55", children: [
+              /* @__PURE__ */ jsxs("div", { children: [
+                "الوصف ",
+                /* @__PURE__ */ jsx("span", { className: "text-rose-600 dark:text-rose-300", children: "*" })
+              ] }),
+              /* @__PURE__ */ jsxs("div", { children: [
+                "الحساب ",
+                /* @__PURE__ */ jsx("span", { className: "text-rose-600 dark:text-rose-300", children: "*" })
+              ] }),
+              /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
+                "الكمية ",
+                /* @__PURE__ */ jsx("span", { className: "text-rose-600 dark:text-rose-300", children: "*" })
+              ] }),
+              /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
+                "السعر ",
+                /* @__PURE__ */ jsx("span", { className: "text-rose-600 dark:text-rose-300", children: "*" })
+              ] }),
+              /* @__PURE__ */ jsx("div", { className: "text-center", children: "ضريبة %" }),
+              /* @__PURE__ */ jsx("div", { className: "text-center", children: "نوع السعر" }),
+              /* @__PURE__ */ jsx("div", { className: "text-left", children: "الإجمالي" }),
+              /* @__PURE__ */ jsx("div", {})
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: `divide-y ${ws.divider}`, children: lines.map((line) => {
+              const math = lineMath(line);
+              const bean = lineBean(line);
+              return /* @__PURE__ */ jsxs(React__default.Fragment, { children: [
+                /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-[minmax(190px,1.5fr)_minmax(160px,1fr)_72px_100px_64px_76px_92px_32px] gap-2 items-center px-2 py-2", children: [
+                  /* @__PURE__ */ jsx("input", { type: "text", value: line.description, onChange: (event) => updateLine(line.key, {
+                    description: event.target.value
+                  }), className: `${ws.input} px-2.5 py-1.5 text-sm`, placeholder: "الوصف أو اسم الصنف…" }),
+                  /* @__PURE__ */ jsx(GlassSelect, { value: line.account_id, onChange: (value) => updateLine(line.key, {
+                    account_id: value
+                  }), options: accountOptions, placeholder: "غير مصنّفة", buttonClassName: "text-xs py-1.5 px-2", menuWidth: 340, searchable: true, searchPlaceholder: "ابحث في شجرة الحسابات…" }),
+                  /* @__PURE__ */ jsx("input", { type: "number", value: line.quantity, onChange: (event) => updateLine(line.key, {
+                    quantity: event.target.value
+                  }), className: `${ws.input} px-2 py-1.5 text-sm text-center`, step: "any", min: "0", dir: "ltr", placeholder: "1" }),
+                  /* @__PURE__ */ jsx("input", { type: "number", value: line.unit_price, onChange: (event) => updateLine(line.key, {
+                    unit_price: event.target.value
+                  }), className: `${ws.input} px-2 py-1.5 text-sm text-center`, step: "any", min: "0", dir: "ltr", placeholder: "0.00" }),
+                  /* @__PURE__ */ jsx("input", { type: "number", value: line.tax_rate, onChange: (event) => updateLine(line.key, {
+                    tax_rate: event.target.value
+                  }), className: `${ws.input} px-2 py-1.5 text-sm text-center`, step: "0.1", min: "0", max: "100", dir: "ltr" }),
+                  /* @__PURE__ */ jsx("button", { type: "button", disabled: !!bean && !!line.roast_enabled, onClick: () => updateLine(line.key, {
+                    amount_includes_tax: !line.amount_includes_tax
+                  }), className: `${ws.pill} justify-center text-[10px] py-1 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed ${line.amount_includes_tax ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25" : "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10"}`, title: "بدّل بين سعر شامل الضريبة وسعر خالٍ منها", children: line.amount_includes_tax ? "شامل الضريبة" : "خالي الضريبة" }),
+                  /* @__PURE__ */ jsx("div", { className: "text-left text-sm font-bold text-slate-800 dark:text-white/85", dir: "ltr", children: math.total > 0 ? math.total.toFixed(2) : "—" }),
+                  /* @__PURE__ */ jsx("div", { className: "flex justify-center", children: lines.length > 1 ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => removeLine(line.key), className: `${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`, title: "حذف البند", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) }) : null })
+                ] }),
+                bean ? /* @__PURE__ */ jsx(CoffeeLineRow, { line, bean, calc: coffee.perLine.get(line.key) || null, updateLine, isEditing, allowArrival, currency }) : null
+              ] }, line.key);
+            }) })
+          ] }) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
+          /* @__PURE__ */ jsx(SectionTitle$1, { children: "الإجماليات والدفع" }),
+          /* @__PURE__ */ jsxs("div", { className: "space-y-1.5 text-sm", children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
+              /* @__PURE__ */ jsx("span", { children: "مجموع البنود (قبل الضريبة)" }),
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$h(totals.rawSubtotal, currency) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 text-slate-600 dark:text-white/60", children: [
+              /* @__PURE__ */ jsx("span", { children: "الخصم (قبل الضريبة)" }),
+              /* @__PURE__ */ jsx("input", { type: "number", value: discount, onChange: (event) => {
+                autoFilledRef.current.delete("discount");
+                setDiscount(event.target.value);
+              }, className: `${ws.input} w-32 px-2.5 py-1.5 text-sm text-left`, step: "0.01", min: "0", dir: "ltr" })
+            ] }),
+            totals.discount > 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
+              /* @__PURE__ */ jsx("span", { children: "الصافي بعد الخصم" }),
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$h(totals.subtotal, currency) })
+            ] }) : null,
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
+              /* @__PURE__ */ jsx("span", { children: "إجمالي ضريبة القيمة المضافة" }),
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$h(totals.tax, currency) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: `flex items-center justify-between font-bold text-slate-900 dark:text-white pt-2 border-t ${ws.divider}`, children: [
+              /* @__PURE__ */ jsx("span", { children: "المجموع" }),
+              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$h(totals.total, currency) })
+            ] })
+          ] }),
+          hasCoffeeLine ? /* @__PURE__ */ jsxs("div", { className: "rounded-xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2", children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
+              /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 text-sm font-bold text-amber-800 dark:text-amber-200", children: [
+                /* @__PURE__ */ jsx(Flame, { className: "w-4 h-4" }),
+                "تكاليف التحميص (",
+                coffee.count,
+                " ",
+                coffee.count === 1 ? "بند" : "بنود",
+                ")"
+              ] }),
+              /* @__PURE__ */ jsx("span", { className: "text-sm font-bold tabular-nums text-amber-800 dark:text-amber-200", dir: "ltr", children: formatMoney$h(coffee.roastTotal + coffee.roastTax, currency) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-600 dark:text-white/55 leading-relaxed", children: [
+              "خارج إجمالي فاتورة المورد وخارج الإقرار الضريبي.",
+              coffee.roastTotal + coffee.roastTax > 0 ? ` تُنشأ تلقائيًا فاتورة تحميص مستقلة على «${effectiveRoasterName}» بحالة «بانتظار الدفع» واستحقاق بعد 15 يومًا من تاريخ الفاتورة.` : " تحميص بقيمة 0 — لا تُنشأ فاتورة تحميص."
+            ] }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "المحمصة (جهة اتصال)" }),
+              /* @__PURE__ */ jsx(GlassSelect, { value: roasterContactId, onChange: setRoasterContactId, options: [{
+                value: "",
+                label: `الافتراضية — ${effectiveRoasterName}`
+              }, ...contactOptions.filter((option) => option.value !== "")], placeholder: "المحمصة الافتراضية", buttonClassName: "text-sm py-2 px-3", searchable: true, searchPlaceholder: "ابحث في جهات الاتصال…" })
+            ] }),
+            anyArrivalComplete ? /* @__PURE__ */ jsxs("div", { className: "pt-2 border-t border-dashed border-amber-200/70 dark:border-amber-400/15 space-y-2", children: [
+              /* @__PURE__ */ jsxs("label", { className: "inline-flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-white/80 cursor-pointer select-none", children: [
+                /* @__PURE__ */ jsx("input", { type: "checkbox", checked: depositOnArrival, onChange: (event) => setDepositOnArrival(event.target.checked), className: "accent-[#0e7a5f]" }),
+                "إيداع الكمية الواصلة في المخزون"
+              ] }),
+              depositOnArrival && branches.length > 0 ? /* @__PURE__ */ jsx(GlassSelect, { value: depositBranchId || branchId, onChange: setDepositBranchId, options: [{
+                value: "",
+                label: "اختر فرع الإيداع…"
+              }, ...branches.map((branch) => ({
+                value: String(branch.id),
+                label: branch.name
+              }))], placeholder: "اختر فرع الإيداع…", buttonClassName: "text-sm py-2 px-3" }) : null,
+              depositOnArrival && !(depositBranchId || branchId) ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-700 dark:text-rose-200", children: "حدد فرع الإيداع — وإلا يُحفظ الوصول بلا إيداع." }) : null
+            ] }) : null
+          ] }) : null,
+          !isEditing && hasFixedExpenseLine && !hasCoffeeLine ? /* @__PURE__ */ jsxs("label", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-start gap-3 cursor-pointer select-none`, children: [
+            /* @__PURE__ */ jsx("input", { type: "checkbox", checked: recurringMonthly, onChange: (event) => setRecurringMonthly(event.target.checked), className: "accent-[#0e7a5f] mt-1" }),
+            /* @__PURE__ */ jsxs("span", { className: "min-w-0", children: [
+              /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-white", children: [
+                /* @__PURE__ */ jsx(Repeat, { className: "w-4 h-4 text-[#0e7a5f] dark:text-emerald-200" }),
+                "فاتورة متكررة بشكل شهري"
+              ] }),
+              /* @__PURE__ */ jsx("span", { className: "block text-[11px] text-slate-600 dark:text-white/55 mt-1 leading-relaxed", children: "حساب الفاتورة ضمن «مصروف ثابت» — عند التفعيل ينشئ النظام هذه الفاتورة تلقائياً مع بداية كل شهر بنفس التفاصيل بحالة «بانتظار الدفع» وتاريخ استحقاق نهاية الشهر، دون أي تدخل. تعديل آخر فاتورة منها لاحقاً (المبلغ مثلاً) يُطبَّق على فواتير الأشهر القادمة." })
+            ] })
+          ] }) : null,
+          isEditing && isRecurringLinked ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-start gap-2.5`, children: [
+            /* @__PURE__ */ jsx(Repeat, { className: "w-4 h-4 mt-0.5 text-[#0e7a5f] dark:text-emerald-200 shrink-0" }),
+            /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/60 leading-relaxed", children: "فاتورة متكررة شهرياً — أي تعديل تحفظه هنا (المبلغ، المورد، الحساب…) يُطبَّق تلقائياً على فواتير الأشهر القادمة ما دامت هذه آخر فاتورة من القالب." })
+          ] }) : null,
+          !isEditing ? /* @__PURE__ */ jsxs("div", { className: `${ws.segWrap} w-full`, children: [
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setSendToApproval(false), className: `${ws.segBtn} flex-1 text-xs ${!sendToApproval ? ws.segActive : ws.segInactive}`, children: "تسجيل دفع الآن" }),
+            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+              setSendToApproval(true);
+              setPaidAmount("0.00");
+              setPaidBankAccountId("");
+              setPaymentReceiptUrl("");
+              setPaymentReceiptName("");
+            }, className: `${ws.segBtn} flex-1 text-xs ${sendToApproval ? ws.segActive : ws.segInactive}`, children: "إرسال إلى الاعتماد — غير مدفوعة" })
+          ] }) : null,
+          sendToApproval && !isEditing ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-center justify-between gap-3`, children: [
+            /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/60 leading-relaxed", children: [
+              "ستُنشأ الفاتورة ",
+              /* @__PURE__ */ jsx("b", { children: "غير مدفوعة" }),
+              " بحالة «بانتظار الاعتماد» — يسجل المحاسب دفعاتها لاحقاً (كلياً أو جزئياً) من سجل الدفعات."
+            ] }),
+            /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold shrink-0 ${purchaseInvoiceStatusClass("pending_payment")}`, children: purchaseInvoiceStatusLabel("pending_payment") })
+          ] }) : null,
+          !(sendToApproval && !isEditing) ? /* @__PURE__ */ jsxs(Fragment, { children: [
+            /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1", children: [
+              /* @__PURE__ */ jsxs("div", { children: [
+                /* @__PURE__ */ jsx(FieldLabel$1, { children: "المبلغ المدفوع" }),
+                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+                  /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (event) => setPaidAmount(event.target.value), className: `${ws.input} px-3 py-2.5 text-right flex-1`, step: "0.01", min: "0", dir: "ltr" }),
+                  /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPaidAmount(totals.total > 0 ? totals.total.toFixed(2) : "0.00"), disabled: totals.total <= 0, className: `${ws.btnNeutral} px-3 py-2.5 text-xs shrink-0 whitespace-nowrap disabled:opacity-50`, title: "تعبئة المدفوع بكامل مبلغ الفاتورة", children: "مدفوعة بالكامل" })
+                ] }),
+                moneyValue$a(paidAmount) > totals.total ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-700 dark:text-rose-300 mt-1", children: "المبلغ المدفوع لا يمكن أن يتجاوز مبلغ الفاتورة." }) : null
+              ] }),
+              /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-center justify-between gap-2`, children: [
+                /* @__PURE__ */ jsxs("div", { children: [
+                  /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "الرصيد المتبقي" }),
+                  /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-0.5", dir: "ltr", children: formatMoney$h(balance, currency) })
+                ] }),
+                /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold ${purchaseInvoiceStatusClass(status)}`, children: purchaseInvoiceStatusLabel(status) })
+              ] })
+            ] }),
+            moneyValue$a(paidAmount) > 0 && bankAccountOptions.length > 1 ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel$1, { children: "الحساب البنكي المدفوع منه" }),
+              /* @__PURE__ */ jsx(GlassSelect, { value: paidBankAccountId, onChange: setPaidBankAccountId, options: bankAccountOptions, placeholder: "بدون تحديد حساب", buttonClassName: "text-sm py-2.5 px-3" })
+            ] }) : null,
+            moneyValue$a(paidAmount) > 0 ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsxs(FieldLabel$1, { children: [
+                "إيصال الدفع",
+                " ",
+                /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "(اختياري)" })
+              ] }),
+              paymentReceiptUrl ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} px-3 py-2 flex items-center justify-between gap-2`, children: [
+                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0 text-xs text-slate-700 dark:text-white/70", children: [
+                  /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5 shrink-0" }),
+                  /* @__PURE__ */ jsx("span", { className: "truncate", dir: "ltr", children: paymentReceiptName || "إيصال مرفق" })
+                ] }),
+                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 shrink-0", children: [
+                  /* @__PURE__ */ jsxs("a", { href: paymentReceiptUrl, target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-2.5 py-1.5 text-[11px]`, children: [
+                    /* @__PURE__ */ jsx(ExternalLink, { className: "w-3 h-3" }),
+                    "فتح"
+                  ] }),
+                  /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
+                    setPaymentReceiptUrl("");
+                    setPaymentReceiptName("");
+                  }, className: `${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`, title: "إزالة الإيصال", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+                ] })
+              ] }) : /* @__PURE__ */ jsxs("button", { type: "button", disabled: receiptUploading, onClick: () => receiptInputRef.current?.click(), className: `${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`, children: [
+                receiptUploading ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5" }),
+                receiptUploading ? "جاري الرفع…" : "إرفاق إيصال الدفع"
+              ] }),
+              /* @__PURE__ */ jsx("input", { ref: receiptInputRef, type: "file", accept: "application/pdf,image/*", onChange: (event) => handleReceiptPicked(event?.target?.files?.[0]), className: "hidden" })
+            ] }) : null
+          ] }) : null
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-2`, children: [
+          /* @__PURE__ */ jsx(SectionTitle$1, { children: "ملاحظات" }),
+          /* @__PURE__ */ jsx("textarea", { value: notes, onChange: (event) => setNotes(event.target.value), className: `${ws.input} px-3 py-2.5 min-h-[80px] resize-none`, placeholder: "اختياري" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxs("button", { type: "submit", disabled: !canSubmit, className: `${ws.btnPrimary} px-5 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed`, children: [
+            /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
+            sendToApproval && !isEditing ? "إرسال إلى الاعتماد" : "حفظ الفاتورة"
+          ] }),
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2.5`, children: "إلغاء" })
+        ] })
+      ] }) }),
+      /* @__PURE__ */ jsx("div", { className: `w-full lg:w-[44%] lg:max-w-[640px] border-r ${ws.divider} bg-white/60 dark:bg-white/[0.02] ${mobilePane === "form" ? "hidden lg:flex" : "flex"} flex-col min-h-0`, children: previewPane })
+    ] }),
+    confirmSupplier ? /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1100] flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-sm p-0 sm:p-4", dir: "rtl", onMouseDown: (event) => {
+      if (event.target === event.currentTarget && !creatingSupplier) {
+        setConfirmSupplier(null);
+      }
+    }, children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5`, children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3 mb-4", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Sparkles, { className: "w-5 h-5" }) }),
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white", children: "تأكيد إضافة مورد جديد" }),
+            /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/50 mt-0.5", children: "البيانات مستخرجة من الفاتورة — راجعها وعدّلها قبل الحفظ." })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setConfirmSupplier(null), disabled: creatingSupplier, className: `${ws.iconButton} w-9 h-9`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx(FieldLabel$1, { required: true, children: "اسم المنشأة" }),
+          /* @__PURE__ */ jsx("input", { type: "text", value: confirmSupplier.name, onChange: (event) => setConfirmSupplier({
+            ...confirmSupplier,
+            name: event.target.value
+          }), className: `${ws.input} px-3 py-2.5`, autoFocus: true })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsx(FieldLabel$1, { children: "الرقم الضريبي" }),
+          /* @__PURE__ */ jsx("input", { type: "text", value: confirmSupplier.vat, onChange: (event) => setConfirmSupplier({
+            ...confirmSupplier,
+            vat: event.target.value.replace(/\D/g, "")
+          }), className: `${ws.input} px-3 py-2.5 text-left font-mono`, dir: "ltr", placeholder: "3xxxxxxxxxxxxx", inputMode: "numeric" }),
+          confirmSupplier.vat && confirmSupplier.vat.length !== 15 ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-amber-700 dark:text-amber-300 mt-1", children: "الأرقام الضريبية السعودية 15 خانة — تأكد من الرقم." }) : null
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} px-3 py-2 text-[11px] text-slate-500 dark:text-white/45 leading-relaxed`, children: [
+          confirmSupplier.vat ? "سيُسجل كمورد سعودي مسجل ضريبياً بنسبة افتراضية 15%." : "بدون رقم ضريبي — سيُسجل كمورد غير مسجل في الضريبة.",
+          " ",
+          "يمكن تعديل بقية البيانات لاحقاً من صفحة الموردين."
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 pt-1", children: [
+          /* @__PURE__ */ jsxs("button", { type: "button", onClick: quickAddScannedSupplier, disabled: creatingSupplier || !confirmSupplier.name.trim(), className: `${ws.btnPrimary} px-4 py-2 disabled:opacity-50`, children: [
+            creatingSupplier ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
+            "تأكيد الإضافة"
+          ] }),
+          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setConfirmSupplier(null), disabled: creatingSupplier, className: `${ws.btnNeutral} px-4 py-2`, children: "إلغاء" })
+        ] })
+      ] })
+    ] }) }) : null
+  ] }), document.body);
+}
+
+function useAccountingContacts({
+  employeeId,
+  isAdmin,
+  q,
+  includeInactive
+} = {}) {
+  return useQuery({
+    queryKey: queryKeys.accountingContacts(q || "", !!includeInactive),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const qs = new URLSearchParams();
+      if (q) qs.set("q", q);
+      if (includeInactive) qs.set("includeInactive", "1");
+      const url = qs.toString() ? `/api/accounting/contacts?${qs.toString()}` : "/api/accounting/contacts";
+      const res = await adminFetch(url);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تحميل جهات الاتصال");
+      }
+      return Array.isArray(data?.contacts) ? data.contacts : [];
+    }
+  });
+}
+function useCreateAccountingContact() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/contacts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إضافة جهة الاتصال");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingContacts()
+      });
+      toast.success("تم إضافة جهة الاتصال");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإضافة: ${error.message}`);
+    }
+  });
+}
+function useUpdateAccountingContact() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      ...payload
+    }) => {
+      const res = await adminFetch(`/api/accounting/contacts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل التعديل");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingContacts()
+      });
+      // اسم المورد يظهر داخل صفوف فواتير المشتريات (اسم حي من سجل
+      // الموردين) — أبطل كاشها حتى ينعكس التعديل فوراً بلا تحديث يدوي.
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      toast.success("تم حفظ التعديلات");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل التعديل: ${error.message}`);
+    }
+  });
+}
+function useDeleteAccountingContact() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      force = false
+    }) => {
+      const url = force ? `/api/accounting/contacts/${id}?force=1` : `/api/accounting/contacts/${id}`;
+      const res = await adminFetch(url, {
+        method: "DELETE"
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل الحذف");
+      }
+      return data;
+    },
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingContacts()
+      });
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      toast.success(data?.hard ? "تم الحذف نهائياً" : "تم إيقاف الجهة");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الحذف: ${error.message}`);
+    }
+  });
+}
+
+// Chart of accounts (شجرة الحسابات). Returns the FLAT account list —
+// consumers build the tree client-side from parent_id.
+function useAccountingAccounts({
+  employeeId,
+  isAdmin,
+  includeInactive
+} = {}) {
+  return useQuery({
+    queryKey: queryKeys.accountingAccounts(!!includeInactive),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const url = includeInactive ? "/api/accounting/accounts?includeInactive=1" : "/api/accounting/accounts";
+      const res = await adminFetch(url);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تحميل شجرة الحسابات");
+      }
+      return Array.isArray(data?.accounts) ? data.accounts : [];
+    }
+  });
+}
+function invalidateAccounts(queryClient) {
+  return Promise.all([queryClient.invalidateQueries({
+    queryKey: queryKeys.accountingAccounts()
+  }),
+  // Invoices render account names/codes, banks carry auto-links.
+  queryClient.invalidateQueries({
+    queryKey: queryKeys.accountingPurchaseInvoices()
+  }), queryClient.invalidateQueries({
+    queryKey: queryKeys.accountingBankAccounts()
+  })]);
+}
+function useCreateAccountingAccount() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/accounts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إضافة الحساب");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateAccounts(queryClient);
+      toast.success("تم إضافة الحساب");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإضافة: ${error.message}`);
+    }
+  });
+}
+function useUpdateAccountingAccount() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/accounts", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تعديل الحساب");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateAccounts(queryClient);
+      toast.success("تم حفظ الحساب");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل التعديل: ${error.message}`);
+    }
+  });
+}
+function useDeleteAccountingAccount() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id
+    }) => {
+      const res = await adminFetch(`/api/accounting/accounts?id=${id}`, {
+        method: "DELETE"
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إيقاف الحساب");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await invalidateAccounts(queryClient);
+      toast.success("تم إيقاف الحساب");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإيقاف: ${error.message}`);
+    }
+  });
+}
+
+function useAccountingBankAccounts({
+  employeeId,
+  isAdmin,
+  q,
+  includeInactive
+} = {}) {
+  return useQuery({
+    queryKey: queryKeys.accountingBankAccounts(q || "", !!includeInactive),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const qs = new URLSearchParams();
+      if (q) qs.set("q", q);
+      if (includeInactive) qs.set("includeInactive", "1");
+      const url = qs.toString() ? `/api/accounting/bank-accounts?${qs.toString()}` : "/api/accounting/bank-accounts";
+      // authedFetch: the field entry flow reads the banks list with
+      // its own session token (writes stay admin-only).
+      const res = await authedFetch(url);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تحميل الحسابات البنكية");
+      }
+      return Array.isArray(data?.accounts) ? data.accounts : [];
+    }
+  });
+}
+function useCreateAccountingBankAccount() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/bank-accounts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إضافة الحساب البنكي");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingBankAccounts()
+      });
+      toast.success("تم إضافة الحساب البنكي");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإضافة: ${error.message}`);
+    }
+  });
+}
+function useUpdateAccountingBankAccount() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      ...payload
+    }) => {
+      const res = await adminFetch(`/api/accounting/bank-accounts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تعديل الحساب البنكي");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingBankAccounts()
+      });
+      toast.success("تم حفظ الحساب البنكي");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل التعديل: ${error.message}`);
+    }
+  });
+}
+function useDeleteAccountingBankAccount() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      force = false
+    }) => {
+      const url = force ? `/api/accounting/bank-accounts/${id}?force=1` : `/api/accounting/bank-accounts/${id}`;
+      const res = await adminFetch(url, {
+        method: "DELETE"
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إيقاف الحساب البنكي");
+      }
+      return data;
+    },
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingBankAccounts()
+      });
+      toast.success(data?.hard ? "تم حذف الحساب نهائياً" : "تم إيقاف الحساب");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإيقاف: ${error.message}`);
+    }
+  });
+}
+
+function useAccountingPurchaseInvoices({
+  employeeId,
+  isAdmin,
+  q,
+  status,
+  includeInactive
+} = {}) {
+  return useQuery({
+    queryKey: queryKeys.accountingPurchaseInvoices(q || "", status || "", !!includeInactive),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const qs = new URLSearchParams();
+      if (q) qs.set("q", q);
+      if (status) qs.set("status", status);
+      if (includeInactive) qs.set("includeInactive", "1");
+      const url = qs.toString() ? `/api/accounting/purchase-invoices?${qs.toString()}` : "/api/accounting/purchase-invoices";
+      const res = await adminFetch(url);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تحميل فواتير المشتريات");
+      }
+      return Array.isArray(data?.invoices) ? data.invoices : [];
+    }
+  });
+}
+
+// خطأ يحمل كود الخادم (stale_invoice / roast_paid / unusual_price /
+// deposited_line / high_waste …) حتى تتصرف الواجهة بحسبه.
+function apiError$1(data, fallback, status) {
+  const error = new Error(data?.error || fallback);
+  error.code = data?.code || null;
+  error.status = status || null;
+  error.data = data || null;
+  return error;
+}
+function showWarnings$1(data) {
+  const warnings = Array.isArray(data?.warnings) ? data.warnings : [];
+  for (const warning of warnings) toast.warning(warning, {
+    duration: 8000
+  });
+}
+function useCreateAccountingPurchaseInvoice() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/purchase-invoices", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw apiError$1(data, "فشل إضافة فاتورة المشتريات", res.status);
+      }
+      return data;
+    },
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      // فاتورة البن قد تعيد حساب تكلفة الصنف وتودع في المخزون.
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.items()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.purchaseReceipts()
+      });
+      toast.success(data?.roast?.invoice_number ? `تم إضافة الفاتورة — وفاتورة التحميص ${data.roast.invoice_number}` : "تم إضافة فاتورة المشتريات");
+      showWarnings$1(data);
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإضافة: ${error.message}`);
+    }
+  });
+}
+function useUpdateAccountingPurchaseInvoice() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/purchase-invoices", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw apiError$1(data, "فشل تعديل فاتورة المشتريات", res.status);
+      }
+      return data;
+    },
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.items()
+      });
+      toast.success("تم حفظ فاتورة المشتريات");
+      showWarnings$1(data);
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل التعديل: ${error.message}`);
+    }
+  });
+}
+
+// سجل الدفعات المتعدد: كل دفعة سطر مستقل، والخادم يحدّث رأس
+// الفاتورة في نفس العملية — إبطال كاش الفواتير يكفي للتحديث.
+function useAddPurchaseInvoicePayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/purchase-invoice-payments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تسجيل الدفعة");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      toast.success("تم تسجيل الدفعة");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل تسجيل الدفعة: ${error.message}`);
+    }
+  });
+}
+
+// دفعة جماعية: سداد أكثر من فاتورة لنفس المورد دفعة واحدة بإيصال
+// واحد وحساب بنكي واحد — كل فاتورة تُسدَّد بكامل رصيدها.
+function useBulkPayPurchaseInvoices() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/purchase-invoice-payments/bulk", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل تسجيل الدفعة الجماعية");
+      }
+      return data;
+    },
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      toast.success(`تم سداد ${data?.count || 0} فاتورة بإجمالي ${Number(data?.total || 0).toFixed(2)} ${data?.currency || "SAR"}`);
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الدفع الجماعي: ${error.message}`);
+    }
+  });
+}
+function useDeletePurchaseInvoicePayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id
+    }) => {
+      const res = await adminFetch(`/api/accounting/purchase-invoice-payments?id=${id}`, {
+        method: "DELETE"
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل حذف الدفعة");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      toast.success("تم حذف الدفعة وتحديث الفاتورة");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل حذف الدفعة: ${error.message}`);
+    }
+  });
+}
+
+// مرفقات إضافية على الفاتورة (عرض سعر ثم فاتورة ضريبية…).
+function useAddInvoiceAttachment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/purchase-invoice-attachments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل إضافة المرفق");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      toast.success("تم إرفاق المستند");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإرفاق: ${error.message}`);
+    }
+  });
+}
+function useDeleteInvoiceAttachment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id
+    }) => {
+      const res = await adminFetch(`/api/accounting/purchase-invoice-attachments?id=${id}`, {
+        method: "DELETE"
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "فشل حذف المرفق");
+      }
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      toast.success("تم حذف المرفق");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل حذف المرفق: ${error.message}`);
+    }
+  });
+}
+function useDeleteAccountingPurchaseInvoice() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      force = false,
+      detach = false
+    }) => {
+      const params = new URLSearchParams({
+        id: String(id)
+      });
+      if (force) params.set("force", "1");
+      // فاتورة تحميص مرتبطة بفاتورة بن: إيقافها يتطلب «فك الارتباط».
+      if (detach) params.set("detach", "1");
+      const res = await adminFetch(`/api/accounting/purchase-invoices?${params.toString()}`, {
+        method: "DELETE"
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw apiError$1(data, "فشل إيقاف الفاتورة", res.status);
+      }
+      return data;
+    },
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.items()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.purchaseReceipts()
+      });
+      toast.success(data?.hard ? "تم حذف الفاتورة نهائياً" : "تم إيقاف الفاتورة");
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل الإيقاف: ${error.message}`);
+    }
+  });
+}
+
+// تسجيل وصول بنود البن (الكمية الواصلة، الاكتمال، الإيداع) — أو عكس
+// الإيداع. الخادم يعيد حساب الهدر وصافي الكيلو وتكلفة الصنف.
+function useRecordCoffeeArrival() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async payload => {
+      const res = await adminFetch("/api/accounting/purchase-invoices/arrival", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw apiError$1(data, "فشل تسجيل الوصول", res.status);
+      }
+      return data;
+    },
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.items()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.purchaseReceipts()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.inventoryOperations()
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.stockValue()
+      });
+      if (data?.reversed !== undefined) {
+        toast.success("تم عكس الإيداع");
+      } else {
+        toast.success(data?.mode === "reported" ? "تم إبلاغ الكمية الواصلة — بانتظار اعتماد الإدارة" : "تم تسجيل الوصول");
+      }
+    },
+    onError: error => {
+      console.error(error);
+      toast.error(`فشل تسجيل الوصول: ${error.message}`);
+    }
+  });
 }
 
 /**
@@ -7016,57 +9741,25 @@ function formatDateTime$4(dateString) {
   });
 }
 
-const inputCls$1 = `${ws.input} px-3 py-2 text-sm`;
-const DEFAULT_ACCOUNT = "5399";
-function numberOrNull(raw) {
-  if (raw === null || raw === void 0 || String(raw).trim() === "") return null;
-  const n = Number(raw);
-  return Number.isFinite(n) ? n : null;
-}
-function inferAccountForPhase(project, phaseId) {
-  if (!phaseId) return DEFAULT_ACCOUNT;
-  const phase = (project?.phases || []).find((p) => String(p?.id) === String(phaseId));
-  if (!phase) return DEFAULT_ACCOUNT;
-  if (phase.default_account_code) return String(phase.default_account_code);
-  const template = Array.isArray(DEFAULT_PHASE_TEMPLATE) ? DEFAULT_PHASE_TEMPLATE : [];
-  const match = template.find((t) => t?.name && phase.name && String(t.name).trim() === String(phase.name).trim());
-  if (match?.default_account_code) return String(match.default_account_code);
-  const byColor = template.find((t) => t?.color && phase.color && t.color === phase.color);
-  if (byColor?.default_account_code) return String(byColor.default_account_code);
-  return DEFAULT_ACCOUNT;
-}
-function buildInitial(invoice, project, defaultPhaseId) {
-  const phaseId = invoice?.phase_id != null ? String(invoice.phase_id) : defaultPhaseId != null ? String(defaultPhaseId) : "";
-  return {
-    invoice_number: invoice?.invoice_number || "",
-    invoice_date: invoice?.invoice_date || todayRiyadh$8(),
-    due_date: invoice?.due_date || "",
-    supplier_name: invoice?.supplier_name || "",
-    phase_id: phaseId,
-    expense_account_code: invoice?.expense_account_code ? String(invoice.expense_account_code) : inferAccountForPhase(project, phaseId),
-    total_amount: invoice?.total_amount != null ? String(invoice.total_amount) : "",
-    paid_amount: invoice?.paid_amount != null ? String(invoice.paid_amount) : "0"
-  };
+function knownAccountCode(code) {
+  const text = String(code || "");
+  return (ESTABLISHMENT_ACCOUNTS || []).some((a) => String(a.code) === text) ? text : "";
 }
 function ExpenseModal({
   open,
   project,
   invoice,
-  defaultPhaseId,
   onClose
 }) {
-  const isEditing = !!invoice?.id;
+  const queryClient = useQueryClient();
   const saveMut = useSaveBranchProjectInvoice();
-  const [form, setForm] = useState(() => buildInitial(invoice, project, defaultPhaseId));
-  const [errors, setErrors] = useState({});
-  const [accountTouched, setAccountTouched] = useState(false);
+  const [phaseId, setPhaseId] = useState("");
+  const [accountCode, setAccountCode] = useState("");
   useEffect(() => {
-    if (open) {
-      setForm(buildInitial(invoice, project, defaultPhaseId));
-      setErrors({});
-      setAccountTouched(!!invoice?.expense_account_code);
-    }
-  }, [open, invoice?.id, defaultPhaseId]);
+    if (!open) return;
+    setPhaseId(invoice?.phase_id != null ? String(invoice.phase_id) : "");
+    setAccountCode(knownAccountCode(invoice?.expense_account_code));
+  }, [open, invoice]);
   const phaseOptions = useMemo(() => {
     const phases = Array.isArray(project?.phases) ? [...project.phases] : [];
     phases.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
@@ -7078,121 +9771,62 @@ function ExpenseModal({
       label: p.name
     }))];
   }, [project?.phases]);
-  const accountOptions = useMemo(() => (Array.isArray(ESTABLISHMENT_ACCOUNTS) ? ESTABLISHMENT_ACCOUNTS : []).map((a) => ({
+  const accountOptions = useMemo(() => [{
+    value: "",
+    label: "إبقاء الحساب الحالي"
+  }, ...(Array.isArray(ESTABLISHMENT_ACCOUNTS) ? ESTABLISHMENT_ACCOUNTS : []).map((a) => ({
     value: String(a.code),
     label: `${a.code} — ${a.name}`
-  })), []);
-  const set = (key) => (value) => setForm((prev) => ({
-    ...prev,
-    [key]: value
-  }));
-  const setInput = (key) => (event) => set(key)(event.target.value);
-  function handlePhaseChange(value) {
-    setForm((prev) => ({
-      ...prev,
-      phase_id: value,
-      expense_account_code: accountTouched ? prev.expense_account_code : inferAccountForPhase(project, value)
-    }));
-  }
-  function validate() {
-    const next = {};
-    if (!form.invoice_number.trim()) next.invoice_number = "رقم الفاتورة مطلوب";
-    if (!form.invoice_date) next.invoice_date = "تاريخ الفاتورة مطلوب";
-    if (!form.supplier_name.trim()) next.supplier_name = "اسم المورد مطلوب";
-    if (!form.expense_account_code) next.expense_account_code = "اختر الحساب";
-    const total2 = numberOrNull(form.total_amount);
-    if (total2 === null || total2 <= 0) next.total_amount = "الإجمالي يجب أن يكون أكبر من صفر";
-    const paid2 = numberOrNull(form.paid_amount) ?? 0;
-    if (paid2 < 0) next.paid_amount = "المسدد لا يكون سالباً";
-    else if (total2 !== null && paid2 > total2) next.paid_amount = "المسدد أكبر من الإجمالي";
-    if (form.due_date && form.invoice_date && form.due_date < form.invoice_date) {
-      next.due_date = "الاستحقاق قبل تاريخ الفاتورة";
-    }
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  }
+  }))], []);
   function handleSubmit(event) {
     event?.preventDefault?.();
-    if (!project?.id || saveMut.isPending) return;
-    if (!validate()) return;
+    if (!project?.id || !invoice?.id || saveMut.isPending) return;
     const payload = {
       project_id: project.id,
-      ...isEditing ? {
-        id: invoice.id
-      } : {},
-      invoice_number: form.invoice_number.trim(),
-      invoice_date: form.invoice_date,
-      due_date: form.due_date || null,
-      supplier_name: form.supplier_name.trim(),
-      phase_id: form.phase_id ? Number(form.phase_id) : null,
-      expense_account_code: form.expense_account_code,
-      total_amount: numberOrNull(form.total_amount) ?? 0,
-      paid_amount: numberOrNull(form.paid_amount) ?? 0
+      id: invoice.id,
+      phase_id: phaseId ? Number(phaseId) : null
     };
+    if (accountCode) payload.expense_account_code = accountCode;
     saveMut.mutate(payload, {
-      onSuccess: () => onClose?.()
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.accountingPurchaseInvoices()
+        });
+        onClose?.();
+      }
     });
   }
-  const total = numberOrNull(form.total_amount) ?? 0;
-  const paid = numberOrNull(form.paid_amount) ?? 0;
-  const remaining = Math.max(0, total - paid);
-  const errorText = (key) => errors[key] ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-600 dark:text-rose-300 mt-1", children: errors[key] }) : null;
-  return /* @__PURE__ */ jsx(ModalShell, { open, title: isEditing ? "تعديل الفاتورة" : "فاتورة جديدة", description: "مؤقتاً تُسجَّل الفواتير هنا؛ عند ربط الخلفية تُنشأ من فواتير المشتريات مباشرة", onClose, footer: /* @__PURE__ */ jsxs(Fragment, { children: [
+  const currentAccount = invoice?.expense_account_code ? `${invoice.expense_account_code}${invoice.expense_account_name ? ` — ${invoice.expense_account_name}` : ""}` : "غير مصنّف";
+  return /* @__PURE__ */ jsx(ModalShell, { open, title: "القسم والحساب", description: "تعديل بيانات الفاتورة نفسها (المبالغ، المورد…) يكون من فواتير المشتريات", onClose, width: "max-w-lg", footer: /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2 text-sm`, children: "إلغاء" }),
     /* @__PURE__ */ jsxs("button", { type: "submit", form: "branch-expense-form", disabled: saveMut.isPending, className: `${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`, children: [
       saveMut.isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
-      isEditing ? "حفظ التعديلات" : "إضافة الفاتورة"
+      "حفظ"
     ] })
-  ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-expense-form", onSubmit: handleSubmit, className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx(FieldLabel$2, { children: "رقم الفاتورة *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.invoice_number, onChange: setInput("invoice_number"), className: inputCls$1, placeholder: "INV-0001", dir: "ltr" }),
-      errorText("invoice_number")
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx(FieldLabel$2, { children: "المورد *" }),
-      /* @__PURE__ */ jsx("input", { type: "text", value: form.supplier_name, onChange: setInput("supplier_name"), className: inputCls$1, placeholder: "اسم المورد" }),
-      errorText("supplier_name")
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx(FieldLabel$2, { children: "تاريخ الفاتورة *" }),
-      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.invoice_date, onChange: (v) => set("invoice_date")(v || ""), placeholder: "اختر التاريخ", allowClear: false }),
-      errorText("invoice_date")
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "اختياري", children: "تاريخ الاستحقاق" }),
-      /* @__PURE__ */ jsx(GlassDatePicker, { value: form.due_date, onChange: (v) => set("due_date")(v || ""), placeholder: "بدون استحقاق", allowClear: true }),
-      errorText("due_date")
+  ] }), children: /* @__PURE__ */ jsxs("form", { id: "branch-expense-form", onSubmit: handleSubmit, className: "space-y-3", children: [
+    /* @__PURE__ */ jsxs("div", { className: `${ws.innerCard} px-3 py-2 text-xs grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1`, children: [
+      /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50", children: "الفاتورة" }),
+      /* @__PURE__ */ jsx("span", { className: "font-mono text-slate-900 dark:text-white text-left", dir: "ltr", children: invoice?.invoice_number || "—" }),
+      /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50", children: "المورد" }),
+      /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white", children: invoice?.supplier_name || "—" }),
+      /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50", children: "الإجمالي" }),
+      /* @__PURE__ */ jsx("span", { className: "tabular-nums font-semibold text-slate-900 dark:text-white text-left", dir: "ltr", children: formatMoney$i(invoice?.total_amount) }),
+      /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50", children: "الحساب الحالي" }),
+      /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white", children: currentAccount })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx(FieldLabel$2, { children: "القسم" }),
-      /* @__PURE__ */ jsx(GlassSelect, { value: form.phase_id, onChange: handlePhaseChange, options: phaseOptions, placeholder: "بلا قسم", buttonClassName: "text-sm py-2 px-3" })
+      /* @__PURE__ */ jsx(GlassSelect, { value: phaseId, onChange: setPhaseId, options: phaseOptions, placeholder: "بلا قسم", buttonClassName: "text-sm py-2 px-3" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx(FieldLabel$2, { children: "حساب المصروف *" }),
-      /* @__PURE__ */ jsx(GlassSelect, { value: form.expense_account_code, onChange: (v) => {
-        setAccountTouched(true);
-        set("expense_account_code")(v);
-      }, options: accountOptions, placeholder: "اختر الحساب", buttonClassName: "text-sm py-2 px-3", menuWidth: 320 }),
-      errorText("expense_account_code")
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "SAR", children: "الإجمالي *" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.total_amount, onChange: setInput("total_amount"), className: inputCls$1, placeholder: "0.00", dir: "ltr" }),
-      errorText("total_amount")
-    ] }),
-    /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "SAR", children: "المسدد" }),
-      /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: form.paid_amount, onChange: setInput("paid_amount"), className: inputCls$1, placeholder: "0.00", dir: "ltr" }),
-      errorText("paid_amount")
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: `sm:col-span-2 ${ws.innerCard} px-3 py-2 text-xs flex items-center justify-between gap-3 flex-wrap`, children: [
-      /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/50", children: "المتبقي بعد السداد" }),
-      /* @__PURE__ */ jsx("span", { className: `font-bold tabular-nums ${remaining > 0 ? "text-amber-700 dark:text-amber-200" : "text-[#0e7a5f] dark:text-emerald-200"}`, dir: "ltr", children: formatMoney$i(remaining) })
+      /* @__PURE__ */ jsx(FieldLabel$2, { hint: "حسابات التأسيس 53", children: "حساب المصروف" }),
+      /* @__PURE__ */ jsx(GlassSelect, { value: accountCode, onChange: setAccountCode, options: accountOptions, placeholder: "إبقاء الحساب الحالي", buttonClassName: "text-sm py-2 px-3", menuWidth: 320 }),
+      /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1", children: "اختيار حساب يحدّث رأس الفاتورة وكل بنودها إلى هذا الحساب." })
     ] })
   ] }) });
 }
 
+const DEFAULT_ACCOUNT = "5399";
 const PIE_COLORS$1 = ["#0e7a5f", "#0284c7", "#7c3aed", "#d97706", "#e11d48", "#0891b2", "#65a30d", "#db2777", "#9333ea", "#ea580c", "#64748b"];
 const STATUS_CLASS = {
   paid: "bg-[#e7f2ee] dark:bg-emerald-400/15 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25",
@@ -7207,9 +9841,30 @@ function InvoiceStatusPill({
   const cls = STATUS_CLASS[status] || STATUS_CLASS.pending_payment;
   return /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold whitespace-nowrap ${cls}`, children: INVOICE_STATUS_LABELS?.[status] || status });
 }
-function accountName(code) {
+function LeaseChip({
+  invoice
+}) {
+  if (invoice?.source !== "lease") return null;
+  return /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1 rounded-full border border-sky-200 dark:border-sky-400/25 bg-sky-50 dark:bg-sky-400/10 text-sky-800 dark:text-sky-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap", title: `استقطاع إيجار${invoice.lease_month ? ` لشهر ${invoice.lease_month}` : ""} — يُدار من العقد`, children: [
+    /* @__PURE__ */ jsx(ScrollText, { className: "w-3 h-3" }),
+    "إيجار"
+  ] });
+}
+function accountName(code, fallback) {
   const found = (ESTABLISHMENT_ACCOUNTS || []).find((a) => String(a.code) === String(code));
-  return found?.name || code || "—";
+  return found?.name || fallback || code || "—";
+}
+function inferAccountForPhase(project, phaseId) {
+  if (!phaseId) return DEFAULT_ACCOUNT;
+  const phase = (project?.phases || []).find((p) => String(p?.id) === String(phaseId));
+  if (!phase) return DEFAULT_ACCOUNT;
+  if (phase.default_account_code) return String(phase.default_account_code);
+  const template = Array.isArray(DEFAULT_PHASE_TEMPLATE) ? DEFAULT_PHASE_TEMPLATE : [];
+  const match = template.find((t) => t?.name && phase.name && String(t.name).trim() === String(phase.name).trim());
+  if (match?.default_account_code) return String(match.default_account_code);
+  const byColor = template.find((t) => t?.color && phase.color && t.color === phase.color);
+  if (byColor?.default_account_code) return String(byColor.default_account_code);
+  return DEFAULT_ACCOUNT;
 }
 function PieTooltip({
   active,
@@ -7242,18 +9897,157 @@ function PieTooltip({
     ] })
   ] });
 }
+function LinkInvoiceModal({
+  open,
+  project,
+  phases,
+  defaultPhaseId,
+  employeeId,
+  isAdmin,
+  onClose
+}) {
+  const queryClient = useQueryClient();
+  const saveMut = useSaveBranchProjectInvoice();
+  const [search, setSearch] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [phaseId, setPhaseId] = useState("");
+  React__default.useEffect(() => {
+    if (!open) return;
+    setSearch("");
+    setSelectedId(null);
+    setPhaseId(defaultPhaseId != null ? String(defaultPhaseId) : "");
+  }, [open, defaultPhaseId]);
+  const invoicesQuery = useAccountingPurchaseInvoices({
+    employeeId: open ? employeeId : null,
+    isAdmin: !!isAdmin
+  });
+  const candidates = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return (invoicesQuery.data || []).filter((inv) => !inv.project_id && inv.is_active !== false).filter((inv) => {
+      if (!q) return true;
+      const hay = `${inv.invoice_number || ""} ${inv.supplier_name || ""} ${inv.contact_name || ""}`.toLowerCase();
+      return hay.includes(q);
+    }).slice(0, 60);
+  }, [invoicesQuery.data, search]);
+  const phaseOptions = useMemo(() => [{
+    value: "",
+    label: "بلا قسم"
+  }, ...phases.map((p) => ({
+    value: String(p.id),
+    label: p.name
+  }))], [phases]);
+  const selected = candidates.find((inv) => inv.id === selectedId) || null;
+  function handleConfirm() {
+    if (!project?.id || !selected || saveMut.isPending) return;
+    saveMut.mutate({
+      project_id: project.id,
+      invoice_id: selected.id,
+      phase_id: phaseId ? Number(phaseId) : null
+    }, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.accountingPurchaseInvoices()
+        });
+        onClose?.();
+      }
+    });
+  }
+  return /* @__PURE__ */ jsx(ModalShell, { open, title: "ربط فاتورة موجودة", description: "فواتير المشتريات غير المرتبطة بأي مشروع تأسيس", onClose, footer: /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2 text-sm`, children: "إلغاء" }),
+    /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleConfirm, disabled: !selected || saveMut.isPending, className: `${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`, children: [
+      saveMut.isPending ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Link2, { className: "w-4 h-4" }),
+      "ربط بالمشروع"
+    ] })
+  ] }), children: /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-2", children: [
+      /* @__PURE__ */ jsxs("div", { className: "relative", children: [
+        /* @__PURE__ */ jsx(Search, { className: "w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/35" }),
+        /* @__PURE__ */ jsx("input", { type: "text", value: search, onChange: (e) => setSearch(e.target.value), className: `${ws.input} pr-9 pl-3 py-2 text-sm`, placeholder: "بحث برقم الفاتورة أو المورد…", autoFocus: true })
+      ] }),
+      /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(GlassSelect, { value: phaseId, onChange: setPhaseId, options: phaseOptions, placeholder: "القسم", buttonClassName: "text-sm py-2 px-3" }) })
+    ] }),
+    invoicesQuery.isLoading ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-center gap-2 py-8 text-sm text-slate-500 dark:text-white/50", children: [
+      /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }),
+      "جاري تحميل الفواتير…"
+    ] }) : invoicesQuery.isError ? /* @__PURE__ */ jsx("div", { className: "text-sm text-rose-700 dark:text-rose-200 py-6 text-center", children: invoicesQuery.error?.message || "فشل تحميل فواتير المشتريات" }) : candidates.length === 0 ? /* @__PURE__ */ jsx("div", { className: "text-sm text-slate-500 dark:text-white/45 py-8 text-center", children: search ? "لا فواتير مطابقة." : "لا فواتير غير مرتبطة." }) : /* @__PURE__ */ jsx("ul", { className: `divide-y ${ws.divider} max-h-[50svh] overflow-y-auto -mx-1 px-1`, children: candidates.map((inv) => {
+      const active = inv.id === selectedId;
+      return /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setSelectedId(inv.id), className: `w-full text-right px-3 py-2.5 flex items-center gap-3 rounded-lg transition-colors ${active ? "bg-[#e7f2ee] dark:bg-emerald-400/15" : "hover:bg-slate-50 dark:hover:bg-white/5"}`, children: [
+        /* @__PURE__ */ jsx("span", { className: `w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${active ? "bg-[#0e7a5f] border-[#0e7a5f] text-white" : "border-slate-300 dark:border-white/25 text-transparent"}`, children: /* @__PURE__ */ jsx(Check, { className: "w-3 h-3" }) }),
+        /* @__PURE__ */ jsxs("span", { className: "min-w-0 flex-1", children: [
+          /* @__PURE__ */ jsx("span", { className: "block font-mono text-sm text-slate-900 dark:text-white", dir: "ltr", children: inv.invoice_number }),
+          /* @__PURE__ */ jsxs("span", { className: "block text-xs text-slate-600 dark:text-white/60 truncate", children: [
+            inv.supplier_name || inv.contact_name || "—",
+            " · ",
+            formatDate$4(inv.invoice_date),
+            inv.lease_contract_id ? " · استقطاع إيجار" : ""
+          ] })
+        ] }),
+        /* @__PURE__ */ jsx("span", { className: "tabular-nums font-semibold text-sm text-slate-900 dark:text-white shrink-0", dir: "ltr", children: formatMoney$i(inv.total_amount, false) })
+      ] }) }, inv.id);
+    }) }),
+    selected ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: [
+      "ستُحسب الفاتورة «",
+      selected.invoice_number,
+      "» ضمن تكاليف تأسيس ",
+      project?.name || "المشروع",
+      phaseId ? ` — قسم ${phases.find((p) => String(p.id) === phaseId)?.name || ""}` : " بلا قسم",
+      "."
+    ] }) : null
+  ] }) });
+}
 function ExpensesTab({
   project
 }) {
   const {
     isDark
   } = useAdminTheme();
+  const queryClient = useQueryClient();
+  const {
+    employeeId,
+    user
+  } = useWorkspaceUser();
+  const isAdmin = user?.role === "Admin";
   const today = useMemo(() => todayRiyadh$8(), []);
   const deleteMut = useDeleteBranchProjectInvoice();
-  const [modal, setModal] = useState({
-    open: false,
-    invoice: null
+  const createMut = useCreateAccountingPurchaseInvoice();
+  const contactsQuery = useAccountingContacts({
+    employeeId,
+    isAdmin
   });
+  const accountsQuery = useAccountingAccounts({
+    employeeId,
+    isAdmin
+  });
+  const bankAccountsQuery = useAccountingBankAccounts({
+    employeeId,
+    isAdmin
+  });
+  const projectsQuery = useBranchProjects({
+    employeeId,
+    isAdmin
+  });
+  const branchesQuery = useQuery({
+    queryKey: queryKeys.branches(),
+    enabled: !!employeeId && isAdmin,
+    queryFn: async () => {
+      const response = await authedFetch("/api/branches");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.error || "فشل تحميل الفروع");
+      return Array.isArray(data?.branches) ? data.branches : [];
+    }
+  });
+  const contacts = contactsQuery.data || [];
+  const accounts = accountsQuery.data || [];
+  const bankAccounts = bankAccountsQuery.data || [];
+  const branches = branchesQuery.data || [];
+  const projects = useMemo(() => {
+    const list = Array.isArray(projectsQuery.data) ? projectsQuery.data : [];
+    if (project?.id && !list.some((p) => Number(p?.id) === Number(project.id))) return [project, ...list];
+    return list;
+  }, [projectsQuery.data, project]);
+  const [invoiceModalOpen, setInvoiceModalOpen] = useState(false);
+  const [editInvoice, setEditInvoice] = useState(null);
+  const [linkOpen, setLinkOpen] = useState(false);
   const [phaseFilter, setPhaseFilter] = useState("all");
   const [accountFilter, setAccountFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -7295,15 +10089,16 @@ function ExpensesTab({
   }, [phases, invoices]);
   const pieData = useMemo(() => {
     const map = /* @__PURE__ */ new Map();
+    const names = /* @__PURE__ */ new Map();
     for (const inv of invoices) {
-      const code = String(inv.expense_account_code || "5399");
+      const code = String(inv.expense_account_code || DEFAULT_ACCOUNT);
       map.set(code, (map.get(code) || 0) + moneyValue$b(inv.total_amount));
+      if (inv.expense_account_name && !names.has(code)) names.set(code, inv.expense_account_name);
     }
-    return [...map.entries()].map(([code, value], i) => ({
+    return [...map.entries()].map(([code, value]) => ({
       code,
-      name: accountName(code),
-      value,
-      fill: PIE_COLORS$1[i % PIE_COLORS$1.length]
+      name: accountName(code, names.get(code)),
+      value
     })).filter((d) => d.value > 0).sort((a, b) => b.value - a.value).map((d, i) => ({
       ...d,
       fill: PIE_COLORS$1[i % PIE_COLORS$1.length]
@@ -7360,7 +10155,10 @@ function ExpensesTab({
       accessor: (r) => phaseName(r.phase_id)
     }, {
       header: "الحساب",
-      accessor: (r) => `${r.expense_account_code || ""} ${accountName(r.expense_account_code)}`
+      accessor: (r) => `${r.expense_account_code || ""} ${accountName(r.expense_account_code, r.expense_account_name)}`
+    }, {
+      header: "المصدر",
+      accessor: (r) => r.source === "lease" ? "إيجار" : "مشتريات"
     }, {
       header: "الإجمالي",
       accessor: (r) => formatMoney$i(r.total_amount, false)
@@ -7379,12 +10177,35 @@ function ExpensesTab({
   );
   const exportTitle = `مصروفات تأسيس — ${project?.name || ""}`;
   const exportFile = `branch-project-${project?.code || project?.id || "expenses"}`;
+  const defaultPhaseId = phaseFilter !== "all" && phaseFilter !== "none" ? Number(phaseFilter) : null;
+  const prefill = useMemo(() => ({
+    project_id: project?.id ?? null,
+    project_phase_id: defaultPhaseId,
+    expense_account_code: defaultPhaseId ? inferAccountForPhase(project, defaultPhaseId) : null
+  }), [project, defaultPhaseId]);
+  function handleCreate(payload) {
+    if (!project?.id || createMut.isPending) return;
+    createMut.mutate({
+      ...payload,
+      project_id: payload.project_id ?? project.id,
+      project_phase_id: payload.project_id ? payload.project_phase_id ?? null : null
+    }, {
+      onSuccess: async () => {
+        setInvoiceModalOpen(false);
+        await invalidateBranchProjectQueries(queryClient, project.id);
+      }
+    });
+  }
   function handleDelete(inv) {
-    if (!project?.id) return;
-    if (!window.confirm(`حذف الفاتورة «${inv.invoice_number}»؟`)) return;
+    if (!project?.id || inv.source === "lease") return;
+    if (!window.confirm(`حذف الفاتورة «${inv.invoice_number}» نهائياً من فواتير المشتريات؟`)) return;
     deleteMut.mutate({
       project_id: project.id,
       id: inv.id
+    }, {
+      onSuccess: () => queryClient.invalidateQueries({
+        queryKey: queryKeys.accountingPurchaseInvoices()
+      })
     });
   }
   const statCards = [{
@@ -7476,15 +10297,15 @@ function ExpensesTab({
         /* @__PURE__ */ jsx(FileText, { className: "w-3.5 h-3.5" }),
         "PDF"
       ] }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setModal({
-        open: true,
-        invoice: null
-      }), className: `${ws.btnPrimary} px-3 py-1.5 text-xs`, children: [
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setLinkOpen(true), className: `${ws.btnNeutral} px-2.5 py-1.5 text-xs`, title: "ربط فاتورة مشتريات موجودة بهذا المشروع", children: [
+        /* @__PURE__ */ jsx(Link2, { className: "w-3.5 h-3.5" }),
+        "ربط فاتورة موجودة"
+      ] }),
+      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setInvoiceModalOpen(true), className: `${ws.btnPrimary} px-3 py-1.5 text-xs`, children: [
         /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
         "فاتورة"
       ] })
     ] }), children: [
-      /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mb-3", children: "مؤقتاً تُسجَّل الفواتير هنا؛ عند ربط الخلفية تُنشأ من فواتير المشتريات مباشرة." }),
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3", children: [
         /* @__PURE__ */ jsxs("div", { className: "relative", children: [
           /* @__PURE__ */ jsx(Search, { className: "w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/35" }),
@@ -7503,7 +10324,7 @@ function ExpensesTab({
         const active = statusFilter === opt.value;
         return /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setStatusFilter(opt.value), className: `${ws.chip} px-2.5 py-1 ${active ? "!bg-[#0b3d31] !text-white !border-[#0b3d31] dark:!bg-white/10 dark:!border-white/20" : ""}`, children: opt.label }, opt.value);
       }) }),
-      filtered.length === 0 ? /* @__PURE__ */ jsx(EmptyState$1, { icon: Receipt, title: invoices.length === 0 ? "لا فواتير بعد" : "لا نتائج مطابقة", hint: invoices.length === 0 ? "سجّل أول فاتورة مصروف تأسيس لهذا المشروع." : "عدّل الفلاتر أو البحث." }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+      filtered.length === 0 ? /* @__PURE__ */ jsx(EmptyState$1, { icon: Receipt, title: invoices.length === 0 ? "لا فواتير بعد" : "لا نتائج مطابقة", hint: invoices.length === 0 ? "أنشئ فاتورة مشتريات لهذا المشروع أو اربط فاتورة موجودة." : "عدّل الفلاتر أو البحث." }) : /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx("div", { className: "hidden md:block overflow-x-auto -mx-4 px-4", children: /* @__PURE__ */ jsxs("table", { className: "w-full text-xs min-w-[760px]", children: [
           /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { className: "text-slate-500 dark:text-white/45", children: [
             /* @__PURE__ */ jsx("th", { className: "text-right font-semibold py-2", children: "رقم" }),
@@ -7517,30 +10338,33 @@ function ExpensesTab({
             /* @__PURE__ */ jsx("th", { className: "py-2" })
           ] }) }),
           /* @__PURE__ */ jsx("tbody", { children: filtered.map((inv) => /* @__PURE__ */ jsxs("tr", { className: `border-t ${ws.divider}`, children: [
-            /* @__PURE__ */ jsx("td", { className: "py-2 font-mono text-slate-900 dark:text-white", dir: "ltr", children: inv.invoice_number }),
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white", children: /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5", dir: "ltr", children: [
+              /* @__PURE__ */ jsx("span", { className: "font-mono", children: inv.invoice_number }),
+              /* @__PURE__ */ jsx(LeaseChip, { invoice: inv })
+            ] }) }),
             /* @__PURE__ */ jsx("td", { className: "py-2 tabular-nums text-slate-700 dark:text-white/80", dir: "ltr", children: formatDate$4(inv.invoice_date) }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white", children: inv.supplier_name }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/80", children: phaseName(inv.phase_id) }),
             /* @__PURE__ */ jsxs("td", { className: "py-2 text-slate-700 dark:text-white/80", children: [
               /* @__PURE__ */ jsx("span", { className: "font-mono text-slate-400 dark:text-white/35 ml-1", dir: "ltr", children: inv.expense_account_code }),
-              accountName(inv.expense_account_code)
+              accountName(inv.expense_account_code, inv.expense_account_name)
             ] }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-left tabular-nums text-slate-900 dark:text-white font-semibold", dir: "ltr", children: formatMoney$i(inv.total_amount, false) }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-left tabular-nums text-[#0e7a5f] dark:text-emerald-200", dir: "ltr", children: formatMoney$i(inv.paid_amount, false) }),
             /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsx(InvoiceStatusPill, { status: inv._status }) }),
             /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 justify-end", children: [
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setModal({
-                open: true,
-                invoice: inv
-              }), className: `${ws.iconButton} w-8 h-8`, title: "تعديل", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
-              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleDelete(inv), className: `${ws.iconButton} w-8 h-8 text-rose-600 dark:text-rose-300`, title: "حذف", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
+              /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditInvoice(inv), className: `${ws.iconButton} w-8 h-8`, title: "القسم والحساب", children: /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }) }),
+              inv.source !== "lease" ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => handleDelete(inv), className: `${ws.iconButton} w-8 h-8 text-rose-600 dark:text-rose-300`, title: "حذف نهائي من فواتير المشتريات", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) }) : null
             ] }) })
           ] }, inv.id)) })
         ] }) }),
         /* @__PURE__ */ jsx("div", { className: "md:hidden space-y-2", children: filtered.map((inv) => /* @__PURE__ */ jsxs("div", { className: `${ws.innerCard} p-3 space-y-2`, children: [
           /* @__PURE__ */ jsxs("div", { className: "flex items-start gap-2", children: [
             /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
-              /* @__PURE__ */ jsx("div", { className: "font-mono text-sm text-slate-900 dark:text-white", dir: "ltr", children: inv.invoice_number }),
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 flex-wrap", children: [
+                /* @__PURE__ */ jsx("span", { className: "font-mono text-sm text-slate-900 dark:text-white", dir: "ltr", children: inv.invoice_number }),
+                /* @__PURE__ */ jsx(LeaseChip, { invoice: inv })
+              ] }),
               /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-700 dark:text-white/80", children: inv.supplier_name })
             ] }),
             /* @__PURE__ */ jsx(InvoiceStatusPill, { status: inv._status })
@@ -7551,380 +10375,29 @@ function ExpensesTab({
             /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "قسم" }),
             /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-left", children: phaseName(inv.phase_id) }),
             /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "حساب" }),
-            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-left", children: accountName(inv.expense_account_code) }),
+            /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-left", children: accountName(inv.expense_account_code, inv.expense_account_name) }),
             /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "إجمالي" }),
             /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white tabular-nums font-semibold text-left", dir: "ltr", children: formatMoney$i(inv.total_amount, false) }),
             /* @__PURE__ */ jsx("div", { className: "text-slate-500 dark:text-white/45", children: "مسدد" }),
             /* @__PURE__ */ jsx("div", { className: "text-[#0e7a5f] dark:text-emerald-200 tabular-nums text-left", dir: "ltr", children: formatMoney$i(inv.paid_amount, false) })
           ] }),
           /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 justify-end", children: [
-            /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setModal({
-              open: true,
-              invoice: inv
-            }), className: `${ws.btnNeutral} px-2.5 py-1.5 text-xs`, children: [
+            /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setEditInvoice(inv), className: `${ws.btnNeutral} px-2.5 py-1.5 text-xs`, children: [
               /* @__PURE__ */ jsx(Pencil, { className: "w-3.5 h-3.5" }),
-              "تعديل"
+              "القسم والحساب"
             ] }),
-            /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleDelete(inv), className: `${ws.btnDanger} px-2.5 py-1.5 text-xs`, children: [
+            inv.source !== "lease" ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => handleDelete(inv), className: `${ws.btnDanger} px-2.5 py-1.5 text-xs`, children: [
               /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }),
               "حذف"
-            ] })
+            ] }) : null
           ] })
         ] }, inv.id)) })
       ] })
     ] }),
-    /* @__PURE__ */ jsx(ExpenseModal, { open: modal.open, project, invoice: modal.invoice, defaultPhaseId: phaseFilter !== "all" && phaseFilter !== "none" ? Number(phaseFilter) : null, onClose: () => setModal({
-      open: false,
-      invoice: null
-    }) })
+    /* @__PURE__ */ jsx(PurchaseInvoiceModal, { open: invoiceModalOpen, invoice: null, contacts, accounts, bankAccounts, branches, projects, prefill, isSubmitting: createMut.isPending, onClose: () => setInvoiceModalOpen(false), onSubmit: handleCreate, allowArrival: false }),
+    /* @__PURE__ */ jsx(LinkInvoiceModal, { open: linkOpen, project, phases, defaultPhaseId, employeeId, isAdmin, onClose: () => setLinkOpen(false) }),
+    /* @__PURE__ */ jsx(ExpenseModal, { open: !!editInvoice, project, invoice: editInvoice, onClose: () => setEditInvoice(null) })
   ] });
-}
-
-// Client-side image downscale + re-encode before upload.
-//
-// Phone cameras produce 3–12MB JPEGs at 4000px+. Our chunked
-// uploader pushes those in 128KB slices over sequential HTTP
-// round-trips, so a single receipt photo can take 30–60s. Receipts
-// and deduction attachments only need to be legible, not
-// full-resolution — downscaling the longest edge to ~1600px and
-// re-encoding as JPEG q≈0.72 typically cuts an 8MB photo to
-// ~250–450KB (a 20–40× reduction), which collapses the upload to a
-// 2–4 chunk round-trip.
-//
-// Non-image files, tiny images, and anything the browser can't
-// decode pass through UNTOUCHED — the caller still gets a valid
-// File back, so this is always safe to wrap an upload with.
-
-const DEFAULT_MAX_EDGE = 1600;
-const DEFAULT_QUALITY = 0.72;
-// Below this, compressing is pointless overhead — ship as-is.
-const SKIP_BELOW_BYTES = 400 * 1024; // 400KB
-
-function canvasToBlob(canvas, type, quality) {
-  return new Promise(resolve => {
-    if (canvas.toBlob) {
-      canvas.toBlob(blob => resolve(blob), type, quality);
-    } else {
-      // Very old browsers: fall back to dataURL → Blob.
-      try {
-        const dataUrl = canvas.toDataURL(type, quality);
-        const [meta, b64] = dataUrl.split(",");
-        const mime = (meta.match(/:(.*?);/) || [])[1] || type;
-        const bin = atob(b64);
-        const bytes = new Uint8Array(bin.length);
-        for (let i = 0; i < bin.length; i += 1) bytes[i] = bin.charCodeAt(i);
-        resolve(new Blob([bytes], {
-          type: mime
-        }));
-      } catch {
-        resolve(null);
-      }
-    }
-  });
-}
-function loadImage(file) {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      resolve(img);
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      reject(new Error("decode failed"));
-    };
-    img.src = url;
-  });
-}
-
-/**
- * Returns a (possibly) smaller File. Always resolves to a usable
- * File — never throws to the caller; on any failure it returns the
- * original input untouched.
- *
- * @param {File} file
- * @param {{maxEdge?: number, quality?: number}} [opts]
- */
-async function compressImage(file, opts = {}) {
-  try {
-    if (typeof window === "undefined" || !file) return file;
-    const type = file.type || "";
-    // Only raster photos benefit. Skip SVG (vector — rasterizing
-    // would degrade it) and any non-image.
-    if (!type.startsWith("image/") || type === "image/svg+xml") {
-      return file;
-    }
-    // GIF may be animated; canvas re-encode would flatten to one
-    // frame. Leave it alone.
-    if (type === "image/gif") return file;
-    if (typeof file.size === "number" && file.size > 0 && file.size < SKIP_BELOW_BYTES) {
-      return file;
-    }
-    const maxEdge = opts.maxEdge || DEFAULT_MAX_EDGE;
-    const quality = opts.quality || DEFAULT_QUALITY;
-    const img = await loadImage(file);
-    const w = img.naturalWidth || img.width;
-    const h = img.naturalHeight || img.height;
-    if (!w || !h) return file;
-    const longest = Math.max(w, h);
-    const scale = longest > maxEdge ? maxEdge / longest : 1;
-    const targetW = Math.round(w * scale);
-    const targetH = Math.round(h * scale);
-    const canvas = document.createElement("canvas");
-    canvas.width = targetW;
-    canvas.height = targetH;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return file;
-    ctx.drawImage(img, 0, 0, targetW, targetH);
-
-    // Always re-encode to JPEG — PNG photos balloon, and we don't
-    // need alpha on a receipt/attachment. Keeps the pipeline simple.
-    const blob = await canvasToBlob(canvas, "image/jpeg", quality);
-    if (!blob || !blob.size) return file;
-
-    // If compression somehow produced a bigger file (already-tiny
-    // or already-optimized source), keep the original.
-    if (typeof file.size === "number" && blob.size >= file.size) {
-      return file;
-    }
-    const baseName = (file.name || "image").replace(/\.[^.]+$/, "");
-    return new File([blob], `${baseName}.jpg`, {
-      type: "image/jpeg",
-      lastModified: Date.now()
-    });
-  } catch {
-    // Any failure → original file, upload still works.
-    return file;
-  }
-}
-
-const compressImage$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  compressImage,
-  default: compressImage
-}, Symbol.toStringTag, { value: 'Module' }));
-
-function useUpload() {
-  const [loading, setLoading] = React.useState(false);
-  const MAX_UPLOAD_BYTES = 90 * 1024 * 1024; // 90MB
-
-  const upload = React.useCallback(async input => {
-    try {
-      setLoading(true);
-      const readErrorMessage = async res => {
-        // Prefer JSON { error } but fall back to plain text.
-        // IMPORTANT: clone() the response because body streams can only be read once.
-        try {
-          const maybeJson = await res.clone().json();
-          if (maybeJson?.error) {
-            return String(maybeJson.error);
-          }
-        } catch {
-          // ignore
-        }
-        try {
-          const t = await res.clone().text();
-          if (t) {
-            return t;
-          }
-        } catch {
-          // ignore
-        }
-        return `Upload failed (${res.status} ${res.statusText})`;
-      };
-      const isNetworkLikeError = err => {
-        const msg = err instanceof Error ? err.message : String(err || "");
-        const lower = msg.toLowerCase();
-        // Browsers differ (Chrome: "Failed to fetch", Safari/iOS: "Load failed")
-        return lower.includes("failed to fetch") || lower.includes("load failed") || lower.includes("networkerror") || lower.includes("network error") || lower.includes("the network connection");
-      };
-      const uploadChunked = async file => {
-        // Keep chunks VERY small because Anything Functions can reject bigger payloads
-        // with FUNCTION_PAYLOAD_TOO_LARGE (varies by environment).
-        const CHUNK_SIZE = 128 * 1024; // 128KB (safer across environments)
-        const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-        const initRes = await authedFetch("/api/uploads/init", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            fileName: file.name,
-            mimeType: file.type || null,
-            sizeBytes: file.size,
-            totalChunks
-          })
-        });
-        if (!initRes.ok) {
-          const msg = await readErrorMessage(initRes);
-          throw new Error(msg || `When POSTing /api/uploads/init, the response was [${initRes.status}] ${initRes.statusText}`);
-        }
-        const initData = await initRes.json().catch(() => ({}));
-        const uploadId = initData?.uploadId;
-        if (!uploadId) {
-          throw new Error("فشل بدء رفع الملف");
-        }
-        try {
-          // Upload chunks with bounded concurrency instead of one
-          // strictly-sequential round-trip at a time. Each chunk is
-          // tiny (128KB) but the per-request latency dominates over
-          // a phone connection, so firing several in parallel cuts
-          // wall-clock roughly N-fold. Cap kept modest so we don't
-          // overwhelm the function/DB or trip rate limits.
-          const CONCURRENCY = 6;
-          const uploadOneChunk = async i => {
-            const start = i * CHUNK_SIZE;
-            const end = Math.min(file.size, start + CHUNK_SIZE);
-            const slice = file.slice(start, end);
-            const arrayBuffer = await slice.arrayBuffer();
-            const chunkRes = await authedFetch(`/api/uploads/${uploadId}/chunk?index=${i}`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/octet-stream"
-              },
-              body: arrayBuffer
-            });
-            if (!chunkRes.ok) {
-              const msg = await readErrorMessage(chunkRes);
-              throw new Error(msg || `When POSTing a chunk, the response was [${chunkRes.status}] ${chunkRes.statusText}`);
-            }
-          };
-          for (let base = 0; base < totalChunks; base += CONCURRENCY) {
-            const batch = [];
-            for (let i = base; i < Math.min(base + CONCURRENCY, totalChunks); i += 1) {
-              batch.push(uploadOneChunk(i));
-            }
-            // If any chunk in the batch fails, the whole upload aborts
-            // (the catch below cleans up the session).
-            await Promise.all(batch);
-          }
-          const completeRes = await authedFetch(`/api/uploads/${uploadId}/complete`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              totalChunks
-            })
-          });
-          if (!completeRes.ok) {
-            const msg = await readErrorMessage(completeRes);
-            throw new Error(msg || `When POSTing /api/uploads/${uploadId}/complete, the response was [${completeRes.status}] ${completeRes.statusText}`);
-          }
-          const completeData = await completeRes.json().catch(() => ({}));
-          return {
-            url: completeData?.url,
-            mimeType: completeData?.mimeType || file.type || null
-          };
-        } catch (e) {
-          // best-effort cleanup
-          try {
-            await authedFetch(`/api/uploads/${uploadId}`, {
-              method: "DELETE"
-            });
-          } catch {
-            // ignore
-          }
-          throw e;
-        }
-      };
-      if ("file" in input && input.file) {
-        // Downscale + re-encode photos before chunking. A receipt
-        // shot at 8MB becomes ~300KB, turning a 60-chunk sequential
-        // upload into a 2–3 chunk one. No-op for non-images, tiny
-        // images, or anything the browser can't decode. `unoptimized`
-        // lets a caller opt out (e.g. originals that must stay exact).
-        const file = input.unoptimized ? input.file : await compressImage(input.file);
-        if (typeof file?.size === "number" && file.size > MAX_UPLOAD_BYTES) {
-          throw new Error(`Upload failed: File too large. الحد الأقصى ${Math.round(MAX_UPLOAD_BYTES / (1024 * 1024))}MB`);
-        }
-
-        // Always use chunked upload through our own /api/uploads/* endpoints.
-        const chunked = await uploadChunked(file);
-        return {
-          url: chunked.url,
-          mimeType: chunked.mimeType || null
-        };
-      } else if ("url" in input) {
-        // Fetch the remote URL and convert to a File, then chunked upload.
-        const remoteRes = await fetch(input.url);
-        if (!remoteRes.ok) {
-          throw new Error(`تعذر تحميل الرابط (${remoteRes.status})`);
-        }
-        const blob = await remoteRes.blob();
-        const fileName = (input.url.split("/").pop() || "file").split("?")[0] || "file";
-        const file = new File([blob], fileName, {
-          type: blob.type || "application/octet-stream"
-        });
-        const chunked = await uploadChunked(file);
-        return {
-          url: chunked.url,
-          mimeType: chunked.mimeType || null
-        };
-      } else if ("base64" in input) {
-        // Decode base64 (with optional data: prefix) into a File, then upload.
-        const raw = String(input.base64 || "");
-        let mime = "application/octet-stream";
-        let b64Body = raw;
-        const m = raw.match(/^data:([^;]+);base64,(.*)$/);
-        if (m) {
-          mime = m[1];
-          b64Body = m[2];
-        }
-        const binary = atob(b64Body);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i += 1) {
-          bytes[i] = binary.charCodeAt(i);
-        }
-        const file = new File([bytes], "upload.bin", {
-          type: mime
-        });
-        const chunked = await uploadChunked(file);
-        return {
-          url: chunked.url,
-          mimeType: chunked.mimeType || null
-        };
-      } else {
-        // Raw buffer
-        const buf = input.buffer;
-        const file = new File([buf], "upload.bin", {
-          type: "application/octet-stream"
-        });
-        const chunked = await uploadChunked(file);
-        return {
-          url: chunked.url,
-          mimeType: chunked.mimeType || null
-        };
-      }
-    } catch (uploadError) {
-      const msg = uploadError instanceof Error ? uploadError.message : null;
-      const msgLower = msg ? msg.toLowerCase() : "";
-      if (msgLower.includes("failed to fetch") || msgLower.includes("load failed")) {
-        return {
-          error: "فشل الاتصال بخدمة رفع الملفات. تأكد من الإنترنت ثم جرّب مرة ثانية."
-        };
-      }
-      if (uploadError instanceof Error) {
-        return {
-          error: uploadError.message
-        };
-      }
-      if (typeof uploadError === "string") {
-        return {
-          error: uploadError
-        };
-      }
-      return {
-        error: "Upload failed"
-      };
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-  return [upload, {
-    loading
-  }];
 }
 
 function UpdateComposer({
@@ -8689,7 +11162,7 @@ const DENOMINATIONS = [{
   label: "1",
   value: 1
 }];
-function formatMoney$h(value) {
+function formatMoney$g(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-ca-gregory-nu-latn", {
@@ -9003,7 +11476,7 @@ function CashCalculatorPage() {
                     ] })
                   ] }) }),
                   /* @__PURE__ */ jsx("td", { className: "py-3 px-3", children: /* @__PURE__ */ jsx("input", { type: "number", min: "0", value: counts[d.key] === 0 ? "" : counts[d.key], onChange: (e) => handleCountChange(d.key, e.target.value), placeholder: "0", className: `${ws$1.input} px-4 py-2.5 max-w-[160px] text-center tabular-nums` }) }),
-                  /* @__PURE__ */ jsx("td", { className: "py-3 px-3", children: /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold tabular-nums", children: formatMoney$h(total) }) })
+                  /* @__PURE__ */ jsx("td", { className: "py-3 px-3", children: /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold tabular-nums", children: formatMoney$g(total) }) })
                 ] }, d.key);
               }) }),
               /* @__PURE__ */ jsx("tfoot", { children: /* @__PURE__ */ jsxs("tr", { className: "border-t-2 border-emerald-400/20", children: [
@@ -9012,7 +11485,7 @@ function CashCalculatorPage() {
                   totalNotes,
                   " ورقة"
                 ] }) }),
-                /* @__PURE__ */ jsx("td", { className: "py-4 px-3", children: /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums", children: formatMoney$h(denomTotals.grand) }) })
+                /* @__PURE__ */ jsx("td", { className: "py-4 px-3", children: /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums", children: formatMoney$g(denomTotals.grand) }) })
               ] }) })
             ] }) }),
             /* @__PURE__ */ jsxs("div", { className: "sm:hidden space-y-3", children: [
@@ -9027,7 +11500,7 @@ function CashCalculatorPage() {
                         " ريال"
                       ] })
                     ] }),
-                    /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold tabular-nums", children: formatMoney$h(total) })
+                    /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold tabular-nums", children: formatMoney$g(total) })
                   ] }),
                   /* @__PURE__ */ jsx("input", { type: "number", min: "0", value: counts[d.key] === 0 ? "" : counts[d.key], onChange: (e) => handleCountChange(d.key, e.target.value), placeholder: "0", className: `${ws$1.input} px-4 py-2.5 text-center tabular-nums` })
                 ] }, d.key);
@@ -9040,7 +11513,7 @@ function CashCalculatorPage() {
                     " ورقة"
                   ] })
                 ] }),
-                /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums", children: formatMoney$h(denomTotals.grand) })
+                /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-xl tabular-nums", children: formatMoney$g(denomTotals.grand) })
               ] }) })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "mt-5", children: [
@@ -9077,7 +11550,7 @@ function CashCalculatorPage() {
                     /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-bold text-sm tabular-nums", children: v })
                   ] }, d.key);
                 }) }),
-                /* @__PURE__ */ jsx("div", { className: "mt-2 text-left", children: /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums", children: formatMoney$h(vals.total_amount || 0) }) })
+                /* @__PURE__ */ jsx("div", { className: "mt-2 text-left", children: /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums", children: formatMoney$g(vals.total_amount || 0) }) })
               ] }, log.id);
             }) })
           ] }) : null,
@@ -9094,7 +11567,7 @@ function CashCalculatorPage() {
                 " ",
                 /* @__PURE__ */ jsx("span", { className: "text-slate-500 dark:text-white/40", children: "×" })
               ] }),
-              /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums mt-1", children: formatMoney$h(t) })
+              /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold tabular-nums mt-1", children: formatMoney$g(t) })
             ] }, d.key);
           }) })
         ] })
@@ -9138,7 +11611,7 @@ const route6 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const VAT_RATE = 0.15;
-function formatMoney$g(value) {
+function formatMoney$f(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-nu-latn", {
@@ -9152,7 +11625,7 @@ function toNumberOrNullFromInput$1(raw) {
   if (!Number.isFinite(n)) return null;
   return n;
 }
-function round2$3(n) {
+function round2$2(n) {
   const x = Number(n);
   if (!Number.isFinite(x)) return NaN;
   return Math.round(x * 100) / 100;
@@ -9165,12 +11638,12 @@ function round4(n) {
 function withVat(excl) {
   const n = Number(excl);
   if (!Number.isFinite(n)) return NaN;
-  return round2$3(n * (1 + VAT_RATE));
+  return round2$2(n * (1 + VAT_RATE));
 }
 function withoutVat(incl) {
   const n = Number(incl);
   if (!Number.isFinite(n)) return NaN;
-  return round2$3(n / (1 + VAT_RATE));
+  return round2$2(n / (1 + VAT_RATE));
 }
 function clamp(n, min, max) {
   const x = Number(n);
@@ -9186,15 +11659,15 @@ function computeGreenBeanMetrics(draft) {
   const roastExcl = toNumberOrNullFromInput$1(draft.roastCostExclTax);
   const roastIncl = toNumberOrNullFromInput$1(draft.roastCostInclTax);
   const roastCostPerKgIncl = roastIncl !== null ? roastIncl : roastExcl !== null ? withVat(roastExcl) : NaN;
-  const roastTotalIncl = bag !== null && Number.isFinite(roastCostPerKgIncl) ? round2$3(bag * roastCostPerKgIncl) : NaN;
+  const roastTotalIncl = bag !== null && Number.isFinite(roastCostPerKgIncl) ? round2$2(bag * roastCostPerKgIncl) : NaN;
   const extraPerKg = toNumberOrNullFromInput$1(draft.extraCostPerKg);
   const receivedAfterWaste = toNumberOrNullFromInput$1(draft.receivedKg);
-  const bagCostExcl = price !== null && bag !== null ? round2$3(price * bag) : NaN;
+  const bagCostExcl = price !== null && bag !== null ? round2$2(price * bag) : NaN;
   const bagCostIncl = Number.isFinite(bagCostExcl) ? withVat(bagCostExcl) : NaN;
-  const extraTotal = extraPerKg !== null && bag !== null ? round2$3(extraPerKg * bag) : NaN;
-  const totalIncl = Number.isFinite(bagCostIncl) && Number.isFinite(roastTotalIncl) && Number.isFinite(extraTotal) ? round2$3(bagCostIncl + roastTotalIncl + extraTotal) : NaN;
+  const extraTotal = extraPerKg !== null && bag !== null ? round2$2(extraPerKg * bag) : NaN;
+  const totalIncl = Number.isFinite(bagCostIncl) && Number.isFinite(roastTotalIncl) && Number.isFinite(extraTotal) ? round2$2(bagCostIncl + roastTotalIncl + extraTotal) : NaN;
   const wastePercentDerived = bag !== null && bag > 0 && receivedAfterWaste !== null ? clamp((1 - receivedAfterWaste / bag) * 100, 0, 100) : NaN;
-  const finalPricePerKg = Number.isFinite(totalIncl) && receivedAfterWaste !== null ? receivedAfterWaste > 0 ? round2$3(totalIncl / receivedAfterWaste) : NaN : NaN;
+  const finalPricePerKg = Number.isFinite(totalIncl) && receivedAfterWaste !== null ? receivedAfterWaste > 0 ? round2$2(totalIncl / receivedAfterWaste) : NaN : NaN;
   return {
     bagCostExcl,
     bagCostIncl,
@@ -9758,8 +12231,8 @@ function CalculatorForm({
       /* @__PURE__ */ jsxs("div", { className: "px-4", children: [
         /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو الخام", hint: "Excl. tax", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.01", inputMode: "decimal", value: draft.priceKgExclTax, onChange: handleChangePriceKgExclTax, placeholder: "مثال: 35" }) }),
         /* @__PURE__ */ jsx(FieldRow, { label: "حجم الخيشة", hint: "بالكيلو", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.001", inputMode: "decimal", value: draft.bagSizeKg, onChange: handleChangeBagSizeKg, placeholder: "مثال: 60" }) }),
-        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "غير شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$g(computed.bagCostExcl) }) }),
-        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$g(computed.bagCostIncl) }) }),
+        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "غير شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$f(computed.bagCostExcl) }) }),
+        /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الخيشة", hint: "شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$f(computed.bagCostIncl) }) }),
         !isRegister ? /* @__PURE__ */ jsxs(Fragment, { children: [
           /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة التحميص", hint: "اختر الإدخال: غير شامل الضريبة أو شامل الضريبة", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-2", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex gap-2 flex-wrap", children: [
@@ -9788,11 +12261,11 @@ function CalculatorForm({
               ] })
             ] })
           ] }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الاجماليه للتحميص", hint: "حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$g(computed.roastTotalIncl) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "تكلفة الاجماليه للتحميص", hint: "حجم الخيشة × تكلفة التحميص للكيلو شامل الضريبة (محسوبة تلقائيًا)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$f(computed.roastTotalIncl) }) }),
           /* @__PURE__ */ jsx(FieldRow, { label: "الواصل بعد الهدر", hint: "مدخل (بالكيلو)", children: /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-4 py-2.5`, type: "number", step: "0.001", inputMode: "decimal", value: draft.receivedKg, onChange: handleChangeReceivedKg, placeholder: "مثال: 50" }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "نسبة الهدر", hint: "% (محسوبة تلقائيًا من الكمية الواصلة)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$g(computed.wastePercentDerived) }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "الإجمالي", hint: "شامل الضريبة", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$g(computed.totalIncl) }) }),
-          /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو النهائي", hint: "(الإجمالي / الواصل بعد الهدر)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$g(computed.finalPricePerKg) }) })
+          /* @__PURE__ */ jsx(FieldRow, { label: "نسبة الهدر", hint: "% (محسوبة تلقائيًا من الكمية الواصلة)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-bold`, children: formatMoney$f(computed.wastePercentDerived) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "الإجمالي", hint: "شامل الضريبة", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$f(computed.totalIncl) }) }),
+          /* @__PURE__ */ jsx(FieldRow, { label: "سعر الكيلو النهائي", hint: "(الإجمالي / الواصل بعد الهدر)", children: /* @__PURE__ */ jsx("div", { className: `${ws$1.innerCard} px-4 py-3 text-slate-900 dark:text-white font-extrabold`, children: formatMoney$f(computed.finalPricePerKg) }) })
         ] }) : null,
         /* @__PURE__ */ jsx("div", { className: "py-4" })
       ] })
@@ -10061,7 +12534,7 @@ function ExportMenu({
   ] });
 }
 
-function formatMoney$f(value) {
+function formatMoney$e(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-nu-latn", {
@@ -10083,7 +12556,7 @@ function toNumberOrNullFromInput(raw) {
   if (!Number.isFinite(n)) return null;
   return n;
 }
-function round2$2(n) {
+function round2$1(n) {
   const x = Number(n);
   if (!Number.isFinite(x)) return NaN;
   return Math.round(x * 100) / 100;
@@ -10122,7 +12595,7 @@ function todayISO$1() {
   return todayRiyadhDateKey();
 }
 
-function formatMoney$e(value) {
+function formatMoney$d(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("ar-SA-u-nu-latn", {
@@ -10226,7 +12699,7 @@ function OrdersList({
   }, {
     header: "سعر الكيلو (بدون ضريبة)",
     accessor: (r) => r.price_kg_excl_tax,
-    format: (v) => formatMoney$f(v)
+    format: (v) => formatMoney$e(v)
   }, {
     header: "حجم الخيشة (كغ)",
     accessor: (r) => r.bag_size_kg,
@@ -10234,15 +12707,15 @@ function OrdersList({
   }, {
     header: "تحميص/كغ (شامل)",
     accessor: (r) => r.roast_cost_incl_tax,
-    format: (v) => formatMoney$f(v)
+    format: (v) => formatMoney$e(v)
   }, {
     header: "تكلفة إضافية/كغ",
     accessor: (r) => r.extra_cost_per_kg,
-    format: (v) => formatMoney$f(v)
+    format: (v) => formatMoney$e(v)
   }, {
     header: "الهدر %",
     accessor: (r) => r.waste_percent,
-    format: (v) => formatMoney$f(v)
+    format: (v) => formatMoney$e(v)
   }, {
     header: "الواصل بعد الهدر (كغ)",
     accessor: (r) => r.computed_received_after_waste_kg,
@@ -10250,15 +12723,15 @@ function OrdersList({
   }, {
     header: "السعر الصافي/كغ",
     accessor: (r) => r.computed_final_price_per_kg,
-    format: (v) => formatMoney$f(v)
+    format: (v) => formatMoney$e(v)
   }, {
     header: "إجمالي الصنف (شامل)",
     accessor: (r) => r.computed_total_incl,
-    format: (v) => formatMoney$f(v)
+    format: (v) => formatMoney$e(v)
   }, {
     header: "إجمالي الطلب (شامل)",
     accessor: (r) => r.order_total_incl,
-    format: (v) => formatMoney$f(v)
+    format: (v) => formatMoney$e(v)
   }, {
     header: "ملاحظة",
     accessor: (r) => r.note
@@ -10435,7 +12908,7 @@ function OrdersList({
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: String(o.order_date || "—") }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: o.supplier_name || "—" }),
             /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-700 dark:text-white/75 truncate", children: o.items_count ?? 0 }),
-            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-bold truncate", children: formatMoney$f(o.total_incl) })
+            /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-bold truncate", children: formatMoney$e(o.total_incl) })
           ] }, o.id);
         }) })
       ] }),
@@ -10583,7 +13056,7 @@ function buildItemTableRow(group, idx) {
   const extraTotal = extraPerBag * bagCount;
   const extraCostKgText = extraKg !== null ? formatQty(extraKg) : "الكل";
   const bagCountText = String(bagCount);
-  return [String(idx + 1), beanName, bagCountText, formatMoney$f(price), formatMoney$f(priceInclTax), formatQty(bag), formatMoney$f(roastIncl), formatMoney$f(extraPerKg), extraCostKgText, formatMoney$f(waste), formatQty(group.totalReceived), formatMoney$f(beanCostIncl), formatMoney$f(roastTotal), formatMoney$f(extraTotal), formatMoney$f(group.totalCostIncl), formatMoney$f(it.computed_final_price_per_kg)];
+  return [String(idx + 1), beanName, bagCountText, formatMoney$e(price), formatMoney$e(priceInclTax), formatQty(bag), formatMoney$e(roastIncl), formatMoney$e(extraPerKg), extraCostKgText, formatMoney$e(waste), formatQty(group.totalReceived), formatMoney$e(beanCostIncl), formatMoney$e(roastTotal), formatMoney$e(extraTotal), formatMoney$e(group.totalCostIncl), formatMoney$e(it.computed_final_price_per_kg)];
 }
 function exportGreenBeanOrderExcel(order, items, totals) {
   const headers = buildItemTableHeaders();
@@ -10611,10 +13084,10 @@ function exportGreenBeanOrderExcel(order, items, totals) {
     <tr><td colspan="${colCount}" style="height:15px;border:none;"></td></tr>
     <tr><td colspan="${colCount}" style="font-weight:bold;font-size:14px;background:#1e293b;color:white;padding:10px;border:1px solid #94a3b8;">ملخص الطلب</td></tr>
     <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">عدد أنواع البن</td><td style="padding:6px;border:1px solid #ddd;">${totals.beanTypesCount}</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">عدد الخياش</td><td style="padding:6px;border:1px solid #ddd;">${totals.totalBags}</td><td colspan="${colCount - 6}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">مجموع الكيلوات</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">الواصل بعد الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalReceivedKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">كمية الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.wasteKg)} كغ (${formatMoney$f(totals.wastePercent)}%)</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة البن (شامل الضريبة)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalBeanCostIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة التحميص (شامل)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalRoastIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي التكلفة الإضافية</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$f(totals.totalExtra)} ر.س</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
-    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">متوسط السعر الصافي / كغ</td><td style="padding:6px;font-weight:bold;color:#059669;border:1px solid #ddd;">${formatMoney$f(totals.avgPricePerKg)} ر.س</td><td colspan="${colCount - 3}" style="border:1px solid #ddd;"></td></tr>
-    <tr style="background:#0f172a;"><td colspan="2" style="font-weight:bold;padding:10px;color:white;border:1px solid #94a3b8;">إجمالي الطلب (شامل)</td><td colspan="${colCount - 2}" style="padding:10px;font-weight:bold;font-size:16px;color:white;border:1px solid #94a3b8;">${formatMoney$f(totals.totalGrand)} ر.س</td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">مجموع الكيلوات</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$e(totals.totalKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">الواصل بعد الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$e(totals.totalReceivedKg)} كغ</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">كمية الهدر</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$e(totals.wasteKg)} كغ (${formatMoney$e(totals.wastePercent)}%)</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة البن (شامل الضريبة)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$e(totals.totalBeanCostIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي تكلفة التحميص (شامل)</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$e(totals.totalRoastIncl)} ر.س</td><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">إجمالي التكلفة الإضافية</td><td style="padding:6px;border:1px solid #ddd;">${formatMoney$e(totals.totalExtra)} ر.س</td><td colspan="${colCount - 9}" style="border:1px solid #ddd;"></td></tr>
+    <tr><td colspan="2" style="font-weight:bold;padding:6px;border:1px solid #ddd;">متوسط السعر الصافي / كغ</td><td style="padding:6px;font-weight:bold;color:#059669;border:1px solid #ddd;">${formatMoney$e(totals.avgPricePerKg)} ر.س</td><td colspan="${colCount - 3}" style="border:1px solid #ddd;"></td></tr>
+    <tr style="background:#0f172a;"><td colspan="2" style="font-weight:bold;padding:10px;color:white;border:1px solid #94a3b8;">إجمالي الطلب (شامل)</td><td colspan="${colCount - 2}" style="padding:10px;font-weight:bold;font-size:16px;color:white;border:1px solid #94a3b8;">${formatMoney$e(totals.totalGrand)} ر.س</td></tr>
   ` : "";
   const noteRow = note ? `<tr><td colspan="${colCount}" style="padding:6px;border:1px solid #ddd;"><b>ملاحظة:</b> ${note}</td></tr>` : "";
   const htmlContent = `
@@ -10710,36 +13183,36 @@ function exportGreenBeanOrderPDF(order, items, totals) {
         </div>
         <div class="summary-card">
           <div class="s-label">مجموع الكيلوات</div>
-          <div class="s-value">${formatMoney$f(totals.totalKg)} كغ</div>
+          <div class="s-value">${formatMoney$e(totals.totalKg)} كغ</div>
         </div>
         <div class="summary-card">
           <div class="s-label">الواصل بعد الهدر</div>
-          <div class="s-value">${formatMoney$f(totals.totalReceivedKg)} كغ</div>
+          <div class="s-value">${formatMoney$e(totals.totalReceivedKg)} كغ</div>
         </div>
         <div class="summary-card warn">
           <div class="s-label">كمية الهدر</div>
-          <div class="s-value">${formatMoney$f(totals.wasteKg)} كغ (${formatMoney$f(totals.wastePercent)}%)</div>
+          <div class="s-value">${formatMoney$e(totals.wasteKg)} كغ (${formatMoney$e(totals.wastePercent)}%)</div>
         </div>
         <div class="summary-card">
           <div class="s-label">تكلفة البن (شامل الضريبة)</div>
-          <div class="s-value">${formatMoney$f(totals.totalBeanCostIncl)} ر.س</div>
+          <div class="s-value">${formatMoney$e(totals.totalBeanCostIncl)} ر.س</div>
         </div>
         <div class="summary-card">
           <div class="s-label">تكلفة التحميص (شامل)</div>
-          <div class="s-value">${formatMoney$f(totals.totalRoastIncl)} ر.س</div>
+          <div class="s-value">${formatMoney$e(totals.totalRoastIncl)} ر.س</div>
         </div>
         <div class="summary-card">
           <div class="s-label">التكلفة الإضافية</div>
-          <div class="s-value">${formatMoney$f(totals.totalExtra)} ر.س</div>
+          <div class="s-value">${formatMoney$e(totals.totalExtra)} ر.س</div>
         </div>
         <div class="summary-card accent">
           <div class="s-label">متوسط السعر الصافي / كغ</div>
-          <div class="s-value">${formatMoney$f(totals.avgPricePerKg)} ر.س</div>
+          <div class="s-value">${formatMoney$e(totals.avgPricePerKg)} ر.س</div>
         </div>
       </div>
       <div class="grand-total-bar">
         <span>إجمالي الطلب (شامل)</span>
-        <span class="grand-total-value">${formatMoney$f(totals.totalGrand)} ر.س</span>
+        <span class="grand-total-value">${formatMoney$e(totals.totalGrand)} ر.س</span>
       </div>
     </div>
   ` : "";
@@ -10939,11 +13412,11 @@ function OrderDetailsTable({
             " خيشة"
           ] }) : null
         ] }) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$f(it.price_kg_excl_tax) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$f(it.waste_percent) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$e(it.price_kg_excl_tax) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: formatMoney$e(it.waste_percent) }),
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: extraCostKgText }),
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-800 dark:text-white/80", children: totalReceivedDisplay }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 text-emerald-700 dark:text-emerald-200 font-extrabold", children: formatMoney$f(it.computed_final_price_per_kg) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 text-emerald-700 dark:text-emerald-200 font-extrabold", children: formatMoney$e(it.computed_final_price_per_kg) }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
           /* @__PURE__ */ jsx("input", { className: `${ws$1.input} px-3 py-2 w-[110px]`, type: "number", step: "0.001", inputMode: "decimal", value: receivedValue, "data-group-key": g.groupKey, onChange: handleReceivedInputChange, placeholder: showBagCount ? `إجمالي ${g.bagCount} خياشات` : "مثال: 58", disabled: isRowSaving, title: showBagCount ? `القيمة المُدخلة تُوزَّع بالتساوي على ${g.bagCount} خياشات` : "كمية الواصل بعد الهدر" }),
           /* @__PURE__ */ jsx("button", { type: "button", className: `${ws$1.btnPrimary} px-3 py-2`, "data-group-key": g.groupKey, onClick: handleSaveReceivedClick, disabled: isRowSaving, title: "حفظ الكمية الواصلة", children: /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }) })
@@ -11003,31 +13476,31 @@ function OrderSummary({
       color: "text-blue-700 dark:text-blue-200"
     }, {
       label: "مجموع الكيلوات",
-      value: `${formatMoney$f(totals.totalKg)} كغ`,
+      value: `${formatMoney$e(totals.totalKg)} كغ`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "مجموع الكيلوات الواصلة بعد الهدر",
-      value: `${formatMoney$f(totals.totalReceivedKg)} كغ`,
+      value: `${formatMoney$e(totals.totalReceivedKg)} كغ`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "كمية الهدر",
-      value: `${formatMoney$f(totals.wasteKg)} كغ (${formatMoney$f(totals.wastePercent)}%)`,
+      value: `${formatMoney$e(totals.wasteKg)} كغ (${formatMoney$e(totals.wastePercent)}%)`,
       color: "text-orange-700 dark:text-orange-200"
     }, {
       label: "إجمالي تكلفة البن (شامل الضريبة)",
-      value: `${formatMoney$f(totals.totalBeanCostIncl)} ر.س`,
+      value: `${formatMoney$e(totals.totalBeanCostIncl)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "إجمالي تكلفة التحميص (شامل الضريبة)",
-      value: `${formatMoney$f(totals.totalRoastIncl)} ر.س`,
+      value: `${formatMoney$e(totals.totalRoastIncl)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "إجمالي التكلفة الإضافية",
-      value: `${formatMoney$f(totals.totalExtra)} ر.س`,
+      value: `${formatMoney$e(totals.totalExtra)} ر.س`,
       color: "text-slate-900 dark:text-white"
     }, {
       label: "متوسط السعر الصافي / كغ",
-      value: `${formatMoney$f(totals.avgPricePerKg)} ر.س`,
+      value: `${formatMoney$e(totals.avgPricePerKg)} ر.س`,
       color: "text-emerald-700 dark:text-emerald-200"
     }];
     return /* @__PURE__ */ jsxs("div", { className: "mt-5 pt-4 border-t border-slate-200 dark:border-white/10", children: [
@@ -11043,7 +13516,7 @@ function OrderSummary({
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-sm mt-2 pt-3 border-t border-slate-200 dark:border-white/15", children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", children: "إجمالي الطلب (شامل):" }),
           /* @__PURE__ */ jsxs("span", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold text-base", children: [
-            formatMoney$f(totals.totalGrand),
+            formatMoney$e(totals.totalGrand),
             " ر.س"
           ] })
         ] })
@@ -11931,8 +14404,8 @@ function OrderBuilder({
       const line = row.line;
       const computed = row.computed;
       const qty = row.qty || 1;
-      const wasteText = Number.isFinite(computed?.wastePercent) ? `${formatMoney$f(computed.wastePercent)}%` : "—";
-      const finalPriceText = formatMoney$f(computed?.finalPricePerKg);
+      const wasteText = Number.isFinite(computed?.wastePercent) ? `${formatMoney$e(computed.wastePercent)}%` : "—";
+      const finalPriceText = formatMoney$e(computed?.finalPricePerKg);
       return /* @__PURE__ */ jsxs("tr", { className: "bg-slate-50/50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/10", children: [
         /* @__PURE__ */ jsx("td", { className: "py-2 text-slate-900 dark:text-white font-semibold truncate", children: row.beanName }),
         /* @__PURE__ */ jsx("td", { className: "py-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 justify-center", children: [
@@ -11952,13 +14425,13 @@ function OrderBuilder({
       ] }, beanIdText);
     });
   }, [hasItems, previewRows, handleItemChange, handleRemoveClick, handlePlusClick, handleMinusClick, isSaving]);
-  const totalBeanCostText = hasItems ? formatMoney$f(totals.totalBeanCostIncl) : "—";
-  const totalRoastText = hasItems ? formatMoney$f(totals.totalRoastIncl) : "—";
-  const totalExtraText = hasItems ? formatMoney$f(totals.totalExtra) : "—";
-  const grandTotalText = totals.ok ? formatMoney$f(totals.grandTotal) : "—";
+  const totalBeanCostText = hasItems ? formatMoney$e(totals.totalBeanCostIncl) : "—";
+  const totalRoastText = hasItems ? formatMoney$e(totals.totalRoastIncl) : "—";
+  const totalExtraText = hasItems ? formatMoney$e(totals.totalExtra) : "—";
+  const grandTotalText = totals.ok ? formatMoney$e(totals.grandTotal) : "—";
   const totalBagsText = hasItems ? String(totals.totalBags) : "—";
-  const totalKgText = hasItems ? formatMoney$f(totals.totalKg) : "—";
-  const totalReceivedKgText = hasItems ? formatMoney$f(totals.totalReceivedKg) : "—";
+  const totalKgText = hasItems ? formatMoney$e(totals.totalKg) : "—";
+  const totalReceivedKgText = hasItems ? formatMoney$e(totals.totalReceivedKg) : "—";
   return /* @__PURE__ */ jsxs("div", { className: cardShell, children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3", children: [
       /* @__PURE__ */ jsxs("div", { children: [
@@ -12117,23 +14590,23 @@ function computeRow({
   const effectiveExtraKg = extraKg !== null ? extraKg : bag;
 
   // حسابات الخيشة الواحدة
-  const bagCostExcl = price !== null && bag !== null ? round2$2(price * bag) : NaN;
-  const bagCostIncl = price !== null && bag !== null ? round2$2(price * VAT_MULTIPLIER * bag) : NaN;
-  const roastTotalIncl = roastIncl !== null && bag !== null ? round2$2(roastIncl * bag) : NaN;
-  const extraTotal = extra !== null && effectiveExtraKg !== null ? round2$2(extra * effectiveExtraKg) : NaN;
-  const totalInclPerBag = Number.isFinite(bagCostIncl) && Number.isFinite(roastTotalIncl) && Number.isFinite(extraTotal) ? round2$2(bagCostIncl + roastTotalIncl + extraTotal) : NaN;
+  const bagCostExcl = price !== null && bag !== null ? round2$1(price * bag) : NaN;
+  const bagCostIncl = price !== null && bag !== null ? round2$1(price * VAT_MULTIPLIER * bag) : NaN;
+  const roastTotalIncl = roastIncl !== null && bag !== null ? round2$1(roastIncl * bag) : NaN;
+  const extraTotal = extra !== null && effectiveExtraKg !== null ? round2$1(extra * effectiveExtraKg) : NaN;
+  const totalInclPerBag = Number.isFinite(bagCostIncl) && Number.isFinite(roastTotalIncl) && Number.isFinite(extraTotal) ? round2$1(bagCostIncl + roastTotalIncl + extraTotal) : NaN;
 
   // الإجمالي لكل الخياش
-  const totalIncl = Number.isFinite(totalInclPerBag) ? round2$2(totalInclPerBag * qty) : NaN;
+  const totalIncl = Number.isFinite(totalInclPerBag) ? round2$1(totalInclPerBag * qty) : NaN;
 
   // الوزن الكلي المتوقع (حجم الخيشة × عدد الخياش)
   const totalBagKg = bag !== null ? bag * qty : null;
 
   // نسبة الهدر مقارنة بالوزن الكلي
-  const wastePercent = totalBagKg !== null && totalBagKg > 0 && received !== null ? Math.min(100, Math.max(0, round2$2((1 - received / totalBagKg) * 100))) : NaN;
+  const wastePercent = totalBagKg !== null && totalBagKg > 0 && received !== null ? Math.min(100, Math.max(0, round2$1((1 - received / totalBagKg) * 100))) : NaN;
 
   // السعر الصافي للكيلو = إجمالي التكلفة / الواصل
-  const finalPricePerKg = Number.isFinite(totalIncl) && received !== null && received > 0 ? round2$2(totalIncl / received) : NaN;
+  const finalPricePerKg = Number.isFinite(totalIncl) && received !== null && received > 0 ? round2$1(totalIncl / received) : NaN;
   return {
     bagCostExcl,
     bagCostIncl,
@@ -12761,7 +15234,7 @@ function LoanModal({
       ] }),
       monthly > 0 ? /* @__PURE__ */ jsxs("div", { className: `${ws$1.glassSoft} ${ws$1.card} px-3 py-2 flex items-center justify-between`, children: [
         /* @__PURE__ */ jsx("span", { className: "text-xs text-slate-600 dark:text-white/60", children: "قسط شهري متوقع" }),
-        /* @__PURE__ */ jsx("span", { className: "text-sm font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: formatMoney$e(monthly) })
+        /* @__PURE__ */ jsx("span", { className: "text-sm font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: formatMoney$d(monthly) })
       ] }) : null,
       isEditing ? /* @__PURE__ */ jsxs("label", { className: "flex items-center gap-2 cursor-pointer select-none", children: [
         /* @__PURE__ */ jsx("input", { type: "checkbox", checked: isActive, onChange: (e) => setIsActive(e.target.checked), className: "accent-emerald-400" }),
@@ -12817,8 +15290,8 @@ function LoansList({
       const isActive = l.is_active !== false;
       return /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]", children: [
         /* @__PURE__ */ jsx("td", { className: "py-3 px-3 font-semibold text-slate-900 dark:text-white whitespace-nowrap", children: l.employee_name || `#${l.employee_id}` }),
-        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(l.total_amount) }),
-        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(l.monthly_amount) }),
+        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(l.total_amount) }),
+        /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(l.monthly_amount) }),
         /* @__PURE__ */ jsxs("td", { className: "py-3 px-3 text-slate-700 dark:text-white/75 whitespace-nowrap", children: [
           inst,
           " شهر"
@@ -13201,7 +15674,7 @@ function LoansPage() {
     const monthly = Number(loan.monthly_amount || 0);
     const confirmed = window.confirm(`حذف القرض نهائياً لـ ${loan.employee_name || "هذا الموظف"}؟
 
-سيُحذف من القائمة بالكامل، وتُمسح الاستقطاعات (${formatMoney$e(monthly)}/شهر) من مسير الرواتب لأي شهر لم يُقفل بعد.
+سيُحذف من القائمة بالكامل، وتُمسح الاستقطاعات (${formatMoney$d(monthly)}/شهر) من مسير الرواتب لأي شهر لم يُقفل بعد.
 الأشهر المُقفلة تحتفظ بقيمها كما هي.`);
     if (!confirmed) return;
     deleteMutation.mutate({
@@ -13230,12 +15703,12 @@ function LoansPage() {
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-4`, children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الخصم الشهري" }),
-          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-emerald-700 dark:text-emerald-200 mt-1", dir: "ltr", children: formatMoney$e(totals.monthly) }),
+          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-emerald-700 dark:text-emerald-200 mt-1", dir: "ltr", children: formatMoney$d(totals.monthly) }),
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40 mt-1", children: "يُطرح من المسير" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-4 col-span-2`, children: [
           /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "المتبقي للسداد" }),
-          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$e(totals.outstanding) }),
+          /* @__PURE__ */ jsx("div", { className: "text-2xl font-bold text-slate-900 dark:text-white mt-1", dir: "ltr", children: formatMoney$d(totals.outstanding) }),
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40 mt-1", children: "للقروض النشطة فقط" })
         ] })
       ] }),
@@ -14076,34 +16549,34 @@ function PayrollTotals({
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-8 gap-3 w-full md:w-auto", children: [
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الرواتب" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalSalary) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalSalary) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي البونص" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalBonuses) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalBonuses) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "أوفر تايم" }),
-        /* @__PURE__ */ jsx("div", { className: "text-sky-700 dark:text-sky-200 font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalOvertime) })
+        /* @__PURE__ */ jsx("div", { className: "text-sky-700 dark:text-sky-200 font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalOvertime) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "إجمالي الخصميات" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalDeductions) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalDeductions) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "قسط السلف" }),
-        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$e(totals.totalLoanDeductions) })
+        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$d(totals.totalLoanDeductions) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-600 dark:text-white/55", children: "الصافي" }),
-        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$e(totals.net) })
+        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$d(totals.net) })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: `${ws$1.glass} ${ws$1.card} p-3`, children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 text-xs text-slate-600 dark:text-white/55", children: [
           /* @__PURE__ */ jsx(CheckCircle2, { className: "w-3 h-3 text-emerald-700 dark:text-emerald-400" }),
           "تم الدفع"
         ] }),
-        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$e(paymentStats.totalPaid) }),
+        /* @__PURE__ */ jsx("div", { className: "text-emerald-700 dark:text-emerald-200 font-extrabold", dir: "ltr", children: formatMoney$d(paymentStats.totalPaid) }),
         /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/40 mt-0.5", children: [
           paymentStats.paidCount,
           " / ",
@@ -14115,7 +16588,7 @@ function PayrollTotals({
           /* @__PURE__ */ jsx(Clock, { className: "w-3 h-3 text-amber-700 dark:text-amber-400" }),
           "متبقي"
         ] }),
-        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$e(paymentStats.totalUnpaid) }),
+        /* @__PURE__ */ jsx("div", { className: "text-amber-700 dark:text-amber-200 font-extrabold", dir: "ltr", children: formatMoney$d(paymentStats.totalUnpaid) }),
         /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/40 mt-0.5", children: [
           paymentStats.unpaidCount,
           " موظف"
@@ -14218,17 +16691,17 @@ function PaymentRow({
   const employeeName = entry.employee_name || "—";
   const branchName = entry.branch_name || "—";
   const isSuspended = !!entry.is_suspended;
-  const baseSalary = formatMoney$e(entry.base_salary);
-  const otherAllowances = formatMoney$e(entry.other_allowances);
-  const totalSalary = formatMoney$e(entry.total_salary);
-  const totalBonuses = formatMoney$e(entry.total_bonuses);
-  const totalDeductions = formatMoney$e(entry.total_deductions);
-  const loanDeduction = formatMoney$e(entry.loan_deduction);
+  const baseSalary = formatMoney$d(entry.base_salary);
+  const otherAllowances = formatMoney$d(entry.other_allowances);
+  const totalSalary = formatMoney$d(entry.total_salary);
+  const totalBonuses = formatMoney$d(entry.total_bonuses);
+  const totalDeductions = formatMoney$d(entry.total_deductions);
+  const loanDeduction = formatMoney$d(entry.loan_deduction);
   const hasLoan = Number(entry.loan_deduction || 0) > 0;
-  const totalOvertime = formatMoney$e(entry.total_overtime);
+  const totalOvertime = formatMoney$d(entry.total_overtime);
   const hasOvertime = Number(entry.total_overtime || 0) > 0;
   const overtimeDays = Number(entry.overtime_days || 0);
-  const formattedNet = formatMoney$e(entry.net_salary);
+  const formattedNet = formatMoney$d(entry.net_salary);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("tr", { className: `border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] ${isSuspended ? "opacity-70" : ""}`, children: [
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5 font-semibold text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis", style: {
@@ -14252,7 +16725,7 @@ function PaymentRow({
       /* @__PURE__ */ jsx("td", { className: `py-2 px-1.5 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", title: hasLoan ? "قسط شهري لقرض / سلفة نشطة" : "", children: hasLoan ? loanDeduction : "—" }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formattedNet }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", children: METHOD_LABELS[paymentMethod] || "—" }) : /* @__PURE__ */ jsx(GlassSelect, { value: paymentMethod, onChange: handleMethodChange, options: PAYMENT_METHOD_OPTIONS, placeholder: "اختر", disabled: isClosed, buttonClassName: "text-xs py-1 px-2 !rounded-lg" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
-      /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$e(paidAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (e) => handleAmountChange(e.target.value), disabled: isClosed, className: `${ws$1.input} text-xs py-1 px-1 rounded-lg w-[50px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(netSalary), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2 px-1.5", children: isPaid ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$d(paidAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (e) => handleAmountChange(e.target.value), disabled: isClosed, className: `${ws$1.input} text-xs py-1 px-1 rounded-lg w-[50px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(netSalary), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleTogglePaid, disabled: isClosed || isLocked, "aria-label": isPaid ? "إلغاء حالة الدفع" : "تحديد الراتب كمدفوع", title: isPaid ? "إلغاء حالة الدفع" : "تم الدفع", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isPaid ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isClosed || isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isPaid ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
         isPaid && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), disabled: isClosed, className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${paymentNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
@@ -14424,7 +16897,7 @@ function formatBonusMonth(value) {
   if (s.length >= 7) return s.slice(0, 7);
   return s;
 }
-function formatMoney$d(value) {
+function formatMoney$c(value) {
   if (value === null || value === void 0 || value === "") return "-";
   const n = Number(value);
   if (!Number.isFinite(n)) return "-";
@@ -14490,7 +16963,7 @@ function HRBonusesTable({
   return tableShell(bonuses.map((b) => {
     const employeeName = b.employee_name || "—";
     const monthValue = formatBonusMonth(b.bonus_date);
-    const amountValue = formatMoney$d(b.amount);
+    const amountValue = formatMoney$c(b.amount);
     const sourceValue = b.source || b.created_by_employee_name || "—";
     const isPercent = b.amount_mode === "percent" || b.amount_mode === "Percent" || b.amount_percent !== null && b.amount_percent !== void 0;
     const percentValue = isPercent ? `${formatPercent(b.amount_percent)}%` : null;
@@ -14730,2319 +17203,6 @@ const route10 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: page$G
 }, Symbol.toStringTag, { value: 'Module' }));
-
-// كشف حسابات «المصروف الثابت» في شجرة الحسابات.
-//
-// الحساب يعتبر مصروفاً ثابتاً إذا كان اسمه (أو اسم أي أب في سلسلة
-// آبائه) يجمع كلمتي «مصروف/مصاريف/مصروفات» و«ثابت» — يغطي التسميات
-// الشائعة: «مصروف ثابت»، «المصروفات الثابتة»، «مصاريف ثابتة»…
-// الفحص بالاسم لا بالكود لأن الشجرة قابلة للتعديل من المستخدم.
-
-const normalizeArabic = value => String(value || "").replace(/[أإآ]/g, "ا");
-function isFixedExpenseName(name) {
-  const normalized = normalizeArabic(name);
-  return /(مصروف|مصاريف)/.test(normalized) && /ثابت/.test(normalized);
-}
-
-// هل الحساب نفسه أو أحد آبائه «مصروف ثابت»؟ يمشي سلسلة parent_id
-// بسقف عمق يمنع الدوران لو فسدت الشجرة.
-function isFixedExpenseAccountId(accountId, accounts = []) {
-  const id = Number(accountId);
-  if (!Number.isInteger(id) || id <= 0) return false;
-  const byId = new Map(accounts.map(account => [Number(account.id), account]));
-  let current = byId.get(id);
-  let depth = 0;
-  while (current && depth < 20) {
-    if (isFixedExpenseName(current.name)) return true;
-    current = current.parent_id ? byId.get(Number(current.parent_id)) : null;
-    depth += 1;
-  }
-  return false;
-}
-
-const PURCHASE_INVOICE_STATUS_OPTIONS = [{
-  value: "pending_payment",
-  label: "بانتظار الاعتماد"
-}, {
-  value: "partial_paid",
-  label: "مدفوعة جزئياً"
-}, {
-  value: "paid",
-  label: "مدفوعة"
-}, {
-  value: "overdue",
-  label: "متأخرة"
-}];
-const CURRENCY_OPTIONS$1 = [{
-  value: "SAR",
-  label: "ريال سعودي - SAR"
-}, {
-  value: "USD",
-  label: "دولار أمريكي - USD"
-}, {
-  value: "EUR",
-  label: "يورو - EUR"
-}, {
-  value: "AED",
-  label: "درهم إماراتي - AED"
-}, {
-  value: "KWD",
-  label: "دينار كويتي - KWD"
-}, {
-  value: "BHD",
-  label: "دينار بحريني - BHD"
-}, {
-  value: "QAR",
-  label: "ريال قطري - QAR"
-}, {
-  value: "OMR",
-  label: "ريال عماني - OMR"
-}];
-function todayRiyadh$7() {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Riyadh",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit"
-  }).formatToParts(/* @__PURE__ */ new Date());
-  const get = (type) => parts.find((part) => part.type === type)?.value || "";
-  return `${get("year")}-${get("month")}-${get("day")}`;
-}
-function normalizeDigits(text) {
-  return String(text || "").replace(/[٠-٩]/g, (d) => String("٠١٢٣٤٥٦٧٨٩".indexOf(d))).replace(/[۰-۹]/g, (d) => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/٫/g, ".").replace(/٬/g, ",");
-}
-const MONEY_RE = /(\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?|\d+\.\d{1,2}|\d{2,})/;
-function parseMoneyToken(token) {
-  const number = Number(String(token).replace(/,/g, ""));
-  return Number.isFinite(number) && number > 0 ? number : null;
-}
-function moneyAfterKeyword(text, keywords, windowAfter = 60, windowBefore = 30) {
-  for (const keyword of keywords) {
-    const re = new RegExp(keyword, "gi");
-    let match;
-    while ((match = re.exec(text)) !== null) {
-      const start = match.index + match[0].length;
-      const after = text.slice(start, start + windowAfter);
-      const forward = after.match(MONEY_RE);
-      if (forward) {
-        const value = parseMoneyToken(forward[1]);
-        if (value !== null) return value;
-      }
-      const before = text.slice(Math.max(0, match.index - windowBefore), match.index);
-      const backwardAll = [...before.matchAll(new RegExp(MONEY_RE.source, "g"))];
-      if (backwardAll.length > 0) {
-        const value = parseMoneyToken(backwardAll[backwardAll.length - 1][1]);
-        if (value !== null) return value;
-      }
-    }
-  }
-  return null;
-}
-function detectInvoiceNumber(text) {
-  const patterns = [/(?:رقم\s*الفاتورة|الفاتورة\s*رقم|فاتورة\s*(?:ضريبية\s*)?(?:رقم|#)|المرجع)\s*[:#]?\s*([A-Za-z0-9\-\/_.]{2,30})/gi, /invoice\s*(?:no|number|num|#)?\.?\s*[:#]?\s*([A-Za-z0-9\-\/_.]{2,30})/gi, /\b(INV[-\/]?[A-Za-z0-9][A-Za-z0-9\-]{2,24})\b/g];
-  for (const re of patterns) {
-    for (const match of text.matchAll(re)) {
-      const token = match[1].replace(/[.:،,]+$/, "");
-      if (/^(date|no|number|تاريخ)$/i.test(token)) continue;
-      if (!/\d/.test(token)) continue;
-      return token;
-    }
-  }
-  return null;
-}
-function detectTotal(text) {
-  const value = moneyAfterKeyword(text, ["المبلغ\\s*المستحق", "الإجمالي\\s*المستحق", "الاجمالي\\s*المستحق", "قحتسملا\\s*غلبملا", "عومجملا", "المجموع\\s*الكلي", "الإجمالي\\s*(?:شامل|مع)\\s*الضريبة", "الاجمالي\\s*(?:شامل|مع)\\s*الضريبة", "grand\\s*total", "total\\s*(?:due|amount)", "amount\\s*due", "المجموع", "الإجمالي", "الاجمالي", "total"]) ?? null;
-  if (value !== null) return value;
-  let max = null;
-  const re = new RegExp(MONEY_RE.source, "g");
-  let match;
-  while ((match = re.exec(text)) !== null) {
-    if (!match[1].includes(".") && !match[1].includes(",")) continue;
-    const parsed = parseMoneyToken(match[1]);
-    if (parsed === null || parsed > 1e7) continue;
-    if (max === null || parsed > max) max = parsed;
-  }
-  return max;
-}
-function detectTax(text) {
-  return moneyAfterKeyword(text, ["إجمالي\\s*الضريبة", "اجمالي\\s*الضريبة", "ضريبة\\s*القيمة\\s*المضافة\\s*(?:\\(?\\s*15\\s*%?\\s*\\)?)?", "قيمة\\s*الضريبة", "vat\\s*(?:\\(?\\s*15\\s*%?\\s*\\)?)?\\s*(?:amount)?", "tax\\s*amount"]);
-}
-const DATE_TOKEN_RE = /(\d{4}-\d{2}-\d{2}|\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4})/;
-function normalizeDateToken(raw) {
-  if (!raw) return null;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
-  const parts = raw.split(/[\/\-.]/).map(Number);
-  if (parts.length !== 3) return null;
-  let [day, month, year] = parts;
-  if (parts[0] > 1900) {
-    [year, month, day] = parts;
-  }
-  if (year < 100) year += 2e3;
-  if (!day || !month || !year || month > 12 || day > 31) return null;
-  return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-}
-function compactArabic(text) {
-  return String(text).normalize("NFKC").replace(/(?<=[؀-ۿ])\s+(?=[؀-ۿ])/g, "");
-}
-function dateNearKeyword(text, keywords) {
-  for (const keyword of keywords) {
-    const re = new RegExp(keyword, "gi");
-    let match;
-    while ((match = re.exec(text)) !== null) {
-      const start = match.index + match[0].length;
-      const after = text.slice(start, start + 40).match(DATE_TOKEN_RE);
-      if (after) {
-        const value = normalizeDateToken(after[1]);
-        if (value) return value;
-      }
-      const before = text.slice(Math.max(0, match.index - 40), match.index);
-      const backwardAll = [...before.matchAll(new RegExp(DATE_TOKEN_RE.source, "g"))];
-      if (backwardAll.length > 0) {
-        const value = normalizeDateToken(backwardAll[backwardAll.length - 1][1]);
-        if (value) return value;
-      }
-    }
-  }
-  return null;
-}
-function detectInvoiceDate(text) {
-  const compact = compactArabic(text);
-  const keyworded = dateNearKeyword(compact, ["تاريخ\\s*الفاتورة", "تاريخ\\s*الإصدار", "تاريخ\\s*الاصدار", "رادصلإا\\s*خيرات", "رادصالا\\s*خيرات", "ةروتافلا\\s*خيرات", "invoice\\s*date", "issue\\s*date", "التاريخ", "date"]);
-  if (keyworded) return keyworded;
-  for (const match of compact.matchAll(new RegExp(DATE_TOKEN_RE.source, "g"))) {
-    const value = normalizeDateToken(match[1]);
-    if (value && value >= "2015-01-01" && value <= "2035-12-31") {
-      return value;
-    }
-  }
-  return null;
-}
-function detectDueDate(text) {
-  const compact = compactArabic(text);
-  return dateNearKeyword(compact, ["تاريخ\\s*الاستحقاق", "تاريخ\\s*الإستحقاق", "قاقحتسلاا\\s*خيرات", "قاقحتسالا\\s*خيرات", "due\\s*date", "payment\\s*due"]);
-}
-function normalizeVat(value) {
-  return String(value || "").replace(/[^0-9]/g, "");
-}
-function extractVatNumbers(text) {
-  const found = /* @__PURE__ */ new Set();
-  const keywordRe = /(?:الرقم\s*الضريبي|رقم\s*(?:التسجيل\s*)?الضريبي|السجل\s*الضريبي|vat\s*(?:reg(?:istration)?)?\s*(?:no|number|num|#)?|tax\s*(?:reg(?:istration)?)?\s*(?:no|number|num|#)|trn)\s*[.:#]?\s*([0-9][0-9\s\-]{5,25})/gi;
-  for (const match of text.matchAll(keywordRe)) {
-    const digits = normalizeVat(match[1]);
-    if (digits.length >= 7) found.add(digits);
-  }
-  for (const match of text.matchAll(/\b3\d{13}3\b/g)) {
-    found.add(match[0]);
-  }
-  return [...found];
-}
-function detectContact(text, contacts) {
-  const vatNumbers = extractVatNumbers(text);
-  if (vatNumbers.length > 0) {
-    for (const contact of contacts) {
-      if (contact.is_active === false) continue;
-      const contactVat = normalizeVat(contact.vat_number);
-      if (contactVat.length >= 7 && vatNumbers.includes(contactVat)) {
-        return {
-          contact,
-          matchedBy: "vat"
-        };
-      }
-    }
-  }
-  const lower = text.toLowerCase();
-  let best = null;
-  for (const contact of contacts) {
-    if (contact.is_active === false) continue;
-    const name = String(contact.name || "").trim();
-    if (name.length >= 3 && lower.includes(name.toLowerCase())) {
-      if (!best || name.length > String(best.name).length) best = contact;
-    }
-  }
-  return best ? {
-    contact: best,
-    matchedBy: "name"
-  } : null;
-}
-const SUMMARY_LINE_RE = /(المجموع|الإجمالي|الاجمالي|إجمالي|اجمالي|المبلغ\s*المستحق|المستحق|عومجملا|يلامجلإا|يلامجلاا|يلامجا|قحتسملا|غلبملا|sub\s*-?\s*total|grand\s*total|total\s*(?:due|amount|before)|amount\s*due|balance)/i;
-function isSummaryLine(line) {
-  if (SUMMARY_LINE_RE.test(line)) return true;
-  const compact = String(line).replace(/(?<=[؀-ۿ])\s+(?=[؀-ۿ])/g, "");
-  return SUMMARY_LINE_RE.test(compact);
-}
-const LINE_NUM_RE = /(\d{1,3}(?:,\d{3})+(?:\.\d{1,4})?|\d+\.\d{1,4}|\d{1,6})/g;
-function lineNumbers(line) {
-  const scrubbed = String(line).replace(/\d{7,}/g, " ");
-  const values = [];
-  for (const match of scrubbed.matchAll(LINE_NUM_RE)) {
-    const value = Number(String(match[1]).replace(/,/g, ""));
-    if (Number.isFinite(value)) values.push(value);
-  }
-  return values;
-}
-function findLineTriplet(values) {
-  let best = null;
-  for (let i = 0; i < values.length; i += 1) {
-    for (let j = 0; j < values.length; j += 1) {
-      if (i === j) continue;
-      const net = values[i];
-      const tax = values[j];
-      if (net <= 0 || tax <= 0 || net < tax) continue;
-      const total = net + tax;
-      const hit = values.find((candidate) => Math.abs(candidate - total) <= 0.03);
-      if (hit === void 0) continue;
-      if (!best || hit > best.total) {
-        best = {
-          net: round2$1(net),
-          tax: round2$1(tax),
-          total: round2$1(hit)
-        };
-      }
-    }
-  }
-  return best;
-}
-const AR_INVOICE_WORDS = new Set("كيك وحدة قطعة صينية صينة علبة كرتون حبة شدة كوب أكواب اكواب حليب قهوة بن سكر شاي ماء مياه عصير شوكولاته شوكولاتة شكلاته كراميل فانيلا فانيليا توت فراولة مانجو ليمون جبن جبنة زبدة كريمة عسل تمر كعك خبز مخبوزات حلويات بسكويت دونات كرواسون معمول تراميسو تشيز لوز فستق بندق جوز كاجو مندي كوكيز مافن براونيز كوكونت بيري راز كرانشي لاتيه موكا كابتشينو اسبريسو سموذي ميلك شيك وافل بانكيك سينابون".split(" "));
-function arabicDirectionScore(text) {
-  let score = 0;
-  for (const word of text.split(/\s+/)) {
-    if (!/[؀-ۿ]/.test(word)) continue;
-    if (AR_INVOICE_WORDS.has(word)) score += 3;
-    if (/^ال./.test(word)) score += 2;
-    if (/.[ةى]$/.test(word)) score += 2;
-    if (/^[ةى]/.test(word)) score -= 3;
-    if (/.ال$/.test(word)) score -= 2;
-  }
-  return score;
-}
-function mergeSingleLetterRuns(text) {
-  const tokens = String(text).split(/\s+/).filter(Boolean);
-  const out = [];
-  let buffer = [];
-  const flush = () => {
-    const singles = buffer.filter((token) => token.length === 1).length;
-    if (buffer.length >= 3 || buffer.length === 2 && singles === 2) {
-      out.push(buffer.join(""));
-    } else {
-      out.push(...buffer);
-    }
-    buffer = [];
-  };
-  for (const token of tokens) {
-    if (/^[؀-ۿ]{1,2}$/.test(token)) {
-      buffer.push(token);
-    } else {
-      flush();
-      out.push(token);
-    }
-  }
-  flush();
-  return out.join(" ");
-}
-function mirrorArabic(run) {
-  const LAM_ALEF_MARK = "";
-  return [...run.split("لا").join(LAM_ALEF_MARK)].reverse().join("").split(LAM_ALEF_MARK).join("لا");
-}
-const AR_WORDS_BY_LENGTH = [...AR_INVOICE_WORDS].sort((a, b) => b.length - a.length);
-function segmentByLexicon(block) {
-  const out = [];
-  let unknown = "";
-  let i = 0;
-  while (i < block.length) {
-    let hit = null;
-    for (const word of AR_WORDS_BY_LENGTH) {
-      if (block.startsWith(word, i)) {
-        hit = word;
-        break;
-      }
-    }
-    if (hit) {
-      if (unknown) {
-        out.push(unknown);
-        unknown = "";
-      }
-      out.push(hit);
-      i += hit.length;
-    } else {
-      unknown += block[i];
-      i += 1;
-    }
-  }
-  if (unknown) out.push(unknown);
-  return out;
-}
-function expandGluedWords(text) {
-  return text.split(/\s+/).flatMap((word) => /^[؀-ۿ]{6,}$/.test(word) ? segmentByLexicon(word) : [word]).join(" ");
-}
-function fixArabicText(text) {
-  return mergeSingleLetterRuns(text).replace(/[؀-ۿ][؀-ۿs]*[؀-ۿ]/g, (run) => {
-    const forward = expandGluedWords(run);
-    const backward = expandGluedWords(mirrorArabic(run));
-    const lexiconHits = (s) => s.split(/\s+/).filter((w) => AR_INVOICE_WORDS.has(w)).length;
-    const score = (s) => arabicDirectionScore(s) + lexiconHits(s) * 2;
-    return score(backward) > score(forward) ? backward : forward;
-  });
-}
-function cleanItemDescription(line) {
-  const cleaned = line.replace(/\b\d{7,}\b/g, " ").replace(new RegExp(MONEY_RE.source, "g"), " ").replace(/\d+(?:\.\d+)?\s*%/g, " ").replace(/[%#|]/g, " ").replace(/\s{2,}/g, " ").replace(/^\s*\d+\s+/, "").trim();
-  return fixArabicText(cleaned);
-}
-function decimalsOf(value) {
-  return (String(value).split(".")[1] || "").length;
-}
-function findQtyPrice(values, net, total) {
-  const clean = values.filter((value) => value > 0 && value <= 1e6);
-  let best = null;
-  for (const [basis, base] of [["net", net], ["gross", total]]) {
-    if (!base || base <= 0) continue;
-    for (const q of clean) {
-      if (q > 1e5) continue;
-      const impliedPrice = base / q;
-      if (!Number.isFinite(impliedPrice) || impliedPrice <= 0) continue;
-      for (const p of clean) {
-        if (p === q && clean.filter((v) => v === q).length < 2) {
-          if (Math.abs(q * q - base) > 0.02) continue;
-        }
-        const diff = Math.abs(p - impliedPrice);
-        if (diff > Math.max(0.02, impliedPrice * 3e-3)) continue;
-        const trivial = q === 1 || p === 1 ? 1 : 0;
-        const qtyIsCountLike = decimalsOf(q) <= 1 ? 1 : 0;
-        const candidate = {
-          diff,
-          trivial,
-          qtyIsCountLike,
-          basisIsNet: basis === "net" ? 1 : 0,
-          quantity: q,
-          unitPrice: p,
-          basis
-        };
-        if (!best || candidate.trivial < best.trivial || candidate.trivial === best.trivial && (candidate.qtyIsCountLike > best.qtyIsCountLike || candidate.qtyIsCountLike === best.qtyIsCountLike && (candidate.basisIsNet > best.basisIsNet || candidate.basisIsNet === best.basisIsNet && candidate.diff < best.diff))) {
-          best = candidate;
-        }
-      }
-    }
-  }
-  return best;
-}
-function itemFromLine(line) {
-  if (isSummaryLine(line)) return null;
-  const values = lineNumbers(line);
-  if (values.length < 3) return null;
-  const triplet = findLineTriplet(values);
-  if (!triplet) return null;
-  const rate = triplet.net > 0 ? round2$1(triplet.tax / triplet.net * 100) : 15;
-  if (rate <= 0 || rate > 50) return null;
-  const qtyPrice = findQtyPrice(values, triplet.net, triplet.total);
-  return {
-    description: cleanItemDescription(line),
-    net: triplet.net,
-    total: triplet.total,
-    rate,
-    quantity: qtyPrice?.quantity ?? null,
-    unitPrice: qtyPrice?.unitPrice ?? null,
-    priceIncludesTax: qtyPrice?.basis === "gross"
-  };
-}
-const HEADER_WORD_RE = /^(vat|qty|unit|price|amount|total|discount|before|tax|products?|#|الوصف|المنتج|الكمية|السعر|الخصم|الضريبة)$/i;
-function isDescriptionLine(line) {
-  if (isSummaryLine(line)) return false;
-  const numbers = lineNumbers(line);
-  if (numbers.length > 2) return false;
-  if (numbers.some((value) => value >= 1e3)) return false;
-  const cleaned = cleanItemDescription(line);
-  if (cleaned.length < 3) return false;
-  const words = cleaned.split(/\s+/);
-  if (words.every((word) => HEADER_WORD_RE.test(word))) return false;
-  return true;
-}
-function dedupeDescription(description) {
-  const segments = description.split(/\s+-\s+|^-\s+|\s+-$/).map((segment) => segment.trim()).filter(Boolean);
-  const seen = /* @__PURE__ */ new Set();
-  const unique = [];
-  for (const segment of segments) {
-    const key = segment.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    unique.push(segment);
-  }
-  let result = unique.join(" - ") || description.trim();
-  for (let pass = 0; pass < 2; pass += 1) {
-    result = result.replace(/(.{4,}?)\s*[-–]?\s*\1/gu, "$1");
-  }
-  return result.replace(/\s{2,}/g, " ").trim();
-}
-function itemsFromRows(rows) {
-  const normalized = rows.map((row) => normalizeDigits(row));
-  const items = [];
-  const consumed = /* @__PURE__ */ new Set();
-  let i = 0;
-  while (i < normalized.length) {
-    if (isSummaryLine(normalized[i])) {
-      i += 1;
-      continue;
-    }
-    let best = null;
-    let merged = "";
-    for (let k = 1; k <= 4 && i + k <= normalized.length; k += 1) {
-      const next = normalized[i + k - 1];
-      if (k > 1 && isSummaryLine(next)) break;
-      merged = merged ? `${merged} ${next}` : next;
-      const item = itemFromLine(merged);
-      if (!item) continue;
-      if (!best) best = {
-        item,
-        k
-      };
-      if (item.quantity !== null) {
-        best = {
-          item,
-          k
-        };
-        break;
-      }
-    }
-    if (!best) {
-      i += 1;
-      continue;
-    }
-    const descParts = [];
-    for (let back = i - 1; back >= 0 && back >= i - 2; back -= 1) {
-      if (consumed.has(back)) break;
-      if (!isDescriptionLine(normalized[back])) break;
-      descParts.unshift(cleanItemDescription(normalized[back]));
-      consumed.add(back);
-    }
-    const description = dedupeDescription([...descParts, best.item.description].join(" ").replace(/\s{2,}/g, " ").trim());
-    items.push({
-      ...best.item,
-      description
-    });
-    for (let c = 0; c < best.k; c += 1) consumed.add(i + c);
-    i += best.k;
-  }
-  return items;
-}
-function itemsSumMatches(items, grandTotal) {
-  if (items.length === 0) return false;
-  if (grandTotal === null || grandTotal === void 0) return items.length >= 2;
-  const sum = round2$1(items.reduce((acc, item) => acc + item.total, 0));
-  return Math.abs(sum - grandTotal) <= Math.max(1, grandTotal * 0.015);
-}
-function receiptItemsFromRows(rows) {
-  const items = [];
-  const consumed = /* @__PURE__ */ new Set();
-  const normalized = rows.map((row) => normalizeDigits(row));
-  for (let i = 0; i < normalized.length; i += 1) {
-    const line = normalized[i];
-    if (isSummaryLine(line)) continue;
-    if (!/\d{8,}/.test(line)) continue;
-    const values = lineNumbers(line);
-    const quantities = values.filter((value) => value > 0 && value <= 999 && decimalsOf(value) <= 1);
-    const amounts = values.filter((value) => value > 0 && decimalsOf(value) === 2);
-    if (quantities.length === 0 || amounts.length === 0) continue;
-    const total = Math.max(...amounts);
-    const quantity = quantities[0];
-    if (total <= 0 || quantity <= 0) continue;
-    let description = cleanItemDescription(line);
-    for (const neighbor of [i + 1, i - 1]) {
-      if (description.length >= 4) break;
-      if (neighbor < 0 || neighbor >= normalized.length) continue;
-      if (consumed.has(neighbor)) continue;
-      if (!isDescriptionLine(normalized[neighbor])) continue;
-      description = cleanItemDescription(normalized[neighbor]);
-      consumed.add(neighbor);
-    }
-    consumed.add(i);
-    items.push({
-      description,
-      net: round2$1(total / 1.15),
-      total: round2$1(total),
-      rate: 15,
-      quantity,
-      unitPrice: round2$1(total / quantity * 1e4) / 1e4,
-      priceIncludesTax: true
-    });
-  }
-  return items;
-}
-function parseInvoiceLineItems(rowGroups, grandTotal) {
-  const groups = (Array.isArray(rowGroups) ? rowGroups : []).filter((rows) => Array.isArray(rows) && rows.length > 0);
-  if (groups.length === 0) return null;
-  for (const rows of groups) {
-    const items = itemsFromRows(rows);
-    if (itemsSumMatches(items, grandTotal)) {
-      return items;
-    }
-  }
-  for (const rows of groups) {
-    const items = receiptItemsFromRows(rows);
-    if (itemsSumMatches(items, grandTotal)) {
-      return items;
-    }
-  }
-  return null;
-}
-function parseInvoiceText(rawText, contacts = []) {
-  const text = normalizeDigits(String(rawText).normalize("NFKC")).replace(/\s+/g, " ");
-  const total = detectTotal(text);
-  const tax = detectTax(text);
-  const contactMatch = detectContact(text, contacts);
-  return {
-    invoiceNumber: detectInvoiceNumber(text),
-    total,
-    tax: tax !== null && total !== null && tax >= total ? null : tax,
-    invoiceDate: detectInvoiceDate(text),
-    dueDate: detectDueDate(text),
-    contact: contactMatch?.contact || null,
-    contactMatchedBy: contactMatch?.matchedBy || null
-  };
-}
-function moneyInput$2(value) {
-  if (value === null || value === void 0 || value === "") return "";
-  const number = Number(value);
-  if (!Number.isFinite(number)) return "";
-  return (Math.round(number * 100) / 100).toFixed(2);
-}
-function moneyValue$a(value) {
-  const number = Number(value || 0);
-  return Number.isFinite(number) ? number : 0;
-}
-function round2$1(value) {
-  return Math.round(value * 100) / 100;
-}
-const MAX_SMART_FILE_BYTES$1 = 3 * 1024 * 1024;
-async function fileToBase64$1(file) {
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  let binary = "";
-  const chunk = 32768;
-  for (let i = 0; i < bytes.length; i += chunk) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
-  }
-  return btoa(binary);
-}
-async function analyzeInvoiceRemotely({
-  file,
-  text
-} = {}) {
-  try {
-    const payload = {
-      text: text || ""
-    };
-    if (file && file.size > 0 && file.size <= MAX_SMART_FILE_BYTES$1) {
-      const mediaType = file.type || (/\.pdf$/i.test(file.name || "") ? "application/pdf" : "");
-      if (/^(application\/pdf|image\/(jpeg|png|webp|gif))$/.test(mediaType)) {
-        payload.file_base64 = await fileToBase64$1(file);
-        payload.media_type = mediaType;
-      }
-    }
-    if (!payload.file_base64 && !(payload.text || "").trim()) {
-      return {
-        analysis: null,
-        note: null
-      };
-    }
-    const response = await authedFetch("/api/accounting/purchase-invoices/analyze", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-    if (!response.ok) {
-      console.info("[invoice-scan] smart analysis unavailable:", response.status);
-      const data2 = await response.json().catch(() => ({}));
-      const note = response.status === 503 ? "التحليل الذكي غير مفعّل على الخادم (ANTHROPIC_API_KEY) — استخدمت القراءة المحلية." : `التحليل الذكي فشل (${response.status}${data2?.error ? `: ${data2.error}` : ""}) — استخدمت القراءة المحلية.`;
-      return {
-        analysis: null,
-        note
-      };
-    }
-    const data = await response.json().catch(() => null);
-    return {
-      analysis: data?.ok && data.analysis ? data.analysis : null,
-      note: null
-    };
-  } catch (error) {
-    console.error("smart invoice analysis failed", error);
-    return {
-      analysis: null,
-      note: "تعذر الاتصال بالتحليل الذكي — استخدمت القراءة المحلية."
-    };
-  }
-}
-const ISO_DATE$1 = /^\d{4}-\d{2}-\d{2}$/;
-function formatMoney$c(value, currency = "SAR") {
-  return `${moneyValue$a(value).toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  })} ${currency}`;
-}
-function computedStatus({
-  totalAmount,
-  paidAmount,
-  dueDate
-}) {
-  const total = moneyValue$a(totalAmount);
-  const paid = moneyValue$a(paidAmount);
-  const balance = Math.max(total - paid, 0);
-  if (total > 0 && paid >= total) return "paid";
-  if (dueDate && dueDate < todayRiyadh$7() && balance > 0) return "overdue";
-  if (paid > 0) return "partial_paid";
-  return "pending_payment";
-}
-function purchaseInvoiceStatusLabel(value) {
-  if (value === "new") return "بانتظار الاعتماد";
-  return PURCHASE_INVOICE_STATUS_OPTIONS.find((option) => option.value === value)?.label || "بانتظار الاعتماد";
-}
-function purchaseInvoiceStatusClass(value) {
-  if (value === "paid") {
-    return "bg-[#e6f4ec] dark:bg-emerald-500/15 text-[#178a5b] dark:text-emerald-200 border-[#b7ddc7] dark:border-emerald-500/25";
-  }
-  if (value === "partial_paid") {
-    return "bg-[#e4f2f5] dark:bg-indigo-500/15 text-[#0e7490] dark:text-indigo-200 border-[#b4dde5] dark:border-indigo-500/25";
-  }
-  if (value === "overdue") {
-    return "bg-[#f9ebe9] dark:bg-rose-500/15 text-[#b5443c] dark:text-rose-200 border-[#e8c4bf] dark:border-rose-500/25";
-  }
-  return "bg-[#faf3e3] dark:bg-amber-500/15 text-[#b7791f] dark:text-amber-200 border-[#ecd9ab] dark:border-amber-500/25";
-}
-function buildExpenseAccountOptions(accounts = []) {
-  const active = accounts.filter((account) => account.is_active !== false);
-  const byId = new Map(active.map((account) => [account.id, account]));
-  const byCode = (a, b) => String(a.code).localeCompare(String(b.code), "en", {
-    numeric: true
-  });
-  const childrenOf = (id) => active.filter((account) => account.parent_id === id).sort(byCode);
-  const options = [{
-    value: "",
-    label: "غير مصنّفة"
-  }];
-  const INDENT = " ";
-  const walk = (node, depth) => {
-    if (node.account_type !== "expense") return;
-    const prefix = INDENT.repeat(depth);
-    if (node.is_postable !== false) {
-      options.push({
-        value: String(node.id),
-        label: `${prefix}${node.code} — ${node.name}`
-      });
-    } else {
-      options.push({
-        value: `group-${node.id}`,
-        label: `${prefix}${node.code} ${node.name}`,
-        isGroupLabel: true
-      });
-    }
-    for (const child of childrenOf(node.id)) {
-      walk(child, depth + 1);
-    }
-  };
-  const roots = active.filter((account) => account.account_type === "expense" && (account.parent_id == null || !byId.has(account.parent_id))).sort(byCode);
-  for (const root of roots) {
-    if (root.parent_id == null) {
-      for (const child of childrenOf(root.id)) walk(child, 0);
-    } else {
-      walk(root, 0);
-    }
-  }
-  return options;
-}
-let lineKeyCounter = 0;
-function newLine(overrides = {}) {
-  lineKeyCounter += 1;
-  return {
-    key: `line-${lineKeyCounter}`,
-    description: "",
-    account_id: "",
-    quantity: "1",
-    unit_price: "",
-    tax_rate: "15",
-    amount_includes_tax: false,
-    // معرّف البند المخزَّن (التعديل يطابق بالمعرّف لا يستبدل)
-    id: null,
-    // بند بن محمّص: «إضافة قيمة تحميص» + افتراضاته
-    roast_enabled: false,
-    quantity_unit: "sack",
-    kg_per_sack: "",
-    roast_per_kg: "",
-    extra_cost: "",
-    free_sample: false,
-    confirm_unusual_price: false,
-    // مصدر «كيلو/خيشة»: scan | description | item | null (يدوي)
-    kg_source: null,
-    // إجمالي الكيلو الخام (المدخل الفعلي للحسابات) ومصدره:
-    // quantity (الكمية بالكيلو) | sacks (خِيَش × كيلو/خيشة) | stored | manual | null
-    raw_kg: "",
-    raw_source: null,
-    // الوصول عند الإنشاء (للمعتمِدين فقط)
-    arrival_received_kg: "",
-    arrival_date: "",
-    arrival_complete: false,
-    confirm_high_waste: false,
-    // بيانات يملكها الخادم — للعرض فقط عند التعديل
-    stored: null,
-    ...overrides
-  };
-}
-function beanForAccount$1(accounts, accountId) {
-  if (!accountId) return null;
-  const account = accounts.find((a) => String(a.id) === String(accountId));
-  return account?.bean || null;
-}
-function beanUnitDefaults(bean) {
-  const unitKg = Number(bean?.purchase_unit_kg) || null;
-  if (unitKg && unitKg <= 1.0005) return {
-    quantity_unit: "kg",
-    kg_per_sack: ""
-  };
-  return {
-    quantity_unit: "sack",
-    kg_per_sack: coffeeInput(unitKg && unitKg > 1 ? unitKg : bean?.bag_size_kg, 3)
-  };
-}
-function coffeeSeed(accounts, accountId, description, hints = {}) {
-  const bean = beanForAccount$1(accounts, accountId);
-  if (!bean) return {};
-  const hintUnit = hints.quantity_unit === "kg" ? "kg" : hints.quantity_unit === "sack" ? "sack" : null;
-  const scanned = numOrNull$1(hints.pack_size_kg);
-  const fromText = scanned ? null : guessKgPerSack(description);
-  const defaults = beanUnitDefaults(bean);
-  const unit = hintUnit || (scanned || fromText ? "sack" : defaults.quantity_unit);
-  const kg = unit === "kg" ? "" : scanned ? coffeeInput(scanned, 3) : fromText ? coffeeInput(fromText, 3) : defaults.kg_per_sack;
-  return {
-    roast_enabled: true,
-    amount_includes_tax: false,
-    quantity_unit: unit,
-    kg_per_sack: kg,
-    kg_source: unit === "kg" ? null : scanned ? "scan" : fromText ? "description" : kg ? "item" : null,
-    roast_per_kg: bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : ""
-  };
-}
-function withDerivedRaw(line, {
-  quantityChanged = false
-} = {}) {
-  if (!line.roast_enabled) return line;
-  if (line.raw_source === "manual") return line;
-  if (line.raw_source === "stored" && !quantityChanged) return line;
-  const qty = Number(line.quantity) || 0;
-  if (line.quantity_unit === "kg") {
-    return {
-      ...line,
-      raw_kg: qty > 0 ? coffeeInput(qty, 3) : "",
-      raw_source: "quantity"
-    };
-  }
-  const kps = numOrNull$1(line.kg_per_sack);
-  if (kps && qty > 0) {
-    return {
-      ...line,
-      raw_kg: coffeeInput(qty * kps, 3),
-      raw_source: "sacks"
-    };
-  }
-  if (line.raw_source === "stored") return line;
-  return {
-    ...line,
-    raw_kg: line.raw_source ? "" : line.raw_kg,
-    raw_source: null
-  };
-}
-function coffeeInput(value, digits = 3) {
-  const n = Number(value);
-  if (!Number.isFinite(n) || n <= 0) return "";
-  return String(Math.round(n * 10 ** digits) / 10 ** digits);
-}
-function lineAmount(line) {
-  const quantity = moneyValue$a(line.quantity);
-  const price = moneyValue$a(line.unit_price);
-  if (quantity <= 0 || price <= 0) return 0;
-  return round2$1(quantity * price);
-}
-function lineMath(line) {
-  const amount = lineAmount(line);
-  const rate = Math.min(Math.max(moneyValue$a(line.tax_rate), 0), 100);
-  if (amount <= 0) return {
-    amount: 0,
-    subtotal: 0,
-    tax: 0,
-    total: 0
-  };
-  if (line.amount_includes_tax) {
-    const subtotal = amount / (1 + rate / 100);
-    return {
-      amount,
-      subtotal: round2$1(subtotal),
-      tax: round2$1(amount - subtotal),
-      total: round2$1(amount)
-    };
-  }
-  const tax = amount * rate / 100;
-  return {
-    amount,
-    subtotal: round2$1(amount),
-    tax: round2$1(tax),
-    total: round2$1(amount + tax)
-  };
-}
-function priceInput(value) {
-  const number = Number(value);
-  if (!Number.isFinite(number) || number <= 0) return "";
-  return String(Math.round(number * 1e4) / 1e4);
-}
-function linesFromInvoice(invoice) {
-  const stored = Array.isArray(invoice?.items) ? invoice.items : [];
-  if (stored.length > 0) {
-    return stored.map((item) => {
-      const quantity = moneyValue$a(item.quantity);
-      const price = moneyValue$a(item.unit_price);
-      const roast = !!item.roast_enabled;
-      return newLine({
-        id: item.id || null,
-        description: item.description || "",
-        account_id: item.account_id ? String(item.account_id) : "",
-        quantity: quantity > 0 ? String(quantity) : roast ? "0" : "1",
-        unit_price: price > 0 ? priceInput(price) : moneyInput$2(item.amount) || "",
-        tax_rate: String(moneyValue$a(item.tax_rate)),
-        amount_includes_tax: !!item.amount_includes_tax,
-        roast_enabled: roast,
-        quantity_unit: item.quantity_unit === "kg" ? "kg" : "sack",
-        kg_per_sack: coffeeInput(item.kg_per_sack, 3),
-        raw_kg: coffeeInput(item.raw_kg, 3),
-        raw_source: item.raw_kg != null ? "stored" : null,
-        roast_per_kg: item.roast_per_kg != null ? String(Number(item.roast_per_kg)) : "",
-        extra_cost: coffeeInput(item.extra_cost, 2),
-        free_sample: !!item.free_sample,
-        // الواصل بعد الهدر المخزَّن — يُعرض ويُعدَّل من نفس الصف.
-        arrival_received_kg: roast && item.received_kg != null ? String(Number(item.received_kg)) : "",
-        arrival_date: roast ? item.arrival_date || "" : "",
-        arrival_complete: roast ? !!item.arrival_complete : false,
-        stored: roast ? {
-          raw_kg: numOrNull$1(item.raw_kg),
-          received_kg: numOrNull$1(item.received_kg),
-          arrival_complete: !!item.arrival_complete,
-          arrival_date: item.arrival_date || null,
-          waste_percent: numOrNull$1(item.waste_percent),
-          net_incl_per_kg: numOrNull$1(item.net_incl_per_kg),
-          deposited_kg: numOrNull$1(item.deposited_kg),
-          roast_tax_rate: numOrNull$1(item.roast_tax_rate)
-        } : null
-      });
-    });
-  }
-  const total = moneyValue$a(invoice?.total_amount);
-  if (total > 0) {
-    const tax = moneyValue$a(invoice?.tax_amount);
-    const subtotal = Math.max(total - tax, 0);
-    const rate = subtotal > 0 ? round2$1(tax / subtotal * 100) : 15;
-    return [newLine({
-      description: "",
-      account_id: invoice?.expense_account_id ? String(invoice.expense_account_id) : "",
-      quantity: "1",
-      unit_price: moneyInput$2(total),
-      tax_rate: String(rate || 0),
-      amount_includes_tax: true
-    })];
-  }
-  return [newLine()];
-}
-function CoffeeLineRow({
-  line,
-  bean,
-  calc,
-  updateLine,
-  isEditing,
-  allowArrival,
-  currency
-}) {
-  const on = !!line.roast_enabled;
-  const tile = "rounded-lg bg-white/70 dark:bg-white/[0.04] border border-amber-200/60 dark:border-amber-400/15 px-2 py-1.5 min-w-0";
-  const tileLabel = "text-[10px] text-slate-500 dark:text-white/45 truncate";
-  const tileValue = "text-sm font-bold tabular-nums text-slate-800 dark:text-white/85";
-  const stored = line.stored;
-  const flag = calc ? wasteFlag(calc.wastePercent) : null;
-  const kgMode = line.quantity_unit === "kg";
-  const rawInclPerKg = calc && calc.rawKg > 0 ? round2$1(calc.beanCostIncl / calc.rawKg) : null;
-  const deposited = (stored?.deposited_kg || 0) > 0;
-  const fieldLabel = "text-[10px] text-slate-500 dark:text-white/45 mb-0.5";
-  const fieldInput = `${ws.input} px-2 py-1.5 text-sm text-center`;
-  return /* @__PURE__ */ jsx("div", { className: "px-2 pb-2 -mt-1", children: /* @__PURE__ */ jsxs("div", { className: `rounded-xl border px-3 py-2 space-y-2 ${on ? "border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05]" : "border-dashed border-slate-200 dark:border-white/10"}`, children: [
-    /* @__PURE__ */ jsx("div", { className: "flex items-center justify-between gap-2 flex-wrap", children: /* @__PURE__ */ jsxs("label", { className: "inline-flex items-center gap-2 text-xs font-bold text-amber-800 dark:text-amber-200 cursor-pointer select-none", children: [
-      /* @__PURE__ */ jsx("input", { type: "checkbox", checked: on, onChange: (event) => updateLine(line.key, {
-        roast_enabled: event.target.checked,
-        amount_includes_tax: false,
-        ...line.kg_per_sack || line.quantity_unit === "kg" ? {} : (() => {
-          const seed = coffeeSeed([{
-            id: "x",
-            bean
-          }], "x", line.description);
-          return {
-            quantity_unit: seed.quantity_unit,
-            kg_per_sack: seed.kg_per_sack,
-            kg_source: seed.kg_source
-          };
-        })(),
-        // إعادة اشتقاق إجمالي الكيلو بعد التفعيل (updateLine)
-        raw_source: line.raw_source === "manual" ? "manual" : null,
-        roast_per_kg: line.roast_per_kg || (bean.roast_per_kg != null ? String(Number(bean.roast_per_kg)) : "")
-      }), className: "accent-amber-500" }),
-      /* @__PURE__ */ jsx(Flame, { className: "w-3.5 h-3.5" }),
-      "إضافة قيمة تحميص",
-      /* @__PURE__ */ jsxs("span", { className: "font-normal text-slate-500 dark:text-white/45", children: [
-        "— ",
-        bean.item_name
-      ] })
-    ] }) }),
-    on ? /* @__PURE__ */ jsxs(Fragment, { children: [
-      /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-4 gap-2", children: [
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "عدد الكيلوات (إجمالي الخام)" }),
-          /* @__PURE__ */ jsx("input", { type: "number", value: line.raw_kg, onChange: (event) => updateLine(line.key, {
-            raw_kg: event.target.value
-          }), className: `${fieldInput} ${!(numOrNull$1(line.raw_kg) > 0) ? "border-amber-400/70 dark:border-amber-400/50" : ""}`, step: "any", min: "0", dir: "ltr", placeholder: "أدخل إجمالي الكيلو" }),
-          /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-400 dark:text-white/35 mt-0.5 truncate", children: !(numOrNull$1(line.raw_kg) > 0) ? kgMode ? "= الكمية بالكيلو — أدخل الكمية" : "لم يُعرف وزن الخيشة — أدخل الإجمالي يدويًا" : line.raw_source === "quantity" ? "= الكمية في الفاتورة (بالكيلو)" : line.raw_source === "sacks" ? `= ${line.quantity || 0} خيشة × ${line.kg_per_sack} كغ${line.kg_source === "scan" ? " (من التحليل الذكي)" : line.kg_source === "description" ? " (من وصف البند)" : line.kg_source === "item" ? " (من الصنف)" : ""}` : line.raw_source === "stored" ? "المخزَّن — عدّله إن لزم" : "مُدخل يدويًا" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "تحميص / كغ (ر.س)" }),
-          /* @__PURE__ */ jsx("input", { type: "number", value: line.roast_per_kg, onChange: (event) => updateLine(line.key, {
-            roast_per_kg: event.target.value
-          }), className: fieldInput, step: "any", min: "0", dir: "ltr", placeholder: String(bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG) })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "تكاليف إضافية (شحن…)" }),
-          /* @__PURE__ */ jsx("input", { type: "number", value: line.extra_cost, onChange: (event) => updateLine(line.key, {
-            extra_cost: event.target.value
-          }), className: fieldInput, step: "0.01", min: "0", dir: "ltr", placeholder: "0.00" })
-        ] }),
-        allowArrival ? /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx("div", { className: fieldLabel, children: "الواصل بعد الهدر (كغ)" }),
-          /* @__PURE__ */ jsx("input", { type: "number", value: line.arrival_received_kg, disabled: deposited, onChange: (event) => updateLine(line.key, {
-            arrival_received_kg: event.target.value
-          }), className: `${fieldInput} disabled:opacity-40`, step: "any", min: "0", dir: "ltr", placeholder: "لم يصل بعد" })
-        ] }) : /* @__PURE__ */ jsxs("div", { className: tile, children: [
-          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "الكيلو الخام" }),
-          /* @__PURE__ */ jsx("div", { className: tileValue, dir: "ltr", children: calc && calc.rawKg > 0 ? `${calc.rawKg} كغ` : "—" })
-        ] })
-      ] }),
-      calc ? /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-4 gap-2", children: [
-        /* @__PURE__ */ jsxs("div", { className: `${tile} ${calc.unusualPrice ? "border-rose-300 dark:border-rose-400/40" : ""}`, children: [
-          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "سعر الكيلو الخام (غير شامل الضريبة)" }),
-          /* @__PURE__ */ jsx("div", { className: tileValue, dir: "ltr", children: calc.rawCostPerKg !== null ? calc.rawCostPerKg.toFixed(2) : "—" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: tile, children: [
-          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "سعر الكيلو الخام (شامل الضريبة)" }),
-          /* @__PURE__ */ jsx("div", { className: tileValue, dir: "ltr", children: rawInclPerKg !== null ? rawInclPerKg.toFixed(2) : "—" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: tile, children: [
-          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "نسبة الهدر" }),
-          /* @__PURE__ */ jsx("div", { className: `${tileValue} ${flag === "high" || flag === "confirm" || flag === "over" ? "text-rose-700 dark:text-rose-200" : flag === "low" ? "text-amber-700 dark:text-amber-200" : ""}`, dir: "ltr", children: calc.arrivalComplete ? `${calc.wastePercent}%` : "—" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: `${tile} border-[#c9e2d8] dark:border-emerald-400/25`, children: [
-          /* @__PURE__ */ jsx("div", { className: tileLabel, children: "السعر الصافي / كغ (شامل الضريبة)" }),
-          /* @__PURE__ */ jsx("div", { className: `${tileValue} text-[#0e7a5f] dark:text-emerald-200`, dir: "ltr", children: calc.arrivalComplete && calc.netInclPerKg != null ? calc.netInclPerKg.toFixed(2) : "—" })
-        ] })
-      ] }) : null,
-      calc?.unusualPrice ? /* @__PURE__ */ jsxs("label", { className: "flex items-start gap-2 text-[11px] text-rose-700 dark:text-rose-200 cursor-pointer select-none", children: [
-        /* @__PURE__ */ jsx("input", { type: "checkbox", checked: !!line.confirm_unusual_price, onChange: (event) => updateLine(line.key, {
-          confirm_unusual_price: event.target.checked
-        }), className: "accent-rose-500 mt-0.5" }),
-        /* @__PURE__ */ jsxs("span", { children: [
-          "سعر الكيلو الخام ",
-          calc.rawCostPerKg?.toFixed(2),
-          " ر.س غير معتاد (المتوقع ",
-          RAW_PRICE_MIN,
-          "–",
-          RAW_PRICE_MAX,
-          ") — تحقق من وحدة الكمية (خيشة/كغ) أو أكّد السعر هنا."
-        ] })
-      ] }) : null,
-      calc?.arrivalComplete && flag === "over" ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-700 dark:text-rose-200", children: "الواصل أكبر من الكيلو الخام — تحقق من كيلو/خيشة أو الواصل." }) : null,
-      calc?.arrivalComplete && flag === "confirm" ? /* @__PURE__ */ jsxs("label", { className: "flex items-start gap-2 text-[11px] text-rose-700 dark:text-rose-200 cursor-pointer select-none", children: [
-        /* @__PURE__ */ jsx("input", { type: "checkbox", checked: !!line.confirm_high_waste, onChange: (event) => updateLine(line.key, {
-          confirm_high_waste: event.target.checked
-        }), className: "accent-rose-500 mt-0.5" }),
-        /* @__PURE__ */ jsxs("span", { children: [
-          "هدر ",
-          calc.wastePercent,
-          "% غير اعتيادي (أكثر من 60%) — أكّده."
-        ] })
-      ] }) : null,
-      allowArrival && !deposited ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60", children: [
-        /* @__PURE__ */ jsx("span", { children: "تاريخ الوصول:" }),
-        /* @__PURE__ */ jsx("input", { type: "date", value: line.arrival_date || todayRiyadh$7(), max: todayRiyadh$7(), onChange: (event) => updateLine(line.key, {
-          arrival_date: event.target.value
-        }), className: `${ws.input} px-2 py-1 text-xs w-40` })
-      ] }) : null,
-      isEditing && stored ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-[11px] text-slate-600 dark:text-white/60", children: [
-        stored.arrival_complete ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`, children: [
-          "مسجَّل: وصل ",
-          stored.received_kg,
-          " كغ — هدر ",
-          stored.waste_percent ?? 0,
-          "%",
-          stored.arrival_date ? ` — ${stored.arrival_date}` : ""
-        ] }) : stored.received_kg ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-200 border-amber-200 dark:border-amber-400/25`, children: [
-          "وصول جزئي مسجَّل ",
-          stored.received_kg,
-          " كغ"
-        ] }) : null,
-        deposited ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-sky-100 dark:bg-sky-400/10 text-sky-700 dark:text-sky-200 border-sky-200 dark:border-sky-400/25`, children: [
-          "مودَع ",
-          stored.deposited_kg,
-          " كغ — التعديل من نافذة «تسجيل الوصول»"
-        ] }) : null
-      ] }) : null
-    ] }) : null
-  ] }) });
-}
-function SectionTitle$1({
-  children
-}) {
-  return /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-900 dark:text-white tracking-tight", children });
-}
-function FieldLabel$1({
-  children,
-  required
-}) {
-  return /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/55 mb-1", children: [
-    children,
-    required ? /* @__PURE__ */ jsx("span", { className: "text-rose-700 dark:text-rose-300", children: " *" }) : null
-  ] });
-}
-function PurchaseInvoiceModal({
-  open,
-  invoice,
-  contacts = [],
-  accounts = [],
-  bankAccounts = [],
-  branches = [],
-  contactStats = null,
-  isSubmitting,
-  onClose,
-  onSubmit,
-  // المعتمِد (إدارة محاسبة/مشتريات/مخزون): يسجّل الوصول والإيداع
-  // مباشرة عند إنشاء فاتورة بن. موظف الإدخال الميداني لا يراها.
-  allowArrival = false
-}) {
-  const isEditing = !!invoice;
-  const isRoastInvoice = invoice?.invoice_kind === "roast";
-  const [invoiceNumber, setInvoiceNumber] = useState("");
-  const [contactId, setContactId] = useState("");
-  const [supplierName, setSupplierName] = useState("");
-  const [invoiceDate, setInvoiceDate] = useState(todayRiyadh$7());
-  const [dueDate, setDueDate] = useState("");
-  const [currency, setCurrency] = useState("SAR");
-  const [lines, setLines] = useState(() => [newLine()]);
-  const [discount, setDiscount] = useState("0.00");
-  const [paidAmount, setPaidAmount] = useState("0.00");
-  const [paidBankAccountId, setPaidBankAccountId] = useState("");
-  const [sendToApproval, setSendToApproval] = useState(false);
-  const [recurringMonthly, setRecurringMonthly] = useState(false);
-  const [roasterContactId, setRoasterContactId] = useState("");
-  const [roasterReference, setRoasterReference] = useState("");
-  const [depositOnArrival, setDepositOnArrival] = useState(true);
-  const [depositBranchId, setDepositBranchId] = useState("");
-  const [paymentReceiptUrl, setPaymentReceiptUrl] = useState("");
-  const [paymentReceiptName, setPaymentReceiptName] = useState("");
-  const [receiptUploading, setReceiptUploading] = useState(false);
-  const [branchId, setBranchId] = useState("");
-  const [notes, setNotes] = useState("");
-  const [attachmentUrl, setAttachmentUrl] = useState("");
-  const [attachmentName, setAttachmentName] = useState("");
-  const [attachmentMime, setAttachmentMime] = useState("");
-  const [attachmentKind, setAttachmentKind] = useState("");
-  const [vatMatched, setVatMatched] = useState(false);
-  const [scanSupplier, setScanSupplier] = useState(null);
-  const [confirmSupplier, setConfirmSupplier] = useState(null);
-  const [creatingSupplier, setCreatingSupplier] = useState(false);
-  const [createdContacts, setCreatedContacts] = useState([]);
-  const [scanBusy, setScanBusy] = useState(false);
-  const [ocrProgress, setOcrProgress] = useState(null);
-  const [scanSummary, setScanSummary] = useState(null);
-  const [mobilePane, setMobilePane] = useState("form");
-  const fileInputRef = useRef(null);
-  const receiptInputRef = useRef(null);
-  const [upload, {
-    loading: uploading
-  }] = useUpload();
-  const handleReceiptPicked = async (fileArg) => {
-    if (!fileArg) return;
-    setReceiptUploading(true);
-    try {
-      const result = await upload({
-        file: fileArg,
-        unoptimized: true
-      });
-      if (result?.error) {
-        alert(`فشل رفع الإيصال: ${result.error}`);
-        return;
-      }
-      setPaymentReceiptUrl(result.url || "");
-      setPaymentReceiptName(fileArg.name || "");
-    } finally {
-      setReceiptUploading(false);
-      if (receiptInputRef.current) receiptInputRef.current.value = "";
-    }
-  };
-  const [duplicateInvoice, setDuplicateInvoice] = useState(null);
-  useEffect(() => {
-    if (!open) return void 0;
-    const number = invoiceNumber.trim();
-    if (!number || !contactId) {
-      setDuplicateInvoice(null);
-      return void 0;
-    }
-    let cancelled = false;
-    const timer = setTimeout(async () => {
-      try {
-        const params = new URLSearchParams({
-          number,
-          contact_id: contactId
-        });
-        if (invoice?.id) params.set("exclude_id", String(invoice.id));
-        const response = await authedFetch(`/api/accounting/purchase-invoices/check-number?${params}`);
-        const data = await response.json().catch(() => null);
-        if (!cancelled) {
-          setDuplicateInvoice(data?.duplicate ? data.invoice : null);
-        }
-      } catch {
-        if (!cancelled) setDuplicateInvoice(null);
-      }
-    }, 500);
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-    };
-  }, [open, invoiceNumber, contactId, invoice?.id]);
-  const autoFilledRef = useRef(/* @__PURE__ */ new Set());
-  useEffect(() => {
-    if (!open) return;
-    setInvoiceNumber(invoice?.invoice_number || "");
-    setContactId(invoice?.contact_id ? String(invoice.contact_id) : "");
-    setSupplierName(invoice?.supplier_name || "");
-    setInvoiceDate(invoice?.invoice_date || todayRiyadh$7());
-    setDueDate(invoice?.due_date || "");
-    setCurrency(invoice?.currency || "SAR");
-    setLines(linesFromInvoice(invoice));
-    setDiscount(moneyInput$2(invoice?.discount_amount) || "0.00");
-    setPaidAmount(moneyInput$2(invoice?.paid_amount) || "0.00");
-    setPaidBankAccountId(invoice?.paid_bank_account_id ? String(invoice.paid_bank_account_id) : "");
-    setSendToApproval(false);
-    setRecurringMonthly(false);
-    setRoasterContactId(invoice?.roaster_contact_id ? String(invoice.roaster_contact_id) : "");
-    setRoasterReference(invoice?.roaster_reference || "");
-    setDepositOnArrival(true);
-    setDepositBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
-    setScanSupplier(null);
-    setConfirmSupplier(null);
-    setCreatingSupplier(false);
-    setCreatedContacts([]);
-    setPaymentReceiptUrl(invoice?.payment_receipt_url || "");
-    setPaymentReceiptName("");
-    setReceiptUploading(false);
-    setBranchId(invoice?.branch_id ? String(invoice.branch_id) : "");
-    setNotes(invoice?.notes || "");
-    setAttachmentUrl(invoice?.attachment_url || "");
-    setAttachmentKind(invoice?.attachment_kind || "");
-    setAttachmentName("");
-    setAttachmentMime(invoice?.attachment_url && /\.pdf(\?|$)/i.test(invoice.attachment_url) ? "application/pdf" : "");
-    setVatMatched(false);
-    setScanBusy(false);
-    setScanSummary(null);
-    setMobilePane("form");
-    autoFilledRef.current = new Set(isEditing ? [] : ["date"]);
-  }, [open, invoice, isEditing]);
-  useEffect(() => {
-    if (!open || !attachmentUrl || attachmentMime) return void 0;
-    let cancelled = false;
-    (async () => {
-      try {
-        const response = await fetch(attachmentUrl);
-        const type = (response.headers.get("content-type") || "").split(";")[0].trim();
-        try {
-          response.body?.cancel?.();
-        } catch {
-        }
-        if (!cancelled && type) setAttachmentMime(type);
-      } catch {
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [open, attachmentUrl, attachmentMime]);
-  useEffect(() => {
-    if (!open || typeof document === "undefined") return void 0;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [open]);
-  const contactOptions = useMemo(() => {
-    const activeContacts = [...contacts, ...createdContacts].filter((contact) => contact.is_active !== false).map((contact) => ({
-      value: String(contact.id),
-      label: contact.name
-    }));
-    activeContacts.sort((a, b) => a.label.localeCompare(b.label, "ar"));
-    return [{
-      value: "",
-      label: "بدون جهة اتصال / مورد يدوي"
-    }, ...activeContacts];
-  }, [contacts, createdContacts]);
-  const accountOptions = useMemo(() => buildExpenseAccountOptions(accounts), [accounts]);
-  const lineBean = (line) => isRoastInvoice ? null : beanForAccount$1(accounts, line.account_id);
-  const hasCoffeeLine = useMemo(() => !isRoastInvoice && lines.some((line) => line.roast_enabled && beanForAccount$1(accounts, line.account_id)), [lines, accounts, isRoastInvoice]);
-  const bankAccountOptions = useMemo(() => [{
-    value: "",
-    label: "بدون تحديد حساب"
-  }, ...bankAccounts.filter((account) => account.is_active !== false).map((account) => ({
-    value: String(account.id),
-    label: account.bank_name ? `${account.name} — ${account.bank_name}` : account.name
-  }))], [bankAccounts]);
-  const totals = useMemo(() => {
-    let rawSubtotal = 0;
-    let rawTax = 0;
-    for (const line of lines) {
-      const math = lineMath(line);
-      rawSubtotal += math.subtotal;
-      rawTax += math.tax;
-    }
-    const applied = Math.min(Math.max(moneyValue$a(discount), 0), rawSubtotal);
-    const factor = rawSubtotal > 0 ? (rawSubtotal - applied) / rawSubtotal : 1;
-    const subtotal = rawSubtotal - applied;
-    const tax = rawTax * factor;
-    return {
-      rawSubtotal: round2$1(rawSubtotal),
-      discount: round2$1(applied),
-      subtotal: round2$1(subtotal),
-      tax: round2$1(tax),
-      total: round2$1(subtotal + tax)
-    };
-  }, [lines, discount]);
-  const coffee = useMemo(() => {
-    const perLine = /* @__PURE__ */ new Map();
-    if (isRoastInvoice) return {
-      perLine,
-      roastTotal: 0,
-      roastTax: 0,
-      count: 0,
-      unusual: []
-    };
-    const subtotals = lines.map((line) => lineMath(line).subtotal);
-    const rawSubtotal = subtotals.reduce((s, v) => s + v, 0);
-    const applied = Math.min(Math.max(moneyValue$a(discount), 0), rawSubtotal);
-    const shares = allocateDiscount(subtotals, applied);
-    const factor = rawSubtotal > 0 ? (rawSubtotal - applied) / rawSubtotal : 1;
-    let roastTotal = 0;
-    let roastTax = 0;
-    let count = 0;
-    const unusual = [];
-    lines.forEach((line, index) => {
-      const bean = beanForAccount$1(accounts, line.account_id);
-      if (!bean || !line.roast_enabled) return;
-      const math = lineMath(line);
-      const roastRate = numOrNull$1(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG;
-      const c = computeCoffeeLine({
-        quantity: moneyValue$a(line.quantity),
-        quantityUnit: line.quantity_unit,
-        kgPerSack: numOrNull$1(line.kg_per_sack) ?? bean.bag_size_kg,
-        rawKg: numOrNull$1(line.raw_kg),
-        lineSubtotal: math.subtotal,
-        lineTax: math.tax,
-        lineDiscount: shares[index] || 0,
-        discountFactor: factor,
-        roastPerKg: roastRate,
-        roastTaxRate: bean.roast_tax_rate ?? 0,
-        extraCost: moneyValue$a(line.extra_cost),
-        // إدخال «الواصل بعد الهدر» = الوصول مكتمل (الجزئي من نافذة الوصول).
-        receivedKg: numOrNull$1(line.arrival_received_kg),
-        arrivalComplete: numOrNull$1(line.arrival_received_kg) > 0
-      });
-      const unusualPrice = !line.free_sample && c.rawCostPerKg !== null && (c.rawCostPerKg < RAW_PRICE_MIN || c.rawCostPerKg > RAW_PRICE_MAX);
-      if (unusualPrice) unusual.push(line.key);
-      perLine.set(line.key, {
-        ...c,
-        roastRate,
-        unusualPrice,
-        bean
-      });
-      roastTotal += c.roastTotalNet;
-      roastTax += c.roastTaxAmount;
-      count += 1;
-    });
-    return {
-      perLine,
-      roastTotal: round2$1(roastTotal),
-      roastTax: round2$1(roastTax),
-      count,
-      unusual
-    };
-  }, [lines, discount, accounts, isRoastInvoice]);
-  const effectiveRoasterName = useMemo(() => {
-    if (roasterContactId) {
-      const c = [...contacts, ...createdContacts].find((contact) => String(contact.id) === roasterContactId);
-      if (c) return c.name;
-    }
-    for (const entry of coffee.perLine.values()) {
-      if (entry.bean?.roaster_name) return entry.bean.roaster_name;
-    }
-    return "محمصة درر";
-  }, [roasterContactId, contacts, createdContacts, coffee.perLine]);
-  const arrivalChanged = (line) => {
-    const received = numOrNull$1(line.arrival_received_kg);
-    const stored = line.stored?.received_kg ?? null;
-    if (received === null) return stored !== null;
-    return stored === null || Math.abs(received - stored) > 5e-4;
-  };
-  const anyArrivalComplete = allowArrival && lines.some((line) => line.roast_enabled && numOrNull$1(line.arrival_received_kg) > 0 && arrivalChanged(line));
-  const contactTransactionCount = useMemo(() => {
-    if (!contactId || !contactStats) return null;
-    const count = contactStats[contactId];
-    return Number.isFinite(count) ? count : null;
-  }, [contactId, contactStats]);
-  const contactDefaultAccountId = useMemo(() => {
-    const selected = contacts.find((contact) => String(contact.id) === contactId);
-    return selected?.default_account_id ? String(selected.default_account_id) : "";
-  }, [contacts, contactId]);
-  const applyDefaultAccount = (accountId) => {
-    if (!accountId) return;
-    setLines((prev) => prev.map((line) => line.account_id ? line : {
-      ...line,
-      account_id: accountId
-    }));
-  };
-  const hasFixedExpenseLine = useMemo(() => lines.some((line) => isFixedExpenseAccountId(line.account_id, accounts)), [lines, accounts]);
-  const isRecurringLinked = !!invoice?.recurring_template_id || /^REC-\d{6}-\d+$/.test(invoice?.invoice_number || "");
-  const status = computedStatus({
-    totalAmount: totals.total,
-    paidAmount,
-    dueDate
-  });
-  const balance = Math.max(totals.total - moneyValue$a(paidAmount), 0);
-  const hasFreeSampleLine = lines.some((line) => line.roast_enabled && line.free_sample && lineBean(line));
-  const unconfirmedUnusual = coffee.unusual.some((key) => !lines.find((line) => line.key === key)?.confirm_unusual_price);
-  const unconfirmedWaste = lines.some((line) => {
-    const c = coffee.perLine.get(line.key);
-    return c?.arrivalComplete && wasteFlag(c.wastePercent) === "confirm" && !line.confirm_high_waste;
-  });
-  const missingRawKg = lines.some((line) => line.roast_enabled && lineBean(line) && !(numOrNull$1(line.raw_kg) > 0));
-  const canSubmit = !isSubmitting && (!!supplierName.trim() || !!contactId) && (totals.total > 0 || hasFreeSampleLine) && moneyValue$a(paidAmount) <= totals.total && !unconfirmedUnusual && !unconfirmedWaste && !missingRawKg;
-  const updateLine = (key, patch) => {
-    autoFilledRef.current.delete("lines");
-    setLines((prev) => prev.map((line) => {
-      if (line.key !== key) return line;
-      const next = {
-        ...line,
-        ...patch
-      };
-      if (patch.account_id !== void 0 && patch.account_id !== line.account_id) {
-        const bean = isRoastInvoice ? null : beanForAccount$1(accounts, patch.account_id);
-        if (bean && !line.id) {
-          Object.assign(next, coffeeSeed(accounts, patch.account_id, next.description));
-          if (!next.description.trim() && bean.item_name) next.description = bean.item_name;
-        } else if (!bean) {
-          next.roast_enabled = false;
-          next.free_sample = false;
-        }
-      }
-      if (next.roast_enabled) next.amount_includes_tax = false;
-      if (patch.raw_kg !== void 0) {
-        next.raw_source = next.raw_kg === "" ? null : "manual";
-        return next;
-      }
-      return withDerivedRaw(next, {
-        quantityChanged: patch.quantity !== void 0 || patch.kg_per_sack !== void 0
-      });
-    }));
-  };
-  const removeLine = (key) => {
-    autoFilledRef.current.delete("lines");
-    setLines((prev) => prev.length <= 1 ? prev : prev.filter((line) => line.key !== key));
-  };
-  const addLine = () => {
-    autoFilledRef.current.delete("lines");
-    setLines((prev) => [...prev, newLine({
-      account_id: contactDefaultAccountId || ""
-    })]);
-  };
-  const handleSubmit = (event) => {
-    event?.preventDefault?.();
-    if (!canSubmit) return;
-    const kept = lines.filter((line) => lineAmount(line) > 0 || line.roast_enabled && line.free_sample && !!lineBean(line));
-    const items = kept.map((line) => {
-      const bean = lineBean(line);
-      const roast = !!bean && !!line.roast_enabled;
-      const base = {
-        id: line.id || void 0,
-        description: line.description.trim() || null,
-        account_id: line.account_id || null,
-        quantity: moneyValue$a(line.quantity),
-        unit_price: moneyValue$a(line.unit_price),
-        amount: lineAmount(line),
-        tax_rate: moneyValue$a(line.tax_rate),
-        amount_includes_tax: roast ? false : !!line.amount_includes_tax
-      };
-      if (isRoastInvoice) return base;
-      return {
-        ...base,
-        roast_enabled: roast,
-        quantity_unit: roast ? line.quantity_unit : null,
-        kg_per_sack: roast ? numOrNull$1(line.kg_per_sack) ?? bean.bag_size_kg ?? null : null,
-        raw_kg: roast ? numOrNull$1(line.raw_kg) : null,
-        roast_per_kg: roast ? numOrNull$1(line.roast_per_kg) ?? bean.roast_per_kg ?? DEFAULT_ROAST_PER_KG : null,
-        extra_cost: roast ? moneyValue$a(line.extra_cost) : 0,
-        free_sample: roast && !!line.free_sample,
-        confirm_unusual_price: roast && !!line.confirm_unusual_price
-      };
-    });
-    let arrival = null;
-    if (allowArrival && !isRoastInvoice) {
-      const arrivalLines = [];
-      kept.forEach((line, index) => {
-        if (!line.roast_enabled || !lineBean(line)) return;
-        if (!arrivalChanged(line)) return;
-        const received = numOrNull$1(line.arrival_received_kg);
-        if (!isEditing && (received === null || received <= 0)) return;
-        if (line.stored?.deposited_kg > 0) return;
-        arrivalLines.push({
-          index,
-          id: line.id || void 0,
-          received_kg: received,
-          arrival_date: line.arrival_date || todayRiyadh$7(),
-          arrival_complete: received !== null && received > 0,
-          confirm_high_waste: !!line.confirm_high_waste
-        });
-      });
-      if (arrivalLines.length > 0) {
-        const depositBranch = depositBranchId || branchId || "";
-        arrival = {
-          lines: arrivalLines,
-          deposit: depositOnArrival && depositBranch ? {
-            enabled: true,
-            branch_id: Number(depositBranch)
-          } : null
-        };
-      }
-    }
-    const forApproval = sendToApproval && !isEditing;
-    const effectivePaid = forApproval ? 0 : moneyValue$a(paidAmount);
-    const payload = {
-      invoice_number: invoiceNumber.trim() || void 0,
-      contact_id: contactId || null,
-      supplier_name: supplierName.trim() || null,
-      invoice_date: invoiceDate,
-      due_date: dueDate || null,
-      currency,
-      items,
-      subtotal_amount: totals.subtotal,
-      discount_amount: totals.discount,
-      tax_amount: totals.tax,
-      total_amount: totals.total,
-      paid_amount: effectivePaid,
-      paid_bank_account_id: effectivePaid > 0 ? paidBankAccountId || null : null,
-      payment_receipt_url: effectivePaid > 0 ? paymentReceiptUrl || null : null,
-      submit_for_approval: forApproval,
-      // قالب فاتورة متكررة شهرياً — الخادم يعيد التحقق من شرط
-      // «مصروف ثابت» قبل الإنشاء.
-      recurring_monthly: recurringMonthly && hasFixedExpenseLine && !isEditing && !hasCoffeeLine,
-      // القيمة الثابتة المتبقية — الحالة الفعلية تُحسب من المبالغ.
-      workflow_status: "pending_payment",
-      branch_id: branchId || null,
-      notes: notes.trim() || null,
-      attachment_url: attachmentUrl || null,
-      attachment_kind: attachmentUrl ? attachmentKind || null : null,
-      // البن: المحمصة لفاتورة التحميص المولّدة + الوصول عند الإنشاء.
-      roaster_contact_id: hasCoffeeLine && roasterContactId ? Number(roasterContactId) : null,
-      arrival
-    };
-    if (isRoastInvoice) payload.roaster_reference = roasterReference.trim() || null;
-    if (isEditing) {
-      payload.id = invoice.id;
-      payload.expected_updated_at = invoice.updated_at || void 0;
-    }
-    onSubmit(payload);
-  };
-  const quickAddScannedSupplier = async () => {
-    if (!confirmSupplier || creatingSupplier) return;
-    const name = confirmSupplier.name.trim();
-    const vat = confirmSupplier.vat.trim();
-    if (!name) return;
-    setCreatingSupplier(true);
-    try {
-      const response = await authedFetch("/api/accounting/contacts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name,
-          country: "SA",
-          vat_registered: !!vat,
-          vat_number: vat || null,
-          default_tax_rate: vat ? 15 : 0,
-          notes: "أُنشئ تلقائياً من السكان الذكي لفاتورة مشتريات"
-        })
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(data?.error || "فشل إضافة المورد");
-      }
-      const created = data.contact;
-      setCreatedContacts((prev) => [...prev, created]);
-      setContactId(String(created.id));
-      setSupplierName(created.name || name);
-      setVatMatched(!!vat);
-      setScanSupplier(null);
-      setConfirmSupplier(null);
-    } catch (error) {
-      alert(error.message || "فشل إضافة المورد");
-    } finally {
-      setCreatingSupplier(false);
-    }
-  };
-  const handleContactChange = (nextContactId) => {
-    autoFilledRef.current.delete("contact");
-    setContactId(nextContactId);
-    setVatMatched(false);
-    if (!nextContactId) return;
-    const selected = contacts.find((contact) => String(contact.id) === nextContactId);
-    if (selected?.name) {
-      setSupplierName(selected.name);
-    }
-    if (selected?.default_account_id) {
-      applyDefaultAccount(String(selected.default_account_id));
-    }
-  };
-  const handleFilePicked = async (fileArg) => {
-    const file = fileArg;
-    if (!file) return;
-    setScanSummary(null);
-    const result = await upload({
-      file,
-      unoptimized: true
-    });
-    if (result?.error) {
-      setScanSummary({
-        filled: [],
-        warning: `فشل رفع الملف: ${result.error}`
-      });
-      return;
-    }
-    setAttachmentUrl(result.url || "");
-    setAttachmentName(file.name || "");
-    setAttachmentMime(file.type || "");
-    const isPdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name || "");
-    const isImage = /^image\/(jpeg|png|webp|gif)$/i.test(file.type || "");
-    if (!isPdf && !isImage) {
-      setScanSummary({
-        filled: [],
-        warning: "تم إرفاق الملف. الفحص التلقائي يدعم PDF والصور فقط."
-      });
-      return;
-    }
-    setScanBusy(true);
-    try {
-      const filled = [];
-      const owned = autoFilledRef.current;
-      const canFill = (field, isEmpty) => isEmpty || owned.has(field);
-      setScanSummary({
-        filled: [],
-        warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة."
-      });
-      let scanFile = file;
-      if (isImage && file.size > MAX_SMART_FILE_BYTES$1) {
-        try {
-          const {
-            compressImage
-          } = await Promise.resolve().then(() => compressImage$1);
-          scanFile = await compressImage(file);
-        } catch {
-        }
-      }
-      const fileEligible = scanFile.size <= MAX_SMART_FILE_BYTES$1;
-      let analysis = null;
-      let smartNote = null;
-      if (fileEligible) {
-        const smart = await analyzeInvoiceRemotely({
-          file: scanFile
-        });
-        analysis = smart.analysis;
-        smartNote = smart.note;
-      }
-      if (!analysis && isImage) {
-        setScanSummary({
-          filled: [],
-          warning: smartNote || "ما قدرت أحلل الصورة تلقائياً — تم إرفاقها، عبّي الحقول يدوياً."
-        });
-        return;
-      }
-      let details = null;
-      if (!analysis) {
-        const {
-          extractPdfDetails,
-          ocrPdfDetails
-        } = await import('./pdfjs-Dh-rJueC.js');
-        details = await extractPdfDetails(file);
-        if (!details || details.text.trim().length < 10) {
-          setScanSummary({
-            filled: [],
-            warning: "الفاتورة صورة ممسوحة — جاري التعرف الضوئي (OCR)، قد يستغرق دقيقة…"
-          });
-          setOcrProgress(0);
-          details = await ocrPdfDetails(file, (progress) => setOcrProgress(progress));
-          setOcrProgress(null);
-        }
-        if (!details?.text || details.text.trim().length < 10) {
-          setScanSummary({
-            filled: [],
-            warning: "تم إرفاق الفاتورة لكن ما قدرت أقرأ نصها حتى بالتعرف الضوئي. عبّي الحقول يدوياً."
-          });
-          return;
-        }
-        if (!fileEligible) {
-          setScanSummary({
-            filled: [],
-            warning: "جاري التحليل الذكي للفاتورة… ثوانٍ معدودة."
-          });
-          const smart = await analyzeInvoiceRemotely({
-            text: (details?.pageLines || []).flat().join("\n") || details.text
-          });
-          analysis = smart.analysis;
-          smartNote = smart.note;
-        }
-      }
-      if (analysis) {
-        if (analysis.document_type) {
-          setAttachmentKind(String(analysis.document_type));
-          const kindLabel = {
-            quote: "عرض سعر",
-            tax_invoice: "فاتورة ضريبية",
-            payment_receipt: "سند سداد"
-          }[analysis.document_type];
-          if (kindLabel) filled.push(`نوع المستند: ${kindLabel}`);
-        }
-        if (analysis.invoice_number && canFill("number", !invoiceNumber.trim())) {
-          setInvoiceNumber(String(analysis.invoice_number));
-          owned.add("number");
-          filled.push("رقم الفاتورة");
-        }
-        const matchedContact = analysis.contact_id ? contacts.find((contact) => contact.id === analysis.contact_id) : null;
-        if (matchedContact && canFill("contact", !contactId)) {
-          setContactId(String(matchedContact.id));
-          setSupplierName(matchedContact.name);
-          setVatMatched(analysis.contact_matched_by === "vat");
-          setScanSupplier(null);
-          owned.add("contact");
-          filled.push(analysis.contact_matched_by === "vat" ? "جهة الاتصال (تطابق الرقم الضريبي)" : "جهة الاتصال (تطابق الاسم)");
-        } else if (!matchedContact && analysis.supplier_name) {
-          if (!supplierName.trim()) {
-            setSupplierName(String(analysis.supplier_name));
-            filled.push("اسم المورد");
-          }
-          setScanSupplier({
-            name: String(analysis.supplier_name).trim(),
-            vat: analysis.supplier_vat_number ? String(analysis.supplier_vat_number).replace(/\D/g, "") : ""
-          });
-        }
-        const fallbackAccount = matchedContact?.default_account_id ? String(matchedContact.default_account_id) : contactDefaultAccountId;
-        const items = (Array.isArray(analysis.items) ? analysis.items : []).filter((item) => Number(item?.quantity) > 0 && Number(item?.unit_price) > 0);
-        const hasAmounts2 = lines.some((line) => lineAmount(line) > 0);
-        if (items.length > 0 && canFill("lines", !hasAmounts2)) {
-          setLines(items.map((item) => {
-            const accountId = item.account_id ? String(item.account_id) : fallbackAccount;
-            return newLine({
-              description: String(item.description || ""),
-              account_id: accountId,
-              quantity: String(Number(item.quantity)),
-              unit_price: priceInput(Number(item.unit_price)),
-              tax_rate: String(Number.isFinite(Number(item.tax_rate)) ? Number(item.tax_rate) : 15),
-              amount_includes_tax: !!item.amount_includes_tax,
-              // بند بن: التحميص + كيلو/خيشة من التحليل الذكي أو الوصف.
-              ...isRoastInvoice ? {} : coffeeSeed(accounts, accountId, String(item.description || ""), {
-                pack_size_kg: item.pack_size_kg,
-                quantity_unit: item.quantity_unit
-              })
-            });
-          }).map((line) => withDerivedRaw(line)));
-          owned.add("lines");
-          filled.push(`بنود الفاتورة (${items.length})`);
-          if (items.some((item) => item.account_id)) {
-            filled.push("تصنيف البنود على شجرة الحسابات");
-          }
-        } else if (items.length === 0 && Number(analysis.total) > 0 && canFill("lines", !hasAmounts2)) {
-          const total = Number(analysis.total);
-          const tax = Number(analysis.tax);
-          const subtotal = Number.isFinite(tax) && tax >= 0 ? total - tax : null;
-          const rate = subtotal !== null && subtotal > 0 ? round2$1(tax / subtotal * 100) : 15;
-          setLines([newLine({
-            description: "",
-            account_id: fallbackAccount,
-            quantity: "1",
-            unit_price: total.toFixed(2),
-            tax_rate: String(rate),
-            amount_includes_tax: true
-          })]);
-          owned.add("lines");
-          filled.push("مبلغ الفاتورة");
-          if (Number.isFinite(tax)) filled.push("الضريبة");
-        }
-        const scanDiscount = Number(analysis.discount);
-        if (Number.isFinite(scanDiscount) && scanDiscount > 0 && canFill("discount", moneyValue$a(discount) === 0)) {
-          setDiscount(scanDiscount.toFixed(2));
-          owned.add("discount");
-          filled.push("الخصم");
-        }
-        if (ISO_DATE$1.test(analysis.invoice_date || "") && canFill("date", false)) {
-          setInvoiceDate(analysis.invoice_date);
-          owned.add("date");
-          filled.push("تاريخ الفاتورة");
-        }
-        if (ISO_DATE$1.test(analysis.due_date || "") && canFill("dueDate", !dueDate)) {
-          setDueDate(analysis.due_date);
-          owned.add("dueDate");
-          filled.push("تاريخ الاستحقاق");
-        }
-        setScanSummary({
-          filled,
-          smart: true,
-          warning: analysis.operator_note || (!matchedContact ? "ما لقيت مورداً مطابقاً في جهات الاتصال — اضغط زر الإضافة السريعة تحت حقل المورد لإنشائه بالاسم والرقم الضريبي من الفاتورة." : null)
-        });
-        setMobilePane("form");
-        return;
-      }
-      const text = details.text;
-      const linesText = (details?.pageLines || []).flat().join("\n");
-      const parsed = parseInvoiceText(linesText || text, contacts);
-      if (parsed.invoiceNumber && canFill("number", !invoiceNumber.trim())) {
-        setInvoiceNumber(parsed.invoiceNumber);
-        owned.add("number");
-        filled.push("رقم الفاتورة");
-      }
-      const contactLabel = parsed.contactMatchedBy === "vat" ? "جهة الاتصال (تطابق الرقم الضريبي)" : "جهة الاتصال (تطابق الاسم)";
-      if (parsed.contact && canFill("contact", !contactId)) {
-        setContactId(String(parsed.contact.id));
-        setSupplierName(parsed.contact.name);
-        setVatMatched(parsed.contactMatchedBy === "vat");
-        owned.add("contact");
-        filled.push(contactLabel);
-      } else if (parsed.contact && !supplierName.trim()) {
-        setSupplierName(parsed.contact.name);
-        filled.push("اسم المورد");
-      }
-      const scanDefaultAccount = parsed.contact?.default_account_id ? String(parsed.contact.default_account_id) : contactDefaultAccountId;
-      const hasAmounts = lines.some((line) => lineAmount(line) > 0);
-      if (canFill("lines", !hasAmounts)) {
-        const rowGroups = [...Array.isArray(details?.pageLines) ? details.pageLines : [], details?.lines];
-        const tableItems = parseInvoiceLineItems(rowGroups, parsed.total);
-        console.info("[invoice-scan] total:", parsed.total, "items:", JSON.stringify(tableItems), "lines:", JSON.stringify(details?.pageLines?.[0]?.slice(0, 40) || []));
-        if (tableItems) {
-          setLines(tableItems.map((item) => withDerivedRaw(item.quantity !== null && item.unitPrice !== null ? (
-            // Quantity × unit price recovered from the row —
-            // entered exactly like the invoice quotes it (net or
-            // tax-inclusive unit prices both supported).
-            newLine({
-              description: item.description,
-              account_id: scanDefaultAccount,
-              quantity: String(item.quantity),
-              unit_price: priceInput(item.unitPrice),
-              tax_rate: String(item.rate),
-              amount_includes_tax: !!item.priceIncludesTax,
-              ...isRoastInvoice ? {} : coffeeSeed(accounts, scanDefaultAccount, item.description)
-            })
-          ) : newLine({
-            description: item.description,
-            account_id: scanDefaultAccount,
-            quantity: "1",
-            unit_price: item.total.toFixed(2),
-            tax_rate: String(item.rate),
-            amount_includes_tax: true
-          }))));
-          owned.add("lines");
-          filled.push(`بنود الفاتورة (${tableItems.length})`);
-          if (scanDefaultAccount) {
-            filled.push("حساب المورد الافتراضي");
-          }
-        } else if (parsed.total !== null) {
-          const tax = parsed.tax ?? null;
-          const subtotal = tax !== null ? parsed.total - tax : null;
-          const rate = tax !== null && subtotal > 0 ? round2$1(tax / subtotal * 100) : 15;
-          setLines([newLine({
-            description: "",
-            account_id: scanDefaultAccount,
-            quantity: "1",
-            unit_price: parsed.total.toFixed(2),
-            tax_rate: String(rate),
-            amount_includes_tax: true
-          })]);
-          owned.add("lines");
-          filled.push("مبلغ الفاتورة");
-          if (tax !== null) filled.push("الضريبة");
-        }
-      }
-      if (parsed.invoiceDate && canFill("date", false)) {
-        setInvoiceDate(parsed.invoiceDate);
-        owned.add("date");
-        filled.push("تاريخ الفاتورة");
-      }
-      if (parsed.dueDate && canFill("dueDate", !dueDate)) {
-        setDueDate(parsed.dueDate);
-        owned.add("dueDate");
-        filled.push("تاريخ الاستحقاق");
-      }
-      const ocrLimitNote = details?.viaOcr && !filled.some((f) => f.startsWith("بنود")) ? "المسح الضوئي التقط الإجماليات لكن جدول الأصناف غير واضح بما يكفي — للبنود التفصيلية اطلب PDF رقمياً من المورد أو صوّر بإضاءة أوضح." : null;
-      const heuristicsNote = filled.length === 0 ? "قرأت الملف لكن ما تعرفت على الحقول — تأكد منها يدوياً." : !parsed.contact ? "ما لقيت مورداً مطابقاً (بالرقم الضريبي أو الاسم) في جهات الاتصال — اختر الجهة أو اكتب اسم المورد." : ocrLimitNote;
-      setScanSummary({
-        filled,
-        // smartNote explains why the AI pass was skipped — without it
-        // the operator can't tell a server problem from a weak scan.
-        warning: [smartNote, heuristicsNote].filter(Boolean).join(" ")
-      });
-      setMobilePane("form");
-    } catch (error) {
-      console.error("invoice scan failed", error);
-      const staleDeploy = /dynamically imported module|module script failed|ChunkLoadError|Loading chunk/i.test(String(error?.message || error));
-      setScanSummary({
-        filled: [],
-        warning: staleDeploy ? "تم تحديث النظام أثناء فتح الصفحة — حدّث الصفحة (Ctrl+F5) ثم أعد إرفاق الفاتورة." : `تعذّر فحص الملف — تم إرفاقه فقط. (${String(error?.message || error).slice(0, 100)})`
-      });
-    } finally {
-      setScanBusy(false);
-      setOcrProgress(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
-  };
-  const isPdfAttachment = /pdf/i.test(attachmentMime) || /\.pdf(\?|$)/i.test(attachmentUrl);
-  const isImageAttachment = /^image\//i.test(attachmentMime);
-  if (!open || typeof document === "undefined") return null;
-  const previewPane = /* @__PURE__ */ jsx("div", { className: "h-full flex flex-col", children: attachmentUrl ? /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsxs("div", { className: `px-4 py-2.5 border-b ${ws.divider} flex items-center justify-between gap-2`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0 text-xs text-slate-600 dark:text-white/60", children: [
-        /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5 shrink-0" }),
-        /* @__PURE__ */ jsx("span", { className: "truncate", dir: "ltr", children: attachmentName || "الفاتورة المرفقة" })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 shrink-0", children: [
-        /* @__PURE__ */ jsxs("a", { href: attachmentUrl, target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-2.5 py-1.5 text-[11px]`, children: [
-          /* @__PURE__ */ jsx(ExternalLink, { className: "w-3 h-3" }),
-          "فتح"
-        ] }),
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => fileInputRef.current?.click(), disabled: uploading || scanBusy, className: `${ws.btnNeutral} px-2.5 py-1.5 text-[11px] disabled:opacity-50`, children: "استبدال" }),
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-          setAttachmentUrl("");
-          setAttachmentName("");
-          setAttachmentMime("");
-          setScanSummary(null);
-        }, className: `${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`, title: "إزالة المرفق", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsx("div", { className: "flex-1 min-h-0 bg-slate-200/70 dark:bg-black/40", children: isPdfAttachment ? /* @__PURE__ */ jsx("iframe", { src: attachmentUrl, title: "معاينة الفاتورة", className: "w-full h-full border-0" }) : isImageAttachment ? /* @__PURE__ */ jsx("div", { className: "w-full h-full overflow-auto p-3", children: /* @__PURE__ */ jsx("img", { src: attachmentUrl, alt: "الفاتورة المرفقة", className: "max-w-full h-auto rounded-xl mx-auto" }) }) : /* @__PURE__ */ jsx("div", { className: "h-full flex items-center justify-center text-sm text-slate-500 dark:text-white/50 p-6 text-center", children: "لا يمكن معاينة هذا النوع — استخدم زر «فتح»." }) })
-  ] }) : /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => fileInputRef.current?.click(), disabled: uploading || scanBusy, className: "flex-1 m-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 hover:border-[#0e7a5f] dark:hover:border-emerald-400/50 hover:bg-[#e7f2ee]/40 dark:hover:bg-emerald-500/[0.04] transition-colors flex flex-col items-center justify-center gap-3 p-8 text-center disabled:opacity-50", children: [
-    uploading || scanBusy ? /* @__PURE__ */ jsx(Loader2, { className: "w-10 h-10 text-[#0e7a5f] dark:text-emerald-300 animate-spin" }) : /* @__PURE__ */ jsx(ScanLine, { className: "w-10 h-10 text-slate-400 dark:text-white/35" }),
-    /* @__PURE__ */ jsx("div", { className: "text-sm font-bold text-slate-800 dark:text-white/85", children: uploading ? "جاري الرفع…" : ocrProgress !== null ? `تعرف ضوئي (OCR)… ${Math.round(ocrProgress * 100)}%` : scanBusy ? "جاري فحص الفاتورة…" : "أرفق الفاتورة (PDF)" }),
-    /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 max-w-[260px] leading-relaxed", children: "تُعرض هنا جنب النموذج، وتُفحص وتُعبّأ الحقول تلقائياً — رقم الفاتورة، المورد (بالرقم الضريبي)، المبلغ والضريبة والتاريخ." })
-  ] }) });
-  return createPortal(/* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[1000] flex flex-col bg-slate-100 dark:bg-slate-950", dir: "rtl", children: [
-    /* @__PURE__ */ jsxs("div", { className: `${ws.topBar} px-4 sm:px-6 py-3 flex items-center gap-3 border-b ${ws.divider} shrink-0`, children: [
-      /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-9 h-9 text-[#0e7a5f] dark:text-emerald-200 shrink-0`, children: /* @__PURE__ */ jsx(FileText, { className: "w-4.5 h-4.5" }) }),
-      /* @__PURE__ */ jsxs("div", { className: "min-w-0 flex-1", children: [
-        /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white tracking-tight truncate", children: isEditing ? "تعديل فاتورة مشتريات" : "تسجيل فاتورة مشتريات" }),
-        /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 truncate", children: "الحالة تُحسب تلقائياً من المبلغ والمدفوع وتاريخ الاستحقاق." })
-      ] }),
-      /* @__PURE__ */ jsx("span", { className: `hidden sm:inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold shrink-0 ${purchaseInvoiceStatusClass(status)}`, children: purchaseInvoiceStatusLabel(status) }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: handleSubmit, disabled: !canSubmit, className: `${ws.btnPrimary} px-4 py-2 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed`, children: [
-        isSubmitting ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
-        "حفظ الفاتورة"
-      ] }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.iconButton} w-9 h-9 shrink-0`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
-    ] }),
-    /* @__PURE__ */ jsx("div", { className: `lg:hidden px-4 pt-3 shrink-0`, children: /* @__PURE__ */ jsxs("div", { className: `${ws.segWrap}`, children: [
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setMobilePane("form"), className: `${ws.segBtn} text-xs flex-1 ${mobilePane === "form" ? ws.segActive : ws.segInactive}`, children: "النموذج" }),
-      /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setMobilePane("preview"), className: `${ws.segBtn} text-xs flex-1 ${mobilePane === "preview" ? ws.segActive : ws.segInactive}`, children: [
-        "المرفق ",
-        attachmentUrl ? "•" : ""
-      ] })
-    ] }) }),
-    /* @__PURE__ */ jsx("input", { ref: fileInputRef, type: "file", accept: "application/pdf,image/*", onChange: (event) => handleFilePicked(event?.target?.files?.[0]), className: "hidden" }),
-    /* @__PURE__ */ jsxs("div", { className: "flex-1 min-h-0 flex", children: [
-      /* @__PURE__ */ jsx("div", { className: `flex-1 min-w-0 overflow-y-auto p-4 sm:p-6 ${mobilePane === "preview" ? "hidden lg:block" : ""}`, children: /* @__PURE__ */ jsxs("form", { onSubmit: handleSubmit, className: "max-w-4xl mx-auto space-y-4 pb-16", children: [
-        scanSummary ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 space-y-1.5`, children: [
-          scanSummary.filled.length > 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap text-xs text-[#0b3d31] dark:text-emerald-200", children: [
-            /* @__PURE__ */ jsx(Sparkles, { className: "w-3.5 h-3.5 shrink-0" }),
-            /* @__PURE__ */ jsx("span", { children: scanSummary.smart ? "تحليل ذكي — تمت تعبئة:" : "تمت تعبئة:" }),
-            scanSummary.filled.map((label) => /* @__PURE__ */ jsx("span", { className: `${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25`, children: label }, label))
-          ] }) : null,
-          scanSummary.warning ? /* @__PURE__ */ jsx("div", { className: "text-xs text-amber-700 dark:text-amber-200", children: scanSummary.warning }) : null
-        ] }) : null,
-        isRoastInvoice ? /* @__PURE__ */ jsxs("div", { className: "rounded-xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2", children: [
-          /* @__PURE__ */ jsxs("div", { className: "inline-flex items-center gap-1.5 text-sm font-bold text-amber-800 dark:text-amber-200", children: [
-            /* @__PURE__ */ jsx(Flame, { className: "w-4 h-4" }),
-            "فاتورة تحميص مولّدة من فاتورة البن",
-            " ",
-            /* @__PURE__ */ jsx("span", { dir: "ltr", className: "font-mono", children: invoice?.source_invoice_number || `#${invoice?.source_invoice_id}` })
-          ] }),
-          /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/55 leading-relaxed", children: "تعديل البنود هنا يجعل هذه الفاتورة المرجع: تكلفة التحميص في فاتورة البن تُحدَّث منها وتُعاد حساب تكلفة الصنف." }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx(FieldLabel$1, { children: "رقم فاتورة المحمصة الحقيقي" }),
-            /* @__PURE__ */ jsx("input", { type: "text", value: roasterReference, onChange: (event) => setRoasterReference(event.target.value), className: `${ws.input} px-3 py-2 text-sm`, placeholder: "رقم الفاتورة كما ورد من المحمصة", dir: "ltr" })
-          ] })
-        ] }) : null,
-        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
-          /* @__PURE__ */ jsx(SectionTitle$1, { children: "معلومات الفاتورة" }),
-          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: [
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { children: "رقم الفاتورة" }),
-              /* @__PURE__ */ jsx("input", { type: "text", value: invoiceNumber, onChange: (event) => {
-                autoFilledRef.current.delete("number");
-                setInvoiceNumber(event.target.value);
-              }, className: `${ws.input} px-3 py-2.5 ${duplicateInvoice ? "border-amber-400 dark:border-amber-400/60" : ""}`, placeholder: "فارغ = رقم تلقائي", dir: "ltr" }),
-              duplicateInvoice ? /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-amber-700 dark:text-amber-300 mt-1 flex items-start gap-1", children: [
-                /* @__PURE__ */ jsx("span", { className: "shrink-0", children: "⚠️" }),
-                /* @__PURE__ */ jsxs("span", { children: [
-                  "رقم الفاتورة مسجّل سابقاً لنفس المورد — فاتورة بتاريخ",
-                  " ",
-                  /* @__PURE__ */ jsx("span", { dir: "ltr", children: duplicateInvoice.invoice_date }),
-                  " ",
-                  "بمبلغ",
-                  " ",
-                  /* @__PURE__ */ jsx("span", { dir: "ltr", children: moneyValue$a(duplicateInvoice.total_amount).toFixed(2) }),
-                  " ",
-                  "SAR. تأكد أنها ليست فاتورة مكررة."
-                ] })
-              ] }) : null
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { children: "العملة" }),
-              /* @__PURE__ */ jsx(GlassSelect, { value: currency, onChange: setCurrency, options: CURRENCY_OPTIONS$1, placeholder: "اختر العملة", buttonClassName: "text-sm py-2.5 px-3" })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { required: true, children: "المورد" }),
-              /* @__PURE__ */ jsx(GlassSelect, { value: contactId, onChange: handleContactChange, options: contactOptions, placeholder: "اختر المورد", buttonClassName: "text-sm py-2.5 px-3" }),
-              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 flex-wrap mt-1.5", children: [
-                scanSupplier && !contactId ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setConfirmSupplier({
-                  ...scanSupplier
-                }), disabled: creatingSupplier, className: `${ws.pill} bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0b3d31] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25 inline-flex items-center gap-1.5 hover:bg-[#d8ebe2] dark:hover:bg-emerald-400/15 disabled:opacity-60`, title: scanSupplier.vat ? `إضافة المورد بالرقم الضريبي ${scanSupplier.vat}` : "إضافة المورد كجهة اتصال جديدة", children: [
-                  creatingSupplier ? /* @__PURE__ */ jsx(Loader2, { className: "w-3 h-3 animate-spin" }) : /* @__PURE__ */ jsx(Plus, { className: "w-3 h-3" }),
-                  scanSupplier.name,
-                  /* @__PURE__ */ jsx(Sparkles, { className: "w-3 h-3" })
-                ] }) : null,
-                scanSupplier && !contactId && scanSupplier.vat ? /* @__PURE__ */ jsxs("span", { className: "text-[11px] text-slate-500 dark:text-white/45 font-mono", dir: "ltr", children: [
-                  "VAT: ",
-                  scanSupplier.vat
-                ] }) : null,
-                vatMatched ? /* @__PURE__ */ jsxs("span", { className: `${ws.pill} bg-fuchsia-100 dark:bg-fuchsia-400/10 text-fuchsia-700 dark:text-fuchsia-200 border-fuchsia-200 dark:border-fuchsia-400/25 inline-flex items-center gap-1`, children: [
-                  /* @__PURE__ */ jsx(BadgeCheck, { className: "w-3 h-3" }),
-                  "مطابق حسب الرقم الضريبي"
-                ] }) : null,
-                contactTransactionCount !== null ? /* @__PURE__ */ jsxs("span", { className: "text-[11px] text-sky-700 dark:text-sky-300", children: [
-                  contactTransactionCount,
-                  " معاملة سابقة"
-                ] }) : null
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { children: "اسم المورد (كما في الفاتورة)" }),
-              /* @__PURE__ */ jsx("input", { type: "text", value: supplierName, onChange: (event) => {
-                autoFilledRef.current.delete("contact");
-                setSupplierName(event.target.value);
-              }, className: `${ws.input} px-3 py-2.5`, placeholder: "مثال: مؤسسة عمق المذاق" })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { children: "تاريخ الفاتورة" }),
-              /* @__PURE__ */ jsx("input", { type: "date", value: invoiceDate, onChange: (event) => {
-                autoFilledRef.current.delete("date");
-                setInvoiceDate(event.target.value);
-              }, className: `${ws.input} px-3 py-2.5` })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { children: "تاريخ الاستحقاق" }),
-              /* @__PURE__ */ jsx("input", { type: "date", value: dueDate, onChange: (event) => {
-                autoFilledRef.current.delete("dueDate");
-                setDueDate(event.target.value);
-              }, className: `${ws.input} px-3 py-2.5` })
-            ] }),
-            branches.length > 0 ? /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { children: "الفرع" }),
-              /* @__PURE__ */ jsx(GlassSelect, { value: branchId, onChange: setBranchId, options: [{
-                value: "",
-                label: "بدون تحديد فرع"
-              }, ...branches.map((branch) => ({
-                value: String(branch.id),
-                label: branch.name
-              }))], placeholder: "بدون تحديد فرع", buttonClassName: "text-sm py-2.5 px-3" })
-            ] }) : null,
-            /* @__PURE__ */ jsx("div", { className: "sm:col-span-2 text-[11px] text-slate-500 dark:text-white/45", children: "الحالة تلقائية بالكامل: بدون دفع «بانتظار الاعتماد»، وبعد السداد «مدفوعة جزئياً» أو «مدفوعة»، و«متأخرة» عند تجاوز الاستحقاق." })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
-            /* @__PURE__ */ jsx(SectionTitle$1, { children: "بنود الفاتورة" }),
-            /* @__PURE__ */ jsxs("button", { type: "button", onClick: addLine, className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: [
-              /* @__PURE__ */ jsx(Plus, { className: "w-3.5 h-3.5" }),
-              "إضافة بند"
-            ] })
-          ] }),
-          /* @__PURE__ */ jsx("div", { className: "overflow-x-auto -mx-1 px-1", children: /* @__PURE__ */ jsxs("div", { className: "min-w-[840px]", children: [
-            /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-[minmax(190px,1.5fr)_minmax(160px,1fr)_72px_100px_64px_76px_92px_32px] gap-2 items-center px-2 py-2 rounded-xl bg-slate-100/80 dark:bg-white/[0.05] text-[11px] font-bold text-slate-600 dark:text-white/55", children: [
-              /* @__PURE__ */ jsxs("div", { children: [
-                "الوصف ",
-                /* @__PURE__ */ jsx("span", { className: "text-rose-600 dark:text-rose-300", children: "*" })
-              ] }),
-              /* @__PURE__ */ jsxs("div", { children: [
-                "الحساب ",
-                /* @__PURE__ */ jsx("span", { className: "text-rose-600 dark:text-rose-300", children: "*" })
-              ] }),
-              /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
-                "الكمية ",
-                /* @__PURE__ */ jsx("span", { className: "text-rose-600 dark:text-rose-300", children: "*" })
-              ] }),
-              /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
-                "السعر ",
-                /* @__PURE__ */ jsx("span", { className: "text-rose-600 dark:text-rose-300", children: "*" })
-              ] }),
-              /* @__PURE__ */ jsx("div", { className: "text-center", children: "ضريبة %" }),
-              /* @__PURE__ */ jsx("div", { className: "text-center", children: "نوع السعر" }),
-              /* @__PURE__ */ jsx("div", { className: "text-left", children: "الإجمالي" }),
-              /* @__PURE__ */ jsx("div", {})
-            ] }),
-            /* @__PURE__ */ jsx("div", { className: `divide-y ${ws.divider}`, children: lines.map((line) => {
-              const math = lineMath(line);
-              const bean = lineBean(line);
-              return /* @__PURE__ */ jsxs(React__default.Fragment, { children: [
-                /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-[minmax(190px,1.5fr)_minmax(160px,1fr)_72px_100px_64px_76px_92px_32px] gap-2 items-center px-2 py-2", children: [
-                  /* @__PURE__ */ jsx("input", { type: "text", value: line.description, onChange: (event) => updateLine(line.key, {
-                    description: event.target.value
-                  }), className: `${ws.input} px-2.5 py-1.5 text-sm`, placeholder: "الوصف أو اسم الصنف…" }),
-                  /* @__PURE__ */ jsx(GlassSelect, { value: line.account_id, onChange: (value) => updateLine(line.key, {
-                    account_id: value
-                  }), options: accountOptions, placeholder: "غير مصنّفة", buttonClassName: "text-xs py-1.5 px-2", menuWidth: 340, searchable: true, searchPlaceholder: "ابحث في شجرة الحسابات…" }),
-                  /* @__PURE__ */ jsx("input", { type: "number", value: line.quantity, onChange: (event) => updateLine(line.key, {
-                    quantity: event.target.value
-                  }), className: `${ws.input} px-2 py-1.5 text-sm text-center`, step: "any", min: "0", dir: "ltr", placeholder: "1" }),
-                  /* @__PURE__ */ jsx("input", { type: "number", value: line.unit_price, onChange: (event) => updateLine(line.key, {
-                    unit_price: event.target.value
-                  }), className: `${ws.input} px-2 py-1.5 text-sm text-center`, step: "any", min: "0", dir: "ltr", placeholder: "0.00" }),
-                  /* @__PURE__ */ jsx("input", { type: "number", value: line.tax_rate, onChange: (event) => updateLine(line.key, {
-                    tax_rate: event.target.value
-                  }), className: `${ws.input} px-2 py-1.5 text-sm text-center`, step: "0.1", min: "0", max: "100", dir: "ltr" }),
-                  /* @__PURE__ */ jsx("button", { type: "button", disabled: !!bean && !!line.roast_enabled, onClick: () => updateLine(line.key, {
-                    amount_includes_tax: !line.amount_includes_tax
-                  }), className: `${ws.pill} justify-center text-[10px] py-1 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed ${line.amount_includes_tax ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25" : "bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-white/60 border-slate-200 dark:border-white/10"}`, title: "بدّل بين سعر شامل الضريبة وسعر خالٍ منها", children: line.amount_includes_tax ? "شامل الضريبة" : "خالي الضريبة" }),
-                  /* @__PURE__ */ jsx("div", { className: "text-left text-sm font-bold text-slate-800 dark:text-white/85", dir: "ltr", children: math.total > 0 ? math.total.toFixed(2) : "—" }),
-                  /* @__PURE__ */ jsx("div", { className: "flex justify-center", children: lines.length > 1 ? /* @__PURE__ */ jsx("button", { type: "button", onClick: () => removeLine(line.key), className: `${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`, title: "حذف البند", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) }) : null })
-                ] }),
-                bean ? /* @__PURE__ */ jsx(CoffeeLineRow, { line, bean, calc: coffee.perLine.get(line.key) || null, updateLine, isEditing, allowArrival, currency }) : null
-              ] }, line.key);
-            }) })
-          ] }) })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
-          /* @__PURE__ */ jsx(SectionTitle$1, { children: "الإجماليات والدفع" }),
-          /* @__PURE__ */ jsxs("div", { className: "space-y-1.5 text-sm", children: [
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
-              /* @__PURE__ */ jsx("span", { children: "مجموع البنود (قبل الضريبة)" }),
-              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$c(totals.rawSubtotal, currency) })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-3 text-slate-600 dark:text-white/60", children: [
-              /* @__PURE__ */ jsx("span", { children: "الخصم (قبل الضريبة)" }),
-              /* @__PURE__ */ jsx("input", { type: "number", value: discount, onChange: (event) => {
-                autoFilledRef.current.delete("discount");
-                setDiscount(event.target.value);
-              }, className: `${ws.input} w-32 px-2.5 py-1.5 text-sm text-left`, step: "0.01", min: "0", dir: "ltr" })
-            ] }),
-            totals.discount > 0 ? /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
-              /* @__PURE__ */ jsx("span", { children: "الصافي بعد الخصم" }),
-              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$c(totals.subtotal, currency) })
-            ] }) : null,
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between text-slate-600 dark:text-white/60", children: [
-              /* @__PURE__ */ jsx("span", { children: "إجمالي ضريبة القيمة المضافة" }),
-              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$c(totals.tax, currency) })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: `flex items-center justify-between font-bold text-slate-900 dark:text-white pt-2 border-t ${ws.divider}`, children: [
-              /* @__PURE__ */ jsx("span", { children: "المجموع" }),
-              /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$c(totals.total, currency) })
-            ] })
-          ] }),
-          hasCoffeeLine ? /* @__PURE__ */ jsxs("div", { className: "rounded-xl border border-amber-300/70 dark:border-amber-400/25 bg-amber-50/70 dark:bg-amber-400/[0.05] p-3 space-y-2", children: [
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-2", children: [
-              /* @__PURE__ */ jsxs("span", { className: "inline-flex items-center gap-1.5 text-sm font-bold text-amber-800 dark:text-amber-200", children: [
-                /* @__PURE__ */ jsx(Flame, { className: "w-4 h-4" }),
-                "تكاليف التحميص (",
-                coffee.count,
-                " ",
-                coffee.count === 1 ? "بند" : "بنود",
-                ")"
-              ] }),
-              /* @__PURE__ */ jsx("span", { className: "text-sm font-bold tabular-nums text-amber-800 dark:text-amber-200", dir: "ltr", children: formatMoney$c(coffee.roastTotal + coffee.roastTax, currency) })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: "text-[11px] text-slate-600 dark:text-white/55 leading-relaxed", children: [
-              "خارج إجمالي فاتورة المورد وخارج الإقرار الضريبي.",
-              coffee.roastTotal + coffee.roastTax > 0 ? ` تُنشأ تلقائيًا فاتورة تحميص مستقلة على «${effectiveRoasterName}» بحالة «بانتظار الدفع» واستحقاق بعد 15 يومًا من تاريخ الفاتورة.` : " تحميص بقيمة 0 — لا تُنشأ فاتورة تحميص."
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { children: "المحمصة (جهة اتصال)" }),
-              /* @__PURE__ */ jsx(GlassSelect, { value: roasterContactId, onChange: setRoasterContactId, options: [{
-                value: "",
-                label: `الافتراضية — ${effectiveRoasterName}`
-              }, ...contactOptions.filter((option) => option.value !== "")], placeholder: "المحمصة الافتراضية", buttonClassName: "text-sm py-2 px-3", searchable: true, searchPlaceholder: "ابحث في جهات الاتصال…" })
-            ] }),
-            anyArrivalComplete ? /* @__PURE__ */ jsxs("div", { className: "pt-2 border-t border-dashed border-amber-200/70 dark:border-amber-400/15 space-y-2", children: [
-              /* @__PURE__ */ jsxs("label", { className: "inline-flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-white/80 cursor-pointer select-none", children: [
-                /* @__PURE__ */ jsx("input", { type: "checkbox", checked: depositOnArrival, onChange: (event) => setDepositOnArrival(event.target.checked), className: "accent-[#0e7a5f]" }),
-                "إيداع الكمية الواصلة في المخزون"
-              ] }),
-              depositOnArrival && branches.length > 0 ? /* @__PURE__ */ jsx(GlassSelect, { value: depositBranchId || branchId, onChange: setDepositBranchId, options: [{
-                value: "",
-                label: "اختر فرع الإيداع…"
-              }, ...branches.map((branch) => ({
-                value: String(branch.id),
-                label: branch.name
-              }))], placeholder: "اختر فرع الإيداع…", buttonClassName: "text-sm py-2 px-3" }) : null,
-              depositOnArrival && !(depositBranchId || branchId) ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-700 dark:text-rose-200", children: "حدد فرع الإيداع — وإلا يُحفظ الوصول بلا إيداع." }) : null
-            ] }) : null
-          ] }) : null,
-          !isEditing && hasFixedExpenseLine && !hasCoffeeLine ? /* @__PURE__ */ jsxs("label", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-start gap-3 cursor-pointer select-none`, children: [
-            /* @__PURE__ */ jsx("input", { type: "checkbox", checked: recurringMonthly, onChange: (event) => setRecurringMonthly(event.target.checked), className: "accent-[#0e7a5f] mt-1" }),
-            /* @__PURE__ */ jsxs("span", { className: "min-w-0", children: [
-              /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1.5 text-sm font-bold text-slate-900 dark:text-white", children: [
-                /* @__PURE__ */ jsx(Repeat, { className: "w-4 h-4 text-[#0e7a5f] dark:text-emerald-200" }),
-                "فاتورة متكررة بشكل شهري"
-              ] }),
-              /* @__PURE__ */ jsx("span", { className: "block text-[11px] text-slate-600 dark:text-white/55 mt-1 leading-relaxed", children: "حساب الفاتورة ضمن «مصروف ثابت» — عند التفعيل ينشئ النظام هذه الفاتورة تلقائياً مع بداية كل شهر بنفس التفاصيل بحالة «بانتظار الدفع» وتاريخ استحقاق نهاية الشهر، دون أي تدخل. تعديل آخر فاتورة منها لاحقاً (المبلغ مثلاً) يُطبَّق على فواتير الأشهر القادمة." })
-            ] })
-          ] }) : null,
-          isEditing && isRecurringLinked ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-start gap-2.5`, children: [
-            /* @__PURE__ */ jsx(Repeat, { className: "w-4 h-4 mt-0.5 text-[#0e7a5f] dark:text-emerald-200 shrink-0" }),
-            /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/60 leading-relaxed", children: "فاتورة متكررة شهرياً — أي تعديل تحفظه هنا (المبلغ، المورد، الحساب…) يُطبَّق تلقائياً على فواتير الأشهر القادمة ما دامت هذه آخر فاتورة من القالب." })
-          ] }) : null,
-          !isEditing ? /* @__PURE__ */ jsxs("div", { className: `${ws.segWrap} w-full`, children: [
-            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setSendToApproval(false), className: `${ws.segBtn} flex-1 text-xs ${!sendToApproval ? ws.segActive : ws.segInactive}`, children: "تسجيل دفع الآن" }),
-            /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-              setSendToApproval(true);
-              setPaidAmount("0.00");
-              setPaidBankAccountId("");
-              setPaymentReceiptUrl("");
-              setPaymentReceiptName("");
-            }, className: `${ws.segBtn} flex-1 text-xs ${sendToApproval ? ws.segActive : ws.segInactive}`, children: "إرسال إلى الاعتماد — غير مدفوعة" })
-          ] }) : null,
-          sendToApproval && !isEditing ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-center justify-between gap-3`, children: [
-            /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-600 dark:text-white/60 leading-relaxed", children: [
-              "ستُنشأ الفاتورة ",
-              /* @__PURE__ */ jsx("b", { children: "غير مدفوعة" }),
-              " بحالة «بانتظار الاعتماد» — يسجل المحاسب دفعاتها لاحقاً (كلياً أو جزئياً) من سجل الدفعات."
-            ] }),
-            /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold shrink-0 ${purchaseInvoiceStatusClass("pending_payment")}`, children: purchaseInvoiceStatusLabel("pending_payment") })
-          ] }) : null,
-          !(sendToApproval && !isEditing) ? /* @__PURE__ */ jsxs(Fragment, { children: [
-            /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1", children: [
-              /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx(FieldLabel$1, { children: "المبلغ المدفوع" }),
-                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-                  /* @__PURE__ */ jsx("input", { type: "number", value: paidAmount, onChange: (event) => setPaidAmount(event.target.value), className: `${ws.input} px-3 py-2.5 text-right flex-1`, step: "0.01", min: "0", dir: "ltr" }),
-                  /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setPaidAmount(totals.total > 0 ? totals.total.toFixed(2) : "0.00"), disabled: totals.total <= 0, className: `${ws.btnNeutral} px-3 py-2.5 text-xs shrink-0 whitespace-nowrap disabled:opacity-50`, title: "تعبئة المدفوع بكامل مبلغ الفاتورة", children: "مدفوعة بالكامل" })
-                ] }),
-                moneyValue$a(paidAmount) > totals.total ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-rose-700 dark:text-rose-300 mt-1", children: "المبلغ المدفوع لا يمكن أن يتجاوز مبلغ الفاتورة." }) : null
-              ] }),
-              /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} p-3 flex items-center justify-between gap-2`, children: [
-                /* @__PURE__ */ jsxs("div", { children: [
-                  /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45", children: "الرصيد المتبقي" }),
-                  /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white mt-0.5", dir: "ltr", children: formatMoney$c(balance, currency) })
-                ] }),
-                /* @__PURE__ */ jsx("span", { className: `inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold ${purchaseInvoiceStatusClass(status)}`, children: purchaseInvoiceStatusLabel(status) })
-              ] })
-            ] }),
-            moneyValue$a(paidAmount) > 0 && bankAccountOptions.length > 1 ? /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(FieldLabel$1, { children: "الحساب البنكي المدفوع منه" }),
-              /* @__PURE__ */ jsx(GlassSelect, { value: paidBankAccountId, onChange: setPaidBankAccountId, options: bankAccountOptions, placeholder: "بدون تحديد حساب", buttonClassName: "text-sm py-2.5 px-3" })
-            ] }) : null,
-            moneyValue$a(paidAmount) > 0 ? /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsxs(FieldLabel$1, { children: [
-                "إيصال الدفع",
-                " ",
-                /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "(اختياري)" })
-              ] }),
-              paymentReceiptUrl ? /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} px-3 py-2 flex items-center justify-between gap-2`, children: [
-                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 min-w-0 text-xs text-slate-700 dark:text-white/70", children: [
-                  /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5 shrink-0" }),
-                  /* @__PURE__ */ jsx("span", { className: "truncate", dir: "ltr", children: paymentReceiptName || "إيصال مرفق" })
-                ] }),
-                /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 shrink-0", children: [
-                  /* @__PURE__ */ jsxs("a", { href: paymentReceiptUrl, target: "_blank", rel: "noreferrer", className: `${ws.btnNeutral} px-2.5 py-1.5 text-[11px]`, children: [
-                    /* @__PURE__ */ jsx(ExternalLink, { className: "w-3 h-3" }),
-                    "فتح"
-                  ] }),
-                  /* @__PURE__ */ jsx("button", { type: "button", onClick: () => {
-                    setPaymentReceiptUrl("");
-                    setPaymentReceiptName("");
-                  }, className: `${ws.iconButton} w-7 h-7 hover:text-red-700 dark:hover:text-red-200`, title: "إزالة الإيصال", children: /* @__PURE__ */ jsx(Trash2, { className: "w-3.5 h-3.5" }) })
-                ] })
-              ] }) : /* @__PURE__ */ jsxs("button", { type: "button", disabled: receiptUploading, onClick: () => receiptInputRef.current?.click(), className: `${ws.btnNeutral} px-3 py-2 text-xs disabled:opacity-50`, children: [
-                receiptUploading ? /* @__PURE__ */ jsx(Loader2, { className: "w-3.5 h-3.5 animate-spin" }) : /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5" }),
-                receiptUploading ? "جاري الرفع…" : "إرفاق إيصال الدفع"
-              ] }),
-              /* @__PURE__ */ jsx("input", { ref: receiptInputRef, type: "file", accept: "application/pdf,image/*", onChange: (event) => handleReceiptPicked(event?.target?.files?.[0]), className: "hidden" })
-            ] }) : null
-          ] }) : null
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-2`, children: [
-          /* @__PURE__ */ jsx(SectionTitle$1, { children: "ملاحظات" }),
-          /* @__PURE__ */ jsx("textarea", { value: notes, onChange: (event) => setNotes(event.target.value), className: `${ws.input} px-3 py-2.5 min-h-[80px] resize-none`, placeholder: "اختياري" })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
-          /* @__PURE__ */ jsxs("button", { type: "submit", disabled: !canSubmit, className: `${ws.btnPrimary} px-5 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed`, children: [
-            /* @__PURE__ */ jsx(Save, { className: "w-4 h-4" }),
-            sendToApproval && !isEditing ? "إرسال إلى الاعتماد" : "حفظ الفاتورة"
-          ] }),
-          /* @__PURE__ */ jsx("button", { type: "button", onClick: onClose, className: `${ws.btnNeutral} px-4 py-2.5`, children: "إلغاء" })
-        ] })
-      ] }) }),
-      /* @__PURE__ */ jsx("div", { className: `w-full lg:w-[44%] lg:max-w-[640px] border-r ${ws.divider} bg-white/60 dark:bg-white/[0.02] ${mobilePane === "form" ? "hidden lg:flex" : "flex"} flex-col min-h-0`, children: previewPane })
-    ] }),
-    confirmSupplier ? /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1100] flex items-end sm:items-center justify-center bg-black/55 backdrop-blur-sm p-0 sm:p-4", dir: "rtl", onMouseDown: (event) => {
-      if (event.target === event.currentTarget && !creatingSupplier) {
-        setConfirmSupplier(null);
-      }
-    }, children: /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-5`, children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-3 mb-4", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-          /* @__PURE__ */ jsx("div", { className: `${ws.iconBox} w-10 h-10 text-[#0e7a5f] dark:text-emerald-200`, children: /* @__PURE__ */ jsx(Sparkles, { className: "w-5 h-5" }) }),
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white", children: "تأكيد إضافة مورد جديد" }),
-            /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/50 mt-0.5", children: "البيانات مستخرجة من الفاتورة — راجعها وعدّلها قبل الحفظ." })
-          ] })
-        ] }),
-        /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setConfirmSupplier(null), disabled: creatingSupplier, className: `${ws.iconButton} w-9 h-9`, "aria-label": "إغلاق", children: /* @__PURE__ */ jsx(X, { className: "w-4 h-4" }) })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx(FieldLabel$1, { required: true, children: "اسم المنشأة" }),
-          /* @__PURE__ */ jsx("input", { type: "text", value: confirmSupplier.name, onChange: (event) => setConfirmSupplier({
-            ...confirmSupplier,
-            name: event.target.value
-          }), className: `${ws.input} px-3 py-2.5`, autoFocus: true })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { children: [
-          /* @__PURE__ */ jsx(FieldLabel$1, { children: "الرقم الضريبي" }),
-          /* @__PURE__ */ jsx("input", { type: "text", value: confirmSupplier.vat, onChange: (event) => setConfirmSupplier({
-            ...confirmSupplier,
-            vat: event.target.value.replace(/\D/g, "")
-          }), className: `${ws.input} px-3 py-2.5 text-left font-mono`, dir: "ltr", placeholder: "3xxxxxxxxxxxxx", inputMode: "numeric" }),
-          confirmSupplier.vat && confirmSupplier.vat.length !== 15 ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-amber-700 dark:text-amber-300 mt-1", children: "الأرقام الضريبية السعودية 15 خانة — تأكد من الرقم." }) : null
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: `${ws.glassSoft} ${ws.card} px-3 py-2 text-[11px] text-slate-500 dark:text-white/45 leading-relaxed`, children: [
-          confirmSupplier.vat ? "سيُسجل كمورد سعودي مسجل ضريبياً بنسبة افتراضية 15%." : "بدون رقم ضريبي — سيُسجل كمورد غير مسجل في الضريبة.",
-          " ",
-          "يمكن تعديل بقية البيانات لاحقاً من صفحة الموردين."
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 pt-1", children: [
-          /* @__PURE__ */ jsxs("button", { type: "button", onClick: quickAddScannedSupplier, disabled: creatingSupplier || !confirmSupplier.name.trim(), className: `${ws.btnPrimary} px-4 py-2 disabled:opacity-50`, children: [
-            creatingSupplier ? /* @__PURE__ */ jsx(Loader2, { className: "w-4 h-4 animate-spin" }) : /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
-            "تأكيد الإضافة"
-          ] }),
-          /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setConfirmSupplier(null), disabled: creatingSupplier, className: `${ws.btnNeutral} px-4 py-2`, children: "إلغاء" })
-        ] })
-      ] })
-    ] }) }) : null
-  ] }), document.body);
-}
 
 function useAccountingBeneficiaries({
   employeeId,
@@ -18139,468 +18299,6 @@ function BeneficiariesExportMenu({
       ] })
     ] })
   ] });
-}
-
-function useAccountingPurchaseInvoices({
-  employeeId,
-  isAdmin,
-  q,
-  status,
-  includeInactive
-} = {}) {
-  return useQuery({
-    queryKey: queryKeys.accountingPurchaseInvoices(q || "", status || "", !!includeInactive),
-    enabled: !!employeeId && isAdmin,
-    queryFn: async () => {
-      const qs = new URLSearchParams();
-      if (q) qs.set("q", q);
-      if (status) qs.set("status", status);
-      if (includeInactive) qs.set("includeInactive", "1");
-      const url = qs.toString() ? `/api/accounting/purchase-invoices?${qs.toString()}` : "/api/accounting/purchase-invoices";
-      const res = await adminFetch(url);
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تحميل فواتير المشتريات");
-      }
-      return Array.isArray(data?.invoices) ? data.invoices : [];
-    }
-  });
-}
-
-// خطأ يحمل كود الخادم (stale_invoice / roast_paid / unusual_price /
-// deposited_line / high_waste …) حتى تتصرف الواجهة بحسبه.
-function apiError$1(data, fallback, status) {
-  const error = new Error(data?.error || fallback);
-  error.code = data?.code || null;
-  error.status = status || null;
-  error.data = data || null;
-  return error;
-}
-function showWarnings$1(data) {
-  const warnings = Array.isArray(data?.warnings) ? data.warnings : [];
-  for (const warning of warnings) toast.warning(warning, {
-    duration: 8000
-  });
-}
-function useCreateAccountingPurchaseInvoice() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/purchase-invoices", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw apiError$1(data, "فشل إضافة فاتورة المشتريات", res.status);
-      }
-      return data;
-    },
-    onSuccess: async data => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      // فاتورة البن قد تعيد حساب تكلفة الصنف وتودع في المخزون.
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.items()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.purchaseReceipts()
-      });
-      toast.success(data?.roast?.invoice_number ? `تم إضافة الفاتورة — وفاتورة التحميص ${data.roast.invoice_number}` : "تم إضافة فاتورة المشتريات");
-      showWarnings$1(data);
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإضافة: ${error.message}`);
-    }
-  });
-}
-function useUpdateAccountingPurchaseInvoice() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/purchase-invoices", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw apiError$1(data, "فشل تعديل فاتورة المشتريات", res.status);
-      }
-      return data;
-    },
-    onSuccess: async data => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.items()
-      });
-      toast.success("تم حفظ فاتورة المشتريات");
-      showWarnings$1(data);
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل التعديل: ${error.message}`);
-    }
-  });
-}
-
-// سجل الدفعات المتعدد: كل دفعة سطر مستقل، والخادم يحدّث رأس
-// الفاتورة في نفس العملية — إبطال كاش الفواتير يكفي للتحديث.
-function useAddPurchaseInvoicePayment() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/purchase-invoice-payments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تسجيل الدفعة");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      toast.success("تم تسجيل الدفعة");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل تسجيل الدفعة: ${error.message}`);
-    }
-  });
-}
-
-// دفعة جماعية: سداد أكثر من فاتورة لنفس المورد دفعة واحدة بإيصال
-// واحد وحساب بنكي واحد — كل فاتورة تُسدَّد بكامل رصيدها.
-function useBulkPayPurchaseInvoices() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/purchase-invoice-payments/bulk", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تسجيل الدفعة الجماعية");
-      }
-      return data;
-    },
-    onSuccess: async data => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      toast.success(`تم سداد ${data?.count || 0} فاتورة بإجمالي ${Number(data?.total || 0).toFixed(2)} ${data?.currency || "SAR"}`);
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الدفع الجماعي: ${error.message}`);
-    }
-  });
-}
-function useDeletePurchaseInvoicePayment() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id
-    }) => {
-      const res = await adminFetch(`/api/accounting/purchase-invoice-payments?id=${id}`, {
-        method: "DELETE"
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل حذف الدفعة");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      toast.success("تم حذف الدفعة وتحديث الفاتورة");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل حذف الدفعة: ${error.message}`);
-    }
-  });
-}
-
-// مرفقات إضافية على الفاتورة (عرض سعر ثم فاتورة ضريبية…).
-function useAddInvoiceAttachment() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/purchase-invoice-attachments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إضافة المرفق");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      toast.success("تم إرفاق المستند");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإرفاق: ${error.message}`);
-    }
-  });
-}
-function useDeleteInvoiceAttachment() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id
-    }) => {
-      const res = await adminFetch(`/api/accounting/purchase-invoice-attachments?id=${id}`, {
-        method: "DELETE"
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل حذف المرفق");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      toast.success("تم حذف المرفق");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل حذف المرفق: ${error.message}`);
-    }
-  });
-}
-function useDeleteAccountingPurchaseInvoice() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      force = false,
-      detach = false
-    }) => {
-      const params = new URLSearchParams({
-        id: String(id)
-      });
-      if (force) params.set("force", "1");
-      // فاتورة تحميص مرتبطة بفاتورة بن: إيقافها يتطلب «فك الارتباط».
-      if (detach) params.set("detach", "1");
-      const res = await adminFetch(`/api/accounting/purchase-invoices?${params.toString()}`, {
-        method: "DELETE"
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw apiError$1(data, "فشل إيقاف الفاتورة", res.status);
-      }
-      return data;
-    },
-    onSuccess: async data => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.items()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.purchaseReceipts()
-      });
-      toast.success(data?.hard ? "تم حذف الفاتورة نهائياً" : "تم إيقاف الفاتورة");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإيقاف: ${error.message}`);
-    }
-  });
-}
-
-// تسجيل وصول بنود البن (الكمية الواصلة، الاكتمال، الإيداع) — أو عكس
-// الإيداع. الخادم يعيد حساب الهدر وصافي الكيلو وتكلفة الصنف.
-function useRecordCoffeeArrival() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/purchase-invoices/arrival", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw apiError$1(data, "فشل تسجيل الوصول", res.status);
-      }
-      return data;
-    },
-    onSuccess: async data => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.items()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.purchaseReceipts()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.inventoryOperations()
-      });
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.stockValue()
-      });
-      if (data?.reversed !== undefined) {
-        toast.success("تم عكس الإيداع");
-      } else {
-        toast.success(data?.mode === "reported" ? "تم إبلاغ الكمية الواصلة — بانتظار اعتماد الإدارة" : "تم تسجيل الوصول");
-      }
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل تسجيل الوصول: ${error.message}`);
-    }
-  });
-}
-
-// Chart of accounts (شجرة الحسابات). Returns the FLAT account list —
-// consumers build the tree client-side from parent_id.
-function useAccountingAccounts({
-  employeeId,
-  isAdmin,
-  includeInactive
-} = {}) {
-  return useQuery({
-    queryKey: queryKeys.accountingAccounts(!!includeInactive),
-    enabled: !!employeeId && isAdmin,
-    queryFn: async () => {
-      const url = includeInactive ? "/api/accounting/accounts?includeInactive=1" : "/api/accounting/accounts";
-      const res = await adminFetch(url);
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تحميل شجرة الحسابات");
-      }
-      return Array.isArray(data?.accounts) ? data.accounts : [];
-    }
-  });
-}
-function invalidateAccounts(queryClient) {
-  return Promise.all([queryClient.invalidateQueries({
-    queryKey: queryKeys.accountingAccounts()
-  }),
-  // Invoices render account names/codes, banks carry auto-links.
-  queryClient.invalidateQueries({
-    queryKey: queryKeys.accountingPurchaseInvoices()
-  }), queryClient.invalidateQueries({
-    queryKey: queryKeys.accountingBankAccounts()
-  })]);
-}
-function useCreateAccountingAccount() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/accounts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إضافة الحساب");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateAccounts(queryClient);
-      toast.success("تم إضافة الحساب");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإضافة: ${error.message}`);
-    }
-  });
-}
-function useUpdateAccountingAccount() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/accounts", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تعديل الحساب");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateAccounts(queryClient);
-      toast.success("تم حفظ الحساب");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل التعديل: ${error.message}`);
-    }
-  });
-}
-function useDeleteAccountingAccount() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id
-    }) => {
-      const res = await adminFetch(`/api/accounting/accounts?id=${id}`, {
-        method: "DELETE"
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إيقاف الحساب");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await invalidateAccounts(queryClient);
-      toast.success("تم إيقاف الحساب");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإيقاف: ${error.message}`);
-    }
-  });
 }
 
 const MONTH_SHORT$1 = ["ينا", "فبر", "مار", "أبر", "ماي", "يون", "يول", "أغس", "سبت", "أكت", "نوف", "ديس"];
@@ -19963,122 +19661,6 @@ function BankAccountModal({
   ] }) }), document.body);
 }
 
-function useAccountingBankAccounts({
-  employeeId,
-  isAdmin,
-  q,
-  includeInactive
-} = {}) {
-  return useQuery({
-    queryKey: queryKeys.accountingBankAccounts(q || "", !!includeInactive),
-    enabled: !!employeeId && isAdmin,
-    queryFn: async () => {
-      const qs = new URLSearchParams();
-      if (q) qs.set("q", q);
-      if (includeInactive) qs.set("includeInactive", "1");
-      const url = qs.toString() ? `/api/accounting/bank-accounts?${qs.toString()}` : "/api/accounting/bank-accounts";
-      // authedFetch: the field entry flow reads the banks list with
-      // its own session token (writes stay admin-only).
-      const res = await authedFetch(url);
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تحميل الحسابات البنكية");
-      }
-      return Array.isArray(data?.accounts) ? data.accounts : [];
-    }
-  });
-}
-function useCreateAccountingBankAccount() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/bank-accounts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إضافة الحساب البنكي");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingBankAccounts()
-      });
-      toast.success("تم إضافة الحساب البنكي");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإضافة: ${error.message}`);
-    }
-  });
-}
-function useUpdateAccountingBankAccount() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      ...payload
-    }) => {
-      const res = await adminFetch(`/api/accounting/bank-accounts/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تعديل الحساب البنكي");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingBankAccounts()
-      });
-      toast.success("تم حفظ الحساب البنكي");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل التعديل: ${error.message}`);
-    }
-  });
-}
-function useDeleteAccountingBankAccount() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      force = false
-    }) => {
-      const url = force ? `/api/accounting/bank-accounts/${id}?force=1` : `/api/accounting/bank-accounts/${id}`;
-      const res = await adminFetch(url, {
-        method: "DELETE"
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إيقاف الحساب البنكي");
-      }
-      return data;
-    },
-    onSuccess: async data => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingBankAccounts()
-      });
-      toast.success(data?.hard ? "تم حذف الحساب نهائياً" : "تم إيقاف الحساب");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإيقاف: ${error.message}`);
-    }
-  });
-}
-
 function accountTypeLabel(value) {
   return ACCOUNT_TYPE_OPTIONS.find((option) => option.value === value)?.label || "بنك";
 }
@@ -20613,128 +20195,6 @@ function CoffeeArrivalModal({
   ] }) }), document.body);
 }
 
-function useAccountingContacts({
-  employeeId,
-  isAdmin,
-  q,
-  includeInactive
-} = {}) {
-  return useQuery({
-    queryKey: queryKeys.accountingContacts(q || "", !!includeInactive),
-    enabled: !!employeeId && isAdmin,
-    queryFn: async () => {
-      const qs = new URLSearchParams();
-      if (q) qs.set("q", q);
-      if (includeInactive) qs.set("includeInactive", "1");
-      const url = qs.toString() ? `/api/accounting/contacts?${qs.toString()}` : "/api/accounting/contacts";
-      const res = await adminFetch(url);
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل تحميل جهات الاتصال");
-      }
-      return Array.isArray(data?.contacts) ? data.contacts : [];
-    }
-  });
-}
-function useCreateAccountingContact() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async payload => {
-      const res = await adminFetch("/api/accounting/contacts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل إضافة جهة الاتصال");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingContacts()
-      });
-      toast.success("تم إضافة جهة الاتصال");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الإضافة: ${error.message}`);
-    }
-  });
-}
-function useUpdateAccountingContact() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      ...payload
-    }) => {
-      const res = await adminFetch(`/api/accounting/contacts/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل التعديل");
-      }
-      return data;
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingContacts()
-      });
-      // اسم المورد يظهر داخل صفوف فواتير المشتريات (اسم حي من سجل
-      // الموردين) — أبطل كاشها حتى ينعكس التعديل فوراً بلا تحديث يدوي.
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      toast.success("تم حفظ التعديلات");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل التعديل: ${error.message}`);
-    }
-  });
-}
-function useDeleteAccountingContact() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      id,
-      force = false
-    }) => {
-      const url = force ? `/api/accounting/contacts/${id}?force=1` : `/api/accounting/contacts/${id}`;
-      const res = await adminFetch(url, {
-        method: "DELETE"
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || "فشل الحذف");
-      }
-      return data;
-    },
-    onSuccess: async data => {
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingContacts()
-      });
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.accountingPurchaseInvoices()
-      });
-      toast.success(data?.hard ? "تم الحذف نهائياً" : "تم إيقاف الجهة");
-    },
-    onError: error => {
-      console.error(error);
-      toast.error(`فشل الحذف: ${error.message}`);
-    }
-  });
-}
-
 const RECURRING_KEY = queryKeys.recurringPurchaseInvoices();
 function moneyValue$5(value) {
   const number = Number(value || 0);
@@ -21100,6 +20560,17 @@ function LeaseBadge({
   return /* @__PURE__ */ jsxs("a", { href, onClick: (event) => event.stopPropagation(), className: "inline-flex items-center gap-1 rounded-full border border-sky-200 dark:border-sky-400/25 bg-sky-50 dark:bg-sky-400/10 text-sky-800 dark:text-sky-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap hover:bg-sky-100 dark:hover:bg-sky-400/20", title: `استقطاع إيجار${invoice.lease_month ? ` لشهر ${invoice.lease_month}` : ""} — مرتبط بعقد رقم ${number} — اضغط لفتح العقد`, dir: "rtl", children: [
     /* @__PURE__ */ jsx(ScrollText, { className: "w-3 h-3" }),
     detailed ? `استقطاع إيجار${invoice.lease_month ? ` ${invoice.lease_month}` : ""} · ${invoice.lease_display_name ? `${invoice.lease_display_name} · ` : ""}عقد رقم ${number}` : invoice.lease_display_name || `عقد ${number}`
+  ] });
+}
+function ProjectBadge({
+  invoice
+}) {
+  if (!invoice?.project_id) return null;
+  const code = invoice.project_code || `#${invoice.project_id}`;
+  const href = `/accounting/branch-projects/${invoice.project_id}?tab=expenses`;
+  return /* @__PURE__ */ jsxs("a", { href, onClick: (event) => event.stopPropagation(), className: "inline-flex items-center gap-1 rounded-full border border-violet-200 dark:border-violet-400/25 bg-violet-50 dark:bg-violet-400/10 text-violet-800 dark:text-violet-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap hover:bg-violet-100 dark:hover:bg-violet-400/20", title: `مشروع تأسيس ${invoice.project_name || code}${invoice.project_phase_name ? ` — قسم ${invoice.project_phase_name}` : ""} — اضغط لفتح مصاريف المشروع`, dir: "rtl", children: [
+    /* @__PURE__ */ jsx(Building2, { className: "w-3 h-3" }),
+    `مشروع ${code}${invoice.project_phase_name ? ` · ${invoice.project_phase_name}` : ""}`
   ] });
 }
 function CoffeeBadge({
@@ -21552,6 +21023,7 @@ function PurchasesInvoicesPanel({
   const [status, setStatus] = useState(initialStatus);
   const [accountFilter, setAccountFilter] = useState("");
   const [branchFilter, setBranchFilter] = useState("");
+  const [projectFilter, setProjectFilter] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const includeInactive = false;
@@ -21581,7 +21053,7 @@ function PurchasesInvoicesPanel({
     } catch {
     }
   };
-  const hasActiveFilters = !!q || !!status || !!accountFilter || !!branchFilter || !!dateFrom || !!dateTo;
+  const hasActiveFilters = !!q || !!status || !!accountFilter || !!branchFilter || !!projectFilter || !!dateFrom || !!dateTo;
   const saveCurrentFilter = () => {
     const name = window.prompt("اسم الفلتر المحفوظ:");
     if (!name || !name.trim()) return;
@@ -21591,6 +21063,7 @@ function PurchasesInvoicesPanel({
       status,
       accountFilter,
       branchFilter,
+      projectFilter,
       dateFrom,
       dateTo
     }];
@@ -21601,6 +21074,7 @@ function PurchasesInvoicesPanel({
     setStatus(filter.status || "");
     setAccountFilter(filter.accountFilter || "");
     setBranchFilter(filter.branchFilter || "");
+    setProjectFilter(filter.projectFilter || "");
     setDateFrom(filter.dateFrom || "");
     setDateTo(filter.dateTo || "");
   };
@@ -21652,12 +21126,17 @@ function PurchasesInvoicesPanel({
       return Array.isArray(data?.branches) ? data.branches : [];
     }
   });
+  const projectsQuery = useBranchProjects({
+    employeeId,
+    isAdmin
+  });
   const invoices = invoicesQuery.data || [];
   const contacts = contactsQuery.data || [];
   const accounts = accountsQuery.data || [];
   const bankAccounts = bankAccountsQuery.data || [];
   const beneficiaries = beneficiariesQuery.data || [];
   const branches = branchesQuery.data || [];
+  const projects = projectsQuery.data || [];
   const previewLogQuery = useQuery({
     queryKey: queryKeys.purchaseAuditLog("invoice", preview?.id),
     enabled: !!preview?.id,
@@ -21769,6 +21248,11 @@ function PurchasesInvoicesPanel({
     } else if (branchFilter) {
       list = list.filter((invoice) => String(invoice.branch_id || "") === branchFilter);
     }
+    if (projectFilter === "none") {
+      list = list.filter((invoice) => !invoice.project_id);
+    } else if (projectFilter) {
+      list = list.filter((invoice) => String(invoice.project_id || "") === projectFilter);
+    }
     if (dateFrom) {
       list = list.filter((invoice) => (invoice.invoice_date || "") >= dateFrom);
     }
@@ -21776,7 +21260,7 @@ function PurchasesInvoicesPanel({
       list = list.filter((invoice) => (invoice.invoice_date || "") <= dateTo);
     }
     return list;
-  }, [invoices, status, accountFilter, branchFilter, dateFrom, dateTo]);
+  }, [invoices, status, accountFilter, branchFilter, projectFilter, dateFrom, dateTo]);
   useEffect(() => {
     const onKeyDown = (event) => {
       const target = event.target;
@@ -21956,6 +21440,16 @@ function PurchasesInvoicesPanel({
           value: String(branch.id),
           label: branch.name
         }))], placeholder: "كل الفروع", buttonClassName: "text-sm py-2 px-3" }) }) : null,
+        projects.length > 0 ? /* @__PURE__ */ jsx("div", { className: "w-44 shrink-0", children: /* @__PURE__ */ jsx(GlassSelect, { value: projectFilter, onChange: setProjectFilter, options: [{
+          value: "",
+          label: "كل المشاريع"
+        }, {
+          value: "none",
+          label: "بلا مشروع"
+        }, ...projects.map((project) => ({
+          value: String(project.id),
+          label: `${project.code ? `${project.code} · ` : ""}${project.name}`
+        }))], placeholder: "المشروع", buttonClassName: "text-sm py-2 px-3", menuWidth: 260 }) }) : null,
         /* @__PURE__ */ jsx("div", { className: "flex-1" }),
         /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => invoicesQuery.refetch(), className: `${ws.btnNeutral} px-4 py-2`, children: [
           /* @__PURE__ */ jsx(RefreshCw, { className: "w-4 h-4" }),
@@ -22058,6 +21552,7 @@ function PurchasesInvoicesPanel({
             /* @__PURE__ */ jsx("span", { children: invoice.invoice_number }),
             /* @__PURE__ */ jsx(CoffeeBadge, { invoice }),
             /* @__PURE__ */ jsx(LeaseBadge, { invoice }),
+            /* @__PURE__ */ jsx(ProjectBadge, { invoice }),
             invoice.attachment_url ? /* @__PURE__ */ jsx("a", { href: invoice.attachment_url, target: "_blank", rel: "noreferrer", className: "text-slate-400 hover:text-[#0e7a5f] dark:text-white/40 dark:hover:text-emerald-300", title: "عرض الفاتورة المرفقة", onClick: (event) => event.stopPropagation(), children: /* @__PURE__ */ jsx(Paperclip, { className: "w-3.5 h-3.5" }) }) : null
           ] }) }),
           /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-slate-700 dark:text-white/70", children: invoice.supplier_name || "—" }),
@@ -22124,7 +21619,7 @@ function PurchasesInvoicesPanel({
         ] })
       ] }, invoice.id)) })
     ] }),
-    /* @__PURE__ */ jsx(PurchaseInvoiceModal, { open: showAdd || !!editing, invoice: editing, contacts, accounts, bankAccounts, branches, contactStats, isSubmitting: createMut.isPending || updateMut.isPending, onClose: () => {
+    /* @__PURE__ */ jsx(PurchaseInvoiceModal, { open: showAdd || !!editing, invoice: editing, contacts, accounts, bankAccounts, branches, contactStats, projects, isSubmitting: createMut.isPending || updateMut.isPending, onClose: () => {
       setShowAdd(false);
       setEditing(null);
     }, onSubmit: handleSubmit, allowArrival: isAdmin }),
@@ -22169,7 +21664,10 @@ function PurchasesInvoicesPanel({
         /* @__PURE__ */ jsxs("div", { className: `sticky top-0 bg-white dark:bg-slate-950 px-5 py-4 border-b ${ws.divider} flex items-center justify-between gap-3`, children: [
           /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
             /* @__PURE__ */ jsx("div", { className: "font-bold text-slate-900 dark:text-white font-mono", dir: "ltr", children: drawerRow.invoice_number }),
-            drawerRow.lease_contract_id ? /* @__PURE__ */ jsx("div", { className: "mt-1", children: /* @__PURE__ */ jsx(LeaseBadge, { invoice: drawerRow, detailed: true }) }) : null,
+            drawerRow.lease_contract_id || drawerRow.project_id ? /* @__PURE__ */ jsxs("div", { className: "mt-1 flex items-center gap-1.5 flex-wrap", children: [
+              /* @__PURE__ */ jsx(LeaseBadge, { invoice: drawerRow, detailed: true }),
+              /* @__PURE__ */ jsx(ProjectBadge, { invoice: drawerRow })
+            ] }) : null,
             drawerRow.contact_id ? /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => {
               const contact = contacts.find((c) => Number(c.id) === Number(drawerRow.contact_id));
               if (contact) setSupplier360(contact);
@@ -25923,7 +25421,7 @@ function PendingFixedRow({
   };
   const typeName = pending.expense_type_name || "—";
   const expenseName = pending.expense_name || "—";
-  const defaultFormatted = formatMoney$e(pending.default_amount);
+  const defaultFormatted = formatMoney$d(pending.default_amount);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04] bg-emerald-400/[0.03]", children: [
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm", style: {
@@ -26019,7 +25517,7 @@ function ExpenseRow({
   };
   const typeName = expense.expense_type_name || "—";
   const expenseName = expense.expense_name || "—";
-  const formattedAmount = formatMoney$e(expense.amount);
+  const formattedAmount = formatMoney$d(expense.amount);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs("tr", { className: "border-t border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.04]", children: [
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-sm", style: {
@@ -26029,7 +25527,7 @@ function ExpenseRow({
         maxWidth: 200
       }, children: expenseName }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap text-right text-sm", dir: "ltr", children: formattedAmount }),
-      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: isConfirmed ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$e(confirmedAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => handleAmountChange(e.target.value), className: `${ws$1.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
+      /* @__PURE__ */ jsx("td", { className: "py-2.5 px-2", children: isConfirmed ? isLocked ? /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 text-xs", dir: "ltr", children: formatMoney$d(confirmedAmount) }) : /* @__PURE__ */ jsx("input", { type: "number", value: confirmedAmount, onChange: (e) => handleAmountChange(e.target.value), className: `${ws$1.input} text-xs py-1 px-1.5 rounded-lg w-[80px] text-right ${amountDiffers ? "border-amber-400/50 ring-1 ring-amber-400/20" : ""}`, dir: "ltr", placeholder: String(originalAmount), step: "0.01" }) : /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/30 text-xs", children: "—" }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1 text-center", children: /* @__PURE__ */ jsx("button", { type: "button", onClick: handleToggleConfirmed, disabled: isLocked, "aria-label": isConfirmed ? "إلغاء تأكيد المصروف" : "تأكيد المصروف", title: isConfirmed ? "إلغاء التأكيد" : "تأكيد المصروف", className: `w-7 h-7 rounded-lg flex items-center justify-center transition-all mx-auto ${isConfirmed ? "bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 dark:text-emerald-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/30 hover:bg-slate-200 dark:hover:bg-white/[0.08]"} ${isLocked ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`, children: isConfirmed ? /* @__PURE__ */ jsx(Check, { className: "w-3.5 h-3.5" }) : /* @__PURE__ */ jsx(X, { className: "w-3.5 h-3.5" }) }) }),
       /* @__PURE__ */ jsx("td", { className: "py-2.5 px-1", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1", children: [
         isConfirmed && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setShowNote(!showNote), className: `w-6 h-6 rounded-md flex items-center justify-center transition-all ${confirmedNote || amountDiffers ? "bg-amber-400/15 border border-amber-400/30 text-amber-700 dark:text-amber-300" : "bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 text-slate-500 dark:text-white/40 hover:bg-slate-200 dark:hover:bg-white/[0.08]"}`, title: "ملاحظة", children: /* @__PURE__ */ jsx(MessageSquare, { className: "w-3 h-3" }) }),
@@ -26087,7 +25585,7 @@ function PendingFixedCard({
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "text-left shrink-0", children: [
         /* @__PURE__ */ jsx("div", { className: "text-[10px] text-slate-500 dark:text-white/40", children: "الافتراضي" }),
-        /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/70 text-sm font-semibold", dir: "ltr", children: formatMoney$e(pending.default_amount) })
+        /* @__PURE__ */ jsx("div", { className: "text-slate-700 dark:text-white/70 text-sm font-semibold", dir: "ltr", children: formatMoney$d(pending.default_amount) })
       ] })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 mt-3", children: [
@@ -26160,7 +25658,7 @@ function ExpenseCard({
         /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white text-sm font-semibold truncate", children: expense.expense_name || "—" })
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-end gap-1 shrink-0", children: [
-        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 text-sm font-bold", dir: "ltr", children: formatMoney$e(expense.amount) }),
+        /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 text-sm font-bold", dir: "ltr", children: formatMoney$d(expense.amount) }),
         /* @__PURE__ */ jsx(StatusBadge, { confirmed: isConfirmed })
       ] })
     ] }),
@@ -26174,7 +25672,7 @@ function ExpenseCard({
     isConfirmed && isLocked && /* @__PURE__ */ jsxs("div", { className: "mt-1.5 text-[11px] text-slate-500 dark:text-white/45", children: [
       "المبلغ المؤكد:",
       " ",
-      /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$e(confirmedAmount) })
+      /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$d(confirmedAmount) })
     ] }),
     showNote && isConfirmed && /* @__PURE__ */ jsx("div", { className: "mt-2", children: isLocked ? /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-600 dark:text-white/60", children: confirmedNote || "—" }) : /* @__PURE__ */ jsx("input", { type: "text", value: confirmedNote, onChange: (e) => {
       setConfirmedNote(e.target.value);
@@ -26237,14 +25735,14 @@ function ExpenseTable({
       /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
         "إجمالي المصروفات:",
         " ",
-        /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-slate-800 dark:text-white/80 font-semibold", children: formatMoney$e(totalOriginal) })
+        /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-slate-800 dark:text-white/80 font-semibold", children: formatMoney$d(totalOriginal) })
       ] }),
       confirmedCount > 0 && /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/40", children: "|" }),
         /* @__PURE__ */ jsxs("span", { className: "jsx-3778571168 text-xs text-slate-500 dark:text-white/50", children: [
           "إجمالي المؤكد:",
           " ",
-          /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-emerald-700 dark:text-emerald-200 font-semibold", children: formatMoney$e(totalConfirmed) })
+          /* @__PURE__ */ jsx("span", { dir: "ltr", className: "jsx-3778571168 text-emerald-700 dark:text-emerald-200 font-semibold", children: formatMoney$d(totalConfirmed) })
         ] })
       ] })
     ] }),
@@ -26365,11 +25863,11 @@ function buildColumns$1() {
   }, {
     header: "المبلغ الأصلي",
     accessor: (i) => i.amount,
-    format: (v) => formatMoney$e(v)
+    format: (v) => formatMoney$d(v)
   }, {
     header: "المبلغ المؤكد",
     accessor: (i) => confirmedValue(i),
-    format: (v) => v === null || v === void 0 ? "-" : formatMoney$e(v)
+    format: (v) => v === null || v === void 0 ? "-" : formatMoney$d(v)
   }, {
     header: "الحالة",
     accessor: (i) => i.is_confirmed,
@@ -26518,20 +26016,20 @@ function ExpensesAnalytics({
           ] })
         ] })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold text-2xl", dir: "ltr", children: formatMoney$e(monthTotal) }),
+      /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-extrabold text-2xl", dir: "ltr", children: formatMoney$d(monthTotal) }),
       trendQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "جاري التحميل…" }) : delta === null ? /* @__PURE__ */ jsx("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-2", children: "لا يوجد شهر سابق للمقارنة —" }) : /* @__PURE__ */ jsxs("div", { className: "mt-3", children: [
         /* @__PURE__ */ jsxs("div", { className: `inline-flex items-center gap-1.5 text-sm font-bold ${deltaColor}`, children: [
           /* @__PURE__ */ jsx(DeltaIcon, { className: "w-4 h-4" }),
           /* @__PURE__ */ jsxs("span", { dir: "ltr", children: [
             delta > 0 ? "+" : "",
-            formatMoney$e(delta),
+            formatMoney$d(delta),
             pct !== null ? ` (${pct > 0 ? "+" : ""}${Math.round(pct)}%)` : ""
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-1.5", children: [
           "الشهر السابق:",
           " ",
-          /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$e(prevMonthTotal) })
+          /* @__PURE__ */ jsx("span", { className: "text-slate-700 dark:text-white/70 font-semibold", dir: "ltr", children: formatMoney$d(prevMonthTotal) })
         ] }),
         /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-400 dark:text-white/35 mt-1", children: down ? "انخفض الإنفاق عن الشهر السابق" : up ? "ارتفع الإنفاق عن الشهر السابق" : "لا تغيير عن الشهر السابق" })
       ] })
@@ -26565,7 +26063,7 @@ function ExpensesAnalytics({
               ] })
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 shrink-0", children: [
-              /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$e(c.total) }),
+              /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$d(c.total) }),
               /* @__PURE__ */ jsxs("span", { className: "text-slate-400 dark:text-white/40 text-[10px]", dir: "ltr", children: [
                 Math.round(p),
                 "%"
@@ -26591,7 +26089,7 @@ function ExpensesAnalytics({
           "."
         ] }),
         /* @__PURE__ */ jsx("span", { className: "text-slate-800 dark:text-white/80", children: c.name }),
-        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$e(c.total) })
+        /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$d(c.total) })
       ] }, c.name)) })
     ] })
   ] });
@@ -26753,15 +26251,15 @@ function FixedPanel({
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs flex-wrap", children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الإجمالي: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$e(totals.total) })
+            /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$d(totals.total) })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مؤكد: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$e(totals.paid) })
+            /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$d(totals.paid) })
           ] }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "بانتظار: " }),
-            /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$e(totals.pending) })
+            /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$d(totals.pending) })
           ] }),
           /* @__PURE__ */ jsxs("button", { type: "button", onClick: () => setShowAdd(true), className: `${ws$1.btnPrimary} px-3 py-2 text-sm`, children: [
             /* @__PURE__ */ jsx(Plus, { className: "w-4 h-4" }),
@@ -26796,13 +26294,13 @@ function FixedPanel({
               })()
             ] }),
             /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-sm", dir: "ltr", children: [
-              /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-semibold", children: formatMoney$e(perMonthAmount(t.default_amount, t.frequency)) }),
+              /* @__PURE__ */ jsx("div", { className: "text-slate-900 dark:text-white font-semibold", children: formatMoney$d(perMonthAmount(t.default_amount, t.frequency)) }),
               (FREQ_CYCLE_MONTHS[t.frequency] || 1) > 1 ? /* @__PURE__ */ jsxs("div", { className: "text-slate-500 dark:text-white/40 text-[10px] mt-0.5", children: [
                 "إجمالي: ",
-                formatMoney$e(t.default_amount)
+                formatMoney$d(t.default_amount)
               ] }) : null
             ] }),
-            /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: paid ? /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$e(paidInfo.amount) }) : /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: overrideAmount[t.id] ?? "", onChange: (e) => setOverrideAmount((prev) => ({
+            /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: paid ? /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$d(paidInfo.amount) }) : /* @__PURE__ */ jsx("input", { type: "number", min: "0", step: "0.01", value: overrideAmount[t.id] ?? "", onChange: (e) => setOverrideAmount((prev) => ({
               ...prev,
               [t.id]: e.target.value
             })), className: `${ws$1.input} px-2 py-1.5 text-sm w-28`, placeholder: String(perMonthAmount(t.default_amount, t.frequency)), dir: "ltr" }) }),
@@ -27226,15 +26724,15 @@ function VariableGrid({
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 text-xs flex-wrap", children: [
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "الإجمالي: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$e(totals.total) })
+          /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-bold", dir: "ltr", children: formatMoney$d(totals.total) })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "مؤكد: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$e(totals.paid) })
+          /* @__PURE__ */ jsx("span", { className: "text-emerald-700 dark:text-emerald-200 font-bold", dir: "ltr", children: formatMoney$d(totals.paid) })
         ] }),
         /* @__PURE__ */ jsxs("div", { children: [
           /* @__PURE__ */ jsx("span", { className: "text-slate-600 dark:text-white/55", children: "بانتظار: " }),
-          /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$e(totals.pending) })
+          /* @__PURE__ */ jsx("span", { className: "text-amber-700 dark:text-amber-200 font-bold", dir: "ltr", children: formatMoney$d(totals.pending) })
         ] }),
         addCta
       ] })
@@ -27376,7 +26874,7 @@ function VariableTemplateModal({
         " ",
         /* @__PURE__ */ jsx("span", { dir: "ltr", children: historyHint.month }),
         " (",
-        /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$e(historyHint.amount) }),
+        /* @__PURE__ */ jsx("span", { dir: "ltr", children: formatMoney$d(historyHint.amount) }),
         ")"
       ] }) : /* @__PURE__ */ jsx("p", { className: "text-[10px] text-slate-500 dark:text-white/45 mt-1.5", children: "يستخدم كقيمة افتراضية كل شهر — يمكن تغييرها لاحقاً." })
     ] }),
@@ -27693,7 +27191,7 @@ function TooltipBox({
       ] }),
       /* @__PURE__ */ jsx("span", { className: "font-bold", style: {
         color: valueColor
-      }, dir: "ltr", children: formatMoney$e(p.value) })
+      }, dir: "ltr", children: formatMoney$d(p.value) })
     ] }, i))
   ] });
 }
@@ -27953,9 +27451,9 @@ function ReviewTabContent({
   const confirmationPct = stats.totalCount > 0 ? Math.round(stats.confirmedCount / stats.totalCount * 100) : 0;
   return /* @__PURE__ */ jsxs("div", { className: "space-y-5", children: [
     /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 sm:grid-cols-4 gap-3", children: [
-      /* @__PURE__ */ jsx(HeroStat, { label: "إجمالي المصروفات", value: formatMoney$e(stats.totalAmount), sub: `${stats.totalCount} مصروف`, icon: Banknote, accent: "emerald", momDelta, momPct }),
-      /* @__PURE__ */ jsx(HeroStat, { label: "تم التأكيد", value: formatMoney$e(stats.confirmedAmount), sub: `${stats.confirmedCount} / ${stats.totalCount}`, icon: CheckCircle2, accent: "emerald" }),
-      /* @__PURE__ */ jsx(HeroStat, { label: "بانتظار التأكيد", value: formatMoney$e(stats.pendingAmount), sub: `${stats.pendingCount} مصروف`, icon: Clock, accent: "amber" }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "إجمالي المصروفات", value: formatMoney$d(stats.totalAmount), sub: `${stats.totalCount} مصروف`, icon: Banknote, accent: "emerald", momDelta, momPct }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "تم التأكيد", value: formatMoney$d(stats.confirmedAmount), sub: `${stats.confirmedCount} / ${stats.totalCount}`, icon: CheckCircle2, accent: "emerald" }),
+      /* @__PURE__ */ jsx(HeroStat, { label: "بانتظار التأكيد", value: formatMoney$d(stats.pendingAmount), sub: `${stats.pendingCount} مصروف`, icon: Clock, accent: "amber" }),
       /* @__PURE__ */ jsx(HeroStat, { label: "نسبة التأكيد", value: `${confirmationPct}%`, sub: /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-200 dark:bg-white/10 rounded-full h-1.5 mt-2", children: /* @__PURE__ */ jsx("div", { className: "bg-emerald-400 h-1.5 rounded-full transition-all", style: {
         width: `${confirmationPct}%`
       } }) }), icon: TrendingUp, accent: "sky" })
@@ -27980,7 +27478,7 @@ function ReviewTabContent({
                 ] }),
                 /* @__PURE__ */ jsx("span", { className: "text-slate-900 dark:text-white font-semibold truncate", children: t.name })
               ] }),
-              /* @__PURE__ */ jsx("div", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$e(t.total) })
+              /* @__PURE__ */ jsx("div", { className: "text-slate-800 dark:text-white/80 font-bold", dir: "ltr", children: formatMoney$d(t.total) })
             ] }),
             /* @__PURE__ */ jsx("div", { className: "w-full bg-slate-100 dark:bg-white/[0.04] rounded-full h-1.5 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "bg-gradient-to-r from-emerald-400/70 to-sky-400/70 h-full rounded-full", style: {
               width: `${pct}%`
@@ -28065,7 +27563,7 @@ function HeroStat({
       momDelta > 0 ? /* @__PURE__ */ jsx(ArrowUpRight, { className: "w-3 h-3 text-red-700 dark:text-red-300" }) : momDelta < 0 ? /* @__PURE__ */ jsx(ArrowDownRight, { className: "w-3 h-3 text-emerald-700 dark:text-emerald-300" }) : /* @__PURE__ */ jsx(Minus, { className: "w-3 h-3 text-slate-500 dark:text-white/40" }),
       /* @__PURE__ */ jsxs("span", { className: momDelta > 0 ? "text-red-700 dark:text-red-300" : momDelta < 0 ? "text-emerald-700 dark:text-emerald-300" : "text-slate-500 dark:text-white/40", dir: "ltr", children: [
         momDelta > 0 ? "+" : "",
-        formatMoney$e(momDelta),
+        formatMoney$d(momDelta),
         momPct !== null && momPct !== void 0 ? ` (${momPct > 0 ? "+" : ""}${Math.round(momPct)}%)` : ""
       ] }),
       /* @__PURE__ */ jsx("span", { className: "text-slate-400 dark:text-white/35", children: "عن الشهر السابق" })
@@ -29198,12 +28696,16 @@ function LeaseContractModal({
   contract,
   contacts = [],
   branches = [],
+  // مشاريع تأسيس الفروع (اختياري): عقد إيجار ما قبل الافتتاح يُربط
+  // بمشروعه فتُحسب فواتير استقطاعه ضمن تكاليف التأسيس.
+  projects = [],
   isSubmitting,
   onClose,
   onSubmit
 }) {
   const isEditing = !!contract?.id;
   const [contractNumber, setContractNumber] = useState("");
+  const [projectId, setProjectId] = useState("");
   const [contactId, setContactId] = useState("");
   const [lessorName, setLessorName] = useState("");
   const [lessorVat, setLessorVat] = useState("");
@@ -29256,6 +28758,7 @@ function LeaseContractModal({
       setLocation(contract.location || "");
       setContractType(CONTRACT_TYPES.includes(contract.contract_type) ? contract.contract_type : "branch");
       setBranchId(contract.branch_id ? String(contract.branch_id) : "");
+      setProjectId(contract.project_id ? String(contract.project_id) : "");
       setStartDate(contract.start_date || "");
       setEndDate(contract.end_date || "");
       setNoticeDays(contract.notice_period_days === null || contract.notice_period_days === void 0 ? "" : String(contract.notice_period_days));
@@ -29300,6 +28803,7 @@ function LeaseContractModal({
       setLocation("");
       setContractType("branch");
       setBranchId("");
+      setProjectId("");
       setStartDate("");
       setEndDate("");
       setNoticeDays("");
@@ -29333,6 +28837,22 @@ function LeaseContractModal({
     value: String(b.id),
     label: b.name
   }))], [branches]);
+  const projectOptions = useMemo(() => {
+    const list = Array.isArray(projects) ? projects : [];
+    const active = list.filter((p) => p && p.is_active !== false && p.status !== "opened" && p.status !== "cancelled");
+    if (projectId && !active.some((p) => String(p.id) === projectId)) {
+      const current = list.find((p) => String(p?.id) === projectId);
+      if (current) active.push(current);
+    }
+    return [{
+      value: "",
+      label: "بدون مشروع"
+    }, ...active.map((p) => ({
+      value: String(p.id),
+      label: `${p.code ? `${p.code} · ` : ""}${p.name || ""}`
+    }))];
+  }, [projects, projectId]);
+  const showProjectField = projectOptions.length > 1;
   const handleContactChange = (value) => {
     setContactId(value);
     autoFilledRef.current.delete("contact");
@@ -29356,7 +28876,7 @@ function LeaseContractModal({
   const fixedTotal = fixedSplit.total;
   const previewRows = useMemo(() => {
     if (frequency === "custom") {
-      return customRows.filter((row) => isDateKey$1(row.due_date) && moneyValue$2(row.amount) > 0).slice().sort((a, b) => compareDateKeys$1(a.due_date, b.due_date)).map((row, index) => ({
+      return customRows.filter((row) => isDateKey(row.due_date) && moneyValue$2(row.amount) > 0).slice().sort((a, b) => compareDateKeys(a.due_date, b.due_date)).map((row, index) => ({
         seq: index + 1,
         due_date: row.due_date,
         period_start: null,
@@ -29381,7 +28901,7 @@ function LeaseContractModal({
       fixedTaxableAmount: fixedSplit.taxable,
       vatRate: vatRateValue,
       amountIncludesVat: includesVat,
-      firstDueDate: isDateKey$1(firstDueDate) ? firstDueDate : null
+      firstDueDate: isDateKey(firstDueDate) ? firstDueDate : null
     });
   }, [frequency, customRows, fixedSplit, startDate, endDate, amount, vatRateValue, includesVat, firstDueDate]);
   const totals = useMemo(() => {
@@ -29394,9 +28914,9 @@ function LeaseContractModal({
       incl += moneyValue$2(row.amount_incl);
     }
     return {
-      excl: round2$5(excl),
-      vat: round2$5(vat),
-      incl: round2$5(incl)
+      excl: round2$4(excl),
+      vat: round2$4(vat),
+      incl: round2$4(incl)
     };
   }, [previewRows]);
   const installment = useMemo(() => installmentWithFixed({
@@ -29414,7 +28934,7 @@ function LeaseContractModal({
     noticePeriodDays: intOrNull(noticeDays),
     today
   });
-  const noticeStartsOn = isDateKey$1(endDate) && intOrNull(noticeDays) > 0 ? addDays$3(endDate, -intOrNull(noticeDays)) : null;
+  const noticeStartsOn = isDateKey(endDate) && intOrNull(noticeDays) > 0 ? addDays$3(endDate, -intOrNull(noticeDays)) : null;
   const customRowsChanged = useMemo(() => {
     if (!isEditing || frequency !== "custom") return false;
     const saved = (Array.isArray(contract?.payments) ? contract.payments : []).filter((p) => p.status !== "cancelled").map((p) => `${p.due_date}|${Math.max(moneyValue$2(p.amount_excl) - moneyValue$2(p.fixed_excl), 0).toFixed(2)}`).sort();
@@ -29432,15 +28952,15 @@ function LeaseContractModal({
   const errors = useMemo(() => {
     const list = [];
     if (!lessorName.trim()) list.push("اسم المؤجر مطلوب.");
-    if (!isDateKey$1(startDate)) list.push("تاريخ البداية مطلوب.");
-    if (!isDateKey$1(endDate)) list.push("تاريخ الانتهاء مطلوب.");
-    if (isDateKey$1(startDate) && isDateKey$1(endDate) && compareDateKeys$1(endDate, startDate) < 0) list.push("تاريخ الانتهاء قبل تاريخ البداية.");
+    if (!isDateKey(startDate)) list.push("تاريخ البداية مطلوب.");
+    if (!isDateKey(endDate)) list.push("تاريخ الانتهاء مطلوب.");
+    if (isDateKey(startDate) && isDateKey(endDate) && compareDateKeys(endDate, startDate) < 0) list.push("تاريخ الانتهاء قبل تاريخ البداية.");
     if (!(vatRateValue >= 0 && vatRateValue <= 100)) list.push("نسبة الضريبة بين 0 و100.");
     if (frequency === "custom") {
       if (previewRows.length === 0) list.push("أضف دفعة واحدة على الأقل بتاريخ استحقاق ومبلغ أكبر من صفر.");
     } else {
       if (!(installment.rent_excl > 0)) list.push("قيمة الدفعة مطلوبة.");
-      else if (isDateKey$1(startDate) && isDateKey$1(endDate) && previewRows.length === 0) list.push("لا تنتج أي دفعة — تحقق من أول استحقاق (يجب ألا يتجاوز نهاية العقد).");
+      else if (isDateKey(startDate) && isDateKey(endDate) && previewRows.length === 0) list.push("لا تنتج أي دفعة — تحقق من أول استحقاق (يجب ألا يتجاوز نهاية العقد).");
     }
     return list;
   }, [lessorName, startDate, endDate, vatRateValue, frequency, previewRows.length, installment.rent_excl]);
@@ -29458,6 +28978,7 @@ function LeaseContractModal({
       location: location.trim() || null,
       contract_type: contractType,
       branch_id: branchId ? Number(branchId) : null,
+      project_id: projectId ? Number(projectId) : null,
       start_date: startDate,
       end_date: endDate,
       notice_period_days: intOrNull(noticeDays),
@@ -29471,7 +28992,7 @@ function LeaseContractModal({
         amount: moneyValue$2(row.amount),
         taxable: row.taxable === true
       })),
-      first_due_date: frequency === "custom" ? null : isDateKey$1(firstDueDate) ? firstDueDate : null,
+      first_due_date: frequency === "custom" ? null : isDateKey(firstDueDate) ? firstDueDate : null,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
       attachment_name: attachmentName || null,
@@ -29831,7 +29352,12 @@ function LeaseContractModal({
             /* @__PURE__ */ jsxs("div", { children: [
               /* @__PURE__ */ jsx(FieldLabel, { children: "الفرع" }),
               /* @__PURE__ */ jsx(GlassSelect, { value: branchId, onChange: setBranchId, options: branchOptions, placeholder: "بدون فرع", buttonClassName: "text-sm py-2 px-3" })
-            ] })
+            ] }),
+            showProjectField ? /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(FieldLabel, { children: "مشروع تأسيس (اختياري)" }),
+              /* @__PURE__ */ jsx(GlassSelect, { value: projectId, onChange: setProjectId, options: projectOptions, placeholder: "بدون مشروع", buttonClassName: "text-sm py-2 px-3" }),
+              /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/45 mt-1", children: "فواتير الاستقطاع حتى شهر الافتتاح تُحسب ضمن تكاليف تأسيس الفرع." })
+            ] }) : null
           ] })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: `${ws.glass} ${ws.card} p-4 space-y-3`, children: [
@@ -30398,7 +29924,7 @@ function PaymentPill({
   payment,
   today
 }) {
-  const overdue = payment.status === "pending" && (payment.overdue || payment.due_date && compareDateKeys$1(payment.due_date, today) < 0);
+  const overdue = payment.status === "pending" && (payment.overdue || payment.due_date && compareDateKeys(payment.due_date, today) < 0);
   const cls = payment.status === "paid" ? "bg-[#e7f2ee] dark:bg-emerald-400/10 text-[#0e7a5f] dark:text-emerald-200 border-[#c9e2d8] dark:border-emerald-400/25" : payment.status === "cancelled" ? "bg-slate-100 dark:bg-white/[0.06] text-slate-500 dark:text-white/50 border-slate-200 dark:border-white/10" : overdue ? "bg-rose-100 dark:bg-rose-400/10 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-400/25" : "bg-amber-100 dark:bg-amber-400/10 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-400/25";
   const label = payment.status === "paid" ? "مسددة" : payment.status === "cancelled" ? "ملغاة" : overdue ? "متأخرة" : "معلّقة";
   return /* @__PURE__ */ jsx("span", { className: `${ws.pill} whitespace-nowrap ${cls}`, children: label });
@@ -30598,10 +30124,15 @@ function LeaseContractsPanel({
     month: reserveMonth,
     branchId: reserveBranch
   });
+  const projectsQuery = useBranchProjects({
+    employeeId,
+    isAdmin
+  });
   const contracts = contractsQuery.data || [];
   const contacts = contactsQuery.data || [];
   const bankAccounts = bankAccountsQuery.data || [];
   const branches = branchesQuery.data || [];
+  const projects = projectsQuery.data || [];
   const pendingPayments = pendingPaymentsQuery.data || [];
   const duePayments = duePaymentsQuery.data || [];
   const reserve = reserveQuery.data || null;
@@ -30655,8 +30186,8 @@ function LeaseContractsPanel({
     const activeCount = live.filter((c) => ["active", "notice"].includes(c.computed_status)).length;
     const noticeCount = live.filter((c) => c.computed_status === "notice").length;
     const horizon = addDays$3(today, 30);
-    const due30 = pendingPayments.filter((p) => p.due_date && compareDateKeys$1(p.due_date, horizon) <= 0).reduce((acc, p) => acc + moneyValue(p.amount_incl), 0);
-    const due30Count = pendingPayments.filter((p) => p.due_date && compareDateKeys$1(p.due_date, horizon) <= 0).length;
+    const due30 = pendingPayments.filter((p) => p.due_date && compareDateKeys(p.due_date, horizon) <= 0).reduce((acc, p) => acc + moneyValue(p.amount_incl), 0);
+    const due30Count = pendingPayments.filter((p) => p.due_date && compareDateKeys(p.due_date, horizon) <= 0).length;
     const remaining = live.filter((c) => c.computed_status !== "terminated").reduce((acc, c) => acc + moneyValue(c.pending_total), 0);
     return {
       activeCount,
@@ -30831,8 +30362,8 @@ function LeaseContractsPanel({
       if (!showPaid && p.status === "paid") return false;
       const isPending = p.status === "pending";
       if (dueFrom || dueTo) return true;
-      if (dueChip === "overdue") return isPending && compareDateKeys$1(p.due_date, today) < 0;
-      if (dueChip === "30") return compareDateKeys$1(p.due_date, horizon) <= 0;
+      if (dueChip === "overdue") return isPending && compareDateKeys(p.due_date, today) < 0;
+      if (dueChip === "30") return compareDateKeys(p.due_date, horizon) <= 0;
       if (dueChip === "month") return monthKey(p.due_date) === currentMonth;
       return true;
     });
@@ -30853,7 +30384,7 @@ function LeaseContractsPanel({
   }, [dueRows]);
   const dueSummary = useMemo(() => {
     const pending = dueRows.filter((r) => r.status === "pending");
-    const overdue = pending.filter((r) => compareDateKeys$1(r.due_date, today) < 0);
+    const overdue = pending.filter((r) => compareDateKeys(r.due_date, today) < 0);
     return {
       count: pending.length,
       total: pending.reduce((acc, r) => acc + moneyValue(r.amount_incl), 0),
@@ -30897,7 +30428,7 @@ function LeaseContractsPanel({
       accessor: (row) => moneyValue(row.amount_incl).toFixed(2)
     }, {
       header: "الحالة",
-      accessor: (row) => row.status === "paid" ? `مسددة ${row.paid_date || ""}` : compareDateKeys$1(row.due_date, today) < 0 ? "متأخرة" : "معلّقة"
+      accessor: (row) => row.status === "paid" ? `مسددة ${row.paid_date || ""}` : compareDateKeys(row.due_date, today) < 0 ? "متأخرة" : "معلّقة"
     }, {
       header: "تاريخ السداد",
       accessor: (row) => row.paid_date || ""
@@ -31672,8 +31203,8 @@ function LeaseContractsPanel({
   };
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx("div", { className: "space-y-4", children: sub === "due" ? renderDue() : sub === "reserve" ? renderReserve() : renderContracts() }),
-    /* @__PURE__ */ jsx(LeaseContractModal, { open: showAdd, contract: null, contacts, branches, isSubmitting: createMut.isPending, onClose: () => setShowAdd(false), onSubmit: handleSubmitContract }),
-    /* @__PURE__ */ jsx(LeaseContractModal, { open: !!editingId && !!editDetailQuery.data, contract: editDetailQuery.data || null, contacts, branches, isSubmitting: updateMut.isPending, onClose: () => setEditingId(null), onSubmit: handleSubmitContract }),
+    /* @__PURE__ */ jsx(LeaseContractModal, { open: showAdd, contract: null, contacts, branches, projects, isSubmitting: createMut.isPending, onClose: () => setShowAdd(false), onSubmit: handleSubmitContract }),
+    /* @__PURE__ */ jsx(LeaseContractModal, { open: !!editingId && !!editDetailQuery.data, contract: editDetailQuery.data || null, contacts, branches, projects, isSubmitting: updateMut.isPending, onClose: () => setEditingId(null), onSubmit: handleSubmitContract }),
     editingId && !editDetailQuery.data && typeof document !== "undefined" ? createPortal(/* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-[1000] flex items-center justify-center bg-black/40", dir: "rtl", children: /* @__PURE__ */ jsx("div", { className: `${ws.glass} ${ws.card} px-5 py-4 flex items-center gap-3 text-sm`, children: editDetailQuery.isError ? /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("span", { className: "text-rose-700 dark:text-rose-300", children: editDetailQuery.error?.message || "فشل تحميل العقد" }),
       /* @__PURE__ */ jsx("button", { type: "button", onClick: () => setEditingId(null), className: `${ws.btnNeutral} px-3 py-1.5 text-xs`, children: "إغلاق" })
@@ -32696,7 +32227,7 @@ function ReasonBreakdownCard({
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsxs("div", { className: "text-lg font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-        formatMoney$e(cost),
+        formatMoney$d(cost),
         " ر.س"
       ] }),
       /* @__PURE__ */ jsxs("div", { className: "text-xs text-slate-500 dark:text-white/45 mt-0.5", children: [
@@ -32740,7 +32271,7 @@ function WasteOperationCard({
         /* @__PURE__ */ jsxs("div", { className: "text-left", children: [
           /* @__PURE__ */ jsx("div", { className: "text-[11px] text-slate-500 dark:text-white/40", children: "التكلفة" }),
           /* @__PURE__ */ jsxs("div", { className: "text-base font-bold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-            formatMoney$e(op.total_cost),
+            formatMoney$d(op.total_cost),
             " ر.س"
           ] })
         ] }),
@@ -32763,15 +32294,15 @@ function WasteOperationCard({
         ] }) }),
         /* @__PURE__ */ jsx("tbody", { children: items.length === 0 ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 6, className: "px-3 py-4 text-center text-slate-500 dark:text-white/45", children: "لا توجد أصناف" }) }) : items.map((it) => /* @__PURE__ */ jsxs("tr", { className: "border-b border-slate-200/60 dark:border-white/[0.06] last:border-0", children: [
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-800 dark:text-white/85", children: it.item_name || "—" }),
-          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$e(it.quantity) }),
+          /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$d(it.quantity) }),
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx(ReasonBadge, { reason: it.reason }) }),
           /* @__PURE__ */ jsx("td", { className: "px-3 py-2 text-slate-600 dark:text-white/60", children: it.note ? it.note : "—" }),
           /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: [
-            formatMoney$e(it.unit_cost),
+            formatMoney$d(it.unit_cost),
             " ر.س"
           ] }),
           /* @__PURE__ */ jsxs("td", { className: "px-3 py-2 text-left font-semibold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-            formatMoney$e(it.cost),
+            formatMoney$d(it.cost),
             " ر.س"
           ] })
         ] }, it.id)) })
@@ -32904,7 +32435,7 @@ function WastePage$1() {
       /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3", children: [
         /* @__PURE__ */ jsx(StatCard$4, { icon: Layers, label: "عدد عمليات الهدر", value: Number(summary.operations_count || 0) }),
         /* @__PURE__ */ jsx(StatCard$4, { icon: Boxes, label: "عدد أصناف الهدر", value: Number(summary.items_count || 0) }),
-        /* @__PURE__ */ jsx(StatCard$4, { icon: Coins, label: "إجمالي تكلفة الهدر", value: formatMoney$e(summary.total_cost), suffix: "ر.س", emerald: true })
+        /* @__PURE__ */ jsx(StatCard$4, { icon: Coins, label: "إجمالي تكلفة الهدر", value: formatMoney$d(summary.total_cost), suffix: "ر.س", emerald: true })
       ] }),
       wasteQuery.isLoading ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-6 text-slate-600 dark:text-white/60`, children: "جاري التحميل…" }) : wasteQuery.isError ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-6 text-red-600 dark:text-red-300`, children: wasteQuery.error?.message || "حدث خطأ أثناء تحميل البيانات." }) : operations.length === 0 ? /* @__PURE__ */ jsx("div", { className: `${ws$1.glass} ${ws$1.card} p-10 text-center text-slate-500 dark:text-white/50`, children: "لا توجد عمليات هدر" }) : /* @__PURE__ */ jsxs(Fragment, { children: [
         visibleReasons.length > 0 ? /* @__PURE__ */ jsxs("section", { className: "space-y-3", children: [
@@ -32929,9 +32460,9 @@ function WastePage$1() {
             /* @__PURE__ */ jsx("tbody", { children: topItems.slice(0, 10).map((it, idx) => /* @__PURE__ */ jsxs("tr", { className: "border-b border-slate-200/60 dark:border-white/[0.06] last:border-0 hover:bg-slate-50 dark:hover:bg-white/[0.03]", children: [
               /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-slate-400 dark:text-white/40 font-semibold", dir: "ltr", children: idx + 1 }),
               /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-slate-800 dark:text-white/85 font-medium", children: it.item_name || "—" }),
-              /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$e(it.total_quantity) }),
+              /* @__PURE__ */ jsx("td", { className: "px-4 py-2.5 text-left text-slate-700 dark:text-white/70", dir: "ltr", children: formatMoney$d(it.total_quantity) }),
               /* @__PURE__ */ jsxs("td", { className: "px-4 py-2.5 text-left font-semibold text-emerald-700 dark:text-emerald-200", dir: "ltr", children: [
-                formatMoney$e(it.total_cost),
+                formatMoney$d(it.total_cost),
                 " ر.س"
               ] })
             ] }, it.item_id ?? idx)) })
@@ -52144,8 +51675,8 @@ function HROvertimePage() {
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 font-semibold text-slate-900 dark:text-white", children: r.employee_name || `#${r.employee_id}` }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-700 dark:text-white/75", children: monthLabel$1(String(r.month).slice(0, 7)) }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-800 dark:text-white/85 text-right", dir: "ltr", children: Number(r.days || 0) }),
-          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/55 text-right", dir: "ltr", children: formatMoney$e(r.base_salary) }),
-          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold text-right", dir: "ltr", children: formatMoney$e(r.amount) }),
+          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/55 text-right", dir: "ltr", children: formatMoney$d(r.base_salary) }),
+          /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-emerald-700 dark:text-emerald-200 font-bold text-right", dir: "ltr", children: formatMoney$d(r.amount) }),
           /* @__PURE__ */ jsx("td", { className: "py-3 px-3 text-slate-600 dark:text-white/60 text-xs", style: {
             maxWidth: 240
           }, children: /* @__PURE__ */ jsx("div", { className: "truncate", title: r.reason || "", children: r.reason || "—" }) }),
@@ -52212,11 +51743,11 @@ function HRPayrollTable({
           ] }) : null
         ] }) }),
         /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/70 whitespace-nowrap", children: e.branch_name || "—" }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-600 dark:text-white/55 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(e.other_allowances) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/75 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(e.total_salary) }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-red-700 dark:text-red-300/80 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(e.total_deductions) }),
-        /* @__PURE__ */ jsx("td", { className: `py-2 px-2 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", children: hasLoan ? formatMoney$e(e.loan_deduction) : "—" }),
-        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$e(hrNet) })
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-600 dark:text-white/55 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(e.other_allowances) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-slate-700 dark:text-white/75 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(e.total_salary) }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-red-700 dark:text-red-300/80 whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(e.total_deductions) }),
+        /* @__PURE__ */ jsx("td", { className: `py-2 px-2 whitespace-nowrap text-right ${hasLoan ? "text-amber-700 dark:text-amber-300/90" : "text-slate-400 dark:text-white/30"}`, dir: "ltr", children: hasLoan ? formatMoney$d(e.loan_deduction) : "—" }),
+        /* @__PURE__ */ jsx("td", { className: "py-2 px-2 text-emerald-700 dark:text-emerald-200 font-bold whitespace-nowrap text-right", dir: "ltr", children: formatMoney$d(hrNet) })
       ] }, e.id);
     }) })
   ] }) }) });
@@ -59580,7 +59111,7 @@ const route53 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: notFound
 }, Symbol.toStringTag, { value: 'Module' }));
 
-const serverManifest = {'entry':{'module':'/assets/entry.client-BVKYnbLA.js','imports':['/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/client-FOCTwQOd.js','/assets/index-kTENV4G-.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-BKNjowSG.js','imports':['/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/client-FOCTwQOd.js','/assets/index-kTENV4G-.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-CpTUohiU.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-CAtPIhkL.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DGfbh85A.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/shield-CRmwDkGB.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/trash-2-BSB_ZFB-.js','/assets/receipt-text-CK3HzO4A.js','/assets/languages-D_0Kt5KC.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CuKJ-f-i.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/calculator-BLO6hCZt.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-up-TCOMGAmf.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/branch-projects/page':{'id':'accounting/branch-projects/page','parentId':'root','path':'accounting/branch-projects','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C7-DTG7p.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/ProjectHeader-cIeS33lp.js','/assets/info-tq43-kUD.js','/assets/building-2-C_M1-kbw.js','/assets/wallet-D6A-w725.js','/assets/receipt-CegkV8OW.js','/assets/calendar-check-CsrP3rFe.js','/assets/search-DWr5r7iP.js','/assets/plus-D_Lc2mQu.js','/assets/loader-circle-CNuax1Pi.js','/assets/map-pin-BeheONbm.js','/assets/triangle-alert-GjVGMM7V.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/apiAuth-CTxhwd0t.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/GlassPopover-CSAIKahT.js','/assets/dateUtils-BM4UzEKk.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js','/assets/save-CdgxGSL7.js','/assets/user-round-ppaa1dNY.js','/assets/scroll-text-De-ug1Mv.js','/assets/pencil-C-4qNeNs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/branch-projects/[id]/page':{'id':'accounting/branch-projects/[id]/page','parentId':'root','path':'accounting/branch-projects/:id','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-qG96FhUK.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/ProjectHeader-cIeS33lp.js','/assets/dateUtils-BM4UzEKk.js','/assets/flag-DKrimwZC.js','/assets/bell-BvWZRMmo.js','/assets/circle-check-CBpMRAci.js','/assets/triangle-alert-GjVGMM7V.js','/assets/wallet-D6A-w725.js','/assets/clock-BBJ5kuC7.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/GlassSelect-DHOHWEHv.js','/assets/loader-circle-CNuax1Pi.js','/assets/save-CdgxGSL7.js','/assets/layers-BBygtpt5.js','/assets/plus-D_Lc2mQu.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/user-round-ppaa1dNY.js','/assets/calendar-days-DwVXTI-7.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/exportUtils-D25Tf_wA.js','/assets/receipt-CegkV8OW.js','/assets/download-a6tJjTYj.js','/assets/pie-chart-CbR6y7XW.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/PieChart-JFHDih7P.js','/assets/search-DWr5r7iP.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/file-text-BmTOHQAR.js','/assets/useUpload-DbCzhcGv.js','/assets/x-oADfqCtd.js','/assets/send-BK5a11KH.js','/assets/upload-uEoJzZYc.js','/assets/paperclip-QfeO3S3a.js','/assets/receipt-text-CK3HzO4A.js','/assets/external-link-G3Sb2e-t.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/arrow-right-DAxcNvoe.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/apiAuth-CTxhwd0t.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-right-B2S7cpJT.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js','/assets/map-pin-BeheONbm.js','/assets/scroll-text-De-ug1Mv.js','/assets/calendar-check-CsrP3rFe.js','/assets/chevron-down-DIQs3av0.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B642E8ey.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/GlassSelect-DHOHWEHv.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/banknote-Dg-cEOrL.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-days-DwVXTI-7.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/history-CrK9quJN.js','/assets/save-CdgxGSL7.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DShStih8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-7v02bBp3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/ui-KgqU6EwG.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/arrow-left-tRfo0eTs.js','/assets/GlassSelect-DHOHWEHv.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/plus-D_Lc2mQu.js','/assets/save-CdgxGSL7.js','/assets/copy-BbSEJx-C.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BgCdxF1Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/ui-KgqU6EwG.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/arrow-left-tRfo0eTs.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/index-CpTUohiU.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/exportUtils-D25Tf_wA.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/useMutation-BbLiwCC1.js','/assets/trash-2-BSB_ZFB-.js','/assets/package-DBl047za.js','/assets/pencil-C-4qNeNs.js','/assets/eye-BtfjA8Xg.js','/assets/save-CdgxGSL7.js','/assets/circle-check-big-Wl95uI6-.js','/assets/triangle-alert-GjVGMM7V.js','/assets/x-oADfqCtd.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/square-check-big-BBx4eJw3.js','/assets/square-CT3vFa__.js','/assets/minus-DgN2e5-e.js','/assets/plus-D_Lc2mQu.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-WQUxCVYJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/index-kTENV4G-.js','/assets/dateUtils-BM4UzEKk.js','/assets/wallet-D6A-w725.js','/assets/x-oADfqCtd.js','/assets/save-CdgxGSL7.js','/assets/pencil-C-4qNeNs.js','/assets/rotate-ccw-CfybkmW1.js','/assets/trash-2-BSB_ZFB-.js','/assets/useEmployeeLoans-CRd2MNxs.js','/assets/filter-DGeJl-lq.js','/assets/plus-D_Lc2mQu.js','/assets/info-tq43-kUD.js','/assets/index-CpTUohiU.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-tyNnHtm7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/x-oADfqCtd.js','/assets/user-BQg6aB1K.js','/assets/file-text-BmTOHQAR.js','/assets/dollar-sign-D9J1U_LA.js','/assets/percent-CVu8oowM.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/usePayrollMutations-Vjj5qY0S.js','/assets/apiAuth-CTxhwd0t.js','/assets/index-CpTUohiU.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/info-tq43-kUD.js','/assets/lock-B--TmCy_.js','/assets/circle-check-CBpMRAci.js','/assets/clock-BBJ5kuC7.js','/assets/style-Dds8TAUA.js','/assets/ban-C8QJdV95.js','/assets/message-square-dcIMhRBP.js','/assets/pencil-C-4qNeNs.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/send-BK5a11KH.js','/assets/gift-0IfMvbWn.js','/assets/trash-2-BSB_ZFB-.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/wallet-D6A-w725.js','/assets/dateUtils-BM4UzEKk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DgUnfMvh.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/BulkInvoiceUploadPanel-FGap178N.js','/assets/map-pin-BeheONbm.js','/assets/circle-check-CBpMRAci.js','/assets/hash-7pJWHBVv.js','/assets/ui-KgqU6EwG.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/hand-coins-DMmMLecd.js','/assets/link-D54RdVcw.js','/assets/index-CpTUohiU.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/arrow-left-tRfo0eTs.js','/assets/triangle-alert-GjVGMM7V.js','/assets/plus-D_Lc2mQu.js','/assets/trending-up-TCOMGAmf.js','/assets/trending-down-BbiDJvzt.js','/assets/copy-BbSEJx-C.js','/assets/bell-BvWZRMmo.js','/assets/loader-circle-CNuax1Pi.js','/assets/send-BK5a11KH.js','/assets/index-kTENV4G-.js','/assets/user-BQg6aB1K.js','/assets/percent-CVu8oowM.js','/assets/x-oADfqCtd.js','/assets/banknote-Dg-cEOrL.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/chevron-left-BvLNMgLZ.js','/assets/lock-B--TmCy_.js','/assets/save-CdgxGSL7.js','/assets/building-2-C_M1-kbw.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/info-tq43-kUD.js','/assets/credit-card-DjeI3m8h.js','/assets/wallet-D6A-w725.js','/assets/useUpload-DbCzhcGv.js','/assets/paperclip-QfeO3S3a.js','/assets/scroll-text-De-ug1Mv.js','/assets/external-link-G3Sb2e-t.js','/assets/users-DNKaMBFk.js','/assets/history-CrK9quJN.js','/assets/calendar-days-DwVXTI-7.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/style-Dds8TAUA.js','/assets/message-square-dcIMhRBP.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/arrow-up-right-C5iYVzxK.js','/assets/minus-DgN2e5-e.js','/assets/layers-BBygtpt5.js','/assets/trophy-BJ4fclRr.js','/assets/circle-RFIGtrVu.js','/assets/receipt-CegkV8OW.js','/assets/pie-chart-CbR6y7XW.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/LineChart-CEs72hat.js','/assets/PieChart-JFHDih7P.js','/assets/BarChart-CQvdXm8D.js','/assets/clock-BBJ5kuC7.js','/assets/clipboard-check-HrIvHDbw.js','/assets/sparkles-CJzlAEkM.js','/assets/upload-uEoJzZYc.js','/assets/ban-C8QJdV95.js','/assets/chevron-right-B2S7cpJT.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/unlink-Pm8LcbTV.js','/assets/badge-check-CcaO09Ay.js','/assets/arrow-right-DAxcNvoe.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D7X1DKEE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/calculator-BLO6hCZt.js','/assets/building-2-C_M1-kbw.js','/assets/info-tq43-kUD.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/dateUtils-BM4UzEKk.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CWvvwsVC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/layers-BBygtpt5.js','/assets/boxes-Dz-EPieR.js','/assets/receipt-CegkV8OW.js','/assets/trophy-BJ4fclRr.js','/assets/trash-2-BSB_ZFB-.js','/assets/building-2-C_M1-kbw.js','/assets/user-BQg6aB1K.js','/assets/clock-BBJ5kuC7.js','/assets/chevron-down-DIQs3av0.js','/assets/sticky-note-DEZam0gt.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/GlassPopover-CSAIKahT.js','/assets/dateUtils-BM4UzEKk.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMALXRfI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/trending-up-TCOMGAmf.js','/assets/clipboard-list-9aP7s25o.js','/assets/circle-check-big-Wl95uI6-.js','/assets/clock-BBJ5kuC7.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-days-DwVXTI-7.js','/assets/dateUtils-BM4UzEKk.js','/assets/sparkles-CJzlAEkM.js','/assets/trending-down-BbiDJvzt.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/x-oADfqCtd.js','/assets/info-tq43-kUD.js','/assets/circle-alert-C38v-ZIg.js','/assets/triangle-alert-GjVGMM7V.js','/assets/package-plus-B_-K8GyX.js','/assets/truck-ChnZnUAV.js','/assets/calendar-DvSjuM8r.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/BarChart-CQvdXm8D.js','/assets/LineChart-CEs72hat.js','/assets/activity-Dd6Je2eD.js','/assets/PieChart-JFHDih7P.js','/assets/dollar-sign-D9J1U_LA.js','/assets/package-DBl047za.js','/assets/exportUtils-D25Tf_wA.js','/assets/file-text-BmTOHQAR.js','/assets/search-DWr5r7iP.js','/assets/download-a6tJjTYj.js','/assets/printer-CAZnI1rX.js','/assets/users-DNKaMBFk.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/layers-BBygtpt5.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CCHv0-Oq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/exportUtils-D25Tf_wA.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/building-2-C_M1-kbw.js','/assets/map-pin-BeheONbm.js','/assets/clipboard-list-9aP7s25o.js','/assets/search-DWr5r7iP.js','/assets/plus-D_Lc2mQu.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/x-oADfqCtd.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js','/assets/file-text-BmTOHQAR.js','/assets/banknote-Dg-cEOrL.js','/assets/dateUtils-BM4UzEKk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BYUJTqBw.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/employeeUtils-B-C4mLB2.js','/assets/users-DNKaMBFk.js','/assets/shield-CRmwDkGB.js','/assets/user-BQg6aB1K.js','/assets/search-DWr5r7iP.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/circle-check-CBpMRAci.js','/assets/circle-x-UtzWpuJv.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/briefcase-ba7l8C4x.js','/assets/dollar-sign-D9J1U_LA.js','/assets/x-oADfqCtd.js','/assets/mail-BaTAwGpw.js','/assets/lock-B--TmCy_.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/receipt-text-CK3HzO4A.js','/assets/truck-ChnZnUAV.js','/assets/bell-BvWZRMmo.js','/assets/building-2-C_M1-kbw.js','/assets/loader-circle-CNuax1Pi.js','/assets/send-BK5a11KH.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/plus-D_Lc2mQu.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/trending-down-BbiDJvzt.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B-ZzNyJH.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/layers-BBygtpt5.js','/assets/x-oADfqCtd.js','/assets/languages-D_0Kt5KC.js','/assets/plus-D_Lc2mQu.js','/assets/link-D54RdVcw.js','/assets/pencil-C-4qNeNs.js','/assets/ban-C8QJdV95.js','/assets/Sidebar-CgQ6OIMb.js','/assets/package-DBl047za.js','/assets/circle-check-big-Wl95uI6-.js','/assets/triangle-alert-GjVGMM7V.js','/assets/circle-x-UtzWpuJv.js','/assets/GlassPopover-CSAIKahT.js','/assets/search-DWr5r7iP.js','/assets/filter-DGeJl-lq.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/dateUtils-BM4UzEKk.js','/assets/eye-BtfjA8Xg.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js','/assets/square-check-big-BBx4eJw3.js','/assets/clipboard-check-HrIvHDbw.js','/assets/square-CT3vFa__.js','/assets/eye-off-CgiG__BY.js','/assets/index-kTENV4G-.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/boxes-Dz-EPieR.js','/assets/clipboard-list-9aP7s25o.js','/assets/circle-alert-C38v-ZIg.js','/assets/exportUtils-D25Tf_wA.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/index-CpTUohiU.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B1H7z16U.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/package-DBl047za.js','/assets/building-2-C_M1-kbw.js','/assets/trending-down-BbiDJvzt.js','/assets/circle-x-UtzWpuJv.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/hash-7pJWHBVv.js','/assets/calendar-DvSjuM8r.js','/assets/user-BQg6aB1K.js','/assets/file-text-BmTOHQAR.js','/assets/triangle-alert-GjVGMM7V.js','/assets/circle-check-big-Wl95uI6-.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/trending-up-TCOMGAmf.js','/assets/x-oADfqCtd.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/LineChart-CEs72hat.js','/assets/package-plus-B_-K8GyX.js','/assets/clipboard-list-9aP7s25o.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-a1gCl9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/useMediaQuery-Be-eWih8.js','/assets/shield-CRmwDkGB.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/circle-alert-C38v-ZIg.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BLi_-ByB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-down-BbiDJvzt.js','/assets/circle-x-UtzWpuJv.js','/assets/triangle-alert-GjVGMM7V.js','/assets/building-2-C_M1-kbw.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/package-DBl047za.js','/assets/circle-check-big-Wl95uI6-.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ENCaeCUD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/dateUtils-BM4UzEKk.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/clipboard-list-9aP7s25o.js','/assets/calendar-check-CsrP3rFe.js','/assets/package-plus-B_-K8GyX.js','/assets/clock-BBJ5kuC7.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/filter-DGeJl-lq.js','/assets/x-oADfqCtd.js','/assets/search-DWr5r7iP.js','/assets/exportUtils-D25Tf_wA.js','/assets/GlassPopover-CSAIKahT.js','/assets/printer-CAZnI1rX.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/square-check-big-BBx4eJw3.js','/assets/trash-2-BSB_ZFB-.js','/assets/square-CT3vFa__.js','/assets/building-2-C_M1-kbw.js','/assets/eye-BtfjA8Xg.js','/assets/pencil-C-4qNeNs.js','/assets/calendar-DvSjuM8r.js','/assets/arrow-up-right-C5iYVzxK.js','/assets/user-BQg6aB1K.js','/assets/trending-down-BbiDJvzt.js','/assets/sticky-note-DEZam0gt.js','/assets/hash-7pJWHBVv.js','/assets/circle-check-big-Wl95uI6-.js','/assets/percent-CVu8oowM.js','/assets/package-DBl047za.js','/assets/circle-alert-C38v-ZIg.js','/assets/circle-check-CBpMRAci.js','/assets/plus-D_Lc2mQu.js','/assets/send-BK5a11KH.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-check-HrIvHDbw.js','/assets/rotate-ccw-CfybkmW1.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/truck-ChnZnUAV.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bq_us6bg.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/dateUtils-BM4UzEKk.js','/assets/truck-ChnZnUAV.js','/assets/calendar-DvSjuM8r.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/package-DBl047za.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/trending-down-BbiDJvzt.js','/assets/file-text-BmTOHQAR.js','/assets/banknote-Dg-cEOrL.js','/assets/GlassPopover-CSAIKahT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C6CB83Uo.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/banknote-Dg-cEOrL.js','/assets/building-2-C_M1-kbw.js','/assets/package-DBl047za.js','/assets/triangle-alert-GjVGMM7V.js','/assets/trending-up-TCOMGAmf.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/arrow-up-down-Bi-g--AF.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/circle-alert-C38v-ZIg.js','/assets/layers-BBygtpt5.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-rLgkhMI3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-down-BbiDJvzt.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/trending-up-TCOMGAmf.js','/assets/triangle-alert-GjVGMM7V.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/dateUtils-BM4UzEKk.js','/assets/calendar-DvSjuM8r.js','/assets/exportUtils-D25Tf_wA.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'alwaha/page':{'id':'alwaha/page','parentId':'root','path':'alwaha','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CZROkpMM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CcBNDFKh.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-check-big-Wl95uI6-.js','/assets/package-DBl047za.js','/assets/search-DWr5r7iP.js','/assets/save-CdgxGSL7.js','/assets/trending-up-TCOMGAmf.js','/assets/arrow-left-tRfo0eTs.js','/assets/layers-BBygtpt5.js','/assets/filter-DGeJl-lq.js','/assets/circle-alert-C38v-ZIg.js','/assets/zap-BrcnJvn1.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DiX0Rwla.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/building-2-C_M1-kbw.js','/assets/circle-check-CBpMRAci.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/page':{'id':'employee/purchase-invoice/page','parentId':'root','path':'employee/purchase-invoice','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D3mO5u75.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/uiPurchases-D-qaUyof.js','/assets/BulkInvoiceUploadPanel-FGap178N.js','/assets/apiAuth-CTxhwd0t.js','/assets/arrow-right-DAxcNvoe.js','/assets/receipt-text-CK3HzO4A.js','/assets/loader-circle-CNuax1Pi.js','/assets/circle-check-CBpMRAci.js','/assets/plus-D_Lc2mQu.js','/assets/truck-ChnZnUAV.js','/assets/search-DWr5r7iP.js','/assets/pencil-C-4qNeNs.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/hand-coins-DMmMLecd.js','/assets/x-oADfqCtd.js','/assets/save-CdgxGSL7.js','/assets/percent-CVu8oowM.js','/assets/unlink-Pm8LcbTV.js','/assets/link-D54RdVcw.js','/assets/useUpload-DbCzhcGv.js','/assets/file-text-BmTOHQAR.js','/assets/sparkles-CJzlAEkM.js','/assets/badge-check-CcaO09Ay.js','/assets/trash-2-BSB_ZFB-.js','/assets/paperclip-QfeO3S3a.js','/assets/external-link-G3Sb2e-t.js','/assets/triangle-alert-GjVGMM7V.js','/assets/chevron-right-B2S7cpJT.js','/assets/copy-BbSEJx-C.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/arrow-left-tRfo0eTs.js','/assets/send-BK5a11KH.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/login/page':{'id':'employee/purchase-invoice/login/page','parentId':'root','path':'employee/purchase-invoice/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-kURqpxQ5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/uiPurchases-D-qaUyof.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/receipt-text-CK3HzO4A.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BDGiIO9F.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-check-big-Wl95uI6-.js','/assets/trash-2-BSB_ZFB-.js','/assets/search-DWr5r7iP.js','/assets/save-CdgxGSL7.js','/assets/trending-up-TCOMGAmf.js','/assets/arrow-left-tRfo0eTs.js','/assets/layers-BBygtpt5.js','/assets/filter-DGeJl-lq.js','/assets/circle-alert-C38v-ZIg.js','/assets/zap-BrcnJvn1.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cr6VqTgC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/building-2-C_M1-kbw.js','/assets/circle-check-CBpMRAci.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Du_7FGO_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/Sidebar-AOwtw_Aj.js','/assets/users-DNKaMBFk.js','/assets/arrow-left-tRfo0eTs.js','/assets/dollar-sign-D9J1U_LA.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/apiAuth-CTxhwd0t.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/wallet-D6A-w725.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-zqe8qOBc.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/gift-0IfMvbWn.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DBQlQI0w.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/users-DNKaMBFk.js','/assets/dollar-sign-D9J1U_LA.js','/assets/image-CWZANUqp.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/useUpload-DbCzhcGv.js','/assets/x-oADfqCtd.js','/assets/user-BQg6aB1K.js','/assets/calendar-DvSjuM8r.js','/assets/file-text-BmTOHQAR.js','/assets/loader-circle-CNuax1Pi.js','/assets/dateUtils-BM4UzEKk.js','/assets/plus-D_Lc2mQu.js','/assets/send-BK5a11KH.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/wallet-D6A-w725.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DYk69G52.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/employeeUtils-B-C4mLB2.js','/assets/search-DWr5r7iP.js','/assets/users-DNKaMBFk.js','/assets/wallet-D6A-w725.js','/assets/credit-card-DjeI3m8h.js','/assets/heart-pulse-Df9itl3a.js','/assets/GlassSelect-DHOHWEHv.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/user-BQg6aB1K.js','/assets/scroll-text-De-ug1Mv.js','/assets/ban-C8QJdV95.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/badge-check-CcaO09Ay.js','/assets/x-oADfqCtd.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/dateUtils-BM4UzEKk.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/calendar-DvSjuM8r.js','/assets/circle-check-CBpMRAci.js','/assets/briefcase-ba7l8C4x.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-check-CsrP3rFe.js','/assets/circle-x-UtzWpuJv.js','/assets/dollar-sign-D9J1U_LA.js','/assets/index-kTENV4G-.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/save-CdgxGSL7.js','/assets/plus-D_Lc2mQu.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CaPgOuH5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/index-CpTUohiU.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/dateUtils-BM4UzEKk.js','/assets/useEmployeeLoans-CRd2MNxs.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/plus-D_Lc2mQu.js','/assets/clock-BBJ5kuC7.js','/assets/trash-2-BSB_ZFB-.js','/assets/info-tq43-kUD.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/dollar-sign-D9J1U_LA.js','/assets/wallet-D6A-w725.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DtRS5L6T.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/index-CpTUohiU.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/usePayrollMutations-Vjj5qY0S.js','/assets/users-DNKaMBFk.js','/assets/ban-C8QJdV95.js','/assets/dateUtils-BM4UzEKk.js','/assets/lock-B--TmCy_.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/send-BK5a11KH.js','/assets/info-tq43-kUD.js','/assets/wallet-D6A-w725.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/dollar-sign-D9J1U_LA.js','/assets/clock-BBJ5kuC7.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BEnbJfE5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-F-vL43DT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CrYi22_Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/index-kTENV4G-.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/client-FOCTwQOd.js','/assets/_commonjs-dynamic-modules-TDtrdbi3.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-DQbYCoV-.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/image-CWZANUqp.js','/assets/chevron-down-DIQs3av0.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/download-a6tJjTYj.js','/assets/useMutation-BbLiwCC1.js','/assets/upload-uEoJzZYc.js','/assets/x-oADfqCtd.js','/assets/circle-alert-C38v-ZIg.js','/assets/circle-check-CBpMRAci.js','/assets/useAdminAuth-COQBaEHh.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/clock-BBJ5kuC7.js','/assets/send-BK5a11KH.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/index-CpTUohiU.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BDOLEftj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/BloggerInvitationCard-DQbYCoV-.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/arrow-right-DAxcNvoe.js','/assets/external-link-G3Sb2e-t.js','/assets/printer-CAZnI1rX.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMFVDHvb.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/coffee-C0FSh_qh.js','/assets/plus-D_Lc2mQu.js','/assets/x-oADfqCtd.js','/assets/eye-off-CgiG__BY.js','/assets/eye-BtfjA8Xg.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DWvHYFOR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/save-CdgxGSL7.js','/assets/coffee-C0FSh_qh.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BrItPtHg.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/shield-CRmwDkGB.js','/assets/globe-CcBG-loe.js','/assets/eye-BtfjA8Xg.js','/assets/lock-B--TmCy_.js','/assets/trash-2-BSB_ZFB-.js','/assets/mail-BaTAwGpw.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DTMfHXrO.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/apiAuth-CTxhwd0t.js','/assets/languages-D_0Kt5KC.js','/assets/useMutation-BbLiwCC1.js','/assets/calculator-BLO6hCZt.js','/assets/building-2-C_M1-kbw.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/info-tq43-kUD.js','/assets/search-DWr5r7iP.js','/assets/send-BK5a11KH.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/dateUtils-BM4UzEKk.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/x-oADfqCtd.js','/assets/chevron-right-B2S7cpJT.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BryC0Wrv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/globe-CcBG-loe.js','/assets/mail-BaTAwGpw.js','/assets/external-link-G3Sb2e-t.js','/assets/shield-CRmwDkGB.js','/assets/file-text-BmTOHQAR.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CiUA49rN.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-alert-C38v-ZIg.js','/assets/lock-B--TmCy_.js','/assets/sparkles-CJzlAEkM.js','/assets/coffee-C0FSh_qh.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DVh_z8lj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/ui-KgqU6EwG.js','/assets/PriorityPill-C8oUxMKE.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/calendar-days-DwVXTI-7.js','/assets/loader-circle-CNuax1Pi.js','/assets/circle-check-CBpMRAci.js','/assets/message-square-dcIMhRBP.js','/assets/triangle-alert-GjVGMM7V.js','/assets/chevron-left-BvLNMgLZ.js','/assets/activity-Dd6Je2eD.js','/assets/circle-RFIGtrVu.js','/assets/heart-pulse-Df9itl3a.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-vGjjpM2J.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/dateUtils-BM4UzEKk.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/message-square-dcIMhRBP.js','/assets/plus-D_Lc2mQu.js','/assets/search-DWr5r7iP.js','/assets/chevron-left-BvLNMgLZ.js','/assets/send-BK5a11KH.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Z_hlOCN2.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/useUpload-DbCzhcGv.js','/assets/ui-KgqU6EwG.js','/assets/circle-RFIGtrVu.js','/assets/x-oADfqCtd.js','/assets/arrow-right-DAxcNvoe.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/flag-DKrimwZC.js','/assets/calendar-days-DwVXTI-7.js','/assets/user-round-ppaa1dNY.js','/assets/upload-uEoJzZYc.js','/assets/trash-2-BSB_ZFB-.js','/assets/paperclip-QfeO3S3a.js','/assets/file-text-BmTOHQAR.js','/assets/clock-BBJ5kuC7.js','/assets/PriorityPill-C8oUxMKE.js','/assets/loader-circle-CNuax1Pi.js','/assets/plus-D_Lc2mQu.js','/assets/unlink-Pm8LcbTV.js','/assets/circle-check-CBpMRAci.js','/assets/search-DWr5r7iP.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/triangle-alert-GjVGMM7V.js','/assets/activity-Dd6Je2eD.js','/assets/chevron-left-BvLNMgLZ.js','/assets/arrow-up-down-Bi-g--AF.js','/assets/square-check-big-BBx4eJw3.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/home-DWTNOdmk.js','/assets/users-DNKaMBFk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/chevron-right-B2S7cpJT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-eznbZ8zT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DIU59fky.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/dateUtils-BM4UzEKk.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/file-text-BmTOHQAR.js','/assets/plus-D_Lc2mQu.js','/assets/trash-2-BSB_ZFB-.js','/assets/flag-DKrimwZC.js','/assets/square-check-big-BBx4eJw3.js','/assets/loader-circle-CNuax1Pi.js','/assets/copy-BbSEJx-C.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/home-DWTNOdmk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CVUqQi_Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/ui-KgqU6EwG.js','/assets/arrow-right-DAxcNvoe.js','/assets/home-DWTNOdmk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-3f2adb00.js','version':'3f2adb00','sri':undefined};
+const serverManifest = {'entry':{'module':'/assets/entry.client-BVKYnbLA.js','imports':['/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/client-FOCTwQOd.js','/assets/index-kTENV4G-.js'],'css':[]},'routes':{'root':{'id':'root','parentId':undefined,'path':'','index':undefined,'caseSensitive':undefined,'hasAction':true,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/root-CMCKad2R.js','imports':['/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/client-FOCTwQOd.js','/assets/index-kTENV4G-.js','/assets/index-BBR7LY95.js','/assets/index-DPCP-Don.js','/assets/index-CpTUohiU.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clsx-DPoTaEZk.js'],'css':['/assets/root-CckoelDL.css'],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'page':{'id':'page','parentId':'root','path':undefined,'index':true,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DGfbh85A.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/shield-CRmwDkGB.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/trash-2-BSB_ZFB-.js','/assets/receipt-text-CK3HzO4A.js','/assets/languages-D_0Kt5KC.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/page':{'id':'accounting/page','parentId':'root','path':'accounting','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CuKJ-f-i.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/calculator-BLO6hCZt.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-up-TCOMGAmf.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/branch-projects/page':{'id':'accounting/branch-projects/page','parentId':'root','path':'accounting/branch-projects','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ChV5uUp-.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/useBranchProjects-BTsgUDlO.js','/assets/ProjectHeader-B_SNyUDH.js','/assets/building-2-C_M1-kbw.js','/assets/wallet-D6A-w725.js','/assets/receipt-CegkV8OW.js','/assets/calendar-check-CsrP3rFe.js','/assets/search-DWr5r7iP.js','/assets/plus-D_Lc2mQu.js','/assets/loader-circle-CNuax1Pi.js','/assets/map-pin-BeheONbm.js','/assets/triangle-alert-GjVGMM7V.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/apiAuth-CTxhwd0t.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/GlassPopover-CSAIKahT.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js','/assets/save-CdgxGSL7.js','/assets/user-round-ppaa1dNY.js','/assets/scroll-text-De-ug1Mv.js','/assets/pencil-C-4qNeNs.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/branch-projects/[id]/page':{'id':'accounting/branch-projects/[id]/page','parentId':'root','path':'accounting/branch-projects/:id','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cgt_k4Dr.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/useBranchProjects-BTsgUDlO.js','/assets/ProjectHeader-B_SNyUDH.js','/assets/dateUtils-BM4UzEKk.js','/assets/flag-DKrimwZC.js','/assets/bell-BvWZRMmo.js','/assets/circle-check-CBpMRAci.js','/assets/triangle-alert-GjVGMM7V.js','/assets/wallet-D6A-w725.js','/assets/clock-BBJ5kuC7.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/GlassSelect-DHOHWEHv.js','/assets/loader-circle-CNuax1Pi.js','/assets/save-CdgxGSL7.js','/assets/layers-BBygtpt5.js','/assets/plus-D_Lc2mQu.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/user-round-ppaa1dNY.js','/assets/calendar-days-DwVXTI-7.js','/assets/useAccountingAccounts-BRERx4gJ.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/useAccountingPurchaseInvoices-BeEQ610v.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/exportUtils-D25Tf_wA.js','/assets/useQuery-CB7dFlkn.js','/assets/receipt-CegkV8OW.js','/assets/download-a6tJjTYj.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/PieChart-JFHDih7P.js','/assets/search-DWr5r7iP.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/file-text-BmTOHQAR.js','/assets/link-2-thtkzgQ1.js','/assets/scroll-text-De-ug1Mv.js','/assets/useUpload-DbCzhcGv.js','/assets/x-oADfqCtd.js','/assets/send-BK5a11KH.js','/assets/upload-uEoJzZYc.js','/assets/paperclip-QfeO3S3a.js','/assets/receipt-text-CK3HzO4A.js','/assets/external-link-G3Sb2e-t.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/arrow-right-DAxcNvoe.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-right-B2S7cpJT.js','/assets/useMutation-BbLiwCC1.js','/assets/map-pin-BeheONbm.js','/assets/calendar-check-CsrP3rFe.js','/assets/chevron-down-DIQs3av0.js','/assets/sparkles-CJzlAEkM.js','/assets/flame-Duk7IyiO.js','/assets/badge-check-CcaO09Ay.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/cash-calculator/page':{'id':'accounting/cash-calculator/page','parentId':'root','path':'accounting/cash-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B642E8ey.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/GlassSelect-DHOHWEHv.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/banknote-Dg-cEOrL.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-days-DwVXTI-7.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/history-CrK9quJN.js','/assets/save-CdgxGSL7.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/expenses/page':{'id':'accounting/expenses/page','parentId':'root','path':'accounting/expenses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DShStih8.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-calculator/page':{'id':'accounting/green-bean-calculator/page','parentId':'root','path':'accounting/green-bean-calculator','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-7v02bBp3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/ui-KgqU6EwG.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/arrow-left-tRfo0eTs.js','/assets/GlassSelect-DHOHWEHv.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/plus-D_Lc2mQu.js','/assets/save-CdgxGSL7.js','/assets/copy-BbSEJx-C.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/green-bean-orders/page':{'id':'accounting/green-bean-orders/page','parentId':'root','path':'accounting/green-bean-orders','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BgCdxF1Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/ui-KgqU6EwG.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/arrow-left-tRfo0eTs.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/index-CpTUohiU.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/exportUtils-D25Tf_wA.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/useMutation-BbLiwCC1.js','/assets/trash-2-BSB_ZFB-.js','/assets/package-DBl047za.js','/assets/pencil-C-4qNeNs.js','/assets/eye-BtfjA8Xg.js','/assets/save-CdgxGSL7.js','/assets/circle-check-big-Wl95uI6-.js','/assets/triangle-alert-GjVGMM7V.js','/assets/x-oADfqCtd.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/square-check-big-BBx4eJw3.js','/assets/square-CT3vFa__.js','/assets/minus-DgN2e5-e.js','/assets/plus-D_Lc2mQu.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/loans/page':{'id':'accounting/loans/page','parentId':'root','path':'accounting/loans','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-WQUxCVYJ.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/index-kTENV4G-.js','/assets/dateUtils-BM4UzEKk.js','/assets/wallet-D6A-w725.js','/assets/x-oADfqCtd.js','/assets/save-CdgxGSL7.js','/assets/pencil-C-4qNeNs.js','/assets/rotate-ccw-CfybkmW1.js','/assets/trash-2-BSB_ZFB-.js','/assets/useEmployeeLoans-CRd2MNxs.js','/assets/filter-DGeJl-lq.js','/assets/plus-D_Lc2mQu.js','/assets/info-tq43-kUD.js','/assets/index-CpTUohiU.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/payroll/page':{'id':'accounting/payroll/page','parentId':'root','path':'accounting/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-tyNnHtm7.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/x-oADfqCtd.js','/assets/user-BQg6aB1K.js','/assets/file-text-BmTOHQAR.js','/assets/dollar-sign-D9J1U_LA.js','/assets/percent-CVu8oowM.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/usePayrollMutations-Vjj5qY0S.js','/assets/apiAuth-CTxhwd0t.js','/assets/index-CpTUohiU.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/payrollCalculations-L5y2jJ1-.js','/assets/info-tq43-kUD.js','/assets/lock-B--TmCy_.js','/assets/circle-check-CBpMRAci.js','/assets/clock-BBJ5kuC7.js','/assets/style-Dds8TAUA.js','/assets/ban-C8QJdV95.js','/assets/message-square-dcIMhRBP.js','/assets/pencil-C-4qNeNs.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/send-BK5a11KH.js','/assets/gift-0IfMvbWn.js','/assets/trash-2-BSB_ZFB-.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/wallet-D6A-w725.js','/assets/dateUtils-BM4UzEKk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/building-2-C_M1-kbw.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/purchases/page':{'id':'accounting/purchases/page','parentId':'root','path':'accounting/purchases','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C8GmQ8x0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/uiPurchases-D-qaUyof.js','/assets/BulkInvoiceUploadPanel-cvHAHZZF.js','/assets/map-pin-BeheONbm.js','/assets/circle-check-CBpMRAci.js','/assets/hash-7pJWHBVv.js','/assets/ui-KgqU6EwG.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/hand-coins-DMmMLecd.js','/assets/link-ClLLuura.js','/assets/useAccountingAccounts-BRERx4gJ.js','/assets/useAccountingPurchaseInvoices-BeEQ610v.js','/assets/arrow-left-tRfo0eTs.js','/assets/triangle-alert-GjVGMM7V.js','/assets/plus-D_Lc2mQu.js','/assets/trending-up-TCOMGAmf.js','/assets/trending-down-BbiDJvzt.js','/assets/apiAuth-CTxhwd0t.js','/assets/copy-BbSEJx-C.js','/assets/bell-BvWZRMmo.js','/assets/loader-circle-CNuax1Pi.js','/assets/send-BK5a11KH.js','/assets/index-kTENV4G-.js','/assets/user-BQg6aB1K.js','/assets/percent-CVu8oowM.js','/assets/x-oADfqCtd.js','/assets/banknote-Dg-cEOrL.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/chevron-left-BvLNMgLZ.js','/assets/lock-B--TmCy_.js','/assets/flame-Duk7IyiO.js','/assets/save-CdgxGSL7.js','/assets/building-2-C_M1-kbw.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/info-tq43-kUD.js','/assets/credit-card-DjeI3m8h.js','/assets/wallet-D6A-w725.js','/assets/useUpload-DbCzhcGv.js','/assets/useBranchProjects-BTsgUDlO.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/paperclip-QfeO3S3a.js','/assets/scroll-text-De-ug1Mv.js','/assets/external-link-G3Sb2e-t.js','/assets/index-CpTUohiU.js','/assets/users-DNKaMBFk.js','/assets/history-CrK9quJN.js','/assets/calendar-days-DwVXTI-7.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/style-Dds8TAUA.js','/assets/message-square-dcIMhRBP.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/arrow-up-right-C5iYVzxK.js','/assets/minus-DgN2e5-e.js','/assets/layers-BBygtpt5.js','/assets/trophy-BJ4fclRr.js','/assets/circle-RFIGtrVu.js','/assets/receipt-CegkV8OW.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/LineChart-CEs72hat.js','/assets/PieChart-JFHDih7P.js','/assets/BarChart-CQvdXm8D.js','/assets/clock-BBJ5kuC7.js','/assets/clipboard-check-HrIvHDbw.js','/assets/sparkles-CJzlAEkM.js','/assets/upload-uEoJzZYc.js','/assets/ban-C8QJdV95.js','/assets/chevron-right-B2S7cpJT.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/unlink-Pm8LcbTV.js','/assets/arrow-right-DAxcNvoe.js','/assets/badge-check-CcaO09Ay.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/shift-close/page':{'id':'accounting/shift-close/page','parentId':'root','path':'accounting/shift-close','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-D7X1DKEE.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/calculator-BLO6hCZt.js','/assets/building-2-C_M1-kbw.js','/assets/info-tq43-kUD.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/dateUtils-BM4UzEKk.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'accounting/waste/page':{'id':'accounting/waste/page','parentId':'root','path':'accounting/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CWvvwsVC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-pDynYnUa.js','/assets/Sidebar-B8YxTbeE.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/apiAuth-CTxhwd0t.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/layers-BBygtpt5.js','/assets/boxes-Dz-EPieR.js','/assets/receipt-CegkV8OW.js','/assets/trophy-BJ4fclRr.js','/assets/trash-2-BSB_ZFB-.js','/assets/building-2-C_M1-kbw.js','/assets/user-BQg6aB1K.js','/assets/clock-BBJ5kuC7.js','/assets/chevron-down-DIQs3av0.js','/assets/sticky-note-DEZam0gt.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/wallet-D6A-w725.js','/assets/hand-coins-DMmMLecd.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/GlassPopover-CSAIKahT.js','/assets/dateUtils-BM4UzEKk.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/page':{'id':'admin/page','parentId':'root','path':'admin','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMALXRfI.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/trending-up-TCOMGAmf.js','/assets/clipboard-list-9aP7s25o.js','/assets/circle-check-big-Wl95uI6-.js','/assets/clock-BBJ5kuC7.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-days-DwVXTI-7.js','/assets/dateUtils-BM4UzEKk.js','/assets/sparkles-CJzlAEkM.js','/assets/trending-down-BbiDJvzt.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/x-oADfqCtd.js','/assets/info-tq43-kUD.js','/assets/circle-alert-C38v-ZIg.js','/assets/triangle-alert-GjVGMM7V.js','/assets/package-plus-B_-K8GyX.js','/assets/truck-ChnZnUAV.js','/assets/calendar-DvSjuM8r.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/BarChart-CQvdXm8D.js','/assets/LineChart-CEs72hat.js','/assets/activity-Dd6Je2eD.js','/assets/PieChart-JFHDih7P.js','/assets/dollar-sign-D9J1U_LA.js','/assets/package-DBl047za.js','/assets/exportUtils-D25Tf_wA.js','/assets/file-text-BmTOHQAR.js','/assets/search-DWr5r7iP.js','/assets/download-a6tJjTYj.js','/assets/printer-CAZnI1rX.js','/assets/users-DNKaMBFk.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/layers-BBygtpt5.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/clsx-DPoTaEZk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/branches/page':{'id':'admin/branches/page','parentId':'root','path':'admin/branches','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CCHv0-Oq.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/exportUtils-D25Tf_wA.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/building-2-C_M1-kbw.js','/assets/map-pin-BeheONbm.js','/assets/clipboard-list-9aP7s25o.js','/assets/search-DWr5r7iP.js','/assets/plus-D_Lc2mQu.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/x-oADfqCtd.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js','/assets/file-text-BmTOHQAR.js','/assets/banknote-Dg-cEOrL.js','/assets/dateUtils-BM4UzEKk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/employees/page':{'id':'admin/employees/page','parentId':'root','path':'admin/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BYUJTqBw.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/employeeUtils-B-C4mLB2.js','/assets/users-DNKaMBFk.js','/assets/shield-CRmwDkGB.js','/assets/user-BQg6aB1K.js','/assets/search-DWr5r7iP.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/circle-check-CBpMRAci.js','/assets/circle-x-UtzWpuJv.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/briefcase-ba7l8C4x.js','/assets/dollar-sign-D9J1U_LA.js','/assets/x-oADfqCtd.js','/assets/mail-BaTAwGpw.js','/assets/lock-B--TmCy_.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/receipt-text-CK3HzO4A.js','/assets/truck-ChnZnUAV.js','/assets/bell-BvWZRMmo.js','/assets/building-2-C_M1-kbw.js','/assets/loader-circle-CNuax1Pi.js','/assets/send-BK5a11KH.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/plus-D_Lc2mQu.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/trending-down-BbiDJvzt.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items/page':{'id':'admin/items/page','parentId':'root','path':'admin/items','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BAEWrtDk.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/layers-BBygtpt5.js','/assets/x-oADfqCtd.js','/assets/languages-D_0Kt5KC.js','/assets/plus-D_Lc2mQu.js','/assets/flame-Duk7IyiO.js','/assets/pencil-C-4qNeNs.js','/assets/ban-C8QJdV95.js','/assets/Sidebar-CgQ6OIMb.js','/assets/package-DBl047za.js','/assets/circle-check-big-Wl95uI6-.js','/assets/triangle-alert-GjVGMM7V.js','/assets/circle-x-UtzWpuJv.js','/assets/GlassPopover-CSAIKahT.js','/assets/search-DWr5r7iP.js','/assets/filter-DGeJl-lq.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/dateUtils-BM4UzEKk.js','/assets/eye-BtfjA8Xg.js','/assets/building-2-C_M1-kbw.js','/assets/trash-2-BSB_ZFB-.js','/assets/link-ClLLuura.js','/assets/square-check-big-BBx4eJw3.js','/assets/clipboard-check-HrIvHDbw.js','/assets/square-CT3vFa__.js','/assets/eye-off-CgiG__BY.js','/assets/index-kTENV4G-.js','/assets/shopping-cart-Ds2DSjx2.js','/assets/boxes-Dz-EPieR.js','/assets/clipboard-list-9aP7s25o.js','/assets/circle-alert-C38v-ZIg.js','/assets/exportUtils-D25Tf_wA.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/index-CpTUohiU.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/items-summary/page':{'id':'admin/items-summary/page','parentId':'root','path':'admin/items-summary','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B1H7z16U.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/package-DBl047za.js','/assets/building-2-C_M1-kbw.js','/assets/trending-down-BbiDJvzt.js','/assets/circle-x-UtzWpuJv.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/hash-7pJWHBVv.js','/assets/calendar-DvSjuM8r.js','/assets/user-BQg6aB1K.js','/assets/file-text-BmTOHQAR.js','/assets/triangle-alert-GjVGMM7V.js','/assets/circle-check-big-Wl95uI6-.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/trending-up-TCOMGAmf.js','/assets/x-oADfqCtd.js','/assets/generateCategoricalChart-CKcOYxjz.js','/assets/LineChart-CEs72hat.js','/assets/package-plus-B_-K8GyX.js','/assets/clipboard-list-9aP7s25o.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js','/assets/clsx-DPoTaEZk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/login/page':{'id':'admin/login/page','parentId':'root','path':'admin/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C-a1gCl9.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/useMediaQuery-Be-eWih8.js','/assets/shield-CRmwDkGB.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/circle-alert-C38v-ZIg.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/low-stock/page':{'id':'admin/low-stock/page','parentId':'root','path':'admin/low-stock','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BLi_-ByB.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-down-BbiDJvzt.js','/assets/circle-x-UtzWpuJv.js','/assets/triangle-alert-GjVGMM7V.js','/assets/building-2-C_M1-kbw.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/package-DBl047za.js','/assets/circle-check-big-Wl95uI6-.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/operations/page':{'id':'admin/operations/page','parentId':'root','path':'admin/operations','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-ENCaeCUD.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/dateUtils-BM4UzEKk.js','/assets/Sidebar-CgQ6OIMb.js','/assets/ui-KgqU6EwG.js','/assets/clipboard-list-9aP7s25o.js','/assets/calendar-check-CsrP3rFe.js','/assets/package-plus-B_-K8GyX.js','/assets/clock-BBJ5kuC7.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/filter-DGeJl-lq.js','/assets/x-oADfqCtd.js','/assets/search-DWr5r7iP.js','/assets/exportUtils-D25Tf_wA.js','/assets/GlassPopover-CSAIKahT.js','/assets/printer-CAZnI1rX.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/square-check-big-BBx4eJw3.js','/assets/trash-2-BSB_ZFB-.js','/assets/square-CT3vFa__.js','/assets/building-2-C_M1-kbw.js','/assets/eye-BtfjA8Xg.js','/assets/pencil-C-4qNeNs.js','/assets/calendar-DvSjuM8r.js','/assets/arrow-up-right-C5iYVzxK.js','/assets/user-BQg6aB1K.js','/assets/trending-down-BbiDJvzt.js','/assets/sticky-note-DEZam0gt.js','/assets/hash-7pJWHBVv.js','/assets/circle-check-big-Wl95uI6-.js','/assets/percent-CVu8oowM.js','/assets/package-DBl047za.js','/assets/circle-alert-C38v-ZIg.js','/assets/circle-check-CBpMRAci.js','/assets/plus-D_Lc2mQu.js','/assets/send-BK5a11KH.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-check-HrIvHDbw.js','/assets/rotate-ccw-CfybkmW1.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/truck-ChnZnUAV.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/banknote-Dg-cEOrL.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/receipts/page':{'id':'admin/receipts/page','parentId':'root','path':'admin/receipts','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Bq_us6bg.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/dateUtils-BM4UzEKk.js','/assets/truck-ChnZnUAV.js','/assets/calendar-DvSjuM8r.js','/assets/chevron-up-CXzQAR7P.js','/assets/chevron-down-DIQs3av0.js','/assets/package-DBl047za.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/triangle-alert-GjVGMM7V.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/trending-down-BbiDJvzt.js','/assets/file-text-BmTOHQAR.js','/assets/banknote-Dg-cEOrL.js','/assets/GlassPopover-CSAIKahT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/stock-value/page':{'id':'admin/stock-value/page','parentId':'root','path':'admin/stock-value','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-C6CB83Uo.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/banknote-Dg-cEOrL.js','/assets/building-2-C_M1-kbw.js','/assets/package-DBl047za.js','/assets/triangle-alert-GjVGMM7V.js','/assets/trending-up-TCOMGAmf.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/arrow-up-down-Bi-g--AF.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/circle-alert-C38v-ZIg.js','/assets/layers-BBygtpt5.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/trending-down-BbiDJvzt.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'admin/variance/page':{'id':'admin/variance/page','parentId':'root','path':'admin/variance','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-rLgkhMI3.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BOEV-tKH.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/Sidebar-CgQ6OIMb.js','/assets/Breadcrumb-Z6WBn8E9.js','/assets/ui-KgqU6EwG.js','/assets/arrow-left-tRfo0eTs.js','/assets/trending-down-BbiDJvzt.js','/assets/GlassSelect-DHOHWEHv.js','/assets/search-DWr5r7iP.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/trending-up-TCOMGAmf.js','/assets/triangle-alert-GjVGMM7V.js','/assets/GlassPopover-CSAIKahT.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/dateUtils-BM4UzEKk.js','/assets/calendar-DvSjuM8r.js','/assets/exportUtils-D25Tf_wA.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/clipboard-list-9aP7s25o.js','/assets/briefcase-ba7l8C4x.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/building-2-C_M1-kbw.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/truck-ChnZnUAV.js','/assets/banknote-Dg-cEOrL.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'alwaha/page':{'id':'alwaha/page','parentId':'root','path':'alwaha','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CZROkpMM.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/inventory/page':{'id':'employee/inventory/page','parentId':'root','path':'employee/inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CcBNDFKh.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-check-big-Wl95uI6-.js','/assets/package-DBl047za.js','/assets/search-DWr5r7iP.js','/assets/save-CdgxGSL7.js','/assets/trending-up-TCOMGAmf.js','/assets/arrow-left-tRfo0eTs.js','/assets/layers-BBygtpt5.js','/assets/filter-DGeJl-lq.js','/assets/circle-alert-C38v-ZIg.js','/assets/zap-BrcnJvn1.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/login/page':{'id':'employee/login/page','parentId':'root','path':'employee/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DiX0Rwla.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/building-2-C_M1-kbw.js','/assets/circle-check-CBpMRAci.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/page':{'id':'employee/purchase-invoice/page','parentId':'root','path':'employee/purchase-invoice','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CRCplqc0.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/uiPurchases-D-qaUyof.js','/assets/useAccountingAccounts-BRERx4gJ.js','/assets/BulkInvoiceUploadPanel-cvHAHZZF.js','/assets/apiAuth-CTxhwd0t.js','/assets/arrow-right-DAxcNvoe.js','/assets/receipt-text-CK3HzO4A.js','/assets/loader-circle-CNuax1Pi.js','/assets/circle-check-CBpMRAci.js','/assets/plus-D_Lc2mQu.js','/assets/truck-ChnZnUAV.js','/assets/search-DWr5r7iP.js','/assets/pencil-C-4qNeNs.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/useUpload-DbCzhcGv.js','/assets/file-text-BmTOHQAR.js','/assets/save-CdgxGSL7.js','/assets/x-oADfqCtd.js','/assets/sparkles-CJzlAEkM.js','/assets/flame-Duk7IyiO.js','/assets/badge-check-CcaO09Ay.js','/assets/trash-2-BSB_ZFB-.js','/assets/paperclip-QfeO3S3a.js','/assets/external-link-G3Sb2e-t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/hand-coins-DMmMLecd.js','/assets/percent-CVu8oowM.js','/assets/unlink-Pm8LcbTV.js','/assets/link-ClLLuura.js','/assets/triangle-alert-GjVGMM7V.js','/assets/chevron-right-B2S7cpJT.js','/assets/copy-BbSEJx-C.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/arrow-left-tRfo0eTs.js','/assets/send-BK5a11KH.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/purchase-invoice/login/page':{'id':'employee/purchase-invoice/login/page','parentId':'root','path':'employee/purchase-invoice/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-kURqpxQ5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/uiPurchases-D-qaUyof.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/receipt-text-CK3HzO4A.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/page':{'id':'employee/waste/page','parentId':'root','path':'employee/waste','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BDGiIO9F.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-check-big-Wl95uI6-.js','/assets/trash-2-BSB_ZFB-.js','/assets/search-DWr5r7iP.js','/assets/save-CdgxGSL7.js','/assets/trending-up-TCOMGAmf.js','/assets/arrow-left-tRfo0eTs.js','/assets/layers-BBygtpt5.js','/assets/filter-DGeJl-lq.js','/assets/circle-alert-C38v-ZIg.js','/assets/zap-BrcnJvn1.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'employee/waste/login/page':{'id':'employee/waste/login/page','parentId':'root','path':'employee/waste/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Cr6VqTgC.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/globe-CcBG-loe.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/building-2-C_M1-kbw.js','/assets/circle-check-CBpMRAci.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/page':{'id':'hr/page','parentId':'root','path':'hr','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-Du_7FGO_.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/Sidebar-AOwtw_Aj.js','/assets/users-DNKaMBFk.js','/assets/arrow-left-tRfo0eTs.js','/assets/dollar-sign-D9J1U_LA.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/apiAuth-CTxhwd0t.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/wallet-D6A-w725.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/bonuses/page':{'id':'hr/bonuses/page','parentId':'root','path':'hr/bonuses','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-zqe8qOBc.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/gift-0IfMvbWn.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/apiAuth-CTxhwd0t.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/deductions/page':{'id':'hr/deductions/page','parentId':'root','path':'hr/deductions','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DBQlQI0w.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/users-DNKaMBFk.js','/assets/dollar-sign-D9J1U_LA.js','/assets/image-CWZANUqp.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/useUpload-DbCzhcGv.js','/assets/x-oADfqCtd.js','/assets/user-BQg6aB1K.js','/assets/calendar-DvSjuM8r.js','/assets/file-text-BmTOHQAR.js','/assets/loader-circle-CNuax1Pi.js','/assets/dateUtils-BM4UzEKk.js','/assets/plus-D_Lc2mQu.js','/assets/send-BK5a11KH.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/index-kTENV4G-.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/wallet-D6A-w725.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/employees/page':{'id':'hr/employees/page','parentId':'root','path':'hr/employees','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DYk69G52.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/ui-KgqU6EwG.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/index-CpTUohiU.js','/assets/useMutation-BbLiwCC1.js','/assets/employeeUtils-B-C4mLB2.js','/assets/search-DWr5r7iP.js','/assets/users-DNKaMBFk.js','/assets/wallet-D6A-w725.js','/assets/credit-card-DjeI3m8h.js','/assets/heart-pulse-Df9itl3a.js','/assets/GlassSelect-DHOHWEHv.js','/assets/filter-DGeJl-lq.js','/assets/rotate-ccw-CfybkmW1.js','/assets/GlassPopover-CSAIKahT.js','/assets/exportUtils-D25Tf_wA.js','/assets/download-a6tJjTYj.js','/assets/chevron-down-DIQs3av0.js','/assets/file-text-BmTOHQAR.js','/assets/user-BQg6aB1K.js','/assets/scroll-text-De-ug1Mv.js','/assets/ban-C8QJdV95.js','/assets/pencil-C-4qNeNs.js','/assets/trash-2-BSB_ZFB-.js','/assets/badge-check-CcaO09Ay.js','/assets/x-oADfqCtd.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/dateUtils-BM4UzEKk.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/calendar-DvSjuM8r.js','/assets/circle-check-CBpMRAci.js','/assets/briefcase-ba7l8C4x.js','/assets/building-2-C_M1-kbw.js','/assets/calendar-check-CsrP3rFe.js','/assets/circle-x-UtzWpuJv.js','/assets/dollar-sign-D9J1U_LA.js','/assets/index-kTENV4G-.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/save-CdgxGSL7.js','/assets/plus-D_Lc2mQu.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/chevron-right-B2S7cpJT.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/overtime/page':{'id':'hr/overtime/page','parentId':'root','path':'hr/overtime','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CaPgOuH5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/index-CpTUohiU.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassMultiSelect-DmSq_GqG.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/dateUtils-BM4UzEKk.js','/assets/useEmployeeLoans-CRd2MNxs.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/plus-D_Lc2mQu.js','/assets/clock-BBJ5kuC7.js','/assets/trash-2-BSB_ZFB-.js','/assets/info-tq43-kUD.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/dollar-sign-D9J1U_LA.js','/assets/wallet-D6A-w725.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'hr/payroll/page':{'id':'hr/payroll/page','parentId':'root','path':'hr/payroll','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DtRS5L6T.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/layout-BHJMDKFc.js','/assets/index-CpTUohiU.js','/assets/Sidebar-AOwtw_Aj.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/payrollFormatters-BiRbzG-Y.js','/assets/usePayrollMutations-Vjj5qY0S.js','/assets/users-DNKaMBFk.js','/assets/ban-C8QJdV95.js','/assets/dateUtils-BM4UzEKk.js','/assets/lock-B--TmCy_.js','/assets/refresh-cw-BDYVB4Zu.js','/assets/send-BK5a11KH.js','/assets/info-tq43-kUD.js','/assets/wallet-D6A-w725.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/apiAuth-CTxhwd0t.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/useQuery-CB7dFlkn.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/layout-dashboard-CkkjPxTl.js','/assets/dollar-sign-D9J1U_LA.js','/assets/clock-BBJ5kuC7.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/queryKeys-DMyzv79T.js','/assets/useMutation-BbLiwCC1.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/page':{'id':'inventory/page','parentId':'root','path':'inventory','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BEnbJfE5.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'inventory/login/page':{'id':'inventory/login/page','parentId':'root','path':'inventory/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-F-vL43DT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/page':{'id':'marketing/bloggers/page','parentId':'root','path':'marketing/bloggers','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CrYi22_Q.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/index-kTENV4G-.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/client-FOCTwQOd.js','/assets/_commonjs-dynamic-modules-TDtrdbi3.js','/assets/index-DPCP-Don.js','/assets/BloggerInvitationCard-DQbYCoV-.js','/assets/exportUtils-D25Tf_wA.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/image-CWZANUqp.js','/assets/chevron-down-DIQs3av0.js','/assets/file-spreadsheet-Cnh7FY_v.js','/assets/download-a6tJjTYj.js','/assets/useMutation-BbLiwCC1.js','/assets/upload-uEoJzZYc.js','/assets/x-oADfqCtd.js','/assets/circle-alert-C38v-ZIg.js','/assets/circle-check-CBpMRAci.js','/assets/useAdminAuth-COQBaEHh.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/clock-BBJ5kuC7.js','/assets/send-BK5a11KH.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/index-CpTUohiU.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/bloggers/[id]/card/page':{'id':'marketing/bloggers/[id]/card/page','parentId':'root','path':'marketing/bloggers/:id/card','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BDOLEftj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/BloggerInvitationCard-DQbYCoV-.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/arrow-right-DAxcNvoe.js','/assets/external-link-G3Sb2e-t.js','/assets/printer-CAZnI1rX.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/menu/page':{'id':'marketing/menu/page','parentId':'root','path':'marketing/menu','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CMFVDHvb.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/coffee-C0FSh_qh.js','/assets/plus-D_Lc2mQu.js','/assets/x-oADfqCtd.js','/assets/eye-off-CgiG__BY.js','/assets/eye-BtfjA8Xg.js','/assets/square-pen-Dh9bMxwt.js','/assets/trash-2-BSB_ZFB-.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'marketing/settings/page':{'id':'marketing/settings/page','parentId':'root','path':'marketing/settings','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DWvHYFOR.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-C85NnarA.js','/assets/ui-KgqU6EwG.js','/assets/useAdminAuth-COQBaEHh.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/save-CdgxGSL7.js','/assets/coffee-C0FSh_qh.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/AdminThemeToggle-D-aV704A.js','/assets/useMediaQuery-Be-eWih8.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'privacy-policy/page':{'id':'privacy-policy/page','parentId':'root','path':'privacy-policy','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BrItPtHg.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/shield-CRmwDkGB.js','/assets/globe-CcBG-loe.js','/assets/eye-BtfjA8Xg.js','/assets/lock-B--TmCy_.js','/assets/trash-2-BSB_ZFB-.js','/assets/mail-BaTAwGpw.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'shift-close/login/page':{'id':'shift-close/login/page','parentId':'root','path':'shift-close/login','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DTMfHXrO.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/apiAuth-CTxhwd0t.js','/assets/languages-D_0Kt5KC.js','/assets/useMutation-BbLiwCC1.js','/assets/calculator-BLO6hCZt.js','/assets/building-2-C_M1-kbw.js','/assets/user-BQg6aB1K.js','/assets/lock-B--TmCy_.js','/assets/info-tq43-kUD.js','/assets/search-DWr5r7iP.js','/assets/send-BK5a11KH.js','/assets/arrow-left-tRfo0eTs.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/dateUtils-BM4UzEKk.js','/assets/clock-BBJ5kuC7.js','/assets/calendar-days-DwVXTI-7.js','/assets/x-oADfqCtd.js','/assets/chevron-right-B2S7cpJT.js','/assets/chevron-left-BvLNMgLZ.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'support/page':{'id':'support/page','parentId':'root','path':'support','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-BryC0Wrv.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/ui-KgqU6EwG.js','/assets/globe-CcBG-loe.js','/assets/mail-BaTAwGpw.js','/assets/external-link-G3Sb2e-t.js','/assets/shield-CRmwDkGB.js','/assets/file-text-BmTOHQAR.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'welcome/[slug]/page':{'id':'welcome/[slug]/page','parentId':'root','path':'welcome/:slug','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-CiUA49rN.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/circle-alert-C38v-ZIg.js','/assets/lock-B--TmCy_.js','/assets/sparkles-CJzlAEkM.js','/assets/coffee-C0FSh_qh.js','/assets/ui-KgqU6EwG.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/page':{'id':'workspace/page','parentId':'root','path':'workspace','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DVh_z8lj.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/ui-KgqU6EwG.js','/assets/PriorityPill-C8oUxMKE.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/calendar-days-DwVXTI-7.js','/assets/loader-circle-CNuax1Pi.js','/assets/circle-check-CBpMRAci.js','/assets/message-square-dcIMhRBP.js','/assets/triangle-alert-GjVGMM7V.js','/assets/chevron-left-BvLNMgLZ.js','/assets/activity-Dd6Je2eD.js','/assets/circle-RFIGtrVu.js','/assets/heart-pulse-Df9itl3a.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/inbox/page':{'id':'workspace/inbox/page','parentId':'root','path':'workspace/inbox','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-vGjjpM2J.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/dateUtils-BM4UzEKk.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/message-square-dcIMhRBP.js','/assets/plus-D_Lc2mQu.js','/assets/search-DWr5r7iP.js','/assets/chevron-left-BvLNMgLZ.js','/assets/send-BK5a11KH.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/tasks/page':{'id':'workspace/tasks/page','parentId':'root','path':'workspace/tasks','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-B9j5Ebfo.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/apiAuth-CTxhwd0t.js','/assets/dateUtils-BM4UzEKk.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/useUpload-DbCzhcGv.js','/assets/ui-KgqU6EwG.js','/assets/circle-RFIGtrVu.js','/assets/x-oADfqCtd.js','/assets/arrow-right-DAxcNvoe.js','/assets/GlassSelect-DHOHWEHv.js','/assets/GlassDatePicker-BQAQuJQV.js','/assets/flag-DKrimwZC.js','/assets/calendar-days-DwVXTI-7.js','/assets/user-round-ppaa1dNY.js','/assets/upload-uEoJzZYc.js','/assets/trash-2-BSB_ZFB-.js','/assets/paperclip-QfeO3S3a.js','/assets/file-text-BmTOHQAR.js','/assets/clock-BBJ5kuC7.js','/assets/PriorityPill-C8oUxMKE.js','/assets/loader-circle-CNuax1Pi.js','/assets/plus-D_Lc2mQu.js','/assets/link-2-thtkzgQ1.js','/assets/unlink-Pm8LcbTV.js','/assets/circle-check-CBpMRAci.js','/assets/search-DWr5r7iP.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/triangle-alert-GjVGMM7V.js','/assets/activity-Dd6Je2eD.js','/assets/chevron-left-BvLNMgLZ.js','/assets/arrow-up-down-Bi-g--AF.js','/assets/square-check-big-BBx4eJw3.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/home-DWTNOdmk.js','/assets/users-DNKaMBFk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js','/assets/chevron-right-B2S7cpJT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/team/page':{'id':'workspace/team/page','parentId':'root','path':'workspace/team','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-eznbZ8zT.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/users-DNKaMBFk.js','/assets/plus-D_Lc2mQu.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/home-DWTNOdmk.js','/assets/square-check-big-BBx4eJw3.js','/assets/file-text-BmTOHQAR.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'workspace/templates/page':{'id':'workspace/templates/page','parentId':'root','path':'workspace/templates','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/page-DIU59fky.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/layout-CHsZk4tz.js','/assets/Sidebar-scEIhD46.js','/assets/useWorkspaceUser-CYMUGEua.js','/assets/ui-KgqU6EwG.js','/assets/GlassSelect-DHOHWEHv.js','/assets/dateUtils-BM4UzEKk.js','/assets/apiAuth-CTxhwd0t.js','/assets/queryKeys-DMyzv79T.js','/assets/useQuery-CB7dFlkn.js','/assets/useMutation-BbLiwCC1.js','/assets/file-text-BmTOHQAR.js','/assets/plus-D_Lc2mQu.js','/assets/trash-2-BSB_ZFB-.js','/assets/flag-DKrimwZC.js','/assets/square-check-big-BBx4eJw3.js','/assets/loader-circle-CNuax1Pi.js','/assets/copy-BbSEJx-C.js','/assets/index-CpTUohiU.js','/assets/index-kTENV4G-.js','/assets/SidebarShell-Cb7jx4JT.js','/assets/clipboard-list-9aP7s25o.js','/assets/calculator-BLO6hCZt.js','/assets/users-DNKaMBFk.js','/assets/useAdminTheme-D6WVFu7-.js','/assets/search-DWr5r7iP.js','/assets/x-oADfqCtd.js','/assets/package-DBl047za.js','/assets/arrow-left-tRfo0eTs.js','/assets/globe-CcBG-loe.js','/assets/chevron-left-BvLNMgLZ.js','/assets/home-DWTNOdmk.js','/assets/GlassPopover-CSAIKahT.js','/assets/chevron-down-DIQs3av0.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined},'__create/not-found':{'id':'__create/not-found','parentId':'root','path':'*?','index':undefined,'caseSensitive':undefined,'hasAction':false,'hasLoader':false,'hasClientAction':false,'hasClientLoader':false,'hasClientMiddleware':false,'hasDefaultExport':true,'hasErrorBoundary':false,'module':'/assets/not-found-CVUqQi_Z.js','imports':['/assets/index-BBR7LY95.js','/assets/chunk-LFPYN7LY-vpE2AaqX.js','/assets/ui-KgqU6EwG.js','/assets/arrow-right-DAxcNvoe.js','/assets/home-DWTNOdmk.js'],'css':[],'clientActionModule':undefined,'clientLoaderModule':undefined,'clientMiddlewareModule':undefined,'hydrateFallbackModule':undefined}},'url':'/assets/manifest-74e68912.js','version':'74e68912','sri':undefined};
 
 const assetsBuildDirectory = "build/client";
       const basename = "/";

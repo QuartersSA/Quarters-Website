@@ -6,12 +6,12 @@ import { queryKeys } from "@/utils/queryKeys";
 
 // مشاريع تأسيس الفروع — الاستعلامات والطفرات.
 //
-// المرحلة 1 واجهة فقط: `BRANCH_PROJECTS_MOCK = true` يوجّه كل الطلبات إلى
-// المخزن المحلي (`branchProjectsMock`). عند ربط الخلفية يُقلب الثابت إلى
-// false فتذهب الطلبات إلى `/api/accounting/branch-projects` بنفس الأشكال.
+// الخلفية مربوطة: `BRANCH_PROJECTS_MOCK = false` فتذهب الطلبات إلى
+// `/api/accounting/branch-projects`. قلبه إلى true يعيد المخزن المحلي
+// (`branchProjectsMock`) للتجربة بلا خادم بنفس الأشكال.
 
 const BASE = "/api/accounting/branch-projects";
-export const BRANCH_PROJECTS_MOCK = true;
+export const BRANCH_PROJECTS_MOCK = false;
 
 // خطأ يحمل كود الخادم (milestones_pending / not_found …) حتى تتصرف
 // الواجهة بحسبه.
@@ -258,16 +258,31 @@ export function useDeleteBranchProjectAttachment() {
   });
 }
 
-// ---------- الفواتير (mock فقط حالياً — تُستبدل بنافذة فاتورة المشتريات) ----------
+// ---------- الفواتير ----------
+// الفواتير الفعلية تُنشأ من نافذة فاتورة المشتريات (`project_id`/
+// `project_phase_id` في حمولتها). هنا: ربط فاتورة موجودة بالمشروع
+// (POST `{invoice_id, phase_id}`) وتعديل القسم/الحساب (PUT
+// `{phase_id, expense_account_code}`) والحذف النهائي.
 
 export function useSaveBranchProjectInvoice() {
   return useProjectMutation({
     mock: (vars) => mockApi.saveInvoice(vars),
-    real: ({ project_id, id, ...fields }) =>
-      id
-        ? request("PUT", `/${project_id}/invoices/${id}`, fields, "فشل حفظ الفاتورة")
-        : request("POST", `/${project_id}/invoices`, fields, "فشل حفظ الفاتورة"),
-    successMessage: (_data, vars) => (vars?.id ? "تم حفظ الفاتورة" : "تمت إضافة الفاتورة"),
+    real: ({ project_id, id, invoice_id, ...fields }) => {
+      if (id) {
+        return request("PUT", `/${project_id}/invoices/${id}`, fields, "فشل حفظ الفاتورة");
+      }
+      if (invoice_id) {
+        return request(
+          "POST",
+          `/${project_id}/invoices`,
+          { invoice_id: Number(invoice_id), phase_id: fields.phase_id ?? null },
+          "فشل ربط الفاتورة بالمشروع",
+        );
+      }
+      return request("POST", `/${project_id}/invoices`, fields, "فشل حفظ الفاتورة");
+    },
+    successMessage: (_data, vars) =>
+      vars?.id ? "تم حفظ الفاتورة" : vars?.invoice_id ? "تم ربط الفاتورة بالمشروع" : "تمت إضافة الفاتورة",
     errorPrefix: "فشل حفظ الفاتورة",
   });
 }

@@ -132,6 +132,9 @@ export default function LeaseContractModal({
   contract,
   contacts = [],
   branches = [],
+  // مشاريع تأسيس الفروع (اختياري): عقد إيجار ما قبل الافتتاح يُربط
+  // بمشروعه فتُحسب فواتير استقطاعه ضمن تكاليف التأسيس.
+  projects = [],
   isSubmitting,
   onClose,
   onSubmit,
@@ -139,6 +142,7 @@ export default function LeaseContractModal({
   const isEditing = !!contract?.id;
 
   const [contractNumber, setContractNumber] = useState("");
+  const [projectId, setProjectId] = useState("");
   const [contactId, setContactId] = useState("");
   const [lessorName, setLessorName] = useState("");
   const [lessorVat, setLessorVat] = useState("");
@@ -202,6 +206,7 @@ export default function LeaseContractModal({
         CONTRACT_TYPES.includes(contract.contract_type) ? contract.contract_type : "branch",
       );
       setBranchId(contract.branch_id ? String(contract.branch_id) : "");
+      setProjectId(contract.project_id ? String(contract.project_id) : "");
       setStartDate(contract.start_date || "");
       setEndDate(contract.end_date || "");
       setNoticeDays(
@@ -274,6 +279,7 @@ export default function LeaseContractModal({
       setLocation("");
       setContractType("branch");
       setBranchId("");
+      setProjectId("");
       setStartDate("");
       setEndDate("");
       setNoticeDays("");
@@ -318,6 +324,23 @@ export default function LeaseContractModal({
     ],
     [branches],
   );
+
+  // مشاريع التأسيس النشطة (غير مفتتحة/ملغاة) + مشروع العقد الحالي إن أُغلق.
+  const projectOptions = useMemo(() => {
+    const list = Array.isArray(projects) ? projects : [];
+    const active = list.filter(
+      (p) => p && p.is_active !== false && p.status !== "opened" && p.status !== "cancelled",
+    );
+    if (projectId && !active.some((p) => String(p.id) === projectId)) {
+      const current = list.find((p) => String(p?.id) === projectId);
+      if (current) active.push(current);
+    }
+    return [
+      { value: "", label: "بدون مشروع" },
+      ...active.map((p) => ({ value: String(p.id), label: `${p.code ? `${p.code} · ` : ""}${p.name || ""}` })),
+    ];
+  }, [projects, projectId]);
+  const showProjectField = projectOptions.length > 1;
 
   const handleContactChange = (value) => {
     setContactId(value);
@@ -505,6 +528,7 @@ export default function LeaseContractModal({
       location: location.trim() || null,
       contract_type: contractType,
       branch_id: branchId ? Number(branchId) : null,
+      project_id: projectId ? Number(projectId) : null,
       start_date: startDate,
       end_date: endDate,
       notice_period_days: intOrNull(noticeDays),
@@ -1112,6 +1136,21 @@ export default function LeaseContractModal({
                       buttonClassName="text-sm py-2 px-3"
                     />
                   </div>
+                  {showProjectField ? (
+                    <div>
+                      <FieldLabel>مشروع تأسيس (اختياري)</FieldLabel>
+                      <GlassSelect
+                        value={projectId}
+                        onChange={setProjectId}
+                        options={projectOptions}
+                        placeholder="بدون مشروع"
+                        buttonClassName="text-sm py-2 px-3"
+                      />
+                      <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                        فواتير الاستقطاع حتى شهر الافتتاح تُحسب ضمن تكاليف تأسيس الفرع.
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
 

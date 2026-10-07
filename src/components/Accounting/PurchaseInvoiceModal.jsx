@@ -1012,6 +1012,20 @@ export function buildExpenseAccountOptions(accounts = []) {
   return options;
 }
 
+// معرّف الحساب بكوده (حساب مصروف نشط قابل للترحيل) — للحساب الافتراضي
+// لقسم مشروع التأسيس والتعبئة المسبقة من تبويب المصاريف.
+function findAccountIdByCode(accounts, code) {
+  const wanted = String(code || "").trim();
+  if (!wanted) return "";
+  const match = (accounts || []).find(
+    (account) =>
+      String(account?.code || "").trim() === wanted &&
+      account?.is_active !== false &&
+      account?.is_postable !== false,
+  );
+  return match ? String(match.id) : "";
+}
+
 // One editable line (بند) of the invoice: quantity × unit price is
 // the base amount; the tax toggle decides whether that base is net or
 // gross.
@@ -1522,6 +1536,12 @@ export default function PurchaseInvoiceModal({
   bankAccounts = [],
   branches = [],
   contactStats = null,
+  // مشاريع تأسيس الفروع (من `useBranchProjects`) — الحقلان يظهران فقط
+  // إن وُجد مشروع نشط (غير مفتتح/ملغى).
+  projects = [],
+  // تعبئة مسبقة عند الإنشاء من تبويب مصاريف المشروع:
+  // { project_id, project_phase_id, expense_account_code }.
+  prefill = null,
   isSubmitting,
   onClose,
   onSubmit,
@@ -1564,6 +1584,9 @@ export default function PurchaseInvoiceModal({
   const [paymentReceiptName, setPaymentReceiptName] = useState("");
   const [receiptUploading, setReceiptUploading] = useState(false);
   const [branchId, setBranchId] = useState("");
+  // مشروع تأسيس فرع وقسمه (اختياريان).
+  const [projectId, setProjectId] = useState("");
+  const [projectPhaseId, setProjectPhaseId] = useState("");
   const [notes, setNotes] = useState("");
   const [attachmentUrl, setAttachmentUrl] = useState("");
   const [attachmentName, setAttachmentName] = useState("");
@@ -1648,16 +1671,45 @@ export default function PurchaseInvoiceModal({
   // values; anything the user typed manually stays protected. Manual
   // edits remove the field from this set.
   const autoFilledRef = useRef(new Set());
+  // التعبئة المسبقة تُقرأ عند الفتح فقط — كائن جديد في كل تصيير لا يعيد
+  // ضبط النموذج.
+  const prefillRef = useRef(prefill);
+  prefillRef.current = prefill;
+  const accountsRef = useRef(accounts);
+  accountsRef.current = accounts;
 
   useEffect(() => {
     if (!open) return;
+    const seed = isEditing ? null : prefillRef.current;
     setInvoiceNumber(invoice?.invoice_number || "");
     setContactId(invoice?.contact_id ? String(invoice.contact_id) : "");
     setSupplierName(invoice?.supplier_name || "");
     setInvoiceDate(invoice?.invoice_date || todayRiyadh());
     setDueDate(invoice?.due_date || "");
     setCurrency(invoice?.currency || "SAR");
-    setLines(linesFromInvoice(invoice));
+    const seededLines = linesFromInvoice(invoice);
+    const seedAccountId = seed?.expense_account_code
+      ? findAccountIdByCode(accountsRef.current, seed.expense_account_code)
+      : "";
+    setLines(
+      seedAccountId && seededLines.length > 0 && !seededLines[0].account_id
+        ? [{ ...seededLines[0], account_id: seedAccountId }, ...seededLines.slice(1)]
+        : seededLines,
+    );
+    setProjectId(
+      invoice?.project_id
+        ? String(invoice.project_id)
+        : seed?.project_id
+          ? String(seed.project_id)
+          : "",
+    );
+    setProjectPhaseId(
+      invoice?.project_phase_id
+        ? String(invoice.project_phase_id)
+        : seed?.project_id && seed?.project_phase_id
+          ? String(seed.project_phase_id)
+          : "",
+    );
     setDiscount(moneyInput(invoice?.discount_amount) || "0.00");
     setPaidAmount(moneyInput(invoice?.paid_amount) || "0.00");
     setPaidBankAccountId(
@@ -1906,6 +1958,58 @@ export default function PurchaseInvoiceModal({
     );
   };
 
+  // مشاريع التأسيس النشطة (غير مفتتحة/ملغاة) + مشروع الفاتورة الحالية
+  // عند التعديل حتى تظهر قيمتها ولو أُغلق المشروع لاحقاً.
+  const projectOptions = useMemo(() => {
+    const list = Array.isArray(projects) ? projects : [];
+    const active = list.filter(
+      (project) =>
+        project &&
+        project.is_active !== false &&
+        project.status !== "opened" &&
+        project.status !== "cancelled",
+    );
+    if (projectId && !active.some((project) => String(project.id) === projectId)) {
+      const current = list.find((project) => String(project?.id) === projectId);
+      if (current) active.push(current);
+    }
+    return active.map((project) => ({
+      value: String(project.id),
+      label: `${project.code ? `${project.code} · ` : ""}${project.name || ""}`,
+    }));
+  }, [projects, projectId]);
+  const selectedProject = useMemo(
+    () => (projectId ? (projects || []).find((project) => String(project?.id) === projectId) || null : null),
+    [projects, projectId],
+  );
+  const projectPhaseOptions = useMemo(() => {
+    const phases = Array.isArray(selectedProject?.phases) ? [...selectedProject.phases] : [];
+    phases.sort((a, b) => (Number(a?.sort_order) || 0) - (Number(b?.sort_order) || 0));
+    return [{ value: "", label: "بلا قسم" }, ...phases.map((phase) => ({ value: String(phase.id), label: phase.name }))];
+  }, [selectedProject]);
+  const showProjectFields = projectOptions.length > 0;
+
+  const handleProjectChange = (value) => {
+    setProjectId(value);
+    setProjectPhaseId("");
+  };
+  // اختيار قسم له حساب افتراضي يضبط حساب البند الأول إن كان فارغاً.
+  const handleProjectPhaseChange = (value) => {
+    setProjectPhaseId(value);
+    const phase = (selectedProject?.phases || []).find((item) => String(item?.id) === String(value));
+    const accountId = phase?.default_account_code
+      ? findAccountIdByCode(accounts, phase.default_account_code)
+      : "";
+    if (!accountId) return;
+    // يُستبدل الحساب إن كان فارغًا أو «أخرى» (5399) الافتراضي فقط.
+    const fallbackId = findAccountIdByCode(accounts, "5399");
+    setLines((prev) =>
+      prev.length > 0 && (!prev[0].account_id || String(prev[0].account_id) === String(fallbackId))
+        ? [{ ...prev[0], account_id: accountId }, ...prev.slice(1)]
+        : prev,
+    );
+  };
+
   // هل أحد بنود الفاتورة مصنّف على «مصروف ثابت» أو أحد فروعه؟ يتحكم
   // بظهور خيار «فاتورة متكررة بشكل شهري».
   const hasFixedExpenseLine = useMemo(
@@ -2089,6 +2193,9 @@ export default function PurchaseInvoiceModal({
       // القيمة الثابتة المتبقية — الحالة الفعلية تُحسب من المبالغ.
       workflow_status: "pending_payment",
       branch_id: branchId || null,
+      // ربط مشروع تأسيس الفرع وقسمه (null يفك الربط عند التعديل).
+      project_id: projectId ? Number(projectId) : null,
+      project_phase_id: projectId && projectPhaseId ? Number(projectPhaseId) : null,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
       attachment_kind: attachmentUrl ? attachmentKind || null : null,
@@ -2994,6 +3101,34 @@ export default function PurchaseInvoiceModal({
                       buttonClassName="text-sm py-2.5 px-3"
                     />
                   </div>
+                ) : null}
+                {showProjectFields ? (
+                  <>
+                    <div>
+                      <FieldLabel>مشروع تأسيس</FieldLabel>
+                      <GlassSelect
+                        value={projectId}
+                        onChange={handleProjectChange}
+                        options={[{ value: "", label: "بدون مشروع" }, ...projectOptions]}
+                        placeholder="بدون مشروع"
+                        buttonClassName="text-sm py-2.5 px-3"
+                      />
+                      <div className="text-[11px] text-slate-500 dark:text-white/45 mt-1">
+                        تُحسب الفاتورة ضمن تكاليف تأسيس الفرع.
+                      </div>
+                    </div>
+                    <div>
+                      <FieldLabel>القسم</FieldLabel>
+                      <GlassSelect
+                        value={projectPhaseId}
+                        onChange={handleProjectPhaseChange}
+                        options={projectPhaseOptions}
+                        placeholder="بلا قسم"
+                        disabled={!projectId}
+                        buttonClassName="text-sm py-2.5 px-3"
+                      />
+                    </div>
+                  </>
                 ) : null}
                 <div className="sm:col-span-2 text-[11px] text-slate-500 dark:text-white/45">
                   الحالة تلقائية بالكامل: بدون دفع «بانتظار الاعتماد»، وبعد
