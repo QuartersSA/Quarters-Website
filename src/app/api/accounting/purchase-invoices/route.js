@@ -3,6 +3,12 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureAccountsSchema } from "@/app/api/utils/accountsTree";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
 import { ensureLeaseSchema, suppressSetAsideInvoice } from "@/app/api/utils/leaseContracts";
+import {
+  ensureBranchProjectsSchema,
+  ensureProjectInvoiceLinkColumns,
+  projectExists,
+  phaseBelongsToProject,
+} from "@/app/api/utils/branchProjects";
 import { purgeInactivePurchaseInvoices } from "@/app/api/utils/purchaseInvoiceDelete";
 import {
   runPurchaseAutomation,
@@ -80,6 +86,10 @@ async function ensureSchemaImpl() {
   await ensureSchemaBase();
   // جداول العقود وأعمدة ربط فواتير الاستقطاع (الاستعلام يربط بجدول العقود).
   await ensureLeaseSchema();
+  // جداول مشاريع تأسيس الفروع (القائمة تربط بها) + أعمدة ربط الفاتورة
+  // بالمشروع/القسم — بنفس أسلوب أعمدة الإيجار.
+  await ensureBranchProjectsSchema();
+  await ensureProjectInvoiceLinkColumns();
   // إلغاء خاصية الإيقاف: ما بقي موقوفًا من فواتير قديمة يُحذف نهائيًا.
   try {
     const purged = await purgeInactivePurchaseInvoices();
@@ -366,7 +376,21 @@ function parsePayload(body = {}) {
 
   const roasterRaw = Number(body.roaster_contact_id);
 
+  // مشروع تأسيس فرع وقسمه: رقم أو null. غياب المفتاح من الحمولة يعني
+  // «أبقِ المخزَّن» عند التعديل (الدفعة السريعة لا ترسله).
+  const projectIdRaw = Number(body.project_id);
+  const projectId =
+    Number.isInteger(projectIdRaw) && projectIdRaw > 0 ? projectIdRaw : null;
+  const projectPhaseRaw = Number(body.project_phase_id);
+  const projectPhaseId =
+    projectId && Number.isInteger(projectPhaseRaw) && projectPhaseRaw > 0
+      ? projectPhaseRaw
+      : null;
+
   return {
+    projectId,
+    projectPhaseId,
+    hasProjectLink: body.project_id !== undefined,
     expenseAccountId: Number.isInteger(expenseAccountId)
       ? expenseAccountId
       : null,
@@ -640,6 +664,21 @@ async function validateExpenseAccount(expenseAccountId) {
   return account ? null : "حساب المصروف المحدد غير صالح";
 }
 
+// ربط الفاتورة بمشروع تأسيس: المشروع موجود والقسم (إن حُدد) يخصه.
+async function validateProjectLink(payload) {
+  if (!payload.projectId) return null;
+  if (!(await projectExists(payload.projectId))) {
+    return "مشروع التأسيس المحدد غير موجود";
+  }
+  if (
+    payload.projectPhaseId &&
+    !(await phaseBelongsToProject(payload.projectPhaseId, payload.projectId))
+  ) {
+    return "القسم المحدد لا يخص مشروع التأسيس المختار";
+  }
+  return null;
+}
+
 function validatePayload(payload) {
   if (!payload.invoiceNumber) return "رقم الفاتورة مطلوب";
   if (!payload.supplierName && !payload.contactId) return "المورد مطلوب";
@@ -717,6 +756,11 @@ function selectInvoicesQuery(where, statusFilter) {
         lc.contract_number AS lease_contract_number,
         lc.contract_type AS lease_contract_type,
         lc.display_name AS lease_display_name,
+        inv.project_id,
+        inv.project_phase_id,
+        bp.name AS project_name,
+        bp.code AS project_code,
+        bpp.name AS project_phase_name,
         CASE
           WHEN inv.is_active = FALSE THEN 'inactive'
           WHEN inv.total_amount > 0 AND inv.paid_amount >= inv.total_amount THEN 'paid'
@@ -742,6 +786,8 @@ function selectInvoicesQuery(where, statusFilter) {
       LEFT JOIN accounting_purchase_invoices src ON src.id = inv.source_invoice_id
       LEFT JOIN accounting_contacts rc ON rc.id = inv.roaster_contact_id
       LEFT JOIN accounting_lease_contracts lc ON lc.id = inv.lease_contract_id
+      LEFT JOIN branch_projects bp ON bp.id = inv.project_id
+      LEFT JOIN branch_project_phases bpp ON bpp.id = inv.project_phase_id
       ${where.sql}
     )
     SELECT *
@@ -835,6 +881,10 @@ export async function createPurchaseInvoice(body, actor, options = {}) {
   if (accountError) {
     return { ok: false, status: 400, error: accountError };
   }
+  const projectError = await validateProjectLink(payload);
+  if (projectError) {
+    return { ok: false, status: 400, error: projectError };
+  }
 
   // بنود البن: أهلية الحساب + الحساب + الحمايات (على الخادم دائمًا).
   let enriched;
@@ -871,6 +921,7 @@ export async function createPurchaseInvoice(body, actor, options = {}) {
         subtotal_amount, discount_amount, tax_amount, total_amount, paid_amount,
         paid_bank_account_id, payment_receipt_url, branch_id, workflow_status,
         notes, attachment_url, attachment_kind, roaster_contact_id,
+        project_id, project_phase_id,
         created_by_employee_id, created_by_employee_name
       )
       VALUES (
@@ -879,6 +930,7 @@ export async function createPurchaseInvoice(body, actor, options = {}) {
         ${payload.subtotalAmount}, ${payload.discountAmount}, ${payload.taxAmount}, ${payload.totalAmount}, ${payload.paidAmount},
         ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl}, ${payload.branchId}, ${payload.workflowStatus},
         ${payload.notes}, ${payload.attachmentUrl}, ${payload.attachmentKind}, ${payload.roasterContactId},
+        ${payload.projectId}, ${payload.projectPhaseId},
         ${createdById}, ${createdByName}
       )
     `,
@@ -1090,6 +1142,12 @@ export async function PUT(request) {
     if (accountError) {
       return Response.json({ error: accountError }, { status: 400 });
     }
+    if (payload.hasProjectLink) {
+      const projectError = await validateProjectLink(payload);
+      if (projectError) {
+        return Response.json({ error: projectError }, { status: 400 });
+      }
+    }
 
     // بنود البن: الحساب على الخادم مع إبقاء ما يملكه الخادم (الوصول).
     let enriched = null;
@@ -1129,6 +1187,9 @@ export async function PUT(request) {
         attachment_kind = ${payload.attachmentKind},
         roaster_contact_id = COALESCE(${payload.roasterContactId}, roaster_contact_id),
         roaster_reference = ${roasterReference},
+        -- ربط مشروع التأسيس: يُكتب فقط إن أرسلته الحمولة (الدفعة السريعة لا ترسله).
+        project_id = CASE WHEN ${payload.hasProjectLink} THEN ${payload.projectId} ELSE project_id END,
+        project_phase_id = CASE WHEN ${payload.hasProjectLink} THEN ${payload.projectPhaseId} ELSE project_phase_id END,
         -- تعديل فاتورة التحميص يدويًا يجعلها الحقيقة ويثبّت استحقاقها.
         roast_confirmed = CASE WHEN ${invoiceKind === "roast" && items !== null} THEN TRUE ELSE roast_confirmed END,
         due_date_auto = CASE WHEN ${dueDateChanged} THEN FALSE ELSE due_date_auto END,

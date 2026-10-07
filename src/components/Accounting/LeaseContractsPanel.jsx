@@ -41,6 +41,7 @@ import { buildRecentMonthOptions, monthLabel } from "@/utils/payrollFormatters";
 import { currentRiyadhMonthKey, riyadhMonthKeyFromOffset } from "@/utils/dateUtils";
 import { useAccountingContacts } from "@/hooks/useAccountingContacts";
 import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
+import { useBranchProjects } from "@/hooks/useBranchProjects";
 import {
   useLeaseContracts,
   useLeaseContract,
@@ -449,10 +450,14 @@ export default function LeaseContractsPanel({
     branchId: reserveBranch,
   });
 
+  // مشاريع تأسيس الفروع — حقل «مشروع تأسيس» في نافذة العقد.
+  const projectsQuery = useBranchProjects({ employeeId, isAdmin });
+
   const contracts = contractsQuery.data || [];
   const contacts = contactsQuery.data || [];
   const bankAccounts = bankAccountsQuery.data || [];
   const branches = branchesQuery.data || [];
+  const projects = projectsQuery.data || [];
   const pendingPayments = pendingPaymentsQuery.data || [];
   const duePayments = duePaymentsQuery.data || [];
   const reserve = reserveQuery.data || null;
@@ -2185,6 +2190,7 @@ export default function LeaseContractsPanel({
         contract={null}
         contacts={contacts}
         branches={branches}
+        projects={projects}
         isSubmitting={createMut.isPending}
         onClose={() => setShowAdd(false)}
         onSubmit={handleSubmitContract}
@@ -2196,6 +2202,7 @@ export default function LeaseContractsPanel({
         contract={editDetailQuery.data || null}
         contacts={contacts}
         branches={branches}
+        projects={projects}
         isSubmitting={updateMut.isPending}
         onClose={() => setEditingId(null)}
         onSubmit={handleSubmitContract}
