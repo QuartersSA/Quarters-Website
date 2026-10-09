@@ -145,11 +145,13 @@ function parsePayload(body) {
 
 export async function GET(request) {
   // Reading the banks list is also allowed for the field entry flow —
-  // payments recorded there pick which bank account paid.
+  // payments recorded there pick which bank account paid — and for
+  // تأسيس الفروع admins (the project expenses tab files invoices).
   const auth = requireAuth(request, {
     anyOf: [
       { role: "Admin", permission: "can_manage_accounting" },
       { role: "Admin", permission: "can_manage_purchases" },
+      { role: "Admin", permission: "can_manage_branch_projects" },
       { permission: "can_add_purchase_invoices" },
     ],
   });

@@ -1,6 +1,7 @@
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import {
   REQUIRE_BRANCH_PROJECTS,
+  REQUIRE_BRANCH_PROJECTS_READ,
   ensureBranchProjectsSchema,
   listProjects,
   loadProject,
@@ -12,11 +13,12 @@ import { fail, serverError } from "./_lib";
 
 // مشاريع تأسيس الفروع — القائمة والإنشاء.
 // GET  /api/accounting/branch-projects            → { projects }
+//      (READ gate: يشمل حامل «قسم المشتريات» لاختيار المشروع في الفاتورة)
 // POST /api/accounting/branch-projects            → 201 { project }
 //      body: حقول ProjectModal + template: 'default' | 'empty'
 
 export async function GET(request) {
-  const auth = requireAuth(request, REQUIRE_BRANCH_PROJECTS);
+  const auth = requireAuth(request, REQUIRE_BRANCH_PROJECTS_READ);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

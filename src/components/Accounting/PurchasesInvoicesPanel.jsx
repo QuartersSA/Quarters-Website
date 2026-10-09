@@ -59,6 +59,7 @@ import { useAccountingBeneficiaries } from "@/hooks/useAccountingBeneficiaries";
 import { useAccountingAccounts } from "@/hooks/useAccountingAccounts";
 import { useAccountingBankAccounts } from "@/hooks/useAccountingBankAccounts";
 import { useBranchProjects } from "@/hooks/useBranchProjects";
+import useWorkspaceUser from "@/hooks/useWorkspaceUser";
 import { useQuery } from "@tanstack/react-query";
 import { authedFetch } from "@/utils/apiAuth";
 import { queryKeys } from "@/utils/queryKeys";
@@ -132,21 +133,40 @@ function LeaseBadge({ invoice, detailed = false }) {
 }
 
 // شارة مشروع تأسيس فرع: الفاتورة محسوبة ضمن تكاليف المشروع — الضغط
-// يفتح تبويب مصاريف المشروع.
+// يفتح تبويب مصاريف المشروع. حامل «قسم المشتريات» فقط (بلا محاسبة ولا
+// تأسيس الفروع) لا يدخل صفحات المشاريع، فتُعرض له الشارة بلا رابط.
 function ProjectBadge({ invoice }) {
+  const { user } = useWorkspaceUser();
   if (!invoice?.project_id) return null;
+  const canOpenProject = !(
+    user?.role === "Admin" &&
+    user?.can_manage_accounting === false &&
+    !user?.can_manage_branch_projects
+  );
   const code = invoice.project_code || `#${invoice.project_id}`;
+  const label = `مشروع ${code}${invoice.project_phase_name ? ` · ${invoice.project_phase_name}` : ""}`;
+  const baseTitle = `مشروع تأسيس ${invoice.project_name || code}${invoice.project_phase_name ? ` — قسم ${invoice.project_phase_name}` : ""}`;
+  const baseClass =
+    "inline-flex items-center gap-1 rounded-full border border-violet-200 dark:border-violet-400/25 bg-violet-50 dark:bg-violet-400/10 text-violet-800 dark:text-violet-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap";
+  if (!canOpenProject) {
+    return (
+      <span className={baseClass} title={baseTitle} dir="rtl">
+        <Building2 className="w-3 h-3" />
+        {label}
+      </span>
+    );
+  }
   const href = `/accounting/branch-projects/${invoice.project_id}?tab=expenses`;
   return (
     <a
       href={href}
       onClick={(event) => event.stopPropagation()}
-      className="inline-flex items-center gap-1 rounded-full border border-violet-200 dark:border-violet-400/25 bg-violet-50 dark:bg-violet-400/10 text-violet-800 dark:text-violet-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap hover:bg-violet-100 dark:hover:bg-violet-400/20"
-      title={`مشروع تأسيس ${invoice.project_name || code}${invoice.project_phase_name ? ` — قسم ${invoice.project_phase_name}` : ""} — اضغط لفتح مصاريف المشروع`}
+      className={`${baseClass} hover:bg-violet-100 dark:hover:bg-violet-400/20`}
+      title={`${baseTitle} — اضغط لفتح مصاريف المشروع`}
       dir="rtl"
     >
       <Building2 className="w-3 h-3" />
-      {`مشروع ${code}${invoice.project_phase_name ? ` · ${invoice.project_phase_name}` : ""}`}
+      {label}
     </a>
   );
 }

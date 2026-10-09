@@ -16,11 +16,13 @@ const REQUIRE_ACCOUNTING = {
 };
 
 // Reading the tree is also allowed for the field purchase-invoice
-// entry flow (رفع فاتورة مشتريات) — lines classify on expense accounts.
+// entry flow (رفع فاتورة مشتريات) — lines classify on expense accounts —
+// and for تأسيس الفروع admins (project expenses are purchase invoices).
 const REQUIRE_PURCHASES_READ = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
     { role: "Admin", permission: "can_manage_purchases" },
+    { role: "Admin", permission: "can_manage_branch_projects" },
     { permission: "can_add_purchase_invoices" },
     { permission: "can_manage_suppliers" },
   ],

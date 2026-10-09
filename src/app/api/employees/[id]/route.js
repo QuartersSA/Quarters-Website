@@ -15,6 +15,7 @@ async function ensureWasteColumnImpl() {
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_add_purchase_invoices BOOLEAN DEFAULT false`;
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_manage_suppliers BOOLEAN DEFAULT false`;
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_manage_purchases BOOLEAN DEFAULT false`;
+    await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_manage_branch_projects BOOLEAN DEFAULT false`;
   } catch (e) {
     console.error("ensureWasteColumn:", e?.message);
   }
@@ -66,6 +67,7 @@ export async function GET(request, { params }) {
         COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,
         COALESCE(e.can_manage_suppliers, false) as can_manage_suppliers,
         COALESCE(e.can_manage_purchases, false) as can_manage_purchases,
+        COALESCE(e.can_manage_branch_projects, false) as can_manage_branch_projects,
         COALESCE(e.notify_shift_close_push, false) as notify_shift_close_push,
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,
@@ -157,6 +159,7 @@ export async function PUT(request, { params }) {
       can_add_purchase_invoices,
       can_manage_suppliers,
       can_manage_purchases,
+      can_manage_branch_projects,
       // Admin notification preferences (push)
       notify_shift_close_push,
       notify_inventory_operation_push,
@@ -438,6 +441,12 @@ export async function PUT(request, { params }) {
       paramCount++;
     }
 
+    if (can_manage_branch_projects !== undefined) {
+      updates.push(`can_manage_branch_projects = $${paramCount}`);
+      values.push(isAdmin ? !!can_manage_branch_projects : false);
+      paramCount++;
+    }
+
     if (can_close_shift !== undefined) {
       updates.push(`can_close_shift = $${paramCount}`);
       values.push(!!can_close_shift);
@@ -549,6 +558,7 @@ export async function PUT(request, { params }) {
         COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,
         COALESCE(e.can_manage_suppliers, false) as can_manage_suppliers,
         COALESCE(e.can_manage_purchases, false) as can_manage_purchases,
+        COALESCE(e.can_manage_branch_projects, false) as can_manage_branch_projects,
         COALESCE(e.notify_shift_close_push, false) as notify_shift_close_push,
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,

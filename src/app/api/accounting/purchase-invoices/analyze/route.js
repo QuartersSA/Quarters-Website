@@ -1,12 +1,14 @@
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { runInvoiceAnalysis } from "@/app/api/utils/invoiceAnalysis";
 
-// Admin accounting, قسم المشتريات admins, or the dedicated field
-// entry permission (رفع فاتورة مشتريات) — the entry flow scans too.
+// Admin accounting, قسم المشتريات / تأسيس الفروع admins, or the
+// dedicated field entry permission (رفع فاتورة مشتريات) — every
+// invoice-creating flow scans too.
 const REQUIRE_ACCOUNTING = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
     { role: "Admin", permission: "can_manage_purchases" },
+    { role: "Admin", permission: "can_manage_branch_projects" },
     { permission: "can_add_purchase_invoices" },
   ],
 };

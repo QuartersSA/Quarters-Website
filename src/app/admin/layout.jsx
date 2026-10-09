@@ -51,10 +51,12 @@ function allowedModes(adminUser) {
   return {
     workspace: !!adminUser.can_access_workspace,
     inventory: !!adminUser.can_manage_inventory,
-    // قسم المشتريات وحده يكفي لفتح قسم المحاسبة — طبقة المحاسبة تعيد
-    // التوجيه إلى صفحة المشتريات فقط.
+    // قسم المشتريات أو تأسيس الفروع وحده يكفي لفتح قسم المحاسبة — طبقة
+    // المحاسبة تعيد التوجيه إلى الصفحات المسموحة فقط.
     accounting:
-      !!adminUser.can_manage_accounting || !!adminUser.can_manage_purchases,
+      !!adminUser.can_manage_accounting ||
+      !!adminUser.can_manage_purchases ||
+      !!adminUser.can_manage_branch_projects,
     hr: hrFlag || !!adminUser.can_manage_deductions,
     marketing: !!adminUser.can_manage_marketing,
   };

@@ -12,10 +12,12 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 
+// Same audience as invoice creation (incl. تأسيس الفروع admins).
 const REQUIRE_PURCHASES_CREATE = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
     { role: "Admin", permission: "can_manage_purchases" },
+    { role: "Admin", permission: "can_manage_branch_projects" },
     { permission: "can_add_purchase_invoices" },
   ],
 };

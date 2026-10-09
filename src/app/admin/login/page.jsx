@@ -73,6 +73,8 @@ export default function AdminLoginPage() {
           can_manage_marketing: !!data.employee.can_manage_marketing,
           // قسم المشتريات فقط (بدون بقية المحاسبة)
           can_manage_purchases: !!data.employee.can_manage_purchases,
+          // تأسيس الفروع فقط (داخل المحاسبة بدون بقيتها)
+          can_manage_branch_projects: !!data.employee.can_manage_branch_projects,
         }),
       );
 

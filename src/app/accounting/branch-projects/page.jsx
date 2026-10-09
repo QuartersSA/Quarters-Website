@@ -50,7 +50,8 @@ function DesktopHeader() {
 export default function BranchProjectsPage() {
   const { ready, employeeId, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
-  const canManageAccounting = user?.can_manage_accounting !== false;
+  const canAccess =
+    user?.can_manage_accounting !== false || !!user?.can_manage_branch_projects;
 
   let body = null;
   if (!ready) {
@@ -61,10 +62,10 @@ export default function BranchProjectsPage() {
     body = (
       <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>الرجاء تسجيل الدخول.</div>
     );
-  } else if (!isAdmin || !canManageAccounting) {
+  } else if (!isAdmin || !canAccess) {
     body = (
       <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
-        هذا القسم متاح فقط لمستخدمي المحاسبة.
+        تحتاج صلاحية «المحاسبة» أو «تأسيس الفروع».
       </div>
     );
   } else {

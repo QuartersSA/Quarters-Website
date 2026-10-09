@@ -19,16 +19,22 @@ export default function AccountingLayout({ children }) {
       return;
     }
 
-    // Permission gate for admin accounts. can_manage_purchases grants
-    // قسم المشتريات ONLY: its holder lands on /accounting/purchases
-    // and every other accounting page bounces there.
+    // Permission gate for admin accounts without full accounting.
+    // can_manage_purchases grants قسم المشتريات only and
+    // can_manage_branch_projects grants تأسيس الفروع only. The holder may
+    // use every section they hold, lands on the first allowed one, and any
+    // other accounting page bounces there. No partial flag → back to /admin.
     if (user?.role === "Admin" && user?.can_manage_accounting === false) {
-      const purchasesOnly = !!user?.can_manage_purchases;
+      const allowed = [];
+      if (user?.can_manage_purchases) allowed.push("/accounting/purchases");
+      if (user?.can_manage_branch_projects) {
+        allowed.push("/accounting/branch-projects");
+      }
       const path = window.location.pathname;
-      if (!purchasesOnly) {
+      if (allowed.length === 0) {
         window.location.href = "/admin";
-      } else if (!path.startsWith("/accounting/purchases")) {
-        window.location.href = "/accounting/purchases";
+      } else if (!allowed.some((prefix) => path.startsWith(prefix))) {
+        window.location.href = allowed[0];
       }
     }
   }, [ready, isAuthenticated, user]);

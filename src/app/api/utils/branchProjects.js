@@ -24,10 +24,20 @@ import {
   todayRiyadh,
 } from "@/utils/branchProjectMath";
 
-// صلاحيات القسم: محاسبة كاملة أو مشتريات فقط (مثل فواتير المشتريات).
+// صلاحيات القسم: محاسبة كاملة أو «تأسيس الفروع» فقط. تُستخدم لكل
+// الكتابة ولقراءة المشروع الواحد.
 export const REQUIRE_BRANCH_PROJECTS = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
+    { role: "Admin", permission: "can_manage_branch_projects" },
+  ],
+};
+
+// قراءة قائمة المشاريع فقط (GET القائمة): يضاف حامل «قسم المشتريات»
+// لأن نافذة فاتورة المشتريات تحتاج القائمة لاختيار المشروع/القسم.
+export const REQUIRE_BRANCH_PROJECTS_READ = {
+  anyOf: [
+    ...REQUIRE_BRANCH_PROJECTS.anyOf,
     { role: "Admin", permission: "can_manage_purchases" },
   ],
 };

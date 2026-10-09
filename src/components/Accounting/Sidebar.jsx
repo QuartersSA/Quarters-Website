@@ -60,15 +60,17 @@ function defaultLogout() {
 export default function AccountingSidebar({ active = "dashboard" }) {
   const { user } = useWorkspaceUser();
 
-  // قسم المشتريات فقط: بدون can_manage_accounting الشريط يعرض
-  // المشتريات وحدها — بقية الصفحات محجوبة أصلاً في طبقة المحاسبة.
+  // بدون can_manage_accounting الشريط يعرض فقط الأقسام التي يحملها
+  // المدير (المشتريات / تأسيس الفروع) — بقية الصفحات محجوبة أصلاً في
+  // طبقة المحاسبة.
   const navConfig = useMemo(() => {
-    const purchasesOnly =
-      user?.role === "Admin" &&
-      user?.can_manage_accounting === false &&
-      !!user?.can_manage_purchases;
-    if (!purchasesOnly) return NAV_CONFIG;
-    return NAV_CONFIG.filter((entry) => entry.key === "purchases");
+    const partialAccess =
+      user?.role === "Admin" && user?.can_manage_accounting === false;
+    if (!partialAccess) return NAV_CONFIG;
+    const allowedKeys = new Set();
+    if (user?.can_manage_purchases) allowedKeys.add("purchases");
+    if (user?.can_manage_branch_projects) allowedKeys.add("branch-projects");
+    return NAV_CONFIG.filter((entry) => allowedKeys.has(entry.key));
   }, [user]);
 
   const paletteRoutes = useMemo(

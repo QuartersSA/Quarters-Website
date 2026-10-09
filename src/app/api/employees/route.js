@@ -16,6 +16,7 @@ async function ensureWasteColumnImpl() {
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_add_purchase_invoices BOOLEAN DEFAULT false`;
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_manage_suppliers BOOLEAN DEFAULT false`;
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_manage_purchases BOOLEAN DEFAULT false`;
+    await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS can_manage_branch_projects BOOLEAN DEFAULT false`;
     // تفضيلات إشعارات الواتساب لكل موظف (مفاتيح أحداث المحاسبة والجرد).
     await sql`ALTER TABLE employees ADD COLUMN IF NOT EXISTS wa_prefs JSONB DEFAULT '[]'::jsonb`;
   } catch (e) {
@@ -67,6 +68,7 @@ export async function GET(request) {
         COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,
         COALESCE(e.can_manage_suppliers, false) as can_manage_suppliers,
         COALESCE(e.can_manage_purchases, false) as can_manage_purchases,
+        COALESCE(e.can_manage_branch_projects, false) as can_manage_branch_projects,
         COALESCE(e.notify_shift_close_push, false) as notify_shift_close_push,
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,
@@ -163,6 +165,9 @@ export async function POST(request) {
       // Admin section permission: قسم المشتريات only, without the
       // rest of accounting.
       can_manage_purchases,
+      // Admin section permission: قسم تأسيس الفروع only, without the
+      // rest of accounting.
+      can_manage_branch_projects,
     } = body;
 
     if (!name) {
@@ -217,6 +222,9 @@ export async function POST(request) {
     const canAddPurchaseInvoicesBool = !!can_add_purchase_invoices;
     const canManageSuppliersBool = !!can_manage_suppliers;
     const canManagePurchasesBool = isAdmin ? !!can_manage_purchases : false;
+    const canManageBranchProjectsBool = isAdmin
+      ? !!can_manage_branch_projects
+      : false;
 
     const notifyShiftClosePushBool = isAdmin
       ? !!notify_shift_close_push
@@ -285,6 +293,7 @@ export async function POST(request) {
           can_add_purchase_invoices,
           can_manage_suppliers,
           can_manage_purchases,
+          can_manage_branch_projects,
           notify_shift_close_push,
           notify_inventory_operation_push,
           notify_shift_close_wa,
@@ -321,6 +330,7 @@ export async function POST(request) {
           ${canAddPurchaseInvoicesBool},
           ${canManageSuppliersBool},
           ${canManagePurchasesBool},
+          ${canManageBranchProjectsBool},
           ${notifyShiftClosePushBool},
           ${notifyInventoryOperationPushBool},
           ${notifyShiftCloseWaBool},
@@ -373,6 +383,7 @@ export async function POST(request) {
         COALESCE(e.can_add_purchase_invoices, false) as can_add_purchase_invoices,
         COALESCE(e.can_manage_suppliers, false) as can_manage_suppliers,
         COALESCE(e.can_manage_purchases, false) as can_manage_purchases,
+        COALESCE(e.can_manage_branch_projects, false) as can_manage_branch_projects,
         COALESCE(e.notify_shift_close_push, false) as notify_shift_close_push,
         COALESCE(e.notify_inventory_operation_push, false) as notify_inventory_operation_push,
         COALESCE(e.notify_shift_close_wa, false) as notify_shift_close_wa,

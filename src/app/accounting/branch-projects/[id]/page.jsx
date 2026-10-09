@@ -204,7 +204,8 @@ function OpenConfirmModal({ open, project, onClose }) {
 export default function BranchProjectDetailPage() {
   const { ready, employeeId, user } = useWorkspaceUser();
   const isAdmin = user?.role === "Admin";
-  const canManageAccounting = user?.can_manage_accounting !== false;
+  const canAccess =
+    user?.can_manage_accounting !== false || !!user?.can_manage_branch_projects;
 
   const params = useParams();
   const projectId = Number(params?.id);
@@ -261,10 +262,10 @@ export default function BranchProjectDetailPage() {
     body = <div className={`${ws.glass} ${ws.card} p-6 text-slate-600 dark:text-white/60`}>جاري التحميل…</div>;
   } else if (!employeeId) {
     body = <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>الرجاء تسجيل الدخول.</div>;
-  } else if (!isAdmin || !canManageAccounting) {
+  } else if (!isAdmin || !canAccess) {
     body = (
       <div className={`${ws.glass} ${ws.card} p-6 text-slate-700 dark:text-white/70`}>
-        هذا القسم متاح فقط لمستخدمي المحاسبة.
+        تحتاج صلاحية «المحاسبة» أو «تأسيس الفروع».
       </div>
     );
   } else if (!validId) {

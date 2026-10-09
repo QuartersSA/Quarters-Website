@@ -171,6 +171,10 @@ export function EmployeeFormFields({
     ? `${ws.btnPrimary} px-4 py-2`
     : `${ws.btnNeutral} px-4 py-2`;
 
+  const adminBranchProjectsBtnClass = formData.can_manage_branch_projects
+    ? `${ws.btnPrimary} px-4 py-2`
+    : `${ws.btnNeutral} px-4 py-2`;
+
   // WhatsApp notification preferences
   const notifyShiftCloseWaBtnClass = formData.notify_shift_close_wa
     ? `${ws.btnPrimary} px-4 py-2`
@@ -316,6 +320,7 @@ export function EmployeeFormFields({
                 // قسم المشتريات فقط — افتراضياً غير مفعّل (المحاسبة
                 // الكاملة تغنيه)
                 can_manage_purchases: false,
+                can_manage_branch_projects: false,
                 can_manage_accounting: true,
                 can_manage_employees: true,
                 can_access_hr: true,
@@ -349,6 +354,7 @@ export function EmployeeFormFields({
                 can_access_workspace: false,
                 can_manage_inventory: false,
                 can_manage_purchases: false,
+                can_manage_branch_projects: false,
                 can_manage_accounting: false,
                 can_manage_employees: false,
                 can_access_hr: false,
@@ -538,6 +544,26 @@ export function EmployeeFormFields({
                 )}
                 <ShoppingCart className="w-4 h-4" />
                 قسم المشتريات
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({
+                    ...p,
+                    can_manage_branch_projects: !p.can_manage_branch_projects,
+                  }))
+                }
+                className={adminBranchProjectsBtnClass}
+                title="وصول لقسم تأسيس الفروع داخل المحاسبة بدون بقية المحاسبة"
+              >
+                {formData.can_manage_branch_projects ? (
+                  <CheckCircle2 className="w-5 h-5" />
+                ) : (
+                  <XCircle className="w-5 h-5" />
+                )}
+                <Building2 className="w-4 h-4" />
+                تأسيس الفروع
               </button>
 
               <button
