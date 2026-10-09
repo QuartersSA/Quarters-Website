@@ -51,6 +51,15 @@ async function ensureSchemaImpl() {
     console.error("ensureSchema items.max_stock_threshold:", e?.message);
   }
 
+  // قيد قديم من أيام الوحدات الثابتة (items_unit_check: حبة/كيلو/…) يرفض
+  // أي وحدة أخرى مثل «لتر» رغم أن الوحدات الآن حرة عبر measurement_units،
+  // فكان حفظ الصنف يفشل بـ «قيمة لا تحقق شرط التحقق». يُزال إن وُجد.
+  try {
+    await sql`ALTER TABLE items DROP CONSTRAINT IF EXISTS items_unit_check`;
+  } catch (e) {
+    console.error("ensureSchema items_unit_check drop:", e?.message);
+  }
+
   // Sparse per-branch visibility table. Default = item visible at every
   // branch (no row). INSERT a row only when an admin disables the item
   // at a specific branch; DELETE the row to re-enable. Cascading
