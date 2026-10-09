@@ -6,8 +6,10 @@ export async function GET(request) {
     anyOf: [
       { role: "Admin", permission: "can_manage_inventory" },
       { role: "Admin", permission: "can_manage_accounting" },
-      // Purchases flows pick a branch on the invoice.
+      // Purchases flows pick a branch on the invoice (including the
+      // تأسيس الفروع project expenses tab).
       { role: "Admin", permission: "can_manage_purchases" },
+      { role: "Admin", permission: "can_manage_branch_projects" },
       { permission: "can_add_purchase_invoices" },
     ],
   });

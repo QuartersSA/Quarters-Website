@@ -41,7 +41,8 @@ import { ensureOnce } from "@/app/api/utils/ensureOnce";
 const ensureSchema = ensureOnce(ensureSchemaImpl);
 const ensureSchemaBase = ensureOnce(ensureSchemaBaseImpl);
 
-// Full accounting admins OR admins limited to قسم المشتريات only.
+// Full accounting admins OR admins limited to قسم المشتريات only
+// (editing / deleting invoices).
 const REQUIRE_ACCOUNTING = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
@@ -49,13 +50,27 @@ const REQUIRE_ACCOUNTING = {
   ],
 };
 
+// Reading the ledger (GET) additionally admits تأسيس الفروع admins:
+// the project expenses tab links existing invoices to a project, so it
+// needs the list. Edits/deletes from that tab go through the
+// project-scoped /branch-projects/:id/invoices routes, not PUT/DELETE
+// here.
+const REQUIRE_PURCHASES_LIST = {
+  anyOf: [
+    ...REQUIRE_ACCOUNTING.anyOf,
+    { role: "Admin", permission: "can_manage_branch_projects" },
+  ],
+};
+
 // Creating an invoice is also allowed for the field entry flow
 // (رفع فاتورة مشتريات): employees with the dedicated permission can
-// ADD invoices only — reading the ledger and editing stay admin-only.
+// ADD invoices only — editing stays admin-only. تأسيس الفروع admins
+// record project costs through the same modal.
 const REQUIRE_PURCHASES_CREATE = {
   anyOf: [
     { role: "Admin", permission: "can_manage_accounting" },
     { role: "Admin", permission: "can_manage_purchases" },
+    { role: "Admin", permission: "can_manage_branch_projects" },
     { permission: "can_add_purchase_invoices" },
   ],
 };
@@ -798,7 +813,7 @@ function selectInvoicesQuery(where, statusFilter) {
 }
 
 export async function GET(request) {
-  const auth = requireAuth(request, REQUIRE_ACCOUNTING);
+  const auth = requireAuth(request, REQUIRE_PURCHASES_LIST);
   if (!auth.ok) {
     return Response.json({ error: auth.error }, { status: auth.status });
   }

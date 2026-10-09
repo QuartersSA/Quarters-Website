@@ -45,6 +45,7 @@ function readAdminPermissions() {
       can_manage_deductions: !!deductionsFlag,
       can_manage_marketing: !!marketingFlag,
       can_manage_purchases: !!adminUser?.can_manage_purchases,
+      can_manage_branch_projects: !!adminUser?.can_manage_branch_projects,
     };
   } catch {
     return null;
@@ -103,7 +104,11 @@ export default function AppSectionSwitcher({
       label: "المحاسبة",
       Icon: Calculator,
       gate: (p) =>
-        p ? p.can_manage_accounting || p.can_manage_purchases : true,
+        p
+          ? p.can_manage_accounting ||
+            p.can_manage_purchases ||
+            p.can_manage_branch_projects
+          : true,
       onClick: () => {
         try {
           localStorage.setItem("adminMode", "accounting");

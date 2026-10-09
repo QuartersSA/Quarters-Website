@@ -18,6 +18,7 @@ const initialFormState = {
   can_manage_deductions: false,
   can_manage_marketing: false,
   can_manage_purchases: false,
+  can_manage_branch_projects: false,
   // Admin notification preferences (WhatsApp)
   notify_shift_close_wa: false,
   notify_inventory_operation_wa: false,
@@ -60,6 +61,7 @@ export function useEmployeeForm() {
       can_manage_deductions: !!employee.can_manage_deductions,
       can_manage_marketing: !!employee.can_manage_marketing,
       can_manage_purchases: !!employee.can_manage_purchases,
+      can_manage_branch_projects: !!employee.can_manage_branch_projects,
       // Admin notification preferences (WhatsApp)
       notify_shift_close_wa: !!employee.notify_shift_close_wa,
       notify_inventory_operation_wa: !!employee.notify_inventory_operation_wa,

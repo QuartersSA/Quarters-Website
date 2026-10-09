@@ -51,6 +51,7 @@ export async function POST(request) {
       includeAddPurchaseInvoices = true,
       includeManageSuppliers = true,
       includeManagePurchases = true,
+      includeManageBranchProjects = true,
       includeEmployeeBranches = true,
     } = {}) => {
       const selectManageEmployees = includeManageEmployees
@@ -80,6 +81,10 @@ export async function POST(request) {
       const selectManagePurchases = includeManagePurchases
         ? "COALESCE(e.can_manage_purchases, false) as can_manage_purchases,"
         : "false as can_manage_purchases,";
+
+      const selectManageBranchProjects = includeManageBranchProjects
+        ? "COALESCE(e.can_manage_branch_projects, false) as can_manage_branch_projects,"
+        : "false as can_manage_branch_projects,";
 
       const branchesJoin = includeEmployeeBranches
         ? `LEFT JOIN LATERAL (
@@ -119,6 +124,7 @@ export async function POST(request) {
           ${selectAddPurchaseInvoices}
           ${selectManageSuppliers}
           ${selectManagePurchases}
+          ${selectManageBranchProjects}
           COALESCE(e.can_do_inventory, false) as can_do_inventory,
           COALESCE(e.can_close_shift, false) as can_close_shift,
           COALESCE(
@@ -211,6 +217,17 @@ export async function POST(request) {
           includeManagePurchases: false,
           includeEmployeeBranches: true,
         });
+      } else if (
+        code === "42703" &&
+        msg.includes("can_manage_branch_projects")
+      ) {
+        employee = await findEmployee({
+          includeManageEmployees: true,
+          includeAccessHr: true,
+          includeManageDeductions: true,
+          includeManageBranchProjects: false,
+          includeEmployeeBranches: true,
+        });
       } else if (code === "42P01" && msg.includes("employee_branches")) {
         // employee_branches table missing -> rerun without the join
         employee = await findEmployee({
@@ -278,6 +295,7 @@ export async function POST(request) {
         can_add_purchase_invoices: !!employeeData.can_add_purchase_invoices,
         can_manage_suppliers: !!employeeData.can_manage_suppliers,
         can_manage_purchases: !!employeeData.can_manage_purchases,
+        can_manage_branch_projects: !!employeeData.can_manage_branch_projects,
         branchIds,
       });
     } catch (e) {
