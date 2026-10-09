@@ -6,6 +6,39 @@ import { ensureCoffeeSchema } from "@/app/api/utils/coffeeInvoices";
 import { ensureOnce } from "@/app/api/utils/ensureOnce";
 const ensureSchema = ensureOnce(ensureSchemaImpl);
 
+// خطأ قاعدة البيانات → رسالة عربية مفهومة + التفاصيل الأصلية، بدل
+// «Failed to update item» العامة التي لا تدل على السبب.
+function dbErrorResponse(error, fallback) {
+  const code = String(error?.code || "");
+  const detail = String(error?.detail || error?.message || "");
+  const constraint = error?.constraint ? ` (${error.constraint})` : "";
+  let message = fallback;
+  let status = 500;
+  if (code === "23503") {
+    message = `الصنف مرتبط بسجلات أخرى تمنع هذا التعديل${constraint}`;
+    status = 409;
+  } else if (code === "23505") {
+    message = `قيمة مكررة — يوجد سجل آخر بنفس البيانات${constraint}`;
+    status = 409;
+  } else if (code === "23502") {
+    message = `حقل مطلوب فارغ${error?.column ? ` (${error.column})` : ""}`;
+    status = 400;
+  } else if (code === "23514") {
+    message = `قيمة لا تحقق شرط التحقق${constraint}`;
+    status = 400;
+  } else if (code === "22003") {
+    message = "قيمة رقمية أكبر من المسموح";
+    status = 400;
+  } else if (code === "22P02" || code === "22007" || code === "22008") {
+    message = "قيمة غير صالحة في أحد الحقول";
+    status = 400;
+  }
+  return Response.json(
+    { error: message, code: code || null, details: detail || null },
+    { status },
+  );
+}
+
 // Idempotent schema additions; runs cheaply on every request.
 async function ensureSchemaImpl() {
   try {
@@ -733,10 +766,7 @@ export async function POST(request) {
     return Response.json(withCategory[0], { status: 201 });
   } catch (error) {
     console.error("Error creating item:", error);
-    return Response.json(
-      { error: "Failed to create item", details: error.message },
-      { status: 500 },
-    );
+    return dbErrorResponse(error, "فشل إضافة الصنف");
   }
 }
 
@@ -846,6 +876,31 @@ export async function PUT(request) {
       return Response.json({ error: "الصنف غير موجود" }, { status: 404 });
     }
 
+    // فئة أو حبة بن محذوفة ما زال الصنف يشير إليها: تُصفَّر بدل أن
+    // يفشل التعديل كله بخطأ مفتاح أجنبي.
+    const warnings = [];
+    let finalCategoryId = safeCategoryId;
+    if (finalCategoryId) {
+      const [cat] = await sql`SELECT id FROM item_categories WHERE id = ${finalCategoryId}`;
+      if (!cat) {
+        finalCategoryId = null;
+        warnings.push("الفئة المحددة لم تعد موجودة — حُفظ الصنف بلا فئة");
+      }
+    }
+    let finalLinkedBeanId = safeLinkedBeanId;
+    if (finalLinkedBeanId) {
+      try {
+        const [bean] = await sql`SELECT id FROM accounting_green_beans WHERE id = ${finalLinkedBeanId}`;
+        if (!bean) {
+          finalLinkedBeanId = null;
+          warnings.push("حبة البن المرتبطة لم تعد موجودة — أُلغي الربط");
+        }
+      } catch {
+        // جدول البن الأخضر غير موجود = لا ربط.
+        finalLinkedBeanId = null;
+      }
+    }
+
     // تعديل التكلفة يدويًا من نموذج الصنف يلغي مصدر «فاتورة» — التكلفة
     // تعود «يدوية» حتى أول وصول مكتمل جديد يعيد حسابها من الفاتورة.
     const costChanged = !sameMoney(existingItem.base_purchase_cost, parsedBaseCost);
@@ -870,11 +925,11 @@ export async function PUT(request) {
         min_stock_threshold = ${safeMinThreshold},
         max_stock_threshold = ${safeMaxThreshold},
         is_active = ${active},
-        category_id = ${safeCategoryId},
+        category_id = ${finalCategoryId},
         cost = ${parsedCost},
         base_purchase_cost = ${parsedBaseCost},
         show_in_inventory = ${showInInventory},
-        linked_green_bean_id = ${safeLinkedBeanId},
+        linked_green_bean_id = ${finalLinkedBeanId},
         bag_size_kg = CASE WHEN ${coffee.bag_size_kg !== undefined} THEN ${coffee.bag_size_kg ?? null}::numeric ELSE bag_size_kg END,
         roast_cost_per_kg = CASE WHEN ${coffee.roast_cost_per_kg !== undefined} THEN ${coffee.roast_cost_per_kg ?? null}::numeric ELSE roast_cost_per_kg END,
         cost_source = CASE WHEN ${costChanged} THEN 'manual' ELSE cost_source END,
@@ -903,13 +958,10 @@ export async function PUT(request) {
     `;
 
     console.log("Item updated successfully:", withCategory[0]);
-    return Response.json(withCategory[0]);
+    return Response.json({ ...withCategory[0], warnings });
   } catch (error) {
     console.error("Error updating item:", error);
-    return Response.json(
-      { error: "Failed to update item", details: error.message },
-      { status: 500 },
-    );
+    return dbErrorResponse(error, "فشل تعديل الصنف");
   }
 }
 
@@ -957,9 +1009,6 @@ export async function DELETE(request) {
     return Response.json({ message: "تم حذف الصنف بنجاح" });
   } catch (error) {
     console.error("Error deleting item:", error);
-    return Response.json(
-      { error: "Failed to delete item", details: error.message },
-      { status: 500 },
-    );
+    return dbErrorResponse(error, "فشل حذف الصنف");
   }
 }
