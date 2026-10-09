@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import { useNavigate } from "react-router";
 import { formatRiyadhDateForInput } from "@/utils/dateUtils";
 import {
   AlertTriangle,
@@ -8,6 +9,7 @@ import {
   Camera,
   CheckCircle2,
   Clock,
+  FileSignature,
   Flag,
   MessageSquareText,
   Wallet,
@@ -19,6 +21,7 @@ import {
   phaseBudget,
   phaseHealth,
   phaseTasks,
+  summarizeContracts,
   todayRiyadh,
 } from "@/utils/branchProjectMath";
 import ProjectTimeline from "@/components/Accounting/BranchProjects/ProjectTimeline";
@@ -28,7 +31,12 @@ import {
   formatMoney,
 } from "@/components/Accounting/BranchProjects/shared";
 
-// نظرة عامة: الخط الزمني + تنبيهات + آخر التطورات.
+// نظرة عامة: الخط الزمني + تنبيهات (أقسام متأخرة، تجاوز ميزانية، مهام
+// ومعالم قادمة، دفعات عقود متأخرة/قريبة) + آخر التطورات.
+
+// تبويب المصاريف بعرض العقود — `setTab` في الصفحة يحتفظ بـ tab/phase فقط،
+// لذا نتنقل بسلسلة الاستعلام كاملة.
+const CONTRACTS_SEARCH = "?tab=expenses&exp=contracts";
 
 const ALERT_TONE = {
   rose: {
@@ -63,7 +71,7 @@ function truncate(text, max = 140) {
   return `${value.slice(0, max).trimEnd()}…`;
 }
 
-function AlertLine({ icon: Icon, tone = "amber", title, detail, phaseId, phaseName, onSelectPhase }) {
+function AlertLine({ icon: Icon, tone = "amber", title, detail, phaseId, phaseName, onSelectPhase, actionLabel, onAction }) {
   const t = ALERT_TONE[tone] || ALERT_TONE.amber;
   return (
     <div className={`rounded-[10px] border px-3 py-2 flex items-start gap-2 ${t.box}`}>
@@ -72,7 +80,16 @@ function AlertLine({ icon: Icon, tone = "amber", title, detail, phaseId, phaseNa
         <div className="text-sm font-semibold text-slate-900 dark:text-white">{title}</div>
         {detail ? <div className="text-[11px] text-slate-600 dark:text-white/60 mt-0.5">{detail}</div> : null}
       </div>
-      {phaseId != null ? (
+      {onAction ? (
+        <button
+          type="button"
+          onClick={onAction}
+          className="text-[11px] font-bold text-[#0e7a5f] dark:text-emerald-200 hover:underline whitespace-nowrap shrink-0"
+          title={actionLabel || "فتح"}
+        >
+          {actionLabel || "فتح"}
+        </button>
+      ) : phaseId != null ? (
         <button
           type="button"
           onClick={() => onSelectPhase?.(phaseId)}
@@ -95,10 +112,15 @@ function formatTimestampDay(value) {
 }
 
 export default function OverviewTab({ project, onSelectPhase, selectedPhaseId = null }) {
+  const navigate = useNavigate();
   const today = useMemo(() => todayRiyadh(), []);
   const phases = project?.phases || [];
   const tasks = project?.tasks || [];
   const invoices = project?.invoices || [];
+  // قد تغيب `contracts` في بيانات مخزّنة قديمة.
+  const contracts = useMemo(() => (Array.isArray(project?.contracts) ? project.contracts : []), [project?.contracts]);
+  const contractSummary = useMemo(() => summarizeContracts(contracts, today), [contracts, today]);
+  const openContracts = () => navigate({ search: CONTRACTS_SEARCH });
   const phaseById = useMemo(() => new Map(phases.map((phase) => [phase.id, phase])), [phases]);
 
   const latePhases = useMemo(
@@ -150,7 +172,15 @@ export default function OverviewTab({ project, onSelectPhase, selectedPhaseId = 
     () => upcomingMilestones.filter((task) => !dueSoon.some((due) => due.id === task.id)),
     [upcomingMilestones, dueSoon],
   );
-  const alertCount = latePhases.length + overBudgetPhases.length + dueSoon.length + extraMilestones.length;
+  const overdueInstallments = contractSummary.overdue || [];
+  const dueSoonInstallments = contractSummary.due_soon || [];
+  const alertCount =
+    latePhases.length +
+    overBudgetPhases.length +
+    dueSoon.length +
+    extraMilestones.length +
+    overdueInstallments.length +
+    dueSoonInstallments.length;
 
   return (
     <div className="space-y-5">
@@ -165,7 +195,7 @@ export default function OverviewTab({ project, onSelectPhase, selectedPhaseId = 
           {alertCount === 0 ? (
             <div className="flex items-center gap-2 text-sm text-[#0e7a5f] dark:text-emerald-200">
               <CheckCircle2 className="w-4 h-4" />
-              كل شيء في المسار — لا أقسام متأخرة ولا تجاوز في الميزانية.
+              كل شيء في المسار — لا أقسام متأخرة ولا تجاوز في الميزانية ولا دفعات عقود مستحقة.
             </div>
           ) : (
             <div className="space-y-2">
@@ -235,6 +265,34 @@ export default function OverviewTab({ project, onSelectPhase, selectedPhaseId = 
                     />
                   );
                 })}
+              {overdueInstallments.map(({ contract, installment }) => {
+                const overdue = daysBetween(installment.due_date, today);
+                return (
+                  <AlertLine
+                    key={`inst-overdue-${contract.id}-${installment.id ?? installment.seq}`}
+                    icon={FileSignature}
+                    tone="rose"
+                    title={`دفعة ${installment.seq} من عقد ${contract.title} — ${formatMoney(installment.amount)} — تستحق ${formatDate(installment.due_date)}`}
+                    detail={`متأخرة${Number.isFinite(overdue) && overdue > 0 ? ` بـ ${overdue} ${daysWord(overdue)}` : ""} · ${contract.party_name || ""} — لم تُسجَّل فاتورة لها بعد`}
+                    actionLabel="عرض العقود"
+                    onAction={openContracts}
+                  />
+                );
+              })}
+              {dueSoonInstallments.map(({ contract, installment }) => {
+                const left = daysBetween(today, installment.due_date);
+                return (
+                  <AlertLine
+                    key={`inst-due-${contract.id}-${installment.id ?? installment.seq}`}
+                    icon={FileSignature}
+                    tone="amber"
+                    title={`دفعة ${installment.seq} من عقد ${contract.title} — ${formatMoney(installment.amount)} — تستحق ${formatDate(installment.due_date)}`}
+                    detail={`${Number.isFinite(left) ? (left === 0 ? "اليوم" : `باقي ${left} ${daysWord(left)}`) : ""} · ${contract.party_name || ""}`}
+                    actionLabel="عرض العقود"
+                    onAction={openContracts}
+                  />
+                );
+              })}
             </div>
           )}
         </SectionCard>

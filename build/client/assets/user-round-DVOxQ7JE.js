@@ -1,0 +1,1 @@
+import{c as r}from"./ui-UbDhmL1H.js";if(typeof window<"u"){const n={};globalThis.process??={};const o=globalThis.process.env??{};globalThis.process.env=new Proxy(Object.assign({},n,o),{get(e,s){return s in e?e[s]:void 0},has(){return!0}})}const i=r("UserRound",[["circle",{cx:"12",cy:"8",r:"5",key:"1hypcn"}],["path",{d:"M20 21a8 8 0 0 0-16 0",key:"rfgkzh"}]]);export{i as U};

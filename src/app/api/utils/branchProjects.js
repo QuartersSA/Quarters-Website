@@ -44,6 +44,14 @@ export const REQUIRE_BRANCH_PROJECTS_READ = {
 
 export { ATTACHMENT_KINDS, PHASE_STATUSES, PROJECT_STATUSES, TASK_STATUSES };
 
+// عقود المقاولين/الموردين داخل المشروع (قسم «العقود» في تبويب المصاريف).
+// نفس القوائم في src/utils/branchProjectMath.js (الواجهة) — تُكرَّر هنا
+// حتى لا تعتمد الخلفية على ملف الواجهة.
+export const CONTRACT_KINDS = ["contractor", "supplier", "service", "other"];
+export const CONTRACT_STATUSES = ["active", "completed", "cancelled"];
+export const INSTALLMENT_STATUSES = ["pending", "invoiced", "overdue", "paid"];
+export const MAX_CONTRACT_INSTALLMENTS = 60;
+
 const ESTABLISHMENT_PARENT = {
   code: "53",
   name: "تكاليف تأسيس الفروع",
@@ -331,6 +339,86 @@ async function ensureBranchProjectsSchemaImpl() {
       ON branch_project_attachments (project_id, created_at DESC)
   `;
 
+  // عقود المقاولين/الموردين: التزام بمبلغ متفق عليه مقسّم إلى دفعات.
+  // السداد الفعلي عبر فواتير المشتريات فقط (الدفعة تُربط بفاتورة).
+  await sql`
+    CREATE TABLE IF NOT EXISTS branch_project_contracts (
+      id SERIAL PRIMARY KEY,
+      project_id INTEGER NOT NULL REFERENCES branch_projects(id) ON DELETE CASCADE,
+      phase_id INTEGER REFERENCES branch_project_phases(id) ON DELETE SET NULL,
+      kind TEXT NOT NULL DEFAULT 'contractor',
+      title TEXT NOT NULL,
+      party_name TEXT NOT NULL,
+      party_contact_id INTEGER,
+      agreed_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      vat_included BOOLEAN NOT NULL DEFAULT TRUE,
+      start_date DATE,
+      end_date DATE,
+      status TEXT NOT NULL DEFAULT 'active',
+      attachment_url TEXT,
+      attachment_name TEXT,
+      notes TEXT,
+      is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      created_by_employee_id INTEGER,
+      created_by_employee_name TEXT
+    )
+  `;
+  await sql`
+    ALTER TABLE branch_project_contracts
+      ADD COLUMN IF NOT EXISTS phase_id INTEGER REFERENCES branch_project_phases(id) ON DELETE SET NULL,
+      ADD COLUMN IF NOT EXISTS kind TEXT NOT NULL DEFAULT 'contractor',
+      ADD COLUMN IF NOT EXISTS party_contact_id INTEGER,
+      ADD COLUMN IF NOT EXISTS agreed_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS vat_included BOOLEAN NOT NULL DEFAULT TRUE,
+      ADD COLUMN IF NOT EXISTS start_date DATE,
+      ADD COLUMN IF NOT EXISTS end_date DATE,
+      ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active',
+      ADD COLUMN IF NOT EXISTS attachment_url TEXT,
+      ADD COLUMN IF NOT EXISTS attachment_name TEXT,
+      ADD COLUMN IF NOT EXISTS notes TEXT,
+      ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT TRUE,
+      ADD COLUMN IF NOT EXISTS created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      ADD COLUMN IF NOT EXISTS created_by_employee_id INTEGER,
+      ADD COLUMN IF NOT EXISTS created_by_employee_name TEXT
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_branch_project_contracts_project
+      ON branch_project_contracts (project_id)
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS branch_project_contract_installments (
+      id SERIAL PRIMARY KEY,
+      contract_id INTEGER NOT NULL REFERENCES branch_project_contracts(id) ON DELETE CASCADE,
+      seq INTEGER NOT NULL DEFAULT 1,
+      label TEXT,
+      due_date DATE,
+      amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      invoice_id INTEGER,
+      notes TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh')
+    )
+  `;
+  await sql`
+    ALTER TABLE branch_project_contract_installments
+      ADD COLUMN IF NOT EXISTS seq INTEGER NOT NULL DEFAULT 1,
+      ADD COLUMN IF NOT EXISTS label TEXT,
+      ADD COLUMN IF NOT EXISTS due_date DATE,
+      ADD COLUMN IF NOT EXISTS amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS invoice_id INTEGER,
+      ADD COLUMN IF NOT EXISTS notes TEXT,
+      ADD COLUMN IF NOT EXISTS created_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh'),
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'Asia/Riyadh')
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_branch_project_contract_installments_contract
+      ON branch_project_contract_installments (contract_id, seq)
+  `;
+
   await ensureProjectInvoiceLinkColumns();
 
   // مجموعة حسابات التأسيس (53) تُهيَّأ مبكرًا حتى تظهر في نافذة الفاتورة.
@@ -364,11 +452,17 @@ export async function ensureProjectInvoiceLinkColumns() {
   await sql`
     ALTER TABLE accounting_purchase_invoices
       ADD COLUMN IF NOT EXISTS project_id INTEGER,
-      ADD COLUMN IF NOT EXISTS project_phase_id INTEGER
+      ADD COLUMN IF NOT EXISTS project_phase_id INTEGER,
+      ADD COLUMN IF NOT EXISTS project_contract_id INTEGER,
+      ADD COLUMN IF NOT EXISTS project_installment_id INTEGER
   `;
   await sql`
     CREATE INDEX IF NOT EXISTS idx_purchase_invoices_project
       ON accounting_purchase_invoices (project_id)
+  `;
+  await sql`
+    CREATE INDEX IF NOT EXISTS idx_purchase_invoices_project_contract
+      ON accounting_purchase_invoices (project_contract_id)
   `;
   invoiceColumnsReady = true;
   return true;
@@ -502,6 +596,7 @@ function mapProjectRow(row) {
     phases: [],
     tasks: [],
     invoices: [],
+    contracts: [],
     updates: [],
     attachments: [],
   };
@@ -618,7 +713,253 @@ export function mapInvoiceRow(row, today = todayRiyadh()) {
     source: leaseContractId ? "lease" : "manual",
     lease_contract_id: leaseContractId,
     lease_month: row.lease_month ? String(row.lease_month) : null,
+    // ربط الفاتورة بعقد مقاول/مورد ودفعته (قسم «العقود»).
+    contract_id: intOrNull(row.project_contract_id),
+    contract_title: row.contract_title ? String(row.contract_title) : null,
+    installment_id: intOrNull(row.project_installment_id),
+    installment_seq: intOrNull(row.installment_seq),
   };
+}
+
+// ---------------------------------------------------------------------------
+// عقود المقاولين/الموردين ودفعاتها
+// ---------------------------------------------------------------------------
+
+// حالة الدفعة محسوبة لا مخزّنة — نفس قاعدة installmentStatus في الواجهة
+// (src/utils/branchProjectMath.js): مسددة إن فاتورتها مسددة بالكامل
+// (paid ≥ total − 0.005)، «فاتورة» إن لها فاتورة غير مسددة، متأخرة إن بلا
+// فاتورة واستحقاقها قبل اليوم، وإلا بانتظار السداد.
+export function installmentStatus(inst, today = todayRiyadh()) {
+  if (!inst) return "pending";
+  if (intOrNull(inst.invoice_id)) {
+    const total = round2(num(inst.invoice_total));
+    const paid = round2(num(inst.invoice_paid));
+    return paid + MONEY_TOLERANCE >= total ? "paid" : "invoiced";
+  }
+  const day = isDateKey(today) ? today : todayRiyadh();
+  const due = inst.due_date || null;
+  if (isDateKey(due) && compareDateKeys(due, day) < 0) return "overdue";
+  return "pending";
+}
+
+// صف دفعة (مع الفاتورة المرتبطة إن وُجدت ونشطة) → Installment.
+// فاتورة محذوفة/موقوفة تُعامل كأن الدفعة بلا فاتورة.
+export function mapInstallmentRow(row, today = todayRiyadh()) {
+  const linked = row.linked_invoice_id !== undefined
+    ? intOrNull(row.linked_invoice_id)
+    : intOrNull(row.invoice_id);
+  const inst = {
+    id: Number(row.id),
+    contract_id: Number(row.contract_id),
+    seq: num(row.seq) || 1,
+    label: str(row.label),
+    due_date: row.due_date || null,
+    amount: round2(num(row.amount)),
+    notes: str(row.notes),
+    invoice_id: linked,
+    invoice_number: linked && row.invoice_number ? String(row.invoice_number) : null,
+    invoice_total: linked ? round2(num(row.invoice_total)) : 0,
+    invoice_paid: linked ? round2(num(row.invoice_paid)) : 0,
+    created_at: iso(row.created_at),
+    updated_at: iso(row.updated_at),
+  };
+  inst.status = installmentStatus(inst, today);
+  return inst;
+}
+
+export function mapContractRow(row) {
+  const kind = str(row.kind);
+  const status = str(row.status);
+  return {
+    id: Number(row.id),
+    project_id: Number(row.project_id),
+    phase_id: intOrNull(row.phase_id),
+    kind: CONTRACT_KINDS.includes(kind) ? kind : "contractor",
+    title: str(row.title),
+    party_name: str(row.party_name),
+    party_contact_id: intOrNull(row.party_contact_id),
+    agreed_amount: round2(num(row.agreed_amount)),
+    vat_included: row.vat_included !== false,
+    start_date: row.start_date || null,
+    end_date: row.end_date || null,
+    status: CONTRACT_STATUSES.includes(status) ? status : "active",
+    attachment_url: row.attachment_url ? String(row.attachment_url) : null,
+    attachment_name: row.attachment_name ? String(row.attachment_name) : null,
+    notes: str(row.notes),
+    is_active: row.is_active !== false,
+    installments: [],
+    invoiced: 0,
+    paid: 0,
+    created_at: iso(row.created_at),
+    updated_at: iso(row.updated_at),
+    created_by_employee_id: intOrNull(row.created_by_employee_id),
+    created_by_employee_name: str(row.created_by_employee_name),
+  };
+}
+
+const CONTRACT_SELECT = `
+  SELECT pc.id, pc.project_id, pc.phase_id, pc.kind, pc.title, pc.party_name, pc.party_contact_id,
+         pc.agreed_amount, pc.vat_included,
+         TO_CHAR(pc.start_date, 'YYYY-MM-DD') AS start_date,
+         TO_CHAR(pc.end_date, 'YYYY-MM-DD') AS end_date,
+         pc.status, pc.attachment_url, pc.attachment_name, pc.notes, pc.is_active,
+         pc.created_at, pc.updated_at, pc.created_by_employee_id, pc.created_by_employee_name
+  FROM branch_project_contracts pc
+`;
+
+const INSTALLMENT_COLUMNS = `
+  pci.id, pci.contract_id, pci.seq, pci.label,
+  TO_CHAR(pci.due_date, 'YYYY-MM-DD') AS due_date,
+  pci.amount, pci.invoice_id, pci.notes, pci.created_at, pci.updated_at
+`;
+
+// دفعات مجموعة عقود مع فاتورة كل دفعة (رقمها وإجماليها ومسددها) إن كان
+// جدول الفواتير موجودًا؛ وإلا بلا ربط.
+async function loadInstallmentRows(contractIds, hasInvoices) {
+  if (!contractIds.length) return [];
+  if (hasInvoices) {
+    return sql(
+      `SELECT ${INSTALLMENT_COLUMNS},
+              inv.id AS linked_invoice_id, inv.invoice_number,
+              inv.total_amount AS invoice_total, inv.paid_amount AS invoice_paid
+       FROM branch_project_contract_installments pci
+       LEFT JOIN accounting_purchase_invoices inv
+         ON inv.id = pci.invoice_id AND inv.is_active = TRUE
+       WHERE pci.contract_id = ANY($1::int[])
+       ORDER BY pci.contract_id ASC, pci.seq ASC, pci.id ASC`,
+      [contractIds],
+    );
+  }
+  return sql(
+    `SELECT ${INSTALLMENT_COLUMNS}, NULL::int AS linked_invoice_id,
+            NULL::text AS invoice_number, 0 AS invoice_total, 0 AS invoice_paid
+     FROM branch_project_contract_installments pci
+     WHERE pci.contract_id = ANY($1::int[])
+     ORDER BY pci.contract_id ASC, pci.seq ASC, pci.id ASC`,
+    [contractIds],
+  );
+}
+
+// مجموع فواتير كل عقد (الإجمالي والمسدد) — استعلام تجميعي واحد.
+async function loadContractInvoiceSums(contractIds, hasInvoices) {
+  if (!contractIds.length || !hasInvoices) return new Map();
+  const rows = await sql`
+    SELECT inv.project_contract_id AS contract_id,
+           COALESCE(SUM(inv.total_amount), 0) AS invoiced,
+           COALESCE(SUM(inv.paid_amount), 0) AS paid
+    FROM accounting_purchase_invoices inv
+    WHERE inv.project_contract_id = ANY(${contractIds}::int[]) AND inv.is_active = TRUE
+    GROUP BY inv.project_contract_id
+  `;
+  return new Map(
+    rows.map((row) => [Number(row.contract_id), { invoiced: round2(num(row.invoiced)), paid: round2(num(row.paid)) }]),
+  );
+}
+
+async function assembleContracts(contractRows, today) {
+  if (!contractRows.length) return [];
+  const contracts = contractRows.map(mapContractRow);
+  const contractIds = contracts.map((c) => c.id);
+  const hasInvoices = await ensureProjectInvoiceLinkColumns();
+  const [installmentRows, sums] = await Promise.all([
+    loadInstallmentRows(contractIds, hasInvoices),
+    loadContractInvoiceSums(contractIds, hasInvoices),
+  ]);
+  const byContract = new Map(contracts.map((c) => [c.id, c]));
+  for (const row of installmentRows) {
+    const contract = byContract.get(Number(row.contract_id));
+    if (contract) contract.installments.push(mapInstallmentRow(row, today));
+  }
+  for (const contract of contracts) {
+    const sum = sums.get(contract.id);
+    contract.invoiced = sum ? sum.invoiced : 0;
+    contract.paid = sum ? sum.paid : 0;
+  }
+  return contracts;
+}
+
+// عقود مشاريع (النشطة فقط) مرتبة بالإنشاء ثم المعرّف، مع دفعاتها بحالتها
+// المحسوبة ومجاميع فواتيرها. تعيد Contract[] (كل عقد يحمل project_id).
+export async function loadContracts(projectIds, today = todayRiyadh()) {
+  const ids = (projectIds || []).map(parseId).filter(Boolean);
+  if (!ids.length) return [];
+  const rows = await sql(
+    `${CONTRACT_SELECT}
+     WHERE pc.project_id = ANY($1::int[]) AND pc.is_active = TRUE
+     ORDER BY pc.project_id ASC, pc.created_at ASC, pc.id ASC`,
+    [ids],
+  );
+  return assembleContracts(rows, today);
+}
+
+// عقد واحد كامل (بعد POST/PUT). null إن لم يوجد أو لا يخص المشروع.
+export async function loadContract(contractId, projectId = null, today = todayRiyadh()) {
+  const cid = parseId(contractId);
+  if (!cid) return null;
+  const prj = parseId(projectId);
+  const rows = await sql(
+    `${CONTRACT_SELECT}
+     WHERE pc.id = $1 AND pc.is_active = TRUE AND ($2::int IS NULL OR pc.project_id = $2::int)
+     LIMIT 1`,
+    [cid, prj],
+  );
+  if (!rows[0]) return null;
+  const [contract] = await assembleContracts(rows, today);
+  return contract || null;
+}
+
+// رأس عقد نشط (للتحقق ونصوص التدقيق) أو null.
+export async function loadContractHeader(contractId, projectId = null) {
+  const cid = parseId(contractId);
+  if (!cid) return null;
+  const prj = parseId(projectId);
+  const [row] = await sql`
+    SELECT id, project_id, phase_id, kind, title, party_name, status, is_active
+    FROM branch_project_contracts
+    WHERE id = ${cid} AND is_active = TRUE
+      AND (${prj}::int IS NULL OR project_id = ${prj}::int)
+    LIMIT 1
+  `;
+  return row
+    ? {
+        id: Number(row.id),
+        project_id: Number(row.project_id),
+        phase_id: intOrNull(row.phase_id),
+        kind: str(row.kind),
+        title: str(row.title),
+        party_name: str(row.party_name),
+        status: str(row.status),
+      }
+    : null;
+}
+
+// دفعة واحدة بشكل Installment (بعد ربط/فك ربط فاتورتها). null إن لم توجد.
+export async function loadInstallment(installmentId, contractId = null, today = todayRiyadh()) {
+  const iid = parseId(installmentId);
+  if (!iid) return null;
+  const cid = parseId(contractId);
+  const hasInvoices = await ensureProjectInvoiceLinkColumns();
+  const rows = hasInvoices
+    ? await sql(
+        `SELECT ${INSTALLMENT_COLUMNS},
+                inv.id AS linked_invoice_id, inv.invoice_number,
+                inv.total_amount AS invoice_total, inv.paid_amount AS invoice_paid
+         FROM branch_project_contract_installments pci
+         LEFT JOIN accounting_purchase_invoices inv
+           ON inv.id = pci.invoice_id AND inv.is_active = TRUE
+         WHERE pci.id = $1 AND ($2::int IS NULL OR pci.contract_id = $2::int)
+         LIMIT 1`,
+        [iid, cid],
+      )
+    : await sql(
+        `SELECT ${INSTALLMENT_COLUMNS}, NULL::int AS linked_invoice_id,
+                NULL::text AS invoice_number, 0 AS invoice_total, 0 AS invoice_paid
+         FROM branch_project_contract_installments pci
+         WHERE pci.id = $1 AND ($2::int IS NULL OR pci.contract_id = $2::int)
+         LIMIT 1`,
+        [iid, cid],
+      );
+  return rows[0] ? mapInstallmentRow(rows[0], today) : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -696,10 +1037,15 @@ const INVOICE_SELECT = `
          acc.code AS expense_account_code,
          acc.name AS expense_account_name,
          inv.total_amount, inv.paid_amount,
-         inv.lease_contract_id, inv.lease_month, inv.is_active
+         inv.lease_contract_id, inv.lease_month, inv.is_active,
+         inv.project_contract_id, inv.project_installment_id,
+         pc.title AS contract_title,
+         pci.seq AS installment_seq
   FROM accounting_purchase_invoices inv
   LEFT JOIN accounting_accounts acc ON acc.id = inv.expense_account_id
   LEFT JOIN accounting_contacts c ON c.id = inv.contact_id
+  LEFT JOIN branch_project_contracts pc ON pc.id = inv.project_contract_id
+  LEFT JOIN branch_project_contract_installments pci ON pci.id = inv.project_installment_id
 `;
 
 async function loadInvoices(ids) {
@@ -737,10 +1083,12 @@ function groupBy(rows, mapper) {
   return groups;
 }
 
-function assemble(projectRows, { phases, tasks, invoices, updates, attachments }, today) {
+function assemble(projectRows, { phases, tasks, invoices, contracts = [], updates, attachments }, today) {
   const phaseGroups = groupBy(phases, mapPhaseRow);
   const taskGroups = groupBy(tasks, mapTaskRow);
   const invoiceGroups = groupBy(invoices, (row) => mapInvoiceRow(row, today));
+  // العقود جاهزة (Contract[] من loadContracts) — تُجمَّع بلا تحويل.
+  const contractGroups = groupBy(contracts, (contract) => contract);
   const updateGroups = groupBy(updates, mapUpdateRow);
   const attachmentGroups = groupBy(attachments, mapAttachmentRow);
   return projectRows.map((row) => {
@@ -748,14 +1096,15 @@ function assemble(projectRows, { phases, tasks, invoices, updates, attachments }
     project.phases = phaseGroups.get(project.id) || [];
     project.tasks = taskGroups.get(project.id) || [];
     project.invoices = invoiceGroups.get(project.id) || [];
+    project.contracts = contractGroups.get(project.id) || [];
     project.updates = updateGroups.get(project.id) || [];
     project.attachments = attachmentGroups.get(project.id) || [];
     return project;
   });
 }
 
-// كل المشاريع النشطة مع الأقسام والمهام والفواتير (updates/attachments فارغة
-// للخفة). الجارية أولًا ثم بموعد الافتتاح.
+// كل المشاريع النشطة مع الأقسام والمهام والفواتير (contracts/updates/
+// attachments فارغة للخفة). الجارية أولًا ثم بموعد الافتتاح.
 export async function listProjects() {
   const rows = await sql(`
     ${PROJECT_SELECT}
@@ -781,14 +1130,16 @@ export async function loadProject(id) {
   const [row] = await sql(`${PROJECT_SELECT} WHERE p.id = $1 AND p.is_active = TRUE`, [projectId]);
   if (!row) return null;
   const ids = [projectId];
-  const [phases, tasks, invoices, updates, attachments] = await Promise.all([
+  const today = todayRiyadh();
+  const [phases, tasks, invoices, contracts, updates, attachments] = await Promise.all([
     loadPhases(ids),
     loadTasks(ids),
     loadInvoices(ids),
+    loadContracts(ids, today),
     loadUpdates(ids),
     loadAttachments(ids),
   ]);
-  const [project] = assemble([row], { phases, tasks, invoices, updates, attachments }, todayRiyadh());
+  const [project] = assemble([row], { phases, tasks, invoices, contracts, updates, attachments }, today);
   return project || null;
 }
 
@@ -1164,6 +1515,116 @@ export function parseTaskInput(body = {}, existing = null) {
       assignee_name: text(pick("assignee_name", ""), 200),
       sort_order: sortOrder,
       notes: text(pick("notes", ""), 5000),
+    },
+  };
+}
+
+// عقد مقاول/مورد: العنوان والطرف مطلوبان؛ النوع/الحالة من القوائم؛ المبلغ
+// ≥ 0؛ التواريخ YYYY-MM-DD أو null مع النهاية ≥ البداية. `installments`
+// (إن أُرسلت) مصفوفة {id?, label, due_date, amount, notes} ≤ 60 دفعة، تُرقَّم
+// seq حسب ترتيب الإرسال؛ غيابها عن الحمولة → null (PUT يبقي الدفعات).
+export function parseContractInput(body = {}, existing = null) {
+  const input = body && typeof body === "object" ? body : {};
+  const base = existing || {};
+  const has = (key) => input[key] !== undefined;
+  const pick = (key, fallback) => (has(key) ? input[key] : (base[key] ?? fallback));
+
+  const title = text(pick("title", ""), 300);
+  if (!title) return fail("عنوان العقد مطلوب");
+  const partyName = text(pick("party_name", ""), 300);
+  if (!partyName) return fail("اسم الطرف (المقاول/المورد) مطلوب");
+
+  const kind = str(pick("kind", "contractor")).trim() || "contractor";
+  if (!CONTRACT_KINDS.includes(kind)) return fail("نوع العقد غير معروف");
+
+  const status = str(pick("status", "active")).trim() || "active";
+  if (!CONTRACT_STATUSES.includes(status)) return fail("حالة العقد غير معروفة");
+
+  let agreedAmount = 0;
+  const agreedRaw = pick("agreed_amount", 0);
+  if (agreedRaw !== null && agreedRaw !== "") {
+    const n = Number(agreedRaw);
+    if (!Number.isFinite(n) || n < 0) return fail("المبلغ المتفق عليه غير صحيح");
+    agreedAmount = round2(n);
+  }
+
+  const vatIncluded = has("vat_included")
+    ? truthy(input.vat_included)
+    : base.vat_included === undefined || base.vat_included === null
+      ? true
+      : base.vat_included !== false;
+
+  const phaseRaw = pick("phase_id", null);
+  if (phaseRaw !== null && phaseRaw !== "" && intOrNull(phaseRaw) === null) {
+    return fail("رقم القسم غير صحيح");
+  }
+  const contactRaw = pick("party_contact_id", null);
+  if (contactRaw !== null && contactRaw !== "" && intOrNull(contactRaw) === null) {
+    return fail("رقم جهة الاتصال غير صحيح");
+  }
+
+  const startRaw = pick("start_date", null);
+  if (badDate(startRaw)) return fail("تاريخ بداية العقد غير صحيح (YYYY-MM-DD)");
+  const startDate = dateOrNull(startRaw);
+  const endRaw = pick("end_date", null);
+  if (badDate(endRaw)) return fail("تاريخ نهاية العقد غير صحيح (YYYY-MM-DD)");
+  const endDate = dateOrNull(endRaw);
+  if (startDate && endDate && compareDateKeys(endDate, startDate) < 0) {
+    return fail("تاريخ نهاية العقد يجب أن يكون بعد بدايته أو يساويه");
+  }
+
+  const attachmentUrl = text(pick("attachment_url", ""), 2000) || null;
+  const attachmentName = text(pick("attachment_name", ""), 300) || null;
+
+  // null/غياب = لا تغيير على الدفعات (PUT)؛ مصفوفة فارغة = إزالة غير المرتبطة.
+  let installments = null;
+  if (has("installments") && input.installments !== null) {
+    if (!Array.isArray(input.installments)) return fail("الدفعات يجب أن تكون قائمة");
+    if (input.installments.length > MAX_CONTRACT_INSTALLMENTS) {
+      return fail(`عدد الدفعات لا يتجاوز ${MAX_CONTRACT_INSTALLMENTS}`);
+    }
+    installments = [];
+    for (let i = 0; i < input.installments.length; i += 1) {
+      const raw = input.installments[i] && typeof input.installments[i] === "object" ? input.installments[i] : {};
+      const seq = i + 1;
+      if (raw.id !== undefined && raw.id !== null && raw.id !== "" && intOrNull(raw.id) === null) {
+        return fail(`رقم الدفعة ${seq} غير صحيح`);
+      }
+      if (badDate(raw.due_date)) return fail(`تاريخ استحقاق الدفعة ${seq} غير صحيح (YYYY-MM-DD)`);
+      let amount = 0;
+      if (raw.amount !== null && raw.amount !== undefined && raw.amount !== "") {
+        const n = Number(raw.amount);
+        if (!Number.isFinite(n) || n < 0) return fail(`مبلغ الدفعة ${seq} غير صحيح`);
+        amount = round2(n);
+      }
+      installments.push({
+        id: intOrNull(raw.id),
+        seq,
+        label: text(raw.label, 300),
+        due_date: dateOrNull(raw.due_date),
+        amount,
+        notes: text(raw.notes, 2000),
+      });
+    }
+  }
+
+  return {
+    error: null,
+    value: {
+      phase_id: intOrNull(phaseRaw),
+      kind,
+      title,
+      party_name: partyName,
+      party_contact_id: intOrNull(contactRaw),
+      agreed_amount: agreedAmount,
+      vat_included: vatIncluded,
+      start_date: startDate,
+      end_date: endDate,
+      status,
+      attachment_url: attachmentUrl,
+      attachment_name: attachmentName,
+      notes: text(pick("notes", ""), 5000),
+      installments,
     },
   };
 }

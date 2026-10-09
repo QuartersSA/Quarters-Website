@@ -83,13 +83,17 @@ export function useBranchProject(id) {
 // ---------- الطفرات ----------
 
 // مصنع طفرة موحّد: ينفّذ mock أو الخادم، يبطل الكاش، ويعرض التوست.
-function useProjectMutation({ mock, real, successMessage, errorPrefix, onErrorCode }) {
+// `extraKeys`: مفاتيح استعلام إضافية تُبطل مع المشروع (مثل فواتير المشتريات).
+function useProjectMutation({ mock, real, successMessage, errorPrefix, onErrorCode, extraKeys }) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (variables) => (BRANCH_PROJECTS_MOCK ? mock(variables) : real(variables)),
     onSuccess: async (data, variables) => {
       const id = variables?.project_id ?? variables?.id ?? data?.id ?? null;
       await invalidateBranchProjectQueries(queryClient, id);
+      for (const key of Array.isArray(extraKeys) ? extraKeys : []) {
+        queryClient.invalidateQueries({ queryKey: key });
+      }
       const message = typeof successMessage === "function" ? successMessage(data, variables) : successMessage;
       if (message) toast.success(message);
     },
@@ -294,5 +298,66 @@ export function useDeleteBranchProjectInvoice() {
       request("DELETE", `/${project_id}/invoices/${id}`, undefined, "فشل حذف الفاتورة"),
     successMessage: "تم حذف الفاتورة",
     errorPrefix: "فشل حذف الفاتورة",
+  });
+}
+
+// ---------- العقود والدفعات ----------
+// العقد التزام مقسّم إلى دفعات؛ السداد يبقى عبر فواتير المشتريات
+// المرتبطة بالدفعات. لا دعم في الوضع التجريبي (mock).
+// POST   /[id]/contracts                                       {…fields, installments}
+// PUT    /[id]/contracts/[contractId]                          {…fields, installments}
+// DELETE /[id]/contracts/[contractId]                          (409 has_invoices)
+// PUT    /[id]/contracts/[contractId]/installments/[instId]    {invoice_id|null}
+
+function mockUnavailable() {
+  return Promise.reject(new Error("غير متاح في الوضع التجريبي"));
+}
+
+export function useSaveBranchProjectContract() {
+  return useProjectMutation({
+    mock: mockUnavailable,
+    real: ({ project_id, id, ...fields }) =>
+      id
+        ? request("PUT", `/${project_id}/contracts/${id}`, fields, "فشل حفظ العقد")
+        : request("POST", `/${project_id}/contracts`, fields, "فشل حفظ العقد"),
+    successMessage: (_data, vars) => (vars?.id ? "تم حفظ العقد" : "تمت إضافة العقد"),
+    errorPrefix: "فشل حفظ العقد",
+    extraKeys: [queryKeys.accountingPurchaseInvoices()],
+  });
+}
+
+export function useDeleteBranchProjectContract() {
+  return useProjectMutation({
+    mock: mockUnavailable,
+    real: ({ project_id, id }) => request("DELETE", `/${project_id}/contracts/${id}`, undefined, "فشل حذف العقد"),
+    successMessage: "تم حذف العقد",
+    errorPrefix: "فشل حذف العقد",
+    extraKeys: [queryKeys.accountingPurchaseInvoices()],
+    onErrorCode: (error) => {
+      if (error.code !== "has_invoices") return false;
+      toast.error("لا يمكن حذف العقد: له فواتير مرتبطة بدفعاته — فك ربط الفواتير أولاً.", { duration: 8000 });
+      return true;
+    },
+  });
+}
+
+export function useLinkContractInstallmentInvoice() {
+  return useProjectMutation({
+    mock: mockUnavailable,
+    real: ({ project_id, contract_id, installment_id, invoice_id }) =>
+      request(
+        "PUT",
+        `/${project_id}/contracts/${contract_id}/installments/${installment_id}`,
+        { invoice_id: invoice_id === undefined || invoice_id === null || invoice_id === "" ? null : Number(invoice_id) },
+        "فشل ربط الفاتورة بالدفعة",
+      ),
+    successMessage: (_data, vars) => (vars?.invoice_id ? "تم ربط الفاتورة بالدفعة" : "تم فك ربط الفاتورة من الدفعة"),
+    errorPrefix: "فشل ربط الفاتورة بالدفعة",
+    extraKeys: [queryKeys.accountingPurchaseInvoices()],
+    onErrorCode: (error) => {
+      if (error.code !== "linked_elsewhere") return false;
+      toast.error(error.message || "الفاتورة مرتبطة بدفعة أو مشروع آخر.", { duration: 8000 });
+      return true;
+    },
   });
 }

@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useSearchParams } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import {
   AlertTriangle,
   Check,
   Download,
+  FileSignature,
   FileSpreadsheet,
   FileText,
   Link2,
@@ -37,6 +39,7 @@ import {
   invalidateBranchProjectQueries,
   useBranchProjects,
   useDeleteBranchProjectInvoice,
+  useLinkContractInstallmentInvoice,
   useSaveBranchProjectInvoice,
 } from "@/hooks/useBranchProjects";
 import { authedFetch } from "@/utils/apiAuth";
@@ -48,16 +51,20 @@ import {
   INVOICE_STATUS_LABELS,
   invoiceStatus,
   phaseBudget,
+  phaseContracted,
   projectBudget,
   todayRiyadh,
 } from "@/utils/branchProjectMath";
 import { EmptyState, ModalShell, ProgressBar, SectionCard, SummaryCard, formatDate, formatMoney, moneyValue } from "./shared";
 import ExpenseModal from "./ExpenseModal";
+import ContractsSection from "./ContractsSection";
 
 // تبويب المصروفات: ملخص الميزانية، جدول قسم/فعلي، رسم دائري، فواتير.
 // الفواتير فواتير مشتريات حقيقية مرتبطة بالمشروع (project_id/project_phase_id):
 // «+ فاتورة» يفتح نافذة فاتورة المشتريات بتعبئة مسبقة، «ربط فاتورة موجودة»
 // يربط فاتورة غير مرتبطة، التعديل هنا = القسم والحساب فقط، والحذف نهائي.
+// مبدّل «الفواتير | العقود» (`?exp=contracts`): العقود = `ContractsSection`
+// (عقود المقاولين/الموردين ودفعاتها؛ تسجيل الدفعة = فاتورة مشتريات مرتبطة).
 
 const DEFAULT_ACCOUNT = "5399";
 
@@ -103,6 +110,23 @@ function LeaseChip({ invoice }) {
     >
       <ScrollText className="w-3 h-3" />
       إيجار
+    </span>
+  );
+}
+
+// شارة ربط الفاتورة بدفعة عقد: «عقد: {العنوان} · د{التسلسل}».
+function ContractChip({ invoice }) {
+  if (!invoice?.contract_id) return null;
+  const seq = invoice.installment_seq != null ? ` · د${invoice.installment_seq}` : "";
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full border border-violet-200 dark:border-violet-400/25 bg-violet-50 dark:bg-violet-400/10 text-violet-800 dark:text-violet-200 px-2 py-0.5 text-[10px] font-bold whitespace-nowrap"
+      title={`دفعة عقد «${invoice.contract_title || `#${invoice.contract_id}`}»${invoice.installment_seq != null ? ` — الدفعة ${invoice.installment_seq}` : ""}`}
+      dir="rtl"
+    >
+      <FileSignature className="w-3 h-3" />
+      عقد: {invoice.contract_title || `#${invoice.contract_id}`}
+      {seq}
     </span>
   );
 }
@@ -154,12 +178,20 @@ function PieTooltip({ active, payload, isDark, total }) {
 
 // نافذة «ربط فاتورة موجودة»: فواتير المشتريات غير المرتبطة بأي مشروع،
 // بحث بالرقم/المورد، اختيار قسم، ثم POST {invoice_id, phase_id}.
-function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, isAdmin, onClose }) {
+// بوضع `installmentTarget = {contract, installment}` تربط الفاتورة بدفعة
+// عقد (PUT installments/[id] {invoice_id}) بدل ربط المشروع؛ تُقبل حينها
+// الفواتير غير المرتبطة بمشروع أو المرتبطة بهذا المشروع بلا دفعة.
+function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, isAdmin, installmentTarget = null, onClose }) {
   const queryClient = useQueryClient();
   const saveMut = useSaveBranchProjectInvoice();
+  const linkMut = useLinkContractInstallmentInvoice();
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [phaseId, setPhaseId] = useState("");
+  const targetContract = installmentTarget?.contract || null;
+  const targetInstallment = installmentTarget?.installment || null;
+  const installmentMode = !!(targetContract && targetInstallment);
+  const pending = installmentMode ? linkMut.isPending : saveMut.isPending;
 
   React.useEffect(() => {
     if (!open) return;
@@ -176,15 +208,22 @@ function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, i
 
   const candidates = useMemo(() => {
     const q = search.trim().toLowerCase();
+    const projectId = Number(project?.id);
     return (invoicesQuery.data || [])
-      .filter((inv) => !inv.project_id && inv.is_active !== false)
+      .filter((inv) => inv.is_active !== false)
+      .filter((inv) => {
+        if (!installmentMode) return !inv.project_id;
+        if (inv.project_installment_id) return false;
+        if (inv.project_contract_id && Number(inv.project_contract_id) !== Number(targetContract?.id)) return false;
+        return !inv.project_id || Number(inv.project_id) === projectId;
+      })
       .filter((inv) => {
         if (!q) return true;
         const hay = `${inv.invoice_number || ""} ${inv.supplier_name || ""} ${inv.contact_name || ""}`.toLowerCase();
         return hay.includes(q);
       })
       .slice(0, 60);
-  }, [invoicesQuery.data, search]);
+  }, [invoicesQuery.data, search, installmentMode, targetContract?.id, project?.id]);
 
   const phaseOptions = useMemo(
     () => [{ value: "", label: "بلا قسم" }, ...phases.map((p) => ({ value: String(p.id), label: p.name }))],
@@ -194,7 +233,19 @@ function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, i
   const selected = candidates.find((inv) => inv.id === selectedId) || null;
 
   function handleConfirm() {
-    if (!project?.id || !selected || saveMut.isPending) return;
+    if (!project?.id || !selected || pending) return;
+    if (installmentMode) {
+      linkMut.mutate(
+        {
+          project_id: project.id,
+          contract_id: targetContract.id,
+          installment_id: targetInstallment.id,
+          invoice_id: selected.id,
+        },
+        { onSuccess: () => onClose?.() },
+      );
+      return;
+    }
     saveMut.mutate(
       { project_id: project.id, invoice_id: selected.id, phase_id: phaseId ? Number(phaseId) : null },
       {
@@ -209,8 +260,12 @@ function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, i
   return (
     <ModalShell
       open={open}
-      title="ربط فاتورة موجودة"
-      description="فواتير المشتريات غير المرتبطة بأي مشروع تأسيس"
+      title={installmentMode ? "ربط فاتورة بالدفعة" : "ربط فاتورة موجودة"}
+      description={
+        installmentMode
+          ? `عقد «${targetContract.title}» — الدفعة ${targetInstallment.seq} (${formatMoney(targetInstallment.amount, false)})`
+          : "فواتير المشتريات غير المرتبطة بأي مشروع تأسيس"
+      }
       onClose={onClose}
       footer={
         <>
@@ -220,17 +275,17 @@ function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, i
           <button
             type="button"
             onClick={handleConfirm}
-            disabled={!selected || saveMut.isPending}
+            disabled={!selected || pending}
             className={`${ws.btnPrimary} px-4 py-2 text-sm disabled:opacity-60`}
           >
-            {saveMut.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4" />}
-            ربط بالمشروع
+            {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Link2 className="w-4 h-4" />}
+            {installmentMode ? "ربط بالدفعة" : "ربط بالمشروع"}
           </button>
         </>
       }
     >
       <div className="space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div className={`grid grid-cols-1 ${installmentMode ? "" : "sm:grid-cols-2"} gap-2`}>
           <div className="relative">
             <Search className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/35" />
             <input
@@ -242,9 +297,11 @@ function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, i
               autoFocus
             />
           </div>
-          <div>
-            <GlassSelect value={phaseId} onChange={setPhaseId} options={phaseOptions} placeholder="القسم" buttonClassName="text-sm py-2 px-3" />
-          </div>
+          {installmentMode ? null : (
+            <div>
+              <GlassSelect value={phaseId} onChange={setPhaseId} options={phaseOptions} placeholder="القسم" buttonClassName="text-sm py-2 px-3" />
+            </div>
+          )}
         </div>
 
         {invoicesQuery.isLoading ? (
@@ -258,7 +315,7 @@ function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, i
           </div>
         ) : candidates.length === 0 ? (
           <div className="text-sm text-slate-500 dark:text-white/45 py-8 text-center">
-            {search ? "لا فواتير مطابقة." : "لا فواتير غير مرتبطة."}
+            {search ? "لا فواتير مطابقة." : installmentMode ? "لا فواتير متاحة للربط بهذه الدفعة." : "لا فواتير غير مرتبطة."}
           </div>
         ) : (
           <ul className={`divide-y ${ws.divider} max-h-[50svh] overflow-y-auto -mx-1 px-1`}>
@@ -302,8 +359,13 @@ function LinkInvoiceModal({ open, project, phases, defaultPhaseId, employeeId, i
         )}
         {selected ? (
           <div className="text-[11px] text-slate-500 dark:text-white/45">
-            ستُحسب الفاتورة «{selected.invoice_number}» ضمن تكاليف تأسيس {project?.name || "المشروع"}
-            {phaseId ? ` — قسم ${phases.find((p) => String(p.id) === phaseId)?.name || ""}` : " بلا قسم"}.
+            {installmentMode
+              ? `ستُربط الفاتورة «${selected.invoice_number}» بالدفعة ${targetInstallment.seq} من عقد «${targetContract.title}» وتُحسب ضمن تكاليف ${project?.name || "المشروع"}${
+                  targetContract.phase_id != null ? ` — قسم ${phases.find((p) => String(p.id) === String(targetContract.phase_id))?.name || ""}` : ""
+                }.`
+              : `ستُحسب الفاتورة «${selected.invoice_number}» ضمن تكاليف تأسيس ${project?.name || "المشروع"}${
+                  phaseId ? ` — قسم ${phases.find((p) => String(p.id) === phaseId)?.name || ""}` : " بلا قسم"
+                }.`}
           </div>
         ) : null}
       </div>
@@ -346,9 +408,23 @@ export default function ExpensesTab({ project }) {
     return list;
   }, [projectsQuery.data, project]);
 
+  // «الفواتير | العقود» — يُحفظ في `?exp=contracts` حتى تصل إليه التنبيهات.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const view = searchParams.get("exp") === "contracts" ? "contracts" : "invoices";
+  const setView = (next) => {
+    const params = new URLSearchParams(searchParams);
+    if (next === "contracts") params.set("exp", "contracts");
+    else params.delete("exp");
+    setSearchParams(params, { replace: true });
+  };
+
   const [invoiceModalOpen, setInvoiceModalOpen] = useState(false);
+  // تعبئة مسبقة قادمة من «تسجيل دفعة» في العقود (تتجاوز تعبئة الفلتر).
+  const [invoicePrefill, setInvoicePrefill] = useState(null);
   const [editInvoice, setEditInvoice] = useState(null);
   const [linkOpen, setLinkOpen] = useState(false);
+  // هدف «ربط فاتورة موجودة» بدفعة عقد — null = ربط بالمشروع.
+  const [linkTarget, setLinkTarget] = useState(null);
   const [phaseFilter, setPhaseFilter] = useState("all");
   const [accountFilter, setAccountFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -370,17 +446,26 @@ export default function ExpensesTab({ project }) {
   );
 
   const budget = useMemo(() => projectBudget(project), [project]);
+  // قد تغيب `contracts` في بيانات مخزّنة قديمة.
+  const contracts = useMemo(() => (Array.isArray(project?.contracts) ? project.contracts : []), [project?.contracts]);
 
   const phaseRows = useMemo(() => {
-    const rows = phases.map((phase) => ({ key: String(phase.id), name: phase.name, color: phase.color, ...phaseBudget(phase, invoices) }));
+    const rows = phases.map((phase) => ({
+      key: String(phase.id),
+      name: phase.name,
+      color: phase.color,
+      contracted: phaseContracted(phase.id, contracts),
+      ...phaseBudget(phase, invoices),
+    }));
     const orphan = invoices.filter((inv) => inv.phase_id == null);
-    if (orphan.length > 0) {
+    const orphanContracted = phaseContracted(null, contracts);
+    if (orphan.length > 0 || orphanContracted > 0) {
       const committed = orphan.reduce((s, i) => s + moneyValue(i.total_amount), 0);
       const paid = orphan.reduce((s, i) => s + moneyValue(i.paid_amount), 0);
-      rows.push({ key: "none", name: "بلا قسم", color: "#94a3b8", budget: 0, committed, paid, remaining: -committed, over: committed, pct: committed > 0 ? 100 : 0 });
+      rows.push({ key: "none", name: "بلا قسم", color: "#94a3b8", contracted: orphanContracted, budget: 0, committed, paid, remaining: -committed, over: committed, pct: committed > 0 ? 100 : 0 });
     }
     return rows;
-  }, [phases, invoices]);
+  }, [phases, invoices, contracts]);
 
   const pieData = useMemo(() => {
     const map = new Map();
@@ -460,19 +545,46 @@ export default function ExpensesTab({ project }) {
 
   function handleCreate(payload) {
     if (!project?.id || createMut.isPending) return;
+    const projectId = payload.project_id ?? project.id;
+    const contractId = payload.project_contract_id ? Number(payload.project_contract_id) : null;
     createMut.mutate(
       {
         ...payload,
-        project_id: payload.project_id ?? project.id,
+        project_id: projectId,
         project_phase_id: payload.project_id ? (payload.project_phase_id ?? null) : null,
+        // ربط الفاتورة بدفعة عقد (من «تسجيل دفعة» في العقود).
+        project_contract_id: contractId,
+        project_installment_id: contractId && payload.project_installment_id ? Number(payload.project_installment_id) : null,
       },
       {
         onSuccess: async () => {
           setInvoiceModalOpen(false);
+          setInvoicePrefill(null);
           await invalidateBranchProjectQueries(queryClient, project.id);
         },
       },
     );
+  }
+
+  // «تسجيل دفعة» من العقود → نافذة فاتورة المشتريات معبّأة بالمورد/المبلغ/الدفعة.
+  function handleNewInvoice(contractPrefill) {
+    setInvoicePrefill(contractPrefill || null);
+    setInvoiceModalOpen(true);
+  }
+
+  // «ربط فاتورة موجودة» بدفعة عقد.
+  function handleLinkInvoice(target) {
+    setLinkTarget(target || null);
+    setLinkOpen(true);
+  }
+
+  // «فتح الفاتورة» من دفعة مرتبطة → عرض الفواتير مع البحث برقمها.
+  function handleOpenInvoice({ installment }) {
+    setPhaseFilter("all");
+    setAccountFilter("all");
+    setStatusFilter("all");
+    setSearch(installment?.invoice_number || "");
+    setView("invoices");
   }
 
   function handleDelete(inv) {
@@ -512,6 +624,50 @@ export default function ExpensesTab({ project }) {
         </div>
       ) : null}
 
+      {/* الفواتير | العقود */}
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className={ws.segWrap}>
+          {[
+            { key: "invoices", label: "الفواتير", Icon: Receipt, count: invoices.length },
+            { key: "contracts", label: "العقود", Icon: FileSignature, count: contracts.length },
+          ].map((opt) => {
+            const active = view === opt.key;
+            const Icon = opt.Icon;
+            return (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => setView(opt.key)}
+                className={`${ws.segBtn} text-sm flex items-center gap-2 ${active ? ws.segActive : ws.segInactive}`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{opt.label}</span>
+                <span className="tabular-nums text-[11px] opacity-70" dir="ltr">
+                  {opt.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        {view === "contracts" ? (
+          <div className="text-[11px] text-slate-500 dark:text-white/45">
+            السداد يبقى عبر فواتير المشتريات: كل دفعة تُسدَّد بفاتورة مرتبطة بها.
+          </div>
+        ) : null}
+      </div>
+
+      {view === "contracts" ? (
+        <ContractsSection
+          project={project}
+          phases={phases}
+          employeeId={employeeId}
+          isAdmin={isAdmin}
+          onNewInvoice={handleNewInvoice}
+          onLinkInvoice={handleLinkInvoice}
+          onOpenInvoice={handleOpenInvoice}
+        />
+      ) : (
+      <>
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-4 items-start">
         {/* الميزانية مقابل الفعلي */}
         <SectionCard title="الميزانية مقابل الفعلي" icon={Table2} description="لكل قسم">
@@ -519,11 +675,12 @@ export default function ExpensesTab({ project }) {
             <div className="text-sm text-slate-500 dark:text-white/45 py-4 text-center">لا أقسام بعد.</div>
           ) : (
             <div className="overflow-x-auto -mx-4 px-4">
-              <table className="w-full text-xs min-w-[560px]">
+              <table className="w-full text-xs min-w-[640px]">
                 <thead>
                   <tr className="text-slate-500 dark:text-white/45">
                     <th className="text-right font-semibold py-2">القسم</th>
                     <th className="text-left font-semibold py-2">ميزانية</th>
+                    <th className="text-left font-semibold py-2" title="مجموع المتفق عليه في عقود القسم النشطة والمكتملة">تعاقدات</th>
                     <th className="text-left font-semibold py-2">ملتزم</th>
                     <th className="text-left font-semibold py-2">مسدد</th>
                     <th className="text-left font-semibold py-2">متبقٍ</th>
@@ -540,6 +697,7 @@ export default function ExpensesTab({ project }) {
                         </span>
                       </td>
                       <td className="py-2 text-left tabular-nums text-slate-700 dark:text-white/80" dir="ltr">{formatMoney(row.budget, false)}</td>
+                      <td className={`py-2 text-left tabular-nums ${row.contracted > 0 ? "text-violet-700 dark:text-violet-200" : "text-slate-400 dark:text-white/35"}`} dir="ltr">{formatMoney(row.contracted, false)}</td>
                       <td className={`py-2 text-left tabular-nums ${row.over ? "text-rose-600 dark:text-rose-300 font-semibold" : "text-slate-700 dark:text-white/80"}`} dir="ltr">{formatMoney(row.committed, false)}</td>
                       <td className="py-2 text-left tabular-nums text-[#0e7a5f] dark:text-emerald-200" dir="ltr">{formatMoney(row.paid, false)}</td>
                       <td className={`py-2 text-left tabular-nums ${row.remaining < 0 ? "text-rose-600 dark:text-rose-300" : "text-slate-700 dark:text-white/80"}`} dir="ltr">{formatMoney(row.remaining, false)}</td>
@@ -671,9 +829,10 @@ export default function ExpensesTab({ project }) {
                   {filtered.map((inv) => (
                     <tr key={inv.id} className={`border-t ${ws.divider}`}>
                       <td className="py-2 text-slate-900 dark:text-white">
-                        <span className="inline-flex items-center gap-1.5" dir="ltr">
+                        <span className="inline-flex items-center gap-1.5 flex-wrap" dir="ltr">
                           <span className="font-mono">{inv.invoice_number}</span>
                           <LeaseChip invoice={inv} />
+                          <ContractChip invoice={inv} />
                         </span>
                       </td>
                       <td className="py-2 tabular-nums text-slate-700 dark:text-white/80" dir="ltr">{formatDate(inv.invoice_date)}</td>
@@ -713,6 +872,7 @@ export default function ExpensesTab({ project }) {
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="font-mono text-sm text-slate-900 dark:text-white" dir="ltr">{inv.invoice_number}</span>
                         <LeaseChip invoice={inv} />
+                        <ContractChip invoice={inv} />
                       </div>
                       <div className="text-xs text-slate-700 dark:text-white/80">{inv.supplier_name}</div>
                     </div>
@@ -748,8 +908,10 @@ export default function ExpensesTab({ project }) {
           </>
         )}
       </SectionCard>
+      </>
+      )}
 
-      {/* فاتورة مشتريات جديدة مرتبطة بالمشروع */}
+      {/* فاتورة مشتريات جديدة مرتبطة بالمشروع (أو بدفعة عقد) */}
       <PurchaseInvoiceModal
         open={invoiceModalOpen}
         invoice={null}
@@ -758,9 +920,12 @@ export default function ExpensesTab({ project }) {
         bankAccounts={bankAccounts}
         branches={branches}
         projects={projects}
-        prefill={prefill}
+        prefill={invoicePrefill || prefill}
         isSubmitting={createMut.isPending}
-        onClose={() => setInvoiceModalOpen(false)}
+        onClose={() => {
+          setInvoiceModalOpen(false);
+          setInvoicePrefill(null);
+        }}
         onSubmit={handleCreate}
         allowArrival={false}
       />
@@ -772,7 +937,11 @@ export default function ExpensesTab({ project }) {
         defaultPhaseId={defaultPhaseId}
         employeeId={employeeId}
         isAdmin={isAdmin}
-        onClose={() => setLinkOpen(false)}
+        installmentTarget={linkTarget}
+        onClose={() => {
+          setLinkOpen(false);
+          setLinkTarget(null);
+        }}
       />
 
       <ExpenseModal open={!!editInvoice} project={project} invoice={editInvoice} onClose={() => setEditInvoice(null)} />
