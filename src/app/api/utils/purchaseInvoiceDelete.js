@@ -6,6 +6,29 @@
 import sql from "@/app/api/utils/sql";
 import { logPurchaseAudit } from "@/app/api/utils/purchaseAudit";
 
+// فك ربط دفعات عقود المقاولين (مشاريع التأسيس) من فواتير على وشك الحذف:
+// الدفعة تعود «بلا فاتورة» فتُحسب حالتها من جديد. الجدول قد لا يكون موجودًا
+// (ميزة المشاريع غير مهيأة) — to_regclass + try/catch حتى لا يتعطل الحذف.
+// يعيد عدد الدفعات التي فُك ربطها.
+export async function unlinkInvoicesFromInstallments(invoiceIds) {
+  const ids = [...new Set((invoiceIds || []).map(Number).filter((n) => Number.isInteger(n) && n > 0))];
+  if (!ids.length) return 0;
+  try {
+    const [reg] = await sql`SELECT to_regclass('branch_project_contract_installments') AS t`;
+    if (!reg?.t) return 0;
+    const rows = await sql`
+      UPDATE branch_project_contract_installments
+      SET invoice_id = NULL, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+      WHERE invoice_id = ANY(${ids})
+      RETURNING id
+    `;
+    return rows.length;
+  } catch (error) {
+    console.warn("contract installment unlink skipped", error?.message);
+    return 0;
+  }
+}
+
 export async function hardDeletePurchaseInvoices(invoiceIds, { actor = null, reason = "" } = {}) {
   const ids = [...new Set((invoiceIds || []).map(Number).filter((n) => Number.isInteger(n) && n > 0))];
   if (!ids.length) return [];
@@ -14,6 +37,8 @@ export async function hardDeletePurchaseInvoices(invoiceIds, { actor = null, rea
   `;
   if (!rows.length) return [];
   const found = rows.map((r) => Number(r.id));
+  // دفعات عقود المقاولين المرتبطة بهذه الفواتير تعود بلا فاتورة.
+  await unlinkInvoicesFromInstallments(found);
   await sql.transaction([
     sql`DELETE FROM accounting_purchase_invoice_payments WHERE invoice_id = ANY(${found})`,
     sql`DELETE FROM accounting_purchase_invoice_items WHERE invoice_id = ANY(${found})`,

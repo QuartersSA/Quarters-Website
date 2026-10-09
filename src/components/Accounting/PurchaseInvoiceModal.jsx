@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import {
   BadgeCheck,
   ExternalLink,
+  FileSignature,
   FileText,
   Flame,
   Loader2,
@@ -1540,7 +1541,10 @@ export default function PurchaseInvoiceModal({
   // إن وُجد مشروع نشط (غير مفتتح/ملغى).
   projects = [],
   // تعبئة مسبقة عند الإنشاء من تبويب مصاريف المشروع:
-  // { project_id, project_phase_id, expense_account_code }.
+  // { project_id, project_phase_id, expense_account_code } — ومن «تسجيل
+  // دفعة» في عقود المشروع إضافةً: { supplier_name, contact_id, due_date,
+  // line_amount, line_description, project_contract_id,
+  // project_installment_id, contract_label }.
   prefill = null,
   isSubmitting,
   onClose,
@@ -1587,6 +1591,10 @@ export default function PurchaseInvoiceModal({
   // مشروع تأسيس فرع وقسمه (اختياريان).
   const [projectId, setProjectId] = useState("");
   const [projectPhaseId, setProjectPhaseId] = useState("");
+  // دفعة عقد داخل المشروع (من «تسجيل دفعة» — إنشاء فقط؛ PUT لا يغيّرهما).
+  const [projectContractId, setProjectContractId] = useState("");
+  const [projectInstallmentId, setProjectInstallmentId] = useState("");
+  const [contractLabel, setContractLabel] = useState("");
   const [notes, setNotes] = useState("");
   const [attachmentUrl, setAttachmentUrl] = useState("");
   const [attachmentName, setAttachmentName] = useState("");
@@ -1682,20 +1690,41 @@ export default function PurchaseInvoiceModal({
     if (!open) return;
     const seed = isEditing ? null : prefillRef.current;
     setInvoiceNumber(invoice?.invoice_number || "");
-    setContactId(invoice?.contact_id ? String(invoice.contact_id) : "");
-    setSupplierName(invoice?.supplier_name || "");
+    setContactId(
+      invoice?.contact_id
+        ? String(invoice.contact_id)
+        : seed?.contact_id
+          ? String(seed.contact_id)
+          : "",
+    );
+    setSupplierName(invoice?.supplier_name || (seed?.supplier_name ? String(seed.supplier_name) : ""));
     setInvoiceDate(invoice?.invoice_date || todayRiyadh());
-    setDueDate(invoice?.due_date || "");
+    setDueDate(invoice?.due_date || (seed?.due_date ? String(seed.due_date).slice(0, 10) : ""));
     setCurrency(invoice?.currency || "SAR");
     const seededLines = linesFromInvoice(invoice);
     const seedAccountId = seed?.expense_account_code
       ? findAccountIdByCode(accountsRef.current, seed.expense_account_code)
       : "";
-    setLines(
-      seedAccountId && seededLines.length > 0 && !seededLines[0].account_id
-        ? [{ ...seededLines[0], account_id: seedAccountId }, ...seededLines.slice(1)]
-        : seededLines,
-    );
+    const seedLineAmount = Number(seed?.line_amount);
+    const seedLineDescription = seed?.line_description ? String(seed.line_description) : "";
+    const hasSeedLine = Number.isFinite(seedLineAmount) && seedLineAmount > 0;
+    if (seededLines.length > 0 && (seedAccountId || hasSeedLine || seedLineDescription)) {
+      const first = { ...seededLines[0] };
+      if (seedAccountId && !first.account_id) first.account_id = seedAccountId;
+      // دفعة عقد: بند واحد بكمية 1 وسعر = مبلغ الدفعة شاملاً الضريبة.
+      if (hasSeedLine) {
+        first.quantity = "1";
+        first.unit_price = moneyInput(seedLineAmount);
+        first.amount_includes_tax = true;
+      }
+      if (seedLineDescription) first.description = seedLineDescription;
+      setLines([first, ...seededLines.slice(1)]);
+    } else {
+      setLines(seededLines);
+    }
+    setProjectContractId(seed?.project_contract_id ? String(seed.project_contract_id) : "");
+    setProjectInstallmentId(seed?.project_installment_id ? String(seed.project_installment_id) : "");
+    setContractLabel(seed?.contract_label ? String(seed.contract_label) : "");
     setProjectId(
       invoice?.project_id
         ? String(invoice.project_id)
@@ -1992,6 +2021,10 @@ export default function PurchaseInvoiceModal({
   const handleProjectChange = (value) => {
     setProjectId(value);
     setProjectPhaseId("");
+    // تغيير المشروع يُبطل ربط دفعة العقد (العقد يخص مشروعه فقط).
+    setProjectContractId("");
+    setProjectInstallmentId("");
+    setContractLabel("");
   };
   // اختيار قسم له حساب افتراضي يضبط حساب البند الأول إن كان فارغاً.
   const handleProjectPhaseChange = (value) => {
@@ -2196,6 +2229,10 @@ export default function PurchaseInvoiceModal({
       // ربط مشروع تأسيس الفرع وقسمه (null يفك الربط عند التعديل).
       project_id: projectId ? Number(projectId) : null,
       project_phase_id: projectId && projectPhaseId ? Number(projectPhaseId) : null,
+      // دفعة عقد المشروع (إنشاء فقط — الخادم يتجاهلهما في PUT).
+      project_contract_id: projectId && projectContractId ? Number(projectContractId) : null,
+      project_installment_id:
+        projectId && projectContractId && projectInstallmentId ? Number(projectInstallmentId) : null,
       notes: notes.trim() || null,
       attachment_url: attachmentUrl || null,
       attachment_kind: attachmentUrl ? attachmentKind || null : null,
@@ -2923,6 +2960,18 @@ export default function PurchaseInvoiceModal({
                     {scanSummary.warning}
                   </div>
                 ) : null}
+              </div>
+            ) : null}
+
+            {/* دفعة عقد مقاول/مورد من مشروع تأسيس — تُربط الفاتورة بالدفعة */}
+            {!isEditing && contractLabel && projectContractId ? (
+              <div className="rounded-xl border border-violet-200 dark:border-violet-400/25 bg-violet-50/70 dark:bg-violet-400/[0.08] px-3 py-2 flex items-center gap-2 flex-wrap text-xs text-violet-800 dark:text-violet-200">
+                <FileSignature className="w-4 h-4 shrink-0" />
+                <span className="font-bold">دفعة عقد:</span>
+                <span>{contractLabel}</span>
+                <span className="text-[11px] text-violet-700/80 dark:text-violet-200/70">
+                  — ستُربط هذه الفاتورة بالدفعة وتُحسب ضمن تكاليف المشروع.
+                </span>
               </div>
             ) : null}
 

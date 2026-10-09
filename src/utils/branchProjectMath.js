@@ -674,3 +674,196 @@ export function pendingMilestones(project) {
 export function sortPhases(project) {
   return sortedPhases(project);
 }
+
+// ---------- العقود والدفعات ----------
+// العقد التزام مقسّم إلى دفعات؛ السداد الفعلي عبر فواتير المشتريات
+// المرتبطة بالدفعات. حالة الدفعة محسوبة من فاتورتها ومن تاريخ الاستحقاق
+// (نفس القاعدة مطبّقة في الخادم).
+
+export const CONTRACT_KINDS = ["contractor", "supplier", "service", "other"];
+export const CONTRACT_KIND_LABELS = {
+  contractor: "مقاول",
+  supplier: "مورد مواد",
+  service: "خدمة",
+  other: "أخرى",
+};
+
+export const CONTRACT_STATUSES = ["active", "completed", "cancelled"];
+export const CONTRACT_STATUS_LABELS = {
+  active: "نشط",
+  completed: "مكتمل",
+  cancelled: "ملغى",
+};
+
+export const INSTALLMENT_STATUSES = ["pending", "invoiced", "overdue", "paid"];
+export const INSTALLMENT_STATUS_LABELS = {
+  pending: "لم تُسدَّد",
+  invoiced: "فاتورة بانتظار السداد",
+  overdue: "متأخرة",
+  paid: "مسددة",
+};
+
+function hasInvoice(inst) {
+  const id = inst?.invoice_id;
+  return id !== null && id !== undefined && id !== "" && Number.isFinite(Number(id));
+}
+
+// paid: فاتورتها مسددة بالكامل (paid ≥ total − 0.005)؛ invoiced: لها
+// فاتورة غير مسددة؛ overdue: بلا فاتورة واستحقاقها قبل اليوم؛ وإلا pending.
+export function installmentStatus(inst, today) {
+  if (hasInvoice(inst)) {
+    const total = num(inst?.invoice_total);
+    const paid = num(inst?.invoice_paid);
+    return paid >= total - 0.005 ? "paid" : "invoiced";
+  }
+  const day = isDateKey(today) ? today : todayRiyadh();
+  if (isDateKey(inst?.due_date) && compareDateKeys(inst.due_date, day) < 0) return "overdue";
+  return "pending";
+}
+
+// ترتيب الدفعات غير المسددة: الأقرب استحقاقاً أولاً (بلا تاريخ آخراً) ثم التسلسل.
+function compareInstallmentDue(a, b) {
+  const da = isDateKey(a?.due_date) ? a.due_date : null;
+  const db = isDateKey(b?.due_date) ? b.due_date : null;
+  if (da && db && da !== db) return compareDateKeys(da, db);
+  if (da && !db) return -1;
+  if (!da && db) return 1;
+  return num(a?.seq) - num(b?.seq) || num(a?.id) - num(b?.id);
+}
+
+export function contractTotals(contract, today) {
+  const day = isDateKey(today) ? today : todayRiyadh();
+  const agreed = round2(Math.max(num(contract?.agreed_amount), 0));
+  const invoiced = round2(num(contract?.invoiced));
+  const paid = round2(num(contract?.paid));
+  const installments = listOf(contract?.installments);
+  let installmentsPaid = 0;
+  let installmentsSum = 0;
+  let overdueCount = 0;
+  let next = null;
+  for (const inst of installments) {
+    installmentsSum += num(inst?.amount);
+    const status = installmentStatus(inst, day);
+    if (status === "paid") {
+      installmentsPaid += 1;
+      continue;
+    }
+    if (status === "overdue") overdueCount += 1;
+    if (!next || compareInstallmentDue(inst, next) < 0) next = inst;
+  }
+  return {
+    agreed,
+    invoiced,
+    paid,
+    remaining: round2(agreed - paid),
+    pct: pctOf(paid, agreed),
+    installments_total: installments.length,
+    installments_paid: installmentsPaid,
+    installments_sum: round2(installmentsSum),
+    next_due: next
+      ? {
+          id: next.id ?? null,
+          seq: num(next.seq),
+          due_date: isDateKey(next.due_date) ? next.due_date : null,
+          amount: round2(num(next.amount)),
+          status: installmentStatus(next, day),
+        }
+      : null,
+    overdue_count: overdueCount,
+  };
+}
+
+// إضافة أشهر مع تثبيت اليوم عند آخر يوم في الشهر إن لزم (31 يناير + 1 = 28 فبراير).
+export function addMonths(key, n) {
+  const p = parts(key);
+  if (!p) return null;
+  const months = Math.trunc(Number(n) || 0);
+  const index = p.m - 1 + months;
+  const y = p.y + Math.floor(index / 12);
+  const m = ((index % 12) + 12) % 12;
+  const last = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+  return `${y}-${pad2(m + 1)}-${pad2(Math.min(p.d, last))}`;
+}
+
+// توزيع متساوٍ على `count` دفعة (الأخيرة تحمل فرق التقريب) بتواريخ
+// متتابعة من أول استحقاق: شهرياً أو كل N يوم. بلا تاريخ → due_date null.
+export function buildInstallments({ count, total, firstDue, every = "month", days = 30 } = {}) {
+  const n = Math.min(Math.max(Math.trunc(num(count)) || 1, 1), 60);
+  const cents = Math.round(Math.max(num(total), 0) * 100);
+  const base = Math.floor(cents / n);
+  const step = Math.max(Math.trunc(num(days)) || 30, 1);
+  const start = isDateKey(firstDue) ? firstDue : null;
+  const list = [];
+  for (let i = 0; i < n; i += 1) {
+    const amountCents = i === n - 1 ? cents - base * (n - 1) : base;
+    let due_date = null;
+    if (start) due_date = every === "days" ? addDays(start, step * i) : addMonths(start, i);
+    list.push({
+      seq: i + 1,
+      label: `الدفعة ${i + 1}`,
+      due_date,
+      amount: round2(amountCents / 100),
+      notes: "",
+    });
+  }
+  return list;
+}
+
+// ملخص عقود المشروع: الملغاة خارج الحساب؛ المتأخرة والقريبة من عقود نشطة فقط.
+export function summarizeContracts(contracts, today) {
+  const day = isDateKey(today) ? today : todayRiyadh();
+  const limit = addDays(day, 7);
+  let active_count = 0;
+  let agreed_total = 0;
+  let paid_total = 0;
+  const overdue = [];
+  const due_soon = [];
+  for (const contract of listOf(contracts)) {
+    if (contract?.status === "cancelled") continue;
+    const totals = contractTotals(contract, day);
+    agreed_total += totals.agreed;
+    paid_total += totals.paid;
+    if (contract?.status !== "active") continue;
+    active_count += 1;
+    for (const installment of listOf(contract?.installments)) {
+      const status = installmentStatus(installment, day);
+      if (status === "overdue") {
+        overdue.push({ contract, installment });
+      } else if (
+        status === "pending" &&
+        isDateKey(installment?.due_date) &&
+        compareDateKeys(installment.due_date, day) >= 0 &&
+        compareDateKeys(installment.due_date, limit) <= 0
+      ) {
+        due_soon.push({ contract, installment });
+      }
+    }
+  }
+  const byDue = (a, b) => compareInstallmentDue(a.installment, b.installment);
+  overdue.sort(byDue);
+  due_soon.sort(byDue);
+  return {
+    active_count,
+    agreed_total: round2(agreed_total),
+    paid_total: round2(paid_total),
+    remaining_total: round2(agreed_total - paid_total),
+    overdue_installments: overdue.length,
+    overdue,
+    due_soon,
+  };
+}
+
+// مجموع المتفق عليه لعقود القسم النشطة/المكتملة (phaseId null = بلا قسم).
+export function phaseContracted(phaseId, contracts) {
+  const wantNone = phaseId === null || phaseId === undefined || phaseId === "";
+  const pid = Number(phaseId);
+  let sum = 0;
+  for (const contract of listOf(contracts)) {
+    if (contract?.status === "cancelled") continue;
+    const cp = contract?.phase_id;
+    const none = cp === null || cp === undefined || cp === "";
+    if (wantNone ? !none : none || Number(cp) !== pid) continue;
+    sum += Math.max(num(contract?.agreed_amount), 0);
+  }
+  return round2(sum);
+}

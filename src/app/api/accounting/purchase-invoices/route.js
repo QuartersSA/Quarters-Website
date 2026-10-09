@@ -9,7 +9,10 @@ import {
   projectExists,
   phaseBelongsToProject,
 } from "@/app/api/utils/branchProjects";
-import { purgeInactivePurchaseInvoices } from "@/app/api/utils/purchaseInvoiceDelete";
+import {
+  purgeInactivePurchaseInvoices,
+  unlinkInvoicesFromInstallments,
+} from "@/app/api/utils/purchaseInvoiceDelete";
 import {
   runPurchaseAutomation,
   createRecurringTemplateFromInvoice,
@@ -401,10 +404,21 @@ function parsePayload(body = {}) {
     projectId && Number.isInteger(projectPhaseRaw) && projectPhaseRaw > 0
       ? projectPhaseRaw
       : null;
+  // عقد مقاول/مورد داخل المشروع ودفعته («تسجيل دفعة» من قسم العقود):
+  // رقم أو null. يُكتبان عند الإنشاء فقط — PUT لا يغيّرهما إلا بالتصفير
+  // عند تغيير المشروع (العقد يخص مشروعًا واحدًا).
+  const projectContractRaw = Number(body.project_contract_id);
+  const projectContractId =
+    Number.isInteger(projectContractRaw) && projectContractRaw > 0 ? projectContractRaw : null;
+  const projectInstallmentRaw = Number(body.project_installment_id);
+  const projectInstallmentId =
+    Number.isInteger(projectInstallmentRaw) && projectInstallmentRaw > 0 ? projectInstallmentRaw : null;
 
   return {
     projectId,
     projectPhaseId,
+    projectContractId,
+    projectInstallmentId,
     hasProjectLink: body.project_id !== undefined,
     expenseAccountId: Number.isInteger(expenseAccountId)
       ? expenseAccountId
@@ -694,6 +708,35 @@ async function validateProjectLink(payload) {
   return null;
 }
 
+// ربط الفاتورة بعقد مقاول/مورد ودفعته (الإنشاء فقط): العقد يخص المشروع
+// المرسل، والدفعة تخص العقد وبلا فاتورة. نص خطأ أو null.
+async function validateContractLink(payload) {
+  if (!payload.projectContractId) {
+    return payload.projectInstallmentId ? "الدفعة تتطلب تحديد عقد المشروع" : null;
+  }
+  if (!payload.projectId) return "حدد مشروع التأسيس لربط الفاتورة بالعقد";
+  const [contract] = await sql`
+    SELECT id, project_id FROM branch_project_contracts
+    WHERE id = ${payload.projectContractId} AND is_active = TRUE
+    LIMIT 1
+  `;
+  if (!contract || Number(contract.project_id) !== payload.projectId) {
+    return "العقد المحدد لا يخص مشروع التأسيس المختار";
+  }
+  if (payload.projectInstallmentId) {
+    const [installment] = await sql`
+      SELECT id, contract_id, invoice_id FROM branch_project_contract_installments
+      WHERE id = ${payload.projectInstallmentId}
+      LIMIT 1
+    `;
+    if (!installment || Number(installment.contract_id) !== payload.projectContractId) {
+      return "الدفعة المحددة لا تخص العقد المختار";
+    }
+    if (installment.invoice_id) return "الدفعة مرتبطة بفاتورة أخرى";
+  }
+  return null;
+}
+
 function validatePayload(payload) {
   if (!payload.invoiceNumber) return "رقم الفاتورة مطلوب";
   if (!payload.supplierName && !payload.contactId) return "المورد مطلوب";
@@ -776,6 +819,9 @@ function selectInvoicesQuery(where, statusFilter) {
         bp.name AS project_name,
         bp.code AS project_code,
         bpp.name AS project_phase_name,
+        inv.project_contract_id,
+        inv.project_installment_id,
+        pc.title AS project_contract_title,
         CASE
           WHEN inv.is_active = FALSE THEN 'inactive'
           WHEN inv.total_amount > 0 AND inv.paid_amount >= inv.total_amount THEN 'paid'
@@ -803,6 +849,7 @@ function selectInvoicesQuery(where, statusFilter) {
       LEFT JOIN accounting_lease_contracts lc ON lc.id = inv.lease_contract_id
       LEFT JOIN branch_projects bp ON bp.id = inv.project_id
       LEFT JOIN branch_project_phases bpp ON bpp.id = inv.project_phase_id
+      LEFT JOIN branch_project_contracts pc ON pc.id = inv.project_contract_id
       ${where.sql}
     )
     SELECT *
@@ -900,6 +947,10 @@ export async function createPurchaseInvoice(body, actor, options = {}) {
   if (projectError) {
     return { ok: false, status: 400, error: projectError };
   }
+  const contractError = await validateContractLink(payload);
+  if (contractError) {
+    return { ok: false, status: 400, error: contractError };
+  }
 
   // بنود البن: أهلية الحساب + الحساب + الحمايات (على الخادم دائمًا).
   let enriched;
@@ -936,7 +987,7 @@ export async function createPurchaseInvoice(body, actor, options = {}) {
         subtotal_amount, discount_amount, tax_amount, total_amount, paid_amount,
         paid_bank_account_id, payment_receipt_url, branch_id, workflow_status,
         notes, attachment_url, attachment_kind, roaster_contact_id,
-        project_id, project_phase_id,
+        project_id, project_phase_id, project_contract_id, project_installment_id,
         created_by_employee_id, created_by_employee_name
       )
       VALUES (
@@ -945,7 +996,7 @@ export async function createPurchaseInvoice(body, actor, options = {}) {
         ${payload.subtotalAmount}, ${payload.discountAmount}, ${payload.taxAmount}, ${payload.totalAmount}, ${payload.paidAmount},
         ${payload.paidBankAccountId}, ${payload.paymentReceiptUrl}, ${payload.branchId}, ${payload.workflowStatus},
         ${payload.notes}, ${payload.attachmentUrl}, ${payload.attachmentKind}, ${payload.roasterContactId},
-        ${payload.projectId}, ${payload.projectPhaseId},
+        ${payload.projectId}, ${payload.projectPhaseId}, ${payload.projectContractId}, ${payload.projectInstallmentId},
         ${createdById}, ${createdByName}
       )
     `,
@@ -968,6 +1019,27 @@ export async function createPurchaseInvoice(body, actor, options = {}) {
     `);
   }
   await sql.transaction(statements);
+
+  // «تسجيل دفعة عقد»: الدفعة تشير إلى الفاتورة الجديدة. إن سُبقت بفاتورة
+  // أخرى في الأثناء (سباق) تُمسح إشارة الفاتورة إلى الدفعة ويبقى ربط العقد.
+  if (payload.projectInstallmentId) {
+    try {
+      const linked = await sql`
+        UPDATE branch_project_contract_installments
+        SET invoice_id = ${invoiceId}, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+        WHERE id = ${payload.projectInstallmentId} AND invoice_id IS NULL
+        RETURNING id
+      `;
+      if (!linked.length) {
+        await sql`
+          UPDATE accounting_purchase_invoices SET project_installment_id = NULL WHERE id = ${invoiceId}
+        `;
+      }
+    } catch (error) {
+      console.error("contract installment link failed", error);
+    }
+  }
+
   const [created] = await sql`
     SELECT * FROM accounting_purchase_invoices WHERE id = ${invoiceId}
   `;
@@ -1120,7 +1192,8 @@ export async function PUT(request) {
     const [existing] = await sql`
       SELECT id, invoice_number, invoice_kind, source_invoice_id, is_active,
              updated_at, paid_amount, total_amount, roaster_contact_id,
-             roaster_reference, TO_CHAR(due_date, 'YYYY-MM-DD') AS due_date
+             roaster_reference, project_id,
+             TO_CHAR(due_date, 'YYYY-MM-DD') AS due_date
       FROM accounting_purchase_invoices
       WHERE id = ${id}
     `;
@@ -1178,6 +1251,11 @@ export async function PUT(request) {
     const roasterReference =
       payload.roasterReference !== null ? payload.roasterReference : existing.roaster_reference;
     const dueDateChanged = (payload.dueDate || null) !== (existing.due_date || null);
+    // تغيير المشروع (أو إزالته) من المحرر الكامل يفك ربط العقد ودفعته —
+    // العقد يخص مشروعًا واحدًا، وإلا بقيت الفاتورة محسوبة على عقد مشروع آخر.
+    const projectChanged =
+      payload.hasProjectLink &&
+      (payload.projectId ?? null) !== (Number(existing.project_id) || null);
     const headerUpdate = sql`
       UPDATE accounting_purchase_invoices
       SET
@@ -1205,6 +1283,9 @@ export async function PUT(request) {
         -- ربط مشروع التأسيس: يُكتب فقط إن أرسلته الحمولة (الدفعة السريعة لا ترسله).
         project_id = CASE WHEN ${payload.hasProjectLink} THEN ${payload.projectId} ELSE project_id END,
         project_phase_id = CASE WHEN ${payload.hasProjectLink} THEN ${payload.projectPhaseId} ELSE project_phase_id END,
+        -- عقد المشروع ودفعته يُصفَّران عند تغيير المشروع فقط.
+        project_contract_id = CASE WHEN ${projectChanged} THEN NULL ELSE project_contract_id END,
+        project_installment_id = CASE WHEN ${projectChanged} THEN NULL ELSE project_installment_id END,
         -- تعديل فاتورة التحميص يدويًا يجعلها الحقيقة ويثبّت استحقاقها.
         roast_confirmed = CASE WHEN ${invoiceKind === "roast" && items !== null} THEN TRUE ELSE roast_confirmed END,
         due_date_auto = CASE WHEN ${dueDateChanged} THEN FALSE ELSE due_date_auto END,
@@ -1219,6 +1300,8 @@ export async function PUT(request) {
     } else {
       await headerUpdate;
     }
+    // الدفعة التي كانت تشير إلى هذه الفاتورة تعود بلا فاتورة.
+    if (projectChanged) await unlinkInvoicesFromInstallments([id]);
     const [updated] = await sql`
       SELECT * FROM accounting_purchase_invoices WHERE id = ${id}
     `;
@@ -1358,6 +1441,8 @@ export async function DELETE(request) {
       ];
       if (child) statements.push(sql`DELETE FROM accounting_purchase_invoices WHERE id = ${child.id}`);
       statements.push(sql`DELETE FROM accounting_purchase_invoices WHERE id = ${id}`);
+      // دفعات عقود المقاولين المرتبطة بالفاتورة تعود بلا فاتورة.
+      await unlinkInvoicesFromInstallments(ids);
       await sql.transaction(statements);
       if (leaseLink?.lease_payment_id && leaseLink?.lease_month) {
         await suppressSetAsideInvoice(leaseLink.lease_payment_id, leaseLink.lease_month).catch(() => {});

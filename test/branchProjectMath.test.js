@@ -1,22 +1,33 @@
 import { describe, expect, it } from "vitest";
 import {
+  CONTRACT_KINDS,
+  CONTRACT_KIND_LABELS,
+  CONTRACT_STATUSES,
+  CONTRACT_STATUS_LABELS,
   DEFAULT_PHASE_TEMPLATE,
   ESTABLISHMENT_ACCOUNTS,
+  INSTALLMENT_STATUS_LABELS,
   addDays,
+  addMonths,
   barPosition,
+  buildInstallments,
   buildPhasesFromTemplate,
+  contractTotals,
   daysBetween,
   daysToOpening,
   formatDateKey,
+  installmentStatus,
   invoiceStatus,
   nextProjectCode,
   phaseBudget,
+  phaseContracted,
   phaseHealth,
   phaseProgress,
   phaseTasks,
   projectBudget,
   projectHealth,
   projectProgress,
+  summarizeContracts,
   summarizeProjects,
   timelineRange,
 } from "@/utils/branchProjectMath";
@@ -320,5 +331,196 @@ describe("phaseHealth blocked", () => {
   it("treats a blocked phase with a future end date as at_risk", () => {
     const phase = { id: 9, status: "blocked", planned_start: "2026-10-01", planned_end: "2026-12-31" };
     expect(phaseHealth(phase, [], "2026-10-05")).toBe("at_risk");
+  });
+});
+
+describe("branch project math — contracts and installments", () => {
+  function inst(seq, extra = {}) {
+    return {
+      id: 100 + seq,
+      contract_id: 1,
+      seq,
+      label: `الدفعة ${seq}`,
+      due_date: null,
+      amount: 5000,
+      notes: "",
+      invoice_id: null,
+      invoice_number: null,
+      invoice_total: 0,
+      invoice_paid: 0,
+      ...extra,
+    };
+  }
+
+  function contract(extra = {}) {
+    return {
+      id: 1,
+      project_id: 1,
+      phase_id: 4,
+      kind: "contractor",
+      title: "مقاول الصبغ",
+      party_name: "مؤسسة الألوان",
+      party_contact_id: null,
+      agreed_amount: 15000,
+      vat_included: true,
+      start_date: "2026-10-01",
+      end_date: "2026-12-31",
+      status: "active",
+      attachment_url: null,
+      attachment_name: null,
+      notes: "",
+      installments: [],
+      invoiced: 0,
+      paid: 0,
+      ...extra,
+    };
+  }
+
+  it("ships the contract constants with Arabic labels", () => {
+    expect(CONTRACT_KINDS).toEqual(["contractor", "supplier", "service", "other"]);
+    expect(CONTRACT_STATUSES).toEqual(["active", "completed", "cancelled"]);
+    for (const kind of CONTRACT_KINDS) expect(CONTRACT_KIND_LABELS[kind]).toBeTruthy();
+    for (const status of CONTRACT_STATUSES) expect(CONTRACT_STATUS_LABELS[status]).toBeTruthy();
+    expect(Object.keys(INSTALLMENT_STATUS_LABELS).sort()).toEqual(["invoiced", "overdue", "paid", "pending"]);
+    expect(INSTALLMENT_STATUS_LABELS.paid).toBe("مسددة");
+  });
+
+  it("marks an installment paid when its invoice is fully settled (within half a halala)", () => {
+    expect(installmentStatus(inst(1, { invoice_id: 7, invoice_total: 5000, invoice_paid: 5000 }), TODAY)).toBe("paid");
+    expect(installmentStatus(inst(1, { invoice_id: 7, invoice_total: 5000, invoice_paid: 4999.996 }), TODAY)).toBe("paid");
+    // الاستحقاق الماضي لا يهم متى وُجدت فاتورة مسددة.
+    expect(installmentStatus(inst(1, { invoice_id: 7, invoice_total: 100, invoice_paid: 100, due_date: "2026-01-01" }), TODAY)).toBe("paid");
+  });
+
+  it("marks an installment invoiced when its invoice is not fully paid, even when overdue", () => {
+    expect(installmentStatus(inst(1, { invoice_id: 7, invoice_total: 5000, invoice_paid: 0 }), TODAY)).toBe("invoiced");
+    expect(installmentStatus(inst(1, { invoice_id: 7, invoice_total: 5000, invoice_paid: 4990, due_date: "2026-09-01" }), TODAY)).toBe("invoiced");
+    expect(installmentStatus(inst(1, { invoice_id: "7", invoice_total: 5000, invoice_paid: 2500 }), TODAY)).toBe("invoiced");
+  });
+
+  it("marks an uninvoiced installment overdue only when its due date is before today", () => {
+    expect(installmentStatus(inst(1, { due_date: "2026-10-04" }), TODAY)).toBe("overdue");
+    expect(installmentStatus(inst(1, { due_date: "2026-10-05" }), TODAY)).toBe("pending");
+    expect(installmentStatus(inst(1, { due_date: "2026-10-06" }), TODAY)).toBe("pending");
+  });
+
+  it("keeps an installment pending without a due date or an invoice", () => {
+    expect(installmentStatus(inst(1), TODAY)).toBe("pending");
+    expect(installmentStatus(inst(1, { due_date: "" }), TODAY)).toBe("pending");
+    expect(installmentStatus(inst(1, { invoice_id: "" , due_date: "2026-12-01" }), TODAY)).toBe("pending");
+  });
+
+  it("totals a contract: remaining, percentage, installment counts, next due and overdue count", () => {
+    const c = contract({
+      agreed_amount: 15000,
+      invoiced: 10000,
+      paid: 5000,
+      installments: [
+        inst(1, { due_date: "2026-09-01", invoice_id: 7, invoice_total: 5000, invoice_paid: 5000 }),
+        inst(2, { due_date: "2026-09-20" }),
+        inst(3, { due_date: "2026-10-20", invoice_id: 8, invoice_total: 5000, invoice_paid: 0 }),
+        inst(4, { due_date: "2026-11-20", amount: 2500 }),
+      ],
+    });
+    const totals = contractTotals(c, TODAY);
+    expect(totals).toMatchObject({
+      agreed: 15000,
+      invoiced: 10000,
+      paid: 5000,
+      remaining: 10000,
+      pct: 33,
+      installments_total: 4,
+      installments_paid: 1,
+      installments_sum: 17500,
+      overdue_count: 1,
+    });
+    expect(totals.next_due).toMatchObject({ seq: 2, due_date: "2026-09-20", amount: 5000, status: "overdue" });
+    // بلا دفعات: لا دفعة تالية ولا متأخرات.
+    expect(contractTotals(contract({ agreed_amount: 0 }), TODAY)).toMatchObject({
+      agreed: 0,
+      remaining: 0,
+      pct: 0,
+      installments_total: 0,
+      next_due: null,
+      overdue_count: 0,
+    });
+    // الدفعات بلا تاريخ تأتي بعد المؤرّخة في اختيار التالية.
+    const undated = contractTotals(contract({ installments: [inst(1), inst(2, { due_date: "2026-12-01" })] }), TODAY);
+    expect(undated.next_due.seq).toBe(2);
+  });
+
+  it("splits a total equally into monthly installments and puts the rounding remainder on the last one", () => {
+    const list = buildInstallments({ count: 3, total: 10000, firstDue: "2026-10-31", every: "month" });
+    expect(list.map((i) => i.amount)).toEqual([3333.33, 3333.33, 3333.34]);
+    expect(list.reduce((s, i) => s + i.amount, 0)).toBeCloseTo(10000, 2);
+    expect(list.map((i) => i.seq)).toEqual([1, 2, 3]);
+    expect(list.map((i) => i.due_date)).toEqual(["2026-10-31", "2026-11-30", "2026-12-31"]);
+    expect(list[0].label).toBe("الدفعة 1");
+    expect(list.every((i) => i.notes === "")).toBe(true);
+  });
+
+  it("spaces installments every N days and clamps the count to 1..60", () => {
+    const list = buildInstallments({ count: 4, total: 100, firstDue: "2026-10-05", every: "days", days: 15 });
+    expect(list.map((i) => i.due_date)).toEqual(["2026-10-05", "2026-10-20", "2026-11-04", "2026-11-19"]);
+    expect(list.map((i) => i.amount)).toEqual([25, 25, 25, 25]);
+    expect(buildInstallments({ count: 0, total: 50 })).toHaveLength(1);
+    expect(buildInstallments({ count: 99, total: 50, firstDue: "2026-01-01" })).toHaveLength(60);
+    // بلا تاريخ أول استحقاق تبقى التواريخ فارغة.
+    expect(buildInstallments({ count: 2, total: 7 }).map((i) => i.due_date)).toEqual([null, null]);
+    expect(buildInstallments({ count: 2, total: 7 }).map((i) => i.amount)).toEqual([3.5, 3.5]);
+  });
+
+  it("adds months while clamping to the end of shorter months", () => {
+    expect(addMonths("2026-01-31", 1)).toBe("2026-02-28");
+    expect(addMonths("2028-01-31", 1)).toBe("2028-02-29");
+    expect(addMonths("2026-11-15", 2)).toBe("2027-01-15");
+    expect(addMonths("2026-03-01", -1)).toBe("2026-02-01");
+    expect(addMonths("bad", 1)).toBeNull();
+  });
+
+  it("summarizes contracts: active count, money totals, overdue and due-soon installments", () => {
+    const contracts = [
+      contract({
+        id: 1,
+        agreed_amount: 15000,
+        paid: 5000,
+        installments: [
+          inst(1, { due_date: "2026-09-30" }),
+          inst(2, { due_date: "2026-10-10" }),
+          inst(3, { due_date: "2026-10-12", invoice_id: 9, invoice_total: 5000, invoice_paid: 0 }),
+          inst(4, { due_date: "2026-10-13" }),
+        ],
+      }),
+      contract({ id: 2, status: "completed", agreed_amount: 4000, paid: 4000, installments: [inst(1, { due_date: "2026-01-01" })] }),
+      contract({ id: 3, status: "cancelled", agreed_amount: 99999, paid: 0, installments: [inst(1, { due_date: "2026-01-01" })] }),
+    ];
+    const summary = summarizeContracts(contracts, TODAY);
+    expect(summary).toMatchObject({
+      active_count: 1,
+      agreed_total: 19000,
+      paid_total: 9000,
+      remaining_total: 10000,
+      overdue_installments: 1,
+    });
+    expect(summary.overdue.map((x) => [x.contract.id, x.installment.seq])).toEqual([[1, 1]]);
+    expect(summary.due_soon.map((x) => x.installment.seq)).toEqual([2]);
+    expect(summarizeContracts([], TODAY)).toMatchObject({ active_count: 0, agreed_total: 0, due_soon: [] });
+    expect(summarizeContracts(undefined, TODAY).overdue_installments).toBe(0);
+  });
+
+  it("sums the agreed amounts contracted against a phase, ignoring cancelled contracts", () => {
+    const contracts = [
+      contract({ id: 1, phase_id: 4, agreed_amount: 15000 }),
+      contract({ id: 2, phase_id: 4, status: "completed", agreed_amount: 2000.5 }),
+      contract({ id: 3, phase_id: 4, status: "cancelled", agreed_amount: 70000 }),
+      contract({ id: 4, phase_id: 5, agreed_amount: 100 }),
+      contract({ id: 5, phase_id: null, agreed_amount: 42 }),
+    ];
+    expect(phaseContracted(4, contracts)).toBe(17000.5);
+    expect(phaseContracted("4", contracts)).toBe(17000.5);
+    expect(phaseContracted(5, contracts)).toBe(100);
+    expect(phaseContracted(null, contracts)).toBe(42);
+    expect(phaseContracted(9, contracts)).toBe(0);
+    expect(phaseContracted(4, undefined)).toBe(0);
   });
 });

@@ -130,19 +130,44 @@ export async function DELETE(request, { params } = {}) {
     if (!existing) return fail(404, "المشروع غير موجود");
 
     // فك ربط الفواتير والعقود (إن وُجدت الجداول/الأعمدة) — لا تُحذف الفواتير.
+    // يشمل عقود المقاولين ودفعاتها: الفاتورة تفقد project_contract_id/
+    // project_installment_id، والدفعة تفقد invoice_id، والعقود تُوقَف ناعمًا
+    // حتى لا تقبلها مسارات الربط لاحقًا.
     let unlinkedInvoices = 0;
     if (await purchaseInvoicesTableExists()) {
       try {
         const rows = await sql`
           UPDATE accounting_purchase_invoices
-          SET project_id = NULL, project_phase_id = NULL
+          SET project_id = NULL, project_phase_id = NULL,
+              project_contract_id = NULL, project_installment_id = NULL
           WHERE project_id = ${id}
+             OR project_contract_id IN (
+               SELECT id FROM branch_project_contracts WHERE project_id = ${id}
+             )
           RETURNING id
         `;
         unlinkedInvoices = rows.length;
       } catch (unlinkError) {
         console.warn("branch project delete: invoice unlink skipped", unlinkError?.message);
       }
+    }
+    try {
+      const [reg] = await sql`SELECT to_regclass('branch_project_contract_installments') AS t`;
+      if (reg?.t) {
+        await sql`
+          UPDATE branch_project_contract_installments
+          SET invoice_id = NULL, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+          WHERE invoice_id IS NOT NULL
+            AND contract_id IN (SELECT id FROM branch_project_contracts WHERE project_id = ${id})
+        `;
+        await sql`
+          UPDATE branch_project_contracts
+          SET is_active = FALSE, updated_at = (NOW() AT TIME ZONE 'Asia/Riyadh')
+          WHERE project_id = ${id} AND is_active = TRUE
+        `;
+      }
+    } catch (unlinkError) {
+      console.warn("branch project delete: contract unlink skipped", unlinkError?.message);
     }
     try {
       const [reg] = await sql`SELECT to_regclass('accounting_lease_contracts') AS t`;
