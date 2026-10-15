@@ -2255,13 +2255,32 @@ export default function PurchasesInvoicesPanel({
                         البنود ({drawerRow.items.length})
                       </div>
                       <div className="space-y-1.5">
-                        {drawerRow.items.map((item) => (
+                        {drawerRow.items.map((item) => {
+                          const account =
+                            item.account_name
+                              ? { code: item.account_code, name: item.account_name }
+                              : accounts.find((acc) => Number(acc.id) === Number(item.account_id)) || null;
+                          return (
                           <div
                             key={item.id}
                             className="flex items-center justify-between gap-2 text-xs border-b border-dashed border-slate-200 dark:border-white/10 pb-1.5 last:border-0"
                           >
-                            <span className="text-slate-700 dark:text-white/75 truncate">
-                              {item.description || "بند"}
+                            <span className="min-w-0 flex flex-col">
+                              <span className="text-slate-700 dark:text-white/75 truncate">
+                                {item.description || "بند"}
+                              </span>
+                              {account ? (
+                                <span
+                                  className="text-[10px] text-sky-700 dark:text-sky-200 truncate"
+                                  title={`حساب البند: ${account.code ? `${account.code} — ` : ""}${account.name}`}
+                                >
+                                  {account.code ? <span className="font-mono" dir="ltr">{account.code}</span> : null}
+                                  {account.code ? " · " : ""}
+                                  {account.name}
+                                </span>
+                              ) : (
+                                <span className="text-[10px] text-slate-400 dark:text-white/35">بلا حساب</span>
+                              )}
                             </span>
                             <span className="text-slate-500 dark:text-white/45 shrink-0" dir="ltr">
                               {moneyValue(item.quantity)} × {moneyValue(item.unit_price).toFixed(2)}
@@ -2270,7 +2289,8 @@ export default function PurchasesInvoicesPanel({
                               {moneyValue(item.line_total).toFixed(2)}
                             </span>
                           </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   ) : null}
