@@ -2,6 +2,7 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureInventoryUnitSnapshotSchema } from "@/app/api/utils/inventoryUnitSnapshots";
 import { ensureCoffeeSchema } from "@/app/api/utils/coffeeInvoices";
+import { syncCatalogAccounts } from "@/app/api/utils/accountsTree";
 
 import { ensureOnce } from "@/app/api/utils/ensureOnce";
 const ensureSchema = ensureOnce(ensureSchemaImpl);
@@ -771,6 +772,10 @@ export async function POST(request) {
       WHERE i.id = ${newItemId}
     `;
 
+    // حساب الصنف في شجرة الحسابات (تحت فئته) — لا يفشل الحفظ بسببه.
+    await syncCatalogAccounts().catch((error) =>
+      console.error("accounts catalog sync failed", error?.message),
+    );
     console.log("Item created successfully:", withCategory[0]);
     return Response.json(withCategory[0], { status: 201 });
   } catch (error) {
@@ -966,6 +971,10 @@ export async function PUT(request) {
       WHERE i.id = ${id}
     `;
 
+    // حساب الصنف في شجرة الحسابات (تحت فئته) — لا يفشل الحفظ بسببه.
+    await syncCatalogAccounts().catch((error) =>
+      console.error("accounts catalog sync failed", error?.message),
+    );
     console.log("Item updated successfully:", withCategory[0]);
     return Response.json({ ...withCategory[0], warnings });
   } catch (error) {
