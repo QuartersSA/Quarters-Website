@@ -594,11 +594,16 @@ async function attachItems(rows) {
   const ids = rows.map((row) => row.id);
   if (ids.length === 0) return rows;
   try {
+    // اسم/كود حساب البند يُرفق مع كل بند حتى يظهر بجانب الصنف في المعاينة.
     const items = await sql(
-      `SELECT ${LINE_SELECT_COLUMNS}
-       FROM accounting_purchase_invoice_items
-       WHERE invoice_id = ANY($1)
-       ORDER BY invoice_id, position, id`,
+      `SELECT li.*, acc.code AS account_code, acc.name AS account_name
+       FROM (
+         SELECT ${LINE_SELECT_COLUMNS}
+         FROM accounting_purchase_invoice_items
+         WHERE invoice_id = ANY($1)
+       ) li
+       LEFT JOIN accounting_accounts acc ON acc.id = li.account_id
+       ORDER BY li.invoice_id, li.position, li.id`,
       [ids],
     );
     const byInvoice = new Map();

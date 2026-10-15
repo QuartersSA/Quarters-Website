@@ -5,7 +5,7 @@ import { l as logPurchaseAudit } from './purchaseAudit-DZMMDeLJ.js';
 import { s as suppressSetAsideInvoice, e as ensureLeaseSchema } from './leaseContracts-TE5yL-xw.js';
 import { p as projectExists, a as phaseBelongsToProject, e as ensureBranchProjectsSchema, b as ensureProjectInvoiceLinkColumns } from './branchProjects-Cl75sntE.js';
 import { u as unlinkInvoicesFromInstallments, p as purgeInactivePurchaseInvoices } from './purchaseInvoiceDelete-CYPnydoW.js';
-import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-CykZzbIq.js';
+import { s as syncRecurringTemplateFromInvoice, c as createRecurringTemplateFromInvoice, r as runPurchaseAutomation } from './leaseSetAsideInvoices-OyY7wAMn.js';
 import { n as notifyByPref } from './waNotify-BPFQhIP4.js';
 import { l as loadRoastChild, a as loadInvoiceLines, r as reverseDeposits, b as recomputeItemCost, c as loadRoastLinks, d as applyCoffeeToItems, e as assertRoastSyncAllowed, s as syncRoastInvoice, f as reverseSyncRoastToBean, C as CoffeeError, g as resolveRoaster, h as getRoastingAccountId, i as reserveIds, j as insertLineStatement, k as recordArrival, L as LINE_SELECT_COLUMNS, p as planLineReconcile, m as ensureCoffeeSchema } from './coffeeInvoices-BX9syo2W.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
@@ -13,7 +13,7 @@ import '@neondatabase/serverless';
 import 'crypto';
 import './dateUtils-Bvji1KrH.js';
 import './wasender-vtNAxFgq.js';
-import './route-BHoteogM.js';
+import './route-CY00V5vL.js';
 import './inventoryUnitSnapshots-B5krAOBv.js';
 import './employeeDisplayName-CwZGtUC2.js';
 import './branchVisibility-CPqSH5sT.js';
@@ -488,10 +488,15 @@ async function attachItems(rows) {
   const ids = rows.map(row => row.id);
   if (ids.length === 0) return rows;
   try {
-    const items = await sql(`SELECT ${LINE_SELECT_COLUMNS}
-       FROM accounting_purchase_invoice_items
-       WHERE invoice_id = ANY($1)
-       ORDER BY invoice_id, position, id`, [ids]);
+    // اسم/كود حساب البند يُرفق مع كل بند حتى يظهر بجانب الصنف في المعاينة.
+    const items = await sql(`SELECT li.*, acc.code AS account_code, acc.name AS account_name
+       FROM (
+         SELECT ${LINE_SELECT_COLUMNS}
+         FROM accounting_purchase_invoice_items
+         WHERE invoice_id = ANY($1)
+       ) li
+       LEFT JOIN accounting_accounts acc ON acc.id = li.account_id
+       ORDER BY li.invoice_id, li.position, li.id`, [ids]);
     const byInvoice = new Map();
     for (const item of items) {
       const key = Number(item.invoice_id);
