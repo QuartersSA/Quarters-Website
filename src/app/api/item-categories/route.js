@@ -1,6 +1,7 @@
 import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureCoffeeSchema } from "@/app/api/utils/coffeeInvoices";
+import { syncCatalogAccounts } from "@/app/api/utils/accountsTree";
 
 import { ensureOnce } from "@/app/api/utils/ensureOnce";
 const ensureSchema = ensureOnce(ensureSchemaImpl);
@@ -193,6 +194,10 @@ export async function POST(request) {
          WHERE c.id = $1`,
         [inserted[0].id],
       );
+      // حساب الفئة في شجرة الحسابات — لا يفشل الحفظ بسببه.
+      await syncCatalogAccounts().catch((error) =>
+        console.error("accounts catalog sync failed", error?.message),
+      );
       return Response.json(row, { status: 201 });
     } catch (err) {
       // likely unique constraint
@@ -318,6 +323,10 @@ export async function PUT(request) {
          LEFT JOIN accounting_contacts r ON r.id = c.default_roaster_contact_id
          WHERE c.id = $1`,
         [id],
+      );
+      // حساب الفئة في شجرة الحسابات — لا يفشل الحفظ بسببه.
+      await syncCatalogAccounts().catch((error) =>
+        console.error("accounts catalog sync failed", error?.message),
       );
       return Response.json(row);
     } catch (err) {

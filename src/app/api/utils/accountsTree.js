@@ -145,6 +145,20 @@ async function ensureAccountsSchemaImpl() {
     }
   }
 
+  // أعمدة مصدر الصنف (تُستخدم في المزامنة أدناه).
+  await sql`
+    ALTER TABLE accounting_accounts
+      ADD COLUMN IF NOT EXISTS source_item_id INTEGER
+  `;
+  await syncCatalogAccounts();
+}
+
+// مزامنة الكتالوج مع الشجرة: فئات الأصناف → حسابات 51NN، والأصناف →
+// حسابات 51NNiii تحت فئتها، مع انعكاس إعادة التسمية. أربعة أوامر
+// idempotent رخيصة؛ تُستدعى عند كل قراءة للشجرة وبعد حفظ صنف/فئة —
+// لا داخل التهيئة الممَيمَزة، وإلا ظهر الصنف الجديد فقط بعد إعادة
+// تشغيل الخادم.
+export async function syncCatalogAccounts() {
   // Migrate purchase item-categories into expense accounts under
   // "51 المشتريات". Idempotent: source_category_id marks imported rows,
   // and the generated code is derived from the category id so re-runs
@@ -190,10 +204,6 @@ async function ensureAccountsSchemaImpl() {
   // Idempotent via source_item_id; the code appends the item id as a
   // 3-digit block under the category code (5101 + 007 → 5101007), so
   // it never collides with manually added 2-digit children (510101).
-  await sql`
-    ALTER TABLE accounting_accounts
-      ADD COLUMN IF NOT EXISTS source_item_id INTEGER
-  `;
   try {
     await sql`
       INSERT INTO accounting_accounts (

@@ -2,8 +2,7 @@ import sql from "@/app/api/utils/sql";
 import { requireAuth } from "@/app/api/utils/sessionToken";
 import {
   ensureAccountsSchema,
-  nextChildCode,
-} from "@/app/api/utils/accountsTree";
+  nextChildCode, syncCatalogAccounts } from "@/app/api/utils/accountsTree";
 import { ensureCoffeeSchema, loadBeanInfo, resolveKgPerBaseUnit } from "@/app/api/utils/coffeeInvoices";
 
 // Full accounting admins OR admins limited to قسم المشتريات only
@@ -117,6 +116,10 @@ export async function GET(request) {
 
   try {
     await ensureAccountsSchema();
+    // صنف/فئة أُضيفا بعد إقلاع الخادم يظهران في الشجرة فورًا.
+    await syncCatalogAccounts().catch((error) =>
+      console.error("accounts catalog sync failed", error?.message),
+    );
     const url = new URL(request.url);
     const includeInactive = url.searchParams.get("includeInactive") === "1";
 
