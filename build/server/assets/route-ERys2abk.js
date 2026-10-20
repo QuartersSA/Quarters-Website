@@ -3,6 +3,7 @@ import { hash } from 'argon2';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-CwZGtUC2.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
+import { d as dbErrorResponse } from './dbErrors-Cuy7H0rJ.js';
 import '@neondatabase/serverless';
 import 'crypto';
 
@@ -385,12 +386,7 @@ async function POST(request) {
     return Response.json(employeeWithBranches);
   } catch (error) {
     console.error("Error creating employee:", error);
-    return Response.json({
-      error: "Failed to create employee",
-      details: error.message
-    }, {
-      status: 500
-    });
+    return dbErrorResponse(error, "فشل إضافة الموظف");
   }
 }
 

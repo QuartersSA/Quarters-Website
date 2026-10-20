@@ -4,6 +4,7 @@ import { requireAuth } from "@/app/api/utils/sessionToken";
 import { ensureEmployeeDisplayNameSchema } from "@/app/api/utils/employeeDisplayName";
 
 import { ensureOnce } from "@/app/api/utils/ensureOnce";
+import { dbErrorResponse } from "@/app/api/utils/dbErrors";
 const ensureWasteColumn = ensureOnce(ensureWasteColumnImpl);
 
 // Idempotent: ensure the waste-logging permission column exists.
@@ -417,9 +418,6 @@ export async function POST(request) {
     return Response.json(employeeWithBranches);
   } catch (error) {
     console.error("Error creating employee:", error);
-    return Response.json(
-      { error: "Failed to create employee", details: error.message },
-      { status: 500 },
-    );
+    return dbErrorResponse(error, "فشل إضافة الموظف");
   }
 }
