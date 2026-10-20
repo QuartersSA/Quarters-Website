@@ -207,13 +207,16 @@ async function PUT(request, {
     // نص فارغ على عمود فريد (اسم المستخدم/البريد) يتعارض مع موظف آخر فارغ
     // أيضًا فيفشل التحديث بـ «قيمة مكررة».
     const blankToNull = value => value === undefined ? undefined : String(value).trim() === "" ? null : String(value).trim();
-    const cleanEmail = blankToNull(email);
+    let cleanEmail = blankToNull(email);
     const cleanPhone = blankToNull(phone);
-    const cleanUsername = blankToNull(username);
+    let cleanUsername = blankToNull(username);
     const [existing] = await sql`
       SELECT
         id,
         role,
+        name,
+        username,
+        email,
         COALESCE(can_access_workspace, false) as can_access_workspace,
         COALESCE(can_manage_inventory, false) as can_manage_inventory,
         COALESCE(can_manage_accounting, false) as can_manage_accounting,
@@ -236,6 +239,47 @@ async function PUT(request, {
       }, {
         status: 404
       });
+    }
+
+    // اسم المستخدم/البريد غير المتغيّرين (بغض النظر عن المسافات وحالة
+    // الأحرف) لا يُعاد حفظهما؛ وعند تغييرهما يُفحص التعارض مع موظف آخر
+    // مسبقًا برسالة تسمّيه بدل خطأ القيد الفريد.
+    const sameText = (a, b) => String(a ?? "").trim().toLowerCase() === String(b ?? "").trim().toLowerCase();
+    if (cleanUsername !== undefined && sameText(cleanUsername, existing.username)) {
+      cleanUsername = undefined;
+    }
+    if (cleanEmail !== undefined && sameText(cleanEmail, existing.email)) {
+      cleanEmail = undefined;
+    }
+    if (cleanUsername) {
+      const [clash] = await sql`
+        SELECT id, name FROM employees
+        WHERE id <> ${employeeId} AND LOWER(TRIM(username)) = LOWER(${cleanUsername})
+        LIMIT 1
+      `;
+      if (clash) {
+        return Response.json({
+          error: `اسم المستخدم «${cleanUsername}» مستخدم لموظف آخر: ${clash.name || `#${clash.id}`}`,
+          code: "username_taken"
+        }, {
+          status: 409
+        });
+      }
+    }
+    if (cleanEmail) {
+      const [clash] = await sql`
+        SELECT id, name FROM employees
+        WHERE id <> ${employeeId} AND LOWER(TRIM(email)) = LOWER(${cleanEmail})
+        LIMIT 1
+      `;
+      if (clash) {
+        return Response.json({
+          error: `البريد «${cleanEmail}» مستخدم لموظف آخر: ${clash.name || `#${clash.id}`}`,
+          code: "email_taken"
+        }, {
+          status: 409
+        });
+      }
     }
     const effectiveRole = role !== undefined ? role : existing.role;
     const isAdmin = effectiveRole === "Admin";
