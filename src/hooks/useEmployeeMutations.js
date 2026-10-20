@@ -3,6 +3,14 @@ import { toast } from "sonner";
 import { adminFetch } from "@/utils/apiAuth";
 import { queryKeys } from "../utils/queryKeys.js";
 
+// نص الخادم + التفاصيل الأصلية إن وُجدت حتى يظهر السبب الحقيقي.
+function describeApiError(result, fallback) {
+  const base = result?.error || fallback;
+  const details = result?.details ? String(result.details) : "";
+  if (!details || details === base) return base;
+  return `${base} — ${details}`;
+}
+
 export function useEmployeeMutations() {
   const queryClient = useQueryClient();
 
@@ -15,9 +23,7 @@ export function useEmployeeMutations() {
       });
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(
-          result.details || result.error || "Failed to create employee",
-        );
+        throw new Error(describeApiError(result, "فشل إضافة الموظف"));
       }
       return result;
     },
@@ -40,9 +46,7 @@ export function useEmployeeMutations() {
       });
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(
-          result.error || result.details || "Failed to update employee",
-        );
+        throw new Error(describeApiError(result, "فشل تحديث الموظف"));
       }
       return result;
     },

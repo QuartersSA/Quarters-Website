@@ -2,6 +2,7 @@ import sql from './sql-CSDV1lSC.js';
 import { hash } from 'argon2';
 import { r as requireAuth } from './sessionToken-DDNn6nuk.js';
 import { e as ensureEmployeeDisplayNameSchema } from './employeeDisplayName-CwZGtUC2.js';
+import { d as dbErrorResponse } from './dbErrors-Cuy7H0rJ.js';
 import { e as ensureOnce } from './ensureOnce-D_53iNPN.js';
 import '@neondatabase/serverless';
 import 'crypto';
@@ -188,6 +189,27 @@ async function PUT(request, {
       wa_prefs
     } = body;
     const employeeId = parseInt(id);
+    if (!Number.isInteger(employeeId) || employeeId <= 0) {
+      return Response.json({
+        error: "معرّف الموظف غير صحيح"
+      }, {
+        status: 400
+      });
+    }
+    if (name !== undefined && !String(name).trim()) {
+      return Response.json({
+        error: "اسم الموظف مطلوب"
+      }, {
+        status: 400
+      });
+    }
+    // الحقول الاختيارية الفارغة تُحفظ NULL (كما عند الإضافة) لا نصًا فارغًا:
+    // نص فارغ على عمود فريد (اسم المستخدم/البريد) يتعارض مع موظف آخر فارغ
+    // أيضًا فيفشل التحديث بـ «قيمة مكررة».
+    const blankToNull = value => value === undefined ? undefined : String(value).trim() === "" ? null : String(value).trim();
+    const cleanEmail = blankToNull(email);
+    const cleanPhone = blankToNull(phone);
+    const cleanUsername = blankToNull(username);
     const [existing] = await sql`
       SELECT
         id,
@@ -262,7 +284,7 @@ async function PUT(request, {
     let paramCount = 1;
     if (name !== undefined) {
       updates.push(`name = $${paramCount}`);
-      values.push(name);
+      values.push(String(name).trim());
       paramCount++;
     }
     if (display_name !== undefined) {
@@ -270,19 +292,19 @@ async function PUT(request, {
       values.push(display_name || null);
       paramCount++;
     }
-    if (email !== undefined) {
+    if (cleanEmail !== undefined) {
       updates.push(`email = $${paramCount}`);
-      values.push(email);
+      values.push(cleanEmail);
       paramCount++;
     }
-    if (phone !== undefined) {
+    if (cleanPhone !== undefined) {
       updates.push(`phone = $${paramCount}`);
-      values.push(phone);
+      values.push(cleanPhone);
       paramCount++;
     }
-    if (username !== undefined) {
+    if (cleanUsername !== undefined) {
       updates.push(`username = $${paramCount}`);
-      values.push(username);
+      values.push(cleanUsername);
       paramCount++;
     }
 
@@ -555,12 +577,7 @@ async function PUT(request, {
     return Response.json(updated);
   } catch (error) {
     console.error("Error updating employee:", error);
-    return Response.json({
-      error: "Failed to update employee",
-      details: error.message
-    }, {
-      status: 500
-    });
+    return dbErrorResponse(error, "فشل تحديث الموظف");
   }
 }
 
