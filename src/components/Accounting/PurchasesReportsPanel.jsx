@@ -436,6 +436,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   const [customFrom, setCustomFrom] = useState("");
   const [customTo, setCustomTo] = useState("");
   const [supplierId, setSupplierId] = useState("");
+  // كشف حساب المورد: إظهار الفواتير التي عليها رصيد متبقٍ فقط.
+  const [statementUnpaidOnly, setStatementUnpaidOnly] = useState(false);
   const [branchId, setBranchId] = useState("");
   const [compare, setCompare] = useState(false);
   const [showSchedules, setShowSchedules] = useState(false);
@@ -997,6 +999,8 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     if (!supplierId) return { rows: [], totals: null, byAccount: null };
     const rows = periodInvoices
       .filter((invoice) => String(invoice.contact_id) === supplierId)
+      // «غير المدفوع فقط»: الفواتير التي ما زال عليها رصيد متبقٍ.
+      .filter((invoice) => !statementUnpaidOnly || moneyValue(invoice.balance_due) > 0.005)
       .sort((a, b) =>
         String(a.invoice_date).localeCompare(String(b.invoice_date)),
       )
@@ -1028,7 +1032,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
     // المورد المعتادة أو بقي بلا تصنيف.
     const byAccount = bucketInvoicesByAccount(rows, accountById);
     return { rows, totals, byAccount };
-  }, [periodInvoices, supplierId, accountById]);
+  }, [periodInvoices, supplierId, accountById, statementUnpaidOnly]);
 
   // Aging always reads ALL active unpaid invoices — a debt doesn't
   // stop existing because the filter looks at last month.
@@ -1361,7 +1365,7 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         );
         return {
           filename: "supplier-statement",
-          title: `كشف حساب مورد — ${supplier?.name || ""} (${label})`,
+          title: `كشف حساب مورد — ${supplier?.name || ""} (${label})${statementUnpaidOnly ? " — غير المدفوع فقط" : ""}`,
           columns: [
             { header: "التاريخ", accessor: (row) => row.invoice_date },
             { header: "رقم الفاتورة", accessor: (row) => row.invoice_number },
@@ -1670,17 +1674,31 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
           ) : null}
 
           {reportKey === "statement" ? (
-            <div className="w-56">
-              <GlassSelect
-                value={supplierId}
-                onChange={setSupplierId}
-                options={supplierOptions}
-                placeholder="اختر المورد…"
-                buttonClassName="text-sm py-2 px-3"
-                searchable
-                searchPlaceholder="ابحث عن مورد…"
-              />
-            </div>
+            <>
+              <div className="w-56">
+                <GlassSelect
+                  value={supplierId}
+                  onChange={setSupplierId}
+                  options={supplierOptions}
+                  placeholder="اختر المورد…"
+                  buttonClassName="text-sm py-2 px-3"
+                  searchable
+                  searchPlaceholder="ابحث عن مورد…"
+                />
+              </div>
+              <label
+                className="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-700 dark:text-white/70 shrink-0"
+                title="عرض الفواتير التي عليها مبلغ متبقٍ لم يُسدَّد بعد فقط"
+              >
+                <input
+                  type="checkbox"
+                  checked={statementUnpaidOnly}
+                  onChange={(event) => setStatementUnpaidOnly(event.target.checked)}
+                  className="accent-[#0e7a5f]"
+                />
+                غير المدفوع فقط
+              </label>
+            </>
           ) : null}
 
           {reportKey === "coffee" ? (
@@ -2195,7 +2213,9 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
               </div>
             ) : statementReport.rows.length === 0 ? (
               <div className="text-center text-sm text-slate-500 dark:text-white/50 py-8">
-                لا توجد فواتير لهذا المورد في الفترة المحددة.
+                {statementUnpaidOnly
+                  ? "لا توجد مبالغ متبقية غير مدفوعة لهذا المورد في الفترة المحددة."
+                  : "لا توجد فواتير لهذا المورد في الفترة المحددة."}
               </div>
             ) : (
               <>
