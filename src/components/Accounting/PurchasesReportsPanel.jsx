@@ -697,6 +697,36 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
   // البنود بنسبة 0% لا تدخل الإقرار إطلاقاً (بقرار المستخدم): فواتير
   // الموردين غير المسجلين بالضريبة «خارج نطاق الضريبة» لا «مشتريات
   // بالنسبة الصفرية» — خانة 10 تبقى صفراً ولا تتضخم خانة 12 بها.
+  // حصة فاتورة واحدة في خانة 7 (المشتريات بالنسبة الأساسية) بنسبة
+  // `ratio` (1 في أساس الاستحقاق، نسبة المسدد في الفترة في النقدي).
+  const invoiceStandardVat = (invoice, ratio) => {
+    const items = Array.isArray(invoice.items) ? invoice.items : [];
+    let base = 0;
+    let vat = 0;
+    if (items.length === 0) {
+      const headerVat = moneyValue(invoice.tax_amount) * ratio;
+      if (headerVat > 0) {
+        base = moneyValue(invoice.subtotal_amount) * ratio;
+        vat = headerVat;
+      }
+      return { base, vat };
+    }
+    const linesBase = items.reduce(
+      (acc, item) => acc + moneyValue(item.line_subtotal),
+      0,
+    );
+    const headerBase = moneyValue(invoice.subtotal_amount);
+    const factor =
+      (linesBase > 0 && headerBase > 0 ? headerBase / linesBase : 1) * ratio;
+    for (const item of items) {
+      if (moneyValue(item.tax_rate) > 0) {
+        base += moneyValue(item.line_subtotal) * factor;
+        vat += moneyValue(item.line_tax) * factor;
+      }
+    }
+    return { base, vat };
+  };
+
   const vatReturn = useMemo(() => {
     let standardBase = 0;
     let standardVat = 0;
@@ -705,31 +735,9 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
         ? cashEntries
         : periodInvoices.map((invoice) => ({ invoice, ratio: 1 }));
     for (const { invoice, ratio } of vatEntries) {
-      const items = Array.isArray(invoice.items) ? invoice.items : [];
-      if (items.length === 0) {
-        const base = moneyValue(invoice.subtotal_amount) * ratio;
-        const vat = moneyValue(invoice.tax_amount) * ratio;
-        if (vat > 0) {
-          standardBase += base;
-          standardVat += vat;
-        }
-        continue;
-      }
-      const linesBase = items.reduce(
-        (acc, item) => acc + moneyValue(item.line_subtotal),
-        0,
-      );
-      const headerBase = moneyValue(invoice.subtotal_amount);
-      const factor =
-        (linesBase > 0 && headerBase > 0 ? headerBase / linesBase : 1) * ratio;
-      for (const item of items) {
-        const base = moneyValue(item.line_subtotal) * factor;
-        const vat = moneyValue(item.line_tax) * factor;
-        if (moneyValue(item.tax_rate) > 0) {
-          standardBase += base;
-          standardVat += vat;
-        }
-      }
+      const share = invoiceStandardVat(invoice, ratio);
+      standardBase += share.base;
+      standardVat += share.vat;
     }
     return {
       standardBase: round2(standardBase),
@@ -738,7 +746,69 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
       purchasesBase: round2(standardBase),
       purchasesVat: round2(standardVat),
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [periodInvoices, vatBasis, cashEntries]);
+
+  // تشخيص خانة 7: كل فاتورة في الفترة (وفي الأساس النقدي: كل فاتورة
+  // سُدّد منها شيء خلال الفترة) مع ما احتُسب منها وسبب الاستبعاد —
+  // حتى لا تبدو الخانة «فارغة» بلا تفسير رغم وجود فواتير في الشهر.
+  const vatDiagnostics = useMemo(() => {
+    const ratioByInvoice = new Map(
+      cashEntries.map((entry) => [entry.invoice.id, entry.ratio]),
+    );
+    const seen = new Set();
+    const list = [];
+    const consider = (invoice) => {
+      if (seen.has(invoice.id)) return;
+      seen.add(invoice.id);
+      list.push(invoice);
+    };
+    periodInvoices.forEach(consider);
+    if (vatBasis === "cash") cashEntries.forEach((entry) => consider(entry.invoice));
+    const rows = list
+      .map((invoice) => {
+        const ratio = vatBasis === "cash" ? ratioByInvoice.get(invoice.id) || 0 : 1;
+        const full = invoiceStandardVat(invoice, 1);
+        const share = invoiceStandardVat(invoice, ratio);
+        let reason;
+        if (full.vat <= 0.004) {
+          reason = "بنود بنسبة 0% — لا تدخل الإقرار";
+        } else if (vatBasis === "cash" && ratio <= 0) {
+          reason = "لم يُسدَّد منها شيء خلال الفترة (أساس نقدي)";
+        } else if (vatBasis === "cash" && ratio < 0.999) {
+          reason = `محتسبة بنسبة ${Math.round(ratio * 100)}% من المسدد`;
+        } else {
+          reason = "محتسبة";
+        }
+        return {
+          id: invoice.id,
+          invoice_date: invoice.invoice_date,
+          invoice_number: invoice.invoice_number,
+          supplier: invoice.contact_name || invoice.supplier_name || "—",
+          total: moneyValue(invoice.total_amount),
+          tax: moneyValue(invoice.tax_amount),
+          counted_vat: round2(share.vat),
+          counted: share.vat > 0.004,
+          reason,
+        };
+      })
+      .sort((a, b) => String(a.invoice_date).localeCompare(String(b.invoice_date)));
+    const counted = rows.filter((row) => row.counted).length;
+    const zeroRated = rows.filter((row) => row.reason.startsWith("بنود بنسبة 0%")).length;
+    const unpaid = rows.filter((row) => row.reason.startsWith("لم يُسدَّد")).length;
+    // فواتير الشهر المستبعدة بفلتر الفرع وحده.
+    const hiddenByBranch = branchId
+      ? invoices.filter((invoice) => {
+          if (invoice.is_active === false) return false;
+          const date = invoice.invoice_date || "";
+          if (from && date < from) return false;
+          if (to && date > to) return false;
+          return !matchesBranch(invoice);
+        }).length
+      : 0;
+    return { rows, counted, zeroRated, unpaid, hiddenByBranch };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [periodInvoices, cashEntries, vatBasis, branchId, invoices, from, to, matchesBranch]);
 
   // التقارير الشهرية المحفوظة في القاعدة — للشهر المعروض (تعبئة
   // مسبقة + حالة الحفظ) ولأشهر الربع (تجميع مبيعاتها المحفوظة).
@@ -2091,6 +2161,63 @@ export default function PurchasesReportsPanel({ employeeId, isAdmin }) {
                   للاسترداد/الترحيل — المشتريات أعلى من المبيعات في الفترة.
                 </div>
               ) : null}
+
+              {/* تشخيص خانة 7: فواتير الفترة وما احتُسب منها ولماذا */}
+              <div className={`${ws.glassSoft} ${ws.card} p-4 space-y-3`}>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="text-sm font-bold text-slate-900 dark:text-white">
+                    فواتير الفترة وأثرها في خانة 7 (ضريبة المشتريات)
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-white/45">
+                    {vatDiagnostics.rows.length} فاتورة · محتسبة {vatDiagnostics.counted}
+                    {vatDiagnostics.zeroRated ? ` · بنسبة 0% ${vatDiagnostics.zeroRated}` : ""}
+                    {vatDiagnostics.unpaid ? ` · غير مسددة في الفترة ${vatDiagnostics.unpaid}` : ""}
+                  </div>
+                </div>
+                {vatDiagnostics.hiddenByBranch > 0 ? (
+                  <div className="text-[11px] text-amber-700 dark:text-amber-200">
+                    فلتر الفرع نشط: {vatDiagnostics.hiddenByBranch} فاتورة في هذه الفترة مستبعدة لأنها على فرع آخر أو بلا فرع.
+                  </div>
+                ) : null}
+                {vatDiagnostics.rows.length === 0 ? (
+                  <div className="text-[11px] text-slate-500 dark:text-white/45">
+                    لا فواتير مشتريات نشطة بتاريخ داخل هذه الفترة
+                    {vatBasis === "cash" ? " ولا دفعات مسجلة خلالها" : ""}.
+                  </div>
+                ) : (
+                  <ReportTable
+                    columns={[
+                      { header: "التاريخ", accessor: (row) => row.invoice_date, numeric: true },
+                      { header: "رقم الفاتورة", accessor: (row) => row.invoice_number, numeric: true },
+                      { header: "المورد", accessor: (row) => row.supplier },
+                      { header: "الإجمالي", accessor: (row) => money(row.total), numeric: true },
+                      { header: "ضريبة الفاتورة", accessor: (row) => money(row.tax), numeric: true },
+                      { header: "المحتسب في الإقرار", accessor: (row) => money(row.counted_vat), numeric: true },
+                      {
+                        header: "الحالة",
+                        accessor: (row) => row,
+                        format: (row) => (
+                          <span
+                            className={
+                              row.counted
+                                ? "text-[#0e7a5f] dark:text-emerald-300"
+                                : "text-amber-700 dark:text-amber-200"
+                            }
+                          >
+                            {row.reason}
+                          </span>
+                        ),
+                      },
+                    ]}
+                    rows={vatDiagnostics.rows}
+                  />
+                )}
+                <div className="text-[11px] text-slate-500 dark:text-white/45 leading-relaxed">
+                  تدخل الخانة فقط بنود الفواتير بنسبة ضريبة أكبر من 0% (فواتير
+                  الموردين غير المسجلين ضريبياً خارج نطاق الإقرار). في الأساس
+                  النقدي تُحتسب حصة كل فاتورة بقدر ما سُدّد منها خلال الفترة.
+                </div>
+              </div>
             </>
           ) : null}
 
